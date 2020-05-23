@@ -44,7 +44,7 @@ en:
     cookie: "This site uses cookies. See our <a href='/cookie-policy'>Cookie Policy</a> for details."
   public:
     index:
-      title: "Coming Soon"
+      title: "Welcome Solana Validators"
       paragraph: "This website is under construction. Be awesome today."
     privacy_policy:
       title: 'Privacy Policy'
@@ -73,7 +73,7 @@ en:
           telephone: 'Telephone'
           comments: 'Message'
           created_at: 'Created at'
-  site_title: "FMA Ruby On Rails Template"
+  site_title: "www.validators.app"
   error:
     one: '%{count} error'
     other: '%{count} errors'
@@ -85,4 +85,4 @@ en:
       terms_of_use: 'Terms of use'
       contact_us: 'Contact us'
       contact_requests: 'Contact requests'
-    copyright_text: 'provides tools that businesses use for Consumer Privacy Act Compliance.'
+    copyright_text: 'provides tools for the Solana validator community.'
