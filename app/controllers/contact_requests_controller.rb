@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# ContactRequestsController
 class ContactRequestsController < ApplicationController
   before_action :authenticate_user!, only: [:index]
 

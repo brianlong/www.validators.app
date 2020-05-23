@@ -1,14 +1,14 @@
+# frozen_string_literal: true
+
+# PublicController
 class PublicController < ApplicationController
-  def index
-  end
+  def index; end
 
   def cookie_policy
     @title = t('public.cookie_policy.title')
   end
 
-  def do_not_sell_my_personal_information
-    #
-  end
+  def do_not_sell_my_personal_information; end
 
   def faq
     @title = t('public.faq.title')
@@ -42,6 +42,7 @@ class PublicController < ApplicationController
   end
 
   private
+
   def contact_us_params
     params.require(:contact_request)
           .permit(

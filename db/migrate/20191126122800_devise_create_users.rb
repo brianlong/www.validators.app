@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# DeviseCreateUsers
 class DeviseCreateUsers < ActiveRecord::Migration[6.0]
   def change
     create_table :users do |t|
@@ -40,14 +41,16 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.0]
       t.string    :email_encrypted
       t.string    :email_hash
 
+      t.string :api_key
+
       # This can be removed if you are using Vault:
-      t.string    :email_encrypted_iv
+      t.string :email_encrypted_iv
     end
 
     add_index :users, :reset_password_token, unique: true
     add_index :users, :username,             unique: true
     add_index :users, :confirmation_token,   unique: true
     add_index :users, :unlock_token,         unique: true
-    add_index :users, :email_encrypted_iv,   unique: true
+    # add_index :users, :email_encrypted_iv,   unique: true
   end
 end
