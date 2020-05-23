@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Validators</h1>
+<p><%= @network %></p>
+<table>
+  <thead>
+    <tr>
+      <th>Account</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @validators.each do |validator| %>
+      <tr>
+        <td>
+          <%= link_to validator.account, validators_url(validator) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,4 @@
+one:
+  id: 1
+  network: solana-tds
+  account: '1234'

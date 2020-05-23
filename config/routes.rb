@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  resources :validators, only: %i[index show]
   devise_for :users
 
   # Free Sidekiq

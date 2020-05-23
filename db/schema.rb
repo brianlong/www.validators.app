@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_26_122800) do
+ActiveRecord::Schema.define(version: 2020_05_23_205030) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -78,5 +78,54 @@ ActiveRecord::Schema.define(version: 2019_11_26_122800) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "validator_ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "validator_id", null: false
+    t.integer "version", default: 4
+    t.string "address"
+    t.datetime "max_mind_updated_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
+    t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
+  end
+
+  create_table "validators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "network"
+    t.string "account"
+    t.string "name"
+    t.string "keybase_id"
+    t.string "www_url"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
+  end
+
+  create_table "vote_accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "validator_id", null: false
+    t.string "account"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
+    t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
+    t.index ["validator_id"], name: "index_vote_accounts_on_validator_id"
+  end
+
+  create_table "votes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "vote_account_id", null: false
+    t.integer "commission"
+    t.bigint "last_vote"
+    t.bigint "root_slot"
+    t.bigint "credits"
+    t.bigint "activated_stake"
+    t.string "software_version"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["vote_account_id", "created_at"], name: "index_votes_on_vote_account_id_and_created_at"
+    t.index ["vote_account_id"], name: "index_votes_on_vote_account_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "validator_ips", "validators"
+  add_foreign_key "vote_accounts", "validators"
+  add_foreign_key "votes", "vote_accounts"
 end
