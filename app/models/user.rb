@@ -1,5 +1,12 @@
+# frozen_string_literal: true
+
+# User
 class User < ApplicationRecord
   before_save :create_email_hash
+
+  # has_secure_token will initialize a new token when the record is created.
+  # Create a new user token with `user.regenerate_auth_token`
+  has_secure_token :api_token
 
   # Include default devise modules. Others available are:
   # :omniauthable
@@ -12,7 +19,8 @@ class User < ApplicationRecord
   attr_encrypted_options.merge!(
     key: Rails.application.credentials.attribute_key,
     prefix: '',
-    suffix: '_encrypted')
+    suffix: '_encrypted'
+  )
   attr_encrypted :email
 
   # For Vault:

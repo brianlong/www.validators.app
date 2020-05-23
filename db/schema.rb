@@ -69,9 +69,10 @@ ActiveRecord::Schema.define(version: 2019_11_26_122800) do
     t.boolean "is_admin", default: false
     t.string "email_encrypted"
     t.string "email_hash"
+    t.string "api_token"
     t.string "email_encrypted_iv"
+    t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-    t.index ["email_encrypted_iv"], name: "index_users_on_email_encrypted_iv", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true

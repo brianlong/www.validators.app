@@ -41,7 +41,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.0]
       t.string    :email_encrypted
       t.string    :email_hash
 
-      t.string :api_key
+      t.string :api_token
 
       # This can be removed if you are using Vault:
       t.string :email_encrypted_iv
@@ -51,6 +51,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.0]
     add_index :users, :username,             unique: true
     add_index :users, :confirmation_token,   unique: true
     add_index :users, :unlock_token,         unique: true
-    # add_index :users, :email_encrypted_iv,   unique: true
+    add_index :users, :api_token,            unique: true
   end
 end

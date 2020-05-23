@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
+# UserTest
 class UserTest < ActiveSupport::TestCase
   setup do
     @user_params = {
@@ -25,5 +28,18 @@ class UserTest < ActiveSupport::TestCase
 
     user = User.search_by_email_hash(@user_params[:email])
     assert_equal user.email, 'test@test.com'
+  end
+
+  test 'api_token is created with a new User' do
+    # Show that the api_token is created with a new user
+    u = User.create(@user_params)
+    api_token = u.api_token
+    assert_not_nil api_token
+
+    # Save & reload the user to confirm that the token did not change
+    u.update(username: 'test2')
+    u.reload
+    assert_equal 'test2', u.username
+    assert_equal api_token, u.api_token
   end
 end
