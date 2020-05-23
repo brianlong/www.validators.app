@@ -1,0 +1,27 @@
+<h2>Contact requests</h2>
+<table class='table'>
+  <thead>
+    <tr>
+      <th>
+        <%= t('public.contact_us.table.headings.name') %><br />
+        <%= t('public.contact_us.table.headings.email') %><br />
+        <%= t('public.contact_us.table.headings.telephone') %>
+      </th>
+      <th><%= t('public.contact_us.table.headings.comments') %></th>
+      <th><%= t('public.contact_us.table.headings.created_at') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @contact_requests.each do |cr |%>
+      <tr>
+          <td>
+            <%= cr.name %><br />
+            <%= cr.email_address %><br />
+            <%= cr.telephone %>
+          </td>
+          <td><%= cr.comments %></td>
+          <td><%= cr.created_at %></td>
+      </tr>
+    <% end%>
+  </tbody>
+</table>

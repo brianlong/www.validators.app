@@ -1,0 +1,22 @@
+apt update
+
+apt install fail2ban
+
+ufw allow 22
+ufw allow 443
+ufw enable
+
+apt install ruby-full
+
+gem install bundler
+
+apt install mysql-client
+
+apt install redis-server
+# See https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04 for Redis config
+
+apt install apache2
+
+# https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-18-04
+
+apt install passsenger

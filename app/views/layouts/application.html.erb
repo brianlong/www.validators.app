@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= t('site_title') %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous">
+    </script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/<%= Rails.application.credentials.dig(:font_awesome_download_key)%>.js"
+            crossorigin="anonymous">
+    </script>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+  </head>
+
+  <body>
+     <!-- fixed-width container -->
+    <div class="container">
+      <div class="header">
+
+        <a href="<%= root_path %>">
+          <%= image_tag 'fmaprivacy_logo_50.png', alt: t('home_page_link'), title: t('home_page') %>
+        </a>
+        <span class="float-right">
+          <% if user_signed_in? %>
+            <%= link_to destroy_user_session_path, method: :delete do %>
+              <i class="fas fa-sign-out-alt sign-in-out"
+                 alt="Sign Out Link"
+                 title="Sign Out"></i>
+            <% end %>
+          <% else %>
+            <%= link_to new_user_session_path do %>
+              <i class="fas fa-sign-in-alt sign-in-out"
+                 alt="Sign In Link"
+                 title="Sign In"></i>
+            <% end %>
+            &nbsp;|&nbsp;
+            <%= link_to new_user_registration_path do %>
+              <i class="fas fa-user-plus"
+                 alt="Sign In Link"
+                 title="Sign Up"></i>
+            <% end %>
+          <% end %>
+        </span>
+      </div>
+    </div>
+
+    <div class='container body-main'>
+      <%= render 'layouts/flash' %>
+      <%= yield %>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <% if flash[:cookie_notice] %>
+          <div class="alert alert-info" role="alert">
+            <%= flash[:cookie_notice] %>
+            <%= link_to(t('ok'), saw_cookie_notice_path, method: :post, class: 'float-right') unless cookies[:saw_cookie_notice] %>
+          </div>
+        <% end %>
+
+        <ul class="nav">
+          <li class="nav-item">
+            <%# link_to 'Contact Us', contact_us_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('footer.nav_links.faq'), faq_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('footer.nav_links.privacy_policy'), privacy_policy_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('footer.nav_links.terms_of_use'), terms_of_use_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to t('footer.nav_links.contact_us'), contact_us_path, class: 'nav-link' %>
+          </li>
+          <% if user_signed_in? && current_user.is_admin? %>
+            <li class="nav-item">
+              <%= link_to t('footer.nav_links.contact_requests'), contact_requests_path, class: 'nav-link' %>
+            </li>
+          <% end %>
+        </ul>
+        <div class="text-muted">
+          &copy; 2019<%= " - #{Date.today.year}" if Date.today.year > 2019 %>  <%= FMA_LLC %> <%= t('footer.copyright_text') %>
+        </div>
+      </div>
+
+    </footer>
+    <%# render 'layouts/development_footer' if Rails.env == 'development' %>
+
+    <!-- JavaScript files for Boostrap. See https://getbootstrap.com/ -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

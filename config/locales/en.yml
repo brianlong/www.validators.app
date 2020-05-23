@@ -1,0 +1,88 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
+# To learn more, please read the Rails Internationalization guide
+# available at https://guides.rubyonrails.org/i18n.html.
+
+en:
+  ok: OK
+  activerecord:
+    attributes:
+      user:
+        username: 'Username'
+      contact_request:
+          name: 'Name'
+          email_address: 'Email address'
+          telephone: 'Telephone'
+          comments: 'Message'
+  flash:
+    cookie: "This site uses cookies. See our <a href='/cookie-policy'>Cookie Policy</a> for details."
+  public:
+    index:
+      title: "Coming Soon"
+      paragraph: "This website is under construction. Be awesome today."
+    privacy_policy:
+      title: 'Privacy Policy'
+    cookie_policy:
+      title: 'Cookie Policy'
+    terms_of_use:
+      title: 'Terms of use'
+    ccpa:
+      title: 'California Consumer Privacy Act Disclosures'
+    faq:
+      title: 'FAQ'
+    contact_us:
+      title: 'Contact us'
+      flash:
+        contact_request_saved: 'Your request has been saved. We will contact you ASAP.'
+        only_admins_allowed: 'You are not allowed to enter this page.'
+      form:
+        comments:
+          placeholder: 'Max 500 characters.'
+        errors: 'stopped you from sending contact request.'
+        submit: 'Submit'
+      table:
+        headings:
+          name: 'Name'
+          email: 'Email address'
+          telephone: 'Telephone'
+          comments: 'Message'
+          created_at: 'Created at'
+  site_title: "FMA Ruby On Rails Template"
+  error:
+    one: '%{count} error'
+    other: '%{count} errors'
+  footer:
+    nav_links:
+      cookie_policy: 'Cookie Policy'
+      faq: 'FAQ'
+      privacy_policy: 'Privacy Policy'
+      terms_of_use: 'Terms of use'
+      contact_us: 'Contact us'
+      contact_requests: 'Contact requests'
+    copyright_text: 'provides tools that businesses use for Consumer Privacy Act Compliance.'

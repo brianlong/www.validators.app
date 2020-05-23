@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+ADMIN_EMAIL = ''
+ADMIN_SITE = ''
+COMPANY_AKA = 'FMAdata'
+FMA = 'First Movers Advantage'
+FMA_LLC = 'First Movers Advantage, LLC'
+OUR_CITY_STATE_ZIP = 'Boulder, CO 80302-3812'
+OUR_COMPANY = ''
+OUR_EMAIL_ADDRESS = ''
+OUR_FAX = '(303) 443-2073'
+OUR_LOGO = ''
+OUR_STREET_ADDRESS = '2575 PEARL ST STE 230'
+OUR_TELEPHONE = '(303) 443-2070'
+THIS_SITE = 'www.fma-rails-template.com'
+THIS_HOST = 'fma-rails-template.com'

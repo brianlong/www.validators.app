@@ -1,0 +1,79 @@
+pl:
+  ok: OK
+  activerecord:
+    attributes:
+      user:
+        username: 'Nazwa użytkownika'
+      contact_request:
+        name: 'Imię'
+        email_address: 'Adres e-mail'
+        telephone: 'Telefon'
+        comments: 'Wiadomość'
+    errors:
+      models:
+        contact_request:
+          attributes:
+            email_address:
+              invalid: 'jest nieprawidłowy.'
+              too_long: 'jest zbyt długi (maksimum 50 znaków).'
+            name:
+              invalid: 'jest nieprawidłowe.'
+              too_long: 'jest zbyt długie (maksimum 20 znaków).'
+  flash:
+    cookie: "Ta strona używa plików cookie. Zobacz naszą <a href='/cookie-policy'>Politykę Cookie</a>, aby dowiedzieć się więcej."
+  helpers:
+    label:
+      contact_request:
+        name: 'Imię'
+        email_address: 'Adres e-mail'
+        telephone: 'Telefon'
+        comments: 'Wiadomość'
+  public:
+    index:
+      title: "Public#index"
+      paragraph: "Znajdziesz mnie w app/views/public/index.pl.html.erb"
+    privacy_policy:
+      title: 'Polityka prywatności'
+      paragraph: "Znajdziesz mnie w app/views/public/privacy_policy.pl.html.erb"
+    cookie_policy:
+      title: 'Polityka cookie'
+      paragraph: "Znajdziesz mnie w app/views/public/cookie_policy.pl.html.erb"
+    terms_of_use:
+      title: 'Zasady użytkowania'
+      paragraph: "Znajdziesz mnie w app/views/public/terms_of_use.pl.html.erb"
+    ccpa:
+      title: 'Prywatność konsumenta z Kalifornii'
+      paragraph: "Znajdziesz mnie w app/views/public/disclosure_ccpa.pl.html.erb"
+    faq:
+      title: 'FAQ'
+      paragraph: "Znajdziesz mnie w app/views/public/faq.pl.html.erb"
+    contact_us:
+      title: 'Skontaktuj się z nami'
+      flash:
+        contact_request_saved: 'Prośba o kontakt została zapisana, skontaktujemy się z Tobą jak najszybciej.'
+        only_admins_allowed: 'Brak uprawnień do przeglądania zawartości tej strony.'
+      form:
+        comments:
+          placeholder: 'Max 500 znaków.'
+        errors: 'uniemożliwił/y wysłanie zapytania.'
+        submit: 'Wyślij'
+      table:
+        headings:
+          name: 'Imię'
+          email: 'Email'
+          telephone: 'Telefon'
+          comments: 'Wiadomość'
+          created_at: 'Dodano'
+  site_title: "FMA Ruby On Rails Szablon"
+  error:
+    one: '%{count} błąd'
+    other: '%{count} błędy'
+  footer:
+    nav_links:
+      cookie_policy: 'Polityka cookies'
+      faq: 'FAQ'
+      privacy_policy: 'Polityka prywatności'
+      terms_of_use: 'Zasady użytkowania'
+      contact_us: 'Kontakt'
+      contact_requests: 'Prośby o kontakt'
+    copyright_text: 'dostarcza narzędzi, których biznes używa do zgodności z ustawą o ochronie prywatności konsumentów (ang. CCPA).'

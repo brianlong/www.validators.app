@@ -1,0 +1,21 @@
+<h2><%= t('.resend_confirmation_instructions') %></h2>
+
+<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="form-group col-md-4">
+    <%= f.label :username %><br />
+    <%= f.text_field :username, autofocus: true, 
+                                 autocomplete: "username",
+                                 class: 'form-control', 
+                                 value: resource.username %>  
+  </div>
+
+  <div class="form-group col-md-4 actions">
+    <%= f.submit t('.resend_confirmation_instructions'), class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+<div class="form-group col-md-4">
+  <%= render "devise/shared/links" %>
+</div>

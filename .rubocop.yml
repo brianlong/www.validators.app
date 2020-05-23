@@ -1,0 +1,8 @@
+Layout/LineLength:
+  Max: 80
+Metrics/BlockLength:
+  Max: 999
+Metrics/MethodLength:
+  Max: 999
+Metrics/ClassLength:
+  Max: 999
