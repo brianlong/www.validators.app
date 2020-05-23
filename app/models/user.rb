@@ -5,7 +5,7 @@ class User < ApplicationRecord
   before_save :create_email_hash
 
   # has_secure_token will initialize a new token when the record is created.
-  # Create a new user token with `user.regenerate_auth_token`
+  # Regenerate a new user token with `user.regenerate_auth_token`
   has_secure_token :api_token
 
   # Include default devise modules. Others available are:
