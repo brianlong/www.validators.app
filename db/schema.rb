@@ -82,7 +82,6 @@ ActiveRecord::Schema.define(version: 2020_05_23_205030) do
     t.bigint "validator_id", null: false
     t.integer "version", default: 4
     t.string "address"
-    t.datetime "max_mind_updated_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
