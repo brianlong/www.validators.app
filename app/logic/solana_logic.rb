@@ -134,6 +134,77 @@ module SolanaLogic
     end
   end
 
+  def validator_block_history_get
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      solana_path = \
+        if Rails.env.production?
+          '/home/deploy/.local/share/solana/install/active_release/bin/'
+        else
+          ''
+        end
+      block_history = `#{solana_path}solana block-production \
+                       --output json \
+                       --url #{p[:payload][:config_url]}`
+      epoch = JSON.parse(block_history)['epoch']
+      validator_block_json = JSON.parse(block_history)['leaders']
+      validator_block_history = {}
+      validator_block_json.each do |v|
+        validator_block_history[v['identityPubkey']] = {
+          'epoch' => epoch,
+          'leader_slots' => v['leaderSlots'],
+          'blocks_produced' => v['blocksProduced'],
+          'skipped_slots' => v['skippedSlots'],
+          'skipped_slot_percent' => v['skippedSlots'] / v['leaderSlots'].to_f
+        }
+      end
+
+      Pipeline.new(
+        200,
+        p[:payload].merge(validator_block_history: validator_block_history)
+      )
+    rescue StandardError => e
+      Pipeline.new(
+        500,
+        p[:payload],
+        'Error from validator_block_history_get',
+        e
+      )
+    end
+  end
+
+  def validator_block_history_save
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      p[:payload][:validator_block_history].each do |k, v|
+        validator = Validator.where(
+          network: p[:payload][:network],
+          account: k
+        ).first
+        next if validator.nil?
+
+        validator.validator_block_histories.create(
+          epoch: v['epoch'],
+          leader_slots: v['leader_slots'],
+          blocks_produced: v['blocks_produced'],
+          skipped_slots: v['skipped_slots'],
+          skipped_slot_percent: v['skipped_slot_percent'].round(4)
+        )
+      end
+
+      Pipeline.new(200, p[:payload])
+    rescue StandardError => e
+      Pipeline.new(
+        500,
+        p[:payload],
+        'Error from validator_block_history_save',
+        e
+      )
+    end
+  end
+
   # rpc_request will make a Solana RPC request and return the results in a
   # JSON object. API specifications are at:
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference

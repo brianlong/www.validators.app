@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_23_205030) do
+ActiveRecord::Schema.define(version: 2020_05_24_223437) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -78,6 +78,20 @@ ActiveRecord::Schema.define(version: 2020_05_23_205030) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "validator_block_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "validator_id", null: false
+    t.integer "epoch"
+    t.integer "leader_slots"
+    t.integer "blocks_produced"
+    t.integer "skipped_slots"
+    t.decimal "skipped_slot_percent", precision: 10, scale: 4
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
+    t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
+    t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
+  end
+
   create_table "validator_ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.integer "version", default: 4
@@ -124,6 +138,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_205030) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
   add_foreign_key "vote_accounts", "validators"

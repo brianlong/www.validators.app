@@ -16,6 +16,8 @@ p = Pipeline.new(200, payload)
             .then(&vote_accounts_get)
             .then(&reduce_validator_vote_accounts)
             .then(&validators_save)
+            .then(&validator_block_history_get)
+            .then(&validator_block_history_save)
             .then(&log_errors)
 
 # Now go look in the validators_development DB
@@ -34,3 +36,6 @@ puts ''
 puts \
   p.payload[:validators_reduced]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
 puts ''
+p.payload[:validator_block_history].each do |k, v|
+  puts "#{k} => #{v}"
+end
