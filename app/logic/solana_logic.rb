@@ -6,57 +6,19 @@
 #
 # See `config/initializers/pipeline.rb` for a description of the Pipeline struct
 module SolanaLogic
-  # validators will return a validators Hash with the identity account as the
-  # key. and the contents of the shell command results as the values.
+  # validators_get returns the data from RPC 'getClusterNodes'
   def validators_get
     lambda do |p|
       return p unless p[:code] == 200
 
-      validators_array = \
-        JSON.parse(`solana validators --url #{p[:payload][:config_url]} \
-                    --output json-compact`)['currentValidators']
-
-      # Sample Output
-      # {"activatedStake"=>49307292744891, "commission"=>100,
-      # "credits"=>8819521,
-      # "identityPubkey"=>"Ft5fbkqNa76vnsjYNwjDZUXoTWpP7VYm3mtsaQckQADN",
-      # "lastVote"=>15251252, "rootSlot"=>15251214,
-      # "voteAccountPubkey"=>"Dht9r8gKos3p7wAQP4tFPb7VxsQT48y8ZfvxxeRa8eTT"}
-      validators = {}
-      validators_array.each do |hash|
-        validators[hash['identityPubkey']] = {
-          'vote_account' => hash['voteAccountPubkey'],
-          'activated_stake' => hash['activatedStake'],
-          'commission' => hash['commission'],
-          'credits' => hash['credits'],
-          'last_vote' => hash['lastVote'],
-          'root_slot' => hash['rootSlot']
-        }
-      end
-      Pipeline.new(200, p[:payload].merge(validators: validators))
-    rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from validators_get', e)
-    end
-  end
-
-  # gossip returns the data from `solana gossip`
-  def gossip_get
-    lambda do |p|
-      return p unless p[:code] == 200
-
-      gossip_json = rpc_request(
+      validators_json = rpc_request(
         'getClusterNodes',
         p[:payload][:config_url]
       )['result']
 
-      # Sample output:
-      # {"gossip"=>"216.24.140.155:8001",
-      # "pubkey"=>"5D1fNXzvv5NjV1ysLjirC4WY92RNsVH18vjmcszZd8on",
-      # "rpc"=>"216.24.140.155:8899", "tpu"=>"216.24.140.155:8004",
-      # "version"=>"1.1.14 c7d85758"}
-      gossip = {}
-      gossip_json.each do |hash|
-        gossip[hash['pubkey']] = {
+      validators = {}
+      validators_json.each do |hash|
+        validators[hash['pubkey']] = {
           'gossip_ip_port' => hash['gossip'],
           'rpc_ip_port' => hash['rpc'],
           'tpu_ip_port' => hash['tpu'],
@@ -64,21 +26,50 @@ module SolanaLogic
         }
       end
 
-      Pipeline.new(200, p[:payload].merge(gossip: gossip))
+      Pipeline.new(200, p[:payload].merge(validators: validators))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from gossip_get', e)
+      Pipeline.new(500, p[:payload], 'Error from validators_get', e)
     end
   end
 
-  # reduce the two validators and gossip Hashes into a single structure
-  def reduce_gossip_validators
+  # vote_accounts_get returns the data from RPC 'getVoteAccounts'
+  def vote_accounts_get
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      vote_accounts_json = rpc_request(
+        'getVoteAccounts',
+        p[:payload][:config_url]
+      )['result']['current']
+
+      vote_accounts = {}
+      vote_accounts_json.each do |hash|
+        vote_accounts[hash['nodePubkey']] = {
+          'vote_account' => hash['votePubkey'],
+          'activated_stake' => hash['activatedStake'],
+          'commission' => hash['commission'],
+          'last_vote' => hash['lastVote'],
+          'credits' => hash['epochCredits'][-1][1]
+        }
+      end
+
+      Pipeline.new(200, p[:payload].merge(vote_accounts: vote_accounts))
+    rescue StandardError => e
+      Pipeline.new(500, p[:payload], 'Error from vote_accounts_get', e)
+    end
+  end
+
+  # reduce the two validators and vote_accounts Hashes into a single structure
+  def reduce_validator_vote_accounts
     lambda do |p|
       return p unless p[:code] == 200
 
       validators_reduced = {}
       p[:payload][:validators].each do |k, _v|
+        next if p[:payload][:vote_accounts][k].nil?
+
         validators_reduced[k] = \
-          p[:payload][:validators][k].merge(p[:payload][:gossip][k])
+          p[:payload][:validators][k].merge(p[:payload][:vote_accounts][k])
       end
 
       Pipeline.new(
@@ -86,7 +77,12 @@ module SolanaLogic
         p[:payload].merge(validators_reduced: validators_reduced)
       )
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from reduce_gossip_validators', e)
+      Pipeline.new(
+        500,
+        p[:payload],
+        'Error from reduce_validator_vote_accounts',
+        e
+      )
     end
   end
 
@@ -111,13 +107,11 @@ module SolanaLogic
         vote_account.votes.create(
           commission: v['commission'],
           last_vote: v['last_vote'],
-          root_slot: v['root_slot'],
           credits: v['credits'],
           activated_stake: v['activated_stake'],
           software_version: v['version']
         )
 
-        # byebug
         # Find or create the validator IP address
         _ip = validator.validator_ips.find_or_create_by(
           version: 4,
@@ -136,7 +130,22 @@ module SolanaLogic
   #
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
   def rpc_request(rpc_method, rpc_url)
-    JSON.parse(`curl -X POST -H "Content-Type: application/json" \
-      -d '{"jsonrpc":"2.0", "id":1, "method":"#{rpc_method}"}' #{rpc_url}`)
+    # Parse the URL data into an URI object
+    uri = URI.parse(
+      "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
+    )
+
+    # Create the HTTP session and send the request
+    response = Net::HTTP.start(uri.host, uri.port) do |http|
+      request = Net::HTTP::Post.new(
+        uri.request_uri,
+        { 'Content-Type' => 'application/json' }
+      )
+      request.body = {
+        'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
+      }.to_json
+      http.request(request)
+    end
+    JSON.parse(response.body)
   end
 end

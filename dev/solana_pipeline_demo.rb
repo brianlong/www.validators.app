@@ -13,21 +13,23 @@ payload = {
 
 pipeline = Pipeline.new(200, payload)
                    .then(&validators_get)
-                   .then(&gossip_get)
-                   .then(&reduce_gossip_validators)
+                   .then(&vote_accounts_get)
+                   .then(&reduce_validator_vote_accounts)
                    .then(&validators_save)
 
 # Now go look in the validators_development DB
 
 # puts pipeline.inspect
-puts "code: #{pipeline[:code]}; message: #{pipeline[:message]}, error: #{pipeline[:errors]}"
+puts "CODE: #{pipeline[:code]}"
+puts "MESSAGE: #{pipeline[:message]}"
+puts "ERROR: #{pipeline[:errors].inspect}"
 puts ''
 puts 'Data for 71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B:'
 puts ''
 puts \
   pipeline.payload[:validators]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
 puts ''
-puts pipeline.payload[:gossip]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
+puts pipeline.payload[:vote_accounts]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
 puts ''
 puts \
   pipeline.payload[:validators_reduced]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
