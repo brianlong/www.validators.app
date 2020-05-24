@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+# NOTE:
+# There are currently these tasks running in production. Remove these once
+# schedule.rb is working correctly.
+#
+# 0,5,10,15,20,25,30,35,40,45,50,55 * * * * /bin/bash -l -c 'cd /home/deploy/validators.app/current && RAILS_ENV=production /usr/bin/bundle exec /usr/bin/ruby script/gather_rpc_data.rb >> /home/deploy/validators.app/current/log/gather_rpc_data.rb.log 2>&1'
+
 # Use this file to easily define all of your cron jobs.
 #
 # It's helpful, but not entirely necessary to understand cron before proceeding.
