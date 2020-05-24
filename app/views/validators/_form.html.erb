@@ -1,0 +1,32 @@
+<%= form_with(model: validator, local: true) do |form| %>
+  <% if validator.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(validator.errors.count, "error") %> prohibited this validator from being saved:</h2>
+
+      <ul>
+        <% validator.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :network %>
+    <%= form.text_field :network %>
+  </div>
+
+  <div class="field">
+    <%= form.label :account_identity %>
+    <%= form.text_field :account_identity %>
+  </div>
+
+  <div class="field">
+    <%= form.label :account_vote %>
+    <%= form.text_field :account_vote %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -41,6 +41,8 @@ gem 'sidekiq'
 #   gem 'sidekiq-pro'
 # end
 
+gem 'whenever', require: false
+
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
