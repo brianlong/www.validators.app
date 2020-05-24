@@ -86,3 +86,5 @@ en:
       contact_us: 'Contact us'
       contact_requests: 'Contact requests'
     copyright_text: 'provides tools for the Solana validator community.'
+  you:
+    only_users_allowed: 'Only authenticated User are allowed'

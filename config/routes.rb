@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'you/', to: 'you#index', as: :user_root
+  post 'you/regenerate_token', to: 'you#regenerate_token'
+
   devise_for :users
 
   # Free Sidekiq
