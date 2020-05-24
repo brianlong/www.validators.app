@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateVotes < ActiveRecord::Migration[6.0]
+class CreateVoteAccountHistories < ActiveRecord::Migration[6.0]
   def change
-    create_table :votes do |t|
+    create_table :vote_account_histories do |t|
       t.references :vote_account, null: false, foreign_key: true
       t.integer :commission
       t.bigint :last_vote
@@ -13,6 +13,6 @@ class CreateVotes < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
-    add_index :votes, %i[vote_account_id created_at]
+    add_index :vote_account_histories, %i[vote_account_id created_at]
   end
 end

@@ -104,7 +104,7 @@ module SolanaLogic
         )
 
         # Create Vote records to save a time series of vote & stake data
-        vote_account.votes.create(
+        vote_account.vote_account_histories.create(
           commission: v['commission'],
           last_vote: v['last_vote'],
           credits: v['credits'],
@@ -127,7 +127,6 @@ module SolanaLogic
 
   # rpc_request will make a Solana RPC request and return the results in a
   # JSON object. API specifications are at:
-  #
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
   def rpc_request(rpc_method, rpc_url)
     # Parse the URL data into an URI object
@@ -146,6 +145,7 @@ module SolanaLogic
       }.to_json
       http.request(request)
     end
+
     JSON.parse(response.body)
   end
 end

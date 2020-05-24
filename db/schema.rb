@@ -100,6 +100,20 @@ ActiveRecord::Schema.define(version: 2020_05_23_205030) do
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 
+  create_table "vote_account_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "vote_account_id", null: false
+    t.integer "commission"
+    t.bigint "last_vote"
+    t.bigint "root_slot"
+    t.bigint "credits"
+    t.bigint "activated_stake"
+    t.string "software_version"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["vote_account_id", "created_at"], name: "index_vote_account_histories_on_vote_account_id_and_created_at"
+    t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"
+  end
+
   create_table "vote_accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.string "account"
@@ -110,22 +124,8 @@ ActiveRecord::Schema.define(version: 2020_05_23_205030) do
     t.index ["validator_id"], name: "index_vote_accounts_on_validator_id"
   end
 
-  create_table "votes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "vote_account_id", null: false
-    t.integer "commission"
-    t.bigint "last_vote"
-    t.bigint "root_slot"
-    t.bigint "credits"
-    t.bigint "activated_stake"
-    t.string "software_version"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["vote_account_id", "created_at"], name: "index_votes_on_vote_account_id_and_created_at"
-    t.index ["vote_account_id"], name: "index_votes_on_vote_account_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "validator_ips", "validators"
+  add_foreign_key "vote_account_histories", "vote_accounts"
   add_foreign_key "vote_accounts", "validators"
-  add_foreign_key "votes", "vote_accounts"
 end

@@ -3,5 +3,5 @@
 # VoteAccount
 class VoteAccount < ApplicationRecord
   belongs_to :validator
-  has_many :votes
+  has_many :vote_account_histories
 end
