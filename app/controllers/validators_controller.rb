@@ -8,7 +8,7 @@ class ValidatorsController < ApplicationController
   # GET /validators.json
   def index
     # Default network is 'solana-tds'
-    @network ||= 'solana-tds' # 'solana-main'
+    @network ||= 'testnet' # 'main'
     @validators = Validator.where(network: @network)
                            .order('network, account desc')
                            .all
