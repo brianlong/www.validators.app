@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/faker-ruby/faker.git
-  revision: 53341f87d454eca30c9fe6f8ed62310ecc9c0ab4
+  revision: 2ad1e42524fd187bfdd4966e295d29ac5d025cd2
   branch: master
   specs:
     faker (2.11.0)
@@ -336,9 +336,6 @@ DEPENDENCIES
   webdrivers
   webpacker (~> 4.0)
   whenever
-
-RUBY VERSION
-   ruby 2.7.0p0
 
 BUNDLED WITH
    2.1.2

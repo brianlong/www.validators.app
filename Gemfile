@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.0'
+# ruby '2.7.0'
 gem 'bundler', '>= 2.1'
 gem 'json', '>= 2.3.0'
 
