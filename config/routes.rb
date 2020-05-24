@@ -2,6 +2,10 @@
 
 Rails.application.routes.draw do
   resources :validators, only: %i[index show]
+
+  get 'you/', to: 'you#index', as: :user_root
+  post 'you/regenerate_token', to: 'you#regenerate_token'
+
   devise_for :users
 
   # Free Sidekiq
