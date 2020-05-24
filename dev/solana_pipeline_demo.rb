@@ -16,7 +16,7 @@ p = Pipeline.new(200, payload)
             .then(&vote_accounts_get)
             .then(&reduce_validator_vote_accounts)
             .then(&validators_save)
-# .then(&log_errors)
+            .then(&log_errors)
 
 # Now go look in the validators_development DB
 

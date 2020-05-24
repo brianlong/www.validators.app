@@ -125,6 +125,15 @@ module SolanaLogic
     end
   end
 
+  def log_errors
+    lambda do |p|
+      unless p[:code] == 200
+        Rails.logger.error "PIPELINE ERROR CODE: #{p[:code]} MESSAGE: #{p[:message]} CLASS: #{p[:errors].class}"
+      end
+      p
+    end
+  end
+
   # rpc_request will make a Solana RPC request and return the results in a
   # JSON object. API specifications are at:
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
