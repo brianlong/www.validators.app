@@ -13,7 +13,7 @@
     <% @validators.each do |validator| %>
       <tr>
         <td>
-          <%= link_to validator.account, validators_url(validator) %>
+          <%= link_to validator.account, validator_url(validator) %>
         </td>
       </tr>
     <% end %>
