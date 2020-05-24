@@ -1,8 +1,10 @@
-# config valid for current version and patch releases of Capistrano
-lock "~> 3.11.2"
+# frozen_string_literal: true
 
-set :application, "my_app_name"
-set :repo_url, "git@example.com:me/my_repo.git"
+# config valid for current version and patch releases of Capistrano
+lock '~> 3.14.0'
+
+set :application, 'validators.app'
+set :repo_url, 'git@github.com:brianlong/www.validators.app.git'
 set :user, 'deploy'
 
 # Default branch is :master
@@ -27,15 +29,13 @@ set :templated_config_files, []
 set :pty, false
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml"
-append :linked_files, "config/master.key"
-append :linked_files, "config/credentials.yml.enc"
+append :linked_files, 'config/database.yml'
+append :linked_files, 'config/credentials/production.key'
 
 # Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system'
 
-set :bundle_dir, "/home/deploy/gems"
+set :bundle_dir, '/home/deploy/gems'
 set :default_env, {
   'GEM_HOME' => '/home/deploy/gems',
   'GEM_PATH' => '/home/deploy/gems'
