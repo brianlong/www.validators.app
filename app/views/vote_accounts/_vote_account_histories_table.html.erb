@@ -1,0 +1,33 @@
+<h3>Recent Vote Account Activity</h3>
+<table class='table table-striped'>
+  <thead class="thead-dark">
+    <tr>
+      <th>Last<br />Vote</th>
+      <th>Activated<br />Stake</th>
+      <th>Credits</th>
+      <th>Software<br />Version</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @vote_account.vote_account_histories.order('id desc').limit(60).each do |vote| %>
+    <tr>
+      <td class='text-right'>
+        <%= number_with_delimiter vote.last_vote %>
+      </td>
+      <td class='text-right'>
+        <%= number_with_delimiter (vote.activated_stake/1_000_000_000) %> SOL
+      </td>
+      <td class='text-right'>
+        <%= number_with_delimiter vote.credits %>
+      </td>
+      <td class='text-right'>
+        <%= number_with_delimiter vote.software_version %>
+      </td>
+      <td>
+        <%= vote.created_at %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,37 @@
+<div id="notice"><%= notice %></div>
+
+<h3>Vote Account Details</h3>
+<div class="row">
+  <div class="col-sm-12">
+    <table class='table table-striped'>
+      <tbody>
+        <tr>
+          <td><strong>Network:</strong></td>
+          <td><%= @network %></td>
+        </tr>
+        <tr>
+          <td><strong>Vote Account:</strong></td>
+          <td><%= @vote_account.account %></td>
+        </tr>
+        <tr>
+          <td><strong>Identity Account:</strong></td>
+          <td>
+            <%= link_to @vote_account.validator.account, validator_url(@vote_account.validator) %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row validator-block-history-table">
+  <div class="col-sm-12">
+    <%= render partial: 'vote_account_histories_table' %>
+  </div>
+</div>
+
+<div class='row'>
+  <div class="col-sm-12">
+    <%= link_to 'Back to List of Validators', validators_path %>
+  </div>
+</div>

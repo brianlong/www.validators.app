@@ -1,21 +1,28 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Validators</h1>
-<p><%= @network %></p>
-<table>
-  <thead>
-    <tr>
-      <th>Account</th>
-    </tr>
-  </thead>
+<h1><%= @network.capitalize%> Validators</h1>
+<div class="row">
+  <div class="col-sm-12">
+    <table class='table table-striped'>
+      <thead class="thead-dark">
+        <tr>
+          <th>Identity Account</th>
+          <th>Vote Account</th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @validators.each do |validator| %>
-      <tr>
-        <td>
-          <%= link_to validator.account, validator_url(validator) %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @validators.each do |validator| %>
+          <tr>
+            <td>
+              <%= link_to validator.account, validator_url(validator) %>
+            </td>
+            <td>
+              <%= link_to validator.vote_accounts.order('id desc').last.account, vote_account_url(validator.vote_accounts.order('id desc').last) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

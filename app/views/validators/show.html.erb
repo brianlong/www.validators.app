@@ -1,13 +1,41 @@
-<p id="notice"><%= notice %></p>
+<div id="notice"><%= notice %></div>
 
-<p>
-  <strong>Network:</strong>
-  <%= @validator.network %>
-</p>
+<h3>Validator Details</h3>
+<div class="row">
+  <div class="col-sm-12">
+    <table class='table table-striped'>
+      <tbody>
+        <tr>
+          <td><strong>Network:</strong></td>
+          <td><%= @validator.network %></td>
+        </tr>
+        <tr>
+          <td><strong>Identity Account:</strong></td>
+          <td><%= @validator.account %></td>
+        </tr>
+        <tr>
+          <td><strong>Vote Account:</strong></td>
+          <td>
+            <%= link_to @validator.vote_accounts.order('id desc').last.account, vote_account_url(@validator.vote_accounts.order('id desc').last) %>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>IP Address:</strong></td>
+          <td><%= @validator.validator_ips.last.address %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-<p>
-  <strong>Account:</strong>
-  <%= @validator.account %>
-</p>
+<div class="row validator-block-history-table">
+  <div class="col-sm-12">
+    <%= render partial: 'block_history_table' %>
+  </div>
+</div>
 
-<%= link_to 'Back', validators_path %>
+<div class='row'>
+  <div class="col-sm-12">
+    <%= link_to 'Back to List of Validators', validators_path %>
+  </div>
+</div>
