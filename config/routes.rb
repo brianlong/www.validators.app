@@ -27,7 +27,6 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    # scope module:
     namespace :v1 do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
@@ -37,7 +36,6 @@ Rails.application.routes.draw do
   end
 
   # Public Controller
-  # get 'public/index'
   match 'contact-us', to: 'public#contact_us', via: %i[get post]
 
   get 'contact-requests', to: 'contact_requests#index'
