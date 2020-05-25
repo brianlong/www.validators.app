@@ -1,0 +1,2 @@
+class PingTime < ApplicationRecord
+end
