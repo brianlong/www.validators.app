@@ -34,12 +34,14 @@ ActiveRecord::Schema.define(version: 2020_05_25_162028) do
   end
 
   create_table "collectors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
     t.string "payload_type"
     t.integer "payload_version"
     t.text "payload", size: :long
     t.string "ip_address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_collectors_on_user_id"
   end
 
   create_table "contact_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -171,6 +173,7 @@ ActiveRecord::Schema.define(version: 2020_05_25_162028) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "collectors", "users"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
