@@ -10,7 +10,7 @@ class ValidatorsController < ApplicationController
     # Default network is 'solana-tds'
     @network ||= 'testnet' # 'main'
     @validators = Validator.where(network: @network)
-                           .order('network, account desc')
+                           .order('network, account')
                            .all
   end
 

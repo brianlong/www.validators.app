@@ -1,2 +1,47 @@
 <h1><%= t('public.index.title') %></h1>
-<p><%= t('public.index.paragraph') %></p>
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+    This website is collecting time-series data to help Solana validators track the performance of their nodes over time. Every five minutes, we are sampling validator and vote account activity such as block production, active stake, skipped slot percentage, etc.</p>
+  </div>
+</div>
+
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+      The application is still under construction, but you are welcome to click around and see the current progress. Start at the <%= link_to 'Testnet Validators', validators_url %> page to find your Account, then click on your Identity or Vote account to see recent time series data. Right now, the website will only show the 60 most recent rows. All of the data will be available through a forthcoming JSON API.
+    </p>
+  </div>
+</div>
+
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+      Very soon, the app will receive ping data from participating cluster nodes so we can create a map of the network latency of the cluster. I will make an announcement in the Discord channels when the validator client script is ready.
+    </p>
+  </div>
+</div>
+
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+      I hope you find the time-series data useful. Please send feedback in the Solana Discord group. You are also welcome to create issues on my <%= link_to 'Github Repo', 'https://github.com/brianlong/www.validators.app', target: '_blank' %>.
+    </p>
+  </div>
+</div>
+
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+      Thanks! -- Brian Long
+    </p>
+  </div>
+</div>
+
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+      P.S. I will work to make the site look prettier in the future. Right now, I am focused on the data and API features ;-)
+    </p>
+  </div>
+</div>

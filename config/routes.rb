@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  resources :vote_accounts, only: %i[show]
   resources :validators, only: %i[index show]
 
   get 'you/', to: 'you#index', as: :user_root

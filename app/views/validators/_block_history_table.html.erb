@@ -1,0 +1,37 @@
+<h3>Validator Recent Block Production</h3>
+<table class='table table-striped'>
+  <thead class="thead-dark">
+    <tr>
+      <th>Epoch</th>
+      <th>Leader<br />Slots</th>
+      <th>Blocks<br />Produced</th>
+      <th>Skipped<br />Slots</th>
+      <th>Skipped<br />Slot Percent</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @validator.validator_block_histories.order('id desc').limit(60).each do |history| %>
+    <tr>
+      <td class='text-right'>
+        <%= number_with_delimiter history.epoch %>
+      </td>
+      <td class='text-right'>
+        <%= number_with_delimiter history.leader_slots %>
+      </td>
+      <td class='text-right'>
+        <%= number_with_delimiter history.blocks_produced %>
+      </td>
+      <td class='text-right'>
+        <%= number_with_delimiter history.skipped_slots %>
+      </td>
+      <td class='text-right'>
+        <%= number_to_percentage (history.skipped_slot_percent*100.0) %>
+      </td>
+      <td>
+        <%= history.created_at %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

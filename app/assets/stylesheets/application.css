@@ -23,11 +23,19 @@
  }
 
  tr > td {
-   font-size: 18px;
+   font-size: 16px;
  }
 
  tr > th {
-   font-size: 18px;
+   font-size: 16px;
+ }
+
+a {
+  color: #007bff;
+}
+
+ a:visited {
+   color: #007bff;
  }
 
  #donotsell_frame {
@@ -41,6 +49,7 @@
  .body-main {
    min-height: 420px;
    margin-bottom: 60px;
+   font-size: 16px;
  }
 
  .highlight-for-emphasis {
@@ -81,9 +90,26 @@
 .you-dashboard {
   font-size: 24px;
   padding-top: 20px;
-  padding-bottom: 10px;  
+  padding-bottom: 10px;
 }
 
+.validator-block-history-table {
+  padding-top: 20px;
+}
+
+.paragraph {
+  /* padding-top: 20px; */
+}
+
+p {
+  font-size: 18px;
+  padding-top: 10px;
+  line-height: 1.6;
+}
+
+.font-16 {
+  font-size: 16px;
+}
  /* Extra small devices (portrait phones, less than 576px)
  No media query for `xs` since this is the default in Bootstrap */
 
@@ -124,3 +150,10 @@
  span.task-validated-icon {
    font-size: 2em;
  }
+
+/* class='font-fixed-width text-success' */
+.font-fixed-width {
+  font-family: monospace;
+  font: courier;
+  font-size: 24px;
+}
