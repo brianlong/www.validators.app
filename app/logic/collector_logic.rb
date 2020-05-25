@@ -2,13 +2,10 @@
 
 # CollectorLogic
 module CollectorLogic
-  # collect_ping_times will read a Collector object with PingTimes and import
-  # the data into the ping_times table.
-  #
-  # This method will be called from a Sidekiq worker.
+  # guard_ping_times will check the collector payload type & version
   #
   # Expects to see p[:payload][:collector_id]
-  def collect_ping_times
+  def ping_times_guard
     lambda do |p|
       return p unless p[:code] == 200
 
@@ -25,16 +22,98 @@ module CollectorLogic
         return Pipeline.new(400, p[:payload], 'Wrong payload_version')
       end
 
-      # Import the records
+      # Pass the collector object with the payload for subsquent steps
+      return Pipeline.new(200, p[:payload].merge(collector: collector))
+    rescue StandardError => e
+      Pipeline.new(500, p[:payload], 'Error from guard_ping_times', e)
+    end
+  end
+
+  # Read the ping_times from the collector object and set a batch_id
+  #
+  # Expects to see p[:payload][:collector]
+  def ping_times_read
+    lambda do |p|
+      return p unless p[:code] == 200
+
       batch_id = SecureRandom.uuid
-      ping_times = JSON.parse(collector.payload)
+      ping_times = JSON.parse(p[:payload][:collector].payload)
+
+      # Pass the batch_id & ping_times through for subsequent steps
+      return Pipeline.new(
+        200,
+        p[:payload].merge(
+          batch_id: batch_id,
+          ping_times: ping_times
+        )
+      )
+    rescue StandardError => e
+      Pipeline.new(500, p[:payload], 'Error from ping_times_read', e)
+    end
+  end
+
+  # Calculate stats from the batch of ping_times. Pass the results through in
+  # p[:payload][:ping_time_stats]
+  def ping_times_calculate_stats
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      # Calculate Average Ping Times
+      average_times = p[:payload][:ping_times].map do |pt|
+        pt['avg_ms'] unless pt['avg_ms'].nil?
+      end
+      average_times = average_times.reject { |a| a.to_s.empty? }
+      overall_average_time = \
+        average_times.inject { |sum, el| sum + el }.to_f / average_times.size
+
+      # byebug
+      min_times = p[:payload][:ping_times].map do |pt|
+        pt['min_ms'] unless pt['min_ms'].nil?
+      end
+      min_times = min_times.reject { |a| a.to_s.empty? }
+      overall_min_time = min_times.min
+
+      max_times = p[:payload][:ping_times].map do |pt|
+        pt['max_ms'] unless pt['max_ms'].nil?
+      end
+      max_times = max_times.reject { |a| a.to_s.empty? }
+      overall_max_time = max_times.max
+
+      return Pipeline.new(
+        200,
+        p[:payload].merge(
+          ping_time_stats: {
+            batch_id: p[:payload][:batch_id],
+            overall_min_time: overall_min_time,
+            overall_max_time: overall_max_time,
+            overall_average_time: overall_average_time
+          }
+        )
+      )
+    rescue StandardError => e
+      Pipeline.new(500, p[:payload], 'Error from ping_times_calculate_stats', e)
+    end
+  end
+
+  # collect_ping_times will read a Collector object with PingTimes and import
+  # the data into the ping_times table.
+  #
+  # Expects to see p[:payload][:collector], p[:payload][:batch_id], &
+  # p[:payload][:ping_times]
+  def ping_times_save
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      # Import the records
+      # batch_id = SecureRandom.uuid
+      # ping_times = JSON.parse(p[:payload][:collector].payload)
       # byebug
 
       ActiveRecord::Base.transaction do
-        ping_times.each do |pt|
+        p[:payload][:ping_times].each do |pt|
           # Create the ping_times record
           PingTime.create!(
-            batch_id: batch_id,
+            batch_id: p[:payload][:batch_id],
             network: pt['network'],
             from_account: pt['from_account'],
             from_ip: pt['from_ip'],
@@ -46,8 +125,18 @@ module CollectorLogic
             mdev: pt['mdev']
           )
         end
+
+        # Create the PingTimeStat record
+        PingTimeStat.create(
+          batch_id: p[:payload][:ping_time_stats][:batch_id],
+          overall_min_time: p[:payload][:ping_time_stats][:overall_min_time],
+          overall_max_time: p[:payload][:ping_time_stats][:overall_max_time],
+          overall_average_time: \
+            p[:payload][:ping_time_stats][:overall_average_time]
+        )
+
         # destroy the collector
-        collector.destroy!
+        p[:payload][:collector].destroy!
       end
 
       return Pipeline.new(200, p[:payload])

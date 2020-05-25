@@ -33,6 +33,7 @@ collector = Collector.create(
 
 payload = { collector_id: collector.id }
 result = Pipeline.new(200, payload)
-                 .then(&collect_ping_times)
+                 .then(&ping_times_guard)
+                 .then(&ping_times_save)
 
 puts result.inspect
