@@ -26,6 +26,16 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  namespace :api do
+    # scope module:
+    namespace :v1 do
+      # api_v1_ping GET /api/v1/ping(.:format)
+      get 'ping', to: 'api#ping'
+      # api_v1_collector POST /api/v1/collector
+      post 'collector', to: 'api#collector'
+    end
+  end
+
   # Public Controller
   # get 'public/index'
   match 'contact-us', to: 'public#contact_us', via: %i[get post]
