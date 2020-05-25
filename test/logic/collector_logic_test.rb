@@ -16,6 +16,7 @@ class CollectorLogicTest < ActiveSupport::TestCase
                      .then(&ping_times_read)
                      .then(&ping_times_calculate_stats)
                      .then(&ping_times_save)
+                     .then(&log_errors)
 
     assert_equal 200, result.code
 

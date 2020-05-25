@@ -2,6 +2,8 @@
 
 # CollectorLogic
 module CollectorLogic
+  include PipelineLogic
+
   # guard_ping_times will check the collector payload type & version
   #
   # Expects to see p[:payload][:collector_id]

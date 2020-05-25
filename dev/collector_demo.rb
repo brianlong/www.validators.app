@@ -34,6 +34,9 @@ collector = Collector.create(
 payload = { collector_id: collector.id }
 result = Pipeline.new(200, payload)
                  .then(&ping_times_guard)
+                 .then(&ping_times_read)
+                 .then(&ping_times_calculate_stats)
                  .then(&ping_times_save)
+                 .then(&log_errors)
 
 puts result.inspect

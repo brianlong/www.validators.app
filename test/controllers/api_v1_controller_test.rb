@@ -71,7 +71,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     valid_payload = {
       payload_type: 'ping',
       payload_version: 1,
-      payload: { test_key: 'test_value' }.to_json
+      payload: { 'test_key' => 'test_value' }.to_json
     }
 
     # Post the payload
