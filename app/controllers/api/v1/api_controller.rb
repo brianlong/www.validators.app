@@ -8,12 +8,16 @@ module Api
 
       # POST api/v1/collector
       def collector
+        Rails.logger.debug params
+        Rails.logger.debug collector_params
+
         @collector = Collector.new(
           collector_params.merge(
             user_id: User.where(api_token: request.headers['Token']).first.id,
             ip_address: request.remote_ip
           )
         )
+        Rails.logger.debug @collector.inspect
 
         if @collector.save
           # TODO: Move this to a Sidekiq worker!
