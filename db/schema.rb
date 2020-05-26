@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_133100) do
+ActiveRecord::Schema.define(version: 2020_05_25_224751) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -34,12 +34,14 @@ ActiveRecord::Schema.define(version: 2020_05_25_133100) do
   end
 
   create_table "collectors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
     t.string "payload_type"
     t.integer "payload_version"
     t.text "payload", size: :long
     t.string "ip_address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_collectors_on_user_id"
   end
 
   create_table "contact_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -53,6 +55,42 @@ ActiveRecord::Schema.define(version: 2020_05_25_133100) do
     t.string "comments_encrypted_iv"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "ping_time_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "batch_id"
+    t.decimal "overall_min_time", precision: 10, scale: 3
+    t.decimal "overall_max_time", precision: 10, scale: 3
+    t.decimal "overall_average_time", precision: 10, scale: 3
+    t.datetime "observed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["batch_id"], name: "index_ping_time_stats_on_batch_id"
+  end
+
+  create_table "ping_times", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "batch_id"
+    t.string "network"
+    t.string "from_account"
+    t.string "from_ip"
+    t.string "to_account"
+    t.string "to_ip"
+    t.decimal "min_ms", precision: 10, scale: 3
+    t.decimal "avg_ms", precision: 10, scale: 3
+    t.decimal "max_ms", precision: 10, scale: 3
+    t.decimal "mdev", precision: 10, scale: 3
+    t.datetime "observed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["batch_id"], name: "index_ping_times_on_batch_id"
+    t.index ["network", "from_account", "created_at"], name: "index_ping_times_on_network_and_from_account_and_created_at"
+    t.index ["network", "from_account", "to_account", "created_at"], name: "ndx_network_from_to_account"
+    t.index ["network", "from_ip", "created_at"], name: "index_ping_times_on_network_and_from_ip_and_created_at"
+    t.index ["network", "from_ip", "to_ip", "created_at"], name: "index_ping_times_on_network_and_from_ip_and_to_ip_and_created_at"
+    t.index ["network", "to_account", "created_at"], name: "index_ping_times_on_network_and_to_account_and_created_at"
+    t.index ["network", "to_account", "from_account", "created_at"], name: "ndx_network_to_from_account"
+    t.index ["network", "to_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_created_at"
+    t.index ["network", "to_ip", "from_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_from_ip_and_created_at"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -147,6 +185,7 @@ ActiveRecord::Schema.define(version: 2020_05_25_133100) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "collectors", "users"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"

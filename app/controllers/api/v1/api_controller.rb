@@ -7,7 +7,10 @@ module Api
       # POST api/v1/collector
       def collector
         @collector = Collector.new(
-          collector_params.merge(ip_address: request.remote_ip)
+          collector_params.merge(
+            user_id: User.where(api_token: request.headers['Token']).first.id,
+            ip_address: request.remote_ip
+          )
         )
 
         if @collector.save
