@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# This script will attempt to ping all of the other nodes shown in the gossip
-# network and find the ping time from this node to the others.
+# This script will attempt to ping all of the other nodes shown in the cluster
+# and find the ping time from this node to the others.
 #
 # Prerequisites:
 #   - Any recent version of Ruby. `sudo apt install ruby` should work.
@@ -13,13 +13,14 @@
 #
 # Please note that we are sampling ping times on each node in the gossip
 # network in a single thread, so this script will take a while to run. Be
-# patient!
+# patient! We are trying to not disturb your running validator with high bursts
+# of traffic.
 #
 # CRON Example:
 # */5 * * * * /bin/bash -l -c 'VALIDATORS_API_TOKEN=YOUR_TOKEN_HERE cd /home/SOLANA_USER/ && /usr/bin/ruby collect_ping_times.rb >> /home/SOLANA_USER/collect_ping_times.log 2>&1'
 #
 # NOTE: Your logs will be empty if there are no errors. All errors will be
-# logged.
+# seen in your designated log file.
 #
 # Author: Brian Long
 
@@ -66,7 +67,7 @@ module CollectorLogic
     uri = URI.parse('https://www.validators.app/api/v1/collector')
 
     # Create the HTTP session and send the request
-    response = Net::HTTP.start(uri.host, uri.port) do |http|
+    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
       request = Net::HTTP::Post.new(
         uri.request_uri,
         {
@@ -149,7 +150,7 @@ begin
         'min_ms' => ping_stats[0].to_f,
         'avg_ms' => ping_stats[1].to_f,
         'max_ms' => ping_stats[2].to_f,
-        'mdev_ms' => ping_stats[3].gsub('ms', '').strip.to_f
+        'mdev' => ping_stats[3].gsub('ms', '').strip.to_f
       }
     end
     raise 'Interrupted' if interrupted
