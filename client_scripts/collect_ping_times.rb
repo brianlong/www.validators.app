@@ -17,7 +17,7 @@
 # of traffic.
 #
 # CRON Example:
-# */5 * * * * /bin/bash -l -c 'VALIDATORS_API_TOKEN=YOUR_TOKEN_HERE cd /home/SOLANA_USER/ && /usr/bin/ruby collect_ping_times.rb >> /home/SOLANA_USER/collect_ping_times.log 2>&1'
+# */10 * * * * /bin/bash -l -c 'cd /home/brianlong/ && VALIDATORS_API_TOKEN=YOUR_TOKEN /usr/bin/ruby collect_ping_times.rb >> /home/brianlong/collect_ping_times.log 2>&1'
 #
 # NOTE: Your logs will be empty if there are no errors. All errors will be
 # seen in your designated log file.

@@ -16,7 +16,13 @@ class ValidatorsController < ApplicationController
 
   # GET /validators/1
   # GET /validators/1.json
-  def show; end
+  def show
+    @network ||= 'testnet' # 'main'
+    @ping_times = PingTime.where(
+      network: @network,
+      to_account: @validator.account
+    ).order('id desc').limit(30)
+  end
 
   private
 

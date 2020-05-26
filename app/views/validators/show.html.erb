@@ -27,7 +27,21 @@
     </table>
   </div>
 </div>
-
+<div class='row'>
+  <div class="col-sm-12">
+    <%= link_to 'Back to List of Validators', validators_path %>
+  </div>
+</div>
+<div class="row validator-block-history-table">
+  <div class="col-sm-12">
+    <%= render partial: 'ping_times_table' %>
+  </div>
+</div>
+<div class='row'>
+  <div class="col-sm-12">
+    <%= link_to 'Back to List of Validators', validators_path %>
+  </div>
+</div>
 <div class="row validator-block-history-table">
   <div class="col-sm-12">
     <%= render partial: 'block_history_table' %>

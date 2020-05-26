@@ -1,0 +1,38 @@
+<h3>Validator Recent Ping Times (ms)</h3>
+<table class='table table-striped'>
+  <thead class="thead-dark">
+    <tr>
+      <th>From Account</th>
+      <th>Min. Time<br />Batch Min.</th>
+      <th>Avg. Time<br />Batch Avg.</th>
+      <th>Max. Time<br />Batch Max.</th>
+      <th>Observed At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @ping_times.each do |ping_time| %>
+    <% ping_stats = PingTimeStat.where(batch_id: ping_time.batch_id).first %>
+    <tr>
+      <td class='text-right'>
+        <%= ping_time.from_account %>
+      </td>
+      <td class='text-right'>
+        <%= ping_time.min_ms %><br />
+        <%= ping_stats.overall_min_time %>
+      </td>
+      <td class='text-right'>
+        <%= ping_time.avg_ms %><br />
+        <%= ping_stats.overall_average_time %>
+      </td>
+      <td class='text-right'>
+        <%= ping_time.max_ms %><br />
+        <%= ping_stats.overall_max_time %>
+      </td>
+      <td class='text-right'>
+        <%= ping_time.observed_at %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<p>The Batch Time represents the overall times for this batch of samples. You can use this to compare your ping times to the rest of the cluster.</p>
