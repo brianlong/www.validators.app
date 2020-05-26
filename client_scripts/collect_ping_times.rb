@@ -31,7 +31,7 @@ require 'json'
 api_token = ENV['VALIDATORS_API_TOKEN']
 # Adjust this if your local RPC is not on port 8899
 rpc_url = 'http://127.0.0.1:8899' # 'https://testnet.solana.com:8899'
-short_run = true # true for development, false for production
+short_run = false # true for development, false for production
 
 interrupted = false
 trap('INT') { interrupted = true }
