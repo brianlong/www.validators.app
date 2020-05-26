@@ -30,7 +30,7 @@ require 'json'
 # Script variables -- You generally won't need to change these
 api_token = ENV['VALIDATORS_API_TOKEN']
 # Adjust this if your local RPC is not on port 8899
-rpc_url = 'https://testnet.solana.com:8899' # 'http://127.0.0.1:8899'
+rpc_url = 'http://127.0.0.1:8899' # 'https://testnet.solana.com:8899'
 short_run = true # true for development, false for production
 
 interrupted = false
@@ -63,8 +63,7 @@ module CollectorLogic
   # Post the ping times to www.validators.app
   def post_ping_times(api_token, merged_results)
     # Parse the URL data into an URI object
-    # uri = URI.parse('https://www.validators.app/api/v1/collector')
-    uri = URI.parse('http://localhost:3000/api/v1/collector')
+    uri = URI.parse('https://www.validators.app/api/v1/collector')
 
     # Create the HTTP session and send the request
     response = Net::HTTP.start(uri.host, uri.port) do |http|

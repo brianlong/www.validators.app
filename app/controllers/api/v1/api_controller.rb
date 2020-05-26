@@ -4,6 +4,8 @@ module Api
   module V1
     # This is the V1 API controller.
     class ApiController < BaseController
+      include CollectorLogic
+
       # POST api/v1/collector
       def collector
         @collector = Collector.new(
@@ -14,6 +16,15 @@ module Api
         )
 
         if @collector.save
+          # TODO: Move this to a Sidekiq worker!
+          payload = { collector_id: @collector.id }
+          Pipeline.new(200, payload)
+                  .then(&ping_times_guard)
+                  .then(&ping_times_read)
+                  .then(&ping_times_calculate_stats)
+                  .then(&ping_times_save)
+                  .then(&log_errors)
+
           render json: { 'status' => 'Accepted' }, status: 202
         else
           render json: { 'status' => 'Bad Request' }, status: 400
