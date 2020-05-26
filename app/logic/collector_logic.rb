@@ -68,7 +68,6 @@ module CollectorLogic
       overall_average_time = \
         average_times.inject { |sum, el| sum + el }.to_f / average_times.size
 
-      # byebug
       min_times = p[:payload][:ping_times].map do |pt|
         pt['min_ms'] unless pt['min_ms'].nil?
       end
@@ -88,7 +87,8 @@ module CollectorLogic
             batch_id: p[:payload][:batch_id],
             overall_min_time: overall_min_time,
             overall_max_time: overall_max_time,
-            overall_average_time: overall_average_time
+            overall_average_time: overall_average_time,
+            observed_at: p[:payload][:ping_times].last['observed_at']
           }
         )
       )
@@ -124,7 +124,8 @@ module CollectorLogic
             min_ms: pt['min_ms'],
             avg_ms: pt['avg_ms'],
             max_ms: pt['max_ms'],
-            mdev: pt['mdev']
+            mdev: pt['mdev'],
+            observed_at: pt['observed_at']
           )
         end
 
@@ -134,7 +135,8 @@ module CollectorLogic
           overall_min_time: p[:payload][:ping_time_stats][:overall_min_time],
           overall_max_time: p[:payload][:ping_time_stats][:overall_max_time],
           overall_average_time: \
-            p[:payload][:ping_time_stats][:overall_average_time]
+            p[:payload][:ping_time_stats][:overall_average_time],
+          observed_at: p[:payload][:ping_time_stats][:observed_at]
         )
 
         # destroy the collector

@@ -14,6 +14,7 @@ class CreatePingTimes < ActiveRecord::Migration[6.0]
       t.decimal :avg_ms, precision: 10, scale: 3
       t.decimal :max_ms, precision: 10, scale: 3
       t.decimal :mdev, precision: 10, scale: 3
+      t.datetime :observed_at
       t.timestamps
     end
     add_index :ping_times, :batch_id

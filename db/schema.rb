@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2020_05_25_224751) do
     t.decimal "overall_min_time", precision: 10, scale: 3
     t.decimal "overall_max_time", precision: 10, scale: 3
     t.decimal "overall_average_time", precision: 10, scale: 3
+    t.datetime "observed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["batch_id"], name: "index_ping_time_stats_on_batch_id"
@@ -78,6 +79,7 @@ ActiveRecord::Schema.define(version: 2020_05_25_224751) do
     t.decimal "avg_ms", precision: 10, scale: 3
     t.decimal "max_ms", precision: 10, scale: 3
     t.decimal "mdev", precision: 10, scale: 3
+    t.datetime "observed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["batch_id"], name: "index_ping_times_on_batch_id"
