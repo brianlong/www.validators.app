@@ -1,43 +1,94 @@
 # frozen_string_literal: true
 
 # This script will attempt to ping all of the other nodes shown in the cluster
-# and find the ping time from this node to the others.
+# and find the ping time from this node to the others. It will then post the
+# results to www.validators.app
 #
 # Prerequisites:
-#   - Any recent version of Ruby. `sudo apt install ruby` should work.
-#   - Local RPC running on your validator.
+#   - Create a user account on https://www.validators.app
+#   - Verify your account through email
+#   - Get your VALIDATORS_API_TOKEN from the app
 #
-# Copy this fine in to your Solana home directory. Example to run:
+# Software Requirements:
+#   - Any recent version of Ruby. `sudo apt install ruby` should do it.
+#   - Local RPC running on your *staked* validator (I haven't tested this from
+#     a spy node or an un-staked validator).
+#   - Copy this file in to your validator home directory.
 #
-#   `VALIDATORS_API_TOKEN=TOKEN_HERE ruby collect_ping_times.rb >> /home/brianlong/collect_ping_times.log &`
+# You will pass in your VALIDATORS_API_TOKEN from an environment variable or
+# an option on the command line. Example to run using an environment variable
+# for the API token:
 #
-# Please note that we are sampling ping times on each node in the gossip
-# network in a single thread, so this script will take a while to run. Be
-# patient! We are trying to not disturb your running validator with high bursts
-# of traffic.
+#   `VALIDATORS_API_TOKEN=TOKEN_HERE ruby collect_ping_times.rb >> \
+#    collect_ping_times.log &`
+#
+# Example to run using a command line option for the API token:
+#
+#   `ruby collect_ping_times.rb --token TOKEN_HERE >> collect_ping_times.log &`
+#
+# Command line options (None of these are required).
+#
+#  --local-app or -l if you are me doing development on my local workstation.
+#  --short-run or -s can be used for development. This option will stop the
+#    script after 5 nodes.
+#  --token or -t followed by your API token. Required if you are not using an
+#    environment variable for the token.
+#  --url or -u if you need to use a different RPC URL or port. Pass the full
+#    url & port like --url 'http://127.0.0.1:8899'
+#
+# Please note that we are sampling ping times on each node in the cluster
+# in a single thread, so this script will take a while to run. Be patient!
+# I do not want to disturb your running validator with bursts of traffic.
 #
 # CRON Example:
-# */10 * * * * /bin/bash -l -c 'cd /home/brianlong/ && VALIDATORS_API_TOKEN=YOUR_TOKEN /usr/bin/ruby collect_ping_times.rb >> /home/brianlong/collect_ping_times.log 2>&1'
+# */15 * * * * /bin/bash -l -c 'export VALIDATORS_API_TOKEN=YOUR_TOKEN; cd /home/SOLANA_USERNAME/ && /usr/bin/ruby collect_ping_times.rb >> /home/SOLANA_USERNAME/collect_ping_times.log 2>&1'
 #
 # NOTE: Your logs will be empty if there are no errors. All errors will be
 # seen in your designated log file.
 #
 # Author: Brian Long
+# Script Version: 1
 
 require 'uri'
 require 'net/http'
 require 'json'
+require 'getoptlong'
+require 'timeout'
 
-# Script variables -- You generally won't need to change these
+# Capture options from the command line
+options = GetoptLong.new(
+  ['--local-app', '-l', GetoptLong::OPTIONAL_ARGUMENT],
+  ['--short-run', '-s', GetoptLong::OPTIONAL_ARGUMENT],
+  ['--token', '-t', GetoptLong::OPTIONAL_ARGUMENT],
+  ['--url', '-u', GetoptLong::OPTIONAL_ARGUMENT]
+)
+
+# Default script variables -- You generally won't need to change these, but you
+# can pass in optional command line options for each as described above.
 api_token = ENV['VALIDATORS_API_TOKEN']
-# Adjust this if your local RPC is not on port 8899
-rpc_url = 'http://127.0.0.1:8899' # 'https://testnet.solana.com:8899'
+rpc_url = 'http://127.0.0.1:8899' # Not 'https://testnet.solana.com:8899'!
 short_run = false # true for development, false for production
+app_host = 'https://www.validators.app'
 
+options.each do |option, argument|
+  case option
+  when '--local-app'
+    app_host = 'http://localhost:3000'
+  when '--short-run'
+    short_run = true
+  when '--token'
+    api_token = argument
+  when '--url'
+    rpc_url = argument
+  end
+end
+
+# Send an interrupt with `ctrl-c` or `kill` to stop the script. Results will
+# not be posted to the app server.
 interrupted = false
 trap('INT') { interrupted = true }
 
-# CollectorLogic contains helper methods for the body of the script below.
+# CollectorLogic contains helper methods for the body of the script seen below.
 module CollectorLogic
   # rpc_request will make a Solana RPC request and return the results in a
   # JSON object. API specifications are at:
@@ -47,47 +98,53 @@ module CollectorLogic
     uri = URI.parse(rpc_url)
 
     # Create the HTTP session and send the request
-    response = Net::HTTP.start(uri.host, uri.port) do |http|
-      request = Net::HTTP::Post.new(
-        uri.request_uri,
-        { 'Content-Type' => 'application/json' }
-      )
-      request.body = {
-        'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
-      }.to_json
-      http.request(request)
-    end
+    Timeout.timeout(10) do
+      response = Net::HTTP.start(uri.host, uri.port) do |http|
+        request = Net::HTTP::Post.new(
+          uri.request_uri,
+          { 'Content-Type' => 'application/json' }
+        )
+        request.body = {
+          'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
+        }.to_json
+        http.request(request)
+      end
 
-    JSON.parse(response.body)
+      JSON.parse(response.body)
+    end
   end
 
   # Post the ping times to www.validators.app
-  def post_ping_times(api_token, merged_results)
+  def post_ping_times(api_token, merged_results, app_host)
     # Parse the URL data into an URI object
-    uri = URI.parse('https://www.validators.app/api/v1/collector')
+    uri = URI.parse("#{app_host}/api/v1/collector")
+
+    use_ssl = app_host.include?('https') ? true : false
 
     # Create the HTTP session and send the request
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-      request = Net::HTTP::Post.new(
-        uri.request_uri,
-        {
-          'Content-Type' => 'application/json',
-          'Token' => api_token
-        }
-      )
-      request.body = JSON.generate(
-        {
-          collector:
-            {
-              payload_type: 'ping_times',
-              payload_version: 1,
-              payload: JSON.generate(merged_results)
-            }
-        }
-      )
-      http.request(request)
+    Timeout.timeout(10) do
+      response = Net::HTTP.start(uri.host, uri.port, use_ssl: use_ssl) do |http|
+        request = Net::HTTP::Post.new(
+          uri.request_uri,
+          {
+            'Content-Type' => 'application/json',
+            'Token' => api_token
+          }
+        )
+        request.body = JSON.generate(
+          {
+            collector:
+              {
+                payload_type: 'ping_times',
+                payload_version: 1,
+                payload: JSON.generate(merged_results)
+              }
+          }
+        )
+        http.request(request)
+      end
+      response.code
     end
-    # response.code
   end
 end
 
@@ -167,9 +224,11 @@ begin
   end
 
   # Post the merged results and leave the script
-  post_ping_times(api_token, merged_results)
+  _code = post_ping_times(api_token, merged_results, app_host)
 rescue StandardError => e
+  # Write errors to I/O so it can be seen on the console or in the log file.
   puts ''
+  puts Time.now.to_s
   puts e.class
   puts e.message
   puts e.backtrace
