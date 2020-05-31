@@ -7,7 +7,7 @@ endpoint.
 - collect_ping_times.rb will ping each of the other nodes in the cluster and
   upload the results through our API. The ping data can be used to build a
   network graph of cluster nodes with edges showing the minimum, average, &
-  maximum ping times between the node pair.
+  maximum ping times between the node pair. [https://raw.githubusercontent.com/brianlong/www.validators.app/master/client_scripts/collect_ping_times.rb]
 
 ### Miscellaneous
 Each of the scripts will contain instructions inside the file. All supporting
