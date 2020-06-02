@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_224751) do
+ActiveRecord::Schema.define(version: 2020_06_02_024138) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -134,9 +134,24 @@ ActiveRecord::Schema.define(version: 2020_05_25_224751) do
     t.decimal "skipped_slot_percent", precision: 10, scale: 4
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "batch_id"
+    t.index ["batch_id"], name: "index_validator_block_histories_on_batch_id"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
     t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
+  end
+
+  create_table "validator_block_history_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "batch_id"
+    t.integer "epoch", unsigned: true
+    t.bigint "start_slot", unsigned: true
+    t.bigint "end_slot", unsigned: true
+    t.integer "total_slots", unsigned: true
+    t.integer "total_blocks_produced", unsigned: true
+    t.integer "total_slots_skipped", unsigned: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["batch_id"], name: "index_validator_block_history_stats_on_batch_id"
   end
 
   create_table "validator_ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
