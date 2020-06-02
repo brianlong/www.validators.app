@@ -1,0 +1,2 @@
+class ValidatorBlockHistoryStat < ApplicationRecord
+end

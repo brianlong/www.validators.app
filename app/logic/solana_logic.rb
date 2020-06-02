@@ -140,11 +140,28 @@ module SolanaLogic
       block_history = `#{solana_path}solana block-production \
                        --output json \
                        --url #{p[:payload][:config_url]}`
+
+      # Data for the validator_block_history_stats table
+      batch_id = SecureRandom.uuid
       epoch = JSON.parse(block_history)['epoch']
+      block_history_stats = {
+        'batch_id' => batch_id,
+        'epoch' => epoch,
+        'start_slot' => JSON.parse(block_history)['start_slot'],
+        'end_slot' => JSON.parse(block_history)['end_slot'],
+        'total_slots' => JSON.parse(block_history)['total_slots'],
+        'total_blocks_produced' => \
+          JSON.parse(block_history)['total_blocks_produced'],
+        'total_slots_skipped' => \
+          JSON.parse(block_history)['total_slots_skipped']
+      }
+
+      # Leaders
       validator_block_json = JSON.parse(block_history)['leaders']
       validator_block_history = {}
       validator_block_json.each do |v|
         validator_block_history[v['identityPubkey']] = {
+          'batch_id' => batch_id,
           'epoch' => epoch,
           'leader_slots' => v['leaderSlots'],
           'blocks_produced' => v['blocksProduced'],
@@ -153,9 +170,12 @@ module SolanaLogic
         }
       end
 
+      # byebug
+      payload_1 = p[:payload] \
+                  .merge(validator_block_history: validator_block_history)
       Pipeline.new(
         200,
-        p[:payload].merge(validator_block_history: validator_block_history)
+        payload_1.merge(validator_block_history_stats: block_history_stats)
       )
     rescue StandardError => e
       Pipeline.new(
@@ -171,6 +191,18 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
+      stats = p[:payload][:validator_block_history_stats]
+      ValidatorBlockHistoryStat.create(
+        batch_id: stats['batch_id'],
+        epoch: stats['epoch'],
+        start_slot: stats['start_slot'],
+        end_slot: stats['end_slot'],
+        total_slots: stats['total_slots'],
+        total_blocks_produced: stats['total_blocks_produced'],
+        total_slots_skipped: stats['total_slots_skipped']
+      )
+
+      # byebug
       p[:payload][:validator_block_history].each do |k, v|
         validator = Validator.where(
           network: p[:payload][:network],
@@ -179,6 +211,7 @@ module SolanaLogic
         next if validator.nil?
 
         validator.validator_block_histories.create(
+          batch_id: v['batch_id'],
           epoch: v['epoch'],
           leader_slots: v['leader_slots'],
           blocks_produced: v['blocks_produced'],
