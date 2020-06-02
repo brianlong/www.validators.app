@@ -46,13 +46,15 @@
 # seen in your designated log file.
 #
 # Author: Brian Long
-# Script Version: 1
+# Script Version: 1.0.1 -- Sanitize IP address
 
 require 'uri'
 require 'net/http'
 require 'json'
 require 'getoptlong'
 require 'timeout'
+require 'shellwords'
+require 'ipaddress'
 
 # Capture options from the command line
 options = GetoptLong.new(
@@ -185,11 +187,15 @@ begin
       next if i > 5
     end
 
+    # Grab the IP address for this node from gossip data
     node_ip = node['gossip'].to_s.split(':')[0]
+
+    # Skip this record if the node_ip is not a valid IP address
+    next unless IPAddress.valid?(node_ip)
 
     # Ping and collect the average time over 4 attempts. Gather the results into
     # an Array.
-    ping_results = `ping -c 4 #{node_ip}`.split("\n")
+    ping_results = `ping -c 4 #{Shellwords.escape(node_ip)}`.split("\n")
 
     # Pull the good stuff out of the Array.
     # Example output:
