@@ -127,15 +127,6 @@ module SolanaLogic
     end
   end
 
-  # def log_errors
-  #   lambda do |p|
-  #     unless p[:code] == 200
-  #       Rails.logger.error "PIPELINE ERROR CODE: #{p[:code]} MESSAGE: #{p[:message]} CLASS: #{p[:errors].class}"
-  #     end
-  #     p
-  #   end
-  # end
-
   def validator_block_history_get
     lambda do |p|
       return p unless p[:code] == 200
