@@ -54,7 +54,7 @@ require 'json'
 require 'getoptlong'
 require 'timeout'
 require 'shellwords'
-require 'ipaddress'
+require 'ipaddr'
 
 # Capture options from the command line
 options = GetoptLong.new(
@@ -191,7 +191,8 @@ begin
     node_ip = node['gossip'].to_s.split(':')[0]
 
     # Skip this record if the node_ip is not a valid IP address
-    next unless IPAddress.valid?(node_ip)
+    # ipaddr = IPAddr.new(node_ip)
+    next unless IPAddr.new(node_ip).ipv4?
 
     # Ping and collect the average time over 4 attempts. Gather the results into
     # an Array.
