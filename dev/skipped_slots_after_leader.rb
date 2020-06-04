@@ -51,15 +51,18 @@ block_history['individual_slot_status'].each do |h|
     # if /26AT/.match prior_leader
     #   puts "  PRIOR LEADER: #{prior_leader}"
     #   puts "  NEW LEADER: #{current_leader}"
-    #   puts "  #{block_history['individual_slot_status'][i + 1..i + 4].map { |s| s['skipped'] }}"
+    #   puts "  #{block_history['individual_slot_status'][i..i + 3].map { |s| s['skipped'] }}"
     # end
     skipped_slots_after_leader = \
-      block_history['individual_slot_status'][i + 1..i + 4].count do |s|
+      block_history['individual_slot_status'][i..i + 3].count do |s|
         s['skipped'] == true
       end
     # puts "  #{skipped_slots_after_leader}"
 
-    next if prior_leader.nil?
+    if prior_leader.nil?
+      i += 1
+      next
+    end
 
     validator_block_history[prior_leader]['skipped_slots_after_me'] += \
       skipped_slots_after_leader
@@ -79,10 +82,18 @@ puts [
   'Slots'.ljust(9),
   'Skipped'.ljust(9),
   'Skipped %'.ljust(9),
-  'Skipped After'.ljust(13),
-  'Skipped After %'.ljust(15)
+  'Skipped'.ljust(9),
+  'Skipped'.ljust(9)
 ].join(' | ')
-puts ['-' * 11, '-' * 9, '-' * 9, '-' * 9, '-' * 13, '-' * 15].join('-|-')
+puts [
+  ' '.ljust(11),
+  ' '.ljust(9),
+  ' '.ljust(9),
+  ' '.ljust(9),
+  'After'.ljust(9),
+  'After %'.ljust(9)
+].join(' | ')
+puts ['-' * 11, '-' * 9, '-' * 9, '-' * 9, '-' * 9, '-' * 9].join('-|-')
 
 validator_block_history.each do |k, v|
   puts [
@@ -90,7 +101,7 @@ validator_block_history.each do |k, v|
     v['leader_slots'].to_s.rjust(9),
     v['skipped_slots'].to_s.rjust(9),
     format('%.2f', v['skipped_slot_percent'] * 100.0).rjust(9),
-    v['skipped_slots_after_me'].to_s.rjust(13),
-    format('%.2f', (v['skipped_slots_after_me'] / v['leader_slots'].to_f) * 100.0).rjust(15)
+    v['skipped_slots_after_me'].to_s.rjust(9),
+    format('%.2f', (v['skipped_slots_after_me'] / v['leader_slots'].to_f) * 100.0).rjust(9)
   ].join(' | ')
 end
