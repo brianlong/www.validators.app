@@ -137,27 +137,28 @@ module SolanaLogic
         else
           ''
         end
-      block_history = `#{solana_path}solana block-production \
-                       --output json \
-                       --url #{p[:payload][:config_url]}`
+      block_history_json = `#{solana_path}solana block-production \
+                              --output json \
+                              --url #{p[:payload][:config_url]}`
+      block_history = JSON.parse(block_history_json)
 
       # Data for the validator_block_history_stats table
       batch_id = SecureRandom.uuid
-      epoch = JSON.parse(block_history)['epoch']
+      epoch = block_history['epoch']
       block_history_stats = {
         'batch_id' => batch_id,
         'epoch' => epoch,
-        'start_slot' => JSON.parse(block_history)['start_slot'],
-        'end_slot' => JSON.parse(block_history)['end_slot'],
-        'total_slots' => JSON.parse(block_history)['total_slots'],
+        'start_slot' => block_history['start_slot'],
+        'end_slot' => block_history['end_slot'],
+        'total_slots' => block_history['total_slots'],
         'total_blocks_produced' => \
-          JSON.parse(block_history)['total_blocks_produced'],
+          block_history['total_blocks_produced'],
         'total_slots_skipped' => \
-          JSON.parse(block_history)['total_slots_skipped']
+          block_history['total_slots_skipped']
       }
 
       # Leaders
-      validator_block_json = JSON.parse(block_history)['leaders']
+      validator_block_json = block_history['leaders']
       validator_block_history = {}
       validator_block_json.each do |v|
         validator_block_history[v['identityPubkey']] = {
@@ -166,9 +167,51 @@ module SolanaLogic
           'leader_slots' => v['leaderSlots'],
           'blocks_produced' => v['blocksProduced'],
           'skipped_slots' => v['skippedSlots'],
-          'skipped_slot_percent' => v['skippedSlots'] / v['leaderSlots'].to_f
+          'skipped_slot_percent' => v['skippedSlots'] / v['leaderSlots'].to_f,
+          'skipped_slots_after' => 0,
+          'skipped_slots_after_percent' => 0.0
         }
       end
+
+      # Loop through the slots to accumulate stats
+      prior_leader = nil
+      current_leader = nil
+      i = 0
+      # byebug
+      block_history['individual_slot_status'].each do |h|
+        this_leader = h['leader']
+        # puts "#{h['slot']} => #{this_leader}"
+        if this_leader == current_leader
+          # We have the same leader
+        else
+          # We have a new leader
+          prior_leader = current_leader
+          current_leader = this_leader
+          # calculate the stats for the prior leader
+          # The prior leaders slots ended at i-1
+          # if /26AT/.match prior_leader
+          #   puts "  PRIOR LEADER: #{prior_leader}"
+          #   puts "  NEW LEADER: #{current_leader}"
+          #   puts "  #{block_history['individual_slot_status'][i..i + 3].map { |s| s['skipped'] }}"
+          # end
+          skipped_slots_after_leader = \
+            block_history['individual_slot_status'][i..i + 3].count do |s|
+              s['skipped'] == true
+            end
+          # puts "  #{skipped_slots_after_leader}"
+
+          if prior_leader.nil?
+            i += 1
+            next
+          end
+
+          validator_block_history[prior_leader]['skipped_slots_after'] += \
+            skipped_slots_after_leader
+        end
+
+        i += 1
+      end
+      # Done looping through the slots to accumulate stats
 
       # byebug
       payload_1 = p[:payload] \
@@ -216,7 +259,10 @@ module SolanaLogic
           leader_slots: v['leader_slots'],
           blocks_produced: v['blocks_produced'],
           skipped_slots: v['skipped_slots'],
-          skipped_slot_percent: v['skipped_slot_percent'].round(4)
+          skipped_slot_percent: v['skipped_slot_percent'].round(4),
+          skipped_slots_after: v['skipped_slots_after'],
+          skipped_slots_after_percent:
+            (v['skipped_slots_after'] / v['leader_slots'].to_f) * 100.0
         )
       end
 
