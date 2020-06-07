@@ -7,6 +7,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'bundler', '>= 2.1'
 gem 'json', '>= 2.3.0'
 
+gem 'websocket-extensions', '>= 0.1.5'
+
 gem 'actionview', '>= 6.0.3.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
