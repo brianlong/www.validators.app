@@ -2,6 +2,49 @@
 <div class='row'>
   <div class="col-sm-12">
     <p>
+      Top and bottom performing validators for epoch <%= @block_history_stat.epoch %> appear in the tables below. The &quot;Skipped Slot&quot; stats show how many slots were skipped by each leader. The &quot;Skipped After&quot; stats show the performance by the leader AFTER the designated node. Poor performance in the &quot;Skipped After&quot; category may indicate that your validator is slow to propagate blocks to the next leader. Slow handoffs from one leader to the next will result in more forks and missed slots by the rest of the cluster.
+    </p>
+  </div>
+</div>
+<hr />
+<div class='row'>
+  <div class="col-sm-6">
+    <h3>Top Skipped Slots &percnt;</h3>
+    <p>The testnet validators who have skipped the lowest percentage of their slots in epoch <%= @block_history_stat.epoch %>.</p>
+    <p>
+      <%= render 'skipped_slots_table', histories: @skipped_slots_top %>
+    </p>
+  </div>
+  <div class="col-sm-6">
+    <h3>Top Skipped After &percnt;</h3>
+    <p>The testnet validators with the best performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
+    <p>
+      <%= render 'skipped_after_table', histories: @skipped_after_top %>
+    </p>
+  </div>
+</div>
+<div class='row'>
+  <div class="col-sm-6">
+    <h3>Bottom Skipped Slots &percnt;</h3>
+    <p>The testnet validators who have skipped the highest percentage of their slots in epoch <%= @block_history_stat.epoch %>.</p>
+    <p>
+      <%= render 'skipped_slots_table', histories: @skipped_slots_bottom %>
+    </p>
+  </div>
+  <div class="col-sm-6">
+    <h3>Bottom Skipped After &percnt;</h3>
+    <p>The testnet validators with the worst performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
+    <p>
+      <%= render 'skipped_after_table', histories: @skipped_after_bottom %>
+    </p>
+  </div>
+</div>
+
+<hr />
+
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
     This website is collecting time-series data to help Solana validators track the performance of their nodes over time. Every five minutes, we are sampling validator and vote account activity such as block production, active stake, skipped slot percentage, etc.</p>
   </div>
 </div>

@@ -1,0 +1,11 @@
+one:
+  id: 1
+  batch_id: 1
+  validator_id: 1
+  epoch: 1
+  leader_slots: 100
+  blocks_produced: 90
+  skipped_slots: 10
+  skipped_slot_percent: 0.1
+  skipped_slots_after: 10
+  skipped_slots_after_percent: 0.1

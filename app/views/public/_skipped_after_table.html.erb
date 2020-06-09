@@ -1,0 +1,19 @@
+<table class='table table-striped'>
+  <thead class="thead-dark">
+    <tr>
+      <th>Account</th>
+      <th>Skipped<br />After</th>
+      <th>Percent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% histories.each do |history| %>
+      <tr>
+        <td><%= link_to shorten_key(history.validator.account), validator_url(history.validator) %></td>
+        <td><%= history.skipped_slots_after %></td>
+        <td><%= number_to_percentage history.skipped_slots_after_percent.to_f * 100.0 %></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>

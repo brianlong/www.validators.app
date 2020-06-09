@@ -2,7 +2,24 @@
 
 # PublicController
 class PublicController < ApplicationController
-  def index; end
+  def index
+    @block_history_stat = ValidatorBlockHistoryStat.last
+    @skipped_slots_top = ValidatorBlockHistory.where(
+      batch_id: @block_history_stat.batch_id
+    ).order('skipped_slot_percent asc').limit(20)
+
+    @skipped_slots_bottom = ValidatorBlockHistory.where(
+      batch_id: @block_history_stat.batch_id
+    ).order('skipped_slot_percent desc').limit(20)
+
+    @skipped_after_top = ValidatorBlockHistory.where(
+      batch_id: @block_history_stat.batch_id
+    ).order('skipped_slots_after_percent asc').limit(20)
+
+    @skipped_after_bottom = ValidatorBlockHistory.where(
+      batch_id: @block_history_stat.batch_id
+    ).order('skipped_slots_after_percent desc').limit(20)
+  end
 
   def cookie_policy
     @title = t('public.cookie_policy.title')
