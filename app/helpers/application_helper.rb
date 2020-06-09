@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def bootstrap_class_for_flash(flash_type)
     case flash_type
@@ -16,5 +18,9 @@ module ApplicationHelper
 
   def flash_message_is_cookie_info(msg)
     msg == t('flash.cookie')
+  end
+
+  def shorten_key(pub_key)
+    "#{pub_key[0..3]}...#{pub_key[-4..-1]}"
   end
 end

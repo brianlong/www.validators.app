@@ -262,7 +262,7 @@ module SolanaLogic
           skipped_slot_percent: v['skipped_slot_percent'].round(4),
           skipped_slots_after: v['skipped_slots_after'],
           skipped_slots_after_percent:
-            (v['skipped_slots_after'] / v['leader_slots'].to_f) * 100.0
+            (v['skipped_slots_after'] / v['leader_slots'].to_f)
         )
       end
 

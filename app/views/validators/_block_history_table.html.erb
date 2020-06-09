@@ -2,11 +2,11 @@
 <table class='table table-striped'>
   <thead class="thead-dark">
     <tr>
-      <th>Epoch</th>
-      <th>Leader Slots<br />Total Slots</th>
-      <th>Blocks Produced<br />Total Blocks</th>
-      <th>Skipped Slots<br />Total Skipped</th>
-      <th>Skipped Slot Percent<br />Total Percent</th>
+      <th class='text-right'>Epoch</th>
+      <th class='text-right'>Leader Slots<br />&nbsp;<br />Total Slots</th>
+      <th class='text-right'>Blocks Produced<br />&nbsp;<br />Total Blocks</th>
+      <th class='text-right'>Skipped Slots<br />Skipped After<br />Total Skipped</th>
+      <th class='text-right'>Skipped Slot &percnt;<br />Skipped After &percnt;<br />Total &percnt;</th>
       <th>Timestamp</th>
     </tr>
   </thead>
@@ -20,21 +20,25 @@
       </td>
       <td class='text-right'>
         <%= number_with_delimiter history.leader_slots %><br />
+        &nbsp;<br />
         <%= number_with_delimiter block_stats.total_slots \
               unless block_stats.nil? %>
       </td>
       <td class='text-right'>
         <%= number_with_delimiter history.blocks_produced %><br />
+        &nbsp;<br />
         <%= number_with_delimiter block_stats.total_blocks_produced \
               unless block_stats.nil? %>
       </td>
       <td class='text-right'>
         <%= number_with_delimiter history.skipped_slots %><br />
+        <%= number_with_delimiter history.skipped_slots_after %><br />
         <%= number_with_delimiter block_stats.total_slots_skipped \
              unless block_stats.nil? %>
       </td>
       <td class='text-right'>
         <%= number_to_percentage (history.skipped_slot_percent*100.0) %><br />
+        <%= number_to_percentage (history.skipped_slots_after_percent*100.0) %><br />
         <%= number_to_percentage (
               block_stats.total_slots_skipped/block_stats.total_slots.to_f
               )*100.0 unless block_stats.nil? %>

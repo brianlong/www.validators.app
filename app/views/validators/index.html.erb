@@ -15,10 +15,10 @@
         <% @validators.each do |validator| %>
           <tr>
             <td>
-              <%= link_to validator.account, validator_url(validator) %>
+              <%= link_to shorten_key(validator.account), validator_url(validator) %>
             </td>
             <td>
-              <%= link_to validator.vote_accounts.order('id desc').last.account, vote_account_url(validator.vote_accounts.order('id desc').last) %>
+              <%= link_to shorten_key(validator.vote_accounts.order('id desc').last.account), vote_account_url(validator.vote_accounts.order('id desc').last) %>
             </td>
           </tr>
         <% end %>

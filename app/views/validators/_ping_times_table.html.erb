@@ -15,7 +15,7 @@
     <% ping_stats = PingTimeStat.where(batch_id: ping_time.batch_id).first %>
     <tr>
       <td class='text-right'>
-        <%= ping_time.from_account %>
+        <%= shorten_key(ping_time.from_account) %>
       </td>
       <td class='text-right'>
         <%= ping_time.min_ms %><br />
