@@ -37,8 +37,8 @@
              unless block_stats.nil? %>
       </td>
       <td class='text-right'>
-        <%= number_to_percentage (history.skipped_slot_percent*100.0) %><br />
-        <%= number_to_percentage (history.skipped_slots_after_percent*100.0) %><br />
+        <%= number_to_percentage (history.skipped_slot_percent.to_f*100.0) %><br />
+        <%= number_to_percentage (history.skipped_slots_after_percent.to_f*100.0) %><br />
         <%= number_to_percentage (
               block_stats.total_slots_skipped/block_stats.total_slots.to_f
               )*100.0 unless block_stats.nil? %>
