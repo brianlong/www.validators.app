@@ -4,6 +4,7 @@
       <th>Account</th>
       <th>Skipped<br />After</th>
       <th>Percent</th>
+      <th>Max Ping<br />Time (ms)</th>
     </tr>
   </thead>
   <tbody>
@@ -12,6 +13,13 @@
         <td><%= link_to shorten_key(history.validator.account), validator_url(history.validator) %></td>
         <td><%= history.skipped_slots_after %></td>
         <td><%= number_to_percentage history.skipped_slots_after_percent.to_f * 100.0 %></td>
+        <td>
+          <% ping_time = PingTime.where(to_account: history.validator.account)
+                                  .order('id desc')
+                                  .limit(20)
+                                  .maximum('avg_ms') %>
+           <%= ping_time.nil? ? 'N/A' : ping_time %>
+        </td>
       </tr>
     <% end %>
   </tbody>
