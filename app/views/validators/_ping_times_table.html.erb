@@ -3,7 +3,7 @@
 <table class='table table-striped'>
   <thead class="thead-dark">
     <tr>
-      <th class='text-right'>From Account</th>
+      <th>From Account</th>
       <th class='text-right'>Min. Time<br />Batch Min.</th>
       <th class='text-right'>Avg. Time<br />Batch Avg.</th>
       <th class='text-right'>Max. Time<br />Batch Max.</th>
@@ -14,7 +14,7 @@
     <% @ping_times.each do |ping_time| %>
     <% ping_stats = PingTimeStat.where(batch_id: ping_time.batch_id).first %>
     <tr>
-      <td class='text-right'>
+      <td>
         <%= shorten_key(ping_time.from_account) %>
       </td>
       <td class='text-right'>
