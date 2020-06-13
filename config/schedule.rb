@@ -26,14 +26,15 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+
 set :bundle_bin, '/usr/bin/bundle'
 set :ruby_bin, '/usr/bin/ruby'
 set :rake_bin, '/usr/bin/rake'
 set :environment, (ENV['RAILS_ENV'] || @environment).to_s
+set :whenever_path, Whenever.path
 
-set :output, "#{Rails.root}/log/schedule.log"
-
-job_type :ruby_script, 'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> #{Rails.root}/:task.log 2>&1'
+set :output, File.join(Whenever.path, 'log', 'whenever.log')
+job_type :ruby_script, 'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
 
 every 5.minutes do
   ruby_script 'gather_rpc_data.rb'
