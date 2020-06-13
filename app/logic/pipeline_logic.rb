@@ -6,6 +6,7 @@ module PipelineLogic
   def log_errors
     lambda do |p|
       unless p[:code] == 200
+        Appsignal.set_error(p[:errors])
         Rails.logger.error "PIPELINE ERROR CODE: #{p[:code]} MESSAGE: #{p[:message]} CLASS: #{p[:errors].class}"
       end
       p
