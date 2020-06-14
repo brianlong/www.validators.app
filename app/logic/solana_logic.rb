@@ -137,9 +137,10 @@ module SolanaLogic
         else
           ''
         end
+      url_to_use = "#{p[:payload][:config_url]}:#{Rails.application.credentials.solana[:rpc_port]}"
       block_history_json = `#{solana_path}solana block-production \
                               --output json \
-                              --url #{p[:payload][:config_url]}`
+                              --url #{url_to_use}`
       block_history = JSON.parse(block_history_json)
 
       # Data for the validator_block_history_stats table
