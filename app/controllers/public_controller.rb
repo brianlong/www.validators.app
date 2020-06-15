@@ -4,21 +4,39 @@
 class PublicController < ApplicationController
   def index
     @block_history_stat = ValidatorBlockHistoryStat.last
-    @skipped_slots_top = ValidatorBlockHistory.where(
-      batch_id: @block_history_stat.batch_id
-    ).order('skipped_slot_percent asc').limit(20)
+    @skipped_slots_report = Report.where(
+      network: 'testnet',
+      name: 'build_skipped_slot_percent'
+    ).last
 
-    @skipped_slots_bottom = ValidatorBlockHistory.where(
-      batch_id: @block_history_stat.batch_id
-    ).order('skipped_slot_percent desc').limit(20)
+    @skipped_slots_top = if @skipped_slots_report.nil?
+                           []
+                         else
+                           @skipped_slots_report.payload[0..19]
+                         end
 
-    @skipped_after_top = ValidatorBlockHistory.where(
-      batch_id: @block_history_stat.batch_id
-    ).order('skipped_slots_after_percent asc').limit(20)
+    @skipped_slots_bottom = if @skipped_slots_report.nil?
+                              []
+                            else
+                              @skipped_slots_report.payload[-20..-1].reverse
+                            end
 
-    @skipped_after_bottom = ValidatorBlockHistory.where(
-      batch_id: @block_history_stat.batch_id
-    ).order('skipped_slots_after_percent desc').limit(20)
+    @skipped_after_report = Report.where(
+      network: 'testnet',
+      name: 'build_skipped_after_percent'
+    ).last
+
+    @skipped_after_top = if @skipped_after_report.nil?
+                           []
+                         else
+                           @skipped_after_report.payload[0..19]
+                         end
+    @skipped_after_bottom = if @skipped_after_report.nil?
+                              []
+                            else
+                              @skipped_after_report.payload[-20..-1]
+                                                   .try(:reverse)
+                            end
   end
 
   def cookie_policy
