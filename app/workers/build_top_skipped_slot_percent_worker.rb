@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+# BuildTopSkippedSlotPercentWorker.perform_async(
+#   batch_id: '65c9083f-8f53-4873-a9f8-8f782e276d30'
+# )
+class BuildTopSkippedSlotPercentWorker
+  include Sidekiq::Worker
+  # include SolanaLogic
+  include ReportLogic
+
+  def perform(args = {})
+    payload = {
+      network: 'testnet',
+      batch_id: args['batch_id'],
+      name: 'build_top_skipped_slot_percent'
+    }
+
+    p = Pipeline.new(200, payload)
+                .then(&build_top_skipped_slot_percent)
+    # byebug
+  end
+end
