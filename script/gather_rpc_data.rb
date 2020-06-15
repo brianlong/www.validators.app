@@ -20,6 +20,9 @@ p = Pipeline.new(200, payload)
             .then(&validator_block_history_save)
             .then(&log_errors)
 
-BuildTopSkippedSlotPercentWorker.perform_async(
+BuildSkippedSlotPercentWorker.perform_async(
+  batch_id: p[:payload][:validator_block_history_stats]['batch_id']
+)
+BuildSkippedAfterPercentWorker.perform_async(
   batch_id: p[:payload][:validator_block_history_stats]['batch_id']
 )

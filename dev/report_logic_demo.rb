@@ -11,10 +11,10 @@ block_history_stat = ValidatorBlockHistoryStat.last
 payload = {
   network: 'testnet',
   batch_id: block_history_stat.batch_id,
-  name: 'build_top_skipped_slot_percent'
+  name: 'build_skipped_slot_percent'
 }
 
 p = Pipeline.new(200, payload)
-            .then(&build_top_skipped_slot_percent)
+            .then(&build_skipped_slot_percent)
 puts p[:errors].inspect
 puts p.inspect

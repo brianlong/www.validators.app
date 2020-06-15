@@ -9,7 +9,6 @@
   </thead>
   <tbody>
     <% histories.each do |val| %>
-    <%# byebug %>
       <tr>
         <td>
           <%= link_to shorten_key(val['account']), validator_url(val['validator_id'])  %>

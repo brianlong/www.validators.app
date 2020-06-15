@@ -3,7 +3,7 @@
 # BuildTopSkippedSlotPercentWorker.perform_async(
 #   batch_id: '65c9083f-8f53-4873-a9f8-8f782e276d30'
 # )
-class BuildTopSkippedSlotPercentWorker
+class BuildSkippedSlotPercentWorker
   include Sidekiq::Worker
   # include SolanaLogic
   include ReportLogic
@@ -12,11 +12,11 @@ class BuildTopSkippedSlotPercentWorker
     payload = {
       network: 'testnet',
       batch_id: args['batch_id'],
-      name: 'build_top_skipped_slot_percent'
+      name: 'build_skipped_slot_percent'
     }
 
     p = Pipeline.new(200, payload)
-                .then(&build_top_skipped_slot_percent)
+                .then(&build_skipped_slot_percent)
     # byebug
   end
 end

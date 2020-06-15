@@ -8,17 +8,15 @@
     </tr>
   </thead>
   <tbody>
-    <% histories.each do |history| %>
+    <% histories.each do |val| %>
       <tr>
-        <td><%= link_to shorten_key(history.validator.account), validator_url(history.validator) %></td>
-        <td><%= history.skipped_slots_after %></td>
-        <td><%= number_to_percentage history.skipped_slots_after_percent.to_f * 100.0 %></td>
         <td>
-          <% ping_time = PingTime.where(to_account: history.validator.account)
-                                  .order('id desc')
-                                  .limit(20)
-                                  .maximum('avg_ms') %>
-           <%= ping_time.nil? ? 'N/A' : ping_time %>
+          <%= link_to shorten_key(val['account']), validator_url(val['validator_id'])  %>
+        </td>
+        <td><%= val['skipped_slots_after'] %></td>
+        <td><%= number_to_percentage val['skipped_slots_after_percent'].to_f * 100.0 %></td>
+        <td>
+           <%= val['ping_time'].nil? ? 'N/A' : val['ping_time'] %>
         </td>
       </tr>
     <% end %>
