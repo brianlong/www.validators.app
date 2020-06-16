@@ -3,10 +3,10 @@
 require File.expand_path('../config/environment', __dir__)
 batch_id = SecureRandom.uuid
 
-# block_history_json = `solana block-production \
-#                       --output json-compact \
-#                       --url 'http://testnet.solana.com:8899'`
-block_history_json = File.read('block_production.json')
+block_history_json = `solana block-production \
+                      --output json-compact \
+                      --url 'http://api.mainnet-beta.solana.com:8899'`
+# block_history_json = File.read('block_production.json')
 block_history = JSON.parse(block_history_json)
 
 epoch = block_history['epoch']
