@@ -3,10 +3,21 @@
 require File.expand_path('../config/environment', __dir__)
 batch_id = SecureRandom.uuid
 
-block_history_json = `solana block-production \
-                      --output json-compact \
-                      --url 'http://api.mainnet-beta.solana.com:8899'`
+# block_history_json = `solana block-production \
+#                       --output json-compact \
+#                       --url 'http://api.mainnet-beta.solana.com:8899'`
 # block_history_json = File.read('block_production.json')
+# solana:
+#   main_url: 'https://api.mainnet-beta.solana.com'
+#   testnet_url: 'https://testnet.solana.com'
+#   rpc_port: 8899
+#
+# Capture the block production into a JSON file, then process the
+# file.
+#
+# `solana block-production  --output json-compact  --url 'https://api.mainnet-beta.solana.com:8899' > blocks_20200614.json`
+
+block_history_json = File.read('blocks_20200614.json')
 block_history = JSON.parse(block_history_json)
 
 epoch = block_history['epoch']
@@ -95,7 +106,8 @@ puts [
 ].join(' | ')
 puts ['-' * 11, '-' * 9, '-' * 9, '-' * 9, '-' * 9, '-' * 9].join('-|-')
 
-validator_block_history.each do |k, v|
+# TODO: sort by skipped after % descending
+validator_block_history.sort_by { |_k, v| v['skipped_slots_after_me'] / v['leader_slots'].to_f }.reverse.to_h.each do |k, v|
   puts [
     "#{k[0..3]}...#{k[-4..-1]}".ljust(11),
     v['leader_slots'].to_s.rjust(9),

@@ -26,6 +26,8 @@
 /config/master.key
 /config/credentials/production.key
 /config/credentials/stage.key
+/config/sidekiq.yml
+/config/appsignal.yml
 
 /public/packs
 /public/packs-test

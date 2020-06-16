@@ -59,6 +59,9 @@ gem 'capistrano-passenger'
 gem 'capistrano-rails', group: :development
 gem 'capistrano-sidekiq', require: false
 
+# AppSignal
+gem 'appsignal'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'

@@ -2,7 +2,27 @@
 <div class='row'>
   <div class="col-sm-12">
     <p>
+    This website is collecting time-series data to help Solana validators track the performance of their nodes over time. Every five minutes, we are sampling validator and vote account activity such as block production, active stake, skipped slot percentage, etc.</p>
+  </div>
+</div>
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+      The app is still under construction, but you are welcome to click around and see the current progress. Start at the <%= link_to 'Testnet Validators', validators_url %> page to find your Account.
+    </p>
+  </div>
+</div>
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
       Top and bottom performing validators for epoch <%= @block_history_stat.epoch %> appear in the tables below. The &quot;Skipped Slot&quot; stats show how many slots were skipped by each leader. The &quot;Skipped After&quot; stats show the performance by the leader AFTER the designated node. Poor performance in the &quot;Skipped After&quot; category may indicate that your validator is slow to propagate blocks to the next leader. Slow handoffs from one leader to the next will result in more forks and missed slots by the rest of the cluster.
+    </p>
+  </div>
+</div>
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+      Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!
     </p>
   </div>
 </div>
@@ -42,20 +62,7 @@
 
 <hr />
 
-<div class='row'>
-  <div class="col-sm-12">
-    <p>
-    This website is collecting time-series data to help Solana validators track the performance of their nodes over time. Every five minutes, we are sampling validator and vote account activity such as block production, active stake, skipped slot percentage, etc.</p>
-  </div>
-</div>
 
-<div class='row'>
-  <div class="col-sm-12">
-    <p>
-      The app is still under construction, but you are welcome to click around and see the current progress. Start at the <%= link_to 'Testnet Validators', validators_url %> page to find your Account, then click on your Identity or Vote account to see recent time series data. Right now, the website will only show the 60 most recent rows. All of the data will be available through a forthcoming JSON API.
-    </p>
-  </div>
-</div>
 
 <div class='row'>
   <div class="col-sm-12">
