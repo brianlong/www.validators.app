@@ -11,7 +11,7 @@
     <% histories.each do |val| %>
       <tr>
         <td>
-          <%= link_to shorten_key(val['account']), validator_url(val['validator_id'])  %>
+          <%= link_to shorten_key(val['account']), validator_url(network: params[:network], account: val['account'])  %>
         </td>
         <td><%= val['skipped_slots'] %></td>
         <td><%= number_to_percentage val['skipped_slot_percent'].to_f * 100.0 %></td>

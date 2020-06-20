@@ -9,12 +9,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get index' do
-    get validators_url
+    get validators_url(network: 'testnet')
     assert_response :success
   end
 
   test 'should show validator' do
-    get validator_url(@validator)
+    get validator_url(network: 'testnet', account: @validator.account)
     assert_response :success
   end
 end

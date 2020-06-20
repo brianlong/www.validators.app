@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+# curl -H "Token: secret-api-token" https://localhost:3000/api/v1/validators/testnet
+
 module Api
   module V1
     # This is the V1 API controller.
     class ApiController < BaseController
       include CollectorLogic
+      include ActionController::ImplicitRender
 
       # POST api/v1/collector
       def collector
@@ -41,6 +44,21 @@ module Api
       # GET api/v1/ping => { 'answer' => 'pong' }
       def ping
         render json: { 'answer' => 'pong' }, status: 200
+      end
+
+      def validators_list
+        # Default network is 'testnet'
+        @validators = Validator.where(network: params[:network])
+                               .order('network, account')
+                               .all
+        render 'validators/index', formats: :json
+      end
+
+      def validators_show
+        @validator = Validator.where(
+          network: params[:network], account: params['account']
+        ).order('network, account').first
+        render 'validators/show', formats: :json
       end
 
       # Filter params for the Collector

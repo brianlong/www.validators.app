@@ -7,7 +7,7 @@
       <tbody>
         <tr>
           <td><strong>Network:</strong></td>
-          <td><%= @network %></td>
+          <td><%= params[:network] %></td>
         </tr>
         <tr>
           <td><strong>Vote Account:</strong></td>
@@ -16,7 +16,10 @@
         <tr>
           <td><strong>Identity Account:</strong></td>
           <td>
-            <%= link_to @vote_account.validator.account, validator_url(@vote_account.validator) %>
+            <%= link_to @vote_account.validator.account, validator_url(
+                  network: params[:network],
+                  account: @vote_account.validator.account
+                ) %>
           </td>
         </tr>
       </tbody>
@@ -32,6 +35,6 @@
 
 <div class='row'>
   <div class="col-sm-12">
-    <%= link_to 'Back to List of Validators', validators_path %>
+    <%= link_to 'Back to List of Validators', validators_path(network: params[:network]) %>
   </div>
 </div>

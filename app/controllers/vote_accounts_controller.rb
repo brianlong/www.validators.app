@@ -3,9 +3,7 @@
 class VoteAccountsController < ApplicationController
   before_action :set_vote_account, only: %i[show]
 
-  def show
-    @network ||= 'testnet' # 'main'
-  end
+  def show; end
 
   private
 

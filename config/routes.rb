@@ -2,7 +2,9 @@
 
 Rails.application.routes.draw do
   resources :vote_accounts, only: %i[show]
-  resources :validators, only: %i[index show]
+
+  get 'validators/:network', to: 'validators#index', as: 'validators'
+  get 'validators/:network/:account', to: 'validators#show', as: 'validator'
 
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
@@ -32,6 +34,12 @@ Rails.application.routes.draw do
       get 'ping', to: 'api#ping'
       # api_v1_collector POST /api/v1/collector
       post 'collector', to: 'api#collector'
+      # api_v1_validators GET /api/v1/validators/:network
+      get 'validators/:network', to: 'api#validators_list'
+      # api_v1_validators GET /api/v1/validators/:network/:account
+      get 'validators/:network/:account',
+          to: 'api#validators_show',
+          as: 'validator'
     end
   end
 
