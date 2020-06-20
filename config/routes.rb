@@ -32,10 +32,13 @@ Rails.application.routes.draw do
     namespace :v1 do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
+
       # api_v1_collector POST /api/v1/collector
       post 'collector', to: 'api#collector'
+
       # api_v1_validators GET /api/v1/validators/:network
       get 'validators/:network', to: 'api#validators_list'
+
       # api_v1_validators GET /api/v1/validators/:network/:account
       get 'validators/:network/:account',
           to: 'api#validators_show',
