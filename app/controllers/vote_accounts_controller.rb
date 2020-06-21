@@ -9,6 +9,6 @@ class VoteAccountsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_vote_account
-    @vote_account = VoteAccount.find(params[:id])
+    @vote_account = VoteAccount.where(account: params[:account]).first
   end
 end

@@ -1,10 +1,17 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :vote_accounts, only: %i[show]
+  # resources :vote_accounts, only: %i[show]
 
-  get 'validators/:network', to: 'validators#index', as: 'validators'
-  get 'validators/:network/:account', to: 'validators#show', as: 'validator'
+  get 'vote_accounts/:network/:account',
+      to: 'vote_accounts#show',
+      as: 'vote_account'
+  get 'validators/:network',
+      to: 'validators#index',
+      as: 'validators'
+  get 'validators/:network/:account',
+      to: 'validators#show',
+      as: 'validator'
 
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
