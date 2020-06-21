@@ -53,7 +53,7 @@ module Api
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
       rescue StandardError => e
-        # AppSignal.send_error(e)
+        Appsignal.send_error(e)
         render json: { 'status' => e.message }, status: 500
       end
 
@@ -77,7 +77,7 @@ module Api
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
       rescue StandardError => e
-        # AppSignal.send_error(e)
+        Appsignal.send_error(e)
         render json: { 'status' => e.message }, status: 500
       end
 
@@ -100,7 +100,7 @@ module Api
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
       rescue StandardError => e
-        # AppSignal.send_error(e)
+        Appsignal.send_error(e)
         render json: { 'status' => e.message }, status: 500
       end
 
