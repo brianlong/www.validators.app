@@ -88,4 +88,28 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, collector.payload_version
     assert_equal '{"test_key":"test_value"}', collector.payload
   end
+
+  test 'request validators with token should succeed' do
+    get api_v1_validators_url(network: 'testnet'),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+    json = response_to_json(@response.body)
+    assert_equal '1234', json.first['account']
+  end
+
+  test 'request validator with token should succeed' do
+    get api_v1_validators_url(network: 'testnet', account: '1234'),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+    json = response_to_json(@response.body)
+    assert_equal '1234', json.first['account']
+  end
+
+  test 'request ping_times with token should show empty array' do
+    get api_v1_ping_times_url(network: 'testnet', account: '1234'),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+    json = response_to_json(@response.body)
+    assert_equal [], json
+  end
 end

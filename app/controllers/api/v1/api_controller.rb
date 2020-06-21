@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # curl -H "Token: secret-api-token" https://localhost:3000/api/v1/validators/testnet
+require 'appsignal'
 
 module Api
   module V1
@@ -46,19 +47,61 @@ module Api
         render json: { 'answer' => 'pong' }, status: 200
       end
 
+      def ping_times
+        limit = params[:limit] || 1000
+        render json: PingTime.order('id desc').limit(limit).to_json, status: 200
+      rescue ActionController::ParameterMissing
+        render json: { 'status' => 'Parameter Missing' }, status: 400
+      rescue StandardError => e
+        # AppSignal.send_error(e)
+        render json: { 'status' => e.message }, status: 500
+      end
+
       def validators_list
         # Default network is 'testnet'
         @validators = Validator.where(network: params[:network])
                                .order('network, account')
                                .all
-        render 'validators/index', formats: :json
+
+        @skipped_slots_report = Report.where(
+          network: params[:network],
+          name: 'build_skipped_slot_percent'
+        ).last
+
+        @skipped_after_report = Report.where(
+          network: params[:network],
+          name: 'build_skipped_after_percent'
+        ).last
+
+        render 'api/v1/validators/index', formats: :json
+      rescue ActionController::ParameterMissing
+        render json: { 'status' => 'Parameter Missing' }, status: 400
+      rescue StandardError => e
+        # AppSignal.send_error(e)
+        render json: { 'status' => e.message }, status: 500
       end
 
       def validators_show
         @validator = Validator.where(
           network: params[:network], account: params['account']
         ).order('network, account').first
-        render 'validators/show', formats: :json
+
+        @skipped_slots_report = Report.where(
+          network: params[:network],
+          name: 'build_skipped_slot_percent'
+        ).last
+
+        @skipped_after_report = Report.where(
+          network: params[:network],
+          name: 'build_skipped_after_percent'
+        ).last
+
+        render 'api/v1/validators/show', formats: :json
+      rescue ActionController::ParameterMissing
+        render json: { 'status' => 'Parameter Missing' }, status: 400
+      rescue StandardError => e
+        # AppSignal.send_error(e)
+        render json: { 'status' => e.message }, status: 500
       end
 
       # Filter params for the Collector

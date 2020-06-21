@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # resources :vote_accounts, only: %i[show]
-
   get 'vote_accounts/:network/:account',
       to: 'vote_accounts#show',
       as: 'vote_account'
+
   get 'validators/:network',
       to: 'validators#index',
       as: 'validators'
@@ -40,11 +39,16 @@ Rails.application.routes.draw do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
 
+      # api_v1_ping_times GET /api/v1/ping_times
+      get 'ping_times', to: 'api#ping_times'
+
       # api_v1_collector POST /api/v1/collector
       post 'collector', to: 'api#collector'
 
       # api_v1_validators GET /api/v1/validators/:network
-      get 'validators/:network', to: 'api#validators_list'
+      get 'validators/:network',
+          to: 'api#validators_list',
+          as: 'validators'
 
       # api_v1_validators GET /api/v1/validators/:network/:account
       get 'validators/:network/:account',
