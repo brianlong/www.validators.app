@@ -60,6 +60,9 @@ Rails.application.routes.draw do
   # Public Controller
   match 'contact-us', to: 'public#contact_us', via: %i[get post]
 
+  get 'api-documentation',
+      to: 'public#api_documentation',
+      as: 'api_documentation'
   get 'contact-requests', to: 'contact_requests#index'
   get 'cookie-policy', to: 'public#cookie_policy'
   get '/do-not-sell-my-personal-information/',
@@ -69,6 +72,7 @@ Rails.application.routes.draw do
   get 'privacy-policy-california', to: 'public#privacy_policy_california'
   get 'privacy-policy', to: 'public#privacy_policy'
   get 'terms-of-use', to: 'public#terms_of_use'
+
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
 
   # Default root path
