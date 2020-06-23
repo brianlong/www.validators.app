@@ -34,7 +34,7 @@
           <%= image_tag 'validators_logo.png', alt: t('home_page_link'), title: t('home_page') %>
         </a>
         <span class="float-right">
-          <%= link_to 'Testnet', validators_url %>&nbsp;|&nbsp;
+          <%= link_to 'Testnet', validators_url(network: params[:network]) %>&nbsp;|&nbsp;
           <% if user_signed_in? %>
             <%= link_to destroy_user_session_path, method: :delete do %>
               <i class="fas fa-sign-out-alt sign-in-out"
@@ -74,7 +74,7 @@
 
         <ul class="nav">
           <li class="nav-item">
-            <%# link_to 'Contact Us', contact_us_path, class: 'nav-link' %>
+            <%= link_to 'API Documentation', api_documentation_path, class: 'nav-link' %>
           </li>
           <li class="nav-item">
             <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>

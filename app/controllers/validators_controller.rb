@@ -7,9 +7,8 @@ class ValidatorsController < ApplicationController
   # GET /validators
   # GET /validators.json
   def index
-    # Default network is 'solana-tds'
-    @network ||= 'testnet' # 'main'
-    @validators = Validator.where(network: @network)
+    # Default network is 'testnet'
+    @validators = Validator.where(network: params[:network])
                            .order('network, account')
                            .all
   end
@@ -17,9 +16,8 @@ class ValidatorsController < ApplicationController
   # GET /validators/1
   # GET /validators/1.json
   def show
-    @network ||= 'testnet' # 'main'
     @ping_times = PingTime.where(
-      network: @network,
+      network: params[:network],
       to_account: @validator.account
     ).order('id desc').limit(30)
   end
@@ -28,6 +26,9 @@ class ValidatorsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_validator
-    @validator = Validator.find(params[:id])
+    @validator = Validator.where(
+      network: params[:network],
+      account: params[:account]
+    ).first
   end
 end

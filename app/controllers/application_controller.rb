@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   around_action :switch_locale
   before_action :check_if_saw_cookie_notice
+  before_action :set_network
 
   def switch_locale(&action)
     locale = params[:locale] || I18n.default_locale
@@ -25,6 +26,10 @@ class ApplicationController < ActionController::Base
     cookies[:saw_cookie_notice] = true
     flash.delete(:cookie_notice)
     redirect_back(fallback_location: root_path)
+  end
+
+  def set_network
+    params[:network] ||= 'testnet'
   end
 
   protected

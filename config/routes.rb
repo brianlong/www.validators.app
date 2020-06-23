@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :vote_accounts, only: %i[show]
-  resources :validators, only: %i[index show]
+  get 'vote_accounts/:network/:account',
+      to: 'vote_accounts#show',
+      as: 'vote_account'
+
+  get 'validators/:network',
+      to: 'validators#index',
+      as: 'validators'
+  get 'validators/:network/:account',
+      to: 'validators#show',
+      as: 'validator'
 
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
@@ -30,14 +38,31 @@ Rails.application.routes.draw do
     namespace :v1 do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
+
+      # api_v1_ping_times GET /api/v1/ping_times
+      get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
+
       # api_v1_collector POST /api/v1/collector
       post 'collector', to: 'api#collector'
+
+      # api_v1_validators GET /api/v1/validators/:network
+      get 'validators/:network',
+          to: 'api#validators_list',
+          as: 'validators'
+
+      # api_v1_validators GET /api/v1/validators/:network/:account
+      get 'validators/:network/:account',
+          to: 'api#validators_show',
+          as: 'validator'
     end
   end
 
   # Public Controller
   match 'contact-us', to: 'public#contact_us', via: %i[get post]
 
+  get 'api-documentation',
+      to: 'public#api_documentation',
+      as: 'api_documentation'
   get 'contact-requests', to: 'contact_requests#index'
   get 'cookie-policy', to: 'public#cookie_policy'
   get '/do-not-sell-my-personal-information/',
@@ -47,6 +72,7 @@ Rails.application.routes.draw do
   get 'privacy-policy-california', to: 'public#privacy_policy_california'
   get 'privacy-policy', to: 'public#privacy_policy'
   get 'terms-of-use', to: 'public#terms_of_use'
+
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
 
   # Default root path

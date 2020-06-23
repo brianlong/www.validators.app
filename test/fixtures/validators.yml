@@ -1,4 +1,4 @@
 one:
   id: 1
-  network: solana-tds
+  network: testnet
   account: '1234'

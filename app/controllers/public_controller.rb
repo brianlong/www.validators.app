@@ -39,6 +39,10 @@ class PublicController < ApplicationController
                             end
   end
 
+  def api_documentation
+    @title = 'API Documentation'
+  end
+
   def cookie_policy
     @title = t('public.cookie_policy.title')
   end

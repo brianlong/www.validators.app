@@ -16,7 +16,13 @@
         <tr>
           <td><strong>Vote Account:</strong></td>
           <td>
-            <%= link_to @validator.vote_accounts.order('id desc').last.account, vote_account_url(@validator.vote_accounts.order('id desc').last) %>
+            <%=
+              link_to \
+              @validator.vote_accounts.last.account,
+              vote_account_url(
+                 network: params[:network],
+                 account: @validator.vote_accounts.last.account
+              ) %>
           </td>
         </tr>
         <tr>
