@@ -49,7 +49,9 @@ module Api
 
       def ping_times
         limit = params[:limit] || 1000
-        render json: PingTime.order('id desc').limit(limit).to_json, status: 200
+        render json: PingTime.where(network: params[:network])
+                             .order('id desc')
+                             .limit(limit).to_json, status: 200
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
       rescue StandardError => e

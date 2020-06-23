@@ -40,7 +40,7 @@ Rails.application.routes.draw do
       get 'ping', to: 'api#ping'
 
       # api_v1_ping_times GET /api/v1/ping_times
-      get 'ping_times', to: 'api#ping_times'
+      get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
 
       # api_v1_collector POST /api/v1/collector
       post 'collector', to: 'api#collector'
