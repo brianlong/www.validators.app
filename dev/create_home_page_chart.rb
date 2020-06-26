@@ -15,7 +15,6 @@ payload = {
   name: 'chart_home_page'
 }
 
-results = Pipeline.new(200, payload)
-                  .then(&chart_home_page)
+results = Pipeline.new(200, payload).then(&chart_home_page)
 
 puts results
