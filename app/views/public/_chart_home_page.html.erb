@@ -1,5 +1,5 @@
 <hr />
-<h3>Epoch <%= @chart_data.payload.first['epoch'] %> Stats</h3>
+<h3><%= @chart_data.network.capitalize %> Epoch <%= @chart_data.payload.first['epoch'] %></h3>
 <canvas id="chart_home_page"></canvas>
 
 <script type="text/javascript">
