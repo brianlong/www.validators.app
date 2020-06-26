@@ -87,6 +87,8 @@ module ReportLogic
     end
   end
 
+  # Sample payload
+  # [{"epoch":61,"end_slot":20988266,"total_blocks_produced":145785,"total_slots_skipped":14226,"total_skipped_percent":0.09758205576705423},...]
   def chart_home_page
     lambda do |p|
       return p unless p[:code] == 200
@@ -108,9 +110,10 @@ module ReportLogic
         result << {
           # 'network' => history.network,
           'epoch' => history.epoch,
-          'total_blocks_produced' => history.total_blocks_produced,
+          'end_slot' => history.end_slot,
+          'total_slots' => history.total_blocks_produced,
           'total_slots_skipped' => history.total_slots_skipped,
-          'total_skipped_percent' => history.total_slots_skipped / history.total_blocks_produced.to_f
+          'total_skipped_percent' => history.total_slots_skipped / history.total_slots.to_f
         }
       end
 

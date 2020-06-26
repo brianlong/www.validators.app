@@ -4,6 +4,12 @@
 class PublicController < ApplicationController
   def index
     @block_history_stat = ValidatorBlockHistoryStat.last
+
+    @chart_data = Report.where(
+      network: 'testnet',
+      name: 'chart_home_page'
+    ).last
+
     @skipped_slots_report = Report.where(
       network: 'testnet',
       name: 'build_skipped_slot_percent'

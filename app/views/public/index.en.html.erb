@@ -5,6 +5,12 @@
     This website is collecting time-series data to help Solana validators track the performance of their nodes over time. Every five minutes, we are sampling validator and vote account activity such as block production, active stake, skipped slot percentage, etc.</p>
   </div>
 </div>
+<div class="row">
+  <div class="col-sm-12">
+    <%= render 'chart_home_page' if @chart_data %>
+  </div>
+</div>
+
 <div class='row'>
   <div class="col-sm-12">
     <p>
