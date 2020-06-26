@@ -102,18 +102,29 @@ module ReportLogic
       block_history = ValidatorBlockHistoryStat.where(
         # network: p[:payload][:network],
         epoch: p[:payload][:epoch]
-      ).order('id desc').limit(100)
+      ).order('id desc').limit(500)
 
       # Create a results array and insert the data
       result = []
       block_history.each do |history|
+        # Calculate the median skipped slots for this batch_id
+        vbh = ValidatorBlockHistory.where(
+          batch_id: history.batch_id
+        ).all
+
+        array_sorted = vbh.map(&:skipped_slot_percent).sort
+        array_length = array_sorted.length
+        array_center = array_length / 2
+        median_skipped = array_length.even? ? (array_sorted[array_center] + array_sorted[array_center + 1]) / 2.0 : array_sorted[array_center]
+
         result << {
           # 'network' => history.network,
           'epoch' => history.epoch,
           'end_slot' => history.end_slot,
           'total_slots' => history.total_blocks_produced,
           'total_slots_skipped' => history.total_slots_skipped,
-          'total_skipped_percent' => history.total_slots_skipped / history.total_slots.to_f
+          'total_skipped_percent' => history.total_slots_skipped / history.total_slots.to_f,
+          'median_skipped_percent' => median_skipped.to_f
         }
       end
 
