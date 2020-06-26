@@ -71,6 +71,7 @@ Rails.application.routes.draw do
   get 'faq', to: 'public#faq'
   get 'privacy-policy-california', to: 'public#privacy_policy_california'
   get 'privacy-policy', to: 'public#privacy_policy'
+  get 'sample-chart', to: 'public#sample_chart'
   get 'terms-of-use', to: 'public#terms_of_use'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'

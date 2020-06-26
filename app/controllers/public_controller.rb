@@ -65,6 +65,8 @@ class PublicController < ApplicationController
     @title = t('public.privacy_policy.title')
   end
 
+  def sample_chart; end
+
   def contact_us
     if request.post?
       @contact_request = ContactRequest.new(contact_us_params)
