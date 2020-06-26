@@ -1,0 +1,4 @@
+https://flatuicolors.com/palette/us
+
+light greenish blue: rgb(85, 239, 196) #55efc4
+faded poster: rgb(129, 236, 236) #81ecec

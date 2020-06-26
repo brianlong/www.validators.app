@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# RAILS_ENV=production bundle exec ruby script/gather_rpc_data.rb
 require File.expand_path('../config/environment', __dir__)
 require 'solana_logic'
 
@@ -25,4 +26,8 @@ BuildSkippedSlotPercentWorker.perform_async(
 )
 BuildSkippedAfterPercentWorker.perform_async(
   batch_id: p[:payload][:validator_block_history_stats]['batch_id']
+)
+ChartHomePageWorker.perform_async(
+  network: p[:payload][:network],
+  epoch: p[:payload][:validator_block_history_stats]['epoch']
 )
