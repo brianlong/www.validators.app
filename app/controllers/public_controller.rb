@@ -3,7 +3,7 @@
 # PublicController
 class PublicController < ApplicationController
   def index
-    @block_history_stat = ValidatorBlockHistoryStat.last
+    @block_history_stat = ValidatorBlockHistoryStat.last || ValidatorBlockHistoryStat.new
 
     @chart_data = Report.where(
       network: 'testnet',
