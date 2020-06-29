@@ -25,7 +25,7 @@ class ValidatorsController < ApplicationController
 
     i = 0
     @validator.validator_block_histories
-              .order('id desc').limit(500).reverse.each do |vbh|
+              .order('id desc').limit(288).reverse.each do |vbh|
       i += 1
       batch_stats = ValidatorBlockHistoryStat.where(
         batch_id: vbh.batch_id
