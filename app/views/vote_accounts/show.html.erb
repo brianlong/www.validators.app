@@ -22,6 +22,10 @@
                 ) %>
           </td>
         </tr>
+        <tr>
+          <td><strong>Commission:</strong></td>
+          <td><%= @vote_account.vote_account_histories.last.commission rescue 'N/A' %> &percnt;</td>
+        </tr>
       </tbody>
     </table>
   </div>

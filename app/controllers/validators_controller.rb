@@ -38,6 +38,13 @@ class ValidatorsController < ApplicationController
               batch_stats.total_slots_skipped / batch_stats.total_slots.to_f
             ) * 100.0
       }
+
+      @vote_account_history = \
+        if @validator.vote_accounts.last
+          @validator.vote_accounts.last.vote_account_histories.last
+        else
+          VoteAccountHistory.new
+        end
     end
 
     # @block_stats = \
