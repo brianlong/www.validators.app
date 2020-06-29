@@ -73,7 +73,7 @@ en:
           telephone: 'Telephone'
           comments: 'Message'
           created_at: 'Created at'
-  site_title: "www.validators.app"
+  site_title: "Solana Validators | www.validators.app"
   error:
     one: '%{count} error'
     other: '%{count} errors'
