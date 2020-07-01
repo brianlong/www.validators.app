@@ -36,6 +36,6 @@ set :whenever_path, Whenever.path
 set :output, File.join(Whenever.path, 'log', 'whenever.log')
 job_type :ruby_script, 'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
 
-every 5.minutes do
+every 1.minutes do
   ruby_script 'gather_rpc_data.rb'
 end
