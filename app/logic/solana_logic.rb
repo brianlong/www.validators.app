@@ -33,6 +33,27 @@ module SolanaLogic
     end
   end
 
+  def epoch_get
+    lambda do |p|
+      epoch_json = rpc_request(
+        'getEpochInfo',
+        p[:payload][:config_url]
+      )['result']
+
+      epoch = EpochHistory.create(
+        batch_uuid: p.payload[:batch_uuid],
+        epoch: epoch_json['epoch'],
+        current_slot: epoch_json['absoluteSlot'],
+        slot_index: epoch_json['slotIndex'],
+        slots_in_epoch: epoch_json['slotsInEpoch']
+      )
+
+      Pipeline.new(200, p.payload.merge(epoch: epoch.epoch))
+    rescue StandardError => e
+      Pipeline.new(500, p[:payload], 'Error from batch_set', e)
+    end
+  end
+
   # validators_get returns the data from RPC 'getClusterNodes'
   def validators_get
     lambda do |p|
@@ -169,10 +190,9 @@ module SolanaLogic
       block_history = JSON.parse(block_history_json)
 
       # Data for the validator_block_history_stats table
-      epoch = block_history['epoch']
       block_history_stats = {
         'batch_uuid' => p[:payload][:batch_uuid],
-        'epoch' => epoch,
+        'epoch' => p.payload[:epoch],
         'start_slot' => block_history['start_slot'],
         'end_slot' => block_history['end_slot'],
         'total_slots' => block_history['total_slots'],
@@ -188,7 +208,7 @@ module SolanaLogic
       validator_block_json.each do |v|
         validator_block_history[v['identityPubkey']] = {
           'batch_uuid' => p[:payload][:batch_uuid],
-          'epoch' => epoch,
+          'epoch' => p.payload[:epoch],
           'leader_slots' => v['leaderSlots'],
           'blocks_produced' => v['blocksProduced'],
           'skipped_slots' => v['skippedSlots'],
@@ -262,7 +282,7 @@ module SolanaLogic
       stats = p[:payload][:validator_block_history_stats]
       ValidatorBlockHistoryStat.create(
         batch_uuid: stats['batch_uuid'],
-        epoch: stats['epoch'],
+        epoch: p.payload[:epoch],
         start_slot: stats['start_slot'],
         end_slot: stats['end_slot'],
         total_slots: stats['total_slots'],
@@ -280,7 +300,7 @@ module SolanaLogic
 
         validator.validator_block_histories.create(
           batch_uuid: v['batch_uuid'],
-          epoch: v['epoch'],
+          epoch: p.payload[:epoch],
           leader_slots: v['leader_slots'],
           blocks_produced: v['blocks_produced'],
           skipped_slots: v['skipped_slots'],

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_02_202509) do
+ActiveRecord::Schema.define(version: 2020_07_02_212903) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -63,6 +63,17 @@ ActiveRecord::Schema.define(version: 2020_07_02_202509) do
     t.string "comments_encrypted_iv"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "epoch_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "batch_uuid"
+    t.integer "epoch"
+    t.bigint "current_slot"
+    t.integer "slot_index"
+    t.integer "slots_in_epoch"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["batch_uuid"], name: "index_epoch_histories_on_batch_uuid"
   end
 
   create_table "ping_time_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
