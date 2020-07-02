@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_15_000540) do
+ActiveRecord::Schema.define(version: 2020_07_02_202509) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 2020_06_15_000540) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "batches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "uuid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_at"], name: "index_batches_on_created_at"
+    t.index ["uuid"], name: "index_batches_on_uuid"
   end
 
   create_table "collectors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -58,18 +66,18 @@ ActiveRecord::Schema.define(version: 2020_06_15_000540) do
   end
 
   create_table "ping_time_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "batch_id"
+    t.string "batch_uuid"
     t.decimal "overall_min_time", precision: 10, scale: 3
     t.decimal "overall_max_time", precision: 10, scale: 3
     t.decimal "overall_average_time", precision: 10, scale: 3
     t.datetime "observed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["batch_id"], name: "index_ping_time_stats_on_batch_id"
+    t.index ["batch_uuid"], name: "index_ping_time_stats_on_batch_uuid"
   end
 
   create_table "ping_times", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "batch_id"
+    t.string "batch_uuid"
     t.string "network"
     t.string "from_account"
     t.string "from_ip"
@@ -82,7 +90,7 @@ ActiveRecord::Schema.define(version: 2020_06_15_000540) do
     t.datetime "observed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["batch_id"], name: "index_ping_times_on_batch_id"
+    t.index ["batch_uuid"], name: "index_ping_times_on_batch_uuid"
     t.index ["network", "from_account", "created_at"], name: "index_ping_times_on_network_and_from_account_and_created_at"
     t.index ["network", "from_account", "to_account", "created_at"], name: "ndx_network_from_to_account"
     t.index ["network", "from_ip", "created_at"], name: "index_ping_times_on_network_and_from_ip_and_created_at"
@@ -97,9 +105,10 @@ ActiveRecord::Schema.define(version: 2020_06_15_000540) do
     t.string "network"
     t.string "name"
     t.text "payload", size: :long
-    t.string "batch_id"
+    t.string "batch_uuid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["batch_uuid"], name: "index_reports_on_batch_uuid"
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
   end
 
@@ -144,17 +153,17 @@ ActiveRecord::Schema.define(version: 2020_06_15_000540) do
     t.decimal "skipped_slot_percent", precision: 10, scale: 4
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "batch_id"
+    t.string "batch_uuid"
     t.integer "skipped_slots_after"
     t.decimal "skipped_slots_after_percent", precision: 10, scale: 4
-    t.index ["batch_id"], name: "index_validator_block_histories_on_batch_id"
+    t.index ["batch_uuid"], name: "index_validator_block_histories_on_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
     t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
   end
 
   create_table "validator_block_history_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "batch_id"
+    t.string "batch_uuid"
     t.integer "epoch", unsigned: true
     t.bigint "start_slot", unsigned: true
     t.bigint "end_slot", unsigned: true
@@ -163,7 +172,7 @@ ActiveRecord::Schema.define(version: 2020_06_15_000540) do
     t.integer "total_slots_skipped", unsigned: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["batch_id"], name: "index_validator_block_history_stats_on_batch_id"
+    t.index ["batch_uuid"], name: "index_validator_block_history_stats_on_batch_uuid"
   end
 
   create_table "validator_ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

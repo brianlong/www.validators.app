@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <% @validator.validator_block_histories.order('id desc').limit(60).each do |history| %>
-    <% block_stats = ValidatorBlockHistoryStat.where(batch_id: history.batch_id)
+    <% block_stats = ValidatorBlockHistoryStat.where(batch_uuid: history.batch_uuid)
                                               .first %>
     <tr>
       <td class='text-right'>

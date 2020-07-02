@@ -10,7 +10,7 @@ block_history_stat = ValidatorBlockHistoryStat.last
 
 payload = {
   network: 'testnet',
-  batch_id: block_history_stat.batch_id,
+  batch_uuid: block_history_stat.batch_uuid,
   name: 'build_skipped_slot_percent'
 }
 
