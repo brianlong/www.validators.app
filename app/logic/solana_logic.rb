@@ -15,7 +15,7 @@ module SolanaLogic
 
       Pipeline.new(200, p[:payload].merge(batch_uuid: batch.uuid))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from set_batch', e)
+      Pipeline.new(500, p[:payload], 'Error from batch_set', e)
     end
   end
 
@@ -29,7 +29,7 @@ module SolanaLogic
 
       Pipeline.new(200, p[:payload])
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from set_batch', e)
+      Pipeline.new(500, p[:payload], 'Error from batch_touch', e)
     end
   end
 
