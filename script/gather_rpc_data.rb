@@ -14,6 +14,7 @@ payload = {
 
 p = Pipeline.new(200, payload)
             .then(&batch_set)
+            .then(&epoch_get)
             .then(&validators_get)
             .then(&vote_accounts_get)
             .then(&reduce_validator_vote_accounts)

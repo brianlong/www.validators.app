@@ -1,0 +1,2 @@
+class EpochHistory < ApplicationRecord
+end
