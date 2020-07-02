@@ -13,6 +13,7 @@ payload = {
 }
 
 p = Pipeline.new(200, payload)
+            .then(&set_batch)
             .then(&validators_get)
             .then(&vote_accounts_get)
             .then(&reduce_validator_vote_accounts)
@@ -22,10 +23,10 @@ p = Pipeline.new(200, payload)
             .then(&log_errors)
 
 BuildSkippedSlotPercentWorker.perform_async(
-  batch_id: p[:payload][:validator_block_history_stats]['batch_id']
+  batch_uuid: p[:payload][:validator_block_history_stats]['batch_uuid']
 )
 BuildSkippedAfterPercentWorker.perform_async(
-  batch_id: p[:payload][:validator_block_history_stats]['batch_id']
+  batch_uuid: p[:payload][:validator_block_history_stats]['batch_uuid']
 )
 ChartHomePageWorker.perform_async(
   network: p[:payload][:network],

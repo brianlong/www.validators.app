@@ -31,7 +31,7 @@ class CollectorLogicTest < ActiveSupport::TestCase
 
     # Check the values of the PingTimeStat record
     ping_time_stat = PingTimeStat.last
-    assert_equal ping_time.batch_id, ping_time_stat.batch_id
+    assert_equal ping_time.batch_uuid, ping_time_stat.batch_uuid
     assert_equal 0.881, ping_time_stat.overall_min_time
     assert_equal 3.428, ping_time_stat.overall_max_time
     assert_equal 1.738, ping_time_stat.overall_average_time

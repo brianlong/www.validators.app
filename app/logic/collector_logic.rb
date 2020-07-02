@@ -31,21 +31,21 @@ module CollectorLogic
     end
   end
 
-  # Read the ping_times from the collector object and set a batch_id
+  # Read the ping_times from the collector object and set a batch_uuid
   #
   # Expects to see p[:payload][:collector]
   def ping_times_read
     lambda do |p|
       return p unless p[:code] == 200
 
-      batch_id = SecureRandom.uuid
+      batch_uuid = SecureRandom.uuid
       ping_times = JSON.parse(p[:payload][:collector].payload)
 
-      # Pass the batch_id & ping_times through for subsequent steps
+      # Pass the batch_uuid & ping_times through for subsequent steps
       return Pipeline.new(
         200,
         p[:payload].merge(
-          batch_id: batch_id,
+          batch_uuid: batch_uuid,
           ping_times: ping_times
         )
       )
@@ -84,7 +84,7 @@ module CollectorLogic
         200,
         p[:payload].merge(
           ping_time_stats: {
-            batch_id: p[:payload][:batch_id],
+            batch_uuid: p[:payload][:batch_uuid],
             overall_min_time: overall_min_time,
             overall_max_time: overall_max_time,
             overall_average_time: overall_average_time,
@@ -100,14 +100,14 @@ module CollectorLogic
   # collect_ping_times will read a Collector object with PingTimes and import
   # the data into the ping_times table.
   #
-  # Expects to see p[:payload][:collector], p[:payload][:batch_id], &
+  # Expects to see p[:payload][:collector], p[:payload][:batch_uuid], &
   # p[:payload][:ping_times]
   def ping_times_save
     lambda do |p|
       return p unless p[:code] == 200
 
       # Import the records
-      # batch_id = SecureRandom.uuid
+      # batch_uuid = SecureRandom.uuid
       # ping_times = JSON.parse(p[:payload][:collector].payload)
       # byebug
 
@@ -115,7 +115,7 @@ module CollectorLogic
         p[:payload][:ping_times].each do |pt|
           # Create the ping_times record
           PingTime.create!(
-            batch_id: p[:payload][:batch_id],
+            batch_uuid: p[:payload][:batch_uuid],
             network: pt['network'],
             from_account: pt['from_account'],
             from_ip: pt['from_ip'],
@@ -131,7 +131,7 @@ module CollectorLogic
 
         # Create the PingTimeStat record
         PingTimeStat.create(
-          batch_id: p[:payload][:ping_time_stats][:batch_id],
+          batch_uuid: p[:payload][:ping_time_stats][:batch_uuid],
           overall_min_time: p[:payload][:ping_time_stats][:overall_min_time],
           overall_max_time: p[:payload][:ping_time_stats][:overall_max_time],
           overall_average_time: \

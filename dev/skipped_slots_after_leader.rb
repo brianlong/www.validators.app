@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require File.expand_path('../config/environment', __dir__)
-batch_id = SecureRandom.uuid
+batch_uuid = SecureRandom.uuid
 
 # block_history_json = `solana block-production \
 #                       --output json-compact \
@@ -29,7 +29,7 @@ leaders_block = block_history['leaders']
 validator_block_history = {}
 leaders_block.each do |v|
   validator_block_history[v['identityPubkey']] = {
-    'batch_id' => batch_id,
+    'batch_uuid' => batch_uuid,
     'epoch' => epoch,
     'leader_slots' => v['leaderSlots'],
     'blocks_produced' => v['blocksProduced'],

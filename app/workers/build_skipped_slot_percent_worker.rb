@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # BuildTopSkippedSlotPercentWorker.perform_async(
-#   batch_id: '65c9083f-8f53-4873-a9f8-8f782e276d30'
+#   batch_uuid: '65c9083f-8f53-4873-a9f8-8f782e276d30'
 # )
 class BuildSkippedSlotPercentWorker
   include Sidekiq::Worker
@@ -11,7 +11,7 @@ class BuildSkippedSlotPercentWorker
   def perform(args = {})
     payload = {
       network: 'testnet',
-      batch_id: args['batch_id'],
+      batch_uuid: args['batch_uuid'],
       name: 'build_skipped_slot_percent'
     }
 

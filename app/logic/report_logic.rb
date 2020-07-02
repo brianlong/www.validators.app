@@ -8,12 +8,12 @@ module ReportLogic
       return p unless p[:code] == 200
       raise StandardError, 'Missing p[:payload][:network]' \
         unless p[:payload][:network]
-      raise StandardError, 'Missing p[:payload][:batch_id]' \
-        unless p[:payload][:batch_id]
+      raise StandardError, 'Missing p[:payload][:batch_uuid]' \
+        unless p[:payload][:batch_uuid]
 
       # Grab the block history for this batch
       block_history = ValidatorBlockHistory.where(
-        batch_id: p[:payload][:batch_id]
+        batch_uuid: p[:payload][:batch_uuid]
       ).order('skipped_slot_percent asc')
 
       # Create a results array and insert the data
@@ -34,7 +34,7 @@ module ReportLogic
       # Create the report
       Report.create(
         network: p[:payload][:network],
-        batch_id: p[:payload][:batch_id],
+        batch_uuid: p[:payload][:batch_uuid],
         name: 'build_skipped_slot_percent',
         payload: result
       )
@@ -50,12 +50,12 @@ module ReportLogic
       return p unless p[:code] == 200
       raise StandardError, 'Missing p[:payload][:network]' \
         unless p[:payload][:network]
-      raise StandardError, 'Missing p[:payload][:batch_id]' \
-        unless p[:payload][:batch_id]
+      raise StandardError, 'Missing p[:payload][:batch_uuid]' \
+        unless p[:payload][:batch_uuid]
 
       # Grab the block history for this batch
       block_history = ValidatorBlockHistory.where(
-        batch_id: p[:payload][:batch_id]
+        batch_uuid: p[:payload][:batch_uuid]
       ).order('skipped_slots_after_percent asc')
 
       # Create a results array and insert the data
@@ -76,7 +76,7 @@ module ReportLogic
       # Create the report
       Report.create(
         network: p[:payload][:network],
-        batch_id: p[:payload][:batch_id],
+        batch_uuid: p[:payload][:batch_uuid],
         name: 'build_skipped_after_percent',
         payload: result
       )
@@ -107,9 +107,9 @@ module ReportLogic
       # Create a results array and insert the data
       result = []
       block_history.each do |history|
-        # Calculate the median skipped slots for this batch_id
+        # Calculate the median skipped slots for this batch_uuid
         vbh = ValidatorBlockHistory.where(
-          batch_id: history.batch_id
+          batch_uuid: history.batch_uuid
         ).all
 
         array_sorted = vbh.map(&:skipped_slot_percent).sort

@@ -28,7 +28,7 @@ class ValidatorsController < ApplicationController
               .order('id desc').limit(288).reverse.each do |vbh|
       i += 1
       batch_stats = ValidatorBlockHistoryStat.where(
-        batch_id: vbh.batch_id
+        batch_uuid: vbh.batch_uuid
       ).first
 
       @data[i] = {
@@ -49,7 +49,7 @@ class ValidatorsController < ApplicationController
 
     # @block_stats = \
     #   ValidatorBlockHistoryStat.where(
-    #     batch_id: @validator_block_histories.first.batch_id
+    #     batch_uuid: @validator_block_histories.first.batch_uuid
     #   )
   end
 
