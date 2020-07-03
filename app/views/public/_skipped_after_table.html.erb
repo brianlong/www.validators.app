@@ -8,17 +8,23 @@
     </tr>
   </thead>
   <tbody>
-    <% histories.each do |val| %>
+    <% if histories.nil? %>
       <tr>
-        <td>
-          <%= link_to shorten_key(val['account']), validator_url(network: params[:network], account: val['account'])  %>
-        </td>
-        <td><%= val['skipped_slots_after'] %></td>
-        <td><%= number_to_percentage val['skipped_slots_after_percent'].to_f * 100.0 %></td>
-        <td>
-           <%= val['ping_time'].nil? ? 'N/A' : val['ping_time'] %>
-        </td>
+        <td colspan="4">No data</td>
       </tr>
+    <% else %>
+      <% histories.each do |val| %>
+        <tr>
+          <td>
+            <%= link_to shorten_key(val['account']), validator_url(network: params[:network], account: val['account'])  %>
+          </td>
+          <td><%= val['skipped_slots_after'] %></td>
+          <td><%= number_to_percentage val['skipped_slots_after_percent'].to_f * 100.0 %></td>
+          <td>
+             <%= val['ping_time'].nil? ? 'N/A' : val['ping_time'] %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 
