@@ -18,7 +18,7 @@
 <div class='row'>
   <div class="col-sm-12">
     <p>
-      The app is still under construction, but you are welcome to click around and see the current progress. Start at the <%= link_to 'Testnet Validators', validators_url(network: params[:network]) %> page to find your Account.
+      The app is still under construction, but you are welcome to click around and see the current progress. Start at the <%= link_to "#{params[:network].capitalize} Validators", validators_url(network: params[:network]) %> page to find your Account.
     </p>
   </div>
 </div>
@@ -29,7 +29,7 @@
       <div class="col-lg-6">
         <h3>Tower Leaders</h3>
         <p>
-          The testnet validators who have highest root blocks in epoch <%= @block_history_stat.epoch %>.
+          The <%= params[:network] %> validators who have highest root blocks in epoch <%= @block_history_stat.epoch %>.
         </p>
         <p>
           <%= render 'tower_table', validators: @tower_leaders %>
@@ -39,7 +39,7 @@
       <div class="col-lg-6">
         <h3>Tower laggards</h3>
         <p>
-          The testnet validators who have lowest root blocks in epoch <%= @block_history_stat.epoch %>.
+          The <%= params[:network] %> validators who have lowest root blocks in epoch <%= @block_history_stat.epoch %>.
         </p>
         <p>
           <%= render 'tower_table', validators: @tower_laggards %>
@@ -62,7 +62,7 @@
   <div class='row'>
     <div class="col-sm-6">
       <h3>Top Skipped Slots &percnt;</h3>
-      <p>The testnet validators who have skipped the lowest percentage of their slots in epoch <%= @block_history_stat.epoch %>.</p>
+      <p>The <%= params[:network] %> validators who have skipped the lowest percentage of their slots in epoch <%= @block_history_stat.epoch %>.</p>
       <p>
         <%= render 'skipped_slots_table', histories: @skipped_slots_top %>
         Data through <%= @skipped_slots_report.created_at %>.
@@ -70,7 +70,7 @@
     </div>
     <div class="col-sm-6">
       <h3>Top Skipped After &percnt;</h3>
-      <p>The testnet validators with the best performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
+      <p>The <%= params[:network] %> validators with the best performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
       <p>
         <%= render 'skipped_after_table', histories: @skipped_after_top %>
         Data through <%= @skipped_after_report.created_at %>.
@@ -80,7 +80,7 @@
   <div class='row'>
     <div class="col-sm-6">
       <h3>Bottom Skipped Slots &percnt;</h3>
-      <p>The testnet validators who have skipped the highest percentage of their slots in epoch <%= @block_history_stat.epoch %>.</p>
+      <p>The <%= params[:network] %> validators who have skipped the highest percentage of their slots in epoch <%= @block_history_stat.epoch %>.</p>
       <p>
         <%= render 'skipped_slots_table', histories: @skipped_slots_bottom %>
         Data through <%= @skipped_slots_report.created_at %>.
@@ -88,7 +88,7 @@
     </div>
     <div class="col-sm-6">
       <h3>Bottom Skipped After &percnt;</h3>
-      <p>The testnet validators with the worst performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
+      <p>The <%= params[:network] %> validators with the worst performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
       <p>
         <%= render 'skipped_after_table', histories: @skipped_after_bottom %>
         Data through <%= @skipped_after_report.created_at %>.

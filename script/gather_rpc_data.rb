@@ -23,11 +23,14 @@ p = Pipeline.new(200, payload)
             .then(&validator_block_history_get)
             .then(&validator_block_history_save)
             .then(&log_errors)
+            .then(&batch_touch)
 
 BuildSkippedSlotPercentWorker.perform_async(
+  network: p.payload[:network],
   batch_uuid: p.payload[:batch_uuid]
 )
 BuildSkippedAfterPercentWorker.perform_async(
+  network: p.payload[:network],
   batch_uuid: p.payload[:batch_uuid]
 )
 ChartHomePageWorker.perform_async(

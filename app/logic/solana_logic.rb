@@ -11,11 +11,11 @@ module SolanaLogic
   # Create a batch record and set the :batch_uuid in the payload
   def batch_set
     lambda do |p|
-      batch = Batch.create!
+      batch = Batch.create!(network: p.payload[:network])
 
-      Pipeline.new(200, p[:payload].merge(batch_uuid: batch.uuid))
+      Pipeline.new(200, p.payload.merge(batch_uuid: batch.uuid))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from batch_set', e)
+      Pipeline.new(500, p.payload, 'Error from batch_set', e)
     end
   end
 
@@ -24,12 +24,12 @@ module SolanaLogic
   def batch_touch
     lambda do |p|
       # byebug
-      batch = Batch.where(uuid: p[:payload][:batch_uuid]).first
+      batch = Batch.where(uuid: p.payload[:batch_uuid]).first
       batch&.touch # instead of batch.touch if batch
 
-      Pipeline.new(200, p[:payload])
+      Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from batch_touch', e)
+      Pipeline.new(500, p.payload, 'Error from batch_touch', e)
     end
   end
 
@@ -37,10 +37,11 @@ module SolanaLogic
     lambda do |p|
       epoch_json = rpc_request(
         'getEpochInfo',
-        p[:payload][:config_url]
+        p.payload[:config_url]
       )['result']
 
       epoch = EpochHistory.create(
+        network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid],
         epoch: epoch_json['epoch'],
         current_slot: epoch_json['absoluteSlot'],
@@ -50,7 +51,7 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload.merge(epoch: epoch.epoch))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from batch_set', e)
+      Pipeline.new(500, p.payload, 'Error from batch_set', e)
     end
   end
 
@@ -110,7 +111,7 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from validators_cli', e)
+      Pipeline.new(500, p.payload, 'Error from validators_cli', e)
     end
   end
 
@@ -121,7 +122,7 @@ module SolanaLogic
 
       validators_json = rpc_request(
         'getClusterNodes',
-        p[:payload][:config_url]
+        p.payload[:config_url]
       )['result']
 
       validators = {}
@@ -134,9 +135,9 @@ module SolanaLogic
         }
       end
 
-      Pipeline.new(200, p[:payload].merge(validators: validators))
+      Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from validators_get', e)
+      Pipeline.new(500, p.payload, 'Error from validators_get', e)
     end
   end
 
@@ -147,7 +148,7 @@ module SolanaLogic
 
       vote_accounts_json = rpc_request(
         'getVoteAccounts',
-        p[:payload][:config_url]
+        p.payload[:config_url]
       )['result']['current']
 
       vote_accounts = {}
@@ -161,9 +162,9 @@ module SolanaLogic
         }
       end
 
-      Pipeline.new(200, p[:payload].merge(vote_accounts: vote_accounts))
+      Pipeline.new(200, p.payload.merge(vote_accounts: vote_accounts))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from vote_accounts_get', e)
+      Pipeline.new(500, p.payload, 'Error from vote_accounts_get', e)
     end
   end
 
@@ -173,21 +174,21 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       validators_reduced = {}
-      p[:payload][:validators].each do |k, _v|
-        next if p[:payload][:vote_accounts][k].nil?
+      p.payload[:validators].each do |k, _v|
+        next if p.payload[:vote_accounts][k].nil?
 
         validators_reduced[k] = \
-          p[:payload][:validators][k].merge(p[:payload][:vote_accounts][k])
+          p.payload[:validators][k].merge(p.payload[:vote_accounts][k])
       end
 
       Pipeline.new(
         200,
-        p[:payload].merge(validators_reduced: validators_reduced)
+        p.payload.merge(validators_reduced: validators_reduced)
       )
     rescue StandardError => e
       Pipeline.new(
         500,
-        p[:payload],
+        p.payload,
         'Error from reduce_validator_vote_accounts',
         e
       )
@@ -199,10 +200,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      p[:payload][:validators_reduced].each do |k, v|
+      p.payload[:validators_reduced].each do |k, v|
         # Find or create the validator record
         validator = Validator.find_or_create_by(
-          network: p[:payload][:network],
+          network: p.payload[:network],
           account: k
         )
 
@@ -213,6 +214,8 @@ module SolanaLogic
 
         # Create Vote records to save a time series of vote & stake data
         vote_account.vote_account_histories.create(
+          network: p.payload[:network],
+          batch_uuid: p.payload[:batch_uuid],
           commission: v['commission'],
           last_vote: v['last_vote'],
           credits: v['credits'],
@@ -227,9 +230,9 @@ module SolanaLogic
         )
       end
 
-      Pipeline.new(200, p[:payload])
+      Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'Error from validators_save', e)
+      Pipeline.new(500, p.payload, 'Error from validators_save', e)
     end
   end
 
@@ -243,7 +246,7 @@ module SolanaLogic
         else
           ''
         end
-      url_to_use = "#{p[:payload][:config_url]}:#{Rails.application.credentials.solana[:rpc_port]}"
+      url_to_use = "#{p.payload[:config_url]}:#{Rails.application.credentials.solana[:rpc_port]}"
       block_history_json = `#{solana_path}solana block-production \
                               --output json \
                               --url #{url_to_use}`
@@ -251,7 +254,7 @@ module SolanaLogic
 
       # Data for the validator_block_history_stats table
       block_history_stats = {
-        'batch_uuid' => p[:payload][:batch_uuid],
+        'batch_uuid' => p.payload[:batch_uuid],
         'epoch' => p.payload[:epoch],
         'start_slot' => block_history['start_slot'],
         'end_slot' => block_history['end_slot'],
@@ -267,7 +270,7 @@ module SolanaLogic
       validator_block_history = {}
       validator_block_json.each do |v|
         validator_block_history[v['identityPubkey']] = {
-          'batch_uuid' => p[:payload][:batch_uuid],
+          'batch_uuid' => p.payload[:batch_uuid],
           'epoch' => p.payload[:epoch],
           'leader_slots' => v['leaderSlots'],
           'blocks_produced' => v['blocksProduced'],
@@ -319,8 +322,8 @@ module SolanaLogic
       # Done looping through the slots to accumulate stats
 
       # byebug
-      payload_1 = p[:payload] \
-                  .merge(validator_block_history: validator_block_history)
+      payload_1 = p.payload \
+                   .merge(validator_block_history: validator_block_history)
       Pipeline.new(
         200,
         payload_1.merge(validator_block_history_stats: block_history_stats)
@@ -328,7 +331,7 @@ module SolanaLogic
     rescue StandardError => e
       Pipeline.new(
         500,
-        p[:payload],
+        p.payload,
         'Error from validator_block_history_get',
         e
       )
@@ -339,9 +342,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      stats = p[:payload][:validator_block_history_stats]
+      stats = p.payload[:validator_block_history_stats]
       ValidatorBlockHistoryStat.create(
-        batch_uuid: stats['batch_uuid'],
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid],
         epoch: p.payload[:epoch],
         start_slot: stats['start_slot'],
         end_slot: stats['end_slot'],
@@ -351,15 +355,16 @@ module SolanaLogic
       )
 
       # byebug
-      p[:payload][:validator_block_history].each do |k, v|
+      p.payload[:validator_block_history].each do |k, v|
         validator = Validator.where(
-          network: p[:payload][:network],
+          network: p.payload[:network],
           account: k
         ).first
         next if validator.nil?
 
         validator.validator_block_histories.create(
-          batch_uuid: v['batch_uuid'],
+          network: p.payload[:network],
+          batch_uuid: p.payload[:batch_uuid],
           epoch: p.payload[:epoch],
           leader_slots: v['leader_slots'],
           blocks_produced: v['blocks_produced'],
@@ -371,11 +376,11 @@ module SolanaLogic
         )
       end
 
-      Pipeline.new(200, p[:payload])
+      Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(
         500,
-        p[:payload],
+        p.payload,
         'Error from validator_block_history_save',
         e
       )

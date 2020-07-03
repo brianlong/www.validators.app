@@ -7,7 +7,6 @@ class ValidatorsController < ApplicationController
   # GET /validators
   # GET /validators.json
   def index
-    # Default network is 'testnet'
     @validators = Validator.where(network: params[:network])
                            .order('network, account')
                            .all
