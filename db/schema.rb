@@ -196,7 +196,7 @@ ActiveRecord::Schema.define(version: 2020_07_02_220912) do
     t.bigint "root_block", unsigned: true
     t.bigint "credits", unsigned: true
     t.bigint "active_stake", unsigned: true
-    t.boolean "delinquent"
+    t.boolean "delinquent", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"

@@ -20,7 +20,7 @@
 </div>
 <hr />
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-lg-6">
       <h3>Tower Leaders</h3>
       <p>
         The testnet validators who have highest root blocks in epoch <%= @block_history_stat.epoch %>.
@@ -30,7 +30,7 @@
         See the full <%= link_to 'Tower Report', tower_url(network: params[:network]) %>.
       </p>
     </div>
-    <div class="col-sm-6">
+    <div class="col-lg-6">
       <h3>Tower laggards</h3>
       <p>
         The testnet validators who have lowest root blocks in epoch <%= @block_history_stat.epoch %>.
@@ -43,7 +43,7 @@
 </div>
 <hr />
 <div class='row'>
-  <div class="col-sm-12">
+  <div class="col-md-12">
     <p>
       Top and bottom performing validators for epoch <%= @block_history_stat.epoch %> appear in the tables below. The &quot;Skipped Slot&quot; stats show how many slots were skipped by each leader. The &quot;Skipped After&quot; stats show the performance by the leader AFTER the designated node. Poor performance in the &quot;Skipped After&quot; category may indicate that your validator is slow to propagate blocks to the next leader. Slow handoffs from one leader to the next will result in more forks and missed slots by the rest of the cluster.
     </p>

@@ -21,7 +21,8 @@ class PublicController < ApplicationController
                            @skipped_slots_report.payload[0..19]
                          end
 
-    @skipped_slots_bottom = if @skipped_slots_report.nil?
+    @skipped_slots_bottom = if @skipped_slots_report.nil? ||
+                               @skipped_slots_report.payload.nil?
                               []
                             else
                               @skipped_slots_report.payload[-20..-1].reverse

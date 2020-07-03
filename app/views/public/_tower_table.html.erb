@@ -5,6 +5,7 @@
       <th>Root<br />Block</th>
       <th>Behind<br />Leader</th>
       <th>Active<br />Stake</th>
+      <th>&nbsp;</th>
     </tr>
   </thead>
   <tbody>
@@ -21,6 +22,9 @@
         <td><%= number_with_delimiter val['blocks_behind_leader'] %></td>
         <td>
            <%= number_with_delimiter(lamports_to_sol(val['active_stake'])) %>
+        </td>
+        <td>
+          <%= 'Delinquent' if val['delinquent'] %>
         </td>
       </tr>
     <% end %>

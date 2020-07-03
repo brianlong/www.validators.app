@@ -167,7 +167,8 @@ module ReportLogic
           'account' => validator.account,
           'root_block' => validator.root_block,
           'blocks_behind_leader' => blocks_behind_leader,
-          'active_stake' => validator.active_stake
+          'active_stake' => validator.active_stake,
+          'delinquent' => validator.delinquent
         }
       end
 

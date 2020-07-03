@@ -72,6 +72,12 @@ module SolanaLogic
                               --output json \
                               --url #{url_to_use}`
       validators = JSON.parse(validators_json)
+
+      raise 'No results from `solana validators`' if \
+        validators['currentValidators'].empty? &&
+        validators['delinquentValidators'].empty?
+
+      # Create current validators
       validators['currentValidators'].each do |validator|
         ValidatorHistory.create(
           network: p.payload[:network],
@@ -83,6 +89,22 @@ module SolanaLogic
           root_block: validator['rootSlot'],
           credits: validator['credits'],
           active_stake: validator['activatedStake']
+        )
+      end
+
+      # Create delinquent validators
+      validators['delinquentValidators'].each do |validator|
+        ValidatorHistory.create(
+          network: p.payload[:network],
+          batch_uuid: p.payload[:batch_uuid],
+          account: validator['identityPubkey'],
+          vote_account: validator['voteAccountPubkey'],
+          commission: validator['commission'],
+          last_vote: validator['lastVote'],
+          root_block: validator['rootSlot'],
+          credits: validator['credits'],
+          active_stake: validator['activatedStake'],
+          delinquent: true
         )
       end
 
