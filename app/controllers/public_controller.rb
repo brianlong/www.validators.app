@@ -6,12 +6,12 @@ class PublicController < ApplicationController
     @block_history_stat = ValidatorBlockHistoryStat.last || ValidatorBlockHistoryStat.new
 
     @chart_data = Report.where(
-      network: 'testnet',
+      network: params[:network],
       name: 'chart_home_page'
     ).last
 
     @skipped_slots_report = Report.where(
-      network: 'testnet',
+      network: params[:network],
       name: 'build_skipped_slot_percent'
     ).last
 
@@ -33,7 +33,7 @@ class PublicController < ApplicationController
                             end
 
     @skipped_after_report = Report.where(
-      network: 'testnet',
+      network: params[:network],
       name: 'build_skipped_after_percent'
     ).last
 
@@ -51,7 +51,7 @@ class PublicController < ApplicationController
 
     # Report Tower Height
     @tower_report = Report.where(
-      network: 'testnet',
+      network: params[:network],
       name: 'report_tower_height'
     ).last
 

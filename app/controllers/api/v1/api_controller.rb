@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# curl -H "Token: secret-api-token" https://localhost:3000/api/v1/validators/testnet
+# curl -H "Token: secret-api-token" https://localhost:3000/api/v1/validators/:network
 require 'appsignal'
 
 module Api
@@ -60,7 +60,6 @@ module Api
       end
 
       def validators_list
-        # Default network is 'testnet'
         @validators = Validator.where(network: params[:network])
                                .order('network, account')
                                .all

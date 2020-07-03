@@ -10,7 +10,7 @@ class BuildSkippedAfterPercentWorker
 
   def perform(args = {})
     payload = {
-      network: 'testnet',
+      network: args['network'],
       batch_uuid: args['batch_uuid'],
       name: 'build_skipped_after_percent'
     }

@@ -6,14 +6,14 @@ module ReportLogic
   def build_skipped_slot_percent
     lambda do |p|
       return p unless p[:code] == 200
-      raise StandardError, 'Missing p[:payload][:network]' \
-        unless p[:payload][:network]
-      raise StandardError, 'Missing p[:payload][:batch_uuid]' \
-        unless p[:payload][:batch_uuid]
+      raise StandardError, 'Missing p.payload[:network]' \
+        unless p.payload[:network]
+      raise StandardError, 'Missing p.payload[:batch_uuid]' \
+        unless p.payload[:batch_uuid]
 
       # Grab the block history for this batch
       block_history = ValidatorBlockHistory.where(
-        batch_uuid: p[:payload][:batch_uuid]
+        batch_uuid: p.payload[:batch_uuid]
       ).order('skipped_slot_percent asc')
 
       # Create a results array and insert the data
@@ -35,29 +35,29 @@ module ReportLogic
 
       # Create the report
       Report.create(
-        network: p[:payload][:network],
-        batch_uuid: p[:payload][:batch_uuid],
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid],
         name: 'build_skipped_slot_percent',
         payload: result
       )
 
-      Pipeline.new(200, p[:payload].merge(result: result))
+      Pipeline.new(200, p.payload.merge(result: result))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'build_skipped_slot_percent', e)
+      Pipeline.new(500, p.payload, 'build_skipped_slot_percent', e)
     end
   end
 
   def build_skipped_after_percent
     lambda do |p|
       return p unless p[:code] == 200
-      raise StandardError, 'Missing p[:payload][:network]' \
-        unless p[:payload][:network]
-      raise StandardError, 'Missing p[:payload][:batch_uuid]' \
-        unless p[:payload][:batch_uuid]
+      raise StandardError, 'Missing p.payload[:network]' \
+        unless p.payload[:network]
+      raise StandardError, 'Missing p.payload[:batch_uuid]' \
+        unless p.payload[:batch_uuid]
 
       # Grab the block history for this batch
       block_history = ValidatorBlockHistory.where(
-        batch_uuid: p[:payload][:batch_uuid]
+        batch_uuid: p.payload[:batch_uuid]
       ).order('skipped_slots_after_percent asc')
 
       # Create a results array and insert the data
@@ -79,15 +79,15 @@ module ReportLogic
 
       # Create the report
       Report.create(
-        network: p[:payload][:network],
-        batch_uuid: p[:payload][:batch_uuid],
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid],
         name: 'build_skipped_after_percent',
         payload: result
       )
 
-      Pipeline.new(200, p[:payload].merge(result: result))
+      Pipeline.new(200, p.payload.merge(result: result))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'build_skipped_slot_percent', e)
+      Pipeline.new(500, p.payload, 'build_skipped_slot_percent', e)
     end
   end
 
@@ -96,16 +96,16 @@ module ReportLogic
   def chart_home_page
     lambda do |p|
       return p unless p[:code] == 200
-      raise StandardError, 'Missing p[:payload][:network]' \
-        unless p[:payload][:network]
-      raise StandardError, 'Missing p[:payload][:epoch]' \
-        unless p[:payload][:epoch]
+      raise StandardError, 'Missing p.payload[:network]' \
+        unless p.payload[:network]
+      raise StandardError, 'Missing p.payload[:epoch]' \
+        unless p.payload[:epoch]
 
       # Grab the block history for the most recent bars
       # TODO: Add the :network to ValidatorBlockHistoryStat
       block_history = ValidatorBlockHistoryStat.where(
-        # network: p[:payload][:network],
-        epoch: p[:payload][:epoch]
+        # network: p.payload[:network],
+        epoch: p.payload[:epoch]
       ).order('id desc').limit(500)
 
       # Create a results array and insert the data
@@ -136,14 +136,15 @@ module ReportLogic
 
       # Create the report
       Report.create(
-        network: p[:payload][:network],
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid],
         name: 'chart_home_page',
         payload: result
       )
 
-      Pipeline.new(200, p[:payload].merge(result: result))
+      Pipeline.new(200, p.payload.merge(result: result))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'chart_home_page', e)
+      Pipeline.new(500, p.payload, 'chart_home_page', e)
     end
   end
 
@@ -151,15 +152,19 @@ module ReportLogic
   def report_tower_height
     lambda do |p|
       return p unless p.code == 200
-      raise StandardError, 'Missing p[:payload][:network]' \
+      raise StandardError, 'Missing p.payload[:network]' \
         unless p.payload[:network]
-      raise StandardError, 'Missing p[:payload][:batch_uuid]' \
+      raise StandardError, 'Missing p.payload[:batch_uuid]' \
         unless p.payload[:batch_uuid]
 
-      highest_block = ValidatorHistory.where(network: p.payload[:network], batch_uuid: p.payload[:batch_uuid]).maximum(:root_block)
+      highest_block = ValidatorHistory.where(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid]
+      ).maximum(:root_block)
 
       # Grab the block history for this batch
       validators = ValidatorHistory.where(
+        network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
       ).order('root_block desc, active_stake desc').all
 
@@ -188,9 +193,9 @@ module ReportLogic
         payload: result
       )
 
-      Pipeline.new(200, p[:payload].merge(result: result))
+      Pipeline.new(200, p.payload.merge(result: result))
     rescue StandardError => e
-      Pipeline.new(500, p[:payload], 'report_tower_height', e)
+      Pipeline.new(500, p.payload, 'report_tower_height', e)
     end
   end
 end
