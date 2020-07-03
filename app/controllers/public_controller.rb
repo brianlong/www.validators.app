@@ -25,7 +25,11 @@ class PublicController < ApplicationController
                                @skipped_slots_report.payload.nil?
                               []
                             else
-                              @skipped_slots_report.payload[-20..-1].reverse
+                              begin
+                                @skipped_slots_report.payload[-20..-1].reverse
+                              rescue StandardError
+                                []
+                              end
                             end
 
     @skipped_after_report = Report.where(
