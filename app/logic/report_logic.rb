@@ -31,6 +31,8 @@ module ReportLogic
         }
       end
 
+      raise 'No data' if result.empty?
+
       # Create the report
       Report.create(
         network: p[:payload][:network],
@@ -72,6 +74,8 @@ module ReportLogic
                                  .maximum('avg_ms')
         }
       end
+
+      raise 'No data' if result.empty?
 
       # Create the report
       Report.create(
@@ -128,6 +132,8 @@ module ReportLogic
         }
       end
 
+      raise 'No data' if result.empty?
+
       # Create the report
       Report.create(
         network: p[:payload][:network],
@@ -171,6 +177,8 @@ module ReportLogic
           'delinquent' => validator.delinquent
         }
       end
+
+      raise 'No data' if result.empty?
 
       # Create the report
       Report.create(
