@@ -12,6 +12,10 @@ Rails.application.routes.draw do
       to: 'validators#show',
       as: 'validator'
 
+  get 'tower/:network',
+      to: 'public#tower',
+      as: 'tower'
+
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
 

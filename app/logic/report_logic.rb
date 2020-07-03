@@ -140,4 +140,48 @@ module ReportLogic
       Pipeline.new(500, p[:payload], 'chart_home_page', e)
     end
   end
+
+  # Create a report to show tower height.
+  def report_tower_height
+    lambda do |p|
+      return p unless p.code == 200
+      raise StandardError, 'Missing p[:payload][:network]' \
+        unless p.payload[:network]
+      raise StandardError, 'Missing p[:payload][:batch_uuid]' \
+        unless p.payload[:batch_uuid]
+
+      highest_block = ValidatorHistory.where(network: p.payload[:network], batch_uuid: p.payload[:batch_uuid]).maximum(:root_block)
+
+      # Grab the block history for this batch
+      validators = ValidatorHistory.where(
+        batch_uuid: p.payload[:batch_uuid]
+      ).order('root_block desc, active_stake desc').all
+
+      # Create a results array and insert the data
+      result = []
+      validators.each do |validator|
+        validator_root_block = validator.root_block || 0
+        blocks_behind_leader = highest_block - validator_root_block
+        result << {
+          'epoch' => p.payload[:epoch],
+          'account' => validator.account,
+          'root_block' => validator.root_block,
+          'blocks_behind_leader' => blocks_behind_leader,
+          'active_stake' => validator.active_stake
+        }
+      end
+
+      # Create the report
+      Report.create(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid],
+        name: 'report_tower_height',
+        payload: result
+      )
+
+      Pipeline.new(200, p[:payload].merge(result: result))
+    rescue StandardError => e
+      Pipeline.new(500, p[:payload], 'report_tower_height', e)
+    end
+  end
 end

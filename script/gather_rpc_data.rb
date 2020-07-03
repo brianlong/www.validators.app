@@ -15,6 +15,7 @@ payload = {
 p = Pipeline.new(200, payload)
             .then(&batch_set)
             .then(&epoch_get)
+            .then(&validators_cli)
             .then(&validators_get)
             .then(&vote_accounts_get)
             .then(&reduce_validator_vote_accounts)
@@ -24,12 +25,18 @@ p = Pipeline.new(200, payload)
             .then(&log_errors)
 
 BuildSkippedSlotPercentWorker.perform_async(
-  batch_uuid: p[:payload][:validator_block_history_stats]['batch_uuid']
+  batch_uuid: p.payload[:batch_uuid]
 )
 BuildSkippedAfterPercentWorker.perform_async(
-  batch_uuid: p[:payload][:validator_block_history_stats]['batch_uuid']
+  batch_uuid: p.payload[:batch_uuid]
 )
 ChartHomePageWorker.perform_async(
-  network: p[:payload][:network],
-  epoch: p[:payload][:validator_block_history_stats]['epoch']
+  batch_uuid: p.payload[:batch_uuid],
+  network: p.payload[:network],
+  epoch: p.payload[:epoch]
+)
+ReportTowerHeightWorker.perform_async(
+  epoch: p.payload[:epoch],
+  batch_uuid: p.payload[:batch_uuid],
+  network: p.payload[:network]
 )

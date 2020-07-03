@@ -63,4 +63,32 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_not_nil epoch.slots_in_epoch
     end
   end
+
+  test 'validators_cli' do
+    # Empty the ValidatorHistory table
+    ValidatorHistory.delete_all
+    assert_equal 0, ValidatorHistory.count
+
+    # NOTE: This VCR cassette is not captuing the network events because Ruby is
+    # not making the network calls. In the future, we might change the CLI call
+    # to RPC and then the VCR cassette will work.
+    VCR.use_cassette('validators_cli') do
+      # Show that the pipeline runs & the expected values are not empty.
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&batch_set)
+                  .then(&epoch_get)
+                  .then(&validators_cli)
+
+      # puts p.inspect
+      assert_equal 200, p.code
+      assert_not_nil p.payload[:epoch]
+      assert_not_nil p.payload[:batch_uuid]
+
+      # Find the EpochHistory record and show that the values match
+      validators = ValidatorHistory.where(
+        batch_uuid: p.payload[:batch_uuid]
+      ).all
+      assert validators.count.positive?
+    end
+  end
 end

@@ -43,6 +43,42 @@ class PublicController < ApplicationController
                               @skipped_after_report.payload[-20..-1]
                                                    .try(:reverse)
                             end
+
+    # Report Tower Height
+    @tower_report = Report.where(
+      network: 'testnet',
+      name: 'report_tower_height'
+    ).last
+
+    @tower_leaders = if @tower_report.nil?
+                       []
+                     else
+                       @tower_report.payload[0..19]
+                     end
+
+    @tower_laggards = if @tower_report.nil?
+                        []
+                      else
+                        @tower_report.payload[-20..-1]
+                                     .try(:reverse)
+                      end
+  end
+
+  def tower
+    @title = "Solana #{params[:network].capitalize} Tower"
+
+    @tower_report = Report.where(
+      network: params[:network],
+      name: 'report_tower_height'
+    ).last
+
+    @show_full_account = true
+
+    @tower_leaders = if @tower_report.nil?
+                       []
+                     else
+                       @tower_report.payload
+                     end
   end
 
   def api_documentation
