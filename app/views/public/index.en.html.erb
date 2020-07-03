@@ -18,6 +18,30 @@
     </p>
   </div>
 </div>
+<hr />
+<div class="row">
+    <div class="col-sm-6">
+      <h3>Tower Leaders</h3>
+      <p>
+        The testnet validators who have highest root blocks in epoch <%= @block_history_stat.epoch %>.
+      </p>
+      <p>
+        <%= render 'tower_table', validators: @tower_leaders %>
+        See the full <%= link_to 'Tower Report', tower_url(network: params[:network]) %>.
+      </p>
+    </div>
+    <div class="col-sm-6">
+      <h3>Tower laggards</h3>
+      <p>
+        The testnet validators who have lowest root blocks in epoch <%= @block_history_stat.epoch %>.
+      </p>
+      <p>
+        <%= render 'tower_table', validators: @tower_laggards %>
+        See the full <%= link_to 'Tower Report', tower_url(network: params[:network]) %>.
+      </p>
+    </div>
+</div>
+<hr />
 <div class='row'>
   <div class="col-sm-12">
     <p>

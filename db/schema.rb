@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_02_212903) do
+ActiveRecord::Schema.define(version: 2020_07_02_220912) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -184,6 +184,22 @@ ActiveRecord::Schema.define(version: 2020_07_02_212903) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["batch_uuid"], name: "index_validator_block_history_stats_on_batch_uuid"
+  end
+
+  create_table "validator_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "network"
+    t.string "batch_uuid"
+    t.string "account"
+    t.string "vote_account"
+    t.decimal "commission", precision: 10, unsigned: true
+    t.bigint "last_vote", unsigned: true
+    t.bigint "root_block", unsigned: true
+    t.bigint "credits", unsigned: true
+    t.bigint "active_stake", unsigned: true
+    t.boolean "delinquent"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
   end
 
   create_table "validator_ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

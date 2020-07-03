@@ -54,6 +54,44 @@ module SolanaLogic
     end
   end
 
+  # Use the Solana CLI tool to get Validator information
+  def validators_cli
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      # Use the CLI to get the validator data
+      solana_path = \
+        if Rails.env.production?
+          '/home/deploy/.local/share/solana/install/active_release/bin/'
+        else
+          ''
+        end
+
+      url_to_use = "#{p.payload[:config_url]}:#{Rails.application.credentials.solana[:rpc_port]}"
+      validators_json = `#{solana_path}solana validators \
+                              --output json \
+                              --url #{url_to_use}`
+      validators = JSON.parse(validators_json)
+      validators['currentValidators'].each do |validator|
+        ValidatorHistory.create(
+          network: p.payload[:network],
+          batch_uuid: p.payload[:batch_uuid],
+          account: validator['identityPubkey'],
+          vote_account: validator['voteAccountPubkey'],
+          commission: validator['commission'],
+          last_vote: validator['lastVote'],
+          root_block: validator['rootSlot'],
+          credits: validator['credits'],
+          active_stake: validator['activatedStake']
+        )
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p[:payload], 'Error from validators_cli', e)
+    end
+  end
+
   # validators_get returns the data from RPC 'getClusterNodes'
   def validators_get
     lambda do |p|
