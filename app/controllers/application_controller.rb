@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_network
-    params[:network] ||= 'testnet'
+    params[:network] ||= 'mainnet'
   end
 
   protected

@@ -8,7 +8,7 @@ batch_uuid = SecureRandom.uuid
 #                       --url 'http://api.mainnet-beta.solana.com:8899'`
 # block_history_json = File.read('block_production.json')
 # solana:
-#   main_url: 'https://api.mainnet-beta.solana.com'
+#   mainnet_url: 'https://api.mainnet-beta.solana.com'
 #   testnet_url: 'https://testnet.solana.com'
 #   rpc_port: 8899
 #

@@ -38,4 +38,5 @@ job_type :ruby_script, 'cd :path && RAILS_ENV=:environment :bundle_bin exec :rub
 
 every 1.minutes do
   ruby_script 'gather_rpc_data.rb'
+  ruby_script 'gather_rpc_data_mainnet.rb'
 end
