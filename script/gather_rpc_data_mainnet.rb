@@ -8,8 +8,8 @@ include SolanaLogic
 
 # Create our initial payload with the input values
 payload = {
-  config_url: Rails.application.credentials.solana[:testnet_url],
-  network: 'testnet'
+  config_url: Rails.application.credentials.solana[:mainnet_url],
+  network: 'mainnet'
 }
 
 p = Pipeline.new(200, payload)

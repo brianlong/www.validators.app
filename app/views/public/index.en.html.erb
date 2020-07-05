@@ -60,7 +60,7 @@
   </div>
   <hr />
   <div class='row'>
-    <div class="col-sm-6">
+    <div class="col-lg-6">
       <h3>Top Skipped Slots &percnt;</h3>
       <p>The <%= params[:network] %> validators who have skipped the lowest percentage of their slots in epoch <%= @block_history_stat.epoch %>.</p>
       <p>
@@ -68,7 +68,7 @@
         Data through <%= @skipped_slots_report.created_at %>.
       </p>
     </div>
-    <div class="col-sm-6">
+    <div class="col-lg-6">
       <h3>Top Skipped After &percnt;</h3>
       <p>The <%= params[:network] %> validators with the best performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
       <p>
@@ -78,7 +78,7 @@
     </div>
   </div>
   <div class='row'>
-    <div class="col-sm-6">
+    <div class="col-lg-6">
       <h3>Bottom Skipped Slots &percnt;</h3>
       <p>The <%= params[:network] %> validators who have skipped the highest percentage of their slots in epoch <%= @block_history_stat.epoch %>.</p>
       <p>
@@ -86,7 +86,7 @@
         Data through <%= @skipped_slots_report.created_at %>.
       </p>
     </div>
-    <div class="col-sm-6">
+    <div class="col-lg-6">
       <h3>Bottom Skipped After &percnt;</h3>
       <p>The <%= params[:network] %> validators with the worst performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
       <p>

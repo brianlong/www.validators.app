@@ -68,7 +68,7 @@ module SolanaLogic
           ''
         end
 
-      url_to_use = "#{p.payload[:config_url]}:#{Rails.application.credentials.solana[:rpc_port]}"
+      url_to_use = p.payload[:config_url].to_s
       validators_json = `#{solana_path}solana validators \
                               --output json \
                               --url #{url_to_use}`
@@ -246,7 +246,7 @@ module SolanaLogic
         else
           ''
         end
-      url_to_use = "#{p.payload[:config_url]}:#{Rails.application.credentials.solana[:rpc_port]}"
+      url_to_use = p.payload[:config_url].to_s
       block_history_json = `#{solana_path}solana block-production \
                               --output json \
                               --url #{url_to_use}`
@@ -391,10 +391,13 @@ module SolanaLogic
   # JSON object. API specifications are at:
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
   def rpc_request(rpc_method, rpc_url)
-    # Parse the URL data into an URI object
-    uri = URI.parse(
-      "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
-    )
+    # Parse the URL data into an URI object.
+    # The mainnet RPC endpoint is not on port 8899. I am now including the port
+    # with the URL inside of Rails credentials.
+    # uri = URI.parse(
+    #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
+    # )
+    uri = URI.parse(rpc_url)
 
     # Create the HTTP session and send the request
     response = Net::HTTP.start(uri.host, uri.port) do |http|
