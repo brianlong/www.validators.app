@@ -13,6 +13,7 @@ module ReportLogic
 
       # Grab the block history for this batch
       block_history = ValidatorBlockHistory.where(
+        network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
       ).order('skipped_slot_percent asc')
 
@@ -24,10 +25,10 @@ module ReportLogic
           'account' => history.validator.account,
           'skipped_slots' => history.skipped_slots,
           'skipped_slot_percent' => history.skipped_slot_percent,
-          'ping_time' => PingTime.where(to_account: history.validator.account)
-                                 .order('id desc')
-                                 .limit(20)
-                                 .maximum('avg_ms')
+          'ping_time' => PingTime.where(
+            network: p.payload[:network],
+            to_account: history.validator.account
+          ).order('id desc').limit(20).maximum('avg_ms')
         }
       end
 
@@ -57,6 +58,7 @@ module ReportLogic
 
       # Grab the block history for this batch
       block_history = ValidatorBlockHistory.where(
+        network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
       ).order('skipped_slots_after_percent asc')
 
@@ -104,7 +106,7 @@ module ReportLogic
       # Grab the block history for the most recent bars
       # TODO: Add the :network to ValidatorBlockHistoryStat
       block_history = ValidatorBlockHistoryStat.where(
-        # network: p.payload[:network],
+        network: p.payload[:network],
         epoch: p.payload[:epoch]
       ).order('id desc').limit(500)
 
@@ -113,6 +115,7 @@ module ReportLogic
       block_history.each do |history|
         # Calculate the median skipped slots for this batch_uuid
         vbh = ValidatorBlockHistory.where(
+          network: p.payload[:network],
           batch_uuid: history.batch_uuid
         ).all
 
