@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_03_190032) do
+ActiveRecord::Schema.define(version: 2020_07_05_153707) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -76,6 +76,18 @@ ActiveRecord::Schema.define(version: 2020_07_03_190032) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "network"
     t.index ["network", "batch_uuid"], name: "index_epoch_histories_on_network_and_batch_uuid"
+  end
+
+  create_table "feed_zones", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "network"
+    t.string "batch_uuid"
+    t.datetime "batch_created_at"
+    t.integer "payload_version"
+    t.text "payload", size: :long
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "batch_created_at"], name: "index_feed_zones_on_network_and_batch_created_at"
+    t.index ["network", "batch_uuid"], name: "index_feed_zones_on_network_and_batch_uuid", unique: true
   end
 
   create_table "ping_time_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
