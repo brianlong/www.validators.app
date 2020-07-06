@@ -42,7 +42,7 @@ module Api
       end
 
       def feed_zone
-        limit = params[:limit] || 10_000
+        limit = params[:limit] || 1000
 
         render json: FeedZone.where(network: params[:network])
                              .order('network, batch_created_at desc')
