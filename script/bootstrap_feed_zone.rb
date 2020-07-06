@@ -8,9 +8,10 @@ include FeedZoneLogic
 
 %w[testnet mainnet].each do |network|
   Batch.where(network: network).each do |batch|
-    FeedZoneWorker.perform_async(
-      network: network,
-      batch_uuid: batch.uuid
-    )
+    FeedZoneWorker.set(queue: 'low_priority')
+                  .perform_async(
+                    network: network,
+                    batch_uuid: batch.uuid
+                  )
   end
 end
