@@ -70,7 +70,8 @@ class FeedZoneLogicTest < ActiveSupport::TestCase
 
     assert_equal 200, p.code
     assert_equal 1, p.payload[:feed_zone_payload].size
-    assert_equal '1234', p.payload[:feed_zone_payload].first['batch_uuid']
+    assert_equal 'account_1',
+                 p.payload[:feed_zone_payload].first['validator_account']
   end
 
   test 'save_feed_zone' do
@@ -89,7 +90,9 @@ class FeedZoneLogicTest < ActiveSupport::TestCase
     assert_equal Batch.first.created_at, feed_zone.batch_created_at
     assert_equal 1, feed_zone.payload_version
     assert_equal p.payload[:feed_zone].batch_uuid, feed_zone.batch_uuid
-    assert_equal p.payload[:feed_zone].payload.first['account'], \
-                 feed_zone.payload.first['account']
+    assert_equal p.payload[:feed_zone].payload.first['validator_account'], \
+                 feed_zone.payload.first['validator_account']
+    assert_equal 'account_1', p.payload[:feed_zone].payload.first['validator_account']
+    assert_equal 'account_1', feed_zone.payload.first['validator_account']
   end
 end

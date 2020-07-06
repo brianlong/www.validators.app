@@ -5,6 +5,7 @@ class CreateFeedZones < ActiveRecord::Migration[6.0]
     create_table :feed_zones do |t|
       t.string 'network'
       t.string 'batch_uuid'
+      t.integer 'epoch'
       t.datetime 'batch_created_at'
       t.integer 'payload_version'
       t.text 'payload', size: :long

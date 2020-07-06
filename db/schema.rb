@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 2020_07_05_153707) do
   create_table "feed_zones", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "network"
     t.string "batch_uuid"
+    t.integer "epoch"
     t.datetime "batch_created_at"
     t.integer "payload_version"
     t.text "payload", size: :long

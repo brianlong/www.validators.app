@@ -18,6 +18,5 @@ class ReportTowerHeightWorker
 
     _p = Pipeline.new(200, payload)
                  .then(&report_tower_height)
-    # byebug
   end
 end

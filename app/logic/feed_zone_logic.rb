@@ -29,7 +29,7 @@ module FeedZoneLogic
         ['network = ? AND created_at < ?',
          p.payload[:network],
          p.payload[:this_batch].created_at]
-      ).first
+      ).last
       # Note: It is acceptable for prev_batch to be nil.
 
       Pipeline.new(200, p.payload.merge(prev_batch: prev_batch))
@@ -76,18 +76,120 @@ module FeedZoneLogic
       ).each do |validator|
         tmp = {}
 
+        # Basic batch & epoch data
         tmp['network'] = p.payload[:network]
+        tmp['epoch'] = p.payload[:this_epoch].epoch
         tmp['batch_uuid'] = p.payload[:batch_uuid]
+        tmp['batch_created_at'] = p.payload[:this_batch].created_at
 
         # validator_histories table
-        tmp['account'] = validator.account
-        tmp['delinquent'] = validator.delinquent
-        tmp['vote_account'] = validator.vote_account
-        tmp['commission'] = validator.commission
+        tmp['validator_account'] = validator.account
+        tmp['validator_delinquent'] = validator.delinquent
+        tmp['validator_vote_account'] = validator.vote_account
+        tmp['validator_commission'] = validator.commission
+        tmp['validator_last_vote'] = validator.last_vote
+        tmp['validator_root_block'] = validator.root_block
+        tmp['validator_credits'] = validator.credits
+        tmp['validator_active_stake'] = validator.active_stake
 
-        # this_epoch
-        tmp['epoch'] = p.payload[:this_epoch].epoch
-        tmp['epoch_current_slot'] = p.payload[:this_epoch].current_slot
+        # Calculate tower data
+        tmp['tower_highest_block'] = ValidatorHistory.where(
+          network: p.payload[:network],
+          batch_uuid: p.payload[:batch_uuid]
+        ).maximum(:root_block)
+        tmp['tower_blocks_behind_leader'] = \
+          if tmp['tower_highest_block'].nil?
+            nil
+          else
+            tmp['tower_highest_block'] - validator.root_block
+          end
+
+        # If we have a Validator record, then append slot data
+        validator2 = Validator.where(
+          network: p.payload[:network], account: validator.account
+        ).first
+        if validator2
+          # Look for the skipped slot dat for this batch
+          vbh = validator2.validator_block_histories.where(
+            network: p.payload[:network],
+            batch_uuid: p.payload[:batch_uuid]
+          ).first
+          if vbh
+            tmp['validator_epoch_leader_slots'] = vbh.leader_slots
+            tmp['validator_epoch_blocks_produced'] = vbh.blocks_produced
+            tmp['validator_epoch_skipped_slots'] = vbh.skipped_slots
+            tmp['validator_epoch_skipped_slot_percent'] = \
+              vbh.skipped_slot_percent
+            tmp['validator_epoch_skipped_slots_after'] = vbh.skipped_slots_after
+            tmp['validator_epoch_skipped_slots_after_percent'] = \
+              vbh.skipped_slots_after_percent
+          end
+
+          # TODO: Look for the skipped stats for just this batch
+          pvbh = validator2.validator_block_histories.where(
+            network: p.payload[:network],
+            batch_uuid: p.payload[:prev_batch].uuid
+          ).first
+          if pvbh
+            tmp['validator_batch_leader_slots'] = \
+              tmp['validator_epoch_leader_slots'] - pvbh.leader_slots
+
+            tmp['validator_batch_blocks_produced'] = \
+              tmp['validator_epoch_blocks_produced'] - pvbh.blocks_produced
+
+            tmp['validator_batch_skipped_slots'] = \
+              tmp['validator_epoch_skipped_slots'] - pvbh.skipped_slots
+
+            tmp['validator_batch_skipped_slot_percent'] = \
+              tmp['validator_batch_skipped_slots'] / tmp['validator_batch_leader_slots'].to_f
+
+            tmp['validator_batch_skipped_slots_after'] = \
+              tmp['validator_epoch_skipped_slots_after'] - pvbh.skipped_slots_after
+
+            tmp['validator_batch_skipped_slots_after_percent'] = \
+              tmp['validator_batch_skipped_slots_after'] /
+              tmp['validator_batch_leader_slots'].to_f
+          end
+
+          # Look for the software_version in the vote_account_histories table
+          vote_account = validator2.vote_accounts.where(
+            account: validator.vote_account
+          ).first
+          if vote_account
+            vah = vote_account.vote_account_histories.where(
+              network: p.payload[:network],
+              batch_uuid: p.payload[:batch_uuid]
+            ).first
+            tmp['software_version'] = vah.software_version if vah
+          end
+        end
+
+        # If we have validator_block_history_stats
+        vbhs = ValidatorBlockHistoryStat.where(
+          network: p.payload[:network],
+          batch_uuid: p.payload[:batch_uuid]
+        ).first
+        if vbhs
+          tmp['cluster_epoch_start_slot'] = vbhs.start_slot
+          tmp['cluster_epoch_end_slot'] = vbhs.end_slot
+          tmp['cluster_epoch_total_slots'] = vbhs.total_slots
+          tmp['cluster_epoch_total_blocks_produced'] = \
+            vbhs.total_blocks_produced
+          tmp['cluster_epoch_total_slots_skipped'] = vbhs.total_slots_skipped
+          tmp['cluster_epoch_skipped_slot_percent'] = \
+            tmp['cluster_epoch_total_slots_skipped'] / \
+            tmp['cluster_epoch_total_slots'].to_f
+        end
+
+        # Ping Times Trailing 20 pings stats
+        ping_times = PingTime.where(
+          network: p.payload[:network],
+          to_account: validator.account
+        ).order('created_at desc').limit(20)
+
+        tmp['ping_times_min_ms'] = ping_times.minimum(:min_ms)
+        tmp['ping_times_avg_ms'] = ping_times.average(:avg_ms)
+        tmp['ping_times_max_ms'] = ping_times.maximum(:max_ms)
 
         # TODO: Compile more data here.
 
@@ -103,6 +205,7 @@ module FeedZoneLogic
 
   def save_feed_zone
     lambda do |p|
+      p.payload[:feed_zone].epoch = p.payload[:this_epoch].epoch
       p.payload[:feed_zone].payload_version = PAYLOAD_VERSION
       p.payload[:feed_zone].batch_created_at = p.payload[:this_batch].created_at
       p.payload[:feed_zone].payload = p.payload[:feed_zone_payload]
