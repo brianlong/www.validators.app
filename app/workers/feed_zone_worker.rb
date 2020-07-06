@@ -7,6 +7,7 @@
 class FeedZoneWorker
   include Sidekiq::Worker
   include FeedZoneLogic
+  include PipelineLogic
 
   def perform(args = {})
     payload = {
@@ -21,5 +22,6 @@ class FeedZoneWorker
                  .then(&set_this_epoch)
                  .then(&compile_feed_zone_payload)
                  .then(&save_feed_zone)
+                 .then(&log_errors)
   end
 end
