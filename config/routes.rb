@@ -40,6 +40,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get 'feed-zone/:network', to: 'api#feed_zone', as: 'feed_zone'
+
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
 

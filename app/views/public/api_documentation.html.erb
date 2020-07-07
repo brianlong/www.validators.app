@@ -26,6 +26,161 @@
   </div>
 </div>
 <hr />
+<h4>Feed Zone</h4>
+<div class="row" id="feedzone">
+  <div class="col-sm-12">
+    <p>
+      The Feed Zone endpoint returns a consolidated data feed that you can use for analytics or machine learning applications. We poll RPC data every 1 minute and save the results for all of the validators to a "batch." Each record within the batch is "flattened" to capture data for the validator and the cluster.
+    </p>
+    <p>
+      For example, if the dependent variable for your study is `delinquent,` then you can look for correlations between all of the other validator variables compared to the cluster variables in the same batch to identify the relationship with delinquency. Use the Feed Zone to look for factors that might predict delinquency in the next batch!
+    </p>
+  </div>
+</div>
+<p>Here are the attributes shown for each validator in a batch:</p>
+<hr />
+<dl class='row'>
+  <dt class="col-lg-6">network</dt>
+  <dd class="col-lg-6">`mainnet` or `testnet`</dd>
+  <dt class="col-lg-6">epoch</dt>
+  <dd class="col-lg-6">The current epoch for the given network</dd>
+  <dt class="col-lg-6">batch_uuid</dt>
+  <dd class="col-lg-6">The UUID for this batch. All rows within each payload will have the same batch_uuid</dd>
+  <dt class="col-lg-6">batch_created_at</dt>
+  <dd class="col-lg-6">The date &amp; time (UTC) that this batch was created</dd>
+  <dt class="col-lg-6">validator_account</dt>
+  <dd class="col-lg-6">The validator public address key</dd>
+  <dt class="col-lg-6">validator_delinquent</dt>
+  <dd class="col-lg-6">Is the validator currently delinquent? (boolean)</dd>
+  <dt class="col-lg-6">validator_vote_account</dt>
+  <dd class="col-lg-6">The vote account address key related to this validator</dd>
+  <dt class="col-lg-6">validator_commission</dt>
+  <dd class="col-lg-6">The staking commission charged by this validator</dd>
+  <dt class="col-lg-6">validator_last_vote</dt>
+  <dd class="col-lg-6">The validator's last vote</dd>
+  <dt class="col-lg-6">validator_root_block</dt>
+  <dd class="col-lg-6">The validator's current root block</dd>
+  <dt class="col-lg-6">validator_credits</dt>
+  <dd class="col-lg-6">The credit balance for this validator</dd>
+  <dt class="col-lg-6">validator_active_stake</dt>
+  <dd class="col-lg-6">The active stake for this validator (Lamports)</dd>
+  <dt class="col-lg-6">tower_highest_block</dt>
+  <dd class="col-lg-6">The highest block in the cluster (by any validator)</dd>
+  <dt class="col-lg-6">tower_blocks_behind_leader</dt>
+  <dd class="col-lg-6">The distance from this validator's root block to the highest root block in the cluster</dd>
+  <dt class="col-lg-6">validator_epoch_leader_slots</dt>
+  <dd class="col-lg-6">The number of slots that this leader has had so far in this epoch</dd>
+  <dt class="col-lg-6">validator_epoch_blocks_produced</dt>
+  <dd class="col-lg-6">The number of blocks produced by this validator in this epoch</dd>
+  <dt class="col-lg-6">validator_epoch_skipped_slots</dt>
+  <dd class="col-lg-6">The number of slots where a validator failed to create a block</dd>
+  <dt class="col-lg-6">validator_epoch_skipped_slot_percent</dt>
+  <dd class="col-lg-6">The percentage of the time that a validator skipped a slot</dd>
+  <dt class="col-lg-6">validator_epoch_skipped_slots_after</dt>
+  <dd class="col-lg-6">The number of times that the leader AFTER this validator skipped a slot. This may be an indicator that the current leader is slow to propagate blocks to the cluster</dd>
+  <dt class="col-lg-6">validator_epoch_skipped_slots_after_percent</dt>
+  <dd class="col-lg-6">The percentage of time that the leader AFTER this leader skips their slots</dd>
+  <dt class="col-lg-6">validator_batch_leader_slots</dt>
+  <dd class="col-lg-6">The number of slots the validator had in this batch</dd>
+  <dt class="col-lg-6">validator_batch_blocks_produced</dt>
+  <dd class="col-lg-6">The number of blocks the validator produced in this batch</dd>
+  <dt class="col-lg-6">validator_batch_skipped_slots</dt>
+  <dd class="col-lg-6">The number of slots in this batch where the validator failed to produce a block</dd>
+  <dt class="col-lg-6">validator_batch_skipped_slot_percent</dt>
+  <dd class="col-lg-6">The skipped slot percentage for this batch</dd>
+  <dt class="col-lg-6">validator_batch_skipped_slots_after</dt>
+  <dd class="col-lg-6">The number of slots skipped by the next leader in this batch</dd>
+  <dt class="col-lg-6">validator_batch_skipped_slots_after_percent</dt>
+  <dd class="col-lg-6">The percentage of slots skipped by the next leader in this batch</dd>
+  <dt class="col-lg-6">software_version</dt>
+  <dd class="col-lg-6">The software version currently in use by this validator</dd>
+  <dt class="col-lg-6">cluster_epoch_start_slot</dt>
+  <dd class="col-lg-6">The starting slot for this epoch</dd>
+  <dt class="col-lg-6">cluster_epoch_end_slot</dt>
+  <dd class="col-lg-6">The ending slot for this epoch</dd>
+  <dt class="col-lg-6">cluster_epoch_total_slots</dt>
+  <dd class="col-lg-6">The total number of slots in this epoch</dd>
+  <dt class="col-lg-6">cluster_epoch_total_blocks_produced</dt>
+  <dd class="col-lg-6">The number of blocks produced by the cluster in this epoch</dd>
+  <dt class="col-lg-6">cluster_epoch_total_slots_skipped</dt>
+  <dd class="col-lg-6">The total skipped slots by the cluster in this epoch</dd>
+  <dt class="col-lg-6">cluster_epoch_skipped_slot_percent</dt>
+  <dd class="col-lg-6">The percentage of slots skipped by the cluster in this epoch</dd>
+  <dt class="col-lg-6">ping_times_min_ms</dt>
+  <dd class="col-lg-6">The minimum ping time (ms) reported by another node in the cluster over the previous 20 reported ping times. `null` means that no data was available</dd>
+  <dt class="col-lg-6">ping_times_avg_ms</dt>
+  <dd class="col-lg-6">The average ping time (ms) reported by other nodes in the cluster over the previous 20 reported ping times. `null` means that no data was available</dd>
+  <dt class="col-lg-6">ping_times_max_ms</dt>
+  <dd class="col-lg-6">The maximum ping time (ms) reported by another node in the cluster over the previous 20 reported ping times. `null` means that no data was available</dd>
+  <dt class="col-lg-6"></dt>
+  <dd class="col-lg-6"></dd>
+</dl>
+<hr />
+<div class="row">
+  <div class="col-sm-12">
+    <p>
+      By default, the API will return the most recent 1,000 batches. You can include a `limit` parameter to request more or fewer batches. In the examples below, replace `:network` with 'testnet' or 'mainnet' as desired.
+    </p>
+    <p>Request:</p>
+    <pre>$ curl -H "Token: secret-api-token" https://www.validators.app/api/v1/feed-zone/:network</pre>
+    <p>or</p>
+    <pre>$ curl -H "Token: secret-api-token" https://www.validators.app/api/v1/feed-zone/:network?limit=1</pre>
+    <p>Response:</p>
+    <p>An Array of batches.</p>
+    <pre>
+      [{
+        "id":10,
+        "network":"mainnet",
+        "batch_uuid":"5e8cd9a4-0422-42c9-8955-f46f1ca2a7fd",
+        "epoch":48,
+        "batch_created_at":"2020-07-06T00:02:48.000Z",
+        "payload_version":1,
+        "payload":
+          [{
+            "network":"mainnet",
+            "epoch":48,
+            "batch_uuid":"5e8cd9a4-0422-42c9-8955-f46f1ca2a7fd",
+            "batch_created_at":"2020-07-06T00:02:48.862Z",
+            "validator_account":"GdnSyH3YtwcxFvQrVVJMm1JhTS4QVX7MFsX56uJLUfiZ",
+            "validator_delinquent":false,
+            "validator_vote_account":"sCtiJieP8B3SwYnXemiLpRFRR8KJLMtsMVN25fAFWjW",
+            "validator_commission":100,
+            "validator_last_vote":20902694,
+            "validator_root_block":20902663,
+            "validator_credits":19125450,
+            "validator_active_stake":6558185316478044,
+            "tower_highest_block":20902663,
+            "tower_blocks_behind_leader":0,
+            "validator_epoch_leader_slots":15984,
+            "validator_epoch_blocks_produced":15892,
+            "validator_epoch_skipped_slots":92,
+            "validator_epoch_skipped_slot_percent":"0.0058",
+            "validator_epoch_skipped_slots_after":183,
+            "validator_epoch_skipped_slots_after_percent":"0.0114",
+            "validator_batch_leader_slots":124,
+            "validator_batch_blocks_produced":124,
+            "validator_batch_skipped_slots":0,
+            "validator_batch_skipped_slot_percent":0.0,
+            "validator_batch_skipped_slots_after":0,
+            "validator_batch_skipped_slots_after_percent":0.0,
+            "software_version":"1.1.19 e651209f",
+            "cluster_epoch_start_slot":20736000,
+            "cluster_epoch_end_slot":20902666,
+            "cluster_epoch_total_slots":166667,
+            "cluster_epoch_total_blocks_produced":162863,
+            "cluster_epoch_total_slots_skipped":3804,
+            "cluster_epoch_skipped_slot_percent":0.022823954352091294,
+            "ping_times_min_ms":null,
+            "ping_times_avg_ms":null,
+            "ping_times_max_ms":null
+          }, ...],
+        "created_at":"2020-07-05T23:05:01.861Z",
+        "updated_at":"2020-07-05T23:05:02.485Z"
+      }]
+    </pre>
+  </div>
+</div>
+<hr />
 <h4>Ping Times</h4>
 <div class="row">
   <div class="col-sm-12">
