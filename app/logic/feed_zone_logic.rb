@@ -154,14 +154,15 @@ module FeedZoneLogic
             batch_uuid: p.payload[:batch_uuid]
           ).first
           if vbh
-            tmp['validator_epoch_leader_slots'] = vbh.leader_slots
-            tmp['validator_epoch_blocks_produced'] = vbh.blocks_produced
-            tmp['validator_epoch_skipped_slots'] = vbh.skipped_slots
+            # Set defaults to 0 if nil
+            tmp['validator_epoch_leader_slots'] = vbh.leader_slots.to_i
+            tmp['validator_epoch_blocks_produced'] = vbh.blocks_produced.to_i
+            tmp['validator_epoch_skipped_slots'] = vbh.skipped_slots.to_i
             tmp['validator_epoch_skipped_slot_percent'] = \
-              vbh.skipped_slot_percent
-            tmp['validator_epoch_skipped_slots_after'] = vbh.skipped_slots_after
+              vbh.skipped_slot_percent.to_f
+            tmp['validator_epoch_skipped_slots_after'] = vbh.skipped_slots_after.to_i
             tmp['validator_epoch_skipped_slots_after_percent'] = \
-              vbh.skipped_slots_after_percent
+              vbh.skipped_slots_after_percent.to_f
           end
 
           # TODO: Look for the skipped stats for just this batch
@@ -171,19 +172,19 @@ module FeedZoneLogic
           ).first
           if pvbh
             tmp['validator_batch_leader_slots'] = \
-              tmp['validator_epoch_leader_slots'] - pvbh.leader_slots
+              tmp['validator_epoch_leader_slots'] - pvbh.leader_slots.to_i
 
             tmp['validator_batch_blocks_produced'] = \
-              tmp['validator_epoch_blocks_produced'] - pvbh.blocks_produced
+              tmp['validator_epoch_blocks_produced'] - pvbh.blocks_produced.to_i
 
             tmp['validator_batch_skipped_slots'] = \
-              tmp['validator_epoch_skipped_slots'] - pvbh.skipped_slots
+              tmp['validator_epoch_skipped_slots'] - pvbh.skipped_slots.to_i
 
             tmp['validator_batch_skipped_slot_percent'] = \
               tmp['validator_batch_skipped_slots'] / tmp['validator_batch_leader_slots'].to_f
 
             tmp['validator_batch_skipped_slots_after'] = \
-              tmp['validator_epoch_skipped_slots_after'] - pvbh.skipped_slots_after
+              tmp['validator_epoch_skipped_slots_after'] - pvbh.skipped_slots_after.to_i
 
             tmp['validator_batch_skipped_slots_after_percent'] = \
               tmp['validator_batch_skipped_slots_after'] /
