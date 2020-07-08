@@ -70,10 +70,10 @@ module ReportLogic
           'account' => history.validator.account,
           'skipped_slots_after' => history.skipped_slots_after,
           'skipped_slots_after_percent' => history.skipped_slots_after_percent,
-          'ping_time' => PingTime.where(to_account: history.validator.account)
-                                 .order('id desc')
-                                 .limit(20)
-                                 .maximum('avg_ms')
+          'ping_time' => PingTime.where(
+            network: p.payload[:network],
+            to_account: history.validator.account
+          ).order('id desc').limit(20).maximum('avg_ms')
         }
       end
 
