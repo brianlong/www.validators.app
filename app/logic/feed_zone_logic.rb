@@ -40,7 +40,7 @@ module FeedZoneLogic
 
   def set_feed_zone
     lambda do |p|
-      feed_zone = FeedZone.create_or_find_by(
+      feed_zone = FeedZone.create_or_find_by!(
         network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
       )
@@ -81,7 +81,12 @@ module FeedZoneLogic
         tmp['epoch'] = p.payload[:this_epoch].epoch
         tmp['batch_uuid'] = p.payload[:batch_uuid]
         tmp['batch_created_at'] = p.payload[:this_batch].created_at
-
+        tmp['previous_batch_uuid'] = \
+          if p.payload[:prev_batch].nil?
+            nil
+          else
+            p.payload[:prev_batch].uuid
+          end
         # validator_histories table
         tmp['validator_account'] = validator.account
         tmp['validator_delinquent'] = validator.delinquent
@@ -93,10 +98,31 @@ module FeedZoneLogic
         tmp['validator_active_stake'] = validator.active_stake
 
         # Calculate tower data
+        # Highest root block
         tmp['tower_highest_block'] = ValidatorHistory.where(
           network: p.payload[:network],
           batch_uuid: p.payload[:batch_uuid]
         ).maximum(:root_block)
+
+        # Find the median root_block for this batch
+        median_root = ValidatorHistory.where(
+          network: p.payload[:network],
+          batch_uuid: p.payload[:batch_uuid]
+        ).median(:root_block)
+        # Calculate the median distance from the leader
+        tmp['tower_cluster_median_behind_leader'] = \
+          tmp['tower_highest_block'] - median_root
+
+        # Find the average root_block for this batch
+        average_root = ValidatorHistory.where(
+          network: p.payload[:network],
+          batch_uuid: p.payload[:batch_uuid]
+        ).average(:root_block)
+        # Calculate the average distance from the leader
+        tmp['tower_cluster_average_behind_leader'] = \
+          tmp['tower_highest_block'] - average_root
+
+        # Show this leader's distance behind the leader.
         tmp['tower_blocks_behind_leader'] = \
           if tmp['tower_highest_block'].nil?
             nil
@@ -205,15 +231,20 @@ module FeedZoneLogic
 
   def save_feed_zone
     lambda do |p|
-      p.payload[:feed_zone].epoch = p.payload[:this_epoch].epoch
+      unless p.payload[:this_epoch].nil?
+        p.payload[:feed_zone].epoch = p.payload[:this_epoch].epoch
+      end
       p.payload[:feed_zone].payload_version = PAYLOAD_VERSION
-      p.payload[:feed_zone].batch_created_at = p.payload[:this_batch].created_at
+      unless p.payload[:this_batch].nil?
+        p.payload[:feed_zone].batch_created_at = \
+          p.payload[:this_batch].created_at
+      end
       p.payload[:feed_zone].payload = p.payload[:feed_zone_payload]
       p.payload[:feed_zone].save!
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from compile_feed_zone_payload', e)
+      Pipeline.new(500, p.payload, 'Error from save_feed_zone', e)
     end
   end
 end

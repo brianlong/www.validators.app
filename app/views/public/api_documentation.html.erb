@@ -46,6 +46,8 @@
   <dd class="col-lg-6">The current epoch for the given network</dd>
   <dt class="col-lg-6">batch_uuid</dt>
   <dd class="col-lg-6">The UUID for this batch. All rows within each payload will have the same batch_uuid</dd>
+  <dt class="col-lg-6">previous_batch_uuid</dt>
+  <dd class="col-lg-6">The UUID for the previous batch</dd>
   <dt class="col-lg-6">batch_created_at</dt>
   <dd class="col-lg-6">The date &amp; time (UTC) that this batch was created</dd>
   <dt class="col-lg-6">validator_account</dt>
@@ -66,6 +68,10 @@
   <dd class="col-lg-6">The active stake for this validator (Lamports)</dd>
   <dt class="col-lg-6">tower_highest_block</dt>
   <dd class="col-lg-6">The highest block in the cluster (by any validator)</dd>
+  <dt class="col-lg-6">tower_cluster_median_behind_leader</dt>
+  <dd class="col-lg-6">The median tower distance behind the leader block in this batch</dd>
+  <dt class="col-lg-6">tower_cluster_average_behind_leader</dt>
+  <dd class="col-lg-6">The average tower distance behind the leader block in this batch</dd>
   <dt class="col-lg-6">tower_blocks_behind_leader</dt>
   <dd class="col-lg-6">The distance from this validator's root block to the highest root block in the cluster</dd>
   <dt class="col-lg-6">validator_epoch_leader_slots</dt>
