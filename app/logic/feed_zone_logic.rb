@@ -170,7 +170,7 @@ module FeedZoneLogic
             network: p.payload[:network],
             batch_uuid: p.payload[:prev_batch].uuid
           ).first
-          if pvbh
+          if vbh && pvbh
             tmp['validator_batch_leader_slots'] = \
               tmp['validator_epoch_leader_slots'] - pvbh.leader_slots.to_i
 
