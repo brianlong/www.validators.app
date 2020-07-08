@@ -45,9 +45,12 @@ module FeedZoneLogic
         batch_uuid: p.payload[:batch_uuid]
       )
 
+      raise "No FeedZone #{p.payload[:network]} #{p.payload[:batch_uuid]}" \
+        if feed_zone.nil?
+
       Pipeline.new(200, p.payload.merge(feed_zone: feed_zone))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_previous_batch', e)
+      Pipeline.new(500, p.payload, 'Error from set_feed_zone', e)
     end
   end
 
@@ -234,7 +237,9 @@ module FeedZoneLogic
       unless p.payload[:this_epoch].nil?
         p.payload[:feed_zone].epoch = p.payload[:this_epoch].epoch
       end
+
       p.payload[:feed_zone].payload_version = PAYLOAD_VERSION
+
       unless p.payload[:this_batch].nil?
         p.payload[:feed_zone].batch_created_at = \
           p.payload[:this_batch].created_at
