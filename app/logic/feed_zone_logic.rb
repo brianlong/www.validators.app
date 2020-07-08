@@ -8,6 +8,8 @@ module FeedZoneLogic
   # Payload starts with :network & :batch_uuid
   def set_this_batch
     lambda do |p|
+      return p unless p.code == 200
+
       this_batch = Batch.where(
         network: p.payload[:network],
         uuid: p.payload[:batch_uuid]
@@ -25,6 +27,8 @@ module FeedZoneLogic
 
   def set_previous_batch
     lambda do |p|
+      return p unless p.code == 200
+
       prev_batch = Batch.where(
         ['network = ? AND created_at < ?',
          p.payload[:network],
@@ -40,6 +44,8 @@ module FeedZoneLogic
 
   def set_feed_zone
     lambda do |p|
+      return p unless p.code == 200
+
       feed_zone = FeedZone.create_or_find_by!(
         network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
@@ -56,6 +62,8 @@ module FeedZoneLogic
 
   def set_this_epoch
     lambda do |p|
+      return p unless p.code == 200
+
       this_epoch = EpochHistory.where(
         network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
@@ -70,6 +78,8 @@ module FeedZoneLogic
   # Loop through all of the validators for this batch and complile the data.
   def compile_feed_zone_payload
     lambda do |p|
+      return p unless p.code == 200
+
       p.payload[:feed_zone].payload_version = PAYLOAD_VERSION
 
       feed_zone_payload = []
@@ -234,6 +244,8 @@ module FeedZoneLogic
 
   def save_feed_zone
     lambda do |p|
+      return p unless p.code == 200
+
       unless p.payload[:this_epoch].nil?
         p.payload[:feed_zone].epoch = p.payload[:this_epoch].epoch
       end
