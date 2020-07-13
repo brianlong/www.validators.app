@@ -26,6 +26,10 @@
 #
 #   `ruby collect_ping_times.rb --token TOKEN_HERE >> collect_ping_times.log &`
 #
+# Please run the script every 15 minutes! CRON Example:
+#
+# */15 * * * * /bin/bash -l -c 'export VALIDATORS_API_TOKEN=YOUR_TOKEN; cd /home/SOLANA_USERNAME/ && /usr/bin/ruby collect_ping_times.rb >> /home/SOLANA_USERNAME/collect_ping_times.log 2>&1'
+#
 # Command line options (None of these are required).
 #
 #  --local-app or -l if you are me doing development on my local workstation.
@@ -39,9 +43,6 @@
 # Please note that we are sampling ping times on each node in the cluster
 # in a single thread, so this script will take a while to run. Be patient!
 # I do not want to disturb your running validator with bursts of traffic.
-#
-# CRON Example:
-# */15 * * * * /bin/bash -l -c 'export VALIDATORS_API_TOKEN=YOUR_TOKEN; cd /home/SOLANA_USERNAME/ && /usr/bin/ruby collect_ping_times.rb >> /home/SOLANA_USERNAME/collect_ping_times.log 2>&1'
 #
 # NOTE: Your logs will be empty if there are no errors. All errors will be
 # seen in your designated log file.
