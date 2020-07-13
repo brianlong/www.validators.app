@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'timeout'
+
 # SolanaLogic contains methods used for importing data from the solana runtime.
 # Many of these methods are simple wrappers for shell commands. These methods
 # are lambdas that we can use in a processing pipeline for various purposes.
@@ -37,7 +39,7 @@ module SolanaLogic
     lambda do |p|
       epoch_json = rpc_request(
         'getEpochInfo',
-        p.payload[:config_url]
+        p.payload[:config_urls]
       )['result']
 
       epoch = EpochHistory.create(
@@ -68,7 +70,7 @@ module SolanaLogic
           ''
         end
 
-      url_to_use = p.payload[:config_url].to_s
+      url_to_use = p.payload[:config_urls][0].to_s
       validators_json = `#{solana_path}solana validators \
                               --output json \
                               --url #{url_to_use}`
@@ -122,7 +124,7 @@ module SolanaLogic
 
       validators_json = rpc_request(
         'getClusterNodes',
-        p.payload[:config_url]
+        p.payload[:config_urls]
       )['result']
 
       validators = {}
@@ -148,7 +150,7 @@ module SolanaLogic
 
       vote_accounts_json = rpc_request(
         'getVoteAccounts',
-        p.payload[:config_url]
+        p.payload[:config_urls]
       )['result']['current']
 
       vote_accounts = {}
@@ -246,7 +248,7 @@ module SolanaLogic
         else
           ''
         end
-      url_to_use = p.payload[:config_url].to_s
+      url_to_use = p.payload[:config_urls][0].to_s
       block_history_json = `#{solana_path}solana block-production \
                               --output json \
                               --url #{url_to_use}`
@@ -390,27 +392,38 @@ module SolanaLogic
   # rpc_request will make a Solana RPC request and return the results in a
   # JSON object. API specifications are at:
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
-  def rpc_request(rpc_method, rpc_url)
+  def rpc_request(rpc_method, rpc_urls)
     # Parse the URL data into an URI object.
     # The mainnet RPC endpoint is not on port 8899. I am now including the port
     # with the URL inside of Rails credentials.
     # uri = URI.parse(
     #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
     # )
-    uri = URI.parse(rpc_url)
+    # response_body = '{}'
+    rpc_urls.each do |rpc_url|
+      uri = URI.parse(rpc_url)
 
-    # Create the HTTP session and send the request
-    response = Net::HTTP.start(uri.host, uri.port) do |http|
-      request = Net::HTTP::Post.new(
-        uri.request_uri,
-        { 'Content-Type' => 'application/json' }
-      )
-      request.body = {
-        'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
-      }.to_json
-      http.request(request)
+      response_body = Timeout.timeout(10) do
+        # Create the HTTP session and send the request
+        response = Net::HTTP.start(uri.host, uri.port) do |http|
+          request = Net::HTTP::Post.new(
+            uri.request_uri,
+            { 'Content-Type' => 'application/json' }
+          )
+          request.body = {
+            'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
+          }.to_json
+          http.request(request)
+        end
+
+        response.body
+      rescue Timeout::Error => e
+        Appsignal.send_error(e)
+        nil
+      end
+
+      break if response_body
     end
-
-    JSON.parse(response.body)
+    JSON.parse(response_body)
   end
 end

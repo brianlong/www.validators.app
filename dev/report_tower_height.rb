@@ -7,7 +7,7 @@ include SolanaLogic
 
 # Create our initial payload with the input values
 payload = {
-  config_url: Rails.application.credentials.solana[:testnet_url],
+  config_urls: Rails.application.credentials.solana[:testnet_urls],
   network: 'testnet'
 }
 

@@ -9,7 +9,12 @@ class SolanaLogicTest < ActiveSupport::TestCase
   def setup
     # Create our initial payload with the input values
     @initial_payload = {
-      config_url: Rails.application.credentials.solana[:testnet_url],
+      # config_urls: Rails.application.credentials.solana[:testnet_urls],
+      config_urls: [
+        'http://165.227.100.142:8899',
+        'http://testnet.solana.com:8899',
+        'http://127.0.0.1:8899'
+      ],
       network: 'testnet'
     }
   end
@@ -50,6 +55,8 @@ class SolanaLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload)
                   .then(&batch_set)
                   .then(&epoch_get)
+      puts p.inspect
+
       assert_equal 200, p.code
       assert_not_nil p.payload[:epoch]
       assert_not_nil p.payload[:batch_uuid]
