@@ -3,7 +3,7 @@ This folder contains client scripts that are used to collect network and system
 data from nodes in the cluster and then send the data to our collector API
 endpoint.
 
-On the Solana testnet, we are asking validators to contribute ping times from their node to the other nodes in the cluster. The ping data can be used to build a network graph of cluster nodes with edges showing the minimum, average, & maximum ping times between the node pair. The ping times might also help us see correlations between network and validator performance. As a validator, this data can also help you trouble-shoot performance problems if they arise.
+On the Solana testnet, we are asking validators to contribute ping times from their node to the other nodes in the cluster every 15 minutes. The ping data can be used to build a network graph of cluster nodes with edges showing the minimum, average, & maximum ping times between the node pair. The ping times might also help us see correlations between network and validator performance. As a validator, this data can also help you trouble-shoot performance problems if they arise.
 
 Prerequisites:
   - Create a user account on https://www.validators.app
@@ -14,6 +14,8 @@ Software Requirements:
   - The scripts below are written in the Ruby scripting language. Simply download the client script to your home folder and follow the instructions inside the file. No compilation required! The scripts will work with any recent version of Ruby, and `sudo apt install ruby` should do it.
 
 The scripts are written to run in a single thread to minimize system load -- I do not want to disturb your running validator with bursts of traffic!
+
+Please use cron to run the script every 15 minutes!
 
 ### Script Listing
 - collect_ping_times.rb will ping each of the other nodes in the cluster and
