@@ -1,0 +1,35 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://testnet.solana.com:8899/
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":1,"method":"getEpochInfo"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '111'
+      Date:
+      - Tue, 14 Jul 2020 01:18:52 GMT
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","result":{"absoluteSlot":23035721,"epoch":66,"slotIndex":47465,"slotsInEpoch":432000},"id":1}
+
+        '
+  recorded_at: Tue, 14 Jul 2020 01:18:52 GMT
+recorded_with: VCR 6.0.0

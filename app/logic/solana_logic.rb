@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'timeout'
+
 # SolanaLogic contains methods used for importing data from the solana runtime.
 # Many of these methods are simple wrappers for shell commands. These methods
 # are lambdas that we can use in a processing pipeline for various purposes.
@@ -7,6 +9,7 @@
 # See `config/initializers/pipeline.rb` for a description of the Pipeline struct
 module SolanaLogic
   include PipelineLogic
+  RPC_TIMEOUT = 7 # seconds
 
   # Create a batch record and set the :batch_uuid in the payload
   def batch_set
@@ -37,7 +40,7 @@ module SolanaLogic
     lambda do |p|
       epoch_json = rpc_request(
         'getEpochInfo',
-        p.payload[:config_url]
+        p.payload[:config_urls]
       )['result']
 
       epoch = EpochHistory.create(
@@ -51,7 +54,7 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload.merge(epoch: epoch.epoch))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from batch_set', e)
+      Pipeline.new(500, p.payload, 'Error from epoch_get', e)
     end
   end
 
@@ -60,19 +63,9 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      # Use the CLI to get the validator data
-      solana_path = \
-        if Rails.env.production?
-          '/home/deploy/.local/share/solana/install/active_release/bin/'
-        else
-          ''
-        end
+      validators = cli_request('validators', p.payload[:config_urls])
 
-      url_to_use = p.payload[:config_url].to_s
-      validators_json = `#{solana_path}solana validators \
-                              --output json \
-                              --url #{url_to_use}`
-      validators = JSON.parse(validators_json)
+      raise 'No results from `solana validators`' if validators.nil?
 
       raise 'No results from `solana validators`' if \
         validators['currentValidators'].empty? &&
@@ -122,7 +115,7 @@ module SolanaLogic
 
       validators_json = rpc_request(
         'getClusterNodes',
-        p.payload[:config_url]
+        p.payload[:config_urls]
       )['result']
 
       validators = {}
@@ -148,7 +141,7 @@ module SolanaLogic
 
       vote_accounts_json = rpc_request(
         'getVoteAccounts',
-        p.payload[:config_url]
+        p.payload[:config_urls]
       )['result']['current']
 
       vote_accounts = {}
@@ -240,17 +233,9 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      solana_path = \
-        if Rails.env.production?
-          '/home/deploy/.local/share/solana/install/active_release/bin/'
-        else
-          ''
-        end
-      url_to_use = p.payload[:config_url].to_s
-      block_history_json = `#{solana_path}solana block-production \
-                              --output json \
-                              --url #{url_to_use}`
-      block_history = JSON.parse(block_history_json)
+      block_history = cli_request('block-production', p.payload[:config_urls])
+
+      raise 'No data from block-production' if block_history.nil?
 
       # Data for the validator_block_history_stats table
       block_history_stats = {
@@ -288,7 +273,6 @@ module SolanaLogic
       # byebug
       block_history['individual_slot_status'].each do |h|
         this_leader = h['leader']
-        # puts "#{h['slot']} => #{this_leader}"
         if this_leader == current_leader
           # We have the same leader
         else
@@ -306,7 +290,6 @@ module SolanaLogic
             block_history['individual_slot_status'][i..i + 3].count do |s|
               s['skipped'] == true
             end
-          # puts "  #{skipped_slots_after_leader}"
 
           if prior_leader.nil?
             i += 1
@@ -390,27 +373,63 @@ module SolanaLogic
   # rpc_request will make a Solana RPC request and return the results in a
   # JSON object. API specifications are at:
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
-  def rpc_request(rpc_method, rpc_url)
+  def rpc_request(rpc_method, rpc_urls)
     # Parse the URL data into an URI object.
     # The mainnet RPC endpoint is not on port 8899. I am now including the port
     # with the URL inside of Rails credentials.
     # uri = URI.parse(
     #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
     # )
-    uri = URI.parse(rpc_url)
 
-    # Create the HTTP session and send the request
-    response = Net::HTTP.start(uri.host, uri.port) do |http|
-      request = Net::HTTP::Post.new(
-        uri.request_uri,
-        { 'Content-Type' => 'application/json' }
-      )
-      request.body = {
-        'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
-      }.to_json
-      http.request(request)
+    rpc_urls.each do |rpc_url|
+      uri = URI.parse(rpc_url)
+
+      response_body = Timeout.timeout(RPC_TIMEOUT) do
+        # Create the HTTP session and send the request
+        response = Net::HTTP.start(uri.host, uri.port) do |http|
+          request = Net::HTTP::Post.new(
+            uri.request_uri,
+            { 'Content-Type' => 'application/json' }
+          )
+          request.body = {
+            'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
+          }.to_json
+          http.request(request)
+        end
+
+        response.body
+      rescue Errno::ECONNREFUSED, Timeout::Error => e
+        Rails.logger.error "RPC ERROR\n#{e.class}\nRPC URL: #{rpc_url}"
+        Appsignal.send_error(e)
+        nil
+      end
+
+      return JSON.parse(response_body) if response_body
     end
+  end
 
-    JSON.parse(response.body)
+  # cli_request will accept a command line command to run and then return the
+  # results as parsed JSON. nil is returned if there is no data
+  def cli_request(cli_method, rpc_urls)
+    solana_path = \
+      if Rails.env.production?
+        '/home/deploy/.local/share/solana/install/active_release/bin/'
+      else
+        ''
+      end
+
+    rpc_urls.each do |rpc_url|
+      response_json = Timeout.timeout(RPC_TIMEOUT) do
+        `#{solana_path}solana #{cli_method} --output json --url #{rpc_url}`
+
+      rescue Errno::ECONNREFUSED, Timeout::Error => e
+        Rails.logger.error "RPC ERROR\n#{e.class}\nRPC URL: #{rpc_url}"
+        Appsignal.send_error(e)
+        ''
+      end
+
+      return JSON.parse(response_json) unless response_json == ''
+    end
+    nil
   end
 end
