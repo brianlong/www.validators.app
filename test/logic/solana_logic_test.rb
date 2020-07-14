@@ -55,7 +55,6 @@ class SolanaLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload)
                   .then(&batch_set)
                   .then(&epoch_get)
-      puts p.inspect
 
       assert_equal 200, p.code
       assert_not_nil p.payload[:epoch]
@@ -68,6 +67,51 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_not_nil epoch.current_slot
       assert_not_nil epoch.slot_index
       assert_not_nil epoch.slots_in_epoch
+    end
+  end
+
+  test 'epoch_get with fail_over' do
+    VCR.use_cassette('epoch_get_with_fail_over') do
+      fail_over_payload = {
+        # This assumes that there is no RPC server running on the localhost!
+        config_urls: [
+          'http://127.0.0.1:8899',
+          'http://testnet.solana.com:8899'
+        ],
+        network: 'testnet'
+      }
+
+      p = Pipeline.new(200, fail_over_payload)
+                  .then(&batch_set)
+                  .then(&epoch_get)
+
+      assert_equal 200, p.code
+      assert_not_nil p.payload[:epoch]
+      assert_not_nil p.payload[:batch_uuid]
+
+      # Find the EpochHistory record and show that the values match
+      epoch = EpochHistory.where(batch_uuid: p.payload[:batch_uuid]).first
+      assert_equal p.payload[:epoch], epoch.epoch
+      assert_equal p.payload[:batch_uuid], epoch.batch_uuid
+      assert_not_nil epoch.current_slot
+      assert_not_nil epoch.slot_index
+      assert_not_nil epoch.slots_in_epoch
+    end
+  end
+
+  test 'epoch_get with no response' do
+    VCR.use_cassette('epoch_get_no_response') do
+      no_response_payload = {
+        # This assumes that there is no RPC server running on the localhost!
+        config_urls: ['http://127.0.0.1:8899'],
+        network: 'testnet'
+      }
+
+      p = Pipeline.new(200, no_response_payload)
+                  .then(&batch_set)
+                  .then(&epoch_get)
+
+      assert_equal 500, p.code
     end
   end
 
@@ -95,6 +139,22 @@ class SolanaLogicTest < ActiveSupport::TestCase
         batch_uuid: p.payload[:batch_uuid]
       ).all
       assert validators.count.positive?
+    end
+  end
+
+  test 'cli_request with fail over' do
+    VCR.use_cassette('validators_cli_with_fail_over') do
+      rpc_urls = ['http://127.0.0.1:8899', 'http://testnet.solana.com:8899']
+
+      assert cli_request('validators', rpc_urls).count.positive?
+    end
+  end
+
+  test 'cli_request with no response' do
+    VCR.use_cassette('validators_cli_no_response') do
+      rpc_urls = ['http://127.0.0.1:8899']
+
+      assert_nil cli_request('validators', rpc_urls)
     end
   end
 end
