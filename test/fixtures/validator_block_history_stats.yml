@@ -1,5 +1,6 @@
 one:
   id: 1
+  network: testnet
   batch_uuid: 1
   epoch: 1
   start_slot: 1

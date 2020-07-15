@@ -27,6 +27,7 @@ class ValidatorsController < ApplicationController
               .order('id desc').limit(288).reverse.each do |vbh|
       i += 1
       batch_stats = ValidatorBlockHistoryStat.where(
+        network: params[:network],
         batch_uuid: vbh.batch_uuid
       ).first
 
@@ -45,11 +46,6 @@ class ValidatorsController < ApplicationController
           VoteAccountHistory.new
         end
     end
-
-    # @block_stats = \
-    #   ValidatorBlockHistoryStat.where(
-    #     batch_uuid: @validator_block_histories.first.batch_uuid
-    #   )
   end
 
   private
