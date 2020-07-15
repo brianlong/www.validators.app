@@ -20,7 +20,7 @@
 # You will pass in your VALIDATORS_API_TOKEN from an environment variable or
 # an option on the command line. Example to run using an environment variable:
 #
-#   `VALIDATORS_API_TOKEN=TOKEN_HERE ruby collect_ping_times.rb >>  collect_ping_times.log &`
+#   `VALIDATORS_API_TOKEN=TOKEN_HERE ruby collect_ping_times_loop.rb >>  collect_ping_times_loop.log &`
 #
 # Example to run using a command line option for the API token:
 #
