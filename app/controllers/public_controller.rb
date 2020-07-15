@@ -3,7 +3,9 @@
 # PublicController
 class PublicController < ApplicationController
   def index
-    @block_history_stat = ValidatorBlockHistoryStat.last || ValidatorBlockHistoryStat.new
+    @block_history_stat = \
+      ValidatorBlockHistoryStat.where(network: params[:network]).last || \
+      ValidatorBlockHistoryStat.new(network: params[:network])
 
     @chart_data = Report.where(
       network: params[:network],
