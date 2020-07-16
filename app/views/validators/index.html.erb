@@ -2,12 +2,13 @@
 
 <h1><%= params[:network].capitalize%> Validators</h1>
 <div class="row">
-  <div class="col-sm-12">
+  <div class="col-lg-12">
     <table class='table table-striped'>
       <thead class="thead-dark">
         <tr>
           <th>Identity Account</th>
           <th>Vote Account</th>
+          <th>Software Version</th>
         </tr>
       </thead>
 
@@ -15,15 +16,20 @@
         <% @validators.each do |validator| %>
           <tr>
             <td>
-              <%= link_to validator.account, validator_url(network: params[:network], account: validator.account) %>
+              <%= link_to shorten_key(validator.account), validator_url(network: params[:network], account: validator.account) %>
             </td>
             <td>
               <%=
-                  link_to validator.vote_accounts.last.account,
+                  link_to shorten_key(validator.vote_accounts.last.account),
                     vote_account_url(
                       network: params[:network],
                       account: validator.vote_accounts.last.account
                     )
+               %>
+            </td>
+            <td>
+              <%=
+                validator.vote_accounts.last.vote_account_histories.last.software_version rescue ''
                %>
             </td>
           </tr>
@@ -32,3 +38,28 @@
     </table>
   </div>
 </div>
+<hr />
+<% if @software_versions %>
+  <h3>Software Versions</h3>
+  <div class="row">
+    <div class="col-lg-12">
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Software Version</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @software_versions.payload.each do |group| %>
+            <tr>
+              <td><%= group.first[0] %></td>
+              <td><%= group.first[1] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+<% end %>

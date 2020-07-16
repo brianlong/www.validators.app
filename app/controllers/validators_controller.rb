@@ -10,6 +10,10 @@ class ValidatorsController < ApplicationController
     @validators = Validator.where(network: params[:network])
                            .order('network, account')
                            .all
+    @software_versions = Report.where(
+      network: params[:network],
+      name: 'report_software_versions'
+    ).last
   end
 
   # GET /validators/1
