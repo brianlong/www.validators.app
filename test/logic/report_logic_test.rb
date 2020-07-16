@@ -66,4 +66,44 @@ class ReportLogicTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test 'report_software_versions' do
+    Sidekiq::Testing.inline! do
+      ReportSoftwareVersionWorker.perform_async(
+        batch_uuid: '1-2-3',
+        network: 'testnet'
+      )
+      # sleep(5) # wait for the report
+      report = Report.where(
+        network: 'testnet',
+        batch_uuid: '1-2-3',
+        name: 'report_software_versions'
+      ).last
+
+      # puts report.inspect
+
+      assert_equal 'testnet', report.network
+      assert_equal '1-2-3', report.batch_uuid
+      assert report.payload.count.positive?
+    end
+
+    # report_payload = {
+    #   network: 'testnet',
+    #   batch_uuid: '1-2-3'
+    # }
+    # p = Pipeline.new(200, report_payload)
+    #             .then(&report_software_versions)
+    # puts p.inspect
+    # assert_equal 200, p.code
+    #
+    # report = Report.where(
+    #   network: 'testnet',
+    #   batch_uuid: report_payload[:batch_uuid],
+    #   name: 'report_software_versions'
+    # ).last
+    #
+    # assert_equal p.payload[:network], report.network
+    # assert_equal p.payload[:batch_uuid], report.batch_uuid
+    # assert report.payload.count.positive?
+  end
 end

@@ -201,4 +201,45 @@ module ReportLogic
       Pipeline.new(500, p.payload, 'report_tower_height', e)
     end
   end
+
+  def report_software_versions
+    lambda do |p|
+      return p unless p[:code] == 200
+      raise StandardError, 'Missing p.payload[:network]' \
+        unless p.payload[:network]
+      raise StandardError, 'Missing p.payload[:batch_uuid]' \
+        unless p.payload[:batch_uuid]
+
+      # Grab the vote history for this batch
+      sql_results = VoteAccountHistory.connection.execute("
+        SELECT software_version, count(*) as count
+        FROM vote_account_histories
+        WHERE network = '#{p.payload[:network]}'
+        AND batch_uuid = '#{p.payload[:batch_uuid]}'
+        GROUP BY software_version;
+      ")
+
+      # Create a results array and insert the data
+      result = []
+      sql_results.each do |row|
+        result << {
+          row[0] => row[1]
+        }
+      end
+
+      raise 'No data' if result.empty?
+
+      # Create the report
+      Report.create(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid],
+        name: 'report_software_versions',
+        payload: result
+      )
+
+      Pipeline.new(200, p.payload.merge(result: result))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'report_software_versions', e)
+    end
+  end
 end
