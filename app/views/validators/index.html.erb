@@ -6,7 +6,7 @@
 <div class="row">
   <div class="col-lg-12">
     <p>
-      Color Legend: Green = above the median; Yellow = between the median and average; Red = below average. (Stats not available if the validator has not taken a turn as leader).
+      Color Legend: Green = above the median; Yellow = between the median and average; Red = below average. Ping 'N/A' means the node is not responding to ping/ICMP. (Stats not available if the validator has not taken a turn as leader).
     </p>
   </div>
 </div>
@@ -21,7 +21,7 @@
           <th>Vote<br />Distance</th>
           <th>Skipped<br />Slot &percnt;</th>
           <th>Skipped<br />After Slot &percnt;</th>
-          <th>Average<br />Ping Time</th>
+          <th>Average<br />Ping Time (ms)</th>
         </tr>
       </thead>
 
@@ -40,7 +40,7 @@
             Avg: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent'].to_f * 100.0) %>
           </td>
           <td>
-            Avg: <%= fz_first['ping_times_cluster_average_ms'] || 'N/A' %> ms
+            Avg: <%= fz_first['ping_times_cluster_average_ms'].nil? ? 'N/A' : fz_first['ping_times_cluster_average_ms'].to_f.round(1)  %>
           </td>
         </tr>
         <% @feed_zone.payload.each do |fz| %>
@@ -128,7 +128,7 @@
               end
              %>
             <td class="<%= ping_bg_color %>">
-              <%= fz['ping_times_avg_ms'] || 'N/A' %>
+              <%= fz['ping_times_avg_ms'].nil? ? 'N/A' : fz['ping_times_avg_ms'].to_f.round(1)  %>
             </td>
           </tr>
         <% end %>
