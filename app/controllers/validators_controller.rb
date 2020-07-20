@@ -15,7 +15,9 @@ class ValidatorsController < ApplicationController
       name: 'report_software_versions'
     ).last
 
-    @feed_zone = FeedZone.where(network: params[:network]).last
+    @feed_zone = FeedZone.where(
+      ['network = ? and payload is not null', params[:network]]
+    ).last
   end
 
   # GET /validators/1
