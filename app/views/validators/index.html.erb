@@ -28,7 +28,10 @@
       <tbody>
         <tr>
           <% fz_first = @feed_zone.payload.first %>
-          <td colspan="2">Cluster Height/Stats:</td>
+          <td colspan="2">
+            Cluster Height/Stats:<br />
+            Epoch: <%= fz_first['epoch'] %>
+          </td>
           <td class='text-right'><%= number_with_delimiter fz_first['tower_highest_block'] %></td>
           <td class='text-right'><%= number_with_delimiter fz_first['tower_highest_vote'] %></td>
           <td class='text-right'>
@@ -134,8 +137,10 @@
         <% end %>
       </tbody>
     </table>
+    Data updated at <%= @feed_zone.batch_created_at %>
   </div>
 </div>
+
 <hr />
 <% if @software_versions %>
   <h3>Software Versions</h3>
