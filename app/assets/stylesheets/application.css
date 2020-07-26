@@ -46,6 +46,18 @@ a {
    padding: 0px;
  }
 
+.bg-green{
+  background-color: #D4EDDA;
+}
+
+.bg-yellow {
+  background-color: #FFF3CD;
+}
+
+.bg-red {
+  background-color: #F8D7DA;
+}
+
  .body-main {
    min-height: 420px;
    margin-bottom: 60px;

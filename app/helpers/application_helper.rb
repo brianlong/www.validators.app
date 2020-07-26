@@ -21,7 +21,7 @@ module ApplicationHelper
   end
 
   def shorten_key(pub_key)
-    "#{pub_key[0..3]}...#{pub_key[-4..-1]}"
+    "#{pub_key[0..5]}...#{pub_key[-4..-1]}"
   end
 
   def lamports_to_sol(lamports)
