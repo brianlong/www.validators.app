@@ -2,15 +2,23 @@
 
 <h3><%= params[:network].capitalize %> Validator Details</h3>
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-lg-6">
     <table class='table table-striped'>
       <tbody>
         <tr>
-          <td><strong>Identity Account:</strong></td>
-          <td><%= @validator.account %></td>
+          <td><strong>Name:</strong></td>
+          <td><%= @validator.name %></td>
         </tr>
         <tr>
-          <td><strong>Software Version:</strong></td>
+          <td><strong>Details:</strong></td>
+          <td><%= @validator.details %></td>
+        </tr>
+        <tr>
+          <td><strong>Identity:</strong></td>
+          <td><small><%= @validator.account %></small></td>
+        </tr>
+        <tr>
+          <td><strong>Software:</strong></td>
           <td>
             <%=
               @vote_account_history.try(:software_version)
@@ -18,18 +26,27 @@
           </td>
         </tr>
         <tr>
-          <td><strong>IP Address:</strong></td>
+          <td><strong>IP:</strong></td>
           <td><%= @validator.validator_ips.last.address %></td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="col-sm-6">
+  <div class="col-lg-6">
     <table class='table table-striped'>
       <tbody>
         <tr>
+          <td><strong>keybase:</strong></td>
+          <td><%= @validator.keybase_id %></td>
+        </tr>
+        <tr>
+          <td><strong>Website:</strong></td>
+          <td><%= @validator.www_url %></td>
+        </tr>
+        <tr>
           <td><strong>Vote Account:</strong></td>
           <td>
+            <small>
             <%=
               link_to \
               @validator.vote_accounts.last.account,
@@ -37,10 +54,11 @@
                  network: params[:network],
                  account: @validator.vote_accounts.last.account
               ) %>
+              </small>
           </td>
         </tr>
         <tr>
-          <td><strong>Activated State:</strong></td>
+          <td><strong>Active Stake:</strong></td>
           <td>
             <%= number_with_delimiter(
                   (@vote_account_history.activated_stake * 0.000000001).round
