@@ -268,18 +268,22 @@ module FeedZoneLogic
             tmp['cluster_epoch_total_slots'].to_f
         end
 
-        # Ping Times Trailing 20 pings stats
-        ping_times = PingTime.where(
+        # Ping Times Trailing 1_000 pings stats
+        account_ping_times = PingTime.where(
           network: p.payload[:network],
           to_account: validator.account
-        ).order('created_at desc').limit(20)
+        ).order('created_at desc').limit(1_000)
 
-        tmp['ping_times_min_ms'] = ping_times.minimum(:min_ms)
-        tmp['ping_times_avg_ms'] = ping_times.average(:avg_ms)
-        tmp['ping_times_max_ms'] = ping_times.maximum(:max_ms)
-        tmp['ping_times_cluster_average_ms'] = PingTime.where(
+        tmp['ping_times_min_ms'] = account_ping_times.minimum(:min_ms)
+        tmp['ping_times_avg_ms'] = account_ping_times.average(:avg_ms)
+        tmp['ping_times_max_ms'] = account_ping_times.maximum(:max_ms)
+
+        cluster_ping_times = PingTime.where(
           network: p.payload[:network]
-        ).order('created_at desc').limit(1_000).average(:avg_ms)
+        ).order('created_at desc').limit(1_000)
+
+        tmp['ping_times_cluster_average_ms'] = \
+          cluster_ping_times.average(:avg_ms)
 
         # TODO: Compile more data here.
 

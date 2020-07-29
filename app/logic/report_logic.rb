@@ -20,15 +20,20 @@ module ReportLogic
       # Create a results array and insert the data
       result = []
       block_history.each do |history|
+        # Calculate Ping Times
+        account_ping_times = PingTime.where(
+          network: p.payload[:network],
+          to_account: history.validator.account
+        ).order('created_at desc').limit(1_000)
+
+        ping_times_avg_ms = account_ping_times.average(:avg_ms)
+
         result << {
           'validator_id' => history.validator.id,
           'account' => history.validator.account,
           'skipped_slots' => history.skipped_slots,
           'skipped_slot_percent' => history.skipped_slot_percent,
-          'ping_time' => PingTime.where(
-            network: p.payload[:network],
-            to_account: history.validator.account
-          ).order('id desc').limit(20).maximum('avg_ms')
+          'ping_time' => ping_times_avg_ms
         }
       end
 
@@ -65,15 +70,20 @@ module ReportLogic
       # Create a results array and insert the data
       result = []
       block_history.each do |history|
+        # Calculate Ping Times
+        account_ping_times = PingTime.where(
+          network: p.payload[:network],
+          to_account: history.validator.account
+        ).order('created_at desc').limit(1_000)
+
+        ping_times_avg_ms = account_ping_times.average(:avg_ms)
+
         result << {
           'validator_id' => history.validator.id,
           'account' => history.validator.account,
           'skipped_slots_after' => history.skipped_slots_after,
           'skipped_slots_after_percent' => history.skipped_slots_after_percent,
-          'ping_time' => PingTime.where(
-            network: p.payload[:network],
-            to_account: history.validator.account
-          ).order('id desc').limit(20).maximum('avg_ms')
+          'ping_time' => ping_times_avg_ms
         }
       end
 
