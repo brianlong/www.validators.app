@@ -370,6 +370,43 @@ module SolanaLogic
     end
   end
 
+  def validator_info_get_and_save
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      results = cli_request('validator-info get', p.payload[:config_urls])
+      results.each do |result|
+        # puts result.inspect
+        validator = Validator.find_or_create_by(
+          network: p.payload[:network],
+          account: result['identityPubkey']
+        )
+
+        # puts "#{result['info']['name']} => #{result['info']['name'].encoding}"
+        validator.name = result['info']['name'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
+
+        validator.keybase_id = result['info']['keybaseUsername'].to_s
+
+        validator.www_url = result['info']['website'].to_s
+
+        validator.details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
+
+        validator.info_pub_key = result['infoPubkey']
+
+        validator.save!
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(
+        500,
+        p.payload,
+        'Error from validator_info_get_and_save',
+        e
+      )
+    end
+  end
+
   # rpc_request will make a Solana RPC request and return the results in a
   # JSON object. API specifications are at:
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
@@ -421,14 +458,15 @@ module SolanaLogic
 
     rpc_urls.each do |rpc_url|
       response_json = Timeout.timeout(RPC_TIMEOUT) do
-        `#{solana_path}solana #{cli_method} --output json --url #{rpc_url}`
+        `#{solana_path}solana #{cli_method} --output json-compact --url #{rpc_url}`
 
       rescue Errno::ECONNREFUSED, Timeout::Error => e
         Rails.logger.error "RPC ERROR\n#{e.class}\nRPC URL: #{rpc_url}"
         ''
       end
-
-      return JSON.parse(response_json) unless response_json == ''
+      # puts response_json
+      response_utf8 = response_json.encode('UTF-8', invalid: :replace, undef: :replace)
+      return JSON.parse(response_utf8) unless response_utf8 == ''
     rescue JSON::ParserError => e
       Rails.logger.error "RPC ERROR\n#{e.class}\nRPC URL: #{rpc_url}"
     end

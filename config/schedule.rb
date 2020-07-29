@@ -40,3 +40,7 @@ every 1.minutes do
   ruby_script 'gather_rpc_data.rb'
   ruby_script 'gather_rpc_data_mainnet.rb'
 end
+
+every 1.hour do
+  ruby_script 'validators_get_info.rb'
+end
