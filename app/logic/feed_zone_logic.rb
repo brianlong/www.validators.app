@@ -85,7 +85,8 @@ module FeedZoneLogic
       feed_zone_payload = []
 
       ValidatorHistory.where(
-        network: p.payload[:network], batch_uuid: p.payload[:batch_uuid]
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid]
       ).each do |validator|
         tmp = {}
 
