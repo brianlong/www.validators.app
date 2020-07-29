@@ -279,7 +279,7 @@ module FeedZoneLogic
         tmp['ping_times_max_ms'] = ping_times.maximum(:max_ms)
         tmp['ping_times_cluster_average_ms'] = PingTime.where(
           network: p.payload[:network]
-        ).order('created_at desc').limit(10_000).average(:avg_ms)
+        ).order('created_at desc').limit(1_000).average(:avg_ms)
 
         # TODO: Compile more data here.
 
