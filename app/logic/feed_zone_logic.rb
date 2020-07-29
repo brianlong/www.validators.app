@@ -268,22 +268,31 @@ module FeedZoneLogic
             tmp['cluster_epoch_total_slots'].to_f
         end
 
-        # Ping Times Trailing 1_000 pings stats
+        # Ping Times Trailing 1_000 pings stats.
+        # Do not use ActiveRecord to calculate the averages! Horrible
+        # performance
         account_ping_times = PingTime.where(
           network: p.payload[:network],
           to_account: validator.account
         ).order('created_at desc').limit(1_000)
 
-        tmp['ping_times_min_ms'] = account_ping_times.minimum(:min_ms)
-        tmp['ping_times_avg_ms'] = account_ping_times.average(:avg_ms)
-        tmp['ping_times_max_ms'] = account_ping_times.maximum(:max_ms)
+        account_min_ms = account_ping_times.map { |pt| pt.min_ms.to_f.round(2) }
+        account_avg_ms = account_ping_times.map { |pt| pt.avg_ms.to_f.round(2) }
+        account_max_ms = account_ping_times.map { |pt| pt.max_ms.to_f.round(2) }
 
-        cluster_ping_times = PingTime.where(
-          network: p.payload[:network]
-        ).order('created_at desc').limit(1_000)
+        tmp['ping_times_min_ms'] = account_min_ms.sum / account_min_ms.size.to_f
+        tmp['ping_times_avg_ms'] = account_avg_ms.sum / account_avg_ms.size.to_f
+        tmp['ping_times_max_ms'] = account_max_ms.sum / account_max_ms.size.to_f
+
+        # Get an Array of avg_ms PingTimes for the cluster
+        cluster_ping_times = PingTime.select('avg_ms')
+                                     .where(network: p.payload[:network])
+                                     .order('id desc')
+                                     .limit(1_000)
+                                     .map { |pt| pt.avg_ms.to_f.round(2) }
 
         tmp['ping_times_cluster_average_ms'] = \
-          cluster_ping_times.average(:avg_ms)
+          cluster_ping_times.sum / cluster_ping_times.size.to_f
 
         # TODO: Compile more data here.
 
