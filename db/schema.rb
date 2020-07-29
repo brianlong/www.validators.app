@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_05_153707) do
+ActiveRecord::Schema.define(version: 2020_07_29_033136) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -214,7 +214,7 @@ ActiveRecord::Schema.define(version: 2020_07_05_153707) do
     t.bigint "root_block", unsigned: true
     t.bigint "credits", unsigned: true
     t.bigint "active_stake", unsigned: true
-    t.boolean "delinquent"
+    t.boolean "delinquent", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
@@ -238,6 +238,8 @@ ActiveRecord::Schema.define(version: 2020_07_05_153707) do
     t.string "www_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "details"
+    t.string "info_pub_key"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 
