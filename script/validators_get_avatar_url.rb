@@ -28,13 +28,8 @@ image_css = '.picture > .img-circle'
 
         if avatar_url.to_s.include?('keybase_processed_uploads')
           validator.update(avatar_url: avatar_url)
-          puts "URL: #{avatar_url}"
         end
-      else
-        puts "Image not found #{keybase_url}"
       end
-    else
-      puts "Non-200 Code: #{keybase[:http_code]}"
     end
 
     # break # for development
