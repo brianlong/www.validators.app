@@ -1,0 +1,179 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.movingleads.com/toss?code=403
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip,deflate,identity
+      Accept:
+      - text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+      User-Agent:
+      - Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:39.0) Gecko/20100101 Firefox/39.0
+      Accept-Charset:
+      - ISO-8859-1,utf-8;q=0.7,*;q=0.7
+      Accept-Language:
+      - en-US,en;q=0.5
+      Host:
+      - www.movingleads.com
+      Cache-Control:
+      - no-cache
+      Dnt:
+      - '1'
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '300'
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      Date:
+      - Sat, 01 Aug 2020 18:29:58 GMT
+      Server:
+      - Apache/2.4.29 (Ubuntu)
+      Content-Type:
+      - text/plain
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - 7367ab12-038f-4744-a07d-4050e1fe11d5
+      X-Runtime:
+      - '0.000548'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Via:
+      - 1.1 www.movingleads.com
+      Keep-Alive:
+      - timeout=5, max=100
+      Connection:
+      - Keep-Alive
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: 'status: 403'
+  recorded_at: Sat, 01 Aug 2020 18:29:58 GMT
+- request:
+    method: get
+    uri: https://www.movingleads.com/toss?code=403
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip,deflate,identity
+      Accept:
+      - text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+      User-Agent:
+      - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)
+        Chrome/44.0.2403.125 Safari/537.36
+      Accept-Charset:
+      - ISO-8859-1,utf-8;q=0.7,*;q=0.7
+      Accept-Language:
+      - en-US,en;q=0.5
+      Host:
+      - www.movingleads.com
+      Cache-Control:
+      - no-cache
+      Dnt:
+      - '1'
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '300'
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      Date:
+      - Sat, 01 Aug 2020 18:29:58 GMT
+      Server:
+      - Apache/2.4.29 (Ubuntu)
+      Content-Type:
+      - text/plain
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - ec6ec6bd-4ba3-4a7c-b8fa-39961b22a620
+      X-Runtime:
+      - '0.000519'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Via:
+      - 1.1 www.movingleads.com
+      Keep-Alive:
+      - timeout=5, max=100
+      Connection:
+      - Keep-Alive
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: 'status: 403'
+  recorded_at: Sat, 01 Aug 2020 18:29:58 GMT
+- request:
+    method: get
+    uri: https://www.movingleads.com/toss?code=403
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip,deflate,identity
+      Accept:
+      - text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+      User-Agent:
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/44.0.2403.157 Safari/537.36
+      Accept-Charset:
+      - ISO-8859-1,utf-8;q=0.7,*;q=0.7
+      Accept-Language:
+      - en-US,en;q=0.5
+      Host:
+      - www.movingleads.com
+      Cache-Control:
+      - no-cache
+      Dnt:
+      - '1'
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '300'
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      Date:
+      - Sat, 01 Aug 2020 18:29:59 GMT
+      Server:
+      - Apache/2.4.29 (Ubuntu)
+      Content-Type:
+      - text/plain
+      Cache-Control:
+      - no-cache
+      X-Request-Id:
+      - c7a8b16d-74df-4bb2-952b-28386a9d2a25
+      X-Runtime:
+      - '0.000534'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Via:
+      - 1.1 www.movingleads.com
+      Keep-Alive:
+      - timeout=5, max=100
+      Connection:
+      - Keep-Alive
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: 'status: 403'
+  recorded_at: Sat, 01 Aug 2020 18:29:59 GMT
+recorded_with: VCR 6.0.0

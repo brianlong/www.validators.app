@@ -2,10 +2,16 @@
 <div class='row'>
   <div class="col-sm-12">
     <p>
-    This website is collecting time-series data to help Solana validators track the performance of their nodes over time. Every five minutes, we are sampling validator and vote account activity such as block production, active stake, skipped slot percentage, etc. Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!</p>
+    This website is collecting time-series data to help Solana validators track the performance of their nodes over time. Every minute, we are sampling validator and vote account activity such as block production, active stake, skipped slot percentage, etc. Here you will find historical data and trend reports.</p>
   </div>
 </div>
-
+<div class='row'>
+  <div class="col-sm-12">
+    <p>
+      The app is still under construction, but you are welcome to click around and see the current progress. Start at the <%= link_to "#{params[:network].capitalize} Validators", validators_url(network: params[:network]) %> page to find your Account. Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!
+    </p>
+  </div>
+</div>
 <% if @chart_data %>
   <div class="row">
     <div class="col-sm-12">
@@ -15,13 +21,7 @@
   </div>
 <% end %>
 
-<div class='row'>
-  <div class="col-sm-12">
-    <p>
-      The app is still under construction, but you are welcome to click around and see the current progress. Start at the <%= link_to "#{params[:network].capitalize} Validators", validators_url(network: params[:network]) %> page to find your Account.
-    </p>
-  </div>
-</div>
+
 
 <% if @tower_report  %>
   <hr />

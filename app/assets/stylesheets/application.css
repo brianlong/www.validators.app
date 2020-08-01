@@ -46,6 +46,14 @@ a {
    padding: 0px;
  }
 
+.avatar{
+  display: inline-block;
+  /* display: block; */
+  /* margin-right: .25rem; */
+  /* position: relative; */
+  /* font-size: 1.2rem; */
+}
+
 .bg-green{
   background-color: #D4EDDA;
 }
@@ -68,6 +76,12 @@ a {
    font-weight: bold;
    font-variant-caps: all-small-caps;
    background-color: #FFFFCC;
+ }
+
+ .img-circle {
+     border-radius: 50%;
+     height: 50px;
+     width: 50px;
  }
 
  .font-logo {

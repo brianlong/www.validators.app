@@ -385,13 +385,13 @@ module SolanaLogic
         # puts "#{result['info']['name']} => #{result['info']['name'].encoding}"
         validator.name = result['info']['name'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
 
-        validator.keybase_id = result['info']['keybaseUsername'].to_s
+        validator.keybase_id = result['info']['keybaseUsername'].to_s.strip
 
-        validator.www_url = result['info']['website'].to_s
+        validator.www_url = result['info']['website'].to_s.strip
 
         validator.details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
 
-        validator.info_pub_key = result['infoPubkey']
+        validator.info_pub_key = result['infoPubkey'].strip
 
         validator.save!
       end

@@ -181,6 +181,11 @@ module FeedZoneLogic
           network: p.payload[:network], account: validator.account
         ).first
         if validator2
+          tmp['validator_name'] = validator2.name
+          tmp['validator_avatar_url'] = validator2.avatar_url
+          tmp['validator_www_url'] = validator2.www_url
+          tmp['validator_keybase_id'] = validator2.keybase_id
+
           # Look for the skipped slot data for this batch
           vbh = validator2.validator_block_histories.where(
             network: p.payload[:network],
