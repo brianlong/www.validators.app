@@ -84,6 +84,12 @@ a {
      width: 50px;
  }
 
+ .img-circle-small {
+     border-radius: 50%;
+     height: 30px;
+     width: 30px;
+ }
+
  .font-logo {
    font-size: 48px;
  }

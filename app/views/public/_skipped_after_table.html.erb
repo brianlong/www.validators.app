@@ -14,9 +14,24 @@
       </tr>
     <% else %>
       <% histories.each do |val| %>
+      <% validator = Validator.where(account: val['account']).first %>
+      <%
+        link_text = if validator && validator.name
+          validator.name
+        else
+          shorten_key(val['account'])
+        end
+      %>
         <tr>
           <td>
-            <%= link_to shorten_key(val['account']), validator_url(network: params[:network], account: val['account'])  %>
+            <span class="avatar">
+              <% if validator && validator.avatar_url %>
+                <%= image_tag validator.avatar_url, class: 'img-circle-small' %>
+              <% else %>
+                <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-small' %>
+              <% end %>
+            </span>
+            <%= link_to link_text, validator_url(network: params[:network], account: val['account'])  %>
           </td>
           <td><%= val['skipped_slots_after'] %></td>
           <td><%= number_to_percentage val['skipped_slots_after_percent'].to_f * 100.0 %></td>

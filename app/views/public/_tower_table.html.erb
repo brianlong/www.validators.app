@@ -5,31 +5,46 @@
       <th>Root<br />Block</th>
       <th>Behind<br />Leader</th>
       <th>Active<br />Stake</th>
-      <th>&nbsp;</th>
     </tr>
   </thead>
   <tbody>
     <% if validators.nil? %>
       <tr>
-        <td colspan="5">No data</td>
+        <td colspan="4">No data</td>
       </tr>
     <% else %>
       <% validators.each do |val| %>
+      <% validator = Validator.where(account: val['account']).first %>
+      <%
+        link_text = if validator && validator.name
+          validator.name
+        else
+          shorten_key(val['account'])
+        end
+      %>
         <tr>
           <td>
+            <span class="avatar">
+              <% if validator && validator.avatar_url %>
+                <%= image_tag validator.avatar_url, class: 'img-circle-small' %>
+              <% else %>
+                <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-small' %>
+              <% end %>
+            </span>
+
             <% if @show_full_account %>
               <%= link_to val['account'], validator_url(network: params[:network], account: val['account'])  %>
             <% else %>
-              <%= link_to shorten_key(val['account']), validator_url(network: params[:network], account: val['account'])  %>
+              <%= link_to link_text, validator_url(network: params[:network], account: val['account'])  %>
             <% end %>
           </td>
           <td><%= number_with_delimiter val['root_block'] %></td>
           <td><%= number_with_delimiter val['blocks_behind_leader'] %></td>
           <td>
              <%= number_with_delimiter(lamports_to_sol(val['active_stake'])) %>
-          </td>
-          <td>
-            <%= 'Delinquent' if val['delinquent'] %>
+             <% if val['delinquent'] %>
+               <br /><small>Delinquent</small>
+             <% end %>
           </td>
         </tr>
       <% end %>
