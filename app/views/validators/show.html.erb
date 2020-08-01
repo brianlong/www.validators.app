@@ -1,13 +1,25 @@
 <div id="notice"><%= notice %></div>
 
-<h3><%= params[:network].capitalize %> Validator Details</h3>
+<h3>
+  <span class="avatar">
+    <% if @validator.avatar_url %>
+      <%= image_tag @validator.avatar_url, class: 'img-circle' %>
+    <% else %>
+      <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+    <% end %>
+  </span>
+  <%= params[:network].capitalize %> Validator Details
+</h3>
 <div class="row">
   <div class="col-lg-6">
     <table class='table table-striped'>
       <tbody>
         <tr>
           <td><strong>Name:</strong></td>
-          <td><%= @validator.name %></td>
+          <td>
+
+            <%= @validator.name %>
+          </td>
         </tr>
         <tr>
           <td><strong>Details:</strong></td>
@@ -27,7 +39,7 @@
         </tr>
         <tr>
           <td><strong>IP:</strong></td>
-          <td><%= @validator.validator_ips.last.address %></td>
+          <td><%= @validator.validator_ips.last.address unless @validator.validator_ips.empty? %></td>
         </tr>
       </tbody>
     </table>
@@ -53,7 +65,7 @@
               vote_account_url(
                  network: params[:network],
                  account: @validator.vote_accounts.last.account
-              ) %>
+              ) unless @validator.vote_accounts.empty? %>
               </small>
           </td>
         </tr>

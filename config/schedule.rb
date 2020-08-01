@@ -43,4 +43,5 @@ end
 
 every 1.hour do
   ruby_script 'validators_get_info.rb'
+  ruby_script 'validators_get_avatar_url.rb'
 end

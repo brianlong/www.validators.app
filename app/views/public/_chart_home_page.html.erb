@@ -22,6 +22,7 @@
             fill: false,
             backgroundColor: 'rgb(85, 239, 196)',
             borderColor: 'rgb(85, 239, 196)',
+            radius: 0,
             data: <%= @chart_data.payload.reverse.map { |p| p['total_skipped_percent'] * 100.0  } %>
           },
           {
@@ -29,6 +30,7 @@
             fill: false,
             backgroundColor: 'rgb(129, 236, 236)',
             borderColor: 'rgb(129, 236, 236)',
+            radius: 0,
             data: <%= @chart_data.payload.reverse.map { |p| p['median_skipped_percent'] * 100.0  } %>
           }
         ]

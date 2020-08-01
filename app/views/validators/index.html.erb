@@ -10,137 +10,152 @@
     </p>
   </div>
 </div>
-<div class="row">
-  <div class="col-lg-12">
-    <table id="validators-table" class='table table-striped'>
-      <thead class="thead-dark">
-        <tr>
-          <th>Identity<br />Account</th>
-          <th>ActiveStake<br />Software</th>
-          <th class='text-right'>Root Block<br />Distance</th>
-          <th class='text-right'>Vote<br />Distance</th>
-          <th class='text-right'>Skipped<br />Slot &percnt;</th>
-          <th class='text-right'>Skipped<br />After Slot &percnt;</th>
-          <th class='text-right'>Average<br />Ping Time (ms)</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <% fz_first = @feed_zone.payload.first %>
-          <td colspan="2">
-            Cluster Height/Stats:<br />
-            Epoch: <%= fz_first['epoch'] %>
-          </td>
-          <td class='text-right'><%= number_with_delimiter fz_first['tower_highest_block'] %></td>
-          <td class='text-right'><%= number_with_delimiter fz_first['tower_highest_vote'] %></td>
-          <td class='text-right'>
-            Med: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent_median'].to_f * 100.0) %><br />
-            Avg: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent'].to_f * 100.0) %>
-          </td>
-          <td class='text-right'>
-            Med: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent_median'].to_f * 100.0) %><br />
-            Avg: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent'].to_f * 100.0) %>
-          </td>
-          <td class='text-right'>
-            Avg: <%= fz_first['ping_times_cluster_average_ms'].nil? ? 'N/A' : fz_first['ping_times_cluster_average_ms'].to_f.round(1)  %>
-          </td>
-        </tr>
-        <% @feed_zone.payload.each do |fz| %>
+<% if @feed_zone %>
+  <div class="row">
+    <div class="col-lg-12">
+      <table id="validators-table" class='table table-striped'>
+        <thead class="thead-dark">
           <tr>
+            <th>&nbsp;</th>
+            <th>Name<br />ActiveStake<br />Software</th>
+            <th class='text-right'>Root Block<br />Distance</th>
+            <th class='text-right'>Vote<br />Distance</th>
+            <th class='text-right'>Skipped<br />Slot &percnt;</th>
+            <th class='text-right'>Skipped<br />After Slot &percnt;</th>
+            <th class='text-right'>Average<br />Ping Time (ms)</th>
+          </tr>
+        </thead>
 
-            <td class="<%= 'bg-red' if fz['validator_delinquent'] == true %>">
-              <%= link_to shorten_key(fz['validator_account']), validator_url(network: params[:network], account: fz['validator_account']) %><br />
-              <%= 'Delinquent' if fz['validator_delinquent'] == true %>
+        <tbody>
+          <tr>
+            <% fz_first = @feed_zone.payload.first %>
+            <td colspan="2">
+              Cluster Height/Stats:<br />
+              Epoch: <%= fz_first['epoch'] %>
             </td>
-            <td class="<%= 'bg-red' if fz['validator_delinquent'] == true %>">
-              <%= number_with_delimiter lamports_to_sol(fz['validator_active_stake']) %>
-              <br />
-              <%= fz['software_version'] || 'N/A' %>
+            <td class='text-right'><%= number_with_delimiter fz_first['tower_highest_block'] %></td>
+            <td class='text-right'><%= number_with_delimiter fz_first['tower_highest_vote'] %></td>
+            <td class='text-right'>
+              Med: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent_median'].to_f * 100.0) %><br />
+              Avg: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent'].to_f * 100.0) %>
             </td>
-            <%
+            <td class='text-right'>
+              Med: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent_median'].to_f * 100.0) %><br />
+              Avg: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent'].to_f * 100.0) %>
+            </td>
+            <td class='text-right'>
+              Avg: <%= fz_first['ping_times_cluster_average_ms'].nil? ? 'N/A' : fz_first['ping_times_cluster_average_ms'].to_f.round(1)  %>
+            </td>
+          </tr>
+          <% @feed_zone.payload.each do |fz| %>
+            <tr>
+              <td class="<%= 'bg-red' if fz['validator_delinquent'] == true %>">
+                <span class="avatar">
+                  <% if fz['validator_avatar_url'] %>
+                    <%= image_tag fz['validator_avatar_url'], class: 'img-circle' %>
+                  <% else %>
+                    <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+                  <% end %>
+                </span>
+                </td>
+                <td class="<%= 'bg-red' if fz['validator_delinquent'] == true %>">
+                <%
+                  validator_name = if fz['validator_name']
+                    fz['validator_name']
+                  else
+                    shorten_key(fz['validator_account'])
+                  end
+                %>
+                  <%= link_to validator_name, validator_url(network: params[:network], account: fz['validator_account']) %><br />
+                  <small><%= number_with_delimiter lamports_to_sol(fz['validator_active_stake']) %></small>
+                  <br />
+                  <small><%= fz['software_version'] || 'N/A' %></small>
+
+              </td>
+
+              <%
+                # Calculate the backgroud color
+                tower_background = if fz['tower_blocks_behind_leader'].to_i <= fz['tower_cluster_median_behind_leader'].to_i
+                  'bg-green'
+                elsif (fz['tower_blocks_behind_leader'].to_i > fz['tower_cluster_median_behind_leader'].to_i) && (fz['tower_blocks_behind_leader'].to_i < fz['tower_cluster_average_behind_leader'].to_i)
+                    'bg-yellow'
+                  else
+                    'bg-red'
+                  end
+               %>
+              <td class="<%= tower_background %> text-right">
+                <%= fz['tower_blocks_behind_leader'] %>
+              </td>
+              <%
               # Calculate the backgroud color
-              tower_background = if fz['tower_blocks_behind_leader'].to_i <= fz['tower_cluster_median_behind_leader'].to_i
+              vote_background = if fz['tower_votes_behind_leader'].to_i <= fz['tower_cluster_median_vote_behind_leader'].to_i
                 'bg-green'
-              elsif (fz['tower_blocks_behind_leader'].to_i > fz['tower_cluster_median_behind_leader'].to_i) && (fz['tower_blocks_behind_leader'].to_i < fz['tower_cluster_average_behind_leader'].to_i)
+              elsif (fz['tower_votes_behind_leader'].to_i > fz['tower_cluster_median_vote_behind_leader'].to_i) && (fz['tower_votes_behind_leader'].to_i < fz['tower_cluster_average_vote_behind_leader'].to_i)
                   'bg-yellow'
                 else
                   'bg-red'
                 end
-             %>
-            <td class="<%= tower_background %> text-right">
-              <%= fz['tower_blocks_behind_leader'] %>
-            </td>
-            <%
-            # Calculate the backgroud color
-            vote_background = if fz['tower_votes_behind_leader'].to_i <= fz['tower_cluster_median_vote_behind_leader'].to_i
-              'bg-green'
-            elsif (fz['tower_votes_behind_leader'].to_i > fz['tower_cluster_median_vote_behind_leader'].to_i) && (fz['tower_votes_behind_leader'].to_i < fz['tower_cluster_average_vote_behind_leader'].to_i)
-                'bg-yellow'
-              else
-                'bg-red'
-              end
-             %>
-            <td class="<%= vote_background %> text-right">
-              <%= fz['tower_votes_behind_leader'] %>
-            </td>
-
-            <%
-              # Calculate the backgroud color
-              skipped_background = if
-                fz['validator_epoch_skipped_slot_percent'].to_f <= fz['cluster_epoch_skipped_slot_percent_median'].to_f
-                  'bg-green'
-              elsif
-                fz['validator_epoch_skipped_slot_percent'].to_f > fz['cluster_epoch_skipped_slot_percent'].to_f
-                'bg-red'
-              else
-                'bg-yellow'
-              end
-             %>
-
-            <td class="<%= skipped_background %> text-right">
-              <%=
-                number_to_percentage(fz['validator_epoch_skipped_slot_percent'].to_f * 100.0)
                %>
-            </td>
+              <td class="<%= vote_background %> text-right">
+                <%= fz['tower_votes_behind_leader'] %>
+              </td>
 
-            <%
-              after_bg_color = if
-                fz['validator_epoch_skipped_slots_after_percent'].to_f <= fz['cluster_epoch_skipped_slot_percent_median'].to_f
+              <%
+                # Calculate the backgroud color
+                skipped_background = if
+                  fz['validator_epoch_skipped_slot_percent'].to_f <= fz['cluster_epoch_skipped_slot_percent_median'].to_f
+                    'bg-green'
+                elsif
+                  fz['validator_epoch_skipped_slot_percent'].to_f > fz['cluster_epoch_skipped_slot_percent'].to_f
+                  'bg-red'
+                else
+                  'bg-yellow'
+                end
+               %>
+
+              <td class="<%= skipped_background %> text-right">
+                <%=
+                  number_to_percentage(fz['validator_epoch_skipped_slot_percent'].to_f * 100.0)
+                 %>
+              </td>
+
+              <%
+                after_bg_color = if
+                  fz['validator_epoch_skipped_slots_after_percent'].to_f <= fz['cluster_epoch_skipped_slot_percent_median'].to_f
+                    'bg-green'
+                elsif
+                  fz['validator_epoch_skipped_slots_after_percent'].to_f > fz['cluster_epoch_skipped_slot_percent'].to_f
+                  'bg-red'
+                else
+                  'bg-yellow'
+                end
+               %>
+              <td class="<%= after_bg_color %> text-right">
+                <%=
+                  number_to_percentage(fz['validator_epoch_skipped_slots_after_percent'].to_f * 100.0)
+                %>
+              </td>
+
+              <%
+                ping_bg_color = if fz['ping_times_avg_ms'].nil?
+                  'bg-red'
+                elsif fz['ping_times_avg_ms'].to_f <= fz['ping_times_cluster_average_ms'].to_f
                   'bg-green'
-              elsif
-                fz['validator_epoch_skipped_slots_after_percent'].to_f > fz['cluster_epoch_skipped_slot_percent'].to_f
-                'bg-red'
-              else
-                'bg-yellow'
-              end
-             %>
-            <td class="<%= after_bg_color %> text-right">
-              <%=
-                number_to_percentage(fz['validator_epoch_skipped_slots_after_percent'].to_f * 100.0)
-              %>
-            </td>
-
-            <%
-              ping_bg_color = if fz['ping_times_avg_ms'].nil?
-                'bg-red'
-              elsif fz['ping_times_avg_ms'].to_f <= fz['ping_times_cluster_average_ms'].to_f
-                'bg-green'
-              else
-                'bg-yellow'
-              end
-             %>
-            <td class="<%= ping_bg_color %> text-right">
-              <%= fz['ping_times_avg_ms'].nil? ? 'N/A' : fz['ping_times_avg_ms'].to_f.round(1)  %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    Data updated at <%= @feed_zone.batch_created_at %>
+                else
+                  'bg-yellow'
+                end
+               %>
+              <td class="<%= ping_bg_color %> text-right">
+                <%= fz['ping_times_avg_ms'].nil? ? 'N/A' : fz['ping_times_avg_ms'].to_f.round(1)  %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      Data updated at <%= @feed_zone.batch_created_at %>
+    </div>
   </div>
-</div>
-
+<% end %>
 <hr />
 <% if @software_versions %>
   <h3>Software Versions</h3>

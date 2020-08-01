@@ -62,6 +62,9 @@ gem 'capistrano-sidekiq', require: false
 # AppSignal
 gem 'appsignal'
 
+gem 'mechanize'
+gem 'nokogiri'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'

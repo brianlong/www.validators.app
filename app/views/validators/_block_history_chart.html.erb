@@ -21,6 +21,7 @@
             fill: false,
             backgroundColor: 'rgb(85, 239, 196)',
             borderColor: 'rgb(85, 239, 196)',
+            radius: 0,
             data: <%= @data.map { |k,v| v[:skipped_slot_percent] }%>
           },
           {
@@ -28,6 +29,7 @@
             fill: false,
             backgroundColor: 'rgb(129, 236, 236)',
             borderColor: 'rgb(129, 236, 236)',
+            radius: 0,
             data: <%= @data.map { |k,v| v[:skipped_slots_after_percent] } %>
           },
           {
@@ -35,6 +37,7 @@
             fill: false,
             backgroundColor: 'rgb(116, 185, 255)',
             borderColor: 'rgb(116, 185, 255)',
+            radius: 0,
             data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent] } %>
           }
         ]
