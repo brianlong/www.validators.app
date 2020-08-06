@@ -15,9 +15,17 @@ class ValidatorsController < ApplicationController
       name: 'report_software_versions'
     ).last
 
+    # I needed to hack this because we are occassionally receiving errors when
+    # building the FeedZone and the payload = []. I am grabbing some of the most
+    # recent records for the network and returning the last good record.
     @feed_zone = FeedZone.where(
-      ['network = ? and payload is not null', params[:network]]
-    ).last
+      ["network = ? and payload != '[]'", params[:network]]
+    ).order('created_at desc').limit(10).each do |fz|
+      next if fz.payload.nil?
+      next if fz.payload == []
+
+      return fz
+    end
   end
 
   # GET /validators/1
