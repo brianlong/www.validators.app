@@ -18,13 +18,14 @@ class ValidatorsController < ApplicationController
     # I needed to hack this because we are occassionally receiving errors when
     # building the FeedZone and the payload = []. I am grabbing some of the most
     # recent records for the network and returning the last good record.
-    @feed_zone = FeedZone.where(
+    FeedZone.where(
       ['network = ?', params[:network]]
     ).order('batch_created_at desc').limit(10).each do |fz|
       next if fz.payload.nil?
       next if fz.payload == []
 
-      return fz
+      @feed_zone = fz
+      return
     end
   end
 
