@@ -19,7 +19,7 @@ class ValidatorsController < ApplicationController
     # building the FeedZone and the payload = []. I am grabbing some of the most
     # recent records for the network and returning the last good record.
     @feed_zone = FeedZone.where(
-      ["network = ? and payload != '[]'", params[:network]]
+      ['network = ?', params[:network]]
     ).order('created_at desc').limit(10).each do |fz|
       next if fz.payload.nil?
       next if fz.payload == []
