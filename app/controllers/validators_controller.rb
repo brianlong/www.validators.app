@@ -20,7 +20,7 @@ class ValidatorsController < ApplicationController
     # recent records for the network and returning the last good record.
     @feed_zone = FeedZone.where(
       ['network = ?', params[:network]]
-    ).order('created_at desc').limit(10).each do |fz|
+    ).order('batch_created_at desc').limit(10).each do |fz|
       next if fz.payload.nil?
       next if fz.payload == []
 
