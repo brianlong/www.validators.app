@@ -48,6 +48,7 @@ if p.code == 200
     batch_uuid: p.payload[:batch_uuid],
     network: p.payload[:network]
   )
+  sleep(15)
   FeedZoneWorker.perform_async(
     network: p.payload[:network],
     batch_uuid: p.payload[:batch_uuid]
