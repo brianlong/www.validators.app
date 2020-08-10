@@ -17,7 +17,7 @@
         <thead class="thead-dark">
           <tr>
             <th>&nbsp;</th>
-            <th>Name<br />ActiveStake<br />Software (<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</th>
+            <th>Name (Commission)<br />ActiveStake<br />Software (<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</th>
             <th class='text-right'>Root Block<br />Distance</th>
             <th class='text-right'>Vote<br />Distance</th>
             <th class='text-right'>Skipped<br />Slot &percnt;</th>
@@ -66,7 +66,8 @@
                     shorten_key(fz['validator_account'])
                   end
                 %>
-                  <%= link_to validator_name, validator_url(network: params[:network], account: fz['validator_account']) %><br />
+                  <%= link_to validator_name, validator_url(network: params[:network], account: fz['validator_account']) %>
+                  <small>(<%= fz['validator_commission'] %> %)</small><br />
                   <small><%= number_with_delimiter lamports_to_sol(fz['validator_active_stake']) %></small>
                   <br />
                   <small  class="<%= software_color_class(fz['software_version']) %>">
