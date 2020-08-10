@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_01_181559) do
+ActiveRecord::Schema.define(version: 2020_08_10_200009) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -228,6 +228,13 @@ ActiveRecord::Schema.define(version: 2020_08_01_181559) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
     t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
+  end
+
+  create_table "validator_score_v1s", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "validator_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
 
   create_table "validators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
