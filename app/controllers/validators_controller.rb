@@ -22,6 +22,7 @@ class ValidatorsController < ApplicationController
       ['network = ?', params[:network]]
     ).order('batch_created_at desc').limit(10).each do |fz|
       next if fz.payload.nil?
+      next if fz.payload_version.nil?
       next if fz.payload == []
 
       @feed_zone = fz
