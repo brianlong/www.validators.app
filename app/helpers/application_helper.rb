@@ -27,4 +27,22 @@ module ApplicationHelper
   def lamports_to_sol(lamports)
     lamports / 1_000_000_000
   end
+
+  def software_color_class(software_version)
+    return 'text-red' if software_version.nil?
+    return 'text-red' if software_version.blank?
+
+    if software_version.include?(
+      Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym].to_s
+    )
+      'text-green'
+    elsif software_version.include?(
+      Rails.application.credentials.solana["software_minor_#{params[:network]}".to_sym].to_s
+    )
+      'text-orange'
+    else
+      'text-red'
+    end
+    # 'text-orange'
+  end
 end

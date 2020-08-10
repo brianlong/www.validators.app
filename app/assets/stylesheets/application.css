@@ -133,6 +133,18 @@ a {
   /* padding-top: 20px; */
 }
 
+.text-green {
+  color: green;
+}
+
+.text-red {
+  color: red;
+}
+
+.text-orange {
+  color: orange;
+}
+
 p {
   font-size: 18px;
   padding-top: 10px;
