@@ -14,6 +14,22 @@ module PipelineLogic
   end
 end
 
+def array_average(array)
+  return nil unless array.is_a? Array
+  return nil if array.empty?
+
+  array.sum / array.size.to_f
+end
+
+def array_median(array)
+  return nil unless array.is_a? Array
+  return nil if array.empty?
+
+  sorted = array.sort
+  mid = (sorted.length - 1) / 2.0
+  (sorted[mid.floor] + sorted[mid.ceil]) / 2.0
+end
+
 # Monkey patch the .median method
 class ActiveRecord::Base
   def self.median(column_name)

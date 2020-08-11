@@ -18,4 +18,31 @@
 #   stakeholders = -1, 6% = -2
 class ValidatorScoreV1 < ApplicationRecord
   belongs_to :validator
+
+  serialize :root_distance_history, JSON
+  serialize :vote_distance_history, JSON
+  serialize :skipped_slot_history, JSON
+  serialize :skipped_after_history, JSON
+
+  def avg_root_distance_history
+    array_average(root_distance_history)
+  end
+
+  def avg_vote_distance_history
+    array_average(vote_distance_history)
+  end
+
+  def root_distance_history_push(val)
+    self.root_distance_history = [] if root_distance_history.nil?
+
+    root_distance_history << val
+    # TODO: Prune array records. Keep the NNNN most recent
+  end
+
+  def vote_distance_history_push(val)
+    self.vote_distance_history = [] if vote_distance_history.nil?
+
+    vote_distance_history << val
+    # TODO: Prune array records. Keep the NNNN most recent
+  end
 end

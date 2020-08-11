@@ -4,6 +4,7 @@ class CreateValidatorScoreV1s < ActiveRecord::Migration[6.0]
   def change
     create_table :validator_score_v1s do |t|
       t.references :validator
+      t.integer :total_score
       t.text :root_distance_history
       t.integer :root_distance_score
       t.text :vote_distance_history
@@ -14,10 +15,10 @@ class CreateValidatorScoreV1s < ActiveRecord::Migration[6.0]
       t.integer :skipped_after_score
       t.string :software_version
       t.integer :software_version_score
-      t.bigint :active_stake
-      t.integer :active_stake_score
+      t.bigint :stake_concentration
+      t.integer :stake_concentration_score
       t.integer :data_center_concentration
-      t.integer :data_center_score
+      t.integer :data_center_concentration_score
       t.timestamps
     end
   end
