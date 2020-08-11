@@ -19,6 +19,12 @@ class CreateValidatorScoreV1s < ActiveRecord::Migration[6.0]
       t.integer :stake_concentration_score
       t.integer :data_center_concentration
       t.integer :data_center_concentration_score
+      # Other data that is not included in a score, but will be helpful to
+      # delegators
+      t.bigint :active_stake, unsigned: true
+      t.integer :commission
+      t.decimal :ping_time_avg
+      t.boolean :delinquent
       t.timestamps
     end
   end

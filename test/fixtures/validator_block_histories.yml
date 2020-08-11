@@ -1,6 +1,7 @@
 one:
   id: 1
-  batch_uuid: 1
+  network: testnet
+  batch_uuid: '1234'
   validator_id: 1
   epoch: 1
   leader_slots: 100

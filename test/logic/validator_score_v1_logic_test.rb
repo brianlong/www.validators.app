@@ -72,12 +72,83 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .vote_distance_score
   end
 
+  test 'block_history_get' do
+    p = Pipeline.new(200, @initial_payload)
+                .then(&set_this_batch)
+                .then(&validators_get)
+                .then(&block_vote_history_get)
+                .then(&assign_block_and_vote_scores)
+                .then(&block_history_get)
+
+    assert_equal 0.1, p.payload[:avg_skipped_slot_pct_all]
+    assert_equal 0.1, p.payload[:med_skipped_slot_pct_all]
+    assert_equal 0.1, p.payload[:avg_skipped_after_pct_all]
+    assert_equal 0.1, p.payload[:med_skipped_after_pct_all]
+    assert_equal [0.1], p.payload[:validators]
+                         .first
+                         .validator_score_v1
+                         .skipped_slot_history
+    assert_equal [0.1], p.payload[:validators]
+                         .first
+                         .validator_score_v1
+                         .skipped_after_history
+  end
+
+  test 'assign_block_history_score' do
+    p = Pipeline.new(200, @initial_payload)
+                .then(&set_this_batch)
+                .then(&validators_get)
+                .then(&block_vote_history_get)
+                .then(&assign_block_and_vote_scores)
+                .then(&block_history_get)
+                .then(&assign_block_history_score)
+
+    assert_equal 0.1, p.payload[:avg_skipped_slot_pct_all]
+    assert_equal 0.1, p.payload[:med_skipped_slot_pct_all]
+    assert_equal 0.1, p.payload[:avg_skipped_after_pct_all]
+    assert_equal 0.1, p.payload[:med_skipped_after_pct_all]
+    assert_equal [0.1], p.payload[:validators]
+                         .first
+                         .validator_score_v1
+                         .skipped_slot_history
+    assert_equal [0.1], p.payload[:validators]
+                         .first
+                         .validator_score_v1
+                         .skipped_after_history
+    assert_equal 2, p.payload[:validators]
+                     .first
+                     .validator_score_v1
+                     .skipped_slot_score
+    assert_equal 2, p.payload[:validators]
+                     .first
+                     .validator_score_v1
+                     .skipped_after_score
+  end
+
+  test 'asign_software_version_score' do
+    p = Pipeline.new(200, @initial_payload)
+                .then(&set_this_batch)
+                .then(&validators_get)
+                .then(&block_vote_history_get)
+                .then(&assign_block_and_vote_scores)
+                .then(&block_history_get)
+                .then(&assign_block_history_score)
+                .then(&assign_software_version_score)
+    assert_equal 0, p.payload[:validators]
+                     .first
+                     .validator_score_v1
+                     .software_version_score
+  end
+
   test 'save_validators' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&block_vote_history_get)
                 .then(&assign_block_and_vote_scores)
+                .then(&block_history_get)
+                .then(&assign_block_history_score)
+                .then(&assign_software_version_score)
                 .then(&save_validators)
     # byebug
     assert_equal 2, p.payload[:validators]
@@ -85,5 +156,6 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .validator_score_v1
                      .root_distance_score
     assert_equal 2, Validator.first.validator_score_v1.root_distance_score
+    assert_equal 2, Validator.first.validator_score_v1.skipped_slot_score
   end
 end

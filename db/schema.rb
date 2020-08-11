@@ -232,6 +232,7 @@ ActiveRecord::Schema.define(version: 2020_08_10_200009) do
 
   create_table "validator_score_v1s", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "validator_id"
+    t.integer "total_score"
     t.text "root_distance_history"
     t.integer "root_distance_score"
     t.text "vote_distance_history"
@@ -242,10 +243,10 @@ ActiveRecord::Schema.define(version: 2020_08_10_200009) do
     t.integer "skipped_after_score"
     t.string "software_version"
     t.integer "software_version_score"
-    t.bigint "active_stake"
-    t.integer "active_stake_score"
+    t.bigint "stake_concentration"
+    t.integer "stake_concentration_score"
     t.integer "data_center_concentration"
-    t.integer "data_center_score"
+    t.integer "data_center_concentration_score"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
