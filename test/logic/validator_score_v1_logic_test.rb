@@ -140,6 +140,26 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .software_version_score
   end
 
+  test 'get_ping_times' do
+    p = Pipeline.new(200, @initial_payload)
+                .then(&set_this_batch)
+                .then(&validators_get)
+                .then(&block_vote_history_get)
+                .then(&assign_block_and_vote_scores)
+                .then(&block_history_get)
+                .then(&assign_block_history_score)
+                .then(&assign_software_version_score)
+                .then(&get_ping_times)
+                .then(&save_validators)
+    assert_equal 75.0, p.payload[:validators]
+                        .first
+                        .validator_score_v1
+                        .ping_time_avg
+    assert_equal 75.0, Validator.first
+                                .validator_score_v1
+                                .ping_time_avg
+  end
+
   test 'save_validators' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)

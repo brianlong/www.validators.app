@@ -40,7 +40,7 @@ module ValidatorScoreV1Logic
 
       Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, 'Error from validators_get', e)
     end
   end
 
@@ -84,7 +84,7 @@ module ValidatorScoreV1Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, 'Error from block_vote_history_get', e)
     end
   end
 
@@ -137,7 +137,7 @@ module ValidatorScoreV1Logic
                           vote_distance_all_median: vote_distance_all_median
                         ))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, 'Error from assign_block_and_vote_scores', e)
     end
   end
 
@@ -194,7 +194,7 @@ module ValidatorScoreV1Logic
         )
       )
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, 'Error from block_history_get', e)
     end
   end
 
@@ -233,7 +233,7 @@ module ValidatorScoreV1Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
     end
   end
 
@@ -254,7 +254,7 @@ module ValidatorScoreV1Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, 'Error from assign_software_version_score', e)
     end
   end
 
@@ -263,27 +263,13 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       p.payload[:validators].each do |validator|
-        # Ping Times Trailing 100 pings stats.
-        # Do not use ActiveRecord to calculate the averages! Horrible
-        # performance
-        account_ping_times = PingTime.where(
-          network: p.payload[:network],
-          to_account: validator.account
-        ).order('created_at desc').limit(100)
-
-        account_avg_ms = account_ping_times.map { |pt| pt.avg_ms.to_f.round(2) }
-
         validator.validator_score_v1.ping_time_avg = \
-          if account_avg_ms.empty?
-            nil
-          else
-            account_avg_ms.sum / account_avg_ms.size.to_f
-          end
+          validator.ping_times_to_avg
       end
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, 'Error from get_ping_times', e)
     end
   end
 
@@ -300,7 +286,7 @@ module ValidatorScoreV1Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, 'Error from save_validators', e)
     end
   end
 end

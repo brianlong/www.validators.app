@@ -16,4 +16,21 @@ class Validator < ApplicationRecord
       .select('account')
       .map(&:account)
   end
+
+  def ping_times_to(limit = 100)
+    PingTime.where(
+      network: network,
+      to_account: account
+    ).order('created_at desc').limit(limit)
+  end
+
+  def ping_times_to_avg
+    ary = ping_times_to.all.map do |pt|
+      pt.avg_ms.to_f.round(2)
+    end
+
+    return nil if ary.empty?
+
+    ary.sum / ary.length.to_f
+  end
 end

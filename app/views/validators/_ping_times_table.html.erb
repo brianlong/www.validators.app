@@ -19,15 +19,15 @@
       </td>
       <td class='text-right'>
         <%= ping_time.min_ms %><br />
-        <%= ping_stats.overall_min_time %>
+        <%= ping_stats.overall_min_time unless ping_stats.nil? %>
       </td>
       <td class='text-right'>
         <%= ping_time.avg_ms %><br />
-        <%= ping_stats.overall_average_time %>
+        <%= ping_stats.overall_average_time unless ping_stats.nil? %>
       </td>
       <td class='text-right'>
         <%= ping_time.max_ms %><br />
-        <%= ping_stats.overall_max_time %>
+        <%= ping_stats.overall_max_time unless ping_stats.nil? %>
       </td>
       <td class='text-right'>
         <%= ping_time.observed_at %>
