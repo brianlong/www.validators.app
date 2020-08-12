@@ -15,15 +15,15 @@ class CreateValidatorScoreV1s < ActiveRecord::Migration[6.0]
       t.integer :skipped_after_score
       t.string :software_version
       t.integer :software_version_score
-      t.bigint :stake_concentration
+      t.decimal :stake_concentration, precision: 10, scale: 3
       t.integer :stake_concentration_score
-      t.integer :data_center_concentration
+      t.decimal :data_center_concentration, precision: 10, scale: 3
       t.integer :data_center_concentration_score
       # Other data that is not included in a score, but will be helpful to
       # delegators
       t.bigint :active_stake, unsigned: true
       t.integer :commission
-      t.decimal :ping_time_avg
+      t.decimal :ping_time_avg, precision: 10, scale: 3
       t.boolean :delinquent
       t.timestamps
     end

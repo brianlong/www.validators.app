@@ -253,13 +253,13 @@ ActiveRecord::Schema.define(version: 2020_08_10_200009) do
     t.integer "skipped_after_score"
     t.string "software_version"
     t.integer "software_version_score"
-    t.bigint "stake_concentration"
+    t.decimal "stake_concentration", precision: 10, scale: 3
     t.integer "stake_concentration_score"
-    t.integer "data_center_concentration"
+    t.decimal "data_center_concentration", precision: 10, scale: 3
     t.integer "data_center_concentration_score"
     t.bigint "active_stake", unsigned: true
     t.integer "commission"
-    t.decimal "ping_time_avg", precision: 10
+    t.decimal "ping_time_avg", precision: 10, scale: 3
     t.boolean "delinquent"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
