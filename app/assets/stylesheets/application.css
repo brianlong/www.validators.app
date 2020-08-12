@@ -78,6 +78,18 @@ a {
    background-color: #FFFFCC;
  }
 
+  .score-2 {
+    color: green;
+  }
+
+  .score-1 {
+    color: orange;
+  }
+
+  .score-0 {
+    color: red;
+  }
+
  .img-circle {
      border-radius: 50%;
      height: 50px;

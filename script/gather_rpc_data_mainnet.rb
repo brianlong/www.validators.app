@@ -48,12 +48,12 @@ if p.code == 200
     batch_uuid: p.payload[:batch_uuid],
     network: p.payload[:network]
   )
-  FeedZoneWorker.perform_async(
-    network: p.payload[:network],
-    batch_uuid: p.payload[:batch_uuid]
-  )
-  # ValidatorScoreV1Worker.perform_async(
+  # FeedZoneWorker.perform_async(
   #   network: p.payload[:network],
   #   batch_uuid: p.payload[:batch_uuid]
   # )
+  ValidatorScoreV1Worker.perform_async(
+    network: p.payload[:network],
+    batch_uuid: p.payload[:batch_uuid]
+  )
 end

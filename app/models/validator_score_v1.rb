@@ -37,6 +37,10 @@ class ValidatorScoreV1 < ApplicationRecord
                        data_center_concentration_score.to_i
   end
 
+  def delinquent?
+    delinquent == true
+  end
+
   # Evaluate the software version and assign a score
   def assign_software_version_score
     if software_version.blank?

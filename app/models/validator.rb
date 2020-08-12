@@ -33,4 +33,69 @@ class Validator < ApplicationRecord
 
     ary.sum / ary.length.to_f
   end
+
+  # Convenience methods
+  def score
+    validator_score_v1
+  end
+
+  def delinquent?
+    score&.delinquent
+  end
+
+  def commission
+    score&.commission
+  end
+
+  def active_stake
+    score&.active_stake || 0
+  end
+
+  def software_version
+    score&.software_version
+  end
+
+  def tower_blocks_behind_leader
+    score&.root_distance_history&.last
+  end
+
+  def root_distance_score
+    score&.root_distance_score
+  end
+
+  def tower_votes_behind_leader
+    score&.vote_distance_history&.last
+  end
+
+  def vote_distance_score
+    score&.vote_distance_score
+  end
+
+  def skipped_slot_percent
+    score&.skipped_slot_history&.last
+  end
+
+  def skipped_slot_score
+    score&.skipped_slot_score
+  end
+
+  def skipped_after_percent
+    score&.skipped_after_history&.last
+  end
+
+  def skipped_after_score
+    score&.skipped_after_score
+  end
+
+  def ping_time_avg
+    score&.ping_time_avg
+  end
+
+  def software_version_score
+    score&.software_version_score
+  end
+
+  def total_score
+    score&.total_score
+  end
 end
