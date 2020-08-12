@@ -71,6 +71,9 @@ module ValidatorScoreV1Logic
         if vh
           root_distance = highest_root - vh.root_block.to_i
           vote_distance = highest_vote - vh.last_vote.to_i
+          validator.validator_score_v1.commission = vh.commission
+          validator.validator_score_v1.delinquent = vh.delinquent
+          validator.validator_score_v1.active_stake = vh.active_stake
         else
           root_distance = highest_root
           vote_distance = highest_vote
@@ -201,13 +204,15 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |validator|
         skipped_slot_percent = \
-          validator.validator_score_v1.skipped_slot_history.last
+          validator&.validator_score_v1&.skipped_slot_history&.last
         skipped_after_percent = \
-          validator.validator_score_v1.skipped_after_history.last
+          validator&.validator_score_v1&.skipped_after_history&.last
 
         # Assign the scores
         validator.validator_score_v1.skipped_slot_score = \
-          if skipped_slot_percent <= p.payload[:med_skipped_slot_pct_all]
+          if skipped_slot_percent.nil?
+            0
+          elsif skipped_slot_percent <= p.payload[:med_skipped_slot_pct_all]
             2
           elsif skipped_slot_percent <= p.payload[:avg_skipped_slot_pct_all]
             1
@@ -215,9 +220,11 @@ module ValidatorScoreV1Logic
             0
           end
         validator.validator_score_v1.skipped_after_score = \
-          if skipped_slot_percent <= p.payload[:med_skipped_after_pct_all]
+          if skipped_after_percent.nil?
+            0
+          elsif skipped_after_percent <= p.payload[:med_skipped_after_pct_all]
             2
-          elsif skipped_slot_percent <= p.payload[:avg_skipped_after_pct_all]
+          elsif skipped_after_percent <= p.payload[:avg_skipped_after_pct_all]
             1
           else
             0
@@ -251,14 +258,43 @@ module ValidatorScoreV1Logic
     end
   end
 
+  def get_ping_times
+    lambda do |p|
+      return p unless p.code == 200
+
+      p.payload[:validators].each do |validator|
+        # Ping Times Trailing 100 pings stats.
+        # Do not use ActiveRecord to calculate the averages! Horrible
+        # performance
+        account_ping_times = PingTime.where(
+          network: p.payload[:network],
+          to_account: validator.account
+        ).order('created_at desc').limit(100)
+
+        account_avg_ms = account_ping_times.map { |pt| pt.avg_ms.to_f.round(2) }
+
+        validator.validator_score_v1.ping_time_avg = \
+          if account_avg_ms.empty?
+            nil
+          else
+            account_avg_ms.sum / account_avg_ms.size.to_f
+          end
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+    end
+  end
+
   def save_validators
     lambda do |p|
       return p unless p.code == 200
 
       ActiveRecord::Base.transaction do
         p.payload[:validators].each do |validator|
-          validator.save
-          validator.validator_score_v1.save
+          validator.save!
+          validator.validator_score_v1.save!
         end
       end
 

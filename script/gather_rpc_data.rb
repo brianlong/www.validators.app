@@ -24,6 +24,7 @@ p = Pipeline.new(200, payload)
             .then(&validator_block_history_save)
             .then(&log_errors)
             .then(&batch_touch)
+puts p.payload[:batch_uuid]
 
 if p.code == 200
   BuildSkippedSlotPercentWorker.perform_async(

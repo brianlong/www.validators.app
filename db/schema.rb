@@ -139,6 +139,16 @@ ActiveRecord::Schema.define(version: 2020_08_10_200009) do
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
   end
 
+  create_table "spark_lines", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "network"
+    t.string "spark_group"
+    t.string "batch_uuid"
+    t.text "payload", size: :long
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "spark_group", "batch_uuid"], name: "index_spark_lines_on_network_and_spark_group_and_batch_uuid"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "username", null: false
     t.string "encrypted_password", default: "", null: false
@@ -214,7 +224,7 @@ ActiveRecord::Schema.define(version: 2020_08_10_200009) do
     t.bigint "root_block", unsigned: true
     t.bigint "credits", unsigned: true
     t.bigint "active_stake", unsigned: true
-    t.boolean "delinquent"
+    t.boolean "delinquent", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
@@ -247,6 +257,10 @@ ActiveRecord::Schema.define(version: 2020_08_10_200009) do
     t.integer "stake_concentration_score"
     t.integer "data_center_concentration"
     t.integer "data_center_concentration_score"
+    t.bigint "active_stake", unsigned: true
+    t.integer "commission"
+    t.decimal "ping_time_avg", precision: 10
+    t.boolean "delinquent"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"

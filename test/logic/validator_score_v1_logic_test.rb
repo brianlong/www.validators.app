@@ -157,5 +157,6 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .root_distance_score
     assert_equal 2, Validator.first.validator_score_v1.root_distance_score
     assert_equal 2, Validator.first.validator_score_v1.skipped_slot_score
+    assert_equal 2, Validator.first.validator_score_v1.skipped_after_score
   end
 end
