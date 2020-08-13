@@ -110,11 +110,8 @@
                       %>
                       <i class="fas fa-minus-circle <%= score_class %>" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
                     <% end %>
-
-
-
-                    (<%= validator.total_score %>)
                   </small>
+                  (<%= validator.total_score %>)
               </td>
               <td class="score-<%= validator.root_distance_score %> text-right">
                 <%= number_with_delimiter validator.tower_blocks_behind_leader %>
