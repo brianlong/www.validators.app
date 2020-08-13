@@ -13,7 +13,10 @@ class ValidatorsController < ApplicationController
                            .includes(:validator_score_v1)
                            .all
 
-    @total_active_stake = @validators.map { |v| v.active_stake }.sum
+    # @total_active_stake = @validators.map { |v| v.active_stake }.sum
+    @total_active_stake = Validator.where(network: params[:network])
+                                   .joins(:validator_score_v1)
+                                   .sum(:active_stake)
 
     @software_versions = Report.where(
       network: params[:network],
@@ -53,8 +56,8 @@ class ValidatorsController < ApplicationController
         params[:network],
         @batch.uuid
       )
-    ping_batch = PingTime.where(network: params[:network]).last.batch_uuid
-    ping_time_stat = PingTimeStat.where(batch_uuid: ping_batch).last
+    ping_batch = PingTime.where(network: params[:network])&.last&.batch_uuid
+    ping_time_stat = PingTimeStat.where(batch_uuid: ping_batch)&.last
     @ping_time_avg = ping_time_stat&.overall_average_time
 
     # I needed to hack this because we are occassionally receiving errors when
