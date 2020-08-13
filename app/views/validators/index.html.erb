@@ -13,6 +13,8 @@
 <% unless @validators.empty? %>
   <div class="row">
     <div class="col-lg-12">
+      <small>Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %></small>
+
       <table id="validators-table" class='table table-striped'>
         <thead class="thead-dark">
           <tr>
