@@ -1,6 +1,45 @@
 <h1>FAQ</h1>
 <dl>
   <%# Questions that pertain to all visitors %>
-  <dt>How is my Data Protected?</dt>
-  <dd>All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by clicking the lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is stored within our database. The encryption keys for data at rest are not stored on this Web App server.</dd>
+  <dt>How Does the Validator Score V1 Work?</dt>
+  <dd>
+    <p>
+      We are tracking validator performance over several dimensions and assigning a score in the range of [0..2] for each. The scores also correlate with colored icons: <i class="fas fa-circle score-2"></i> is great, <i class="fas fa-circle score-1"></i> is OK, and <i class="fas fa-circle score-0"></i> means there is room for improvement. The scored dimensions are:</p>
+      <ul>
+        <li>
+          <p><strong>Root Block Distance</strong> <small>measures the median & average distance in block height between the validator and the highest block in the tower. Smaller numbers mean that the validator is near the top of the block tower. <i class="fas fa-circle score-2"></i> (2 points) means that the validator median block distance is at, or below, the cluster median. <i class="fas fa-circle score-1"></i> (1 point) means that the validator average block distance is at, or below, the cluster average. <i class="fas fa-circle score-0"></i> (0 points) means that the validator average is higher than the cluster average. The medians and averages are calculated over a trailing 2-day period and do not reset with each epoch.</small></p>
+        </li>
+        <li>
+          <p><strong>Vote Distance</strong> <small>is very similar to the Root Block Distance score above. Lower numbers mean that the node is voting near the front of the group. The scoring rules are the same as Root Block Distance above.</small></p>
+        </li>
+        <li>
+          <p><strong>Skipped Slot &percnt;</strong> <small>measures the percent of time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is producing blocks at a very high rate. <i class="fas fa-circle score-2"></i> (2 points) means that the validator skipped slot &percnt; is at, or below, the cluster median. <i class="fas fa-circle score-1"></i> (1 point) means that the skipped slot &percnt; is at, or below, the cluster average. <i class="fas fa-circle score-0"></i> (0 points) means that the validator average is higher than the cluster average. The medians and averages are calculated over the current epoch and the stats are re-set with each new epoch.</small></p>
+        </li>
+        <li>
+          <p>
+            <strong>Skipped After &percnt;</strong> <small>measures the percent of time that the leader FOLLOWING this node fails to produce a block. A high skipped after &percnt; may indicate that a validator is slow to propagate blocks to the network and, as a result, causes problems for the next leader in line. <i class="fas fa-circle score-2"></i> (2 points) means that the validator skipped after &percnt; is at, or below, the cluster median. <i class="fas fa-circle score-1"></i> (1 point) means that the skipped after &percnt; is at, or below, the cluster average. <i class="fas fa-circle score-0"></i> (0 points) means that the validator average is higher than the cluster average. The medians and averages are calculated over the current epoch and the stats are re-set with each new epoch.</small>
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Software Version</strong> <small>scores are based on the version of the Solana software currently in use on this node. <i class="fas fa-circle score-2"></i> (2 points) means that the validator is using the correct major, minor, & patch versions. <i class="fas fa-circle score-1"></i> (1 point) means that the validator is using the correct major, & minor versions (but not patch). <i class="fas fa-circle score-0"></i> (0 points) means that the validator average is only using the current major version (or less). This score is updated as soon as the validator starts voting with a new software update.</small>
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Stake Concentration</strong> <small>is a contra-score and will DEDUCT points from a validator's total score. <i class="fas fa-minus-circle score-0"></i> (-2 points) means that this validator controls over 6&percnt; of the active stake. <i class="fas fa-minus-circle score-1"></i> (-1 point) means that this validator controls over 3&percnt; of the active stake. Concentration of stake is considered to be a bad thing on a proof-of-stake blockchain. There is no deduction of points, and no icon, if the validator controls less than 3&percnt;. If you are an investor who is delegating stake, please consider high performing nodes without high stake concentrations.</small>
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>Data Center Concentration</strong> <small>COMING SOON -- another contra-score that will DEDUCT points from validators that are located in data centers that also host a high percentage of other Solana validators. A high data center concentration means that a problem with the hosting provider could take a high &percnt; of the nodes offline. If you are an investor who is delegating stake, please consider high performing nodes without high a data center concentration.</small>
+          </p>
+        </li>
+      </ul>
+      <p>
+      The maximum score is currently ten (10) points: <i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>
+    </p>
+  </dd>
+  <dt>How is my Personal Data Protected?</dt>
+  <dd><p>All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by clicking the lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is stored within our database.</p></dd>
 </dl>
