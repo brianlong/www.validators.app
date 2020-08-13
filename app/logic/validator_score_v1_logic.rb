@@ -59,6 +59,10 @@ module ValidatorScoreV1Logic
         p.payload[:network],
         p.payload[:batch_uuid]
       )
+      total_active_stake = ValidatorHistory.total_active_stake_for(
+        p.payload[:network],
+        p.payload[:batch_uuid]
+      )
 
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
@@ -68,21 +72,31 @@ module ValidatorScoreV1Logic
           batch_uuid: p.payload[:batch_uuid],
           account: validator.account
         ).first
+
         if vh
           root_distance = highest_root - vh.root_block.to_i
           vote_distance = highest_vote - vh.last_vote.to_i
-          validator.validator_score_v1.commission = vh.commission
-          validator.validator_score_v1.delinquent = vh.delinquent
-          validator.validator_score_v1.active_stake = vh.active_stake
+          unless vh.commission.nil?
+            validator.validator_score_v1.commission = vh.commission
+          end
+          unless vh.delinquent.nil?
+            validator.validator_score_v1.delinquent = vh.delinquent
+          end
+          unless vh.active_stake.nil?
+            validator.validator_score_v1.active_stake = vh.active_stake
+          end
+          validator.validator_score_v1.stake_concentration = \
+            (vh.active_stake.to_f / total_active_stake.to_f)
         else
           root_distance = highest_root
           vote_distance = highest_vote
         end
+
         validator.validator_score_v1.root_distance_history_push(root_distance)
         validator.validator_score_v1.vote_distance_history_push(vote_distance)
       end
 
-      Pipeline.new(200, p.payload)
+      Pipeline.new(200, p.payload.merge(total_active_stake: total_active_stake))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from block_vote_history_get', e)
     end
@@ -95,6 +109,7 @@ module ValidatorScoreV1Logic
       # get the average & median from the cluster history
       root_distance_all = []
       vote_distance_all = []
+
       p.payload[:validators].each do |v|
         root_distance_all += v.validator_score_v1.root_distance_history
         vote_distance_all += v.validator_score_v1.vote_distance_history
@@ -123,6 +138,16 @@ module ValidatorScoreV1Logic
             2
           elsif avg_vote_distance <= vote_distance_all_average
             1
+          else
+            0
+          end
+
+        # Assign the stake concentration & score
+        v.validator_score_v1.stake_concentration_score = \
+          if v.validator_score_v1.stake_concentration.to_f >= 0.06
+            -2
+          elsif v.validator_score_v1.stake_concentration.to_f >= 0.03
+            -1
           else
             0
           end

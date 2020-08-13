@@ -17,7 +17,12 @@
         <thead class="thead-dark">
           <tr>
             <th>&nbsp;</th>
-            <th>Name (Commission)<br />Active Stake<br />Software (<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</th>
+            <th>
+              Name <small>(Commission)</small><br />
+              Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %> SOL)</small><br />
+              Software <small>(<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</small><br />
+              Scores <small>(total)</small>
+            </th>
             <th class='text-right'>Root Block<br />Distance</th>
             <th class='text-right'>Vote<br />Distance</th>
             <th class='text-right'>Skipped<br />Slot &percnt;</th>
@@ -50,9 +55,12 @@
               Avg: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
             </td>
           </tr>
+          <% i = 0 %>
           <% @validators.each do |validator| %>
+          <% i += 1 %>
             <tr>
               <td>
+                <small><%= i %></small>&nbsp;
                 <span class="avatar">
                   <% if validator.avatar_url %>
                     <%= image_tag validator.avatar_url, class: 'img-circle' %>
@@ -71,14 +79,16 @@
                 %>
                   <%= link_to validator_name, validator_url(network: params[:network], account: validator.account) %>
                   <small>(<%= validator.commission %>%)</small><br />
-                  <small><%= number_with_delimiter lamports_to_sol(validator.active_stake) %></small>
+                  <small>
+                    <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
+                    (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
+                  </small>
                   <br />
                   <small  class="<%= software_color_class(validator.software_version) %>">
                     <%= validator.software_version || 'N/A' %>
                   </small>
                   <br />
                   <small>
-                    Scores:
                     <i class="fas fa-circle score-<%= validator.root_distance_score %>"
                        title="Root Distance Score = <%= validator.root_distance_score %>"></i>&nbsp;
                     <i class="fas fa-circle score-<%= validator.vote_distance_score %>"
@@ -87,8 +97,22 @@
                        title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>&nbsp;
                    <i class="fas fa-circle score-<%= validator.skipped_after_score %>"
                       title="Skipped After Score = <%= validator.skipped_after_score %>"></i>&nbsp;
-                   <i class="fas fa-circle score-<%= validator.skipped_after_score %>"
-                      title="Skipped After Score = <%= validator.skipped_after_score %>"></i>&nbsp;
+                   <i class="fas fa-circle score-<%= validator.software_version_score %>"
+                      title="Software Version Score = <%= validator.software_version_score %>"></i>&nbsp;
+                    <% if validator.stake_concentration_score < 0 %>
+                      <%
+                        score_class = \
+                          if validator.stake_concentration_score == -2
+                            'score-0'
+                          else
+                            'score-1'
+                          end
+                      %>
+                      <i class="fas fa-minus-circle <%= score_class %>" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
+                    <% end %>
+
+
+
                     (<%= validator.total_score %>)
                   </small>
               </td>

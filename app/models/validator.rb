@@ -51,6 +51,14 @@ class Validator < ApplicationRecord
     score&.active_stake || 0
   end
 
+  def stake_concentration
+    score&.stake_concentration || 0.0
+  end
+
+  def stake_concentration_score
+    score&.stake_concentration_score || 0
+  end
+
   def software_version
     score&.software_version
   end

@@ -27,4 +27,8 @@ class ValidatorHistory < ApplicationRecord
   def self.median_last_vote_for(network, batch_uuid)
     where(network: network, batch_uuid: batch_uuid).median(:last_vote)
   end
+
+  def self.total_active_stake_for(network, batch_uuid)
+    where(network: network, batch_uuid: batch_uuid).sum(:active_stake)
+  end
 end

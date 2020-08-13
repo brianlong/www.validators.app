@@ -13,6 +13,8 @@ class ValidatorsController < ApplicationController
                            .includes(:validator_score_v1)
                            .all
 
+    @total_active_stake = @validators.map { |v| v.active_stake }.sum
+
     @software_versions = Report.where(
       network: params[:network],
       name: 'report_software_versions'

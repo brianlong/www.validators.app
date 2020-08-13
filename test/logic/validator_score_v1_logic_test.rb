@@ -37,31 +37,50 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&block_vote_history_get)
-    # byebug
+
     assert_equal 1, p.payload[:validators].count
+    assert_equal 100, p.payload[:total_active_stake]
+
     assert_not_nil p.payload[:validators].first.validator_score_v1
-    assert_equal [1], p.payload[:validators]
+    assert_equal [0], p.payload[:validators]
                        .first
                        .validator_score_v1
                        .root_distance_history
-    assert_equal [1], p.payload[:validators]
+    assert_equal [0], p.payload[:validators]
                        .first
                        .validator_score_v1
                        .vote_distance_history
+    assert_equal 100, p.payload[:validators]
+                       .first
+                       .validator_score_v1
+                       .commission
+    assert_equal 100, p.payload[:validators]
+                       .first
+                       .validator_score_v1
+                       .active_stake
+    assert_equal 1.0, p.payload[:validators]
+                       .first
+                       .validator_score_v1
+                       .stake_concentration
+    refute p.payload[:validators]
+            .first
+            .validator_score_v1
+            .delinquent
   end
 
-  test 'block_vote_score' do
+  test 'assign_block_and_vote_scores' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&block_vote_history_get)
                 .then(&assign_block_and_vote_scores)
-    # byebug
-    assert_equal [1], p.payload[:root_distance_all]
-    assert_equal 1.0, p.payload[:root_distance_all_average]
-    assert_equal 1.0, p.payload[:root_distance_all_median]
-    assert_equal 1.0, p.payload[:vote_distance_all_average]
-    assert_equal 1.0, p.payload[:vote_distance_all_median]
+
+    assert_equal [0], p.payload[:root_distance_all]
+    assert_equal 0.0, p.payload[:root_distance_all_average]
+    assert_equal 0.0, p.payload[:root_distance_all_median]
+    assert_equal 0.0, p.payload[:vote_distance_all_average]
+    assert_equal 0.0, p.payload[:vote_distance_all_median]
+
     assert_equal 2, p.payload[:validators]
                      .first
                      .validator_score_v1
@@ -70,6 +89,10 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .first
                      .validator_score_v1
                      .vote_distance_score
+    assert_equal(-2, p.payload[:validators]
+                      .first
+                      .validator_score_v1
+                      .stake_concentration_score)
   end
 
   test 'block_history_get' do

@@ -24,7 +24,10 @@ p = Pipeline.new(200, payload)
             .then(&validator_block_history_save)
             .then(&log_errors)
             .then(&batch_touch)
-puts p.payload[:batch_uuid]
+
+# puts p.payload[:batch_uuid]
+# puts p.code
+# puts p.errors
 
 if p.code == 200
   BuildSkippedSlotPercentWorker.perform_async(
@@ -57,4 +60,31 @@ if p.code == 200
     network: p.payload[:network],
     batch_uuid: p.payload[:batch_uuid]
   )
+
+  # include ValidatorScoreV1Logic
+  # include PipelineLogic
+  #
+  # score_payload = {
+  #   network: p.payload[:network],
+  #   batch_uuid: p.payload[:batch_uuid]
+  # }
+  #
+  # score = Pipeline.new(200, score_payload)
+  #                 .then(&set_this_batch)
+  #                 .then(&validators_get)
+  #                 .then(&block_vote_history_get)
+  #                 .then(&assign_block_and_vote_scores)
+  #                 .then(&block_history_get)
+  #                 .then(&assign_block_history_score)
+  #                 .then(&assign_software_version_score)
+  #                 .then(&get_ping_times)
+  #                 .then(&save_validators)
+  #                 .then(&log_errors)
+  #
+  # puts score.code
+  # puts score.message
+  # if score.errors
+  #   puts score.errors.message
+  #   puts score.errors.backtrace
+  # end
 end
