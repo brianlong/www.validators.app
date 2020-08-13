@@ -119,9 +119,17 @@ module ValidatorScoreV1Logic
       vote_distance_all_average = array_average(vote_distance_all)
       vote_distance_all_median = array_median(vote_distance_all)
 
+      Rails.logger.warn "#{p.payload[:network]} root_distance_all_average: #{root_distance_all_average}"
+      Rails.logger.warn "#{p.payload[:network]} root_distance_all_median: #{root_distance_all_median}"
+      Rails.logger.warn "#{p.payload[:network]} vote_distance_all_average: #{vote_distance_all_average}"
+      Rails.logger.warn "#{p.payload[:network]} vote_distance_all_median: #{vote_distance_all_median}"
+
       p.payload[:validators].each do |v|
         # Assign the root_distance_score
         avg_root_distance = v.validator_score_v1.avg_root_distance_history
+
+        Rails.logger.warn "#{p.payload[:network]} #{v.account} avg_root_distance: #{avg_root_distance}"
+
         v.validator_score_v1.root_distance_score = \
           if avg_root_distance <= root_distance_all_median
             2
