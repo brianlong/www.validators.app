@@ -67,8 +67,16 @@ class ValidatorScoreV1 < ApplicationRecord
     array_average(root_distance_history)
   end
 
+  def med_root_distance_history
+    array_median(root_distance_history)
+  end
+
   def avg_vote_distance_history
     array_average(vote_distance_history)
+  end
+
+  def med_vote_distance_history
+    array_median(vote_distance_history)
   end
 
   def root_distance_history_push(val)

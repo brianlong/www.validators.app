@@ -3,6 +3,7 @@
 # Logic to compile ValidatorScoreV1
 module ValidatorScoreV1Logic
   include PipelineLogic
+  STAKE_CONCENTRATION_FACTOR = 0.03
 
   # Payload starts with :network & :batch_uuid
   def set_this_batch
@@ -127,11 +128,12 @@ module ValidatorScoreV1Logic
       p.payload[:validators].each do |v|
         # Assign the root_distance_score
         avg_root_distance = v.validator_score_v1.avg_root_distance_history
+        med_root_distance = v.validator_score_v1.med_root_distance_history
 
-        Rails.logger.warn "#{p.payload[:network]} #{v.account} avg_root_distance: #{avg_root_distance}"
+        Rails.logger.warn "#{p.payload[:network]} #{v.account} avg_root_distance: #{avg_root_distance}, med_root_distance: #{med_root_distance}"
 
         v.validator_score_v1.root_distance_score = \
-          if avg_root_distance <= root_distance_all_median
+          if med_root_distance <= root_distance_all_median
             2
           elsif avg_root_distance <= root_distance_all_average
             1
@@ -141,8 +143,10 @@ module ValidatorScoreV1Logic
 
         # Assign the vote distance score
         avg_vote_distance = v.validator_score_v1.avg_vote_distance_history
+        med_vote_distance = v.validator_score_v1.med_vote_distance_history
+
         v.validator_score_v1.vote_distance_score = \
-          if avg_vote_distance <= vote_distance_all_median
+          if med_vote_distance <= vote_distance_all_median
             2
           elsif avg_vote_distance <= vote_distance_all_average
             1
@@ -152,9 +156,9 @@ module ValidatorScoreV1Logic
 
         # Assign the stake concentration & score
         v.validator_score_v1.stake_concentration_score = \
-          if v.validator_score_v1.stake_concentration.to_f >= 0.06
+          if v.validator_score_v1.stake_concentration.to_f >= (STAKE_CONCENTRATION_FACTOR * 2)
             -2
-          elsif v.validator_score_v1.stake_concentration.to_f >= 0.03
+          elsif v.validator_score_v1.stake_concentration.to_f >= STAKE_CONCENTRATION_FACTOR
             -1
           else
             0
