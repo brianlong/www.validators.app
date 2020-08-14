@@ -79,11 +79,11 @@ a {
  }
 
   .score-2 {
-    color: green;
+    color: Green;
   }
 
   .score-1 {
-    color: orange;
+    color: MediumBlue;
   }
 
   .score-0 {
@@ -91,11 +91,11 @@ a {
   }
 
   .score-minus-1 {
-    color: orange;    
+    color: Orange;
   }
 
   .score-minus-2 {
-    color: red;
+    color: OrangeRed;
   }
 
  .img-circle {
