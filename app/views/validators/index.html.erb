@@ -69,6 +69,10 @@
                     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
                   <% end %>
                 </span>
+                <% if validator.delinquent? %>
+                  <br />
+                  <small class="score-minus-2">DELINQUENT</small>
+                <% end %>
                 </td>
                 <td>
                 <%
@@ -104,9 +108,9 @@
                       <%
                         score_class = \
                           if validator.stake_concentration_score == -2
-                            'score-0'
+                            'score-minus-2'
                           else
-                            'score-1'
+                            'score-minus-1'
                           end
                       %>
                       <i class="fas fa-minus-circle <%= score_class %>" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;

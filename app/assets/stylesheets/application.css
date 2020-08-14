@@ -87,6 +87,14 @@ a {
   }
 
   .score-0 {
+    color: grey;
+  }
+
+  .score-minus-1 {
+    color: orange;    
+  }
+
+  .score-minus-2 {
     color: red;
   }
 
