@@ -20,14 +20,20 @@
             <th class="avatar-column">&nbsp;</th>
             <th class="name-column">
               Name <small>(Commission)</small><br />
-              Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %> SOL)</small><br />
+              Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
               Software <small>(<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</small><br />
               Scores <small>(total)</small>
             </th>
-            <th class='text-right'>Root Block<br />Distance</th>
-            <th class='text-right'>Vote<br />Distance</th>
+            <th class='text-right'>
+              Root<br />Distance<br />
+              <small>60-Min Chart</small>
+            </th>
+            <th class='text-right'>
+              Vote<br />Distance<br />
+              <small>60-Min Chart</small>
+            </th>
             <th class='text-right'>Skipped<br />Slot &percnt;</th>
-            <th class='text-right'>Skipped<br />After Slot &percnt;</th>
+            <th class='text-right'>Skipped<br />After &percnt;</th>
             <th class='text-right'>Average<br />Ping Time (ms)</th>
           </tr>
         </thead>
@@ -45,15 +51,15 @@
               <%= number_with_delimiter @tower_highest_vote %>
             </td>
             <td class='text-right'>
-              Med: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0) %><br />
-              Avg: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0) %>
+              Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br />
+              Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
             </td>
             <td class='text-right'>
-              Med: <%= number_to_percentage(@skipped_after_median.to_f * 100.0) %><br />
-              Avg: <%= number_to_percentage(@skipped_after_average.to_f * 100.0) %>
+              Md: <%= number_to_percentage(@skipped_after_median.to_f * 100.0, precision: 1) %><br />
+              Av: <%= number_to_percentage(@skipped_after_average.to_f * 100.0, precision: 1) %>
             </td>
             <td class='text-right'>
-              Avg: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
+              Av: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
             </td>
           </tr>
           <% i = 0 %>
@@ -173,21 +179,38 @@
                 <script><%= vote_vector %></script>
               </td>
 
-              <td class="score-<%= validator.skipped_slot_score %> text-right">
-                <%=
-                  if validator.skipped_slot_percent.nil?
-                    'N/A'
-                  else
-                    number_to_percentage(validator.skipped_slot_percent.to_f * 100.0)
-                  end
+              <!-- SKIPPED SLOTS  -->
+              <td class="spark-line text-right">
+                <%
+                    vl = \
+                      if validator.score&.skipped_slot_history.to_a.count < 60
+                        validator.score&.skipped_slot_history.to_a.count
+                      else
+                        60
+                      end
+                    line_color = if validator.skipped_slot_score == 2
+                        'Green'
+                      elsif validator.skipped_slot_score == 1
+                        'MediumBlue'
+                      else
+                        'grey'
+                      end
+                    slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| v.to_f*100.0}
                  %>
+
+                <%= render 'spark_line_skipped_slots',
+                        account: validator.account,
+                        vector: slot_vector,
+                        line_color: line_color
+                %>
+                <script><%= slot_vector %></script>
               </td>
               <td class="score-<%= validator.skipped_after_score %> text-right">
                 <%=
                   if validator.skipped_after_percent.nil?
                     'N/A'
                   else
-                    number_to_percentage(validator.skipped_after_percent.to_f * 100.0)
+                    number_to_percentage(validator.skipped_after_percent.to_f * 100.0, precision: 1)
                   end
                 %>
               </td>

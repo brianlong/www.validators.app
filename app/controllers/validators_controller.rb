@@ -24,6 +24,7 @@ class ValidatorsController < ApplicationController
     ).last
 
     @batch = Batch.where(network: params[:network]).last
+
     @this_epoch = EpochHistory.where(
       network: params[:network],
       batch_uuid: @batch.uuid
