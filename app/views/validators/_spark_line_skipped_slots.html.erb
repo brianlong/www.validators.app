@@ -27,9 +27,11 @@
 
     // Configuration options go here
     options: {
-      legend: {
-        display: false
-      },
+      animation: { duration: 0 }, // general animation time
+      elements: { line: { tension: 0 } }, // disables bezier curves
+      hover: { animationDuration: 0 }, // duration of animations when hovering
+      responsiveAnimationDuration: 0, // animation duration after a resize
+      legend: { display: false },
       scales: {
 				xAxes: [{
 					display: true,
