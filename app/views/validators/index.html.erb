@@ -32,7 +32,10 @@
               Vote<br />Distance<br />
               <small>60-Min Chart</small>
             </th>
-            <th class='text-right'>Skipped<br />Slot &percnt;</th>
+            <th class='text-right'>
+              Skipped<br />Slot &percnt;<br />
+              <small>60-Min Chart</small>
+            </th>
             <th class='text-right'>Skipped<br />After &percnt;</th>
             <th class='text-right'>Average<br />Ping Time (ms)</th>
           </tr>
@@ -139,7 +142,7 @@
                       elsif validator.root_distance_score == 1
                         'MediumBlue'
                       else
-                        'grey'
+                        'DimGray'
                       end
                     vector = validator.score&.root_distance_history[-vl..-1]
                  %>
@@ -166,7 +169,7 @@
                       elsif validator.vote_distance_score == 1
                         'MediumBlue'
                       else
-                        'grey'
+                        'DimGray'
                       end
                     vote_vector = validator.score&.vote_distance_history[-vl..-1]
                  %>
@@ -193,7 +196,7 @@
                       elsif validator.skipped_slot_score == 1
                         'MediumBlue'
                       else
-                        'grey'
+                        'DimGray'
                       end
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| v.to_f*100.0}
                  %>
