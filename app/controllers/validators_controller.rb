@@ -8,26 +8,71 @@ class ValidatorsController < ApplicationController
   # GET /validators.json
   def index
     @validators = Validator.where(network: params[:network])
-                           .order('network, account')
+                           .joins(:validator_score_v1)
+                           .order('validator_score_v1s.active_stake desc')
                            .all
+    # .includes(:validator_score_v1)
+
+    # @total_active_stake = @validators.map { |v| v.active_stake }.sum
+    @total_active_stake = Validator.where(network: params[:network])
+                                   .joins(:validator_score_v1)
+                                   .sum(:active_stake)
+
     @software_versions = Report.where(
       network: params[:network],
       name: 'report_software_versions'
     ).last
 
+    @batch = Batch.where(network: params[:network]).last
+    @this_epoch = EpochHistory.where(
+      network: params[:network],
+      batch_uuid: @batch.uuid
+    ).first
+    @tower_highest_block = ValidatorHistory.highest_root_block_for(
+      params[:network],
+      @batch.uuid
+    )
+    @tower_highest_vote = ValidatorHistory.highest_last_vote_for(
+      params[:network],
+      @batch.uuid
+    )
+    @skipped_slot_average = \
+      ValidatorBlockHistory.average_skipped_slot_percent_for(
+        params[:network],
+        @batch.uuid
+      )
+    @skipped_slot_median = \
+      ValidatorBlockHistory.median_skipped_slot_percent_for(
+        params[:network],
+        @batch.uuid
+      )
+    @skipped_after_average = \
+      ValidatorBlockHistory.average_skipped_slots_after_percent_for(
+        params[:network],
+        @batch.uuid
+      )
+    @skipped_after_median = \
+      ValidatorBlockHistory.median_skipped_slots_after_percent_for(
+        params[:network],
+        @batch.uuid
+      )
+    ping_batch = PingTime.where(network: params[:network])&.last&.batch_uuid
+    ping_time_stat = PingTimeStat.where(batch_uuid: ping_batch)&.last
+    @ping_time_avg = ping_time_stat&.overall_average_time
+
     # I needed to hack this because we are occassionally receiving errors when
     # building the FeedZone and the payload = []. I am grabbing some of the most
     # recent records for the network and returning the last good record.
-    FeedZone.where(
-      ['network = ?', params[:network]]
-    ).order('batch_created_at desc').limit(10).each do |fz|
-      next if fz.payload.nil?
-      next if fz.payload_version.nil?
-      next if fz.payload == []
-
-      @feed_zone = fz
-      return
-    end
+    # FeedZone.where(
+    #   ['network = ?', params[:network]]
+    # ).order('batch_created_at desc').limit(10).each do |fz|
+    #   next if fz.payload.nil?
+    #   next if fz.payload_version.nil?
+    #   next if fz.payload == []
+    #
+    #   @feed_zone = fz
+    #   return
+    # end
   end
 
   # GET /validators/1

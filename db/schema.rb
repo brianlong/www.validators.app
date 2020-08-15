@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_01_181559) do
+ActiveRecord::Schema.define(version: 2020_08_10_200009) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -139,6 +139,16 @@ ActiveRecord::Schema.define(version: 2020_08_01_181559) do
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
   end
 
+  create_table "spark_lines", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "network"
+    t.string "spark_group"
+    t.string "batch_uuid"
+    t.text "payload", size: :long
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "spark_group", "batch_uuid"], name: "index_spark_lines_on_network_and_spark_group_and_batch_uuid"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "username", null: false
     t.string "encrypted_password", default: "", null: false
@@ -214,7 +224,7 @@ ActiveRecord::Schema.define(version: 2020_08_01_181559) do
     t.bigint "root_block", unsigned: true
     t.bigint "credits", unsigned: true
     t.bigint "active_stake", unsigned: true
-    t.boolean "delinquent"
+    t.boolean "delinquent", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
@@ -228,6 +238,32 @@ ActiveRecord::Schema.define(version: 2020_08_01_181559) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
     t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
+  end
+
+  create_table "validator_score_v1s", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "validator_id"
+    t.integer "total_score"
+    t.text "root_distance_history"
+    t.integer "root_distance_score"
+    t.text "vote_distance_history"
+    t.integer "vote_distance_score"
+    t.text "skipped_slot_history"
+    t.integer "skipped_slot_score"
+    t.text "skipped_after_history"
+    t.integer "skipped_after_score"
+    t.string "software_version"
+    t.integer "software_version_score"
+    t.decimal "stake_concentration", precision: 10, scale: 3
+    t.integer "stake_concentration_score"
+    t.decimal "data_center_concentration", precision: 10, scale: 3
+    t.integer "data_center_concentration_score"
+    t.bigint "active_stake", unsigned: true
+    t.integer "commission"
+    t.decimal "ping_time_avg", precision: 10, scale: 3
+    t.boolean "delinquent"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
 
   create_table "validators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

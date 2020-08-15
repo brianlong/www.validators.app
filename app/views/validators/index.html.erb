@@ -1,23 +1,29 @@
 <p id="notice"><%= notice %></p>
-<!--
-  {"network":"mainnet","epoch":54,"batch_uuid":"d15cc021-8200-4b29-82a2-43a1ff333247","batch_created_at":"2020-07-20T00:22:05.004Z","previous_batch_uuid":"a362c907-1382-421a-991a-aec47e9468f5","validator_account":"GdnSyH3YtwcxFvQrVVJMm1JhTS4QVX7MFsX56uJLUfiZ","validator_delinquent":false,"validator_vote_account":"sCtiJieP8B3SwYnXemiLpRFRR8KJLMtsMVN25fAFWjW","validator_commission":100,"validator_last_vote":23551929,"validator_root_block":23551898,"validator_credits":21606796,"validator_active_stake":11476617084384080,"tower_highest_block":23551899,"tower_cluster_median_behind_leader":1,"tower_cluster_average_behind_leader":"468218.3309","tower_blocks_behind_leader":1,"tower_highest_vote":23551930,"tower_cluster_median_vote_behind_leader":1,"tower_cluster_average_vote_behind_leader":"468218.0956","tower_votes_behind_leader":1,"validator_epoch_leader_slots":19440,"validator_epoch_blocks_produced":19265,"validator_epoch_skipped_slots":175,"validator_epoch_skipped_slot_percent":0.009,"validator_epoch_skipped_slots_after":478,"validator_epoch_skipped_slots_after_percent":0.0246,"cluster_epoch_skipped_slot_percent_average":0.009,"cluster_epoch_skipped_slot_percent_median":0.009,"validator_batch_leader_slots":276,"validator_batch_blocks_produced":274,"validator_batch_skipped_slots":2,"validator_batch_skipped_slot_percent":0.007246376811594203,"validator_batch_skipped_slots_after":28,"validator_batch_skipped_slots_after_percent":0.10144927536231885,"software_version":"1.1.19 e651209f","cluster_epoch_start_slot":23328000,"cluster_epoch_end_slot":23551916,"cluster_epoch_total_slots":223917,"cluster_epoch_total_blocks_produced":215701,"cluster_epoch_total_slots_skipped":8216,"cluster_epoch_skipped_slot_percent":0.03669216718694873,"ping_times_min_ms":null,"ping_times_avg_ms":null,"ping_times_max_ms":null,"ping_times_cluster_average_ms":null}
--->
 <h1><%= params[:network].capitalize%> Validators</h1>
 <div class="row">
   <div class="col-lg-12">
     <p>
-      Color Legend: Green = above the median; Yellow = between the median and average; Red = below average. Ping 'N/A' means the node is not responding to ping/ICMP. (Stats not available if the validator has not taken a turn as leader).
+      Meet the validators who power Solana, the world's fastest blockchain! The table below show each validator by name and includes some recent statistics for each. You will also see color-coded validator scores (beta) to help you assess the relative performance of each node. See our <%= link_to 'FAQ', faq_url, target: '_blank' %> to learn how the scores are calculated. <small>(You can also hover your mouse over the circular score icons below for a short description.)</small>
     </p>
+    <p>Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!</p>
   </div>
 </div>
-<% if @feed_zone %>
+<% unless @validators.empty? %>
   <div class="row">
     <div class="col-lg-12">
+      <small>
+        Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %>
+      </small>
       <table id="validators-table" class='table table-striped'>
         <thead class="thead-dark">
           <tr>
             <th>&nbsp;</th>
-            <th>Name (Commission)<br />Active Stake<br />Software (<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</th>
+            <th>
+              Name <small>(Commission)</small><br />
+              Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %> SOL)</small><br />
+              Software <small>(<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</small><br />
+              Scores <small>(total)</small>
+            </th>
             <th class='text-right'>Root Block<br />Distance</th>
             <th class='text-right'>Vote<br />Distance</th>
             <th class='text-right'>Skipped<br />Slot &percnt;</th>
@@ -28,134 +34,132 @@
 
         <tbody>
           <tr>
-            <% fz_first = @feed_zone.payload.first %>
             <td colspan="2">
               Cluster Height/Stats:<br />
-              Epoch: <%= fz_first['epoch'] %>
-            </td>
-            <td class='text-right'><%= number_with_delimiter fz_first['tower_highest_block'] %></td>
-            <td class='text-right'><%= number_with_delimiter fz_first['tower_highest_vote'] %></td>
-            <td class='text-right'>
-              Med: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent_median'].to_f * 100.0) %><br />
-              Avg: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent'].to_f * 100.0) %>
+              Epoch: <%= @this_epoch.epoch %>
             </td>
             <td class='text-right'>
-              Med: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent_median'].to_f * 100.0) %><br />
-              Avg: <%= number_to_percentage(fz_first['cluster_epoch_skipped_slot_percent'].to_f * 100.0) %>
+              <%= number_with_delimiter @tower_highest_block %>
             </td>
             <td class='text-right'>
-              Avg: <%= fz_first['ping_times_cluster_average_ms'].nil? ? 'N/A' : fz_first['ping_times_cluster_average_ms'].to_f.round(1)  %>
+              <%= number_with_delimiter @tower_highest_vote %>
+            </td>
+            <td class='text-right'>
+              Med: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0) %><br />
+              Avg: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0) %>
+            </td>
+            <td class='text-right'>
+              Med: <%= number_to_percentage(@skipped_after_median.to_f * 100.0) %><br />
+              Avg: <%= number_to_percentage(@skipped_after_average.to_f * 100.0) %>
+            </td>
+            <td class='text-right'>
+              Avg: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
             </td>
           </tr>
-          <% @feed_zone.payload.each do |fz| %>
+          <% i = 0 %>
+          <% @validators.each do |validator| %>
+          <% i += 1 %>
             <tr>
-              <td class="<%= 'bg-red' if fz['validator_delinquent'] == true %>">
+              <td>
+                <small><%= i %></small>&nbsp;
                 <span class="avatar">
-                  <% if fz['validator_avatar_url'] %>
-                    <%= image_tag fz['validator_avatar_url'], class: 'img-circle' %>
+                  <% if validator.avatar_url %>
+                    <%= image_tag validator.avatar_url, class: 'img-circle' %>
                   <% else %>
                     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
                   <% end %>
                 </span>
+                <% if validator.delinquent? %>
+                  <br />
+                  <small class="score-minus-2">DELINQUENT</small>
+                <% end %>
                 </td>
-                <td class="<%= 'bg-red' if fz['validator_delinquent'] == true %>">
+                <td>
                 <%
-                  validator_name = if fz['validator_name']
-                    fz['validator_name']
+                  validator_name = if validator.name
+                    validator.name
                   else
-                    shorten_key(fz['validator_account'])
+                    shorten_key(validator.account)
                   end
                 %>
-                  <%= link_to validator_name, validator_url(network: params[:network], account: fz['validator_account']) %>
-                  <small>(<%= fz['validator_commission'] %>%)</small><br />
-                  <small><%= number_with_delimiter lamports_to_sol(fz['validator_active_stake']) %></small>
-                  <br />
-                  <small  class="<%= software_color_class(fz['software_version']) %>">
-                    <%= fz['software_version'] || 'N/A' %>
+                  <%= link_to validator_name, validator_url(network: params[:network], account: validator.account) %>
+                  <small>(<%= validator.commission %>%)</small><br />
+                  <small>
+                    <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
+                    (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
                   </small>
-
+                  <br />
+                  <small  class="<%= software_color_class(validator.software_version) %>">
+                    <%= validator.software_version || 'N/A' %>
+                  </small>
+                  <br />
+                  <small>
+                    <i class="fas fa-circle score-<%= validator.root_distance_score %>"
+                       title="Root Distance Score = <%= validator.root_distance_score %>"></i>&nbsp;
+                    <i class="fas fa-circle score-<%= validator.vote_distance_score %>"
+                       title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>&nbsp;
+                    <i class="fas fa-circle score-<%= validator.skipped_slot_score %>"
+                       title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>&nbsp;
+                   <i class="fas fa-circle score-<%= validator.skipped_after_score %>"
+                      title="Skipped After Score = <%= validator.skipped_after_score %>"></i>&nbsp;
+                   <i class="fas fa-circle score-<%= validator.software_version_score %>"
+                      title="Software Version Score = <%= validator.software_version_score %>"></i>&nbsp;
+                    <% if validator.stake_concentration_score < 0 %>
+                      <%
+                        score_class = \
+                          if validator.stake_concentration_score == -2
+                            'score-minus-2'
+                          else
+                            'score-minus-1'
+                          end
+                      %>
+                      <i class="fas fa-minus-circle <%= score_class %>" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
+                    <% end %>
+                  </small>
+                  (<%= validator.total_score %>)
               </td>
-
-              <%
-                # Calculate the backgroud color
-                tower_background = if fz['tower_blocks_behind_leader'].to_i <= fz['tower_cluster_median_behind_leader'].to_i
-                  'bg-green'
-                elsif (fz['tower_blocks_behind_leader'].to_i > fz['tower_cluster_median_behind_leader'].to_i) && (fz['tower_blocks_behind_leader'].to_i < fz['tower_cluster_average_behind_leader'].to_i)
-                    'bg-yellow'
-                  else
-                    'bg-red'
-                  end
-               %>
-              <td class="<%= tower_background %> text-right">
-                <%= fz['tower_blocks_behind_leader'] %>
+              <td class="score-<%= validator.root_distance_score %> text-right">
+                <%= number_with_delimiter validator.tower_blocks_behind_leader %>
               </td>
-              <%
-              # Calculate the backgroud color
-              vote_background = if fz['tower_votes_behind_leader'].to_i <= fz['tower_cluster_median_vote_behind_leader'].to_i
-                'bg-green'
-              elsif (fz['tower_votes_behind_leader'].to_i > fz['tower_cluster_median_vote_behind_leader'].to_i) && (fz['tower_votes_behind_leader'].to_i < fz['tower_cluster_average_vote_behind_leader'].to_i)
-                  'bg-yellow'
-                else
-                  'bg-red'
-                end
-               %>
-              <td class="<%= vote_background %> text-right">
-                <%= fz['tower_votes_behind_leader'] %>
+              <td class="score-<%= validator.vote_distance_score %> text-right">
+                <%= number_with_delimiter validator.tower_votes_behind_leader %>
               </td>
-
-              <%
-                # Calculate the backgroud color
-                skipped_background = if
-                  fz['validator_epoch_skipped_slot_percent'].to_f <= fz['cluster_epoch_skipped_slot_percent_median'].to_f
-                    'bg-green'
-                elsif
-                  fz['validator_epoch_skipped_slot_percent'].to_f > fz['cluster_epoch_skipped_slot_percent'].to_f
-                  'bg-red'
-                else
-                  'bg-yellow'
-                end
-               %>
-
-              <td class="<%= skipped_background %> text-right">
+              <td class="score-<%= validator.skipped_slot_score %> text-right">
                 <%=
-                  number_to_percentage(fz['validator_epoch_skipped_slot_percent'].to_f * 100.0)
+                  if validator.skipped_slot_percent.nil?
+                    'N/A'
+                  else
+                    number_to_percentage(validator.skipped_slot_percent.to_f * 100.0)
+                  end
                  %>
               </td>
-
-              <%
-                after_bg_color = if
-                  fz['validator_epoch_skipped_slots_after_percent'].to_f <= fz['cluster_epoch_skipped_slot_percent_median'].to_f
-                    'bg-green'
-                elsif
-                  fz['validator_epoch_skipped_slots_after_percent'].to_f > fz['cluster_epoch_skipped_slot_percent'].to_f
-                  'bg-red'
-                else
-                  'bg-yellow'
-                end
-               %>
-              <td class="<%= after_bg_color %> text-right">
+              <td class="score-<%= validator.skipped_after_score %> text-right">
                 <%=
-                  number_to_percentage(fz['validator_epoch_skipped_slots_after_percent'].to_f * 100.0)
+                  if validator.skipped_after_percent.nil?
+                    'N/A'
+                  else
+                    number_to_percentage(validator.skipped_after_percent.to_f * 100.0)
+                  end
                 %>
               </td>
 
               <%
-                ping_bg_color = if fz['ping_times_avg_ms'].nil?
-                  'bg-red'
-                elsif fz['ping_times_avg_ms'].to_f <= fz['ping_times_cluster_average_ms'].to_f
-                  'bg-green'
+                ping_color = if validator.ping_time_avg.nil?
+                  'score-0'
+                elsif validator.ping_time_avg.to_f <= @ping_time_avg.to_f
+                  'score-2'
                 else
-                  'bg-yellow'
+                  'score-1'
                 end
                %>
-              <td class="<%= ping_bg_color %> text-right">
-                <%= fz['ping_times_avg_ms'].nil? ? 'N/A' : fz['ping_times_avg_ms'].to_f.round(1)  %>
+              <td class="<%= ping_color %> text-right">
+                <%= validator.ping_time_avg.nil? ? 'N/A' : validator.ping_time_avg.to_f.round(1)  %>
               </td>
             </tr>
           <% end %>
         </tbody>
       </table>
-      <small>Data updated at <%= @feed_zone.batch_created_at %> in batch <%= @feed_zone.batch_uuid %></small>
+      <small>Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %></small>
     </div>
   </div>
 <% end %>

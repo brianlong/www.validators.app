@@ -110,6 +110,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
         headers: { 'Token' => @user.api_token }
     assert_response 200
     json = response_to_json(@response.body)
-    assert_equal [], json
+    assert_equal 3, json.count
   end
 end

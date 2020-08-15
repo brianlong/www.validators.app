@@ -1,7 +1,7 @@
 one:
   network: testnet
   batch_uuid: '1234'
-  account: account_1
+  account: '1234'
   vote_account: vote_account_1
   commission: 100.0
   last_vote: 1
@@ -9,4 +9,3 @@ one:
   credits: 1
   active_stake: 100
   delinquent: false
-  

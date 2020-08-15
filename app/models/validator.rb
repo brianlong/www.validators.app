@@ -6,6 +6,7 @@ class Validator < ApplicationRecord
   has_many :vote_account_histories, through: :vote_accounts
   has_many :validator_ips
   has_many :validator_block_histories
+  has_one :validator_score_v1
 
   # Returns an Array of account IDs for a given network
   #
@@ -14,5 +15,95 @@ class Validator < ApplicationRecord
     where(network: network)
       .select('account')
       .map(&:account)
+  end
+
+  def ping_times_to(limit = 100)
+    PingTime.where(
+      network: network,
+      to_account: account
+    ).order('created_at desc').limit(limit)
+  end
+
+  def ping_times_to_avg
+    ary = ping_times_to.all.map do |pt|
+      pt.avg_ms.to_f.round(2)
+    end
+
+    return nil if ary.empty?
+
+    ary.sum / ary.length.to_f
+  end
+
+  # Convenience methods
+  def score
+    validator_score_v1
+  end
+
+  def delinquent?
+    score&.delinquent
+  end
+
+  def commission
+    score&.commission
+  end
+
+  def active_stake
+    score&.active_stake || 0
+  end
+
+  def stake_concentration
+    score&.stake_concentration || 0.0
+  end
+
+  def stake_concentration_score
+    score&.stake_concentration_score || 0
+  end
+
+  def software_version
+    score&.software_version
+  end
+
+  def tower_blocks_behind_leader
+    score&.root_distance_history&.last
+  end
+
+  def root_distance_score
+    score&.root_distance_score
+  end
+
+  def tower_votes_behind_leader
+    score&.vote_distance_history&.last
+  end
+
+  def vote_distance_score
+    score&.vote_distance_score
+  end
+
+  def skipped_slot_percent
+    score&.skipped_slot_history&.last
+  end
+
+  def skipped_slot_score
+    score&.skipped_slot_score
+  end
+
+  def skipped_after_percent
+    score&.skipped_after_history&.last
+  end
+
+  def skipped_after_score
+    score&.skipped_after_score
+  end
+
+  def ping_time_avg
+    score&.ping_time_avg
+  end
+
+  def software_version_score
+    score&.software_version_score
+  end
+
+  def total_score
+    score&.total_score
   end
 end
