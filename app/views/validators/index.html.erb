@@ -14,11 +14,11 @@
       <small>
         Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %>
       </small>
-      <table id="validators-table" class='table table-striped'>
+      <table id="validators-table" class='table table-striped spark-line-table'>
         <thead class="thead-dark">
           <tr>
-            <th>&nbsp;</th>
-            <th>
+            <th class="avatar-column">&nbsp;</th>
+            <th class="name-column">
               Name <small>(Commission)</small><br />
               Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %> SOL)</small><br />
               Software <small>(<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</small><br />
@@ -34,11 +34,11 @@
 
         <tbody>
           <tr>
-            <td colspan="2">
+            <td colspan="2" class="avatar-column">
               Cluster Height/Stats:<br />
               Epoch: <%= @this_epoch.epoch %>
             </td>
-            <td class='text-right'>
+            <td class='text-right name-column'>
               <%= number_with_delimiter @tower_highest_block %>
             </td>
             <td class='text-right'>
@@ -60,7 +60,7 @@
           <% @validators.each do |validator| %>
           <% i += 1 %>
             <tr>
-              <td>
+              <td class="avatar-column">
                 <small><%= i %></small>&nbsp;
                 <span class="avatar">
                   <% if validator.avatar_url %>
@@ -74,7 +74,7 @@
                   <small class="score-minus-2">DELINQUENT</small>
                 <% end %>
                 </td>
-                <td>
+                <td class="name-column">
                 <%
                   validator_name = if validator.name
                     validator.name
@@ -118,12 +118,61 @@
                   </small>
                   (<%= validator.total_score %>)
               </td>
-              <td class="score-<%= validator.root_distance_score %> text-right">
-                <%= number_with_delimiter validator.tower_blocks_behind_leader %>
+
+              <!-- ROOT DISTANCE -->
+              <td class="spark-line text-right">
+                <%
+                    vl = \
+                      if validator.score&.root_distance_history.count < 60
+                        validator.score&.root_distance_history.count
+                      else
+                        60
+                      end
+                    line_color = if validator.root_distance_score == 2
+                        'Green'
+                      elsif validator.root_distance_score == 1
+                        'MediumBlue'
+                      else
+                        'grey'
+                      end
+                    vector = validator.score&.root_distance_history[-vl..-1]
+                 %>
+
+                <%= render 'spark_line_block_distance',
+                        account: validator.account,
+                        vector: vector,
+                        line_color: line_color
+                %>
+                <script><%= vector %></script>
               </td>
-              <td class="score-<%= validator.vote_distance_score %> text-right">
-                <%= number_with_delimiter validator.tower_votes_behind_leader %>
+
+              <!-- VOTE DISTANCE -->
+              <td class="spark-line text-right">
+                <%
+                    vl = \
+                      if validator.score&.vote_distance_history.count < 60
+                        validator.score&.vote_distance_history.count
+                      else
+                        60
+                      end
+                    line_color = if validator.vote_distance_score == 2
+                        'Green'
+                      elsif validator.vote_distance_score == 1
+                        'MediumBlue'
+                      else
+                        'grey'
+                      end
+                    vote_vector = validator.score&.vote_distance_history[-vl..-1]
+                 %>
+
+                <%= render 'spark_line_vote_distance',
+                        account: validator.account,
+                        vector: vote_vector,
+                        line_color: line_color
+                %>
+                <script><%= vote_vector %></script>
               </td>
+
               <td class="score-<%= validator.skipped_slot_score %> text-right">
                 <%=
                   if validator.skipped_slot_percent.nil?
