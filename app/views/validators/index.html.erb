@@ -11,7 +11,25 @@
 <% unless @validators.empty? %>
   <div class="row">
     <div class="col-lg-12">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort By:</a>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Stake', url_for(order: 'stake', page: params[:page]), class: "nav-link #{'active' unless %w[score name].include?(params[:order])}"  %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Score', url_for(order: 'score', page: params[:page]), class: "nav-link #{'active' if params[:order] == 'score'}"  %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Name', url_for(order: 'name', page: params[:page]), class: "nav-link #{'active' if params[:order] == 'name'}"  %>
+        </li>
 
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
       <small>
         Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %>
       </small>
@@ -67,7 +85,7 @@
             </td>
           </tr>
           <%
-              i = if params[:page].nil?
+              i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
                     0
                   else
                     (params[:page].to_i - 1) * Kaminari.config.default_per_page

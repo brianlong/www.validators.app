@@ -7,9 +7,17 @@ class ValidatorsController < ApplicationController
   # GET /validators
   # GET /validators.json
   def index
+    @sort_order = if params[:order] == 'score'
+                    'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
+                  elsif params[:order] == 'name'
+                    'validators.name asc'
+                  else
+                    'validator_score_v1s.active_stake desc'
+            end
+
     @validators = Validator.where(network: params[:network])
                            .joins(:validator_score_v1)
-                           .order('validator_score_v1s.active_stake desc')
+                           .order(@sort_order)
                            .page(params[:page])
     # .includes(:validator_score_v1)
 
