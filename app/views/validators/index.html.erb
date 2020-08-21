@@ -165,9 +165,9 @@
                     line_color = if validator.root_distance_score == 2
                         'Green'
                       elsif validator.root_distance_score == 1
-                        'MediumBlue'
+                        'Blue'
                       else
-                        'DimGray'
+                        'Gray'
                       end
                     vector = validator.score&.root_distance_history[-vl..-1]
                  %>
@@ -191,9 +191,9 @@
                     line_color = if validator.vote_distance_score == 2
                         'Green'
                       elsif validator.vote_distance_score == 1
-                        'MediumBlue'
+                        'Blue'
                       else
-                        'DimGray'
+                        'Gray'
                       end
                     vote_vector = validator.score&.vote_distance_history[-vl..-1]
                  %>
@@ -217,9 +217,9 @@
                     line_color = if validator.skipped_slot_score == 2
                         'Green'
                       elsif validator.skipped_slot_score == 1
-                        'MediumBlue'
+                        'Blue'
                       else
-                        'DimGray'
+                        'Gray'
                       end
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| v.to_f*100.0}
                  %>

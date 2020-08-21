@@ -85,11 +85,11 @@ a {
   }
 
   .score-1 {
-    color: MediumBlue;
+    color: Blue;
   }
 
   .score-0 {
-    color: DimGray;
+    color: Gray;
   }
 
   .score-minus-1 {
@@ -175,15 +175,15 @@ a {
 }
 
 .text-green {
-  color: green;
+  color: Green;
 }
 
 .text-red {
-  color: red;
+  color: Red;
 }
 
 .text-orange {
-  color: orange;
+  color: Orange;
 }
 
 p {
