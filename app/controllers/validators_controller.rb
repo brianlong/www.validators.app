@@ -10,7 +10,7 @@ class ValidatorsController < ApplicationController
     @validators = Validator.where(network: params[:network])
                            .joins(:validator_score_v1)
                            .order('validator_score_v1s.active_stake desc')
-                           .all
+                           .page(params[:page])
     # .includes(:validator_score_v1)
 
     # @total_active_stake = @validators.map { |v| v.active_stake }.sum

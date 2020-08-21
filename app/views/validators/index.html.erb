@@ -11,6 +11,7 @@
 <% unless @validators.empty? %>
   <div class="row">
     <div class="col-lg-12">
+
       <small>
         Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %>
       </small>
@@ -65,7 +66,13 @@
               Av: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
             </td>
           </tr>
-          <% i = 0 %>
+          <%
+              i = if params[:page].nil?
+                    0
+                  else
+                    (params[:page].to_i - 1) * Kaminari.config.default_per_page
+                  end
+          %>
           <% @validators.each do |validator| %>
           <% i += 1 %>
             <tr>
@@ -231,7 +238,9 @@
           <% end %>
         </tbody>
       </table>
+      <%= paginate @validators, theme: 'bootstrap4' %>
       <small>Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %></small>
+
     </div>
   </div>
 <% end %>
