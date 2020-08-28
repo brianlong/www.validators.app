@@ -48,6 +48,8 @@ a {
 
 .avatar{
   display: inline-block;
+  padding: 0px;
+  margin: 0px;
   /* display: block; */
   /* margin-right: .25rem; */
   /* position: relative; */
@@ -83,11 +85,11 @@ a {
   }
 
   .score-1 {
-    color: MediumBlue;
+    color: Blue;
   }
 
   .score-0 {
-    color: grey;
+    color: Gray;
   }
 
   .score-minus-1 {
@@ -96,6 +98,25 @@ a {
 
   .score-minus-2 {
     color: OrangeRed;
+  }
+
+  .spark-line-table{
+    table-layout: fixed;
+    width: 100%
+  }
+
+  .avatar-column {
+    padding-right: 0;
+    margin-right: 0;
+    width: 10%;
+  }
+
+  .name-column {
+    width: 25%;
+  }
+
+  .spark-line{
+    width: 15%
   }
 
  .img-circle {
@@ -154,15 +175,15 @@ a {
 }
 
 .text-green {
-  color: green;
+  color: Green;
 }
 
 .text-red {
-  color: red;
+  color: Red;
 }
 
 .text-orange {
-  color: orange;
+  color: Orange;
 }
 
 p {

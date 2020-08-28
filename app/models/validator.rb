@@ -79,6 +79,10 @@ class Validator < ApplicationRecord
     score&.vote_distance_score
   end
 
+  def skipped_slot_history
+    score&.skipped_slot_history
+  end
+
   def skipped_slot_percent
     score&.skipped_slot_history&.last
   end

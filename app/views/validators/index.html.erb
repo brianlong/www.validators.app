@@ -11,56 +11,90 @@
 <% unless @validators.empty? %>
   <div class="row">
     <div class="col-lg-12">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort By:</a>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Stake', url_for(order: 'stake', page: params[:page]), class: "nav-link #{'active' unless %w[score name].include?(params[:order])}"  %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Score', url_for(order: 'score', page: params[:page]), class: "nav-link #{'active' if params[:order] == 'score'}"  %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Name', url_for(order: 'name', page: params[:page]), class: "nav-link #{'active' if params[:order] == 'name'}"  %>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
       <small>
         Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %>
       </small>
-      <table id="validators-table" class='table table-striped'>
+      <table id="validators-table" class='table table-striped spark-line-table'>
         <thead class="thead-dark">
           <tr>
-            <th>&nbsp;</th>
-            <th>
+            <th class="avatar-column">&nbsp;</th>
+            <th class="name-column">
               Name <small>(Commission)</small><br />
-              Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %> SOL)</small><br />
+              Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
               Software <small>(<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</small><br />
               Scores <small>(total)</small>
             </th>
-            <th class='text-right'>Root Block<br />Distance</th>
-            <th class='text-right'>Vote<br />Distance</th>
-            <th class='text-right'>Skipped<br />Slot &percnt;</th>
-            <th class='text-right'>Skipped<br />After Slot &percnt;</th>
+            <th class='text-right'>
+              Root<br />Distance<br />
+              <small>60-Min Chart</small>
+            </th>
+            <th class='text-right'>
+              Vote<br />Distance<br />
+              <small>60-Min Chart</small>
+            </th>
+            <th class='text-right'>
+              Skipped<br />Slot &percnt;<br />
+              <small>60-Min Chart</small>
+            </th>
+            <th class='text-right'>Skipped<br />After &percnt;</th>
             <th class='text-right'>Average<br />Ping Time (ms)</th>
           </tr>
         </thead>
 
         <tbody>
           <tr>
-            <td colspan="2">
+            <td colspan="2" class="avatar-column">
               Cluster Height/Stats:<br />
-              Epoch: <%= @this_epoch.epoch %>
+              Epoch: <%= @this_epoch&.epoch %>
             </td>
-            <td class='text-right'>
+            <td class='text-right name-column'>
               <%= number_with_delimiter @tower_highest_block %>
             </td>
             <td class='text-right'>
               <%= number_with_delimiter @tower_highest_vote %>
             </td>
             <td class='text-right'>
-              Med: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0) %><br />
-              Avg: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0) %>
+              Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br />
+              Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
             </td>
             <td class='text-right'>
-              Med: <%= number_to_percentage(@skipped_after_median.to_f * 100.0) %><br />
-              Avg: <%= number_to_percentage(@skipped_after_average.to_f * 100.0) %>
+              Md: <%= number_to_percentage(@skipped_after_median.to_f * 100.0, precision: 1) %><br />
+              Av: <%= number_to_percentage(@skipped_after_average.to_f * 100.0, precision: 1) %>
             </td>
             <td class='text-right'>
-              Avg: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
+              Av: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
             </td>
           </tr>
-          <% i = 0 %>
+          <%
+              i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
+                    0
+                  else
+                    (params[:page].to_i - 1) * Kaminari.config.default_per_page
+                  end
+          %>
           <% @validators.each do |validator| %>
           <% i += 1 %>
             <tr>
-              <td>
+              <td class="avatar-column">
                 <small><%= i %></small>&nbsp;
                 <span class="avatar">
                   <% if validator.avatar_url %>
@@ -74,7 +108,7 @@
                   <small class="score-minus-2">DELINQUENT</small>
                 <% end %>
                 </td>
-                <td>
+                <td class="name-column">
                 <%
                   validator_name = if validator.name
                     validator.name
@@ -118,27 +152,90 @@
                   </small>
                   (<%= validator.total_score %>)
               </td>
-              <td class="score-<%= validator.root_distance_score %> text-right">
-                <%= number_with_delimiter validator.tower_blocks_behind_leader %>
-              </td>
-              <td class="score-<%= validator.vote_distance_score %> text-right">
-                <%= number_with_delimiter validator.tower_votes_behind_leader %>
-              </td>
-              <td class="score-<%= validator.skipped_slot_score %> text-right">
-                <%=
-                  if validator.skipped_slot_percent.nil?
-                    'N/A'
-                  else
-                    number_to_percentage(validator.skipped_slot_percent.to_f * 100.0)
-                  end
+
+              <!-- ROOT DISTANCE -->
+              <td class="spark-line text-right">
+                <%
+                    vl = \
+                      if validator.score&.root_distance_history.count < 60
+                        validator.score&.root_distance_history.count
+                      else
+                        60
+                      end
+                    line_color = if validator.root_distance_score == 2
+                        'Green'
+                      elsif validator.root_distance_score == 1
+                        'Blue'
+                      else
+                        'Gray'
+                      end
+                    vector = validator.score&.root_distance_history[-vl..-1]
                  %>
+
+                <%= render 'spark_line_block_distance',
+                        account: validator.account,
+                        vector: vector,
+                        line_color: line_color
+                %>
+              </td>
+
+              <!-- VOTE DISTANCE -->
+              <td class="spark-line text-right">
+                <%
+                    vl = \
+                      if validator.score&.vote_distance_history.count < 60
+                        validator.score&.vote_distance_history.count
+                      else
+                        60
+                      end
+                    line_color = if validator.vote_distance_score == 2
+                        'Green'
+                      elsif validator.vote_distance_score == 1
+                        'Blue'
+                      else
+                        'Gray'
+                      end
+                    vote_vector = validator.score&.vote_distance_history[-vl..-1]
+                 %>
+
+                <%= render 'spark_line_vote_distance',
+                        account: validator.account,
+                        vector: vote_vector,
+                        line_color: line_color
+                %>
+              </td>
+
+              <!-- SKIPPED SLOTS  -->
+              <td class="spark-line text-right">
+                <%
+                    vl = \
+                      if validator.score&.skipped_slot_history.to_a.count < 60
+                        validator.score&.skipped_slot_history.to_a.count
+                      else
+                        60
+                      end
+                    line_color = if validator.skipped_slot_score == 2
+                        'Green'
+                      elsif validator.skipped_slot_score == 1
+                        'Blue'
+                      else
+                        'Gray'
+                      end
+                    slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| v.to_f*100.0}
+                 %>
+
+                <%= render 'spark_line_skipped_slots',
+                        account: validator.account,
+                        vector: slot_vector,
+                        line_color: line_color
+                %>
               </td>
               <td class="score-<%= validator.skipped_after_score %> text-right">
                 <%=
                   if validator.skipped_after_percent.nil?
                     'N/A'
                   else
-                    number_to_percentage(validator.skipped_after_percent.to_f * 100.0)
+                    number_to_percentage(validator.skipped_after_percent.to_f * 100.0, precision: 1)
                   end
                 %>
               </td>
@@ -159,7 +256,9 @@
           <% end %>
         </tbody>
       </table>
+      <%= paginate @validators, theme: 'bootstrap4' %>
       <small>Data updated at <%= @batch.created_at %> in batch <%= @batch.uuid %></small>
+
     </div>
   </div>
 <% end %>
