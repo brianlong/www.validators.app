@@ -154,7 +154,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     VCR.use_cassette('validators_cli_no_response') do
       rpc_urls = ['http://127.0.0.1:8899']
 
-      assert_nil cli_request('validators', rpc_urls)
+      assert_equal [], cli_request('validators', rpc_urls)
     end
   end
 end
