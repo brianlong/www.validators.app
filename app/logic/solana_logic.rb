@@ -470,6 +470,6 @@ module SolanaLogic
     rescue JSON::ParserError => e
       Rails.logger.error "RPC ERROR\n#{e.class}\nRPC URL: #{rpc_url}"
     end
-    nil
+    []
   end
 end

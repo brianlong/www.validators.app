@@ -13,7 +13,7 @@ class ValidatorsController < ApplicationController
                     'validators.name asc'
                   else
                     'validator_score_v1s.active_stake desc'
-            end
+                  end
 
     @validators = Validator.where(network: params[:network])
                            .joins(:validator_score_v1)
