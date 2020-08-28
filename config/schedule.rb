@@ -41,7 +41,7 @@ every 1.minutes do
 end
 
 every 2.minutes do
-  ruby_script 'gather_rpc_data.rb'
+  # ruby_script 'gather_rpc_data.rb'
 end
 
 every 1.hour do
