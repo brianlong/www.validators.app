@@ -14,7 +14,8 @@ class ApplicationController < ActionController::Base
 
   # app/controllers/application_controller.rb
   def default_url_options
-    { locale: I18n.locale }
+    network = params[:network] ||= 'mainnet'
+    { locale: I18n.locale, network: network }
   end
 
   def check_if_saw_cookie_notice

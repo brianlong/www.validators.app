@@ -3,72 +3,69 @@
 # PublicController
 class PublicController < ApplicationController
   def index
-    @block_history_stat = \
-      ValidatorBlockHistoryStat.where(network: params[:network]).last || \
-      ValidatorBlockHistoryStat.new(network: params[:network])
+    @sort_order = if params[:order] == 'score'
+                    'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
+                  elsif params[:order] == 'name'
+                    'validators.name asc'
+                  else
+                    'validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc'
+                  end
 
-    @chart_data = Report.where(
+    @validators = Validator.where(network: params[:network])
+                           .joins(:validator_score_v1)
+                           .order(@sort_order)
+                           .page(params[:page])
+
+    @total_active_stake = Validator.where(network: params[:network])
+                                   .joins(:validator_score_v1)
+                                   .sum(:active_stake)
+
+    @software_versions = Report.where(
       network: params[:network],
-      name: 'chart_home_page'
+      name: 'report_software_versions'
     ).last
 
-    @skipped_slots_report = Report.where(
-      network: params[:network],
-      name: 'build_skipped_slot_percent'
-    ).last
+    @batch = Batch.where(network: params[:network]).last
+    if @batch
+      @this_epoch = EpochHistory.where(
+        network: params[:network],
+        batch_uuid: @batch.uuid
+      ).first
+      @tower_highest_block = ValidatorHistory.highest_root_block_for(
+        params[:network],
+        @batch.uuid
+      )
+      @tower_highest_vote = ValidatorHistory.highest_last_vote_for(
+        params[:network],
+        @batch.uuid
+      )
+      @skipped_slot_average = \
+        ValidatorBlockHistory.average_skipped_slot_percent_for(
+          params[:network],
+          @batch.uuid
+        )
+      @skipped_slot_median = \
+        ValidatorBlockHistory.median_skipped_slot_percent_for(
+          params[:network],
+          @batch.uuid
+        )
+      @skipped_after_average = \
+        ValidatorBlockHistory.average_skipped_slots_after_percent_for(
+          params[:network],
+          @batch.uuid
+        )
+      @skipped_after_median = \
+        ValidatorBlockHistory.median_skipped_slots_after_percent_for(
+          params[:network],
+          @batch.uuid
+        )
+    end
 
-    @skipped_slots_top = if @skipped_slots_report.nil?
-                           []
-                         else
-                           @skipped_slots_report.payload[0..19]
-                         end
-
-    @skipped_slots_bottom = if @skipped_slots_report.nil? ||
-                               @skipped_slots_report.payload.nil?
-                              []
-                            else
-                              begin
-                                @skipped_slots_report.payload[-20..-1].reverse
-                              rescue StandardError
-                                []
-                              end
-                            end
-
-    @skipped_after_report = Report.where(
-      network: params[:network],
-      name: 'build_skipped_after_percent'
-    ).last
-
-    @skipped_after_top = if @skipped_after_report.nil?
-                           []
-                         else
-                           @skipped_after_report.payload[0..19]
-                         end
-    @skipped_after_bottom = if @skipped_after_report.nil?
-                              []
-                            else
-                              @skipped_after_report.payload[-20..-1]
-                                                   .try(:reverse)
-                            end
-
-    # Report Tower Height
-    @tower_report = Report.where(
-      network: params[:network],
-      name: 'report_tower_height'
-    ).last
-
-    @tower_leaders = if @tower_report.nil?
-                       []
-                     else
-                       @tower_report.payload[0..19]
-                     end
-
-    @tower_laggards = if @tower_report.nil?
-                        []
-                      else
-                        @tower_report.payload[-20..-1]
-                                     .try(:reverse)
-                      end
+    # Ping Times
+    ping_batch = PingTime.where(network: params[:network])&.last&.batch_uuid
+    ping_time_stat = PingTimeStat.where(batch_uuid: ping_batch)&.last
+    @ping_time_avg = ping_time_stat&.overall_average_time
+    render 'validators/index'
   end
 
   def tower

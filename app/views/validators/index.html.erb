@@ -3,7 +3,7 @@
 <div class="row">
   <div class="col-lg-12">
     <p>
-      Meet the validators who power Solana, the world's fastest blockchain! The table below show each validator by name and includes some recent statistics for each. You will also see color-coded validator scores (beta) to help you assess the relative performance of each node. See our <%= link_to 'FAQ', faq_url, target: '_blank' %> to learn how the scores are calculated. <small>(You can also hover your mouse over the circular score icons below for a short description.)</small>
+      Meet the validators who power Solana, the world's fastest blockchain! The table below show each validator by name and includes some recent statistics for each. You will also see color-coded validator scores (beta) to help you assess the relative performance of each node. See our <%= link_to 'FAQ', faq_url(network: params[:network]), target: '_blank' %> to learn how the scores are calculated. <small>(You can also hover your mouse over the circular score icons below for a short description.)</small>
     </p>
     <p>Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!</p>
   </div>
@@ -16,13 +16,13 @@
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort By:</a>
         </li>
         <li class="nav-item">
-          <%= link_to 'Stake', url_for(order: 'stake', page: params[:page]), class: "nav-link #{'active' unless %w[score name].include?(params[:order])}"  %>
+          <%= link_to 'Stake', url_for(order: 'stake', page: params[:page], network: params[:network]), class: "nav-link #{'active' unless %w[score name].include?(params[:order])}"  %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Score', url_for(order: 'score', page: params[:page]), class: "nav-link #{'active' if params[:order] == 'score'}"  %>
+          <%= link_to 'Score', url_for(order: 'score', page: params[:page], network: params[:network]), class: "nav-link #{'active' if params[:order] == 'score'}"  %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Name', url_for(order: 'name', page: params[:page]), class: "nav-link #{'active' if params[:order] == 'name'}"  %>
+          <%= link_to 'Name', url_for(order: 'name', page: params[:page], network: params[:network]), class: "nav-link #{'active' if params[:order] == 'name'}"  %>
         </li>
 
       </ul>
@@ -172,7 +172,7 @@
                     vector = validator.score&.root_distance_history[-vl..-1]
                  %>
 
-                <%= render 'spark_line_block_distance',
+                <%= render 'validators/spark_line_block_distance',
                         account: validator.account,
                         vector: vector,
                         line_color: line_color
@@ -198,7 +198,7 @@
                     vote_vector = validator.score&.vote_distance_history[-vl..-1]
                  %>
 
-                <%= render 'spark_line_vote_distance',
+                <%= render 'validators/spark_line_vote_distance',
                         account: validator.account,
                         vector: vote_vector,
                         line_color: line_color
@@ -224,7 +224,7 @@
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| v.to_f*100.0}
                  %>
 
-                <%= render 'spark_line_skipped_slots',
+                <%= render 'validators/spark_line_skipped_slots',
                         account: validator.account,
                         vector: slot_vector,
                         line_color: line_color
