@@ -10,7 +10,7 @@ network = 'testnet'
 today = Date.today.strftime('%Y%m%d')
 puts "Archiving data for #{network} #{today}"
 
-%w[batches epoch_histories feed_zones reports validator_block_histories validator_block_history_stats validator_histories vote_account_histories].each do |table|
+%w[batches epoch_histories reports validator_block_histories validator_block_history_stats validator_histories vote_account_histories].each do |table|
   # Create the restart archive table
   archive_table = "#{table}_restart_#{today}"
   ddl = "CREATE TABLE IF NOT EXISTS #{archive_table} LIKE #{table}"

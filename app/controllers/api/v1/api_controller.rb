@@ -41,19 +41,6 @@ module Api
         render json: { 'status' => 'Parameter Missing' }, status: 400
       end
 
-      def feed_zone
-        limit = params[:limit] || 1000
-
-        render json: FeedZone.where(network: params[:network])
-                             .order('network, batch_created_at desc')
-                             .limit(limit).to_json, status: 200
-      rescue ActionController::ParameterMissing
-        render json: { 'status' => 'Parameter Missing' }, status: 400
-      rescue StandardError => e
-        Appsignal.send_error(e)
-        render json: { 'status' => e.message }, status: 500
-      end
-
       # This is a simple endpoint to test API connections.
       # GET api/v1/ping => { 'answer' => 'pong' }
       def ping
