@@ -87,6 +87,8 @@ module Api
           network: params[:network], account: params['account']
         ).order('network, account').first
 
+        raise ValidatorNotFound if @validator.nil?
+
         @skipped_slots_report = Report.where(
           network: params[:network],
           name: 'build_skipped_slot_percent'
@@ -98,6 +100,8 @@ module Api
         ).last
 
         render 'api/v1/validators/show', formats: :json
+      rescue ValidatorNotFound
+        render json: { 'status' => 'Validator Not Found' }, status: 404
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
       rescue StandardError => e
