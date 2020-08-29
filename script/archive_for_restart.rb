@@ -32,4 +32,25 @@ puts "Archiving data for #{network} #{today}"
   # Delete from the source table for this network
   sql_delete = "DELETE FROM #{table} WHERE network = '#{network}'"
   ActiveRecord::Base.connection.execute(sql_delete)
+
+  # Reset the validator_score_v1s
+  Validator.where(network: network)
+           .joins(:validator_score_v1)
+           .find_each do |validator|
+    validator.validator_score_v1.update(
+      total_score: 0,
+      root_distance_history: [],
+      root_distance_score: 0,
+      vote_distance_history: [],
+      vote_distance_score: 0,
+      skipped_slot_history: [],
+      skipped_slot_score: 0,
+      skipped_after_history: [],
+      skipped_after_score: 0,
+      stake_concentration: 0.0,
+      stake_concentration_score: 0,
+      active_stake: 0,
+      delinquent: false
+    )
+  end
 end

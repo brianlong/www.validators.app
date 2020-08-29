@@ -12,7 +12,7 @@ class ValidatorsController < ApplicationController
                   elsif params[:order] == 'name'
                     'validators.name asc'
                   else
-                    'validator_score_v1s.active_stake desc'
+                    'validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc'
                   end
 
     @validators = Validator.where(network: params[:network])
