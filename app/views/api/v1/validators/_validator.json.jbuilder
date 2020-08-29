@@ -2,17 +2,35 @@
 
 # Extract the base attributes
 json.extract! validator,
-              :network, :account, :name, :keybase_id, :www_url, :created_at,
-              :updated_at
+              :network, :account, :name, :keybase_id, :www_url,
+              :details, :created_at, :updated_at
+
+score = validator.validator_score_v1
+unless score.nil?
+  json.total_score score.total_score
+  json.root_distance_score score.root_distance_score
+  json.vote_distance_score score.vote_distance_score
+  json.skipped_slot_score score.skipped_slot_score
+  # json.skipped_after_score score.skipped_after_score
+  json.software_version score.software_version
+  json.software_version_score score.software_version_score
+  json.stake_concentration_score score.stake_concentration_score
+  json.data_center_concentration_score score.data_center_concentration_score
+  json.published_information_score 0 # coming soon
+  json.security_report_score 0 # coming soon
+  json.active_stake score.active_stake
+  json.commission score.commission
+  json.delinquent score.delinquent
+end
 
 # Vote account data
 vote_account = validator.vote_accounts.last
 unless vote_account.nil?
   json.vote_account vote_account.account
 
-  vote_account_history = vote_account.vote_account_histories.last
-  json.software_version vote_account_history.software_version \
-    unless vote_account_history.nil?
+  # vote_account_history = vote_account.vote_account_histories.last
+  # json.software_version vote_account_history.software_version \
+  #   unless vote_account_history.nil?
 end
 
 # Data from the skipped_slots_report
@@ -29,17 +47,17 @@ unless @skipped_slots_report.nil?
 end
 
 # Data from the skipped_after_report
-unless @skipped_after_report.nil?
-  this_after_report = @skipped_after_report.payload.select do |sar|
-    sar['account'] == validator.account
-  end
-
-  unless this_after_report.first.nil?
-    json.skipped_slots_after this_after_report.first['skipped_slots_after']
-    json.skipped_slots_after_percent \
-      this_after_report.first['skipped_slots_after_percent']
-  end
-end
+# unless @skipped_after_report.nil?
+#   this_after_report = @skipped_after_report.payload.select do |sar|
+#     sar['account'] == validator.account
+#   end
+#
+#   unless this_after_report.first.nil?
+#     json.skipped_slots_after this_after_report.first['skipped_slots_after']
+#     json.skipped_slots_after_percent \
+#       this_after_report.first['skipped_slots_after_percent']
+#   end
+# end
 
 # Show URl to this record in the API
 json.url api_v1_validator_url(

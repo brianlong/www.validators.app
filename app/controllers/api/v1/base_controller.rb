@@ -5,6 +5,9 @@ module Api
     # This is the base controller for the V1 API. It handles token
     # authentication.
     class BaseController < ActionController::API
+      # Special error classes:
+      class ValidatorNotFound < StandardError; end
+
       before_action :validate_api_token
 
       def validate_api_token
