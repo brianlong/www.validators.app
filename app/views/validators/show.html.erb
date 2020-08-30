@@ -83,6 +83,16 @@
             <%= @validator.validator_score_v1&.commission rescue 'N/A' %> &percnt;
           </td>
         </tr>
+        <% unless @validator.security_report_url.blank? %>
+          <tr>
+            <td>
+              <strong>Security Info:</strong>
+            </td>
+            <td>
+              <%= link_to @validator.security_report_url, @validator.security_report_url, target: '_blank'  %>
+            </td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>

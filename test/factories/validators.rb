@@ -4,9 +4,8 @@ FactoryBot.define do
   factory :validator do
     network { 'testnet' }
     account { '12345678' }
+    name { 'john doe' }
+    keybase_id { 'johndoe' }
+    security_report_url { 'http://www.example.com' }
   end
-
-  # trait :with_validator_score_v1 do
-  #   validator_score_v1
-  # end
 end

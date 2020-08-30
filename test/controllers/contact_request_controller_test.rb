@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ContactRequestControllerTest < ActionDispatch::IntegrationTest
@@ -11,7 +13,7 @@ class ContactRequestControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect when non admin is logged in' do
     sign_in @user
     get contact_requests_url
-    assert_redirected_to root_path + '?locale=en'
+    assert_redirected_to root_path + '?locale=en&network=mainnet'
   end
 
   test 'should get index when admin is logged in' do
