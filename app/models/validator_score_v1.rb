@@ -8,14 +8,18 @@
 # - root_distance: [0, 1, 2] based on cluster median & average
 # - vote_distance: [0, 1, 2] based on cluster median & average
 # - skipped_slot_percent: [0, 1, 2] based on cluster median & average
-# - skipped_after_percent: [0, 1, 2] based on cluster median & average
 # - software_version: 2 = current patch, 1 = current minor, 0 = major or N/A
+# - published_information_score: [0, 1, 2] 2 = published 4 info elements to the
+#     chain. 1 = published 2 or 3 elements, 0 = published 0 or 1 element.
+# - security_report_score: [0,1] = no url published. 1 = url is published
 #
 # Factors that will be deducted from score above:
 # - High percent of total stake. We want to encourage decentralization.
 #   Delegated stake > 3% = -2
 # - Located in high-concentration data center. Located with 3% stake of other
 #   stakeholders = -1, 6% = -2
+#
+# Max score is currently eleven (11)
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 
@@ -28,10 +32,16 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_after_history, JSON
 
   def calculate_total_score
+    # Assign special scores before calculating the total score
+    assign_published_information_score
+    assign_software_version_score
+    assign_security_report_score
+
     self.total_score = root_distance_score.to_i +
                        vote_distance_score.to_i +
                        skipped_slot_score.to_i +
-                       skipped_after_score.to_i +
+                       published_information_score.to_i +
+                       security_report_score.to_i +
                        software_version_score.to_i +
                        stake_concentration_score.to_i +
                        data_center_concentration_score.to_i
@@ -61,6 +71,24 @@ class ValidatorScoreV1 < ApplicationRecord
       else
         0
       end
+  end
+
+  # Assign a score based on published information. We assign 1/2 point for each
+  # element of published information. After assigning the individual scores, we
+  # round down to the nearest integer. 1 point if there are two or three pieces
+  # of data. 2 points if all for elements are not blank.
+  def assign_published_information_score
+    sc = 0.0
+    sc += validator.name.blank? ? 0.0 : 0.5
+    sc += validator.keybase_id.blank? ? 0.0 : 0.5
+    sc += validator.www_url.blank? ? 0.0 : 0.5
+    sc += validator.details.blank? ? 0.0 : 0.5
+    self.published_information_score = sc.floor
+  end
+
+  # Assign one point if the validator has provided a security_report_url
+  def assign_security_report_score
+    self.security_report_score = validator.security_report_url.blank? ? 0 : 1
   end
 
   def avg_root_distance_history

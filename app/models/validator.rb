@@ -107,6 +107,14 @@ class Validator < ApplicationRecord
     score&.software_version_score
   end
 
+  def published_information_score
+    score&.published_information_score
+  end
+
+  def security_report_score
+    score&.security_report_score
+  end
+
   def total_score
     score&.total_score
   end
