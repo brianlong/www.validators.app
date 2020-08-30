@@ -86,10 +86,10 @@
         <% unless @validator.security_report_url.blank? %>
           <tr>
             <td>
-              <strong>Security/Operations Info:</strong>
+              <strong>Security Info:</strong>
             </td>
             <td>
-              <%= @validator.security_report_url %>
+              <%= link_to @validator.security_report_url, @validator.security_report_url, target: '_blank'  %>
             </td>
           </tr>
         <% end %>
