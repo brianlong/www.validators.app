@@ -16,7 +16,10 @@
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort By:</a>
         </li>
         <li class="nav-item">
-          <%= link_to 'Stake', url_for(order: 'stake', page: params[:page], network: params[:network]), class: "nav-link #{'active' unless %w[score name].include?(params[:order])}"  %>
+          <%= link_to 'Random', url_for(order: 'random', page: params[:page], network: params[:network]), class: "nav-link #{'active' unless %w[score name stake].include?(params[:order])}"  %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Stake', url_for(order: 'stake', page: params[:page], network: params[:network]), class: "nav-link #{'active' if params[:order] == 'stake'}"  %>
         </li>
         <li class="nav-item">
           <%= link_to 'Score', url_for(order: 'score', page: params[:page], network: params[:network]), class: "nav-link #{'active' if params[:order] == 'score'}"  %>
@@ -134,7 +137,7 @@
                        title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>&nbsp;
                     <i class="fas fa-circle score-<%= validator.skipped_slot_score %>"
                        title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>&nbsp;
-                       
+
                    <i class="fas fa-circle score-<%= validator.published_information_score.to_i %>"
                       title="Published Information Score = <%= validator.published_information_score.to_i %>"></i>&nbsp;
 
