@@ -105,6 +105,15 @@ a {
     width: 100%
   }
 
+   /* Rounded border for table header */
+  th:first-of-type {
+    border-top-left-radius: 10px;
+  }
+
+  th:last-of-type {
+    border-top-right-radius: 10px;
+  }
+
   .avatar-column {
     padding-right: 0;
     margin-right: 0;
@@ -184,6 +193,10 @@ a {
 
 .text-orange {
   color: Orange;
+}
+
+body {
+  /* background-color: #e4eef5; */
 }
 
 p {
