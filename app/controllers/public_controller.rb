@@ -51,22 +51,23 @@ class PublicController < ApplicationController
           params[:network],
           @batch.uuid
         )
-      @skipped_after_average = \
-        ValidatorBlockHistory.average_skipped_slots_after_percent_for(
-          params[:network],
-          @batch.uuid
-        )
-      @skipped_after_median = \
-        ValidatorBlockHistory.median_skipped_slots_after_percent_for(
-          params[:network],
-          @batch.uuid
-        )
+      # @skipped_after_average = \
+      #   ValidatorBlockHistory.average_skipped_slots_after_percent_for(
+      #     params[:network],
+      #     @batch.uuid
+      #   )
+      # @skipped_after_median = \
+      #   ValidatorBlockHistory.median_skipped_slots_after_percent_for(
+      #     params[:network],
+      #     @batch.uuid
+      #   )
     end
 
     # Ping Times
     ping_batch = PingTime.where(network: params[:network])&.last&.batch_uuid
     ping_time_stat = PingTimeStat.where(batch_uuid: ping_batch)&.last
     @ping_time_avg = ping_time_stat&.overall_average_time
+
     render 'validators/index'
   end
 

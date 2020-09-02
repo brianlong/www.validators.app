@@ -58,7 +58,6 @@
               Skipped<br />Slot &percnt;<br />
               <small>60-Min Chart</small>
             </th>
-            <th class='text-right'>Skipped<br />After &percnt;</th>
             <th class='text-right'>Average<br />Ping Time (ms)</th>
           </tr>
         </thead>
@@ -78,10 +77,6 @@
             <td class='text-right'>
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
-            </td>
-            <td class='text-right'>
-              Md: <%= number_to_percentage(@skipped_after_median.to_f * 100.0, precision: 1) %><br />
-              Av: <%= number_to_percentage(@skipped_after_average.to_f * 100.0, precision: 1) %>
             </td>
             <td class='text-right'>
               Av: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
@@ -119,7 +114,11 @@
                     shorten_key(validator.account)
                   end
                 %>
-                  <%= link_to validator_name, validator_url(network: params[:network], account: validator.account) %>
+                  <%= link_to validator_name,
+                              validator_url(
+                                network: params[:network],
+                                account: validator.account
+                              ) %>
                   <small>(<%= validator.commission %>%)</small><br />
                   <small>
                     <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
@@ -238,15 +237,6 @@
                         account: validator.account,
                         vector: slot_vector,
                         line_color: line_color
-                %>
-              </td>
-              <td class="score-<%= validator.skipped_after_score %> text-right">
-                <%=
-                  if validator.skipped_after_percent.nil?
-                    'N/A'
-                  else
-                    number_to_percentage(validator.skipped_after_percent.to_f * 100.0, precision: 1)
-                  end
                 %>
               </td>
 
