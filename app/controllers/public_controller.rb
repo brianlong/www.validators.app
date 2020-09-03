@@ -18,6 +18,12 @@ class PublicController < ApplicationController
                            .order(@sort_order)
                            .page(params[:page])
 
+    unless params[:q].blank?
+      @validators = @validators.where(
+        ['name like :q or account like :q', q: "#{params[:q]}%"]
+      )
+    end
+
     @total_active_stake = Validator.where(network: params[:network])
                                    .joins(:validator_score_v1)
                                    .sum(:active_stake)

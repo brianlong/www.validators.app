@@ -4,13 +4,15 @@
     <p>
       Meet the validators who power Solana, the world's fastest blockchain! The table below show each validator by name and includes some recent statistics for each. You will also see color-coded validator scores (beta) to help you assess the relative performance of each node. See our <%= link_to 'FAQ', faq_url(network: params[:network]), target: '_blank' %> to learn how the scores are calculated. <small>(You can also hover your mouse over the circular score icons below for a short description.)</small>
     </p>
-    <p>Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!</p>
+    <p>
+      Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!
+    </p>
   </div>
 </div>
 <h1>Solana <%= params[:network].capitalize%> Validators</h1>
 <% unless @validators.empty? %>
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-sm-8">
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort By:</a>
@@ -29,6 +31,20 @@
         </li>
 
       </ul>
+    </div>
+    <div class="col-sm-4">
+      <%= form_with(method: :get, local: true) do %>
+        <div class="form-group-row">
+          <div class="input-group mb-3">
+            <%= text_field_tag(:q, '', placeholder: 'Starts with...', class: 'form-control') %>
+          <%= hidden_field_tag(:network, params[:network]) %>
+          <%= hidden_field_tag(:order, params[:order]) %>
+          <div class="input-group-append">
+            <%= submit_tag("Search", class: 'btn btn-outline-secondary') %>
+          </div>
+        </div>
+      </div>
+      <% end %>
     </div>
   </div>
   <div class="row">
