@@ -12,7 +12,7 @@
     <div class="col-sm-8">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort By:</a>
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort:</a>
         </li>
         <li class="nav-item">
           <%= link_to 'Random', url_for(order: 'random', page: params[:page], network: params[:network]), class: "nav-link #{'active' unless %w[score name stake].include?(params[:order])}"  %>
