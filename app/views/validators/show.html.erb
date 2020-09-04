@@ -100,8 +100,17 @@
 
 
 <div class='row'>
-  <div class="col-sm-12">
-    <%= link_to 'Back to List of Validators', url_for(:back) %>
+  <div class="col-sm-8">
+    <%= link_to 'Back to List of Validators', url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]) %>
+  </div>
+  <div class='col-sm-4 text-right'>
+    <% if params[:refresh] == 'true' %>
+            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: false)  %>
+      <small>Refresh ON</small>
+    <% else %>
+      <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: true)  %>
+      <small>Refresh OFF</small>
+    <% end %>
   </div>
 </div>
 
@@ -114,7 +123,7 @@
 
 <div class='row'>
   <div class="col-sm-12">
-    <%= link_to 'Back to List of Validators', url_for(:back) %>
+    <%= link_to 'Back to List of Validators', url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]) %>
   </div>
 </div>
 
@@ -126,7 +135,7 @@
 
 <div class='row'>
   <div class="col-sm-12">
-    <%= link_to 'Back to List of Validators', url_for(:back) %>
+    <%= link_to 'Back to List of Validators', url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]) %>
   </div>
 </div>
 <div class="row validator-block-history-table">
@@ -137,6 +146,6 @@
 
 <div class='row'>
   <div class="col-sm-12">
-    <%= link_to 'Back to List of Validators', url_for(:back) %>
+    <%= link_to 'Back to List of Validators', url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]) %>
   </div>
 </div>

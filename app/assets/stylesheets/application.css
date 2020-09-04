@@ -195,6 +195,10 @@ a {
   color: Orange;
 }
 
+.toggle {
+  font-size: 24px;
+}
+
 body {
   /* background-color: #e4eef5; */
 }

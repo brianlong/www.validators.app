@@ -42,15 +42,6 @@ ActiveRecord::Schema.define(version: 2020_08_30_003349) do
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
   end
 
-  create_table "batches_restart_20200828", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "uuid"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "network"
-    t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
-    t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
-  end
-
   create_table "collectors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "payload_type"
@@ -87,32 +78,7 @@ ActiveRecord::Schema.define(version: 2020_08_30_003349) do
     t.index ["network", "batch_uuid"], name: "index_epoch_histories_on_network_and_batch_uuid"
   end
 
-  create_table "epoch_histories_restart_20200828", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "batch_uuid"
-    t.integer "epoch"
-    t.bigint "current_slot"
-    t.integer "slot_index"
-    t.integer "slots_in_epoch"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "network"
-    t.index ["network", "batch_uuid"], name: "index_epoch_histories_on_network_and_batch_uuid"
-  end
-
   create_table "feed_zones", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "network"
-    t.string "batch_uuid"
-    t.integer "epoch"
-    t.datetime "batch_created_at"
-    t.integer "payload_version"
-    t.text "payload", size: :long
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "batch_created_at"], name: "index_feed_zones_on_network_and_batch_created_at"
-    t.index ["network", "batch_uuid"], name: "index_feed_zones_on_network_and_batch_uuid", unique: true
-  end
-
-  create_table "feed_zones_restart_20200828", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "network"
     t.string "batch_uuid"
     t.integer "epoch"
@@ -173,27 +139,6 @@ ActiveRecord::Schema.define(version: 2020_08_30_003349) do
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
   end
 
-  create_table "reports_restart_20200828", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "network"
-    t.string "name"
-    t.text "payload", size: :long
-    t.string "batch_uuid"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "batch_uuid"], name: "index_reports_on_network_and_batch_uuid"
-    t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
-  end
-
-  create_table "spark_lines", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "network"
-    t.string "spark_group"
-    t.string "batch_uuid"
-    t.text "payload", size: :long
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "spark_group", "batch_uuid"], name: "index_spark_lines_on_network_and_spark_group_and_batch_uuid"
-  end
-
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "username", null: false
     t.string "encrypted_password", default: "", null: false
@@ -245,40 +190,7 @@ ActiveRecord::Schema.define(version: 2020_08_30_003349) do
     t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
   end
 
-  create_table "validator_block_histories_restart_20200828", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "validator_id", null: false
-    t.integer "epoch"
-    t.integer "leader_slots"
-    t.integer "blocks_produced"
-    t.integer "skipped_slots"
-    t.decimal "skipped_slot_percent", precision: 10, scale: 4
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "batch_uuid"
-    t.integer "skipped_slots_after"
-    t.decimal "skipped_slots_after_percent", precision: 10, scale: 4
-    t.string "network"
-    t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
-    t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
-    t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
-    t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
-  end
-
   create_table "validator_block_history_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "batch_uuid"
-    t.integer "epoch", unsigned: true
-    t.bigint "start_slot", unsigned: true
-    t.bigint "end_slot", unsigned: true
-    t.integer "total_slots", unsigned: true
-    t.integer "total_blocks_produced", unsigned: true
-    t.integer "total_slots_skipped", unsigned: true
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "network"
-    t.index ["network", "batch_uuid"], name: "index_validator_block_history_stats_on_network_and_batch_uuid"
-  end
-
-  create_table "validator_block_history_stats_restart_20200828", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "batch_uuid"
     t.integer "epoch", unsigned: true
     t.bigint "start_slot", unsigned: true
@@ -302,23 +214,7 @@ ActiveRecord::Schema.define(version: 2020_08_30_003349) do
     t.bigint "root_block", unsigned: true
     t.bigint "credits", unsigned: true
     t.bigint "active_stake", unsigned: true
-    t.boolean "delinquent", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
-  end
-
-  create_table "validator_histories_restart_20200828", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "network"
-    t.string "batch_uuid"
-    t.string "account"
-    t.string "vote_account"
-    t.decimal "commission", precision: 10, unsigned: true
-    t.bigint "last_vote", unsigned: true
-    t.bigint "root_block", unsigned: true
-    t.bigint "credits", unsigned: true
-    t.bigint "active_stake", unsigned: true
-    t.boolean "delinquent", default: false
+    t.boolean "delinquent"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
@@ -378,23 +274,6 @@ ActiveRecord::Schema.define(version: 2020_08_30_003349) do
   end
 
   create_table "vote_account_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "vote_account_id", null: false
-    t.integer "commission"
-    t.bigint "last_vote"
-    t.bigint "root_slot"
-    t.bigint "credits"
-    t.bigint "activated_stake"
-    t.string "software_version"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "network"
-    t.string "batch_uuid"
-    t.index ["network", "batch_uuid"], name: "index_vote_account_histories_on_network_and_batch_uuid"
-    t.index ["vote_account_id", "created_at"], name: "index_vote_account_histories_on_vote_account_id_and_created_at"
-    t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"
-  end
-
-  create_table "vote_account_histories_restart_20200828", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "vote_account_id", null: false
     t.integer "commission"
     t.bigint "last_vote"
