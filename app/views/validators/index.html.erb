@@ -36,6 +36,7 @@
             <%= text_field_tag(:q, '', placeholder: 'Starts with...', class: 'form-control') %>
           <%= hidden_field_tag(:network, params[:network]) %>
           <%= hidden_field_tag(:order, params[:order]) %>
+          <%= hidden_field_tag(:refresh, params[:refresh]) %>
           <div class="input-group-append">
             <%= submit_tag("Search", class: 'btn btn-outline-secondary') %>
           </div>
@@ -52,10 +53,10 @@
     </div>
     <div class='col-sm-4 text-right'>
       <% if params[:refresh] == 'true' %>
-        <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: false)  %>
+        <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false)  %>
         <small>Refresh ON</small>
       <% else %>
-        <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: true)  %>
+        <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true)  %>
         <small>Refresh OFF</small>
       <% end %>
     </div>
