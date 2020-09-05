@@ -158,12 +158,10 @@
 </div>
 <hr />
 <div class="row">
-  <div class="col-sm-12">
+  <div class="col-lg-6">
     <%= render partial: 'block_history_chart' %>
   </div>
-</div>
-<div class="row">
-  <div class="col-sm-12">
+  <div class="col-lg-6">
     <% vl = \
       if @validator.score.root_distance_history&.count.to_i < @history_limit
         @validator.score.root_distance_history&.count.to_i
