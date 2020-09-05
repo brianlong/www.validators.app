@@ -102,7 +102,12 @@ a {
 
   .spark-line-table{
     table-layout: fixed;
-    width: 100%
+    width: 100%;
+  }
+
+  .table-full-width {
+    width: 100%;
+    table-layout: auto;
   }
 
    /* Rounded border for table header */
