@@ -120,7 +120,12 @@
 </div>
 <hr />
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-12">
+    <%= render partial: 'block_history_chart' %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
     <% vl = \
       if @validator.score.root_distance_history&.count.to_i < @history_limit
         @validator.score.root_distance_history&.count.to_i
@@ -133,9 +138,6 @@
             vector_block: @validator.score&.root_distance_history.to_a[-vl..-1],
             vector_vote: @validator.score&.vote_distance_history.to_a[-vl..-1]
     %>
-  </div>
-  <div class="col-sm-6">
-    <%= render partial: 'block_history_chart' %>
   </div>
 </div>
 
