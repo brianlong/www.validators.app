@@ -89,12 +89,12 @@ class ValidatorsController < ApplicationController
             ) * 100.0
       }
 
-      @vote_account_history = \
-        if @validator.vote_accounts.last
-          @validator.vote_accounts.last.vote_account_histories.last
-        else
-          VoteAccountHistory.new
-        end
+      # @vote_account_history = \
+      #   if @validator.vote_accounts.last
+      #     @validator.vote_accounts.last.vote_account_histories.last
+      #   else
+      #     VoteAccountHistory.new
+      #   end
     end
   end
 
