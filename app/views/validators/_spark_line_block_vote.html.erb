@@ -1,8 +1,7 @@
-<h3 class="text-center">Skipped Slot History</h3>
-<canvas id="chart_validator_block_history"></canvas>
-
+<h3 class="text-center">Block &amp; Vote History</h3>
+<canvas id="spark_line_block_distance_<%= local_assigns[:account] %>"></canvas>
 <script type="text/javascript">
-  var ctx = document.getElementById('chart_validator_block_history').getContext('2d');
+  var ctx = document.getElementById("spark_line_block_distance_<%= local_assigns[:account] %>").getContext('2d');
   var chart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'line',
@@ -10,28 +9,28 @@
     // The data for our dataset
     data: {
         // x-axis labels
-        labels: <%= @data.keys %>,
+        labels: <%= local_assigns[:vector_block].to_a.count.downto(1).to_a %>,
         // An Array of JSON hashes for each dataset to plot. The y-axis is
         // dynamicly calculated. Look for othe options to control the y-axis if
         // desired.
         datasets: [
           {
-            label: 'Skipped Slot %',
+            label: 'Block Distance',
             fill: false,
-            backgroundColor: 'Green',
+            backgroundColor: 'Green', // 'rgb(85, 239, 196)',
             borderColor: 'Green',
             borderWidth: 1,
             radius: 0,
-            data: <%= @data.map { |k,v| v[:skipped_slot_percent] }%>
+            data: <%= local_assigns[:vector_block] %>
           },
           {
-            label: 'Cluster Skipped Slot %',
+            label: 'Vote Distance',
             fill: false,
-            backgroundColor: 'Blue',
+            backgroundColor: 'Blue', // 'rgb(85, 239, 196)',
             borderColor: 'Blue',
             borderWidth: 1,
             radius: 0,
-            data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent] } %>
+            data: <%= local_assigns[:vector_vote] %>
           }
         ]
     },
@@ -50,7 +49,7 @@
           gridLines: {display: false},
 					scaleLabel: {
 						display: true,
-						labelString: "Previous <%= @data.count %> Observations"
+						labelString: "Previous <%= local_assigns[:vector_block].to_a.count %> Observations"
 					}
 				}],
 				yAxes: [{
@@ -59,7 +58,7 @@
           gridLines: {display: false},
 					scaleLabel: {
 						display: true,
-						labelString: 'Percent'
+						labelString: 'Distance Behind'
 					}
 				}]
 			}

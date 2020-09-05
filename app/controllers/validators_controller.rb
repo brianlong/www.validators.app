@@ -53,16 +53,6 @@ class ValidatorsController < ApplicationController
           params[:network],
           @batch.uuid
         )
-      # @skipped_after_average = \
-      #   ValidatorBlockHistory.average_skipped_slots_after_percent_for(
-      #     params[:network],
-      #     @batch.uuid
-      #   )
-      # @skipped_after_median = \
-      #   ValidatorBlockHistory.median_skipped_slots_after_percent_for(
-      #     params[:network],
-      #     @batch.uuid
-      #   )
     end
 
     # Ping Times
@@ -81,9 +71,11 @@ class ValidatorsController < ApplicationController
 
     @data = {}
 
+    @history_limit = 240
+
     i = 0
     @validator.validator_block_histories
-              .order('id desc').limit(288).reverse.each do |vbh|
+              .order('id desc').limit(@history_limit).reverse.each do |vbh|
       i += 1
       batch_stats = ValidatorBlockHistoryStat.where(
         network: params[:network],
@@ -92,7 +84,6 @@ class ValidatorsController < ApplicationController
 
       @data[i] = {
         skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
-        skipped_slots_after_percent: vbh.skipped_slots_after_percent.to_f * 100.0,
         cluster_skipped_slot_percent: (
               batch_stats.total_slots_skipped / batch_stats.total_slots.to_f
             ) * 100.0

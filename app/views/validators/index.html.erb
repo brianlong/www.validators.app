@@ -197,8 +197,8 @@
               <td class="spark-line text-right">
                 <%
                     vl = \
-                      if validator.score&.root_distance_history.count < 60
-                        validator.score&.root_distance_history.count
+                      if validator.score&.root_distance_history.to_a.count < 60
+                        validator.score&.root_distance_history.to_a.count
                       else
                         60
                       end
@@ -209,7 +209,7 @@
                       else
                         'Gray'
                       end
-                    vector = validator.score&.root_distance_history[-vl..-1]
+                    vector = validator.score&.root_distance_history.to_a[-vl..-1]
                  %>
 
                 <%= render 'validators/spark_line_block_distance',
@@ -223,8 +223,8 @@
               <td class="spark-line text-right">
                 <%
                     vl = \
-                      if validator.score&.vote_distance_history.count < 60
-                        validator.score&.vote_distance_history.count
+                      if validator.score&.vote_distance_history.to_a.count < 60
+                        validator.score&.vote_distance_history.to_a.count
                       else
                         60
                       end
@@ -235,7 +235,7 @@
                       else
                         'Gray'
                       end
-                    vote_vector = validator.score&.vote_distance_history[-vl..-1]
+                    vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
                  %>
 
                 <%= render 'validators/spark_line_vote_distance',
