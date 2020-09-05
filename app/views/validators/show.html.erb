@@ -130,8 +130,8 @@
     %>
     <%= render 'validators/spark_line_block_vote',
             account: @validator.account,
-            vector_block: @validator.score&.root_distance_history,
-            vector_vote: @validator.score&.root_distance_history
+            vector_block: @validator.score&.root_distance_history.to_a[-vl..-1],
+            vector_vote: @validator.score&.root_distance_history.to_a[-vl..-1]
     %>
   </div>
   <div class="col-sm-6">
