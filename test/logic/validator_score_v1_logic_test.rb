@@ -105,16 +105,10 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
     assert_equal 0.1, p.payload[:avg_skipped_slot_pct_all]
     assert_equal 0.1, p.payload[:med_skipped_slot_pct_all]
-    assert_equal 0.1, p.payload[:avg_skipped_after_pct_all]
-    assert_equal 0.1, p.payload[:med_skipped_after_pct_all]
     assert_equal [0.1], p.payload[:validators]
                          .first
                          .validator_score_v1
                          .skipped_slot_history
-    assert_equal [0.1], p.payload[:validators]
-                         .first
-                         .validator_score_v1
-                         .skipped_after_history
   end
 
   test 'assign_block_history_score' do
@@ -128,24 +122,14 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
     assert_equal 0.1, p.payload[:avg_skipped_slot_pct_all]
     assert_equal 0.1, p.payload[:med_skipped_slot_pct_all]
-    assert_equal 0.1, p.payload[:avg_skipped_after_pct_all]
-    assert_equal 0.1, p.payload[:med_skipped_after_pct_all]
     assert_equal [0.1], p.payload[:validators]
                          .first
                          .validator_score_v1
                          .skipped_slot_history
-    assert_equal [0.1], p.payload[:validators]
-                         .first
-                         .validator_score_v1
-                         .skipped_after_history
     assert_equal 2, p.payload[:validators]
                      .first
                      .validator_score_v1
                      .skipped_slot_score
-    assert_equal 2, p.payload[:validators]
-                     .first
-                     .validator_score_v1
-                     .skipped_after_score
   end
 
   test 'asign_software_version_score' do
@@ -200,6 +184,5 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .root_distance_score
     assert_equal 2, Validator.first.validator_score_v1.root_distance_score
     assert_equal 2, Validator.first.validator_score_v1.skipped_slot_score
-    assert_equal 2, Validator.first.validator_score_v1.skipped_after_score
   end
 end
