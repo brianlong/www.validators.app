@@ -20,18 +20,4 @@ class ValidatorBlockHistory < ApplicationRecord
       batch_uuid: batch_uuid
     ).median(:skipped_slot_percent)
   end
-
-  def self.average_skipped_slots_after_percent_for(network, batch_uuid)
-    where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).average(:skipped_slots_after_percent)
-  end
-
-  def self.median_skipped_slots_after_percent_for(network, batch_uuid)
-    where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).median(:skipped_slots_after_percent)
-  end
 end

@@ -69,11 +69,6 @@ module Api
           name: 'build_skipped_slot_percent'
         ).last
 
-        @skipped_after_report = Report.where(
-          network: params[:network],
-          name: 'build_skipped_after_percent'
-        ).last
-
         render 'api/v1/validators/index', formats: :json
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
@@ -92,11 +87,6 @@ module Api
         @skipped_slots_report = Report.where(
           network: params[:network],
           name: 'build_skipped_slot_percent'
-        ).last
-
-        @skipped_after_report = Report.where(
-          network: params[:network],
-          name: 'build_skipped_after_percent'
         ).last
 
         render 'api/v1/validators/show', formats: :json

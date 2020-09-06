@@ -139,15 +139,4 @@ class ValidatorScoreV1 < ApplicationRecord
       self.skipped_slot_history = skipped_slot_history[-MAX_HISTORY..-1]
     end
   end
-
-  def skipped_after_history_push(val)
-    self.skipped_after_history = [] if skipped_after_history.nil?
-
-    skipped_after_history << val
-
-    # Prune the array  to include the most recent values
-    if skipped_after_history.length > MAX_HISTORY
-      self.skipped_after_history = skipped_after_history[-MAX_HISTORY..-1]
-    end
-  end
 end

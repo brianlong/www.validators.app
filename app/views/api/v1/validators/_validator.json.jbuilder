@@ -45,19 +45,6 @@ unless @skipped_slots_report.nil?
   end
 end
 
-# Data from the skipped_after_report
-# unless @skipped_after_report.nil?
-#   this_after_report = @skipped_after_report.payload.select do |sar|
-#     sar['account'] == validator.account
-#   end
-#
-#   unless this_after_report.first.nil?
-#     json.skipped_slots_after this_after_report.first['skipped_slots_after']
-#     json.skipped_slots_after_percent \
-#       this_after_report.first['skipped_slots_after_percent']
-#   end
-# end
-
 # Show URl to this record in the API
 json.url api_v1_validator_url(
   network: params[:network],

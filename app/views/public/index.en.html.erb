@@ -54,7 +54,7 @@
   <div class='row'>
     <div class="col-md-12">
       <p>
-        Top and bottom performing validators for epoch <%= @block_history_stat.epoch %> appear in the tables below. The &quot;Skipped Slot&quot; stats show how many slots were skipped by each leader. The &quot;Skipped After&quot; stats show the performance by the leader AFTER the designated node. Poor performance in the &quot;Skipped After&quot; category may indicate that your validator is slow to propagate blocks to the next leader. Slow handoffs from one leader to the next will result in more forks and missed slots by the rest of the cluster.
+        Top and bottom performing validators for epoch <%= @block_history_stat.epoch %> appear in the tables below. The &quot;Skipped Slot&quot; stats show how many slots were skipped by each leader.
       </p>
     </div>
   </div>
@@ -69,12 +69,7 @@
       </p>
     </div>
     <div class="col-lg-6">
-      <h3>Skipped After &percnt; Leaders</h3>
-      <p>The <%= params[:network] %> validators with the best performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
-      <p>
-        <%= render 'skipped_after_table', histories: @skipped_after_top %>
-        Data through <%= @skipped_after_report.created_at %>.
-      </p>
+      &nbsp;
     </div>
   </div>
   <div class='row'>
@@ -87,12 +82,7 @@
       </p>
     </div>
     <div class="col-lg-6">
-      <h3>Skipped After &percnt; Laggards</h3>
-      <p>The <%= params[:network] %> validators with the worst performance in the slots AFTER their turn as leader in epoch <%= @block_history_stat.epoch %>.</p>
-      <p>
-        <%= render 'skipped_after_table', histories: @skipped_after_bottom %>
-        Data through <%= @skipped_after_report.created_at %>.
-      </p>
+      &nbsp;
     </div>
   </div>
   <hr />
