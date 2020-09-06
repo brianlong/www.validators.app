@@ -34,15 +34,6 @@ if p.code == 200
     network: p.payload[:network],
     batch_uuid: p.payload[:batch_uuid]
   )
-  BuildSkippedAfterPercentWorker.perform_async(
-    network: p.payload[:network],
-    batch_uuid: p.payload[:batch_uuid]
-  )
-  ChartHomePageWorker.perform_async(
-    batch_uuid: p.payload[:batch_uuid],
-    network: p.payload[:network],
-    epoch: p.payload[:epoch]
-  )
   ReportTowerHeightWorker.perform_async(
     epoch: p.payload[:epoch],
     batch_uuid: p.payload[:batch_uuid],
