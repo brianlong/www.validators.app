@@ -260,7 +260,7 @@
                       else
                         'Gray'
                       end
-                    slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| v.to_f*100.0}
+                    slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| (v.to_f*100.0).round(1)}
                  %>
 
                 <%= render 'validators/spark_line_skipped_slots',

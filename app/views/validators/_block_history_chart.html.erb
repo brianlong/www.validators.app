@@ -16,22 +16,22 @@
         // desired.
         datasets: [
           {
-            label: 'Skipped Slot %',
+            label: 'Skipped %',
             fill: false,
             backgroundColor: 'Green',
             borderColor: 'Green',
             borderWidth: 1,
             radius: 0,
-            data: <%= @data.map { |k,v| v[:skipped_slot_percent] }%>
+            data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
           },
           {
-            label: 'Cluster Skipped Slot %',
+            label: 'Cluster %',
             fill: false,
             backgroundColor: 'Blue',
             borderColor: 'Blue',
             borderWidth: 1,
             radius: 0,
-            data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent] } %>
+            data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent].round(1) } %>
           }
         ]
     },
