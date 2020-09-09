@@ -1,5 +1,4 @@
-<hr />
-<h3>Skipped Slot History</h3>
+<h3 class="text-center">Skipped Slot History</h3>
 <canvas id="chart_validator_block_history"></canvas>
 
 <script type="text/javascript">
@@ -17,45 +16,47 @@
         // desired.
         datasets: [
           {
-            label: 'Skipped Slot %',
+            label: 'Skip %',
             fill: false,
-            backgroundColor: 'rgb(85, 239, 196)',
-            borderColor: 'rgb(85, 239, 196)',
+            backgroundColor: 'Green',
+            borderColor: 'Green',
+            borderWidth: 1,
             radius: 0,
-            data: <%= @data.map { |k,v| v[:skipped_slot_percent] }%>
+            data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
           },
           {
-            label: 'Skipped Slot After %',
+            label: 'Cluster %',
             fill: false,
-            backgroundColor: 'rgb(129, 236, 236)',
-            borderColor: 'rgb(129, 236, 236)',
+            backgroundColor: 'Blue',
+            borderColor: 'Blue',
+            borderWidth: 1,
             radius: 0,
-            data: <%= @data.map { |k,v| v[:skipped_slots_after_percent] } %>
-          },
-          {
-            label: 'Cluster Skipped Slot %',
-            fill: false,
-            backgroundColor: 'rgb(116, 185, 255)',
-            borderColor: 'rgb(116, 185, 255)',
-            radius: 0,
-            data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent] } %>
+            data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent].round(1) } %>
           }
         ]
     },
 
     // Configuration options go here
     options: {
+      animation: { duration: 0 }, // general animation time
+      elements: { line: { tension: 0 } }, // disables bezier curves
+      hover: { animationDuration: 0 }, // duration of animations when hovering
+      responsiveAnimationDuration: 0, // animation duration after a resize
+      // legend: { display: false },
       scales: {
 				xAxes: [{
 					display: true,
+          ticks: {display: false},
+          gridLines: {display: false},
 					scaleLabel: {
 						display: true,
-						labelString: 'Counter'
+						labelString: "Previous <%= @data.count %> Observations"
 					}
 				}],
 				yAxes: [{
 					display: true,
           ticks: { min: 0},
+          gridLines: {display: true},
 					scaleLabel: {
 						display: true,
 						labelString: 'Percent'
@@ -65,4 +66,3 @@
     }
   });
 </script>
-<hr />

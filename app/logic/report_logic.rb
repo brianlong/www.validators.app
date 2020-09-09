@@ -55,58 +55,6 @@ module ReportLogic
     end
   end
 
-  def build_skipped_after_percent
-    lambda do |p|
-      return p unless p[:code] == 200
-      raise StandardError, 'Missing p.payload[:network]' \
-        unless p.payload[:network]
-      raise StandardError, 'Missing p.payload[:batch_uuid]' \
-        unless p.payload[:batch_uuid]
-
-      # Grab the block history for this batch
-      block_history = ValidatorBlockHistory.where(
-        network: p.payload[:network],
-        batch_uuid: p.payload[:batch_uuid]
-      ).order('skipped_slots_after_percent asc')
-
-      # Create a results array and insert the data
-      result = []
-      block_history.each do |history|
-        # Ping Times Trailing 1_000 pings stats.
-        # DO NOT USE ACTIVE RECORD FOR THIS! Horrible performance
-        account_ping_times = PingTime.where(
-          network: p.payload[:network],
-          to_account: history.validator.account
-        ).order('created_at desc').limit(1_000)
-
-        account_avg_ms = account_ping_times.map { |pt| pt.avg_ms.to_f.round(2) }
-        ping_times_avg_ms = account_avg_ms.sum / account_avg_ms.size.to_f
-
-        result << {
-          'validator_id' => history.validator.id,
-          'account' => history.validator.account,
-          'skipped_slots_after' => history.skipped_slots_after,
-          'skipped_slots_after_percent' => history.skipped_slots_after_percent,
-          'ping_time' => ping_times_avg_ms
-        }
-      end
-
-      raise 'No data' if result.empty?
-
-      # Create the report
-      Report.create(
-        network: p.payload[:network],
-        batch_uuid: p.payload[:batch_uuid],
-        name: 'build_skipped_after_percent',
-        payload: result
-      )
-
-      Pipeline.new(200, p.payload.merge(result: result))
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, 'build_skipped_slot_percent', e)
-    end
-  end
-
   # Sample payload
   # [{"epoch":61,"end_slot":20988266,"total_blocks_produced":145785,"total_slots_skipped":14226,"total_skipped_percent":0.09758205576705423},...]
   def chart_home_page

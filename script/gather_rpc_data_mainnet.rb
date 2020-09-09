@@ -26,30 +26,21 @@ p = Pipeline.new(200, payload)
             .then(&batch_touch)
 
 if p.code == 200
-  BuildSkippedSlotPercentWorker.perform_async(
+  BuildSkippedSlotPercentWorker.set(queue: :high_priority).perform_async(
     network: p.payload[:network],
     batch_uuid: p.payload[:batch_uuid]
   )
-  BuildSkippedAfterPercentWorker.perform_async(
-    network: p.payload[:network],
-    batch_uuid: p.payload[:batch_uuid]
-  )
-  ChartHomePageWorker.perform_async(
-    batch_uuid: p.payload[:batch_uuid],
-    network: p.payload[:network],
-    epoch: p.payload[:epoch]
-  )
-  ReportTowerHeightWorker.perform_async(
+  ReportTowerHeightWorker.set(queue: :high_priority).perform_async(
     epoch: p.payload[:epoch],
     batch_uuid: p.payload[:batch_uuid],
     network: p.payload[:network]
   )
-  ReportSoftwareVersionWorker.perform_async(
+  ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(
     batch_uuid: p.payload[:batch_uuid],
     network: p.payload[:network]
   )
 
-  ValidatorScoreV1Worker.perform_async(
+  ValidatorScoreV1Worker.set(queue: :high_priority).perform_async(
     network: p.payload[:network],
     batch_uuid: p.payload[:batch_uuid]
   )
