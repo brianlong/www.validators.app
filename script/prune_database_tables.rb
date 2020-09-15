@@ -5,7 +5,7 @@ require File.expand_path('../config/environment', __dir__)
 
 thirty_days_ago = (Date.today - 30.days).to_s(:db)
 
-verbose = true
+verbose = false
 puts thirty_days_ago if verbose
 
 %w[batches epoch_histories ping_time_stats ping_times reports validator_block_histories validator_block_history_stats validator_histories vote_account_histories].each do |table|
