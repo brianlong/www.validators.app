@@ -59,9 +59,24 @@ module Api
         render json: { 'status' => e.message }, status: 500
       end
 
+      # Show the list of validators with scores
       def validators_list
+        @sort_order = if params[:order] == 'score'
+                        'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
+                      elsif params[:order] == 'name'
+                        'validators.name asc'
+                      elsif params[:order] == 'stake'
+                        'validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc'
+                      else
+                        'RAND()'
+                      end
+
+        @limit = params[:limit] || 9999
+
         @validators = Validator.where(network: params[:network])
-                               .order('network, account')
+                               .joins(:validator_score_v1)
+                               .order(@sort_order)
+                               .limit(@limit)
                                .all
 
         @skipped_slots_report = Report.where(
