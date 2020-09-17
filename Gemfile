@@ -67,6 +67,10 @@ gem 'nokogiri'
 
 gem 'kaminari'
 
+# MaxMind
+gem 'dnsruby'
+gem 'maxmind-geoip2'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
