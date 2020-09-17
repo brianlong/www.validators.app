@@ -149,7 +149,12 @@
                                 page: params[:page],
                                 refresh: params[:refresh]
                               ) %>
-                  <small>(<%= validator.commission %>%)</small><br />
+                  <%
+                    comm_class = 'text-red' \
+                      if params[:network] == 'mainnet' &&
+                         validator.commission.to_i == 100
+                  %>
+                  <small class="<%= comm_class %>">(<%= validator.commission %>%)</small><br />
                   <small>
                     <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
                     (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)

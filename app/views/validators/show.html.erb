@@ -120,8 +120,13 @@
         <!-- Fifth Row -->
         <tr>
           <td><strong>Commission:</strong></td>
-          <td>
-            <%= @validator.validator_score_v1&.commission rescue 'N/A' %> &percnt;
+          <%
+            comm_class = 'text-red' \
+              if params[:network] == 'mainnet' &&
+                 @validator.commission.to_i == 100
+          %>
+          <td class="<%= comm_class %>">
+            <%= @validator.commission rescue 'N/A' %> &percnt;
           </td>
         </tr>
 
