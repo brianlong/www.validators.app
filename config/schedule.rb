@@ -40,7 +40,7 @@ every 1.minutes do
   ruby_script 'gather_rpc_data_mainnet.rb'
 end
 
-every 3.minutes do
+every 2.minutes do
   ruby_script 'gather_rpc_data.rb'
 end
 
