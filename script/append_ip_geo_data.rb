@@ -7,8 +7,6 @@ require 'net/http'
 require 'uri'
 require 'maxmind/geoip2'
 
-# dev_mode = true # change to false for production
-
 begin
   interrupted = false
   trap('INT') { interrupted = true }
@@ -18,6 +16,7 @@ begin
     account_id: Rails.application.credentials.max_mind[:account_id],
     license_key: Rails.application.credentials.max_mind[:license_key]
   )
+
   # SQL statement to find un-appended IPs
   sql = "SELECT address
          FROM validator_ips v
