@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/faker-ruby/faker.git
-  revision: a7c823ccf8527ce1127e04871353021b4b4f4d6f
+  revision: ef44b03a5e45f7cdd05fb363d3d226985d952264
   branch: master
   specs:
     faker (2.14.0)
@@ -74,8 +74,8 @@ GEM
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
     aws-eventstream (1.1.0)
-    aws-partitions (1.373.0)
-    aws-sdk-core (3.107.0)
+    aws-partitions (1.376.0)
+    aws-sdk-core (3.108.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
@@ -83,7 +83,7 @@ GEM
     aws-sdk-kms (1.38.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.81.0)
+    aws-sdk-s3 (1.81.1)
       aws-sdk-core (~> 3, >= 3.104.3)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -125,7 +125,7 @@ GEM
     connection_pool (2.2.3)
     crack (0.4.4)
     crass (1.0.6)
-    devise (4.7.2)
+    devise (4.7.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -133,6 +133,8 @@ GEM
       warden (~> 1.2.3)
     devise-i18n (1.9.2)
       devise (>= 4.7.1)
+    dnsruby (1.61.4)
+      simpleidn (~> 0.1)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     encryptor (3.0.0)
@@ -143,11 +145,22 @@ GEM
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
     ffi (1.13.1)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     hashdiff (1.0.1)
+    http (4.4.1)
+      addressable (~> 2.3)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.2)
+      http-parser (~> 1.2.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    http-form_data (2.3.0)
+    http-parser (1.2.1)
+      ffi-compiler (>= 1.0, < 2.0)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.1)
@@ -177,6 +190,11 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
+    maxmind-db (1.1.1)
+    maxmind-geoip2 (0.5.0)
+      connection_pool (~> 2.2)
+      http (~> 4.3)
+      maxmind-db (~> 1.1)
     mechanize (2.7.6)
       domain_name (~> 0.5, >= 0.5.1)
       http-cookie (~> 1.0)
@@ -208,7 +226,7 @@ GEM
     ntlm-http (0.1.1)
     orm_adapter (0.5.0)
     parallel (1.19.2)
-    parser (2.7.1.4)
+    parser (2.7.1.5)
       ast (~> 2.4.1)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -251,22 +269,22 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.2.2)
-    regexp_parser (1.7.1)
+    regexp_parser (1.8.0)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.4)
-    rubocop (0.91.0)
+    rubocop (0.92.0)
       parallel (~> 1.10)
-      parser (>= 2.7.1.1)
+      parser (>= 2.7.1.5)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.7)
       rexml
-      rubocop-ast (>= 0.4.0, < 1.0)
+      rubocop-ast (>= 0.5.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.4.2)
-      parser (>= 2.7.1.4)
+    rubocop-ast (0.6.0)
+      parser (>= 2.7.1.5)
     ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
     rubyzip (2.3.0)
@@ -287,6 +305,8 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
+    simpleidn (0.1.1)
+      unf (~> 0.1.4)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -360,12 +380,14 @@ DEPENDENCIES
   capybara (>= 2.15)
   devise
   devise-i18n
+  dnsruby
   factory_bot_rails
   faker!
   jbuilder (~> 2.7)
   json (>= 2.3.0)
   kaminari
   listen (>= 3.0.5, < 3.2)
+  maxmind-geoip2
   mechanize
   mysql2 (>= 0.5.3)
   nokogiri
