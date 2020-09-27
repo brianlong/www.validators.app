@@ -65,7 +65,12 @@
   <div class="col-sm-12">
     <p>The validators endpoint will return a list of validators for the requested network. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired.</p>
     <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" https://www.validators.app/api/v1/validators/:network.json</pre>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json'</pre>
+    <p>Parameter Options:</p>
+    <p>`order=[score, name, stage]` will sort the results by score descending, name, or stake.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score'</pre>
+    <p>`limit=NN` will limit the results to NN entries. The default is 9_999.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&limit=50'</pre>
     <p>Response:</p>
     <p>An Array of validators.</p>
     <pre>
