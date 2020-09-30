@@ -28,6 +28,10 @@ begin
 
   Ip.connection.execute(sql).each do |missing_ip|
     puts missing_ip[0].inspect if Rails.env == 'development'
+    # Skip private IPs
+    next if missing_ip[0..2] == '10.'
+    next if missing_ip[0..3] == '192.'
+
     record = client.insights(missing_ip[0])
     ip = Ip.create(
       address: missing_ip[0],
