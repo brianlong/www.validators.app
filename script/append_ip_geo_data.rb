@@ -18,7 +18,7 @@ begin
   )
 
   # SQL statement to find un-appended IPs
-  sql = "SELECT address
+  sql = "SELECT DISTINCT address
          FROM validator_ips v
          WHERE v.address NOT IN (
            SELECT ips.address FROM ips
