@@ -48,7 +48,7 @@
   <div class="row">
     <div class="col-sm-8">
       <small>
-        Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
+        Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>. <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
       </small>
     </div>
     <div class='col-sm-4 text-right'>

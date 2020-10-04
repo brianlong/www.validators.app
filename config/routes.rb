@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'data-centers/:network', to: 'data_centers#index', as: 'data_centers'
+
   get 'vote_accounts/:network/:account',
       to: 'vote_accounts#show',
       as: 'vote_account'
