@@ -46,12 +46,12 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-8">
+    <div class="col-sm-10">
       <small>
         Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>. <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
       </small>
     </div>
-    <div class='col-sm-4 text-right'>
+    <div class='col-sm-2 text-right'>
       <% if params[:refresh] == 'true' %>
         <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false)  %>
         <small>Refresh ON</small>
