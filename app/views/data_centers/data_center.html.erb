@@ -1,0 +1,32 @@
+<h1><%= params[:network].capitalize %> Data Centers</h1>
+<p><%= link_to 'Back to Data Centers', data_centers_url(network: params[:network]) %></p>
+<table class='table table-striped table-borderless'>
+  <thead class="thead-dark">
+    <tr>
+      <th class="avatar-column">&nbsp;</th>
+      <th class="name-column">Name</th>
+      <th>Account</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @validators.each do |dc| %>
+      <% this_validator = Validator.where(account: dc[2]).first %>
+    <tr>
+      <td>
+        <span class="avatar">
+          <% if this_validator && this_validator.avatar_url %>
+            <%= image_tag this_validator.avatar_url, class: 'img-circle' %>
+          <% else %>
+            <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+          <% end %>
+        </span>
+      </td>
+      <td><%= dc[3] %></td>
+      <td><%= link_to dc[2], validator_url(network: params[:network], account: dc[2]) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+
+
+</table>
+<p><%= link_to 'Back to Data Centers', data_centers_url(network: params[:network]) %></p>
