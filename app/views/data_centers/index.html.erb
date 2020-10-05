@@ -12,7 +12,7 @@
   <tbody>
     <% @data_centers.each do |dc| %>
     <tr>
-      <td><%= link_to dc[0], data_center_url(network: params[:network], key: dc[0]) %></td>
+      <td><%= link_to dc[0], data_center_url(network: params[:network], key: URI.escape(dc[0])) %></td>
       <td><%= dc[1] %></td>
       <td><%= dc[2] %></td>
       <td><%= dc[3] %></td>

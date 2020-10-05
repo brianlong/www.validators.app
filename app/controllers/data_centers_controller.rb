@@ -33,7 +33,7 @@ class DataCentersController < ApplicationController
       WHERE val.network = '#{params[:network]}'
       AND vip.address IN (
         SELECT address from ips
-        WHERE data_center_key = '#{params[:key]}'
+        WHERE data_center_key = '#{URI.unescape(params[:key])}'
       )
       ORDER BY val.updated_at desc
     "
