@@ -35,7 +35,7 @@ class DataCentersController < ApplicationController
         SELECT address from ips
         WHERE data_center_key = '#{params[:key].gsub('-slash-', '/')}'
       )
-      ORDER BY val.updated_at desc
+      ORDER BY val.account
     "
     @validators = Validator.connection.execute(sql)
   end
