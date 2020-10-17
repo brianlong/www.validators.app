@@ -21,11 +21,13 @@ class DataCentersController < ApplicationController
       ORDER BY count desc
     "
     @data_centers = Ip.connection.execute(sql)
+    @scores = ValidatorScoreV1.where(network: params[:network])
   end
 
   # params[:network]
   # params[:key]
   def data_center
+    key = params[:key].gsub('-slash-', '/')
     sql = "
       SELECT *
       FROM validators val
@@ -33,10 +35,12 @@ class DataCentersController < ApplicationController
       WHERE val.network = '#{params[:network]}'
       AND vip.address IN (
         SELECT address from ips
-        WHERE data_center_key = '#{params[:key].gsub('-slash-', '/')}'
+        WHERE data_center_key = '#{key}'
       )
       ORDER BY val.account
     "
     @validators = Validator.connection.execute(sql)
+    @scores = ValidatorScoreV1.where(network: params[:network])
+                              .where(data_center_key: key)
   end
 end

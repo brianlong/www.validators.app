@@ -16,7 +16,7 @@
       <td><%= dc[1] %></td>
       <td><%= dc[2] %></td>
       <td><%= dc[3] %></td>
-      <td><%= dc[4] %></td>
+      <td><%= @scores.where(data_center_key: dc[0]).count %></td>
     </tr>
     <% end %>
   </tbody>

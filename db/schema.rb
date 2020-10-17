@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_27_151605) do
+ActiveRecord::Schema.define(version: 2020_10_17_163925) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -404,6 +404,10 @@ ActiveRecord::Schema.define(version: 2020_09_27_151605) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "published_information_score"
     t.integer "security_report_score"
+    t.string "ip_address"
+    t.string "data_center_key"
+    t.string "network"
+    t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
 

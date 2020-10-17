@@ -1,4 +1,7 @@
 <h1><%= params[:network].capitalize %> Data Centers</h1>
+<% if params[:key] %>
+  <h3><%= params[:key].gsub('-slash-', '/') %></h3>
+<% end %>
 <p><%= link_to 'Back to Data Centers', data_centers_url(network: params[:network]) %></p>
 <table class='table table-striped table-borderless'>
   <thead class="thead-dark">
@@ -9,8 +12,8 @@
     </tr>
   </thead>
   <tbody>
-    <% @validators.each do |dc| %>
-      <% this_validator = Validator.where(account: dc[2]).first %>
+    <% @scores.each do |sc| %>
+      <% this_validator = sc.validator %>
     <tr>
       <td>
         <span class="avatar">
@@ -21,8 +24,8 @@
           <% end %>
         </span>
       </td>
-      <td><%= dc[3] %></td>
-      <td><%= link_to dc[2], validator_url(network: params[:network], account: dc[2]) %></td>
+      <td><%= this_validator.name %></td>
+      <td><%= link_to this_validator.account, validator_url(network: params[:network], account: this_validator.account) %></td>
     </tr>
     <% end %>
   </tbody>

@@ -34,6 +34,10 @@ class Validator < ApplicationRecord
     ary.sum / ary.length.to_f
   end
 
+  def ip_address
+    validator_ips.last&.address
+  end
+
   # Convenience methods
   def score
     validator_score_v1

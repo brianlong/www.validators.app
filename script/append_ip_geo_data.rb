@@ -76,6 +76,22 @@ begin
     ip.subdivision_name = record.most_specific_subdivision.name
     ip.save
   end
+
+  puts '' if Rails.env == 'development'
+  # Update validator_score_v1s with the latest data
+  ValidatorScoreV1.find_each do |vs1|
+    next unless vs1.validator && vs1.validator&.ip_address
+
+    ip = vs1.validator.ip_address
+    puts ip if Rails.env == 'development'
+
+    vs1.network = vs1.validator.network
+    vs1.ip_address = ip
+    if Ip.where(address: ip).first
+      vs1.data_center_key = Ip.where(address: ip).first.data_center_key
+    end
+    vs1.save
+  end
 rescue StandardError => e
   puts "\nERROR:"
   puts e.message
