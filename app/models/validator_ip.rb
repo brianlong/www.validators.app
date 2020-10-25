@@ -3,12 +3,9 @@
 # ValidatorIp
 class ValidatorIp < ApplicationRecord
   belongs_to :validator
-  after_save :copy_data_to_score
+  after_touch :copy_data_to_score
 
   def copy_data_to_score
-    return unless validator.validator_score_v1
-
-    validator.validator_score_v1.ip_address = address
-    validator.validator_score_v1.save
+    validator.copy_data_to_score
   end
 end

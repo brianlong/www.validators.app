@@ -39,12 +39,12 @@ class Validator < ApplicationRecord
     validator_ips.order('updated_at desc').first&.address
   end
 
-  # def copy_data_to_score
-  #   if validator_score_v1
-  #     validator_score_v1.ip_address = ip_address
-  #     validator_score_v1.save
-  #   end
-  # end
+  def copy_data_to_score
+    if validator_score_v1
+      validator_score_v1.ip_address = ip_address
+      validator_score_v1.save
+    end
+  end
 
   # Convenience methods
   def score
