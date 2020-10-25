@@ -36,7 +36,7 @@ class Validator < ApplicationRecord
   end
 
   def ip_address
-    validator_ips.order('updated_at desc').last&.address
+    validator_ips.order('updated_at desc').first&.address
   end
 
   # def copy_data_to_score
