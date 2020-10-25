@@ -7,7 +7,7 @@ class Validator < ApplicationRecord
   has_many :validator_ips
   has_many :validator_block_histories
   has_one :validator_score_v1
-  after_save :copy_data_to_score
+  # after_save :copy_data_to_score
 
   # Returns an Array of account IDs for a given network
   #
@@ -39,12 +39,12 @@ class Validator < ApplicationRecord
     validator_ips.order('updated_at desc').last&.address
   end
 
-  def copy_data_to_score
-    if validator_score_v1
-      validator_score_v1.ip_address = ip_address
-      validator_score_v1.save
-    end
-  end
+  # def copy_data_to_score
+  #   if validator_score_v1
+  #     validator_score_v1.ip_address = ip_address
+  #     validator_score_v1.save
+  #   end
+  # end
 
   # Convenience methods
   def score
