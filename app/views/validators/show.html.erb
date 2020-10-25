@@ -63,7 +63,7 @@
           <td>
               <%=
                 link_to(@validator.data_center_key.to_s,
-                  data_center_url(network: params[:network], key: @validator.data_center_key)) unless @validator.data_center_key.blank?
+                  data_center_url(network: params[:network], key: @validator.data_center_key.gsub('/', '-slash-'))) unless @validator.data_center_key.blank?
               %>
           </td>
         </tr>
