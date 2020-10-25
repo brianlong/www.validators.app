@@ -10,13 +10,13 @@
     </tr>
   </thead>
   <tbody>
-    <% @data_centers.each do |dc| %>
+    <% @data_centers.each do |k,v| %>
     <tr>
-      <td><%= link_to dc[0], data_center_url(network: params[:network], key: dc[0].gsub('/', '-slash-')) %></td>
-      <td><%= dc[1] %></td>
-      <td><%= dc[2] %></td>
-      <td><%= dc[3] %></td>
-      <td><%= @scores.where(data_center_key: dc[0]).count %></td>
+      <td><%= link_to k, data_center_url(network: params[:network], key: k.gsub('/', '-slash-')) %></td>
+      <td><%= v[:aso] %></td>
+      <td><%= v[:country] %></td>
+      <td><%= v[:locked_at] %></td>
+      <td><%= v[:count] %></td>
     </tr>
     <% end %>
   </tbody>
