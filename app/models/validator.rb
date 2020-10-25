@@ -114,4 +114,8 @@ class Validator < ApplicationRecord
   def total_score
     score&.total_score
   end
+
+  def data_center_key
+    score&.data_center_key
+  end
 end
