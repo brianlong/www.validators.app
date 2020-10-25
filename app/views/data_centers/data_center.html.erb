@@ -9,6 +9,10 @@
       <th class="avatar-column">&nbsp;</th>
       <th class="name-column">Name</th>
       <th>Account</th>
+      <th>
+        Active Stake<br />
+        <span class='small'> <%= number_with_delimiter lamports_to_sol(@total_stake) %> </span>
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -26,6 +30,14 @@
       </td>
       <td><%= this_validator.name %></td>
       <td><%= link_to this_validator.account, validator_url(network: params[:network], account: this_validator.account) %></td>
+      <td>
+        <%= number_with_delimiter lamports_to_sol(sc.active_stake) %>
+        (  <%= number_to_percentage(
+                 (sc.active_stake / @total_stake.to_f)*100.0,
+                 precision: 2
+              )
+           %>)
+      </td>
     </tr>
     <% end %>
   </tbody>
