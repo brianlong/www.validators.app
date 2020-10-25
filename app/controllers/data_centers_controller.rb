@@ -20,6 +20,8 @@ class DataCentersController < ApplicationController
     @data_centers = {}
     @dc_sql.each do |dc|
       population = @scores.where(data_center_key: dc[0]).count || 0
+      next if population.zero?
+
       # Rails.logger.info "#{dc.inspect} => #{population}"
       # Rails.logger.info dc[0]
       # Rails.logger.info "@data_centers is a #{@data_centers.class}"
