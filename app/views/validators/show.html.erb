@@ -54,7 +54,7 @@
         <!-- Fifth Row -->
         <tr>
           <td><strong>IP:</strong></td>
-          <td><%= @validator.validator_ips.last.address unless @validator.validator_ips.empty? %></td>
+          <td><%= @validator.ip_address unless @validator.validator_ips.empty? %></td>
         </tr>
 
         <!-- Sixth Row -->
@@ -149,7 +149,7 @@
            <td>&nbsp;</td>
          </tr>
 
-         <!-- Seventh Row -->         
+         <!-- Seventh Row -->
          <tr>
            <td>
              <strong>Security Info:</strong>
