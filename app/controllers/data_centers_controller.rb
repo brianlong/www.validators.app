@@ -8,10 +8,10 @@ class DataCentersController < ApplicationController
              IF(ISNULL(city_name), location_time_zone, city_name) as location
       FROM ips
       WHERE ips.address IN (
-        SELECT vip.address
-        FROM validator_ips vip
-        INNER JOIN validators val ON val.id = vip.validator_id
-        WHERE val.network = '#{params[:network]}'
+        SELECT score.ip_address
+        FROM validator_score_v1s score
+        WHERE score.network = '#{params[:network]}'
+        AND score.active_stake > 0
       )
     "
     @dc_sql = Ip.connection.execute(sql)
@@ -44,10 +44,11 @@ class DataCentersController < ApplicationController
     sql = "
       SELECT *
       FROM validators val
-      INNER JOIN validator_ips vip ON val.id = vip.validator_id
-      WHERE val.network = '#{params[:network]}'
-      AND vip.address IN (
-        SELECT address from ips
+      INNER JOIN validator_score_v1s score ON val.id = score.validator_id
+      WHERE score.network = '#{params[:network]}'
+      AND score.active_stake > 0
+      AND score.ip_address IN (
+        SELECT ip_address from ips
         WHERE data_center_key = '#{key}'
       )
       ORDER BY val.account
