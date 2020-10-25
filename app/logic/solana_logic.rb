@@ -217,10 +217,11 @@ module SolanaLogic
         )
 
         # Find or create the validator IP address
-        _ip = validator.validator_ips.find_or_create_by(
+        val_ip = validator.validator_ips.find_or_create_by(
           version: 4,
           address: v['gossip_ip_port'].split(':')[0]
         )
+        val_ip.touch
       end
 
       Pipeline.new(200, p.payload)

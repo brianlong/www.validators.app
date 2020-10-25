@@ -35,7 +35,7 @@ class Validator < ApplicationRecord
   end
 
   def ip_address
-    validator_ips.last&.address
+    validator_ips.order('updated_at desc').last&.address
   end
 
   # Convenience methods
