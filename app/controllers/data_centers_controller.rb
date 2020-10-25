@@ -18,11 +18,15 @@ class DataCentersController < ApplicationController
     @scores = ValidatorScoreV1.where(network: params[:network])
                               .where('active_stake > 0')
     @data_centers = {}
+    @total_stake = @scores.sum(:active_stake)
+
     @dc_sql.each do |dc|
       population = @scores.where(data_center_key: dc[0]).count || 0
+      active_stake = @scores.where(data_center_key: dc[0]).sum(:active_stake)
       next if population.zero?
 
-      # Rails.logger.info "#{dc.inspect} => #{population}"
+      Rails.logger.info "#{dc.inspect} => #{population}"
+      Rails.logger.info "Active Stake: #{active_stake}"
       # Rails.logger.info dc[0]
       # Rails.logger.info "@data_centers is a #{@data_centers.class}"
       # Rails.logger.info @data_centers[dc[0]]
@@ -32,7 +36,8 @@ class DataCentersController < ApplicationController
         aso: dc[1],
         country: dc[2],
         location: dc[3],
-        count: population
+        count: population,
+        active_stake: active_stake
       }
       # Rails.logger.info @data_centers.inspect
     end

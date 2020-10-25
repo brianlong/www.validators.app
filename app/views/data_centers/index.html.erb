@@ -2,11 +2,13 @@
 <table class='table table-striped table-borderless'>
   <thead class="thead-dark">
     <tr>
-      <th>Key</th>
-      <th>ISP</th>
-      <th>Country</th>
-      <th>Location</th>
-      <th>Count</th>
+      <th>Key<br />&nbsp;</th>
+      <th>ISP<br />&nbsp;</th>
+      <th>Population<br />&nbsp;</th>
+      <th>
+        Active Stake<br />
+        <span class="small"><%= number_with_delimiter lamports_to_sol(@total_stake) %></span>
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -14,9 +16,15 @@
     <tr>
       <td><%= link_to k, data_center_url(network: params[:network], key: k.gsub('/', '-slash-')) %></td>
       <td><%= v[:aso] %></td>
-      <td><%= v[:country] %></td>
-      <td><%= v[:locked_at] %></td>
       <td><%= v[:count] %></td>
+      <td>
+        <%= number_with_delimiter lamports_to_sol(v[:active_stake]) %>
+      (  <%= number_to_percentage(
+               (v[:active_stake] / @total_stake.to_f)*100.0,
+               precision: 2
+            )
+         %>)
+      </td>
     </tr>
     <% end %>
   </tbody>
