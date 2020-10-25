@@ -42,6 +42,8 @@ class Validator < ApplicationRecord
   def copy_data_to_score
     if validator_score_v1
       validator_score_v1.ip_address = ip_address
+      ip_dc = Ip.where(address: ip_address).first&.data_center_key
+      validator_score_v1.data_center_key = ip_dc
       validator_score_v1.save
     end
   end
