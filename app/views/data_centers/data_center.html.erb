@@ -26,6 +26,14 @@
         <%= @dc_info.city_name || @dc_info.location_time_zone %>
       </td>
     </tr>
+    <tr>
+      <td><strong>Population</strong></td>
+      <td><%= @scores.count %></td>
+      <td><strong>Total Stake</strong></td>
+      <td>
+        <%= number_with_delimiter(lamports_to_sol(@total_stake)) %>
+      </td>
+    </tr>
   </tbody>
 </table>
 
