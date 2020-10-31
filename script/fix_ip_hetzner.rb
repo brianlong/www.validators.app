@@ -10,29 +10,29 @@ hetzner_hosts = {
     city_name: 'Falkenstein',
     data_center_key: '24940-DE-Falkenstein'
   },
-  'hel1.hetzner.com' => {
-    country_iso_code: 'FI',
-    country_name: 'Finland',
-    city_name: 'Helsinki',
-    data_center_key: '24940-Fi-Helsinki'
-  },
   'nbg1.hetzner.com' => {
     country_iso_code: 'DE',
     country_name: 'Germany',
     city_name: 'Nuremburg',
     data_center_key: '24940-DE-Nuremburg'
+  },
+  'hel1.hetzner.com' => {
+    country_iso_code: 'FI',
+    country_name: 'Finland',
+    city_name: 'Helsinki',
+    data_center_key: '24940-Fi-Helsinki'
   }
 }
 
 # Sample data_center_hosts:
-#   spine2.cloud1.hel1.hetzner.com
-#   ex9k1.dc4.hel1.hetzner.com
-#   ex9k2.dc1.fsn1.hetzner.com
-#   spine1.cloud1.nbg1.hetzner.com
-#   ex9k1.dc2.hel1.hetzner.com
 #   ex9k1.dc1.nbg1.hetzner.com
 #   ex9k1.dc15.fsn1.hetzner.com
+#   ex9k1.dc2.hel1.hetzner.com
+#   ex9k1.dc4.hel1.hetzner.com
+#   ex9k2.dc1.fsn1.hetzner.com
 #   ex9k2.dc2.hel1.hetzner.com
+#   spine1.cloud1.nbg1.hetzner.com
+#   spine2.cloud1.hel1.hetzner.com
 
 Ip.where(traits_autonomous_system_number: 24_940).each do |ip|
   puts ''
