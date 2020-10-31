@@ -31,7 +31,8 @@
       <td><%= @scores.count %></td>
       <td><strong>Total Stake</strong></td>
       <td>
-        <%= number_with_delimiter(lamports_to_sol(@total_stake)) %>
+        <%= number_with_delimiter(lamports_to_sol(@dc_stake)) %>
+        (<%= number_to_percentage(@dc_stake/@total_stake.to_f) %>)
       </td>
     </tr>
   </tbody>
