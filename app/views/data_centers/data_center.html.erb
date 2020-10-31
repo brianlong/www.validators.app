@@ -1,8 +1,36 @@
 <h1><%= params[:network].capitalize %> Data Centers</h1>
-<% if params[:key] %>
-  <h3><%= params[:key].gsub('-slash-', '/') %></h3>
-<% end %>
+<table class='table table-striped table-borderless'>
+  <thead class="thead-dark">
+    <tr>
+      <th colspan="4">
+        <% if params[:key] %>
+          <%= params[:key].gsub('-slash-', '/') %>
+        <% else %>
+          &nbsp;
+        <% end %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ASN</strong></td>
+      <td><%= @dc_info.traits_autonomous_system_number %></td>
+      <td><strong>ASO</strong></td>
+      <td><%= @dc_info.traits_autonomous_system_organization %></td>
+    </tr>
+    <tr>
+      <td><strong>Country</strong></td>
+      <td><%= @dc_info.country_name %></td>
+      <td><strong>Location</strong></td>
+      <td>
+        <%= @dc_info.city_name || @dc_info.location_time_zone %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <p><%= link_to 'Back to Data Centers', data_centers_url(network: params[:network]) %></p>
+
 <table class='table table-striped table-borderless'>
   <thead class="thead-dark">
     <tr>
@@ -12,8 +40,10 @@
         Account
       </th>
       <th>
-        Active Stake<br />
-        <span class='small'> <%= number_with_delimiter lamports_to_sol(@total_stake) %> </span>
+        Active Stake
+        (<span class='small'>N/<%= number_with_delimiter lamports_to_sol(@total_stake) %></span>)
+        <br />
+        IP Address
       </th>
     </tr>
   </thead>
@@ -42,6 +72,8 @@
                  precision: 2
               )
            %>)
+        <br /><br />
+        <%= sc.ip_address %>
       </td>
     </tr>
     <% end %>
