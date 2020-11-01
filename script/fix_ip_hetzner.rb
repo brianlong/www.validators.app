@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec ruby script/fix_ip_hetzner.rb >> /tmp/fix_ip_hetzner.log 2>&1
+# RAILS_ENV=production bundle exec ruby script/fix_ip_hetzner.rb >> /tmp/fix_ip_hetzner.log 2>&1 &
 
 require File.expand_path('../config/environment', __dir__)
 
@@ -59,9 +59,9 @@ Ip.where(traits_autonomous_system_number: 24_940)
       ipor.country_name = v[:country_name]
       ipor.city_name = v[:city_name]
       ipor.data_center_key = v[:data_center_key]
-      host = line.match(/(\sex.+\.dc.+\.hetzner\.com)/)[1].strip \
+      host = line.match(/(\sex.+\.dc.+\.hetzner\.com\s)/)[1].strip.split(' ')[0] \
              if line.match?(/(\sex.+\.dc.+\.hetzner\.com)/)
-      host = line.match(/(\ssp.+\.cloud.+\.hetzner\.com)/)[1].strip \
+      host = line.match(/(\ssp.+\.cloud.+\.hetzner\.com)/)[1].strip.split(' ')[0] \
              if line.match?(/(\ssp.+\.cloud.+\.hetzner\.com)/)
       ipor.data_center_host = host
       ipor.save
