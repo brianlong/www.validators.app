@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_17_163925) do
+ActiveRecord::Schema.define(version: 2020_11_01_213128) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -125,6 +125,19 @@ ActiveRecord::Schema.define(version: 2020_10_17_163925) do
     t.index ["network", "batch_uuid"], name: "index_feed_zones_on_network_and_batch_uuid", unique: true
   end
 
+  create_table "ip_overrides", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "address"
+    t.integer "traits_autonomous_system_number"
+    t.string "country_iso_code"
+    t.string "country_name"
+    t.string "city_name"
+    t.string "data_center_key"
+    t.string "data_center_host"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address"], name: "index_ip_overrides_on_address", unique: true
+  end
+
   create_table "ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "address"
     t.string "continent_code"
@@ -166,6 +179,7 @@ ActiveRecord::Schema.define(version: 2020_10_17_163925) do
     t.string "data_center_key"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "data_center_host"
     t.index ["address"], name: "index_ips_on_address", unique: true
     t.index ["data_center_key"], name: "index_ips_on_data_center_key"
   end
