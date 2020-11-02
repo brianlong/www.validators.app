@@ -46,14 +46,12 @@
     <tr>
       <th class="avatar-column">&nbsp;</th>
       <th class="name-column">
-        Name<br />
+        Name: Stake (%)<br />
         Account
       </th>
       <th>
-        Active Stake
-        (<span class='small'>N/<%= number_with_delimiter lamports_to_sol(@total_stake) %></span>)
-        <br />
-        IP Address
+        IP Address<br />
+        Data Center Gateway
       </th>
     </tr>
   </thead>
@@ -71,19 +69,19 @@
         </span>
       </td>
       <td>
-        <%= this_validator.name %>
-        <br /><br />
-        <%= link_to this_validator.account, validator_url(network: params[:network], account: this_validator.account) %>
-      </td>
-      <td>
-        <%= number_with_delimiter lamports_to_sol(sc.active_stake) %>
+        <%= this_validator.name || 'Anonymous' %>: <%= number_with_delimiter lamports_to_sol(sc.active_stake) %>
         (  <%= number_to_percentage(
                  (sc.active_stake / @total_stake.to_f)*100.0,
                  precision: 2
               )
            %>)
         <br /><br />
+        <%= link_to this_validator.account, validator_url(network: params[:network], account: this_validator.account) %>
+      </td>
+      <td>
         <%= sc.ip_address %>
+        <br /><br />
+        <%= Ip.where(address: sc.ip_address).first&.data_center_host %>
       </td>
     </tr>
     <% end %>

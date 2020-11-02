@@ -4,6 +4,7 @@
 
 require File.expand_path('../config/environment', __dir__)
 
+aso = 'Hetzner Online GmbH'
 hetzner_hosts = {
   'fsn1.hetzner.com' => {
     country_iso_code: 'DE',
@@ -71,7 +72,7 @@ Ip.where(traits_autonomous_system_number: 24_940)
     # More stuff here
     break
   end
-  sql = "
+  sql1 = "
     UPDATE ips ip
     INNER JOIN ip_overrides ipor
     ON ip.address = ipor.address
@@ -82,8 +83,19 @@ Ip.where(traits_autonomous_system_number: 24_940)
     ip.city_name = ipor.city_name,
     ip.data_center_key = ipor.data_center_key,
     ip.data_center_host = ipor.data_center_host,
+    ip.traits_autonomous_system_organization = 'Hetzner Online GmbH',
     ip.updated_at = NOW();
   "
-  Ip.connection.execute(sql)
+  Ip.connection.execute(sql1)
+
+  sql2 = "
+    UPDATE validator_score_v1s sc
+    INNER JOIN ips ip
+    ON sc.ip_address = ip.address
+    SET sc.data_center_key = ip.data_center_key,
+    sc.updated_at = NOW();
+  "
+  ValidatorScoreV1.connection.execute(sql2)
   puts ''
 end
+puts 'End of Script'
