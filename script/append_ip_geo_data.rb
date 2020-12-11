@@ -31,6 +31,7 @@ begin
     # Skip private IPs
     next if missing_ip[0][0..2] == '10.'
     next if missing_ip[0][0..3] == '192.'
+    next if missing_ip[0][0..3] == '127.'
 
     record = client.insights(missing_ip[0])
     ip = Ip.create(
