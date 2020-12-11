@@ -4,7 +4,10 @@
     <tr>
       <th>Key<br />&nbsp;</th>
       <th>ISP<br />&nbsp;</th>
-      <th>Population<br />&nbsp;</th>
+      <th>
+        Population<br />
+        <span class="small">(<%= @total_population %>)</span>
+      </th>
       <th>
         Active Stake<br />
         <span class="small"><%= number_with_delimiter lamports_to_sol(@total_stake) %></span>

@@ -18,6 +18,12 @@ hetzner_hosts = {
     city_name: 'Nuremburg',
     data_center_key: '24940-DE-Nuremburg'
   },
+  'hel.hetzner.com' => {
+    country_iso_code: 'FI',
+    country_name: 'Finland',
+    city_name: 'Helsinki',
+    data_center_key: '24940-FI-Helsinki'
+  },
   'hel1.hetzner.com' => {
     country_iso_code: 'FI',
     country_name: 'Finland',
@@ -45,9 +51,12 @@ Ip.where(traits_autonomous_system_number: 24_940)
   # e.g. ex9k1.dc5.fsn1.hetzner.com
   traceroute =  `traceroute -m 20 #{ip.address}`.split("\n")
   traceroute.each do |line|
-    # puts ".  #{line}"
+    puts ".  #{line}"
     next unless line.match?(/ex.+\.dc.+\.hetzner\.com/) ||
                 line.match?(/sp.+\.cloud.+\.hetzner\.com/)
+    # use the lines below for some tough-to-get addresses
+    # ||
+    # line.match?(/core.+\.[hfn].+\.hetzner\.com/)
 
     puts "M  #{line}"
     hetzner_hosts.each do |k, v|

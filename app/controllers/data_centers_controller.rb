@@ -42,6 +42,7 @@ class DataCentersController < ApplicationController
       # Rails.logger.info @data_centers.inspect
     end
     @data_centers = @data_centers.sort_by { |_k, v| -v[:count] }
+    @total_population = @data_centers.count
     # Rails.logger.info @data_centers
   end
 
