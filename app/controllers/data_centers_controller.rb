@@ -19,11 +19,14 @@ class DataCentersController < ApplicationController
                               .where('active_stake > 0')
     @data_centers = {}
     @total_stake = @scores.sum(:active_stake)
+    @total_population = 0
 
     @dc_sql.each do |dc|
       population = @scores.where(data_center_key: dc[0]).count || 0
       active_stake = @scores.where(data_center_key: dc[0]).sum(:active_stake)
       next if population.zero?
+
+      @total_population += population
 
       Rails.logger.info "#{dc.inspect} => #{population}"
       Rails.logger.info "Active Stake: #{active_stake}"
@@ -42,7 +45,6 @@ class DataCentersController < ApplicationController
       # Rails.logger.info @data_centers.inspect
     end
     @data_centers = @data_centers.sort_by { |_k, v| -v[:count] }
-    @total_population = @data_centers.count
     # Rails.logger.info @data_centers
   end
 
