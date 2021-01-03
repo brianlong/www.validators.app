@@ -11,6 +11,8 @@ begin
   interrupted = false
   trap('INT') { interrupted = true }
 
+  verbose = true # Rails.env == 'development'
+
   # Setup the MaxMind client
   client = MaxMind::GeoIP2::Client.new(
     account_id: Rails.application.credentials.max_mind[:account_id],
@@ -27,10 +29,11 @@ begin
   sql = "#{sql} LIMIT 10" if Rails.env == 'development'
 
   Ip.connection.execute(sql).each do |missing_ip|
-    puts missing_ip[0].inspect if Rails.env == 'development'
+    puts missing_ip[0].inspect if verbose
     # Skip private IPs
     next if missing_ip[0][0..2] == '10.'
     next if missing_ip[0][0..3] == '192.'
+    next if missing_ip[0][0..3] == '127.'
 
     record = client.insights(missing_ip[0])
     ip = Ip.create(
@@ -75,6 +78,22 @@ begin
     ip.subdivision_geoname_id = record.most_specific_subdivision.geoname_id
     ip.subdivision_name = record.most_specific_subdivision.name
     ip.save
+  end
+
+  puts '' if verbose
+  # Update validator_score_v1s with the latest data
+  ValidatorScoreV1.find_each do |vs1|
+    next unless vs1.validator && vs1.validator&.ip_address
+
+    ip = vs1.validator.ip_address
+    puts ip if verbose
+
+    vs1.network = vs1.validator.network
+    vs1.ip_address = ip
+    if Ip.where(address: ip).first
+      vs1.data_center_key = Ip.where(address: ip).first.data_center_key
+    end
+    vs1.save
   end
 rescue StandardError => e
   puts "\nERROR:"

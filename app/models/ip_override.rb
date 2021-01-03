@@ -1,0 +1,2 @@
+class IpOverride < ApplicationRecord
+end

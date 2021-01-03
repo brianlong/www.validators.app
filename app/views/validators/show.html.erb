@@ -54,12 +54,23 @@
         <!-- Fifth Row -->
         <tr>
           <td><strong>IP:</strong></td>
-          <td><%= @validator.validator_ips.last.address unless @validator.validator_ips.empty? %></td>
+          <td><%= @validator.ip_address unless @validator.validator_ips.empty? %></td>
+        </tr>
+
+        <!-- Sixth Row -->
+        <tr>
+          <td><strong>Data Center:</strong></td>
+          <td>
+              <%=
+                link_to(@validator.data_center_key.to_s,
+                  data_center_url(network: params[:network], key: @validator.data_center_key.gsub('/', '-slash-'))) unless @validator.data_center_key.blank?
+              %>
+          </td>
         </tr>
 
         <% unless @validator.security_report_url.blank? %>
 
-         <!-- Sixth Row -->
+         <!-- Seventh Row -->
          <tr>
            <td>&nbsp;</td>
            <td>&nbsp;</td>
@@ -133,6 +144,12 @@
         <% unless @validator.security_report_url.blank? %>
 
          <!-- Sixth Row -->
+         <tr>
+           <td>&nbsp;</td>
+           <td>&nbsp;</td>
+         </tr>
+
+         <!-- Seventh Row -->
          <tr>
            <td>
              <strong>Security Info:</strong>

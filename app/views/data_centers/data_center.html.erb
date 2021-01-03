@@ -1,0 +1,92 @@
+<h1><%= params[:network].capitalize %> Data Centers</h1>
+<table class='table table-striped table-borderless'>
+  <thead class="thead-dark">
+    <tr>
+      <th colspan="4">
+        <% if params[:key] %>
+          <%= params[:key].gsub('-slash-', '/') %>
+        <% else %>
+          &nbsp;
+        <% end %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ASN</strong></td>
+      <td><%= @dc_info.traits_autonomous_system_number %></td>
+      <td><strong>ASO</strong></td>
+      <td><%= @dc_info.traits_autonomous_system_organization %></td>
+    </tr>
+    <tr>
+      <td><strong>Country</strong></td>
+      <td><%= @dc_info.country_name %></td>
+      <td><strong>Location</strong></td>
+      <td>
+        <%= @dc_info.city_name || @dc_info.location_time_zone %>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Population</strong></td>
+      <td><%= @scores.count %></td>
+      <td><strong>Total Stake</strong></td>
+      <td>
+        <%= number_with_delimiter(lamports_to_sol(@dc_stake)) %>
+        (<%= number_to_percentage((@dc_stake/@total_stake.to_f)*100.0,
+        precision: 2) %>)
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><%= link_to 'Back to Data Centers', data_centers_url(network: params[:network]) %></p>
+
+<table class='table table-striped table-borderless'>
+  <thead class="thead-dark">
+    <tr>
+      <th class="avatar-column">&nbsp;</th>
+      <th class="name-column">
+        Name: Stake (%)<br />
+        Account
+      </th>
+      <th>
+        IP Address<br />
+        Data Center Gateway
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @scores.each do |sc| %>
+      <% this_validator = sc.validator %>
+    <tr>
+      <td>
+        <span class="avatar">
+          <% if this_validator && this_validator.avatar_url %>
+            <%= image_tag this_validator.avatar_url, class: 'img-circle' %>
+          <% else %>
+            <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+          <% end %>
+        </span>
+      </td>
+      <td>
+        <%= this_validator.name || 'Anonymous' %>: <%= number_with_delimiter lamports_to_sol(sc.active_stake) %>
+        (  <%= number_to_percentage(
+                 (sc.active_stake / @total_stake.to_f)*100.0,
+                 precision: 2
+              )
+           %>)
+        <br /><br />
+        <%= link_to this_validator.account, validator_url(network: params[:network], account: this_validator.account) %>
+      </td>
+      <td>
+        <%= sc.ip_address %>
+        <br /><br />
+        <%= Ip.where(address: sc.ip_address).first&.data_center_host %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+
+
+</table>
+<p><%= link_to 'Back to Data Centers', data_centers_url(network: params[:network]) %></p>

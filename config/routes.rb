@@ -1,10 +1,19 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # Data Centers
+  get 'data-centers/:network',
+      to: 'data_centers#index',
+      as: 'data_centers'
+  get 'data-centers/:network/:key',
+      to: 'data_centers#data_center',
+      as: 'data_center'
+
   get 'vote_accounts/:network/:account',
       to: 'vote_accounts#show',
       as: 'vote_account'
 
+  # Validators
   get 'validators/:network',
       to: 'validators#index',
       as: 'validators'
