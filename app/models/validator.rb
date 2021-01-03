@@ -128,4 +128,12 @@ class Validator < ApplicationRecord
   def data_center_key
     score&.data_center_key
   end
+
+  def data_center_concentration
+    score&.data_center_concentration || 0.0
+  end
+
+  def data_center_concentration_score
+    score&.data_center_concentration_score || 0
+  end
 end

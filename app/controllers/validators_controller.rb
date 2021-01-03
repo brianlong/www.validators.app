@@ -30,6 +30,9 @@ class ValidatorsController < ApplicationController
     ).last
 
     @batch = Batch.where(network: params[:network]).last
+    # Use the previous batch for average & median stats since the most recent
+    # batch might still be in process.
+    @batch_previous = Batch.find(@batch.id - 1)
     if @batch
       @this_epoch = EpochHistory.where(
         network: params[:network],
@@ -46,12 +49,12 @@ class ValidatorsController < ApplicationController
       @skipped_slot_average = \
         ValidatorBlockHistory.average_skipped_slot_percent_for(
           params[:network],
-          @batch.uuid
+          @batch_previous.uuid
         )
       @skipped_slot_median = \
         ValidatorBlockHistory.median_skipped_slot_percent_for(
           params[:network],
-          @batch.uuid
+          @batch_previous.uuid
         )
     end
 
