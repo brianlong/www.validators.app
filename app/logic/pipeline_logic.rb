@@ -18,7 +18,7 @@ def array_average(array)
   return nil unless array.is_a? Array
   return nil if array.empty?
 
-  array.sum / array.size.to_f
+  array.sum.to_i / array.size.to_f
 end
 
 def array_median(array)
