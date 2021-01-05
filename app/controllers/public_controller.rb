@@ -64,6 +64,8 @@ class PublicController < ApplicationController
     ping_time_stat = PingTimeStat.where(batch_uuid: ping_batch)&.last
     @ping_time_avg = ping_time_stat&.overall_average_time
 
+    flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
+
     render 'validators/index'
   end
 
