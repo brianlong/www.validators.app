@@ -454,14 +454,14 @@ module SolanaLogic
         `#{solana_path}solana #{cli_method} --output json-compact --url #{rpc_url}`
 
       rescue Errno::ECONNREFUSED, Timeout::Error => e
-        Rails.logger.error "RPC TIMEOUT\n#{e.class}\nRPC URL: #{rpc_url}"
+        Rails.logger.error "CLI TIMEOUT\n#{e.class}\nRPC URL: #{rpc_url}"
         ''
       end
       # puts response_json
       response_utf8 = response_json.encode('UTF-8', invalid: :replace, undef: :replace)
       return JSON.parse(response_utf8) unless response_utf8 == ''
     rescue JSON::ParserError => e
-      Rails.logger.error "RPC ERROR #{e.class} RPC URL: #{rpc_url}\n#{response_utf8}"
+      Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
     end
     []
   end
