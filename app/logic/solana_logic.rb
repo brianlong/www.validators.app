@@ -458,8 +458,20 @@ module SolanaLogic
         ''
       end
       # puts response_json
-      response_utf8 = response_json.encode('UTF-8', invalid: :replace, undef: :replace)
-      return JSON.parse(response_utf8) unless response_utf8 == ''
+      response_utf8_raw = response_json.encode(
+                            'UTF-8',
+                            invalid: :replace,
+                            undef: :replace
+                          )
+      response_utf8 = ''
+      # The Serum server is including this line in the output:
+      # Note: Requested start slot was 59184000 but minimum ledger slot is 59199052
+      # So, we need to suppress that line from the JSON
+      response_utf8_raw.each_line do |line|
+        response_utf8 << line unless line.include?('Note:') || line.blank?
+      end
+      response_utf8_json = JSON.parse(response_utf8) unless response_utf8 == ''
+      return response_utf8_json || ''
     rescue JSON::ParserError => e
       Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
     end
