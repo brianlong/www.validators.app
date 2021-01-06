@@ -412,7 +412,11 @@ module SolanaLogic
 
       response_body = Timeout.timeout(RPC_TIMEOUT) do
         # Create the HTTP session and send the request
-        response = Net::HTTP.start(uri.host, uri.port) do |http|
+        response = Net::HTTP.start(
+                     uri.host,
+                     uri.port,
+                     use_ssl: uri.scheme == 'https'
+                   ) do |http|
           request = Net::HTTP::Post.new(
             uri.request_uri,
             { 'Content-Type' => 'application/json' }
