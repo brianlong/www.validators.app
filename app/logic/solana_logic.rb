@@ -429,13 +429,13 @@ module SolanaLogic
 
         response.body
       rescue Errno::ECONNREFUSED, Timeout::Error => e
-        Rails.logger.error "RPC ERROR\n#{e.class}\nRPC URL: #{rpc_url}"
+        Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}"
         nil
       end
 
       return JSON.parse(response_body) if response_body
     rescue JSON::ParserError => e
-      Rails.logger.error "RPC ERROR\n#{e.class}\nRPC URL: #{rpc_url}"
+      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}\n#{response.body}"
     end
   end
 
