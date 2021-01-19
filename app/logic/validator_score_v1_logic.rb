@@ -228,9 +228,9 @@ module ValidatorScoreV1Logic
         validator.validator_score_v1.skipped_slot_score = \
           if skipped_slot_percent.nil?
             0
-          elsif skipped_slot_percent <= p.payload[:med_skipped_slot_pct_all]
+          elsif skipped_slot_percent.to_f <= p.payload[:med_skipped_slot_pct_all].to_f
             2
-          elsif skipped_slot_percent <= p.payload[:avg_skipped_slot_pct_all]
+          elsif skipped_slot_percent.to_f <= p.payload[:avg_skipped_slot_pct_all].to_f
             1
           else
             0
