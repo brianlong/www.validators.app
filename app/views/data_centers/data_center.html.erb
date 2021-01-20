@@ -67,6 +67,10 @@
             <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
           <% end %>
         </span>
+        <% if sc.delinquent? %>
+          <br />
+          <small class="score-minus-2">DELINQUENT</small>
+        <% end %>
       </td>
       <td>
         <%= this_validator.name || 'Anonymous' %>: <%= number_with_delimiter lamports_to_sol(sc.active_stake) %>
