@@ -83,7 +83,8 @@ module SolanaLogic
           last_vote: validator['lastVote'],
           root_block: validator['rootSlot'],
           credits: validator['credits'],
-          active_stake: validator['activatedStake']
+          active_stake: validator['activatedStake'],
+          software_version: validator['version']
         )
       end
 
@@ -99,6 +100,7 @@ module SolanaLogic
           root_block: validator['rootSlot'],
           credits: validator['credits'],
           active_stake: validator['activatedStake'],
+          software_version: validator['version'],
           delinquent: true
         )
       end

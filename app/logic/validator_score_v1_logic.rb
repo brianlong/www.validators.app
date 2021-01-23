@@ -249,6 +249,7 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |validator|
         vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+        # This means we skip the software version for non-voting nodes.
         if vah
           unless vah.software_version.blank?
             validator.validator_score_v1.software_version = \
