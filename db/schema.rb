@@ -264,7 +264,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_194803) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "software_version"
-    t.index ["network", "account"], name: "index_validator_histories_on_network_and_account"
+    t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
   end
 
