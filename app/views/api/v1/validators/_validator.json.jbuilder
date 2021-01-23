@@ -20,6 +20,7 @@ unless score.nil?
   json.active_stake score.active_stake
   json.commission score.commission
   json.delinquent score.delinquent
+  json.data_center_key score.data_center_key
 end
 
 # Vote account data

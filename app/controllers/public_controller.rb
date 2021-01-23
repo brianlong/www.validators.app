@@ -20,7 +20,7 @@ class PublicController < ApplicationController
 
     unless params[:q].blank?
       @validators = @validators.where(
-        ['name like :q or account like :q', q: "#{params[:q]}%"]
+        ['name like :q or account like :q or validator_score_v1s.data_center_key like :q', q: "#{params[:q]}%"]
       )
     end
 

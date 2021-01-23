@@ -73,6 +73,6 @@ class DataCentersController < ApplicationController
                                    .where('active_stake > 0')
                                    .sum(:active_stake)
     @dc_stake = @scores.where(data_center_key: key).sum(:active_stake)
-    @dc_info = Ip.where(data_center_key: key).last
+    @dc_info = Ip.where(data_center_key: key).last || Ip.new(data_center_key: key)
   end
 end

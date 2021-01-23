@@ -228,9 +228,9 @@ module ValidatorScoreV1Logic
         validator.validator_score_v1.skipped_slot_score = \
           if skipped_slot_percent.nil?
             0
-          elsif skipped_slot_percent <= p.payload[:med_skipped_slot_pct_all]
+          elsif skipped_slot_percent.to_f <= p.payload[:med_skipped_slot_pct_all].to_f
             2
-          elsif skipped_slot_percent <= p.payload[:avg_skipped_slot_pct_all]
+          elsif skipped_slot_percent.to_f <= p.payload[:avg_skipped_slot_pct_all].to_f
             1
           else
             0
@@ -248,7 +248,11 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       p.payload[:validators].each do |validator|
-        vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+        vah = validator.validator_history_last
+        if vah.nil?
+          vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+        end
+        # This means we skip the software version for non-voting nodes.
         if vah
           unless vah.software_version.blank?
             validator.validator_score_v1.software_version = \

@@ -19,6 +19,17 @@ class SolanaLogicTest < ActiveSupport::TestCase
     }
   end
 
+  test 'array_average' do
+    assert_equal 2, array_average([1,2,3])
+    assert_nil array_average('TEST')
+    assert_nil array_average(nil)
+    assert_nil array_average([])
+    assert_equal 'ABC', ['A','B','C'].sum
+    assert_equal 0, ['A','B','C'].sum.to_i
+    assert_equal 0, array_average(['A','B','C'])
+    assert_equal 1, array_average([1])
+  end
+
   test 'batch_set' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&batch_set)
@@ -142,14 +153,26 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
+  # This test assumes that there is no validator RPC running locally.
+  # 159.89.252.85 is my testnet server.
   test 'cli_request with fail over' do
     VCR.use_cassette('validators_cli_with_fail_over') do
-      rpc_urls = ['http://127.0.0.1:8899', 'http://testnet.solana.com:8899']
-
-      assert cli_request('validators', rpc_urls).count.positive?
+      rpc_urls = ['http://127.0.0.1:8899', 'http://159.89.252.85:8899']
+      cli_response = cli_request('validators', rpc_urls)
+      assert_equal 6, cli_response.count
     end
   end
 
+  # This test assumes that there is no validator RPC running locally.
+  test 'cli_request should get first attempt with no fail over' do
+    VCR.use_cassette('validators_cli_with_no_fail_over') do
+      rpc_urls = ['http://159.89.252.85:8899', 'http://127.0.0.1:8899']
+      cli_response = cli_request('validators', rpc_urls)
+      assert_equal 6, cli_response.count
+    end
+  end
+
+  # This test assumes that there is no validator RPC running locally.
   test 'cli_request with no response' do
     VCR.use_cassette('validators_cli_no_response') do
       rpc_urls = ['http://127.0.0.1:8899']

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_01_213128) do
+ActiveRecord::Schema.define(version: 2021_01_23_194803) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -263,6 +263,8 @@ ActiveRecord::Schema.define(version: 2020_11_01_213128) do
     t.boolean "delinquent", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "software_version"
+    t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
   end
 
