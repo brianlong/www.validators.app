@@ -248,7 +248,10 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       p.payload[:validators].each do |validator|
-        vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+        vah = validator.validator_history_last&.software_version
+        if vah.nil?
+          vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+        end
         # This means we skip the software version for non-voting nodes.
         if vah
           unless vah.software_version.blank?

@@ -18,6 +18,13 @@ class Validator < ApplicationRecord
       .map(&:account)
   end
 
+  def validator_history_last
+    ValidatorHistory.where(
+      network: network,
+      account: account
+    ).last
+  end
+
   def ping_times_to(limit = 100)
     PingTime.where(
       network: network,
