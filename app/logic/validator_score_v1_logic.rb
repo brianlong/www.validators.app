@@ -248,7 +248,7 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       p.payload[:validators].each do |validator|
-        vah = validator.validator_history_last&.software_version
+        vah = validator.validator_history_last
         if vah.nil?
           vah = validator&.vote_accounts&.last&.vote_account_histories&.last
         end
