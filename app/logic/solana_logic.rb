@@ -244,14 +244,14 @@ module SolanaLogic
       # Data for the validator_block_history_stats table
       block_history_stats = {
         'batch_uuid' => p.payload[:batch_uuid],
-        'epoch' => p.payload[:epoch],
-        'start_slot' => block_history['start_slot'],
-        'end_slot' => block_history['end_slot'],
-        'total_slots' => block_history['total_slots'],
+        'epoch' => p.payload[:epoch].to_i,
+        'start_slot' => block_history['start_slot'].to_i,
+        'end_slot' => block_history['end_slot'].to_i,
+        'total_slots' => block_history['total_slots'].to_i,
         'total_blocks_produced' => \
-          block_history['total_blocks_produced'],
+          block_history['total_blocks_produced'].to_i,
         'total_slots_skipped' => \
-          block_history['total_slots_skipped']
+          block_history['total_slots_skipped'].to_i
       }
 
       # Leaders
