@@ -67,6 +67,10 @@ Rails.application.routes.draw do
       get 'validators/:network/:account',
           to: 'api#validators_show',
           as: 'validator'
+
+      get 'validator_block_history/:network/:account',
+          to: 'api#validator_block_history',
+          as: 'validator_block_history'
     end
   end
 

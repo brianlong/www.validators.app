@@ -114,6 +114,29 @@ module Api
         render json: { 'status' => e.message }, status: 500
       end
 
+      def validator_block_history
+        @validator = Validator.where(
+          network: params[:network], account: params['account']
+        ).order('network, account').first
+
+        raise ValidatorNotFound if @validator.nil?
+
+        @limit = params[:limit] || 9999
+
+        @block_history = @validator.validator_block_histories
+                                   .order('id desc')
+                                   .limit(@limit)
+
+        render 'api/v1/validators/block_history', formats: :json
+      rescue ValidatorNotFound
+        render json: { 'status' => 'Validator Not Found' }, status: 404
+      rescue ActionController::ParameterMissing
+        render json: { 'status' => 'Parameter Missing' }, status: 400
+      rescue StandardError => e
+        Appsignal.send_error(e)
+        render json: { 'status' => e.message }, status: 500
+      end
+
       # Filter params for the Collector
       def collector_params
         params.require(:collector).permit(
