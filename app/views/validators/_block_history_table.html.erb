@@ -3,15 +3,15 @@
   <thead class="thead-dark">
     <tr>
       <th class='text-right'>Epoch</th>
-      <th class='text-right'>Leader Slots<br />&nbsp;<br />Total Slots</th>
-      <th class='text-right'>Blocks Produced<br />&nbsp;<br />Total Blocks</th>
+      <th class='text-right'>Leader Slots<br />Total Slots</th>
+      <th class='text-right'>Leader Blocks<br />Total Blocks</th>
       <th class='text-right'>
         Skipped Slots<br />
-        Total Skipped
+        Skipped Total
       </th>
       <th class='text-right'>
-        Skipped Slot &percnt;<br />
-        Total &percnt;
+        &percnt; Skipped<br />
+        &percnt; Total
       </th>
       <th>Timestamp</th>
     </tr>
@@ -26,13 +26,11 @@
       </td>
       <td class='text-right'>
         <%= number_with_delimiter history.leader_slots %><br />
-        &nbsp;<br />
         <%= number_with_delimiter block_stats.total_slots \
               unless block_stats.nil? %>
       </td>
       <td class='text-right'>
         <%= number_with_delimiter history.blocks_produced %><br />
-        &nbsp;<br />
         <%= number_with_delimiter block_stats.total_blocks_produced \
               unless block_stats.nil? %>
       </td>
