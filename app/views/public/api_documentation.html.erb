@@ -154,9 +154,9 @@
 <h4>Validator Block Production History</h4>
 <div class="row">
   <div class="col-sm-12">
-    <p>The validator_block_history endpoint will return a history of block production stats for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.</p>
+    <p>The validator_block_history endpoint will return a history of block production stats for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID. You can also include a `limit` parameter to request more or fewer datapoints. </p>
     <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" https://www.validators.app/api/v1/validator_block_history/:network/:account.json</pre>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validator_block_history/:network/:account.json?limit=100'</pre>
     <p>Response:</p>
     <pre>
       [
