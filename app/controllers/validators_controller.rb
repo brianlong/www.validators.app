@@ -85,22 +85,26 @@ class ValidatorsController < ApplicationController
     @history_limit = 240
 
     i = 0
-    @validator.validator_block_histories
-              .order('id desc').limit(@history_limit).reverse.each do |vbh|
-      i += 1
-      batch_stats = ValidatorBlockHistoryStat.where(
-        network: params[:network],
-        batch_uuid: vbh.batch_uuid
-      ).first
+    unless @validator.nil?
+      @validator.validator_block_histories
+                .order('id desc')
+                .limit(@history_limit)
+                .reverse
+                .each do |vbh|
+        i += 1
+        batch_stats = ValidatorBlockHistoryStat.where(
+          network: params[:network],
+          batch_uuid: vbh.batch_uuid
+        ).first
 
-      @data[i] = {
-        skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
-        cluster_skipped_slot_percent: (
-              batch_stats.total_slots_skipped / batch_stats.total_slots.to_f
-            ) * 100.0
-      }
+        @data[i] = {
+          skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
+          cluster_skipped_slot_percent: (
+                batch_stats.total_slots_skipped / batch_stats.total_slots.to_f
+              ) * 100.0
+        }
+      end
     end
-
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
 
   end
