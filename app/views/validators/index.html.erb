@@ -110,7 +110,7 @@
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
             </td>
             <td class='text-right'>
-              Min: <%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0) %>
+              Min: <%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0, precision: 2) %>
             </td>
             <td class='text-right'>
               Av: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
