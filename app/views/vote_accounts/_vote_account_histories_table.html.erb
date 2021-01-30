@@ -28,7 +28,7 @@
       <td class='text-right'>
         <%=
           number_to_percentage(
-            (vote.slot_index_current.to_i - vote.credits_current.to_i)/vote.slot_index_current.to_f,
+            ((vote.slot_index_current.to_i - vote.credits_current.to_i)/vote.slot_index_current.to_f)*100.0,
             precision: 1
           )
         %>
