@@ -85,6 +85,10 @@
               Skipped<br />Slot &percnt;<br />
               <small>60-Min Chart</small>
             </th>
+            <th class='text-right'>
+              Skipped<br />Vote &percnt;<br />
+              <small>current</small>
+            </th>
             <th class='text-right'>Average<br />Ping Time (ms)</th>
           </tr>
         </thead>
@@ -104,6 +108,9 @@
             <td class='text-right'>
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
+            </td>
+            <td class='text-right'>
+              &nbsp;
             </td>
             <td class='text-right'>
               Av: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
@@ -285,7 +292,15 @@
                         line_color: line_color
                 %>
               </td>
-
+              <td class="text-right">
+                <% vahl = validator.vote_account_last.vote_account_history_last %>
+                <%=
+                number_to_percentage(
+                  ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
+                  precision: 1
+                )
+                 %>
+              </td>
               <%
                 ping_color = if validator.ping_time_avg.nil?
                   'score-0'

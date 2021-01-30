@@ -25,6 +25,10 @@ class Validator < ApplicationRecord
     ).last
   end
 
+  def vote_account_last
+    vote_accounts.last
+  end
+
   def ping_times_to(limit = 100)
     PingTime.where(
       network: network,
