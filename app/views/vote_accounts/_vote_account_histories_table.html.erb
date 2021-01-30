@@ -3,9 +3,10 @@
   <thead class="thead-dark">
     <tr>
       <th>Last<br />Vote</th>
-      <th>Activated<br />Stake</th>
       <th>Credits<br />Total</th>
       <th>Credits<br />Current Epoch</th>
+      <th>Slot Index<br />Current Epoch</th>
+      <th>Skipped Vote &percnt;</th>
       <th>Timestamp</th>
     </tr>
   </thead>
@@ -16,13 +17,21 @@
         <%= number_with_delimiter vote.last_vote %>
       </td>
       <td class='text-right'>
-        <%= number_with_delimiter (vote.activated_stake/1_000_000_000) %> SOL
-      </td>
-      <td class='text-right'>
         <%= number_with_delimiter vote.credits %>
       </td>
       <td class='text-right'>
         <%= number_with_delimiter vote.credits_current %>
+      </td>
+      <td class='text-right'>
+        <%= number_with_delimiter vote.slot_index_current %>
+      </td>
+      <td class='text-right'>
+        <%=
+          number_to_percentage(
+            (vote.slot_index_current.to_i - vote.credits_current.to_i)/vote.slot_index_current.to_f,
+            precision: 1
+          )
+        %>
       </td>
       <td>
         <%= vote.created_at %>
