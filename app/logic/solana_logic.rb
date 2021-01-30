@@ -52,7 +52,10 @@ module SolanaLogic
         slots_in_epoch: epoch_json['slotsInEpoch']
       )
 
-      Pipeline.new(200, p.payload.merge(epoch: epoch.epoch))
+      Pipeline.new(200, p.payload.merge(
+                          epoch: epoch.epoch,
+                          epoch_slot_index: epoch.slot_index
+                        ))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from epoch_get', e)
     end
@@ -224,6 +227,7 @@ module SolanaLogic
           last_vote: v['last_vote'],
           credits: v['credits'],
           credits_current: v['credits_current'],
+          slot_index_current: p.payload[:epoch_slot_index],
           activated_stake: v['activated_stake'],
           software_version: v['version']
         )
