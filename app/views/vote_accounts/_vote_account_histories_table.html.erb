@@ -2,11 +2,16 @@
 <table class='table table-striped'>
   <thead class="thead-dark">
     <tr>
-      <th>Last<br />Vote</th>
-      <th>Credits<br />Total</th>
-      <th>Credits<br />Current Epoch</th>
-      <th>Slot Index<br />Current Epoch</th>
-      <th>Skipped Vote &percnt;</th>
+      <th>
+        Credits Total<br />
+        Last Vote
+      </th>
+      <th>
+        Credits Current<br />
+        Slots Current
+      </th>
+      <th>Skipped<br />Votes</th>
+      <th>Skipped<br />Vote &percnt;</th>
       <th>Timestamp</th>
     </tr>
   </thead>
@@ -14,16 +19,16 @@
     <% @vote_account.vote_account_histories.order('id desc').limit(60).each do |vote| %>
     <tr>
       <td class='text-right'>
+        <%= number_with_delimiter vote.credits %><br />
         <%= number_with_delimiter vote.last_vote %>
       </td>
+
       <td class='text-right'>
-        <%= number_with_delimiter vote.credits %>
-      </td>
-      <td class='text-right'>
-        <%= number_with_delimiter vote.credits_current %>
-      </td>
-      <td class='text-right'>
+        <%= number_with_delimiter vote.credits_current %><br />
         <%= number_with_delimiter vote.slot_index_current %>
+      </td>
+      <td class='text-right'>
+        <%= number_with_delimiter(vote.slot_index_current.to_i - vote.credits_current.to_i) %>
       </td>
       <td class='text-right'>
         <%=
