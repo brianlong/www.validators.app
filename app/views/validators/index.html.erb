@@ -293,7 +293,8 @@
                 %>
               </td>
               <td class="text-right">
-                <% vahl = validator.vote_account_last.vote_account_history_last %>
+                <%
+                  vahl = validator.vote_account_last&.vote_account_history_last %>
                 <%=
                 number_to_percentage(
                   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
