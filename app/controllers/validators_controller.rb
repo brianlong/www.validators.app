@@ -58,6 +58,18 @@ class ValidatorsController < ApplicationController
         )
     end
 
+    # Calculate the best skipped vote percent.
+    @credits_current_max = VoteAccountHistory.where(
+      network: params[:network],
+      batch_uuid: @batch.uuid
+    ).maximum(:credits_current).to_i
+    @slot_index_current = VoteAccountHistory.where(
+      network: params[:network],
+      batch_uuid: @batch.uuid
+    ).maximum(:slot_index_current).to_i
+    @skipped_vote_percent_best = \
+      (@slot_index_current - @credits_current_max )/@slot_index_current.to_f
+
     # Ping Times
     ping_batch = PingTime.where(network: params[:network])&.last&.batch_uuid
     ping_time_stat = PingTimeStat.where(batch_uuid: ping_batch)&.last
