@@ -4,8 +4,8 @@
     <tr>
       <th>Last<br />Vote</th>
       <th>Activated<br />Stake</th>
-      <th>Credits</th>
-      <th>Software<br />Version</th>
+      <th>Credits<br />&nbsp;</th>
+      <th>Credits<br />Current Epoch</th>
       <th>Timestamp</th>
     </tr>
   </thead>
@@ -22,7 +22,7 @@
         <%= number_with_delimiter vote.credits %>
       </td>
       <td class='text-right'>
-        <%= number_with_delimiter vote.software_version %>
+        <%= number_with_delimiter vote.credits_current %>
       </td>
       <td>
         <%= vote.created_at %>
