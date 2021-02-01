@@ -52,7 +52,10 @@ module SolanaLogic
         slots_in_epoch: epoch_json['slotsInEpoch']
       )
 
-      Pipeline.new(200, p.payload.merge(epoch: epoch.epoch))
+      Pipeline.new(200, p.payload.merge(
+                          epoch: epoch.epoch,
+                          epoch_slot_index: epoch.slot_index
+                        ))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from epoch_get', e)
     end
@@ -148,13 +151,22 @@ module SolanaLogic
       )['result']['current']
 
       vote_accounts = {}
+
+      # epochCredits History of how many credits earned by the end of each
+      # epoch, as an array of arrays containing: [epoch, credits,
+      # previousCredits]
       vote_accounts_json.each do |hash|
+        credits_total = hash['epochCredits'][-1][1].to_i
+        credits_previous = hash['epochCredits'][-1][2].to_i
+        credits_current = credits_total - credits_previous
+
         vote_accounts[hash['nodePubkey']] = {
           'vote_account' => hash['votePubkey'],
           'activated_stake' => hash['activatedStake'],
           'commission' => hash['commission'],
           'last_vote' => hash['lastVote'],
-          'credits' => hash['epochCredits'][-1][1]
+          'credits' => credits_total,
+          'credits_current' => credits_current
         }
       end
 
@@ -215,6 +227,8 @@ module SolanaLogic
           commission: v['commission'],
           last_vote: v['last_vote'],
           credits: v['credits'],
+          credits_current: v['credits_current'],
+          slot_index_current: p.payload[:epoch_slot_index],
           activated_stake: v['activated_stake'],
           software_version: v['version']
         )

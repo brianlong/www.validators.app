@@ -3,6 +3,13 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
+# OpenSSH keys only supported if ED25519 is available (NotImplementedError)
+# net-ssh requires the following gems for ed25519 support:
+#  * ed25519 (>= 1.2, < 2.0)
+#  * bcrypt_pbkdf (>= 1.0, < 2.0)
+# See https://github.com/net-ssh/net-ssh/issues/565 for more information
+# Gem::LoadError : "ed25519 is not part of the bundle. Add it to your Gemfile."
+
 # ruby '2.7.0'
 gem 'bundler', '>= 2.1'
 gem 'json', '>= 2.3.0'
@@ -70,6 +77,8 @@ gem 'kaminari'
 # MaxMind
 gem 'dnsruby'
 gem 'maxmind-geoip2'
+
+
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
