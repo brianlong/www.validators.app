@@ -388,18 +388,32 @@ module SolanaLogic
           account: result['identityPubkey']
         )
 
+        # Raise an exception if we detect script. Then skip to the next result.
+        %w[name keybaseUsername website details].each do |f|
+          raise "Script detected in #{f}" \
+            if result['info'][f].to_s.include?('script')
+        end
+
         # puts "#{result['info']['name']} => #{result['info']['name'].encoding}"
-        validator.name = result['info']['name'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
+        ascii_name = result['info']['name'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
+        validator.name = ascii_name
 
-        validator.keybase_id = result['info']['keybaseUsername'].to_s.strip
+        keybase_name = result['info']['keybaseUsername'].to_s.strip
+        validator.keybase_id = keybase_name
 
-        validator.www_url = result['info']['website'].to_s.strip
+        www_url = result['info']['website'].to_s.strip
+        validator.www_url = www_url
 
-        validator.details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
+        ascii_details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
+        validator.details = ascii_details
 
         validator.info_pub_key = result['infoPubkey'].strip
 
         validator.save!
+      rescue StandardError => e
+        # I don't want to break the loop, but I do want to write these to the
+        # Rails log so I can see failures.
+        Rails.logger.error "validator-info MESSAGE: #{e.message} CLASS: #{e.class}. Validator: #{result.inspect}"
       end
 
       Pipeline.new(200, p.payload)
@@ -407,7 +421,7 @@ module SolanaLogic
       Pipeline.new(
         500,
         p.payload,
-        'Error from validator_info_get_and_save',
+        "Error from validator_info_get_and_save on #{p.payload[:network]}",
         e
       )
     end

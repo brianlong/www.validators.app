@@ -1,3 +1,6 @@
+# mainnet_urls: ['http://157.245.143.40:8899', 'https://api.mainnet-beta.solana.com']
+# testnet_urls: ['http://165.227.100.142:8899', 'https://testnet.solana.com:8899']
+
 # Get Epoch Info
 curl http://solana-tds:8899 -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getEpochInfo"}'
 
