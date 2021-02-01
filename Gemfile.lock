@@ -392,7 +392,7 @@ DEPENDENCIES
   maxmind-geoip2
   mechanize
   mysql2 (>= 0.5.3)
-  nokogiri
+  nokogiri (= 1.11.0)
   pry (~> 0.12.2)
   rails (~> 6.0)
   redis (~> 4.0)
