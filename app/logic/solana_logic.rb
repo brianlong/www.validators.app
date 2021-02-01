@@ -391,7 +391,7 @@ module SolanaLogic
         # Raise an exception if we detect script. Then skip to the next result.
         %w[name keybaseUsername website details].each do |f|
           raise "Script detected in #{f}" \
-            if result['info'][f].to_s.include?('script')
+            if result['info'][f].to_s.downcase.include?('script')
         end
 
         # puts "#{result['info']['name']} => #{result['info']['name'].encoding}"
