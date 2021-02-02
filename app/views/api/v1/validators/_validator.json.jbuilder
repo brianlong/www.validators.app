@@ -21,6 +21,7 @@ unless score.nil?
   json.commission score.commission
   json.delinquent score.delinquent
   json.data_center_key score.data_center_key
+  json.data_center_host score.data_center_host
 end
 
 # Vote account data
