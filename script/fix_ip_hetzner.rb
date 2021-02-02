@@ -102,6 +102,7 @@ Ip.where(traits_autonomous_system_number: 24_940)
     INNER JOIN ips ip
     ON sc.ip_address = ip.address
     SET sc.data_center_key = ip.data_center_key,
+    sc.data_center_host = ip.data_center_host,
     sc.updated_at = NOW();
   "
   ValidatorScoreV1.connection.execute(sql2)
