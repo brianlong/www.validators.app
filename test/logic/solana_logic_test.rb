@@ -180,4 +180,13 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_equal [], cli_request('validators', rpc_urls)
     end
   end
+
+  # I use this test in development mode only.
+  # test 'cli_block_production_mainnet' do
+  #   VCR.use_cassette('cli_block_production_mainnet') do
+  #     rpc_urls = ['https://api.mainnet-beta.solana.com']
+  #
+  #     assert_equal [], cli_request('block-production', rpc_urls)
+  #   end
+  # end
 end

@@ -496,6 +496,17 @@ module SolanaLogic
                             invalid: :replace,
                             undef: :replace
                           )
+      # If the response includes extra notes at the top, we need to
+      # strip the notes before parsing JSON
+      #
+      # "\nNote: Requested start slot was 63936000 but minimum ledger slot is 63975209\n{
+      if response_utf8.include?('Note: ')
+        note_end_index = response_utf8.index("\n{")+1
+        response_utf8 = response_utf8[note_end_index..-1]
+      end
+
+      # byebug
+
       return JSON.parse(response_utf8) unless response_utf8 == ''
     rescue JSON::ParserError => e
       Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
