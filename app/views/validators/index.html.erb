@@ -306,7 +306,9 @@
               <td class="text-right">
                 <%
                   vahl = validator.vote_account_last&.vote_account_history_last
-                  skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
+                  if vahl
+                    skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
+                  end
                 %>
                 <%=
                   number_to_percentage(
