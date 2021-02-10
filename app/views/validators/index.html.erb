@@ -292,16 +292,24 @@
                         line_color: line_color
                 %>
               </td>
+
               <td class="text-right">
                 <%
-                  vahl = validator.vote_account_last&.vote_account_history_last %>
+                  vahl = validator.vote_account_last&.vote_account_history_last
+                  skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
+                %>
                 <%=
-                number_to_percentage(
-                  ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
-                  precision: 2
-                ) if vahl
+                  number_to_percentage(
+                    (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
+                    precision: 2
+                  ) if vahl
+                  # number_to_percentage(
+                  #   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
+                  #   precision: 2
+                  # ) if vahl
                  %>
               </td>
+
               <%
                 ping_color = if validator.ping_time_avg.nil?
                   'score-0'
