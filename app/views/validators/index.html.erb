@@ -87,7 +87,7 @@
             </th>
             <th class='text-right'>
               Skipped<br />Vote &percnt;<br />
-              <small>(Work-In-Progress)</small>
+              <small>(Distance from leader)</small>
             </th>
             <th class='text-right'>Average<br />Ping Time (ms)</th>
           </tr>
@@ -127,7 +127,17 @@
           <% i += 1 %>
             <tr>
               <td class="avatar-column">
-                <small><%= i %></small>&nbsp;
+                <small>
+                  <%=
+                   link_to i, validator_url(
+                      network: params[:network],
+                      account: validator.account,
+                      order: params[:order],
+                      page: params[:page],
+                      refresh: params[:refresh]
+                    )
+                  %>
+                </small>&nbsp;
                 <span class="avatar">
                   <% if validator.avatar_url %>
                     <%= image_tag validator.avatar_url, class: 'img-circle' %>
