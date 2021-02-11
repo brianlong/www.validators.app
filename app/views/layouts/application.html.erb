@@ -119,15 +119,15 @@
       </div>
 
       <div class="container">
-        <p class="">
-          <small>
-            First Movers Advantage, LLC ("FMA") is the operator of this website. FMA PROVIDES THE DATA HEREIN ON AN “AS IS” BASIS WITH NO WARRANTIES, AND HEREBY DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY, QUALITY, AND FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT, AND ANY WARRANTIES ARISING FROM A COURSE OF DEALING, COURSE OF PERFORMANCE, TRADE USAGE, OR TRADE PRACTICE. FMA DOES NOT WARRANT THAT THE DATA WILL BE ERROR-FREE OR THAT ANY ERRORS WILL BE CORRECTED. ALL INFORMATION SHOULD BE INDEPENDENTLY VERIFIED BEFORE MAKING AN INVESTMENT DECISION.
-          </small>
-        </p>
-        <p class="text-muted">
-          &copy; 2019<%= " - #{Date.today.year}" if Date.today.year > 2019 %>  <%= FMA_LLC %> <%= t('footer.copyright_text') %>
-        </p>
-      </div>
+        <div class="col-lg-12">
+          <p>
+              First Movers Advantage, LLC ("FMA") is the operator of this website. FMA PROVIDES THE DATA HEREIN ON AN “AS IS” BASIS WITH NO WARRANTIES, AND HEREBY DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY, QUALITY, AND FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT, AND ANY WARRANTIES ARISING FROM A COURSE OF DEALING, COURSE OF PERFORMANCE, TRADE USAGE, OR TRADE PRACTICE. FMA DOES NOT WARRANT THAT THE DATA WILL BE ERROR-FREE OR THAT ANY ERRORS WILL BE CORRECTED. ALL INFORMATION SHOULD BE INDEPENDENTLY VERIFIED BEFORE MAKING AN INVESTMENT OR DELEGATION DECISION.
+            </p>
+            <p class="text-muted">
+              &copy; 2019<%= " - #{Date.today.year}" if Date.today.year > 2019 %>  <%= FMA_LLC %> <%= t('footer.copyright_text') %>
+            </p>
+          </div>
+        </div>
 
     </footer>
     <%# render 'layouts/development_footer' if Rails.env == 'development' %>
