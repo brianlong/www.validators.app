@@ -17,5 +17,9 @@ end
 # Remove old validators that are not active after 30 days
 ValidatorScoreV1.where("active_stake = 0 and created_at < '#{thirty_days_ago}'")
                 .each do |score|
+                  puts "#{score.validator.account} (#{score.network})" \
+                    if verbose
+                  # score.validator.vote_account_histories.destroy_all
+                  # score.validator.vote_accounts
                   score.validator.destroy
                 end
