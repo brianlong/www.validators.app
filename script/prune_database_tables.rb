@@ -13,3 +13,9 @@ puts thirty_days_ago if verbose
   puts sql if verbose
   ActiveRecord::Base.connection.execute(sql)
 end
+
+# Remove old validators that are not active after 30 days
+ValidatorScoreV1.where("active_stake = 0 and created_at < '#{thirty_days_ago}'")
+                .each do |score|
+                  score.validator.destroy
+                end

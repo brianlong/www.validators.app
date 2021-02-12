@@ -24,7 +24,7 @@ class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 
   # Touch the related validator to increment the updated_at attribute
-  belongs_to :validator, touch: true
+  belongs_to :validator
   before_save :calculate_total_score
 
   serialize :root_distance_history, JSON

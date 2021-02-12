@@ -2,11 +2,11 @@
 
 # Validator
 class Validator < ApplicationRecord
-  has_many :vote_accounts
+  has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts
-  has_many :validator_ips
-  has_many :validator_block_histories
-  has_one :validator_score_v1
+  has_many :validator_ips, dependent: :destroy
+  has_many :validator_block_histories, dependent: :destroy
+  has_one :validator_score_v1, dependent: :destroy
   # after_save :copy_data_to_score
 
   # Returns an Array of account IDs for a given network
