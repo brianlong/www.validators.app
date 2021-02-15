@@ -68,6 +68,7 @@ class DataCentersController < ApplicationController
     @scores = ValidatorScoreV1.where(network: params[:network])
                               .where(data_center_key: key)
                               .where('active_stake > 0')
+                              .order('active_stake desc')
 
     @total_stake = ValidatorScoreV1.where(network: params[:network])
                                    .where('active_stake > 0')
