@@ -44,7 +44,7 @@ class DataCentersController < ApplicationController
       }
       # Rails.logger.info @data_centers.inspect
     end
-    @data_centers = @data_centers.sort_by { |_k, v| -v[:count] }
+    @data_centers = @data_centers.sort_by { |_k, v| -v[:active_stake] }
     # Rails.logger.info @data_centers
   end
 
