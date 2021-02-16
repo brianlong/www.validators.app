@@ -9,7 +9,7 @@ require 'timeout'
 # See `config/initializers/pipeline.rb` for a description of the Pipeline struct
 module SolanaLogic
   include PipelineLogic
-  RPC_TIMEOUT = 15 # seconds
+  RPC_TIMEOUT = 30 # seconds
 
   # Create a batch record and set the :batch_uuid in the payload
   def batch_set
@@ -388,24 +388,18 @@ module SolanaLogic
           account: result['identityPubkey']
         )
 
-        # Raise an exception if we detect script. Then skip to the next result.
-        %w[name keybaseUsername website details].each do |f|
-          raise "Script detected in #{f}" \
-            if result['info'][f].to_s.downcase.include?('script')
-        end
-
         # puts "#{result['info']['name']} => #{result['info']['name'].encoding}"
         ascii_name = result['info']['name'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
-        validator.name = ascii_name
+        validator.name = ascii_name unless ascii_name.to_s.downcase.include?('script')
 
         keybase_name = result['info']['keybaseUsername'].to_s.strip
-        validator.keybase_id = keybase_name
+        validator.keybase_id = keybase_name unless keybase_name.to_s.downcase.include?('script')
 
         www_url = result['info']['website'].to_s.strip
-        validator.www_url = www_url
+        validator.www_url = www_url unless www_url.to_s.downcase.include?('script')
 
         ascii_details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
-        validator.details = ascii_details
+        validator.details = ascii_details unless ascii_details.to_s.downcase.include?('script')
 
         validator.info_pub_key = result['infoPubkey'].strip
 
