@@ -91,7 +91,6 @@
               Skipped<br />Vote &percnt;<br />
               <small>(Distance from leader)</small>
             </th>
-            <th class='text-right'>Average<br />Ping Time (ms)</th>
           </tr>
         </thead>
 
@@ -113,9 +112,6 @@
             </td>
             <td class='text-right'>
               Min: <%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0, precision: 2) %>
-            </td>
-            <td class='text-right'>
-              Av: <%= @ping_time_avg.nil? ? 'N/A' : @ping_time_avg&.to_f.round(1)  %>
             </td>
           </tr>
           <%
@@ -322,19 +318,6 @@
                   #   precision: 2
                   # ) if vahl
                  %>
-              </td>
-
-              <%
-                ping_color = if validator.ping_time_avg.nil?
-                  'score-0'
-                elsif validator.ping_time_avg.to_f <= @ping_time_avg.to_f
-                  'score-2'
-                else
-                  'score-1'
-                end
-               %>
-              <td class="<%= ping_color %> text-right">
-                <%= validator.ping_time_avg.nil? ? 'N/A' : validator.ping_time_avg.to_f.round(1)  %>
               </td>
             </tr>
           <% end %>
