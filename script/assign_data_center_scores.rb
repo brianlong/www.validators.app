@@ -4,6 +4,8 @@
 
 require File.expand_path('../config/environment', __dir__)
 
+MAX_DATA_CENTER_STAKE = 25.0
+
 sql = "
   SELECT distinct data_center_key,
          traits_autonomous_system_organization,
@@ -48,7 +50,7 @@ end
 @data_centers = @data_centers.sort_by { |_k, v| -v[:count] }
 
 @data_centers.each do |k,v|
-  if ((v[:active_stake] / @total_stake.to_f)*100.0) >= 33.0
+  if ((v[:active_stake] / @total_stake.to_f)*100.0) >= MAX_DATA_CENTER_STAKE
     score = -2
   else
     score = 0
