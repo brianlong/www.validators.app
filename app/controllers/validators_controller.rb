@@ -74,11 +74,6 @@ class ValidatorsController < ApplicationController
     @skipped_vote_percent_best = \
       (@slot_index_current - @credits_current_max )/@slot_index_current.to_f
 
-    # Ping Times
-    # ping_batch = PingTime.where(network: params[:network])&.last&.batch_uuid
-    # ping_time_stat = PingTimeStat.where(batch_uuid: ping_batch)&.last
-    # @ping_time_avg = ping_time_stat&.overall_average_time
-
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
 
   end
@@ -87,14 +82,15 @@ class ValidatorsController < ApplicationController
   # GET /validators/1.json
   def show
     # Sometimes @validator is nil
-    @ping_times = if @validator.nil?
-                    []
-                  else
-                      PingTime.where(
-                      network: params[:network],
-                      to_account: @validator.account
-                    ).order('created_at desc').limit(30)
-                  end
+    @ping_times = []
+    # @ping_times = if @validator.nil?
+    #                 []
+    #               else
+    #                   PingTime.where(
+    #                   network: params[:network],
+    #                   to_account: @validator.account
+    #                 ).order('created_at desc').limit(30)
+    #               end
 
     @data = {}
 
