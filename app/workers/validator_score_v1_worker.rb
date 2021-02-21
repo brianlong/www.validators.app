@@ -19,8 +19,9 @@ class ValidatorScoreV1Worker
                  .then(&block_history_get)
                  .then(&assign_block_history_score)
                  .then(&assign_software_version_score)
-                 # .then(&get_ping_times)
                  .then(&save_validators)
                  .then(&log_errors)
+
+    # .then(&get_ping_times) was after assign_software_version_score
   end
 end
