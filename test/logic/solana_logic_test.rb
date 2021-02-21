@@ -157,7 +157,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
   # 159.89.252.85 is my testnet server.
   test 'cli_request with fail over' do
     VCR.use_cassette('validators_cli_with_fail_over') do
-      rpc_urls = ['http://127.0.0.1:8899', 'http://159.89.252.85:8899']
+      rpc_urls = ['http://127.0.0.1:8899', 'https://testnet.solana.com:8899']
       cli_response = cli_request('validators', rpc_urls)
       assert_equal 6, cli_response.count
     end
@@ -166,7 +166,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
   # This test assumes that there is no validator RPC running locally.
   test 'cli_request should get first attempt with no fail over' do
     VCR.use_cassette('validators_cli_with_no_fail_over') do
-      rpc_urls = ['http://159.89.252.85:8899', 'http://127.0.0.1:8899']
+      rpc_urls = ['https://testnet.solana.com:8899', 'http://127.0.0.1:8899']
       cli_response = cli_request('validators', rpc_urls)
       assert_equal 6, cli_response.count
     end
