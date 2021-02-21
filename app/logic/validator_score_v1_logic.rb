@@ -52,6 +52,11 @@ module ValidatorScoreV1Logic
 
       # Grab the highest root block & vote for this batch so we can calculate
       # the distances
+      #
+      # NOTE: We are hitting the database three times for these three stats.
+      # Will it be faster to load the batch into memory and perform the
+      # calculations in RAM? We could also eliminate the N+1 query a little
+      # further below if we have the batch in RAM.
       highest_root = ValidatorHistory.highest_root_block_for(
         p.payload[:network],
         p.payload[:batch_uuid]
