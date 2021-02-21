@@ -97,7 +97,9 @@ class ValidatorsController < ApplicationController
     @history_limit = 240
 
     i = 0
-    unless @validator.nil?
+    if @validator.nil?
+      render file: "#{Rails.root}/public/404.html" , status: 404 
+    else
       @validator.validator_block_histories
                 .order('id desc')
                 .limit(@history_limit)
