@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: validator_ips
+#
+#  id           :bigint           not null, primary key
+#  validator_id :bigint           not null
+#  version      :integer          default(4)
+#  address      :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
 # ValidatorIp
 class ValidatorIp < ApplicationRecord
   belongs_to :validator
