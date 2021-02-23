@@ -1,6 +1,15 @@
 # mainnet_urls: ['https://api.mainnet-beta.solana.com']
 # testnet_urls: ['https://testnet.solana.com:8899']
 
+# getBlockCommitment
+curl https://api.mainnet-beta.solana.com -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getBlockCommitment","params":[66487888]}'
+
+# getBlockTime
+curl https://api.mainnet-beta.solana.com -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getBlockTime","params":[66488098]}'
+
+# getEpochSchedule
+curl https://api.mainnet-beta.solana.com -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getEpochSchedule"}'
+
 # Get Epoch Info
 curl http://solana-tds:8899 -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getEpochInfo"}'
 
