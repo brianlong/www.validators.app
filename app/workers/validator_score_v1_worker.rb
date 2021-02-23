@@ -13,7 +13,6 @@ class ValidatorScoreV1Worker
 
     _p = Pipeline.new(200, payload)
                  .then(&set_this_batch)
-                 .then(&get_cluster_version_number)
                  .then(&validators_get)
                  .then(&block_vote_history_get)
                  .then(&assign_block_and_vote_scores)
