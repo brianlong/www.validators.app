@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_02_032238) do
+ActiveRecord::Schema.define(version: 2021_02_23_050901) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -183,6 +183,21 @@ ActiveRecord::Schema.define(version: 2021_02_02_032238) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_reports_on_network_and_batch_uuid"
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
+  end
+
+  create_table "slots", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "network"
+    t.bigint "epoch"
+    t.bigint "slot_number"
+    t.string "leader_account"
+    t.boolean "skipped"
+    t.bigint "block_unix_time"
+    t.datetime "block_created_at"
+    t.text "commitment_level"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "epoch", "slot_number"], name: "index_slots_on_network_and_epoch_and_slot_number", unique: true
+    t.index ["network", "slot_number"], name: "index_slots_on_network_and_slot_number"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
