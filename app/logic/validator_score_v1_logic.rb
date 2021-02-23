@@ -25,6 +25,19 @@ module ValidatorScoreV1Logic
     end
   end
 
+  # Get the current cluster version number for calculating Validator#software_version_score
+  def get_cluster_version_number
+    lambda do |p|
+      return p unless p.code == 200
+
+      cluster_version =
+
+      Pipeline.new(200, p.payload.merge(cluster_version: cluster_version))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from get_cluster_version_number', e)
+    end
+  end
+
   # Get all of the validators for this network + the validator_score_v1 records
   def validators_get
     lambda do |p|
@@ -252,6 +265,8 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
+      current_version = p.payload[:]
+
       p.payload[:validators].each do |validator|
         vah = validator.validator_history_last
         if vah.nil?
@@ -264,7 +279,7 @@ module ValidatorScoreV1Logic
               vah.software_version
           end
         end
-        validator.validator_score_v1.assign_software_version_score
+        validator.validator_score_v1.assign_software_version_score(current_version)
       end
 
       Pipeline.new(200, p.payload)
