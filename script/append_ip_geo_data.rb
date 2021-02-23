@@ -95,6 +95,13 @@ begin
     end
     vs1.save
   end
+
+  # Clean up the scores table to remove data_center_host if the node moved out
+  # of Hetzner
+  ValidatorScoreV1.connection.execute(
+    "update validator_score_v1s set data_center_host = null where data_center_key not like '24940%' and data_center_host is not null;"
+  )
+
 rescue StandardError => e
   puts "\nERROR:"
   puts e.message
