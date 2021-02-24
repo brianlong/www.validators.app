@@ -32,17 +32,13 @@ module ApplicationHelper
     return 'text-red' if software_version.nil?
     return 'text-red' if software_version.blank?
 
-    if software_version.include?(
-      Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym].to_s
-    )
+    version = ValidatorSoftwareVersion.new(software_version)
+    if version.running_latest_or_edge?
       'text-green'
-    elsif software_version.include?(
-      Rails.application.credentials.solana["software_minor_#{params[:network]}".to_sym].to_s
-    )
+    elsif version.running_latest_minor?
       'text-orange'
     else
       'text-red'
     end
-    # 'text-orange'
   end
 end
