@@ -1,19 +1,3 @@
-# == Schema Information
-#
-# Table name: contact_requests
-#
-#  id                         :bigint           not null, primary key
-#  name_encrypted             :string(255)
-#  email_address_encrypted    :string(255)
-#  telephone_encrypted        :string(255)
-#  comments_encrypted         :text(65535)
-#  name_encrypted_iv          :string(255)
-#  email_address_encrypted_iv :string(255)
-#  telephone_encrypted_iv     :string(255)
-#  comments_encrypted_iv      :string(255)
-#  created_at                 :datetime         not null
-#  updated_at                 :datetime         not null
-#
 class ContactRequest < ApplicationRecord
   validates :name, presence: true, length: { maximum: 20 }
   validates :email_address, presence: true,

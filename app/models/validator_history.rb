@@ -1,24 +1,3 @@
-# frozen_string_literal: true
-
-# == Schema Information
-#
-# Table name: validator_histories
-#
-#  id               :bigint           not null, primary key
-#  network          :string(255)
-#  batch_uuid       :string(255)
-#  account          :string(255)
-#  vote_account     :string(255)
-#  commission       :decimal(10, )    unsigned
-#  last_vote        :bigint           unsigned
-#  root_block       :bigint           unsigned
-#  credits          :bigint           unsigned
-#  active_stake     :bigint           unsigned
-#  delinquent       :boolean          default(FALSE)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  software_version :string(255)
-#
 class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic

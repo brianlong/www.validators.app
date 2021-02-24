@@ -1,15 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: vote_accounts
-#
-#  id           :bigint           not null, primary key
-#  validator_id :bigint           not null
-#  account      :string(255)
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#
 # VoteAccount
 class VoteAccount < ApplicationRecord
   belongs_to :validator
