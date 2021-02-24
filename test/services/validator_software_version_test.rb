@@ -38,4 +38,8 @@ class ValidatorSoftwareVersionTest < ActiveSupport::TestCase
     v = ValidatorSoftwareVersion.new('1.4.0')
     refute(v.running_latest_minor?)
   end
+
+  test '#new accepts a second, optional `network` parameter' do
+    ValidatorSoftwareVersion.new('1.4.0', 'testnet')
+  end
 end
