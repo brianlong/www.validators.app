@@ -24,7 +24,7 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
   end
 
   test 'assign_security_report_score' do
-    score = FactoryBot.create(:validator_score_v1, :with_validator)
+    score = FactoryBot.create(:validator_score_v1)
     assert_equal 1, score.security_report_score
   end
 
