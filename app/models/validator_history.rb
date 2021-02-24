@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic

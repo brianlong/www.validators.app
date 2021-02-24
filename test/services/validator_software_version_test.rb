@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class ValidatorSoftwareVersionTest < ActiveSupport::TestCase
-  # test 'CURRENT_VERSION '
-
   test '#running_latest_or_edge? returns true if validator is running an edge version' do
     v = ValidatorSoftwareVersion.new('45.4.23')
     assert(v.running_latest_or_edge?)
