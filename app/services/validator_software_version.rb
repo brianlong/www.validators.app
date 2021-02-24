@@ -1,7 +1,7 @@
 class ValidatorSoftwareVersion < ::Gem::Version
-  def initialize(number, network = 'mainnet')
-    @current_version_number = network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
+  def initialize(number:, network: 'mainnet')
     super(number)
+    @current_version_number = network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
   end
 
   def running_latest_or_edge?

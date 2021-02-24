@@ -60,7 +60,7 @@ class ValidatorScoreV1 < ApplicationRecord
     end
 
     begin
-      version = ValidatorSoftwareVersion.new(software_version)
+      version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network)
     rescue
       return
     end
