@@ -7,6 +7,10 @@ class ValidatorSoftwareVersion < ::Gem::Version
   end
 
   def running_latest_minor?
+    unless CURRENT_VERSION.split('.').length == 3
+      raise 'Invalid value entered for software_patch_mainnet version. Should be specific as x.y.z'
+    end
+
     current_major_minor_version = CURRENT_VERSION.split('.').first(2).join('.')
     self >= Gem::Version.new(current_major_minor_version)
   end
