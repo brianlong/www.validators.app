@@ -42,13 +42,13 @@ module BlockCommitmentSupport
 
         response.body
       rescue Errno::ECONNREFUSED, Timeout::Error => e
-        Rails.logger.error "RPC TIMEOUT #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}"
+        Rails.logger.error "RPC TIMEOUT #{e.class} RPC: #{rpc_url} for getBlockCommitment"
         nil
       end
 
       return JSON.parse(response_body) if response_body
     rescue JSON::ParserError => e
-      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}\n#{response_body}"
+      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for getBlockCommitment\n#{response_body}"
     end
   end
 end
