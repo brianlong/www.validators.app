@@ -72,7 +72,17 @@
             <th class="name-column">
               Name <small>(Commission)</small><br />
               Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
-              Software <small>(<%= Rails.application.credentials.solana["software_patch_#{params[:network]}".to_sym] %>)</small><br />
+              Software
+              <small>
+                (
+                <% if params[:network] == 'mainnet' %>
+                  <%= MAINNET_CLUSTER_VERSION %>
+                <% else %>
+                  <%= TESTNET_CLUSTER_VERSION %>
+                <% end %>
+                )
+              </small>
+              <br />
               Scores <small>(total)</small>
             </th>
             <th class='text-right'>
@@ -175,7 +185,7 @@
                     (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
                   </small>
                   <br />
-                  <small  class="<%= software_color_class(validator.software_version) %>">
+                  <small class="<%= software_color_class(validator.software_version) %>">
                     <%= validator.software_version || 'N/A' %>
                   </small>
                   <br />
