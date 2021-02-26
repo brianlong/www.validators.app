@@ -66,9 +66,9 @@ class ValidatorScoreV1 < ApplicationRecord
     end
 
     self.software_version_score = \
-      if version.running_latest_or_edge?
+      if version.running_latest_or_newer?
         2
-      elsif version.running_latest_minor?
+      elsif version.running_latest_major_and_minor_or_newer?
         1
       else
         0
