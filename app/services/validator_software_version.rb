@@ -8,7 +8,7 @@ class ValidatorSoftwareVersion < ::Gem::Version
     self >= current_major_minor_patch
   end
 
-  def running_latest_major_and_minor?
+  def running_latest_major_and_minor_or_newer?
     self >= current_major_minor
   end
 

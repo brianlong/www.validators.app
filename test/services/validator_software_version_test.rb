@@ -23,42 +23,42 @@ class ValidatorSoftwareVersionTest < ActiveSupport::TestCase
     end
   end
 
-  test '#running_latest_major_and_minor? returns true if validator is running same minor version' do
+  test '#running_latest_major_and_minor_or_newer? returns true if validator is running same minor version' do
     v = ValidatorSoftwareVersion.new(number: '1.5')
     stub_current_major_minor(v) do
-      assert(v.running_latest_major_and_minor?)
+      assert(v.running_latest_major_and_minor_or_newer?)
     end
 
     v = ValidatorSoftwareVersion.new(number: '1.5.0')
     stub_current_major_minor(v) do
-      assert(v.running_latest_major_and_minor?)
+      assert(v.running_latest_major_and_minor_or_newer?)
     end
 
     v = ValidatorSoftwareVersion.new(number: '1.5.1')
     stub_current_major_minor(v) do
-      assert(v.running_latest_major_and_minor?)
+      assert(v.running_latest_major_and_minor_or_newer?)
     end
   end
 
-  test '#running_latest_major_and_minor? returns false if validator is running an older minor version' do
+  test '#running_latest_major_and_minor_or_newer? returns false if validator is running an older minor version' do
     v = ValidatorSoftwareVersion.new(number: '1.4')
     stub_current_major_minor(v) do
-      refute(v.running_latest_major_and_minor?)
+      refute(v.running_latest_major_and_minor_or_newer?)
     end
 
     v = ValidatorSoftwareVersion.new(number: '1.4.9')
     stub_current_major_minor(v) do
-      refute(v.running_latest_major_and_minor?)
+      refute(v.running_latest_major_and_minor_or_newer?)
     end
 
     v = ValidatorSoftwareVersion.new(number: '1.4.0')
     stub_current_major_minor(v) do
-      refute(v.running_latest_major_and_minor?)
+      refute(v.running_latest_major_and_minor_or_newer?)
     end
 
     v = ValidatorSoftwareVersion.new(number: '0.4.0')
     stub_current_major_minor(v) do
-      refute(v.running_latest_major_and_minor?)
+      refute(v.running_latest_major_and_minor_or_newer?)
     end
   end
 
