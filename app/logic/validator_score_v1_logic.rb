@@ -298,8 +298,8 @@ module ValidatorScoreV1Logic
 
       ActiveRecord::Base.transaction do
         p.payload[:validators].each do |validator|
-          validator.save!
-          validator.validator_score_v1.save!
+          validator.save
+          validator.validator_score_v1.save
         end
       end
 
