@@ -7,6 +7,7 @@ This repo is a template to be used for creating new projects. After creating you
   environment variables that you should copy to config/credentials.yml.enc
 - config/database.yml to reflect the proper database name and other settings.
   There is an example in `config/database.example.yml`
+- Copy `config/cluster.yml.example` to `config/cluster.yml` 
 - Look at `config/initializers/site_information.rb` and make changes as needed
   to the constant values shown there.
 - Perform a 'find all' to look for 'fmaprivacy' and 'fmadata'. Modify those
