@@ -24,7 +24,19 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
   end
 
   test 'assign_security_report_score' do
-    score = FactoryBot.create(:validator_score_v1, :with_validator)
+    score = FactoryBot.create(:validator_score_v1)
     assert_equal 1, score.security_report_score
+  end
+
+  test 'assign_software_version_score persists a software_version_score' do
+    score = create(:validator_score_v1, software_version: '1.5.4')
+    score.assign_software_version_score
+    assert(score.software_version_score.present?)
+  end
+
+  test 'assign_software_version_score preserves the existing value if junk is passed' do
+    score = create(:validator_score_v1, software_version: 'foo', software_version_score: 1)
+    score.assign_software_version_score
+    assert_equal 1, score.reload.software_version_score
   end
 end

@@ -59,15 +59,16 @@ class ValidatorScoreV1 < ApplicationRecord
       return
     end
 
-    creds = Rails.application.credentials
+    begin
+      version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network)
+    rescue
+      return
+    end
+
     self.software_version_score = \
-      if software_version.include?(
-        creds.solana["software_patch_#{validator.network}".to_sym].to_s
-      )
+      if version.running_latest_or_newer?
         2
-      elsif software_version.include?(
-        creds.solana["software_minor_#{validator.network}".to_sym].to_s
-      )
+      elsif version.running_latest_major_and_minor_or_newer?
         1
       else
         0

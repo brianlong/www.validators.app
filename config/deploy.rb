@@ -33,6 +33,7 @@ append :linked_files, 'config/database.yml'
 append :linked_files, 'config/credentials/production.key'
 append :linked_files, 'config/appsignal.yml'
 append :linked_files, 'config/sidekiq.yml'
+append :linked_files, 'config/cluster.yml'
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system'
