@@ -1,3 +1,4 @@
+# Copy this example file to config/cluster.yml for development & testing.
 ---
 mainnet_urls:
   - "https://api.mainnet-beta.solana.com"
