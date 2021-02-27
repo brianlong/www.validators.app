@@ -33,9 +33,9 @@ module ApplicationHelper
     return 'text-red' if software_version.blank?
 
     version = ValidatorSoftwareVersion.new(number: software_version, network: params[:network])
-    if version.running_latest_or_edge?
+    if version.running_latest_or_newer?
       'text-green'
-    elsif version.running_latest_minor?
+    elsif version.running_latest_major_and_minor_or_newer?
       'text-orange'
     else
       'text-red'
