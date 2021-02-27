@@ -200,6 +200,8 @@ module ValidatorScoreV1Logic
           p.payload[:batch_uuid]
         )
 
+      # TODO: Eliminate the N+1 Query caused by
+      # validator.validator_block_histories.last
       p.payload[:validators].each do |validator|
         vbh = validator.validator_block_histories.last
         next unless vbh
@@ -252,6 +254,8 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
+      # TODO: Fix the N+1 query caused by validator.validator_history_last &
+      # vah = validator&.vote_accounts&.last&.vote_account_histories&.last
       p.payload[:validators].each do |validator|
         vah = validator.validator_history_last
         if vah.nil?
