@@ -24,4 +24,13 @@ class ValidatorSoftwareVersion < ::Gem::Version
     current_major_minor_version = @current_version_number.split('.').first(2).join('.')
     Gem::Version.new(current_major_minor_version)
   end
+
+  def self.valid_software_version?(number)
+    begin
+      self.new(number: number)
+      true
+    rescue
+      false
+    end
+  end
 end
