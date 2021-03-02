@@ -1,0 +1,30 @@
+<header class="container">
+  <a href="<%= root_url(network: params[:network]) %>">
+    <%= image_tag 'validators_logo_white_min.png', alt: t('home_page_link'), title: t('home_page'), class: 'logo' %>
+  </a>
+
+  <span class="float-right">
+        <%= link_to 'mainnet', root_url(network: 'mainnet') %>&nbsp;|&nbsp;
+    <%= link_to 'testnet', root_url(network: 'testnet') %>&nbsp;|&nbsp;
+
+    <% if user_signed_in? %>
+          <%= link_to destroy_user_session_path, method: :delete do %>
+            <i class="fas fa-sign-out-alt sign-in-out"
+               alt="Sign Out Link"
+               title="Sign Out"></i>
+          <% end %>
+        <% else %>
+          <%= link_to new_user_session_path do %>
+            <i class="fas fa-sign-in-alt sign-in-out"
+               alt="Sign In Link"
+               title="Sign In"></i>
+          <% end %>
+      &nbsp;|&nbsp;
+      <%= link_to new_user_registration_path do %>
+            <i class="fas fa-user-plus"
+               alt="Sign In Link"
+               title="Sign Up"></i>
+          <% end %>
+        <% end %>
+  </span>
+</header>

@@ -1,0 +1,55 @@
+@import "variables";
+
+@mixin btn-hover($color) {
+  &:hover, &:focus, &.focus, &:active, &:visited, &.active,
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active,
+  &:not(:disabled):not(.disabled):active:focus,
+  &:not(:disabled):not(.disabled).active:focus {
+    transition: .5s ease;
+    background-color: $color;
+    border-color: $color;
+    outline: none;
+    box-shadow: none;
+  }
+  &.disabled, &:disabled {
+    background-color: lighten($color, 5%);
+    border-color: lighten($color, 5%);
+    outline: none;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+
+.btn {
+  font-weight: $font-weight-bold-primary;
+  letter-spacing: 1px;
+  padding: 12px 16px;
+  @include font-size-base;
+  border-radius: $border-radius;
+  &-primary {
+    background-color: $green;
+    border-color: $green;
+    color: white;
+    //@include btn-hover($dk-orange-darker);
+  }
+  &-secondary {
+    //background-color: $navy-blue;
+    //border-color: $navy-blue;
+    color: white;
+    //@include btn-hover($navy-blue-darker);
+  }
+  &-lg {
+    padding: 16px 20px;
+    @include font-size-larger;
+  }
+  &-md {
+    padding: 12px 16px;
+    @include font-size-base;
+  }
+  &-sm {
+    padding: 10px 14px;
+    @include font-size-smaller;
+    font-weight: $font-weight-bold-secondary;
+  }
+}

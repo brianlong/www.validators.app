@@ -1,5 +1,7 @@
 @import "variables";
 
+p {}
+
 .text {
   &-muted {
     color: unset !important;
@@ -57,4 +59,25 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
   h4, .h4 { font-size: $font-size-h4*.8; }
   h5, .h5 { font-size: $font-size-h5*.8; }
   h6, .h6 { font-size: $font-size-larger-mobile; }
+}
+
+
+a {
+  color: $link-color;
+  &:hover {
+    text-decoration: none;
+    color: darken($link-color, 10%);
+  }
+  &.base-color {
+    color: $base-color;
+    cursor: pointer;
+    &:hover { color: lighten($base-color, 15%); }
+  }
+  img {
+    transition: filter .3s ease-in-out;
+    &:hover {
+      filter: grayscale(70%);
+      transition: filter .3s ease-in-out;
+    }
+  }
 }
