@@ -1,0 +1,168 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ */
+
+ @import "variables";
+ @import "bootstrap_overrides";
+ @import "header";
+ @import "footer";
+ @import "lists";
+ @import "tables";
+ @import "forms";
+ @import "scores";
+ @import "typography";
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  @include font-size-base;
+}
+
+body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  @include font-family-base;
+  color: $base-color;
+  background-color: transparent;
+  @include font-size-base;
+}
+
+#donotsell_frame {
+  border: none;
+  width: 100%;
+  height: 900px;
+  margin: 0px;
+  padding: 0px;
+}
+
+
+// TODO old styles - to be redone
+
+.avatar{
+  display: inline-block;
+  padding: 0px;
+  margin: 0px;
+}
+
+.bg-green{
+  background-color: #D4EDDA;
+}
+.bg-yellow {
+  background-color: #FFF3CD;
+}
+.bg-red {
+  background-color: #F8D7DA;
+}
+
+
+.highlight-for-emphasis {
+  font-weight: bold;
+  font-variant-caps: all-small-caps;
+  background-color: #FFFFCC;
+}
+
+.spark-line-table{
+  table-layout: fixed;
+  width: 100%;
+}
+
+.spark-line{
+  width: 15%
+}
+
+.avatar-column {
+  padding-right: 0;
+  margin-right: 0;
+  width: 10%;
+}
+
+.name-column {
+  width: 25%;
+}
+
+.img-circle {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
+
+.img-circle-small {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+}
+
+.font-logo {
+  font-size: 48px;
+}
+
+.to-do-item {
+  padding-bottom: 20px;
+}
+
+.you-dashboard {
+  font-size: 24px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+.validator-block-history-table {
+  padding-top: 20px;
+}
+
+
+.text-green {
+  color: Green;
+}
+.text-red {
+  color: Red;
+}
+.text-orange {
+  color: Orange;
+}
+
+.toggle {
+  font-size: 24px;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px 7px 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px -7px 0;
+    background-color: #c00;
+    color: #fff;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
+
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+#notice {
+  color: green;
+}
