@@ -159,6 +159,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_history_get)
                 .then(&assign_block_history_score)
                 .then(&assign_software_version_score)
+                .then(&save_validators)
 
     assert_equal('1.5.6', Validator.last.validator_score_v1.software_version)
   end
