@@ -4,11 +4,12 @@ $black: #000;
 $white: #fff;
 $red: #f00;
 $grey-light: #dee2e6;
-$base-color: #e3e3e3;
-$link-color: #007bff;
 // Brand colors:
 $green: #2bcf9b;
 $purple: #b832c8;
+// Bootstrap overrides:
+$base-color: #e3e3e3;
+$link-color: lighten($purple, 25%);
 
 
 // Breakpoints

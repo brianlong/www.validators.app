@@ -60,13 +60,25 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
   h5, .h5 { font-size: $font-size-h5*.8; }
   h6, .h6 { font-size: $font-size-larger-mobile; }
 }
+.heading-primary {
+  font-size: 68px;
+  line-height: 70px;
+  @include font-family-alternative();
+  font-weight: $font-weight-bold-primary;
+  margin: 0 40% 30px 0;
+}
+.heading-secondary {
+  text-transform: uppercase;
+}
 
 
 a {
   color: $link-color;
+  transition: color .1s ease-in-out;
   &:hover {
     text-decoration: none;
-    color: darken($link-color, 10%);
+    color: lighten($link-color, 12%);
+    transition: color .1s ease-in-out;
   }
   &.base-color {
     color: $base-color;
