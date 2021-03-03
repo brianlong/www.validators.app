@@ -9,7 +9,10 @@ $green: #2bcf9b;
 $purple: #b832c8;
 // Bootstrap overrides:
 $base-color: #e3e3e3;
-$link-color: lighten($purple, 25%);
+$link-color: lighten($purple, 28%);
+$background-color: #1c1732;
+$background-color-secondary: lighten($background-color, 9%);
+$background-color-tertiary: #341843;
 
 
 // Breakpoints

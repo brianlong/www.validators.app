@@ -42,14 +42,13 @@ body {
   z-index: -2;
   width: 100vw;
   height: 100vh;
-  background-image: linear-gradient(to bottom left, #1c1732,#1c1732,#1c1732,#301A45,#1c1732);
+  background-image: linear-gradient(to bottom left, $background-color,$background-color,$background-color,$background-color,$background-color,$background-color-secondary,$background-color-tertiary,$background-color);
 }
 .background-image {
   position: fixed;
   z-index: -1;
   width: 100vw;
   height: 100vh;
-  background-image: linear-gradient(to bottom left, #1c1732,#1c1732,#301A45);
   background: url("background.svg") no-repeat top right;
   background-size: contain;
 }
@@ -65,8 +64,7 @@ body {
 
 // TODO - covert to box
 main.container {
-  background-color: #1c1732;
-  background-color: darken(#1c1732, 3%)
+  background-color: darken($background-color, 3%)
 }
 
 #donotsell_frame {

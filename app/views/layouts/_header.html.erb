@@ -1,30 +1,32 @@
 <header class="container">
-  <a href="<%= root_url(network: params[:network]) %>">
-    <%= image_tag 'validators_logo_white_min.png', alt: t('home_page_link'), title: t('home_page'), class: 'logo' %>
-  </a>
-
-  <span class="float-right">
-        <%= link_to 'mainnet', root_url(network: 'mainnet') %>&nbsp;|&nbsp;
-    <%= link_to 'testnet', root_url(network: 'testnet') %>&nbsp;|&nbsp;
-
-    <% if user_signed_in? %>
-          <%= link_to destroy_user_session_path, method: :delete do %>
-            <i class="fas fa-sign-out-alt sign-in-out"
-               alt="Sign Out Link"
-               title="Sign Out"></i>
-          <% end %>
+  <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="<%= root_url(network: params[:network]) %>">
+      <%= image_tag 'validators_logo_white_min.png', alt: t('home_page_link'), title: t('home_page') %>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item <% if params[:network] == 'mainnet'%>active<% end %>">
+          <%= link_to 'Mainnet', root_url(network: 'mainnet'), class: "nav-link" %>
+        </li>
+        <li class="nav-item <% if params[:network] == 'testnet'%>active<% end %>">
+          <%= link_to 'Testnet', root_url(network: 'testnet'), class: "nav-link" %>
+        </li>
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "nav-link" %>
+          </li>
         <% else %>
-          <%= link_to new_user_session_path do %>
-            <i class="fas fa-sign-in-alt sign-in-out"
-               alt="Sign In Link"
-               title="Sign In"></i>
-          <% end %>
-      &nbsp;|&nbsp;
-      <%= link_to new_user_registration_path do %>
-            <i class="fas fa-user-plus"
-               alt="Sign In Link"
-               title="Sign Up"></i>
-          <% end %>
+          <li class="nav-item">
+            <%= link_to 'Log In', new_user_session_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Sign Up', new_user_registration_path, class: "nav-link" %>
+          </li>
         <% end %>
-  </span>
+      </ul>
+    </div>
+  </nav>
 </header>
