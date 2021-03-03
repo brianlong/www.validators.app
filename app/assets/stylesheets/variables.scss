@@ -11,8 +11,8 @@ $purple: #b832c8;
 $base-color: #e3e3e3;
 $link-color: lighten($purple, 28%);
 $background-color: #1c1732;
-$background-color-secondary: lighten($background-color, 9%);
-$background-color-tertiary: #341843;
+$background-color-secondary: lighten($background-color, 7%);
+$background-color-tertiary: #2f163c;
 
 
 // Breakpoints
@@ -33,8 +33,8 @@ $screen-xxxl-min: 1600px;
 
 // Typography
 
-$font-family-base: 'arial';
-$font-family-alternative: 'arial';
+$font-family-base: 'Roboto';
+$font-family-alternative: 'Montserrat';
 
 @mixin font-family-base {
   font-family: $font-family-base, sans-serif;

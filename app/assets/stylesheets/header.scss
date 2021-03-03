@@ -21,5 +21,37 @@ header {
     color: lighten($link-color, 15%);
   }
 
+  .navbar-toggler {
+    width: 34px;
+    padding: 0;
+    &-icon {
+      width: 34px;
+      height: 2px;
+      transition: border-color .1s ease-in-out;
+      background-color: $link-color;
+      border: 1px solid $link-color;
+      &:nth-of-type(1) { margin-top: 8px}
+      &:nth-of-type(2) { margin-top: -8px}
+      &:nth-of-type(3) { margin-top: -22px}
+    }
+    &:hover .navbar-toggler-icon {
+      border-color: lighten($link-color, 15%);
+      transition: border-color .1s ease-in-out;
+    }
+    &:focus { outline: none; }
+  }
+
+
+  @media(max-width: $screen-xs-max) {
+    .navbar {
+      padding: 20px 0 0 0;
+    }
+    .navbar-brand img {
+      width: 240px;
+    }
+    .nav-link {
+      padding-top: 20px;
+    }
+  }
 }
 
