@@ -1,9 +1,5 @@
 // Colors
 
-$black: #000;
-$white: #fff;
-$red: #f00;
-$grey-light: #dee2e6;
 // Brand colors:
 $green: #00ce99;
 $purple: #b832c8;
@@ -14,6 +10,11 @@ $link-color-secondary: lighten($link-color, 18%);
 $background-color: #1c1732;
 $background-color-secondary: lighten($background-color, 7%);
 $background-color-tertiary: #2f163c;
+// Other
+$black: #000;
+$white: #fff;
+$red: #f00;
+$grey-light: darken($base-color, 25%);
 
 
 // Breakpoints

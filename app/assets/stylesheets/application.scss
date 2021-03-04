@@ -81,12 +81,7 @@ main.container {
   padding: 0px;
 }
 
-pre {
-  background-color: $grey-light;
-  border-radius: $border-radius;
-  padding: 10px;
-  @include font-size-smaller();
-}
+
 
 
 
@@ -109,13 +104,16 @@ pre {
 .bg-red {
   background-color: #F8D7DA;
 }
-
-
-.highlight-for-emphasis {
-  font-weight: bold;
-  font-variant-caps: all-small-caps;
-  background-color: #FFFFCC;
+.text-green {
+  color: Green;
 }
+.text-red {
+  color: Red;
+}
+.text-orange {
+  color: Orange;
+}
+
 
 .spark-line-table{
   table-layout: fixed;
@@ -141,20 +139,12 @@ pre {
   height: 50px;
   width: 50px;
 }
-
 .img-circle-small {
   border-radius: 50%;
   height: 30px;
   width: 30px;
 }
 
-.font-logo {
-  font-size: 48px;
-}
-
-.to-do-item {
-  padding-bottom: 20px;
-}
 
 .you-dashboard {
   font-size: 24px;
@@ -166,16 +156,6 @@ pre {
   padding-top: 20px;
 }
 
-
-.text-green {
-  color: Green;
-}
-.text-red {
-  color: Red;
-}
-.text-orange {
-  color: Orange;
-}
 
 .toggle {
   font-size: 24px;

@@ -4,8 +4,7 @@ p {}
 
 .text {
   &-muted {
-    color: unset !important;
-    opacity: 0.6;
+    color: $grey-light !important;
   }
 }
 
@@ -90,4 +89,12 @@ a {
     cursor: pointer;
     &:hover { color: $link-color-secondary; }
   }
+}
+
+
+pre {
+  background-color: $grey-light;
+  border-radius: $border-radius;
+  padding: 10px;
+  @include font-size-smaller();
 }
