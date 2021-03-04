@@ -23,7 +23,7 @@ strong {
 @for $i from 1 through 3 {
   h#{$i}, .h#{$i} {
     @include font-family-alternative();
-    font-weight: $font-weight-bold-primary;
+    font-weight: $font-weight-bold-secondary;
     margin-top: 0;
     margin-bottom: 20px;
   }

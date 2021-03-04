@@ -17,6 +17,7 @@
  @import "buttons";
  @import "header";
  @import "footer";
+ @import "cards";
  @import "lists";
  @import "tables";
  @import "forms";
@@ -51,10 +52,14 @@ body {
   height: 100vh;
   background: url("background.svg") no-repeat top right;
   background-size: contain;
+  @media(max-width: $screen-sm-max) {
+    width: 200vw;
+    right: 0;
+  }
 }
 
 .banner {
-  padding-top: 40px;
+  padding-top: 20px;
   padding-bottom: 40px;
   .heading-primary {
     margin: 0 35% 30px 0;
@@ -66,11 +71,6 @@ body {
     text-decoration: underline;
     text-decoration-color: $green;
   }
-}
-
-// TODO - covert to box
-main.container {
-  background-color: darken($background-color, 3%)
 }
 
 #donotsell_frame {
@@ -180,10 +180,4 @@ main.container {
     font-size: 12px;
     list-style: square;
   }
-}
-
-
-
-#notice {
-  color: green;
 }

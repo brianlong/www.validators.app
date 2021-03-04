@@ -10,11 +10,11 @@ $link-color-secondary: lighten($link-color, 18%);
 $background-color: #1c1732;
 $background-color-secondary: lighten($background-color, 7%);
 $background-color-tertiary: #2f163c;
-// Other
+// Other:
 $black: #000;
 $white: #fff;
 $red: #f00;
-$grey-light: darken($base-color, 25%);
+$grey-light: darken($base-color, 30%);
 
 
 // Breakpoints
@@ -55,7 +55,7 @@ $font-size-smaller: 13px;
 $font-size-smaller-tablet: 12.5px;
 $font-size-smaller-mobile: 12px;
 
-$font-size-h1: 40px;
+$font-size-h1: 42px;
 $font-size-h2: 34px;
 $font-size-h3: 30px;
 $font-size-h4: 26px;
@@ -99,8 +99,8 @@ $font-weight-normal: 400;
 
 // Other
 
-$border-radius: 4px;
-$border-radius-larger: 20px;
+$border-radius: 20px;
+$border-radius-larger: 30px;
 
 @mixin box-shadow() {
   box-shadow: $grey-light 0px 5px 15px 0px;
