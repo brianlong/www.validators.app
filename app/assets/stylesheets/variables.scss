@@ -5,7 +5,7 @@ $white: #fff;
 $red: #f00;
 $grey-light: #dee2e6;
 // Brand colors:
-$green: #2bcf9b;
+$green: #00ce99;
 $purple: #b832c8;
 // Bootstrap overrides:
 $base-color: #e3e3e3;
@@ -98,7 +98,7 @@ $font-weight-normal: 400;
 // Other
 
 $border-radius: 4px;
-$border-radius-larger: 8px;
+$border-radius-larger: 20px;
 
 @mixin box-shadow() {
   box-shadow: $grey-light 0px 5px 15px 0px;

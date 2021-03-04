@@ -6,7 +6,7 @@
   &:not(:disabled):not(.disabled).active,
   &:not(:disabled):not(.disabled):active:focus,
   &:not(:disabled):not(.disabled).active:focus {
-    transition: .5s ease;
+    transition: .2s ease;
     background-color: $color;
     border-color: $color;
     outline: none;
@@ -22,11 +22,10 @@
 }
 
 .btn {
-  font-weight: $font-weight-bold-primary;
   letter-spacing: 1px;
-  padding: 12px 16px;
+  padding: 12px 20px;
   @include font-size-base;
-  border-radius: $border-radius;
+  border-radius: $border-radius-larger;
   &-primary {
     background-color: $green;
     border-color: $green;
@@ -34,22 +33,26 @@
     //@include btn-hover($dk-orange-darker);
   }
   &-secondary {
-    //background-color: $navy-blue;
-    //border-color: $navy-blue;
+    background-color: transparent;
+    border: 2px solid $green;
     color: white;
     //@include btn-hover($navy-blue-darker);
   }
   &-lg {
-    padding: 16px 20px;
+    font-weight: $font-weight-bold-secondary;
+    border-radius: 34px;
+    padding: 18px 26px;
     @include font-size-larger;
   }
   &-md {
-    padding: 12px 16px;
+    font-weight: $font-weight-bold-secondary;
+    border-radius: 30px;
+    padding: 14px 22px;
     @include font-size-base;
   }
   &-sm {
-    padding: 10px 14px;
+    border-radius: 24px;
+    padding: 12px 16px;
     @include font-size-smaller;
-    font-weight: $font-weight-bold-secondary;
   }
 }
