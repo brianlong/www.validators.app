@@ -11,8 +11,6 @@ header {
   }
   .nav-link {
     color: $link-color;
-    //padding-left: 14px !important;
-    //padding-right: 14px !important;
     padding: 12px 18px !important;
     &:hover {
       color: lighten($link-color, 15%);

@@ -1,20 +1,20 @@
 @import "variables";
 
-@mixin btn-hover($color) {
+@mixin btn-hover($background, $border) {
   &:hover, &:focus, &.focus, &:active, &:visited, &.active,
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active,
   &:not(:disabled):not(.disabled):active:focus,
   &:not(:disabled):not(.disabled).active:focus {
     transition: .2s ease;
-    background-color: $color;
-    border-color: $color;
+    background-color: $background;
+    border-color: $border;
     outline: none;
     box-shadow: none;
   }
   &.disabled, &:disabled {
-    background-color: lighten($color, 5%);
-    border-color: lighten($color, 5%);
+    background-color: lighten($background, 6%);
+    border-color: lighten($border, 6%);
     outline: none;
     box-shadow: none;
     cursor: not-allowed;
@@ -25,18 +25,18 @@
   letter-spacing: 1px;
   padding: 12px 20px;
   @include font-size-base;
+  border: 2px solid $green;
   border-radius: $border-radius-larger;
   &-primary {
     background-color: $green;
     border-color: $green;
     color: white;
-    //@include btn-hover($dk-orange-darker);
+    @include btn-hover(transparent, $green);
   }
   &-secondary {
     background-color: transparent;
-    border: 2px solid $green;
     color: white;
-    //@include btn-hover($navy-blue-darker);
+    @include btn-hover($green, $green);
   }
   &-lg {
     font-weight: $font-weight-bold-secondary;
