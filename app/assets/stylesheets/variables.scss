@@ -10,6 +10,7 @@ $purple: #b832c8;
 // Bootstrap overrides:
 $base-color: #e3e3e3;
 $link-color: lighten($purple, 28%);
+$link-color-secondary: lighten($link-color, 18%);
 $background-color: #1c1732;
 $background-color-secondary: lighten($background-color, 7%);
 $background-color-tertiary: #2f163c;
