@@ -1,0 +1,22 @@
+@import "variables";
+
+ol, ul {
+}
+
+dl {
+  dd {
+    padding-left: 0 !important;
+  }
+}
+
+.list-large {
+  @include font-size-larger();
+  li {
+    margin-bottom: 8px;
+  }
+}
+
+.list-no-bullets {
+  list-style-type: none;
+  padding-left: 0;
+}
