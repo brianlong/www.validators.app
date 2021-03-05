@@ -1,6 +1,8 @@
 @import "variables";
 
-p {}
+p {
+  margin-bottom: $margin-standard;
+}
 
 .text {
   &-muted {
@@ -13,6 +15,19 @@ p {}
 }
 
 small, .small {
+  @include font-size-smaller();
+}
+
+mark, .mark {
+  background-color: transparent;
+  color: $link-color;
+}
+
+pre {
+  background-color: $card-background-color;
+  color: inherit;
+  border-radius: $border-radius;
+  padding: $padding-standard;
   @include font-size-smaller();
 }
 
@@ -89,12 +104,4 @@ a {
     cursor: pointer;
     &:hover { color: $link-color-secondary; }
   }
-}
-
-
-pre {
-  background-color: $grey-light;
-  border-radius: $border-radius;
-  padding: 10px;
-  @include font-size-smaller();
 }

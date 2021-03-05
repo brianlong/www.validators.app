@@ -60,7 +60,8 @@ body {
 
 .banner {
   padding-top: 20px;
-  padding-bottom: 40px;
+  padding-bottom: 50px;
+  @media(max-width: $screen-sm-max) { padding-bottom: 40px; }
   .heading-primary {
     margin: 0 35% 30px 0;
     @media(max-width: $screen-md-max) {
@@ -81,7 +82,12 @@ body {
   padding: 0px;
 }
 
-
+hr {
+  border-color: $grey-light;
+  background-color: $grey-light;
+  margin-top: $margin-standard*2;
+  margin-bottom: $margin-standard*2;
+}
 
 
 
@@ -124,15 +130,15 @@ body {
   width: 15%
 }
 
-.avatar-column {
-  padding-right: 0;
-  margin-right: 0;
-  width: 10%;
-}
+//.avatar-column {
+//  padding-right: 0;
+//  margin-right: 0;
+//  width: 10%;
+//}
 
-.name-column {
-  width: 25%;
-}
+//.name-column {
+//  width: 25%;
+//}
 
 .img-circle {
   border-radius: 50%;

@@ -12,6 +12,8 @@ footer {
         flex-wrap: wrap;
       }
       .nav-item {
+        padding: 0;
+        margin: 0;
         .nav-link {
           padding-left: 0;
           padding-right: 30px;
@@ -25,8 +27,7 @@ footer {
 
   .footer {
     &-separator {
-      border-color: $grey-light;
-      background-color: $grey-light;
+      margin-top: $margin-standard;
       margin-bottom: 25px;
       @media(max-width: $screen-sm-max) { margin-bottom: 30px; }
     }

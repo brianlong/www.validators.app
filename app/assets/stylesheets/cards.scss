@@ -1,6 +1,4 @@
 @import "variables";
-$card-background-color: darken($background-color, 3%);
-$card-border-color: #393646;
 
 .card {
   background-color: darken($background-color, 3%);
@@ -10,7 +8,7 @@ $card-border-color: #393646;
   &:last-of-type { margin-bottom: 0; }
 
   &-content {
-    padding: 50px 15px 15px 15px;
+    padding: 50px $padding-standard $padding-standard $padding-standard;
     &::before {
       content: '';
       position: absolute;
@@ -21,6 +19,10 @@ $card-border-color: #393646;
       height: 5px;
       width: 300px;
       margin-left: calc(50% - 15px - 300px/2);
+      @media(max-width: $screen-sm-max) {
+        width: 200px;
+        margin-left: calc(50% - 15px - 200px/2);
+      }
     }
   }
   &-heading {

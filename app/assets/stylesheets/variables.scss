@@ -16,6 +16,8 @@ $white: #fff;
 $red: #f00;
 $grey-light: darken($base-color, 30%);
 
+$card-background-color: darken($background-color, 3%);
+$card-border-color: #393646;
 
 // Breakpoints
 
@@ -111,3 +113,6 @@ $border-radius-larger: 30px;
 @mixin border() {
   border: 1px solid $grey-light;
 }
+
+$padding-standard: 15px;
+$margin-standard: 15px;
