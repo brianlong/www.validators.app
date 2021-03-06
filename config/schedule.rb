@@ -49,6 +49,7 @@ every 1.hour do
   ruby_script 'validators_get_avatar_url.rb'
   ruby_script 'append_ip_geo_data.rb'
   ruby_script 'assign_data_center_scores.rb'
+  ruby_script 'fix_ip_hetzner.rb'
 end
 
 every 1.day do

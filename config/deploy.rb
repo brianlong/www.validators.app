@@ -30,7 +30,9 @@ set :pty, false
 
 # Default value for :linked_files is []
 append :linked_files, 'config/database.yml'
+# Note: Each server contains both keys, but the non-essential key is blank.
 append :linked_files, 'config/credentials/production.key'
+append :linked_files, 'config/credentials/stage.key'
 append :linked_files, 'config/appsignal.yml'
 append :linked_files, 'config/sidekiq.yml'
 append :linked_files, 'config/cluster.yml'
