@@ -407,6 +407,7 @@ module SolanaLogic
       rescue StandardError => e
         # I don't want to break the loop, but I do want to write these to the
         # Rails log so I can see failures.
+        Appsignal.send_error(e)
         Rails.logger.error "validator-info MESSAGE: #{e.message} CLASS: #{e.class}. Validator: #{result.inspect}"
       end
 
