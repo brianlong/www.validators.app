@@ -398,7 +398,7 @@ module SolanaLogic
         www_url = result['info']['website'].to_s.strip
         validator.www_url = www_url unless www_url.to_s.downcase.include?('script')
 
-        ascii_details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
+        ascii_details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip[0..254]
         validator.details = ascii_details unless ascii_details.to_s.downcase.include?('script')
 
         validator.info_pub_key = result['infoPubkey'].strip
