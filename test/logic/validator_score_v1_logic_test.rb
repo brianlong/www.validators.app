@@ -147,6 +147,23 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .software_version_score
   end
 
+  test 'asign_software_version_score skips `software_version` assignment if the version is junk' do
+    Validator.last.validator_score_v1.update!(software_version: '1.5.6')
+    Validator.last.validator_history_last.update!(software_version: 'junk')
+
+    p = Pipeline.new(200, @initial_payload)
+                .then(&set_this_batch)
+                .then(&validators_get)
+                .then(&block_vote_history_get)
+                .then(&assign_block_and_vote_scores)
+                .then(&block_history_get)
+                .then(&assign_block_history_score)
+                .then(&assign_software_version_score)
+                .then(&save_validators)
+
+    assert_equal('1.5.6', Validator.last.validator_score_v1.software_version)
+  end
+
   test 'get_ping_times' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
