@@ -37,6 +37,8 @@ module ValidatorScoreV1Logic
       # Make sure that we have a validator_score_v1 record for each validator
       validators.each do |validator|
         validator.create_validator_score_v1 if validator.validator_score_v1.nil?
+      rescue StandardError => e
+        Appsignal.send_error(e)
       end
 
       Pipeline.new(200, p.payload.merge(validators: validators))
@@ -100,6 +102,8 @@ module ValidatorScoreV1Logic
 
         validator.validator_score_v1.root_distance_history_push(root_distance)
         validator.validator_score_v1.vote_distance_history_push(vote_distance)
+      rescue StandardError => e
+        Appsignal.send_error(e)
       end
 
       Pipeline.new(200, p.payload.merge(total_active_stake: total_active_stake))
@@ -119,7 +123,10 @@ module ValidatorScoreV1Logic
       p.payload[:validators].each do |v|
         root_distance_all += v.validator_score_v1.root_distance_history
         vote_distance_all += v.validator_score_v1.vote_distance_history
+      rescue StandardError => e
+        Appsignal.send_error(e)
       end
+
       root_distance_all_average = array_average(root_distance_all)
       root_distance_all_median = array_median(root_distance_all)
       vote_distance_all_average = array_average(vote_distance_all)
@@ -168,6 +175,8 @@ module ValidatorScoreV1Logic
           else
             0
           end
+      rescue StandardError => e
+        Appsignal.send_error(e)
       end
 
       Pipeline.new(200, p.payload.merge(
@@ -209,6 +218,8 @@ module ValidatorScoreV1Logic
         validator.validator_score_v1.skipped_slot_history_push(
           vbh.skipped_slot_percent.to_f
         )
+      rescue StandardError => e
+        Appsignal.send_error(e)
       end
 
       Pipeline.new(
@@ -242,6 +253,8 @@ module ValidatorScoreV1Logic
           else
             0
           end
+      rescue StandardError => e
+        Appsignal.send_error(e)
       end
 
       Pipeline.new(200, p.payload)
@@ -269,6 +282,8 @@ module ValidatorScoreV1Logic
           end
         end
         validator.validator_score_v1.assign_software_version_score
+      rescue StandardError => e
+        Appsignal.send_error(e)
       end
 
       Pipeline.new(200, p.payload)
@@ -284,6 +299,8 @@ module ValidatorScoreV1Logic
       p.payload[:validators].each do |validator|
         validator.validator_score_v1.ping_time_avg = \
           validator.ping_times_to_avg
+      rescue StandardError => e
+        Appsignal.send_error(e)
       end
 
       Pipeline.new(200, p.payload)
@@ -300,6 +317,8 @@ module ValidatorScoreV1Logic
         p.payload[:validators].each do |validator|
           validator.save
           validator.validator_score_v1.save
+        rescue StandardError => e
+          Appsignal.send_error(e)
         end
       end
 
