@@ -62,8 +62,18 @@ class ValidatorSoftwareVersionTest < ActiveSupport::TestCase
     end
   end
 
-  test '#new accepts a second, optional `network` parameter' do
+  test '::new accepts a second, optional `network` parameter' do
     ValidatorSoftwareVersion.new(number: '1.4.0', network: 'testnet')
+  end
+
+  test '::valid_software_version? returns false when a junk version is passed' do
+    refute(ValidatorSoftwareVersion.valid_software_version?('unknown'))
+    refute(ValidatorSoftwareVersion.valid_software_version?('null'))
+    refute(ValidatorSoftwareVersion.valid_software_version?(false))
+
+    assert(ValidatorSoftwareVersion.valid_software_version?('1.1'))
+    assert(ValidatorSoftwareVersion.valid_software_version?('0.0.1'))
+    assert(ValidatorSoftwareVersion.valid_software_version?('1.1.a'))
   end
 
   # these two methods ensure that our tests don't break when the actual cluster

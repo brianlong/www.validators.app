@@ -25,8 +25,9 @@ class Validator < ApplicationRecord
     ).last
   end
 
+  # Return the vote account that was most recently used
   def vote_account_last
-    vote_accounts.last
+    vote_accounts.order('updated_at desc').limit(1).first
   end
 
   def ping_times_to(limit = 100)

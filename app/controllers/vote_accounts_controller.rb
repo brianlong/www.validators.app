@@ -9,6 +9,10 @@ class VoteAccountsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_vote_account
-    @vote_account = VoteAccount.where(account: params[:account]).first
+    @vote_account = VoteAccount.where(
+      network: params[:network],
+      account: params[:account]).first
+    render file: "#{Rails.root}/public/404.html" , status: 404 \
+      if @vote_account.nil?
   end
 end

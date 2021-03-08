@@ -219,6 +219,7 @@ module SolanaLogic
         vote_account = validator.vote_accounts.find_or_create_by(
           account: v['vote_account']
         )
+        vote_account.touch
 
         # Create Vote records to save a time series of vote & stake data
         vote_account.vote_account_histories.create(
@@ -398,7 +399,7 @@ module SolanaLogic
         www_url = result['info']['website'].to_s.strip
         validator.www_url = www_url unless www_url.to_s.downcase.include?('script')
 
-        ascii_details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
+        ascii_details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip[0..254]
         validator.details = ascii_details unless ascii_details.to_s.downcase.include?('script')
 
         validator.info_pub_key = result['infoPubkey'].strip
@@ -407,6 +408,7 @@ module SolanaLogic
       rescue StandardError => e
         # I don't want to break the loop, but I do want to write these to the
         # Rails log so I can see failures.
+        Appsignal.send_error(e)
         Rails.logger.error "validator-info MESSAGE: #{e.message} CLASS: #{e.class}. Validator: #{result.inspect}"
       end
 

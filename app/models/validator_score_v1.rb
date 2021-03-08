@@ -59,11 +59,8 @@ class ValidatorScoreV1 < ApplicationRecord
       return
     end
 
-    begin
-      version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network)
-    rescue
-      return
-    end
+    return unless ValidatorSoftwareVersion.valid_software_version?(software_version)
+    version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network)
 
     self.software_version_score = \
       if version.running_latest_or_newer?

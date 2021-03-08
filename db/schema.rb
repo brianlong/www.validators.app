@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_02_032238) do
+ActiveRecord::Schema.define(version: 2021_03_06_020946) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -40,6 +40,16 @@ ActiveRecord::Schema.define(version: 2021_02_02_032238) do
     t.string "network"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
+  end
+
+  create_table "block_commitments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "network"
+    t.bigint "slot"
+    t.text "commitment"
+    t.bigint "total_stake"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "slot"], name: "index_block_commitments_on_network_and_slot", unique: true
   end
 
   create_table "collectors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -183,6 +193,18 @@ ActiveRecord::Schema.define(version: 2021_02_02_032238) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_reports_on_network_and_batch_uuid"
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
+  end
+
+  create_table "slots", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "network"
+    t.bigint "slot_number"
+    t.string "leader_account"
+    t.boolean "skipped"
+    t.bigint "block_unix_time"
+    t.datetime "block_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "slot_number"], name: "index_slots_on_network_and_slot_number", unique: true
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -350,7 +372,9 @@ ActiveRecord::Schema.define(version: 2021_02_02_032238) do
     t.string "account"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
     t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
+    t.index ["network", "account"], name: "index_vote_accounts_on_network_and_account"
     t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
     t.index ["validator_id"], name: "index_vote_accounts_on_validator_id"
   end
