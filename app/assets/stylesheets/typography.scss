@@ -1,9 +1,12 @@
 @import "variables";
 
+p {
+  margin-bottom: $margin-standard;
+}
+
 .text {
   &-muted {
-    color: unset !important;
-    opacity: 0.6;
+    color: $grey-light !important;
   }
 }
 
@@ -15,6 +18,19 @@ small, .small {
   @include font-size-smaller();
 }
 
+mark, .mark {
+  background-color: transparent;
+  color: $link-color;
+}
+
+pre {
+  background-color: $card-background-color;
+  color: inherit;
+  border-radius: $border-radius;
+  padding: $padding-standard;
+  @include font-size-smaller();
+}
+
 strong {
   font-weight: $font-weight-bold-primary;
 }
@@ -22,7 +38,7 @@ strong {
 @for $i from 1 through 3 {
   h#{$i}, .h#{$i} {
     @include font-family-alternative();
-    font-weight: $font-weight-bold-primary;
+    font-weight: $font-weight-bold-secondary;
     margin-top: 0;
     margin-bottom: 20px;
   }
@@ -57,4 +73,35 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
   h4, .h4 { font-size: $font-size-h4*.8; }
   h5, .h5 { font-size: $font-size-h5*.8; }
   h6, .h6 { font-size: $font-size-larger-mobile; }
+}
+.heading-primary {
+  color: $white;
+  font-size: 68px;
+  line-height: 70px;
+  @include font-family-alternative();
+  font-weight: $font-weight-bold-primary;
+  @media(max-width: $screen-md-max) {
+    font-size: 55px;
+    line-height: 55px;
+  }
+  @media(max-width: $screen-sm-max) { font-size: 47px }
+}
+.heading-secondary {
+  text-transform: uppercase;
+}
+
+
+a {
+  color: $link-color;
+  transition: color .1s ease-in-out;
+  &:hover {
+    text-decoration: none;
+    color: $link-color-secondary;
+    transition: color .1s ease-in-out;
+  }
+  &.base-color {
+    color: $base-color;
+    cursor: pointer;
+    &:hover { color: $link-color-secondary; }
+  }
 }

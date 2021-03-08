@@ -1,0 +1,58 @@
+@import "variables";
+
+@mixin btn-hover($background, $border) {
+  &:hover, &:focus, &.focus, &:active, &:visited, &.active,
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active,
+  &:not(:disabled):not(.disabled):active:focus,
+  &:not(:disabled):not(.disabled).active:focus {
+    transition: .2s ease;
+    background-color: $background;
+    border-color: $border;
+    outline: none;
+    box-shadow: none;
+  }
+  &.disabled, &:disabled {
+    background-color: lighten($background, 6%);
+    border-color: lighten($border, 6%);
+    outline: none;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+
+.btn {
+  letter-spacing: 1px;
+  @include font-size-base;
+  border: 2px solid $green;
+  border-radius: 30px;
+  padding: 14px 22px;
+  &-primary {
+    background-color: $green;
+    border-color: $green;
+    color: white;
+    @include btn-hover(transparent, $green);
+  }
+  &-secondary {
+    background-color: transparent;
+    color: white;
+    @include btn-hover($green, $green);
+  }
+  &-lg {
+    font-weight: $font-weight-bold-secondary;
+    border-radius: 34px;
+    padding: 18px 26px;
+    @include font-size-larger;
+  }
+  &-md {
+    font-weight: $font-weight-bold-secondary;
+    border-radius: 30px;
+    padding: 14px 22px;
+    @include font-size-base;
+  }
+  &-sm {
+    border-radius: 24px;
+    padding: 12px 16px;
+    @include font-size-smaller;
+  }
+}

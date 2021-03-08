@@ -1,0 +1,49 @@
+@import "variables";
+
+ol, ul {
+  padding-left: 20px;
+  li {
+    padding-left: 10px;
+    margin-bottom: $margin-standard;
+  }
+}
+
+dl {
+  dt {
+    color: $grey-light;
+    font-weight: $font-weight-bold-primary;
+  }
+  dd {
+    padding-left: 0 !important;
+  }
+}
+
+.list {
+  &-large {
+    @include font-size-larger();
+    li {
+      margin-bottom: $margin-standard;
+    }
+  }
+
+  &-no-bullets {
+    list-style: none;
+    padding-left: 0;
+    li { padding-left: 0; }
+  }
+
+  &-with-numbers {
+    li {
+      list-style: none;
+      counter-increment: item;
+      &:before {
+        position: absolute;
+        margin-left: -30px;
+        font-weight: $font-weight-bold-primary;
+        content: counter(item) ".";
+        @include font-family-alternative;
+        color: $grey-light;
+      }
+    }
+  }
+}

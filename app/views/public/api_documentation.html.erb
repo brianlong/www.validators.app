@@ -6,7 +6,22 @@
     </p>
   </div>
 </div>
-<h3>Authentication</h3>
+
+<h3>Quick Reference</h3>
+<ul class="list-large list-no-bullets">
+  <li><a href="#auhentication">Authentication</a></li>
+  <li><a href="#ping">Ping</a></li>
+  <li><a href="#ping-times">Ping Times</a></li>
+  <li><a href="#validators-list">Validators List</a></li>
+  <li><a href="#validator-detail">Validator Detail</a></li>
+  <li><a href="#validator-block">Validator Block Production History</a></li>
+  <li><a href="#error-codes">Error Codes</a></li>
+  <li><a href="#notes">Notes</a></li>
+</ul>
+
+<hr />
+
+<h3 id="auhentication">Authentication</h3>
 <div class="row">
   <div class="col-sm-12">
     <p>Pass your API token in as the Token header, like in this curl example:</p>
@@ -14,8 +29,10 @@
     <p>Examples in this API guide are demonstrated using curl, but you can use an HTTP library of your choice. All responses are JSON.</p>
   </div>
 </div>
+
 <hr />
-<h4>Ping</h4>
+
+<h4 id="ping">Ping</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The ping endpoint will allow you to test your connection to the server.</p>
@@ -25,8 +42,10 @@
     <pre>{"answer":"pong"}</pre>
   </div>
 </div>
+
 <hr />
-<h4>Ping Times</h4>
+
+<h4 id="ping-times">Ping Times</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The ping-times endpoint will return recent ping times as reported by the participating validators. By default, the most recent 1,000 ping times will be returned. You can include a `limit` parameter to request more or fewer ping times. In the examples below, replace `:network` with 'testnet' or 'mainnet' as desired.</p>
@@ -59,8 +78,10 @@
     </pre>
   </div>
 </div>
+
 <hr />
-<h4>Validators List</h4>
+
+<h4 id="validators-list">Validators List</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The validators endpoint will return a list of validators for the requested network. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired.</p>
@@ -109,8 +130,10 @@
     </pre>
   </div>
 </div>
+
 <hr />
-<h4>Validator Detail</h4>
+
+<h4 id="validator-detail">Validator Detail</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The validators endpoint will return a single validator for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.</p>
@@ -150,8 +173,10 @@
     </pre>
   </div>
 </div>
+
 <hr />
-<h4>Validator Block Production History</h4>
+
+<h4 id="validator-block">Validator Block Production History</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The validator_block_history endpoint will return a history of block production stats for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID. You can also include a `limit` parameter to request more or fewer datapoints. </p>
@@ -174,24 +199,29 @@
     </pre>
   </div>
 </div>
+
 <hr />
-<h3>Error Codes:</h3>
+
+<h3 id="error-codes">Error Codes:</h3>
 <dl class="row">
-  <dt class="col-sm-1 text-right">400</dt>
-  <dd class="col-sm-11">Parameter Missing</dd>
-  <dt class="col-sm-1 text-right">401</dt>
-  <dd class="col-sm-11">Unauthorized</dd>
-  <dt class="col-sm-1 text-right">404</dt>
-  <dd class="col-sm-11">Record Not Found</dd>
-  <dt class="col-sm-1 text-right">500</dt>
-  <dd class="col-sm-11">Server Error (Admin has been notified)</dd>
+  <dt class="col-2 col-sm-1">400</dt>
+  <dd class="col-10 col-sm-11">Parameter Missing</dd>
+  <dt class="col-2 col-sm-1">401</dt>
+  <dd class="col-10 col-sm-11">Unauthorized</dd>
+  <dt class="col-2 col-sm-1">404</dt>
+  <dd class="col-10 col-sm-11">Record Not Found</dd>
+  <dt class="col-2 col-sm-1">500</dt>
+  <dd class="col-10 col-sm-11">Server Error (Admin has been notified)</dd>
 </dl>
-<h3>NOTES:</h3>
+
+<hr />
+
+<h3 id="notes">NOTES:</h3>
 <div class="row">
   <div class="col-sm-12">
-    <p>Active stake is shown in Lamports</p>
-    <p>Commision is shown in percent. e.g. 10&percnt;</p>
+    <p>Active stake is shown in Lamports.</p>
+    <p>Commision is shown in percent. e.g. 10&percnt;.</p>
     <p>Our database uses null values when there is no data. You should expect to see `null` as a possible return value for any attribute. If an attribute is missing from the output, then you can also assume the value is null.</p>
-    <p>Version 1 of this API is still in development. Check back here to see updates!</p>
+    <p class="text-muted">Version 1 of this API is still in development. Check back here to see updates!</p>
   </div>
 </div>
