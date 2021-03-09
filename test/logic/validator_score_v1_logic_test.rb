@@ -33,13 +33,24 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test 'block_vote_history_get' do
+    # create enough records to confirm via logs we don't have an N+1 query when
+    # getting ValidatorHistory for all accounts for this batch
+    5.times do
+      create(
+        :validator_history,
+        network: 'testnet',
+        batch_uuid: '1234',
+        account: create(:validator).account
+      )
+    end
+
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&block_vote_history_get)
 
-    assert_equal 1, p.payload[:validators].count
-    assert_equal 100, p.payload[:total_active_stake]
+    assert_equal 6, p.payload[:validators].count
+    assert_equal 600, p.payload[:total_active_stake]
 
     assert_not_nil p.payload[:validators].first.validator_score_v1
     assert_equal [0], p.payload[:validators]
@@ -58,7 +69,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                        .first
                        .validator_score_v1
                        .active_stake
-    assert_equal 1.0, p.payload[:validators]
+    assert_equal 0.167e0, p.payload[:validators]
                        .first
                        .validator_score_v1
                        .stake_concentration
