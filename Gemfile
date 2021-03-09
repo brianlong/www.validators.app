@@ -109,6 +109,7 @@ group :test do
   # VCR to record & save network events in tests
   gem 'vcr'
   gem 'webmock'
+  gem 'timecop'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
