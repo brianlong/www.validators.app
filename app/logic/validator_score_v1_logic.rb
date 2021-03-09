@@ -222,8 +222,6 @@ module ValidatorScoreV1Logic
 
       result = ActiveRecord::Base.connection.execute(sql).to_a
 
-      # TODO: Eliminate the N+1 Query caused by
-      # validator.validator_block_histories.last
       p.payload[:validators].each do |validator|
         last_validator_block_history_for_validator = result.find { |r| r.first == validator.id }
         next unless last_validator_block_history_for_validator.present?
