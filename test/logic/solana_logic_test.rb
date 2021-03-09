@@ -184,11 +184,8 @@ class SolanaLogicTest < ActiveSupport::TestCase
 
   # This test assumes that there is no validator RPC running locally.
   test 'cli_request with no response' do
-    VCR.use_cassette('validators_cli_no_response') do
-      rpc_urls = ['http://127.0.0.1:8899']
-
-      assert_equal [], cli_request('validators', rpc_urls)
-    end
+    rpc_urls = ['http://127.0.0.1:8899']
+    assert_equal [], cli_request('validators', rpc_urls)
   end
 
   # I use this test in development mode only.
