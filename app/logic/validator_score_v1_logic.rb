@@ -197,7 +197,6 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      # byebug
       avg_skipped_slot_pct_all = \
         ValidatorBlockHistory.average_skipped_slot_percent_for(
           p.payload[:network],
@@ -209,14 +208,38 @@ module ValidatorScoreV1Logic
           p.payload[:batch_uuid]
         )
 
+      validator_ids = p.payload[:validators].map { |v| v.id }
+
+      # sql = <<-SQL_END
+      #   SELECT validators.id, validator_block_histories.id, validator_block_histories.skipped_slot_percent
+      #   FROM validator_block_histories
+      #   JOIN validators ON validators.id = validator_block_histories.validator_id
+      #   WHERE validators.id IN (#{validator_ids.join(', ')})
+      #   ORDER BY validator_block_histories.id DESC;
+      # SQL_END
+
+      sql = <<-SQL_END
+        SELECT v.id, vbh.id, vbh.skipped_slot_percent
+        FROM validators v
+        JOIN validator_block_histories vbh ON (v.id = vbh.validator_id)
+
+        LEFT OUTER JOIN validator_block_histories vbh2 ON (v.id = vbh2.validator_id AND
+          (vbh.created_at < vbh2.created_at OR (vbh.created_at = vbh2.created_at AND vbh.id < vbh2.id)))
+
+        WHERE v.id IN (#{validator_ids.join(', ')}) AND vbh2.id IS NULL
+      SQL_END
+
+      result = ActiveRecord::Base.connection.execute(sql).to_a
+
       # TODO: Eliminate the N+1 Query caused by
       # validator.validator_block_histories.last
       p.payload[:validators].each do |validator|
-        vbh = validator.validator_block_histories.last
-        next unless vbh
+        last_validator_block_history_for_validator = result.find { |r| r.first == validator.id }
+        next unless last_validator_block_history_for_validator.present?
+        skipped_slot_percent = last_validator_block_history_for_validator.last
 
         validator.validator_score_v1.skipped_slot_history_push(
-          vbh.skipped_slot_percent.to_f
+          skipped_slot_percent.to_f
         )
       rescue StandardError => e
         Appsignal.send_error(e)
