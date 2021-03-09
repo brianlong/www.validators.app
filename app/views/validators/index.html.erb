@@ -1,60 +1,25 @@
-<%= render 'layouts/banner' %>
+<%= render 'validators/banner' %>
 
 <% unless @validators.empty? %>
   <div class="card">
-    <div class="card-content">
+    <div class="card-content pb-0">
       <h1 class="h2 card-heading">Solana <%= params[:network].capitalize%> Validators</h1>
 
-      <div class="row">
-        <div class="col-sm-8">
-          <ul class="nav nav-tabs">
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort:</a>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Random', url_for(order: 'random', page: params[:page], network: params[:network], refresh: params[:refresh]), class: "nav-link #{'active' unless %w[score name stake].include?(params[:order])}"  %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Stake', url_for(order: 'stake', page: params[:page], network: params[:network], refresh: params[:refresh]), class: "nav-link #{'active' if params[:order] == 'stake'}"  %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Score', url_for(order: 'score', page: params[:page], network: params[:network], refresh: params[:refresh]), class: "nav-link #{'active' if params[:order] == 'score'}"  %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Name', url_for(order: 'name', page: params[:page], network: params[:network], refresh: params[:refresh]), class: "nav-link #{'active' if params[:order] == 'name'}"  %>
-            </li>
-          </ul>
-        </div>
-        <div class="col-sm-4">
-          <%= form_with(method: :get, local: true) do %>
-            <div class="form-group-row">
-              <div class="input-group mb-3">
-                <%= text_field_tag(:q, '', placeholder: 'Starts with...', class: 'form-control') %>
-                <%= hidden_field_tag(:network, params[:network]) %>
-                <%= hidden_field_tag(:order, params[:order]) %>
-                <%= hidden_field_tag(:refresh, params[:refresh]) %>
-                <div class="input-group-append">
-                  <%= submit_tag("Search", class: 'btn btn-sm btn-secondary') %>
-                </div>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
+      <%= render 'validators/sort_bar' %>
 
       <div class="row">
         <div class="col-sm-10">
-          <small>
+          <p class="small muted">
             Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>. <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
-          </small>
+          </p>
         </div>
-        <div class='col-sm-2 text-right'>
+        <div class='col-sm-2 text-right toggle-container'>
           <% if params[:refresh] == 'true' %>
             <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false)  %>
-            <small>Refresh ON</small>
+            <p class="small muted">REFRESH ON</p>
           <% else %>
             <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true)  %>
-            <small>Refresh OFF</small>
+            <p class="small muted">REFRESH OFF</p>
           <% end %>
         </div>
       </div>
@@ -63,8 +28,8 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <table id="validators-table" class='table table-striped table-borderless spark-line-table'>
-          <thead class="thead-dark">
+        <table id="validators-table" class='table table-striped table-borderless'>
+          <thead>
             <tr>
               <th class="avatar-column">&nbsp;</th>
               <th class="name-column">
@@ -83,28 +48,28 @@
                 <br />
                 Scores <small>(total)</small>
               </th>
-              <th class='text-right'>
+              <th class='chart-column text-right'>
                 Root<br />Distance<br />
                 <small>60-Min Chart</small>
               </th>
-              <th class='text-right'>
+              <th class='chart-column text-right'>
                 Vote<br />Distance<br />
                 <small>60-Min Chart</small>
               </th>
-              <th class='text-right'>
+              <th class='chart-column text-right'>
                 Skipped<br />Slot &percnt;<br />
                 <small>60-Min Chart</small>
               </th>
               <th class='text-right'>
                 Skipped<br />Vote &percnt;<br />
-                <small>(Distance from leader)</small>
+                <small>(Distance from leader)</small>F
               </th>
             </tr>
           </thead>
 
           <tbody>
           <tr>
-            <td colspan="2" class="avatar-column">
+            <td colspan="2" class="avatar-column text-left">
               Cluster Height/Stats:<br />
               Epoch: <%= @this_epoch&.epoch %>
             </td>
@@ -133,7 +98,7 @@
             <% i += 1 %>
             <tr>
               <td class="avatar-column">
-                <small>
+                <div class="number">
                   <%=
                     link_to i, validator_url(
                       network: params[:network],
@@ -143,14 +108,14 @@
                       refresh: params[:refresh]
                     )
                   %>
-                </small>&nbsp;
-                <span class="avatar">
-                    <% if validator.avatar_url %>
-                      <%= image_tag validator.avatar_url, class: 'img-circle' %>
-                    <% else %>
-                      <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
-                    <% end %>
-                  </span>
+                </div>
+                <div class="avatar">
+                  <% if validator.avatar_url %>
+                    <%= image_tag validator.avatar_url, class: 'img-circle' %>
+                  <% else %>
+                    <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+                  <% end %>
+                </div>
                 <% if validator.delinquent? %>
                   <br />
                   <small class="score-minus-2">DELINQUENT</small>
@@ -174,8 +139,7 @@
                             ) %>
                 <%
                   comm_class = 'text-red' \
-                        if params[:network] == 'mainnet' &&
-                    validator.commission.to_i == 100
+                        if params[:network] == 'mainnet' && validator.commission.to_i == 100
                 %>
                 <small class="<%= comm_class %>">(<%= validator.commission %>%)</small><br />
                 <small>
@@ -206,24 +170,22 @@
 
                   <% if validator.stake_concentration_score < 0 %>
                     <%
-                      score_class = \
-                            if validator.stake_concentration_score == -2
-                                                                'score-minus-2'
-                            else
-                              'score-minus-1'
-                            end
+                      score_class = if validator.stake_concentration_score == -2
+                                      'score-minus-2'
+                                    else
+                                      'score-minus-1'
+                                    end
                     %>
                     <i class="fas fa-minus-circle <%= score_class %>" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
                   <% end %>
 
                   <% if validator.data_center_concentration_score < 0 %>
                     <%
-                      score_class = \
-                            if validator.data_center_concentration_score == -2
-                                                                'score-minus-2'
-                            else
-                              'score-minus-1'
-                            end
+                      score_class = if validator.data_center_concentration_score == -2
+                                      'score-minus-2'
+                                    else
+                                      'score-minus-1'
+                                    end
                     %>
                     <i class="fas fa-minus-circle <%= score_class %>" title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>&nbsp;
                   <% end %>
@@ -234,14 +196,13 @@
               <!-- ROOT DISTANCE -->
               <td class="spark-line text-right">
                 <%
-                  vl = \
-                        if validator.score&.root_distance_history.to_a.count < 60
-                                               validator.score&.root_distance_history.to_a.count
-                        else
-                          60
-                        end
+                  vl = if validator.score&.root_distance_history.to_a.count < 60
+                         validator.score&.root_distance_history.to_a.count
+                       else
+                         60
+                       end
                   line_color = if validator.root_distance_score == 2
-                                 'Green'
+                                 '#00bf72'
                                elsif validator.root_distance_score == 1
                                  'Blue'
                                else
@@ -260,14 +221,13 @@
               <!-- VOTE DISTANCE -->
               <td class="spark-line text-right">
                 <%
-                  vl = \
-                        if validator.score&.vote_distance_history.to_a.count < 60
-                          validator.score&.vote_distance_history.to_a.count
-                        else
-                          60
-                        end
+                  vl = if validator.score&.vote_distance_history.to_a.count < 60
+                         validator.score&.vote_distance_history.to_a.count
+                       else
+                         60
+                       end
                   line_color = if validator.vote_distance_score == 2
-                                 'Green'
+                                 '#00bf72'
                                elsif validator.vote_distance_score == 1
                                  'Blue'
                                else
@@ -286,14 +246,13 @@
               <!-- SKIPPED SLOTS  -->
               <td class="spark-line text-right">
                 <%
-                  vl = \
-                        if validator.score&.skipped_slot_history.to_a.count < 60
-                                               validator.score&.skipped_slot_history.to_a.count
-                        else
-                          60
-                        end
+                  vl = if validator.score&.skipped_slot_history.to_a.count < 60
+                         validator.score&.skipped_slot_history.to_a.count
+                       else
+                         60
+                       end
                   line_color = if validator.skipped_slot_score == 2
-                                 'Green'
+                                 '#00bf72'
                                elsif validator.skipped_slot_score == 1
                                  'Blue'
                                else
@@ -331,38 +290,16 @@
           <% end %>
           </tbody>
         </table>
-        <%= paginate @validators, theme: 'bootstrap4' %>
-        <small>Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %></small>
+
+        <div class="px-15">
+          <p class="small muted">Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %></p>
+          <%= paginate @validators, theme: 'bootstrap4' %>
+        </div>
+
 
       </div>
     </div>
   </div>
 <% end %>
 
-<% if @software_versions %>
-  <div class="card">
-    <div class="card-content">
-      <h2 class="card-heading">Software Versions</h2>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <table class="table table-striped table-borderless">
-          <thead class="thead-dark">
-            <tr>
-              <th>Software Version</th>
-              <th>Count</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @software_versions.payload.each do |group| %>
-              <tr>
-                <td><%= group.first[0] %></td>
-                <td><%= group.first[1] %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-<% end %>
+<%= render 'validators/software_versions' %>

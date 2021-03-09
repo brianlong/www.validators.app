@@ -1,5 +1,58 @@
 @import "variables";
+$table-lines-color: darken($card-border-color, 3%);
 
 table, .table {
   color: inherit;
+  max-width: 100%;
+  table-layout: fixed;
+
+  thead {
+    background-color: $table-lines-color;
+  }
+
+  th {}
+  tr {}
+  td { padding: $padding-standard 20px; }
+
+  .avatar-column {
+    width: 80px;
+    text-align: center;
+    .number {
+      font-weight: $font-weight-bold-primary;
+      @include font-family-alternative;
+      position: absolute;
+      width: 80px;
+      background-color: $table-lines-color;
+      margin-top: -$padding-standard;
+      margin-left: -20px;
+      padding: 2px 0;
+
+
+    }
+    .avatar {
+      padding-top: 30px;
+    }
+  }
+
+  .name-column {
+    width: 18%;
+  }
+
+  .chart-column {
+    width: 20%;
+  }
+
+  &.table-striped {
+    tbody {
+      tr {
+        border-top: 1px solid $table-lines-color;
+      }
+      tr:nth-of-type(odd) {
+        background-color: transparent;
+      }
+      tr:nth-of-type(even) {
+        background-color: darken($card-background-color, 2%);
+      }
+    }
+  }
 }

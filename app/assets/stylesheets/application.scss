@@ -60,7 +60,7 @@ body {
 
 .banner {
   padding-top: 20px;
-  padding-bottom: 50px;
+  padding-bottom: 45px;
   @media(max-width: $screen-sm-max) { padding-bottom: 40px; }
   .heading-primary {
     margin: 0 35% 30px 0;
@@ -89,6 +89,54 @@ hr {
   margin-bottom: $margin-standard*2;
 }
 
+.p {
+  &-15 { padding: $padding-standard; }
+  &x-15 {
+    padding-right: $padding-standard;
+    padding-left: $padding-standard;
+  }
+}
+
+.toggle {
+  position: absolute;
+  font-size: $font-size-smaller*2;
+  margin-left: -115px;
+  margin-top: -4px;
+  color: darken($link-color, 5%);
+  &-container { padding-left: 30px; }
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px 7px 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px -7px 0;
+    background-color: #c00;
+    color: #fff;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
+
+.img-circle {
+  border-radius: 50%;
+  height: 55px;
+  width: 55px;
+  &-small {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+  }
+}
 
 
 
@@ -111,7 +159,7 @@ hr {
   background-color: #F8D7DA;
 }
 .text-green {
-  color: Green;
+  color: $score-green;
 }
 .text-red {
   color: Red;
@@ -121,35 +169,15 @@ hr {
 }
 
 
-.spark-line-table{
-  table-layout: fixed;
-  width: 100%;
-}
+//.spark-line-table{
+//  table-layout: fixed;
+//  width: 100%;
+//}
 
 .spark-line{
   width: 15%
 }
 
-//.avatar-column {
-//  padding-right: 0;
-//  margin-right: 0;
-//  width: 10%;
-//}
-
-//.name-column {
-//  width: 25%;
-//}
-
-.img-circle {
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-}
-.img-circle-small {
-  border-radius: 50%;
-  height: 30px;
-  width: 30px;
-}
 
 
 .you-dashboard {
@@ -160,30 +188,4 @@ hr {
 
 .validator-block-history-table {
   padding-top: 20px;
-}
-
-
-.toggle {
-  font-size: 24px;
-}
-
-#error_explanation {
-  width: 450px;
-  border: 2px solid red;
-  padding: 7px 7px 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  h2 {
-    text-align: left;
-    font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px -7px 0;
-    background-color: #c00;
-    color: #fff;
-  }
-  ul li {
-    font-size: 12px;
-    list-style: square;
-  }
 }
