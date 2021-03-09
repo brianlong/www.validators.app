@@ -220,10 +220,10 @@ module ValidatorScoreV1Logic
         WHERE v.id IN (#{validator_ids.join(', ')}) AND vbh2.id IS NULL
       SQL_END
 
-      result = ActiveRecord::Base.connection.execute(sql).to_a
+      last_skipped_slot_percents = ActiveRecord::Base.connection.execute(sql).to_a
 
       p.payload[:validators].each do |validator|
-        last_validator_block_history_for_validator = result.find { |r| r.first == validator.id }
+        last_validator_block_history_for_validator = last_skipped_slot_percents.find { |r| r.first == validator.id }
         next unless last_validator_block_history_for_validator.present?
         skipped_slot_percent = last_validator_block_history_for_validator.last
 
