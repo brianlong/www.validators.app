@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: batches
+#
+#  id         :bigint           not null, primary key
+#  uuid       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  network    :string(255)
+#
 # The Batch class will provide a UUID that we can use to keep track of all
 # data retrieved in a batch.
 #
