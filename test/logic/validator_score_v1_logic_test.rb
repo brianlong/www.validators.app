@@ -96,6 +96,25 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test 'block_history_get' do
+    Timecop.scale do
+      v1 = Validator.first
+      v2 = create(:validator)
+      v3 = create(:validator)
+      v4 = create(:validator)
+
+      create(:validator_block_history, validator: v1, skipped_slot_percent: 0)
+      create(:validator_block_history, validator: v1, skipped_slot_percent: 0)
+      create(:validator_block_history, validator: v1, skipped_slot_percent: 0.1)
+
+      create(:validator_block_history, validator: v2, skipped_slot_percent: 0)
+      create(:validator_block_history, validator: v2, skipped_slot_percent: 0)
+      create(:validator_block_history, validator: v2, skipped_slot_percent: 0.2)
+
+      create(:validator_block_history, validator: v3, skipped_slot_percent: 0)
+      create(:validator_block_history, validator: v3, skipped_slot_percent: 0)
+      create(:validator_block_history, validator: v3, skipped_slot_percent: 0.3)
+    end
+
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -105,8 +124,20 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
     assert_equal 0.1, p.payload[:avg_skipped_slot_pct_all]
     assert_equal 0.1, p.payload[:med_skipped_slot_pct_all]
-    assert_equal [0.1], p.payload[:validators]
-                         .first
+
+    assert_equal [0.1], p.payload[:validators][0]
+                         .validator_score_v1
+                         .skipped_slot_history
+
+    assert_equal [0.2], p.payload[:validators][1]
+                         .validator_score_v1
+                         .skipped_slot_history
+
+    assert_equal [0.3], p.payload[:validators][2]
+                         .validator_score_v1
+                         .skipped_slot_history
+
+    assert_nil p.payload[:validators][3]
                          .validator_score_v1
                          .skipped_slot_history
   end
