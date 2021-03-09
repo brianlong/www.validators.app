@@ -1,5 +1,22 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: validators
+#
+#  id                  :bigint           not null, primary key
+#  network             :string(255)
+#  account             :string(255)
+#  name                :string(255)
+#  keybase_id          :string(255)
+#  www_url             :string(255)
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  details             :string(255)
+#  info_pub_key        :string(255)
+#  avatar_url          :string(255)
+#  security_report_url :string(255)
+#
 # Validator
 class Validator < ApplicationRecord
   has_many :vote_accounts, dependent: :destroy
@@ -7,6 +24,7 @@ class Validator < ApplicationRecord
   has_many :validator_ips, dependent: :destroy
   has_many :validator_block_histories, dependent: :destroy
   has_one :validator_score_v1, dependent: :destroy
+
   # after_save :copy_data_to_score
 
   # Returns an Array of account IDs for a given network
