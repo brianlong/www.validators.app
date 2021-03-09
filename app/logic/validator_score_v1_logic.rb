@@ -210,22 +210,13 @@ module ValidatorScoreV1Logic
 
       validator_ids = p.payload[:validators].map { |v| v.id }
 
-      # sql = <<-SQL_END
-      #   SELECT validators.id, validator_block_histories.id, validator_block_histories.skipped_slot_percent
-      #   FROM validator_block_histories
-      #   JOIN validators ON validators.id = validator_block_histories.validator_id
-      #   WHERE validators.id IN (#{validator_ids.join(', ')})
-      #   ORDER BY validator_block_histories.id DESC;
-      # SQL_END
-
       sql = <<-SQL_END
         SELECT v.id, vbh.id, vbh.skipped_slot_percent
         FROM validators v
-        JOIN validator_block_histories vbh ON (v.id = vbh.validator_id)
-
-        LEFT OUTER JOIN validator_block_histories vbh2 ON (v.id = vbh2.validator_id AND
-          (vbh.created_at < vbh2.created_at OR (vbh.created_at = vbh2.created_at AND vbh.id < vbh2.id)))
-
+        JOIN validator_block_histories vbh
+        ON (v.id = vbh.validator_id)
+        LEFT OUTER JOIN validator_block_histories vbh2
+        ON (v.id = vbh2.validator_id AND (vbh.created_at < vbh2.created_at OR (vbh.created_at = vbh2.created_at AND vbh.id < vbh2.id)))
         WHERE v.id IN (#{validator_ids.join(', ')}) AND vbh2.id IS NULL
       SQL_END
 
