@@ -104,10 +104,24 @@ hr {
 .toggle {
   position: absolute;
   font-size: $font-size-smaller*2;
-  margin-left: -115px;
-  margin-top: -4px;
+  margin-left: -40px;
+  margin-top: -2px;
   color: darken($link-color, 5%);
-  &-container { padding-left: 30px; }
+  @media(max-width: $screen-sm-max) {
+    margin-left: 0;
+  }
+  &-container {
+    text-align: right;
+    @media(max-width: $screen-sm-max) {
+      text-align: left;
+    }
+  }
+  &-label {
+    display: inline-block;
+    @media(max-width: $screen-sm-max) {
+      padding-left: 40px;
+    }
+  }
 }
 
 #error_explanation {

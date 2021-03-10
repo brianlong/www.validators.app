@@ -8,18 +8,18 @@
       <%= render 'validators/sort_bar' %>
 
       <div class="row">
-        <div class="col-sm-10">
+        <div class="col-md-9 col-lg-10">
           <p class="small muted">
             Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>. <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
           </p>
         </div>
-        <div class='col-sm-2 text-right toggle-container'>
+        <div class='col-md-3 col-lg-2 toggle-container'>
           <% if params[:refresh] == 'true' %>
             <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false)  %>
             <p class="small muted">REFRESH ON</p>
           <% else %>
             <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true)  %>
-            <p class="small muted">REFRESH OFF</p>
+            <p class="small muted toggle-label">REFRESH OFF</p>
           <% end %>
         </div>
       </div>
@@ -204,7 +204,7 @@
                   line_color = if validator.root_distance_score == 2
                                  '#00bf72'
                                elsif validator.root_distance_score == 1
-                                 'Blue'
+                                 '#008ae6'
                                else
                                  'Gray'
                                end
@@ -229,7 +229,7 @@
                   line_color = if validator.vote_distance_score == 2
                                  '#00bf72'
                                elsif validator.vote_distance_score == 1
-                                 'Blue'
+                                 '#008ae6'
                                else
                                  'Gray'
                                end
@@ -254,7 +254,7 @@
                   line_color = if validator.skipped_slot_score == 2
                                  '#00bf72'
                                elsif validator.skipped_slot_score == 1
-                                 'Blue'
+                                 '#008ae6'
                                else
                                  'Gray'
                                end
