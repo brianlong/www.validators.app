@@ -17,7 +17,6 @@ table, .table {
   .avatar-column {
     width: 90px;
     text-align: center;
-    padding: 0;
     .number {
       font-weight: $font-weight-bold-primary;
       @include font-family-alternative;
