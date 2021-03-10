@@ -48,13 +48,17 @@ body {
 .background-image {
   position: fixed;
   z-index: -1;
-  width: 100vw;
+  width: 96vw;
   height: 100vh;
-  background: url("background.svg") no-repeat top right;
+  right: 0;
+  top: 0;
+  background: url(asset_path("background.svg")) no-repeat top right;
   background-size: contain;
+  @media(max-width: $screen-md-max) {
+    width: 130vw;
+  }
   @media(max-width: $screen-sm-max) {
     width: 200vw;
-    right: 0;
   }
 }
 
