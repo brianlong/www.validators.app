@@ -32,6 +32,7 @@ module ValidatorScoreV1Logic
 
       validators = Validator.where(network: p.payload[:network])
                             .includes(:validator_score_v1)
+                            .includes(:last_validator_history)
                             .all
 
       # Make sure that we have a validator_score_v1 record for each validator
@@ -267,10 +268,18 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
+      # not
+      # validator_block_histories
+
       # TODO: Fix the N+1 query caused by validator.validator_history_last &
       # vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+
+      # p(p.payload[:validators].class)
+
       p.payload[:validators].each do |validator|
-        vah = validator.validator_history_last
+        # vah = validator.validator_history_last
+        vah = validator.last_validator_history
+
         if vah.nil?
           vah = validator&.vote_accounts&.last&.vote_account_histories&.last
         end

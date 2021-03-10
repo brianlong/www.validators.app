@@ -141,6 +141,10 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_history_get)
                 .then(&assign_block_history_score)
                 .then(&assign_software_version_score)
+
+    binding.pry
+    assert_equal 200, p.code
+
     assert_equal 0, p.payload[:validators]
                      .first
                      .validator_score_v1
