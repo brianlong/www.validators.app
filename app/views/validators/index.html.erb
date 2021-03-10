@@ -194,7 +194,7 @@
               </td>
 
               <!-- ROOT DISTANCE -->
-              <td class="spark-line text-right">
+              <td class="chart-column text-right">
                 <%
                   vl = if validator.score&.root_distance_history.to_a.count < 60
                          validator.score&.root_distance_history.to_a.count
@@ -204,9 +204,9 @@
                   line_color = if validator.root_distance_score == 2
                                  '#00bf72'
                                elsif validator.root_distance_score == 1
-                                 '#008ae6'
+                                 '#0091f2'
                                else
-                                 'Gray'
+                                 '#cacaca'
                                end
                   vector = validator.score&.root_distance_history.to_a[-vl..-1]
                 %>
@@ -219,7 +219,7 @@
               </td>
 
               <!-- VOTE DISTANCE -->
-              <td class="spark-line text-right">
+              <td class="chart-column text-right">
                 <%
                   vl = if validator.score&.vote_distance_history.to_a.count < 60
                          validator.score&.vote_distance_history.to_a.count
@@ -229,9 +229,9 @@
                   line_color = if validator.vote_distance_score == 2
                                  '#00bf72'
                                elsif validator.vote_distance_score == 1
-                                 '#008ae6'
+                                 '#0091f2'
                                else
-                                 'Gray'
+                                 '#cacaca'
                                end
                   vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
                 %>
@@ -244,7 +244,7 @@
               </td>
 
               <!-- SKIPPED SLOTS  -->
-              <td class="spark-line text-right">
+              <td class="chart-column text-right">
                 <%
                   vl = if validator.score&.skipped_slot_history.to_a.count < 60
                          validator.score&.skipped_slot_history.to_a.count
@@ -254,9 +254,9 @@
                   line_color = if validator.skipped_slot_score == 2
                                  '#00bf72'
                                elsif validator.skipped_slot_score == 1
-                                 '#008ae6'
+                                 '#0091f2'
                                else
-                                 'Gray'
+                                 '#cacaca'
                                end
                   slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| (v.to_f*100.0).round(1)}
                 %>

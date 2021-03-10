@@ -15,21 +15,21 @@
         // desired.
         datasets: [
           {
-            label: 'Block Diff',
+            label: ' Block Diff ',
             fill: false,
             backgroundColor: '#00bf72',
             borderColor: '#00bf72',
             borderWidth: 1,
-            radius: 0,
+            radius: 2,
             data: <%= local_assigns[:vector_block] %>
           },
           {
-            label: 'Vote Diff',
+            label: ' Vote Diff ',
             fill: false,
-            backgroundColor: '#008ae6',
-            borderColor: '#008ae6',
+            backgroundColor: '#0091f2',
+            borderColor: '#0091f2',
             borderWidth: 1,
-            radius: 0,
+            radius: 2,
             data: <%= local_assigns[:vector_vote] %>
           }
         ]
@@ -41,7 +41,11 @@
       elements: { line: { tension: 0 } }, // disables bezier curves
       hover: { animationDuration: 0 }, // duration of animations when hovering
       responsiveAnimationDuration: 0, // animation duration after a resize
-      // legend: { display: false },
+      legend: {
+        labels: {
+          fontColor: '#979797'
+        }
+      },
       scales: {
 				xAxes: [{
 					display: true,
@@ -49,16 +53,25 @@
           gridLines: {display: false},
 					scaleLabel: {
 						display: true,
-						labelString: "Previous <%= local_assigns[:vector_block].to_a.count %> Observations"
+						labelString: "Previous <%= local_assigns[:vector_block].to_a.count %> Observations",
+            fontColor: '#979797'
 					}
 				}],
 				yAxes: [{
 					display: true,
-          ticks: { min: 0},
-          gridLines: {display: true},
+          ticks: {
+					  min: 0,
+            padding: 5
+          },
+          gridLines: {
+  			    display: true,
+            zeroLineColor: '#322f3d',
+            color: '#322f3d'
+          },
 					scaleLabel: {
 						display: true,
-						labelString: 'Distance Behind'
+						labelString: 'Distance Behind',
+            fontColor: '#979797'
 					}
 				}]
 			}
