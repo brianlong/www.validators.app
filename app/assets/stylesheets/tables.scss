@@ -15,13 +15,13 @@ table, .table {
   td { padding: $padding-standard 20px; }
 
   .avatar-column {
-    width: 80px;
+    width: 70px;
     text-align: center;
     .number {
       font-weight: $font-weight-bold-primary;
       @include font-family-alternative;
       position: absolute;
-      width: 80px;
+      width: 70px;
       background-color: $table-lines-color;
       padding: 2px 0;
     }
@@ -36,7 +36,7 @@ table, .table {
 
   .chart-column {
     width: 22%;
-    padding: $padding-standard 20px 10px 20px;
+    padding: $padding-standard $padding-standard 10px $padding-standard;
   }
 
   &.table-striped {
