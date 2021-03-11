@@ -4,7 +4,8 @@
   background-color: darken($background-color, 3%);
   border: 2px solid $card-border-color;
   border-radius: $border-radius;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  overflow: hidden;
   &:last-of-type { margin-bottom: 0; }
 
   &-content {
@@ -27,6 +28,6 @@
   }
   &-heading {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
   }
 }

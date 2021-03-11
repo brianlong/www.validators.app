@@ -48,19 +48,23 @@ body {
 .background-image {
   position: fixed;
   z-index: -1;
-  width: 100vw;
+  width: 96vw;
   height: 100vh;
-  background: url("background.svg") no-repeat top right;
+  right: 0;
+  top: 0;
+  background: url(asset_path("background.svg")) no-repeat top right;
   background-size: contain;
+  @media(max-width: $screen-md-max) {
+    width: 130vw;
+  }
   @media(max-width: $screen-sm-max) {
     width: 200vw;
-    right: 0;
   }
 }
 
 .banner {
   padding-top: 20px;
-  padding-bottom: 50px;
+  padding-bottom: 45px;
   @media(max-width: $screen-sm-max) { padding-bottom: 40px; }
   .heading-primary {
     margin: 0 35% 30px 0;
@@ -89,17 +93,73 @@ hr {
   margin-bottom: $margin-standard*2;
 }
 
+.p {
+  &-15 { padding: $padding-standard; }
+  &x-15 {
+    padding-right: $padding-standard;
+    padding-left: $padding-standard;
+  }
+}
+
+.toggle {
+  position: absolute;
+  font-size: $font-size-smaller*2;
+  margin-left: -40px;
+  margin-top: -2px;
+  color: darken($link-color, 5%);
+  @media(max-width: $screen-sm-max) {
+    margin-left: 0;
+  }
+  &-container {
+    text-align: right;
+    @media(max-width: $screen-sm-max) {
+      text-align: left;
+    }
+  }
+  &-label {
+    display: inline-block;
+    @media(max-width: $screen-sm-max) {
+      padding-left: 40px;
+    }
+  }
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px 7px 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px -7px 0;
+    background-color: #c00;
+    color: #fff;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
+
+.img-circle {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  &-small {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+  }
+}
 
 
 
 
 // TODO old styles - to be redone
-
-.avatar{
-  display: inline-block;
-  padding: 0px;
-  margin: 0px;
-}
 
 .bg-green{
   background-color: #D4EDDA;
@@ -111,7 +171,7 @@ hr {
   background-color: #F8D7DA;
 }
 .text-green {
-  color: Green;
+  color: $score-green;
 }
 .text-red {
   color: Red;
@@ -119,38 +179,6 @@ hr {
 .text-orange {
   color: Orange;
 }
-
-
-.spark-line-table{
-  table-layout: fixed;
-  width: 100%;
-}
-
-.spark-line{
-  width: 15%
-}
-
-//.avatar-column {
-//  padding-right: 0;
-//  margin-right: 0;
-//  width: 10%;
-//}
-
-//.name-column {
-//  width: 25%;
-//}
-
-.img-circle {
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-}
-.img-circle-small {
-  border-radius: 50%;
-  height: 30px;
-  width: 30px;
-}
-
 
 .you-dashboard {
   font-size: 24px;
@@ -160,11 +188,6 @@ hr {
 
 .validator-block-history-table {
   padding-top: 20px;
-}
-
-
-.toggle {
-  font-size: 24px;
 }
 
 #error_explanation {

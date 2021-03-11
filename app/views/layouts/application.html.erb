@@ -17,11 +17,6 @@
           rel="stylesheet"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous">
-    </script>
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/<%= Rails.application.credentials.dig(:font_awesome_download_key)%>.js"
             crossorigin="anonymous">
@@ -48,7 +43,9 @@
 
   <body>
     <div class="background-color"></div>
-    <div class="background-image"></div>
+    <div class="background-image">
+
+    </div>
     <%= render 'layouts/header' %>
 
     <main class="container">
