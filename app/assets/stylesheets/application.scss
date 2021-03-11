@@ -187,3 +187,15 @@ hr {
     list-style: square;
   }
 }
+
+.font-fixed-width {
+  font-family: monospace;
+  font: courier;
+  font-size: 24px;
+}
+
+.font-fixed-width-green {
+  font-family: monospace;
+  font: courier;
+  color: Green;
+}
