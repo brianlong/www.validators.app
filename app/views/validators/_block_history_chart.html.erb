@@ -21,7 +21,7 @@
             backgroundColor: '#00bf72',
             borderColor: '#00bf72',
             borderWidth: 1,
-            radius: 2,
+            radius: 1,
             data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
           },
           {
@@ -30,7 +30,7 @@
             backgroundColor: '#0091f2',
             borderColor: '#0091f2',
             borderWidth: 1,
-            radius: 2,
+            radius: 1,
             data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent].round(1) } %>
           }
         ]
