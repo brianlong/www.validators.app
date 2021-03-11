@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :validator do
     network { 'testnet' }
-    account { '12345678' }
+    account { SecureRandom.hex }
     name { 'john doe' }
     keybase_id { 'johndoe' }
     security_report_url { 'http://www.example.com' }
