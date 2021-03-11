@@ -1,16 +1,6 @@
 require 'test_helper'
 
 class ValidatorBlockHistoryTest < ActiveSupport::TestCase
-  test 'associated_block_histories returns other block histories for the same validator' do
-    validator = create(:validator)
-    vbh1 = create(:validator_block_history, validator: validator)
-    vbh2 = create(:validator_block_history, validator: validator)
-    vbh3 = create(:validator_block_history, validator: validator)
-    create(:validator_block_history)
-
-    assert_equal([vbh2, vbh3], vbh1.associated_block_histories)
-  end
-
   test 'last_24_hours scopes results to only ones created within the last 24 hours' do
     Timecop.freeze do
       ValidatorBlockHistory.delete_all
@@ -24,6 +14,12 @@ class ValidatorBlockHistoryTest < ActiveSupport::TestCase
   end
 
   test 'after_create, #last_24_hours_skipped_slot_percent_moving_average is calculated' do
+    validator = create(:validator)
+    vbh1 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0)
+    vbh2 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.25)
+    vbh3 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.5)
+    vbh4 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.75)
 
+    assert_equal(0.25, vbh4.last_24_hours_skipped_slot_percent_moving_average)
   end
 end

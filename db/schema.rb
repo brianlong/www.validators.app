@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 2021_03_11_150854) do
     t.integer "skipped_slots_after"
     t.decimal "skipped_slots_after_percent", precision: 10, scale: 4
     t.string "network"
-    t.decimal "last_24_hours_skipped_slot_percent_moving_average", precision: 10
+    t.decimal "last_24_hours_skipped_slot_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"

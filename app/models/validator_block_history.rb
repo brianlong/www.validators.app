@@ -25,20 +25,9 @@ class ValidatorBlockHistory < ApplicationRecord
 
   belongs_to :validator
 
-  has_many(
-    :associated_block_histories,
-    ->(vbh) { where(validator_id: vbh.validator_id).where.not(id: vbh.id) },
-    class_name: 'ValidatorBlockHistory',
-    foreign_key: :validator_id
-  )
-
   scope :last_24_hours, -> { where('created_at >= ?', 24.hours.ago) }
 
-  # where("max_post_length > ?", blog.max_post_length)
-  # has_many :positive_reviews, -> { where("rating > 3.0") }, class_name: "Review"
-  # scope :associate
-
-  after_create :calc_last_24_hours_skipped_slot_percent_moving_average
+  before_create :set_last_24_hours_skipped_slot_percent_moving_average
 
   def self.average_skipped_slot_percent_for(network, batch_uuid)
     where(
@@ -56,7 +45,7 @@ class ValidatorBlockHistory < ApplicationRecord
 
   private
 
-  def calc_last_24_hours_skipped_slot_percent_moving_average
-    associated_block_histories
+  def set_last_24_hours_skipped_slot_percent_moving_average
+    self.last_24_hours_skipped_slot_percent_moving_average = self.class.where(validator: validator).last_24_hours.average(:skipped_slot_percent)
   end
 end
