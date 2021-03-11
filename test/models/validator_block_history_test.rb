@@ -20,6 +20,9 @@ class ValidatorBlockHistoryTest < ActiveSupport::TestCase
     vbh3 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.5)
     vbh4 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.75)
 
-    assert_equal(0.25, vbh4.last_24_hours_skipped_slot_percent_moving_average)
+    assert_equal(0, vbh1.last_24_hours_skipped_slot_percent_moving_average)
+    assert_equal(0.125, vbh2.last_24_hours_skipped_slot_percent_moving_average)
+    assert_equal(0.25, vbh3.last_24_hours_skipped_slot_percent_moving_average)
+    assert_equal(0.375, vbh4.last_24_hours_skipped_slot_percent_moving_average)
   end
 end
