@@ -9,7 +9,7 @@ require 'timeout'
 # See `config/initializers/pipeline.rb` for a description of the Pipeline struct
 module SolanaLogic
   include PipelineLogic
-  RPC_TIMEOUT = 30 # seconds
+  RPC_TIMEOUT = 60 # seconds
 
   # Create a batch record and set the :batch_uuid in the payload
   def batch_set
