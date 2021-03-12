@@ -31,7 +31,17 @@ table, .table {
   }
 
   .name-column {
-    width: 195px;
+    width: 190px;
+  }
+
+  .category-column {
+    width: 28%;
+    @media(max-width: $screen-md-max) {
+      width: 26%;
+    }
+    @media(max-width: $screen-xs-max) {
+      width: 37%;
+    }
   }
 
   .chart-column {

@@ -1,4 +1,4 @@
-<h3 class="text-center">Block &amp; Vote History</h3>
+<h2 class="card-heading">Block &amp; Vote History</h2>
 <canvas id="spark_line_block_distance_<%= local_assigns[:account] %>"></canvas>
 <script type="text/javascript">
   var ctx = document.getElementById("spark_line_block_distance_<%= local_assigns[:account] %>").getContext('2d');
@@ -20,7 +20,7 @@
             backgroundColor: '#00bf72',
             borderColor: '#00bf72',
             borderWidth: 1,
-            radius: 2,
+            radius: 1,
             data: <%= local_assigns[:vector_block] %>
           },
           {
@@ -29,7 +29,7 @@
             backgroundColor: '#0091f2',
             borderColor: '#0091f2',
             borderWidth: 1,
-            radius: 2,
+            radius: 1,
             data: <%= local_assigns[:vector_vote] %>
           }
         ]
