@@ -73,14 +73,17 @@ module ValidatorScoreV1Logic
         p.payload[:batch_uuid]
       )
 
+      # The to_a at the end ensures that the query is run here, instead of
+      # inside of the `p.payload[:validators].each` block which eliminates an
+      # N+1 query
+      validator_histories = ValidatorHistory.where(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid]
+      ).where({ account: p.payload[:validators].map(&:account) }).to_a
+
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
-        # TODO: eliminate N+1 query
-        vh = ValidatorHistory.where(
-          network: p.payload[:network],
-          batch_uuid: p.payload[:batch_uuid],
-          account: validator.account
-        ).first
+        vh = validator_histories.select { |vh| vh.account == validator.account }.first
 
         if vh
           root_distance = highest_root - vh.root_block.to_i
