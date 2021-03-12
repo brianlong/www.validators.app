@@ -129,6 +129,10 @@ class PublicController < ApplicationController
 
   def sample_chart; end
 
+  def stake_boss
+    @title = t('public.stake_boss.title')
+  end
+
   def contact_us
     if request.post?
       @contact_request = ContactRequest.new(contact_us_params)
