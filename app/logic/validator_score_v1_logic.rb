@@ -213,6 +213,7 @@ module ValidatorScoreV1Logic
 
       validator_ids = p.payload[:validators].map { |v| v.id }
 
+      # Returns the last skipped_slot_percent for each validator
       sql = <<-SQL_END
         SELECT v.id, vbh.id, vbh.skipped_slot_percent
         FROM validators v
@@ -227,6 +228,7 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |validator|
         last_validator_block_history_for_validator = last_skipped_slot_percents.find { |r| r.first == validator.id }
+
         next unless last_validator_block_history_for_validator.present?
         skipped_slot_percent = last_validator_block_history_for_validator.last
 
