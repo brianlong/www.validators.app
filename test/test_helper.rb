@@ -9,8 +9,14 @@ require 'minitest/mock'
 VCR.configure do |config|
   config.cassette_library_dir = 'test/vcr_cassettes'
   config.hook_into :webmock
-  config.default_cassette_options = { record: :new_episodes }
-  # config.allow_http_connections_when_no_cassette = true
+  # config.default_cassette_options = { record: :new_episodes }
+  config.allow_http_connections_when_no_cassette = false
+
+  config.ignore_request do |request|
+    uri = URI(request.uri)
+    # ignore only localhost requests to port 7500
+    uri.host == '127.0.0.1' && uri.port == 8899
+  end
 end
 
 class ActiveSupport::TestCase
