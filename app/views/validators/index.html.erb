@@ -15,10 +15,10 @@
         </div>
         <div class='col-md-3 col-lg-2 toggle-container'>
           <% if params[:refresh] == 'true' %>
-            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false)  %>
+            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
             <p class="small muted">REFRESH ON</p>
           <% else %>
-            <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true)  %>
+            <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
             <p class="small muted toggle-label">REFRESH OFF</p>
           <% end %>
         </div>
@@ -31,12 +31,12 @@
         <table id="validators-table" class='table table-striped table-borderless'>
           <thead>
             <tr>
-              <th class="avatar-column">&nbsp;</th>
+              <th class="avatar-column">#</th>
               <th class="name-column">
-                Name <small>(Commission)</small><br />
-                Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
+                Name <small class="text-muted">(Commission)</small><br />
+                Active Stake <small class="text-muted">(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
                 Software
-                <small>
+                <small class="text-muted">
                   (
                   <% if params[:network] == 'mainnet' %>
                     <%= MAINNET_CLUSTER_VERSION %>
@@ -46,23 +46,23 @@
                   )
                 </small>
                 <br />
-                Scores <small>(total)</small>
+                Scores <small class="text-muted">(total)</small>
               </th>
               <th class='chart-column text-right'>
                 Root Distance<br />
-                <small>60-Min Chart</small>
+                <small class="text-muted">60-Min Chart</small>
               </th>
               <th class='chart-column text-right'>
                 Vote Distance<br />
-                <small>60-Min Chart</small>
+                <small class="text-muted">60-Min Chart</small>
               </th>
               <th class='chart-column text-right'>
                 Skipped Slot &percnt;<br />
-                <small>60-Min Chart</small>
+                <small class="text-muted">60-Min Chart</small>
               </th>
               <th class='text-right'>
                 Skipped Vote &percnt;<br />
-                <small>(Distance from leader)</small>
+                <small class="text-muted">(Distance from leader)</small>
               </th>
             </tr>
           </thead>
@@ -111,9 +111,9 @@
                 </div>
                 <div class="avatar">
                   <% if validator.avatar_url %>
-                    <%= image_tag validator.avatar_url, class: 'img-circle' %>
+                    <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
                   <% else %>
-                    <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+                    <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
                   <% end %>
                 </div>
                 <% if validator.delinquent? %>
