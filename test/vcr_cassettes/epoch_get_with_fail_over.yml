@@ -23,13 +23,13 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '111'
+      - '167'
       Date:
-      - Tue, 14 Jul 2020 01:18:52 GMT
+      - Tue, 09 Mar 2021 03:29:53 GMT
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","result":{"absoluteSlot":23035721,"epoch":66,"slotIndex":47465,"slotsInEpoch":432000},"id":1}
+      string: '{"jsonrpc":"2.0","result":{"absoluteSlot":67025411,"blockHeight":55010520,"epoch":167,"slotIndex":405155,"slotsInEpoch":432000,"transactionCount":13812023674},"id":1}
 
         '
-  recorded_at: Tue, 14 Jul 2020 01:18:52 GMT
+  recorded_at: Tue, 09 Mar 2021 03:29:53 GMT
 recorded_with: VCR 6.0.0
