@@ -47,6 +47,9 @@ table, .table {
   .chart-column {
     width: 22%;
     padding: $padding-standard $padding-standard 10px $padding-standard;
+    @media(max-width: $screen-lg-max) {
+      width: 20%;
+    }
   }
 
   &.table-striped {
