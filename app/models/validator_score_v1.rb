@@ -1,5 +1,18 @@
 # frozen_string_literal: true
 
+# This is the model for version 1 of our ValidatorScore. This model will
+# maintain scores for each validator and also maintain a recent history of
+# events that can be used for charting or quick analysis. Factors that go into
+# building the score are (representative values are shown. Subject to change):
+
+# Factors that will be deducted from score above:
+# - High percent of total stake. We want to encourage decentralization.
+#   Delegated stake > 3% = -2
+# - Located in high-concentration data center. Located with 3% stake of other
+#   stakeholders = -1, 6% = -2
+#
+# Max score is currently eleven (11)
+
 # == Schema Information
 #
 # Table name: validator_score_v1s
@@ -34,26 +47,11 @@
 #  data_center_key                 :string(255)
 #  data_center_host                :string(255)
 #
-# This is the model for version 1 of our ValidatorScore. This model will
-# maintain scores for each validator and also maintain a recent history of
-# events that can be used for charting or quick analysis. Factors that go into
-# building the score are (representative values are shown. Subject to change):
+# Indexes
 #
-# - root_distance: [0, 1, 2] based on cluster median & average
-# - vote_distance: [0, 1, 2] based on cluster median & average
-# - skipped_slot_percent: [0, 1, 2] based on cluster median & average
-# - software_version: 2 = current patch, 1 = current minor, 0 = major or N/A
-# - published_information_score: [0, 1, 2] 2 = published 4 info elements to the
-#     chain. 1 = published 2 or 3 elements, 0 = published 0 or 1 element.
-# - security_report_score: [0,1] = no url published. 1 = url is published
+#  index_validator_score_v1s_on_network_and_data_center_key  (network,data_center_key)
+#  index_validator_score_v1s_on_validator_id                 (validator_id)
 #
-# Factors that will be deducted from score above:
-# - High percent of total stake. We want to encourage decentralization.
-#   Delegated stake > 3% = -2
-# - Located in high-concentration data center. Located with 3% stake of other
-#   stakeholders = -1, 6% = -2
-#
-# Max score is currently eleven (11)
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 

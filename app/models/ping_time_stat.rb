@@ -12,5 +12,9 @@
 #  updated_at           :datetime         not null
 #  network              :string(255)
 #
+# Indexes
+#
+#  index_ping_time_stats_on_network_and_batch_uuid  (network,batch_uuid)
+#
 class PingTimeStat < ApplicationRecord
 end

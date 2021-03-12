@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# The Batch class will provide a UUID that we can use to keep track of all
+# data retrieved in a batch.
+# batch = Batch.create
+# batch.uuid #=> A UUID
+
 # == Schema Information
 #
 # Table name: batches
@@ -10,11 +15,11 @@
 #  updated_at :datetime         not null
 #  network    :string(255)
 #
-# The Batch class will provide a UUID that we can use to keep track of all
-# data retrieved in a batch.
+# Indexes
 #
-# batch = Batch.create
-# batch.uuid #=> A UUID
+#  index_batches_on_network_and_created_at  (network,created_at)
+#  index_batches_on_network_and_uuid        (network,uuid)
+#
 class Batch < ApplicationRecord
   before_create :create_uuid
 

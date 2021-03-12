@@ -17,7 +17,10 @@
 #  avatar_url          :string(255)
 #  security_report_url :string(255)
 #
-# Validator
+# Indexes
+#
+#  index_validators_on_network_and_account  (network,account) UNIQUE
+#
 class Validator < ApplicationRecord
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy

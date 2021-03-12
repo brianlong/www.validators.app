@@ -13,5 +13,9 @@
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
 #
+# Indexes
+#
+#  index_ip_overrides_on_address  (address) UNIQUE
+#
 class IpOverride < ApplicationRecord
 end

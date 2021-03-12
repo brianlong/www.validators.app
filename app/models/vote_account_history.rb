@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Holds the history of getVoteAccounts RPC requests. See
+# https://docs.solana.com/apps/jsonrpc-api#getvoteaccounts
+
 # == Schema Information
 #
 # Table name: vote_account_histories
@@ -19,8 +22,12 @@
 #  credits_current    :bigint
 #  slot_index_current :integer
 #
-# Holds the history of getVoteAccounts RPC requests. See
-# https://docs.solana.com/apps/jsonrpc-api#getvoteaccounts
+# Indexes
+#
+#  index_vote_account_histories_on_network_and_batch_uuid          (network,batch_uuid)
+#  index_vote_account_histories_on_vote_account_id                 (vote_account_id)
+#  index_vote_account_histories_on_vote_account_id_and_created_at  (vote_account_id,created_at)
+#
 class VoteAccountHistory < ApplicationRecord
   belongs_to :vote_account
 end
