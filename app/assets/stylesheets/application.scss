@@ -1,0 +1,224 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ */
+
+ @import "variables";
+ @import "typography";
+ @import "buttons";
+ @import "header";
+ @import "footer";
+ @import "cards";
+ @import "lists";
+ @import "tables";
+ @import "forms";
+ @import "scores";
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  @include font-size-base;
+}
+
+body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  @include font-family-base;
+  color: $base-color;
+  @include font-size-base;
+  background-color: transparent;
+}
+
+.background-color {
+  position: fixed;
+  z-index: -2;
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(to bottom left, $background-color,$background-color,$background-color,$background-color,$background-color,$background-color-secondary,$background-color-tertiary,$background-color);
+}
+.background-image {
+  position: fixed;
+  z-index: -1;
+  width: 96vw;
+  height: 100vh;
+  right: 0;
+  top: 0;
+  background: url(asset_path("background.svg")) no-repeat top right;
+  background-size: contain;
+  @media(max-width: $screen-md-max) {
+    width: 130vw;
+  }
+  @media(max-width: $screen-sm-max) {
+    width: 200vw;
+  }
+}
+
+.banner {
+  padding-top: 20px;
+  padding-bottom: 45px;
+  @media(max-width: $screen-sm-max) { padding-bottom: 40px; }
+  .heading-primary {
+    margin: 0 35% 30px 0;
+    @media(max-width: $screen-md-max) {
+      margin-right: 0;
+    }
+  }
+  span {
+    text-decoration: underline;
+    text-decoration-color: $green;
+  }
+}
+
+#donotsell_frame {
+  border: none;
+  width: 100%;
+  height: 900px;
+  margin: 0px;
+  padding: 0px;
+}
+
+hr {
+  border-color: $grey-light;
+  background-color: $grey-light;
+  margin-top: $margin-standard*2;
+  margin-bottom: $margin-standard*2;
+}
+
+.p {
+  &-15 { padding: $padding-standard; }
+  &x-15 {
+    padding-right: $padding-standard;
+    padding-left: $padding-standard;
+  }
+}
+
+.toggle {
+  position: absolute;
+  font-size: $font-size-smaller*2;
+  margin-left: -40px;
+  margin-top: -2px;
+  color: darken($link-color, 5%);
+  @media(max-width: $screen-sm-max) {
+    margin-left: 0;
+  }
+  &-container {
+    text-align: right;
+    @media(max-width: $screen-sm-max) {
+      text-align: left;
+    }
+  }
+  &-label {
+    display: inline-block;
+    @media(max-width: $screen-sm-max) {
+      padding-left: 40px;
+    }
+  }
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px 7px 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px -7px 0;
+    background-color: #c00;
+    color: #fff;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
+
+.img-circle {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  &-small {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+  }
+}
+
+
+
+
+// TODO old styles - to be redone
+
+.bg-green{
+  background-color: #D4EDDA;
+}
+.bg-yellow {
+  background-color: #FFF3CD;
+}
+.bg-red {
+  background-color: #F8D7DA;
+}
+.text-green {
+  color: $score-green;
+}
+.text-red {
+  color: Red;
+}
+.text-orange {
+  color: Orange;
+}
+
+.you-dashboard {
+  font-size: 24px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+.validator-block-history-table {
+  padding-top: 20px;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px 7px 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px -7px 0;
+    background-color: #c00;
+    color: #fff;
+  }
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
+
+.font-fixed-width {
+  font-family: monospace;
+  font: courier;
+  font-size: 24px;
+}
+
+.font-fixed-width-green {
+  font-family: monospace;
+  font: courier;
+  color: Green;
+}
