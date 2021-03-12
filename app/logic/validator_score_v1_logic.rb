@@ -211,23 +211,16 @@ module ValidatorScoreV1Logic
           p.payload[:batch_uuid]
         )
 
-      validator_ids = p.payload[:validators].map { |v| v.id }
-
-      # Returns the last skipped_slot_percent for each validator
       sql = <<-SQL_END
-        SELECT v.id, vbh.id, vbh.skipped_slot_percent
-        FROM validators v
-        JOIN validator_block_histories vbh
-        ON (v.id = vbh.validator_id)
-        LEFT OUTER JOIN validator_block_histories vbh2
-        ON (v.id = vbh2.validator_id AND (vbh.created_at < vbh2.created_at OR (vbh.created_at = vbh2.created_at AND vbh.id < vbh2.id)))
-        WHERE v.id IN (#{validator_ids.join(', ')}) AND vbh2.id IS NULL
+        SELECT vbh.validator_id, vbh.skipped_slot_percent
+        FROM validator_block_histories vbh
+        WHERE vbh.network = '#{p.payload[:network]}' AND vbh.batch_uuid = '#{p.payload[:batch_uuid]}'
       SQL_END
 
-      last_skipped_slot_percents = ActiveRecord::Base.connection.execute(sql).to_a
+      skipped_slot_percents = ActiveRecord::Base.connection.execute(sql).to_a
 
       p.payload[:validators].each do |validator|
-        last_validator_block_history_for_validator = last_skipped_slot_percents.find { |r| r.first == validator.id }
+        last_validator_block_history_for_validator = skipped_slot_percents.find { |r| r.first == validator.id }
 
         next unless last_validator_block_history_for_validator.present?
         skipped_slot_percent = last_validator_block_history_for_validator.last
