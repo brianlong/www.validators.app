@@ -9,8 +9,8 @@
 #  account      :string(255)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  network      :string(255)
 #
-# VoteAccount
 class VoteAccount < ApplicationRecord
   belongs_to :validator
   has_many :vote_account_histories

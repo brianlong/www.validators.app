@@ -4,21 +4,21 @@
 #
 # Table name: validator_block_histories
 #
-#  id                          :bigint           not null, primary key
-#  validator_id                :bigint           not null
-#  epoch                       :integer
-#  leader_slots                :integer
-#  blocks_produced             :integer
-#  skipped_slots               :integer
-#  skipped_slot_percent        :decimal(10, 4)
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  batch_uuid                  :string(255)
-#  skipped_slots_after         :integer
-#  skipped_slots_after_percent :decimal(10, 4)
-#  network                     :string(255)
+#  id                                  :bigint           not null, primary key
+#  validator_id                        :bigint           not null
+#  epoch                               :integer
+#  leader_slots                        :integer
+#  blocks_produced                     :integer
+#  skipped_slots                       :integer
+#  skipped_slot_percent                :decimal(10, 4)
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
+#  batch_uuid                          :string(255)
+#  skipped_slots_after                 :integer
+#  skipped_slots_after_percent         :decimal(10, 4)
+#  network                             :string(255)
+#  skipped_slot_percent_moving_average :decimal(10, 4)
 #
-# ValidatorBlockHistory
 class ValidatorBlockHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
