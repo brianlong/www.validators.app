@@ -200,7 +200,6 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      # byebug
       avg_skipped_slot_pct_all = \
         ValidatorBlockHistory.average_skipped_slot_percent_for(
           p.payload[:network],
@@ -212,14 +211,22 @@ module ValidatorScoreV1Logic
           p.payload[:batch_uuid]
         )
 
-      # TODO: Eliminate the N+1 Query caused by
-      # validator.validator_block_histories.last
+      sql = <<-SQL_END
+        SELECT vbh.validator_id, vbh.skipped_slot_percent
+        FROM validator_block_histories vbh
+        WHERE vbh.network = '#{p.payload[:network]}' AND vbh.batch_uuid = '#{p.payload[:batch_uuid]}'
+      SQL_END
+
+      skipped_slot_percents = ActiveRecord::Base.connection.execute(sql).to_a
+
       p.payload[:validators].each do |validator|
-        vbh = validator.validator_block_histories.last
-        next unless vbh
+        last_validator_block_history_for_validator = skipped_slot_percents.find { |r| r.first == validator.id }
+
+        next unless last_validator_block_history_for_validator.present?
+        skipped_slot_percent = last_validator_block_history_for_validator.last
 
         validator.validator_score_v1.skipped_slot_history_push(
-          vbh.skipped_slot_percent.to_f
+          skipped_slot_percent.to_f
         )
       rescue StandardError => e
         Appsignal.send_error(e)

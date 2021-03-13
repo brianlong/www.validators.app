@@ -14,5 +14,10 @@
 #  updated_at            :datetime         not null
 #  network               :string(255)
 #
+# Indexes
+#
+#  index_validator_block_history_stats_on_network_and_batch_uuid  (network,batch_uuid)
+#
+
 class ValidatorBlockHistoryStat < ApplicationRecord
 end

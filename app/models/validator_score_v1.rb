@@ -38,15 +38,7 @@
 # maintain scores for each validator and also maintain a recent history of
 # events that can be used for charting or quick analysis. Factors that go into
 # building the score are (representative values are shown. Subject to change):
-#
-# - root_distance: [0, 1, 2] based on cluster median & average
-# - vote_distance: [0, 1, 2] based on cluster median & average
-# - skipped_slot_percent: [0, 1, 2] based on cluster median & average
-# - software_version: 2 = current patch, 1 = current minor, 0 = major or N/A
-# - published_information_score: [0, 1, 2] 2 = published 4 info elements to the
-#     chain. 1 = published 2 or 3 elements, 0 = published 0 or 1 element.
-# - security_report_score: [0,1] = no url published. 1 = url is published
-#
+
 # Factors that will be deducted from score above:
 # - High percent of total stake. We want to encourage decentralization.
 #   Delegated stake > 3% = -2
@@ -54,6 +46,46 @@
 #   stakeholders = -1, 6% = -2
 #
 # Max score is currently eleven (11)
+
+# == Schema Information
+#
+# Table name: validator_score_v1s
+#
+#  id                              :bigint           not null, primary key
+#  validator_id                    :bigint
+#  total_score                     :integer
+#  root_distance_history           :text(65535)
+#  root_distance_score             :integer
+#  vote_distance_history           :text(65535)
+#  vote_distance_score             :integer
+#  skipped_slot_history            :text(65535)
+#  skipped_slot_score              :integer
+#  skipped_after_history           :text(65535)
+#  skipped_after_score             :integer
+#  software_version                :string(255)
+#  software_version_score          :integer
+#  stake_concentration             :decimal(10, 3)
+#  stake_concentration_score       :integer
+#  data_center_concentration       :decimal(10, 3)
+#  data_center_concentration_score :integer
+#  active_stake                    :bigint           unsigned
+#  commission                      :integer
+#  ping_time_avg                   :decimal(10, 3)
+#  delinquent                      :boolean
+#  created_at                      :datetime         not null
+#  updated_at                      :datetime         not null
+#  published_information_score     :integer
+#  security_report_score           :integer
+#  ip_address                      :string(255)
+#  network                         :string(255)
+#  data_center_key                 :string(255)
+#  data_center_host                :string(255)
+#
+# Indexes
+#
+#  index_validator_score_v1s_on_network_and_data_center_key  (network,data_center_key)
+#  index_validator_score_v1s_on_validator_id                 (validator_id)
+#
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 

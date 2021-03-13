@@ -12,9 +12,24 @@
 #
 # The Batch class will provide a UUID that we can use to keep track of all
 # data retrieved in a batch.
-#
 # batch = Batch.create
 # batch.uuid #=> A UUID
+
+# == Schema Information
+#
+# Table name: batches
+#
+#  id         :bigint           not null, primary key
+#  uuid       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  network    :string(255)
+#
+# Indexes
+#
+#  index_batches_on_network_and_created_at  (network,created_at)
+#  index_batches_on_network_and_uuid        (network,uuid)
+#
 class Batch < ApplicationRecord
   before_create :create_uuid
 

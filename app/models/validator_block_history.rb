@@ -19,6 +19,13 @@
 #  network                             :string(255)
 #  skipped_slot_percent_moving_average :decimal(10, 4)
 #
+# Indexes
+#
+#  index_validator_block_histories_on_network_and_batch_uuid       (network,batch_uuid)
+#  index_validator_block_histories_on_validator_id                 (validator_id)
+#  index_validator_block_histories_on_validator_id_and_created_at  (validator_id,created_at)
+#  index_validator_block_histories_on_validator_id_and_epoch       (validator_id,epoch)
+#
 class ValidatorBlockHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic

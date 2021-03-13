@@ -98,6 +98,8 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate'
+  gem 'ed25519'
+  gem 'bcrypt_pbkdf'
 end
 
 group :test do

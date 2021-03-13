@@ -93,6 +93,7 @@ GEM
     aws-sigv4 (1.2.2)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.16)
+    bcrypt_pbkdf (1.1.0)
     bindex (0.8.1)
     bootsnap (1.4.8)
       msgpack (~> 1.0)
@@ -140,6 +141,7 @@ GEM
       simpleidn (~> 0.1)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    ed25519 (1.2.4)
     encryptor (3.0.0)
     erubi (1.9.0)
     factory_bot (6.1.0)
@@ -380,6 +382,7 @@ DEPENDENCIES
   appsignal
   attr_encrypted (>= 3.1.0)
   aws-sdk-s3
+  bcrypt_pbkdf
   bootsnap (>= 1.4.2)
   bundler (>= 2.1)
   byebug
@@ -390,6 +393,7 @@ DEPENDENCIES
   devise
   devise-i18n
   dnsruby
+  ed25519
   factory_bot_rails
   faker!
   jbuilder (~> 2.7)

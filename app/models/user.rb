@@ -30,7 +30,14 @@
 #  api_token              :string(255)
 #  email_encrypted_iv     :string(255)
 #
-# User
+# Indexes
+#
+#  index_users_on_api_token             (api_token) UNIQUE
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_unlock_token          (unlock_token) UNIQUE
+#  index_users_on_username              (username) UNIQUE
+#
 class User < ApplicationRecord
   before_save :create_email_hash
 

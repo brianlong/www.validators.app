@@ -45,6 +45,11 @@
 #  updated_at                            :datetime         not null
 #  data_center_host                      :string(255)
 #
+# Indexes
+#
+#  index_ips_on_address          (address) UNIQUE
+#  index_ips_on_data_center_key  (data_center_key)
+#
 class Ip < ApplicationRecord
   before_save :assign_data_center_key
 

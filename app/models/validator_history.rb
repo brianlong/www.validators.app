@@ -19,6 +19,12 @@
 #  updated_at       :datetime         not null
 #  software_version :string(255)
 #
+# Indexes
+#
+#  index_validator_histories_on_network_and_account_and_id  (network,account,id)
+#  index_validator_histories_on_network_and_batch_uuid      (network,batch_uuid)
+#
+
 class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
