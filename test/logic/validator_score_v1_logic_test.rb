@@ -153,8 +153,6 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&assign_block_history_score)
                 .then(&assign_software_version_score)
 
-    assert_equal 200, p.code
-
     assert_equal 0, p.payload[:validators]
                      .first
                      .validator_score_v1
