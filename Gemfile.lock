@@ -68,6 +68,9 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
+    annotate (3.1.1)
+      activerecord (>= 3.2, < 7.0)
+      rake (>= 10.4, < 14.0)
     appsignal (2.11.0)
       rack
     ast (2.4.1)
@@ -90,6 +93,7 @@ GEM
     aws-sigv4 (1.2.2)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.16)
+    bcrypt_pbkdf (1.1.0)
     bindex (0.8.1)
     bootsnap (1.4.8)
       msgpack (~> 1.0)
@@ -137,6 +141,7 @@ GEM
       simpleidn (~> 0.1)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    ed25519 (1.2.4)
     encryptor (3.0.0)
     erubi (1.9.0)
     factory_bot (6.1.0)
@@ -327,6 +332,7 @@ GEM
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
+    timecop (0.9.4)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -372,9 +378,11 @@ PLATFORMS
 
 DEPENDENCIES
   actionview (>= 6.0.3.1)
+  annotate
   appsignal
   attr_encrypted (>= 3.1.0)
   aws-sdk-s3
+  bcrypt_pbkdf
   bootsnap (>= 1.4.2)
   bundler (>= 2.1)
   byebug
@@ -385,6 +393,7 @@ DEPENDENCIES
   devise
   devise-i18n
   dnsruby
+  ed25519
   factory_bot_rails
   faker!
   jbuilder (~> 2.7)
@@ -404,6 +413,7 @@ DEPENDENCIES
   sidekiq
   spring
   spring-watcher-listen (~> 2.0.0)
+  timecop
   turbolinks (~> 5)
   vcr
   web-console (>= 3.3.0)
