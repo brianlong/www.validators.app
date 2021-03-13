@@ -270,6 +270,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
+      # call #to_a at the end to guarantee the query is run now, instead of inside of the loop
       last_validator_histories = ValidatorHistory.where(
         network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
