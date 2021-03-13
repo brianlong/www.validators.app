@@ -13,16 +13,16 @@ class ValidatorBlockHistoryTest < ActiveSupport::TestCase
     end
   end
 
-  test 'after_create, #last_24_hours_skipped_slot_percent_moving_average is calculated' do
+  test 'after_create, #skipped_slot_percent_moving_average is calculated' do
     validator = create(:validator)
     vbh1 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0)
     vbh2 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.25)
     vbh3 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.5)
     vbh4 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.75)
 
-    assert_equal(0, vbh1.last_24_hours_skipped_slot_percent_moving_average)
-    assert_equal(0.125, vbh2.last_24_hours_skipped_slot_percent_moving_average)
-    assert_equal(0.25, vbh3.last_24_hours_skipped_slot_percent_moving_average)
-    assert_equal(0.375, vbh4.last_24_hours_skipped_slot_percent_moving_average)
+    assert_equal(0, vbh1.skipped_slot_percent_moving_average)
+    assert_equal(0.125, vbh2.skipped_slot_percent_moving_average)
+    assert_equal(0.25, vbh3.skipped_slot_percent_moving_average)
+    assert_equal(0.375, vbh4.skipped_slot_percent_moving_average)
   end
 end
