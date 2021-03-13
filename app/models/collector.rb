@@ -22,24 +22,6 @@
 #
 #  index_collectors_on_user_id  (user_id)
 #
-
-# == Schema Information
-#
-# Table name: collectors
-#
-#  id              :bigint           not null, primary key
-#  user_id         :bigint           not null
-#  payload_type    :string(255)
-#  payload_version :integer
-#  payload         :text(4294967295)
-#  ip_address      :string(255)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#
-# Indexes
-#
-#  index_collectors_on_user_id  (user_id)
-#
 class Collector < ApplicationRecord
   validates :payload_type, presence: true
   validates :payload_version, presence: true
