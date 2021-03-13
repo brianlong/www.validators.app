@@ -13,7 +13,7 @@ class ValidatorBlockHistoryTest < ActiveSupport::TestCase
     end
   end
 
-  test 'after_create, #skipped_slot_percent_moving_average is calculated' do
+  test 'after_create, #skipped_slot_percent_moving_average is calculated as the moving average for the last 24 hours' do
     validator = create(:validator)
     vbh1 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0)
     vbh2 = create(:validator_block_history, validator: validator, skipped_slot_percent: 0.25)
