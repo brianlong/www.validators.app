@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# The Report model will hold pre-compiled reports
+
 # == Schema Information
 #
 # Table name: reports
@@ -12,7 +14,11 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-# The Report model will hold pre-compiled reports
+# Indexes
+#
+#  index_reports_on_network_and_batch_uuid           (network,batch_uuid)
+#  index_reports_on_network_and_name_and_created_at  (network,name,created_at)
+#
 
 # == Schema Information
 #

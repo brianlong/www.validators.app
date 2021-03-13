@@ -1,39 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: validator_score_v1s
-#
-#  id                              :bigint           not null, primary key
-#  validator_id                    :bigint
-#  total_score                     :integer
-#  root_distance_history           :text(65535)
-#  root_distance_score             :integer
-#  vote_distance_history           :text(65535)
-#  vote_distance_score             :integer
-#  skipped_slot_history            :text(65535)
-#  skipped_slot_score              :integer
-#  skipped_after_history           :text(65535)
-#  skipped_after_score             :integer
-#  software_version                :string(255)
-#  software_version_score          :integer
-#  stake_concentration             :decimal(10, 3)
-#  stake_concentration_score       :integer
-#  data_center_concentration       :decimal(10, 3)
-#  data_center_concentration_score :integer
-#  active_stake                    :bigint           unsigned
-#  commission                      :integer
-#  ping_time_avg                   :decimal(10, 3)
-#  delinquent                      :boolean
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
-#  published_information_score     :integer
-#  security_report_score           :integer
-#  ip_address                      :string(255)
-#  network                         :string(255)
-#  data_center_key                 :string(255)
-#  data_center_host                :string(255)
-#
 # This is the model for version 1 of our ValidatorScore. This model will
 # maintain scores for each validator and also maintain a recent history of
 # events that can be used for charting or quick analysis. Factors that go into
