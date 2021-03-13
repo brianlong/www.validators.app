@@ -32,7 +32,6 @@ module ValidatorScoreV1Logic
 
       validators = Validator.where(network: p.payload[:network])
                             .includes(:validator_score_v1)
-                            .includes(:last_validator_history)
                             .all
 
       # Make sure that we have a validator_score_v1 record for each validator
@@ -271,28 +270,22 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      # not
-      # validator_block_histories
-
-      # TODO: Fix the N+1 query caused by validator.validator_history_last &
-      # vah = validator&.vote_accounts&.last&.vote_account_histories&.last
-
-      # p(p.payload[:validators].class)
+      last_validator_histories = ValidatorHistory.where(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid]
+      ).to_a
 
       p.payload[:validators].each do |validator|
-        # vah = validator.validator_history_last
-        vah = validator.last_validator_history
+        vah = last_validator_histories.find { |vh| vh.account == validator.account }
 
         if vah.nil?
           vah = validator&.vote_accounts&.last&.vote_account_histories&.last
-        end
-        # This means we skip the software version for non-voting nodes.
-        if vah
+        else
           if vah.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
-            validator.validator_score_v1.software_version = \
-              vah.software_version
+            validator.validator_score_v1.software_version = vah.software_version
           end
         end
+
         validator.validator_score_v1.assign_software_version_score
       rescue StandardError => e
         Appsignal.send_error(e)

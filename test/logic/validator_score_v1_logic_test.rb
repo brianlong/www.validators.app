@@ -143,7 +143,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .skipped_slot_score
   end
 
-  test 'asign_software_version_score' do
+  test 'assign_software_version_score' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -153,7 +153,6 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&assign_block_history_score)
                 .then(&assign_software_version_score)
 
-    binding.pry
     assert_equal 200, p.code
 
     assert_equal 0, p.payload[:validators]
