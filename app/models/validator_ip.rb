@@ -5,16 +5,20 @@
 # Table name: validator_ips
 #
 #  id           :bigint           not null, primary key
-#  validator_id :bigint           not null
-#  version      :integer          default(4)
 #  address      :string(255)
+#  version      :integer          default(4)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  validator_id :bigint           not null
 #
 # Indexes
 #
 #  index_validator_ips_on_validator_id                          (validator_id)
 #  index_validator_ips_on_validator_id_and_version_and_address  (validator_id,version,address) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (validator_id => validators.id)
 #
 
 class ValidatorIp < ApplicationRecord
