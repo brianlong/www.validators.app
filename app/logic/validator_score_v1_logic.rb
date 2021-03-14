@@ -283,11 +283,22 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).to_a
 
+      last_vote_account_histories = VoteAccountHistory.where(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid]
+      ).to_a
+
       p.payload[:validators].each do |validator|
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
 
         if vah.nil?
-          vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+          vah = last_vote_account_histories.select do |vah|
+            if validator.vote_accounts.any?
+              validator.vote_accounts.last.account == vah.vote_account.account
+            end
+
+          end
+          # vah = validator&.vote_accounts&.last&.vote_account_histories&.last
         end
         # This means we skip the software version for non-voting nodes.
         if vah
