@@ -15,14 +15,15 @@
 # payload = {
 #   config_urls: ['https://testnet.solana.com:8899'],
 #   network: args['network'],
-#   stake_account: args['stake_account']
+#   stake_address: args['stake_address']
 # }
 #
 # _p = Pipeline.new(200, payload)
 #              .then(&guard_input)
 #              .then(&guard_stake_account)
+#              .then(&log_errors)
 
-require 'timeout'
+# require 'timeout'
 require 'base58'
 
 module StakeBossLogic
@@ -47,15 +48,15 @@ module StakeBossLogic
     lambda do |p|
       # Make sure the address is not blank
       raise InvalidStakeAccount.new('Blank Address') \
-        if p.payload[:stake_account].blank?
+        if p.payload[:stake_address].blank?
 
       # Make sure the address does not contain script
       raise InvalidStakeAccount.new('Hi Leo, javascript is not allowed!') \
-        if p.payload[:stake_account].include?('<script')
+        if p.payload[:stake_address].include?('<script')
 
       # Make sure the base58 decoded address is the right length (33 bytes)
       raise InvalidStakeAccount.new("Address is wrong size") \
-        if Base58.base58_to_binary(p.payload[:stake_account]).bytes.length != 33
+        if Base58.base58_to_binary(p.payload[:stake_address]).bytes.length != 33
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -69,7 +70,7 @@ module StakeBossLogic
     lambda do |p|
       # Check the blockchain to see if this is a valid stake account
       stake_account = Solana::StakeAccount.new(
-                        address: p.payload[:stake_account],
+                        address: p.payload[:stake_address],
                         rpc_urls: p.payload[:config_urls]
                       )
       stake_account.get
@@ -79,6 +80,9 @@ module StakeBossLogic
 
       raise InvalidStakeAccount.new('Stake Boss needs Stake Authority') \
         unless stake_account.stake_authority == STAKE_BOSS_ADDRESS
+
+      raise InvalidStakeAccount.new('Stake Account is inactive') \
+        unless stake_account.is_active?
 
       Pipeline.new(200, p.payload.merge(solana_stake_account: stake_account))
     rescue StandardError => e

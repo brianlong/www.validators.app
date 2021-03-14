@@ -21,7 +21,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   # Show that the input guards are working
   test 'guard_input_blank' do
     # Blank input
-    p = Pipeline.new(200, @initial_payload.merge(stake_account: nil))
+    p = Pipeline.new(200, @initial_payload.merge(stake_address: nil))
                 .then(&guard_input)
     assert_equal 500, p.code
     assert_equal StakeBossLogic::InvalidStakeAccount, p.errors.class
@@ -31,7 +31,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   test 'guard_input_javascript' do
     # javascript
     account = '"><script src=https://certus.xss.ht></script>'
-    p = Pipeline.new(200, @initial_payload.merge(stake_account: account))
+    p = Pipeline.new(200, @initial_payload.merge(stake_address: account))
                 .then(&guard_input)
 
     assert_equal 500,
@@ -44,7 +44,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
   test 'guard_input_wrong_length' do
     # Blank input
-    p = Pipeline.new(200, @initial_payload.merge(stake_account: 'test'))
+    p = Pipeline.new(200, @initial_payload.merge(stake_address: 'test'))
                 .then(&guard_input)
 
     assert_equal 500,
@@ -55,7 +55,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                  p.errors.message
   end
 
-  test 'guard_invalid_stake_account' do
+  test 'guard_stake_account_invalid' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuZ'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -66,7 +66,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       [address, TESTNET_CLUSTER_URLS]
     ) do
 
-      p = Pipeline.new(200, @initial_payload.merge(stake_account: address))
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
 
@@ -80,7 +80,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'guard_stake_boss_does_not_have_stake_authority' do
+  test 'guard_stake_account_boss_does_not_have_stake_authority' do
     address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuS'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -91,7 +91,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       [address, TESTNET_CLUSTER_URLS]
     ) do
 
-      p = Pipeline.new(200, @initial_payload.merge(stake_account: address))
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
 
@@ -102,6 +102,55 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       assert_equal 'Invalid Stake Account: Stake Boss needs Stake Authority',
                    p.errors.message
 
+    end
+  end
+
+  test 'guard_stake_account_inactive' do
+    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_input)
+                  .then(&guard_stake_account)
+
+      assert_equal 500,
+                   p.code
+      assert_equal StakeBossLogic::InvalidStakeAccount,
+                   p.errors.class
+      assert_equal 'Invalid Stake Account: Stake Account is inactive',
+                   p.errors.message
+
+    end
+  end
+
+  test 'guard_stake_account_success' do
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_input)
+                  .then(&guard_stake_account)
+
+      assert_equal 200,
+                   p.code
+      assert       p.payload[:solana_stake_account].is_valid?
+      assert       p.payload[:solana_stake_account].is_active?
+      assert_equal 'BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH',
+                   p.payload[:solana_stake_account].stake_authority
     end
   end
 end
