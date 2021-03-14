@@ -17,6 +17,8 @@
 /storage/*
 !/storage/.keep
 
+.DS_Store
+
 /public/assets
 .byebug_history
 
