@@ -22,4 +22,13 @@
 
 class ValidatorBlockHistoryStat < ApplicationRecord
   scope :last_24_hours, -> { where('created_at >= ?', 24.hours.ago) }
+
+  # TODO add test
+  after_create :set_skipped_slot_percent_moving_average
+
+  private
+
+  def set_skipped_slot_percent_moving_average
+    self.skipped_slot_percent_moving_average = validator.validator_block_histories.last_24_hours.average(:skipped_slot_percent)
+  end
 end
