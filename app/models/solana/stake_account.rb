@@ -74,9 +74,13 @@ module Solana
     rescue StandardError => e
       @error = e
     end
-    
+
     def is_valid?
       @error.nil?
+    end
+
+    def is_active?
+      @error.nil? && @deactivation_epoch.nil?
     end
   end
 end
