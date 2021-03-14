@@ -23,11 +23,9 @@
 #              .then(&guard_stake_account)
 #              .then(&log_errors)
 
-# require 'timeout'
 require 'base58'
 
 module StakeBossLogic
-  # include PipelineLogic
   RPC_TIMEOUT = 60 # seconds
 
   # InvalidStakeAccount is a custom Error class with a default message for
@@ -68,22 +66,30 @@ module StakeBossLogic
   # StakeAuthority, and the balance is > zero
   def guard_stake_account
     lambda do |p|
-      # Check the blockchain to see if this is a valid stake account
+      # Load the account info from the blockchain
       stake_account = Solana::StakeAccount.new(
                         address: p.payload[:stake_address],
                         rpc_urls: p.payload[:config_urls]
                       )
       stake_account.get
 
+      # Make sure this is a valid stake account
       raise InvalidStakeAccount.new('Not a valid Stake Account') \
         unless stake_account.is_valid?
 
+      # Make sure that we have the stake authority
       raise InvalidStakeAccount.new('Stake Boss needs Stake Authority') \
         unless stake_account.stake_authority == STAKE_BOSS_ADDRESS
 
+      # Is the stake account currently active?
       raise InvalidStakeAccount.new('Stake Account is inactive') \
         unless stake_account.is_active?
 
+      # Is the balance > 10?
+      raise InvalidStakeAccount.new('Balance is too low') \
+        unless (stake_account.delegated_stake / 1_000_000_000) > 10
+
+      # Append the valid stake account to the payload
       Pipeline.new(200, p.payload.merge(solana_stake_account: stake_account))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from guard_input', e)

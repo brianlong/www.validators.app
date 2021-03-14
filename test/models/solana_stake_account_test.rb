@@ -4,15 +4,9 @@ require 'test_helper'
 
 # Valid regular account: testarBnsk6ZVZWthoBAmbn5wyA35Nc2Dr7QWWV9TRv
 # Valid stake account:   BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY
+# Invalid stake account: BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuZ
 
-# SolanaLogicTest
 class SolanaStakeAccountTest < ActiveSupport::TestCase
-  # include SolanaLogic
-
-  test 'the truth' do
-    assert true
-  end
-
   test 'get valid stake account' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
