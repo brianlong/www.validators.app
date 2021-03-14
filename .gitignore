@@ -17,7 +17,8 @@
 /storage/*
 !/storage/.keep
 
-.DS_Store
+# Time machine backups
+*.DS_STORE
 
 /public/assets
 .byebug_history
