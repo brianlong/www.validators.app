@@ -106,15 +106,21 @@ class ValidatorsController < ApplicationController
                 .reverse
                 .each do |vbh|
         i += 1
-        batch_stats = ValidatorBlockHistoryStat.where(
+        batch_stats = ValidatorBlockHistoryStat.find_by(
           network: params[:network],
           batch_uuid: vbh.batch_uuid
-        ).first
+        )
 
-        cluster_skipped_slot_percent_moving_average = ValidatorBlockHistory.where(
-          network: params[:network],
-          batch_uuid: vbh.batch_uuid
-        ).last_24_hours.average(:skipped_slot_percent)
+        # this takes 10s
+        # cluster_skipped_slot_percent_moving_average = ValidatorBlockHistory
+        #                                                 .where(network: params[:network], batch_uuid: )
+        #                                                 .last_24_hours
+        #                                                 .average(:skipped_slot_percent)
+
+        cluster_skipped_slot_percent_moving_average = ValidatorBlockHistoryStat
+                                                    .where(network: params[:network], batch_uuid: vbh.batch_uuid)
+                                                    .last_24_hours
+                                                    .average(:skipped_slot_percent_moving_average)
 
         @data[i] = {
           skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,

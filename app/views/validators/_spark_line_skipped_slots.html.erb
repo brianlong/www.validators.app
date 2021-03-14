@@ -7,22 +7,31 @@
 
     // The data for our dataset
     data: {
-        // x-axis labels
-        labels: <%= local_assigns[:vector].count.downto(1).to_a %>,
-        // An Array of JSON hashes for each dataset to plot. The y-axis is
-        // dynamicly calculated. Look for othe options to control the y-axis if
-        // desired.
-        datasets: [
-          {
-            label: 'Skip %',
-            fill: false,
-            // backgroundColor: '#D4EDDA', // 'rgb(85, 239, 196)',
-            borderColor: "<%= local_assigns[:line_color] %>",
-            borderWidth: 1,
-            radius: 0,
-            data: <%= local_assigns[:vector] %>
-          }
-        ]
+      // x-axis labels
+      labels: <%= local_assigns[:vector].count.downto(1).to_a %>,
+      // An Array of JSON hashes for each dataset to plot. The y-axis is
+      // dynamicly calculated. Look for othe options to control the y-axis if
+      // desired.
+      datasets: [
+        {
+          label: 'Skip %',
+          fill: false,
+          // backgroundColor: '#D4EDDA', // 'rgb(85, 239, 196)',
+          borderColor: "<%= local_assigns[:line_color] %>",
+          borderWidth: 1,
+          radius: 0,
+          data: <%= local_assigns[:vector] %>
+        },
+        {
+          label: 'Moving Avg Skip %',
+          fill: false,
+          // backgroundColor: '#D4EDDA', // 'rgb(85, 239, 196)',
+          borderColor: "<%= local_assigns[:line_color] %>",
+          borderWidth: 1,
+          radius: 0,
+          data: <%= local_assigns[:vector] %>
+        }
+      ]
     },
 
     // Configuration options go here

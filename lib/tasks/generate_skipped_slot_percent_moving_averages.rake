@@ -5,8 +5,7 @@ namespace :db do
 
     counter = 1
 
-    # ValidatorBlockHistory.where("created_at > ?", 3.days.ago).order('id desc').find_each do |vbh|
-    ValidatorBlockHistory.where("created_at > ?", 3.days.ago).order('id desc').each do |vbh|
+    ValidatorBlockHistory.where("created_at > ?", 2.days.ago).find_each(order: :desc) do |vbh|
       p vbh.id
 
       vbh.update_column(
@@ -14,8 +13,6 @@ namespace :db do
         vbh.validator.validator_block_histories.last_24_hours.average(:skipped_slot_percent)
       )
 
-      break if counter >= 100_000
-      counter += 1
     end
 
     end_time = Time.now

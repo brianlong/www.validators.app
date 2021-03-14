@@ -20,4 +20,5 @@
 #
 
 class ValidatorBlockHistoryStat < ApplicationRecord
+  scope :last_24_hours, -> { where('created_at >= ?', 24.hours.ago) }
 end
