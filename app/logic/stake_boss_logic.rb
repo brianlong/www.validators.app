@@ -12,17 +12,40 @@
 #
 # Example:
 #
-# payload = {
-#   config_urls: ['https://testnet.solana.com:8899'],
-#   network: args['network'],
-#   stake_address: args['stake_address']
-# }
+#   payload = {
+#     config_urls: ['https://testnet.solana.com:8899'],
+#     network: args['network'],
+#     stake_address: args['stake_address']
+#   }
 #
-# _p = Pipeline.new(200, payload)
-#              .then(&guard_input)
-#              .then(&guard_stake_account)
-#              .then(&set_max_n_split)
-#              .then(&log_errors)
+# The pipeline for the first iteration to determine balance & set max_n_split
+# looks like this:
+#
+#   _p = Pipeline.new(200, payload)
+#                .then(&guard_input)
+#                .then(&guard_stake_account)
+#                .then(&guard_duplicate_records)
+#                .then(&set_max_n_split)
+#                .then(&log_errors)
+#
+# The pipeline for the second iteration where we split the accounts and
+# delegate the validators looks like this:
+#
+#   payload = {
+#     config_urls: ['https://testnet.solana.com:8899'],
+#     network: args['network'],
+#     stake_address: args['stake_address'],
+#     split_n_ways: args['split_n_ways']
+#   }
+#
+#   _p = Pipeline.new(200, payload)
+#                .then(&guard_input)
+#                .then(&guard_stake_account)
+#                .then(&guard_duplicate_records)
+#                .then(&set_max_n_split)
+#                .then(&select_validators)
+#                .then(&register_first_stake_account)
+#                .then(&log_errors)
 
 require 'base58'
 
@@ -39,7 +62,9 @@ module StakeBossLogic
   #   e.message: 'Invalid Stake Account: Blank Address'
   class InvalidStakeAccount < StandardError
     attr_accessor :message
+
     def initialize(message = nil)
+      super
       @message = "Invalid Stake Account: #{message}".strip
     end
   end
@@ -48,15 +73,15 @@ module StakeBossLogic
   def guard_input
     lambda do |p|
       # Make sure the address is not blank
-      raise InvalidStakeAccount.new('Blank Address') \
+      raise InvalidStakeAccount, 'Blank Address' \
         if p.payload[:stake_address].blank?
 
       # Make sure the address does not contain script
-      raise InvalidStakeAccount.new('Hi Leo, javascript is not allowed!') \
+      raise InvalidStakeAccount, 'Hi Leo, javascript is not allowed!' \
         if p.payload[:stake_address].include?('<script')
 
       # Make sure the base58 decoded address is the right length (33 bytes)
-      raise InvalidStakeAccount.new("Address is wrong size") \
+      raise InvalidStakeAccount, 'Address is wrong size' \
         if Base58.base58_to_binary(p.payload[:stake_address]).bytes.length != 33
 
       Pipeline.new(200, p.payload)
@@ -71,31 +96,42 @@ module StakeBossLogic
     lambda do |p|
       # Load the account info from the blockchain
       stake_account = Solana::StakeAccount.new(
-                        address: p.payload[:stake_address],
-                        rpc_urls: p.payload[:config_urls]
-                      )
+        address: p.payload[:stake_address],
+        rpc_urls: p.payload[:config_urls]
+      )
       stake_account.get
 
       # Make sure this is a valid stake account
-      raise InvalidStakeAccount.new('Not a valid Stake Account') \
+      raise InvalidStakeAccount, 'Not a valid Stake Account' \
         unless stake_account.is_valid?
 
       # Make sure that we have the stake authority
-      raise InvalidStakeAccount.new('Stake Boss needs Stake Authority') \
+      raise InvalidStakeAccount, 'Stake Boss needs Stake Authority' \
         unless stake_account.stake_authority == STAKE_BOSS_ADDRESS
 
       # Is the stake account currently active?
-      raise InvalidStakeAccount.new('Stake Account is inactive') \
+      raise InvalidStakeAccount, 'Stake Account is inactive' \
         unless stake_account.is_active?
 
       # Is the balance > 10?
-      raise InvalidStakeAccount.new('Balance is too low') \
+      raise InvalidStakeAccount, 'Balance is too low' \
         unless lamports_to_sol(stake_account.delegated_stake) >= STAKE_BOSS_MIN
 
       # Append the valid stake account to the payload
       Pipeline.new(200, p.payload.merge(solana_stake_account: stake_account))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from guard_stake_account', e)
+    end
+  end
+
+  # Guard against duplicate records in the stake_boss_stake_accounts table
+  def guard_duplicate_records
+    lambda do |p|
+      # TODO: Check for duplicates in the stake_boss_stake_accounts table
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from guard_duplicate_records', e)
     end
   end
 
@@ -114,11 +150,10 @@ module StakeBossLogic
       # balance going below the minimum
       split_n_max = split_n_ways
       STAKE_BOSS_N_SPLIT_OPTIONS.each do |n|
-        if lamports_to_sol(p.payload[:solana_stake_account].delegated_stake)/n >= 5
-          split_n_max = n
-        else
-          break
-        end
+        ds = p.payload[:solana_stake_account].delegated_stake
+        break if (lamports_to_sol(ds) / n) < 5
+
+        split_n_max = n
       end
 
       Pipeline.new(
@@ -132,8 +167,9 @@ module StakeBossLogic
 
   def select_validators
     lambda do |p|
-      select_fields = [
-        :id, :validator_id, :delinquent, :stake_concentration_score, :data_center_concentration_score, :data_center_key
+      select_fields = %i[
+        id validator_id delinquent stake_concentration_score
+        data_center_concentration_score data_center_key
       ]
       scores = ValidatorScoreV1.where(network: p.payload[:network])
                                .select(select_fields)
@@ -143,7 +179,7 @@ module StakeBossLogic
       validators = []
       scores.each do |score|
         next if score.delinquent
-        next if score.stake_concentration_score < 0
+        next if score.stake_concentration_score.negative?
 
         if Rails.env.production?
           next if score.commission.to_i == 100
@@ -168,11 +204,9 @@ module StakeBossLogic
 
   def register_first_stake_account
     lambda do |p|
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
-
 end
