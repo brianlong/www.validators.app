@@ -63,8 +63,10 @@
                 <small class="text-muted">60-Min Chart</small>
               </th>
               <th class='text-right'>
-                Skipped Vote &percnt;<br />
-                <small class="text-muted">(Distance from leader)</small>
+                Skipped Vote &percnt;
+                <a data-toggle="tooltip" data-html="true" title="Distance from leader">
+                  <i class="fas fa-question-circle"></i>
+                </a>
               </th>
             </tr>
           </thead>
@@ -100,8 +102,7 @@
                     <% end %>
                   </div>
                   <% if validator.delinquent? %>
-                    <br />
-                    <small class="score-minus-2">DELINQUENT</small>
+                    <small class="score-minus-2">delinquent</small>
                   <% end %>
                 </td>
                 <td class="name-column">
