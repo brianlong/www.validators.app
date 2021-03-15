@@ -469,20 +469,13 @@ module SolanaLogic
   # cli_request will accept a command line command to run and then return the
   # results as parsed JSON. [] is returned if there is no data
   def cli_request(cli_method, rpc_urls)
-    solana_path = \
-      if Rails.env.production?
-        '/home/deploy/.local/share/solana/install/active_release/bin/'
-      else
-        ''
-      end
-
-
     rpc_urls.each do |rpc_url|
       response_json = Timeout.timeout(RPC_TIMEOUT) do
-        `#{solana_path}solana #{cli_method} --output json-compact --url #{rpc_url}`
 
-      # Log errors and return '' if there is a problem
+        SolanaCliService.request(cli_method, rpc_url)
+
       rescue Errno::ENOENT, Errno::ECONNREFUSED, Timeout::Error => e
+        # Log errors and return '' if there is a problem
         Rails.logger.error "CLI TIMEOUT\n#{e.class}\nRPC URL: #{rpc_url}"
         ''
       end

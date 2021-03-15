@@ -8,31 +8,31 @@
 
     // The data for our dataset
     data: {
-        // x-axis labels
-        labels: <%= local_assigns[:vector_block].to_a.count.downto(1).to_a %>,
-        // An Array of JSON hashes for each dataset to plot. The y-axis is
-        // dynamicly calculated. Look for othe options to control the y-axis if
-        // desired.
-        datasets: [
-          {
-            label: ' Block Diff ',
-            fill: false,
-            backgroundColor: '#00bf72',
-            borderColor: '#00bf72',
-            borderWidth: 1,
-            radius: 1,
-            data: <%= local_assigns[:vector_block] %>
-          },
-          {
-            label: ' Vote Diff ',
-            fill: false,
-            backgroundColor: '#0091f2',
-            borderColor: '#0091f2',
-            borderWidth: 1,
-            radius: 1,
-            data: <%= local_assigns[:vector_vote] %>
-          }
-        ]
+      // x-axis labels
+      labels: <%= local_assigns[:vector_block].to_a.count.downto(1).to_a %>,
+      // An Array of JSON hashes for each dataset to plot. The y-axis is
+      // dynamicly calculated. Look for othe options to control the y-axis if
+      // desired.
+      datasets: [
+        {
+          label: ' Block Diff ',
+          fill: false,
+          backgroundColor: '#00bf72',
+          borderColor: '#00bf72',
+          borderWidth: 1,
+          radius: 1,
+          data: <%= local_assigns[:vector_block] %>
+        },
+        {
+          label: ' Vote Diff ',
+          fill: false,
+          backgroundColor: '#0091f2',
+          borderColor: '#0091f2',
+          borderWidth: 1,
+          radius: 1,
+          data: <%= local_assigns[:vector_vote] %>
+        }
+      ]
     },
 
     // Configuration options go here
@@ -47,34 +47,34 @@
         }
       },
       scales: {
-				xAxes: [{
-					display: true,
+        xAxes: [{
+          display: true,
           ticks: {display: false},
           gridLines: {display: false},
-					scaleLabel: {
-						display: true,
-						labelString: "Previous <%= local_assigns[:vector_block].to_a.count %> Observations",
-            fontColor: '#979797'
-					}
-				}],
-				yAxes: [{
-					display: true,
+          scaleLabel: {
+              display: true,
+              labelString: "Previous <%= local_assigns[:vector_block].to_a.count %> Observations",
+              fontColor: '#979797'
+          }
+        }],
+        yAxes: [{
+          display: true,
           ticks: {
-					  min: 0,
+            min: 0,
             padding: 5
           },
           gridLines: {
-  			    display: true,
+            display: true,
             zeroLineColor: '#322f3d',
             color: '#322f3d'
           },
-					scaleLabel: {
-						display: true,
-						labelString: 'Distance Behind',
+          scaleLabel: {
+            display: true,
+            labelString: 'Distance Behind',
             fontColor: '#979797'
-					}
-				}]
-			}
+          }
+        }]
+      }
     }
   });
 </script>

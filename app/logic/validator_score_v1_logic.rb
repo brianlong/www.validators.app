@@ -72,14 +72,17 @@ module ValidatorScoreV1Logic
         p.payload[:batch_uuid]
       )
 
+      # The to_a at the end ensures that the query is run here, instead of
+      # inside of the `p.payload[:validators].each` block which eliminates an
+      # N+1 query
+      validator_histories = ValidatorHistory.where(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid]
+      ).where({ account: p.payload[:validators].map(&:account) }).to_a
+
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
-        # TODO: eliminate N+1 query
-        vh = ValidatorHistory.where(
-          network: p.payload[:network],
-          batch_uuid: p.payload[:batch_uuid],
-          account: validator.account
-        ).first
+        vh = validator_histories.select { |vh| vh.account == validator.account }.first
 
         if vh
           root_distance = highest_root - vh.root_block.to_i
@@ -197,7 +200,6 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      # byebug
       avg_skipped_slot_pct_all = \
         ValidatorBlockHistory.average_skipped_slot_percent_for(
           p.payload[:network],
@@ -209,14 +211,22 @@ module ValidatorScoreV1Logic
           p.payload[:batch_uuid]
         )
 
-      # TODO: Eliminate the N+1 Query caused by
-      # validator.validator_block_histories.last
+      sql = <<-SQL_END
+        SELECT vbh.validator_id, vbh.skipped_slot_percent
+        FROM validator_block_histories vbh
+        WHERE vbh.network = '#{p.payload[:network]}' AND vbh.batch_uuid = '#{p.payload[:batch_uuid]}'
+      SQL_END
+
+      skipped_slot_percents = ActiveRecord::Base.connection.execute(sql).to_a
+
       p.payload[:validators].each do |validator|
-        vbh = validator.validator_block_histories.last
-        next unless vbh
+        last_validator_block_history_for_validator = skipped_slot_percents.find { |r| r.first == validator.id }
+
+        next unless last_validator_block_history_for_validator.present?
+        skipped_slot_percent = last_validator_block_history_for_validator.last
 
         validator.validator_score_v1.skipped_slot_history_push(
-          vbh.skipped_slot_percent.to_f
+          skipped_slot_percent.to_f
         )
       rescue StandardError => e
         Appsignal.send_error(e)
@@ -267,18 +277,22 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      # TODO: Fix the N+1 query caused by validator.validator_history_last &
-      # vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+      # call #to_a at the end to guarantee the query is run now, instead of inside of the loop
+      last_validator_histories = ValidatorHistory.where(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid]
+      ).to_a
+
       p.payload[:validators].each do |validator|
-        vah = validator.validator_history_last
+        vah = last_validator_histories.find { |vh| vh.account == validator.account }
+
         if vah.nil?
           vah = validator&.vote_accounts&.last&.vote_account_histories&.last
         end
         # This means we skip the software version for non-voting nodes.
         if vah
           if vah.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
-            validator.validator_score_v1.software_version = \
-              vah.software_version
+            validator.validator_score_v1.software_version = vah.software_version
           end
         end
         validator.validator_score_v1.assign_software_version_score

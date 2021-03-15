@@ -9,31 +9,31 @@
 
     // The data for our dataset
     data: {
-        // x-axis labels
-        labels: <%= @data.keys %>,
-        // An Array of JSON hashes for each dataset to plot. The y-axis is
-        // dynamicly calculated. Look for othe options to control the y-axis if
-        // desired.
-        datasets: [
-          {
-            label: ' Skip % ',
-            fill: false,
-            backgroundColor: '#00bf72',
-            borderColor: '#00bf72',
-            borderWidth: 1,
-            radius: 1,
-            data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
-          },
-          {
-            label: ' Cluster % ',
-            fill: false,
-            backgroundColor: '#0091f2',
-            borderColor: '#0091f2',
-            borderWidth: 1,
-            radius: 1,
-            data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent].round(1) } %>
-          }
-        ]
+      // x-axis labels
+      labels: <%= @data.keys %>,
+      // An Array of JSON hashes for each dataset to plot. The y-axis is
+      // dynamicly calculated. Look for othe options to control the y-axis if
+      // desired.
+      datasets: [
+        {
+          label: ' Skip % ',
+          fill: false,
+          backgroundColor: '#00bf72',
+          borderColor: '#00bf72',
+          borderWidth: 1,
+          radius: 1,
+          data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
+        },
+        {
+          label: ' Cluster % ',
+          fill: false,
+          backgroundColor: '#0091f2',
+          borderColor: '#0091f2',
+          borderWidth: 1,
+          radius: 1,
+          data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent].round(1) } %>
+        }
+      ]
     },
 
     // Configuration options go here
@@ -48,34 +48,34 @@
         }
       },
       scales: {
-				xAxes: [{
-					display: true,
+        xAxes: [{
+          display: true,
           ticks: {display: false},
           gridLines: {display: false},
-					scaleLabel: {
-						display: true,
-						labelString: "Previous <%= @data.count %> Observations",
+          scaleLabel: {
+            display: true,
+            labelString: "Previous <%= @data.count %> Observations",
             fontColor: '#979797'
-					}
-				}],
-				yAxes: [{
-					display: true,
+          }
+        }],
+        yAxes: [{
+          display: true,
           ticks: {
-					  min: 0,
+            min: 0,
             padding: 5
           },
           gridLines: {
-					  display: true,
+            display: true,
             zeroLineColor: '#322f3d',
             color: '#322f3d'
           },
-					scaleLabel: {
-						display: true,
-						labelString: 'Percent',
+          scaleLabel: {
+            display: true,
+            labelString: 'Percent',
             fontColor: '#979797'
-					}
-				}]
-			}
+          }
+        }]
+      }
     }
   });
 </script>

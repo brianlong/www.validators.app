@@ -33,13 +33,24 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test 'block_vote_history_get' do
+    # create enough records to confirm via logs we don't have an N+1 query when
+    # getting ValidatorHistory for all accounts for this batch
+    5.times do
+      create(
+        :validator_history,
+        network: 'testnet',
+        batch_uuid: '1234',
+        account: create(:validator).account
+      )
+    end
+
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&block_vote_history_get)
 
-    assert_equal 1, p.payload[:validators].count
-    assert_equal 100, p.payload[:total_active_stake]
+    assert_equal 6, p.payload[:validators].count
+    assert_equal 600, p.payload[:total_active_stake]
 
     assert_not_nil p.payload[:validators].first.validator_score_v1
     assert_equal [0], p.payload[:validators]
@@ -58,7 +69,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                        .first
                        .validator_score_v1
                        .active_stake
-    assert_equal 1.0, p.payload[:validators]
+    assert_equal 0.167e0, p.payload[:validators]
                        .first
                        .validator_score_v1
                        .stake_concentration
@@ -96,6 +107,86 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test 'block_history_get' do
+
+    # Empty the previous ValidatorBlockHistory table
+    ValidatorBlockHistory.destroy_all
+
+    Timecop.scale do
+      v1 = Validator.first
+      v2 = create(:validator)
+      v3 = create(:validator)
+      v4 = create(:validator)
+
+      # Show that we start with one validator_block_histories
+      assert_equal 0, v1.validator_block_histories.count
+      assert_equal 0, ValidatorBlockHistory.count
+
+      # 2 from previous batches. These should not be included in the stats for
+      # this batch
+      2.times do
+        create(
+          :validator_block_history,
+          network: @initial_payload[:network],
+          batch_uuid: 'previous',
+          validator: v1,
+          skipped_slot_percent: 0.5
+        )
+      end
+
+      # 1 from this batch
+      create(
+        :validator_block_history,
+        network: @initial_payload[:network],
+        batch_uuid: @initial_payload[:batch_uuid],
+        validator: v1,
+        skipped_slot_percent: 0.1
+      )
+
+      # 2 from previous batches. These should not be included in the stats for
+      # this batch
+      2.times do
+        create(
+          :validator_block_history,
+          network: @initial_payload[:network],
+          batch_uuid: 'previous',
+          validator: v2,
+          skipped_slot_percent: 0.6
+        )
+      end
+
+      # 1 from this batch
+      create(
+        :validator_block_history,
+        network: @initial_payload[:network],
+        batch_uuid: @initial_payload[:batch_uuid],
+        validator: v2,
+        skipped_slot_percent: 0.2
+      )
+
+      # 2 from previous batches
+      2.times do
+        create(
+          :validator_block_history,
+          network: @initial_payload[:network],
+          batch_uuid: 'previous',
+          validator: v3,
+          skipped_slot_percent: 0.7
+        )
+      end
+
+      # 1 from this batch
+      create(
+        :validator_block_history,
+        network: @initial_payload[:network],
+        batch_uuid: @initial_payload[:batch_uuid],
+        validator: v3,
+        skipped_slot_percent: 0.3
+      )
+    end
+
+    assert_equal 9, ValidatorBlockHistory.count
+
+
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -103,10 +194,38 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&assign_block_and_vote_scores)
                 .then(&block_history_get)
 
-    assert_equal 0.1, p.payload[:avg_skipped_slot_pct_all]
-    assert_equal 0.1, p.payload[:med_skipped_slot_pct_all]
-    assert_equal [0.1], p.payload[:validators]
-                         .first
+    # We should now have 3 validator_block_histories per validator
+    0.upto(2).each do |i|
+      assert_equal 3, p.payload[:validators][i].validator_block_histories.count
+    end
+
+    # These stats should only reflect this batch
+    assert_equal 0.2, p.payload[:avg_skipped_slot_pct_all]
+    assert_equal 0.2, ValidatorBlockHistory.average_skipped_slot_percent_for(
+                        @initial_payload[:network],
+                        @initial_payload[:batch_uuid]
+                      )
+
+    # These stats should only reflect this batch
+    assert_equal 0.2, p.payload[:med_skipped_slot_pct_all]
+    assert_equal 0.2, ValidatorBlockHistory.median_skipped_slot_percent_for(
+                        @initial_payload[:network],
+                        @initial_payload[:batch_uuid]
+                      )
+
+    assert_equal [0.1], p.payload[:validators][0]
+                         .validator_score_v1
+                         .skipped_slot_history
+
+    assert_equal [0.2], p.payload[:validators][1]
+                         .validator_score_v1
+                         .skipped_slot_history
+
+    assert_equal [0.3], p.payload[:validators][2]
+                         .validator_score_v1
+                         .skipped_slot_history
+
+    assert_nil p.payload[:validators][3]
                          .validator_score_v1
                          .skipped_slot_history
   end
@@ -132,7 +251,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .skipped_slot_score
   end
 
-  test 'asign_software_version_score' do
+  test 'assign_software_version_score' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -141,6 +260,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_history_get)
                 .then(&assign_block_history_score)
                 .then(&assign_software_version_score)
+
     assert_equal 0, p.payload[:validators]
                      .first
                      .validator_score_v1

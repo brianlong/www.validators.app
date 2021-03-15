@@ -63,9 +63,9 @@
                 <circle id="Oval-2" fill="#b832c8" cx="12.5" cy="12.5" r="3.5"/>
                 <circle id="Oval-2" stroke="#b832c8" cx="12.5" cy="12.5" r="12.5"/>
               </g><g xmlns="http://www.w3.org/2000/svg" id="dots" transform="translate(936, 813)">
-                <circle id="Oval-2" fill="#C4C4C4" cx="12.5" cy="12.5" r="3.5"/>
-                <circle id="Oval-2" stroke="#CACACA" cx="12.5" cy="12.5" r="12.5"/>
-              </g>
+              <circle id="Oval-2" fill="#C4C4C4" cx="12.5" cy="12.5" r="3.5"/>
+              <circle id="Oval-2" stroke="#CACACA" cx="12.5" cy="12.5" r="12.5"/>
+            </g>
               <g xmlns="http://www.w3.org/2000/svg" id="dots" transform="translate(1303, 933)">
                 <circle id="Oval-2" fill="#C4C4C4" cx="12.5" cy="12.5" r="3.5"/>
                 <circle id="Oval-2" stroke="#CACACA" cx="12.5" cy="12.5" r="12.5"/>
@@ -90,9 +90,9 @@
                 <circle id="Oval-2" fill="#b832c8" cx="12.5" cy="12.5" r="3.5"/>
                 <circle id="Oval-2" stroke="#b832c8" cx="12.5" cy="12.5" r="12.5"/>
               </g><g xmlns="http://www.w3.org/2000/svg" id="dots" transform="translate(823.000000, 158.000000)">
-                <circle id="Oval-2" fill="#b832c8" cx="12.5" cy="12.5" r="3.5"/>
-                <circle id="Oval-2" stroke="#b832c8" cx="12.5" cy="12.5" r="12.5"/>
-              </g>
+              <circle id="Oval-2" fill="#b832c8" cx="12.5" cy="12.5" r="3.5"/>
+              <circle id="Oval-2" stroke="#b832c8" cx="12.5" cy="12.5" r="12.5"/>
+            </g>
 
             </g>
           </g>
