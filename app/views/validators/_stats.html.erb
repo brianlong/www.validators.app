@@ -1,35 +1,104 @@
 <div class="card">
-  <div class="card-content pb-0">
+  <div class="card-content">
     <h2 class="card-heading"><%= params[:network].capitalize %> Cluster Stats</h2>
 
-    <div class="row mb-3">
-      <div class="col-6 col-md-3 offset-md-1">
-        <small>Epoch:</small>
-        <div class="h1 text-purple"><%= @this_epoch&.epoch %></div>
+    <div class="row pl-md-5 text-center">
+      <div class="col-md-3 px-0 mb-3">
+        <small>Epochs:</small>
+        <div class="h1 text-success"><%= @this_epoch&.epoch %></div>
       </div>
-      <div class="col-6 col-md-3">
-        <small>Skipped Vote Min:</small>
-        <div class="h1 text-purple"><%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0, precision: 2) %></div>
+      <div class="col-md-4 px-0 mb-3">
+        <small>Root Distance:</small>
+        <div class="h1 text-success"><%= number_with_delimiter @tower_highest_block %></div>
       </div>
-      <div class="col-6 col-md-4">
+      <div class="col-md-4 px-0 mb-3">
         <small>Vote Distance:</small>
-        <div class="h1 text-purple"><%= number_with_delimiter @tower_highest_vote %></div>
+        <div class="h1 text-success"><%= number_with_delimiter @tower_highest_vote %></div>
       </div>
     </div>
 
-    <div class="row mb-3">
-      <div class="col-6 col-md-3 offset-md-1">
+    <div class="row pl-md-5 text-center">
+      <div class="col-md-3 offset-md-1 px-0 mb-4">
         <small>Skipped Slot Md:</small>
-        <div class="h1 text-purple"><%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br /></div>
+        <div class="h4 mb-0 text-purple"><%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br /></div>
+        <canvas id="skipped_slot_md"></canvas>
       </div>
-      <div class="col-6 col-md-3">
+      <div class="col-md-3 px-0 mb-4">
         <small>Skipped Slot Av:</small>
-        <div class="h1 text-purple"><%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %></div>
+        <div class="h4 mb-0 text-purple"><%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %></div>
+        <canvas id="skipped_slot_av"></canvas>
       </div>
-      <div class="col-6 col-md-4">
-        <small>Root Distance:</small>
-        <div class="h1 text-purple"><%= number_with_delimiter @tower_highest_block %></div>
+      <div class="col-md-3 px-0 mb-4">
+        <small>Skipped Vote Min:</small>
+        <div class="h4 mb-0 text-purple"><%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0, precision: 2) %></div>
+        <canvas id="skipped_vote_min"></canvas>
       </div>
     </div>
   </div>
 </div>
+
+
+<script type="text/javascript">
+  var ctx = document.getElementById('skipped_vote_min').getContext('2d');
+  var skippedVoteMinChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      datasets: [
+        {
+          backgroundColor: ['#b832c8', 'transparent'],
+          borderColor: '#393646',
+          data: [
+            <%= (@skipped_vote_percent_best.to_f * 100.0).round(2) %>,
+            <%= 100 - (@skipped_vote_percent_best.to_f * 100.0).round(2) %>
+          ]
+        }
+      ]
+    },
+    options: {
+      tooltips: { enabled: false },
+      hover: { mode: null },
+    }
+  });
+
+  var ctx = document.getElementById('skipped_slot_md').getContext('2d');
+  var skippedSlotMdChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      datasets: [
+        {
+          backgroundColor: ['#b832c8', 'transparent'],
+          borderColor: '#393646',
+          data: [
+            <%= (@skipped_slot_median.to_f * 100.0).round(2) %>,
+            <%= 100 - (@skipped_slot_median.to_f * 100.0).round(2) %>
+          ]
+        }
+      ]
+    },
+    options: {
+      tooltips: { enabled: false },
+      hover: { mode: null },
+    }
+  });
+
+  var ctx = document.getElementById('skipped_slot_av').getContext('2d');
+  var skippedSlotAvChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      datasets: [
+        {
+          backgroundColor: ['#b832c8', 'transparent'],
+          borderColor: '#393646',
+          data: [
+            <%= (@skipped_slot_average.to_f * 100.0).round(2) %>,
+            <%= 100 - (@skipped_slot_average.to_f * 100.0).round(2) %>
+          ]
+        }
+      ]
+    },
+    options: {
+      tooltips: { enabled: false },
+      hover: { mode: null },
+    }
+  });
+</script>
