@@ -1,0 +1,35 @@
+<div class="card">
+  <div class="card-content pb-0">
+    <h2 class="card-heading"><%= params[:network].capitalize %> Cluster Stats</h2>
+
+    <div class="row mb-3">
+      <div class="col-6 col-md-3 offset-md-1">
+        <small>Epoch:</small>
+        <div class="h1 text-purple"><%= @this_epoch&.epoch %></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <small>Skipped Vote Min:</small>
+        <div class="h1 text-purple"><%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0, precision: 2) %></div>
+      </div>
+      <div class="col-6 col-md-4">
+        <small>Vote Distance:</small>
+        <div class="h1 text-purple"><%= number_with_delimiter @tower_highest_vote %></div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-6 col-md-3 offset-md-1">
+        <small>Skipped Slot Md:</small>
+        <div class="h1 text-purple"><%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br /></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <small>Skipped Slot Av:</small>
+        <div class="h1 text-purple"><%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %></div>
+      </div>
+      <div class="col-6 col-md-4">
+        <small>Root Distance:</small>
+        <div class="h1 text-purple"><%= number_with_delimiter @tower_highest_block %></div>
+      </div>
+    </div>
+  </div>
+</div>

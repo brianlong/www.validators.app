@@ -39,9 +39,9 @@ module ApplicationHelper
     end
 
     if version.running_latest_or_newer?
-      'text-green'
+      'text-success'
     elsif version.running_latest_major_and_minor_or_newer?
-      'text-orange'
+      'text-warning'
     else
       'text-danger'
     end

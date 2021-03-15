@@ -11,6 +11,15 @@ p {
   &-danger {
     color: $red !important;
   }
+  &-warning {
+    color: #ffc107 !important;
+  }
+  &-success {
+    color: $green !important;
+  }
+  &-purple {
+    color: $purple;
+  }
 }
 
 .lead, big {

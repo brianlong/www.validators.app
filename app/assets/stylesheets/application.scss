@@ -175,7 +175,7 @@ hr {
   background-color: #F8D7DA;
 }
 .text-green {
-  color: $score-green;
+  color: $green;
 }
 .text-orange {
   color: Orange;
@@ -221,5 +221,5 @@ hr {
 .font-fixed-width-green {
   font-family: monospace;
   font: courier;
-  color: Green;
+  color: $green;
 }
