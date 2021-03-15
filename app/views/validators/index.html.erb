@@ -137,7 +137,7 @@
                               refresh: params[:refresh]
                             ) %>
                 <%
-                  comm_class = 'text-red' \
+                  comm_class = 'text-danger' \
                         if params[:network] == 'mainnet' && validator.commission.to_i == 100
                 %>
                 <small class="<%= comm_class %>">(<%= validator.commission %>%)</small><br />

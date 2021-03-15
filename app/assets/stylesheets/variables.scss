@@ -13,7 +13,7 @@ $background-color-tertiary: #2f163c;
 // Other:
 $black: #000;
 $white: #fff;
-$red: #f00;
+$red: #ff5262;
 $grey-light: darken($base-color, 30%);
 $card-background-color: darken($background-color, 3%);
 $card-border-color: #393646;
@@ -21,7 +21,7 @@ $card-border-color: #393646;
 $score-green: #00bf72;
 $score-blue: #0091f2;
 $score-grey: darken($base-color, 10%);
-$score-red: red;
+$score-red: $red;
 
 
 // Breakpoints

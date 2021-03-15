@@ -8,6 +8,9 @@ p {
   &-muted {
     color: $grey-light !important;
   }
+  &-danger {
+    color: $red !important;
+  }
 }
 
 .lead, big {
