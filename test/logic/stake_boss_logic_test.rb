@@ -19,6 +19,48 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     }
   end
 
+  def create_validators
+    # Marco Broeken
+    @marco = Validator.create(
+      network: 'testnet',
+      account: '8SQEcP4FaYQySktNQeyxF3w8pvArx3oMEh7fPrzkN9pu',
+      name: 'Stakeconomy.com'
+    )
+    @marco.vote_accounts.create(
+      # network: 'testnet',
+      account: '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
+    )
+    ValidatorScoreV1.create(
+      network: 'testnet',
+      validator_id: @marco.id,
+      total_score: 10,
+      delinquent: false,
+      stake_concentration_score: 0,
+      data_center_concentration_score: 0,
+      data_center_key: '3265-NL-Bergschenhoek'
+    )
+
+    # Martin Smith
+    @martin = Validator.create(
+      network: 'testnet',
+      account: '4XWxphAh1Ji9p3dYMNRNtW3sbmr5Z1cvsGyJXJx5Jvfy',
+      name: 'Smith'
+    )
+    @martin.vote_accounts.create(
+      # network: 'testnet',
+      account: '38QX3p44u4rrdAYvTh2Piq7LvfVps9mcLV9nnmUmK28x'
+    )
+    ValidatorScoreV1.create(
+      network: 'testnet',
+      validator_id: @martin.id,
+      total_score: 9,
+      delinquent: false,
+      stake_concentration_score: 0,
+      data_center_concentration_score: 0,
+      data_center_key: '199610-RU-Moscow'
+    )
+  end
+
   # Show that the input guards are working
   test 'guard_input_blank' do
     # Blank input
@@ -155,7 +197,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'guard_stake_account_success_with_split_n_ways' do
+  test 'split_n_ways' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -181,6 +223,46 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                    p.payload[:split_n_ways]
       assert_equal 32,
                    p.payload[:split_n_max]
+    end
+  end
+
+  test 'select_validators' do
+    create_validators
+
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_input)
+                  .then(&guard_stake_account)
+                  .then(&set_max_n_split)
+                  .then(&select_validators)
+
+      # puts p.inspect
+      # puts p.payload[:validators]
+
+      assert_equal 200,
+                   p.code
+      assert_equal 199,
+                   lamports_to_sol(
+                     p.payload[:solana_stake_account].delegated_stake
+                   )
+      assert_equal 2,
+                   p.payload[:split_n_ways]
+      assert_equal 32,
+                   p.payload[:split_n_max]
+      assert_equal 1,
+                   p.payload[:validators].count
+      assert       p.payload[:validators].include?(
+                     '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
+                   )
     end
   end
 

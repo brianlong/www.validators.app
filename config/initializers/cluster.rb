@@ -4,6 +4,12 @@ MAINNET_CLUSTER_URLS = cluster_yml['mainnet_urls']
 TESTNET_CLUSTER_VERSION = cluster_yml['software_patch_testnet']
 TESTNET_CLUSTER_URLS = cluster_yml['testnet_urls']
 
+BLOCK_LOGIC_VOTE_ACCOUNT = if Rails.env.production?
+  '9GJmEHGom9eWo4np4L5vC6b6ri1Df2xN8KFoWixvD1Bs'
+else
+  '8zipsAVJU28GyirnyUNwt2yjTNuNusq3ZiJoVn41EgJE'
+end
+
 STAKE_BOSS_ADDRESS = if Rails.env.production?
   cluster_yml['stake_boss_mainnet']
 else

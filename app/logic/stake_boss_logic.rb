@@ -130,6 +130,38 @@ module StakeBossLogic
     end
   end
 
+  def select_validators
+    lambda do |p|
+      select_fields = [
+        :id, :validator_id, :delinquent, :stake_concentration_score, :data_center_concentration_score, :data_center_key
+      ]
+      scores = ValidatorScoreV1.where(network: p.payload[:network])
+                               .select(select_fields)
+                               .order('total_score desc')
+
+      # The first stake account will be delegated to BLOCK_LOGIC_VOTE_ACCOUNT
+      validators = []
+      scores.each do |score|
+        next if score.delinquent
+        next if score.stake_concentration_score < 0
+
+        if Rails.env.production?
+          next if score.commission.to_i == 100
+          # This is a stub to exclude Hetzner until we change the
+          # data_center_concentration_score to count only ASN.
+          next if score.data_center_key.include?('24940')
+        end
+
+        validators << score.validator.vote_account_last.account
+        break if validators.count == (p.payload[:split_n_ways] - 1)
+      end
+
+      Pipeline.new(200, p.payload.merge(validators: validators))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
+    end
+  end
+
   # NOTE: The steps above will need to be repeated since we just
   # accepted input from the Internet. The second time, we will have the value
   # for N (default: 2)
