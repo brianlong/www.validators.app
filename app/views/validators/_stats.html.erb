@@ -45,8 +45,8 @@
     data: {
       datasets: [
         {
-          backgroundColor: ['#b832c8', 'transparent'],
-          borderColor: '#393646',
+          backgroundColor: ['<%= PURPLE %>', 'transparent'],
+          borderColor: '<%= CHART_LINE %>',
           data: [
             <%= (@skipped_vote_percent_best.to_f * 100.0).round(2) %>,
             <%= 100 - (@skipped_vote_percent_best.to_f * 100.0).round(2) %>
@@ -66,8 +66,8 @@
     data: {
       datasets: [
         {
-          backgroundColor: ['#b832c8', 'transparent'],
-          borderColor: '#393646',
+          backgroundColor: ['<%= PURPLE %>', 'transparent'],
+          borderColor: '<%= CHART_LINE %>',
           data: [
             <%= (@skipped_slot_median.to_f * 100.0).round(2) %>,
             <%= 100 - (@skipped_slot_median.to_f * 100.0).round(2) %>
@@ -87,8 +87,8 @@
     data: {
       datasets: [
         {
-          backgroundColor: ['#b832c8', 'transparent'],
-          borderColor: '#393646',
+          backgroundColor: ['<%= PURPLE %>', 'transparent'],
+          borderColor: '<%= CHART_LINE %>',
           data: [
             <%= (@skipped_slot_average.to_f * 100.0).round(2) %>,
             <%= 100 - (@skipped_slot_average.to_f * 100.0).round(2) %>

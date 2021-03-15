@@ -182,11 +182,11 @@
                            60
                          end
                     line_color = if validator.root_distance_score == 2
-                                   '#00ce99'
+                                   GREEN
                                  elsif validator.root_distance_score == 1
-                                   '#0091f2'
+                                   BLUE
                                  else
-                                   '#cacaca'
+                                   LIGHT_GREY
                                  end
                     vector = validator.score&.root_distance_history.to_a[-vl..-1]
                   %>
@@ -206,11 +206,11 @@
                            60
                          end
                     line_color = if validator.vote_distance_score == 2
-                                   '#00ce99'
+                                   GREEN
                                  elsif validator.vote_distance_score == 1
-                                   '#0091f2'
+                                   BLUE
                                  else
-                                   '#cacaca'
+                                   LIGHT_GREY
                                  end
                     vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
                   %>
@@ -230,11 +230,11 @@
                            60
                          end
                     line_color = if validator.skipped_slot_score == 2
-                                   '#00ce99'
+                                   GREEN
                                  elsif validator.skipped_slot_score == 1
-                                   '#0091f2'
+                                   BLUE
                                  else
-                                   '#cacaca'
+                                   LIGHT_GREY
                                  end
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| (v.to_f*100.0).round(1)}
                   %>

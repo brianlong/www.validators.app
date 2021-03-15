@@ -1,0 +1,7 @@
+GREEN = '#00ce99'
+PURPLE = '#b832c8'
+BLUE = '#0091f2'
+RED = '#ff5262'
+LIGHT_GREY = '#cacaca'
+DARK_GREY = '#979797'
+CHART_LINE = '#322f3d'

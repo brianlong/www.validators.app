@@ -17,8 +17,8 @@
         {
           label: ' Block Diff ',
           fill: false,
-          backgroundColor: '#00ce99',
-          borderColor: '#00ce99',
+          backgroundColor: '<%= GREEN %>',
+          borderColor: '<%= GREEN %>',
           borderWidth: 1,
           radius: 1,
           data: <%= local_assigns[:vector_block] %>
@@ -26,8 +26,8 @@
         {
           label: ' Vote Diff ',
           fill: false,
-          backgroundColor: '#0091f2',
-          borderColor: '#0091f2',
+          backgroundColor: '<%= BLUE %>',
+          borderColor: '<%= BLUE %>',
           borderWidth: 1,
           radius: 1,
           data: <%= local_assigns[:vector_vote] %>
@@ -43,7 +43,7 @@
       responsiveAnimationDuration: 0, // animation duration after a resize
       legend: {
         labels: {
-          fontColor: '#979797'
+          fontColor: '<%= DARK_GREY %>'
         }
       },
       scales: {
@@ -54,7 +54,7 @@
           scaleLabel: {
               display: true,
               labelString: "Previous <%= local_assigns[:vector_block].to_a.count %> Observations",
-              fontColor: '#979797'
+              fontColor: '<%= DARK_GREY %>'
           }
         }],
         yAxes: [{
@@ -65,13 +65,13 @@
           },
           gridLines: {
             display: true,
-            zeroLineColor: '#322f3d',
-            color: '#322f3d'
+            zeroLineColor: '<%= CHART_LINE %>',
+            color: '<%= CHART_LINE %>'
           },
           scaleLabel: {
             display: true,
             labelString: 'Distance Behind',
-            fontColor: '#979797'
+            fontColor: '<%= DARK_GREY %>'
           }
         }]
       }
