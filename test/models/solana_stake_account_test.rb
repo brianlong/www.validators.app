@@ -22,7 +22,7 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
                         rpc_urls: TESTNET_CLUSTER_URLS
                       )
       stake_account.get
-      # puts stake_account.inspect
+
       assert       stake_account.is_valid?
       assert       stake_account.is_active?
       assert_equal 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY',
@@ -96,7 +96,7 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
                         rpc_urls: TESTNET_CLUSTER_URLS
                       )
       stake_account.get
-      # puts stake_account.inspect
+
       assert       stake_account.is_valid?
       refute       stake_account.is_active?
       assert_equal '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuS',
@@ -122,15 +122,14 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
                    stake_account.lockup_custodian
       assert_equal 1657314000,
                    stake_account.lockup_timestamp
-       assert_equal 2282880,
-                    stake_account.rent_exempt_reserve
-       assert_equal '8F5yQQLSTnFVweVAj8e7kcjfDBjTZEo7XxcnShGJVYAZ',
-                    stake_account.stake_authority
-       assert_equal 'Stake',
-                    stake_account.stake_type
-       assert_equal '3zViUB98aYn4eFDLb1Bfg2gp3bX5VZ3iQUgYcc3QTmF3',
-                    stake_account.withdraw_authority
-
+      assert_equal 2282880,
+                   stake_account.rent_exempt_reserve
+      assert_equal '8F5yQQLSTnFVweVAj8e7kcjfDBjTZEo7XxcnShGJVYAZ',
+                   stake_account.stake_authority
+      assert_equal 'Stake',
+                   stake_account.stake_type
+      assert_equal '3zViUB98aYn4eFDLb1Bfg2gp3bX5VZ3iQUgYcc3QTmF3',
+                   stake_account.withdraw_authority
     end
   end
 end

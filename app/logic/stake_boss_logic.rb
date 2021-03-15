@@ -21,11 +21,14 @@
 # _p = Pipeline.new(200, payload)
 #              .then(&guard_input)
 #              .then(&guard_stake_account)
+#              .then(&set_max_n_split)
 #              .then(&log_errors)
 
 require 'base58'
 
 module StakeBossLogic
+  include ApplicationHelper
+
   RPC_TIMEOUT = 60 # seconds
 
   # InvalidStakeAccount is a custom Error class with a default message for
@@ -87,12 +90,57 @@ module StakeBossLogic
 
       # Is the balance > 10?
       raise InvalidStakeAccount.new('Balance is too low') \
-        unless (stake_account.delegated_stake / 1_000_000_000) > 10
+        unless lamports_to_sol(stake_account.delegated_stake) >= STAKE_BOSS_MIN
 
       # Append the valid stake account to the payload
       Pipeline.new(200, p.payload.merge(solana_stake_account: stake_account))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from guard_input', e)
+      Pipeline.new(500, p.payload, 'Error from guard_stake_account', e)
     end
   end
+
+  # NOTE: The steps above will be used to process a first request from the User.
+  # After we confirm that we have a valid stake account with balance > 10
+  # lamports, we will determine the max N ways to split the account and then
+  # proceed to split the account and delegate to validators.
+
+  def set_max_n_split
+    lambda do |p|
+      # The default split N-ways is 2. The user can pick a value between
+      # 2 and split_n_max
+      split_n_ways = 2
+
+      # Figure out the max N ways we can split this account without each
+      # balance going below the minimum
+      split_n_max = split_n_ways
+      STAKE_BOSS_N_SPLIT_OPTIONS.each do |n|
+        if lamports_to_sol(p.payload[:solana_stake_account].delegated_stake)/n >= 5
+          split_n_max = n
+        else
+          break
+        end
+      end
+
+      Pipeline.new(
+        200,
+        p.payload.merge(split_n_ways: 2, split_n_max: split_n_max)
+      )
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
+    end
+  end
+
+  # NOTE: The steps above will need to be repeated since we just
+  # accepted input from the Internet. The second time, we will have the value
+  # for N (default: 2)
+
+  def register_first_stake_account
+    lambda do |p|
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
+    end
+  end
+
 end

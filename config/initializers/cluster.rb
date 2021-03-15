@@ -10,6 +10,9 @@ else
   cluster_yml['stake_boss_testnet']
 end
 
+STAKE_BOSS_MIN = 10 # SOL
+STAKE_BOSS_N_SPLIT_OPTIONS = [2,4,8,16,32,64,128,256]
+
 unless MAINNET_CLUSTER_VERSION.split('.').length == 3
   raise 'Invalid value entered for software_patch_mainnet version. Should be specific as x.y.z'
 end

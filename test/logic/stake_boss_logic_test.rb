@@ -8,6 +8,7 @@ require 'test_helper'
 
 class StakeBossLogicTest < ActiveSupport::TestCase
   include StakeBossLogic
+  include ApplicationHelper
 
   def setup
     # Create our initial payload with the input values
@@ -153,4 +154,34 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                    p.payload[:solana_stake_account].stake_authority
     end
   end
+
+  test 'guard_stake_account_success_with_split_n_ways' do
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_input)
+                  .then(&guard_stake_account)
+                  .then(&set_max_n_split)
+
+      assert_equal 200,
+                   p.code
+      assert_equal 199,
+                   lamports_to_sol(
+                     p.payload[:solana_stake_account].delegated_stake
+                   )
+      assert_equal 2,
+                   p.payload[:split_n_ways]
+      assert_equal 32,
+                   p.payload[:split_n_max]
+    end
+  end
+
 end
