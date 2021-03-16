@@ -103,7 +103,7 @@ module StakeBossLogic
 
       # Make sure this is a valid stake account
       raise InvalidStakeAccount, 'Not a valid Stake Account' \
-        unless stake_account.is_valid?
+        unless stake_account.valid?
 
       # Make sure that we have the stake authority
       raise InvalidStakeAccount, 'Stake Boss needs Stake Authority' \
@@ -111,7 +111,7 @@ module StakeBossLogic
 
       # Is the stake account currently active?
       raise InvalidStakeAccount, 'Stake Account is inactive' \
-        unless stake_account.is_active?
+        unless stake_account.active?
 
       # Is the balance > 10?
       raise InvalidStakeAccount, 'Balance is too low' \
@@ -128,6 +128,11 @@ module StakeBossLogic
   def guard_duplicate_records
     lambda do |p|
       # TODO: Check for duplicates in the stake_boss_stake_accounts table
+      raise InvalidStakeAccount, 'Duplicate Record' \
+        if StakeBoss::StakeAccount.where(
+          network: p.payload[:network],
+          address: p.payload[:stake_address]
+        ).first
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e

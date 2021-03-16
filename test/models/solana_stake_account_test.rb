@@ -23,8 +23,8 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
                       )
       stake_account.get
 
-      assert       stake_account.is_valid?
-      assert       stake_account.is_active?
+      assert       stake_account.valid?
+      assert       stake_account.active?
       assert_equal 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY',
                    stake_account.address
       assert_equal 200000000000,
@@ -71,12 +71,12 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
                         rpc_urls: TESTNET_CLUSTER_URLS
                       )
       stake_account.get
-      refute         stake_account.is_valid?
-      refute         stake_account.is_active?
+      refute         stake_account.valid?
+      refute         stake_account.active?
       assert_equal   'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuZ',
                      stake_account.address
       assert_not_nil stake_account.error
-      refute         stake_account.is_valid?
+      refute         stake_account.valid?
 
     end
   end
@@ -97,8 +97,8 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
                       )
       stake_account.get
 
-      assert       stake_account.is_valid?
-      refute       stake_account.is_active?
+      assert       stake_account.valid?
+      refute       stake_account.active?
       assert_equal '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuS',
                    stake_account.address
       assert_equal 104166666268940,

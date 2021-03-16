@@ -108,7 +108,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       json_data,
       [address, TESTNET_CLUSTER_URLS]
     ) do
-
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
@@ -119,7 +118,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                    p.errors.class
       assert_equal 'Invalid Stake Account: Not a valid Stake Account',
                    p.errors.message
-
     end
   end
 
@@ -133,7 +131,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       json_data,
       [address, TESTNET_CLUSTER_URLS]
     ) do
-
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
@@ -144,7 +141,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                    p.errors.class
       assert_equal 'Invalid Stake Account: Stake Boss needs Stake Authority',
                    p.errors.message
-
     end
   end
 
@@ -158,7 +154,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       json_data,
       [address, TESTNET_CLUSTER_URLS]
     ) do
-
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
@@ -169,7 +164,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                    p.errors.class
       assert_equal 'Invalid Stake Account: Stake Account is inactive',
                    p.errors.message
-
     end
   end
 
@@ -183,17 +177,39 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       json_data,
       [address, TESTNET_CLUSTER_URLS]
     ) do
-
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
 
       assert_equal 200,
                    p.code
-      assert       p.payload[:solana_stake_account].is_valid?
-      assert       p.payload[:solana_stake_account].is_active?
+      assert       p.payload[:solana_stake_account].valid?
+      assert       p.payload[:solana_stake_account].active?
       assert_equal 'BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH',
                    p.payload[:solana_stake_account].stake_authority
+    end
+  end
+
+  test 'guard_duplicate_records' do
+    StakeBoss::StakeAccount.create!(
+      network: 'testnet',
+      address: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    )
+
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_duplicate_records)
+
+      assert_equal 500, p.code
+      assert_equal 'Invalid Stake Account: Duplicate Record', p.errors.message
     end
   end
 
@@ -207,10 +223,10 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       json_data,
       [address, TESTNET_CLUSTER_URLS]
     ) do
-
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
+                  .then(&guard_duplicate_records)
                   .then(&set_max_n_split)
 
       assert_equal 200,
@@ -238,10 +254,10 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       json_data,
       [address, TESTNET_CLUSTER_URLS]
     ) do
-
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
+                  .then(&guard_duplicate_records)
                   .then(&set_max_n_split)
                   .then(&select_validators)
 
@@ -261,9 +277,8 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       assert_equal 1,
                    p.payload[:validators].count
       assert       p.payload[:validators].include?(
-                     '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
-                   )
+        '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
+      )
     end
   end
-
 end
