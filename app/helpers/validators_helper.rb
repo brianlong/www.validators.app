@@ -9,6 +9,16 @@ module ValidatorsHelper
     end
   end
 
+  def set_chart_fill_color(score)
+    if score == 2
+      GREEN_TRANSPARENT
+    elsif score == 1
+      BLUE_TRANSPARENT
+    else
+      LIGHT_GREY_TRANSPARENT
+    end
+  end
+
   def set_score_class(score)
     if score == -2
       'text-danger'

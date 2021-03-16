@@ -23,6 +23,7 @@
 @import "tables";
 @import "forms";
 @import "scores";
+@import "pagination";
 
 html {
   overflow-x: hidden;
@@ -173,12 +174,6 @@ hr {
 }
 .bg-red {
   background-color: #F8D7DA;
-}
-.text-green {
-  color: $green;
-}
-.text-orange {
-  color: Orange;
 }
 
 .you-dashboard {

@@ -135,12 +135,14 @@
                   <%
                     vl = set_chart_y_scale(validator.score&.root_distance_history.to_a.count)
                     line_color = set_chart_line_color(validator.root_distance_score)
+                    fill_color = set_chart_fill_color(validator.root_distance_score)
                     vector = validator.score&.root_distance_history.to_a[-vl..-1]
                   %>
                   <%= render 'validators/spark_line_block_distance',
                              account: validator.account,
                              vector: vector,
-                             line_color: line_color
+                             line_color: line_color,
+                             fill_color: fill_color
                   %>
                 </td>
 
@@ -149,12 +151,14 @@
                   <%
                     vl = set_chart_y_scale(validator.score&.vote_distance_history.to_a.count)
                     line_color = set_chart_line_color(validator.vote_distance_score)
+                    fill_color = set_chart_fill_color(validator.vote_distance_score)
                     vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
                   %>
                   <%= render 'validators/spark_line_vote_distance',
                              account: validator.account,
                              vector: vote_vector,
-                             line_color: line_color
+                             line_color: line_color,
+                             fill_color: fill_color
                   %>
                 </td>
 
@@ -163,12 +167,14 @@
                   <%
                     vl = set_chart_y_scale(validator.score&.skipped_slot_history.to_a.count)
                     line_color = set_chart_line_color(validator.skipped_slot_score)
+                    fill_color = set_chart_fill_color(validator.skipped_slot_score)
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| (v.to_f*100.0).round(1)}
                   %>
                   <%= render 'validators/spark_line_skipped_slots',
                              account: validator.account,
                              vector: slot_vector,
-                             line_color: line_color
+                             line_color: line_color,
+                             fill_color: fill_color
                   %>
                 </td>
 
@@ -197,7 +203,7 @@
 
         <div class="px-15">
           <p class="small muted">Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %></p>
-          <%= paginate @validators, theme: 'bootstrap4' %>
+          <%= paginate @validators %>
         </div>
 
 

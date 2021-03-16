@@ -136,6 +136,12 @@
               <%= link_to @validator.security_report_url, @validator.security_report_url, target: '_blank'  %>
             </td>
           </tr>
+          <tr>
+            <td>
+              <strong>Scores:</strong>
+            </td>
+            <td><%= render 'validators/scores', validator: @validator %></td>
+          </tr>
         <% end %>
         </tbody>
       </table>
