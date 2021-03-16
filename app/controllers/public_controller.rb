@@ -16,10 +16,11 @@ class PublicController < ApplicationController
                     'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
                   end
 
-    @validators = Validator.where(network: params[:network])
-                           .joins(:validator_score_v1)
-                           .order(@sort_order)
-                           .page(params[:page])
+    validators = Validator.where(network: params[:network])
+                          .joins(:validator_score_v1)
+                          .order(@sort_order)
+    @validators_count = validators.count
+    @validators = validators.page(params[:page])
 
     unless params[:q].blank?
       @validators = @validators.where(
