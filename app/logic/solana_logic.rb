@@ -279,7 +279,7 @@ module SolanaLogic
           'leader_slots' => v['leaderSlots'],
           'blocks_produced' => v['blocksProduced'],
           'skipped_slots' => v['skippedSlots'],
-          'skipped_slot_percent' => v['skippedSlots'] / v['leaderSlots'].to_f ################################################
+          'skipped_slot_percent' => v['skippedSlots'] / v['leaderSlots'].to_f
         }
       end
 
