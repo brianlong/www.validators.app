@@ -33,13 +33,11 @@ table, .table {
     .number {
       font-weight: $font-weight-bold-primary;
       @include font-family-alternative;
-      position: absolute;
-      width: 70px;
-      background-color: $table-lines-color;
-      padding: 2px 0;
+      padding: $padding-standard 0 10px 0;
+      a { color: $grey-light; }
     }
     .avatar {
-      padding: 45px 0 5px 0;
+      padding-bottom: 5px;
     }
   }
 
