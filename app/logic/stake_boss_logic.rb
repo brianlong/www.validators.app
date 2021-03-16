@@ -209,6 +209,8 @@ module StakeBossLogic
 
   def register_first_stake_account
     lambda do |p|
+      # Create a DB record for the first stake account in a batch.
+
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
