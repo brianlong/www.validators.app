@@ -43,7 +43,7 @@ pre {
   @include font-size-smaller();
 }
 
-strong {
+strong, .font-weight-bold {
   font-weight: $font-weight-bold-primary;
 }
 

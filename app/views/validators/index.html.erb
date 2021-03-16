@@ -30,7 +30,7 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <table id="validators-table" class='table table-striped table-borderless'>
+        <table id="validators-table" class='table'>
           <thead>
             <tr>
               <th class="avatar-column">#</th>
@@ -39,13 +39,11 @@
                 Active Stake <small class="text-muted">(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
                 Software
                 <small class="text-muted">
-                  (
                   <% if params[:network] == 'mainnet' %>
-                    <%= MAINNET_CLUSTER_VERSION %>
+                    (<%= MAINNET_CLUSTER_VERSION %>)
                   <% else %>
-                    <%= TESTNET_CLUSTER_VERSION %>
+                    (<%= TESTNET_CLUSTER_VERSION %>)
                   <% end %>
-                  )
                 </small>
                 <br />
                 Scores <small class="text-muted">(total)</small>
@@ -59,13 +57,13 @@
                 <small class="text-muted">60-Min Chart</small>
               </th>
               <th class='chart-column text-right'>
-                Skipped Slot &percnt;<br />
+                Skipped Slot&nbsp;&percnt;<br />
                 <small class="text-muted">60-Min Chart</small>
               </th>
-              <th class='text-right'>
-                Skipped Vote &percnt;
+              <th class='percent-column text-right'>
+                Skipped Vote&nbsp;&percnt;
                 <a data-toggle="tooltip" data-html="true" title="Distance from leader">
-                  <i class="fas fa-question-circle"></i>
+                  <i class="fas fa-question-circle ml-1"></i>
                 </a>
               </th>
             </tr>
@@ -102,17 +100,12 @@
                     <% end %>
                   </div>
                   <% if validator.delinquent? %>
-                    <small class="score-minus-2">delinquent</small>
+                    <small class="text-danger">delinquent</small>
                   <% end %>
                 </td>
+
                 <td class="name-column">
-                  <%
-                    validator_name = if validator.name
-                                       validator.name
-                                     else
-                                       shorten_key(validator.account)
-                                     end
-                  %>
+                  <% validator_name = validator.name || shorten_key(validator.account) %>
                   <%= link_to validator_name,
                               validator_url(
                                 network: params[:network],
@@ -120,10 +113,9 @@
                                 order: params[:order],
                                 page: params[:page],
                                 refresh: params[:refresh]
-                              ) %>
-                  <%
-                    comm_class = 'text-danger' \
-                          if params[:network] == 'mainnet' && validator.commission.to_i == 100
+                              ), class: 'font-weight-bold' %>
+                  <% comm_class = 'text-danger' \
+                                  if params[:network] == 'mainnet' && validator.commission.to_i == 100
                   %>
                   <small class="<%= comm_class %>">(<%= validator.commission %>%)</small><br />
                   <small>
@@ -135,60 +127,14 @@
                     <%= validator.software_version || 'N/A' %>
                   </small>
                   <br />
-                  <small>
-                    <i class="fas fa-circle score-<%= validator.root_distance_score %>"
-                       title="Root Distance Score = <%= validator.root_distance_score %>"></i>&nbsp;
-                    <i class="fas fa-circle score-<%= validator.vote_distance_score %>"
-                       title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>&nbsp;
-                    <i class="fas fa-circle score-<%= validator.skipped_slot_score %>"
-                       title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>&nbsp;
-                    <i class="fas fa-circle score-<%= validator.published_information_score.to_i %>"
-                       title="Published Information Score = <%= validator.published_information_score.to_i %>"></i>&nbsp;
-                    <i class="fas fa-circle score-<%= validator.software_version_score %>"
-                       title="Software Version Score = <%= validator.software_version_score %>"></i>&nbsp;
-
-                    <i class="fas fa-circle score-<%= validator.security_report_score.to_i %>"
-                       title="Security Report Score = <%= validator.security_report_score.to_i %>"></i>&nbsp;
-
-                    <% if validator.stake_concentration_score < 0 %>
-                      <%
-                        score_class = if validator.stake_concentration_score == -2
-                                        'score-minus-2'
-                                      else
-                                        'score-minus-1'
-                                      end
-                      %>
-                      <i class="fas fa-minus-circle <%= score_class %>" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
-                    <% end %>
-                    <% if validator.data_center_concentration_score < 0 %>
-                      <%
-                        score_class = if validator.data_center_concentration_score == -2
-                                        'score-minus-2'
-                                      else
-                                        'score-minus-1'
-                                      end
-                      %>
-                      <i class="fas fa-minus-circle <%= score_class %>" title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>&nbsp;
-                    <% end %>
-                    (<%= validator.total_score %>)
-                  </small>
+                  <%= render 'validators/scores', validator: validator %>
                 </td>
 
                 <!-- ROOT DISTANCE -->
                 <td class="chart-column text-right">
                   <%
-                    vl = if validator.score&.root_distance_history.to_a.count < 60
-                           validator.score&.root_distance_history.to_a.count
-                         else
-                           60
-                         end
-                    line_color = if validator.root_distance_score == 2
-                                   GREEN
-                                 elsif validator.root_distance_score == 1
-                                   BLUE
-                                 else
-                                   LIGHT_GREY
-                                 end
+                    vl = set_chart_y_scale(validator.score&.root_distance_history.to_a.count)
+                    line_color = set_chart_line_color(validator.root_distance_score)
                     vector = validator.score&.root_distance_history.to_a[-vl..-1]
                   %>
                   <%= render 'validators/spark_line_block_distance',
@@ -201,18 +147,8 @@
                 <!-- VOTE DISTANCE -->
                 <td class="chart-column text-right">
                   <%
-                    vl = if validator.score&.vote_distance_history.to_a.count < 60
-                           validator.score&.vote_distance_history.to_a.count
-                         else
-                           60
-                         end
-                    line_color = if validator.vote_distance_score == 2
-                                   GREEN
-                                 elsif validator.vote_distance_score == 1
-                                   BLUE
-                                 else
-                                   LIGHT_GREY
-                                 end
+                    vl = set_chart_y_scale(validator.score&.vote_distance_history.to_a.count)
+                    line_color = set_chart_line_color(validator.vote_distance_score)
                     vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
                   %>
                   <%= render 'validators/spark_line_vote_distance',
@@ -225,18 +161,8 @@
                 <!-- SKIPPED SLOTS  -->
                 <td class="chart-column text-right">
                   <%
-                    vl = if validator.score&.skipped_slot_history.to_a.count < 60
-                           validator.score&.skipped_slot_history.to_a.count
-                         else
-                           60
-                         end
-                    line_color = if validator.skipped_slot_score == 2
-                                   GREEN
-                                 elsif validator.skipped_slot_score == 1
-                                   BLUE
-                                 else
-                                   LIGHT_GREY
-                                 end
+                    vl = set_chart_y_scale(validator.score&.skipped_slot_history.to_a.count)
+                    line_color = set_chart_line_color(validator.skipped_slot_score)
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| (v.to_f*100.0).round(1)}
                   %>
                   <%= render 'validators/spark_line_skipped_slots',
