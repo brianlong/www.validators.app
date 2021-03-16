@@ -11,6 +11,12 @@ table, .table {
     th { border: none; }
   }
 
+  .subhead {
+    @include font-size-smaller;
+    background-color: darken($table-lines-color, 4%);
+    td { border-top: 1px solid $table-lines-color; }
+  }
+
   tbody {
     tr {
       border-top: 1px solid $table-lines-color;

@@ -67,6 +67,19 @@
                 </a>
               </th>
             </tr>
+
+            <tr class="subhead">
+              <td colspan="2"></td>
+              <td class="text-right"><%= number_with_delimiter @tower_highest_block %></td>
+              <td class="text-right"><%= number_with_delimiter @tower_highest_vote %></td>
+              <td class="text-right">
+                Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br />
+                Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
+              </td>
+              <td class="text-right">
+                Min: <%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0, precision: 2) %>
+              </td>
+            </tr>
           </thead>
 
           <tbody>
