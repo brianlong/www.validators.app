@@ -22,7 +22,7 @@ table, .table {
       border-top: 1px solid $table-lines-color;
     }
     tr:nth-of-type(even) {
-      background-color: transparent;
+      background-color: $card-background-color;
     }
     tr:nth-of-type(odd) {
       background-color: darken($card-background-color, 2%);
