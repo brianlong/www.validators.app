@@ -64,6 +64,16 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_slot_history, JSON
   serialize :skipped_after_history, JSON
 
+  def skipped_slot_history_moving_averages
+    # .where('created_at > ?', 60.minutes.ago)
+    # .last(60)
+
+    ValidatorBlockHistory
+      .where(validator: validator, network: network)
+      .last(60)
+      .pluck(:skipped_slot_percent_moving_average)
+  end
+
   def calculate_total_score
     # Assign special scores before calculating the total score
     assign_published_information_score

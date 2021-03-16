@@ -26,6 +26,14 @@ class ValidatorBlockHistoryStat < ApplicationRecord
   # TODO add test
   after_create :set_skipped_slot_percent_moving_average
 
+  def self.last_60_mins_skipped_slot_percent_moving_average(network)
+    where(network: network)
+      .last(60)
+      .map do |vbhs|
+        (vbhs.skipped_slot_percent_moving_average.to_f * 100.0).round(1)
+      end
+  end
+
   private
 
   def set_skipped_slot_percent_moving_average

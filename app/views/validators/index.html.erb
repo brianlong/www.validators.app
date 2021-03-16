@@ -306,21 +306,23 @@
                       end
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
-                    line_color2 = if validator.skipped_slot_score == 2
+                    moving_avg_color = if validator.skipped_slot_score == 2
                         '#7fbf7f'
                       elsif validator.skipped_slot_score == 1
                         '#7f7fff'
                       else
                         '#bfbfbf'
                       end
-                 %>
+
+                    skipped_slots_moving_avg = validator.score&.skipped_slot_history_moving_averages[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
+                %>
 
                 <%= render 'validators/spark_line_skipped_slots',
                         account: validator.account,
                         vector: slot_vector,
                         line_color: line_color,
-                        vector2: @slot_vector2,
-                        line_color2: line_color2
+                        moving_avg: skipped_slots_moving_avg,
+                        moving_average_color: moving_avg_color
                 %>
               </td>
 

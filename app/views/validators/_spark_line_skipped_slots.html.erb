@@ -23,13 +23,13 @@
           data: <%= local_assigns[:vector] %>
         },
         {
-          label: 'Moving Avg Skip %',
+          label: '24h Moving Avg Skip %',
           fill: false,
           // backgroundColor: '#D4EDDA', // 'rgb(85, 239, 196)',
-          borderColor: "<%= local_assigns[:line_color2] %>",
+          borderColor: "<%= local_assigns[:moving_average_color] %>",
           borderWidth: 1,
           radius: 0,
-          data: <%= local_assigns[:vector2] %>
+          data: <%= local_assigns[:moving_avg] %>
         }
       ]
     },

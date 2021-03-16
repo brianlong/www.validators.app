@@ -67,8 +67,6 @@ class PublicController < ApplicationController
         )
     end
 
-    @slot_vector2 = ValidatorBlockHistoryStat.where(network: params[:network]).last(60).map { |vbhs| (vbhs.skipped_slot_percent_moving_average.to_f * 100.0).round(1) }
-
     # Calculate the best skipped vote percent.
     @credits_current_max = VoteAccountHistory.where(
       network: params[:network],
