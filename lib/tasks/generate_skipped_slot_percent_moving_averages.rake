@@ -12,7 +12,7 @@ namespace :db do
 
       vbh.update_column(
         :skipped_slot_percent_moving_average,
-        vbh.validator.validator_block_histories.last_24_hours.average(:skipped_slot_percent)
+        vbh.validator.validator_block_histories.previous_24_hours.average(:skipped_slot_percent)
       )
 
     end
@@ -23,20 +23,9 @@ namespace :db do
     p end_time - start_time
   end
 
-  # TODO refactor to account for refactors to #previous_24_hours method
   task generate_vbhs_skipped_slot_percent_moving_averages: :environment do
     ValidatorBlockHistoryStat.find_each(order: :desc) do |vbhs|
-      records_in_range = ValidatorBlockHistoryStat.where(network: vbhs.network)
-                                                        .where('created_at >= ?', vbhs.created_at - 24.hours)
-                                                        .where('created_at < ?', vbhs.created_at)
-
-      skipped_slot_ratios = records_in_range.map { |vbhs| vbhs.total_slots_skipped.to_f / vbhs.total_slots }
-
-      running_avg = skipped_slot_ratios.sum(0.0) / skipped_slot_ratios.length
-
-      unless running_avg.nan?
-        vbhs.update_column(:skipped_slot_percent_moving_average, running_avg)
-      end
+      vbhs.send(:set_skipped_slot_percent_moving_average)
     end
   end
 end
