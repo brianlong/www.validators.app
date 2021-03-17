@@ -40,7 +40,7 @@ class ValidatorBlockHistory < ApplicationRecord
   # of self, there are no ValidatorBlockHistoryStat records newer than self. The  beelow scope
   # needs to get refactored, and needs to take created_at into account, to ensure we aren't
   # calculating the average on records newer than self.
-  scope :last_24_hours, -> { where('created_at >= ?', 24.hours.ago) }
+  # scope :last_24_hours, -> { where('created_at >= ?', 24.hours.ago) }
 
   after_create :set_skipped_slot_percent_moving_average
 
@@ -58,9 +58,14 @@ class ValidatorBlockHistory < ApplicationRecord
     ).median(:skipped_slot_percent)
   end
 
+  # returns other ValidatorBlockHistory records created within the last 24 hours of `self`
+  def previous_24_hours
+    self.class.where(validator: validator, created_at: 24.hours.ago..created_at)
+  end
+
   private
 
   def set_skipped_slot_percent_moving_average
-    self.skipped_slot_percent_moving_average = validator.validator_block_histories.last_24_hours.average(:skipped_slot_percent)
+    self.skipped_slot_percent_moving_average = previous_24_hours.average(:skipped_slot_percent)
   end
 end
