@@ -61,6 +61,5 @@ class ValidatorBlockHistory < ApplicationRecord
 
   def set_skipped_slot_percent_moving_average
     self.skipped_slot_percent_moving_average = previous_24_hours.average(:skipped_slot_percent)
-    save
   end
 end
