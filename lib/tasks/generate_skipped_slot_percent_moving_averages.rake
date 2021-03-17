@@ -1,4 +1,6 @@
 namespace :db do
+
+  # TODO refactor to account for refactors to #previous_24_hours method
   task generate_vbh_skipped_slot_percent_moving_averages: :environment do
     start_time = Time.now
     p start_time
@@ -21,6 +23,7 @@ namespace :db do
     p end_time - start_time
   end
 
+  # TODO refactor to account for refactors to #previous_24_hours method
   task generate_vbhs_skipped_slot_percent_moving_averages: :environment do
     ValidatorBlockHistoryStat.find_each(order: :desc) do |vbhs|
       records_in_range = ValidatorBlockHistoryStat.where(network: vbhs.network)
