@@ -58,5 +58,6 @@ class ValidatorBlockHistoryStat < ApplicationRecord
 
     average = skipped_slot_percents.sum(0.0) / skipped_slot_percents.length
     self.skipped_slot_percent_moving_average = average
+    save
   end
 end

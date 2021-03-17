@@ -65,9 +65,6 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_after_history, JSON
 
   def skipped_slot_history_moving_averages
-    # .where('created_at > ?', 60.minutes.ago)
-    # .last(60)
-
     ValidatorBlockHistory
       .where(validator: validator, network: network)
       .last(60)
