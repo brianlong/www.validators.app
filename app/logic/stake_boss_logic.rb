@@ -210,8 +210,39 @@ module StakeBossLogic
   def register_first_stake_account
     lambda do |p|
       # Create a DB record for the first stake account in a batch.
+      # Guard against someone submitting split_n_ways that is too big
 
-      Pipeline.new(200, p.payload)
+      split_n_ways = p.payload[:split_n_ways]
+      split_n_max = p.payload[:split_n_max]
+      split_n = split_n_ways > split_n_max ? split_n_max : split_n_ways
+
+      ssa = p.payload[:solana_stake_account]
+
+      sbsa = StakeBoss::StakeAccount.create!(
+        network: p.payload[:network],
+        address: ssa.address,
+        account_balance: ssa.account_balance,
+        activating_stake: ssa.activating_stake,
+        activation_epoch: ssa.activation_epoch,
+        active_stake: ssa.active_stake,
+        credits_observed: ssa.credits_observed,
+        deactivation_epoch: ssa.deactivation_epoch,
+        delegated_stake: ssa.delegated_stake,
+        delegated_vote_account_address: ssa.delegated_vote_account_address,
+        epoch: ssa.epoch,
+        epoch_rewards: ssa.epoch_rewards,
+        lockup_custodian: ssa.lockup_custodian,
+        lockup_timestamp: ssa.lockup_timestamp,
+        rent_exempt_reserve: ssa.rent_exempt_reserve,
+        stake_authority: ssa.stake_authority,
+        stake_type: ssa.stake_type,
+        withdraw_authority: ssa.withdraw_authority,
+        batch_uuid: SecureRandom.uuid,
+        split_n_ways: split_n,
+        primary_account: true
+      )
+
+      Pipeline.new(200, p.payload.merge(stake_boss_stake_account: sbsa))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end

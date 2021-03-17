@@ -261,9 +261,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&set_max_n_split)
                   .then(&select_validators)
 
-      # puts p.inspect
-      # puts p.payload[:validators]
-
       assert_equal 200,
                    p.code
       assert_equal 199,
@@ -279,6 +276,35 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       assert       p.payload[:validators].include?(
         '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
       )
+    end
+  end
+
+  test 'register_first_stake_account' do
+    create_validators
+
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      assert_difference 'StakeBoss::StakeAccount.count' do
+        p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                    .then(&guard_input)
+                    .then(&guard_stake_account)
+                    .then(&guard_duplicate_records)
+                    .then(&set_max_n_split)
+                    .then(&select_validators)
+                    .then(&register_first_stake_account)
+
+        assert_equal 200,
+                     p.code
+        assert_equal address,
+                     p.payload[:stake_boss_stake_account].address
+      end
     end
   end
 end
