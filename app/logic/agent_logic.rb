@@ -79,7 +79,8 @@ module AgentLogic
           result[:errors] << e.message + (proxy.present? ? " -- #{proxy[:host]}:#{proxy[:port]}" : '')
           add_error(params[:url], result[:http_code], e, proxy_for_log, result[:tries])
           sleep(sleep_secs) unless Rails.env == 'test'
-        rescue Net::HTTPServerException => e
+        rescue Net::HTTPClientException => e #Net::HTTPServerException was deprecated
+          puts e
           # We don't need to log these codes. Do not retry 404 or 410
           if e.message.include?('404')
             result[:http_code] = '404'
