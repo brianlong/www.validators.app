@@ -63,9 +63,22 @@ table, .table {
 
   .chart-column {
     width: 22%;
-    padding: $padding-standard $padding-standard 10px $padding-standard;
+    padding: 20px $padding-standard 10px $padding-standard;
     @media(max-width: $screen-lg-max) {
-      width: 20%;
+      width: 25%;
+    }
+
+    .chart-top-container {
+      position: absolute;
+      padding-left: 25px;
+      width: 19%;
+    }
+    .chart-top-value {
+      font-size: 11px;
+      line-height: 9px;
+      color: #979797;
+      margin-top: -10px;
+      text-align: right;
     }
   }
 

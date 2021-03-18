@@ -73,11 +73,12 @@
               <td class="text-right"><%= number_with_delimiter @tower_highest_block %></td>
               <td class="text-right"><%= number_with_delimiter @tower_highest_vote %></td>
               <td class="text-right">
-                Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br />
+                Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
+                <br />
                 Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
               </td>
               <td class="text-right">
-                Min: <%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0, precision: 2) %>
+                Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
               </td>
             </tr>
           </thead>
@@ -144,13 +145,22 @@
                 </td>
 
                 <!-- ROOT DISTANCE -->
-                <td class="chart-column text-right">
+                <td class="chart-column">
                   <%
-                    vl = set_chart_y_scale(validator.score&.root_distance_history.to_a.count)
+                    vl = set_chart_x_scale(validator.score&.root_distance_history.to_a.count)
                     line_color = set_chart_line_color(validator.root_distance_score)
                     fill_color = set_chart_fill_color(validator.root_distance_score)
                     vector = validator.score&.root_distance_history.to_a[-vl..-1]
                   %>
+                  <% max_value = vector&.max %>
+                  <% if max_value > Y_ROOT_DISTANCE_MAX %>
+                    <% max_value_position = set_max_value_position(vector) %>
+                    <div class="chart-top-container">
+                      <div class="chart-top-value" style="width: <%=max_value_position%>">
+                        <%= max_value %>
+                      </div>
+                    </div>
+                  <% end %>
                   <%= render 'validators/spark_line_block_distance',
                              account: validator.account,
                              vector: vector,
@@ -160,13 +170,22 @@
                 </td>
 
                 <!-- VOTE DISTANCE -->
-                <td class="chart-column text-right">
+                <td class="chart-column">
                   <%
-                    vl = set_chart_y_scale(validator.score&.vote_distance_history.to_a.count)
+                    vl = set_chart_x_scale(validator.score&.vote_distance_history.to_a.count)
                     line_color = set_chart_line_color(validator.vote_distance_score)
                     fill_color = set_chart_fill_color(validator.vote_distance_score)
                     vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
                   %>
+                  <% max_value = vote_vector&.max %>
+                  <% if max_value > Y_VOTE_DISTANCE_MAX %>
+                    <% max_value_position = set_max_value_position(vote_vector) %>
+                    <div class="chart-top-container">
+                      <div class="chart-top-value" style="width: <%=max_value_position%>">
+                        <%= max_value %>
+                      </div>
+                    </div>
+                  <% end %>
                   <%= render 'validators/spark_line_vote_distance',
                              account: validator.account,
                              vector: vote_vector,
@@ -178,7 +197,7 @@
                 <!-- SKIPPED SLOTS  -->
                 <td class="chart-column text-right">
                   <%
-                    vl = set_chart_y_scale(validator.score&.skipped_slot_history.to_a.count)
+                    vl = set_chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
                     line_color = set_chart_line_color(validator.skipped_slot_score)
                     fill_color = set_chart_fill_color(validator.skipped_slot_score)
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| (v.to_f*100.0).round(1)}

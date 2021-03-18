@@ -27,11 +27,21 @@ module ValidatorsHelper
     end
   end
 
-  def set_chart_y_scale(count)
-    if count < 60
+  def set_chart_x_scale(count)
+    if count < X_SCALE_MAX
       count
     else
-      60
+      X_SCALE_MAX
     end
+  end
+
+  def set_max_value_position(vector)
+    max_value = vector.max
+    max_value_index = vector.index(max_value) + 1
+    position = max_value_index.to_f / vector.size * 100
+    position = position + 4
+    position = [position, 100].min # rejects values larger than 100
+    position = [position, 12].max # rejects values smaller than 12
+    number_to_percentage(position, precision: 0)
   end
 end
