@@ -7,7 +7,7 @@ namespace :db do
 
     counter = 1
 
-    ValidatorBlockHistory.where("created_at > ?", 2.days.ago).find_each(order: :desc) do |vbh|
+    ValidatorBlockHistory.where("created_at > ?", 1.days.ago).find_each(order: :desc) do |vbh|
       p vbh.id
 
       vbh.update_column(
