@@ -48,6 +48,12 @@
                 <br />
                 Scores <small class="text-muted">(total)</small>
               </th>
+              <th class='percent-column text-right'>
+                Skipped Vote&nbsp;&percnt;
+                <a data-toggle="tooltip" data-html="true" title="Distance from leader">
+                  <i class="fas fa-question-circle ml-1"></i>
+                </a>
+              </th>
               <th class='chart-column text-right'>
                 Root Distance<br />
                 <small class="text-muted">60-Min Chart</small>
@@ -60,25 +66,19 @@
                 Skipped Slot&nbsp;&percnt;<br />
                 <small class="text-muted">60-Min Chart</small>
               </th>
-              <th class='percent-column text-right'>
-                Skipped Vote&nbsp;&percnt;
-                <a data-toggle="tooltip" data-html="true" title="Distance from leader">
-                  <i class="fas fa-question-circle ml-1"></i>
-                </a>
-              </th>
             </tr>
 
             <tr class="subhead">
               <td colspan="2"></td>
+              <td class="text-right">
+                Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
+              </td>
               <td class="text-right"><%= number_with_delimiter @tower_highest_block %></td>
               <td class="text-right"><%= number_with_delimiter @tower_highest_vote %></td>
               <td class="text-right">
                 Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
                 <br />
                 Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
-              </td>
-              <td class="text-right">
-                Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
               </td>
             </tr>
           </thead>
@@ -144,6 +144,26 @@
                   <%= render 'validators/scores', validator: validator %>
                 </td>
 
+                <!-- SKIPPED VOTE % -->
+                <td class="">
+                  <%
+                    vahl = validator.vote_account_last&.vote_account_history_last
+                    if vahl
+                      skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
+                    end
+                  %>
+                  <%=
+                    number_to_percentage(
+                      (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
+                      precision: 2
+                    ) if vahl
+                    # number_to_percentage(
+                    #   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
+                    #   precision: 2
+                    # ) if vahl
+                  %>
+                </td>
+
                 <!-- ROOT DISTANCE -->
                 <td class="chart-column">
                   <%
@@ -207,25 +227,6 @@
                              vector: slot_vector,
                              line_color: line_color,
                              fill_color: fill_color
-                  %>
-                </td>
-
-                <td class="text-right">
-                  <%
-                    vahl = validator.vote_account_last&.vote_account_history_last
-                    if vahl
-                      skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
-                    end
-                  %>
-                  <%=
-                    number_to_percentage(
-                      (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
-                      precision: 2
-                    ) if vahl
-                    # number_to_percentage(
-                    #   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
-                    #   precision: 2
-                    # ) if vahl
                   %>
                 </td>
               </tr>
