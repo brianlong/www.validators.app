@@ -207,6 +207,10 @@ module StakeBossLogic
   # accepted input from the Internet. The second time, we will have the value
   # for N (default: 2)
 
+  # Register the primary_account in the database. This step will also set the
+  # batch_uuid that will be used in later steps. Since we are working with data
+  # submitted online, we will also make sure that the N value is within our
+  # acceptable range.
   def register_first_stake_account
     lambda do |p|
       # Create a DB record for the first stake account in a batch.
@@ -242,9 +246,131 @@ module StakeBossLogic
         primary_account: true
       )
 
-      Pipeline.new(200, p.payload.merge(stake_boss_stake_account: sbsa))
+      Pipeline.new(
+        200,
+        p.payload.merge(
+          stake_boss_stake_account: sbsa, batch_uuid: sbsa.batch_uuid
+        )
+      )
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
+    end
+  end
+
+  # This is the step where we split the primary account into smaller accounts.
+  # This function should only be run once per batch. We will set the value for
+  # `split_on` when we are done.
+  #
+  # There will be extra logging here so we can keep tabs on processing. If we
+  # have a problem, I may need to re-build the current state from the logs. Use
+  # log level WARN here so I can see the entries on the production server.
+  def split_primary_account
+    lambda do |p|
+      # Make sure we are splitting a primary account
+      raise InvalidStakeAccount, 'Not the primary_account' \
+        unless p.payload[:stake_boss_stake_account].primary_account?
+
+      # Make sure we haven't already split this one
+      raise InvalidStakeAccount, 'Already split' \
+        unless p.payload[:stake_boss_stake_account].nil?
+
+      # Within a loop, select one account record from this batch in
+      # `delegated_stake desc` order and split it by executing a command on-
+      # chain. Also create a new DB record for the new account. Repeat this
+      # loop until we have `split_n_ways` records in the DB. We should have N
+      # equal sized stake accounts when we are done. None of the stake
+      # accounts should be delegated at this point.
+      #
+      # The split command will look like this (testnet). In this example,
+      # BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY is the stake account
+      # address.
+      #
+      # % solana split-stake \
+      # --url testnet \
+      # --stake-authority BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH.json \
+      # --fee-payer BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH.json \
+      # BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY \
+      # BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH.json --seed 1 \
+      # 200
+      #
+      # The seed value should be incremented each time. Treat it like a simple
+      # nonce.  If we create the DB record before making the split, we can use
+      # the DB record ID as the seed. By using the record ID as the seed, we can
+      # always re-create an address if needed.
+      #
+      # The final value (200) should be calculated as 1/2 of the current
+      # delegated_stake
+      #
+      # Experiment with cases where we receive a stake account that is already
+      # delegated to validator. Is the new account, after the split, delegated
+      # to the previous validator? If so, we may need to assign the
+      # primary_account to BlockLogic before making the split.
+      #
+      # We should create an initializer that returns the absolute path to the
+      # Boss*.json key file on the development/production server.
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from split_primary_account', e)
+    end
+  end
+
+  # This is the step where we delegate validators to the batch. This step can
+  # be run just after splitting a new account OR once per epoch to re-delegate
+  # validators for a given batch.
+  def delegate_validators_for_batch
+    lambda do |p|
+      # Collect the list of current_validators from the DB.
+      #
+      # Get the list of top_validators from the select_validators pipeline
+      # function.
+      #
+      # Calculate the difference between the current_validators and the
+      # top_validators. Determine which validators should be swapped out and
+      # which validators should go in.
+      #
+      # BlockLogic will always have at least one delegation from the
+      # primary_account. If the primary_account was already delegated when we
+      # got the authority, we should re-asssign away from the existing
+      # validator to BlockLogic. BlockLogic will also be eligible for a second
+      # delegation if justified by on-chain performance.
+      #
+      # Grab the primary_account for the given batch and read the value for
+      # `split_n_ways` from that. Also count the number of stake accounts in
+      # that batch and make sure the counts match. Raise an error and notify an
+      # admin of all errors inside this function.
+      #
+      # If this is the first time we have run a batch, the current_validators
+      # set will be empty and we can simply loop through and assign validators
+      # from the top_validators list.
+      #
+      # Otherwise, we will use the difference sets to find the stake account
+      # for each validator that we want to remove and replace with a top
+      # performer.
+      #
+      # Execute the CHANGED delegations on the blockchain. Don't spend the tx
+      # fees if the validator doesn't change.
+      #
+      # Update the DB records.
+      #
+      # The solana command looks like this (testnet). In this example,
+      # 2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2 is the stake account
+      # address, and 38QX3p44u4rrdAYvTh2Piq7LvfVps9mcLV9nnmUmK28x is the
+      # validator.
+      #
+      # % solana delegate-stake \
+      # --url testnet \
+      # --stake-authority BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH.json \
+      # 2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2 \
+      # 38QX3p44u4rrdAYvTh2Piq7LvfVps9mcLV9nnmUmK28x \
+      # --fee-payer BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH.json
+      #
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(
+        500, p.payload, 'Error from delegate_validators_for_batch', e
+      )
     end
   end
 end

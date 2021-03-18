@@ -42,7 +42,7 @@ module StakeBoss
   class StakeAccount < ApplicationRecord
     audited
 
-    # Just an alias for primary_account?
+    # Just an alias for primary_account
     def primary_account?
       primary_account
     end
