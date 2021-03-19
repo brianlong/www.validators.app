@@ -38,6 +38,48 @@ input[type=submit] {
   }
 }
 
+.field_with_errors {
+  label {}
+  .form-control {
+    box-shadow: 0 0 0 3px $red-transparent;
+  }
+}
+
+.checkbox-custom {
+  label {
+    padding-left: 20px;
+    &:hover { cursor: pointer; }
+  }
+  .checkbox {
+    position: absolute;
+    margin-top: 2px;
+    margin-left: -30px;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    background-color: $white;
+    border-radius: 50%;
+    font-size: 18px;
+    .fa-check {
+      position: absolute;
+      margin-top: -2px;
+      margin-left: 2px;
+      color: $green;
+      font-size: 18px;
+      opacity: 0;
+      transition: opacity .1s ease-in-out;
+    }
+  }
+  input[type=checkbox] {
+    height: 0;
+    opacity: 0;
+    &:checked ~ label .fa-check {
+      opacity: 1;
+      transition: opacity .15s ease-in-out;
+    }
+  }
+}
+
 .form-errors {
   h4, h5, h6 {
     margin-bottom: 10px;
