@@ -22,6 +22,7 @@ p {
   }
 }
 
+
 .lead, big {
   @include font-size-larger();
 }
@@ -41,6 +42,17 @@ pre {
   border-radius: $border-radius;
   padding: $padding-standard;
   @include font-size-smaller();
+}
+
+code {
+  font-family: monospace;
+  font: courier;
+  @media(max-width: $screen-sm-max) {
+    word-break: break-all;
+  }
+  &.text-green {
+    color: $green;
+  }
 }
 
 strong, .font-weight-bold {

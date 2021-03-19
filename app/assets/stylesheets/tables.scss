@@ -1,10 +1,13 @@
 @import "variables";
 $table-lines-color: darken($card-border-color, 3%);
 
-table, .table {
-  color: inherit;
+#validators-table {
   max-width: 100%;
   table-layout: fixed;
+}
+
+table, .table {
+  color: inherit;
 
   thead {
     background-color: $table-lines-color;
@@ -80,6 +83,17 @@ table, .table {
       margin-top: -10px;
       text-align: right;
     }
+  }
+
+  .address-column {
+    width: 20%;
+    @media(max-width: $screen-sm-max) {
+      word-break: break-all;
+      min-width: 150px;
+    }
+  }
+  .message-column {
+    min-width: 180px;
   }
 
 }

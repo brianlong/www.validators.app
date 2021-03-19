@@ -39,6 +39,10 @@ body {
   color: $base-color;
   @include font-size-base;
   background-color: transparent;
+
+  &.modal-open {
+    padding-right: 0 !important;
+  }
 }
 
 .background-color {
@@ -140,25 +144,17 @@ hr {
   }
 }
 
-#error_explanation {
-  width: 450px;
-  border: 2px solid red;
-  padding: 7px 7px 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  h2 {
-    text-align: left;
-    font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px -7px 0;
-    background-color: #c00;
-    color: #fff;
+
+.modal {
+  &-content {
+    background-color: $card-background-color;
+    border: 2px solid $card-border-color;
+    border-radius: $border-radius;
+    color: $base-color;
+    margin-top: 30vh;
   }
-  ul li {
-    font-size: 12px;
-    list-style: square;
-  }
+  &-header {}
+  &-body {}
 }
 
 
@@ -185,37 +181,4 @@ hr {
 
 .validator-block-history-table {
   padding-top: 20px;
-}
-
-#error_explanation {
-  width: 450px;
-  border: 2px solid red;
-  padding: 7px 7px 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  h2 {
-    text-align: left;
-    font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px -7px 0;
-    background-color: #c00;
-    color: #fff;
-  }
-  ul li {
-    font-size: 12px;
-    list-style: square;
-  }
-}
-
-.font-fixed-width {
-  font-family: monospace;
-  font: courier;
-  font-size: 24px;
-}
-
-.font-fixed-width-green {
-  font-family: monospace;
-  font: courier;
-  color: $green;
 }

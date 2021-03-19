@@ -56,25 +56,25 @@
     <p>Response:</p>
     <p>An Array of response times.</p>
     <pre>
-      [
-        {
-          "id":614598,
-          "batch_uuid":"baf5c581-7ca3-471f-9a86-17a4f3c904a3",
-          "network":"testnet",
-          "from_account":"71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B",
-          "from_ip":"165.227.100.142",
-          "to_account":"HrTZp96AjUbgxFyaJUcWPLe93441D4TuEN1hC14TNTuJ",
-          "to_ip":"95.217.226.153",
-          "min_ms":"101.706",
-          "avg_ms":"101.778",
-          "max_ms":"101.872",
-          "mdev":"0.396",
-          "observed_at":"2020-06-19T12:54:50.000Z",
-          "created_at":"2020-06-19T12:54:50.559Z",
-          "updated_at":"2020-06-19T12:54:50.559Z"
-        },
-        ...
-      ]
+[
+  {
+    "id":614598,
+    "batch_uuid":"baf5c581-7ca3-471f-9a86-17a4f3c904a3",
+    "network":"testnet",
+    "from_account":"71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B",
+    "from_ip":"165.227.100.142",
+    "to_account":"HrTZp96AjUbgxFyaJUcWPLe93441D4TuEN1hC14TNTuJ",
+    "to_ip":"95.217.226.153",
+    "min_ms":"101.706",
+    "avg_ms":"101.778",
+    "max_ms":"101.872",
+    "mdev":"0.396",
+    "observed_at":"2020-06-19T12:54:50.000Z",
+    "created_at":"2020-06-19T12:54:50.559Z",
+    "updated_at":"2020-06-19T12:54:50.559Z"
+  },
+  ...
+]
     </pre>
   </div>
 </div>
@@ -95,38 +95,38 @@
     <p>Response:</p>
     <p>An Array of validators.</p>
     <pre>
-      [
-        {
-          "network":"testnet",
-          "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
-          "name":"Example Name",
-          "keybase_id":null,
-          "www_url":"https://www.example.com",
-          "details":"Example validator located anywhere.",
-          "created_at":"2020-05-24T19:07:38.222Z",
-          "updated_at":"2020-05-24T19:07:38.222Z",
-          "total_score":10,
-          "root_distance_score:2,
-          "vote_distance_score":2,
-          "skipped_slot_score":2,
-          "software_version":"1.2.3 devbuild",
-          "software_version_score":2,
-          "stake_concentration_score":0,
-          "data_center_concentration_score":0,
-          "published_information_score":0,
-          "security_report_score":0,
-          "active_stake":100000,
-          "commission":10,
-          "delinquent":false,
-          "data_center_key":"24940-FI-Helsinki",
-          "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
-          "skipped_slots":664,
-          "skipped_slot_percent":"0.5155",
-          "ping_time":"205.703",
-          "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
-        },
-        ...
-      ]
+[
+  {
+    "network":"testnet",
+    "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
+    "name":"Example Name",
+    "keybase_id":null,
+    "www_url":"https://www.example.com",
+    "details":"Example validator located anywhere.",
+    "created_at":"2020-05-24T19:07:38.222Z",
+    "updated_at":"2020-05-24T19:07:38.222Z",
+    "total_score":10,
+    "root_distance_score:2,
+    "vote_distance_score":2,
+    "skipped_slot_score":2,
+    "software_version":"1.2.3 devbuild",
+    "software_version_score":2,
+    "stake_concentration_score":0,
+    "data_center_concentration_score":0,
+    "published_information_score":0,
+    "security_report_score":0,
+    "active_stake":100000,
+    "commission":10,
+    "delinquent":false,
+    "data_center_key":"24940-FI-Helsinki",
+    "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
+    "skipped_slots":664,
+    "skipped_slot_percent":"0.5155",
+    "ping_time":"205.703",
+    "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
+  },
+  ...
+]
     </pre>
   </div>
 </div>
@@ -141,35 +141,35 @@
     <pre>curl -H "Token: secret-api-token" https://www.validators.app/api/v1/validators/:network/:account.json</pre>
     <p>Response:</p>
     <pre>
-      {
-        "network":"testnet",
-        "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
-        "name":"Example Name",
-        "keybase_id":null,
-        "www_url":"https://www.example.com",
-        "details":"Example validator located anywhere.",
-        "created_at":"2020-05-24T19:07:38.222Z",
-        "updated_at":"2020-05-24T19:07:38.222Z",
-        "total_score":10,
-        "root_distance_score:2,
-        "vote_distance_score":2,
-        "skipped_slot_score":2,
-        "software_version":"1.2.3 devbuild",
-        "software_version_score":2,
-        "stake_concentration_score":0,
-        "data_center_concentration_score":0,
-        "published_information_score":0,
-        "security_report_score":0,
-        "active_stake":100000,
-        "commission":10,
-        "delinquent":false,
-        "data_center_key":"24940-FI-Helsinki",
-        "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
-        "skipped_slots":664,
-        "skipped_slot_percent":"0.5155",
-        "ping_time":"205.703",
-        "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
-      }
+{
+  "network":"testnet",
+  "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
+  "name":"Example Name",
+  "keybase_id":null,
+  "www_url":"https://www.example.com",
+  "details":"Example validator located anywhere.",
+  "created_at":"2020-05-24T19:07:38.222Z",
+  "updated_at":"2020-05-24T19:07:38.222Z",
+  "total_score":10,
+  "root_distance_score:2,
+  "vote_distance_score":2,
+  "skipped_slot_score":2,
+  "software_version":"1.2.3 devbuild",
+  "software_version_score":2,
+  "stake_concentration_score":0,
+  "data_center_concentration_score":0,
+  "published_information_score":0,
+  "security_report_score":0,
+  "active_stake":100000,
+  "commission":10,
+  "delinquent":false,
+  "data_center_key":"24940-FI-Helsinki",
+  "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
+  "skipped_slots":664,
+  "skipped_slot_percent":"0.5155",
+  "ping_time":"205.703",
+  "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
+}
     </pre>
   </div>
 </div>
@@ -184,18 +184,18 @@
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validator_block_history/:network/:account.json?limit=100'</pre>
     <p>Response:</p>
     <pre>
-      [
-        {
-          "epoch":143,
-          "leader_slots":2188,
-          "blocks_produced":2036,
-          "skipped_slots":152,
-          "skipped_slot_percent":"0.0695",
-          "created_at":"2021-01-24T17:12:23.098Z",
-          "batch_uuid":"015ccead-e713-4412-a1f4-e2365d956809"
-        },
-        ...
-      ]
+[
+  {
+    "epoch":143,
+    "leader_slots":2188,
+    "blocks_produced":2036,
+    "skipped_slots":152,
+    "skipped_slot_percent":"0.0695",
+    "created_at":"2021-01-24T17:12:23.098Z",
+    "batch_uuid":"015ccead-e713-4412-a1f4-e2365d956809"
+  },
+  ...
+]
     </pre>
   </div>
 </div>
