@@ -1,24 +1,20 @@
 @import "variables";
 
-@mixin light-text {
-  color: $base-color;
-  .close { color: $base-color; }
-}
-
 .alert {
   border-radius: $border-radius;
   color: $background-color;
   margin-bottom: $margin-standard*2;
+  color: $base-color;
 
   a {
-    color: lighten($background-color, 20%);
+    color: lighten($link-color, 10%);
     &:hover {
       text-decoration: underline;
     }
   }
 
   .close, .float-right {
-    color: $background-color;
+    color: $base-color;
     opacity: 1;
     text-shadow: none;
   }
@@ -31,19 +27,16 @@
   &.alert-success {
     background-color: $green-transparent;
     border: 1px solid $green;
-    @include light-text();
   }
 
   &.alert-warning {
     background-color: $orange-transparent;
     border: 1px solid $orange;
-    @include light-text();
   }
 
   &.alert-danger {
     background-color: $red-transparent;
     border: 1px solid $red;
-    @include light-text();
   }
 
 }
