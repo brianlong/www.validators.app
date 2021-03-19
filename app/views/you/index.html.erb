@@ -33,11 +33,11 @@
     Change takes effect immediately.
   </div>
 </div>
-<div class="row">
-  <div class="col-sm-6">
-    <%= link_to 'Edit Your Details', edit_user_registration_url, class: 'you-dashboard' %>
-  </div>
-  <div class="col-sm-6">
-    &nbsp;
-  </div>
-</div>
+
+
+<%= link_to 'Edit Your Details', edit_user_registration_url, class: 'btn btn-md btn-primary' %>
+<%= button_to 'Cancel my account', registration_path(@user), data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-md btn-secondary d-inline-block' %>
+
+<%= link_to :back, class: 'text-muted' do %>
+  <i class="fas fa-arrow-left mr-1 mt-4"></i> Back
+<% end %>

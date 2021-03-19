@@ -29,6 +29,7 @@
   border: 2px solid $green;
   border-radius: 30px;
   padding: 14px 22px;
+  font-weight: $font-weight-bold-secondary;
   &-primary {
     background-color: $green;
     border-color: $green;
@@ -53,6 +54,7 @@
     @include font-size-base;
   }
   &-sm {
+    font-weight: $font-weight-normal;
     border-radius: 24px;
     padding: 12px 16px;
     @include font-size-smaller;
