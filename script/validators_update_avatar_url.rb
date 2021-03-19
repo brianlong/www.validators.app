@@ -2,28 +2,19 @@
 
 # RAILS_ENV=production bundle exec ruby script/validators_get_avatar_url.rb
 require File.expand_path('../config/environment', __dir__)
-require File.expand_path('./app/services/keybase_service.rb')
 # Default URL is at 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png'
 
-# include AgentLogic
-# include KeyBaseService
+include KeybaseLogic
 
 interrupted = false
 trap('INT') { interrupted = true }
 
-agent = Mechanize.new
-keybase_service = KeyBaseService.new
-
 %w[testnet mainnet].each do |network|
-  Validator.where(
-    ["network = ? and keybase_id != '' AND avatar_url IS NOT NULL", network]
-  ).each do |validator|
-    begin
-      validator_avatar = agent.get(validator.avatar_url)
-    rescue StandardError => e
-      if e.response_code && ['404', '403'].include?(e.response_code)
-        keybase_service.get_validator_avatar(validator)
-      end
+  Validator.where(network: network).where.not(keybase_id: '').where.not(avatar_url: nil).each do |validator|
+    if validator.avatar_url == DEFAULT_AVATAR_URL || ['404', '403'].include?(Net::HTTP.get_response(URI(validator.avatar_url)).code)
+      validator_url = get_validator_avatar(validator.keybase_id)
+      validator.update(avatar_url: validator_url)
+      sleep(1)
     end
   end
 end
