@@ -1,42 +1,45 @@
-<h3>Vote Account Details</h3>
-<div class="row">
-  <div class="col-sm-12">
-    <table class='table table-striped'>
-      <tbody>
-        <tr>
-          <td><strong>Network:</strong></td>
-          <td><%= params[:network] %></td>
-        </tr>
-        <tr>
-          <td><strong>Vote Account:</strong></td>
-          <td><%= @vote_account.account %></td>
-        </tr>
-        <tr>
-          <td><strong>Identity Account:</strong></td>
-          <td>
-            <%= link_to @vote_account.validator.account, validator_url(
-                  network: params[:network],
-                  account: @vote_account.validator.account
-                ) %>
-          </td>
-        </tr>
-        <tr>
-          <td><strong>Commission:</strong></td>
-          <td><%= @vote_account.vote_account_histories.last.commission rescue 'N/A' %> &percnt;</td>
-        </tr>
-      </tbody>
-    </table>
+<h1 class="mb-5"><%= params[:network].capitalize %> Vote Account</h1>
+
+<div class="card">
+  <div class="card-content pb-0">
+    <h2 class="h2 card-heading">Account Details</h2>
   </div>
+  <table class='table table-block-sm mb-0'>
+    <tbody>
+    <tr>
+      <td><strong>Network:</strong></td>
+      <td><%= params[:network] %></td>
+    </tr>
+    <tr>
+      <td><strong>Vote Account:</strong></td>
+      <td><%= @vote_account.account %></td>
+    </tr>
+    <tr>
+      <td><strong>Identity Account:</strong></td>
+      <td>
+        <%= link_to @vote_account.validator.account, validator_url(
+          network: params[:network],
+          account: @vote_account.validator.account
+        ) %>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Commission:</strong></td>
+      <td><%= @vote_account.vote_account_histories.last.commission rescue 'N/A' %> &percnt;</td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 
-<div class="row validator-block-history-table">
-  <div class="col-sm-12">
-    <%= render partial: 'vote_account_histories_table' %>
+
+<div class="card mb-4">
+  <div class="card-content pb-0">
+    <h2 class="h2 card-heading">Recent Activity</h2>
   </div>
+  <%= render partial: 'vote_account_histories_table' %>
 </div>
 
-<div class='row'>
-  <div class="col-sm-12">
-    <%= link_to 'Back to List of Validators', root_path(network: params[:network]) %>
-  </div>
-</div>
+
+<%= link_to 'Back to List of Validators',
+            root_path(network: params[:network]),
+            class: 'btn btn-sm btn-secondary' %>
