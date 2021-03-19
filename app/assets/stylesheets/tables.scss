@@ -97,3 +97,19 @@ table, .table {
   }
 
 }
+
+.table-block-sm {
+  @media(max-width: $screen-md-max) {
+    tr {
+      display: block;
+      td {
+        display: block;
+        width: 100%;
+        border: none;
+        &:first-of-type {
+          padding-bottom: 0;
+        }
+      }
+    }
+  }
+}
