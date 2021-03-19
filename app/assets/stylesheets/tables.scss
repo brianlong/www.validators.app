@@ -11,7 +11,10 @@ table, .table {
 
   thead {
     background-color: $table-lines-color;
-    th { border: none; }
+    th {
+      border: none;
+      padding: $padding-standard 20px;
+    }
   }
 
   .subhead {
@@ -85,18 +88,32 @@ table, .table {
     }
   }
 
-  .address-column {
+  .wider-column {
+    min-width: 180px;
+  }
+
+  .medium-column {
     width: 20%;
     @media(max-width: $screen-sm-max) {
       word-break: break-all;
       min-width: 150px;
     }
   }
-  .message-column {
-    min-width: 180px;
+
+  .narrower-column {
+    width: 17%;
+    @media(max-width: $screen-md-max) {
+      min-width: 140px;
+    }
   }
 
+  .narrow-column {
+    @media(max-width: $screen-md-max) {
+      min-width: 135px;
+    }
+  }
 }
+
 
 .table-block-sm {
   @media(max-width: $screen-md-max) {

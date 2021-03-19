@@ -41,7 +41,7 @@ module ValidatorsHelper
     position = max_value_index.to_f / vector.size * 100
     position = position + 3
     position = [position, 100].min # rejects values larger than 100
-    position = [position, 12].max # rejects values smaller than 12
+    position = [position, 11].max # rejects values smaller than 11
     number_to_percentage(position, precision: 0)
   end
 end

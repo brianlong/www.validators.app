@@ -15,9 +15,8 @@
         <h2 class="card-heading">Validator Details</h2>
       </div>
 
-      <table class='table mb-0'>
+      <table class='table table-block-sm mb-0'>
         <tbody>
-        <!-- First Row -->
         <tr>
           <td class="category-column"><strong>Name:</strong></td>
           <td>
@@ -25,19 +24,16 @@
           </td>
         </tr>
 
-        <!-- Second Row -->
         <tr>
           <td><strong>Details:</strong></td>
           <td><%= @validator.details %></td>
         </tr>
 
-        <!-- Third Row -->
         <tr>
           <td><strong>Identity:</strong></td>
-          <td><small><%= @validator.account %></small></td>
+          <td><small class="word-break"><%= @validator.account %></small></td>
         </tr>
 
-        <!-- Fourth Row -->
         <tr>
           <td><strong>Software:</strong></td>
           <td>
@@ -47,13 +43,11 @@
           </td>
         </tr>
 
-        <!-- Fifth Row -->
         <tr>
           <td><strong>IP:</strong></td>
           <td><%= @validator.ip_address unless @validator.validator_ips.empty? %></td>
         </tr>
 
-        <!-- Sixth Row -->
         <tr>
           <td><strong>Data Center:</strong></td>
           <td>
@@ -73,25 +67,22 @@
       <div class="card-content pb-0">
         <h2 class="card-heading">Validator Details</h2>
       </div>
-      <table class='table table-striped table-borderless mb-0'>
+      <table class='table table-block-sm mb-0'>
         <tbody>
-        <!-- First Row -->
         <tr>
           <td class="category-column"><strong>Keybase:</strong></td>
           <td><%= @validator.keybase_id %></td>
         </tr>
 
-        <!-- Second Row -->
         <tr>
           <td><strong>Website:</strong></td>
           <td><%= @validator.www_url %></td>
         </tr>
 
-        <!-- Third Row -->
         <tr>
           <td><strong>Vote Account:</strong></td>
           <td>
-            <small>
+            <small class="word-break">
               <%=
                 link_to \
               @validator.vote_account_last&.account,
@@ -103,7 +94,6 @@
           </td>
         </tr>
 
-        <!-- Fourth Row -->
         <tr>
           <td><strong>Active Stake:</strong></td>
           <td>
@@ -113,7 +103,6 @@
           </td>
         </tr>
 
-        <!-- Fifth Row -->
         <tr>
           <td><strong>Commission:</strong></td>
           <%

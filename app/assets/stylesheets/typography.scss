@@ -129,3 +129,12 @@ a {
     &:hover { color: $link-color-secondary; }
   }
 }
+
+.word-break {
+  word-break: break-all;
+}
+.word-break-sm {
+  @media(max-width: $screen-sm-max) {
+    word-break: break-all;
+  }
+}
