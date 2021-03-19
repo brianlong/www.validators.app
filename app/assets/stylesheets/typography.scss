@@ -133,6 +133,11 @@ a {
 .word-break {
   word-break: break-all;
 }
+.word-break-md {
+  @media(max-width: $screen-md-max) {
+    word-break: break-all;
+  }
+}
 .word-break-sm {
   @media(max-width: $screen-sm-max) {
     word-break: break-all;

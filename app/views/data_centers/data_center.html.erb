@@ -73,11 +73,11 @@
 
 <div class="card mb-4">
   <div class="table-responsive-sm">
-  <table class='table'>
+  <table class='table mb-0'>
     <thead>
       <tr>
         <th class="avatar-column">&nbsp;</th>
-        <th class="medium-column">
+        <th class="wider-column">
           Name: Stake (%)<br />
           Account
         </th>
@@ -112,7 +112,7 @@
             </p>
             <%= link_to this_validator.account,
                         validator_url(network: params[:network],account: this_validator.account),
-                        class: 'word-break-sm' %>
+                        class: 'word-break-md' %>
           </td>
           <td>
             <p><%= sc.ip_address %></p>
