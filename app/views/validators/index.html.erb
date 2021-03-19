@@ -30,7 +30,7 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <table id="validators-table" class='table'>
+        <table id="validators-table" class='table table-block-sm'>
           <thead>
             <tr>
               <th class="avatar-column">#</th>
@@ -120,38 +120,38 @@
 
                 <td class="name-column">
                   <% validator_name = validator.name || shorten_key(validator.account) %>
-                  <%= link_to validator_name,
-                              validator_url(
-                                network: params[:network],
-                                account: validator.account,
-                                order: params[:order],
-                                page: params[:page],
-                                refresh: params[:refresh]
-                              ), class: 'font-weight-bold' %>
+                  <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]
+                                           ), class: 'font-weight-bold' do %>
+                      <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator.name %>
+                    <% end %>
                   <% comm_class = 'text-danger' \
                                   if params[:network] == 'mainnet' && validator.commission.to_i == 100
                   %>
-                  <small class="<%= comm_class %>">(<%= validator.commission %>%)</small><br />
+                  <small class="<%= comm_class %>">(<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)</small><br />
+                  <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
                   <small>
                     <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
                     (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
                   </small>
                   <br />
+                  <span class="d-inline-block d-lg-none">Sofware version:&nbsp;</span>
                   <small class="<%= software_color_class(validator.software_version) %>">
                     <%= validator.software_version || 'N/A' %>
                   </small>
                   <br />
+                  <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
                   <%= render 'validators/scores', validator: validator %>
                 </td>
 
                 <!-- SKIPPED VOTE % -->
-                <td class="">
+                <td class="percent-column">
                   <%
                     vahl = validator.vote_account_last&.vote_account_history_last
                     if vahl
                       skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
                     end
                   %>
+                  <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
                   <%=
                     number_to_percentage(
                       (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
@@ -166,6 +166,7 @@
 
                 <!-- ROOT DISTANCE -->
                 <td class="chart-column">
+                  <span class="d-block d-lg-none mb-3 pl-1 mb-4">Root Distance:&nbsp;</span>
                   <%
                     vl = set_chart_x_scale(validator.score&.root_distance_history.to_a.count)
                     line_color = set_chart_line_color(validator.root_distance_score)
@@ -191,6 +192,7 @@
 
                 <!-- VOTE DISTANCE -->
                 <td class="chart-column">
+                  <span class="d-block d-lg-none mb-3 pl-1 mb-4">Vote Distance:&nbsp;</span>
                   <%
                     vl = set_chart_x_scale(validator.score&.vote_distance_history.to_a.count)
                     line_color = set_chart_line_color(validator.vote_distance_score)
@@ -215,7 +217,8 @@
                 </td>
 
                 <!-- SKIPPED SLOTS  -->
-                <td class="chart-column text-right">
+                <td class="chart-column">
+                  <span class="d-block d-lg-none mb-3 pl-1 mb-4">Skipped Slot&nbsp;%:&nbsp;</span>
                   <%
                     vl = set_chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
                     line_color = set_chart_line_color(validator.skipped_slot_score)

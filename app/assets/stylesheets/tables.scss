@@ -1,11 +1,6 @@
 @import "variables";
 $table-lines-color: darken($card-border-color, 3%);
 
-#validators-table {
-  max-width: 100%;
-  table-layout: fixed;
-}
-
 table, .table {
   color: inherit;
 
@@ -121,12 +116,44 @@ table, .table {
       display: block;
       td {
         display: block;
-        width: 100%;
+        width: 100% !important;
         border: none;
         &:first-of-type {
           padding-bottom: 0;
         }
       }
+      th {
+        display: block;
+        width: 100% !important;
+        text-align: left !important;
+        padding-left: 20px !important;
+      }
     }
+  }
+}
+
+
+#validators-table {
+  max-width: 100%;
+  width: 100%;
+  table-layout: fixed;
+
+  @media(max-width: $screen-lg-max) {
+    .percent-column { width: 96px; }
+    .avatar-column { display: none; }
+  }
+
+  @media(max-width: $screen-md-max) {
+    thead { display: none; }
+    .subhead { display: none; }
+    .avatar-column { display: none; }
+    .percent-column, .chart-column {
+      padding-top: 0;
+    }
+    .chart-top-container {
+      padding-left: 20px;
+      width: 87%;
+
+    } // TODO
   }
 }
