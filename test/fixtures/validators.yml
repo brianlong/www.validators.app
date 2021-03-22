@@ -2,21 +2,3 @@ one:
   id: 1
   network: testnet
   account: '1234'
-staking_fund:
-  id: 2
-  keybase_id: 'stakingfund'
-  network: testnet
-  account: '2345'
-  avatar_url: "https://s3.amazonaws.com/keybase_processed_uploads/d48739023a250815c4ac564c9870ec05_360_360.jpg"
-medusa:
-  id: 3
-  keybase_id: 'nikitainbar'
-  network: testnet
-  account: '3456'
-  avatar_url: "https://s3.amazonaws.com/keybase_processed_uploads/3efdd9c766508d123c15677e075e5d05_360_360.jpg"
-hashquark:
-  id: 4
-  keybase_id: 'zhanglianghui'
-  network: testnet
-  account: '4567'
-  avatar_url: "https://s3.amazonaws.com/keybase_processed_uploads/5a7a92ba3326454e654e76eaeb9c3d05_360_360.jpg"
