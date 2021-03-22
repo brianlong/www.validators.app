@@ -35,13 +35,15 @@ module ValidatorsHelper
     end
   end
 
-  def set_max_value_position(vector)
+  def set_max_value_position(vector, min_position = true)
     max_value = vector.max
     max_value_index = vector.index(max_value) + 1
     position = max_value_index.to_f / vector.size * 100
     position = position + 3
     position = [position, 100].min # rejects values larger than 100
-    position = [position, 11].max # rejects values smaller than 11
+    if min_position
+      position = [position, 11].max # rejects values smaller than 11
+    end
     number_to_percentage(position, precision: 0)
   end
 end

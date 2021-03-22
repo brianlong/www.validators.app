@@ -64,7 +64,7 @@ table, .table {
 
   .chart-column {
     width: 22%;
-    padding: 20px $padding-standard 10px $padding-standard;
+    padding: 25px $padding-standard 10px $padding-standard;
     @media(max-width: $screen-lg-max) {
       width: 25%;
     }
@@ -78,7 +78,7 @@ table, .table {
       font-size: 11px;
       line-height: 9px;
       color: #979797;
-      margin-top: -10px;
+      margin-top: -12px;
       text-align: right;
     }
   }
@@ -151,9 +151,19 @@ table, .table {
       padding-top: 0;
     }
     .chart-top-container {
-      padding-left: 20px;
-      width: 87%;
+      padding-left: 23px;
+      width: 89%;
+    }
+    .chart-link.active {
+      color: $link-color-secondary;
+      text-decoration: underline;
+    }
+  }
 
-    } // TODO
+  @media(max-width: $screen-xs-max) {
+    .chart-top-container {
+      padding-left: 25px;
+      width: 84%;
+    }
   }
 }
