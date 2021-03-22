@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+# See https://www.validators.app/stake-boss for a high-level overview of the
+# Stake Boss. The intial iteration will simply split a vote account indicated by
+# the owner and then manage the delegation to the best validators. Future
+# iterations will allow the account owner to provide a list of validators to
+# include or exclude from their validator set.
+#
 # StakeBossLogic contains methods used for splitting and delegating stake
 # accounts. Many of these methods are simple wrappers for shell and on-chain
 # commands. These methods are lambdas that we can use in a processing pipeline
@@ -69,7 +75,10 @@ module StakeBossLogic
     end
   end
 
-  # Guard against invalid or malicious input
+  # Guard against invalid or malicious input. The checks are:
+  #   - No blank or null addresses
+  #   - No script in the provided address
+  #   - The base58 string representing the address should be exactly 33 bytes
   def guard_input
     lambda do |p|
       # Make sure the address is not blank
@@ -91,7 +100,12 @@ module StakeBossLogic
   end
 
   # Make sure that we have a valid stake account, that we possess the
-  # StakeAuthority, and the balance is > zero
+  # StakeAuthority, and the balance is > zero. We will load the account from
+  # the blockchain and then:
+  #   - Confirm that it is a valid Stake Account
+  #   - That the Stake Boss has the Stake Authority
+  #   - The Stake Account is active
+  #   - The stake is > STAKE_BOSS_MIN (See config/initializers/cluster.rb)
   def guard_stake_account
     lambda do |p|
       # Load the account info from the blockchain
@@ -140,11 +154,11 @@ module StakeBossLogic
     end
   end
 
-  # NOTE: The steps above will be used to process a first request from the User.
-  # After we confirm that we have a valid stake account with balance > 10
-  # lamports, we will determine the max N ways to split the account and then
-  # proceed to split the account and delegate to validators.
-
+  # We want to protect against pranksters who might try to submit a ridiculously
+  # large split value (N) to cause problems or drain our transaction fee
+  # account. We will calculate our own max based on the size of the stake. Then
+  # `split_n_max` will be used as a sanity check for an acceptable range of
+  # 2 - split_n_max.
   def set_max_n_split
     lambda do |p|
       # The default split N-ways is 2. The user can pick a value between
@@ -170,10 +184,30 @@ module StakeBossLogic
     end
   end
 
+  # NOTE: The steps above will be used to process a first request from the User.
+  # After we confirm that we have a valid stake account with balance > 10
+  # lamports, we will determine the max N ways to split the account and then
+  # proceed to split the account and delegate to validators.
+  #
+  # The steps above will need to be repeated in the second step since we just
+  # accepted input from the Internet. The second time, we will have the value
+  # for N (default: 2)
+
+  # This first iteration of select_validators will grab the list of validators
+  # from the validator_score_v1s table, sort the results by total score in
+  # descending order, and work from the top down until we have found the
+  # correct number of validators for this batch.
+  #
+  # Future iterations will allow a logged in user to provide a list of
+  # validators to include or exclude from their validator set.
+  #
+  # The first stake account will be delegated to BLOCK_LOGIC_VOTE_ACCOUNT. The
+  # rewards that we earn should cover the cost of maintaining the service and
+  # the transaction fees.
   def select_validators
     lambda do |p|
       select_fields = %i[
-        id validator_id delinquent stake_concentration_score
+        id validator_id commission delinquent stake_concentration_score
         data_center_concentration_score data_center_key
       ]
       scores = ValidatorScoreV1.where(network: p.payload[:network])
@@ -183,15 +217,19 @@ module StakeBossLogic
       # The first stake account will be delegated to BLOCK_LOGIC_VOTE_ACCOUNT
       validators = []
       scores.each do |score|
+        # Reject delinquent validators
         next if score.delinquent
+
+        # Reject validators with a stake concentration score < 0
         next if score.stake_concentration_score.negative?
 
-        if Rails.env.production?
-          next if score.commission.to_i == 100
-          # This is a stub to exclude Hetzner until we change the
-          # data_center_concentration_score to count only ASN.
-          next if score.data_center_key.include?('24940')
-        end
+        # Reject validators with commission > 10%
+        next if score.commission.to_i > 10
+
+        # This is a stub to exclude Hetzner until we change the
+        # data_center_concentration_score to count only ASN. In the future,
+        # any validator with ASN concentration > 25% will be rejected.
+        next if score.data_center_key.include?('24940')
 
         validators << score.validator.vote_account_last.account
         break if validators.count == (p.payload[:split_n_ways] - 1)
@@ -202,10 +240,6 @@ module StakeBossLogic
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
-
-  # NOTE: The steps above will need to be repeated since we just
-  # accepted input from the Internet. The second time, we will have the value
-  # for N (default: 2)
 
   # Register the primary_account in the database. This step will also set the
   # batch_uuid that will be used in later steps. Since we are working with data
@@ -272,7 +306,7 @@ module StakeBossLogic
 
       # Make sure we haven't already split this one
       raise InvalidStakeAccount, 'Already split' \
-        unless p.payload[:stake_boss_stake_account].nil?
+        unless p.payload[:stake_boss_stake_account].split_on.nil?
 
       # Within a loop, select one account record from this batch in
       # `delegated_stake desc` order and split it by executing a command on-
