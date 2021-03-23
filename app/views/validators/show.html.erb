@@ -4,7 +4,7 @@
   <% else %>
     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
   <% end %>
-  <h1><%= @validator.name || @validator.account %></h1>
+  <h1 class="word-break"><%= @validator.name || @validator.account %></h1>
 </div>
 
 
@@ -116,7 +116,6 @@
         </tr>
 
         <% unless @validator.security_report_url.blank? %>
-          <!-- Sixth Row -->
           <tr>
             <td>
               <strong>Security Info:</strong>
@@ -157,12 +156,24 @@
   </div>
 </div>
 
-
 <div class="row">
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
-        <%= render partial: 'block_history_chart' %>
+        <% vl = if @validator.score.root_distance_history&.count.to_i < @history_limit
+                  @validator.score.root_distance_history&.count.to_i
+                else
+                  @history_limit
+                end
+           line_color = set_chart_line_color(@validator.score.root_distance_score)
+           fill_color = set_chart_fill_color(@validator.root_distance_score)
+        %>
+        <%= render 'validators/spark_line_block',
+                   account: @validator.account,
+                   vector_block: @validator.score&.root_distance_history.to_a[-vl..-1],
+                   line_color: line_color,
+                   fill_color: fill_color
+        %>
       </div>
     </div>
   </div>
@@ -175,12 +186,25 @@
                 else
                   @history_limit
                 end
+           line_color = set_chart_line_color(@validator.score.vote_distance_score)
+           fill_color = set_chart_fill_color(@validator.vote_distance_score)
         %>
-        <%= render 'validators/spark_line_block_vote',
+        <%= render 'validators/spark_line_vote',
                    account: @validator.account,
-                   vector_block: @validator.score&.root_distance_history.to_a[-vl..-1],
-                   vector_vote: @validator.score&.vote_distance_history.to_a[-vl..-1]
+                   vector_vote: @validator.score&.vote_distance_history.to_a[-vl..-1],
+                   line_color: line_color,
+                   fill_color: fill_color
         %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card mb-4">
+      <div class="card-content">
+        <%= render partial: 'block_history_chart' %>
       </div>
     </div>
   </div>

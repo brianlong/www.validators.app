@@ -1,4 +1,4 @@
-<h2 class="card-heading">Block &amp; Vote History</h2>
+<h2 class="card-heading">Block History</h2>
 <canvas id="spark_line_block_distance_<%= local_assigns[:account] %>"></canvas>
 <script type="text/javascript">
   var ctx = document.getElementById("spark_line_block_distance_<%= local_assigns[:account] %>").getContext('2d');
@@ -16,21 +16,12 @@
       datasets: [
         {
           label: ' Block Diff ',
-          fill: false,
-          backgroundColor: '<%= GREEN %>',
-          borderColor: '<%= GREEN %>',
+          fill: true,
+          backgroundColor: '<%= local_assigns[:fill_color] %>',
+          borderColor: '<%= local_assigns[:line_color] %>',
           borderWidth: 1,
-          radius: 1,
+          radius: 0,
           data: <%= local_assigns[:vector_block] %>
-        },
-        {
-          label: ' Vote Diff ',
-          fill: false,
-          backgroundColor: '<%= BLUE %>',
-          borderColor: '<%= BLUE %>',
-          borderWidth: 1,
-          radius: 1,
-          data: <%= local_assigns[:vector_vote] %>
         }
       ]
     },
