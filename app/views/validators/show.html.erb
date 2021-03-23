@@ -165,8 +165,8 @@
                 else
                   @history_limit
                 end
-           line_color = set_chart_line_color(@validator.score.root_distance_score)
-           fill_color = set_chart_fill_color(@validator.root_distance_score)
+           line_color = chart_line_color(@validator.score.root_distance_score)
+           fill_color = chart_fill_color(@validator.root_distance_score)
         %>
         <%= render 'validators/spark_line_block',
                    account: @validator.account,

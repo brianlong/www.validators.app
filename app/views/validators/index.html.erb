@@ -184,15 +184,15 @@
                 <!-- ROOT DISTANCE -->
                 <td class="chart-column d-none d-lg-table-cell" id="root-distance-<%=i%>">
                   <%
-                    vl = set_chart_x_scale(validator.score&.root_distance_history.to_a.count)
-                    line_color = set_chart_line_color(validator.root_distance_score)
-                    fill_color = set_chart_fill_color(validator.root_distance_score)
+                    vl = chart_x_scale(validator.score&.root_distance_history.to_a.count)
+                    line_color = chart_line_color(validator.root_distance_score)
+                    fill_color = chart_fill_color(validator.root_distance_score)
                     vector = validator.score&.root_distance_history.to_a[-vl..-1]
                   %>
                   <% max_value = vector&.max %>
                   <% if max_value > Y_ROOT_DISTANCE_MAX %>
-                    <% max_value_position = set_max_value_position(vector) %>
-                    <% max_value_position_mobile = set_max_value_position(vector, false) %>
+                    <% max_value_position = max_value_position(vector) %>
+                    <% max_value_position_mobile = max_value_position(vector, min_position: false) %>
                     <div class="chart-top-container">
                       <div class="chart-top-value d-lg-none" style="width: <%=max_value_position_mobile%>">
                         <%= max_value %>
@@ -213,15 +213,15 @@
                 <!-- VOTE DISTANCE -->
                 <td class="chart-column d-none d-lg-table-cell" id=vote-distance-<%=i%>>
                   <%
-                    vl = set_chart_x_scale(validator.score&.vote_distance_history.to_a.count)
-                    line_color = set_chart_line_color(validator.vote_distance_score)
-                    fill_color = set_chart_fill_color(validator.vote_distance_score)
+                    vl = chart_x_scale(validator.score&.vote_distance_history.to_a.count)
+                    line_color = chart_line_color(validator.vote_distance_score)
+                    fill_color = chart_fill_color(validator.vote_distance_score)
                     vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
                   %>
                   <% max_value = vote_vector&.max %>
                   <% if max_value > Y_VOTE_DISTANCE_MAX %>
-                    <% max_value_position = set_max_value_position(vote_vector) %>
-                    <% max_value_position_mobile = set_max_value_position(vote_vector, false) %>
+                    <% max_value_position = max_value_position(vote_vector) %>
+                    <% max_value_position_mobile = max_value_position(vote_vector, min_position: false) %>
                     <div class="chart-top-container">
                       <div class="chart-top-value d-lg-none" style="width: <%=max_value_position_mobile%>">
                         <%= max_value %>
@@ -242,9 +242,9 @@
                 <!-- SKIPPED SLOTS  -->
                 <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
                   <%
-                    vl = set_chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
-                    line_color = set_chart_line_color(validator.skipped_slot_score)
-                    fill_color = set_chart_fill_color(validator.skipped_slot_score)
+                    vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
+                    line_color = chart_line_color(validator.skipped_slot_score)
+                    fill_color = chart_fill_color(validator.skipped_slot_score)
                     slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| (v.to_f*100.0).round(1)}
                   %>
                   <%= render 'validators/spark_line_skipped_slots',
