@@ -1,38 +1,23 @@
 module ValidatorsHelper
   def set_chart_line_color(score)
-    if score == 2
-      GREEN
-    elsif score == 1
-      BLUE
-    else
-      LIGHT_GREY
-    end
+    return GREEN if score == 2
+    return BLUE if score == 1
+    LIGHT_GREY
   end
 
   def set_chart_fill_color(score)
-    if score == 2
-      GREEN_TRANSPARENT
-    elsif score == 1
-      BLUE_TRANSPARENT
-    else
-      LIGHT_GREY_TRANSPARENT
-    end
+    return GREEN_TRANSPARENT if score == 2
+    return BLUE_TRANSPARENT if score == 1
+    LIGHT_GREY_TRANSPARENT
   end
 
   def set_score_class(score)
-    if score == -2
-      'text-danger'
-    else
-      'text-warning'
-    end
+    return 'text-danger' if score == -2
+    'text-warning'
   end
 
   def set_chart_x_scale(count)
-    if count < X_SCALE_MAX
-      count
-    else
-      X_SCALE_MAX
-    end
+    [X_SCALE_MAX, count].min
   end
 
   def set_max_value_position(vector, min_position = true)

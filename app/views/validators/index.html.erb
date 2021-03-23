@@ -121,14 +121,16 @@
 
                 <td class="name-column">
                   <% validator_name = validator.name || shorten_key(validator.account) %>
-                  <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]
-                                           ), class: 'font-weight-bold' do %>
+                  <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
+                              class: 'font-weight-bold' do %>
                       <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator.name %>
                     <% end %>
                   <% comm_class = 'text-danger' \
                                   if params[:network] == 'mainnet' && validator.commission.to_i == 100
                   %>
-                  <small class="<%= comm_class %>">(<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)</small><br />
+                  <small class="<%= comm_class %>">
+                    (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
+                  </small><br />
                   <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
                   <small>
                     <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
