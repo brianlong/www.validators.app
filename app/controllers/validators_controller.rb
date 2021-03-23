@@ -121,7 +121,6 @@ class ValidatorsController < ApplicationController
       end
     end
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
-
   end
 
   private
