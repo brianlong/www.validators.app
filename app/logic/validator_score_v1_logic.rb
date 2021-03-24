@@ -295,11 +295,6 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).to_a
 
-      # last_vote_account_histories = VoteAccountHistory.where(
-      #   network: p.payload[:network],
-      #   batch_uuid: p.payload[:batch_uuid]
-      # ).to_a
-
       sql = <<-SQL_END
         SELECT validators.id, vote_account_histories.*
         FROM vote_account_histories
@@ -307,7 +302,6 @@ module ValidatorScoreV1Logic
         JOIN validators ON validators.id = vote_accounts.validator_id
         WHERE vote_account_histories.network = '#{p.payload[:network]}' AND vote_account_histories.batch_uuid = '#{p.payload[:batch_uuid]}'
       SQL_END
-
       # GROUP BY validators.id
       # ORDER BY vote_account_histories.created_at DESC LIMIT 1
 
@@ -323,19 +317,7 @@ module ValidatorScoreV1Logic
           # vah = validator&.vote_accounts&.last&.vote_account_histories&.last
 
           # new
-          # there shouldn't be more than 1 for each validator, so #find should work
-          # instead of #select w/ order_by('created_at desc').first
-          Rails.logger.warn "vah_was_nil"
-          Rails.logger.warn "validator_id_is_#{validator.id}"
-          Rails.logger.warn validator.id
-
-          Rails.logger.warn "vote_account_histories_info"
-          Rails.logger.warn "class #{vote_account_histories.class}"
-          Rails.logger.warn "first element #{vote_account_histories.first}"
-
           vah = vote_account_histories.select do |vah_array|
-            Rails.logger.warn "validator_id_is_#{validator.id}"
-            Rails.logger.warn vah_array.first
             vah_array.first == validator.id
           end.first
 
