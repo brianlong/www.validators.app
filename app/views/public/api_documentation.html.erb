@@ -6,7 +6,22 @@
     </p>
   </div>
 </div>
-<h3>Authentication</h3>
+
+<h3>Quick Reference</h3>
+<ul class="list-large list-no-bullets">
+  <li><a href="#auhentication">Authentication</a></li>
+  <li><a href="#ping">Ping</a></li>
+  <li><a href="#ping-times">Ping Times</a></li>
+  <li><a href="#validators-list">Validators List</a></li>
+  <li><a href="#validator-detail">Validator Detail</a></li>
+  <li><a href="#validator-block">Validator Block Production History</a></li>
+  <li><a href="#error-codes">Error Codes</a></li>
+  <li><a href="#notes">Notes</a></li>
+</ul>
+
+<hr />
+
+<h3 id="auhentication">Authentication</h3>
 <div class="row">
   <div class="col-sm-12">
     <p>Pass your API token in as the Token header, like in this curl example:</p>
@@ -14,8 +29,10 @@
     <p>Examples in this API guide are demonstrated using curl, but you can use an HTTP library of your choice. All responses are JSON.</p>
   </div>
 </div>
+
 <hr />
-<h4>Ping</h4>
+
+<h4 id="ping">Ping</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The ping endpoint will allow you to test your connection to the server.</p>
@@ -25,8 +42,10 @@
     <pre>{"answer":"pong"}</pre>
   </div>
 </div>
+
 <hr />
-<h4>Ping Times</h4>
+
+<h4 id="ping-times">Ping Times</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The ping-times endpoint will return recent ping times as reported by the participating validators. By default, the most recent 1,000 ping times will be returned. You can include a `limit` parameter to request more or fewer ping times. In the examples below, replace `:network` with 'testnet' or 'mainnet' as desired.</p>
@@ -37,30 +56,32 @@
     <p>Response:</p>
     <p>An Array of response times.</p>
     <pre>
-      [
-        {
-          "id":614598,
-          "batch_uuid":"baf5c581-7ca3-471f-9a86-17a4f3c904a3",
-          "network":"testnet",
-          "from_account":"71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B",
-          "from_ip":"165.227.100.142",
-          "to_account":"HrTZp96AjUbgxFyaJUcWPLe93441D4TuEN1hC14TNTuJ",
-          "to_ip":"95.217.226.153",
-          "min_ms":"101.706",
-          "avg_ms":"101.778",
-          "max_ms":"101.872",
-          "mdev":"0.396",
-          "observed_at":"2020-06-19T12:54:50.000Z",
-          "created_at":"2020-06-19T12:54:50.559Z",
-          "updated_at":"2020-06-19T12:54:50.559Z"
-        },
-        ...
-      ]
+[
+  {
+    "id":614598,
+    "batch_uuid":"baf5c581-7ca3-471f-9a86-17a4f3c904a3",
+    "network":"testnet",
+    "from_account":"71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B",
+    "from_ip":"165.227.100.142",
+    "to_account":"HrTZp96AjUbgxFyaJUcWPLe93441D4TuEN1hC14TNTuJ",
+    "to_ip":"95.217.226.153",
+    "min_ms":"101.706",
+    "avg_ms":"101.778",
+    "max_ms":"101.872",
+    "mdev":"0.396",
+    "observed_at":"2020-06-19T12:54:50.000Z",
+    "created_at":"2020-06-19T12:54:50.559Z",
+    "updated_at":"2020-06-19T12:54:50.559Z"
+  },
+  ...
+]
     </pre>
   </div>
 </div>
+
 <hr />
-<h4>Validators List</h4>
+
+<h4 id="validators-list">Validators List</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The validators endpoint will return a list of validators for the requested network. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired.</p>
@@ -74,43 +95,45 @@
     <p>Response:</p>
     <p>An Array of validators.</p>
     <pre>
-      [
-        {
-          "network":"testnet",
-          "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
-          "name":"Example Name",
-          "keybase_id":null,
-          "www_url":"https://www.example.com",
-          "details":"Example validator located anywhere.",
-          "created_at":"2020-05-24T19:07:38.222Z",
-          "updated_at":"2020-05-24T19:07:38.222Z",
-          "total_score":10,
-          "root_distance_score:2,
-          "vote_distance_score":2,
-          "skipped_slot_score":2,
-          "software_version":"1.2.3 devbuild",
-          "software_version_score":2,
-          "stake_concentration_score":0,
-          "data_center_concentration_score":0,
-          "published_information_score":0,
-          "security_report_score":0,
-          "active_stake":100000,
-          "commission":10,
-          "delinquent":false,
-          "data_center_key":"24940-FI-Helsinki",
-          "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
-          "skipped_slots":664,
-          "skipped_slot_percent":"0.5155",
-          "ping_time":"205.703",
-          "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
-        },
-        ...
-      ]
+[
+  {
+    "network":"testnet",
+    "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
+    "name":"Example Name",
+    "keybase_id":null,
+    "www_url":"https://www.example.com",
+    "details":"Example validator located anywhere.",
+    "created_at":"2020-05-24T19:07:38.222Z",
+    "updated_at":"2020-05-24T19:07:38.222Z",
+    "total_score":10,
+    "root_distance_score:2,
+    "vote_distance_score":2,
+    "skipped_slot_score":2,
+    "software_version":"1.2.3 devbuild",
+    "software_version_score":2,
+    "stake_concentration_score":0,
+    "data_center_concentration_score":0,
+    "published_information_score":0,
+    "security_report_score":0,
+    "active_stake":100000,
+    "commission":10,
+    "delinquent":false,
+    "data_center_key":"24940-FI-Helsinki",
+    "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
+    "skipped_slots":664,
+    "skipped_slot_percent":"0.5155",
+    "ping_time":"205.703",
+    "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
+  },
+  ...
+]
     </pre>
   </div>
 </div>
+
 <hr />
-<h4>Validator Detail</h4>
+
+<h4 id="validator-detail">Validator Detail</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The validators endpoint will return a single validator for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.</p>
@@ -118,40 +141,42 @@
     <pre>curl -H "Token: secret-api-token" https://www.validators.app/api/v1/validators/:network/:account.json</pre>
     <p>Response:</p>
     <pre>
-      {
-        "network":"testnet",
-        "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
-        "name":"Example Name",
-        "keybase_id":null,
-        "www_url":"https://www.example.com",
-        "details":"Example validator located anywhere.",
-        "created_at":"2020-05-24T19:07:38.222Z",
-        "updated_at":"2020-05-24T19:07:38.222Z",
-        "total_score":10,
-        "root_distance_score:2,
-        "vote_distance_score":2,
-        "skipped_slot_score":2,
-        "software_version":"1.2.3 devbuild",
-        "software_version_score":2,
-        "stake_concentration_score":0,
-        "data_center_concentration_score":0,
-        "published_information_score":0,
-        "security_report_score":0,
-        "active_stake":100000,
-        "commission":10,
-        "delinquent":false,
-        "data_center_key":"24940-FI-Helsinki",
-        "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
-        "skipped_slots":664,
-        "skipped_slot_percent":"0.5155",
-        "ping_time":"205.703",
-        "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
-      }
+{
+  "network":"testnet",
+  "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
+  "name":"Example Name",
+  "keybase_id":null,
+  "www_url":"https://www.example.com",
+  "details":"Example validator located anywhere.",
+  "created_at":"2020-05-24T19:07:38.222Z",
+  "updated_at":"2020-05-24T19:07:38.222Z",
+  "total_score":10,
+  "root_distance_score:2,
+  "vote_distance_score":2,
+  "skipped_slot_score":2,
+  "software_version":"1.2.3 devbuild",
+  "software_version_score":2,
+  "stake_concentration_score":0,
+  "data_center_concentration_score":0,
+  "published_information_score":0,
+  "security_report_score":0,
+  "active_stake":100000,
+  "commission":10,
+  "delinquent":false,
+  "data_center_key":"24940-FI-Helsinki",
+  "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
+  "skipped_slots":664,
+  "skipped_slot_percent":"0.5155",
+  "ping_time":"205.703",
+  "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
+}
     </pre>
   </div>
 </div>
+
 <hr />
-<h4>Validator Block Production History</h4>
+
+<h4 id="validator-block">Validator Block Production History</h4>
 <div class="row">
   <div class="col-sm-12">
     <p>The validator_block_history endpoint will return a history of block production stats for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID. You can also include a `limit` parameter to request more or fewer datapoints. </p>
@@ -159,39 +184,44 @@
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validator_block_history/:network/:account.json?limit=100'</pre>
     <p>Response:</p>
     <pre>
-      [
-        {
-          "epoch":143,
-          "leader_slots":2188,
-          "blocks_produced":2036,
-          "skipped_slots":152,
-          "skipped_slot_percent":"0.0695",
-          "created_at":"2021-01-24T17:12:23.098Z",
-          "batch_uuid":"015ccead-e713-4412-a1f4-e2365d956809"
-        },
-        ...
-      ]
+[
+  {
+    "epoch":143,
+    "leader_slots":2188,
+    "blocks_produced":2036,
+    "skipped_slots":152,
+    "skipped_slot_percent":"0.0695",
+    "created_at":"2021-01-24T17:12:23.098Z",
+    "batch_uuid":"015ccead-e713-4412-a1f4-e2365d956809"
+  },
+  ...
+]
     </pre>
   </div>
 </div>
+
 <hr />
-<h3>Error Codes:</h3>
+
+<h3 id="error-codes">Error Codes:</h3>
 <dl class="row">
-  <dt class="col-sm-1 text-right">400</dt>
-  <dd class="col-sm-11">Parameter Missing</dd>
-  <dt class="col-sm-1 text-right">401</dt>
-  <dd class="col-sm-11">Unauthorized</dd>
-  <dt class="col-sm-1 text-right">404</dt>
-  <dd class="col-sm-11">Record Not Found</dd>
-  <dt class="col-sm-1 text-right">500</dt>
-  <dd class="col-sm-11">Server Error (Admin has been notified)</dd>
+  <dt class="col-2 col-sm-1">400</dt>
+  <dd class="col-10 col-sm-11">Parameter Missing</dd>
+  <dt class="col-2 col-sm-1">401</dt>
+  <dd class="col-10 col-sm-11">Unauthorized</dd>
+  <dt class="col-2 col-sm-1">404</dt>
+  <dd class="col-10 col-sm-11">Record Not Found</dd>
+  <dt class="col-2 col-sm-1">500</dt>
+  <dd class="col-10 col-sm-11">Server Error (Admin has been notified)</dd>
 </dl>
-<h3>NOTES:</h3>
+
+<hr />
+
+<h3 id="notes">NOTES:</h3>
 <div class="row">
   <div class="col-sm-12">
-    <p>Active stake is shown in Lamports</p>
-    <p>Commision is shown in percent. e.g. 10&percnt;</p>
+    <p>Active stake is shown in Lamports.</p>
+    <p>Commision is shown in percent. e.g. 10&percnt;.</p>
     <p>Our database uses null values when there is no data. You should expect to see `null` as a possible return value for any attribute. If an attribute is missing from the output, then you can also assume the value is null.</p>
-    <p>Version 1 of this API is still in development. Check back here to see updates!</p>
+    <p class="text-muted">Version 1 of this API is still in development. Check back here to see updates!</p>
   </div>
 </div>

@@ -1,0 +1,39 @@
+@import "variables";
+
+.card {
+  background-color: darken($background-color, 3%);
+  border: 2px solid $card-border-color;
+  border-radius: $border-radius;
+  margin-bottom: 30px;
+  overflow: hidden;
+  &:last-of-type { margin-bottom: 0; }
+
+  &-content {
+    padding: 50px $padding-standard $padding-standard $padding-standard;
+    &::before {
+      content: '';
+      position: absolute;
+      border: 1px solid $card-border-color;
+      border-radius: 2px;
+      background-color: $card-border-color;
+      margin: -35px auto 20px auto;
+      height: 5px;
+      width: 300px;
+      margin-left: calc(50% - 15px - 300px/2);
+      @media(max-width: $screen-sm-max) {
+        width: 200px;
+        margin-left: calc(50% - 15px - 200px/2);
+      }
+    }
+  }
+
+  &-heading {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  &-img {
+    position: absolute;
+    margin-top: -20px;
+  }
+}

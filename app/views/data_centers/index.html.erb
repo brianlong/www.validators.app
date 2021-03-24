@@ -1,36 +1,36 @@
-<h1><%= params[:network].capitalize %> Data Centers</h1>
-<table class='table table-striped table-borderless'>
-  <thead class="thead-dark">
-    <tr>
-      <th>Key<br />&nbsp;</th>
-      <th>ISP<br />&nbsp;</th>
-      <th>
-        Population<br />
-        <span class="small">(<%= @total_population %>)</span>
-      </th>
-      <th>
-        Active Stake<br />
-        <span class="small"><%= number_with_delimiter lamports_to_sol(@total_stake) %></span>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @data_centers.each do |k,v| %>
-    <tr>
-      <td><%= link_to k, data_center_url(network: params[:network], key: k.gsub('/', '-slash-')) %></td>
-      <td><%= v[:aso] %></td>
-      <td><%= v[:count] %></td>
-      <td>
-        <%= number_with_delimiter lamports_to_sol(v[:active_stake]) %>
-      (  <%= number_to_percentage(
-               (v[:active_stake] / @total_stake.to_f)*100.0,
-               precision: 2
-            )
-         %>)
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
+<h1 class="mb-5"><%= params[:network].capitalize %> Data Centers</h1>
 
+<div class="card mb-4">
+  <div class="table-responsive-md">
+    <table class='table mb-0'>
+      <thead>
+      <tr>
+        <th class="wider-column">Key<br />&nbsp;</th>
+        <th class="wider-column">ISP<br />&nbsp;</th>
+        <th class="narrow-column">
+          Population<br />
+          <small class="text-muted">(<%= @total_population %>)</small>
+        </th>
+        <th class="wider-column">
+          Active Stake<br />
+          <small class="text-muted"><%= number_with_delimiter lamports_to_sol(@total_stake) %></small>
+        </th>
+      </tr>
+      </thead>
 
-</table>
+      <tbody>
+      <% @data_centers.each do |k,v| %>
+        <tr>
+          <td><%= link_to k, data_center_url(network: params[:network], key: k.gsub('/', '-slash-')) %></td>
+          <td><%= v[:aso] %></td>
+          <td><%= v[:count] %></td>
+          <td>
+            <%= number_with_delimiter lamports_to_sol(v[:active_stake]) %>
+            (<%= number_to_percentage((v[:active_stake] / @total_stake.to_f)*100.0, precision: 2) %>)
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

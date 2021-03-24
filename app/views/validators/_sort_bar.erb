@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-md-7 mb-3">
+    <%= link_to 'Random',
+                url_for(order: 'random', page: params[:page], network: params[:network], refresh: params[:refresh]),
+                class: "btn btn-sm mr-1 mb-2 btn-secondary #{ 'active' unless %w[score name stake].include?(params[:order]) }" %>
+    <%= link_to 'Stake',
+                url_for(order: 'stake', page: params[:page], network: params[:network], refresh: params[:refresh]),
+                class: "btn btn-sm mr-1 mb-2 btn-secondary #{ 'active' if params[:order] == 'stake' }" %>
+    <%= link_to 'Score',
+                url_for(order: 'score', page: params[:page], network: params[:network], refresh: params[:refresh]),
+                class: "btn btn-sm mr-1 mb-2 btn-secondary #{ 'active' if params[:order] == 'score' }" %>
+    <%= link_to 'Name',
+                url_for(order: 'name', page: params[:page], network: params[:network], refresh: params[:refresh]),
+                class: "btn btn-sm mb-2 btn-secondary #{ 'active' if params[:order] == 'name' }" %>
+  </div>
+
+  <div class="col-md-5">
+    <%= form_with(method: :get, local: true) do %>
+      <div class="form-group-row">
+        <div class="input-group mb-4">
+          <%= text_field_tag(:q, '', placeholder: 'Starts with...', class: 'form-control') %>
+          <%= hidden_field_tag(:network, params[:network]) %>
+          <%= hidden_field_tag(:order, params[:order]) %>
+          <%= hidden_field_tag(:refresh, params[:refresh]) %>
+          <div class="input-group-append">
+            <%= submit_tag("Search", class: 'btn btn-sm btn-primary') %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

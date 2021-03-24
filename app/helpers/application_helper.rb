@@ -12,7 +12,7 @@ module ApplicationHelper
     when 'notice'
       'alert-info'
     else
-      flash_type.to_s
+      'alert-info'
     end
   end
 
@@ -29,21 +29,21 @@ module ApplicationHelper
   end
 
   def software_color_class(software_version)
-    return 'text-red' if software_version.nil?
-    return 'text-red' if software_version.blank?
+    return 'text-danger' if software_version.nil?
+    return 'text-danger' if software_version.blank?
 
     begin
       version = ValidatorSoftwareVersion.new(number: software_version, network: params[:network])
     rescue
-      return 'text-red'
+      return 'text-danger'
     end
 
     if version.running_latest_or_newer?
-      'text-green'
+      'text-success'
     elsif version.running_latest_major_and_minor_or_newer?
-      'text-orange'
+      'text-warning'
     else
-      'text-red'
+      'text-danger'
     end
   end
 end

@@ -1,0 +1,127 @@
+// Colors
+
+// Brand colors:
+$green: #00ce99;
+$purple: #b832c8;
+// Bootstrap overrides:
+$base-color: #e3e3e3;
+$link-color: lighten($purple, 28%);
+$link-color-secondary: lighten($link-color, 18%);
+$background-color: #1c1732;
+$background-color-secondary: lighten($background-color, 7%);
+$background-color-tertiary: #2f163c;
+// Other:
+$black: #000;
+$white: #fff;
+$red: #ff5262;
+$orange: #ffc107;
+$grey-light: darken($base-color, 30%);
+$card-background-color: darken($background-color, 3%);
+$card-border-color: #393646;
+// Score colours:
+$blue: #0091f2;
+$grey: #cacaca;
+// With transparency:
+$green-transparent: rgba(0, 206, 153, 0.4);
+$orange-transparent: rgba(255, 193, 7, 0.4);
+$red-transparent: rgba(255, 82, 98, 0.4);
+$grey-transparent: rgba(202, 202, 202, 0.3);
+
+
+// Breakpoints
+
+$screen-xs-max: 575px;
+$screen-sm-min: 576px;
+$screen-sm-max: 767px;
+$screen-md-min: 768px;
+$screen-md-max: 991px;
+$screen-lg-min: 992px;
+$screen-lg-max: 1199px;
+$screen-xl-min: 1200px;
+$screen-xl-max: 1399px;
+$screen-xxl-min: 1400px;
+$screen-xxl-max: 1599px;
+$screen-xxxl-min: 1600px;
+
+
+// Typography
+
+$font-family-base: 'Roboto';
+$font-family-alternative: 'Montserrat';
+
+@mixin font-family-base {
+  font-family: $font-family-base, sans-serif;
+}
+@mixin font-family-alternative {
+  font-family: $font-family-alternative, sans-serif;
+}
+
+$font-size-base: 16px;
+$font-size-base-tablet: 15.5px;
+$font-size-base-mobile: 15px;
+$font-size-larger: 18px;
+$font-size-larger-tablet: 17.5px;
+$font-size-larger-mobile: 17px;
+$font-size-smaller: 13px;
+$font-size-smaller-tablet: 13px;
+$font-size-smaller-mobile: 12.5px;
+
+$font-size-h1: 42px;
+$font-size-h2: 34px;
+$font-size-h3: 30px;
+$font-size-h4: 26px;
+$font-size-h5: 22px;
+$font-size-h6: $font-size-larger;
+
+@mixin font-size-base {
+  font-size: $font-size-base;
+  @media(max-width: $screen-md-max) {
+    font-size: $font-size-base-tablet;
+  }
+  @media(max-width: $screen-sm-max) {
+    font-size: $font-size-base-mobile;
+  }
+}
+
+@mixin font-size-larger {
+  font-size: $font-size-larger;
+  @media(max-width: $screen-md-max) {
+    font-size: $font-size-larger-tablet;
+  }
+  @media(max-width: $screen-sm-max) {
+    font-size: $font-size-larger-mobile;
+  }
+}
+
+@mixin font-size-smaller {
+  font-size: $font-size-smaller;
+  @media(max-width: $screen-md-max) {
+    font-size: $font-size-smaller-tablet;
+  }
+  @media(max-width: $screen-sm-max) {
+    font-size: $font-size-smaller-mobile;
+  }
+}
+
+$font-weight-bold-primary: 700;
+$font-weight-bold-secondary: 600;
+$font-weight-normal: 400;
+
+
+// Other
+
+$border-radius: 20px;
+$border-radius-larger: 30px;
+
+@mixin box-shadow() {
+  box-shadow: $grey-light 0px 5px 15px 0px;
+}
+@mixin filter-shadow() {
+  filter: drop-shadow(0px 5px 10px $grey-light);
+}
+@mixin border() {
+  border: 1px solid $grey-light;
+}
+
+$padding-standard: 15px;
+$margin-standard: 15px;

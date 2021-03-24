@@ -1,0 +1,93 @@
+@import "variables";
+
+.required:after {
+  content: " *";
+}
+
+.form-control {
+  border-radius: $border-radius;
+  height: 47px;
+  padding-left: 18px;
+  color: $background-color;
+  transition: .1s ease;
+  &:focus {
+    outline: none;
+    border-color: transparent;
+    box-shadow: 0 0 0 3px $green-transparent;
+    color: $background-color;
+    transition: .1s ease;
+  }
+}
+
+label {
+  padding-left: $padding-standard;
+}
+
+input[type=submit] {
+  margin-top: 10px;
+}
+
+.form-group-row {
+  .form-control:focus {
+    box-shadow: none;
+    border-color: $white;
+    border-right-color: transparent;
+  }
+  input[type=submit] {
+    margin-top: 0px;
+  }
+}
+
+.field_with_errors {
+  label {}
+  .form-control {
+    box-shadow: 0 0 0 3px $red-transparent;
+  }
+}
+
+.checkbox-custom {
+  label {
+    padding-left: 20px;
+    &:hover { cursor: pointer; }
+  }
+  .checkbox {
+    position: absolute;
+    margin-top: 2px;
+    margin-left: -30px;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    background-color: $white;
+    border-radius: 50%;
+    font-size: 18px;
+    .fa-check {
+      position: absolute;
+      margin-top: -2px;
+      margin-left: 2px;
+      color: $green;
+      font-size: 18px;
+      opacity: 0;
+      transition: opacity .1s ease-in-out;
+    }
+  }
+  input[type=checkbox] {
+    height: 0;
+    opacity: 0;
+    &:checked ~ label .fa-check {
+      opacity: 1;
+      transition: opacity .15s ease-in-out;
+    }
+  }
+}
+
+.form-errors {
+  h4, h5, h6 {
+    margin-bottom: 10px;
+  }
+  ul {
+    margin-bottom: 0;
+    li {
+      margin-bottom: 10px;
+    }
+  }
+}

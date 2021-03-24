@@ -1,43 +1,49 @@
-<h1>Your Dashboard</h1>
-<div class="row you-dashboard">
-  <div class="col-sm-6">
-    User Name:
-  </div>
-  <div class="col-sm-6">
-    <%= @user.username %>
-  </div>
-</div>
-<div class="row you-dashboard">
-  <div class="col-sm-6">
-  Email:
-  </div>
-  <div class="col-sm-6">
-    <%= @user.email %>
-  </div>
-</div>
-<div class="row you-dashboard">
-  <div class="col-sm-6">
-    API Token:
-  </div>
-  <div class="col-sm-6">
-    <%= @user.api_token %>
-  </div>
-</div>
 <div class="row">
-  <div class="col-sm-6">
-    &nbsp;
-  </div>
-  <div class="col-sm-6">
-    <%= button_to 'Regenerate Token', you_regenerate_token_url, class: 'btn  btn-light' %>
-    Regenerate only if your current API token was compromised.<br />
-    Change takes effect immediately.
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <div class="card-content pb-0">
+        <h1 class="card-heading">Your Dashboard</h1>
+      </div>
+
+      <table class="table table-block-sm mb-0">
+        <tbody>
+          <tr>
+            <td><strong>Username:</strong></td>
+            <td><%= @user.username %></td>
+          </tr>
+          <tr>
+            <td><strong>Email:</strong></td>
+            <td><%= @user.email %></td>
+          </tr>
+          <tr>
+            <td><strong>API Token:</strong></td>
+            <td>
+              <%= @user.api_token %><br />
+              <%= button_to 'Regenerate Token', you_regenerate_token_url, class: 'btn btn-sm btn-secondary my-3' %>
+              <p>
+                Regenerate only if your current API token was compromised.<br />
+                Change takes effect immediately.
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
 <div class="row">
-  <div class="col-sm-6">
-    <%= link_to 'Edit Your Details', edit_user_registration_url, class: 'you-dashboard' %>
+  <div class="col-sm-6 mb-4">
+    <%= link_to 'Edit Your Details', edit_user_registration_url, class: 'btn btn-md btn-primary' %>
   </div>
-  <div class="col-sm-6">
-    &nbsp;
+  <div class="col-sm-6 text-sm-right">
+    <%= button_to 'Cancel my account', registration_path(@user), data: { confirm: 'Are you sure?' }, method: :delete,
+                  class: 'btn btn-md btn-secondary mt-0' %>
   </div>
 </div>
+
+<!--
+  <%= link_to :back, class: 'text-muted' do %>
+    <i class="fas fa-arrow-left mr-1 mt-4"></i> Back
+  <% end %>
+-->
