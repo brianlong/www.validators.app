@@ -328,7 +328,12 @@ module ValidatorScoreV1Logic
           Rails.logger.warn "vah_was_nil"
           Rails.logger.warn "validator_id_is_#{validator.id}"
           Rails.logger.warn validator.id
-          vah = vote_account_histories.first.find { |vah_array| vah_array.first == validator.id }
+
+          Rails.logger.warn "vote_account_histories_info"
+          Rails.logger.warn "class #{vote_account_histories.class}"
+          Rails.logger.warn "first element #{vote_account_histories.first}"
+
+          vah = vote_account_histories.find { |vah_array| vah_array.first == validator.id }
 
           if vah
             vah = VoteAccountHistory.find(vah[1])
