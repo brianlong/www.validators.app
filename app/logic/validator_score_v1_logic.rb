@@ -288,7 +288,6 @@ module ValidatorScoreV1Logic
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
 
         if vah.nil?
-          Rails.logger.warn "Making_n_plus_one_query"
           vah = validator&.vote_accounts&.last&.vote_account_histories&.last
         end
         # This means we skip the software version for non-voting nodes.
