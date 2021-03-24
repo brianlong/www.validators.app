@@ -300,8 +300,6 @@ module ValidatorScoreV1Logic
       #   batch_uuid: p.payload[:batch_uuid]
       # ).to_a
 
-      # last_vah = p.payload[:validators].joins(:vote_account_histories).order('created_at desc')
-
       sql = <<-SQL_END
         SELECT validators.id, vote_account_histories.*
         FROM vote_account_histories
@@ -310,21 +308,11 @@ module ValidatorScoreV1Logic
         WHERE vote_account_histories.network = '#{p.payload[:network]}' AND vote_account_histories.batch_uuid = '#{p.payload[:batch_uuid]}'
       SQL_END
 
-      # pp sql
-
       # GROUP BY validators.id
       # ORDER BY vote_account_histories.created_at DESC LIMIT 1
 
       vote_account_histories = ActiveRecord::Base.connection.execute(sql).to_a
 
-      # Rails.logger.warn vote_account_histories
-      # binding.pry
-
-# [
-#   [1, 1, 1, nil, 1, nil, 1, 1000000000, "version one", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil],
-#   [1, 2, 1, nil, 1, nil, 1, 1000000000, "version one", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil],
-#   [1, 3, 1, nil, 1, nil, 1, 1000000000, "version two", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil]
-# ]``
       p.payload[:validators].each do |validator|
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
 
