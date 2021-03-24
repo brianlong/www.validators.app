@@ -47,21 +47,54 @@ OVH_HOSTS = {
     country_name: 'France',
     city_name: 'Strasbourg',
     data_center_key: '16276-FR-Strasbourg'
+  },
+  'dc1' => {
+    country_iso_code: 'FR',
+    country_name: 'France',
+    city_name: 'Paris',
+    data_center_key: '16276-FR-Paris'
+  },
+  'gsw' => {
+    country_iso_code: 'FR',
+    country_name: 'France',
+    city_name: 'Paris',
+    data_center_key: '16276-FR-Paris'
+  },
+  'p19' => {
+    country_iso_code: 'FR',
+    country_name: 'France',
+    city_name: 'Paris',
+    data_center_key: '16276-FR-Paris'
+  },
+  'vin' => {
+    country_iso_code: 'US',
+    country_name: 'United States',
+    city_name: 'Vint Hill',
+    data_center_key: '16276-US-Vint-Hill'
+  },
+  'hil' => {
+    country_iso_code: 'US',
+    country_name: 'United States',
+    city_name: 'Hillsboro',
+    data_center_key: '16276-US-Vint-Hill'
   }
 }
 
+ASO = 'OVH SAS'
+HOST_REGEX = /(be|bg|vl).+\.(lon1|rbx|bhs|waw|fra|gra|sbg|hil|vin|p19|gsw|dc1).+/
+
 Ip.where(traits_autonomous_system_number: 16276)
-  .where('address not in (select address from ip_overrides)')
+  .where.not(address: IpOverride.select(:address))
   .each do |ip|
-  last_ovh_ip = get_matching_traceroute(ip.address, /(be|bg|vl).+(lon1|rbx|bhs|waw|fra|gra|sbg).+/)
+  last_ovh_ip = get_matching_traceroute(ip: ip.address, reg: HOST_REGEX)
 
   OVH_HOSTS.each do |host_reg, host_data|
     next unless last_ovh_ip&.include?(host_reg)
-    host = last_ovh_ip.strip.split(" ")[1].strip
-    setup_ip_override(ip, host_data, host)
+    host = ("H" + last_ovh_ip).strip.split(" ")[1].strip
+    setup_ip_override(ip: ip, host_data: host_data, host: host)
   end
 
-  update_ip_with_overrides()
-  update_validator_score_with_overrides()
+  update_ip_with_overrides(aso: ASO)
+  update_validator_score_with_overrides
 end
 
