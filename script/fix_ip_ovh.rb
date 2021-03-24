@@ -76,7 +76,7 @@ OVH_HOSTS = {
     country_iso_code: 'US',
     country_name: 'United States',
     city_name: 'Hillsboro',
-    data_center_key: '16276-US-Vint-Hill'
+    data_center_key: '16276-US-Hillsboro'
   }
 }
 
