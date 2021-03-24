@@ -190,7 +190,7 @@
                     vector = validator.score&.root_distance_history.to_a[-vl..-1]
                   %>
                   <% max_value = vector&.max %>
-                  <% if max_value > Y_ROOT_DISTANCE_MAX %>
+                  <% if max_value && max_value > Y_ROOT_DISTANCE_MAX %>
                     <% max_value_position = max_value_position(vector) %>
                     <% max_value_position_mobile = max_value_position(vector, min_position: false) %>
                     <div class="chart-top-container">
@@ -219,7 +219,7 @@
                     vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
                   %>
                   <% max_value = vote_vector&.max %>
-                  <% if max_value > Y_VOTE_DISTANCE_MAX %>
+                  <% if max_value && max_value > Y_VOTE_DISTANCE_MAX %>
                     <% max_value_position = max_value_position(vote_vector) %>
                     <% max_value_position_mobile = max_value_position(vote_vector, min_position: false) %>
                     <div class="chart-top-container">
