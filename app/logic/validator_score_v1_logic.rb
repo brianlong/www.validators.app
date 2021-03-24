@@ -326,11 +326,13 @@ module ValidatorScoreV1Logic
           # there shouldn't be more than 1 for each validator, so #find should work
           # instead of #select w/ order_by('created_at desc').first
           Rails.logger.warn "vah_was_nil"
+          Rails.logger.warn "validator_id_is_#{validator.id}"
+          Rails.logger.warn validator.id
           vah = vote_account_histories.find { |vah_array| vah_array.first == validator.id }
 
           if vah
             vah = VoteAccountHistory.find(vah[1])
-            Rails.logger.warn "found VAH for #{vah[1]}"
+            Rails.logger.warn "found_VAH_for_#{vah[1]}"
           end
         end
         # This means we skip the software version for non-voting nodes.
