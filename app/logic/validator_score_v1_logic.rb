@@ -325,6 +325,7 @@ module ValidatorScoreV1Logic
           # new
           # there shouldn't be more than 1 for each validator, so #find should work
           # instead of #select w/ order_by('created_at desc').first
+          Rails.logger.warn "vah_was_nil"
           vah = vote_account_histories.find { |vah_array| vah_array.first == validator.id }
 
           if vah
