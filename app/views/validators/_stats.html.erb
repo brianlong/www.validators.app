@@ -4,12 +4,12 @@
 
     <div class="row px-5 text-center">
       <div class="col-6 col-md-3 mb-3">
-        <small class="text-muted">Epochs:</small>
+        <small class="text-muted">Epoch:</small>
         <div class="h2 text-purple"><%= @this_epoch&.epoch %></div>
       </div>
       <div class="col-6 col-md-3 mb-3">
         <small class="text-muted">Validators:</small>
-        <div class="h2 text-purple"><%= @validators_count %></div>
+        <div class="h2 text-purple"><%= number_with_delimiter(@validators_count, delimiter: " ") %></div>
       </div>
       <div class="col-6 col-md-3 mb-3">
         <small class="text-muted">Softw. Version:</small>
