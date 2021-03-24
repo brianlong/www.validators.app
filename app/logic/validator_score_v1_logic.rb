@@ -131,10 +131,21 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
-      root_distance_all_average = array_average(root_distance_all)
-      root_distance_all_median = array_median(root_distance_all)
-      vote_distance_all_average = array_average(vote_distance_all)
-      vote_distance_all_median = array_median(vote_distance_all)
+      if root_distance_all.compact.present?
+        root_distance_all_average = array_average(root_distance_all)
+        root_distance_all_median = array_median(root_distance_all)
+      else
+        root_distance_all_average = 0
+        root_distance_all_median = 0
+      end
+
+      if vote_distance_all.compact.present?
+        vote_distance_all_average = array_average(vote_distance_all)
+        vote_distance_all_median = array_median(vote_distance_all)
+      else
+        vote_distance_all_average = 0
+        vote_distance_all_median = 0
+      end
 
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_average: #{root_distance_all_average}"
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_median: #{root_distance_all_median}"
@@ -284,22 +295,50 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).to_a
 
-      last_vote_account_histories = VoteAccountHistory.where(
-        network: p.payload[:network],
-        batch_uuid: p.payload[:batch_uuid]
-      ).to_a
+      # last_vote_account_histories = VoteAccountHistory.where(
+      #   network: p.payload[:network],
+      #   batch_uuid: p.payload[:batch_uuid]
+      # ).to_a
+
+      # last_vah = p.payload[:validators].joins(:vote_account_histories).order('created_at desc')
+
+      sql = <<-SQL_END
+        SELECT validators.id, vote_account_histories.*
+        FROM vote_account_histories
+        JOIN vote_accounts ON vote_account_histories.vote_account_id = vote_accounts.id
+        JOIN validators ON validators.id = vote_accounts.validator_id
+        WHERE vote_account_histories.network = '#{p.payload[:network]}' AND vote_account_histories.batch_uuid = '#{p.payload[:batch_uuid]}'
+      SQL_END
+
+      # pp sql
+
+      # GROUP BY validators.id
+      # ORDER BY vote_account_histories.created_at DESC LIMIT 1
+
+      vote_account_histories = ActiveRecord::Base.connection.execute(sql).to_a
+
+      # binding.pry
+
+# [
+#   [1, 1, 1, nil, 1, nil, 1, 1000000000, "version one", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil],
+#   [1, 2, 1, nil, 1, nil, 1, 1000000000, "version one", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil],
+#   [1, 3, 1, nil, 1, nil, 1, 1000000000, "version two", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil]
+# ]
 
       p.payload[:validators].each do |validator|
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
 
         if vah.nil?
-          vah = last_vote_account_histories.select do |vah|
-            if validator.vote_accounts.any?
-              validator.vote_accounts.last.account == vah.vote_account.account
-            end
+          # means that validator doesn't have any ValidatorHistory for this batch
 
-          end
+          # old
           # vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+
+          # new
+          # there shouldn't be more than 1 for each validator, so #find should work
+          # instead of #select w/ order_by('created_at desc').first
+          vah = vote_account_histories.select { |vah| vah.first == validator.id }
+          vah = VoteAccountHistory.find(vah[1])
         end
         # This means we skip the software version for non-voting nodes.
         if vah

@@ -2,7 +2,7 @@ one:
   id: 1
   vote_account_id: 1
   network: testnet
-  batch_uuid: '1-2-3'
+  batch_uuid: '1234'
   software_version: version one
   last_vote: 1
   activated_stake: 1_000_000_000
@@ -11,7 +11,7 @@ two:
   id: 2
   vote_account_id: 1
   network: testnet
-  batch_uuid: '1-2-3'
+  batch_uuid: '1234'
   software_version: version one
   last_vote: 1
   activated_stake: 1_000_000_000
@@ -20,7 +20,7 @@ three:
   id: 3
   vote_account_id: 1
   network: testnet
-  batch_uuid: '1-2-3'
+  batch_uuid: '1234'
   software_version: version two
   last_vote: 1
   activated_stake: 1_000_000_000

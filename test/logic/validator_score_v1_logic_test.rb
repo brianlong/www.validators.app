@@ -251,7 +251,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .skipped_slot_score
   end
 
-  test 'assign_software_version_score' do
+  test 'assign_software_version_score when validator has ValidatorHistory for the batch' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -261,7 +261,33 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&assign_block_history_score)
                 .then(&assign_software_version_score)
 
+    pp p.errors
+
     assert_equal 0, p.payload[:validators]
+                     .first
+                     .validator_score_v1
+                     .software_version_score
+  end
+
+  test 'assign_software_version_score when the validator has no ValidatorHistory for the batch' do
+    ValidatorHistory.destroy_all
+
+    # binding.pry
+
+    p = Pipeline.new(200, @initial_payload)
+                .then(&set_this_batch)
+                .then(&validators_get)
+                .then(&block_vote_history_get)
+                .then(&assign_block_and_vote_scores)
+                .then(&block_history_get)
+                .then(&assign_block_history_score)
+                .then(&assign_software_version_score)
+
+    # pp p.errors
+    # binding.pry
+    # pp p.errors.backtrace
+
+    assert_equal 2, p.payload[:validators]
                      .first
                      .validator_score_v1
                      .software_version_score
