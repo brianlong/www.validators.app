@@ -337,7 +337,7 @@ module ValidatorScoreV1Logic
           # new
           # there shouldn't be more than 1 for each validator, so #find should work
           # instead of #select w/ order_by('created_at desc').first
-          vah = vote_account_histories.select { |vah| vah.first == validator.id }
+          vah = vote_account_histories.find { |vah| vah.first == validator.id }
           vah = VoteAccountHistory.find(vah[1])
         end
         # This means we skip the software version for non-voting nodes.
