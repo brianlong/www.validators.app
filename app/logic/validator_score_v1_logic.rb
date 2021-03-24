@@ -317,7 +317,7 @@ module ValidatorScoreV1Logic
 
       vote_account_histories = ActiveRecord::Base.connection.execute(sql).to_a
 
-      Rails.logger.warn vote_account_histories
+      # Rails.logger.warn vote_account_histories
       # binding.pry
 
 # [
