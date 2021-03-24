@@ -26,11 +26,7 @@
           <td><%= v[:count] %></td>
           <td>
             <%= number_with_delimiter lamports_to_sol(v[:active_stake]) %>
-            (<%= number_to_percentage(
-                   (v[:active_stake] / @total_stake.to_f)*100.0,
-                   precision: 2
-                 )
-          %>)
+            (<%= number_to_percentage((v[:active_stake] / @total_stake.to_f)*100.0, precision: 2) %>)
           </td>
         </tr>
       <% end %>

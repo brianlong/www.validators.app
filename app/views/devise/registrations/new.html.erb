@@ -9,16 +9,14 @@
         <%= f.label :username, class: 'required' do %>
           Username <small>(not your email address!)</small>
         <% end %>
-        <%= f.text_field :username, autofocus: true, autocomplete: "username",
-                         class: 'form-control' %>
+        <%= f.text_field :username, autofocus: true, autocomplete: "username", class: 'form-control' %>
       </div>
 
       <div class="form-group">
         <%= f.label :email, class: 'required' do %>
           Email <small>(encrypted on disc)</small>
         <% end %>
-        <%= f.text_field :email, autofocus: true, autocomplete: "email",
-                         class: 'form-control' %>
+        <%= f.text_field :email, autofocus: true, autocomplete: "email", class: 'form-control' %>
       </div>
 
       <div class="form-group">
@@ -28,14 +26,12 @@
             <small><%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %></small>
           <% end %>
         <% end %>
-        <%= f.password_field :password, autocomplete: "new-password",
-                             class: 'form-control' %>
+        <%= f.password_field :password, autocomplete: "new-password", class: 'form-control' %>
       </div>
 
       <div class="form-group">
         <%= f.label :password_confirmation, class: 'required' %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password",
-                             class: 'form-control' %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control' %>
       </div>
 
       <div class="form-group actions">

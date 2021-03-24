@@ -37,7 +37,8 @@
     <%= link_to 'Edit Your Details', edit_user_registration_url, class: 'btn btn-md btn-primary' %>
   </div>
   <div class="col-sm-6 text-sm-right">
-    <%= button_to 'Cancel my account', registration_path(@user), data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-md btn-secondary mt-0' %>
+    <%= button_to 'Cancel my account', registration_path(@user), data: { confirm: 'Are you sure?' }, method: :delete,
+                  class: 'btn btn-md btn-secondary mt-0' %>
   </div>
 </div>
 

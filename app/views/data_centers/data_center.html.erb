@@ -72,11 +72,10 @@
             class: 'btn btn-sm btn-secondary mb-4' %>
 
 <div class="card mb-4">
-  <div class="table-responsive-sm">
-  <table class='table mb-0'>
+  <table class='table mb-0 table-block-sm'>
     <thead>
-      <tr>
-        <th class="avatar-column">&nbsp;</th>
+      <tr class="d-none d-lg-table-row">
+        <th class="avatar-column d-none d-lg-table-cell">&nbsp;</th>
         <th class="wider-column">
           Name: Stake (%)<br />
           Account
@@ -86,43 +85,53 @@
           Data Center Gateway
         </th>
       </tr>
+      <tr class="d-lg-none">
+        <th>
+          Validators
+        </th>
+      </tr>
     </thead>
     <tbody>
       <% @scores.each do |sc| %>
         <% this_validator = sc.validator %>
         <tr>
-          <td>
-          <span class="avatar">
-            <% if this_validator && this_validator.avatar_url %>
-              <%= image_tag this_validator.avatar_url, class: 'img-circle mb-1' %>
-            <% else %>
-              <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle mb-1' %>
-            <% end %>
-          </span>
+          <td class="d-none d-lg-table-cell">
+            <span class="avatar">
+              <% if this_validator && this_validator.avatar_url %>
+                <%= image_tag this_validator.avatar_url, class: 'img-circle mb-1' %>
+              <% else %>
+                <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle mb-1' %>
+              <% end %>
+            </span>
             <% if sc.delinquent? %>
               <small class="text-danger">delinquent</small>
             <% end %>
           </td>
           <td>
-            <p>
+            <div class="mb-2">
+              <div class="d-lg-none">Name & Stake:</div>
               <%= this_validator.name || 'Anonymous' %>: <%= number_with_delimiter lamports_to_sol(sc.active_stake) %>
-              ( <%= number_to_percentage((sc.active_stake / @total_stake.to_f)*100.0,
-                                         precision: 2)
-              %>)
-            </p>
+              (<%= number_to_percentage((sc.active_stake / @total_stake.to_f)*100.0, precision: 2) %>)
+            </div>
+            <div class="d-lg-none">Account:</div>
             <%= link_to this_validator.account,
                         validator_url(network: params[:network],account: this_validator.account),
                         class: 'word-break-md' %>
           </td>
           <td>
-            <p><%= sc.ip_address %></p>
-            <%= Ip.where(address: sc.ip_address).first&.data_center_host %>
+            <div class="mb-2">
+              <div class="d-lg-none">IP Address: </div>
+              <%= sc.ip_address %>
+            </div>
+            <% if Ip.where(address: sc.ip_address).first %>
+              <div class="d-lg-none">Data Center Gateway: </div>
+              <%= Ip.where(address: sc.ip_address).first&.data_center_host %>
+            <% end %>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  </div>
 </div>
 
 <%= link_to 'Back to Data Centers',

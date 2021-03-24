@@ -24,22 +24,19 @@
             <small><%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %></small>
           <% end %>
         <% end %>
-        <%= f.password_field :password, autocomplete: "new-password",
-                             class: 'form-control'  %>
+        <%= f.password_field :password, autocomplete: "new-password", class: 'form-control'  %>
       </div>
 
       <div class="form-group">
         <%= f.label :password_confirmation %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password",
-                             class: 'form-control' %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control' %>
       </div>
 
       <div class="form-group">
         <%= f.label :current_password, class: 'required' do %>
           Current Password <small>(<%= t('.we_need_your_current_password_to_confirm_your_changes') %>)</small>
         <% end %>
-        <%= f.password_field :current_password, autocomplete: "current-password",
-                             class: 'form-control' %>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: 'form-control' %>
       </div>
 
       <div class="form-group actions">

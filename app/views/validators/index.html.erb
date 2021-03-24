@@ -12,15 +12,18 @@
       <div class="row">
         <div class="col-md-9 col-lg-10">
           <p class="small muted">
-            Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>. <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
+            Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
+            <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
           </p>
         </div>
         <div class='col-md-3 col-lg-2 toggle-container'>
           <% if params[:refresh] == 'true' %>
-            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
+            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
+                        url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
             <p class="small muted toggle-label">REFRESH ON</p>
           <% else %>
-            <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
+            <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'),
+                        url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
             <p class="small muted toggle-label">REFRESH OFF</p>
           <% end %>
         </div>
@@ -123,7 +126,7 @@
                   <% validator_name = validator.name || shorten_key(validator.account) %>
                   <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                               class: 'font-weight-bold' do %>
-                      <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator.name %>
+                      <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_name %>
                     <% end %>
                   <% comm_class = 'text-danger' \
                                   if params[:network] == 'mainnet' && validator.commission.to_i == 100
@@ -260,7 +263,9 @@
         </table>
 
         <div class="px-15">
-          <p class="small muted">Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %></p>
+          <p class="small muted">
+            Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
+          </p>
           <%= paginate @validators %>
         </div>
 
