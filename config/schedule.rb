@@ -54,4 +54,5 @@ end
 
 every 1.day do
   ruby_script 'prune_database_tables.rb'
+  ruby_script 'validators_update_avatar_url.rb'
 end
