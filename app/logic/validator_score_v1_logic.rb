@@ -317,10 +317,7 @@ module ValidatorScoreV1Logic
 
       vote_account_histories = ActiveRecord::Base.connection.execute(sql).to_a
 
-<<<<<<< Updated upstream
-=======
       Rails.logger.warn vote_account_histories
->>>>>>> Stashed changes
       # binding.pry
 
 # [
@@ -341,16 +338,11 @@ module ValidatorScoreV1Logic
           # new
           # there shouldn't be more than 1 for each validator, so #find should work
           # instead of #select w/ order_by('created_at desc').first
-<<<<<<< Updated upstream
-          vah = vote_account_histories.find { |vah| vah.first == validator.id }
-          vah = VoteAccountHistory.find(vah[1])
-=======
           vah = vote_account_histories.find { |vah_array| vah_array.first == validator.id }
 
           if vah
             vah = VoteAccountHistory.find(vah[1])
           end
->>>>>>> Stashed changes
         end
         # This means we skip the software version for non-voting nodes.
         if vah
