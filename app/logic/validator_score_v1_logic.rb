@@ -324,8 +324,7 @@ module ValidatorScoreV1Logic
 #   [1, 1, 1, nil, 1, nil, 1, 1000000000, "version one", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil],
 #   [1, 2, 1, nil, 1, nil, 1, 1000000000, "version one", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil],
 #   [1, 3, 1, nil, 1, nil, 1, 1000000000, "version two", 2021-03-24 00:19:25 UTC, 2021-03-24 00:19:25 UTC, "testnet", "1-2-3", nil, nil]
-# ]
-
+# ]``
       p.payload[:validators].each do |validator|
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
 
@@ -342,6 +341,7 @@ module ValidatorScoreV1Logic
 
           if vah
             vah = VoteAccountHistory.find(vah[1])
+            Rails.logger.warn "found VAH for #{vah[1]}"
           end
         end
         # This means we skip the software version for non-voting nodes.
