@@ -12,7 +12,7 @@
         <div class="h2 text-purple"><%= number_with_delimiter(@validators_count, delimiter: " ") %></div>
       </div>
       <div class="col-6 col-md-3 mb-3">
-        <small class="text-muted">Software Ver:</small>
+        <small class="text-muted">Software Ver.:</small>
         <div class="h2 text-purple">
           <%= params[:network] == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION %>
         </div>
