@@ -39,6 +39,7 @@ class ValidatorBlockHistory < ApplicationRecord
   after_create :set_skipped_slot_percent_moving_average
 
   def self.average_skipped_slot_percent_for(network, batch_uuid)
+    # take average of the moving average
     where(
       network: network,
       batch_uuid: batch_uuid
@@ -46,6 +47,7 @@ class ValidatorBlockHistory < ApplicationRecord
   end
 
   def self.median_skipped_slot_percent_for(network, batch_uuid)
+    # take median of the moving average
     where(
       network: network,
       batch_uuid: batch_uuid
