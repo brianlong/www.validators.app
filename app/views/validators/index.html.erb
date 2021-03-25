@@ -306,7 +306,7 @@
                         'Gray'
                       end
 
-                    skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
+                    skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-vl..-1]&.map { |v| (v.to_f*100.0).round(1) }
 
                     line_color = if validator.skipped_slot_score == 2
                         '#7fbf7f'
