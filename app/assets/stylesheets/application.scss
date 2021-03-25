@@ -158,6 +158,13 @@ hr {
   }
 }
 
+.d-xxs-inline-block {
+ display: none;
+  @media(max-width: $screen-xxs-max) {
+    display: inline-block;
+  }
+}
+
 
 .modal {
   &-content {
