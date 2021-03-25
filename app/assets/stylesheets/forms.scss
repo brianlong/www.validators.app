@@ -17,6 +17,9 @@
     color: $background-color;
     transition: .1s ease;
   }
+  @media(max-width: $screen-xs-max) {
+    height: 40px;
+  }
 }
 
 label {
@@ -28,10 +31,15 @@ input[type=submit] {
 }
 
 .form-group-row {
-  .form-control:focus {
-    box-shadow: none;
-    border-color: $white;
-    border-right-color: transparent;
+  .form-control {
+     &:focus {
+       box-shadow: none;
+       border-color: $white;
+       border-right-color: transparent;
+     }
+    @media(max-width: $screen-xs-max) {
+      height: 40px;
+    }
   }
   input[type=submit] {
     margin-top: 0px;

@@ -2,22 +2,22 @@
   <div class="card-content">
 <!--    <h2 class="card-heading">Main Cluster Stats</h2>-->
 
-    <div class="row px-5 text-center">
-      <div class="col-6 col-md-3 mb-3">
+    <div class="row px-4 px-md-5 text-center">
+      <div class="col-6 col-md-3 mb-md-3">
         <small class="text-muted">Epoch:</small>
         <div class="h2 text-purple"><%= @this_epoch&.epoch %></div>
       </div>
-      <div class="col-6 col-md-3 mb-3">
+      <div class="col-6 col-md-3 mb-md-3">
         <small class="text-muted">Validators:</small>
         <div class="h2 text-purple"><%= number_with_delimiter(@validators_count, delimiter: " ") %></div>
       </div>
-      <div class="col-6 col-md-3 mb-3">
+      <div class="col-6 col-md-3 mb-md-3">
         <small class="text-muted">Software Ver.:</small>
         <div class="h2 text-purple">
           <%= params[:network] == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION %>
         </div>
       </div>
-      <div class="col-6 col-md-3 mb-3">
+      <div class="col-6 col-md-3 mb-md-3">
         <small class="text-muted">Active Stake:</small>
         <div class="h2 text-purple">
           <%= number_to_human(lamports_to_sol(@total_active_stake),
