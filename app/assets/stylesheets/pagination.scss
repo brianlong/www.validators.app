@@ -15,10 +15,16 @@
     @include font-size-smaller;
     font-weight: $font-weight-normal;
     padding: 12px 0px;
+    @media(max-width: $screen-xs-max) {
+      padding: 9px 0px;
+    }
 
     a {
       color: $base-color;
       padding: 12px 18px;
+      @media(max-width: $screen-xs-max) {
+        padding: 9px 11px;
+      }
     }
     &:hover, &:focus, &.focus {
       background-color: $green;
@@ -44,17 +50,23 @@
   .page {
     border-radius: 0;
     &.current {
-      padding: 12px 18px;
       background-color: $green;
       border: 2px solid $green;
       color: $background-color;
+      padding: 12px 18px;
+      @media(max-width: $screen-xs-max) {
+        padding: 9px 11px;
+      }
     }
     &.gap {
-      padding: 12px 18px;
       background-color: transparent;
       border: 2px solid $green;
       color: $base-color;
       font-weight: $font-weight-bold-secondary;
+      padding: 12px 18px;
+      @media(max-width: $screen-xs-max) {
+        padding: 9px 11px;
+      }
     }
   }
 }
