@@ -180,7 +180,7 @@ class ValidatorScoreV1 < ApplicationRecord
     end
   end
 
-  def skipped_slot_moving_average_push(val)
+  def skipped_slot_moving_average_history_push(val)
     self.skipped_slot_moving_average_history = [] if skipped_slot_moving_average_history.nil?
 
     skipped_slot_moving_average_history << val

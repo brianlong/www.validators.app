@@ -217,17 +217,33 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                          .validator_score_v1
                          .skipped_slot_history
 
+    assert_equal [0.3667], p.payload[:validators][0]
+                         .validator_score_v1
+                         .skipped_slot_moving_average_history
+
     assert_equal [0.2], p.payload[:validators][1]
                          .validator_score_v1
                          .skipped_slot_history
+
+    assert_equal [0.4667], p.payload[:validators][1]
+                         .validator_score_v1
+                         .skipped_slot_moving_average_history
 
     assert_equal [0.3], p.payload[:validators][2]
                          .validator_score_v1
                          .skipped_slot_history
 
+    assert_equal [0.5667], p.payload[:validators][2]
+                         .validator_score_v1
+                         .skipped_slot_moving_average_history
+
     assert_nil p.payload[:validators][3]
                          .validator_score_v1
                          .skipped_slot_history
+
+    assert_nil p.payload[:validators][3]
+                         .validator_score_v1
+                         .skipped_slot_moving_average_history
   end
 
   test 'assign_block_history_score' do
