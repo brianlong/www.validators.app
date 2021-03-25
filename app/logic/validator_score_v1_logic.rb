@@ -242,7 +242,7 @@ module ValidatorScoreV1Logic
           moving_average = array_average(prev_24_hours << skipped_slot_percent.to_f)
         end
 
-        validator.score.skipped_slot_moving_average_history_push(moving_average)
+        validator.score.skipped_slot_moving_average_history_push(moving_average.to_f)
       rescue StandardError => e
         Appsignal.send_error(e)
       end
