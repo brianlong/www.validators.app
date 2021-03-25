@@ -4,7 +4,7 @@
 
 require File.expand_path('../config/environment', __dir__)
 
-aso = 'Hetzner Online GmbH'
+ASO = 'Hetzner Online GmbH'
 hetzner_hosts = {
   'fsn1.hetzner.com' => {
     country_iso_code: 'DE',
@@ -66,8 +66,7 @@ Ip.where(traits_autonomous_system_number: 24_940)
       puts "   #{v.inspect}"
       ipor = IpOverride.find_or_create_by(address: ip.address)
       ipor.traits_autonomous_system_number = ip.traits_autonomous_system_number
-      ipor.traits_autonomous_system_organization = \
-        ip.traits_autonomous_system_organization
+      ipor.traits_autonomous_system_organization = ASO
       ipor.country_iso_code = v[:country_iso_code]
       ipor.country_name = v[:country_name]
       ipor.city_name = v[:city_name]

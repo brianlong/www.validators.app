@@ -17,8 +17,7 @@ module FixIpModule
   def setup_ip_override(ip:, host_data:, host:)
     ipor = IpOverride.find_or_create_by(address: ip.address)
     ipor.traits_autonomous_system_number = ip.traits_autonomous_system_number
-    ipor.traits_autonomous_system_organization = \
-      ip.traits_autonomous_system_organization
+    ipor.traits_autonomous_system_organization = host_data[:aso]
     ipor.country_iso_code = host_data[:country_iso_code]
     ipor.country_name = host_data[:country_name]
     ipor.city_name = host_data[:city_name]
