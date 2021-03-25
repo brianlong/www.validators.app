@@ -95,6 +95,6 @@ Ip.where(traits_autonomous_system_number: 16_276)
     setup_ip_override(ip: ip, host_data: host_data, host: host)
   end
 
-  update_ip_with_overrides(aso: ASO)
+  update_ip_with_overrides
   update_validator_score_with_overrides
 end

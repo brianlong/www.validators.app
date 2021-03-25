@@ -54,6 +54,7 @@ Ip.where(traits_autonomous_system_number: 24_940)
     puts ".  #{line}"
     next unless line.match?(/ex.+\.dc.+\.hetzner\.com/) ||
                 line.match?(/sp.+\.cloud.+\.hetzner\.com/)
+
     # use the lines below for some tough-to-get addresses
     # ||
     # line.match?(/core.+\.[hfn].+\.hetzner\.com/)
@@ -65,6 +66,8 @@ Ip.where(traits_autonomous_system_number: 24_940)
       puts "   #{v.inspect}"
       ipor = IpOverride.find_or_create_by(address: ip.address)
       ipor.traits_autonomous_system_number = ip.traits_autonomous_system_number
+      ipor.traits_autonomous_system_organization = \
+        ip.traits_autonomous_system_organization
       ipor.country_iso_code = v[:country_iso_code]
       ipor.country_name = v[:country_name]
       ipor.city_name = v[:city_name]
@@ -92,7 +95,7 @@ Ip.where(traits_autonomous_system_number: 24_940)
     ip.city_name = ipor.city_name,
     ip.data_center_key = ipor.data_center_key,
     ip.data_center_host = ipor.data_center_host,
-    ip.traits_autonomous_system_organization = 'Hetzner Online GmbH',
+    ip.traits_autonomous_system_organization = ipor.traits_autonomous_system_organization,
     ip.updated_at = NOW();
   "
   Ip.connection.execute(sql1)

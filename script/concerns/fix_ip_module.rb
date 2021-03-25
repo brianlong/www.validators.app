@@ -6,6 +6,7 @@ module FixIpModule
     last_ovh_ip = nil
     traceroute.each do |line|
       next unless line.match?(reg)
+
       # furthest ovh ip from traceroute
       last_ovh_ip = line
     end
@@ -16,6 +17,8 @@ module FixIpModule
   def setup_ip_override(ip:, host_data:, host:)
     ipor = IpOverride.find_or_create_by(address: ip.address)
     ipor.traits_autonomous_system_number = ip.traits_autonomous_system_number
+    ipor.traits_autonomous_system_organization = \
+      ip.traits_autonomous_system_organization
     ipor.country_iso_code = host_data[:country_iso_code]
     ipor.country_name = host_data[:country_name]
     ipor.city_name = host_data[:city_name]
@@ -24,7 +27,7 @@ module FixIpModule
     ipor.save
   end
 
-  def update_ip_with_overrides(aso:)
+  def update_ip_with_overrides
     sql1 = "
       UPDATE ips ip
       INNER JOIN ip_overrides ipor
@@ -36,7 +39,7 @@ module FixIpModule
       ip.city_name = ipor.city_name,
       ip.data_center_key = ipor.data_center_key,
       ip.data_center_host = ipor.data_center_host,
-      ip.traits_autonomous_system_organization = '#{aso}',
+      ip.traits_autonomous_system_organization = ipor.traits_autonomous_system_organization,
       ip.updated_at = NOW();
     ".squish
     Ip.connection.execute(sql1)
