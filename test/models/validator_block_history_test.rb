@@ -3,6 +3,44 @@ require 'test_helper'
 class ValidatorBlockHistoryTest < ActiveSupport::TestCase
   setup { @validator = create(:validator) }
 
+  test '::average_skipped_slot_percent_for returns the average of all skipped_slot_percent_moving_averages in the batch' do
+    vbh1 = create(
+      :validator_block_history,
+      batch_uuid: '42',
+      skipped_slot_percent: 0.75
+    )
+
+    vbh2 = create(
+      :validator_block_history,
+      batch_uuid: '42',
+      skipped_slot_percent: 0.25
+    )
+
+    assert_equal(0.5, ValidatorBlockHistory.average_skipped_slot_percent_for('testnet', '42'))
+  end
+
+  test '::median_skipped_slot_percent_for returns the median of all skipped_slot_percent_moving_averages in the batch' do
+    vbh1 = create(
+      :validator_block_history,
+      batch_uuid: '42',
+      skipped_slot_percent: 0.75
+    )
+
+    vbh2 = create(
+      :validator_block_history,
+      batch_uuid: '42',
+      skipped_slot_percent: 0.5
+    )
+
+    vbh3 = create(
+      :validator_block_history,
+      batch_uuid: '42',
+      skipped_slot_percent: 0.25
+    )
+
+    assert_equal(0.5, ValidatorBlockHistory.median_skipped_slot_percent_for('testnet', '42'))
+  end
+
   test '#previous_24_hours returns other ValidatorBlockHistory records for the same validator created within 24 hours of the subject (`self`)' do
     create(:validator_block_history, created_at: 25.hours.ago, validator: @validator)
     vbh1 = create(:validator_block_history, created_at: 23.hours.ago, validator: @validator)

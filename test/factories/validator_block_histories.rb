@@ -4,6 +4,7 @@ FactoryBot.define do
     blocks_produced { 1 }
     skipped_slots { 1 }
     skipped_slot_percent { 0.25 }
+    network { 'testnet' }
     validator
   end
 end
