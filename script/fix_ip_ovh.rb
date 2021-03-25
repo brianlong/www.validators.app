@@ -94,7 +94,8 @@ Ip.where(traits_autonomous_system_number: 16_276)
     host = ('H' + last_ovh_ip).strip.split(' ')[1].strip
     setup_ip_override(ip: ip, host_data: host_data, host: host)
   end
-
-  update_ip_with_overrides
-  update_validator_score_with_overrides
 end
+
+# These two methods should run after everything else is done.
+update_ip_with_overrides
+update_validator_score_with_overrides
