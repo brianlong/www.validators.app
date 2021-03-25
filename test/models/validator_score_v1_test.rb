@@ -11,15 +11,6 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal validator.id, score.validator_id
   end
 
-  # test '#skipped_slot_history_moving_averages returns the last 60 moving averages' do
-  #   validator = create(:validator)
-  #   score = validator.create_validator_score_v1
-  #   create(:validator_block_history, validator: validator, skipped_slot_percent: 0.1)
-  #   create(:validator_block_history, validator: validator, skipped_slot_percent: 0.2)
-
-  #   assert_equal([0.1e0, 0.15e0], score.skipped_slot_history_moving_averages)
-  # end
-
   test 'assign_published_information_score' do
     validator = FactoryBot.create(:validator)
     score = validator.create_validator_score_v1
