@@ -181,9 +181,11 @@
 <hr />
 <div class="row">
   <div class="col-lg-6">
+    <!-- Skipped Slot History -->
     <%= render partial: 'block_history_chart' %>
   </div>
   <div class="col-lg-6">
+    <!-- Block & Vote History -->
     <% vl = \
       if @validator.score.root_distance_history&.count.to_i < @history_limit
         @validator.score.root_distance_history&.count.to_i

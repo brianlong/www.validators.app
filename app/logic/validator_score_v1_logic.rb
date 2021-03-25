@@ -226,9 +226,23 @@ module ValidatorScoreV1Logic
         next unless last_validator_block_history_for_validator.present?
         skipped_slot_percent = last_validator_block_history_for_validator.last
 
-        validator.validator_score_v1.skipped_slot_history_push(
-          skipped_slot_percent.to_f
+        validator.score.skipped_slot_history_push(skipped_slot_percent.to_f)
+
+        vbh = validator.validator_block_histories.find_by(
+          batch_uuid: p.payload[:batch_uuid],
+          network: p.payload[:network]
         )
+
+        # does the validator already have a validator_block_history for this batch?
+        if vbh
+          moving_average = vbh.skipped_slot_percent_moving_average
+        else
+          prev_24_hours = validator.validator_block_histories.last.previous_24_hours.pluck(:skipped_slot_percent)
+
+          moving_average = array_average(prev_24_hours << skipped_slot_percent.to_f)
+        end
+
+        validator.score.skipped_slot_history_push(moving_average)
       rescue StandardError => e
         Appsignal.send_error(e)
       end
