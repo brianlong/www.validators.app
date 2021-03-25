@@ -28,13 +28,13 @@ OVH_HOSTS = {
     country_iso_code: 'FR',
     country_name: 'France',
     city_name: 'Roubaix',
-    data_center_key: '16276-FR-Paris'
+    data_center_key: '16276-FR-Roubaix'
   },
   'fra1-lim1' => {
     country_iso_code: 'DE',
     country_name: 'Germany',
     city_name: 'Frankfurt',
-    data_center_key: '16276-FR-Paris'
+    data_center_key: '16276-DE-Frankfurt'
   },
   'gra-' => {
     country_iso_code: 'FR',
@@ -83,18 +83,18 @@ OVH_HOSTS = {
 ASO = 'OVH SAS'
 HOST_REGEX = /(be|bg|vl).+\.(lon1|rbx|bhs|waw|fra|gra|sbg|hil|vin|p19|gsw|dc1).+/
 
-Ip.where(traits_autonomous_system_number: 16276)
+Ip.where(traits_autonomous_system_number: 16_276)
   .where.not(address: IpOverride.select(:address))
   .each do |ip|
   last_ovh_ip = get_matching_traceroute(ip: ip.address, reg: HOST_REGEX)
 
   OVH_HOSTS.each do |host_reg, host_data|
     next unless last_ovh_ip&.include?(host_reg)
-    host = ("H" + last_ovh_ip).strip.split(" ")[1].strip
+
+    host = ('H' + last_ovh_ip).strip.split(' ')[1].strip
     setup_ip_override(ip: ip, host_data: host_data, host: host)
   end
 
   update_ip_with_overrides(aso: ASO)
   update_validator_score_with_overrides
 end
-
