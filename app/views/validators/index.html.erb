@@ -256,7 +256,6 @@
                   slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
                   line_color = chart_line_color(validator.skipped_slot_score)
-                  moving_avg_color = chart_line_color(validator.skipped_slot_score)
                   fill_color = chart_fill_color(validator.skipped_slot_score)
                 %>
                 <%= render 'validators/spark_line_skipped_slots',
@@ -264,8 +263,7 @@
                            vector: slot_vector,
                            line_color: line_color,
                            fill_color: fill_color,
-                           moving_avg: skipped_slots_moving_avg,
-                           moving_average_color: moving_avg_color
+                           moving_avg: skipped_slots_moving_avg
                 %>
               </td>
             </tr>
