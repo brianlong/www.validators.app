@@ -1,47 +1,39 @@
-<div id="notice"><%= notice %></div>
+<div class="page-header with-image">
+  <% if @validator.avatar_url %>
+    <%= image_tag @validator.avatar_url, class: 'img-circle' %>
+  <% else %>
+    <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+  <% end %>
+  <h1 class="word-break"><%= @validator.name || @validator.account %></h1>
+</div>
 
-<h3>
-  <span class="avatar">
-    <% if @validator.avatar_url %>
-      <%= image_tag @validator.avatar_url, class: 'img-circle' %>
-    <% else %>
-      <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
-    <% end %>
-  </span>
-  <%= @validator.name || @validator.account %>
-</h3>
+
 <div class="row">
   <div class="col-lg-6">
-    <table class='table table-striped table-borderless table-full-width'>
-      <thead class="thead-dark">
+    <div class="card mb-4">
+      <div class="card-content pb-0">
+        <h2 class="card-heading">Validator Details</h2>
+      </div>
+
+      <table class='table table-block-sm mb-0'>
+        <tbody>
         <tr>
-          <th colspan="2">
-            <%= params[:network].capitalize %> Validator Details
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- First Row -->
-        <tr>
-          <td><strong>Name:</strong></td>
+          <td class="category-column"><strong>Name:</strong></td>
           <td>
             <%= @validator.name %>
           </td>
         </tr>
 
-        <!-- Second Row -->
         <tr>
           <td><strong>Details:</strong></td>
           <td><%= @validator.details %></td>
         </tr>
 
-        <!-- Third Row -->
         <tr>
           <td><strong>Identity:</strong></td>
-          <td><small><%= @validator.account %></small></td>
+          <td><small class="word-break"><%= @validator.account %></small></td>
         </tr>
 
-        <!-- Fourth Row -->
         <tr>
           <td><strong>Software:</strong></td>
           <td>
@@ -51,74 +43,57 @@
           </td>
         </tr>
 
-        <!-- Fifth Row -->
         <tr>
           <td><strong>IP:</strong></td>
           <td><%= @validator.ip_address unless @validator.validator_ips.empty? %></td>
         </tr>
 
-        <!-- Sixth Row -->
         <tr>
           <td><strong>Data Center:</strong></td>
           <td>
-              <%=
-                link_to(@validator.data_center_key.to_s,
-                  data_center_url(network: params[:network], key: @validator.data_center_key.gsub('/', '-slash-'))) unless @validator.data_center_key.blank?
-              %>
+            <%=
+              link_to(@validator.data_center_key.to_s,
+                      data_center_url(network: params[:network], key: @validator.data_center_key.gsub('/', '-slash-'))) unless @validator.data_center_key.blank?
+            %>
           </td>
         </tr>
-
-        <% unless @validator.security_report_url.blank? %>
-
-         <!-- Seventh Row -->
-         <tr>
-           <td>&nbsp;</td>
-           <td>&nbsp;</td>
-         </tr>
-         <% end %>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="col-lg-6">
-    <table class='table table-striped table-borderless table-full-width'>
-      <thead class="thead-dark">
+    <div class="card mb-4">
+      <div class="card-content pb-0">
+        <h2 class="card-heading">Validator Details</h2>
+      </div>
+      <table class='table table-block-sm mb-0'>
+        <tbody>
         <tr>
-          <th colspan="2">
-            <%= params[:network].capitalize %> Validator Details
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- First Row -->
-        <tr>
-          <td><strong>Keybase:</strong></td>
+          <td class="category-column"><strong>Keybase:</strong></td>
           <td><%= @validator.keybase_id %></td>
         </tr>
 
-        <!-- Second Row -->
         <tr>
           <td><strong>Website:</strong></td>
           <td><%= @validator.www_url %></td>
         </tr>
 
-        <!-- Third Row -->
         <tr>
           <td><strong>Vote Account:</strong></td>
           <td>
-            <small>
-            <%=
-              link_to \
+            <small class="word-break">
+              <%=
+                link_to \
               @validator.vote_account_last&.account,
               vote_account_url(
-                 network: params[:network],
-                 account: @validator.vote_account_last&.account
+                network: params[:network],
+                account: @validator.vote_account_last&.account
               ) unless @validator.vote_accounts.empty? %>
-              </small>
+            </small>
           </td>
         </tr>
 
-        <!-- Fourth Row -->
         <tr>
           <td><strong>Active Stake:</strong></td>
           <td>
@@ -128,13 +103,12 @@
           </td>
         </tr>
 
-        <!-- Fifth Row -->
         <tr>
           <td><strong>Commission:</strong></td>
           <%
-            comm_class = 'text-red' \
+            comm_class = 'text-danger' \
               if params[:network] == 'mainnet' &&
-                 @validator.commission.to_i == 100
+              @validator.commission.to_i == 100
           %>
           <td class="<%= comm_class %>">
             <%= @validator.commission rescue 'N/A' %> &percnt;
@@ -142,85 +116,112 @@
         </tr>
 
         <% unless @validator.security_report_url.blank? %>
-
-         <!-- Sixth Row -->
-         <tr>
-           <td>&nbsp;</td>
-           <td>&nbsp;</td>
-         </tr>
-
-         <!-- Seventh Row -->
-         <tr>
-           <td>
-             <strong>Security Info:</strong>
-           </td>
-           <td>
-             <%= link_to @validator.security_report_url, @validator.security_report_url, target: '_blank'  %>
-           </td>
-         </tr>
-         <% end %>
-      </tbody>
-    </table>
+          <tr>
+            <td>
+              <strong>Security Info:</strong>
+            </td>
+            <td>
+              <%= link_to @validator.security_report_url, @validator.security_report_url, target: '_blank' %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Scores:</strong>
+            </td>
+            <td><%= render 'validators/scores', validator: @validator %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<div class='row'>
-  <div class="col-sm-8">
-    <%= link_to 'Back to List of Validators', url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]) %>
+
+<div class="row mb-3">
+  <div class="col-md-9 col-lg-10">
+    <%= link_to 'Back to List of Validators',
+                url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+                class: 'btn btn-sm btn-secondary mb-3' %>
   </div>
-  <div class='col-sm-4 text-right'>
+
+  <div class='col-md-3 col-lg-2 toggle-container pt-2'>
     <% if params[:refresh] == 'true' %>
-            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: false)  %>
-      <small>Refresh ON</small>
+      <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: false) %>
+      <p class="small muted toggle-label">REFRESH ON</p>
     <% else %>
-      <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: true)  %>
-      <small>Refresh OFF</small>
+      <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: true) %>
+      <p class="small muted toggle-label">REFRESH OFF</p>
     <% end %>
   </div>
 </div>
-<hr />
+
 <div class="row">
   <div class="col-lg-6">
-    <!-- Skipped Slot History -->
-    <%= render partial: 'block_history_chart' %>
+    <div class="card mb-4">
+      <div class="card-content">
+        <!-- Block History Chart -->
+        <% vl = if @validator.score.root_distance_history&.count.to_i < @history_limit
+                  @validator.score.root_distance_history&.count.to_i
+                else
+                  @history_limit
+                end
+           line_color = chart_line_color(@validator.score.root_distance_score)
+           fill_color = chart_fill_color(@validator.root_distance_score)
+        %>
+        <%= render 'validators/spark_line_block',
+                   account: @validator.account,
+                   vector_block: @validator.score&.root_distance_history.to_a[-vl..-1],
+                   line_color: line_color,
+                   fill_color: fill_color
+        %>
+      </div>
+    </div>
   </div>
+
   <div class="col-lg-6">
-    <!-- Block & Vote History -->
-    <% vl = \
-      if @validator.score.root_distance_history&.count.to_i < @history_limit
-        @validator.score.root_distance_history&.count.to_i
-      else
-        @history_limit
-      end
-    %>
-    <%= render 'validators/spark_line_block_vote',
-            account: @validator.account,
-            vector_block: @validator.score&.root_distance_history.to_a[-vl..-1],
-            vector_vote: @validator.score&.vote_distance_history.to_a[-vl..-1]
-    %>
+    <div class="card mb-4">
+      <div class="card-content">
+        <!-- Vote History Chart -->
+        <% vl = if @validator.score.root_distance_history&.count.to_i < @history_limit
+                  @validator.score.root_distance_history&.count.to_i
+                else
+                  @history_limit
+                end
+           line_color = chart_line_color(@validator.score.vote_distance_score)
+           fill_color = chart_fill_color(@validator.vote_distance_score)
+        %>
+        <%= render 'validators/spark_line_vote',
+                   account: @validator.account,
+                   vector_vote: @validator.score&.vote_distance_history.to_a[-vl..-1],
+                   line_color: line_color,
+                   fill_color: fill_color
+        %>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class='row'>
-  <div class="col-sm-12">
-    <%= link_to 'Back to List of Validators', url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]) %>
-  </div>
-</div>
-<hr />
 <div class="row">
-  <div class="col-sm-12">
-    <%= render partial: 'block_history_table' %>
-  </div>
-</div>
-<hr />
-<div class="row">
-  <div class="col-sm-12">
-    <%# render partial: 'ping_times_table' %>
+  <div class="col-lg-6">
+    <div class="card mb-4">
+      <div class="card-content">
+        <!-- Skipped Slot History -->
+        <%= render partial: 'block_history_chart' %>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class='row'>
-  <div class="col-sm-12">
-    <%= link_to 'Back to List of Validators', url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]) %>
-  </div>
+<%= link_to 'Back to List of Validators',
+            url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+            class: 'btn btn-sm btn-secondary mb-4' %>
+
+<div class="card mb-4">
+  <%= render partial: 'block_history_table' %>
 </div>
+
+
+<%= link_to 'Back to List of Validators',
+            url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+            class: 'btn btn-sm btn-secondary' %>

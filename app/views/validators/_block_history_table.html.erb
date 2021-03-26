@@ -1,56 +1,56 @@
-<h3>Recent Block Production</h3>
-<table class='table table-striped table-borderless'>
-  <thead class="thead-dark">
-    <tr>
-      <th class='text-right'>Epoch</th>
-      <th class='text-right'>Leader Slots<br />Total Slots</th>
-      <th class='text-right'>Leader Blocks<br />Total Blocks</th>
-      <th class='text-right'>
-        Skipped Slots<br />
-        Skipped Total
-      </th>
-      <th class='text-right'>
-        &percnt; Skipped<br />
-        &percnt; Total
-      </th>
-      <th>Timestamp</th>
-    </tr>
+<div class="card-content pb-0">
+  <h2 class="card-heading">Recent Block Production</h2>
+</div>
+
+<div class="table-responsive-lg">
+<table class='table mb-0'>
+  <thead>
+  <tr>
+    <th class='text-right'>Epoch</th>
+    <th class='narrower-column text-right'>Leader Slots<br />Total Slots</th>
+    <th class='narrower-column text-right'>Leader Blocks<br />Total Blocks</th>
+    <th class='narrower-column text-right'>
+      Skipped Slots<br />
+      Skipped Total
+    </th>
+    <th class='narrower-column text-right'>
+      &percnt; Skipped<br />
+      &percnt; Total
+    </th>
+    <th class="narrow-column">Timestamp</th>
+  </tr>
   </thead>
   <tbody>
     <% @validator.validator_block_histories.order('id desc').limit(60).each do |history| %>
-
-    <!-- TODO: Add `network` to this query -->
-    <% block_stats = ValidatorBlockHistoryStat.where(batch_uuid: history.batch_uuid)
-                                              .first %>
-    <tr>
-      <td class='text-right'>
-        <%= number_with_delimiter history.epoch %>
-      </td>
-      <td class='text-right'>
-        <%= number_with_delimiter history.leader_slots %><br />
-        <%= number_with_delimiter block_stats.total_slots \
-              unless block_stats.nil? %>
-      </td>
-      <td class='text-right'>
-        <%= number_with_delimiter history.blocks_produced %><br />
-        <%= number_with_delimiter block_stats.total_blocks_produced \
-              unless block_stats.nil? %>
-      </td>
-      <td class='text-right'>
-        <%= number_with_delimiter history.skipped_slots %><br />
-        <%= number_with_delimiter block_stats.total_slots_skipped \
-             unless block_stats.nil? %>
-      </td>
-      <td class='text-right'>
-        <%= number_to_percentage (history.skipped_slot_percent.to_f*100.0) %><br />
-        <%= number_to_percentage (
-              block_stats.total_slots_skipped/block_stats.total_slots.to_f
-              )*100.0 unless block_stats.nil? %>
-      </td>
-      <td>
-        <%= history.created_at %>
-      </td>
-    </tr>
+      <!-- TODO: Add `network` to this query -->
+      <% block_stats = ValidatorBlockHistoryStat.where(batch_uuid: history.batch_uuid).first %>
+      <tr>
+        <td class='text-right'>
+          <%= number_with_delimiter history.epoch %>
+        </td>
+        <td class='narrower-column text-right'>
+          <%= number_with_delimiter history.leader_slots %><br />
+          <%= number_with_delimiter block_stats.total_slots unless block_stats.nil? %>
+        </td>
+        <td class='narrower-column text-right'>
+          <%= number_with_delimiter history.blocks_produced %><br />
+          <%= number_with_delimiter block_stats.total_blocks_produced unless block_stats.nil? %>
+        </td>
+        <td class='narrower-column text-right'>
+          <%= number_with_delimiter history.skipped_slots %><br />
+          <%= number_with_delimiter block_stats.total_slots_skipped unless block_stats.nil? %>
+        </td>
+        <td class='narrower-column text-right'>
+          <%= number_to_percentage (history.skipped_slot_percent.to_f*100.0) %><br />
+          <%= number_to_percentage (
+                                     block_stats.total_slots_skipped/block_stats.total_slots.to_f
+                                   )*100.0 unless block_stats.nil? %>
+        </td>
+        <td class="narrow-column">
+          <%= history.created_at %>
+        </td>
+      </tr>
     <% end %>
   </tbody>
 </table>
+</div>

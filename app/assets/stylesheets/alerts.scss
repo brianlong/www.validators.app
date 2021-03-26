@@ -1,0 +1,42 @@
+@import "variables";
+
+.alert {
+  border-radius: $border-radius;
+  color: $background-color;
+  margin-bottom: $margin-standard*2;
+  color: $base-color;
+
+  a {
+    color: lighten($link-color, 10%);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .close, .float-right {
+    color: $base-color;
+    opacity: 1;
+    text-shadow: none;
+  }
+
+  &.alert-info, &.alert-secondary, &.alert-primary {
+    background-color: $grey-transparent;
+    border: 1px solid $grey;
+  }
+
+  &.alert-success {
+    background-color: $green-transparent;
+    border: 1px solid $green;
+  }
+
+  &.alert-warning {
+    background-color: $orange-transparent;
+    border: 1px solid $orange;
+  }
+
+  &.alert-danger {
+    background-color: $red-transparent;
+    border: 1px solid $red;
+  }
+
+}

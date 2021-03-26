@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-md-8">
+    <% if @software_versions %>
+      <div class="card">
+        <div class="card-content">
+          <h2 class="card-heading mb-4">Software Versions</h2>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <table class="table mb-0">
+              <thead>
+              <tr>
+                <th>Software Version</th>
+                <th>Count</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @software_versions.payload.each do |group| %>
+                <tr>
+                  <td><%= group.first[0] %></td>
+                  <td><%= group.first[1] %></td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

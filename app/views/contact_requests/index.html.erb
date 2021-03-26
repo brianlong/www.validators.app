@@ -1,27 +1,52 @@
-<h2>Contact requests</h2>
-<table class='table'>
-  <thead>
-    <tr>
-      <th>
-        <%= t('public.contact_us.table.headings.name') %><br />
-        <%= t('public.contact_us.table.headings.email') %><br />
-        <%= t('public.contact_us.table.headings.telephone') %>
-      </th>
-      <th><%= t('public.contact_us.table.headings.comments') %></th>
-      <th><%= t('public.contact_us.table.headings.created_at') %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @contact_requests.each do |cr |%>
+<div class="card mb-4">
+  <div class="card-content pb-0">
+    <h1 class="card-heading">Contact requests</h1>
+  </div>
+
+  <div class="table-responsive-md">
+    <table class='table'>
+      <thead>
       <tr>
-          <td>
-            <%= cr.name %><br />
+        <th class="medium-column"><%= t('public.contact_us.table.headings.name') %></th>
+        <th class="medium-column">
+          <%= t('public.contact_us.table.headings.email') %><br />
+          <%= t('public.contact_us.table.headings.telephone') %>
+        </th>
+        <th><%= t('public.contact_us.table.headings.comments') %></th>
+        <th class="narrow-column"><%= t('public.contact_us.table.headings.created_at') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @contact_requests.each.with_index do |cr, index|%>
+        <tr>
+          <td class="medium-column"><%= cr.name %></td>
+          <td class="medium-column">
             <%= cr.email_address %><br />
             <%= cr.telephone %>
           </td>
-          <td><%= cr.comments %></td>
-          <td><%= cr.created_at %></td>
-      </tr>
-    <% end%>
-  </tbody>
-</table>
+          <td class="wider-column small">
+            <%= cr.comments.truncate(100) %>
+            <% if cr.comments.length > 100 %>
+              <a data-toggle="modal" data-target="#messageModal<%=index%>" class="text-muted" href="">Show full text</a>
+              <div class="modal fade" id="messageModal<%=index%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h6 class="modal-title">Message from <%= cr.name %></h6>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body"><%= cr.comments %></div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </td>
+          <td class="narrow-column"><%= cr.created_at %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

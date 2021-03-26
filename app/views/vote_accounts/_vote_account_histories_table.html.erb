@@ -1,47 +1,48 @@
-<h3>Recent Vote Account Activity</h3>
-<table class='table table-striped'>
-  <thead class="thead-dark">
+<div class="table-responsive-md">
+  <table class='table mb-0'>
+    <thead>
     <tr>
-      <th>
+      <th class='medium-column text-right'>
         Credits Total<br />
         Last Vote
       </th>
-      <th>
+      <th class='wider-column text-right'>
         Credits Current<br />
         Slots Current
       </th>
-      <th>Skipped<br />Votes</th>
-      <th>Skipped<br />Vote &percnt;</th>
-      <th>Timestamp</th>
+      <th class='narrower-column text-right'>Skipped Votes</th>
+      <th class='narrow-column text-right'>Skipped Vote&nbsp;&percnt;</th>
+      <th class="narrow-column">Timestamp</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <% @vote_account.vote_account_histories.order('id desc').limit(60).each do |vote| %>
-    <tr>
-      <td class='text-right'>
-        <%= number_with_delimiter vote.credits %><br />
-        <%= number_with_delimiter vote.last_vote %>
-      </td>
+      <tr>
+        <td class='text-right'>
+          <%= number_with_delimiter vote.credits %><br />
+          <%= number_with_delimiter vote.last_vote %>
+        </td>
 
-      <td class='text-right'>
-        <%= number_with_delimiter vote.credits_current %><br />
-        <%= number_with_delimiter vote.slot_index_current %>
-      </td>
-      <td class='text-right'>
-        <%= number_with_delimiter(vote.slot_index_current.to_i - vote.credits_current.to_i) %>
-      </td>
-      <td class='text-right'>
-        <%=
-          number_to_percentage(
-            ((vote.slot_index_current.to_i - vote.credits_current.to_i)/vote.slot_index_current.to_f)*100.0,
-            precision: 2
-          )
-        %>
-      </td>
-      <td>
-        <%= vote.created_at %>
-      </td>
-    </tr>
+        <td class='text-right'>
+          <%= number_with_delimiter vote.credits_current %><br />
+          <%= number_with_delimiter vote.slot_index_current %>
+        </td>
+        <td class='text-right'>
+          <%= number_with_delimiter(vote.slot_index_current.to_i - vote.credits_current.to_i) %>
+        </td>
+        <td class='text-right'>
+          <%=
+            number_to_percentage(
+              ((vote.slot_index_current.to_i - vote.credits_current.to_i)/vote.slot_index_current.to_f)*100.0,
+              precision: 2
+            )
+          %>
+        </td>
+        <td>
+          <%= vote.created_at %>
+        </td>
+      </tr>
     <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>

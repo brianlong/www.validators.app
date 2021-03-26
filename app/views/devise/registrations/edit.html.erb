@@ -1,50 +1,51 @@
-<h2><%= t('.title', resource: resource.model_name.human) %></h2>
+<h1 class="mb-4"><%= t('.title', resource: resource.model_name.human) %></h1>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<div class="row">
+  <div class="col-md-6">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="form-group col-md-4">
-    <%= f.label :username %><br />
-    <%= f.text_field :username, autofocus: true, 
-                                autocomplete: "username",
-                                class: 'form-control' %>
-  </div>
+      <div class="form-group">
+        <%= f.label :username %>
+        <%= f.text_field :username, autofocus: true,
+                         autocomplete: "username",
+                         class: 'form-control' %>
+      </div>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div><%= t('.currently_waiting_confirmation_for_email', email: resource.unconfirmed_email) %></div>
-  <% end %>
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div><%= t('.currently_waiting_confirmation_for_email', email: resource.unconfirmed_email) %></div>
+      <% end %>
 
-  <div class="form-group col-md-4">
-    <%= f.label :password %> <i>(<%= t('.leave_blank_if_you_don_t_want_to_change_it') %>)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password",
-                                    class: 'form-control'  %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %></em>
+      <div class="form-group">
+        <%= f.label :password do %>
+          Password
+          <small>(<%= t('.leave_blank_if_you_don_t_want_to_change_it') %>)</small>
+          <% if @minimum_password_length %>
+            <small><%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %></small>
+          <% end %>
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password", class: 'form-control'  %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :current_password, class: 'required' do %>
+          Current Password <small>(<%= t('.we_need_your_current_password_to_confirm_your_changes') %>)</small>
+        <% end %>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: 'form-control' %>
+      </div>
+
+      <div class="form-group actions">
+        <%= f.submit t('.update'), class: 'btn btn-md btn-primary' %>
+      </div>
     <% end %>
   </div>
-
-  <div class="form-group col-md-4">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password",
-                                                 class: 'form-control' %>
-  </div>
-
-  <div class="form-group col-md-4">
-    <%= f.label :current_password %> <i>(<%= t('.we_need_your_current_password_to_confirm_your_changes') %>)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password",
-                                            class: 'form-control' %>
-  </div>
-
-  <div class="form-group col-md-4 actions">
-    <%= f.submit t('.update') %>
-  </div>
-<% end %>
-
-<div class="form-group col-md-4">
-  <h3><%= t('.cancel_my_account') %></h3>
-
-  <p><%= t('.unhappy') %> <%= button_to t('.cancel_my_account'), registration_path(resource_name), data: { confirm: t('.are_you_sure') }, method: :delete %></p>
-
-  <%= link_to t('devise.shared.links.back'), :back %>
 </div>
+
+<%= link_to :back, class: 'text-muted' do %>
+  <i class="fas fa-arrow-left mr-1 mt-4"></i> Back
+<% end %>

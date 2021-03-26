@@ -1,12 +1,21 @@
 <h1><%= t('public.contact_us.title') %></h1>
-<h4>By US Mail:</h4>
-<p>
-  <%= FMA_LLC %><br />
-  <%= OUR_STREET_ADDRESS %><br />
-  <%= OUR_CITY_STATE_ZIP %>
-</p>
-<h4>By Email or Chat:</h4>
-<p>Please use the chat tool in the lower right corner for all other communications.</p>
-<div class="">
-  <%= render partial: 'form_contact_us' %>
+
+<div class="row">
+  <div class="col-md-7 mb-5 mb-md-0">
+    <h4 class="mb-4">By Email:</h4>
+    <%= render partial: 'form_contact_us' %>
+  </div>
+
+  <div class="col-md-5 pl-md-5">
+    <h4>By US Mail:</h4>
+    <p class="lead mb-4">
+      <%= FMA_LLC.capitalize %><br />
+      <%= OUR_STREET_ADDRESS %><br />
+      <%= OUR_CITY_STATE_ZIP %>
+    </p>
+    <h4>By Phone:</h4>
+    <p class="lead mb-4"><%= OUR_TELEPHONE %></p>
+    <h4>By Chat:</h4>
+    <p class="lead">Please use the chat tool in the lower right corner for all other communications.</p>
+  </div>
 </div>

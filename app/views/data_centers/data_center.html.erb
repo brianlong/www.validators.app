@@ -1,96 +1,139 @@
-<h1><%= params[:network].capitalize %> Data Centers</h1>
-<table class='table table-striped table-borderless'>
-  <thead class="thead-dark">
-    <tr>
-      <th colspan="4">
-        <% if params[:key] %>
-          <%= params[:key].gsub('-slash-', '/') %>
-        <% else %>
-          &nbsp;
-        <% end %>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>ASN</strong></td>
-      <td><%= @dc_info.traits_autonomous_system_number %></td>
-      <td><strong>ASO</strong></td>
-      <td><%= @dc_info.traits_autonomous_system_organization %></td>
-    </tr>
-    <tr>
-      <td><strong>Country</strong></td>
-      <td><%= @dc_info.country_name %></td>
-      <td><strong>Location</strong></td>
-      <td>
-        <%= @dc_info.city_name || @dc_info.location_time_zone %>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Population</strong></td>
-      <td><%= @scores.count %></td>
-      <td><strong>Total Stake</strong></td>
-      <td>
-        <%= number_with_delimiter(lamports_to_sol(@dc_stake)) %>
-        (<%= number_to_percentage((@dc_stake/@total_stake.to_f)*100.0,
-        precision: 2) %>)
-      </td>
-    </tr>
-  </tbody>
-</table>
+<h1 class="page-header"><%= params[:network].capitalize %> Data Center</h1>
 
-<p><%= link_to 'Back to Data Centers', data_centers_url(network: params[:network]) %></p>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <table class='table mb-0'>
+        <thead>
+          <tr>
+            <th colspan="2">
+              <% if params[:key] %>
+                <%= params[:key].gsub('-slash-', '/') %>
+              <% else %>
+                &nbsp;
+              <% end %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="category-column"><strong>ASN</strong></td>
+          <td><%= @dc_info.traits_autonomous_system_number %></td>
+        </tr>
+        <tr>
+          <td><strong>Country</strong></td>
+          <td><%= @dc_info.country_name %></td>
+        </tr>
+        <tr>
+          <td><strong>Population</strong></td>
+          <td><%= @scores.count %></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<table class='table table-striped table-borderless'>
-  <thead class="thead-dark">
-    <tr>
-      <th class="avatar-column">&nbsp;</th>
-      <th class="name-column">
-        Name: Stake (%)<br />
-        Account
-      </th>
-      <th>
-        IP Address<br />
-        Data Center Gateway
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @scores.each do |sc| %>
-      <% this_validator = sc.validator %>
-    <tr>
-      <td>
-        <span class="avatar">
-          <% if this_validator && this_validator.avatar_url %>
-            <%= image_tag this_validator.avatar_url, class: 'img-circle' %>
-          <% else %>
-            <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
-          <% end %>
-        </span>
-        <% if sc.delinquent? %>
-          <br />
-          <small class="score-minus-2">DELINQUENT</small>
-        <% end %>
-      </td>
-      <td>
-        <%= this_validator.name || 'Anonymous' %>: <%= number_with_delimiter lamports_to_sol(sc.active_stake) %>
-        (  <%= number_to_percentage(
-                 (sc.active_stake / @total_stake.to_f)*100.0,
-                 precision: 2
-              )
-           %>)
-        <br /><br />
-        <%= link_to this_validator.account, validator_url(network: params[:network], account: this_validator.account) %>
-      </td>
-      <td>
-        <%= sc.ip_address %>
-        <br /><br />
-        <%= Ip.where(address: sc.ip_address).first&.data_center_host %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <table class='table mb-0'>
+        <thead>
+        <tr>
+          <th colspan="2">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ASO</strong></td>
+            <td><%= @dc_info.traits_autonomous_system_organization %></td>
+          </tr>
+          <tr>
+            <td><strong>Location</strong></td>
+            <td>
+              <%= @dc_info.city_name || @dc_info.location_time_zone %>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Total Stake</strong></td>
+            <td>
+              <%= number_with_delimiter(lamports_to_sol(@dc_stake)) %>
+              (<%= number_to_percentage((@dc_stake/@total_stake.to_f)*100.0,
+                                        precision: 2) %>)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 
-</table>
-<p><%= link_to 'Back to Data Centers', data_centers_url(network: params[:network]) %></p>
+<%= link_to 'Back to Data Centers',
+            data_centers_url(network: params[:network]),
+            class: 'btn btn-sm btn-secondary mb-4' %>
+
+<div class="card mb-4">
+  <table class='table mb-0 table-block-sm'>
+    <thead>
+      <tr class="d-none d-lg-table-row">
+        <th class="avatar-column d-none d-lg-table-cell">&nbsp;</th>
+        <th class="wider-column">
+          Name: Stake (%)<br />
+          Account
+        </th>
+        <th class="wider-column">
+          IP Address<br />
+          Data Center Gateway
+        </th>
+      </tr>
+      <tr class="d-lg-none">
+        <th>
+          Validators
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @scores.each do |sc| %>
+        <% this_validator = sc.validator %>
+        <tr>
+          <td class="d-none d-lg-table-cell">
+            <span class="avatar">
+              <% if this_validator && this_validator.avatar_url %>
+                <%= image_tag this_validator.avatar_url, class: 'img-circle mb-1' %>
+              <% else %>
+                <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle mb-1' %>
+              <% end %>
+            </span>
+            <% if sc.delinquent? %>
+              <small class="text-danger">delinquent</small>
+            <% end %>
+          </td>
+          <td>
+            <div class="mb-2">
+              <div class="d-lg-none">Name & Stake:</div>
+              <%= this_validator.name || 'Anonymous' %>: <%= number_with_delimiter lamports_to_sol(sc.active_stake) %>
+              (<%= number_to_percentage((sc.active_stake / @total_stake.to_f)*100.0, precision: 2) %>)
+            </div>
+            <div class="d-lg-none">Account:</div>
+            <%= link_to this_validator.account,
+                        validator_url(network: params[:network],account: this_validator.account),
+                        class: 'word-break-md' %>
+          </td>
+          <td>
+            <div class="mb-2">
+              <div class="d-lg-none">IP Address: </div>
+              <%= sc.ip_address %>
+            </div>
+            <% if Ip.where(address: sc.ip_address).first %>
+              <div class="d-lg-none">Data Center Gateway: </div>
+              <%= Ip.where(address: sc.ip_address).first&.data_center_host %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to 'Back to Data Centers',
+            data_centers_url(network: params[:network]),
+            class: 'btn btn-sm btn-secondary' %>

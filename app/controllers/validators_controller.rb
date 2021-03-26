@@ -8,17 +8,18 @@ class ValidatorsController < ApplicationController
   # GET /validators.json
   def index
     @sort_order = if params[:order] == 'score'
-                    'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
+                    'validator_score_v1s.total_score desc, validator_score_v1s.active_stake desc'
                   elsif params[:order] == 'name'
                     'validators.name asc'
                   else
                     'validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc'
                   end
 
-    @validators = Validator.where(network: params[:network])
-                           .joins(:validator_score_v1)
-                           .order(@sort_order)
-                           .page(params[:page])
+    validators = Validator.where(network: params[:network])
+                          .joins(:validator_score_v1)
+                          .order(@sort_order)
+    @validators_count = validators.count
+    @validators = validators.page(params[:page])
 
     @total_active_stake = Validator.where(network: params[:network])
                                    .joins(:validator_score_v1)
@@ -120,7 +121,6 @@ class ValidatorsController < ApplicationController
       end
     end
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
-
   end
 
   private
