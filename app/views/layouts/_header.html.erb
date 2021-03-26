@@ -27,6 +27,18 @@
           <li class="nav-item">
             <%= link_to 'Sign Up', new_user_registration_path, class: "nav-link btn btn-md btn-secondary" %>
           </li>
+
+          <li class="nav-item">
+            <% if params[:light] == 'true' %>
+              <%= link_to url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], light: false), class: 'nav-link mr-0 ml-5' do %>
+                <i class="fas fa-toggle-on toggle" style='font-size: 50px'></i>
+              <% end %>
+            <% else %>
+              <%= link_to url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], light: true), class: 'nav-link mr-0 ml-5' do %>
+                <i class="fas fa-toggle-off toggle" style='font-size:50px'></i>
+              <% end %>
+            <% end %>
+          </li>
         <% end %>
       </ul>
     </div>
