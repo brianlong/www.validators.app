@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_26_075312) do
+ActiveRecord::Schema.define(version: 2021_03_26_121943) do
 
   create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -342,6 +342,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_075312) do
     t.string "batch_uuid"
     t.bigint "credits_current"
     t.integer "slot_index_current"
+    t.decimal "skipped_vote_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_vote_account_histories_on_network_and_batch_uuid"
     t.index ["vote_account_id", "created_at"], name: "index_vote_account_histories_on_vote_account_id_and_created_at"
     t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"

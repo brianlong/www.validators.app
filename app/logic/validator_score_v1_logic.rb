@@ -90,7 +90,7 @@ module ValidatorScoreV1Logic
         vh = validator_histories.select { |vh| vh.account == validator.account }.first
         vote_h = vote_histories.select { |vote_h| vote_h.vote_account.validator_id == validator.id }.first
         if vote_h
-          skipped_votes = ((vote_h.slot_index_current.to_i - vote_h.credits_current.to_i)/vote_h.slot_index_current.to_f).round(5)
+          skipped_votes = vote_h.skipped_vote_percent
           validator.validator_score_v1.skipped_vote_history_push(skipped_votes)
         end
         if vh

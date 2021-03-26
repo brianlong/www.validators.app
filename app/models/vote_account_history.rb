@@ -30,4 +30,20 @@
 #
 class VoteAccountHistory < ApplicationRecord
   belongs_to :vote_account
+
+  after_create :set_skipped_vote_percent_moving_average
+
+  def previous_24_hours
+    self.class.where(vote_account: vote_account, network: network, created_at: 24.hours.ago..created_at)
+  end
+
+  def skipped_vote_percent
+    ((slot_index_current.to_i - credits_current.to_i)/slot_index_current.to_f).round(2)
+  end
+
+  def set_skipped_vote_percent_moving_average
+    previous_24_hours_set = self.previous_24_hours.to_a
+    self.skipped_vote_percent_moving_average = previous_24_hours_set.map(&:skipped_vote_percent).sum/previous_24_hours_set.count
+    save
+  end
 end
