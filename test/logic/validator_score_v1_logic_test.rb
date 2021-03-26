@@ -73,6 +73,10 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                        .first
                        .validator_score_v1
                        .stake_concentration
+    assert_equal [0.35188], p.payload[:validators]
+                       .first
+                       .validator_score_v1
+                       .skipped_vote_history
     refute p.payload[:validators]
             .first
             .validator_score_v1

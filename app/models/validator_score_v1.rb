@@ -63,6 +63,7 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :vote_distance_history, JSON
   serialize :skipped_slot_history, JSON
   serialize :skipped_after_history, JSON
+  serialize :skipped_vote_history, JSON
 
   def calculate_total_score
     # Assign special scores before calculating the total score
@@ -146,6 +147,17 @@ class ValidatorScoreV1 < ApplicationRecord
     # Prune the array  to include the most recent values
     if root_distance_history.length > MAX_HISTORY
       self.root_distance_history = root_distance_history[-MAX_HISTORY..-1]
+    end
+  end
+
+  def skipped_vote_history_push(val)
+    self.skipped_vote_history = [] if skipped_vote_history.nil?
+
+    skipped_vote_history << val
+
+    # Prune the array  to include the most recent values
+    if skipped_vote_history.length > MAX_HISTORY
+      self.skipped_vote_history = skipped_vote_history[-MAX_HISTORY..-1]
     end
   end
 

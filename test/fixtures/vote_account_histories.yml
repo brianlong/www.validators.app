@@ -7,6 +7,8 @@ one:
   last_vote: 1
   activated_stake: 1_000_000_000
   credits: 1
+  credits_current: 193916
+  slot_index_current: 299198
 two:
   id: 2
   vote_account_id: 1
@@ -16,6 +18,8 @@ two:
   last_vote: 1
   activated_stake: 1_000_000_000
   credits: 1
+  credits_current: 193916
+  slot_index_current: 299198
 three:
   id: 3
   vote_account_id: 1
@@ -25,3 +29,16 @@ three:
   last_vote: 1
   activated_stake: 1_000_000_000
   credits: 1
+  credits_current: 193916
+  slot_index_current: 299198
+four:
+  id: 4
+  vote_account_id: 1
+  network: testnet
+  batch_uuid: '1234'
+  software_version: version two
+  last_vote: 1
+  activated_stake: 1_000_000_000
+  credits: 1
+  credits_current: 193916
+  slot_index_current: 299198
