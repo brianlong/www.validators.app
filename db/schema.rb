@@ -308,7 +308,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_075312) do
     t.string "network"
     t.string "data_center_key"
     t.string "data_center_host"
-    t.string "skipped_vote_history"
+    t.text "skipped_vote_history"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end

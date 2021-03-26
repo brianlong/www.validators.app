@@ -46,6 +46,7 @@
 #  network                         :string(255)
 #  data_center_key                 :string(255)
 #  data_center_host                :string(255)
+#  skipped_vote_history            :text(65535)
 #
 # Indexes
 #
