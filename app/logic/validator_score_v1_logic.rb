@@ -84,14 +84,13 @@ module ValidatorScoreV1Logic
         network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
       ).where('vote_account.validator_id': p.payload[:validators].pluck(:id)).to_a
-
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
         vh = validator_histories.select { |vh| vh.account == validator.account }.first
         vote_h = vote_histories.select { |vote_h| vote_h.vote_account.validator_id == validator.id }.first
         if vote_h
-          skipped_votes = vote_h.skipped_vote_percent
-          validator.validator_score_v1.skipped_vote_history_push(skipped_votes)
+          validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
+          validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
         end
         if vh
           root_distance = highest_root - vh.root_block.to_i

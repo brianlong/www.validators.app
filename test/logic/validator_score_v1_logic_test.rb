@@ -77,6 +77,10 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                        .first
                        .validator_score_v1
                        .skipped_vote_history
+    assert_equal [0.4], p.payload[:validators]
+                       .first
+                       .validator_score_v1
+                       .skipped_vote_percent_moving_average_history
     refute p.payload[:validators]
             .first
             .validator_score_v1
