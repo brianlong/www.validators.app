@@ -212,36 +212,23 @@ module ValidatorScoreV1Logic
           p.payload[:batch_uuid]
         )
 
-      sql = <<-SQL_END
-        SELECT vbh.validator_id, vbh.skipped_slot_percent
+      vbh_sql = <<-SQL_END
+        SELECT vbh.validator_id, vbh.skipped_slot_percent, vbh.skipped_slot_percent_moving_average
         FROM validator_block_histories vbh
         WHERE vbh.network = '#{p.payload[:network]}' AND vbh.batch_uuid = '#{p.payload[:batch_uuid]}'
       SQL_END
 
-      skipped_slot_percents = ActiveRecord::Base.connection.execute(sql).to_a
+      vbh = ActiveRecord::Base.connection.execute(vbh_sql).to_a
 
       p.payload[:validators].each do |validator|
-        last_validator_block_history_for_validator = skipped_slot_percents.find { |r| r.first == validator.id }
+        last_validator_block_history_for_validator = vbh.find { |r| r.first == validator.id }
 
         next unless last_validator_block_history_for_validator.present?
-        skipped_slot_percent = last_validator_block_history_for_validator.last
 
+        skipped_slot_percent = last_validator_block_history_for_validator[1]
         validator.score.skipped_slot_history_push(skipped_slot_percent.to_f)
 
-        vbh = validator.validator_block_histories.find_by(
-          batch_uuid: p.payload[:batch_uuid],
-          network: p.payload[:network]
-        )
-
-        # does the validator already have a validator_block_history for this batch?
-        if vbh
-          moving_average = vbh.skipped_slot_percent_moving_average
-        else
-          prev_24_hours = validator.validator_block_histories.last.previous_24_hours.pluck(:skipped_slot_percent)
-
-          moving_average = array_average(prev_24_hours << skipped_slot_percent.to_f)
-        end
-
+        moving_average = last_validator_block_history_for_validator[2]
         validator.score.skipped_slot_moving_average_history_push(moving_average.to_f)
       rescue StandardError => e
         Appsignal.send_error(e)
