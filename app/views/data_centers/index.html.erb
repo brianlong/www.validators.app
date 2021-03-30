@@ -1,5 +1,17 @@
 <h1 class="mb-5"><%= params[:network].capitalize %> Data Centers</h1>
-
+<div class="btn-group btn-group-sm mb-4 col-sm-4" role="toolbar" aria-label="filter"> 
+  <p class="medium">Sort by</p>
+  <%= link_to "Data Centers", \
+              data_centers_url(network: params[:network], sort_by: :data_center), \
+              class: "btn #{params[:sort_by]== 'data_center' ? 'btn-primary' : 'btn-outline-primary'}", \
+              type:"button" \
+  %>
+  <%= link_to "ASN",\
+              data_centers_url(network: params[:network], sort_by: :asn), \
+              class: "btn #{params[:sort_by]== 'asn' ? 'btn-primary' : 'btn-outline-primary'}", \
+              type:"button" \
+  %>
+</div>
 <div class="card mb-4">
   <div class="table-responsive-md">
     <table class='table mb-0'>

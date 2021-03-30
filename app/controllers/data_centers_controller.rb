@@ -3,6 +3,7 @@ class DataCentersController < ApplicationController
   def index
     sql = "
       SELECT distinct data_center_key,
+             traits_autonomous_system_number,
              traits_autonomous_system_organization,
              country_iso_code,
              IF(ISNULL(city_name), location_time_zone, city_name) as location
@@ -14,6 +15,21 @@ class DataCentersController < ApplicationController
         AND score.active_stake > 0
       )
     "
+    # if params[:sort_by] == 'asn'
+    #   sql = "
+    #   SELECT distinct traits_autonomous_system_number,
+    #     traits_autonomous_system_organization,
+    #     country_iso_code,
+    #     IF(ISNULL(city_name), location_time_zone, city_name) as location
+    #   FROM ips
+    #   WHERE ips.address IN (
+    #     SELECT score.ip_address
+    #     FROM validator_score_v1s score
+    #     WHERE score.network = '#{params[:network]}'
+    #     AND score.active_stake > 0
+    #   )
+    #   "
+    # end
     @dc_sql = Ip.connection.execute(sql)
     @scores = ValidatorScoreV1.where(network: params[:network])
                               .where('active_stake > 0')
@@ -22,6 +38,7 @@ class DataCentersController < ApplicationController
     @total_population = 0
 
     @dc_sql.each do |dc|
+      throw dc
       population = @scores.where(data_center_key: dc[0]).count || 0
       active_stake = @scores.where(data_center_key: dc[0]).sum(:active_stake)
       next if population.zero?
