@@ -20,22 +20,11 @@ module ReportLogic
       # Create a results array and insert the data
       result = []
       block_history.each do |history|
-        # Ping Times Trailing 1_000 pings stats.
-        # DO NOT USE ACTIVE RECORD FOR THIS! Horrible performance
-        account_ping_times = PingTime.where(
-          network: p.payload[:network],
-          to_account: history.validator.account
-        ).order('created_at desc').limit(1_000)
-
-        account_avg_ms = account_ping_times.map { |pt| pt.avg_ms.to_f.round(2) }
-        ping_times_avg_ms = account_avg_ms.sum / account_avg_ms.size.to_f
-
         result << {
           'validator_id' => history.validator.id,
           'account' => history.validator.account,
           'skipped_slots' => history.skipped_slots,
-          'skipped_slot_percent' => history.skipped_slot_percent,
-          'ping_time' => ping_times_avg_ms
+          'skipped_slot_percent' => history.skipped_slot_percent
         }
       end
 
