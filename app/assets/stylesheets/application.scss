@@ -72,9 +72,12 @@ body {
 .banner {
   padding-top: 20px;
   padding-bottom: 45px;
-  @media(max-width: $screen-sm-max) { padding-bottom: 40px; }
+  @media(max-width: $screen-sm-max) {
+    padding-bottom: 25px;
+    padding-top: 0px;
+  }
   .heading-primary {
-    margin: 0 35% 30px 0;
+    margin: 0 25% 30px 0;
     @media(max-width: $screen-md-max) {
       margin-right: 0;
     }
@@ -86,15 +89,26 @@ body {
 }
 
 .page-header {
-  margin-bottom: $margin-standard*2;
-  img {
-    display: inline-block;
-    position: absolute;
-    margin-top: -6px;
+  margin-bottom: 40px;
+  @media(max-width: $screen-xs-max) {
+    margin-bottom: $margin-standard*2;
   }
-  h1 {
-    display: inline-block;
-    padding-left: 80px;
+
+  &.with-image {
+    h1 {
+      display: inline-block;
+      padding-left: 80px;
+      margin-bottom: 0;
+    }
+    h5 {
+      padding-left: 80px;
+      margin: 5px 0 0 0;
+    }
+    img {
+      display: inline-block;
+      position: absolute;
+      margin-top: -6px;
+    }
   }
 }
 
@@ -111,6 +125,10 @@ hr {
   background-color: $grey-light;
   margin-top: $margin-standard*2;
   margin-bottom: $margin-standard*2;
+  @media(max-width: $screen-xs-max) {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
 }
 
 .p {
@@ -141,6 +159,13 @@ hr {
     @media(max-width: $screen-sm-max) {
       padding-left: 40px;
     }
+  }
+}
+
+.d-xxs-inline-block {
+ display: none;
+  @media(max-width: $screen-xxs-max) {
+    display: inline-block;
   }
 }
 

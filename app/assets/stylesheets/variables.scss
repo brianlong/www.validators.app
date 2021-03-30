@@ -30,6 +30,7 @@ $grey-transparent: rgba(202, 202, 202, 0.3);
 
 // Breakpoints
 
+$screen-xxs-max: 405px;
 $screen-xs-max: 575px;
 $screen-sm-min: 576px;
 $screen-sm-max: 767px;
@@ -63,8 +64,8 @@ $font-size-larger: 18px;
 $font-size-larger-tablet: 17.5px;
 $font-size-larger-mobile: 17px;
 $font-size-smaller: 13px;
-$font-size-smaller-tablet: 13px;
-$font-size-smaller-mobile: 12.5px;
+$font-size-smaller-tablet: 12.5px;
+$font-size-smaller-mobile: 12px;
 
 $font-size-h1: 42px;
 $font-size-h2: 34px;
