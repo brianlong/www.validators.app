@@ -6,7 +6,8 @@ class PublicControllerTest < ActionDispatch::IntegrationTest
       contact_request: {
         name: 'Test Name',
         email_address: 'test@test.com',
-        telephone: '123456789'
+        telephone: '123456789',
+        comments: 'Please contact me.'
       }
     }
 

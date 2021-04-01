@@ -2,4 +2,6 @@
 
 <%= render 'form', validator: @validator %>
 
-<%= link_to 'Back', validators_path %>
+<%= link_to validators_path, class: 'text-muted' do %>
+  <i class="fas fa-arrow-left mr-1 mt-4"></i> Back
+<% end %>

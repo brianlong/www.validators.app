@@ -32,6 +32,7 @@ module ValidatorScoreV1Logic
 
       validators = Validator.where(network: p.payload[:network])
                             .includes(:validator_score_v1)
+                            .order(:id)
                             .all
 
       # Make sure that we have a validator_score_v1 record for each validator
@@ -211,23 +212,24 @@ module ValidatorScoreV1Logic
           p.payload[:batch_uuid]
         )
 
-      sql = <<-SQL_END
-        SELECT vbh.validator_id, vbh.skipped_slot_percent
+      vbh_sql = <<-SQL_END
+        SELECT vbh.validator_id, vbh.skipped_slot_percent, vbh.skipped_slot_percent_moving_average
         FROM validator_block_histories vbh
         WHERE vbh.network = '#{p.payload[:network]}' AND vbh.batch_uuid = '#{p.payload[:batch_uuid]}'
       SQL_END
 
-      skipped_slot_percents = ActiveRecord::Base.connection.execute(sql).to_a
+      vbh = ActiveRecord::Base.connection.execute(vbh_sql).to_a
 
       p.payload[:validators].each do |validator|
-        last_validator_block_history_for_validator = skipped_slot_percents.find { |r| r.first == validator.id }
+        last_validator_block_history_for_validator = vbh.find { |r| r.first == validator.id }
 
         next unless last_validator_block_history_for_validator.present?
-        skipped_slot_percent = last_validator_block_history_for_validator.last
 
-        validator.validator_score_v1.skipped_slot_history_push(
-          skipped_slot_percent.to_f
-        )
+        skipped_slot_percent = last_validator_block_history_for_validator[1]
+        validator.score.skipped_slot_history_push(skipped_slot_percent.to_f)
+
+        moving_average = last_validator_block_history_for_validator[2]
+        validator.score.skipped_slot_moving_average_history_push(moving_average.to_f)
       rescue StandardError => e
         Appsignal.send_error(e)
       end

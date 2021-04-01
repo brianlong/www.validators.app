@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_022838) do
 
+ActiveRecord::Schema.define(version: 2021_03_25_011353) do
   create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_022838) do
     t.string "data_center_host"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "traits_autonomous_system_organization"
     t.index ["address"], name: "index_ip_overrides_on_address", unique: true
   end
 
@@ -305,6 +306,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_022838) do
     t.integer "skipped_slots_after"
     t.decimal "skipped_slots_after_percent", precision: 10, scale: 4
     t.string "network"
+    t.decimal "skipped_slot_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
@@ -322,6 +324,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_022838) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "network"
+    t.decimal "skipped_slot_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_validator_block_history_stats_on_network_and_batch_uuid"
   end
 
@@ -382,6 +385,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_022838) do
     t.string "network"
     t.string "data_center_key"
     t.string "data_center_host"
+    t.text "skipped_slot_moving_average_history"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end

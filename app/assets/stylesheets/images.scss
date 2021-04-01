@@ -1,0 +1,15 @@
+.img-circle {
+  border-radius: 50%;
+  height: 60px;
+  width: 60px;
+  &-medium {
+    border-radius: 50%;
+    height: 45px;
+    width: 45px;
+  }
+  &-small {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+  }
+}

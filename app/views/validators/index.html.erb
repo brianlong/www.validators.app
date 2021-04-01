@@ -1,146 +1,106 @@
-<% if notice %>
-  <p id="notice"><%= notice %></p>
-<% end %>
-<div class="row">
-  <div class="col-lg-12">
-    <p>
-      Meet the validators who power Solana, the world's fastest blockchain! The tables below show each validator by name and include some recent statistics for each. See our <%= link_to 'FAQ', faq_url, target: '_blank' %> for a description of the scores shown below. Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!
-    </p>
-    <p>
-      <strong>NEW:</strong> Check out our upcoming <%= link_to 'Stake Boss', stake_boss_url %> automated stake management service!
-    </p>
-  </div>
-</div>
-<h1>Solana <%= params[:network].capitalize%> Validators</h1>
+<%= render 'validators/banner' %>
 <% unless @validators.empty? %>
-  <div class="row">
-    <div class="col-sm-8">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sort:</a>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Random', url_for(order: 'random', page: params[:page], network: params[:network], refresh: params[:refresh]), class: "nav-link #{'active' unless %w[score name stake].include?(params[:order])}"  %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Stake', url_for(order: 'stake', page: params[:page], network: params[:network], refresh: params[:refresh]), class: "nav-link #{'active' if params[:order] == 'stake'}"  %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Score', url_for(order: 'score', page: params[:page], network: params[:network], refresh: params[:refresh]), class: "nav-link #{'active' if params[:order] == 'score'}"  %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Name', url_for(order: 'name', page: params[:page], network: params[:network], refresh: params[:refresh]), class: "nav-link #{'active' if params[:order] == 'name'}"  %>
-        </li>
+  <%= render 'validators/stats' %>
 
-      </ul>
-    </div>
-    <div class="col-sm-4">
-      <%= form_with(method: :get, local: true) do %>
-        <div class="form-group-row">
-          <div class="input-group mb-3">
-            <%= text_field_tag(:q, '', placeholder: 'Starts with...', class: 'form-control') %>
-          <%= hidden_field_tag(:network, params[:network]) %>
-          <%= hidden_field_tag(:order, params[:order]) %>
-          <%= hidden_field_tag(:refresh, params[:refresh]) %>
-          <div class="input-group-append">
-            <%= submit_tag("Search", class: 'btn btn-outline-secondary') %>
-          </div>
+  <div class="card">
+    <div class="card-content pb-0">
+      <h1 class="h2 card-heading">Solana <%= params[:network].capitalize %> Validators</h1>
+
+      <%= render 'validators/sort_bar' %>
+
+      <div class="row">
+        <div class="col-md-9 col-lg-10">
+          <p class="small muted">
+            Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
+            <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
+          </p>
+        </div>
+        <div class='col-md-3 col-lg-2 toggle-container'>
+          <% if params[:refresh] == 'true' %>
+            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
+                        url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
+            <p class="small muted toggle-label">REFRESH ON</p>
+          <% else %>
+            <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'),
+                        url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
+            <p class="small muted toggle-label">REFRESH OFF</p>
+          <% end %>
         </div>
       </div>
-      <% end %>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-10">
-      <small>
-        Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>. <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
-      </small>
-    </div>
-    <div class='col-sm-2 text-right'>
-      <% if params[:refresh] == 'true' %>
-        <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false)  %>
-        <small>Refresh ON</small>
-      <% else %>
-        <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true)  %>
-        <small>Refresh OFF</small>
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <table id="validators-table" class='table table-striped table-borderless spark-line-table'>
-        <thead class="thead-dark">
+
+
+    <div class="row">
+      <div class="col-sm-12">
+        <table id="validators-table" class='table table-block-sm'>
+          <thead>
           <tr>
-            <th class="avatar-column">&nbsp;</th>
-            <th class="name-column">
-              Name <small>(Commission)</small><br />
-              Active Stake <small>(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
+            <th class="avatar-column">#</th>
+            <th class="name-column pr-1">
+              Name <small class="text-muted">(Commission)</small><br />
+              Active Stake <small class="text-muted">(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
               Software
-              <small>
-                (
+              <small class="text-muted">
                 <% if params[:network] == 'mainnet' %>
-                  <%= MAINNET_CLUSTER_VERSION %>
+                  (<%= MAINNET_CLUSTER_VERSION %>)
                 <% else %>
-                  <%= TESTNET_CLUSTER_VERSION %>
+                  (<%= TESTNET_CLUSTER_VERSION %>)
                 <% end %>
-                )
               </small>
               <br />
-              Scores <small>(total)</small>
+              Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='text-right'>
-              Root<br />Distance<br />
-              <small>60-Min Chart</small>
+            <th class='percent-column pl-1 text-right'>
+              Skipped Vote&nbsp;&percnt;
+              <a data-toggle="tooltip" data-html="true" title="Distance from leader">
+                <i class="fas fa-question-circle ml-1"></i>
+              </a>
             </th>
-            <th class='text-right'>
-              Vote<br />Distance<br />
-              <small>60-Min Chart</small>
+            <th class='chart-column text-right'>
+              Root Distance<br />
+              <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='text-right'>
-              Skipped<br />Slot &percnt;<br />
-              <small>60-Min Chart</small>
+            <th class='chart-column text-right'>
+              Vote Distance<br />
+              <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='text-right'>
-              Skipped<br />Vote &percnt;<br />
-              <small>(Distance from leader)</small>
+            <th class='chart-column text-right'>
+              Skipped Slot&nbsp;&percnt;<br />
+              <small class="text-muted">60-Min Chart</small>
             </th>
           </tr>
-        </thead>
 
-        <tbody>
-          <tr>
-            <td colspan="2" class="avatar-column">
-              Cluster Height/Stats:<br />
-              Epoch: <%= @this_epoch&.epoch %>
+          <tr class="subhead">
+            <td class="avatar-column"></td>
+            <td></td>
+            <td class="text-right">
+              Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
-            <td class='text-right name-column'>
-              <%= number_with_delimiter @tower_highest_block %>
-            </td>
-            <td class='text-right'>
-              <%= number_with_delimiter @tower_highest_vote %>
-            </td>
-            <td class='text-right'>
-              Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %><br />
+            <td class="text-right"><%= number_with_delimiter @tower_highest_block %></td>
+            <td class="text-right"><%= number_with_delimiter @tower_highest_vote %></td>
+            <td class="text-right">
+              Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
+              <br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
             </td>
-            <td class='text-right'>
-              Min: <%= number_to_percentage(@skipped_vote_percent_best.to_f * 100.0, precision: 2) %>
-            </td>
           </tr>
+          </thead>
+
+          <tbody>
           <%
-              i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
-                    0
-                  else
-                    (params[:page].to_i - 1) * Kaminari.config.default_per_page
-                  end
+            i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
+                  0
+                else
+                  (params[:page].to_i - 1) * Kaminari.config.default_per_page
+                end
           %>
           <% @validators.each do |validator| %>
-          <% i += 1 %>
-            <tr>
-              <td class="avatar-column">
-                <small>
+            <% i += 1 %>
+            <tr id="row-<%=i%>">
+              <td class="avatar-column p-0">
+                <div class="number">
                   <%=
-                   link_to i, validator_url(
+                    link_to i, validator_url(
                       network: params[:network],
                       account: validator.account,
                       order: params[:order],
@@ -148,179 +108,55 @@
                       refresh: params[:refresh]
                     )
                   %>
-                </small>&nbsp;
-                <span class="avatar">
+                </div>
+                <div class="avatar">
                   <% if validator.avatar_url %>
-                    <%= image_tag validator.avatar_url, class: 'img-circle' %>
+                    <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
                   <% else %>
-                    <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+                    <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
                   <% end %>
-                </span>
+                </div>
                 <% if validator.delinquent? %>
-                  <br />
-                  <small class="score-minus-2">DELINQUENT</small>
+                  <small class="text-danger">delinquent</small>
                 <% end %>
-                </td>
-                <td class="name-column">
-                <%
-                  validator_name = if validator.name
-                    validator.name
-                  else
-                    shorten_key(validator.account)
-                  end
-                %>
-                  <%= link_to validator_name,
-                              validator_url(
-                                network: params[:network],
-                                account: validator.account,
-                                order: params[:order],
-                                page: params[:page],
-                                refresh: params[:refresh]
-                              ) %>
-                  <%
-                    comm_class = 'text-red' \
-                      if params[:network] == 'mainnet' &&
-                         validator.commission.to_i == 100
-                  %>
-                  <small class="<%= comm_class %>">(<%= validator.commission %>%)</small><br />
-                  <small>
-                    <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
-                    (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
-                  </small>
-                  <br />
-                  <small class="<%= software_color_class(validator.software_version) %>">
-                    <%= validator.software_version || 'N/A' %>
-                  </small>
-                  <br />
-                  <small>
-                    <i class="fas fa-circle score-<%= validator.root_distance_score %>"
-                       title="Root Distance Score = <%= validator.root_distance_score %>"></i>&nbsp;
-                    <i class="fas fa-circle score-<%= validator.vote_distance_score %>"
-                       title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>&nbsp;
-                    <i class="fas fa-circle score-<%= validator.skipped_slot_score %>"
-                       title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>&nbsp;
-
-                   <i class="fas fa-circle score-<%= validator.published_information_score.to_i %>"
-                      title="Published Information Score = <%= validator.published_information_score.to_i %>"></i>&nbsp;
-
-                   <i class="fas fa-circle score-<%= validator.software_version_score %>"
-                      title="Software Version Score = <%= validator.software_version_score %>"></i>&nbsp;
-
-                      <i class="fas fa-circle score-<%= validator.security_report_score.to_i %>"
-                         title="Security Report Score = <%= validator.security_report_score.to_i %>"></i>&nbsp;
-
-                    <% if validator.stake_concentration_score < 0 %>
-                      <%
-                        score_class = \
-                          if validator.stake_concentration_score == -2
-                            'score-minus-2'
-                          else
-                            'score-minus-1'
-                          end
-                      %>
-                      <i class="fas fa-minus-circle <%= score_class %>" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
-                    <% end %>
-
-                    <% if validator.data_center_concentration_score < 0 %>
-                      <%
-                        score_class = \
-                          if validator.data_center_concentration_score == -2
-                            'score-minus-2'
-                          else
-                            'score-minus-1'
-                          end
-                      %>
-                      <i class="fas fa-minus-circle <%= score_class %>" title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>&nbsp;
-                    <% end %>
-                    (<%= validator.total_score %>)
-                  </small>
               </td>
 
-              <!-- ROOT DISTANCE -->
-              <td class="spark-line text-right">
-                <%
-                    vl = \
-                      if validator.score&.root_distance_history.to_a.count < 60
-                        validator.score&.root_distance_history.to_a.count
-                      else
-                        60
-                      end
-                    line_color = if validator.root_distance_score == 2
-                        'Green'
-                      elsif validator.root_distance_score == 1
-                        'Blue'
-                      else
-                        'Gray'
-                      end
-                    vector = validator.score&.root_distance_history.to_a[-vl..-1]
-                 %>
-
-                <%= render 'validators/spark_line_block_distance',
-                        account: validator.account,
-                        vector: vector,
-                        line_color: line_color
+              <td class="name-column">
+                <% validator_name = validator.name || shorten_key(validator.account) %>
+                <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
+                            class: 'font-weight-bold' do %>
+                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_name %>
+                <% end %>
+                <% comm_class = 'text-danger' \
+                                  if params[:network] == 'mainnet' && validator.commission.to_i == 100
                 %>
+                <small class="<%= comm_class %>">
+                  (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
+                </small><br />
+                <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+                <small>
+                  <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
+                  (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
+                </small>
+                <br />
+                <span class="d-inline-block d-lg-none">Sofware version:&nbsp;</span>
+                <small class="<%= software_color_class(validator.software_version) %>">
+                  <%= validator.software_version || 'N/A' %>
+                </small>
+                <br />
+                <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
+                <%= render 'validators/scores', validator: validator %>
               </td>
 
-              <!-- VOTE DISTANCE -->
-              <td class="spark-line text-right">
-                <%
-                    vl = \
-                      if validator.score&.vote_distance_history.to_a.count < 60
-                        validator.score&.vote_distance_history.to_a.count
-                      else
-                        60
-                      end
-                    line_color = if validator.vote_distance_score == 2
-                        'Green'
-                      elsif validator.vote_distance_score == 1
-                        'Blue'
-                      else
-                        'Gray'
-                      end
-                    vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
-                 %>
-
-                <%= render 'validators/spark_line_vote_distance',
-                        account: validator.account,
-                        vector: vote_vector,
-                        line_color: line_color
-                %>
-              </td>
-
-              <!-- SKIPPED SLOTS  -->
-              <td class="spark-line text-right">
-                <%
-                    vl = \
-                      if validator.score&.skipped_slot_history.to_a.count < 60
-                        validator.score&.skipped_slot_history.to_a.count
-                      else
-                        60
-                      end
-                    line_color = if validator.skipped_slot_score == 2
-                        'Green'
-                      elsif validator.skipped_slot_score == 1
-                        'Blue'
-                      else
-                        'Gray'
-                      end
-                    slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map {|v| (v.to_f*100.0).round(1)}
-                 %>
-
-                <%= render 'validators/spark_line_skipped_slots',
-                        account: validator.account,
-                        vector: slot_vector,
-                        line_color: line_color
-                %>
-              </td>
-
-              <td class="text-right">
+              <!-- SKIPPED VOTE % -->
+              <td class="percent-column" id="skipped-vote-column-<%=i%>">
                 <%
                   vahl = validator.vote_account_last&.vote_account_history_last
                   if vahl
                     skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
                   end
                 %>
+                <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
                 <%=
                   number_to_percentage(
                     (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
@@ -330,40 +166,121 @@
                   #   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
                   #   precision: 2
                   # ) if vahl
-                 %>
+                %>
+              </td>
+
+              <td class="d-lg-none pt-0">
+                <div class="row mb-3">
+                  <div class="col pr-0">
+                    <a class="chart-link" data-iterator="<%=i%>" data-target="root-distance" href="">
+                      Root <br class="d-xxs-inline-block" />Distance
+                    </a>
+                  </div>
+                  <div class="col pr-0">
+                    <a class="chart-link" data-iterator="<%=i%>" data-target="vote-distance" href="">
+                      Vote <br class="d-xxs-inline-block" />Distance
+                    </a>
+                  </div>
+                  <div class="col">
+                    <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">
+                      Skipped <br class="d-xxs-inline-block" />Slots
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <!-- ROOT DISTANCE -->
+              <td class="chart-column d-none d-lg-table-cell" id="root-distance-<%=i%>">
+                <%
+                  vl = chart_x_scale(validator.score&.root_distance_history.to_a.count)
+                  line_color = chart_line_color(validator.root_distance_score)
+                  fill_color = chart_fill_color(validator.root_distance_score)
+                  vector = validator.score&.root_distance_history.to_a[-vl..-1]
+                %>
+                <% max_value = vector&.max %>
+                <% if max_value && max_value > Y_ROOT_DISTANCE_MAX %>
+                  <% max_value_position = max_value_position(vector) %>
+                  <% max_value_position_mobile = max_value_position(vector, min_position: false) %>
+                  <div class="chart-top-container">
+                    <div class="chart-top-value d-lg-none" style="width: <%=max_value_position_mobile%>">
+                      <%= max_value %>
+                    </div>
+                    <div class="chart-top-value d-none d-lg-block" style="width: <%=max_value_position%>">
+                      <%= max_value %>
+                    </div>
+                  </div>
+                <% end %>
+                <%= render 'validators/spark_line_block_distance',
+                           account: validator.account,
+                           vector: vector,
+                           line_color: line_color,
+                           fill_color: fill_color
+                %>
+              </td>
+
+              <!-- VOTE DISTANCE -->
+              <td class="chart-column d-none d-lg-table-cell" id=vote-distance-<%=i%>>
+                <%
+                  vl = chart_x_scale(validator.score&.vote_distance_history.to_a.count)
+                  line_color = chart_line_color(validator.vote_distance_score)
+                  fill_color = chart_fill_color(validator.vote_distance_score)
+                  vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
+                %>
+                <% max_value = vote_vector&.max %>
+                <% if max_value && max_value > Y_VOTE_DISTANCE_MAX %>
+                  <% max_value_position = max_value_position(vote_vector) %>
+                  <% max_value_position_mobile = max_value_position(vote_vector, min_position: false) %>
+                  <div class="chart-top-container">
+                    <div class="chart-top-value d-lg-none" style="width: <%=max_value_position_mobile%>">
+                      <%= max_value %>
+                    </div>
+                    <div class="chart-top-value d-none d-lg-block" style="width: <%=max_value_position%>">
+                      <%= max_value %>
+                    </div>
+                  </div>
+                <% end %>
+                <%= render 'validators/spark_line_vote_distance',
+                           account: validator.account,
+                           vector: vote_vector,
+                           line_color: line_color,
+                           fill_color: fill_color
+                %>
+              </td>
+
+              <!-- SKIPPED SLOTS  -->
+              <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
+                <%
+                  vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
+                  # ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
+
+                  # skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
+                  slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
+
+                  line_color = chart_line_color(validator.skipped_slot_score)
+                  fill_color = chart_fill_color(validator.skipped_slot_score)
+                %>
+                <%= render 'validators/spark_line_skipped_slots',
+                           account: validator.account,
+                           vector: slot_vector,
+                           line_color: line_color,
+                           fill_color: fill_color
+                           # moving_avg: skipped_slots_moving_avg
+                %>
               </td>
             </tr>
           <% end %>
-        </tbody>
-      </table>
-      <%= paginate @validators, theme: 'bootstrap4' %>
-      <small>Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %></small>
+          </tbody>
+        </table>
 
+        <div class="px-15">
+          <p class="small muted">
+            Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
+          </p>
+          <%= paginate @validators %>
+        </div>
+
+
+      </div>
     </div>
   </div>
 <% end %>
-<% if @software_versions %>
-  <hr />
-  <h3>Software Versions</h3>
-  <div class="row">
-    <div class="col-lg-12">
-      <table class="table table-striped table-borderless">
-        <thead class="thead-dark">
-          <tr>
-            <th>Software Version</th>
-            <th>Count</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @software_versions.payload.each do |group| %>
-            <tr>
-              <td><%= group.first[0] %></td>
-              <td><%= group.first[1] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-
-      </table>
-    </div>
-  </div>
-<% end %>
+<%= render 'validators/software_versions' %>
