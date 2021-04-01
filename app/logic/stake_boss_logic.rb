@@ -81,6 +81,7 @@ module StakeBossLogic
   #   - The base58 string representing the address should be exactly 33 bytes
   def guard_input
     lambda do |p|
+      return p unless p.code == 200
       # Make sure the address is not blank
       raise InvalidStakeAccount, 'Blank Address' \
         if p.payload[:stake_address].blank?
@@ -97,7 +98,7 @@ module StakeBossLogic
       # Script encoded in base58?
 
       Pipeline.new(200, p.payload)
-    rescue StandardError => e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from guard_input', e)
     end
   end
@@ -111,6 +112,7 @@ module StakeBossLogic
   #   - The stake is > STAKE_BOSS_MIN (See config/initializers/cluster.rb)
   def guard_stake_account
     lambda do |p|
+      return p unless p.code == 200
       # Load the account info from the blockchain
       stake_account = Solana::StakeAccount.new(
         address: p.payload[:stake_address],
@@ -136,7 +138,7 @@ module StakeBossLogic
 
       # Append the valid stake account to the payload
       Pipeline.new(200, p.payload.merge(solana_stake_account: stake_account))
-    rescue StandardError => e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from guard_stake_account', e)
     end
   end
@@ -144,6 +146,7 @@ module StakeBossLogic
   # Guard against duplicate records in the stake_boss_stake_accounts table
   def guard_duplicate_records
     lambda do |p|
+      return p unless p.code == 200
       # TODO: Check for duplicates in the stake_boss_stake_accounts table
       raise InvalidStakeAccount, 'Duplicate Record' \
         if StakeBoss::StakeAccount.where(
@@ -152,7 +155,7 @@ module StakeBossLogic
         ).first
 
       Pipeline.new(200, p.payload)
-    rescue StandardError => e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from guard_duplicate_records', e)
     end
   end
@@ -164,6 +167,7 @@ module StakeBossLogic
   # 2 - split_n_max.
   def set_max_n_split
     lambda do |p|
+      return p unless p.code == 200
       # The default split N-ways is 2. The user can pick a value between
       # 2 and split_n_max
       split_n_ways = 2
@@ -209,6 +213,7 @@ module StakeBossLogic
   # the transaction fees.
   def select_validators
     lambda do |p|
+      return p unless p.code == 200
       select_fields = %i[
         id validator_id commission delinquent stake_concentration_score
         data_center_concentration_score data_center_key
@@ -250,6 +255,7 @@ module StakeBossLogic
   # acceptable range.
   def register_first_stake_account
     lambda do |p|
+      return p unless p.code == 200
       # Create a DB record for the first stake account in a batch.
       # Guard against someone submitting split_n_ways that is too big
 
@@ -303,6 +309,7 @@ module StakeBossLogic
   # log level WARN here so I can see the entries on the production server.
   def split_primary_account
     lambda do |p|
+      return p unless p.code == 200
       # Make sure we are splitting a primary account
       raise InvalidStakeAccount, 'Not the primary_account' \
         unless p.payload[:stake_boss_stake_account].primary_account?
@@ -349,7 +356,7 @@ module StakeBossLogic
       # Boss*.json key file on the development/production server.
 
       Pipeline.new(200, p.payload)
-    rescue StandardError => e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from split_primary_account', e)
     end
   end
@@ -359,6 +366,7 @@ module StakeBossLogic
   # validators for a given batch.
   def delegate_validators_for_batch
     lambda do |p|
+      return p unless p.code == 200
       # Collect the list of current_validators from the DB.
       #
       # Get the list of top_validators from the select_validators pipeline
