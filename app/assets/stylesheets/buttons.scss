@@ -52,11 +52,23 @@
     border-radius: 30px;
     padding: 14px 22px;
     @include font-size-base;
+    @media(max-width: $screen-xs-max) {
+      padding: 12px 20px;
+    }
   }
   &-sm {
     font-weight: $font-weight-normal;
     border-radius: 24px;
     padding: 12px 16px;
     @include font-size-smaller;
+  }
+  &-xs {
+    font-weight: $font-weight-normal;
+    border-radius: 24px;
+    padding: 12px 16px;
+    @include font-size-smaller;
+    @media(max-width: $screen-xs-max) {
+      padding: 9px 11px;
+    }
   }
 }

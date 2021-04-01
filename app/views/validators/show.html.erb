@@ -1,10 +1,15 @@
-<div class="page-header">
+<div class="page-header with-image">
   <% if @validator.avatar_url %>
     <%= image_tag @validator.avatar_url, class: 'img-circle' %>
   <% else %>
     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
   <% end %>
-  <h1 class="word-break"><%= @validator.name || @validator.account %></h1>
+  <h1 class="word-break">
+    <%= @validator.name || @validator.account %>
+  </h1>
+  <% if @validator.delinquent? %>
+    <h5 class="text-danger">(delinquent)</h5>
+  <% end %>
 </div>
 
 

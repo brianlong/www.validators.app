@@ -171,17 +171,23 @@
                 </td>
 
                 <td class="d-lg-none pt-0">
-                  <ul class="list-inline mb-0">
-                    <li class="d-inline-block pl-0 mr-3">
-                      <a class="chart-link" data-iterator="<%=i%>" data-target="root-distance" href="">Root Distance</a>
-                    </li>
-                    <li class="d-inline-block pl-0 mr-3">
-                      <a class="chart-link" data-iterator="<%=i%>" data-target="vote-distance" href="">Vote Distance</a>
-                    </li>
-                    <li class="d-inline-block pl-0 mr-3">
-                      <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">Skipped Slots %</a>
-                    </li>
-                  </ul>
+                  <div class="row mb-3">
+                    <div class="col pr-0">
+                      <a class="chart-link" data-iterator="<%=i%>" data-target="root-distance" href="">
+                        Root <br class="d-xxs-inline-block" />Distance
+                      </a>
+                    </div>
+                    <div class="col pr-0">
+                      <a class="chart-link" data-iterator="<%=i%>" data-target="vote-distance" href="">
+                        Vote <br class="d-xxs-inline-block" />Distance
+                      </a>
+                    </div>
+                    <div class="col">
+                      <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">
+                        Skipped <br class="d-xxs-inline-block" />Slots
+                      </a>
+                    </div>
+                  </div>
                 </td>
 
                 <!-- ROOT DISTANCE -->
