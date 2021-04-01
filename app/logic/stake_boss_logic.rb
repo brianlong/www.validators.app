@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # See https://www.validators.app/stake-boss for a high-level overview of the
-# Stake Boss. The intial iteration will simply split a vote account indicated by
-# the owner and then manage the delegation to the best validators. Future
+# Stake Boss. The intial iteration will simply split a stake account indicated
+# by the owner and then manage the delegation to the best validators. Future
 # iterations will allow the account owner to provide a list of validators to
 # include or exclude from their validator set.
 #
@@ -89,9 +89,12 @@ module StakeBossLogic
       raise InvalidStakeAccount, 'Hi Leo, javascript is not allowed!' \
         if p.payload[:stake_address].include?('<script')
 
+      # TODO: Confirm that it is always 33 bytes
       # Make sure the base58 decoded address is the right length (33 bytes)
       raise InvalidStakeAccount, 'Address is wrong size' \
         if Base58.base58_to_binary(p.payload[:stake_address]).bytes.length != 33
+
+      # Script encoded in base58?
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -318,6 +321,8 @@ module StakeBossLogic
       # The split command will look like this (testnet). In this example,
       # BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY is the stake account
       # address.
+      #
+      # TODO: Explicitly include max commitment level.
       #
       # % solana split-stake \
       # --url testnet \
