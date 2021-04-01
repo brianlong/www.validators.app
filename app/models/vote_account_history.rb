@@ -44,7 +44,9 @@ class VoteAccountHistory < ApplicationRecord
 
   def set_skipped_vote_percent_moving_average
     previous_24_hours_set = self.previous_24_hours.to_a
-    self.skipped_vote_percent_moving_average = previous_24_hours_set.map(&:skipped_vote_percent).sum/previous_24_hours_set.count
+    if previous_24_hours_set.count > 0
+      self.skipped_vote_percent_moving_average = previous_24_hours_set.map(&:skipped_vote_percent).sum/previous_24_hours_set.count
+    end
     save
   end
 
