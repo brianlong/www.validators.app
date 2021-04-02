@@ -252,7 +252,7 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |validator|
         skipped_slot_percent = \
-          validator&.validator_score_v1&.skipped_slot_history&.last
+          validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
 
         # Assign the scores
         validator.validator_score_v1.skipped_slot_score = \
