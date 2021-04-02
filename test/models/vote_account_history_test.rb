@@ -17,12 +17,7 @@ class VoteAccountHistoryTest < ActiveSupport::TestCase
   end
 
   test "skipped_vote_percent_moving_average should not be empty after create" do
-    vah = VoteAccountHistory.create(
-      vote_account_id: 1,
-      network: "testnet",
-      credits_current: 193916,
-      slot_index_current: 299198
-    )
+    vah = create(:vote_account_history)
     assert_not_nil vah.skipped_vote_percent_moving_average
   end
 

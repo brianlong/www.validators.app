@@ -155,10 +155,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def skipped_vote_percent_moving_average_history_push(val)
     self.skipped_vote_percent_moving_average_history = [] if skipped_vote_percent_moving_average_history.nil?
-
     skipped_vote_percent_moving_average_history << val
-
-    # Prune the array  to include the most recent values
     if skipped_vote_percent_moving_average_history.length > MAX_HISTORY
       self.skipped_vote_percent_moving_average_history = skipped_vote_percent_moving_average_history[-MAX_HISTORY..-1]
     end
@@ -166,10 +163,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def skipped_vote_history_push(val)
     self.skipped_vote_history = [] if skipped_vote_history.nil?
-
     skipped_vote_history << val
-
-    # Prune the array  to include the most recent values
     if skipped_vote_history.length > MAX_HISTORY
       self.skipped_vote_history = skipped_vote_history[-MAX_HISTORY..-1]
     end
@@ -177,10 +171,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def vote_distance_history_push(val)
     self.vote_distance_history = [] if vote_distance_history.nil?
-
     vote_distance_history << val
-
-    # Prune the array  to include the most recent values
     if vote_distance_history.length > MAX_HISTORY
       self.vote_distance_history = vote_distance_history[-MAX_HISTORY..-1]
     end
@@ -188,10 +179,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def skipped_slot_history_push(val)
     self.skipped_slot_history = [] if skipped_slot_history.nil?
-
     skipped_slot_history << val
-
-    # Prune the array  to include the most recent values
     if skipped_slot_history.length > MAX_HISTORY
       self.skipped_slot_history = skipped_slot_history[-MAX_HISTORY..-1]
     end

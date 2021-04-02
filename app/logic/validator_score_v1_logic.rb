@@ -86,8 +86,8 @@ module ValidatorScoreV1Logic
       ).where('vote_account.validator_id': p.payload[:validators].pluck(:id)).to_a
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
-        vh = validator_histories.select { |vh| vh.account == validator.account }.first
-        vote_h = vote_histories.select { |vote_h| vote_h.vote_account.validator_id == validator.id }.first
+        vh = validator_histories.find { |vh| vh.account == validator.account }
+        vote_h = vote_histories.find { |vote_h| vote_h.vote_account.validator_id == validator.id }
         if vote_h
           validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
           validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
