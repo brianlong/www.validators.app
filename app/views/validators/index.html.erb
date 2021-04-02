@@ -250,9 +250,9 @@
               <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
                 <%
                   vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
-                  ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
+                  # ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
 
-                  skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
+                  # skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
                   slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
                   line_color = chart_line_color(validator.skipped_slot_score)
@@ -262,8 +262,8 @@
                            account: validator.account,
                            vector: slot_vector,
                            line_color: line_color,
-                           fill_color: fill_color,
-                           moving_avg: skipped_slots_moving_avg
+                           fill_color: fill_color
+                           # moving_avg: skipped_slots_moving_avg
                 %>
               </td>
             </tr>
