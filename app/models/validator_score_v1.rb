@@ -25,6 +25,7 @@
 #  vote_distance_history                        :text(65535)
 #  vote_distance_score                          :integer
 #  skipped_slot_history                         :text(65535)
+#  skipped_slot_moving_average_history          :text(65535)
 #  skipped_slot_score                           :integer
 #  skipped_after_history                        :text(65535)
 #  skipped_after_score                          :integer
@@ -67,6 +68,7 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_after_history, JSON
   serialize :skipped_vote_history, JSON
   serialize :skipped_vote_percent_moving_average_history, JSON
+  serialize :skipped_slot_moving_average_history, JSON
 
   def calculate_total_score
     # Assign special scores before calculating the total score
@@ -147,7 +149,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
     root_distance_history << val
 
-    # Prune the array  to include the most recent values
+    # Prune the array to include the most recent values
     if root_distance_history.length > MAX_HISTORY
       self.root_distance_history = root_distance_history[-MAX_HISTORY..-1]
     end
@@ -180,7 +182,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
     vote_distance_history << val
 
-    # Prune the array  to include the most recent values
+    # Prune the array to include the most recent values
     if vote_distance_history.length > MAX_HISTORY
       self.vote_distance_history = vote_distance_history[-MAX_HISTORY..-1]
     end
@@ -191,9 +193,19 @@ class ValidatorScoreV1 < ApplicationRecord
 
     skipped_slot_history << val
 
-    # Prune the array  to include the most recent values
+    # Prune the array to include the most recent values
     if skipped_slot_history.length > MAX_HISTORY
       self.skipped_slot_history = skipped_slot_history[-MAX_HISTORY..-1]
+    end
+  end
+
+  def skipped_slot_moving_average_history_push(val)
+    self.skipped_slot_moving_average_history = [] if skipped_slot_moving_average_history.nil?
+
+    skipped_slot_moving_average_history << val
+
+    if skipped_slot_moving_average_history.length > MAX_HISTORY
+      self.skipped_slot_moving_average_history = skipped_slot_moving_average_history[-MAX_HISTORY..-1]
     end
   end
 end

@@ -99,24 +99,24 @@ class ValidatorsController < ApplicationController
 
     i = 0
     if @validator.nil?
-      render file: "#{Rails.root}/public/404.html" , status: 404 
+      render file: "#{Rails.root}/public/404.html" , status: 404
     else
       @validator.validator_block_histories
                 .order('id desc')
                 .limit(@history_limit)
                 .reverse
                 .each do |vbh|
+
         i += 1
-        batch_stats = ValidatorBlockHistoryStat.where(
+        batch_stats = ValidatorBlockHistoryStat.find_by(
           network: params[:network],
           batch_uuid: vbh.batch_uuid
-        ).first
+        )
 
         @data[i] = {
           skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
-          cluster_skipped_slot_percent: (
-                batch_stats.total_slots_skipped / batch_stats.total_slots.to_f
-              ) * 100.0
+          # skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
+          # cluster_skipped_slot_percent_moving_average: batch_stats.skipped_slot_percent_moving_average.to_f * 100.0
         }
       end
     end

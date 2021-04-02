@@ -29,6 +29,10 @@
 #  index_vote_account_histories_on_vote_account_id                 (vote_account_id)
 #  index_vote_account_histories_on_vote_account_id_and_created_at  (vote_account_id,created_at)
 #
+# Foreign Keys
+#
+#  fk_rails_...  (vote_account_id => vote_accounts.id)
+#
 class VoteAccountHistory < ApplicationRecord
   belongs_to :vote_account
 

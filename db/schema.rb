@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_140644) do
     t.integer "skipped_slots_after"
     t.decimal "skipped_slots_after_percent", precision: 10, scale: 4
     t.string "network"
+    t.decimal "skipped_slot_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
@@ -248,6 +249,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_140644) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "network"
+    t.decimal "skipped_slot_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_validator_block_history_stats_on_network_and_batch_uuid"
   end
 
@@ -310,6 +312,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_140644) do
     t.string "data_center_host"
     t.text "skipped_vote_history"
     t.text "skipped_vote_percent_moving_average_history"
+    t.text "skipped_slot_moving_average_history"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
