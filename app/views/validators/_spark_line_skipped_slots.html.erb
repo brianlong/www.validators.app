@@ -21,6 +21,14 @@
                     borderDash: [2, 2],
                     radius: 0,
                     data: <%= local_assigns[:vector] %>
+                },
+                {
+                    label: '24h Moving Avg Skip %',
+                    fill: false,
+                    borderColor: "<%= local_assigns[:line_color] %>",
+                    borderWidth: 1,
+                    radius: 0,
+                    data: <%= local_assigns[:moving_avg] %>
                 }
             ]
         },
