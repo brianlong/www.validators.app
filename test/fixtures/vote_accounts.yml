@@ -3,13 +3,3 @@ one:
   validator_id: 1
   account: '456'
   network: 'testnet'
-two:
-  id: 2
-  validator_id: 2
-  account: '4567'
-  network: 'testnet'
-three:
-  id: 3
-  validator_id: 3
-  account: '4567'
-  network: 'testnet'
