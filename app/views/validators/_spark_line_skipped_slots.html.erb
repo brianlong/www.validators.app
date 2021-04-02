@@ -16,8 +16,9 @@
                     label: 'Skip %',
                     fill: false,
                     borderColor: "<%= local_assigns[:line_color] %>",
-                    backgroundColor: "<%= local_assigns[:fill_color] %>",
+                    //backgroundColor: "<%= local_assigns[:fill_color] %>",
                     borderWidth: 1,
+                    borderDash: [2, 2],
                     radius: 0,
                     data: <%= local_assigns[:vector] %>
                 }

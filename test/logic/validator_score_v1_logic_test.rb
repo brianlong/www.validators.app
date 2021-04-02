@@ -216,15 +216,15 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     end
 
     # These stats should only reflect this batch
-    assert_equal 0.2, p.payload[:avg_skipped_slot_pct_all]
-    assert_equal 0.2, ValidatorBlockHistory.average_skipped_slot_percent_for(
+    assert_equal 0.4667, p.payload[:avg_skipped_slot_pct_all]
+    assert_equal 0.4667, ValidatorBlockHistory.average_skipped_slot_percent_for(
                         @initial_payload[:network],
                         @initial_payload[:batch_uuid]
                       )
 
     # These stats should only reflect this batch
-    assert_equal 0.2, p.payload[:med_skipped_slot_pct_all]
-    assert_equal 0.2, ValidatorBlockHistory.median_skipped_slot_percent_for(
+    assert_equal 0.4667, p.payload[:med_skipped_slot_pct_all]
+    assert_equal 0.4667, ValidatorBlockHistory.median_skipped_slot_percent_for(
                         @initial_payload[:network],
                         @initial_payload[:batch_uuid]
                       )
@@ -233,20 +233,38 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                          .validator_score_v1
                          .skipped_slot_history
 
+    assert_equal [0.3667], p.payload[:validators][0]
+                         .validator_score_v1
+                         .skipped_slot_moving_average_history
+
     assert_equal [0.2], p.payload[:validators][1]
                          .validator_score_v1
                          .skipped_slot_history
+
+    assert_equal [0.4667], p.payload[:validators][1]
+                         .validator_score_v1
+                         .skipped_slot_moving_average_history
 
     assert_equal [0.3], p.payload[:validators][2]
                          .validator_score_v1
                          .skipped_slot_history
 
+    assert_equal [0.5667], p.payload[:validators][2]
+                         .validator_score_v1
+                         .skipped_slot_moving_average_history
+
     assert_nil p.payload[:validators][3]
                          .validator_score_v1
                          .skipped_slot_history
+
+    assert_nil p.payload[:validators][3]
+                         .validator_score_v1
+                         .skipped_slot_moving_average_history
   end
 
   test 'assign_block_history_score' do
+    create(:validator_block_history, network: 'testnet', batch_uuid: '1234')
+
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -255,8 +273,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_history_get)
                 .then(&assign_block_history_score)
 
-    assert_equal 0.1, p.payload[:avg_skipped_slot_pct_all]
-    assert_equal 0.1, p.payload[:med_skipped_slot_pct_all]
+    assert_equal 0.25, p.payload[:avg_skipped_slot_pct_all]
+    assert_equal 0.25, p.payload[:med_skipped_slot_pct_all]
     assert_equal [0.1], p.payload[:validators]
                          .first
                          .validator_score_v1
@@ -321,6 +339,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test 'save_validators' do
+    create(:validator_block_history, network: 'testnet', batch_uuid: '1234')
+
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -330,7 +350,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&assign_block_history_score)
                 .then(&assign_software_version_score)
                 .then(&save_validators)
-    # byebug
+
     assert_equal 2, p.payload[:validators]
                      .first
                      .validator_score_v1

@@ -1,6 +1,7 @@
 # Copy this example file to config/cluster.yml for development & testing.
 ---
 mainnet_urls:
+  - "https://api.rpcpool.com"
   - "https://api.mainnet-beta.solana.com"
 testnet_urls:
   - "https://testnet.solana.com:8899"

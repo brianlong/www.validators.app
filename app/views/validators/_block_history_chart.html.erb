@@ -17,20 +17,12 @@
                 {
                     label: ' Skip % ',
                     fill: false,
-                    backgroundColor: '<%= GREEN_TRANSPARENT %>',
-                    borderColor: '<%= GREEN %>',
+                    backgroundColor: '<%= LIGHT_GREY_TRANSPARENT %>',
+                    borderColor: '<%= LIGHT_GREY %>',
                     borderWidth: 1,
+                    borderDash: [2, 2],
                     radius: 0,
                     data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
-                },
-                {
-                    label: ' Cluster % ',
-                    fill: false,
-                    backgroundColor: '<%= BLUE_TRANSPARENT %>',
-                    borderColor: '<%= BLUE %>',
-                    borderWidth: 1,
-                    radius: 0,
-                    data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent].round(1) } %>
                 }
             ]
         },
