@@ -43,7 +43,7 @@ unless @skipped_slots_report.nil?
   unless this_report.first.nil?
     json.skipped_slots this_report.first['skipped_slots']
     json.skipped_slot_percent this_report.first['skipped_slot_percent']
-    json.ping_time this_report.first['ping_time']
+    json.ping_time nil # this_report.first['ping_time']
   end
 end
 

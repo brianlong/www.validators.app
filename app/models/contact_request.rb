@@ -19,7 +19,7 @@ class ContactRequest < ApplicationRecord
   validates :email_address, presence: true,
                             length: { maximum: 50 },
                             format: { with: Devise.email_regexp }
-  validates :comments, length: { maximum: 500 }
+  validates :comments, length: { maximum: 500 }, presence: true
 
   # For attr_encrypted:
   attr_encrypted_options.merge!(

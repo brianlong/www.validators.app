@@ -1,0 +1,169 @@
+@import "variables";
+$table-lines-color: darken($card-border-color, 3%);
+
+table, .table {
+  color: inherit;
+
+  thead {
+    background-color: $table-lines-color;
+    th {
+      border: none;
+      padding: $padding-standard 20px;
+    }
+  }
+
+  .subhead {
+    @include font-size-smaller;
+    background-color: darken($table-lines-color, 4%);
+    td { border-top: 1px solid $table-lines-color; }
+  }
+
+  tbody {
+    tr {
+      border-top: 1px solid $table-lines-color;
+    }
+    tr:nth-of-type(even) {
+      background-color: $card-background-color;
+    }
+    tr:nth-of-type(odd) {
+      background-color: darken($card-background-color, 2%);
+    }
+    td {
+      padding: $padding-standard 20px;
+      border-top: 1px solid $table-lines-color;
+    }
+  }
+
+  .avatar-column {
+    width: 70px;
+    text-align: center;
+    .number {
+      font-weight: $font-weight-bold-primary;
+      @include font-family-alternative;
+      padding: $padding-standard 0 10px 0;
+      a { color: $grey-light; }
+    }
+    .avatar {
+      padding-bottom: 5px;
+    }
+  }
+
+  .name-column {
+    width: 195px;
+  }
+
+  .category-column {
+    width: 28%;
+    @media(max-width: $screen-md-max) {
+      width: 26%;
+    }
+    @media(max-width: $screen-xs-max) {
+      width: 37%;
+    }
+  }
+
+  .chart-column {
+    width: 22%;
+    padding: 25px $padding-standard 10px $padding-standard;
+    @media(max-width: $screen-lg-max) {
+      width: 25%;
+    }
+
+    .chart-top-container {
+      position: absolute;
+      padding-left: 28px;
+      width: 19%;
+    }
+    .chart-top-value {
+      font-size: 11px;
+      line-height: 9px;
+      color: #979797;
+      margin-top: -12px;
+      text-align: right;
+    }
+  }
+
+  .wider-column {
+    min-width: 180px;
+  }
+
+  .medium-column {
+    width: 20%;
+    @media(max-width: $screen-sm-max) {
+      word-break: break-all;
+      min-width: 150px;
+    }
+  }
+
+  .narrower-column {
+    width: 17%;
+    @media(max-width: $screen-md-max) {
+      min-width: 140px;
+    }
+  }
+
+  .narrow-column {
+    @media(max-width: $screen-md-max) {
+      min-width: 135px;
+    }
+  }
+}
+
+
+.table-block-sm {
+  @media(max-width: $screen-md-max) {
+    tr {
+      display: block;
+      td {
+        display: block;
+        width: 100% !important;
+        border: none;
+        &:first-of-type {
+          padding-bottom: 0;
+        }
+      }
+      th {
+        display: block;
+        width: 100% !important;
+        text-align: left !important;
+        padding-left: 20px !important;
+      }
+    }
+  }
+}
+
+
+#validators-table {
+  max-width: 100%;
+  width: 100%;
+  table-layout: fixed;
+
+  @media(max-width: $screen-lg-max) {
+    .percent-column { width: 96px; }
+    .avatar-column { display: none; }
+  }
+
+  @media(max-width: $screen-md-max) {
+    thead { display: none; }
+    .subhead { display: none; }
+    .avatar-column { display: none; }
+    .percent-column, .chart-column {
+      padding-top: 0;
+    }
+    .chart-top-container {
+      padding-left: 23px;
+      width: 89%;
+    }
+    .chart-link.active {
+      color: $link-color-secondary;
+      text-decoration: underline;
+    }
+  }
+
+  @media(max-width: $screen-xs-max) {
+    .chart-top-container {
+      padding-left: 25px;
+      width: 84%;
+    }
+  }
+}

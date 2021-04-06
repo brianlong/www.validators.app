@@ -1,8 +1,7 @@
 <%= form_with(model: validator, local: true) do |form| %>
   <% if validator.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(validator.errors.count, "error") %> prohibited this validator from being saved:</h2>
-
+    <div class="form-errors alert alert-danger">
+      <h6><%= pluralize(validator.errors.count, "error") %> prohibited this validator from being saved:</h6>
       <ul>
         <% validator.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -11,22 +10,22 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class='form-group'>
     <%= form.label :network %>
-    <%= form.text_field :network %>
+    <%= form.text_field :network, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class='form-group'>
     <%= form.label :account_identity %>
-    <%= form.text_field :account_identity %>
+    <%= form.text_field :account_identity, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class='form-group'>
     <%= form.label :account_vote %>
-    <%= form.text_field :account_vote %>
+    <%= form.text_field :account_vote, class: 'form-control' %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <div class='form-group'>
+    <%= form.submit 'Save', class: 'btn btn-md btn-primary' %>
   </div>
 <% end %>

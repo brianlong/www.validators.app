@@ -1,56 +1,111 @@
 <h1>FAQ</h1>
-<dl>
-  <%# Questions that pertain to all visitors %>
-  <dt>How Does the Validator Score V1 Work?</dt>
-  <dd>
-    <p>
-      We track validator performance over several dimensions and assign a score in the range of (0..2) for each. The scores also correlate with colored icons: <i class="fas fa-circle score-2"></i> is excellent, <i class="fas fa-circle score-1"></i> is OK, and <i class="fas fa-circle score-0"></i> means there is room for improvement. The scored dimensions are:</p>
-      <ul>
-        <li>
-          <p><strong>Root Block Distance</strong> <small>measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower. <i class="fas fa-circle score-2"></i> (2 points) means that the validator median block distance is at, or below, the cluster median. <i class="fas fa-circle score-1"></i> (1 point) means that the validator average block distance is at, or below, the cluster average. <i class="fas fa-circle score-0"></i> (0 points) means that the validator average is higher than the cluster average. The medians and averages are calculated over a trailing 2-day period and do not reset with each epoch.</small></p>
-        </li>
-        <li>
-          <p><strong>Vote Distance</strong> <small>is very similar to the Root Block Distance score above. Lower numbers mean that the node is voting near the front of the group. The scoring rules are the same as Root Block Distance above.</small></p>
-        </li>
-        <li>
-          <p><strong>Skipped Slot &percnt;</strong> <small>measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate. <i class="fas fa-circle score-2"></i> (2 points) means that the validator skipped slot &percnt; is at, or below, the cluster median. <i class="fas fa-circle score-1"></i> (1 point) means that the skipped slot &percnt; is at, or below, the cluster average. <i class="fas fa-circle score-0"></i> (0 points) means that the validator average is higher than the cluster average. The medians and averages reflect the current epoch, and the stats reset with each new epoch.</small></p>
-        </li>
-        <li>
-          <p>
-            <strong>Published Information</strong> <small>Investors or delegators want to know who is running a node. The Published Information Score measures the contact information that the validator has posted to the blockchain using the `solana validator-info` feature. <i class="fas fa-circle score-2"></i> (2 points) means that the validator has published all four data elements (Name, Keybase ID, Website URL, and Details). <i class="fas fa-circle score-1"></i> (1 point) means that the validator has published two or three parts. <i class="fas fa-circle score-0"></i> (0 points) means that the validator has published only one, or zero, pieces of contact data.</small>
-          </p>
-        </li>
-        <li>
-          <p>
-            <strong>Software Version</strong> <small>This score is based on the Solana software version currently in use on this node. <i class="fas fa-circle score-2"></i> (2 points) means that the validator is using the correct major, minor, & patch versions. <i class="fas fa-circle score-1"></i> (1 point) means that the validator is using the correct major, & minor versions (but not patch). <i class="fas fa-circle score-0"></i> (0 points) means that the validator is only using the current major version (or less). This score is updated as soon as the validator starts voting with a new software update.</small>
-          </p>
-        </li>
-        <li>
-          <p>
-            <strong>Security Report</strong> <small>Security and operations are a critical component of a well-run validator. I am assigning one (1) point when a validator has provided me with a URL to their web page related to security policies. Please be aware that I am not evaluating the content on that web page. I will merely confirm that the web page discusses security or operating procedures before posting the link to this site. <i class="fas fa-circle score-1"></i> (1 point) means that the validator has provided a valid URL. <i class="fas fa-circle score-0"></i> (0 points) means that the validator has not published a description of their security policies. (Validators, please directly contact Brian Long to provide the URL.</small>
-          </p>
-        </li>
-        <li>
-          <p>
-            <strong>Stake Concentration</strong> <small>is a contra-score and will DEDUCT points from a validator's total score. <i class="fas fa-minus-circle score-minus-2"></i> (-2 points) means that this validator controls over 6&percnt; of the active stake. <i class="fas fa-minus-circle score-minus-1"></i> (-1 point) means that this validator has more than 3&percnt; of the active stake.  The concentration of stake is a bad thing on a decentralized proof-of-stake blockchain. There is no deduction of points, and no icon, if the validator controls less than 3%. If you are an investor who is delegating stake, please consider high performing nodes without high stake concentrations.</small>
-          </p>
-        </li>
-        <li>
-          <p>
-            <strong>Data Center Concentration</strong> <small>This is another contra-score that will DEDUCT points from validators located in data centers that host a high percentage of other Solana validators. A high data center concentration means that a problem with the hosting provider could take a high &percnt; of the nodes offline. If you are an investor who is delegating stake, please consider high performing nodes without a high data center concentration.</small>
-          </p>
-        </li>
-      </ul>
-      <p>
-      The maximum score is currently eleven (11) points: <i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-1"></i>
-    </p>
-  </dd>
-  <dt>Where do the Ping Times come From?</dt>
-  <dd>
-    <p>
-      Volunteer node operators run a script on their machines to ping all of the other cluster nodes. The script sends the ping times to this website for analysis.
-    </p>
-  </dd>
-  <dt>How is my Personal Data Protected?</dt>
-  <dd><p>All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by clicking the lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is stored within our database.</p></dd>
-</dl>
+<%# Questions that pertain to all visitors %>
+
+<h4>How Does the Validator Score V1 Work?</h4>
+<div class="mb-5">
+  <p>
+    We track validator performance over several dimensions and assign a score in the range of (0..2) for each. The
+    scores also correlate with colored icons: <i class="fas fa-circle score-2"></i> is excellent,
+    <i class="fas fa-circle score-1"></i> is OK, and <i class="fas fa-circle score-0"></i> means there is room for
+    improvement. The scored dimensions are:
+  </p>
+
+  <ol class="list-with-numbers">
+    <li>
+      <strong>Root Block Distance</strong> measures the median & average distance in block height between the
+      validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower. <br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator median block distance is at, or below,
+      the cluster median.<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the validator average block distance is at, or
+      below, the cluster average.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator average is higher than the cluster average.<br />
+      The medians and averages are calculated over a trailing 2-day period and do not reset with each epoch.
+    </li>
+    <li>
+      <strong>Vote Distance</strong> is very similar to the Root Block Distance score above. Lower numbers mean
+      that the node is voting near the front of the group. The scoring rules are the same as Root Block Distance
+      above.
+    </li>
+    <li>
+      <strong>Skipped Slot &percnt;</strong> measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.
+      <br />
+      For this metric, we track a trailing 24-hour moving average of the skip rate. The moving average (MA) is then compared to the cluster median(MA) and cluster average(MA). On the charts, a dotted line shows the spot reading that resets with every epoch. The solid line shows the 24-hour moving average.
+      <br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator skipped slot &percnt; is at, or below, the cluster median.
+      <br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the skipped slot &percnt; is at, or below, the cluster average.
+      <br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator average is higher than the cluster average.
+      <br />
+      The moving averages reflect the previous 24-hours, and the spot reading resets with each new epoch.
+    </li>
+    <li>
+      <strong>Published Information</strong><br />
+      Investors or delegators want to know who is running a node. The Published Information Score measures the contact
+      information that the validator has posted to the blockchain using the `solana validator-info` feature.<br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator has published all four data
+      elements (Name, Keybase ID, Website URL, and Details).<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the validator has published two or three parts.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator has published only one, or zero,
+      pieces of contact data.
+    </li>
+    <li>
+      <strong>Software Version</strong><br />
+      This score is based on the Solana software version currently in use on this node.<br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator is using the correct major, minor, & patch versions.<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the validator is using the correct major, & minor versions (but not patch).<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator is only using the current major version (or less).<br />
+      This score is updated as soon as the validator starts voting with a new software update.
+    </li>
+    <li>
+      <strong>Security Report</strong><br />
+      Security and operations are a critical component of a well-run validator. I am assigning one (1) point when a
+      validator has provided me with a URL to their web page related to security policies. Please be aware that I am
+      not evaluating the content on that web page. I will merely confirm that the web page discusses security or
+      operating procedures before posting the link to this site.<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the validator has provided a valid URL.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator has not published a description of
+      their security policies.<br />
+      (Validators, please directly <%= link_to 'contact Brian Long', contact_us_path %> to provide the URL.)
+    </li>
+    <li>
+      <strong>Stake Concentration</strong> is a contra-score and will DEDUCT points from a validator's total score:<br />
+      <i class="fas fa-minus-circle text-danger mr-1"></i> (-2 points) means that this validator controls over 6&percnt; of the active stake.<br />
+      <i class="fas fa-minus-circle text-warning mr-1"></i> (-1 point) means that this validator has more than 3&percnt; of the active stake.<br />
+      The concentration of stake is a bad thing on a decentralized proof-of-stake blockchain. There is no deduction of
+      points, and no icon, if the validator controls less than 3%. If you are an investor who is delegating stake,
+      please consider high performing nodes without high stake concentrations.
+    </li>
+    <li>
+      <strong>Data Center Concentration</strong>
+      <br />
+      This is another contra-score that will DEDUCT points from validators located in data centers that host a high percentage of other Solana validators. A high data center concentration means that a problem with the hosting provider could take many of the nodes offline.
+      <br />
+      <i class="fas fa-minus-circle text-danger mr-1"></i> (-2 points) means that this validator is in a data center with a very high percent of the active stake.
+      <br />
+      <i class="fas fa-minus-circle text-warning mr-1"></i> (-1 point) means that this validator is in a data center with a high percent of the active stake.
+      <br />
+      If you are an investor who is delegating stake, please consider
+      high performing nodes without a high data center concentration.
+    </li>
+  </ol>
+
+  <p>
+    The maximum score is currently eleven (11) points:
+    <i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-2"></i>&nbsp;<i class="fas fa-circle score-1"></i>
+  </p>
+</div>
+
+
+<h4>Where do the Ping Times come From?</h4>
+<div class="mb-5">
+  Volunteer node operators run a script on their machines to ping all of the other cluster nodes. The script sends
+  the ping times to this website for analysis.
+</div>
+
+<h4>How is my Personal Data Protected?</h4>
+<div>
+  All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by
+  clicking the lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is
+  stored within our database.
+</div>

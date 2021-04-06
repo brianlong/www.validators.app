@@ -2,17 +2,17 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_06_020946) do
+ActiveRecord::Schema.define(version: 2021_03_26_140644) do
 
-  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "batches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "batches", charset: "utf8", force: :cascade do |t|
     t.string "uuid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
   end
 
-  create_table "collectors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "collectors", charset: "utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "payload_type"
     t.integer "payload_version"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["user_id"], name: "index_collectors_on_user_id"
   end
 
-  create_table "contact_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "contact_requests", charset: "utf8", force: :cascade do |t|
     t.string "name_encrypted"
     t.string "email_address_encrypted"
     t.string "telephone_encrypted"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "epoch_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "epoch_histories", charset: "utf8", force: :cascade do |t|
     t.string "batch_uuid"
     t.integer "epoch"
     t.bigint "current_slot"
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["network", "batch_uuid"], name: "index_epoch_histories_on_network_and_batch_uuid"
   end
 
-  create_table "ip_overrides", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "ip_overrides", charset: "utf8", force: :cascade do |t|
     t.string "address"
     t.integer "traits_autonomous_system_number"
     t.string "country_iso_code"
@@ -88,10 +88,11 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.string "data_center_host"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "traits_autonomous_system_organization"
     t.index ["address"], name: "index_ip_overrides_on_address", unique: true
   end
 
-  create_table "ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "ips", charset: "utf8", force: :cascade do |t|
     t.string "address"
     t.string "continent_code"
     t.integer "continent_geoname_id"
@@ -137,7 +138,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["data_center_key"], name: "index_ips_on_data_center_key"
   end
 
-  create_table "ping_time_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "ping_time_stats", charset: "utf8", force: :cascade do |t|
     t.string "batch_uuid"
     t.decimal "overall_min_time", precision: 10, scale: 3
     t.decimal "overall_max_time", precision: 10, scale: 3
@@ -149,7 +150,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["network", "batch_uuid"], name: "index_ping_time_stats_on_network_and_batch_uuid"
   end
 
-  create_table "ping_times", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "ping_times", charset: "utf8", force: :cascade do |t|
     t.string "batch_uuid"
     t.string "network"
     t.string "from_account"
@@ -174,7 +175,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["network", "to_ip", "from_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_from_ip_and_created_at"
   end
 
-  create_table "reports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "reports", charset: "utf8", force: :cascade do |t|
     t.string "network"
     t.string "name"
     t.text "payload", size: :long
@@ -185,7 +186,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "users", charset: "utf8", force: :cascade do |t|
     t.string "username", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -217,7 +218,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  create_table "validator_block_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "validator_block_histories", charset: "utf8", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.integer "epoch"
     t.integer "leader_slots"
@@ -230,13 +231,14 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.integer "skipped_slots_after"
     t.decimal "skipped_slots_after_percent", precision: 10, scale: 4
     t.string "network"
+    t.decimal "skipped_slot_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
     t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
   end
 
-  create_table "validator_block_history_stats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "validator_block_history_stats", charset: "utf8", force: :cascade do |t|
     t.string "batch_uuid"
     t.integer "epoch", unsigned: true
     t.bigint "start_slot", unsigned: true
@@ -247,10 +249,11 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "network"
+    t.decimal "skipped_slot_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_validator_block_history_stats_on_network_and_batch_uuid"
   end
 
-  create_table "validator_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "validator_histories", charset: "utf8", force: :cascade do |t|
     t.string "network"
     t.string "batch_uuid"
     t.string "account"
@@ -268,7 +271,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
   end
 
-  create_table "validator_ips", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "validator_ips", charset: "utf8", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.integer "version", default: 4
     t.string "address"
@@ -278,7 +281,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
   end
 
-  create_table "validator_score_v1s", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "validator_score_v1s", charset: "utf8", force: :cascade do |t|
     t.bigint "validator_id"
     t.integer "total_score"
     t.text "root_distance_history"
@@ -307,11 +310,14 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.string "network"
     t.string "data_center_key"
     t.string "data_center_host"
+    t.text "skipped_vote_history"
+    t.text "skipped_vote_percent_moving_average_history"
+    t.text "skipped_slot_moving_average_history"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
 
-  create_table "validators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "validators", charset: "utf8", force: :cascade do |t|
     t.string "network"
     t.string "account"
     t.string "name"
@@ -326,7 +332,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 
-  create_table "vote_account_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "vote_account_histories", charset: "utf8", force: :cascade do |t|
     t.bigint "vote_account_id", null: false
     t.integer "commission"
     t.bigint "last_vote"
@@ -340,12 +346,13 @@ ActiveRecord::Schema.define(version: 2021_03_06_020946) do
     t.string "batch_uuid"
     t.bigint "credits_current"
     t.integer "slot_index_current"
+    t.decimal "skipped_vote_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_vote_account_histories_on_network_and_batch_uuid"
     t.index ["vote_account_id", "created_at"], name: "index_vote_account_histories_on_vote_account_id_and_created_at"
     t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"
   end
 
-  create_table "vote_accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "vote_accounts", charset: "utf8", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.string "account"
     t.datetime "created_at", precision: 6, null: false

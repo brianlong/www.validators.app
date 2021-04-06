@@ -34,15 +34,16 @@ set :environment, (ENV['RAILS_ENV'] || @environment).to_s
 set :whenever_path, Whenever.path
 
 set :output, File.join(Whenever.path, 'log', 'whenever.log')
-job_type :ruby_script, 'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
+job_type :ruby_script,
+         'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
 
 every 2.minutes do
   ruby_script 'gather_rpc_data_mainnet.rb'
 end
 
-every 6.minutes do
- ruby_script 'gather_rpc_data.rb'
-end
+# every 6.minutes do
+#  ruby_script 'gather_rpc_data.rb'
+# end
 
 every 1.hour do
   ruby_script 'validators_get_info.rb'
@@ -50,6 +51,7 @@ every 1.hour do
   ruby_script 'append_ip_geo_data.rb'
   ruby_script 'assign_data_center_scores.rb'
   ruby_script 'fix_ip_hetzner.rb'
+  ruby_script 'fix_ip_ovh.rb'
 end
 
 every 1.day do

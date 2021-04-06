@@ -1,68 +1,81 @@
-<h3 class="text-center">Skipped Slot History</h3>
+<h2 class="card-heading">Skipped Slot History</h2>
 <canvas id="chart_validator_block_history"></canvas>
 
 <script type="text/javascript">
-  var ctx = document.getElementById('chart_validator_block_history').getContext('2d');
-  var chart = new Chart(ctx, {
-    // The type of chart we want to create
-    type: 'line',
+    var ctx = document.getElementById('chart_validator_block_history').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
 
-    // The data for our dataset
-    data: {
-        // x-axis labels
-        labels: <%= @data.keys %>,
-        // An Array of JSON hashes for each dataset to plot. The y-axis is
-        // dynamicly calculated. Look for othe options to control the y-axis if
-        // desired.
-        datasets: [
-          {
-            label: 'Skip %',
-            fill: false,
-            backgroundColor: 'Green',
-            borderColor: 'Green',
-            borderWidth: 1,
-            radius: 0,
-            data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
-          },
-          {
-            label: 'Cluster %',
-            fill: false,
-            backgroundColor: 'Blue',
-            borderColor: 'Blue',
-            borderWidth: 1,
-            radius: 0,
-            data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent].round(1) } %>
-          }
-        ]
-    },
+        // The data for our dataset
+        data: {
+            // x-axis labels
+            labels: <%= @data.keys %>,
+            // An Array of JSON hashes for each dataset to plot. The y-axis is
+            // dynamicly calculated. Look for othe options to control the y-axis if desired.
+            datasets: [
+                {
+                    label: ' Moving Avg Skip %',
+                    fill: false,
+                    backgroundColor: '<%= GREEN_TRANSPARENT %>',
+                    borderColor: '<%= GREEN %>',
+                    borderWidth: 1,
+                    radius: 0,
+                    data: <%= @data.map { |k,v| v[:skipped_slot_percent_moving_average].round(1) } %>
+                },
+                {
+                    label: ' Skip % ',
+                    fill: false,
+                    backgroundColor: '<%= LIGHT_GREY_TRANSPARENT %>',
+                    borderColor: '<%= LIGHT_GREY %>',
+                    borderWidth: 1,
+                    borderDash: [2, 2],
+                    radius: 0,
+                    data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
+                }
+            ]
+        },
 
-    // Configuration options go here
-    options: {
-      animation: { duration: 0 }, // general animation time
-      elements: { line: { tension: 0 } }, // disables bezier curves
-      hover: { animationDuration: 0 }, // duration of animations when hovering
-      responsiveAnimationDuration: 0, // animation duration after a resize
-      // legend: { display: false },
-      scales: {
-				xAxes: [{
-					display: true,
-          ticks: {display: false},
-          gridLines: {display: false},
-					scaleLabel: {
-						display: true,
-						labelString: "Previous <%= @data.count %> Observations"
-					}
-				}],
-				yAxes: [{
-					display: true,
-          ticks: { min: 0},
-          gridLines: {display: true},
-					scaleLabel: {
-						display: true,
-						labelString: 'Percent'
-					}
-				}]
-			}
-    }
-  });
+        // Configuration options go here
+        options: {
+            animation: { duration: 0 }, // general animation time
+            elements: { line: { tension: 0 } }, // disables bezier curves
+            hover: { animationDuration: 0 }, // duration of animations when hovering
+            responsiveAnimationDuration: 0, // animation duration after a resize
+            legend: {
+                labels: {
+                    fontColor: '<%= DARK_GREY %>'
+                }
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    ticks: {display: false},
+                    gridLines: {display: false},
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Previous <%= @data.count %> Observations",
+                        fontColor: '<%= DARK_GREY %>'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        min: 0,
+                        padding: 5
+                    },
+                    gridLines: {
+                        display: true,
+                        zeroLineColor: '<%= CHART_LINE %>',
+                        color: '<%= CHART_LINE %>'
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Percent',
+                        fontColor: '<%= DARK_GREY %>'
+                    }
+                }]
+            }
+        }
+    });
 </script>

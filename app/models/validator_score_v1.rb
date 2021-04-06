@@ -17,35 +17,38 @@
 #
 # Table name: validator_score_v1s
 #
-#  id                              :bigint           not null, primary key
-#  validator_id                    :bigint
-#  total_score                     :integer
-#  root_distance_history           :text(65535)
-#  root_distance_score             :integer
-#  vote_distance_history           :text(65535)
-#  vote_distance_score             :integer
-#  skipped_slot_history            :text(65535)
-#  skipped_slot_score              :integer
-#  skipped_after_history           :text(65535)
-#  skipped_after_score             :integer
-#  software_version                :string(255)
-#  software_version_score          :integer
-#  stake_concentration             :decimal(10, 3)
-#  stake_concentration_score       :integer
-#  data_center_concentration       :decimal(10, 3)
-#  data_center_concentration_score :integer
-#  active_stake                    :bigint           unsigned
-#  commission                      :integer
-#  ping_time_avg                   :decimal(10, 3)
-#  delinquent                      :boolean
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
-#  published_information_score     :integer
-#  security_report_score           :integer
-#  ip_address                      :string(255)
-#  network                         :string(255)
-#  data_center_key                 :string(255)
-#  data_center_host                :string(255)
+#  id                                           :bigint           not null, primary key
+#  validator_id                                 :bigint
+#  total_score                                  :integer
+#  root_distance_history                        :text(65535)
+#  root_distance_score                          :integer
+#  vote_distance_history                        :text(65535)
+#  vote_distance_score                          :integer
+#  skipped_slot_history                         :text(65535)
+#  skipped_slot_moving_average_history          :text(65535)
+#  skipped_slot_score                           :integer
+#  skipped_after_history                        :text(65535)
+#  skipped_after_score                          :integer
+#  software_version                             :string(255)
+#  software_version_score                       :integer
+#  stake_concentration                          :decimal(10, 3)
+#  stake_concentration_score                    :integer
+#  data_center_concentration                    :decimal(10, 3)
+#  data_center_concentration_score              :integer
+#  active_stake                                 :bigint           unsigned
+#  commission                                   :integer
+#  ping_time_avg                                :decimal(10, 3)
+#  delinquent                                   :boolean
+#  created_at                                   :datetime         not null
+#  updated_at                                   :datetime         not null
+#  published_information_score                  :integer
+#  security_report_score                        :integer
+#  ip_address                                   :string(255)
+#  network                                      :string(255)
+#  data_center_key                              :string(255)
+#  data_center_host                             :string(255)
+#  skipped_vote_history                         :text(65535)
+#  skipped_vote_percent_moving_average_history  :text(65535)
 #
 # Indexes
 #
@@ -63,6 +66,9 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :vote_distance_history, JSON
   serialize :skipped_slot_history, JSON
   serialize :skipped_after_history, JSON
+  serialize :skipped_vote_history, JSON
+  serialize :skipped_vote_percent_moving_average_history, JSON
+  serialize :skipped_slot_moving_average_history, JSON
 
   def calculate_total_score
     # Assign special scores before calculating the total score
@@ -143,18 +149,31 @@ class ValidatorScoreV1 < ApplicationRecord
 
     root_distance_history << val
 
-    # Prune the array  to include the most recent values
+    # Prune the array to include the most recent values
     if root_distance_history.length > MAX_HISTORY
       self.root_distance_history = root_distance_history[-MAX_HISTORY..-1]
     end
   end
 
+  def skipped_vote_percent_moving_average_history_push(val)
+    self.skipped_vote_percent_moving_average_history = [] if skipped_vote_percent_moving_average_history.nil?
+    skipped_vote_percent_moving_average_history << val
+    if skipped_vote_percent_moving_average_history.length > MAX_HISTORY
+      self.skipped_vote_percent_moving_average_history = skipped_vote_percent_moving_average_history[-MAX_HISTORY..-1]
+    end
+  end
+
+  def skipped_vote_history_push(val)
+    self.skipped_vote_history = [] if skipped_vote_history.nil?
+    skipped_vote_history << val
+    if skipped_vote_history.length > MAX_HISTORY
+      self.skipped_vote_history = skipped_vote_history[-MAX_HISTORY..-1]
+    end
+  end
+
   def vote_distance_history_push(val)
     self.vote_distance_history = [] if vote_distance_history.nil?
-
     vote_distance_history << val
-
-    # Prune the array  to include the most recent values
     if vote_distance_history.length > MAX_HISTORY
       self.vote_distance_history = vote_distance_history[-MAX_HISTORY..-1]
     end
@@ -162,12 +181,19 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def skipped_slot_history_push(val)
     self.skipped_slot_history = [] if skipped_slot_history.nil?
-
     skipped_slot_history << val
-
-    # Prune the array  to include the most recent values
     if skipped_slot_history.length > MAX_HISTORY
       self.skipped_slot_history = skipped_slot_history[-MAX_HISTORY..-1]
+    end
+  end
+
+  def skipped_slot_moving_average_history_push(val)
+    self.skipped_slot_moving_average_history = [] if skipped_slot_moving_average_history.nil?
+
+    skipped_slot_moving_average_history << val
+
+    if skipped_slot_moving_average_history.length > MAX_HISTORY
+      self.skipped_slot_moving_average_history = skipped_slot_moving_average_history[-MAX_HISTORY..-1]
     end
   end
 end
