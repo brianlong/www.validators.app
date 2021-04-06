@@ -36,11 +36,19 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     # create enough records to confirm via logs we don't have an N+1 query when
     # getting ValidatorHistory for all accounts for this batch
     5.times do
+      v = create(:validator)
+      vote_acc = create(:vote_account, validator_id: v.id, account: v.account)
       create(
         :validator_history,
         network: 'testnet',
         batch_uuid: '1234',
-        account: create(:validator).account
+        account: v.account
+      )
+      create(
+        :vote_account_history,
+        batch_uuid: '1234',
+        network: 'testnet',
+        vote_account_id: vote_acc.id
       )
     end
 
@@ -73,6 +81,14 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                        .first
                        .validator_score_v1
                        .stake_concentration
+    assert_equal [0.35], p.payload[:validators]
+                       .last
+                       .validator_score_v1
+                       .skipped_vote_history
+    assert_equal [0.35], p.payload[:validators]
+                       .last
+                       .validator_score_v1
+                       .skipped_vote_percent_moving_average_history
     refute p.payload[:validators]
             .first
             .validator_score_v1
