@@ -321,12 +321,12 @@ module ValidatorScoreV1Logic
           # means that validator doesn't have any ValidatorHistory for this batch
 
           # old
-          # vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+          vah = validator&.vote_accounts&.last&.vote_account_histories&.last
 
           # new
-          vah = vote_account_histories.select do |vah_array|
-            vah_array.first == validator.id
-          end.last
+          # vah = vote_account_histories.select do |vah_array|
+          #   vah_array.first == validator.id
+          # end.last
 
           if vah
             vah = VoteAccountHistory.find(vah[1])
