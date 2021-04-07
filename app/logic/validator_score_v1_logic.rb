@@ -326,7 +326,7 @@ module ValidatorScoreV1Logic
           # new
           vah = vote_account_histories.select do |vah_array|
             vah_array.first == validator.id
-          end.first
+          end.last
 
           if vah
             vah = VoteAccountHistory.find(vah[1])
