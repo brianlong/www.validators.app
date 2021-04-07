@@ -7,21 +7,21 @@
 #
 # Table name: vote_account_histories
 #
-#  id                                   :bigint           not null, primary key
-#  vote_account_id                      :bigint           not null
-#  commission                           :integer
-#  last_vote                            :bigint
-#  root_slot                            :bigint
-#  credits                              :bigint
-#  activated_stake                      :bigint
-#  software_version                     :string(255)
-#  created_at                           :datetime         not null
-#  updated_at                           :datetime         not null
-#  network                              :string(255)
-#  batch_uuid                           :string(255)
-#  credits_current                      :bigint
-#  slot_index_current                   :integer
-#  skipped_vote_percent_moving_average  :decimal
+#  id                                  :bigint           not null, primary key
+#  activated_stake                     :bigint
+#  batch_uuid                          :string(255)
+#  commission                          :integer
+#  credits                             :bigint
+#  credits_current                     :bigint
+#  last_vote                           :bigint
+#  network                             :string(255)
+#  root_slot                           :bigint
+#  skipped_vote_percent_moving_average :decimal(10, 4)
+#  slot_index_current                  :integer
+#  software_version                    :string(255)
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
+#  vote_account_id                     :bigint           not null
 #
 # Indexes
 #
