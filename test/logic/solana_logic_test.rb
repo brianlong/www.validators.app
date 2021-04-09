@@ -81,6 +81,18 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
+  test 'epoch_get creates new EpochWallClock' do
+    VCR.use_cassette('epoch_get') do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&batch_set)
+                  .then(&epoch_get)
+      assert_equal 200, p.code
+      assert_equal 1, EpochWallClock.count
+      assert_equal 'testnet', EpochWallClock.last.network
+      assert_equal p.payload[:epoch], EpochWallClock.last.epoch
+    end
+  end
+
   test 'epoch_get with fail_over' do
     # We need to stub both the cli call (using minitest stub)
     # plus the POST http://165.227.100.142:8899/ call (using VCR)
