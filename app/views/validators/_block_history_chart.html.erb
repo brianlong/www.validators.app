@@ -32,6 +32,15 @@
                     borderDash: [2, 2],
                     radius: 0,
                     data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
+                },
+                {
+                    label: ' Cluster Moving Avg % ',
+                    fill: false,
+                    backgroundColor: '<%= BLUE_TRANSPARENT %>',
+                    borderColor: '<%= BLUE %>',
+                    borderWidth: 1,
+                    radius: 0,
+                    data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent_moving_average].round(1) } %>
                 }
             ]
         },
@@ -61,7 +70,8 @@
                 yAxes: [{
                     display: true,
                     ticks: {
-                        min: 0,
+                        beginAtZero: false,
+                        // min: 0,
                         padding: 5
                     },
                     gridLines: {
