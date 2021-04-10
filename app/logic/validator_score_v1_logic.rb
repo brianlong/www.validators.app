@@ -307,10 +307,18 @@ module ValidatorScoreV1Logic
         FROM vote_account_histories
         JOIN vote_accounts ON vote_account_histories.vote_account_id = vote_accounts.id
         JOIN validators ON validators.id = vote_accounts.validator_id
-        WHERE vote_account_histories.network = '#{p.payload[:network]}' AND vote_account_histories.batch_uuid = '#{p.payload[:batch_uuid]}'
+        WHERE vote_account_histories.network = '#{p.payload[:network]}'
+        GROUP BY validators.id
+        ORDER BY vote_account_histories.id DESC LIMIT 1
       SQL_END
-      # GROUP BY validators.id
-      # ORDER BY vote_account_histories.created_at DESC LIMIT 1
+
+                # AND
+          # vote_accounts.validator_id IN (#{})
+
+
+
+
+
 
       vote_account_histories = ActiveRecord::Base.connection.execute(sql).to_a
 
