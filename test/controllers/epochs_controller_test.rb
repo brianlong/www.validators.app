@@ -14,7 +14,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'request without token should get error' do
-    get api_v1_epoch_last_url
+    get api_v1_epoch_last_url(network: 'testnet')
     assert_response 401
     expected_response = { 'error' => 'Unauthorized' }
 
@@ -39,14 +39,6 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
       network
       created_at
     ].sort, resp.keys.sort
-  end
-
-  test 'get last epoch by network no params' do
-    get api_v1_epoch_last_url, headers: { 'Token' => @user.api_token }
-    resp = response_to_json(@response.body)
-    expected_response = { "status" => "Parameter Missing" }
-    assert_response 400
-    assert_equal expected_response, resp
   end
 
   test 'get all epochs by network success' do
