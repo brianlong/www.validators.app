@@ -17,5 +17,11 @@ FactoryBot.define do
       email { 'adminone@fmatemplate.com' }
       is_admin { true }
     end
+
+    trait :standard do
+      username { 'test' }
+      email { 'test@test.com' }
+      password { 'password' }
+    end
   end
 end
