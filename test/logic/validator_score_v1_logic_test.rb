@@ -116,7 +116,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .first
                      .validator_score_v1
                      .vote_distance_score
-    assert_equal(-2, p.payload[:validators]
+    assert_equal(-1, p.payload[:validators]
                       .first
                       .validator_score_v1
                       .stake_concentration_score)
