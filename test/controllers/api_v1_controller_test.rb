@@ -4,6 +4,9 @@ require 'test_helper'
 
 # ApiControllerTest
 class ApiControllerTest < ActionDispatch::IntegrationTest
+
+  include ResponseHelper
+
   def setup
     @user_params = {
       username: 'test',
@@ -17,13 +20,13 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     get api_v1_ping_url
     assert_response 401
     expected_response = { 'error' => 'Unauthorized' }
-    assert_equal expected_response, ResponseHelper.response_to_json(@response.body)
+    assert_equal expected_response, response_to_json(@response.body)
   end
 
   test 'request ping with token should succeed' do
     get api_v1_ping_url, headers: { 'Token' => @user.api_token }
     assert_response 200
-    json = ResponseHelper.response_to_json(@response.body)
+    json = response_to_json(@response.body)
     assert_equal 'pong', json['answer']
   end
 
@@ -31,7 +34,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     post api_v1_collector_url, params: {}
     assert_response 401
     expected_response = { 'error' => 'Unauthorized' }
-    assert_equal expected_response, ResponseHelper.response_to_json(@response.body)
+    assert_equal expected_response, response_to_json(@response.body)
   end
 
   test 'post collector with empty params should get error' do
@@ -42,14 +45,14 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
          headers: { 'Token' => @user.api_token },
          params: {}
     assert_response 400
-    assert_equal expected_response, ResponseHelper.response_to_json(@response.body)
+    assert_equal expected_response, response_to_json(@response.body)
 
     # Empty collector params
     post api_v1_collector_url,
          headers: { 'Token' => @user.api_token },
          params: { collector: {} }
     assert_response 400
-    assert_equal expected_response, ResponseHelper.response_to_json(@response.body)
+    assert_equal expected_response, response_to_json(@response.body)
   end
 
   test 'post collector with invalid params should get error' do
@@ -58,7 +61,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
          params: { collector: { one: 1, two: 2, three: 3 } }
     assert_response 400
     expected_response = { 'status' => 'Bad Request' }
-    assert_equal expected_response, ResponseHelper.response_to_json(@response.body)
+    assert_equal expected_response, response_to_json(@response.body)
   end
 
   test 'collector with valid data should succeed' do
@@ -74,7 +77,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
          headers: { 'Token' => @user.api_token },
          params: { collector: valid_payload }
     assert_response 202
-    json = ResponseHelper.response_to_json(@response.body)
+    json = response_to_json(@response.body)
     assert_equal 'Accepted', json['status']
 
     # Verify that the record was saved successfully
@@ -88,7 +91,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     get api_v1_validators_url(network: 'testnet'),
         headers: { 'Token' => @user.api_token }
     assert_response 200
-    json = ResponseHelper.response_to_json(@response.body)
+    json = response_to_json(@response.body)
     assert_equal '1234', json.first['account']
   end
 
@@ -96,7 +99,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     get api_v1_validators_url(network: 'testnet', account: '1234'),
         headers: { 'Token' => @user.api_token }
     assert_response 200
-    json = ResponseHelper.response_to_json(@response.body)
+    json = response_to_json(@response.body)
     assert_equal '1234', json.first['account']
   end
 
@@ -104,7 +107,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     get api_v1_ping_times_url(network: 'testnet', account: '1234'),
         headers: { 'Token' => @user.api_token }
     assert_response 200
-    json = ResponseHelper.response_to_json(@response.body)
+    json = response_to_json(@response.body)
     assert_equal 3, json.count
   end
 end

@@ -3,6 +3,9 @@
 require 'test_helper'
 
 class EpochsControllerTest < ActionDispatch::IntegrationTest
+
+  include ResponseHelper
+
   def setup
     @user = create(:user, :standard)
     create(:epoch_wall_clock, epoch: 101)
@@ -15,7 +18,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
     expected_response = { 'error' => 'Unauthorized' }
 
-    assert_equal expected_response, ResponseHelper.response_to_json(@response.body)
+    assert_equal expected_response, response_to_json(@response.body)
   end
 
   test 'request with token should succeed' do
@@ -25,7 +28,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
 
   test 'get last epoch by network success' do
     get api_v1_epoch_last_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
-    resp = ResponseHelper.response_to_json(@response.body)
+    resp = response_to_json(@response.body)
 
     assert_response 200
     assert_equal 102, resp['epoch']
@@ -40,7 +43,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
 
   test 'get last epoch by network no params' do
     get api_v1_epoch_last_url, headers: { 'Token' => @user.api_token }
-    resp = ResponseHelper.response_to_json(@response.body)
+    resp = response_to_json(@response.body)
     expected_response = { "status" => "Parameter Missing" }
     assert_response 400
     assert_equal expected_response, resp
@@ -48,7 +51,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
 
   test 'get all epochs by network success' do
     get api_v1_epoch_index_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
-    resp = ResponseHelper.response_to_json(@response.body)
+    resp = response_to_json(@response.body)
 
     assert_response 200
     assert_equal 3, resp.count
