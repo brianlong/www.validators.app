@@ -32,6 +32,14 @@ class PublicController < ApplicationController
                                    .joins(:validator_score_v1)
                                    .sum(:active_stake)
 
+    active_stakes = validators.pluck(:active_stake)
+    @at_33_stake = active_stakes.inject do |s, v|
+      if (s / @total_active_stake.to_f) >= 0.33
+        break active_stakes.index(v)
+      end
+      s + v
+    end
+
     @software_versions = Report.where(
       network: params[:network],
       name: 'report_software_versions'
