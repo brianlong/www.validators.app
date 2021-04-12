@@ -47,7 +47,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'get all epochs by network success' do
-    get api_v1_epoch_all_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
+    get api_v1_epoch_index_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
     resp = ResponseHelper.response_to_json(@response.body)
 
     assert_response 200

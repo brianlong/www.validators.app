@@ -12,7 +12,7 @@ module Api
         @epoch = EpochWallClock.last_by_network(epoch_params[:network])
       end
 
-      def all
+      def index
         @epoch_list = EpochWallClock.by_network(epoch_params[:network])
       end
 

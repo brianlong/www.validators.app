@@ -74,7 +74,7 @@ Rails.application.routes.draw do
 
       # Epoch Wall Clock
       get 'epoch/last', to: 'epochs#last'
-      get 'epoch/all', to: 'epochs#all'
+      get 'epoch/index', to: 'epochs#index'
     end
   end
 
