@@ -5,6 +5,7 @@
 # Table name: epoch_wall_clocks
 #
 #  id             :bigint           not null, primary key
+#  ending_slot    :bigint
 #  epoch          :integer
 #  network        :string(255)
 #  slots_in_epoch :integer

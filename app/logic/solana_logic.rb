@@ -51,7 +51,6 @@ module SolanaLogic
         slot_index: epoch_json['slotIndex'],
         slots_in_epoch: epoch_json['slotsInEpoch']
       )
-
       EpochWallClock.find_or_create_by(
         epoch: epoch_json['epoch'],
         network: p.payload[:network]
@@ -59,7 +58,8 @@ module SolanaLogic
         ewc.network = p.payload[:network]
         ewc.epoch = epoch_json['epoch']
         ewc.starting_slot = epoch_json['absoluteSlot'] - epoch_json['slotIndex']
-        ewc.slots_in_epoch= epoch_json['slotsInEpoch']
+        ewc.slots_in_epoch = epoch_json['slotsInEpoch']
+        ewc.ending_slot = ewc.starting_slot + epoch_json['slotsInEpoch']
       end
 
       Pipeline.new(200, p.payload.merge(
