@@ -33,6 +33,28 @@ ActiveRecord::Schema.define(version: 2021_04_13_052956) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "audits", charset: "utf8", force: :cascade do |t|
+    t.bigint "auditable_id", unsigned: true
+    t.string "auditable_type"
+    t.bigint "associated_id", unsigned: true
+    t.string "associated_type"
+    t.bigint "user_id", unsigned: true
+    t.string "user_type"
+    t.string "username"
+    t.string "action"
+    t.text "audited_changes"
+    t.integer "version", default: 0
+    t.string "comment"
+    t.string "remote_address"
+    t.string "request_uuid"
+    t.datetime "created_at"
+    t.index ["associated_type", "associated_id"], name: "associated_index"
+    t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index"
+    t.index ["created_at"], name: "index_audits_on_created_at"
+    t.index ["request_uuid"], name: "index_audits_on_request_uuid"
+    t.index ["user_id", "user_type"], name: "user_index"
+  end
+
   create_table "batches", charset: "utf8", force: :cascade do |t|
     t.string "uuid"
     t.datetime "created_at", precision: 6, null: false
@@ -40,6 +62,16 @@ ActiveRecord::Schema.define(version: 2021_04_13_052956) do
     t.string "network"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
+  end
+
+  create_table "block_commitments", charset: "utf8", force: :cascade do |t|
+    t.string "network"
+    t.bigint "slot"
+    t.text "commitment"
+    t.bigint "total_stake"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "slot"], name: "index_block_commitments_on_network_and_slot", unique: true
   end
 
   create_table "collectors", charset: "utf8", force: :cascade do |t|
@@ -195,6 +227,49 @@ ActiveRecord::Schema.define(version: 2021_04_13_052956) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_reports_on_network_and_batch_uuid"
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
+  end
+
+  create_table "slots", charset: "utf8", force: :cascade do |t|
+    t.string "network"
+    t.bigint "slot_number"
+    t.string "leader_account"
+    t.boolean "skipped"
+    t.bigint "block_unix_time"
+    t.datetime "block_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "slot_number"], name: "index_slots_on_network_and_slot_number", unique: true
+  end
+
+  create_table "stake_boss_stake_accounts", charset: "utf8", force: :cascade do |t|
+    t.bigint "user_id", unsigned: true
+    t.string "batch_uuid"
+    t.string "network"
+    t.string "address"
+    t.bigint "account_balance", unsigned: true
+    t.bigint "activating_stake", unsigned: true
+    t.integer "activation_epoch"
+    t.bigint "active_stake", unsigned: true
+    t.bigint "credits_observed", unsigned: true
+    t.integer "deactivation_epoch"
+    t.bigint "delegated_stake", unsigned: true
+    t.string "delegated_vote_account_address"
+    t.integer "epoch"
+    t.bigint "epoch_rewards", unsigned: true
+    t.string "lockup_custodian"
+    t.bigint "lockup_timestamp", unsigned: true
+    t.bigint "rent_exempt_reserve", unsigned: true
+    t.string "stake_authority"
+    t.string "stake_type"
+    t.string "withdraw_authority"
+    t.integer "split_n_ways"
+    t.boolean "primary_account", default: false
+    t.datetime "split_on"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["batch_uuid", "primary_account"], name: "stake_boss_stake_accounts_batch_uuid_primary_account"
+    t.index ["network", "address"], name: "stake_boss_stake_accounts_network_address", unique: true
+    t.index ["user_id"], name: "stake_boss_stake_accounts_user_id"
   end
 
   create_table "users", charset: "utf8", force: :cascade do |t|

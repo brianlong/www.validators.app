@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # Pages for Log Deep Dives
+  get 'log-deep-dives/',
+      to: 'log_deep_dives#index',
+      as: 'log_deep_dives_index'
+
+  get 'log-deep-dives/slot-72677728',
+      to: 'log_deep_dives#slot_72677728',
+      as: 'log_deep_dives_slot_72677728'
+
   # Data Centers
   get 'data-centers/:network',
       to: 'data_centers#index',
