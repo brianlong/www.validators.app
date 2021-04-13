@@ -162,7 +162,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   test 'guard_stake_account_boss_does_not_have_stake_authority' do
-    address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuS'
+    address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuSa'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
@@ -185,7 +185,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   test 'guard_stake_account_inactive' do
-    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2'
+    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2a'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
