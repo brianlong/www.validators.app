@@ -84,7 +84,7 @@ Rails.application.routes.draw do
   end
 
   # Public Controller
-  match 'contact-us', to: 'public#contact_us', via: %i[get post]
+  get 'contact-us', to: 'public#contact_us'
 
   get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
 
