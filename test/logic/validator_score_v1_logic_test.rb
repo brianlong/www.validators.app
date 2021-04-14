@@ -303,10 +303,14 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .software_version_score
   end
 
-  test 'assign_software_version_score when the validator has no ValidatorHistory for the batch' do
+  test 'assign_software_version_score marks score based on last VoteAccountHistory when the validator has no ValidatorHistory for the batch' do
     ValidatorHistory.destroy_all
 
-    # binding.pry
+    create(
+      :vote_account_history,
+      vote_account: Validator.first.vote_accounts.last,
+      software_version: MAINNET_CLUSTER_VERSION
+    )
 
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
@@ -316,10 +320,6 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_history_get)
                 .then(&assign_block_history_score)
                 .then(&assign_software_version_score)
-
-    # pp p.errors
-    # binding.pry
-    # pp p.errors.backtrace
 
     assert_equal 2, p.payload[:validators]
                      .first
