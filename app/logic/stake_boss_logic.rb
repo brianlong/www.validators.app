@@ -59,6 +59,7 @@ module StakeBossLogic
   include ApplicationHelper
 
   RPC_TIMEOUT = 60 # seconds
+  ILLEGAL_CHARS_REGEXP = /[+\-_,&|]/.freeze
 
   # InvalidStakeAccount is a custom Error class with a default message for
   # invalid Stake Accounts
@@ -88,6 +89,12 @@ module StakeBossLogic
       # Make sure the address does not contain script
       raise InvalidStakeAccount, 'Hi Leo, javascript is not allowed!' \
         if p.payload[:stake_address].include?('<script')
+
+      raise InvalidStakeAccount, 'whitespaces not allowed' \
+        if p.payload[:stake_address].match(/\s/)
+
+      raise InvalidStakeAccount, 'Address contains illegal characters' \
+        if p.payload[:stake_address].match(ILLEGAL_CHARS_REGEXP)
 
       # TODO: Confirm that it is always 33 bytes
       # Make sure the base58 decoded address is the right length (33 bytes)
