@@ -143,17 +143,6 @@ class PublicController < ApplicationController
   end
 
   def contact_us
-    if request.post?
-      @contact_request = ContactRequest.new(contact_us_params)
-      if @contact_request.save
-        flash[:notice] = t('public.contact_us.flash.contact_request_saved')
-        send_email_to_admins_about_new_request
-      else
-        render 'contact_us'
-      end
-    else
-      @contact_request = ContactRequest.new
-    end
     @title = t('public.contact_us.title')
   end
 
