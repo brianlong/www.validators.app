@@ -302,51 +302,34 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).to_a
 
-      sql = <<-SQL_END
-        SELECT validators.id, vote_account_histories.*
-        FROM vote_account_histories
-        JOIN vote_accounts ON vote_account_histories.vote_account_id = vote_accounts.id
-        JOIN validators ON validators.id = vote_accounts.validator_id
-        WHERE vote_account_histories.network = '#{p.payload[:network]}'
-        GROUP BY validators.id
-        ORDER BY vote_account_histories.id DESC LIMIT 1
-      SQL_END
-
-                # AND
-          # vote_accounts.validator_id IN (#{})
-
-
-
-
-
-
-      vote_account_histories = ActiveRecord::Base.connection.execute(sql).to_a
-
       p.payload[:validators].each do |validator|
-        vah = last_validator_histories.find { |vh| vh.account == validator.account }
+        validator_history_for_batch = last_validator_histories.find { |vh| vh.account == validator.account }
 
-        if vah.nil?
+        # VoteAccountHistory
+        #
+        # #software_version
+
+        # ValidatorHistory
+        #
+        # #software_version
+
+        if validator_history_for_batch.nil?
           # means that validator doesn't have any ValidatorHistory for this batch
 
           # old
-          vah = validator&.vote_accounts&.last&.vote_account_histories&.last
-
-          # new
-          # vah = vote_account_histories.select do |vah_array|
-          #   vah_array.first == validator.id
-          # end.last
-
-          if vah
-            vah = VoteAccountHistory.find(vah[1])
-            Rails.logger.warn "found_VAH_for_#{vah[1]}"
-          end
+          last_vah = validator&.vote_accounts&.last&.vote_account_histories&.last
+          software_version = last_vah&.software_version
+        else
+          software_version = validator_history_for_batch.software_version
         end
+
         # This means we skip the software version for non-voting nodes.
-        if vah
-          if vah.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
-            validator.validator_score_v1.software_version = vah.software_version
+        if software_version.present?
+          if ValidatorSoftwareVersion.valid_software_version?(software_version)
+            validator.validator_score_v1.software_version = software_version
           end
         end
+
         validator.validator_score_v1.assign_software_version_score
       rescue StandardError => e
         Appsignal.send_error(e)
