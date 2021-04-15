@@ -43,11 +43,19 @@ class ValidatorsController < ApplicationController
         network: params[:network],
         batch_uuid: @batch.uuid
       ).first
+      @tower_highest_block = ValidatorHistory.highest_root_block_for(
+        params[:network],
+        batch_previous_uuid
+      )
+      @tower_highest_vote = ValidatorHistory.highest_last_vote_for(
+        params[:network],
+        batch_previous_uuid
+      )
       @tower_median_block = ValidatorHistory.median_root_block_for(
         params[:network],
         batch_previous_uuid
       )
-      @tower_average_block = ValidatorHistory.average_root_block_for(
+      @tower_average_block = ValidatorHistory.average_root_block_distance_for(
         params[:network],
         batch_previous_uuid
       )
@@ -55,7 +63,7 @@ class ValidatorsController < ApplicationController
         params[:network],
         batch_previous_uuid
       )
-      @tower_average_vote = ValidatorHistory.average_last_vote_for(
+      @tower_average_vote = ValidatorHistory.average_last_vote_distance_for(
         params[:network],
         batch_previous_uuid
       )
