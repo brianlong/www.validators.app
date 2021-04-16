@@ -9,11 +9,13 @@
 #
 # Table name: batches
 #
-#  id         :bigint           not null, primary key
-#  uuid       :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  network    :string(255)
+#  id          :bigint           not null, primary key
+#  gathered_at :datetime
+#  network     :string(255)
+#  scored_at   :datetime
+#  uuid        :string(255)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 # Indexes
 #
