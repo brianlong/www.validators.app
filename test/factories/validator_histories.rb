@@ -9,6 +9,5 @@ FactoryBot.define do
     credits { 1 }
     active_stake { 100 }
     delinquent { false }
-    network { "testnet" }
   end
 end

@@ -76,16 +76,8 @@
             <td class="text-right">
               Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
-            <td class="text-right">
-              Md: <%= @tower_highest_block.to_i - @tower_median_block.to_i %>
-              <br />
-              Av: <%= @tower_average_block.round(1) %>
-            </td>
-            <td class="text-right">
-              Md: <%= @tower_highest_vote.to_i - @tower_median_vote.to_i %>
-              <br />
-              Av: <%= @tower_average_vote.round(1) %>
-            </td>
+            <td class="text-right"><%= number_with_delimiter @tower_highest_block %></td>
+            <td class="text-right"><%= number_with_delimiter @tower_highest_vote %></td>
             <td class="text-right">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
