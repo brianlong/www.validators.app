@@ -22,13 +22,14 @@ module SolanaLogic
     end
   end
 
-  # At the end of a pipeline operation, we can modify batch.updated_at to
+  # At the end of a pipeline operation, we can modify batch.gathered_at to
   # calculate batch processing time.
   def batch_touch
     lambda do |p|
       # byebug
       batch = Batch.where(uuid: p.payload[:batch_uuid]).first
-      batch&.touch # instead of batch.touch if batch
+      batch&.gathered_at = Time.now # instead of batch.touch if batch
+      batch&.save
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
