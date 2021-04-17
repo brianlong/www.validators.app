@@ -135,7 +135,7 @@
                 </small><br />
                 <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
                 <small>
-                  <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
+                  <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
                   (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
                 </small>
                 <br />
