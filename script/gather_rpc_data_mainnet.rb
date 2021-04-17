@@ -40,8 +40,8 @@ if p.code == 200
     network: p.payload[:network]
   )
 
-  ValidatorScoreV1Worker.set(queue: :high_priority).perform_async(
-    network: p.payload[:network],
-    batch_uuid: p.payload[:batch_uuid]
-  )
+  # ValidatorScoreV1Worker.set(queue: :high_priority).perform_async(
+  #   network: p.payload[:network],
+  #   batch_uuid: p.payload[:batch_uuid]
+  # )
 end

@@ -32,6 +32,14 @@ class PublicController < ApplicationController
                                    .joins(:validator_score_v1)
                                    .sum(:active_stake)
 
+    active_stakes = validators.pluck(:active_stake).compact
+    @at_33_stake = active_stakes.inject do |s, v|
+      if (s / @total_active_stake.to_f) >= 0.33
+        break active_stakes.index(v)
+      end
+      s + v
+    end
+
     @software_versions = Report.where(
       network: params[:network],
       name: 'report_software_versions'
@@ -135,17 +143,6 @@ class PublicController < ApplicationController
   end
 
   def contact_us
-    if request.post?
-      @contact_request = ContactRequest.new(contact_us_params)
-      if @contact_request.save
-        flash[:notice] = t('public.contact_us.flash.contact_request_saved')
-        send_email_to_admins_about_new_request
-      else
-        render 'contact_us'
-      end
-    else
-      @contact_request = ContactRequest.new
-    end
     @title = t('public.contact_us.title')
   end
 

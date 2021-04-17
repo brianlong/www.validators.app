@@ -88,6 +88,10 @@ body {
   }
 }
 
+.deep-dive p {
+  font-size: 18px;
+}
+
 .page-header {
   margin-bottom: 40px;
   @media(max-width: $screen-xs-max) {

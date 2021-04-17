@@ -3,7 +3,7 @@
 # Logic to compile ValidatorScoreV1
 module ValidatorScoreV1Logic
   include PipelineLogic
-  STAKE_CONCENTRATION_FACTOR = 0.03
+  STAKE_CONCENTRATION_FACTOR = 0.015
 
   # Payload starts with :network & :batch_uuid
   def set_this_batch
@@ -41,7 +41,6 @@ module ValidatorScoreV1Logic
       rescue StandardError => e
         Appsignal.send_error(e)
       end
-
       Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from validators_get', e)
@@ -81,10 +80,18 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).where({ account: p.payload[:validators].map(&:account) }).to_a
 
+      vote_histories = VoteAccountHistory.joins(:vote_account).where(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid]
+      ).where('vote_account.validator_id': p.payload[:validators].pluck(:id)).to_a
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
-        vh = validator_histories.select { |vh| vh.account == validator.account }.first
-
+        vh = validator_histories.find { |vh| vh.account == validator.account }
+        vote_h = vote_histories.find { |vote_h| vote_h.vote_account.validator_id == validator.id }
+        if vote_h
+          validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
+          validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
+        end
         if vh
           root_distance = highest_root - vh.root_block.to_i
           vote_distance = highest_vote - vh.last_vote.to_i
@@ -103,7 +110,6 @@ module ValidatorScoreV1Logic
           root_distance = highest_root
           vote_distance = highest_vote
         end
-
         validator.validator_score_v1.root_distance_history_push(root_distance)
         validator.validator_score_v1.vote_distance_history_push(vote_distance)
       rescue StandardError => e
@@ -173,7 +179,8 @@ module ValidatorScoreV1Logic
         # Assign the stake concentration & score
         v.validator_score_v1.stake_concentration_score = \
           if v.validator_score_v1.stake_concentration.to_f >= (STAKE_CONCENTRATION_FACTOR * 2)
-            -2
+            # NOTE: I am only using -1 at the moment. -- BKL
+            -1
           elsif v.validator_score_v1.stake_concentration.to_f >= STAKE_CONCENTRATION_FACTOR
             -1
           else
