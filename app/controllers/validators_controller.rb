@@ -30,13 +30,9 @@ class ValidatorsController < ApplicationController
       name: 'report_software_versions'
     ).last
 
-    @batch = Batch.where(network: params[:network]).last
-    # Use the previous batch for average & median stats since the most recent
-    # batch might still be in process.
-    @batch_previous = Batch.where(network: params[:network])
-                           .order('id desc')
-                           .limit(2)[1]
-    batch_previous_uuid = @batch_previous&.uuid || 'no-uuid'
+    @batch = Batch.where(
+      ["network = ? AND scored_at IS NOT NULL",  params[:network]]
+    ).last
 
     if @batch
       @this_epoch = EpochHistory.where(
@@ -54,23 +50,23 @@ class ValidatorsController < ApplicationController
       @skipped_slot_average = \
         ValidatorBlockHistory.average_skipped_slot_percent_for(
           params[:network],
-          batch_previous_uuid
+          @batch.uuid
         )
       @skipped_slot_median = \
         ValidatorBlockHistory.median_skipped_slot_percent_for(
           params[:network],
-          batch_previous_uuid
+          @batch.uuid
         )
     end
 
     # Calculate the best skipped vote percent.
     @credits_current_max = VoteAccountHistory.where(
       network: params[:network],
-      batch_uuid: batch_previous_uuid
+      batch_uuid: @batch.uuid
     ).maximum(:credits_current).to_i
     @slot_index_current = VoteAccountHistory.where(
       network: params[:network],
-      batch_uuid: batch_previous_uuid
+      batch_uuid: @batch.uuid
     ).maximum(:slot_index_current).to_i
     @skipped_vote_percent_best = \
       (@slot_index_current - @credits_current_max )/@slot_index_current.to_f

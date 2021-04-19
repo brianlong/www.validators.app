@@ -20,6 +20,7 @@
 # Indexes
 #
 #  index_batches_on_network_and_created_at  (network,created_at)
+#  index_batches_on_network_and_scored_at   (network,scored_at)
 #  index_batches_on_network_and_uuid        (network,uuid)
 #
 class Batch < ApplicationRecord
