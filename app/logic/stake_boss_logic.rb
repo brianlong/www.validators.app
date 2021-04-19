@@ -59,7 +59,7 @@ module StakeBossLogic
   include ApplicationHelper
 
   RPC_TIMEOUT = 60 # seconds
-  ILLEGAL_CHARS_REGEXP = /[+\-_,&|]/.freeze
+  ILLEGAL_CHARS_REGEXP = /[+\-_,&|'"]/.freeze
 
   # InvalidStakeAccount is a custom Error class with a default message for
   # invalid Stake Accounts
@@ -79,7 +79,8 @@ module StakeBossLogic
   # Guard against invalid or malicious input. The checks are:
   #   - No blank or null addresses
   #   - No script in the provided address
-  #   - The base58 string representing the address should be exactly 33 bytes
+  #   - The base58 string representing the address should be between 32 and 44 bytes long
+  #   - there should be no characters that do not occur in standard solana address
   def guard_input
     lambda do |p|
       # Make sure the address is not blank
@@ -96,10 +97,9 @@ module StakeBossLogic
       raise InvalidStakeAccount, 'Address contains illegal characters' \
         if p.payload[:stake_address].match(ILLEGAL_CHARS_REGEXP)
 
-      # TODO: Confirm that it is always 33 bytes
-      # Make sure the base58 decoded address is the right length (33 bytes)
+      # Make sure the base58 decoded address is the right length (32 - 44 bytes)
       raise InvalidStakeAccount, 'Address is wrong size' \
-        if Base58.base58_to_binary(p.payload[:stake_address]).bytes.length != 33
+        unless (32..44).include?(Base58.base58_to_binary(p.payload[:stake_address]).bytes.length)
 
       # Script encoded in base58?
 

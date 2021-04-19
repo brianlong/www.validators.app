@@ -33,12 +33,11 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     ValidatorScoreV1.create(
       network: 'testnet',
       validator_id: @marco.id,
-      total_score: 10,
       delinquent: false,
       stake_concentration_score: 0,
       data_center_concentration_score: 0,
       data_center_key: '3265-NL-Bergschenhoek'
-    )
+    ).update_column(:total_score, 10)
 
     # Martin Smith
     @martin = Validator.create(
@@ -53,12 +52,11 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     ValidatorScoreV1.create(
       network: 'testnet',
       validator_id: @martin.id,
-      total_score: 9,
       delinquent: false,
       stake_concentration_score: 0,
       data_center_concentration_score: 0,
       data_center_key: '199610-RU-Moscow'
-    )
+    ).update_column(:total_score, 9)
   end
 
   # Show that the input guards are working
@@ -96,6 +94,33 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                  p.errors.class
     assert_equal 'Invalid Stake Account: Address is wrong size',
                  p.errors.message
+  end
+
+  test 'guard_input_whitespace' do
+    p = Pipeline.new(200, @initial_payload.merge(stake_address: 'te st'))
+                .then(&guard_input)
+
+    assert_equal 500,
+                 p.code
+    assert_equal StakeBossLogic::InvalidStakeAccount,
+                 p.errors.class
+    assert_equal 'Invalid Stake Account: whitespaces not allowed',
+                 p.errors.message
+  end
+
+  test 'guard_input_forbidden_chars' do
+    illegal_chars = %w[+ - _ & | ' "]
+    illegal_chars.each do |chr|
+      account = SecureRandom.hex(16) + chr
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: account))
+                  .then(&guard_input)
+      assert_equal 500,
+                   p.code
+      assert_equal StakeBossLogic::InvalidStakeAccount,
+                   p.errors.class
+      assert_equal 'Invalid Stake Account: Address contains illegal characters',
+                   p.errors.message
+    end
   end
 
   test 'guard_stake_account_invalid' do
@@ -260,7 +285,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&guard_duplicate_records)
                   .then(&set_max_n_split)
                   .then(&select_validators)
-
       assert_equal 200,
                    p.code
       assert_equal 199,
@@ -273,9 +297,8 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                    p.payload[:split_n_max]
       assert_equal 1,
                    p.payload[:validators].count
-      assert       p.payload[:validators].include?(
-        '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
-      )
+      assert_equal '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3',
+                   p.payload[:validators][0]
     end
   end
 
