@@ -50,20 +50,13 @@ class PublicController < ApplicationController
                            .order('id desc')
                            .limit(2)[1]
     batch_previous_uuid = @batch_previous&.uuid || 'no-uuid'
+    @global_stats = ValidatorScoreStat.last
 
     if @batch
       @this_epoch = EpochHistory.where(
         network: params[:network],
         batch_uuid: @batch.uuid
       ).first
-      @tower_highest_block = ValidatorHistory.highest_root_block_for(
-        params[:network],
-        @batch.uuid
-      )
-      @tower_highest_vote = ValidatorHistory.highest_last_vote_for(
-        params[:network],
-        @batch.uuid
-      )
       @skipped_slot_average = \
         ValidatorBlockHistory.average_skipped_slot_percent_for(
           params[:network],

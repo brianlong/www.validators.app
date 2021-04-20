@@ -142,6 +142,14 @@ module ValidatorScoreV1Logic
       vote_distance_all_average = array_average(vote_distance_all)
       vote_distance_all_median = array_median(vote_distance_all)
 
+      ValidatorScoreStat.create(
+        network:                p.payload[:network],
+        root_distance_average:  root_distance_all_average,
+        root_distance_median:   root_distance_all_median,
+        vote_distance_average:  vote_distance_all_average,
+        vote_distance_median:   vote_distance_all_median
+      )
+
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_average: #{root_distance_all_average}"
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_median: #{root_distance_all_median}"
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_average: #{vote_distance_all_average}"

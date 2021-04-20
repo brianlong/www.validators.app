@@ -108,6 +108,12 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal 0.0, p.payload[:vote_distance_all_average]
     assert_equal 0.0, p.payload[:vote_distance_all_median]
 
+    assert_equal 1, ValidatorScoreStat.count
+    assert_not_nil ValidatorScoreStat.last.root_distance_average
+    assert_not_nil ValidatorScoreStat.last.root_distance_median
+    assert_not_nil ValidatorScoreStat.last.vote_distance_average
+    assert_not_nil ValidatorScoreStat.last.vote_distance_median
+
     assert_equal 2, p.payload[:validators]
                      .first
                      .validator_score_v1
