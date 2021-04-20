@@ -48,6 +48,7 @@ begin
 
     break if interrupted
   rescue SkipAndSleep
+    break if interrupted
     sleep(sleep_time)
   end
 rescue StandardError => e
