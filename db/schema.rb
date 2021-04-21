@@ -288,16 +288,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_074022) do
     t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
   end
 
-  create_table "validator_score_stats", charset: "utf8", force: :cascade do |t|
-    t.string "network"
-    t.float "root_distance_average"
-    t.integer "root_distance_median"
-    t.float "vote_distance_average"
-    t.integer "vote_distance_median"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "validator_score_v1s", charset: "utf8", force: :cascade do |t|
     t.bigint "validator_id"
     t.integer "total_score"
