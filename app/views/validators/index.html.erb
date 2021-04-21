@@ -77,17 +77,17 @@
               Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
             <td class="text-right">
-              <% if @global_stats %>
-                Md: <%= @global_stats.root_distance_median %>
+              <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
+                Md: <%= @batch.root_distance_all_median %>
                 <br />
-                Av: <%= @global_stats.root_distance_average %>
+                Av: <%= @batch.root_distance_all_average.round(1) %>
               <% end %>
             </td>
             <td class="text-right">
-              <% if @global_stats %>
-                Md: <%= @global_stats.vote_distance_median %>
+              <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
+                Md: <%= @batch.vote_distance_all_median %>
                 <br />
-                Av: <%= @global_stats.vote_distance_average %>
+                Av: <%= @batch.vote_distance_all_average.round(1) %>
               <% end %>
             </td>
             <td class="text-right">

@@ -48,8 +48,6 @@ class PublicController < ApplicationController
     @batch = Batch.where(
       ["network = ? AND scored_at IS NOT NULL",  params[:network]]
     ).last
-    
-    @global_stats = ValidatorScoreStat.last
 
     if @batch
       @this_epoch = EpochHistory.where(
