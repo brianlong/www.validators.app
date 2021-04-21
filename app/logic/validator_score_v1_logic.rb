@@ -3,7 +3,7 @@
 # Logic to compile ValidatorScoreV1
 module ValidatorScoreV1Logic
   include PipelineLogic
-  STAKE_CONCENTRATION_FACTOR = 0.03
+  STAKE_CONCENTRATION_FACTOR = 0.015
 
   # Payload starts with :network & :batch_uuid
   def set_this_batch
@@ -179,7 +179,8 @@ module ValidatorScoreV1Logic
         # Assign the stake concentration & score
         v.validator_score_v1.stake_concentration_score = \
           if v.validator_score_v1.stake_concentration.to_f >= (STAKE_CONCENTRATION_FACTOR * 2)
-            -2
+            # NOTE: I am only using -1 at the moment. -- BKL
+            -1
           elsif v.validator_score_v1.stake_concentration.to_f >= STAKE_CONCENTRATION_FACTOR
             -1
           else
