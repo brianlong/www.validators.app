@@ -8,7 +8,7 @@ class ValidatorsController < ApplicationController
   # GET /validators.json
   def index
     @sort_order = if params[:order] == 'score'
-                    'validator_score_v1s.total_score desc, validator_score_v1s.active_stake desc'
+                    'validator_score_v1s.total_score desc, RAND()'
                   elsif params[:order] == 'name'
                     'validators.name asc'
                   else
