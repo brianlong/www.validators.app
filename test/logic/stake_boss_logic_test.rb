@@ -13,13 +13,61 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   def setup
     # Create our initial payload with the input values
     @initial_payload = {
-      config_urls: ['https://testnet.solana.com:8899'],
+      config_urls: ['https://testnet.solana.com'],
       network: 'testnet',
       stake_account: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     }
   end
 
   def create_validators
+    # create some validators that should not be delegated by StakeBoss
+    @noname1 = Validator.create(
+      network: 'testnet',
+      account: 'A5oH9BPo6PRnEHmLnhtyN2YXELnbTotEUDB8axHVBcY4',
+      name: 'noname'
+    )
+    @noname1.vote_accounts.create(
+      # network: 'testnet',
+      account: 'A5oH9BPo6PRnEHmLnhtyN2YXELnbTotEUDB8axHVBcY4'
+    )
+    create(
+      :validator_score_v1,
+      validator_id: @noname1.id,
+      delinquent: true,
+      data_center_key: '3265-NL-Bergschenhoek'
+    ).update_column(:total_score, 10)
+
+    @noname2 = Validator.create(
+      network: 'testnet',
+      account: 'Aom2EwxRjtcCZBDwqvaZiEZDPgmw4AsPQGVrsLa2srCg',
+      name: 'noname'
+    )
+    @noname2.vote_accounts.create(
+      # network: 'testnet',
+      account: 'Aom2EwxRjtcCZBDwqvaZiEZDPgmw4AsPQGVrsLa2srCg'
+    )
+    create(
+      :validator_score_v1,
+      validator_id: @noname2.id,
+      stake_concentration_score: -2,
+      data_center_key: '3265-NL-Bergschenhoek'
+    ).update_column(:total_score, 10)
+
+    @noname3 = Validator.create(
+      network: 'testnet',
+      account: 'AxPP3kYU5RC1fsvaPRoaJCHsqGaxYJmV7vervCzVgn83',
+      name: 'noname'
+    )
+    @noname3.vote_accounts.create(
+      # network: 'testnet',
+      account: 'AxPP3kYU5RC1fsvaPRoaJCHsqGaxYJmV7vervCzVgn83'
+    )
+    create(
+      :validator_score_v1,
+      validator_id: @noname3.id,
+      data_center_key: '24940-DE-Nuremburg'
+    ).update_column(:total_score, 10)
+
     # Marco Broeken
     @marco = Validator.create(
       network: 'testnet',
@@ -30,8 +78,8 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       # network: 'testnet',
       account: '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
     )
-    ValidatorScoreV1.create(
-      network: 'testnet',
+    create(
+      :validator_score_v1,
       validator_id: @marco.id,
       delinquent: false,
       stake_concentration_score: 0,
@@ -49,8 +97,8 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       # network: 'testnet',
       account: '38QX3p44u4rrdAYvTh2Piq7LvfVps9mcLV9nnmUmK28x'
     )
-    ValidatorScoreV1.create(
-      network: 'testnet',
+    create(
+      :validator_score_v1,
       validator_id: @martin.id,
       delinquent: false,
       stake_concentration_score: 0,
@@ -147,7 +195,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   test 'guard_stake_account_boss_does_not_have_stake_authority' do
-    address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuS'
+    address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuSa'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
@@ -170,7 +218,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   test 'guard_stake_account_inactive' do
-    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2'
+    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2a'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
@@ -269,7 +317,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
   test 'select_validators' do
     create_validators
-
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
