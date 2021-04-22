@@ -4,7 +4,7 @@
 class PublicController < ApplicationController
   def index
     @sort_order = if params[:order] == 'score'
-                    'validator_score_v1s.total_score desc,  RAND()'
+                    'validator_score_v1s.total_score desc, RAND()'
                   elsif params[:order] == 'name'
                     'validators.name asc'
                   elsif params[:order] == 'stake'
