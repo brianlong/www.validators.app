@@ -7,6 +7,8 @@ class SolanaCliService
     end
   end
 
+  # unless full_resp is set to true, only standard response is provided
+  # otherwise potential error and exit status are provided as well 
   def self.request(cli_method, rpc_url, full_resp = false)
     resp, err, exit_status = Open3.capture3("#{solana_path}solana #{cli_method} --output json-compact --url #{rpc_url}")
     full_resp ? [resp, err, exit_status] : resp

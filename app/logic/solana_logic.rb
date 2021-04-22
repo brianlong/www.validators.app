@@ -498,6 +498,7 @@ module SolanaLogic
 
       # byebug
       if response_utf8 != ''
+        # Include errors from the solana-cli 
         return JSON.parse(response_utf8).merge!('cli_error' => error_msg)
       elsif !error_msg.blank?
         return {cli_error: error_msg}
