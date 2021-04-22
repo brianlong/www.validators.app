@@ -470,9 +470,11 @@ module SolanaLogic
   # results as parsed JSON. [] is returned if there is no data
   def cli_request(cli_method, rpc_urls)
     rpc_urls.each do |rpc_url|
-      response_json = Timeout.timeout(RPC_TIMEOUT) do
+      response_json, error_msg, exit_status = ''
+      Timeout.timeout(RPC_TIMEOUT) do
 
-        SolanaCliService.request(cli_method, rpc_url)
+        response_json, error_msg, exit_status = \
+        SolanaCliService.request(cli_method, rpc_url,)
 
       rescue Errno::ENOENT, Errno::ECONNREFUSED, Timeout::Error => e
         # Log errors and return '' if there is a problem
@@ -495,8 +497,11 @@ module SolanaLogic
       end
 
       # byebug
-
-      return JSON.parse(response_utf8) unless response_utf8 == ''
+      if response_utf8 != ''
+        return JSON.parse(response_utf8).merge!('cli_error' => error_msg)
+      elsif !error_msg.blank?
+        return {cli_error: error_msg}
+      end
     rescue JSON::ParserError => e
       Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
     end

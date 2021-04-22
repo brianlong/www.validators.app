@@ -98,6 +98,33 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                  p.errors.message
   end
 
+  test 'guard_stake_account_not_a_stake_account' do
+    address = 'FLC9P4DgGjQD53X1zsx1hA9HJhzjErzYeJk24Xdfpogx'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      [
+        json_data,
+        "Error: RPC request error: FLC9P4DgGjQD53X1zsx1hA9HJhzjErzYeJk24Xdfpogx is not a stake account\n"
+      ],
+      [address, TESTNET_CLUSTER_URLS],
+      true
+    ) do
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_input)
+                  .then(&guard_stake_account)
+
+      assert_equal 500,
+                   p.code
+      assert_equal StakeBossLogic::InvalidStakeAccount,
+                   p.errors.class
+      assert_equal 'Invalid Stake Account: This is not a Stake Account',
+                   p.errors.message
+    end
+  end
+
   test 'guard_stake_account_invalid' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuZ'
     json_data = \
@@ -111,7 +138,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
-
+      puts p.errors.message
       assert_equal 500,
                    p.code
       assert_equal StakeBossLogic::InvalidStakeAccount,
@@ -134,7 +161,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
-
       assert_equal 500,
                    p.code
       assert_equal StakeBossLogic::InvalidStakeAccount,

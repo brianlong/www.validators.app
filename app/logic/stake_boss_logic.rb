@@ -118,6 +118,10 @@ module StakeBossLogic
       )
       stake_account.get
 
+      # Is solana account but not a stake account
+      raise InvalidStakeAccount, 'This is not a Stake Account' \
+        if stake_account.cli_error&.include?('is not a stake account')
+
       # Make sure this is a valid stake account
       raise InvalidStakeAccount, 'Not a valid Stake Account' \
         unless stake_account.valid?

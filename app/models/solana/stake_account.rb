@@ -60,6 +60,7 @@ module Solana
     # Gets the output from the Solana CLI and populates the attributes
     def get
       ssa = cli_request("stake-account #{@address}", @rpc_urls)
+      @cli_error = ssa[:cli_error]
       @account_balance = ssa['accountBalance']
       @activation_epoch = ssa['activationEpoch']
       @active_stake = ssa['activeStake']
@@ -81,6 +82,10 @@ module Solana
 
     def valid?
       @error.nil?
+    end
+
+    def cli_error
+      @cli_error
     end
 
     def active?

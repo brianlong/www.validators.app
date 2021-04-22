@@ -168,7 +168,8 @@ class SolanaLogicTest < ActiveSupport::TestCase
     SolanaCliService.stub(:request, json_data, ['validators', 'http://testnet.solana.com:8899']) do
       rpc_urls = ['http://127.0.0.1:8899', 'http://testnet.solana.com:8899']
       cli_response = cli_request('validators', rpc_urls)
-      assert_equal 6, cli_response.count
+      assert_equal 7, cli_response.count
+      assert_nil cli_response['error']
     end
   end
 
@@ -178,7 +179,8 @@ class SolanaLogicTest < ActiveSupport::TestCase
     SolanaCliService.stub(:request, json_data, ['validators', 'http://testnet.solana.com:8899']) do
       rpc_urls = ['https://testnet.solana.com:8899', 'http://127.0.0.1:8899']
       cli_response = cli_request('validators', rpc_urls)
-      assert_equal 6, cli_response.count
+      assert_equal 7, cli_response.count
+      assert_nil cli_response['error']
     end
   end
 
