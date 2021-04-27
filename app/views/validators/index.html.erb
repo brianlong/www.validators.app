@@ -50,7 +50,7 @@
               <br />
               Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='percent-column pl-1 text-right'>
+            <th class='chart-column pl-1 text-right'>
               Skipped Vote&nbsp;&percnt;
               <a data-toggle="tooltip" data-html="true" title="Distance from leader">
                 <i class="fas fa-question-circle ml-1"></i>
@@ -164,7 +164,7 @@
               </td>
 
               <!-- SKIPPED VOTE % -->
-              <td class="percent-column" id="skipped-vote-column-<%=i%>">
+              <td class="chart-column" id="skipped-vote-column-<%=i%>">
                 <%
                   vahl = validator.vote_account_last&.vote_account_history_last
                   if vahl
@@ -172,18 +172,22 @@
                   end
                 %>
                 <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
-                <%=
-                  number_to_percentage(
-                    (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
-                    precision: 2
-                  ) if vahl
-                  # number_to_percentage(
-                  #   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
-                  #   precision: 2
-                  # ) if vahl
+                <!-- New skipped vote chart -->
+                <%
+                  vl = chart_x_scale(validator.score&.skipped_vote_history.to_a.count)
+                  line_color = chart_line_color(validator.score.skipped_vote_history)
+                  fill_color = chart_fill_color(validator.score.skipped_vote_history)
+                  vector = validator.score&.skipped_vote_history.to_a[-vl..-1]
+                %>
+                <%= render 'validators/spark_line_skipped_vote',
+                           account: validator.account,
+                           vector: vector,
+                           line_color: line_color,
+                           fill_color: fill_color
                 %>
               </td>
 
+              <!-- Mobile charts menu -->
               <td class="d-lg-none pt-0">
                 <div class="row mb-3">
                   <div class="col pr-0">
@@ -203,6 +207,7 @@
                   </div>
                 </div>
               </td>
+
               <!-- ROOT DISTANCE -->
               <td class="chart-column d-none d-lg-table-cell" id="root-distance-<%=i%>">
                 <%
@@ -282,8 +287,8 @@
                 %>
               </td>
             </tr>
-            <% if params[:order] == 'stake' && i == @at_33_stake%>
-              <tr id="row-halt-line">
+            <% if params[:order] == 'stake' && i == @at_33_stake %>
+              <tr class="heading-secondary text-warning text-center">
                   <td colspan=6>
                     CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
                   </td>
