@@ -9,7 +9,7 @@
       <%= render 'validators/sort_bar' %>
 
       <div class="row">
-        <div class="col-md-9 col-lg-10">
+        <div class="col-md-9 col-lg-9">
           <p class="small muted">
             Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
             <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
@@ -25,6 +25,14 @@
                         url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
             <p class="small muted toggle-label">REFRESH OFF</p>
           <% end %>
+        </div>
+        <div class="col-md-3 col-lg-1 pl-0 text-right">
+          <button class="btn btn-prev disabled mr-1" id='prev-slide-trigger'>
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="btn btn-next" id="next-slide-trigger">
+            <i class="fas fa-chevron-right"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -50,11 +58,9 @@
               <br />
               Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='chart-column pl-1 text-right'>
-              Skipped Vote&nbsp;&percnt;
-              <a data-toggle="tooltip" data-html="true" title="Distance from leader">
-                <i class="fas fa-question-circle ml-1"></i>
-              </a>
+            <th class='chart-column pl-1 text-right d-none d-lg-table-cell prev-slide'>
+              Skipped Vote&nbsp;&percnt;<br />
+              <small class="text-muted">Distance from leader</small>
             </th>
             <th class='chart-column text-right'>
               Root Distance<br />
@@ -64,7 +70,7 @@
               Vote Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column text-right d-none next-slide'>
               Skipped Slot&nbsp;&percnt;<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
@@ -73,7 +79,7 @@
           <tr class="subhead">
             <td class="avatar-column"></td>
             <td></td>
-            <td class="text-right">
+            <td class="text-right d-none d-lg-table-cell prev-slide">
               Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
             <td class="text-right">
@@ -90,7 +96,7 @@
                 Av: <%= @batch.vote_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td class="text-right">
+            <td class="text-right d-none next-slide">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
@@ -261,7 +267,7 @@
               </td>
 
               <!-- SKIPPED SLOTS  -->
-              <td class="chart-column d-none d-lg-table-cell next-slide" id="skipped-slots-<%=i%>">
+              <td class="chart-column d-none next-slide" id="skipped-slots-<%=i%>">
                 <%
                   vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
                   ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
