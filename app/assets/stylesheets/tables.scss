@@ -75,7 +75,18 @@ table, .table {
     .chart-top-container {
       position: absolute;
       padding-left: 28px;
-      width: 19%;
+      width: 21.5%;
+      @media(max-width: $screen-lg-max) {
+        width: 22.5%;
+      }
+      @media(max-width: $screen-md-max) {
+        padding-left: 23px;
+        width: 89%;
+      }
+      @media(max-width: $screen-xs-max) {
+        padding-left: 25px;
+        width: 84%;
+      }
     }
     .chart-top-value {
       font-size: 11px;
@@ -142,7 +153,6 @@ table, .table {
   table-layout: fixed;
 
   @media(max-width: $screen-lg-max) {
-    .percent-column { width: 96px; }
     .avatar-column { display: none; }
   }
 
@@ -150,12 +160,8 @@ table, .table {
     thead { display: none; }
     .subhead { display: none; }
     .avatar-column { display: none; }
-    .percent-column, .chart-column {
+    .chart-column {
       padding-top: 0;
-    }
-    .chart-top-container {
-      padding-left: 23px;
-      width: 89%;
     }
     .chart-link {
       line-height: $font-size-h3;
@@ -163,13 +169,6 @@ table, .table {
         color: $link-color-secondary;
         text-decoration: underline;
       }
-    }
-  }
-
-  @media(max-width: $screen-xs-max) {
-    .chart-top-container {
-      padding-left: 25px;
-      width: 84%;
     }
   }
 }
