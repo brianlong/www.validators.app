@@ -315,6 +315,7 @@ module ValidatorScoreV1Logic
 
         if validator_history_for_batch.nil?
           # means that validator doesn't have any ValidatorHistory for this batch
+          # so just fall back to software_score from last VoteAccountHistory
 
           # old
           last_vah = validator&.vote_accounts&.last&.vote_account_histories&.last
