@@ -163,15 +163,30 @@
                 <%= render 'validators/scores', validator: validator %>
               </td>
 
+              <!-- Mobile charts menu -->
+              <td class="d-lg-none pt-0">
+                <a class="chart-link mr-3" data-iterator="<%=i%>" data-target="skipped-vote" href="">
+                  Skipped&nbsp;Vote&nbsp;%
+                </a>
+                <a class="chart-link mr-3" data-iterator="<%=i%>" data-target="root-distance" href="">
+                  Root&nbsp;Distance
+                </a>
+                <a class="chart-link mr-3" data-iterator="<%=i%>" data-target="vote-distance" href="">
+                  Vote&nbsp;Distance
+                </a>
+                <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">
+                  Skipped&nbsp;Slots
+                </a>
+              </td>
+
               <!-- SKIPPED VOTE % -->
-              <td class="chart-column" id="skipped-vote-column-<%=i%>">
+              <td class="chart-column d-none d-lg-table-cell prev-slide" id="skipped-vote-<%=i%>">
                 <%
                   vahl = validator.vote_account_last&.vote_account_history_last
                   if vahl
                     skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
                   end
                 %>
-                <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
                 <!-- New skipped vote chart -->
                 <%
                   vl = chart_x_scale(validator.score&.skipped_vote_history.to_a.count)
@@ -185,27 +200,6 @@
                            line_color: line_color,
                            fill_color: fill_color
                 %>
-              </td>
-
-              <!-- Mobile charts menu -->
-              <td class="d-lg-none pt-0">
-                <div class="row mb-3">
-                  <div class="col pr-0">
-                    <a class="chart-link" data-iterator="<%=i%>" data-target="root-distance" href="">
-                      Root <br class="d-xxs-inline-block" />Distance
-                    </a>
-                  </div>
-                  <div class="col pr-0">
-                    <a class="chart-link" data-iterator="<%=i%>" data-target="vote-distance" href="">
-                      Vote <br class="d-xxs-inline-block" />Distance
-                    </a>
-                  </div>
-                  <div class="col">
-                    <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">
-                      Skipped <br class="d-xxs-inline-block" />Slots
-                    </a>
-                  </div>
-                </div>
               </td>
 
               <!-- ROOT DISTANCE -->
@@ -267,7 +261,7 @@
               </td>
 
               <!-- SKIPPED SLOTS  -->
-              <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
+              <td class="chart-column d-none d-lg-table-cell next-slide" id="skipped-slots-<%=i%>">
                 <%
                   vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
                   ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)

@@ -157,9 +157,12 @@ table, .table {
       padding-left: 23px;
       width: 89%;
     }
-    .chart-link.active {
-      color: $link-color-secondary;
-      text-decoration: underline;
+    .chart-link {
+      line-height: $font-size-h3;
+      &.active {
+        color: $link-color-secondary;
+        text-decoration: underline;
+      }
     }
   }
 
