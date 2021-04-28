@@ -60,12 +60,13 @@ module Solana
     # Gets the output from the Solana CLI and populates the attributes
     def get
       ssa = cli_request("stake-account #{@address}", @rpc_urls)
+      puts ssa
       @account_balance = ssa['accountBalance']
       @activation_epoch = ssa['activationEpoch']
       @active_stake = ssa['activeStake']
       @credits_observed = ssa['creditsObserved']
       @deactivation_epoch = ssa['deactivationEpoch']
-      @delegated_stake = ssa['delegatedStake']
+      @delegated_stake = ssa['delegatedStake'] || 0
       @delegated_vote_account_address = ssa['delegatedVoteAccountAddress']
       @epoch_rewards = ssa['epochRewards']
       @epoch = ssa['epoch']

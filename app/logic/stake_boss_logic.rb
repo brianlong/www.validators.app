@@ -57,6 +57,7 @@ require 'base58'
 
 module StakeBossLogic
   include ApplicationHelper
+  include SolanaLogic
 
   RPC_TIMEOUT = 60 # seconds
 
@@ -117,7 +118,6 @@ module StakeBossLogic
         rpc_urls: p.payload[:config_urls]
       )
       stake_account.get
-
       # Make sure this is a valid stake account
       raise InvalidStakeAccount, 'Not a valid Stake Account' \
         unless stake_account.valid?
@@ -132,11 +132,12 @@ module StakeBossLogic
 
       # Is the balance > 10?
       raise InvalidStakeAccount, 'Balance is too low' \
-        unless lamports_to_sol(stake_account.delegated_stake) >= STAKE_BOSS_MIN
+        unless lamports_to_sol(stake_account.account_balance) >= STAKE_BOSS_MIN
 
       # Append the valid stake account to the payload
       Pipeline.new(200, p.payload.merge(solana_stake_account: stake_account))
     rescue StandardError => e
+      puts e
       Pipeline.new(500, p.payload, 'Error from guard_stake_account', e)
     end
   end
@@ -153,6 +154,7 @@ module StakeBossLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
+      puts e
       Pipeline.new(500, p.payload, 'Error from guard_duplicate_records', e)
     end
   end
@@ -183,6 +185,7 @@ module StakeBossLogic
         p.payload.merge(split_n_ways: 2, split_n_max: split_n_max)
       )
     rescue StandardError => e
+      puts e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
@@ -240,6 +243,7 @@ module StakeBossLogic
 
       Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
+      puts e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
@@ -252,13 +256,11 @@ module StakeBossLogic
     lambda do |p|
       # Create a DB record for the first stake account in a batch.
       # Guard against someone submitting split_n_ways that is too big
-
       split_n_ways = p.payload[:split_n_ways]
       split_n_max = p.payload[:split_n_max]
       split_n = split_n_ways > split_n_max ? split_n_max : split_n_ways
 
       ssa = p.payload[:solana_stake_account]
-
       sbsa = StakeBoss::StakeAccount.create!(
         network: p.payload[:network],
         address: ssa.address,
@@ -290,6 +292,7 @@ module StakeBossLogic
         )
       )
     rescue StandardError => e
+      puts e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
@@ -311,6 +314,67 @@ module StakeBossLogic
       raise InvalidStakeAccount, 'Already split' \
         unless p.payload[:stake_boss_stake_account].split_on.nil?
 
+      (p.payload[:split_n_ways] - 1).times do |n|
+        puts "split number #{n}"
+        # select account to split
+        split_account = StakeBoss::StakeAccount.where(
+          batch_uuid: p.payload[:batch_uuid]
+        ).order(delegated_stake: :desc).first
+
+        # create new stake boss account record
+        new_acc = StakeBoss::StakeAccount.new(
+          network: p.payload[:network],
+          primary_account: false,
+          batch_uuid: p.payload[:batch_uuid]
+        )
+        if new_acc.save
+          request_str = 'split-stake '
+          request_str += "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE} "
+          request_str += "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE} "
+          request_str += "#{split_account.address} "
+          request_str += "#{STAKE_BOSS_KEYPAIR_FILE} "
+          request_str += "--seed #{new_acc.id} "
+          request_str += lamports_to_sol(split_account.account_balance / 2).to_s
+          Rails.logger.tagged('SPLIT_ACCOUNT') {
+            Rails.logger.warn(request_str)
+          }
+          puts request_str
+
+          # create split account
+          cli_request(request_str, p.payload[:config_urls])
+        else
+          raise InvalidStakeAccount, 'New account could not be created' 
+        end
+        puts "stake boss address: #{STAKE_BOSS_ADDRESS}"
+        puts "new acc address request: " + "create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{new_acc.id} STAKE"
+        new_acc_address = cli_request("create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{new_acc.id} STAKE", p.payload[:config_urls])
+        puts "new address cli response: #{new_acc_address}"
+        new_acc_from_cli = Solana::StakeAccount.new(
+          address: new_acc_address,
+          rpc_urls: p.payload[:config_urls]
+        )
+        new_acc_from_cli.get
+        new_acc.update(
+          address: new_acc_from_cli.address,
+          account_balance: new_acc_from_cli.account_balance,
+          activating_stake: new_acc_from_cli.activating_stake,
+          activation_epoch: new_acc_from_cli.activation_epoch,
+          active_stake: new_acc_from_cli.active_stake,
+          credits_observed: new_acc_from_cli.credits_observed,
+          deactivation_epoch: new_acc_from_cli.deactivation_epoch,
+          delegated_stake: new_acc_from_cli.delegated_stake,
+          delegated_vote_account_address: new_acc_from_cli.delegated_vote_account_address,
+          epoch: new_acc_from_cli.epoch,
+          epoch_rewards: new_acc_from_cli.epoch_rewards,
+          lockup_custodian: new_acc_from_cli.lockup_custodian,
+          lockup_timestamp: new_acc_from_cli.lockup_timestamp,
+          rent_exempt_reserve: new_acc_from_cli.rent_exempt_reserve,
+          stake_authority: new_acc_from_cli.stake_authority,
+          stake_type: new_acc_from_cli.stake_type,
+          withdraw_authority: new_acc_from_cli.withdraw_authority
+        )
+
+      end
       # Within a loop, select one account record from this batch in
       # `delegated_stake desc` order and split it by executing a command on-
       # chain. Also create a new DB record for the new account. Repeat this
@@ -348,8 +412,14 @@ module StakeBossLogic
       # We should create an initializer that returns the absolute path to the
       # Boss*.json key file on the development/production server.
 
-      Pipeline.new(200, p.payload)
+      Pipeline.new(
+        200,
+        p.payload.merge(
+          stake_boss_stake_account: sbsa, batch_uuid: sbsa.batch_uuid
+        )
+      )
     rescue StandardError => e
+      puts e.inspect
       Pipeline.new(500, p.payload, 'Error from split_primary_account', e)
     end
   end

@@ -18,6 +18,12 @@ STAKE_BOSS_ADDRESS = if Rails.env.production?
                        cluster_yml['stake_boss_testnet']
                      end
 
+STAKE_BOSS_KEYPAIR_FILE = if Rails.env.production?
+                            cluster_yml['stake_boss_mainnet_keypair_file']
+                          else
+                            cluster_yml['stake_boss_testnet_keypair_file']
+                          end
+
 STAKE_BOSS_MIN = 10 # SOL
 STAKE_BOSS_N_SPLIT_OPTIONS = [2, 4, 8, 16, 32, 64, 128, 256].freeze
 

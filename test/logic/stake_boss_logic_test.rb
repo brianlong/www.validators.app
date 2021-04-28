@@ -307,4 +307,69 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test 'split_primary_account not a primary account' do
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_stake_account)
+                  .then(&set_max_n_split)
+                  .then(&register_first_stake_account)
+      p.payload[:stake_boss_stake_account].update_column(:primary_account, false)
+      p = Pipeline.new(200, p.payload).then(&split_primary_account)
+
+      assert_equal 500, p.code
+      assert_equal InvalidStakeAccount, p.errors.class
+      assert_equal 'Invalid Stake Account: Not the primary_account', p.errors.message
+    end
+  end
+
+  test 'split_primary_account already split' do
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_stake_account)
+                  .then(&set_max_n_split)
+                  .then(&register_first_stake_account)
+      p.payload[:stake_boss_stake_account].update_column(:split_on, DateTime.now - 10.minutes)
+      p = Pipeline.new(200, p.payload).then(&split_primary_account)
+
+      assert_equal 500, p.code
+      assert_equal InvalidStakeAccount, p.errors.class
+      assert_equal 'Invalid Stake Account: Already split', p.errors.message
+    end
+  end
+
+  test 'split_primary_account success' do
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_stake_account)
+                  .then(&set_max_n_split)
+                  .then(&register_first_stake_account)
+                  .then(&split_primary_account)
+      assert_equal 200, p.code
+    end
+  end
 end

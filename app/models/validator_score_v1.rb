@@ -17,36 +17,38 @@
 #
 # Table name: validator_score_v1s
 #
-#  id                                  :bigint           not null, primary key
-#  active_stake                        :bigint           unsigned
-#  commission                          :integer
-#  data_center_concentration           :decimal(10, 3)
-#  data_center_concentration_score     :integer
-#  data_center_host                    :string(255)
-#  data_center_key                     :string(255)
-#  delinquent                          :boolean
-#  ip_address                          :string(255)
-#  network                             :string(255)
-#  ping_time_avg                       :decimal(10, 3)
-#  published_information_score         :integer
-#  root_distance_history               :text(65535)
-#  root_distance_score                 :integer
-#  security_report_score               :integer
-#  skipped_after_history               :text(65535)
-#  skipped_after_score                 :integer
-#  skipped_slot_history                :text(65535)
-#  skipped_slot_moving_average_history :text(65535)
-#  skipped_slot_score                  :integer
-#  software_version                    :string(255)
-#  software_version_score              :integer
-#  stake_concentration                 :decimal(10, 3)
-#  stake_concentration_score           :integer
-#  total_score                         :integer
-#  vote_distance_history               :text(65535)
-#  vote_distance_score                 :integer
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
-#  validator_id                        :bigint
+#  id                                          :bigint           not null, primary key
+#  active_stake                                :bigint           unsigned
+#  commission                                  :integer
+#  data_center_concentration                   :decimal(10, 3)
+#  data_center_concentration_score             :integer
+#  data_center_host                            :string(255)
+#  data_center_key                             :string(255)
+#  delinquent                                  :boolean
+#  ip_address                                  :string(255)
+#  network                                     :string(255)
+#  ping_time_avg                               :decimal(10, 3)
+#  published_information_score                 :integer
+#  root_distance_history                       :text(65535)
+#  root_distance_score                         :integer
+#  security_report_score                       :integer
+#  skipped_after_history                       :text(65535)
+#  skipped_after_score                         :integer
+#  skipped_slot_history                        :text(65535)
+#  skipped_slot_moving_average_history         :text(65535)
+#  skipped_slot_score                          :integer
+#  skipped_vote_history                        :text(65535)
+#  skipped_vote_percent_moving_average_history :text(65535)
+#  software_version                            :string(255)
+#  software_version_score                      :integer
+#  stake_concentration                         :decimal(10, 3)
+#  stake_concentration_score                   :integer
+#  total_score                                 :integer
+#  vote_distance_history                       :text(65535)
+#  vote_distance_score                         :integer
+#  created_at                                  :datetime         not null
+#  updated_at                                  :datetime         not null
+#  validator_id                                :bigint
 #
 # Indexes
 #
