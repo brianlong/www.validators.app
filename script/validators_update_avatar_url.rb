@@ -11,10 +11,11 @@ trap('INT') { interrupted = true }
 
 %w[testnet mainnet].each do |network|
   Validator.where(network: network).where.not(keybase_id: '').where.not(avatar_url: nil).each do |validator|
-    if validator.avatar_url == DEFAULT_AVATAR_URL || ['404', '403'].include?(Net::HTTP.get_response(URI(validator.avatar_url)).code)
-      validator_url = get_validator_avatar(validator.keybase_id)
+    validator_url = get_validator_avatar(validator.keybase_id)
+    if(validator_url != validator.avatar_url)
+      puts "updated"
       validator.update(avatar_url: validator_url)
-      sleep(1)
     end
+    sleep(1)
   end
 end
