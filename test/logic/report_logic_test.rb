@@ -28,7 +28,10 @@ class ReportLogicTest < ActiveSupport::TestCase
 
     VCR.use_cassette('report_tower_height') do
       json_data = File.read("#{Rails.root}/test/json/validators.json")
-      SolanaCliService.stub(:request, json_data, ['validators', 'http://165.227.100.142:8899/']) do
+      SolanaCliService.stub(
+        :request, 
+        {cli_response: json_data, cli_error: nil}, 
+        ['validators', 'http://165.227.100.142:8899/']) do
         # Show that the pipeline runs & the expected values are not empty.
         p = Pipeline.new(200, @initial_payload)
                     .then(&batch_set)
