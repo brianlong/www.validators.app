@@ -13,7 +13,6 @@ trap('INT') { interrupted = true }
   Validator.where(network: network).where.not(keybase_id: '').where.not(avatar_url: nil).each do |validator|
     validator_url = get_validator_avatar(validator.keybase_id)
     if(validator_url != validator.avatar_url)
-      puts "updated"
       validator.update(avatar_url: validator_url)
     end
     sleep(1)
