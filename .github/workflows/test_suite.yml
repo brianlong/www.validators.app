@@ -76,6 +76,11 @@ jobs:
           mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -ppassword -e "SHOW GRANTS FOR 'root'@'localhost'"
           mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -ppassword mysql
 
+      - name: Decrypt .env file
+        run: ./.github/scripts/decrypt_test_key.sh
+        env:
+          ENV_PASSPHRASE: ${{ secrets.TEST_KEY_PASSPHRASE }}
+
       - name: Bundle install
         env:
           RAILS_ENV: test
