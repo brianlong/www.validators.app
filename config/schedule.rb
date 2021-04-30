@@ -47,6 +47,15 @@ every 1.hour do
 end
 
 every 1.day do
-  ruby_script 'prune_database_tables.rb'
   ruby_script 'validators_update_avatar_url.rb'
+end
+
+if environment == 'production'
+  every 1.day, at: '1:00am' do
+    ruby_script 'prune_database_tables.rb'
+  end
+elsif environment == 'staging'
+  every 1.day, at: '1:00pm' do
+    ruby_script 'prune_database_tables.rb'
+  end
 end
