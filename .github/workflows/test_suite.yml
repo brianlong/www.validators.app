@@ -1,0 +1,112 @@
+name: Validators test suite
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    services:
+      mysql:
+        image: mysql:8.0.23
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306
+        options:
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      redis:
+        image: redis
+        ports: 
+          - 6379/tcp
+        volumes:
+          - 'redis:/app/data'
+        options: --entrypoint redis-server
+        
+    # https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix
+    strategy:
+      fail-fast: false
+      matrix:
+        # Set N number of parallel jobs you want to run tests on.
+        # Use higher number if you have slow tests to split them on more parallel jobs.
+        # Remember to update ci_node_index below to 0..N-1
+        ci_node_total: [2]
+        # set N-1 indexes for parallel jobs
+        # When you run 2 parallel jobs then first job will have index 0, the second job will have index 1 etc
+        ci_node_index: [0, 1]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+        
+      - name: Set up Ruby 2.6
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          # Ruby version is taken from .ruby-version
+
+      - name: Setup cache key and directory for gems cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Get Yarn cache directory path
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Setup cache key and directory for node_modules cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Verify MySQL connection from host
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client libmysqlclient-dev
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -ppassword -e "SHOW GRANTS FOR 'root'@'localhost'"
+          mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -ppassword mysql
+
+      - name: Bundle install
+        env:
+          RAILS_ENV: test
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_PORT: ${{ job.services.mysql.ports[3306] }}
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: password
+        run: |
+          cp config/database.yml.github-actions config/database.yml
+          gem install bundler --version 2.1.4
+          yarn install --check-files --frozen-lockfile
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Create DB
+        env:
+          RAILS_ENV: test
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_PORT: ${{ job.services.mysql.ports[3306] }}
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: password
+        run: |
+          bundle exec rails db:prepare
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_PORT: ${{ job.services.mysql.ports[3306] }} # get randomly assigned published port
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: password
+          REDIS_URL: redis://127.0.0.1:${{ job.services.redis.ports[6379] }}/0
+        run: |
+          bundle exec rails test
