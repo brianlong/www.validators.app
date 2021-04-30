@@ -85,6 +85,7 @@ jobs:
           DATABASE_PASSWORD: password
         run: |
           cp config/database.yml.github-actions config/database.yml
+          cp cluster.yml.example cluster.yml
           gem install bundler --version 2.1.4
           yarn install --check-files --frozen-lockfile
           bundle config path vendor/bundle
