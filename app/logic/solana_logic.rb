@@ -235,10 +235,16 @@ module SolanaLogic
           software_version: v['version']
         )
 
+        ip_address = v['gossip_ip_port'].split(':')[0]
+
+        if ip_address.blank?
+          Rails.logger.warn "Ip address from rpc was evaluated as blank. Unparsed value: #{v['gossip_ip_port']}"
+        end
+
         # Find or create the validator IP address
         val_ip = validator.validator_ips.find_or_create_by(
           version: 4,
-          address: v['gossip_ip_port'].split(':')[0]
+          address: ip_address
         )
         val_ip.touch
       end
