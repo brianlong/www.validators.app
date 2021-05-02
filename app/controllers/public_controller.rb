@@ -8,12 +8,12 @@ class PublicController < ApplicationController
                   elsif params[:order] == 'name'
                     'validators.name asc'
                   elsif params[:order] == 'stake'
-                    'validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc'
+                    'validator_score_v1s.active_stake desc'
                   elsif params[:order] == 'random'
                     'RAND()'
                   else
                     params[:order] = 'score'
-                    'validator_score_v1s.total_score desc, validator_score_v1s.active_stake desc'
+                    'validator_score_v1s.total_score desc, RAND()'
                   end
 
     validators = Validator.where(network: params[:network])
