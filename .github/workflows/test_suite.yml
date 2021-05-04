@@ -79,7 +79,7 @@ jobs:
       - name: Decrypt .env file
         run: ./.github/scripts/decrypt_test_key.sh
         env:
-          ENV_PASSPHRASE: ${{ secrets.TEST_KEY_PASSPHRASE }}
+          TEST_KEY_PASSPHRASE: ${{ secrets.TEST_KEY_PASSPHRASE }}
 
       - name: Bundle install
         env:
