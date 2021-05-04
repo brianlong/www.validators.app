@@ -11,6 +11,18 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal validator.id, score.validator_id
   end
 
+  test 'calculate_total_score assigns a score of 0 if commission is 100' do
+    validator_score_v1 = create(
+      :validator_score_v1,
+      commission: 100,
+      root_distance_score: 2,
+      vote_distance_score: 2,
+      skipped_slot_score: 2
+    )
+
+    assert_equal 0, validator_score_v1.total_score
+  end
+
   test 'assign_published_information_score' do
     validator = FactoryBot.create(:validator)
     score = validator.create_validator_score_v1
