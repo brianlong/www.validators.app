@@ -166,11 +166,14 @@ class SolanaLogicTest < ActiveSupport::TestCase
   # 159.89.252.85 is my testnet server.
   test 'cli_request with fail over' do
     json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, {cli_response: json_data, cli_error: nil}, ['validators', 'http://testnet.solana.com:8899']) do
+    SolanaCliService.stub(
+      :request, 
+      {cli_response: json_data, cli_error: nil}, 
+      ['validators', 'http://testnet.solana.com:8899']) do
       rpc_urls = ['http://127.0.0.1:8899', 'http://testnet.solana.com:8899']
       cli_response = cli_request('validators', rpc_urls)
-      assert_equal 6, cli_response[:cli_response].count
-      assert_nil cli_response['error']
+      assert_equal 6, cli_response['cli_response'].count
+      assert_nil cli_response['cli_error']
     end
   end
 
@@ -180,16 +183,15 @@ class SolanaLogicTest < ActiveSupport::TestCase
     SolanaCliService.stub(:request, {cli_response: json_data, cli_error: nil}, ['validators', 'http://testnet.solana.com:8899']) do
       rpc_urls = ['https://testnet.solana.com:8899', 'http://127.0.0.1:8899']
       cli_response = cli_request('validators', rpc_urls)
-      assert_equal 6, cli_response[:cli_response].count
-      assert_nil cli_response['error']
+      assert_equal 6, cli_response['cli_response'].count
+      assert_nil cli_response['cli_error']
     end
   end
 
   # This test assumes that there is no validator RPC running locally.
   test 'cli_request with no response' do
     rpc_urls = ['http://127.0.0.1:8899']
-    puts cli_request('validators', rpc_urls)
-    assert_equal [], cli_request('validators', rpc_urls)[:cli_response]
+    assert_includes cli_request('validators', rpc_urls)['cli_error'], 'tcp connect error'
   end
 
   # I use this test in development mode only.
