@@ -74,3 +74,11 @@ Follow the instructions for Capistrano
 
 ### Testing
 Please use `User` factory when you need users, more info in 'test/factories/user.rb'
+
+## Continuous Integration
+We use Github Actions. The test credentials are kept in config/credentials/test.yml.enc .
+W have encrypted test.key to decrypt these credentials.
+To decrypt the file: `gpg --output config/credentials/test.key --decrypt config/credentials/test_key.gpg`
+To encrypt the file: `gpg -c --output config/credentials/test_key.gpg config/credentials/test.key`
+
+To decrypt and encrypt the file you need a passphrase, please ask your team leader about it.
