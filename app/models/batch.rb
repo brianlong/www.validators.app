@@ -10,10 +10,10 @@
 # Table name: batches
 #
 #  id         :bigint           not null, primary key
+#  network    :string(255)
 #  uuid       :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  network    :string(255)
 #
 # Indexes
 #

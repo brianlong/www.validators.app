@@ -144,6 +144,33 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                  p.errors.message
   end
 
+  test 'guard_stake_account_not_a_stake_account' do
+    address = 'FLC9P4DgGjQD53X1zsx1hA9HJhzjErzYeJk24Xdfpogx'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      {
+        cli_response: json_data, 
+        cli_error: "Error: RPC request error: FLC9P4DgGjQD53X1zsx1hA9HJhzjErzYeJk24Xdfpogx is not a stake account\n"
+      },
+      [address, TESTNET_CLUSTER_URLS],
+      true
+    ) do
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_input)
+                  .then(&guard_stake_account)
+      assert_equal 500,
+                 p.code
+      assert_equal StakeBossLogic::InvalidStakeAccount,
+                 p.errors.class
+      assert_equal 'Invalid Stake Account: This is not a Stake Account',
+                 p.errors.message
+    end
+  end
+
+
   test 'guard_input_whitespace' do
     p = Pipeline.new(200, @initial_payload.merge(stake_address: 'te st'))
                 .then(&guard_input)
@@ -184,7 +211,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
-
       assert_equal 500,
                    p.code
       assert_equal StakeBossLogic::InvalidStakeAccount,
@@ -201,13 +227,12 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
-
       assert_equal 500,
                    p.code
       assert_equal StakeBossLogic::InvalidStakeAccount,
@@ -224,7 +249,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -247,7 +272,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -293,7 +318,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -323,7 +348,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -358,7 +383,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       assert_difference 'StakeBoss::StakeAccount.count' do

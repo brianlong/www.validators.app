@@ -13,7 +13,7 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
     SolanaCliService.stub(
                           :request,
-                          json_data,
+                          {cli_response: json_data, cli_error: nil},
                           [address, TESTNET_CLUSTER_URLS]
                          ) do
 
@@ -87,7 +87,7 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
     SolanaCliService.stub(
                           :request,
-                          json_data,
+                          {cli_response: json_data, cli_error: nil},
                           [address, TESTNET_CLUSTER_URLS]
                          ) do
 
