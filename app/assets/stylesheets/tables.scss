@@ -123,6 +123,14 @@ table, .table {
   }
 }
 
+.table-arrows {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  padding-right: $padding-standard*2;
+  margin-top: -$margin-standard*3;
+}
+
 
 .table-block-sm {
   @media(max-width: $screen-md-max) {

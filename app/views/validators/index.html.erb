@@ -9,13 +9,13 @@
       <%= render 'validators/sort_bar' %>
 
       <div class="row">
-        <div class="col-md-9 col-lg-9">
+        <div class="col-md-9">
           <p class="small muted">
             Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
             <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
           </p>
         </div>
-        <div class='col-md-3 col-lg-2 toggle-container'>
+        <div class='col-md-3 toggle-container'>
           <% if params[:refresh] == 'true' %>
             <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
                         url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
@@ -26,17 +26,8 @@
             <p class="small muted toggle-label">REFRESH OFF</p>
           <% end %>
         </div>
-        <div class="col-md-3 col-lg-1 pl-0 text-right d-none d-lg-block">
-          <button class="btn btn-prev disabled mr-1" id='prev-slide-trigger'>
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <button class="btn btn-next" id="next-slide-trigger">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
       </div>
     </div>
-
 
     <div class="row">
       <div class="col-sm-12">
@@ -67,6 +58,14 @@
               <small class="text-muted">60-Min Chart</small>
             </th>
             <th class='chart-column text-right'>
+              <div class="table-arrows d-none d-lg-block">
+                <button class="btn btn-prev disabled mr-1" id='prev-slide-trigger'>
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn btn-next" id="next-slide-trigger">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
               Vote Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
