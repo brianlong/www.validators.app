@@ -51,16 +51,27 @@ module SolanaLogic
         slot_index: epoch_json['slotIndex'],
         slots_in_epoch: epoch_json['slotsInEpoch']
       )
-      EpochWallClock.find_or_create_by(
-        epoch: epoch_json['epoch'],
-        network: p.payload[:network]
-      ) do |ewc|
-        ewc.network = p.payload[:network]
-        ewc.epoch = epoch_json['epoch']
-        ewc.starting_slot = epoch_json['absoluteSlot'] - epoch_json['slotIndex']
-        ewc.slots_in_epoch = epoch_json['slotsInEpoch']
-        ewc.ending_slot = ewc.starting_slot + epoch_json['slotsInEpoch']
+      begin
+        EpochWallClock.create!(
+          network:        p.payload[:network],
+          epoch:          epoch_json['epoch'],
+          starting_slot:  epoch_json['absoluteSlot'] - epoch_json['slotIndex'],
+          slots_in_epoch: epoch_json['slotsInEpoch'],
+          ending_slot:    (epoch_json['absoluteSlot'] - epoch_json['slotIndex']) + epoch_json['slotsInEpoch']
+        )
+      rescue ActiveRecord::RecordNotUnique
+        # This epoch already exists.
       end
+      # EpochWallClock.find_or_create_by(
+      #   epoch: epoch_json['epoch'],
+      #   network: p.payload[:network]
+      # ) do |ewc|
+      #   ewc.network = p.payload[:network]
+      #   ewc.epoch = epoch_json['epoch']
+      #   ewc.starting_slot = epoch_json['absoluteSlot'] - epoch_json['slotIndex']
+      #   ewc.slots_in_epoch = epoch_json['slotsInEpoch']
+      #   ewc.ending_slot = ewc.starting_slot + epoch_json['slotsInEpoch']
+      # end
 
       Pipeline.new(200, p.payload.merge(
                           epoch: epoch.epoch,
