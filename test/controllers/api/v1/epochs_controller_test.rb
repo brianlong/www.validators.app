@@ -7,7 +7,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
   include ResponseHelper
 
   def setup
-    @user = create(:user, :standard)
+    @user = create(:user)
     create(:epoch_wall_clock, epoch: 101)
     create(:epoch_wall_clock, epoch: 100)
     create(:epoch_wall_clock, epoch: 102)
