@@ -20,7 +20,7 @@
 class EpochWallClock < ApplicationRecord
   validates :network, :epoch, presence: true
 
-  scope :by_network, ->(network) { where(network: network).order(epoch: :asc) }
+  scope :by_network, ->(network) { where(network: network).order(epoch: :desc) }
 
   def self.last_by_network(network)
     by_network(network).last
