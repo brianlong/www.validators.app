@@ -171,6 +171,6 @@ class Validator < ApplicationRecord
   end
 
   def private_validator?
-    score&.commission == 100
+    score&.commission == 100 && network == 'mainnet'
   end
 end

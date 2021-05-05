@@ -29,7 +29,7 @@
 
   (<span class="d-inline-block d-lg-none">Total:&nbsp;</span><%= validator.total_score %>)
 
-  <% if validator.total_score == 0 %>
-
+  <% if validator.private_validator? %>
+    <i class="fas fa-users-slash text-danger" title="Private Validator"></i>&nbsp;
   <% end %>
 </small>

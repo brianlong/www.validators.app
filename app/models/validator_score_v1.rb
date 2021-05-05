@@ -76,7 +76,7 @@ class ValidatorScoreV1 < ApplicationRecord
     assign_software_version_score
     assign_security_report_score
 
-    if commission == 100
+    if validator.private_validator?
       self.total_score = 0
     else
       self.total_score = root_distance_score.to_i +
