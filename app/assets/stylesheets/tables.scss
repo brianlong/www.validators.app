@@ -75,18 +75,7 @@ table, .table {
     .chart-top-container {
       position: absolute;
       padding-left: 28px;
-      width: 21.5%;
-      @media(max-width: $screen-lg-max) {
-        width: 22.5%;
-      }
-      @media(max-width: $screen-md-max) {
-        padding-left: 23px;
-        width: 89%;
-      }
-      @media(max-width: $screen-xs-max) {
-        padding-left: 25px;
-        width: 84%;
-      }
+      width: 19%;
     }
     .chart-top-value {
       font-size: 11px;
@@ -123,14 +112,6 @@ table, .table {
   }
 }
 
-.table-arrows {
-  position: absolute;
-  z-index: 1;
-  right: 0;
-  padding-right: $padding-standard*2;
-  margin-top: -$margin-standard*3;
-}
-
 
 .table-block-sm {
   @media(max-width: $screen-md-max) {
@@ -161,6 +142,7 @@ table, .table {
   table-layout: fixed;
 
   @media(max-width: $screen-lg-max) {
+    .percent-column { width: 96px; }
     .avatar-column { display: none; }
   }
 
@@ -168,15 +150,29 @@ table, .table {
     thead { display: none; }
     .subhead { display: none; }
     .avatar-column { display: none; }
-    .chart-column {
+    .percent-column, .chart-column {
       padding-top: 0;
     }
-    .chart-link {
-      line-height: $font-size-h3;
-      &.active {
-        color: $link-color-secondary;
-        text-decoration: underline;
-      }
+    .chart-top-container {
+      padding-left: 23px;
+      width: 89%;
+    }
+    .chart-link.active {
+      color: $link-color-secondary;
+      text-decoration: underline;
     }
   }
+
+  @media(max-width: $screen-xs-max) {
+    .chart-top-container {
+      padding-left: 25px;
+      width: 84%;
+    }
+  }
+
+  #row-halt-line {
+    text-align: center;
+    color: $orange;
+  }
+
 }
