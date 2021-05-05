@@ -3,7 +3,7 @@
 # Logic to compile ValidatorScoreV1
 module ValidatorScoreV1Logic
   include PipelineLogic
-  STAKE_CONCENTRATION_FACTOR = 0.03
+  STAKE_CONCENTRATION_FACTOR = 0.014
 
   # Payload starts with :network & :batch_uuid
   def set_this_batch
@@ -142,6 +142,13 @@ module ValidatorScoreV1Logic
       vote_distance_all_average = array_average(vote_distance_all)
       vote_distance_all_median = array_median(vote_distance_all)
 
+      p.payload[:this_batch].update(
+        root_distance_all_average: root_distance_all_average,
+        root_distance_all_median: root_distance_all_median,
+        vote_distance_all_average: vote_distance_all_average,
+        vote_distance_all_median: vote_distance_all_median
+      )
+
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_average: #{root_distance_all_average}"
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_median: #{root_distance_all_median}"
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_average: #{vote_distance_all_average}"
@@ -179,7 +186,8 @@ module ValidatorScoreV1Logic
         # Assign the stake concentration & score
         v.validator_score_v1.stake_concentration_score = \
           if v.validator_score_v1.stake_concentration.to_f >= (STAKE_CONCENTRATION_FACTOR * 2)
-            -2
+            # NOTE: I am only using -1 at the moment. -- BKL
+            -1
           elsif v.validator_score_v1.stake_concentration.to_f >= STAKE_CONCENTRATION_FACTOR
             -1
           else
@@ -343,7 +351,6 @@ module ValidatorScoreV1Logic
           Appsignal.send_error(e)
         end
       end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from save_validators', e)

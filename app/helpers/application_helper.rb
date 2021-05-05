@@ -25,7 +25,7 @@ module ApplicationHelper
   end
 
   def lamports_to_sol(lamports)
-    lamports / 1_000_000_000
+    lamports / 1_000_000_000.to_f
   end
 
   def software_color_class(software_version)

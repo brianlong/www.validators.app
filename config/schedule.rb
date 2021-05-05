@@ -37,14 +37,6 @@ set :output, File.join(Whenever.path, 'log', 'whenever.log')
 job_type :ruby_script,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
 
-every 2.minutes do
-  ruby_script 'gather_rpc_data_mainnet.rb'
-end
-
-every 10.minutes do
-  ruby_script 'gather_rpc_data.rb'
-end
-
 every 1.hour do
   ruby_script 'validators_get_info.rb'
   ruby_script 'validators_get_avatar_url.rb'
@@ -55,6 +47,15 @@ every 1.hour do
 end
 
 every 1.day do
-  ruby_script 'prune_database_tables.rb'
   ruby_script 'validators_update_avatar_url.rb'
+end
+
+if environment == 'production'
+  every 1.day, at: '1:00am' do
+    ruby_script 'prune_database_tables.rb'
+  end
+elsif environment == 'stage'
+  every 1.day, at: '1:00pm' do
+    ruby_script 'prune_database_tables.rb'
+  end
 end
