@@ -6,7 +6,7 @@ require 'solana_logic'
 
 include SolanaLogic
 
-%w[testnet mainnet].each do |network|
+%w[mainnet].each do |network|
   payload = {
     config_urls: Rails.application.credentials.solana["#{network}_urls".to_sym],
     network: network

@@ -14,6 +14,7 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
   test 'calculate_total_score assigns a score of 0 if commission is 100' do
     validator_score_v1 = create(
       :validator_score_v1,
+      network: 'mainnet'
       commission: 100,
       root_distance_score: 2,
       vote_distance_score: 2,

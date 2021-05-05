@@ -12,7 +12,8 @@ class ValidatorTest < ActiveSupport::TestCase
   end
 
   test '#private_validator? returns true if validator\'s commission is 100%' do
-    assert create(:validator_score_v1, commission: 100).validator.private_validator?
-    refute create(:validator_score_v1, commission: 99).validator.private_validator?
+    validator = create(:validator, network: 'mainnet')
+    assert create(:validator_score_v1, commission: 100, validator: validator).validator.private_validator?
+    refute create(:validator_score_v1, commission: 99, validator: validator).validator.private_validator?
   end
 end
