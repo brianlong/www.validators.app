@@ -187,16 +187,10 @@
               <!-- SKIPPED VOTE % -->
               <td class="chart-column d-none d-lg-table-cell prev-slide" id="skipped-vote-<%=i%>">
                 <%
-                  vahl = validator.vote_account_last&.vote_account_history_last
-                  if vahl
-                    skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
-                  end
-                %>
-                <!-- New skipped vote chart -->
-                <%
                   vl = chart_x_scale(validator.score&.skipped_vote_history.to_a.count)
-                  line_color = chart_line_color(validator.score.skipped_vote_history)
-                  fill_color = chart_fill_color(validator.score.skipped_vote_history)
+                  # TODO uncomment once we have skipped vote score
+                  line_color = LIGHT_GREY #chart_line_color(validator.score.skipped_vote_score)
+                  fill_color = LIGHT_GREY_TRANSPARENT #chart_fill_color(validator.score.skipped_vote_score)
                   vector = validator.score&.skipped_vote_history.to_a[-vl..-1]
                 %>
                 <%= render 'validators/spark_line_skipped_vote',
