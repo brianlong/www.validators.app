@@ -1,7 +1,7 @@
 <div class="page-header with-image">
   <% if @validator.private_validator? %>
-    <div class="img-circle private">
-      <span class='fas fa-users-slash fa-2x' title="Private Validator"></span>
+    <div class="img-circle-private">
+      <span class='fas fa-users-slash' title="Private Validator"></span>
     </div>
   <% elsif @validator.avatar_url %>
     <%= image_tag @validator.avatar_url, class: 'img-circle' %>

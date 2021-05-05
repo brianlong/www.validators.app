@@ -123,7 +123,9 @@
                 </div>
                 <div class="avatar">
                   <% if validator.private_validator? %>
-                    <span class='fas fa-users-slash fa-2x text-danger' title="Private Validator"></span>
+                    <div class="img-circle-medium-private">
+                      <span class='fas fa-users-slash' title="Private Validator"></span>
+                    </div>
                   <% elsif validator.avatar_url %>
                     <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
                   <% else %>
