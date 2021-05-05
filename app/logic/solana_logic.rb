@@ -372,7 +372,6 @@ module SolanaLogic
           skipped_slot_percent: v['skipped_slot_percent'].round(4)
         )
       end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(
@@ -418,7 +417,6 @@ module SolanaLogic
         Appsignal.send_error(e)
         Rails.logger.error "validator-info MESSAGE: #{e.message} CLASS: #{e.class}. Validator: #{result.inspect}"
       end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(

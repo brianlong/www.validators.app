@@ -9,13 +9,13 @@
       <%= render 'validators/sort_bar' %>
 
       <div class="row">
-        <div class="col-md-9 col-lg-10">
+        <div class="col-md-9">
           <p class="small muted">
             Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
             <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
           </p>
         </div>
-        <div class='col-md-3 col-lg-2 toggle-container'>
+        <div class='col-md-3 toggle-container'>
           <% if params[:refresh] == 'true' %>
             <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
                         url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
@@ -28,7 +28,6 @@
         </div>
       </div>
     </div>
-
 
     <div class="row">
       <div class="col-sm-12">
@@ -50,21 +49,27 @@
               <br />
               Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='percent-column pl-1 text-right'>
-              Skipped Vote&nbsp;&percnt;
-              <a data-toggle="tooltip" data-html="true" title="Distance from leader">
-                <i class="fas fa-question-circle ml-1"></i>
-              </a>
+            <th class='chart-column pl-1 text-right d-none d-lg-table-cell prev-slide'>
+              Skipped Vote&nbsp;&percnt;<br />
+              <small class="text-muted">60-Min Chart</small>
             </th>
             <th class='chart-column text-right'>
               Root Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
             <th class='chart-column text-right'>
+              <div class="table-arrows d-none d-lg-block">
+                <button class="btn btn-prev disabled mr-1" id='prev-slide-trigger'>
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn btn-next" id="next-slide-trigger">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
               Vote Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column text-right d-none next-slide'>
               Skipped Slot&nbsp;&percnt;<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
@@ -73,12 +78,24 @@
           <tr class="subhead">
             <td class="avatar-column"></td>
             <td></td>
-            <td class="text-right">
+            <td class="text-right d-none d-lg-table-cell prev-slide">
               Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
-            <td class="text-right"><%= number_with_delimiter @tower_highest_block %></td>
-            <td class="text-right"><%= number_with_delimiter @tower_highest_vote %></td>
             <td class="text-right">
+              <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
+                Md: <%= @batch.root_distance_all_median %>
+                <br />
+                Av: <%= @batch.root_distance_all_average.round(1) %>
+              <% end %>
+            </td>
+            <td class="text-right">
+              <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
+                Md: <%= @batch.vote_distance_all_median %>
+                <br />
+                Av: <%= @batch.vote_distance_all_average.round(1) %>
+              <% end %>
+            </td>
+            <td class="text-right d-none next-slide">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
@@ -110,7 +127,11 @@
                   %>
                 </div>
                 <div class="avatar">
-                  <% if validator.avatar_url %>
+                  <% if validator.private_validator? %>
+                    <div class="img-circle-medium-private">
+                      <span class='fas fa-users-slash' title="Private Validator"></span>
+                    </div>
+                  <% elsif validator.avatar_url %>
                     <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
                   <% else %>
                     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
@@ -122,10 +143,9 @@
               </td>
 
               <td class="name-column">
-                <% validator_name = validator.name || shorten_key(validator.account) %>
                 <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                             class: 'font-weight-bold' do %>
-                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_name %>
+                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
                 <% end %>
                 <% comm_class = 'text-danger' \
                                   if params[:network] == 'mainnet' && validator.commission.to_i == 100
@@ -148,46 +168,39 @@
                 <%= render 'validators/scores', validator: validator %>
               </td>
 
+              <!-- Mobile charts menu -->
+              <td class="d-lg-none pt-0 mb-1">
+                <a class="chart-link mr-3" data-iterator="<%=i%>" data-target="skipped-vote" href="">
+                  Skipped&nbsp;Vote&nbsp;%
+                </a>
+                <a class="chart-link mr-3" data-iterator="<%=i%>" data-target="root-distance" href="">
+                  Root&nbsp;Distance
+                </a>
+                <a class="chart-link mr-3" data-iterator="<%=i%>" data-target="vote-distance" href="">
+                  Vote&nbsp;Distance
+                </a>
+                <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">
+                  Skipped&nbsp;Slots
+                </a>
+              </td>
+
               <!-- SKIPPED VOTE % -->
-              <td class="percent-column" id="skipped-vote-column-<%=i%>">
+              <td class="chart-column d-none d-lg-table-cell prev-slide" id="skipped-vote-<%=i%>">
                 <%
-                  vahl = validator.vote_account_last&.vote_account_history_last
-                  if vahl
-                    skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
-                  end
+                  vl = chart_x_scale(validator.score&.skipped_vote_history.to_a.count)
+                  # TODO uncomment once we have skipped vote score
+                  line_color = LIGHT_GREY #chart_line_color(validator.score.skipped_vote_score)
+                  fill_color = LIGHT_GREY_TRANSPARENT #chart_fill_color(validator.score.skipped_vote_score)
+                  vector = validator.score&.skipped_vote_history.to_a[-vl..-1].map{ |v| (v.to_f*100.0).round(1) }
                 %>
-                <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
-                <%=
-                  number_to_percentage(
-                    (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
-                    precision: 2
-                  ) if vahl
-                  # number_to_percentage(
-                  #   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
-                  #   precision: 2
-                  # ) if vahl
+                <%= render 'validators/spark_line_skipped_vote',
+                           account: validator.account,
+                           vector: vector,
+                           line_color: line_color,
+                           fill_color: fill_color
                 %>
               </td>
 
-              <td class="d-lg-none pt-0">
-                <div class="row mb-3">
-                  <div class="col pr-0">
-                    <a class="chart-link" data-iterator="<%=i%>" data-target="root-distance" href="">
-                      Root <br class="d-xxs-inline-block" />Distance
-                    </a>
-                  </div>
-                  <div class="col pr-0">
-                    <a class="chart-link" data-iterator="<%=i%>" data-target="vote-distance" href="">
-                      Vote <br class="d-xxs-inline-block" />Distance
-                    </a>
-                  </div>
-                  <div class="col">
-                    <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">
-                      Skipped <br class="d-xxs-inline-block" />Slots
-                    </a>
-                  </div>
-                </div>
-              </td>
               <!-- ROOT DISTANCE -->
               <td class="chart-column d-none d-lg-table-cell" id="root-distance-<%=i%>">
                 <%
@@ -247,7 +260,7 @@
               </td>
 
               <!-- SKIPPED SLOTS  -->
-              <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
+              <td class="chart-column d-none next-slide" id="skipped-slots-<%=i%>">
                 <%
                   vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
                   ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
@@ -267,8 +280,8 @@
                 %>
               </td>
             </tr>
-            <% if params[:order] == 'stake' && i == @at_33_stake%>
-              <tr id="row-halt-line">
+            <% if params[:order] == 'stake' && i == @at_33_stake %>
+              <tr class="heading-secondary text-warning text-center">
                   <td colspan=6>
                     CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
                   </td>

@@ -76,14 +76,18 @@ class ValidatorScoreV1 < ApplicationRecord
     assign_software_version_score
     assign_security_report_score
 
-    self.total_score = root_distance_score.to_i +
-                       vote_distance_score.to_i +
-                       skipped_slot_score.to_i +
-                       published_information_score.to_i +
-                       security_report_score.to_i +
-                       software_version_score.to_i +
-                       stake_concentration_score.to_i +
-                       data_center_concentration_score.to_i
+    if validator.private_validator?
+      self.total_score = 0
+    else
+      self.total_score = root_distance_score.to_i +
+                         vote_distance_score.to_i +
+                         skipped_slot_score.to_i +
+                         published_information_score.to_i +
+                         security_report_score.to_i +
+                         software_version_score.to_i +
+                         stake_concentration_score.to_i +
+                         data_center_concentration_score.to_i
+    end
   end
 
   def delinquent?
