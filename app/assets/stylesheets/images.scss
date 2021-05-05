@@ -7,7 +7,7 @@
 }
 
 @mixin img-private($padding-y, $padding-x, $font-size) {
-  background-color: $red;
+  background-color: rgba($white, 0.7);
   padding: $padding-y $padding-x;
   span {
     color: $background-color;
