@@ -191,7 +191,7 @@
                   # TODO uncomment once we have skipped vote score
                   line_color = LIGHT_GREY #chart_line_color(validator.score.skipped_vote_score)
                   fill_color = LIGHT_GREY_TRANSPARENT #chart_fill_color(validator.score.skipped_vote_score)
-                  vector = validator.score&.skipped_vote_history.to_a[-vl..-1]
+                  vector = validator.score&.skipped_vote_history.to_a[-vl..-1].map{ |v| (v.to_f*100.0).round(1) }
                 %>
                 <%= render 'validators/spark_line_skipped_vote',
                            account: validator.account,
