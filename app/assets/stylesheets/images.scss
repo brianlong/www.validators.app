@@ -12,4 +12,12 @@
     height: 30px;
     width: 30px;
   }
+
+  &.private {
+    background-color: $red;
+    padding: 15px 10px;
+    span {
+      color: $background-color;
+    }
+  }
 }
