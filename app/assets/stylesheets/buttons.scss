@@ -71,16 +71,4 @@
       padding: 9px 11px;
     }
   }
-
-  &-next, &-prev {
-    font-weight: $font-weight-normal;
-    border-radius: 24px;
-    padding: 2px 6px;
-    font-size: 10px;
-    margin-top: -3px;
-    border: 3px solid darken($link-color, 5%);
-    background-color: transparent;
-    color: white;
-    @include btn-hover(darken($link-color, 5%), darken($link-color, 5%), $background-color);
-  }
 }
