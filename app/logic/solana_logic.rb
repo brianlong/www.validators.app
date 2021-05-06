@@ -11,6 +11,15 @@ module SolanaLogic
   include PipelineLogic
   RPC_TIMEOUT = 60 # seconds
 
+  class SolanaCliError < StandardError
+    attr_accessor :message
+
+    def initialize(message = nil)
+      super
+      @message = "Solana cli error: #{message}".strip
+    end
+  end
+
   # Create a batch record and set the :batch_uuid in the payload
   def batch_set
     lambda do |p|
@@ -66,7 +75,7 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      validators = cli_request('validators', p.payload[:config_urls])
+      validators = cli_request('validators', p.payload[:config_urls])['cli_response']
 
       raise 'No results from `solana validators`' if validators == []
       raise 'No results from `solana validators`' if validators.nil?
@@ -252,7 +261,7 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      block_history = cli_request('block-production', p.payload[:config_urls])
+      block_history = cli_request('block-production', p.payload[:config_urls])['cli_response']
 
       raise 'No data from block-production' if block_history.nil?
 
@@ -381,7 +390,7 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      results = cli_request('validator-info get', p.payload[:config_urls])
+      results = cli_request('validator-info get', p.payload[:config_urls])['cli_response']
       results.each do |result|
         # puts result.inspect
         validator = Validator.find_or_create_by(
@@ -469,34 +478,37 @@ module SolanaLogic
   # cli_request will accept a command line command to run and then return the
   # results as parsed JSON. [] is returned if there is no data
   def cli_request(cli_method, rpc_urls)
-    rpc_urls.each do |rpc_url|
-      response_json = Timeout.timeout(RPC_TIMEOUT) do
-
-        SolanaCliService.request(cli_method, rpc_url)
-
+    rpc_urls.find do |rpc_url|
+      response_json = {}
+      Timeout.timeout(RPC_TIMEOUT) do
+        response_json = SolanaCliService.request(
+          cli_method: cli_method,
+          rpc_url: rpc_url
+        )
       rescue Errno::ENOENT, Errno::ECONNREFUSED, Timeout::Error => e
         # Log errors and return '' if there is a problem
         Rails.logger.error "CLI TIMEOUT\n#{e.class}\nRPC URL: #{rpc_url}"
         ''
       end
-      # puts response_json
-      response_utf8 = response_json.encode(
-                            'UTF-8',
-                            invalid: :replace,
-                            undef: :replace
-                          )
+      response_utf8 = response_json[:cli_response].encode(
+        'UTF-8',
+        invalid: :replace,
+        undef: :replace
+      )
       # If the response includes extra notes at the top, we need to
       # strip the notes before parsing JSON
       #
       # "\nNote: Requested start slot was 63936000 but minimum ledger slot is 63975209\n{
       if response_utf8.include?('Note: ')
-        note_end_index = response_utf8.index("\n{")+1
-        response_utf8 = response_utf8[note_end_index..-1]
+        note_end_index = response_utf8.index("\n{") + 1
+        response_utf8 = response_utf8[note_end_index..]
       end
 
-      # byebug
-
-      return JSON.parse(response_utf8) unless response_utf8 == ''
+      response_utf8 = JSON.parse(response_utf8) unless response_utf8.blank?
+      return {
+        'cli_response' => response_utf8, 
+        'cli_error' => response_json[:cli_error]
+      }
     rescue JSON::ParserError => e
       Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
     end

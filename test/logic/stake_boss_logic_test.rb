@@ -13,13 +13,61 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   def setup
     # Create our initial payload with the input values
     @initial_payload = {
-      config_urls: ['https://testnet.solana.com:8899'],
+      config_urls: ['https://testnet.solana.com'],
       network: 'testnet',
       stake_account: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     }
   end
 
   def create_validators
+    # create some validators that should not be delegated by StakeBoss
+    @noname1 = Validator.create(
+      network: 'testnet',
+      account: 'A5oH9BPo6PRnEHmLnhtyN2YXELnbTotEUDB8axHVBcY4',
+      name: 'noname'
+    )
+    @noname1.vote_accounts.create(
+      # network: 'testnet',
+      account: 'A5oH9BPo6PRnEHmLnhtyN2YXELnbTotEUDB8axHVBcY4'
+    )
+    create(
+      :validator_score_v1,
+      validator_id: @noname1.id,
+      delinquent: true,
+      data_center_key: '3265-NL-Bergschenhoek'
+    ).update_column(:total_score, 10)
+
+    @noname2 = Validator.create(
+      network: 'testnet',
+      account: 'Aom2EwxRjtcCZBDwqvaZiEZDPgmw4AsPQGVrsLa2srCg',
+      name: 'noname'
+    )
+    @noname2.vote_accounts.create(
+      # network: 'testnet',
+      account: 'Aom2EwxRjtcCZBDwqvaZiEZDPgmw4AsPQGVrsLa2srCg'
+    )
+    create(
+      :validator_score_v1,
+      validator_id: @noname2.id,
+      stake_concentration_score: -2,
+      data_center_key: '3265-NL-Bergschenhoek'
+    ).update_column(:total_score, 10)
+
+    @noname3 = Validator.create(
+      network: 'testnet',
+      account: 'AxPP3kYU5RC1fsvaPRoaJCHsqGaxYJmV7vervCzVgn83',
+      name: 'noname'
+    )
+    @noname3.vote_accounts.create(
+      # network: 'testnet',
+      account: 'AxPP3kYU5RC1fsvaPRoaJCHsqGaxYJmV7vervCzVgn83'
+    )
+    create(
+      :validator_score_v1,
+      validator_id: @noname3.id,
+      data_center_key: '24940-DE-Nuremburg'
+    ).update_column(:total_score, 10)
+
     # Marco Broeken
     @marco = Validator.create(
       network: 'testnet',
@@ -30,15 +78,14 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       # network: 'testnet',
       account: '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
     )
-    ValidatorScoreV1.create(
-      network: 'testnet',
+    create(
+      :validator_score_v1,
       validator_id: @marco.id,
-      total_score: 10,
       delinquent: false,
       stake_concentration_score: 0,
       data_center_concentration_score: 0,
       data_center_key: '3265-NL-Bergschenhoek'
-    )
+    ).update_column(:total_score, 10)
 
     # Martin Smith
     @martin = Validator.create(
@@ -50,15 +97,14 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       # network: 'testnet',
       account: '38QX3p44u4rrdAYvTh2Piq7LvfVps9mcLV9nnmUmK28x'
     )
-    ValidatorScoreV1.create(
-      network: 'testnet',
+    create(
+      :validator_score_v1,
       validator_id: @martin.id,
-      total_score: 9,
       delinquent: false,
       stake_concentration_score: 0,
       data_center_concentration_score: 0,
       data_center_key: '199610-RU-Moscow'
-    )
+    ).update_column(:total_score, 9)
   end
 
   # Show that the input guards are working
@@ -98,6 +144,60 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                  p.errors.message
   end
 
+  test 'guard_stake_account_not_a_stake_account' do
+    address = 'FLC9P4DgGjQD53X1zsx1hA9HJhzjErzYeJk24Xdfpogx'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      {
+        cli_response: json_data, 
+        cli_error: "Error: RPC request error: FLC9P4DgGjQD53X1zsx1hA9HJhzjErzYeJk24Xdfpogx is not a stake account\n"
+      },
+      [address, TESTNET_CLUSTER_URLS],
+      true
+    ) do
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_input)
+                  .then(&guard_stake_account)
+      assert_equal 500,
+                 p.code
+      assert_equal StakeBossLogic::InvalidStakeAccount,
+                 p.errors.class
+      assert_equal 'Invalid Stake Account: This is not a Stake Account',
+                 p.errors.message
+    end
+  end
+
+
+  test 'guard_input_whitespace' do
+    p = Pipeline.new(200, @initial_payload.merge(stake_address: 'te st'))
+                .then(&guard_input)
+
+    assert_equal 500,
+                 p.code
+    assert_equal StakeBossLogic::InvalidStakeAccount,
+                 p.errors.class
+    assert_equal 'Invalid Stake Account: whitespaces not allowed',
+                 p.errors.message
+  end
+
+  test 'guard_input_forbidden_chars' do
+    illegal_chars = %w[+ - _ & | ' "]
+    illegal_chars.each do |chr|
+      account = SecureRandom.hex(16) + chr
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: account))
+                  .then(&guard_input)
+      assert_equal 500,
+                   p.code
+      assert_equal StakeBossLogic::InvalidStakeAccount,
+                   p.errors.class
+      assert_equal 'Invalid Stake Account: Address contains illegal characters',
+                   p.errors.message
+    end
+  end
+
   test 'guard_stake_account_invalid' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuZ'
     json_data = \
@@ -111,7 +211,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
-
       assert_equal 500,
                    p.code
       assert_equal StakeBossLogic::InvalidStakeAccount,
@@ -122,19 +221,18 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   test 'guard_stake_account_boss_does_not_have_stake_authority' do
-    address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuS'
+    address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuSa'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
-
       assert_equal 500,
                    p.code
       assert_equal StakeBossLogic::InvalidStakeAccount,
@@ -145,13 +243,13 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   test 'guard_stake_account_inactive' do
-    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2'
+    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2a'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -174,7 +272,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -220,7 +318,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -244,14 +342,13 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
   test 'select_validators' do
     create_validators
-
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -260,7 +357,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&guard_duplicate_records)
                   .then(&set_max_n_split)
                   .then(&select_validators)
-
       assert_equal 200,
                    p.code
       assert_equal 199,
@@ -273,9 +369,8 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                    p.payload[:split_n_max]
       assert_equal 1,
                    p.payload[:validators].count
-      assert       p.payload[:validators].include?(
-        '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3'
-      )
+      assert_equal '2HUKQz7W2nXZSwrdX5RkfS2rLU4j1QZLjdGCHcoUKFh3',
+                   p.payload[:validators][0]
     end
   end
 
@@ -288,7 +383,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       assert_difference 'StakeBoss::StakeAccount.count' do
