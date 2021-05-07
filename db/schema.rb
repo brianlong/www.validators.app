@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_074022) do
+ActiveRecord::Schema.define(version: 2021_03_25_011353) do
 
   create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -60,14 +60,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_074022) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "network"
-    t.datetime "gathered_at"
-    t.datetime "scored_at"
-    t.float "root_distance_all_average"
-    t.integer "root_distance_all_median"
-    t.float "vote_distance_all_average"
-    t.integer "vote_distance_all_median"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
-    t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
   end
 
@@ -371,8 +364,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_074022) do
     t.string "data_center_key"
     t.string "data_center_host"
     t.text "skipped_slot_moving_average_history"
-    t.text "skipped_vote_history"
-    t.text "skipped_vote_percent_moving_average_history"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
@@ -406,7 +397,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_074022) do
     t.string "batch_uuid"
     t.bigint "credits_current"
     t.integer "slot_index_current"
-    t.decimal "skipped_vote_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_vote_account_histories_on_network_and_batch_uuid"
     t.index ["vote_account_id", "created_at"], name: "index_vote_account_histories_on_vote_account_id_and_created_at"
     t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"

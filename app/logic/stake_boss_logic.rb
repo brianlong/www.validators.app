@@ -127,6 +127,9 @@ module StakeBossLogic
         rpc_urls: p.payload[:config_urls]
       )
       stake_account.get
+      raise InvalidStakeAccount, 'This is not a Stake Account' \
+        if stake_account.cli_error&.include?('This is not a Stake Account')
+
       # Make sure this is a valid stake account
       raise InvalidStakeAccount, 'Not a valid Stake Account' \
         unless stake_account.valid?
@@ -295,15 +298,13 @@ module StakeBossLogic
         split_n_ways: split_n,
         primary_account: true
       )
-
       Pipeline.new(
         200,
         p.payload.merge(
           stake_boss_stake_account: sbsa, batch_uuid: sbsa.batch_uuid
         )
       )
-    rescue StandardError => e
-      puts e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
@@ -315,78 +316,8 @@ module StakeBossLogic
   # There will be extra logging here so we can keep tabs on processing. If we
   # have a problem, I may need to re-build the current state from the logs. Use
   # log level WARN here so I can see the entries on the production server.
+
   def split_primary_account
-    lambda do |p|
-      return p unless p.code == 200
-      # Make sure we are splitting a primary account
-      raise InvalidStakeAccount, 'Not the primary_account' \
-        unless p.payload[:stake_boss_stake_account].primary_account?
-
-      # Make sure we haven't already split this one
-      raise InvalidStakeAccount, 'Already split' \
-        unless p.payload[:stake_boss_stake_account].split_on.nil?
-
-      (p.payload[:split_n_ways] - 1).times do |n|
-        puts "split number #{n}"
-        # select account to split
-        split_account = StakeBoss::StakeAccount.where(
-          batch_uuid: p.payload[:batch_uuid]
-        ).order(delegated_stake: :desc).first
-
-        # create new stake boss account record
-        new_acc = StakeBoss::StakeAccount.new(
-          network: p.payload[:network],
-          primary_account: false,
-          batch_uuid: p.payload[:batch_uuid]
-        )
-        if new_acc.save
-          request_str = 'split-stake '
-          request_str += "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE} "
-          request_str += "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE} "
-          request_str += "#{split_account.address} "
-          request_str += "#{STAKE_BOSS_KEYPAIR_FILE} "
-          request_str += "--seed #{new_acc.id} "
-          request_str += lamports_to_sol(split_account.account_balance / 2).to_s
-          Rails.logger.tagged('SPLIT_ACCOUNT') {
-            Rails.logger.warn(request_str)
-          }
-          puts request_str
-
-          # create split account
-          cli_request(request_str, p.payload[:config_urls])
-        else
-          raise InvalidStakeAccount, 'New account could not be created' 
-        end
-        puts "stake boss address: #{STAKE_BOSS_ADDRESS}"
-        puts "new acc address request: " + "create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{new_acc.id} STAKE"
-        new_acc_address = cli_request("create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{new_acc.id} STAKE", p.payload[:config_urls])
-        puts "new address cli response: #{new_acc_address}"
-        new_acc_from_cli = Solana::StakeAccount.new(
-          address: new_acc_address,
-          rpc_urls: p.payload[:config_urls]
-        )
-        new_acc_from_cli.get
-        new_acc.update(
-          address: new_acc_from_cli.address,
-          account_balance: new_acc_from_cli.account_balance,
-          activating_stake: new_acc_from_cli.activating_stake,
-          activation_epoch: new_acc_from_cli.activation_epoch,
-          active_stake: new_acc_from_cli.active_stake,
-          credits_observed: new_acc_from_cli.credits_observed,
-          deactivation_epoch: new_acc_from_cli.deactivation_epoch,
-          delegated_stake: new_acc_from_cli.delegated_stake,
-          delegated_vote_account_address: new_acc_from_cli.delegated_vote_account_address,
-          epoch: new_acc_from_cli.epoch,
-          epoch_rewards: new_acc_from_cli.epoch_rewards,
-          lockup_custodian: new_acc_from_cli.lockup_custodian,
-          lockup_timestamp: new_acc_from_cli.lockup_timestamp,
-          rent_exempt_reserve: new_acc_from_cli.rent_exempt_reserve,
-          stake_authority: new_acc_from_cli.stake_authority,
-          stake_type: new_acc_from_cli.stake_type,
-          withdraw_authority: new_acc_from_cli.withdraw_authority
-        )
-
-      end
       # Within a loop, select one account record from this batch in
       # `delegated_stake desc` order and split it by executing a command on-
       # chain. Also create a new DB record for the new account. Repeat this
@@ -424,15 +355,95 @@ module StakeBossLogic
       # We should create an initializer that returns the absolute path to the
       # Boss*.json key file on the development/production server.
 
+    lambda do |p|
+      return p unless p.code == 200
+      # Make sure we are splitting a primary account
+      raise InvalidStakeAccount, 'Not the primary_account' \
+        unless p.payload[:stake_boss_stake_account].primary_account?
+
+      # Make sure we haven't already split this one
+      raise InvalidStakeAccount, 'Already split' \
+        unless p.payload[:stake_boss_stake_account].split_on.nil?
+
+      (p.payload[:split_n_ways] - 1).times do |n|
+        # puts "split number #{n}"
+        # select account to split
+        split_account = StakeBoss::StakeAccount.where(
+          batch_uuid: p.payload[:batch_uuid]
+        ).order(delegated_stake: :desc).first
+
+        # create new stake boss account record
+        new_acc = StakeBoss::StakeAccount.new(
+          network: p.payload[:network],
+          primary_account: false,
+          batch_uuid: p.payload[:batch_uuid]
+        )
+        if new_acc.save
+          request_str = 'split-stake '
+          request_str += "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE} "
+          request_str += "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE} "
+          request_str += "#{split_account.address} "
+          request_str += "#{STAKE_BOSS_KEYPAIR_FILE} "
+          request_str += "--seed #{new_acc.id} "
+          request_str += lamports_to_sol(split_account.account_balance / 2).to_s
+          Rails.logger.tagged('SPLIT_ACCOUNT') {
+            Rails.logger.warn(request_str)
+          }
+          # create split account
+          cli_request(request_str, p.payload[:config_urls])
+        else
+          raise InvalidStakeAccount, 'New account could not be created' 
+        end
+      end
+
       Pipeline.new(
         200,
-        p.payload.merge(
-          stake_boss_stake_account: sbsa, batch_uuid: sbsa.batch_uuid
-        )
+        p.payload
       )
     rescue StandardError => e
       puts e.inspect
       Pipeline.new(500, p.payload, 'Error from split_primary_account', e)
+    end
+  end
+
+  def gather_split_accounts_info
+    lambda do |p|
+      accounts_to_update = StakeBoss::StakeAccount.where(
+        batch_uuid: p.payload[:batch_uuid],
+        address: nil
+      )
+      accounts_to_update.each do |new_acc|
+        # puts "stake boss address: #{STAKE_BOSS_ADDRESS}"
+        puts "new acc address request: " + "create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{new_acc.id} STAKE"
+        new_acc_address = cli_request("create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{new_acc.id} STAKE", p.payload[:config_urls])
+        puts "new_acc_address: #{new_acc_address}"
+        new_acc_from_cli = Solana::StakeAccount.new(
+          address: new_acc_address,
+          rpc_urls: p.payload[:config_urls]
+        )
+        new_acc_from_cli.get
+        puts " ----- \n"
+        # puts new_acc_from_cli.inspect
+        new_acc.update(
+          address: new_acc_from_cli.address,
+          account_balance: new_acc_from_cli.account_balance,
+          activating_stake: new_acc_from_cli.activating_stake,
+          activation_epoch: new_acc_from_cli.activation_epoch,
+          active_stake: new_acc_from_cli.active_stake,
+          credits_observed: new_acc_from_cli.credits_observed,
+          deactivation_epoch: new_acc_from_cli.deactivation_epoch,
+          delegated_stake: new_acc_from_cli.delegated_stake,
+          delegated_vote_account_address: new_acc_from_cli.delegated_vote_account_address,
+          epoch: new_acc_from_cli.epoch,
+          epoch_rewards: new_acc_from_cli.epoch_rewards,
+          lockup_custodian: new_acc_from_cli.lockup_custodian,
+          lockup_timestamp: new_acc_from_cli.lockup_timestamp,
+          rent_exempt_reserve: new_acc_from_cli.rent_exempt_reserve,
+          stake_authority: new_acc_from_cli.stake_authority,
+          stake_type: new_acc_from_cli.stake_type,
+          withdraw_authority: new_acc_from_cli.withdraw_authority
+        )
+      end
     end
   end
 

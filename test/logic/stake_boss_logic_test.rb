@@ -243,7 +243,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   test 'guard_stake_account_inactive' do
-    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2a'
+    address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
@@ -255,7 +255,6 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
                   .then(&guard_input)
                   .then(&guard_stake_account)
-
       assert_equal 500,
                    p.code
       assert_equal StakeBossLogic::InvalidStakeAccount,
@@ -453,18 +452,26 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
-
+    p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
-      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
-                  .then(&guard_stake_account)
-                  .then(&set_max_n_split)
-                  .then(&register_first_stake_account)
-                  .then(&split_primary_account)
-      assert_equal 200, p.code
+      p = p.then(&guard_stake_account)
+           .then(&set_max_n_split)
+           .then(&register_first_stake_account)
+      # puts p
     end
+    SolanaCliService.stub(
+      :request,
+      {cli_response: "BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY", cli_error: nil},
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      p = p.then(&split_primary_account)
+      # puts p
+    end
+    puts p.errors.message
+    assert_equal 200, p.code
   end
 end

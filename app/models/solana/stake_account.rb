@@ -79,6 +79,7 @@ module Solana
       @stake_type = ssa_resp['stakeType']
       @withdraw_authority = ssa_resp['withdrawer']
     rescue StandardError => e
+      # puts e.backtrace
       @error = e
     end
 

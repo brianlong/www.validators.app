@@ -9,22 +9,15 @@
 #
 # Table name: batches
 #
-#  id                        :bigint           not null, primary key
-#  gathered_at               :datetime
-#  network                   :string(255)
-#  root_distance_all_average :float(24)
-#  root_distance_all_median  :integer
-#  scored_at                 :datetime
-#  uuid                      :string(255)
-#  vote_distance_all_average :float(24)
-#  vote_distance_all_median  :integer
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
+#  id         :bigint           not null, primary key
+#  network    :string(255)
+#  uuid       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 # Indexes
 #
 #  index_batches_on_network_and_created_at  (network,created_at)
-#  index_batches_on_network_and_scored_at   (network,scored_at)
 #  index_batches_on_network_and_uuid        (network,uuid)
 #
 class Batch < ApplicationRecord
