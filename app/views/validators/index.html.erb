@@ -76,8 +76,20 @@
             <td class="text-right">
               Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
-            <td class="text-right"><%= number_with_delimiter @tower_highest_block %></td>
-            <td class="text-right"><%= number_with_delimiter @tower_highest_vote %></td>
+            <td class="text-right">
+              <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
+                Md: <%= @batch.root_distance_all_median %>
+                <br />
+                Av: <%= @batch.root_distance_all_average.round(1) %>
+              <% end %>
+            </td>
+            <td class="text-right">
+              <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
+                Md: <%= @batch.vote_distance_all_median %>
+                <br />
+                Av: <%= @batch.vote_distance_all_average.round(1) %>
+              <% end %>
+            </td>
             <td class="text-right">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
@@ -110,7 +122,11 @@
                   %>
                 </div>
                 <div class="avatar">
-                  <% if validator.avatar_url %>
+                  <% if validator.private_validator? %>
+                    <div class="img-circle-medium-private">
+                      <span class='fas fa-users-slash' title="Private Validator"></span>
+                    </div>
+                  <% elsif validator.avatar_url %>
                     <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
                   <% else %>
                     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
@@ -122,10 +138,9 @@
               </td>
 
               <td class="name-column">
-                <% validator_name = validator.name || shorten_key(validator.account) %>
                 <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                             class: 'font-weight-bold' do %>
-                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_name %>
+                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
                 <% end %>
                 <% comm_class = 'text-danger' \
                                   if params[:network] == 'mainnet' && validator.commission.to_i == 100
