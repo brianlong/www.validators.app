@@ -29,3 +29,5 @@ puts 'validators: '
 puts p.payload[:validators].inspect
 puts 'split n max: '
 puts p.payload[:split_n_max]
+puts 'minor accounts: '
+puts p.payload[:minor_accounts].inspect

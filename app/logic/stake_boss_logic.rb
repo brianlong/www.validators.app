@@ -494,6 +494,7 @@ module StakeBossLogic
     new_acc_address['cli_response']
   end
 
+  # Create new account in db and in solana
   def create_split_account(network:, batch:, split_account:, urls:)
     new_acc = StakeBoss::StakeAccount.new(
       network: network,
