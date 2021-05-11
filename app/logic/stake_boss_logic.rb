@@ -366,6 +366,13 @@ module StakeBossLogic
       # Make sure we haven't already split this one
       raise InvalidStakeAccount, 'Already split' \
         unless p.payload[:stake_boss_stake_account].split_on.nil?
+
+      # Check if primary account is not delegated to foreign validator
+      check_primary_account_delegation(
+        primary_account: p.payload[:stake_boss_stake_account],
+        urls: p.payload[:config_urls]
+      )
+      minor_accounts = []
       (p.payload[:split_n_ways] - 1).times do |n|
         # select account to split
         split_account = StakeBoss::StakeAccount.where(
@@ -409,11 +416,12 @@ module StakeBossLogic
           stake_type: new_acc_from_cli.stake_type,
           withdraw_authority: new_acc_from_cli.withdraw_authority
         )
+        minor_accounts.push(new_acc)
       end
 
       Pipeline.new(
         200,
-        p.payload
+        p.payload.merge({minor_accounts: minor_accounts})
       )
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from split_primary_account', e)
@@ -503,7 +511,6 @@ module StakeBossLogic
       request_str.push "--seed #{new_acc.id} "
       request_str.push lamports_to_sol(split_account.account_balance / 2).to_s
       request_str = request_str.join(' ')
-      puts request_str
       Rails.logger.tagged('SPLIT_ACCOUNT') {
         Rails.logger.warn(request_str)
       }
@@ -522,5 +529,20 @@ module StakeBossLogic
     )
     new_acc_from_cli.get
     new_acc_from_cli
+  end
+
+  def check_primary_account_delegation(primary_account:, urls:)
+    unless primary_account.delegated_vote_account_address.nil? || \
+      primary_account.delegated_vote_account_address == BLOCK_LOGIC_VOTE_ACCOUNT
+
+      request_str = [
+        'delegate-stake',
+        "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE}",
+        primary_account.address,
+        BLOCK_LOGIC_VOTE_ACCOUNT,
+        "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE}"
+      ].join(' ')
+      cli_request(request_str, urls)
+    end
   end
 end

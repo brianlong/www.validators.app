@@ -523,6 +523,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     ) do
       p = p.then(&split_primary_account)
     end
+    assert_equal 1, p.payload[:minor_accounts].count
     assert_equal 200, p.code
   end
 
@@ -540,6 +541,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
         {cli_response: json_data, cli_error: nil}
       when 'create-address-with-seed'
         {cli_response: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', cli_error: nil}
+      when 'delegate-stake'
+        {cli_response: '2NbhvTovBt4dki811xvDJJadG7rJCGeAqv9P2zA98GoP97icwGT5fcV5sJ3y35VsYLAjiyW7jmAyyYMSQsCTXNJ4',
+         cli_error: nil}
       end
     end
   end
