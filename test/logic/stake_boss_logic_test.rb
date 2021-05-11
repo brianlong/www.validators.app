@@ -409,7 +409,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -417,11 +417,65 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&set_max_n_split)
                   .then(&register_first_stake_account)
       p.payload[:stake_boss_stake_account].update_column(:primary_account, false)
-      p = Pipeline.new(200, p.payload).then(&split_primary_account)
+      p = p.then(&split_primary_account)
 
       assert_equal 500, p.code
       assert_equal InvalidStakeAccount, p.errors.class
       assert_equal 'Invalid Stake Account: Not the primary_account', p.errors.message
+    end
+  end
+
+  test 'find_address_by_seed' do
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+
+    SolanaCliService.stub(
+      :request,
+      {cli_response: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', cli_error: nil},
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      addr = find_address_by_seed(
+        seed: 1,
+        urls: TESTNET_CLUSTER_URLS
+      )
+      assert_equal 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', addr
+    end
+  end
+
+  test 'create_split_account' do
+    batch = Batch.create
+    sbsa = StakeBoss::StakeAccount.create(
+      address: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY',
+      network: 'testnet',
+      batch_uuid: batch.uuid,
+      account_balance: 100
+    )
+    acc = create_split_account(
+      network: 'testnet',
+      batch: batch.uuid,
+      split_account: sbsa,
+      urls: TESTNET_CLUSTER_URLS
+    )
+
+    assert_equal sbsa.batch_uuid, acc.batch_uuid
+    assert_equal false, acc.primary_account
+  end
+
+  test 'account_from_cli' do
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      {cli_response: json_data, cli_error: nil},
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      acc = account_from_cli(
+        address: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY',
+        urls: TESTNET_CLUSTER_URLS
+      )
+      assert_equal 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY', acc.address
+      assert_nil acc.cli_error
     end
   end
 
@@ -432,7 +486,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     SolanaCliService.stub(
       :request,
-      json_data,
+      {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
@@ -440,7 +494,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&set_max_n_split)
                   .then(&register_first_stake_account)
       p.payload[:stake_boss_stake_account].update_column(:split_on, DateTime.now - 10.minutes)
-      p = Pipeline.new(200, p.payload).then(&split_primary_account)
+      p = p.then(&split_primary_account)
 
       assert_equal 500, p.code
       assert_equal InvalidStakeAccount, p.errors.class
@@ -450,28 +504,43 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
   test 'split_primary_account success' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
-    json_data = \
-      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
     p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
     SolanaCliService.stub(
       :request,
-      {cli_response: json_data, cli_error: nil},
+      split_primary_account_stub(address: address),
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = p.then(&guard_stake_account)
-           .then(&set_max_n_split)
-           .then(&register_first_stake_account)
-      # puts p
+            .then(&set_max_n_split)
+            .then(&register_first_stake_account)
     end
+
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX'
     SolanaCliService.stub(
       :request,
-      {cli_response: "BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY", cli_error: nil},
+      split_primary_account_stub(address: address),
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = p.then(&split_primary_account)
-      # puts p
     end
-    puts p.errors.message
     assert_equal 200, p.code
+  end
+
+  def split_primary_account_stub(address:)
+    Proc.new do |arg|
+      cli_req_name = arg[:cli_method].split(' ')[0]
+      case cli_req_name
+      when 'stake-account'
+        json_data = \
+        File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+        {cli_response: json_data, cli_error: nil}
+      when 'split-stake'
+        json_data = \
+        File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+        {cli_response: json_data, cli_error: nil}
+      when 'create-address-with-seed'
+        {cli_response: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', cli_error: nil}
+      end
+    end
   end
 end

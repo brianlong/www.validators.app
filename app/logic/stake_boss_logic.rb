@@ -127,8 +127,10 @@ module StakeBossLogic
         rpc_urls: p.payload[:config_urls]
       )
       stake_account.get
-      raise InvalidStakeAccount, 'This is not a Stake Account' \
-        if stake_account.cli_error&.include?('This is not a Stake Account')
+      # Is solana account but not a stake account
+      if stake_account.cli_error&.include?('is not a stake account')
+        raise InvalidStakeAccount, 'This is not a Stake Account'
+      end
 
       # Make sure this is a valid stake account
       raise InvalidStakeAccount, 'Not a valid Stake Account' \
@@ -364,66 +366,30 @@ module StakeBossLogic
       # Make sure we haven't already split this one
       raise InvalidStakeAccount, 'Already split' \
         unless p.payload[:stake_boss_stake_account].split_on.nil?
-
       (p.payload[:split_n_ways] - 1).times do |n|
-        # puts "split number #{n}"
         # select account to split
         split_account = StakeBoss::StakeAccount.where(
           batch_uuid: p.payload[:batch_uuid]
         ).order(delegated_stake: :desc).first
 
         # create new stake boss account record
-        new_acc = StakeBoss::StakeAccount.new(
+        new_acc = create_split_account(
           network: p.payload[:network],
-          primary_account: false,
-          batch_uuid: p.payload[:batch_uuid]
+          batch: p.payload[:batch_uuid],
+          split_account: split_account,
+          urls: p.payload[:config_urls]
         )
-        if new_acc.save
-          request_str = 'split-stake '
-          request_str += "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE} "
-          request_str += "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE} "
-          request_str += "#{split_account.address} "
-          request_str += "#{STAKE_BOSS_KEYPAIR_FILE} "
-          request_str += "--seed #{new_acc.id} "
-          request_str += lamports_to_sol(split_account.account_balance / 2).to_s
-          Rails.logger.tagged('SPLIT_ACCOUNT') {
-            Rails.logger.warn(request_str)
-          }
-          # create split account
-          cli_request(request_str, p.payload[:config_urls])
-        else
-          raise InvalidStakeAccount, 'New account could not be created' 
-        end
-      end
 
-      Pipeline.new(
-        200,
-        p.payload
-      )
-    rescue StandardError => e
-      puts e.inspect
-      Pipeline.new(500, p.payload, 'Error from split_primary_account', e)
-    end
-  end
+        new_acc_address = find_address_by_seed(
+          seed: new_acc.id,
+          urls: p.payload[:config_urls]
+        )
 
-  def gather_split_accounts_info
-    lambda do |p|
-      accounts_to_update = StakeBoss::StakeAccount.where(
-        batch_uuid: p.payload[:batch_uuid],
-        address: nil
-      )
-      accounts_to_update.each do |new_acc|
-        # puts "stake boss address: #{STAKE_BOSS_ADDRESS}"
-        puts "new acc address request: " + "create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{new_acc.id} STAKE"
-        new_acc_address = cli_request("create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{new_acc.id} STAKE", p.payload[:config_urls])
-        puts "new_acc_address: #{new_acc_address}"
-        new_acc_from_cli = Solana::StakeAccount.new(
+        new_acc_from_cli = account_from_cli(
           address: new_acc_address,
-          rpc_urls: p.payload[:config_urls]
+          urls: p.payload[:config_urls]
         )
-        new_acc_from_cli.get
-        puts " ----- \n"
-        # puts new_acc_from_cli.inspect
+
         new_acc.update(
           address: new_acc_from_cli.address,
           account_balance: new_acc_from_cli.account_balance,
@@ -444,6 +410,13 @@ module StakeBossLogic
           withdraw_authority: new_acc_from_cli.withdraw_authority
         )
       end
+
+      Pipeline.new(
+        200,
+        p.payload
+      )
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from split_primary_account', e)
     end
   end
 
@@ -505,5 +478,49 @@ module StakeBossLogic
         500, p.payload, 'Error from delegate_validators_for_batch', e
       )
     end
+  end
+
+  # get accound address based on STAKE_BOSS_ADDRESS and account id
+  def find_address_by_seed(seed:, urls:)
+    new_acc_address = cli_request("create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{seed} STAKE", urls)
+    new_acc_address['cli_response']
+  end
+
+  def create_split_account(network:, batch:, split_account:, urls:)
+    new_acc = StakeBoss::StakeAccount.new(
+      network: network,
+      primary_account: false,
+      batch_uuid: batch
+    )
+
+    if new_acc.save
+      request_str = ['split-stake']
+      request_str.push "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE} "
+      request_str.push "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE} "
+      request_str.push "--commitment finalized "
+      request_str.push "#{split_account.address} "
+      request_str.push "#{STAKE_BOSS_KEYPAIR_FILE} "
+      request_str.push "--seed #{new_acc.id} "
+      request_str.push lamports_to_sol(split_account.account_balance / 2).to_s
+      request_str = request_str.join(' ')
+      puts request_str
+      Rails.logger.tagged('SPLIT_ACCOUNT') {
+        Rails.logger.warn(request_str)
+      }
+      # create split account
+      cli_request(request_str, urls)
+      return new_acc
+    else
+      raise InvalidStakeAccount, 'New account could not be created'
+    end
+  end
+
+  def account_from_cli(address:, urls:)
+    new_acc_from_cli = Solana::StakeAccount.new(
+      address: address,
+      rpc_urls: urls
+    )
+    new_acc_from_cli.get
+    new_acc_from_cli
   end
 end
