@@ -76,8 +76,20 @@
             <td class="text-right">
               Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
-            <td class="text-right"><%= number_with_delimiter @tower_highest_block %></td>
-            <td class="text-right"><%= number_with_delimiter @tower_highest_vote %></td>
+            <td class="text-right">
+              <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
+                Md: <%= @batch.root_distance_all_median %>
+                <br />
+                Av: <%= @batch.root_distance_all_average.round(1) %>
+              <% end %>
+            </td>
+            <td class="text-right">
+              <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
+                Md: <%= @batch.vote_distance_all_median %>
+                <br />
+                Av: <%= @batch.vote_distance_all_average.round(1) %>
+              <% end %>
+            </td>
             <td class="text-right">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
@@ -110,7 +122,11 @@
                   %>
                 </div>
                 <div class="avatar">
-                  <% if validator.avatar_url %>
+                  <% if validator.private_validator? %>
+                    <div class="img-circle-medium-private">
+                      <span class='fas fa-users-slash' title="Private Validator"></span>
+                    </div>
+                  <% elsif validator.avatar_url %>
                     <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
                   <% else %>
                     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
@@ -122,10 +138,9 @@
               </td>
 
               <td class="name-column">
-                <% validator_name = validator.name || shorten_key(validator.account) %>
                 <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                             class: 'font-weight-bold' do %>
-                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_name %>
+                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
                 <% end %>
                 <% comm_class = 'text-danger' \
                                   if params[:network] == 'mainnet' && validator.commission.to_i == 100
@@ -135,7 +150,7 @@
                 </small><br />
                 <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
                 <small>
-                  <%= number_with_delimiter lamports_to_sol(validator.active_stake) %>
+                  <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
                   (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
                 </small>
                 <br />
@@ -250,9 +265,9 @@
               <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
                 <%
                   vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
-                  # ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
+                  ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
 
-                  # skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
+                  skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
                   slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
                   line_color = chart_line_color(validator.skipped_slot_score)
@@ -262,11 +277,18 @@
                            account: validator.account,
                            vector: slot_vector,
                            line_color: line_color,
-                           fill_color: fill_color
-                           # moving_avg: skipped_slots_moving_avg
+                           fill_color: fill_color,
+                           moving_avg: skipped_slots_moving_avg
                 %>
               </td>
             </tr>
+            <% if params[:order] == 'stake' && i == @at_33_stake%>
+              <tr id="row-halt-line">
+                  <td colspan=6>
+                    CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
+                  </td>
+              </tr>
+            <% end %>
           <% end %>
           </tbody>
         </table>
