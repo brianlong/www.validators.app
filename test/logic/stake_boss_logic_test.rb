@@ -511,8 +511,8 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = p.then(&guard_stake_account)
-            .then(&set_max_n_split)
-            .then(&register_first_stake_account)
+           .then(&set_max_n_split)
+           .then(&register_first_stake_account)
     end
 
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX'
@@ -528,22 +528,30 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   def split_primary_account_stub(address:)
-    Proc.new do |arg|
+    proc do |arg|
       cli_req_name = arg[:cli_method].split(' ')[0]
+
       case cli_req_name
       when 'stake-account'
         json_data = \
-        File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+          File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
         {cli_response: json_data, cli_error: nil}
       when 'split-stake'
         json_data = \
-        File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+          File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
         {cli_response: json_data, cli_error: nil}
       when 'create-address-with-seed'
-        {cli_response: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', cli_error: nil}
+        {
+          cli_response: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', 
+          cli_error: nil
+        }
       when 'delegate-stake'
-        {cli_response: '2NbhvTovBt4dki811xvDJJadG7rJCGeAqv9P2zA98GoP97icwGT5fcV5sJ3y35VsYLAjiyW7jmAyyYMSQsCTXNJ4',
-         cli_error: nil}
+        {
+          cli_response: '2NbhvTovBt4dki811xvDJJadG7rJCGeAqv9P2zA98GoP97icwGT5fcV5sJ3y35VsYLAjiyW7jmAyyYMSQsCTXNJ4',
+         cli_error: nil
+        }
       end
     end
   end
