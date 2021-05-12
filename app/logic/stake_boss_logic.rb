@@ -372,7 +372,9 @@ module StakeBossLogic
         primary_account: p.payload[:stake_boss_stake_account],
         urls: p.payload[:config_urls]
       )
+
       minor_accounts = []
+
       (p.payload[:split_n_ways] - 1).times do |n|
         # select account to split
         split_account = StakeBoss::StakeAccount.where(
@@ -416,6 +418,7 @@ module StakeBossLogic
           stake_type: new_acc_from_cli.stake_type,
           withdraw_authority: new_acc_from_cli.withdraw_authority
         )
+
         minor_accounts.push(new_acc)
       end
 
@@ -502,25 +505,26 @@ module StakeBossLogic
       batch_uuid: batch
     )
 
-    if new_acc.save
-      request_str = ['split-stake']
-      request_str.push "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE} "
-      request_str.push "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE} "
-      request_str.push "--commitment finalized "
-      request_str.push "#{split_account.address} "
-      request_str.push "#{STAKE_BOSS_KEYPAIR_FILE} "
-      request_str.push "--seed #{new_acc.id} "
-      request_str.push lamports_to_sol(split_account.account_balance / 2).to_s
-      request_str = request_str.join(' ')
-      Rails.logger.tagged('SPLIT_ACCOUNT') {
-        Rails.logger.warn(request_str)
-      }
-      # create split account
-      cli_request(request_str, urls)
-      return new_acc
-    else
-      raise InvalidStakeAccount, 'New account could not be created'
-    end
+    raise InvalidStakeAccount, 'New account could not be created' \
+      unless new_acc.save
+
+    request_str = ['split-stake']
+    request_str.push "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE}"
+    request_str.push "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE}"
+    request_str.push '--commitment finalized'
+    request_str.push "#{split_account.address}"
+    request_str.push "#{STAKE_BOSS_KEYPAIR_FILE}"
+    request_str.push "--seed #{new_acc.id}"
+    request_str.push lamports_to_sol(split_account.account_balance / 2).to_s
+    request_str = request_str.join(' ')
+
+    Rails.logger.tagged('SPLIT_ACCOUNT') {
+      Rails.logger.warn(request_str)
+    }
+
+    # create split account
+    cli_request(request_str, urls)
+    new_acc
   end
 
   def account_from_cli(address:, urls:)
