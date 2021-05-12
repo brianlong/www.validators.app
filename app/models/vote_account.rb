@@ -32,6 +32,10 @@ class VoteAccount < ApplicationRecord
     vote_account_histories.last
   end
 
+  def vote_account_history_last_in_batch(batch_uuid)
+    vote_account_histories.where(batch_uuid: batch_uuid).last
+  end
+
   def set_network
     self.network = validator.network if validator && network.blank?
   end

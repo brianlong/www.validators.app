@@ -163,7 +163,7 @@
               <!-- SKIPPED VOTE % -->
               <td class="percent-column" id="skipped-vote-column-<%=i%>">
                 <%
-                  vahl = validator.vote_account_last&.vote_account_history_last
+                  vahl = validator.vote_account_last&.vote_account_history_last_in_batch(@batch.uuid)
                   if vahl
                     skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
                   end
