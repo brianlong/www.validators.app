@@ -8,8 +8,8 @@ module Api
       #GET list of all epochs
       def index
         @epoch_list = EpochWallClock.by_network(epoch_params[:network])
-                                    .page(params[:page])
-                                    .per(params[:per])
+                                    .page(epoch_params[:page])
+                                    .per(epoch_params[:per])
       end
 
       private
@@ -19,7 +19,7 @@ module Api
       end
 
       def ensure_params
-        unless epoch_params['network'].present?
+        unless epoch_params[:network].present?
           render(json: { 'status' => 'Parameter Missing' }, status: 404)
         end
       end
