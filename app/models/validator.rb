@@ -169,4 +169,8 @@ class Validator < ApplicationRecord
   def data_center_concentration_score
     score&.data_center_concentration_score || 0
   end
+
+  def private_validator?
+    score&.commission == 100 && network == 'mainnet'
+  end
 end

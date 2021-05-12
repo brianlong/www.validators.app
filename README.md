@@ -7,7 +7,7 @@ This repo is a template to be used for creating new projects. After creating you
   environment variables that you should copy to config/credentials.yml.enc
 - config/database.yml to reflect the proper database name and other settings.
   There is an example in `config/database.example.yml`
-- Copy `config/cluster.yml.example` to `config/cluster.yml` 
+- Copy `config/cluster.yml.example` to `config/cluster.yml`
 - Look at `config/initializers/site_information.rb` and make changes as needed
   to the constant values shown there.
 - Perform a 'find all' to look for 'fmaprivacy' and 'fmadata'. Modify those
@@ -27,6 +27,7 @@ This project requires Ruby 2.7+ as denoted in the `.ruby-version` file. This pro
   - MySQL 5.7+
   - Redis
   - Yarn
+  - shared-mime-info
 
 ## Configuration
 Ask someone in charge about the development `master.key`
@@ -36,6 +37,8 @@ To open e.g. in atom, use `EDITOR="atom --wait" rails credentials:edit`
 To open in vim, make sure it's up to date and use `EDITOR=vim rails credentials:edit`
 
 Set up locking strategy during configuration (https://github.com/plataformatec/devise/wiki/How-To:-Add-:lockable-to-Users).
+
+Developers using Mac OS will need to `brew install shared-mime-info` before `bundle install`
 
 ## Database creation
 
