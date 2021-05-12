@@ -45,6 +45,9 @@ table, .table {
     }
     .avatar {
       padding-bottom: 5px;
+      .img-circle-medium-private {
+        display: inline-block;
+      }
     }
   }
 

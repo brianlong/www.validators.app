@@ -122,7 +122,11 @@
                   %>
                 </div>
                 <div class="avatar">
-                  <% if validator.avatar_url %>
+                  <% if validator.private_validator? %>
+                    <div class="img-circle-medium-private">
+                      <span class='fas fa-users-slash' title="Private Validator"></span>
+                    </div>
+                  <% elsif validator.avatar_url %>
                     <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
                   <% else %>
                     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
@@ -134,10 +138,9 @@
               </td>
 
               <td class="name-column">
-                <% validator_name = validator.name || shorten_key(validator.account) %>
                 <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                             class: 'font-weight-bold' do %>
-                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_name %>
+                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
                 <% end %>
                 <% comm_class = 'text-danger' \
                                   if params[:network] == 'mainnet' && validator.commission.to_i == 100
