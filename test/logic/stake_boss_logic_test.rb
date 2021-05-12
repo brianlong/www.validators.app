@@ -108,7 +108,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   # Show that the input guards are working
-  test 'guard_input returns Blank Address error and code 500' do
+  test 'guard_input \
+        when the input is empty \
+        returns Blank Address error and code 500' do
     # Blank input
     p = Pipeline.new(200, @initial_payload.merge(stake_address: nil))
                 .then(&guard_input)
@@ -117,7 +119,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     assert_equal 'Invalid Stake Account: Blank Address', p.errors.message
   end
 
-  test 'guard_input returns javascript is not allowed error and code 500' do
+  test 'guard_input \
+        when theres a javascript tag \
+        returns javascript is not allowed error and code 500' do
     # javascript
     account = '"><script src=https://certus.xss.ht></script>'
     p = Pipeline.new(200, @initial_payload.merge(stake_address: account))
@@ -131,7 +135,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                  p.errors.message
   end
 
-  test 'guard_input returns wrong size error and code 500' do
+  test 'guard_input \
+        when theres wrong number of chars \
+        returns wrong size error and code 500' do
     # Blank input
     p = Pipeline.new(200, @initial_payload.merge(stake_address: 'test'))
                 .then(&guard_input)
@@ -144,7 +150,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                  p.errors.message
   end
 
-  test 'guard_stake_account returns not a Stake Account error and code 500' do
+  test 'guard_stake_account \
+        when account is not a stake account \
+        returns not a Stake Account error and code 500' do
     address = 'FLC9P4DgGjQD53X1zsx1hA9HJhzjErzYeJk24Xdfpogx'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -171,7 +179,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
 
-  test 'guard_input returns whitespaces error and code 500' do
+  test 'guard_input \
+        when there are whitespaces in input \
+        returns whitespaces error and code 500' do
     p = Pipeline.new(200, @initial_payload.merge(stake_address: 'te st'))
                 .then(&guard_input)
 
@@ -183,7 +193,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                  p.errors.message
   end
 
-  test 'guard_input returns illegal characters error and code 500' do
+  test 'guard_input \
+        when there are forbidden chars \
+        returns illegal characters error and code 500' do
     illegal_chars = %w[+ - _ & | ' "]
     illegal_chars.each do |chr|
       account = SecureRandom.hex(16) + chr
@@ -198,7 +210,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'guard_stake_account returns Not a valid Stake Account error and code 500' do
+  test 'guard_stake_account \
+        when stake account is invalid \
+        returns Not a valid Stake Account error and code 500' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuZ'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -220,7 +234,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'guard_stake_account returns Stake Boss needs Stake Authority error and code 500' do
+  test 'guard_stake_account \
+        when stake boss does not have the stake authority \
+        returns Stake Boss needs Stake Authority error and code 500' do
     address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuSa'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -242,7 +258,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'guard_stake_account returns inactive error and code 500' do
+  test 'guard_stake_account \
+        when account is inactive \
+        returns inactive error and code 500' do
     address = '2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -287,7 +305,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'guard_duplicate_records returns Duplicate Record error and code 500' do
+  test 'guard_duplicate_records \
+        when theres already record in db \
+        returns Duplicate Record error and code 500' do
     StakeBoss::StakeAccount.create!(
       network: 'testnet',
       address: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
