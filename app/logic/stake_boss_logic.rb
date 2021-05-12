@@ -199,7 +199,6 @@ module StakeBossLogic
         p.payload.merge(split_n_ways: 2, split_n_max: split_n_max)
       )
     rescue StandardError => e
-      puts e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
@@ -258,7 +257,6 @@ module StakeBossLogic
 
       Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
-      puts e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
