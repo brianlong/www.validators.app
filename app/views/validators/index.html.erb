@@ -142,12 +142,12 @@
                             class: 'font-weight-bold' do %>
                   <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
                 <% end %>
-                <% comm_class = 'text-danger' \
-                                  if params[:network] == 'mainnet' && validator.commission.to_i == 100
-                %>
-                <small class="<%= comm_class %>">
-                  (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
-                </small><br />
+                <% unless validator.private_validator? %>
+                  <small>
+                    (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
+                  </small>
+                <% end %>
+                <br />
                 <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
                 <small>
                   <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
