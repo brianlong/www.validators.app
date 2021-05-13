@@ -306,7 +306,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   end
 
   test 'guard_duplicate_records \
-        when theres already record in db \
+        when the address is already in db \
         returns Duplicate Record error and code 500' do
     StakeBoss::StakeAccount.create!(
       network: 'testnet',
@@ -422,7 +422,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'split_primary_account returns error not a primary account and code 500' do
+  test 'split_primary_account when primary_account is false returns error not a primary account and code 500' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -457,18 +457,21 @@ class StakeBossLogicTest < ActiveSupport::TestCase
         seed: 1,
         urls: TESTNET_CLUSTER_URLS
       )
+
       assert_equal 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', addr
     end
   end
 
   test 'create_split_account returns valid attributes' do
     batch = Batch.create
+
     sbsa = StakeBoss::StakeAccount.create(
       address: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY',
       network: 'testnet',
       batch_uuid: batch.uuid,
       account_balance: 100
     )
+
     acc = create_split_account(
       network: 'testnet',
       batch: batch.uuid,
@@ -480,7 +483,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     assert_equal false, acc.primary_account
   end
 
-  test 'account_from_cli with no error' do
+  test 'account_from_cli returns valid account and no error' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -494,12 +497,15 @@ class StakeBossLogicTest < ActiveSupport::TestCase
         address: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY',
         urls: TESTNET_CLUSTER_URLS
       )
+
       assert_equal 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY', acc.address
       assert_nil acc.cli_error
     end
   end
 
-  test 'split_primary_account returns error already split and code 500' do
+  test 'split_primary_account \
+        when account has already been splitted \
+        returns error already split and code 500' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -513,7 +519,8 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&guard_stake_account)
                   .then(&set_max_n_split)
                   .then(&register_first_stake_account)
-      p.payload[:stake_boss_stake_account].update_column(:split_on, DateTime.now - 10.minutes)
+      p.payload[:stake_boss_stake_account]
+       .update_column(:split_on, DateTime.now - 10.minutes)
       p = p.then(&split_primary_account)
 
       assert_equal 500, p.code
@@ -536,6 +543,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
 
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX'
+
     SolanaCliService.stub(
       :request,
       split_primary_account_stub(address: address),
@@ -543,6 +551,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     ) do
       p = p.then(&split_primary_account)
     end
+
     assert_equal 1, p.payload[:minor_accounts].count
     assert_equal 200, p.code
   end
@@ -561,7 +570,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
         json_data = \
           File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
 
-        {cli_response: json_data, cli_error: nil}
+        { cli_response: json_data, cli_error: nil }
       when 'create-address-with-seed'
         {
           cli_response: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', 

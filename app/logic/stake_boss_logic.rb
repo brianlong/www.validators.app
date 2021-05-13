@@ -365,12 +365,6 @@ module StakeBossLogic
       raise InvalidStakeAccount, 'Already split' \
         unless p.payload[:stake_boss_stake_account].split_on.nil?
 
-      # Check if primary account is not delegated to foreign validator
-      check_primary_account_delegation(
-        primary_account: p.payload[:stake_boss_stake_account],
-        urls: p.payload[:config_urls]
-      )
-
       minor_accounts = []
 
       (p.payload[:split_n_ways] - 1).times do |n|
@@ -532,20 +526,5 @@ module StakeBossLogic
     )
     new_acc_from_cli.get
     new_acc_from_cli
-  end
-
-  def check_primary_account_delegation(primary_account:, urls:)
-    unless primary_account.delegated_vote_account_address.nil? || \
-      primary_account.delegated_vote_account_address == BLOCK_LOGIC_VOTE_ACCOUNT
-
-      request_str = [
-        'delegate-stake',
-        "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE}",
-        primary_account.address,
-        BLOCK_LOGIC_VOTE_ACCOUNT,
-        "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE}"
-      ].join(' ')
-      cli_request(request_str, urls)
-    end
   end
 end
