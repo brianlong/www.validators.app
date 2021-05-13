@@ -72,8 +72,6 @@ module ValidatorScoreV1Logic
         p.payload[:batch_uuid]
       )
 
-      software_versions = {}
-
       # The to_a at the end ensures that the query is run here, instead of
       # inside of the `p.payload[:validators].each` block which eliminates an
       # N+1 query
@@ -105,13 +103,6 @@ module ValidatorScoreV1Logic
           end
           unless vh.active_stake.nil?
             validator.validator_score_v1.active_stake = vh.active_stake
-            if software_versions[validator.validator_score_v1.software_version]
-              software_versions[validator.validator_score_v1.software_version] += \
-              vh.active_stake
-            else
-              software_versions[validator.validator_score_v1.software_version] = \
-              vh.active_stake
-            end
           end
           validator.validator_score_v1.stake_concentration = \
             (vh.active_stake.to_f / total_active_stake.to_f)
@@ -124,11 +115,6 @@ module ValidatorScoreV1Logic
       rescue StandardError => e
         Appsignal.send_error(e)
       end
-
-      current_software_versions = find_current_software_version(
-        software_versions: software_versions,
-        total_stake: total_active_stake
-      )
 
       Pipeline.new(200, p.payload.merge(total_active_stake: total_active_stake))
     rescue StandardError => e
@@ -313,6 +299,8 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).to_a
 
+      software_versions = {}
+
       p.payload[:validators].each do |validator|
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
 
@@ -325,10 +313,32 @@ module ValidatorScoreV1Logic
             validator.validator_score_v1.software_version = vah.software_version
           end
         end
+
+        this_software_version = validator.validator_score_v1.software_version
+
+        # Gather software_version stat
+        if validator.validator_score_v1.active_stake
+          if software_versions[this_software_version]
+            software_versions[this_software_version] += \
+              validator.validator_score_v1.active_stake
+          else
+            software_versions[this_software_version] = \
+              validator.validator_score_v1.active_stake
+          end
+        end
+
         validator.validator_score_v1.assign_software_version_score
       rescue StandardError => e
         Appsignal.send_error(e)
       end
+
+      # Calculate current version by stake
+      current_software_version = find_current_software_version(
+        software_versions: software_versions,
+        total_stake: p.payload[:total_active_stake]
+      )
+
+      p.payload[:this_batch].update(software_version: current_software_version)
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -373,11 +383,12 @@ module ValidatorScoreV1Logic
 
   def find_current_software_version(software_versions:, total_stake:)
     software_versions.each do |version, stake|
-      software_versions[version] = ((stake/total_stake.to_f) * 100.0).round(2)
+      software_versions[version] = ((stake/total_stake.to_f) * 100.0)
     end
-    puts total_stake
+
     software_version_sorted = software_versions.keys.compact.sort
-    mostly_used_version = software_versions.key(software_versions.values.max)
+    mostly_used_percent = software_versions.values.max
+    mostly_used_version = software_versions.key(mostly_used_percent)
     mostly_used_index = software_version_sorted.index(mostly_used_version)
 
     if mostly_used_percent >= 66
