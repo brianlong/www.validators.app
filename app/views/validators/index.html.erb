@@ -188,16 +188,19 @@
               <td class="chart-column d-none d-lg-table-cell prev-slide" id="skipped-vote-<%=i%>">
                 <%
                   vl = chart_x_scale(validator.score&.skipped_vote_history.to_a.count)
-                  # TODO uncomment once we have skipped vote score
+                  # TODO uncomment the lines below, once we have skipped vote score
                   line_color = LIGHT_GREY #chart_line_color(validator.score.skipped_vote_score)
                   fill_color = LIGHT_GREY_TRANSPARENT #chart_fill_color(validator.score.skipped_vote_score)
-                  vector = validator.score&.skipped_vote_history.to_a[-vl..-1].map{ |v| (v.to_f*100.0).round(1) }
+                  vector = validator.score&.skipped_vote_history.to_a[-vl..-1].map do |v|
+                    (@skipped_vote_percent_best - v)*100
+                  end
                 %>
                 <%= render 'validators/spark_line_skipped_vote',
                            account: validator.account,
                            vector: vector,
                            line_color: line_color,
-                           fill_color: fill_color
+                           fill_color: fill_color,
+                           best: @skipped_vote_percent_best*100
                 %>
               </td>
 
