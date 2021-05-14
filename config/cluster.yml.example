@@ -10,3 +10,6 @@ rpc_port: 8899
 # Both of these need to be x.y.z
 software_patch_mainnet: "1.5.8"
 software_patch_testnet: "1.5.8"
+
+stake_boss_testnet: stake-boss-pubkey
+stake_boss_testnet_keypair_file: stake-boss/file-path.json

@@ -490,6 +490,8 @@ module SolanaLogic
         Rails.logger.error "CLI TIMEOUT\n#{e.class}\nRPC URL: #{rpc_url}"
         ''
       end
+      # puts "cli request #{cli_method.split(' ')[0]}\n #{response_json}"
+
       response_utf8 = response_json[:cli_response].encode(
         'UTF-8',
         invalid: :replace,
@@ -503,8 +505,9 @@ module SolanaLogic
         note_end_index = response_utf8.index("\n{") + 1
         response_utf8 = response_utf8[note_end_index..]
       end
-
-      response_utf8 = JSON.parse(response_utf8) unless response_utf8.blank?
+      unless response_utf8.blank? || !response_utf8.include?('{')
+        response_utf8 = JSON.parse(response_utf8)
+      end
       return {
         'cli_response' => response_utf8, 
         'cli_error' => response_json[:cli_error]
