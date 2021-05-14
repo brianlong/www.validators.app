@@ -192,7 +192,7 @@
                   line_color = LIGHT_GREY #chart_line_color(validator.score.skipped_vote_score)
                   fill_color = LIGHT_GREY_TRANSPARENT #chart_fill_color(validator.score.skipped_vote_score)
                   vector = validator.score&.skipped_vote_history.to_a[-vl..-1].map do |v|
-                    (@skipped_vote_percent_best - v)*100
+                    (@skipped_vote_percent_best - v)*100.abs
                   end
                 %>
                 <%= render 'validators/spark_line_skipped_vote',
