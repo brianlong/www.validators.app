@@ -55,11 +55,13 @@ class ChangeEncodingToUtfmb4 < ActiveRecord::Migration[6.1]
   end
 
   def set_collation(charset)
-    if mysql_version < 8
+    return "#{charset}_unicode_ci" if mysql_version < 8
+
+    if mysql_version >= 8 && charset == 'utf8'
       "#{charset}_unicode_ci"
-    elsif mysql_version >= 8
-      "#{charset}_0900_ai_ci" if charset == 'utf8mb4'
-      "#{charset}_unicode_ci" if charset == 'utf8'
+    elsif mysql_version >= 8 && charset == 'utf8mb4'
+      # That's the default we should have in db
+      "#{charset}_0900_ai_ci"
     end
   end
 
