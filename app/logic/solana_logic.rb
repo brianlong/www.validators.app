@@ -73,27 +73,10 @@ module SolanaLogic
       raise 'No results from `solana validators`' if validators.nil?
 
       raise 'No results from `solana validators`' if \
-        validators['currentValidators'].empty? &&
-        validators['delinquentValidators'].empty?
+        validators['validators'].empty?
 
       # Create current validators
-      validators['currentValidators'].each do |validator|
-        ValidatorHistory.create(
-          network: p.payload[:network],
-          batch_uuid: p.payload[:batch_uuid],
-          account: validator['identityPubkey'],
-          vote_account: validator['voteAccountPubkey'],
-          commission: validator['commission'],
-          last_vote: validator['lastVote'],
-          root_block: validator['rootSlot'],
-          credits: validator['credits'],
-          active_stake: validator['activatedStake'],
-          software_version: validator['version']
-        )
-      end
-
-      # Create delinquent validators
-      validators['delinquentValidators'].each do |validator|
+      validators['validators'].each do |validator|
         ValidatorHistory.create(
           network: p.payload[:network],
           batch_uuid: p.payload[:batch_uuid],
@@ -105,9 +88,26 @@ module SolanaLogic
           credits: validator['credits'],
           active_stake: validator['activatedStake'],
           software_version: validator['version'],
-          delinquent: true
+          delinquent: validator['delinquent']
         )
       end
+
+      # # Create delinquent validators
+      # validators['delinquentValidators'].each do |validator|
+      #   ValidatorHistory.create(
+      #     network: p.payload[:network],
+      #     batch_uuid: p.payload[:batch_uuid],
+      #     account: validator['identityPubkey'],
+      #     vote_account: validator['voteAccountPubkey'],
+      #     commission: validator['commission'],
+      #     last_vote: validator['lastVote'],
+      #     root_block: validator['rootSlot'],
+      #     credits: validator['credits'],
+      #     active_stake: validator['activatedStake'],
+      #     software_version: validator['version'],
+      #     delinquent: true
+      #   )
+      # end
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
