@@ -282,7 +282,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'guard_stake_account success with correct solana_stake_account' do
+  test 'guard_stake_account \
+        with correct solana_stake_account \
+        returns code 200 and valid solana stake account' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -330,7 +332,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'split_n_ways returns 200 and correct values' do
+  test 'split_n_ways \
+        with correct input \
+        returns code 200 and correct values' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -359,7 +363,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'select_validators returns 200 and correct validators' do
+  test 'select_validators \
+        with correct input \
+        returns code 200 and correct validators' do
     create_validators
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
@@ -393,7 +399,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'register_first_stake_account returns 200 and correct stake account' do
+  test 'register_first_stake_account \
+        with correct input
+        returns 200 and correct stake account' do
     create_validators
 
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
@@ -422,7 +430,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'split_primary_account when primary_account is false returns error not a primary account and code 500' do
+  test 'split_primary_account \
+        when primary_account is false \
+        returns error not a primary account and code 500' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -445,7 +455,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'find_address_by_seed returns correct address' do
+  test 'find_address_by_seed \
+        with the correct input \
+        returns correct address' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
 
     SolanaCliService.stub(
@@ -462,7 +474,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'create_split_account returns valid attributes' do
+  test 'create_split_account \
+        when the account to split is valid \
+        returns valid attributes' do
     batch = Batch.create
 
     sbsa = StakeBoss::StakeAccount.create(
@@ -483,7 +497,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     assert_equal false, acc.primary_account
   end
 
-  test 'account_from_cli returns valid account and no error' do
+  test 'account_from_cli \
+        with the correct input \
+        returns valid account and no error' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -529,7 +545,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'split_primary_account success' do
+  test 'split_primary_account 
+        with valid input
+        returns code 200 and minor accounts' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
     SolanaCliService.stub(
