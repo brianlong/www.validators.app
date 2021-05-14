@@ -36,11 +36,19 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     # create enough records to confirm via logs we don't have an N+1 query when
     # getting ValidatorHistory for all accounts for this batch
     5.times do
+      v = create(:validator)
+      vote_acc = create(:vote_account, validator_id: v.id, account: v.account)
       create(
         :validator_history,
         network: 'testnet',
         batch_uuid: '1234',
-        account: create(:validator).account
+        account: v.account
+      )
+      create(
+        :vote_account_history,
+        batch_uuid: '1234',
+        network: 'testnet',
+        vote_account_id: vote_acc.id
       )
     end
 
@@ -73,6 +81,14 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                        .first
                        .validator_score_v1
                        .stake_concentration
+    assert_equal [0.35], p.payload[:validators]
+                       .last
+                       .validator_score_v1
+                       .skipped_vote_history
+    assert_equal [0.35], p.payload[:validators]
+                       .last
+                       .validator_score_v1
+                       .skipped_vote_percent_moving_average_history
     refute p.payload[:validators]
             .first
             .validator_score_v1
@@ -91,6 +107,14 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal 0.0, p.payload[:root_distance_all_median]
     assert_equal 0.0, p.payload[:vote_distance_all_average]
     assert_equal 0.0, p.payload[:vote_distance_all_median]
+    assert_equal p.payload[:root_distance_all_average], 
+                 p.payload[:this_batch].root_distance_all_average
+    assert_equal p.payload[:root_distance_all_median], 
+                 p.payload[:this_batch].root_distance_all_median
+    assert_equal p.payload[:vote_distance_all_average], 
+                 p.payload[:this_batch].vote_distance_all_average
+    assert_equal p.payload[:vote_distance_all_median], 
+                 p.payload[:this_batch].vote_distance_all_median
 
     assert_equal 2, p.payload[:validators]
                      .first
@@ -100,7 +124,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .first
                      .validator_score_v1
                      .vote_distance_score
-    assert_equal(-2, p.payload[:validators]
+    assert_equal(-1, p.payload[:validators]
                       .first
                       .validator_score_v1
                       .stake_concentration_score)

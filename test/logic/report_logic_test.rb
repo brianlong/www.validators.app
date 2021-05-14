@@ -71,6 +71,7 @@ class ReportLogicTest < ActiveSupport::TestCase
   end
 
   test 'report_software_versions' do
+    create(:vote_account_history, batch_uuid: '1-2-3')
     Sidekiq::Testing.inline! do
       ReportSoftwareVersionWorker.perform_async(
         batch_uuid: '1-2-3',
@@ -82,8 +83,6 @@ class ReportLogicTest < ActiveSupport::TestCase
         batch_uuid: '1-2-3',
         name: 'report_software_versions'
       ).last
-
-      # puts report.inspect
 
       assert_equal 'testnet', report.network
       assert_equal '1-2-3', report.batch_uuid

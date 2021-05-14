@@ -45,6 +45,9 @@ table, .table {
     }
     .avatar {
       padding-bottom: 5px;
+      .img-circle-medium-private {
+        display: inline-block;
+      }
     }
   }
 
@@ -166,4 +169,10 @@ table, .table {
       width: 84%;
     }
   }
+
+  #row-halt-line {
+    text-align: center;
+    color: $orange;
+  }
+
 }

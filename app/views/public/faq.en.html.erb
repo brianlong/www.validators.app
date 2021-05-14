@@ -27,13 +27,17 @@
       above.
     </li>
     <li>
-      <strong>Skipped Slot &percnt;</strong> measures the percent of the time that a leader fails to produce a block during
-      their allocated slots. A lower number means that the leader is making blocks at a very high rate.<br />
-      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator skipped slot &percnt; is at, or below, the
-      cluster median.<br />
-      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the skipped slot &percnt; is at, or below, the cluster average.<br />
-      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator average is higher than the cluster average.<br />
-      The medians and averages reflect the current epoch, and the stats reset with each new epoch.
+      <strong>Skipped Slot &percnt;</strong> measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.
+      <br />
+      For this metric, we track a trailing 24-hour moving average of the skip rate. The moving average (MA) is then compared to the cluster median(MA) and cluster average(MA). On the charts, a dotted line shows the spot reading that resets with every epoch. The solid line shows the 24-hour moving average.
+      <br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator skipped slot &percnt; is at, or below, the cluster median.
+      <br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the skipped slot &percnt; is at, or below, the cluster average.
+      <br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator average is higher than the cluster average.
+      <br />
+      The moving averages reflect the previous 24-hours, and the spot reading resets with each new epoch.
     </li>
     <li>
       <strong>Published Information</strong><br />
@@ -73,10 +77,15 @@
       please consider high performing nodes without high stake concentrations.
     </li>
     <li>
-      <strong>Data Center Concentration</strong><br />
-      This is another contra-score that will DEDUCT points from validators located in data centers that host a high
-      percentage of other Solana validators. A high data center concentration means that a problem with the hosting
-      provider could take a high &percnt; of the nodes offline. If you are an investor who is delegating stake, please consider
+      <strong>Data Center Concentration</strong>
+      <br />
+      This is another contra-score that will DEDUCT points from validators located in data centers that host a high percentage of other Solana validators. A high data center concentration means that a problem with the hosting provider could take many of the nodes offline.
+      <br />
+      <i class="fas fa-minus-circle text-danger mr-1"></i> (-2 points) means that this validator is in a data center with a very high percent of the active stake.
+      <br />
+      <i class="fas fa-minus-circle text-warning mr-1"></i> (-1 point) means that this validator is in a data center with a high percent of the active stake.
+      <br />
+      If you are an investor who is delegating stake, please consider
       high performing nodes without a high data center concentration.
     </li>
   </ol>

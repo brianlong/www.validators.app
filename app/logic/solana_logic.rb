@@ -31,13 +31,14 @@ module SolanaLogic
     end
   end
 
-  # At the end of a pipeline operation, we can modify batch.updated_at to
+  # At the end of a pipeline operation, we can modify batch.gathered_at to
   # calculate batch processing time.
   def batch_touch
     lambda do |p|
       # byebug
       batch = Batch.where(uuid: p.payload[:batch_uuid]).first
-      batch&.touch # instead of batch.touch if batch
+      batch&.gathered_at = Time.now # instead of batch.touch if batch
+      batch&.save
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -374,7 +375,6 @@ module SolanaLogic
           skipped_slot_percent: v['skipped_slot_percent'].round(4)
         )
       end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(
@@ -420,7 +420,6 @@ module SolanaLogic
         Appsignal.send_error(e)
         Rails.logger.error "validator-info MESSAGE: #{e.message} CLASS: #{e.class}. Validator: #{result.inspect}"
       end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(
@@ -459,6 +458,52 @@ module SolanaLogic
           )
           request.body = {
             'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
+          }.to_json
+          http.request(request)
+        end
+
+        response.body
+      rescue Errno::ECONNREFUSED, Timeout::Error => e
+        Rails.logger.error "RPC TIMEOUT #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}"
+        nil
+      end
+
+      return JSON.parse(response_body) if response_body
+    rescue JSON::ParserError => e
+      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}\n#{response_body}"
+    end
+  end
+
+  # rpc_request will make a Solana RPC request with params and return the
+  # results in a JSON object. API specifications are at:
+  #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
+  def rpc_request_with_params(rpc_method, rpc_urls, params = [])
+    # Parse the URL data into an URI object.
+    # The mainnet RPC endpoint is not on port 8899. I am now including the port
+    # with the URL inside of Rails credentials.
+    # uri = URI.parse(
+    #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
+    # )
+
+    rpc_urls.each do |rpc_url|
+      uri = URI.parse(rpc_url)
+
+      response_body = Timeout.timeout(RPC_TIMEOUT) do
+        # Create the HTTP session and send the request
+        response = Net::HTTP.start(
+                     uri.host,
+                     uri.port,
+                     use_ssl: uri.scheme == 'https'
+                   ) do |http|
+          request = Net::HTTP::Post.new(
+            uri.request_uri,
+            { 'Content-Type' => 'application/json' }
+          )
+          request.body = {
+            'jsonrpc': '2.0',
+            'id': 1,
+            'method': rpc_method.to_s,
+            'params': params
           }.to_json
           http.request(request)
         end

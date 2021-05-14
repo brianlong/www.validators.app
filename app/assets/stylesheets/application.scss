@@ -88,6 +88,10 @@ body {
   }
 }
 
+.deep-dive p {
+  font-size: 18px;
+}
+
 .page-header {
   margin-bottom: 40px;
   @media(max-width: $screen-xs-max) {
@@ -104,7 +108,7 @@ body {
       padding-left: 80px;
       margin: 5px 0 0 0;
     }
-    img {
+    img, .img-circle, .img-circle-private {
       display: inline-block;
       position: absolute;
       margin-top: -6px;

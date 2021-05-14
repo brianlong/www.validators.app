@@ -41,3 +41,4 @@ yarn-debug.log*
 .yarn-integrity
 
 /config/cluster.yml
+/config/credentials/test.key
