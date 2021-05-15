@@ -10,9 +10,9 @@
 # Table name: collectors
 #
 #  id              :bigint           not null, primary key
-#  ip_address      :string(191)
+#  ip_address      :string(255)
 #  payload         :text(4294967295)
-#  payload_type    :string(191)
+#  payload_type    :string(255)
 #  payload_version :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

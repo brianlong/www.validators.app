@@ -9,16 +9,16 @@
 #
 #  id                                  :bigint           not null, primary key
 #  activated_stake                     :bigint
-#  batch_uuid                          :string(191)
+#  batch_uuid                          :string(255)
 #  commission                          :integer
 #  credits                             :bigint
 #  credits_current                     :bigint
 #  last_vote                           :bigint
-#  network                             :string(191)
+#  network                             :string(255)
 #  root_slot                           :bigint
 #  skipped_vote_percent_moving_average :decimal(10, 4)
 #  slot_index_current                  :integer
-#  software_version                    :string(191)
+#  software_version                    :string(255)
 #  created_at                          :datetime         not null
 #  updated_at                          :datetime         not null
 #  vote_account_id                     :bigint           not null

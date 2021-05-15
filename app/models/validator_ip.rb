@@ -5,7 +5,7 @@
 # Table name: validator_ips
 #
 #  id           :bigint           not null, primary key
-#  address      :string(191)
+#  address      :string(255)
 #  version      :integer          default(4)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
