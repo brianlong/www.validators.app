@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col-md-9 col-lg-10">
           <p class="small muted">
-            Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
+            Score updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
             <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
           </p>
         </div>
@@ -142,12 +142,12 @@
                             class: 'font-weight-bold' do %>
                   <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
                 <% end %>
-                <% comm_class = 'text-danger' \
-                                  if params[:network] == 'mainnet' && validator.commission.to_i == 100
-                %>
-                <small class="<%= comm_class %>">
-                  (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
-                </small><br />
+                <% unless validator.private_validator? %>
+                  <small>
+                    (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
+                  </small>
+                <% end %>
+                <br />
                 <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
                 <small>
                   <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
@@ -166,7 +166,7 @@
               <!-- SKIPPED VOTE % -->
               <td class="percent-column" id="skipped-vote-column-<%=i%>">
                 <%
-                  vahl = validator.vote_account_last&.vote_account_history_last
+                  vahl = validator.vote_account_last&.vote_account_history_for(@batch.uuid)
                   if vahl
                     skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
                   end
@@ -295,7 +295,7 @@
 
         <div class="px-15">
           <p class="small muted">
-            Data updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
+            Score updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
           </p>
           <%= paginate @validators %>
         </div>
