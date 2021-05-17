@@ -5,8 +5,8 @@
 # Table name: vote_accounts
 #
 #  id           :bigint           not null, primary key
-#  account      :string(255)
-#  network      :string(255)
+#  account      :string(191)
+#  network      :string(191)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  validator_id :bigint           not null
