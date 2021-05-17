@@ -318,10 +318,8 @@ module ValidatorScoreV1Logic
 
         # Gather software_version stat
         if validator.validator_score_v1.active_stake
-          if software_versions[this_software_version]
-            software_versions[this_software_version] += \
-              validator.validator_score_v1.active_stake
-          end
+          software_versions[this_software_version] += \
+            validator.validator_score_v1.active_stake
         end
 
         validator.validator_score_v1.assign_software_version_score
