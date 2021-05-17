@@ -16,4 +16,16 @@ class ValidatorTest < ActiveSupport::TestCase
     assert create(:validator_score_v1, commission: 100, validator: validator).validator.private_validator?
     refute create(:validator_score_v1, commission: 99, validator: validator).validator.private_validator?
   end
+
+  test 'validator attributes are correctly stored in db after using utf_8_encode method' do
+    special_chars_sentence = 'Staking-P◎◎l FREE Validati◎n'
+
+    v = Validator.create(
+      name: special_chars_sentence.encode_utf_8,
+      details: special_chars_sentence.encode_utf_8
+    )
+
+    assert_equal special_chars_sentence, v.name
+    assert_equal special_chars_sentence, v.details
+  end
 end
