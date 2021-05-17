@@ -92,23 +92,6 @@ module SolanaLogic
         )
       end
 
-      # # Create delinquent validators
-      # validators['delinquentValidators'].each do |validator|
-      #   ValidatorHistory.create(
-      #     network: p.payload[:network],
-      #     batch_uuid: p.payload[:batch_uuid],
-      #     account: validator['identityPubkey'],
-      #     vote_account: validator['voteAccountPubkey'],
-      #     commission: validator['commission'],
-      #     last_vote: validator['lastVote'],
-      #     root_block: validator['rootSlot'],
-      #     credits: validator['credits'],
-      #     active_stake: validator['activatedStake'],
-      #     software_version: validator['version'],
-      #     delinquent: true
-      #   )
-      # end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from validators_cli', e)
