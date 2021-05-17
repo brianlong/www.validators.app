@@ -5,28 +5,28 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
-#  api_token              :string(255)
+#  api_token              :string(191)
 #  confirmation_sent_at   :datetime
-#  confirmation_token     :string(255)
+#  confirmation_token     :string(191)
 #  confirmed_at           :datetime
 #  current_sign_in_at     :datetime
-#  current_sign_in_ip     :string(255)
-#  email_encrypted        :string(255)
-#  email_encrypted_iv     :string(255)
-#  email_hash             :string(255)
-#  encrypted_password     :string(255)      not null
+#  current_sign_in_ip     :string(191)
+#  email_encrypted        :string(191)
+#  email_encrypted_iv     :string(191)
+#  email_hash             :string(191)
+#  encrypted_password     :string(191)      not null
 #  failed_attempts        :integer          default(0), not null
 #  is_admin               :boolean          default(FALSE)
 #  last_sign_in_at        :datetime
-#  last_sign_in_ip        :string(255)
+#  last_sign_in_ip        :string(191)
 #  locked_at              :datetime
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
-#  reset_password_token   :string(255)
+#  reset_password_token   :string(191)
 #  sign_in_count          :integer          default(0), not null
-#  unconfirmed_email      :string(255)
-#  unlock_token           :string(255)
-#  username               :string(255)      not null
+#  unconfirmed_email      :string(191)
+#  unlock_token           :string(191)
+#  username               :string(191)      not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
