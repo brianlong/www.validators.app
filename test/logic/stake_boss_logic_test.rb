@@ -352,7 +352,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
       assert_equal 200,
                    p.code
-      assert_equal 199,
+      assert_equal 199.99771712,
                    lamports_to_sol(
                      p.payload[:solana_stake_account].delegated_stake
                    )
@@ -384,7 +384,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&select_validators)
       assert_equal 200,
                    p.code
-      assert_equal 199,
+      assert_equal 199.99771712,
                    lamports_to_sol(
                      p.payload[:solana_stake_account].delegated_stake
                    )
