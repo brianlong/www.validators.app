@@ -299,7 +299,7 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).to_a
 
-      software_versions = {}
+      software_versions = Hash.new(0)
 
       p.payload[:validators].each do |validator|
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
@@ -320,9 +320,6 @@ module ValidatorScoreV1Logic
         if validator.validator_score_v1.active_stake
           if software_versions[this_software_version]
             software_versions[this_software_version] += \
-              validator.validator_score_v1.active_stake
-          else
-            software_versions[this_software_version] = \
               validator.validator_score_v1.active_stake
           end
         end

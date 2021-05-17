@@ -372,43 +372,43 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
         when most stake is over 66% \
         should return version with most stake' do
     software_versions = {
-      "1.6.7"=>279919552719104317, 
-      "1.5.19"=>10288992031757525, 
-      "1.6.6"=>10483084971314635, 
-      "1.6.8"=>26015248337068090, 
-      "1.6.4"=>246312332755, 
-      "1.6.9"=>997717120, 
+      "1.6.7"=>279919552719104317,
+      "1.5.19"=>10288992031757525,
+      "1.6.6"=>10483084971314635,
+      "1.6.8"=>26015248337068090,
+      "1.6.4"=>246312332755,
+      "1.6.9"=>997717120,
       nil=>6422600362200
     }
     total_stake = 326713653288250133
 
-    csv = find_current_software_version(
+    current_software_version = find_current_software_version(
       software_versions: software_versions, 
       total_stake: total_stake
     )
 
-    assert_equal "1.6.7", csv
+    assert_equal "1.6.7", current_software_version
   end
 
   test 'find_current_software_version \
     when most stake is under 66% \
     should return version earlier than one with most stake' do
     software_versions = {
-      "1.6.7"=>209919552719104317, 
-      "1.5.19"=>17288992031757525, 
-      "1.6.6"=>10483084971314635, 
-      "1.6.8"=>26015248337068090, 
-      "1.6.4"=>246312332755, 
-      "1.6.9"=>997717120, 
+      "1.6.7"=>209919552719104317,
+      "1.5.19"=>17288992031757525,
+      "1.6.6"=>10483084971314635,
+      "1.6.8"=>26015248337068090,
+      "1.6.4"=>246312332755,
+      "1.6.9"=>997717120,
       nil=>6422600362200
     }
     total_stake = 326713653288250133
 
-    csv = find_current_software_version(
-      software_versions: software_versions, 
+    current_software_version = find_current_software_version(
+      software_versions: software_versions,
       total_stake: total_stake
     )
 
-    assert_equal "1.6.6", csv
+    assert_equal "1.6.6", current_software_version
     end
 end
