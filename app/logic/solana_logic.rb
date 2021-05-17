@@ -69,11 +69,10 @@ module SolanaLogic
 
       validators = cli_request('validators', p.payload[:config_urls])
 
-      raise 'No results from `solana validators`' if validators == []
-      raise 'No results from `solana validators`' if validators.nil?
+      raise 'No results from `solana validators`' if validators.blank?
 
       raise 'No results from `solana validators`' if \
-        validators['validators'].empty?
+        validators['validators'].blank?
 
       # Create current validators
       validators['validators'].each do |validator|
