@@ -5,8 +5,8 @@
 # Table name: vote_accounts
 #
 #  id           :bigint           not null, primary key
-#  account      :string(255)
-#  network      :string(255)
+#  account      :string(191)
+#  network      :string(191)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  validator_id :bigint           not null
@@ -30,6 +30,10 @@ class VoteAccount < ApplicationRecord
 
   def vote_account_history_last
     vote_account_histories.last
+  end
+
+  def vote_account_history_for(batch_uuid)
+    vote_account_histories.find_by(batch_uuid: batch_uuid)
   end
 
   def set_network

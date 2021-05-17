@@ -28,7 +28,10 @@ class ReportLogicTest < ActiveSupport::TestCase
 
     VCR.use_cassette('report_tower_height') do
       json_data = File.read("#{Rails.root}/test/json/validators.json")
-      SolanaCliService.stub(:request, json_data, ['validators', 'http://165.227.100.142:8899/']) do
+      SolanaCliService.stub(
+        :request, 
+        {cli_response: json_data, cli_error: nil}, 
+        ['validators', 'http://165.227.100.142:8899/']) do
         # Show that the pipeline runs & the expected values are not empty.
         p = Pipeline.new(200, @initial_payload)
                     .then(&batch_set)
@@ -68,6 +71,7 @@ class ReportLogicTest < ActiveSupport::TestCase
   end
 
   test 'report_software_versions' do
+    create(:vote_account_history, batch_uuid: '1-2-3')
     Sidekiq::Testing.inline! do
       ReportSoftwareVersionWorker.perform_async(
         batch_uuid: '1-2-3',
@@ -79,8 +83,6 @@ class ReportLogicTest < ActiveSupport::TestCase
         batch_uuid: '1-2-3',
         name: 'report_software_versions'
       ).last
-
-      # puts report.inspect
 
       assert_equal 'testnet', report.network
       assert_equal '1-2-3', report.batch_uuid

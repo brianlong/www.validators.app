@@ -50,7 +50,8 @@ module Solana
                   :rent_exempt_reserve,
                   :stake_authority,
                   :stake_type,
-                  :withdraw_authority
+                  :withdraw_authority,
+                  :cli_error
 
     def initialize(args)
       @address = args[:address]
@@ -60,21 +61,23 @@ module Solana
     # Gets the output from the Solana CLI and populates the attributes
     def get
       ssa = cli_request("stake-account #{@address}", @rpc_urls)
-      @account_balance = ssa['accountBalance']
-      @activation_epoch = ssa['activationEpoch']
-      @active_stake = ssa['activeStake']
-      @credits_observed = ssa['creditsObserved']
-      @deactivation_epoch = ssa['deactivationEpoch']
-      @delegated_stake = ssa['delegatedStake']
-      @delegated_vote_account_address = ssa['delegatedVoteAccountAddress']
-      @epoch_rewards = ssa['epochRewards']
-      @epoch = ssa['epoch']
-      @lockup_custodian = ssa['custodian']
-      @lockup_timestamp = ssa['unixTimestamp']
-      @rent_exempt_reserve = ssa['rentExemptReserve']
-      @stake_authority = ssa['staker']
-      @stake_type = ssa['stakeType']
-      @withdraw_authority = ssa['withdrawer']
+      ssa_resp = ssa['cli_response']
+      @cli_error = ssa['cli_error']
+      @account_balance = ssa_resp['accountBalance']
+      @activation_epoch = ssa_resp['activationEpoch']
+      @active_stake = ssa_resp['activeStake']
+      @credits_observed = ssa_resp['creditsObserved']
+      @deactivation_epoch = ssa_resp['deactivationEpoch']
+      @delegated_stake = ssa_resp['delegatedStake']
+      @delegated_vote_account_address = ssa_resp['delegatedVoteAccountAddress']
+      @epoch_rewards = ssa_resp['epochRewards']
+      @epoch = ssa_resp['epoch']
+      @lockup_custodian = ssa_resp['custodian']
+      @lockup_timestamp = ssa_resp['unixTimestamp']
+      @rent_exempt_reserve = ssa_resp['rentExemptReserve']
+      @stake_authority = ssa_resp['staker']
+      @stake_type = ssa_resp['stakeType']
+      @withdraw_authority = ssa_resp['withdrawer']
     rescue StandardError => e
       @error = e
     end

@@ -11,6 +11,15 @@ module SolanaLogic
   include PipelineLogic
   RPC_TIMEOUT = 60 # seconds
 
+  class SolanaCliError < StandardError
+    attr_accessor :message
+
+    def initialize(message = nil)
+      super
+      @message = "Solana cli error: #{message}".strip
+    end
+  end
+
   # Create a batch record and set the :batch_uuid in the payload
   def batch_set
     lambda do |p|
@@ -22,13 +31,14 @@ module SolanaLogic
     end
   end
 
-  # At the end of a pipeline operation, we can modify batch.updated_at to
+  # At the end of a pipeline operation, we can modify batch.gathered_at to
   # calculate batch processing time.
   def batch_touch
     lambda do |p|
       # byebug
       batch = Batch.where(uuid: p.payload[:batch_uuid]).first
-      batch&.touch # instead of batch.touch if batch
+      batch&.gathered_at = Time.now # instead of batch.touch if batch
+      batch&.save
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -66,7 +76,7 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      validators = cli_request('validators', p.payload[:config_urls])
+      validators = cli_request('validators', p.payload[:config_urls])['cli_response']
 
       raise 'No results from `solana validators`' if validators == []
       raise 'No results from `solana validators`' if validators.nil?
@@ -252,7 +262,7 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      block_history = cli_request('block-production', p.payload[:config_urls])
+      block_history = cli_request('block-production', p.payload[:config_urls])['cli_response']
 
       raise 'No data from block-production' if block_history.nil?
 
@@ -365,7 +375,6 @@ module SolanaLogic
           skipped_slot_percent: v['skipped_slot_percent'].round(4)
         )
       end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(
@@ -381,7 +390,7 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      results = cli_request('validator-info get', p.payload[:config_urls])
+      results = cli_request('validator-info get', p.payload[:config_urls])['cli_response']
       results.each do |result|
         # puts result.inspect
         validator = Validator.find_or_create_by(
@@ -390,8 +399,8 @@ module SolanaLogic
         )
 
         # puts "#{result['info']['name']} => #{result['info']['name'].encoding}"
-        ascii_name = result['info']['name'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
-        validator.name = ascii_name unless ascii_name.to_s.downcase.include?('script')
+        utf_8_name = result['info']['name'].to_s.encode_utf_8.strip
+        validator.name = utf_8_name unless utf_8_name.to_s.downcase.include?('script')
 
         keybase_name = result['info']['keybaseUsername'].to_s.strip
         validator.keybase_id = keybase_name unless keybase_name.to_s.downcase.include?('script')
@@ -399,8 +408,8 @@ module SolanaLogic
         www_url = result['info']['website'].to_s.strip
         validator.www_url = www_url unless www_url.to_s.downcase.include?('script')
 
-        ascii_details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip[0..254]
-        validator.details = ascii_details unless ascii_details.to_s.downcase.include?('script')
+        utf_8_details = result['info']['details'].to_s.encode_utf_8.strip[0..254]
+        validator.details = utf_8_details unless utf_8_details.to_s.downcase.include?('script')
 
         validator.info_pub_key = result['infoPubkey'].strip
 
@@ -411,7 +420,6 @@ module SolanaLogic
         Appsignal.send_error(e)
         Rails.logger.error "validator-info MESSAGE: #{e.message} CLASS: #{e.class}. Validator: #{result.inspect}"
       end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(
@@ -466,37 +474,89 @@ module SolanaLogic
     end
   end
 
+  # rpc_request will make a Solana RPC request with params and return the
+  # results in a JSON object. API specifications are at:
+  #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
+  def rpc_request_with_params(rpc_method, rpc_urls, params = [])
+    # Parse the URL data into an URI object.
+    # The mainnet RPC endpoint is not on port 8899. I am now including the port
+    # with the URL inside of Rails credentials.
+    # uri = URI.parse(
+    #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
+    # )
+
+    rpc_urls.each do |rpc_url|
+      uri = URI.parse(rpc_url)
+
+      response_body = Timeout.timeout(RPC_TIMEOUT) do
+        # Create the HTTP session and send the request
+        response = Net::HTTP.start(
+                     uri.host,
+                     uri.port,
+                     use_ssl: uri.scheme == 'https'
+                   ) do |http|
+          request = Net::HTTP::Post.new(
+            uri.request_uri,
+            { 'Content-Type' => 'application/json' }
+          )
+          request.body = {
+            'jsonrpc': '2.0',
+            'id': 1,
+            'method': rpc_method.to_s,
+            'params': params
+          }.to_json
+          http.request(request)
+        end
+
+        response.body
+      rescue Errno::ECONNREFUSED, Timeout::Error => e
+        Rails.logger.error "RPC TIMEOUT #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}"
+        nil
+      end
+
+      return JSON.parse(response_body) if response_body
+    rescue JSON::ParserError => e
+      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}\n#{response_body}"
+    end
+  end
+
   # cli_request will accept a command line command to run and then return the
   # results as parsed JSON. [] is returned if there is no data
   def cli_request(cli_method, rpc_urls)
-    rpc_urls.each do |rpc_url|
-      response_json = Timeout.timeout(RPC_TIMEOUT) do
-
-        SolanaCliService.request(cli_method, rpc_url)
-
+    rpc_urls.find do |rpc_url|
+      response_json = {}
+      Timeout.timeout(RPC_TIMEOUT) do
+        response_json = SolanaCliService.request(
+          cli_method: cli_method,
+          rpc_url: rpc_url
+        )
       rescue Errno::ENOENT, Errno::ECONNREFUSED, Timeout::Error => e
         # Log errors and return '' if there is a problem
         Rails.logger.error "CLI TIMEOUT\n#{e.class}\nRPC URL: #{rpc_url}"
         ''
       end
-      # puts response_json
-      response_utf8 = response_json.encode(
-                            'UTF-8',
-                            invalid: :replace,
-                            undef: :replace
-                          )
+      # puts "cli request #{cli_method.split(' ')[0]}\n #{response_json}"
+
+      response_utf8 = response_json[:cli_response].encode(
+        'UTF-8',
+        invalid: :replace,
+        undef: :replace
+      )
       # If the response includes extra notes at the top, we need to
       # strip the notes before parsing JSON
       #
       # "\nNote: Requested start slot was 63936000 but minimum ledger slot is 63975209\n{
       if response_utf8.include?('Note: ')
-        note_end_index = response_utf8.index("\n{")+1
-        response_utf8 = response_utf8[note_end_index..-1]
+        note_end_index = response_utf8.index("\n{") + 1
+        response_utf8 = response_utf8[note_end_index..]
       end
-
-      # byebug
-
-      return JSON.parse(response_utf8) unless response_utf8 == ''
+      unless response_utf8.blank? || !response_utf8.include?('{')
+        response_utf8 = JSON.parse(response_utf8)
+      end
+      return {
+        'cli_response' => response_utf8, 
+        'cli_error' => response_json[:cli_error]
+      }
     rescue JSON::ParserError => e
       Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
     end

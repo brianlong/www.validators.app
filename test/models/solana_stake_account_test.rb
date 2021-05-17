@@ -13,7 +13,7 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
     SolanaCliService.stub(
                           :request,
-                          json_data,
+                          {cli_response: json_data, cli_error: nil},
                           [address, TESTNET_CLUSTER_URLS]
                          ) do
 
@@ -82,12 +82,12 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
   end
 
   test 'get locked undelegated stake' do
-    address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuS'
+    address = '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuSa'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
     SolanaCliService.stub(
                           :request,
-                          json_data,
+                          {cli_response: json_data, cli_error: nil},
                           [address, TESTNET_CLUSTER_URLS]
                          ) do
 
@@ -99,7 +99,7 @@ class SolanaStakeAccountTest < ActiveSupport::TestCase
 
       assert       stake_account.valid?
       refute       stake_account.active?
-      assert_equal '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuS',
+      assert_equal '2tgq1PZGanqgmmLcs3PDx8tpr7ny1hFxaZc2LP867JuSa',
                    stake_account.address
       assert_equal 104166666268940,
                    stake_account.account_balance

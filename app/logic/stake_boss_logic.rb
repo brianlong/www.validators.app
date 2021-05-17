@@ -57,8 +57,10 @@ require 'base58'
 
 module StakeBossLogic
   include ApplicationHelper
+  include SolanaLogic
 
   RPC_TIMEOUT = 60 # seconds
+  ILLEGAL_CHARS_REGEXP = /[+\-_,&|'"]/.freeze
 
   # InvalidStakeAccount is a custom Error class with a default message for
   # invalid Stake Accounts
@@ -78,9 +80,11 @@ module StakeBossLogic
   # Guard against invalid or malicious input. The checks are:
   #   - No blank or null addresses
   #   - No script in the provided address
-  #   - The base58 string representing the address should be exactly 33 bytes
+  #   - The base58 string representing the address should be between 32 and 44 bytes long
+  #   - there should be no characters that do not occur in standard solana address
   def guard_input
     lambda do |p|
+      return p unless p.code == 200
       # Make sure the address is not blank
       raise InvalidStakeAccount, 'Blank Address' \
         if p.payload[:stake_address].blank?
@@ -89,15 +93,20 @@ module StakeBossLogic
       raise InvalidStakeAccount, 'Hi Leo, javascript is not allowed!' \
         if p.payload[:stake_address].include?('<script')
 
-      # TODO: Confirm that it is always 33 bytes
-      # Make sure the base58 decoded address is the right length (33 bytes)
+      raise InvalidStakeAccount, 'whitespaces not allowed' \
+        if p.payload[:stake_address].match(/\s/)
+
+      raise InvalidStakeAccount, 'Address contains illegal characters' \
+        if p.payload[:stake_address].match(ILLEGAL_CHARS_REGEXP)
+
+      # Make sure the base58 decoded address is the right length (32 - 44 bytes)
       raise InvalidStakeAccount, 'Address is wrong size' \
-        if Base58.base58_to_binary(p.payload[:stake_address]).bytes.length != 33
+        unless (32..44).include?(Base58.base58_to_binary(p.payload[:stake_address]).bytes.length)
 
       # Script encoded in base58?
 
       Pipeline.new(200, p.payload)
-    rescue StandardError => e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from guard_input', e)
     end
   end
@@ -111,12 +120,17 @@ module StakeBossLogic
   #   - The stake is > STAKE_BOSS_MIN (See config/initializers/cluster.rb)
   def guard_stake_account
     lambda do |p|
+      return p unless p.code == 200
       # Load the account info from the blockchain
       stake_account = Solana::StakeAccount.new(
         address: p.payload[:stake_address],
         rpc_urls: p.payload[:config_urls]
       )
       stake_account.get
+      # Is solana account but not a stake account
+      if stake_account.cli_error&.include?('is not a stake account')
+        raise InvalidStakeAccount, 'This is not a Stake Account'
+      end
 
       # Make sure this is a valid stake account
       raise InvalidStakeAccount, 'Not a valid Stake Account' \
@@ -132,11 +146,11 @@ module StakeBossLogic
 
       # Is the balance > 10?
       raise InvalidStakeAccount, 'Balance is too low' \
-        unless lamports_to_sol(stake_account.delegated_stake) >= STAKE_BOSS_MIN
+        unless lamports_to_sol(stake_account.account_balance) >= STAKE_BOSS_MIN
 
       # Append the valid stake account to the payload
       Pipeline.new(200, p.payload.merge(solana_stake_account: stake_account))
-    rescue StandardError => e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from guard_stake_account', e)
     end
   end
@@ -144,6 +158,7 @@ module StakeBossLogic
   # Guard against duplicate records in the stake_boss_stake_accounts table
   def guard_duplicate_records
     lambda do |p|
+      return p unless p.code == 200
       # TODO: Check for duplicates in the stake_boss_stake_accounts table
       raise InvalidStakeAccount, 'Duplicate Record' \
         if StakeBoss::StakeAccount.where(
@@ -152,7 +167,7 @@ module StakeBossLogic
         ).exists?
 
       Pipeline.new(200, p.payload)
-    rescue StandardError => e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from guard_duplicate_records', e)
     end
   end
@@ -164,6 +179,7 @@ module StakeBossLogic
   # 2 - split_n_max.
   def set_max_n_split
     lambda do |p|
+      return p unless p.code == 200
       # The default split N-ways is 2. The user can pick a value between
       # 2 and split_n_max
       split_n_ways = 2
@@ -209,6 +225,7 @@ module StakeBossLogic
   # the transaction fees.
   def select_validators
     lambda do |p|
+      return p unless p.code == 200
       select_fields = %i[
         id validator_id commission delinquent stake_concentration_score
         data_center_concentration_score data_center_key
@@ -250,15 +267,14 @@ module StakeBossLogic
   # acceptable range.
   def register_first_stake_account
     lambda do |p|
+      return p unless p.code == 200
       # Create a DB record for the first stake account in a batch.
       # Guard against someone submitting split_n_ways that is too big
-
       split_n_ways = p.payload[:split_n_ways]
       split_n_max = p.payload[:split_n_max]
       split_n = split_n_ways > split_n_max ? split_n_max : split_n_ways
 
       ssa = p.payload[:solana_stake_account]
-
       sbsa = StakeBoss::StakeAccount.create!(
         network: p.payload[:network],
         address: ssa.address,
@@ -282,14 +298,13 @@ module StakeBossLogic
         split_n_ways: split_n,
         primary_account: true
       )
-
       Pipeline.new(
         200,
         p.payload.merge(
           stake_boss_stake_account: sbsa, batch_uuid: sbsa.batch_uuid
         )
       )
-    rescue StandardError => e
+    rescue StandardError, StakeBossLogic::InvalidStakeAccount => e
       Pipeline.new(500, p.payload, 'Error from register_first_stake_account', e)
     end
   end
@@ -301,16 +316,8 @@ module StakeBossLogic
   # There will be extra logging here so we can keep tabs on processing. If we
   # have a problem, I may need to re-build the current state from the logs. Use
   # log level WARN here so I can see the entries on the production server.
+
   def split_primary_account
-    lambda do |p|
-      # Make sure we are splitting a primary account
-      raise InvalidStakeAccount, 'Not the primary_account' \
-        unless p.payload[:stake_boss_stake_account].primary_account?
-
-      # Make sure we haven't already split this one
-      raise InvalidStakeAccount, 'Already split' \
-        unless p.payload[:stake_boss_stake_account].split_on.nil?
-
       # Within a loop, select one account record from this batch in
       # `delegated_stake desc` order and split it by executing a command on-
       # chain. Also create a new DB record for the new account. Repeat this
@@ -348,7 +355,69 @@ module StakeBossLogic
       # We should create an initializer that returns the absolute path to the
       # Boss*.json key file on the development/production server.
 
-      Pipeline.new(200, p.payload)
+    lambda do |p|
+      return p unless p.code == 200
+      # Make sure we are splitting a primary account
+      raise InvalidStakeAccount, 'Not the primary_account' \
+        unless p.payload[:stake_boss_stake_account].primary_account?
+
+      # Make sure we haven't already split this one
+      raise InvalidStakeAccount, 'Already split' \
+        unless p.payload[:stake_boss_stake_account].split_on.nil?
+
+      minor_accounts = []
+
+      (p.payload[:split_n_ways] - 1).times do |n|
+        # select account to split
+        split_account = StakeBoss::StakeAccount.where(
+          batch_uuid: p.payload[:batch_uuid]
+        ).order(delegated_stake: :desc).first
+
+        # create new stake boss account record
+        new_acc = create_split_account(
+          network: p.payload[:network],
+          batch: p.payload[:batch_uuid],
+          split_account: split_account,
+          urls: p.payload[:config_urls]
+        )
+
+        new_acc_address = find_address_by_seed(
+          seed: new_acc.id,
+          urls: p.payload[:config_urls]
+        )
+
+        new_acc_from_cli = account_from_cli(
+          address: new_acc_address,
+          urls: p.payload[:config_urls]
+        )
+
+        new_acc.update(
+          address: new_acc_from_cli.address,
+          account_balance: new_acc_from_cli.account_balance,
+          activating_stake: new_acc_from_cli.activating_stake,
+          activation_epoch: new_acc_from_cli.activation_epoch,
+          active_stake: new_acc_from_cli.active_stake,
+          credits_observed: new_acc_from_cli.credits_observed,
+          deactivation_epoch: new_acc_from_cli.deactivation_epoch,
+          delegated_stake: new_acc_from_cli.delegated_stake,
+          delegated_vote_account_address: new_acc_from_cli.delegated_vote_account_address,
+          epoch: new_acc_from_cli.epoch,
+          epoch_rewards: new_acc_from_cli.epoch_rewards,
+          lockup_custodian: new_acc_from_cli.lockup_custodian,
+          lockup_timestamp: new_acc_from_cli.lockup_timestamp,
+          rent_exempt_reserve: new_acc_from_cli.rent_exempt_reserve,
+          stake_authority: new_acc_from_cli.stake_authority,
+          stake_type: new_acc_from_cli.stake_type,
+          withdraw_authority: new_acc_from_cli.withdraw_authority
+        )
+
+        minor_accounts.push(new_acc)
+      end
+
+      Pipeline.new(
+        200,
+        p.payload.merge({minor_accounts: minor_accounts})
+      )
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from split_primary_account', e)
     end
@@ -359,6 +428,7 @@ module StakeBossLogic
   # validators for a given batch.
   def delegate_validators_for_batch
     lambda do |p|
+      return p unless p.code == 200
       # Collect the list of current_validators from the DB.
       #
       # Get the list of top_validators from the select_validators pipeline
@@ -411,5 +481,50 @@ module StakeBossLogic
         500, p.payload, 'Error from delegate_validators_for_batch', e
       )
     end
+  end
+
+  # get accound address based on STAKE_BOSS_ADDRESS and account id
+  def find_address_by_seed(seed:, urls:)
+    new_acc_address = cli_request("create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{seed} STAKE", urls)
+    new_acc_address['cli_response']
+  end
+
+  # Create new account in db and in solana
+  def create_split_account(network:, batch:, split_account:, urls:)
+    new_acc = StakeBoss::StakeAccount.new(
+      network: network,
+      primary_account: false,
+      batch_uuid: batch
+    )
+
+    raise InvalidStakeAccount, 'New account could not be created' \
+      unless new_acc.save
+
+    request_str = ['split-stake']
+    request_str.push "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE}"
+    request_str.push "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE}"
+    request_str.push '--commitment finalized'
+    request_str.push "#{split_account.address}"
+    request_str.push "#{STAKE_BOSS_KEYPAIR_FILE}"
+    request_str.push "--seed #{new_acc.id}"
+    request_str.push lamports_to_sol(split_account.account_balance / 2).to_s
+    request_str = request_str.join(' ')
+
+    Rails.logger.tagged('SPLIT_ACCOUNT') {
+      Rails.logger.warn(request_str)
+    }
+
+    # create split account
+    cli_request(request_str, urls)
+    new_acc
+  end
+
+  def account_from_cli(address:, urls:)
+    new_acc_from_cli = Solana::StakeAccount.new(
+      address: address,
+      rpc_urls: urls
+    )
+    new_acc_from_cli.get
+    new_acc_from_cli
   end
 end

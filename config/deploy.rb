@@ -91,4 +91,49 @@ end
 namespace :deploy do
   after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'sidekiq:restart'
+  after :restart, 'daemons:restart'
+end
+
+namespace :daemons do
+  desc 'Start daemons'
+  task :start do
+    on release_roles([:all]) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :validator_score_mainnet_v1
+          execute :systemctl, '--user', :start, :validator_score_testnet_v1
+          execute :systemctl, '--user', :start, :gather_rpc_mainnet
+          execute :systemctl, '--user', :start, :gather_rpc_testnet
+        end
+      end
+    end
+  end
+
+  desc 'Stop daemons'
+  task :stop do
+    on release_roles([:all]) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :validator_score_mainnet_v1
+          execute :systemctl, '--user', :stop, :validator_score_testnet_v1
+          execute :systemctl, '--user', :stop, :gather_rpc_mainnet
+          execute :systemctl, '--user', :stop, :gather_rpc_testnet
+        end
+      end
+    end
+  end
+
+  desc 'Restart daemons'
+  task :restart do
+    on release_roles([:all]) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :restart, :validator_score_mainnet_v1
+          execute :systemctl, '--user', :restart, :validator_score_testnet_v1
+          execute :systemctl, '--user', :restart, :gather_rpc_mainnet
+          execute :systemctl, '--user', :restart, :gather_rpc_testnet
+        end
+      end
+    end
+  end
 end
