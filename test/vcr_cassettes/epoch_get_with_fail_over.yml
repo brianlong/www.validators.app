@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: http://testnet.solana.com:8899/
+    uri: https://api.testnet.solana.com/
     body:
       encoding: UTF-8
       string: '{"jsonrpc":"2.0","id":1,"method":"getEpochInfo"}'
@@ -22,14 +22,16 @@ http_interactions:
     headers:
       Content-Type:
       - application/json; charset=utf-8
-      Content-Length:
-      - '167'
       Date:
-      - Tue, 09 Mar 2021 03:29:53 GMT
+      - Mon, 17 May 2021 07:45:32 GMT
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
     body:
-      encoding: UTF-8
-      string: '{"jsonrpc":"2.0","result":{"absoluteSlot":67025411,"blockHeight":55010520,"epoch":167,"slotIndex":405155,"slotsInEpoch":432000,"transactionCount":13812023674},"id":1}
+      encoding: ASCII-8BIT
+      string: '{"jsonrpc":"2.0","result":{"absoluteSlot":77309098,"blockHeight":64137252,"epoch":191,"slotIndex":320842,"slotsInEpoch":432000,"transactionCount":21736636050},"id":1}
 
         '
-  recorded_at: Tue, 09 Mar 2021 03:29:53 GMT
+  recorded_at: Mon, 17 May 2021 07:45:33 GMT
 recorded_with: VCR 6.0.0
