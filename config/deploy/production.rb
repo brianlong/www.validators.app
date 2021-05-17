@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+# 'www.validators.app',
+# '104.131.169.171',
 server(
-  'www.validators.app',
+  '104.131.169.171',
   user: 'deploy',
   roles: %w[web app db]
 )

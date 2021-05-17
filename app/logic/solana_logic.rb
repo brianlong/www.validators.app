@@ -399,8 +399,8 @@ module SolanaLogic
         )
 
         # puts "#{result['info']['name']} => #{result['info']['name'].encoding}"
-        ascii_name = result['info']['name'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip
-        validator.name = ascii_name unless ascii_name.to_s.downcase.include?('script')
+        utf_8_name = result['info']['name'].to_s.encode_utf_8.strip
+        validator.name = utf_8_name unless utf_8_name.to_s.downcase.include?('script')
 
         keybase_name = result['info']['keybaseUsername'].to_s.strip
         validator.keybase_id = keybase_name unless keybase_name.to_s.downcase.include?('script')
@@ -408,8 +408,8 @@ module SolanaLogic
         www_url = result['info']['website'].to_s.strip
         validator.www_url = www_url unless www_url.to_s.downcase.include?('script')
 
-        ascii_details = result['info']['details'].to_s.encode('ASCII', invalid: :replace, undef: :replace, replace: '').strip[0..254]
-        validator.details = ascii_details unless ascii_details.to_s.downcase.include?('script')
+        utf_8_details = result['info']['details'].to_s.encode_utf_8.strip[0..254]
+        validator.details = utf_8_details unless utf_8_details.to_s.downcase.include?('script')
 
         validator.info_pub_key = result['infoPubkey'].strip
 

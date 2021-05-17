@@ -7,10 +7,10 @@
 # Table name: reports
 #
 #  id         :bigint           not null, primary key
-#  network    :string(255)
-#  name       :string(255)
+#  batch_uuid :string(191)
+#  name       :string(191)
+#  network    :string(191)
 #  payload    :text(4294967295)
-#  batch_uuid :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
