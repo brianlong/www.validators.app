@@ -164,7 +164,7 @@ module StakeBossLogic
         if StakeBoss::StakeAccount.where(
           network: p.payload[:network],
           address: p.payload[:stake_address]
-        ).first
+        ).exists?
 
       Pipeline.new(200, p.payload)
     rescue StandardError, StakeBossLogic::InvalidStakeAccount => e

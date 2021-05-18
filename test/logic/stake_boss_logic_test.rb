@@ -332,6 +332,23 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
+  test 'guard_duplicate_records_success' do
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      json_data,
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+                  .then(&guard_duplicate_records)
+
+      assert_equal 200, p.code
+    end
+  end
+
   test 'split_n_ways \
         with correct input \
         returns code 200 and correct values' do
