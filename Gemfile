@@ -10,6 +10,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # See https://github.com/net-ssh/net-ssh/issues/565 for more information
 # Gem::LoadError : "ed25519 is not part of the bundle. Add it to your Gemfile."
 
+gem 'base58'
+gem 'audited'
+
 # ruby '2.7.0'
 gem 'bundler', '>= 2.1'
 gem 'json', '>= 2.3.0'
@@ -69,7 +72,7 @@ gem 'capistrano-sidekiq', require: false
 # AppSignal
 gem 'appsignal'
 
-gem "mechanize", ">= 2.7.7"
+gem 'mechanize', '>= 2.7.7'
 gem 'nokogiri', '1.11.0'
 
 gem 'kaminari'
@@ -77,8 +80,6 @@ gem 'kaminari'
 # MaxMind
 gem 'dnsruby'
 gem 'maxmind-geoip2'
-
-
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -95,11 +96,11 @@ group :development do
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
+  gem 'annotate'
+  gem 'bcrypt_pbkdf'
+  gem 'ed25519'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'annotate'
-  gem 'ed25519'
-  gem 'bcrypt_pbkdf'
 end
 
 group :test do
@@ -109,9 +110,9 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
   # VCR to record & save network events in tests
+  gem 'timecop'
   gem 'vcr'
   gem 'webmock'
-  gem 'timecop'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

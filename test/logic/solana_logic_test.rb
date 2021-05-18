@@ -85,7 +85,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     # We need to stub both the cli call (using minitest stub)
     # plus the POST http://165.227.100.142:8899/ call (using VCR)
     json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', 'http://165.227.100.142:8899']) do
+    SolanaCliService.stub(:request, {cli_response: json_data, cli_error: nil}, ['validators', 'http://165.227.100.142:8899']) do
       VCR.use_cassette('epoch_get_with_fail_over') do
         fail_over_payload = {
           # This assumes that there is no RPC server running on the localhost!
@@ -99,7 +99,6 @@ class SolanaLogicTest < ActiveSupport::TestCase
         p = Pipeline.new(200, fail_over_payload)
                     .then(&batch_set)
                     .then(&epoch_get)
-
         assert_equal 200, p.code
         assert_not_nil p.payload[:epoch]
         assert_not_nil p.payload[:batch_uuid]
@@ -139,7 +138,10 @@ class SolanaLogicTest < ActiveSupport::TestCase
     # We need to stub both the cli call (using minitest stub)
     # plus the POST http://165.227.100.142:8899/ call (using VCR)
     json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', 'http://165.227.100.142:8899']) do
+    SolanaCliService.stub(
+      :request, 
+      {cli_response: json_data, cli_error: nil},
+      ['validators', 'http://165.227.100.142:8899']) do
       VCR.use_cassette('validators_cli') do
 
         # Show that the pipeline runs & the expected values are not empty.
@@ -147,7 +149,6 @@ class SolanaLogicTest < ActiveSupport::TestCase
                     .then(&batch_set)
                     .then(&epoch_get)
                     .then(&validators_cli)
-
         assert_equal 200, p.code
         assert_not_nil p.payload[:epoch]
         assert_not_nil p.payload[:batch_uuid]
@@ -165,27 +166,32 @@ class SolanaLogicTest < ActiveSupport::TestCase
   # 159.89.252.85 is my testnet server.
   test 'cli_request with fail over' do
     json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', 'http://testnet.solana.com:8899']) do
+    SolanaCliService.stub(
+      :request, 
+      {cli_response: json_data, cli_error: nil}, 
+      ['validators', 'http://testnet.solana.com:8899']) do
       rpc_urls = ['http://127.0.0.1:8899', 'http://testnet.solana.com:8899']
       cli_response = cli_request('validators', rpc_urls)
-      assert_equal 6, cli_response.count
+      assert_equal 6, cli_response['cli_response'].count
+      assert_nil cli_response['cli_error']
     end
   end
 
   # This test assumes that there is no validator RPC running locally.
   test 'cli_request should get first attempt with no fail over' do
     json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', 'http://testnet.solana.com:8899']) do
+    SolanaCliService.stub(:request, {cli_response: json_data, cli_error: nil}, ['validators', 'http://testnet.solana.com:8899']) do
       rpc_urls = ['https://testnet.solana.com:8899', 'http://127.0.0.1:8899']
       cli_response = cli_request('validators', rpc_urls)
-      assert_equal 6, cli_response.count
+      assert_equal 6, cli_response['cli_response'].count
+      assert_nil cli_response['cli_error']
     end
   end
 
   # This test assumes that there is no validator RPC running locally.
   test 'cli_request with no response' do
     rpc_urls = ['http://127.0.0.1:8899']
-    assert_equal [], cli_request('validators', rpc_urls)
+    assert_includes cli_request('validators', rpc_urls)['cli_error'], 'tcp connect error'
   end
 
   # I use this test in development mode only.
