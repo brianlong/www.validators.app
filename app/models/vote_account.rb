@@ -5,11 +5,11 @@
 # Table name: vote_accounts
 #
 #  id           :bigint           not null, primary key
-#  validator_id :bigint           not null
-#  account      :string(255)
+#  account      :string(191)
+#  network      :string(191)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  network      :string(255)
+#  validator_id :bigint           not null
 #
 # Indexes
 #
@@ -18,6 +18,11 @@
 #  index_vote_accounts_on_validator_id              (validator_id)
 #  index_vote_accounts_on_validator_id_and_account  (validator_id,account) UNIQUE
 #
+# Foreign Keys
+#
+#  fk_rails_...  (validator_id => validators.id)
+#
+
 class VoteAccount < ApplicationRecord
   belongs_to :validator
   has_many :vote_account_histories
@@ -25,6 +30,10 @@ class VoteAccount < ApplicationRecord
 
   def vote_account_history_last
     vote_account_histories.last
+  end
+
+  def vote_account_history_for(batch_uuid)
+    vote_account_histories.find_by(batch_uuid: batch_uuid)
   end
 
   def set_network

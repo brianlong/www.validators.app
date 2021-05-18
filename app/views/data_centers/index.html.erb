@@ -1,4 +1,4 @@
-<h1 class="mb-5"><%= params[:network].capitalize %> Data Centers</h1>
+<h1 class="page-header"><%= params[:network].capitalize %> Data Centers</h1>
 <div class="btn-group btn-group-sm mb-4 col-sm-4" role="toolbar" aria-label="filter"> 
   <p class="medium">Sort by</p>
   <%= link_to "Data Centers", \
@@ -25,7 +25,7 @@
         </th>
         <th class="wider-column">
           Active Stake<br />
-          <small class="text-muted"><%= number_with_delimiter lamports_to_sol(@total_stake) %></small>
+          <small class="text-muted"><%= number_with_delimiter lamports_to_sol(@total_stake).round(0) %></small>
         </th>
       </tr>
       </thead>
@@ -37,7 +37,7 @@
           <td><%= v[:aso] %></td>
           <td><%= v[:count] %></td>
           <td>
-            <%= number_with_delimiter lamports_to_sol(v[:active_stake]) %>
+            <%= number_with_delimiter lamports_to_sol(v[:active_stake]).round(0) %>
             (<%= number_to_percentage((v[:active_stake] / @total_stake.to_f)*100.0, precision: 2) %>)
           </td>
         </tr>

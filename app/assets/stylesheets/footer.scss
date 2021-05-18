@@ -2,6 +2,9 @@
 
 footer {
   padding: 40px 0;
+  @media(max-width: $screen-sm-max) {
+    padding: 30px 0;
+  }
 
   .navbar {
     padding: 0;
@@ -29,7 +32,11 @@ footer {
     &-separator {
       margin-top: $margin-standard;
       margin-bottom: 25px;
-      @media(max-width: $screen-sm-max) { margin-bottom: 30px; }
+      @media(max-width: $screen-xs-max) {
+        margin-bottom: 25px;
+        margin-top: 10px;
+      }
+
     }
     &-disclaimer {
       @include font-size-smaller;

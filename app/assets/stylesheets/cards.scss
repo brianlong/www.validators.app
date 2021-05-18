@@ -30,6 +30,9 @@
   &-heading {
     text-align: center;
     margin-bottom: 40px;
+    @media(max-width: $screen-sm-max) {
+      margin-bottom: 30px;
+    }
   }
 
   &-img {

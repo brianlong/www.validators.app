@@ -1,10 +1,22 @@
-<div class="page-header">
-  <% if @validator.avatar_url %>
+<div class="page-header with-image">
+  <% if @validator.private_validator? %>
+    <div class="img-circle-private">
+      <span class='fas fa-users-slash' title="Private Validator"></span>
+    </div>
+  <% elsif @validator.avatar_url %>
     <%= image_tag @validator.avatar_url, class: 'img-circle' %>
   <% else %>
     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
   <% end %>
-  <h1 class="word-break"><%= @validator.name || @validator.account %></h1>
+  <h1 class="word-break">
+    <%= @validator.name || @validator.account %>
+  </h1>
+  <% if @validator.private_validator? %>
+    <h5 class="text-danger">(Private Validator)</h5>
+  <% end %>
+  <% if @validator.delinquent? %>
+    <h5 class="text-danger">(delinquent)</h5>
+  <% end %>
 </div>
 
 
@@ -124,13 +136,13 @@
               <%= link_to @validator.security_report_url, @validator.security_report_url, target: '_blank' %>
             </td>
           </tr>
+          <% end %>
           <tr>
             <td>
               <strong>Scores:</strong>
             </td>
             <td><%= render 'validators/scores', validator: @validator %></td>
           </tr>
-        <% end %>
         </tbody>
       </table>
     </div>
@@ -160,6 +172,7 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
+        <!-- Block History Chart -->
         <% vl = if @validator.score.root_distance_history&.count.to_i < @history_limit
                   @validator.score.root_distance_history&.count.to_i
                 else
@@ -181,6 +194,7 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
+        <!-- Vote History Chart -->
         <% vl = if @validator.score.root_distance_history&.count.to_i < @history_limit
                   @validator.score.root_distance_history&.count.to_i
                 else
@@ -204,6 +218,7 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
+        <!-- Skipped Slot History -->
         <%= render partial: 'block_history_chart' %>
       </div>
     </div>

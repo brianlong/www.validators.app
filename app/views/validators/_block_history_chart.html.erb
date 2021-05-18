@@ -15,22 +15,32 @@
             // dynamicly calculated. Look for othe options to control the y-axis if desired.
             datasets: [
                 {
-                    label: ' Skip % ',
+                    label: ' Moving Avg Skip %',
                     fill: false,
                     backgroundColor: '<%= GREEN_TRANSPARENT %>',
                     borderColor: '<%= GREEN %>',
                     borderWidth: 1,
                     radius: 0,
+                    data: <%= @data.map { |k,v| v[:skipped_slot_percent_moving_average].round(1) } %>
+                },
+                {
+                    label: ' Skip % ',
+                    fill: false,
+                    backgroundColor: '<%= LIGHT_GREY_TRANSPARENT %>',
+                    borderColor: '<%= LIGHT_GREY %>',
+                    borderWidth: 1,
+                    borderDash: [2, 2],
+                    radius: 0,
                     data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
                 },
                 {
-                    label: ' Cluster % ',
+                    label: ' Cluster Moving Avg % ',
                     fill: false,
                     backgroundColor: '<%= BLUE_TRANSPARENT %>',
                     borderColor: '<%= BLUE %>',
                     borderWidth: 1,
                     radius: 0,
-                    data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent].round(1) } %>
+                    data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent_moving_average].round(1) } %>
                 }
             ]
         },
@@ -60,7 +70,8 @@
                 yAxes: [{
                     display: true,
                     ticks: {
-                        min: 0,
+                        beginAtZero: false,
+                        // min: 0,
                         padding: 5
                     },
                     gridLines: {

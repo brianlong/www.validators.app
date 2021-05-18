@@ -10,17 +10,21 @@
 # Table name: collectors
 #
 #  id              :bigint           not null, primary key
-#  user_id         :bigint           not null
-#  payload_type    :string(255)
-#  payload_version :integer
+#  ip_address      :string(191)
 #  payload         :text(4294967295)
-#  ip_address      :string(255)
+#  payload_type    :string(191)
+#  payload_version :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  user_id         :bigint           not null
 #
 # Indexes
 #
 #  index_collectors_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (user_id => users.id)
 #
 class Collector < ApplicationRecord
   validates :payload_type, presence: true

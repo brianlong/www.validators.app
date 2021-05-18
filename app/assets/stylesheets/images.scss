@@ -1,15 +1,39 @@
-.img-circle {
+@import "variables";
+
+@mixin img-circle($height, $width) {
   border-radius: 50%;
-  height: 60px;
-  width: 60px;
+  height: $height;
+  width: $width;
+}
+
+@mixin img-private($padding-y, $padding-x, $font-size) {
+  background-color: rgba($white, 0.7);
+  padding: $padding-y $padding-x;
+  span {
+    color: $background-color;
+    font-size: $font-size;
+  }
+}
+
+.img-circle {
+  @include img-circle(60px, 60px);
+  &-private {
+    @include img-circle(60px, 60px);
+    @include img-private(16px, 11px, 30px);
+  }
   &-medium {
-    border-radius: 50%;
-    height: 45px;
-    width: 45px;
+    @include img-circle(45px, 45px);
+    &-private {
+      @include img-circle(45px, 45px);
+      @include img-private(12px, 9px, 22px);
+    }
   }
   &-small {
-    border-radius: 50%;
-    height: 30px;
-    width: 30px;
+    @include img-circle(30px, 30px);
+    &-private {
+      @include img-circle(30px, 30px);
+      @include img-private(4px, 6px, 16px);
+    }
   }
+
 }
