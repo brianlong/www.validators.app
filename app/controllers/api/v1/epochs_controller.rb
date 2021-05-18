@@ -10,6 +10,7 @@ module Api
         @epoch_list = EpochWallClock.by_network(epoch_params[:network])
                                     .page(epoch_params[:page])
                                     .per(epoch_params[:per])
+        @total = EpochWallClock.by_network(epoch_params[:network]).count
       end
 
       private
@@ -20,7 +21,7 @@ module Api
 
       def ensure_params
         unless epoch_params[:network].present?
-          render(json: { 'status' => 'Parameter Missing' }, status: 404)
+          render(json: { 'status' => 'Parameter Missing' }, status: 400)
         end
       end
     end

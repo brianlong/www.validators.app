@@ -82,9 +82,7 @@ Rails.application.routes.draw do
           as: 'validator_block_history'
 
       # Epoch Wall Clock
-      get 'epoch/:network/index', 
-          to: 'epochs#index',
-          as: 'epoch_index'
+      get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
     end
   end
 

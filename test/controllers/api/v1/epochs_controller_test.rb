@@ -31,14 +31,14 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
     resp = response_to_json(@response.body)
 
     assert_response 200
-    assert_equal 3, resp.count
+    assert_equal 3, resp['epochs'].count
     assert_equal %w[
       epoch
       starting_slot
       slots_in_epoch
       network
       created_at
-    ].sort, resp[0].keys.sort
+    ].sort, resp['epochs'][0].keys.sort
   end
 
   test 'epoch with default pagination returns correct number of records' do
@@ -50,7 +50,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
     resp = response_to_json(@response.body)
 
     assert_response 200
-    assert_equal 50, resp.count
+    assert_equal 50, resp['epochs'].count
   end
 
   test 'epoch with custom pagination returns correct number of records' do
@@ -62,8 +62,8 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
     resp = response_to_json(@response.body)
 
     assert_response 200
-    assert_equal 20, resp.count
-    assert_equal 82, resp.first['epoch']
+    assert_equal 20, resp['epochs'].count
+    assert_equal 82, resp['epochs'].first['epoch']
   end
 
 end
