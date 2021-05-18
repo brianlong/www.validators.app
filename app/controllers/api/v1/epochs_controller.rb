@@ -20,7 +20,7 @@ module Api
 
       def ensure_params
         unless epoch_params[:network].present?
-          render(json: { 'status' => 'Parameter Missing' }, status: 404)
+          render(json: { 'status' => 'Parameter Missing' }, status: 400)
         end
       end
     end
