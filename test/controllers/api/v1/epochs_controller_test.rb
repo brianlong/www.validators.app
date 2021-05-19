@@ -42,7 +42,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'epoch with default pagination returns correct number of records' do
-    100.times do |i|
+    51.times do |i|
       create(:epoch_wall_clock, epoch: i)
     end
 
@@ -51,10 +51,11 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 50, resp['epochs'].count
+    assert_equal 54, resp['epochs_count']
   end
 
   test 'epoch with custom pagination returns correct number of records' do
-    100.times do |i|
+    41.times do |i|
       create(:epoch_wall_clock, epoch: i)
     end
 
@@ -63,7 +64,8 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 20, resp['epochs'].count
-    assert_equal 82, resp['epochs'].first['epoch']
+    assert_equal 23, resp['epochs'].first['epoch']
+    assert_equal 44, resp['epochs_count']
   end
 
 end
