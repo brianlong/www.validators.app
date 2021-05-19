@@ -183,6 +183,7 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       validators_reduced = {}
+      rpc_servers = {}
       p.payload[:validators].each do |k, _v|
         if p.payload[:vote_accounts][k].nil?
           rpc_servers[k] = p.payload[:validators][k]
@@ -194,13 +195,31 @@ module SolanaLogic
 
       Pipeline.new(
         200,
-        p.payload.merge(validators_reduced: validators_reduced)
+        p.payload.merge(validators_reduced: validators_reduced, rpc_servers: rpc_servers)
       )
     rescue StandardError => e
       Pipeline.new(
         500,
         p.payload,
         'Error from reduce_validator_vote_accounts',
+        e
+      )
+    end
+  end
+
+
+  def rpc_servers_save
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      p.payload[:rpc_servers].update_all(is_rpc: true)
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(
+        500,
+        p.payload,
+        'Error from rpc_servers_save',
         e
       )
     end
