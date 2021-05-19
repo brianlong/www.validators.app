@@ -184,10 +184,12 @@ module SolanaLogic
 
       validators_reduced = {}
       p.payload[:validators].each do |k, _v|
-        next if p.payload[:vote_accounts][k].nil?
-
-        validators_reduced[k] = \
-          p.payload[:validators][k].merge(p.payload[:vote_accounts][k])
+        if p.payload[:vote_accounts][k].nil?
+          rpc_servers[k] = p.payload[:validators][k]
+        else
+          validators_reduced[k] = \
+            p.payload[:validators][k].merge(p.payload[:vote_accounts][k])
+        end
       end
 
       Pipeline.new(
