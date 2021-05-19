@@ -41,35 +41,4 @@ document.addEventListener("turbolinks:load", function() {
             link.classList.add('active');
         })
     })
-
-
-    // Homepage Charts
-    document.getElementById("next-slide-trigger").addEventListener("click", swipeRight);
-    document.getElementById("prev-slide-trigger").addEventListener("click", swipeLeft);
-
-    function swipeRight() {
-        var prevSlides = document.getElementsByClassName("prev-slide");
-        var nextSlides = document.getElementsByClassName("next-slide");
-        for (var prevSlide of prevSlides) {
-            prevSlide.classList.remove("d-lg-table-cell");
-        }
-        for (var nextSlide of nextSlides) {
-            nextSlide.classList.add("d-lg-table-cell");
-        }
-        document.getElementById("prev-slide-trigger").classList.remove("disabled");
-        document.getElementById("next-slide-trigger").classList.add("disabled");
-    }
-
-    function swipeLeft() {
-        var prevSlides = document.getElementsByClassName("prev-slide");
-        var nextSlides = document.getElementsByClassName("next-slide");
-        for (var prevSlide of prevSlides) {
-            prevSlide.classList.add("d-lg-table-cell");
-        }
-        for (var nextSlide of nextSlides) {
-            nextSlide.classList.remove("d-lg-table-cell");
-        }
-        document.getElementById("prev-slide-trigger").classList.add("disabled");
-        document.getElementById("next-slide-trigger").classList.remove("disabled");
-    }
 });

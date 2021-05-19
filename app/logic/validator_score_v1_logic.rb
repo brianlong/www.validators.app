@@ -3,7 +3,7 @@
 # Logic to compile ValidatorScoreV1
 module ValidatorScoreV1Logic
   include PipelineLogic
-  STAKE_CONCENTRATION_FACTOR = 0.014
+  STAKE_CONCENTRATION_FACTOR = 0.011
 
   # Payload starts with :network & :batch_uuid
   def set_this_batch

@@ -5,11 +5,11 @@
 # Table name: validator_block_histories
 #
 #  id                                  :bigint           not null, primary key
-#  batch_uuid                          :string(255)
+#  batch_uuid                          :string(191)
 #  blocks_produced                     :integer
 #  epoch                               :integer
 #  leader_slots                        :integer
-#  network                             :string(255)
+#  network                             :string(191)
 #  skipped_slot_percent                :decimal(10, 4)
 #  skipped_slot_percent_moving_average :decimal(10, 4)
 #  skipped_slots                       :integer

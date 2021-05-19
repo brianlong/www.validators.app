@@ -5,17 +5,17 @@
 # Table name: validators
 #
 #  id                  :bigint           not null, primary key
-#  network             :string(255)
-#  account             :string(255)
-#  name                :string(255)
-#  keybase_id          :string(255)
-#  www_url             :string(255)
+#  account             :string(191)
+#  avatar_url          :string(191)
+#  details             :string(191)
+#  info_pub_key        :string(191)
+#  name                :string(191)
+#  network             :string(191)
+#  security_report_url :string(191)
+#  www_url             :string(191)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  details             :string(255)
-#  info_pub_key        :string(255)
-#  avatar_url          :string(255)
-#  security_report_url :string(255)
+#  keybase_id          :string(191)
 #
 # Indexes
 #
