@@ -36,4 +36,12 @@ module ValidatorsHelper
     end
     number_to_percentage(position, precision: 0)
   end
+
+  def current_software_version(batch, network)
+    if batch.software_version.blank?
+      network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
+    else
+      batch.software_version
+    end
+  end
 end
