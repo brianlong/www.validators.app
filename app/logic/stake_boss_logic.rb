@@ -429,39 +429,74 @@ module StakeBossLogic
   def delegate_validators_for_batch
     lambda do |p|
       return p unless p.code == 200
+
+      accounts_to_delegate = []
+      sb_stake_account = p.payload[:stake_boss_stake_account]
+      minor_stake_accounts = p.payload[:minor_accounts]
+
       # Collect the list of current_validators from the DB.
-      #
+      # TODO in second iteration
+
       # Get the list of top_validators from the select_validators pipeline
       # function.
       #
+      top_validators = p.payload[:validators]
+
+      raise InvalidStakeAccount, 'No validators provided' \
+        unless top_validators&.any?
+
       # Calculate the difference between the current_validators and the
       # top_validators. Determine which validators should be swapped out and
       # which validators should go in.
       #
+      # TODO in second iteration
+
       # BlockLogic will always have at least one delegation from the
       # primary_account. If the primary_account was already delegated when we
       # got the authority, we should re-asssign away from the existing
       # validator to BlockLogic. BlockLogic will also be eligible for a second
       # delegation if justified by on-chain performance.
       #
+      # TODO in second iteration, currently we should get only not assigned accounts.
+      sb_stake_account.delegated_vote_account_address = BLOCK_LOGIC_VOTE_ACCOUNT
+      accounts_to_delegate << sb_stake_account
+
       # Grab the primary_account for the given batch and read the value for
       # `split_n_ways` from that. Also count the number of stake accounts in
       # that batch and make sure the counts match. Raise an error and notify an
       # admin of all errors inside this function.
       #
+      # minor accounts + 1 main account
+      raise InvalidStakeAccount, 'Number of stake accounts is not correct' \
+        unless minor_stake_accounts.size + 1 == sb_stake_account.split_n_ways
+
+      #
       # If this is the first time we have run a batch, the current_validators
       # set will be empty and we can simply loop through and assign validators
       # from the top_validators list.
       #
+      minor_stake_accounts.each_with_index do |msa, i|
+        # Is there a chance that we will have less validators than minor accounts?
+        msa.delegated_vote_account_address = top_validators[i]
+        accounts_to_delegate << msa
+      end
+
       # Otherwise, we will use the difference sets to find the stake account
       # for each validator that we want to remove and replace with a top
       # performer.
       #
+      # TODO in second iteration,
+
       # Execute the CHANGED delegations on the blockchain. Don't spend the tx
       # fees if the validator doesn't change.
       #
-      # Update the DB records.
-      #
+      # TODO in second iteration, when we will get accounts already delegated.
+      # Now we simply delegate and save record in a transaction.
+      delegate_stake_and_update_db(
+        accounts_to_delegate: accounts_to_delegate,
+        config_urls: p.payload[:config_urls]
+      )
+ 
       # The solana command looks like this (testnet). In this example,
       # 2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2 is the stake account
       # address, and 38QX3p44u4rrdAYvTh2Piq7LvfVps9mcLV9nnmUmK28x is the
@@ -526,5 +561,35 @@ module StakeBossLogic
     )
     new_acc_from_cli.get
     new_acc_from_cli
+  end
+
+  def delegate_stake_cli(
+    stake_account_addres:,
+    vote_account_address:,
+    urls:
+  )
+    keypair = Rails.root.join(STAKE_BOSS_KEYPAIR_FILE)
+
+    method = [
+     'delegate-stake',
+     "--stake-authority #{keypair} #{stake_account_addres} #{vote_account_address}",
+     "--fee-payer #{keypair}"
+    ].join(' ')
+
+    cli_request(method, urls)
+  end
+
+  def delegate_stake_and_update_db(accounts_to_delegate:, config_urls:)
+    ActiveRecord::Base.transaction do
+      accounts_to_delegate.each do |atd|
+        delegate_stake_cli(
+          vote_account_address: atd.delegated_vote_account_address,
+          stake_account_addres: atd.address,
+          urls: config_urls
+        )
+
+        atd.save!
+      end
+    end
   end
 end

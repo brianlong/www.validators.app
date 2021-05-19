@@ -517,6 +517,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
   test 'account_from_cli \
         with the correct input \
         returns valid account and no error' do
+
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
     json_data = \
       File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
@@ -526,6 +527,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
       {cli_response: json_data, cli_error: nil},
       [address, TESTNET_CLUSTER_URLS]
     ) do
+
       acc = account_from_cli(
         address: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY',
         urls: TESTNET_CLUSTER_URLS
@@ -552,6 +554,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&guard_stake_account)
                   .then(&set_max_n_split)
                   .then(&register_first_stake_account)
+                  
       p.payload[:stake_boss_stake_account]
        .update_column(:split_on, DateTime.now - 10.minutes)
       p = p.then(&split_primary_account)
@@ -589,6 +592,60 @@ class StakeBossLogicTest < ActiveSupport::TestCase
 
     assert_equal 1, p.payload[:minor_accounts].count
     assert_equal 200, p.code
+  end
+
+  test 'delegate_validators_for_batch \
+        with correct input \
+        delegates accounts to validators with best scores' do
+
+    create_validators
+    address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
+
+    p = Pipeline.new(200, @initial_payload.merge(stake_address: address))
+
+    SolanaCliService.stub(
+      :request,
+      split_primary_account_stub(address: address),
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      p = p.then(&guard_input)
+           .then(&guard_stake_account)
+           .then(&guard_duplicate_records)
+           .then(&set_max_n_split)
+           .then(&select_validators)
+           .then(&register_first_stake_account)
+           .then(&split_primary_account)
+
+      sb_stake_account = p.payload[:stake_boss_stake_account]
+      minor_stake_accounts = p.payload[:minor_accounts]
+
+      refute_equal BLOCK_LOGIC_VOTE_ACCOUNT,
+                   sb_stake_account.delegated_vote_account_address
+
+      refute_equal minor_stake_accounts.first.delegated_vote_account_address,
+                   p.payload[:validators].first
+    end
+
+    json_data = \
+      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
+
+    SolanaCliService.stub(
+      :request,
+      { cli_response: json_data, cli_error: nil },
+      [address, TESTNET_CLUSTER_URLS]
+    ) do
+      p = p.then(&delegate_validators_for_batch)
+
+      sb_stake_account = p.payload[:stake_boss_stake_account]
+      minor_stake_accounts = p.payload[:minor_accounts]
+
+      # Main account is delegated to boss logic
+      assert_equal BLOCK_LOGIC_VOTE_ACCOUNT,
+                   sb_stake_account.reload.delegated_vote_account_address
+      # Minor account is delegated to the top validator
+      assert_equal minor_stake_accounts.first.reload.delegated_vote_account_address,
+                   p.payload[:validators].first
+    end
   end
 
   def split_primary_account_stub(address:)
