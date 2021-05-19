@@ -15,51 +15,53 @@ class DataCentersController < ApplicationController
         AND score.active_stake > 0
       )
     "
-    # if params[:sort_by] == 'asn'
-    #   sql = "
-    #   SELECT distinct traits_autonomous_system_number,
-    #     traits_autonomous_system_organization,
-    #     country_iso_code,
-    #     IF(ISNULL(city_name), location_time_zone, city_name) as location
-    #   FROM ips
-    #   WHERE ips.address IN (
-    #     SELECT score.ip_address
-    #     FROM validator_score_v1s score
-    #     WHERE score.network = '#{params[:network]}'
-    #     AND score.active_stake > 0
-    #   )
-    #   "
-    # end
     @dc_sql = Ip.connection.execute(sql)
     @scores = ValidatorScoreV1.where(network: params[:network])
                               .where('active_stake > 0')
     @data_centers = {}
     @total_stake = @scores.sum(:active_stake)
     @total_population = 0
-
+    asns = Hash.new([])
     @dc_sql.each do |dc|
-      throw dc
-      population = @scores.where(data_center_key: dc[0]).count || 0
-      active_stake = @scores.where(data_center_key: dc[0]).sum(:active_stake)
+      asns[dc[1]] += [dc[0]]
+    end
+
+    asns.keys.each do |asn|
+      population = @scores.where(data_center_key: asns[asn]).count || 0
+      active_stake = @scores.where(data_center_key: asns[asn]).sum(:active_stake)
       next if population.zero?
-
+      
       @total_population += population
-
+      
       Rails.logger.info "#{dc.inspect} => #{population}"
       Rails.logger.info "Active Stake: #{active_stake}"
-      # Rails.logger.info dc[0]
-      # Rails.logger.info "@data_centers is a #{@data_centers.class}"
-      # Rails.logger.info @data_centers[dc[0]]
-      # Rails.logger.info (@data_centers[dc[0]]).to_s
-      # byebug
-      @data_centers[dc[0]] = {
-        aso: dc[1],
-        country: dc[2],
-        location: dc[3],
-        count: population,
-        active_stake: active_stake
-      }
-      # Rails.logger.info @data_centers.inspect
+    end
+    @dc_sql.each do |dc|
+      if false
+        population = @scores.where(data_center_key: dc[0]).count || 0
+        active_stake = @scores.where(data_center_key: dc[0]).sum(:active_stake)
+        next if population.zero?
+
+        @total_population += population
+
+        Rails.logger.info "#{dc.inspect} => #{population}"
+        Rails.logger.info "Active Stake: #{active_stake}"
+        # Rails.logger.info dc[0]
+        # Rails.logger.info "@data_centers is a #{@data_centers.class}"
+        # Rails.logger.info @data_centers[dc[0]]
+        # Rails.logger.info (@data_centers[dc[0]]).to_s
+        # byebug
+        @data_centers[dc[0]] = {
+          aso: dc[1],
+          country: dc[2],
+          location: dc[3],
+          count: population,
+          active_stake: active_stake
+        }
+        # Rails.logger.info @data_centers.inspect
+      else
+        throw dc
+      end
     end
     @data_centers = @data_centers.sort_by { |_k, v| -v[:active_stake] }
     # Rails.logger.info @data_centers

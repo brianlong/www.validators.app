@@ -85,6 +85,17 @@ ActiveRecord::Schema.define(version: 2021_05_14_111517) do
     t.index ["network", "batch_uuid"], name: "index_epoch_histories_on_network_and_batch_uuid"
   end
 
+  create_table "epoch_wall_clocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "epoch"
+    t.string "network"
+    t.bigint "starting_slot"
+    t.integer "slots_in_epoch"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "ending_slot"
+    t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
+  end
+
   create_table "ip_overrides", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "address"
     t.integer "traits_autonomous_system_number"
