@@ -26,6 +26,14 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
   end
 
+  test 'request with invalid per attr should return error' do
+    get api_v1_epoch_index_url(network: 'testnet', per: 501), headers: { 'Token' => @user.api_token }
+    resp = response_to_json(@response.body)
+
+    assert_response 400
+    assert_equal 'maximum value for per is 500', resp['status']
+  end
+
   test 'get all epochs by network success' do
     get api_v1_epoch_index_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
     resp = response_to_json(@response.body)

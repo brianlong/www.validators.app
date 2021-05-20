@@ -20,9 +20,10 @@ module Api
       end
 
       def ensure_params
-        unless epoch_params[:network].present?
-          render(json: { 'status' => 'Parameter Missing' }, status: 400)
-        end
+        render(json: { 'status' => 'Parameter Missing' }, status: 400) \
+          unless epoch_params[:network].present?
+        render(json: { 'status' => 'maximum value for per is 500' }, status: 400) \
+          if epoch_params[:per] && epoch_params[:per].to_i > 500
       end
     end
   end
