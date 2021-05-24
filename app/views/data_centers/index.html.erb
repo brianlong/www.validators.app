@@ -1,6 +1,5 @@
 <h1 class="page-header"><%= params[:network].capitalize %> Data Centers</h1>
-<div class="btn-group btn-group-sm mb-4 col-sm-4" role="toolbar" aria-label="filter"> 
-  <p class="medium">Sort by</p>
+<div class=" mb-4 col-sm-4" role="toolbar" aria-label="filter"> 
   <%= link_to "Data Centers", \
               data_centers_url(network: params[:network], sort_by: :data_center), \
               class: "btn #{params[:sort_by]== 'data_center' ? 'btn-primary' : 'btn-outline-primary'}", \
@@ -16,32 +15,11 @@
   <div class="table-responsive-md">
     <table class='table mb-0'>
       <thead>
-      <tr>
-        <th class="wider-column">Key<br />&nbsp;</th>
-        <th class="wider-column">ISP<br />&nbsp;</th>
-        <th class="narrow-column">
-          Population<br />
-          <small class="text-muted">(<%= @total_population %>)</small>
-        </th>
-        <th class="wider-column">
-          Active Stake<br />
-          <small class="text-muted"><%= number_with_delimiter lamports_to_sol(@total_stake).round(0) %></small>
-        </th>
-      </tr>
+          <%= render "#{params[:sort_by]}_head" rescue render 'data_center_head'%>
       </thead>
 
       <tbody>
-      <% @data_centers.each do |k,v| %>
-        <tr>
-          <td><%= link_to k, data_center_url(network: params[:network], key: k.gsub('/', '-slash-')) %></td>
-          <td><%= v[:aso] %></td>
-          <td><%= v[:count] %></td>
-          <td>
-            <%= number_with_delimiter lamports_to_sol(v[:active_stake]).round(0) %>
-            (<%= number_to_percentage((v[:active_stake] / @total_stake.to_f)*100.0, precision: 2) %>)
-          </td>
-        </tr>
-      <% end %>
+        <%= render "#{params[:sort_by]}_list" rescue render 'data_center_list'%>
       </tbody>
     </table>
   </div>
