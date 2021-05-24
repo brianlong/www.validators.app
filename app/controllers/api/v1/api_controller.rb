@@ -104,6 +104,8 @@ module Api
           name: 'build_skipped_slot_percent'
         ).last
 
+        @score = @validator.score
+        @ip = Ip.find_by(address: @score.ip_address)
         render 'api/v1/validators/show', formats: :json
       rescue ValidatorNotFound
         render json: { 'status' => 'Validator Not Found' }, status: 404
