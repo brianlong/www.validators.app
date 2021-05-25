@@ -37,6 +37,7 @@ table, .table {
   .avatar-column {
     width: 70px;
     text-align: center;
+    padding: 0 5px;
     .number {
       font-weight: $font-weight-bold-primary;
       @include font-family-alternative;
@@ -52,7 +53,11 @@ table, .table {
   }
 
   .name-column {
-    width: 195px;
+    width: 205px;
+    padding-left: 0;
+    @media(max-width: $screen-lg-max) {
+      padding-left: 20px;
+    }
   }
 
   .category-column {
@@ -142,7 +147,7 @@ table, .table {
   table-layout: fixed;
 
   @media(max-width: $screen-lg-max) {
-    .percent-column { width: 96px; }
+    .percent-column { width: 97px; }
     .avatar-column { display: none; }
   }
 
@@ -168,11 +173,6 @@ table, .table {
       padding-left: 25px;
       width: 84%;
     }
-  }
-
-  #row-halt-line {
-    text-align: center;
-    color: $orange;
   }
 
 }

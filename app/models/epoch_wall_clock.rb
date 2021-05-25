@@ -7,7 +7,7 @@
 #  id             :bigint           not null, primary key
 #  ending_slot    :bigint
 #  epoch          :integer
-#  network        :string(191)
+#  network        :string(255)
 #  slots_in_epoch :integer
 #  starting_slot  :bigint
 #  created_at     :datetime         not null
