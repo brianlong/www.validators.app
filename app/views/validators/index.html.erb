@@ -171,15 +171,19 @@
                     skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
                   end
                 %>
-                <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
                 <% skipped_vote_percent = ((@skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2) %>
-                <%= render 'validators/spark_line_skipped_vote',
-                           account: validator.account,
-                           value: skipped_vote_percent
-                %>
-                <div class="text-center small mt-3">
-                  <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
+                <div class="d-none d-lg-block">
+                  <%= render 'validators/spark_line_skipped_vote',
+                             account: validator.account,
+                             value: skipped_vote_percent
+                  %>
+                  <div class="text-center small mt-3">
+                    <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
+                  </div>
                 </div>
+                <span class="d-inline-block d-lg-none">
+                  Skipped Vote&nbsp;% (distance from leader):&nbsp;<%= number_to_percentage(skipped_vote_percent, precision: 2) %>
+                </span>
               </td>
 
               <td class="d-lg-none pt-0">
