@@ -4,13 +4,16 @@
     var chart = new Chart(ctx, {
         type: 'gauge',
         data: {
-            //labels: ['Success', 'Warning', 'Warning', 'Error'],
             datasets: [{
-                data: [-2.5, 0, 2.5, 4],
+                data: [-3, 0, 3, 6],
                 value: <%= local_assigns[:value] %>,
-                minValue: -4,
-                maxValue: 4,
-                backgroundColor: ['<%= LIGHT_GREY %>', '<%= GREEN %>', '<%= GREEN %>', '<%= LIGHT_GREY %>'],
+                minValue: -6,
+                maxValue: 6,
+                backgroundColor: [
+                    '<%= LIGHT_GREY_TRANSPARENT %>', '<%= GREEN_TRANSPARENT %>',
+                    '<%= GREEN_TRANSPARENT %>', '<%= LIGHT_GREY_TRANSPARENT %>'
+                ],
+                borderColor: ['<%= LIGHT_GREY %>', '<%= GREEN %>', '<%= GREEN %>', '<%= LIGHT_GREY %>'],
                 borderWidth: 0.5
             }]
         },
@@ -27,9 +30,9 @@
             },
             needle: {
                 radiusPercentage: 0,
-                widthPercentage: 10,
+                widthPercentage: 5,
                 lengthPercentage: 80,
-                color: '#120f21'
+                color: '<%= DARK_GREY %>'
             },
             valueLabel: {
                 display: false
