@@ -60,6 +60,12 @@ table, .table {
     }
   }
 
+  .percent-column {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100px;
+  }
+
   .category-column {
     width: 28%;
     @media(max-width: $screen-md-max) {

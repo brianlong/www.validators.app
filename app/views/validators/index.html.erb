@@ -50,7 +50,7 @@
               <br />
               Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='percent-column pr-1'>
+            <th class='percent-column'>
               Skipped Vote&nbsp;&percnt;
               <a data-toggle="tooltip" data-html="true" title="Distance from leader">
                 <i class="fas fa-question-circle ml-1"></i>
@@ -73,7 +73,7 @@
           <tr class="subhead">
             <td class="avatar-column"></td>
             <td></td>
-            <td style="padding-left: 20px;">
+            <td class="percent-column">
               Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
             <td class="text-right">
@@ -164,7 +164,7 @@
               </td>
 
               <!-- SKIPPED VOTE % -->
-              <td class="percent-column" id="skipped-vote-column-<%=i%>">
+              <td class="percent-column align-middle" id="skipped-vote-column-<%=i%>">
                 <%
                   vahl = validator.vote_account_last&.vote_account_history_for(@batch.uuid)
                   if vahl
@@ -172,16 +172,14 @@
                   end
                 %>
                 <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
-                <%=
-                  number_to_percentage(
-                    (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
-                    precision: 2
-                  ) if vahl
-                  # number_to_percentage(
-                  #   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
-                  #   precision: 2
-                  # ) if vahl
+                <% skipped_vote_percent = ((@skipped_vote_percent_best - skipped_votes_percent)*100.0).round(2) %>
+                <%= render 'validators/spark_line_skipped_vote',
+                           account: validator.account,
+                           value: skipped_vote_percent
                 %>
+                <div class="text-center small mt-2">
+                  <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
+                </div>
               </td>
 
               <td class="d-lg-none pt-0">
