@@ -172,7 +172,7 @@
                   end
                 %>
                 <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
-                <% skipped_vote_percent = ((@skipped_vote_percent_best - skipped_votes_percent)*100.0).to_f.round(2) %>
+                <% skipped_vote_percent = ((@skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2) %>
                 <%= render 'validators/spark_line_skipped_vote',
                            account: validator.account,
                            value: skipped_vote_percent
