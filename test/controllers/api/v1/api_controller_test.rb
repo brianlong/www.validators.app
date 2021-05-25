@@ -4,6 +4,9 @@ require 'test_helper'
 
 # ApiControllerTest
 class ApiControllerTest < ActionDispatch::IntegrationTest
+
+  include ResponseHelper
+
   def setup
     @user_params = {
       username: 'test',
@@ -11,11 +14,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
       password: 'password'
     }
     @user = User.create(@user_params)
-  end
-
-  # Convert the String response to JSON
-  def response_to_json(response)
-    JSON.parse(response)
   end
 
   test 'request ping without token should get error' do
