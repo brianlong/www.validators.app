@@ -1,10 +1,8 @@
 class SortedDataCenters
-  def self.call(*args, &block)
-    new(*args, &block).call
-  end
 
   def call
     @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
+    @results = @results.sort_by { |_k, v| -v[:active_stake] }
     {
       total_population: @total_population,
       total_stake: @total_stake,
@@ -24,11 +22,11 @@ class SortedDataCenters
       WHERE ips.address IN (
         SELECT score.ip_address
         FROM validator_score_v1s score
-        WHERE score.network = '#{network}'
+        WHERE score.network = ?
         AND score.active_stake > 0
       )
     "
-    @dc_sql = Ip.connection.execute(sql)
+    @dc_sql = Ip.connection.execute(ActiveRecord::Base.send(:sanitize_sql, [sql, network]))
     @scores = ValidatorScoreV1.where(network: network)
                               .where('active_stake > 0')
 
@@ -75,6 +73,5 @@ class SortedDataCenters
         active_stake: active_stake
       }
     end
-    @results = @results.sort_by { |_k, v| -v[:active_stake] }
   end
 end

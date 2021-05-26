@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :ip do
-    address { "0.#{rand(1..999)}.#{rand(1..999)}.#{rand(1..999)}.#{rand(1..999)}" }
+    address { Faker::Internet.ip_v4_address }
     continent_code { 'AS' }
     continent_geoname_id { 6255147 }
     continent_name { 'Asia' }

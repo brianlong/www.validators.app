@@ -1,11 +1,13 @@
 class DataCentersController < ApplicationController
-  # params[:network]
+
+  # index_params[:network]
+  # index_params[:sort_by]
   def index
-    sort_by = params[:sort_by] == 'asn' ? 'asn' : 'data_center'
-    @results = SortedDataCenters.call(
-      sort_by: sort_by, 
+    @sort_by = index_params[:sort_by] == 'asn' ? 'asn' : 'data_center'
+    @results = SortedDataCenters.new(
+      sort_by: @sort_by, 
       network: params[:network]
-    )
+    ).call
   end
 
   # params[:network]
@@ -35,5 +37,11 @@ class DataCentersController < ApplicationController
                                    .sum(:active_stake)
     @dc_stake = @scores.where(data_center_key: key).sum(:active_stake)
     @dc_info = Ip.where(data_center_key: key).last || Ip.new(data_center_key: key)
+  end
+
+  private
+
+  def index_params
+    params.permit(:network, :sort_by)
   end
 end

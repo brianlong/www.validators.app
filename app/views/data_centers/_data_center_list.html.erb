@@ -1,11 +1,11 @@
-<% @results[:results].each do |k,v| %>
+<% @results[:results].each do |dc_key, dc_data| %>
   <tr>
-    <td><%= link_to k, data_center_url(network: params[:network], key: k.gsub('/', '-slash-')) %></td>
-    <td><%= v[:aso] %></td>
-    <td><%= v[:count] %></td>
+    <td><%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %></td>
+    <td><%= dc_data[:aso] %></td>
+    <td><%= dc_data[:count] %></td>
     <td>
-      <%= number_with_delimiter lamports_to_sol(v[:active_stake]).round(0) %>
-      (<%= number_to_percentage((v[:active_stake] / @results[:total_stake].to_f)*100.0, precision: 2) %>)
+      <%= number_with_delimiter lamports_to_sol(dc_data[:active_stake]).round(0) %>
+      (<%= number_to_percentage((dc_data[:active_stake] / @results[:total_stake].to_f) * 100.0, precision: 2) %>)
     </td>
   </tr>
 <% end %>

@@ -39,21 +39,21 @@ class SortedDataCenterTest < ActiveSupport::TestCase
   end
 
   test 'SortedDataCenters when sort_by_asn returns correct result' do
-    result = SortedDataCenters.call(
+    result = SortedDataCenters.new(
       sort_by: 'asn',
       network: 'testnet'
-    )
-    
+    ).call
+
     assert_equal 8, result[:total_population]
     assert_equal 800, result[:total_stake]
-    assert_equal 2, result[:results][12345][:data_centers].count
+    assert_equal 2, result[:results][0][1][:data_centers].count
   end
 
   test 'SortedDataCenters when sort_by_data_centers returns correct result' do
-    result = SortedDataCenters.call(
+    result = SortedDataCenters.new(
       sort_by: 'data_center',
       network: 'testnet'
-    )
+    ).call
 
     assert_equal 8, result[:total_population]
     assert_equal 800, result[:total_stake]

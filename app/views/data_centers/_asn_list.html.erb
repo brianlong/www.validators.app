@@ -1,16 +1,16 @@
-<% @results[:results].each do |k,v| %>
+<% @results[:results].each do |_, asn_data| %>
   <tr>
-    <td><%= v[:asn] %></td>
+    <td><%= asn_data[:asn] %></td>
     <td>
-      <% v[:data_centers].each do |dc| %>
+      <% asn_data[:data_centers].each do |dc| %>
         <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
         <br \>
       <% end %>
     </td>
-    <td><%= v[:count] %></td>
+    <td><%= asn_data[:count] %></td>
     <td>
-      <%= number_with_delimiter lamports_to_sol(v[:active_stake]).round(0) %>
-      (<%= number_to_percentage((v[:active_stake] / @results[:total_stake].to_f)*100.0, precision: 2) %>)
+      <%= number_with_delimiter lamports_to_sol(asn_data[:active_stake]).round(0) %>
+      (<%= number_to_percentage((asn_data[:active_stake] / @results[:total_stake].to_f) * 100.0, precision: 2) %>)
     </td>
   </tr>
 <% end %>
