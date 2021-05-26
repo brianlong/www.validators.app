@@ -15,9 +15,7 @@ module ValidatorsHelper
     LIGHT_GREY_TRANSPARENT
   end
 
-  def score_class(score)
-    return 'text-danger' if score == -2
-
+  def score_class
     'text-warning'
   end
 
@@ -43,5 +41,9 @@ module ValidatorsHelper
     else
       batch.software_version
     end
+  end
+
+  def above_33percent_concentration?(validator)
+    validator.stake_concentration_score.negative?
   end
 end
