@@ -3,7 +3,6 @@
 # Logic to compile ValidatorScoreV1
 module ValidatorScoreV1Logic
   include PipelineLogic
-  STAKE_CONCENTRATION_FACTOR = 0.011
 
   # Payload starts with :network & :batch_uuid
   def set_this_batch
@@ -67,10 +66,10 @@ module ValidatorScoreV1Logic
         p.payload[:network],
         p.payload[:batch_uuid]
       )
-      total_active_stake = ValidatorHistory.total_active_stake_for(
+      total_active_stake = ValidatorHistoryQuery.new(
         p.payload[:network],
         p.payload[:batch_uuid]
-      )
+      ).total_active_stake
 
       # The to_a at the end ensures that the query is run here, instead of
       # inside of the `p.payload[:validators].each` block which eliminates an
@@ -184,15 +183,16 @@ module ValidatorScoreV1Logic
           end
 
         # Assign the stake concentration & score
+        at_33_active_stake =
+          ValidatorHistoryQuery.new(p.payload[:network], p.payload[:batch_uuid])
+                               .at_33_stake
+                               .validator
+                               .active_stake
+
+
         v.validator_score_v1.stake_concentration_score = \
-          if v.validator_score_v1.stake_concentration.to_f >= (STAKE_CONCENTRATION_FACTOR * 2)
-            # NOTE: I am only using -1 at the moment. -- BKL
-            -1
-          elsif v.validator_score_v1.stake_concentration.to_f >= STAKE_CONCENTRATION_FACTOR
-            -1
-          else
-            0
-          end
+          v.validator_score_v1.active_stake >= at_33_active_stake ? -2 : 0
+
       rescue StandardError => e
         Appsignal.send_error(e)
       end
