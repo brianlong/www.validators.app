@@ -52,6 +52,17 @@ module SolanaLogic
         slot_index: epoch_json['slotIndex'],
         slots_in_epoch: epoch_json['slotsInEpoch']
       )
+      begin
+        EpochWallClock.create!(
+          network:        p.payload[:network],
+          epoch:          epoch_json['epoch'],
+          starting_slot:  epoch_json['absoluteSlot'] - epoch_json['slotIndex'],
+          slots_in_epoch: epoch_json['slotsInEpoch'],
+          ending_slot:    (epoch_json['absoluteSlot'] - epoch_json['slotIndex']) + epoch_json['slotsInEpoch']
+        )
+      rescue ActiveRecord::RecordNotUnique
+        # This epoch already exists.
+      end
 
       Pipeline.new(200, p.payload.merge(
                           epoch: epoch.epoch,
@@ -69,31 +80,13 @@ module SolanaLogic
 
       validators = cli_request('validators', p.payload[:config_urls])
 
-      raise 'No results from `solana validators`' if validators == []
-      raise 'No results from `solana validators`' if validators.nil?
+      raise 'No results from `solana validators`' if validators.blank?
 
       raise 'No results from `solana validators`' if \
-        validators['currentValidators'].empty? &&
-        validators['delinquentValidators'].empty?
+        validators['validators'].blank?
 
       # Create current validators
-      validators['currentValidators'].each do |validator|
-        ValidatorHistory.create(
-          network: p.payload[:network],
-          batch_uuid: p.payload[:batch_uuid],
-          account: validator['identityPubkey'],
-          vote_account: validator['voteAccountPubkey'],
-          commission: validator['commission'],
-          last_vote: validator['lastVote'],
-          root_block: validator['rootSlot'],
-          credits: validator['credits'],
-          active_stake: validator['activatedStake'],
-          software_version: validator['version']
-        )
-      end
-
-      # Create delinquent validators
-      validators['delinquentValidators'].each do |validator|
+      validators['validators'].each do |validator|
         ValidatorHistory.create(
           network: p.payload[:network],
           batch_uuid: p.payload[:batch_uuid],
@@ -105,7 +98,7 @@ module SolanaLogic
           credits: validator['credits'],
           active_stake: validator['activatedStake'],
           software_version: validator['version'],
-          delinquent: true
+          delinquent: validator['delinquent']
         )
       end
 

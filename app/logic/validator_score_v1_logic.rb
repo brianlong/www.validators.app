@@ -302,6 +302,8 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).to_a
 
+      software_versions = Hash.new(0)
+
       p.payload[:validators].each do |validator|
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
 
@@ -314,10 +316,27 @@ module ValidatorScoreV1Logic
             validator.validator_score_v1.software_version = vah.software_version
           end
         end
+
+        this_software_version = validator.validator_score_v1.software_version
+
+        # Gather software_version stat
+        if validator.validator_score_v1.active_stake
+          software_versions[this_software_version] += \
+            validator.validator_score_v1.active_stake
+        end
+
         validator.validator_score_v1.assign_software_version_score
       rescue StandardError => e
         Appsignal.send_error(e)
       end
+
+      # Calculate current version by stake
+      current_software_version = find_current_software_version(
+        software_versions: software_versions,
+        total_stake: p.payload[:total_active_stake]
+      )
+
+      p.payload[:this_batch].update(software_version: current_software_version)
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -357,6 +376,23 @@ module ValidatorScoreV1Logic
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from save_validators', e)
+    end
+  end
+
+  def find_current_software_version(software_versions:, total_stake:)
+    software_versions.each do |version, stake|
+      software_versions[version] = ((stake/total_stake.to_f) * 100.0)
+    end
+
+    software_version_sorted = software_versions.keys.compact.sort
+    mostly_used_percent = software_versions.values.max
+    mostly_used_version = software_versions.key(mostly_used_percent)
+    mostly_used_index = software_version_sorted.index(mostly_used_version)
+
+    if mostly_used_percent >= 66
+      mostly_used_version
+    else
+      software_version_sorted[mostly_used_index - 1]
     end
   end
 end

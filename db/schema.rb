@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 2021_05_19_024117) do
     t.integer "root_distance_all_median"
     t.float "vote_distance_all_average"
     t.integer "vote_distance_all_median"
+    t.string "software_version"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
@@ -87,7 +88,7 @@ ActiveRecord::Schema.define(version: 2021_05_19_024117) do
 
   create_table "epoch_wall_clocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "epoch"
-    t.string "network", limit: 255
+    t.string "network"
     t.bigint "starting_slot"
     t.integer "slots_in_epoch"
     t.datetime "created_at", precision: 6, null: false
