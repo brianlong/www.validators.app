@@ -165,26 +165,27 @@
 
               <!-- SKIPPED VOTE % -->
               <td class="percent-column align-middle" id="skipped-vote-column-<%=i%>">
-                <%
-                  vahl = validator.vote_account_last&.vote_account_history_for(@batch.uuid)
-                  if vahl
-                    skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
-                  end
-                  skipped_vote_displayed = ((@skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2)
-                %>
-                <% if skipped_votes_percent %>
+                <% skipped_vote_displayed = skipped_vote_percent(validator, @batch) %>
+                <% if skipped_vote_displayed %>
                   <div class="d-none d-lg-block">
                     <%= render 'validators/spark_line_skipped_vote',
                                account: validator.account,
                                value: skipped_vote_displayed
                     %>
-                    <div class="text-center small mt-3">
+                    <div class="text-center text-muted small mt-3">
                       <%= number_to_percentage(skipped_vote_displayed, precision: 2) %>
                     </div>
                   </div>
+                <% else %>
+                  <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
                 <span class="d-inline-block d-lg-none">
-                  Skipped Vote&nbsp;% (distance from leader):&nbsp;<%= number_to_percentage(skipped_vote_displayed, precision: 2) if skipped_votes_percent %>
+                  Skipped Vote&nbsp;% (distance from leader):&nbsp;
+                  <% if skipped_vote_displayed %>
+                    <%= number_to_percentage(skipped_vote_displayed, precision: 2) %>
+                  <% else %>
+                    N/A
+                  <% end %>
                 </span>
               </td>
 
