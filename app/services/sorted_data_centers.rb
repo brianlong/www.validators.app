@@ -44,7 +44,7 @@ class SortedDataCenters
       population = @scores.where(data_center_key: asns[asn]).count || 0
       active_stake = @scores.where(data_center_key: asns[asn]).sum(:active_stake)
       next if population.zero?
-      
+
       @total_population += population
       @results[asn] = {
         asn: asn,
