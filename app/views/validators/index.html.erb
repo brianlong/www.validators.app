@@ -180,12 +180,8 @@
                   <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
                 <span class="d-inline-block d-lg-none">
-                  Skipped Vote&nbsp;% (distance from leader):&nbsp;
-                  <% if skipped_vote_percent %>
-                    <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
-                  <% else %>
-                    N/A
-                  <% end %>
+                  Skipped Vote&nbsp;% (distance from leader):
+                  <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
                 </span>
               </td>
 
