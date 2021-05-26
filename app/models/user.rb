@@ -7,7 +7,7 @@
 #  id                     :bigint           not null, primary key
 #  api_token              :string(191)
 #  confirmation_sent_at   :datetime
-#  confirmation_token     :string(255)
+#  confirmation_token     :string(191)
 #  confirmed_at           :datetime
 #  current_sign_in_at     :datetime
 #  current_sign_in_ip     :string(191)
