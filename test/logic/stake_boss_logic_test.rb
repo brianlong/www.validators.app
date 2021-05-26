@@ -160,7 +160,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     SolanaCliService.stub(
       :request,
       {
-        cli_response: json_data, 
+        cli_response: json_data,
         cli_error: "Error: RPC request error: FLC9P4DgGjQD53X1zsx1hA9HJhzjErzYeJk24Xdfpogx is not a stake account\n"
       },
       [address, TESTNET_CLUSTER_URLS],
@@ -554,7 +554,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                   .then(&guard_stake_account)
                   .then(&set_max_n_split)
                   .then(&register_first_stake_account)
-                  
+
       p.payload[:stake_boss_stake_account]
        .update_column(:split_on, DateTime.now - 10.minutes)
       p = p.then(&split_primary_account)
@@ -565,7 +565,7 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'split_primary_account 
+  test 'split_primary_account
         with valid input
         returns code 200 and minor accounts' do
     address = 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuY'
@@ -606,7 +606,8 @@ class StakeBossLogicTest < ActiveSupport::TestCase
     SolanaCliService.stub(
       :request,
       split_primary_account_stub(address: address),
-      [address, TESTNET_CLUSTER_URLS]
+      [address, TESTNET_CLUSTER_URLS],
+      1
     ) do
       p = p.then(&guard_input)
            .then(&guard_stake_account)
@@ -626,12 +627,9 @@ class StakeBossLogicTest < ActiveSupport::TestCase
                    p.payload[:validators].first
     end
 
-    json_data = \
-      File.read("#{Rails.root}/test/stubs/solana_stake_account_#{address}.json")
-
     SolanaCliService.stub(
       :request,
-      { cli_response: json_data, cli_error: nil },
+      delegate_stake_stub,
       [address, TESTNET_CLUSTER_URLS]
     ) do
       p = p.then(&delegate_validators_for_batch)
@@ -665,14 +663,39 @@ class StakeBossLogicTest < ActiveSupport::TestCase
         { cli_response: json_data, cli_error: nil }
       when 'create-address-with-seed'
         {
-          cli_response: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX', 
+          cli_response: 'BbeCzMU39ceqSgQoNs9c1j2zes7kNcygew8MEjEBvzuX',
           cli_error: nil
         }
+      end
+    end
+  end
+
+  def delegate_stake_stub
+    proc do |arg|
+      cli_req_name = arg[:cli_method].split(' ')[0]
+      case cli_req_name
+      when 'stake-account'
+        json_data = {"accountBalance"=>69454106381,
+          "activationEpoch"=>168,
+          "activeStake"=>69451823501,
+          "creditsObserved"=>33622505,
+          "delegatedStake"=>0,
+          "delegatedVoteAccountAddress"=>"",
+          "rentExemptReserve"=>2282880,
+          "stakeType"=>"Stake",
+          "staker"=>"BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH",
+          "withdrawer"=>"71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B"}.to_json
+
+        {cli_response: json_data, cli_error: nil}
       when 'delegate-stake'
         {
           cli_response: '2NbhvTovBt4dki811xvDJJadG7rJCGeAqv9P2zA98GoP97icwGT5fcV5sJ3y35VsYLAjiyW7jmAyyYMSQsCTXNJ4',
-         cli_error: nil
+        cli_error: nil
         }
+      when 'delegate-stake-error'
+        {"cli_response"=>"",
+          "cli_error"=>
+           "Error: Dynamic program error: Unable to delegate.  Vote account appears delinquent because its current root slot, 74081426, is less than 78525958\n"}
       end
     end
   end

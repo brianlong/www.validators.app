@@ -188,7 +188,10 @@ module StakeBossLogic
       # balance going below the minimum
       split_n_max = split_n_ways
       STAKE_BOSS_N_SPLIT_OPTIONS.each do |n|
-        ds = p.payload[:solana_stake_account].delegated_stake
+        # QUESTION: What should we use here? Previously it was delegated_stake,
+        # but new accounts does not have it.
+        # We switched to the account_balance.
+        ds = p.payload[:solana_stake_account].account_balance
         break if (lamports_to_sol(ds) / n) < 5
 
         split_n_max = n
@@ -467,6 +470,7 @@ module StakeBossLogic
       # admin of all errors inside this function.
       #
       # minor accounts + 1 main account
+
       raise InvalidStakeAccount, 'Number of stake accounts is not correct' \
         unless minor_stake_accounts.size + 1 == sb_stake_account.split_n_ways
 
@@ -476,8 +480,11 @@ module StakeBossLogic
       # from the top_validators list.
       #
       minor_stake_accounts.each_with_index do |msa, i|
+
         # Is there a chance that we will have less validators than minor accounts?
+        # Check number of validators BEFORE splitting account
         msa.delegated_vote_account_address = top_validators[i]
+
         accounts_to_delegate << msa
       end
 
@@ -492,11 +499,36 @@ module StakeBossLogic
       #
       # TODO in second iteration, when we will get accounts already delegated.
       # Now we simply delegate and save record in a transaction.
-      delegate_stake_and_update_db(
-        accounts_to_delegate: accounts_to_delegate,
-        config_urls: p.payload[:config_urls]
-      )
- 
+      accounts_to_delegate.each do |atd|
+        ActiveRecord::Base.transaction do
+          cli_resp = check_balance(
+            stake_account_address: atd.address,
+            urls: p.payload[:config_urls]
+          )['cli_response']
+
+          cli_balance = cli_resp['accountBalance']
+          raise InvalidStakeAccount, 'Insufficient balance.' \
+            unless atd.account_balance >= cli_balance
+
+          cli_active_stake = cli_resp['activeStake']
+          cli_delegated_stake = cli_resp['delegatedStake']
+          cli_delegated_vote_account_address = cli_resp['delegatedVoteAccountAddress']
+          raise InvalidStakeAccount, 'Stake already delegated.' if \
+            cli_active_stake == cli_delegated_stake && cli_delegated_vote_account_address.present?
+
+          cli_delegate_resp = delegate_stake_cli(
+            vote_account_address: atd.delegated_vote_account_address,
+            stake_account_address: atd.address,
+            urls: p.payload[:config_urls]
+          )
+
+          raise InvalidStakeAccount, "CLI error: #{cli_delegate_resp['cli_error']}" \
+            if cli_delegate_resp['cli_error'].present?
+
+          atd.save!
+        end
+      end
+
       # The solana command looks like this (testnet). In this example,
       # 2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2 is the stake account
       # address, and 38QX3p44u4rrdAYvTh2Piq7LvfVps9mcLV9nnmUmK28x is the
@@ -563,33 +595,23 @@ module StakeBossLogic
     new_acc_from_cli
   end
 
+  def check_balance(stake_account_address:, urls:)
+    request_str = "stake-account #{stake_account_address}"
+    cli_request(request_str, urls)
+  end
+
   def delegate_stake_cli(
-    stake_account_addres:,
+    stake_account_address:,
     vote_account_address:,
     urls:
   )
-    keypair = Rails.root.join(STAKE_BOSS_KEYPAIR_FILE)
 
     method = [
-     'delegate-stake',
-     "--stake-authority #{keypair} #{stake_account_addres} #{vote_account_address}",
-     "--fee-payer #{keypair}"
+      'delegate-stake',
+      "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE} #{stake_account_address} #{vote_account_address}",
+      "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE}"
     ].join(' ')
 
     cli_request(method, urls)
-  end
-
-  def delegate_stake_and_update_db(accounts_to_delegate:, config_urls:)
-    ActiveRecord::Base.transaction do
-      accounts_to_delegate.each do |atd|
-        delegate_stake_cli(
-          vote_account_address: atd.delegated_vote_account_address,
-          stake_account_addres: atd.address,
-          urls: config_urls
-        )
-
-        atd.save!
-      end
-    end
   end
 end
