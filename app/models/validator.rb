@@ -33,10 +33,34 @@ class Validator < ApplicationRecord
   # Returns an Array of account IDs for a given network
   #
   # Validator.accounts_for('testnet') => ['1234', '5678']
-  def self.accounts_for(network)
-    where(network: network)
-      .select('account')
-      .map(&:account)
+
+  class << self
+    def accounts_for(network)
+      where(network: network)
+        .select('account')
+        .map(&:account)
+    end
+
+    def index_order(order_param)
+      sort_order = case order_param
+                   when 'score'
+                     'validator_score_v1s.total_score desc, RAND()'
+                   when 'name'
+                     'validators.name asc'
+                   when 'stake'
+                     'validator_score_v1s.active_stake desc'
+                   when 'random'
+                     'RAND()'
+                   else
+                     'validator_score_v1s.total_score desc, RAND()'
+                   end
+
+      includes(:validator_score_v1).order(sort_order)
+    end
+
+    def total_active_stake
+      includes(:validator_score_v1).sum(:active_stake)
+    end
   end
 
   def validator_history_last
@@ -48,7 +72,7 @@ class Validator < ApplicationRecord
 
   # Return the vote account that was most recently used
   def vote_account_last
-    vote_accounts.order('updated_at desc').limit(1).first
+    vote_accounts.order('updated_at desc').first
   end
 
   def ping_times_to(limit = 100)
@@ -73,12 +97,12 @@ class Validator < ApplicationRecord
   end
 
   def copy_data_to_score
-    if validator_score_v1
-      validator_score_v1.ip_address = ip_address
-      ip_dc = Ip.where(address: ip_address).first&.data_center_key
-      validator_score_v1.data_center_key = ip_dc
-      validator_score_v1.save
-    end
+    return unless validator_score_v1
+
+    validator_score_v1.ip_address = ip_address
+    ip_dc = Ip.where(address: ip_address).first&.data_center_key
+    validator_score_v1.data_center_key = ip_dc
+    validator_score_v1.save
   end
 
   # Convenience methods

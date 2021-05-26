@@ -31,6 +31,10 @@
 class Batch < ApplicationRecord
   before_create :create_uuid
 
+  def self.last_scored(network)
+    where('network = ? and scored_at IS NOT NULL', network).last
+  end
+
   protected
 
   # Internal method assigns a UUID to a Host object's uuid attribute. This
