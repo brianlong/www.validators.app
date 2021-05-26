@@ -61,11 +61,12 @@ module Api
 
       # Show the list of validators with scores
       def validators_list
-        @sort_order = if params[:order] == 'score'
+        @sort_order = case params[:order]
+                      when 'score'
                         'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
-                      elsif params[:order] == 'name'
+                      when 'name'
                         'validators.name asc'
-                      elsif params[:order] == 'stake'
+                      when 'stake'
                         'validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc'
                       else
                         'RAND()'
