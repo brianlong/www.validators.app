@@ -3,29 +3,31 @@
 # PublicController
 class PublicController < ApplicationController
   def index
-    @sort_order = if params[:order] == 'score'
+    @sort_order = if index_params[:order] == 'score'
                     'validator_score_v1s.total_score desc, RAND()'
-                  elsif params[:order] == 'name'
+                  elsif index_params[:order] == 'name'
                     'validators.name asc'
-                  elsif params[:order] == 'stake'
+                  elsif index_params[:order] == 'stake'
                     'validator_score_v1s.active_stake desc'
-                  elsif params[:order] == 'random'
+                  elsif index_params[:order] == 'random'
                     'RAND()'
                   else
-                    params[:order] = 'score'
+                    index_params[:order] = 'score'
                     'validator_score_v1s.total_score desc, RAND()'
                   end
 
-    validators = Validator.where(network: params[:network])
+    validators = Validator.where(network: index_params[:network])
                           .joins(:validator_score_v1)
                           .order(@sort_order)
     @validators_count = validators.count
-    @validators = validators.page(params[:page])
+    @validators = validators.page(index_params[:page])
 
     unless params[:q].blank?
-      @validators = @validators.where(
-        ['name like :q or account like :q or validator_score_v1s.data_center_key like :q', q: "#{params[:q]}%"]
-      )
+      vacs = VoteAccount.where('account LIKE ?', "#{index_params[:q]}%").pluck(:validator_id)
+      @validators = @validators.where('name LIKE ?', "#{index_params[:q]}%")
+                               .or(@validators.where('account LIKE ?', "#{index_params[:q]}%"))
+                               .or(@validators.where('validator_score_v1s.data_center_key LIKE ?', "#{index_params[:q]}%"))
+                               .or(@validators.where(id: vacs))
     end
 
     @total_active_stake = Validator.where(network: params[:network])
@@ -147,6 +149,10 @@ class PublicController < ApplicationController
             :telephone,
             :comments
           )
+  end
+
+  def index_params
+    params.permit(:network, :order, :page, :q)
   end
 
   def send_email_to_admins_about_new_request
