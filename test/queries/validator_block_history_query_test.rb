@@ -5,6 +5,8 @@ require 'test_helper'
 # TODO: docsss
 class ValidatorBlockHistoryQueryTest < ActiveSupport::TestCase
   def setup
+    super
+
     network = 'testnet'
     batch_uuid = create(:batch).uuid
 
@@ -23,6 +25,12 @@ class ValidatorBlockHistoryQueryTest < ActiveSupport::TestCase
     @query = ValidatorBlockHistoryQuery.new(network, batch_uuid)
     @skipped_slot_percent =
       @validator_block_histories[0...-1].map(&:skipped_slot_percent)
+  end
+
+  def teardown
+    super
+
+    @validator_block_histories.each(&:destroy)
   end
 
   test 'average_skipped_slot_percent' do

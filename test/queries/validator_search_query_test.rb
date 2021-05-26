@@ -3,6 +3,8 @@ require 'test_helper'
 
 class ValidatorSearchQueryTest < ActiveSupport::TestCase
   def setup
+    super
+
     @validators = [
       create(:validator, :with_score, name: 'Name1'),
       create(:validator, :with_score, name: 'Name2'),
@@ -17,6 +19,12 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
 
     @validators.last.validator_score_v1 =
       create(:validator_score_v1, data_center_key: 'Name1Center')
+  end
+
+  def teardown
+    super
+
+    @validators.each(&:destroy)
   end
 
   test 'returns proper results for Validator.all' do

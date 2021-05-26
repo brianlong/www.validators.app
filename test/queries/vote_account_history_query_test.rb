@@ -2,6 +2,8 @@ require 'test_helper'
 
 class VoteAccountHistoryQueryTest < ActiveSupport::TestCase
   def setup
+    super
+
     network = 'testnet'
     batch_uuid = create(:batch).uuid
 
@@ -31,6 +33,12 @@ class VoteAccountHistoryQueryTest < ActiveSupport::TestCase
       @vote_account_histories[0...-1].map(&:slot_index_current)
     @vah_skipped_vote_percent =
       @vote_account_histories[0...-1].map(&:skipped_vote_percent)
+  end
+
+  def teardown
+    super
+
+    @vote_account_histories.each(&:destroy)
   end
 
   test 'average_skipped_vote_percent' do

@@ -5,6 +5,8 @@ require 'test_helper'
 # Query Objects for searching for ValidatorHistory relations and objects
 class ValidatorHistoryQueryTest < ActiveSupport::TestCase
   def setup
+    super
+
     network = 'testnet'
     batch_uuid = create(:batch).uuid
     @validator_history_query =
@@ -29,6 +31,12 @@ class ValidatorHistoryQueryTest < ActiveSupport::TestCase
     @root_blocks = @validator_histories[0...-1].map(&:root_block)
     @last_votes = @validator_histories[0...-1].map(&:last_vote)
     @active_stakes = @validator_histories[0...-1].map(&:active_stake)
+  end
+
+  def teardown
+    super
+
+    @validator_histories.each(&:destroy)
   end
 
   test 'for_batch' do
