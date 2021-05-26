@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
-# TODO: docsss
+# QueryObject class created to extract query class methods from
+# ValidatorBlockHistory model.
+# Usage:
+# Set @relation by network and batch_uuid in which query should run:
+#   query = ValidatorBlockHistoryQuery.new(network, batch_uuid)
+# Call query method on scoped @relation
+#   query.average_skipped_slot_percent
+#   query.median_skipped_slot_percent
 class ValidatorBlockHistoryQuery < ApplicationQuery
   def initialize(network, batch_uuid)
     super

@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
-# TODO: Documentation
+# QueryObject class created to extract query class methods from
+# ValidatorsController.
+# Usage:
+# Set @relation by network and batch_uuid in which query should run:
+#   validator_search_query = ValidatorSearchQuery.new(relation)
+# Call query method on scoped @relation
+#   validator_search_query.search(query)
+
 class ValidatorSearchQuery
   def initialize(relation = Validator.joins(:validator_score_v1))
     @relation = relation.joins(:validator_score_v1)

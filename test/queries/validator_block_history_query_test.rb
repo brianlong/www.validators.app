@@ -2,7 +2,6 @@
 
 require 'test_helper'
 
-# TODO: docsss
 class ValidatorBlockHistoryQueryTest < ActiveSupport::TestCase
   def setup
     super

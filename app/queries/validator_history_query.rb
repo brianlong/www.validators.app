@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
-# Query Objects for searching for ValidatorHistory relations and objects
+# QueryObject class created to extract query class methods from
+# ValidatorHistory model.
+# Usage:
+# Set @relation by network and batch_uuid in which query should run:
+#   query = ValidatorHistoryQuery.new(network, batch_uuid)
+# Call query method on scoped @relation
+#   query.for_batch
+#   query.average_root_block
 class ValidatorHistoryQuery < ApplicationQuery
   def initialize(network, batch_uuid)
     super
@@ -9,6 +16,7 @@ class ValidatorHistoryQuery < ApplicationQuery
       ValidatorHistory.where(network: @network, batch_uuid: @batch_uuid)
   end
 
+  # scopes ValidatorHistories by network and batch_uuid
   def for_batch
     @for_batch ||= @relation
   end
@@ -41,6 +49,8 @@ class ValidatorHistoryQuery < ApplicationQuery
     @total_active_stake ||= for_batch.sum(:active_stake)
   end
 
+  # Lists all the ValidatorHistories that collects top 33% of the
+  # all active stakes
   def upto_33_stake
     return @upto_33_stake if @upto_33_stake
 
@@ -60,6 +70,7 @@ class ValidatorHistoryQuery < ApplicationQuery
       ValidatorHistory.where(id: validator_ids).order(active_stake: :desc)
   end
 
+  # ValidatorHistory on the edge of top 33% stakes
   def at_33_stake
     @at_33_stake ||= upto_33_stake.last
   end
