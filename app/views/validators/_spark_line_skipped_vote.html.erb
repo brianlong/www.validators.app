@@ -5,15 +5,16 @@
         type: 'gauge',
         data: {
             datasets: [{
-                data: [-3, 0, 3, 6],
+                data: [-5, -3.0, 0.05],
                 value: <%= local_assigns[:value] %>,
-                minValue: -6,
-                maxValue: 6,
+                minValue: -8,
+                maxValue: 0.05,
                 backgroundColor: [
-                    '<%= LIGHT_GREY_TRANSPARENT %>', '<%= GREEN_TRANSPARENT %>',
-                    '<%= GREEN_TRANSPARENT %>', '<%= LIGHT_GREY_TRANSPARENT %>'
+                    '<%= LIGHT_GREY_TRANSPARENT %>',
+                    '<%= BLUE_TRANSPARENT %>',
+                    '<%= GREEN_TRANSPARENT %>'
                 ],
-                borderColor: ['<%= LIGHT_GREY %>', '<%= GREEN %>', '<%= GREEN %>', '<%= LIGHT_GREY %>'],
+                borderColor: ['<%= LIGHT_GREY %>', '<%= BLUE %>', '<%= GREEN %>'],
                 borderWidth: 0.5
             }]
         },
