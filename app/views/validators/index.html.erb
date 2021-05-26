@@ -165,15 +165,15 @@
 
               <!-- SKIPPED VOTE % -->
               <td class="percent-column align-middle" id="skipped-vote-column-<%=i%>">
-                <% skipped_vote_displayed = skipped_vote_percent(validator, @batch) %>
-                <% if skipped_vote_displayed %>
+                <% skipped_vote_percent = skipped_vote_percent(validator, @batch, @skipped_vote_percent_best) %>
+                <% if skipped_vote_percent %>
                   <div class="d-none d-lg-block">
                     <%= render 'validators/spark_line_skipped_vote',
                                account: validator.account,
-                               value: skipped_vote_displayed
+                               value: skipped_vote_percent
                     %>
                     <div class="text-center text-muted small mt-3">
-                      <%= number_to_percentage(skipped_vote_displayed, precision: 2) %>
+                      <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
                     </div>
                   </div>
                 <% else %>
@@ -181,8 +181,8 @@
                 <% end %>
                 <span class="d-inline-block d-lg-none">
                   Skipped Vote&nbsp;% (distance from leader):&nbsp;
-                  <% if skipped_vote_displayed %>
-                    <%= number_to_percentage(skipped_vote_displayed, precision: 2) %>
+                  <% if skipped_vote_percent %>
+                    <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
                   <% else %>
                     N/A
                   <% end %>

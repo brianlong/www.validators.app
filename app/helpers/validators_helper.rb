@@ -40,11 +40,11 @@ module ValidatorsHelper
     end
   end
 
-  def skipped_vote_percent(validator, batch)
+  def skipped_vote_percent(validator, batch, skipped_vote_percent_best)
     vahl = validator.vote_account_last&.vote_account_history_for(batch.uuid)
     if vahl
       skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
-      skipped_vote_displayed = ((@skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2)
+      skipped_vote_displayed = ((skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2)
     else
       nil
     end
