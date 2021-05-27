@@ -2,12 +2,12 @@
 <div class=" mb-4 col-sm-4" role="toolbar" aria-label="filter"> 
   <%= link_to "Data Centers", \
               data_centers_url(network: params[:network], sort_by: :data_center), \
-              class: "btn #{[nil, 'data_center'].include?(@sort_by) ? 'btn-primary' : 'btn-outline-primary'}", \
+              class: "btn mr-1 #{[nil, 'data_center'].include?(@sort_by) ? 'btn-primary' : 'btn-secondary'}", \
               type: "button" \
   %>
   <%= link_to "ASN",\
               data_centers_url(network: params[:network], sort_by: :asn), \
-              class: "btn #{@sort_by == 'asn' ? 'btn-primary' : 'btn-outline-primary'}", \
+              class: "btn mr-1 #{@sort_by == 'asn' ? 'btn-primary' : 'btn-secondary'}", \
               type: "button" \
   %>
 </div>
