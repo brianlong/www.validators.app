@@ -188,7 +188,10 @@ module StakeBossLogic
       # balance going below the minimum
       split_n_max = split_n_ways
       STAKE_BOSS_N_SPLIT_OPTIONS.each do |n|
-        ds = p.payload[:solana_stake_account].delegated_stake
+        # QUESTION: What should we use here? Previously it was delegated_stake,
+        # but new accounts does not have it.
+        # We switched to the account_balance.
+        ds = p.payload[:solana_stake_account].account_balance
         break if (lamports_to_sol(ds) / n) < 5
 
         split_n_max = n
@@ -429,39 +432,103 @@ module StakeBossLogic
   def delegate_validators_for_batch
     lambda do |p|
       return p unless p.code == 200
+
+      accounts_to_delegate = []
+      sb_stake_account = p.payload[:stake_boss_stake_account]
+      minor_stake_accounts = p.payload[:minor_accounts]
+
       # Collect the list of current_validators from the DB.
-      #
+      # TODO in second iteration
+
       # Get the list of top_validators from the select_validators pipeline
       # function.
       #
+      top_validators = p.payload[:validators]
+
+      raise InvalidStakeAccount, 'No validators provided' \
+        unless top_validators&.any?
+
       # Calculate the difference between the current_validators and the
       # top_validators. Determine which validators should be swapped out and
       # which validators should go in.
       #
+      # TODO in second iteration
+
       # BlockLogic will always have at least one delegation from the
       # primary_account. If the primary_account was already delegated when we
       # got the authority, we should re-asssign away from the existing
       # validator to BlockLogic. BlockLogic will also be eligible for a second
       # delegation if justified by on-chain performance.
       #
+      # TODO in second iteration, currently we should get only not assigned accounts.
+      sb_stake_account.delegated_vote_account_address = BLOCK_LOGIC_VOTE_ACCOUNT
+      accounts_to_delegate << sb_stake_account
+
       # Grab the primary_account for the given batch and read the value for
       # `split_n_ways` from that. Also count the number of stake accounts in
       # that batch and make sure the counts match. Raise an error and notify an
       # admin of all errors inside this function.
       #
+      # minor accounts + 1 main account
+
+      raise InvalidStakeAccount, 'Number of stake accounts is not correct' \
+        unless minor_stake_accounts.size + 1 == sb_stake_account.split_n_ways
+
+      #
       # If this is the first time we have run a batch, the current_validators
       # set will be empty and we can simply loop through and assign validators
       # from the top_validators list.
       #
+      minor_stake_accounts.each_with_index do |msa, i|
+
+        # Is there a chance that we will have less validators than minor accounts?
+        # Check number of validators BEFORE splitting account
+        msa.delegated_vote_account_address = top_validators[i]
+
+        accounts_to_delegate << msa
+      end
+
       # Otherwise, we will use the difference sets to find the stake account
       # for each validator that we want to remove and replace with a top
       # performer.
       #
+      # TODO in second iteration,
+
       # Execute the CHANGED delegations on the blockchain. Don't spend the tx
       # fees if the validator doesn't change.
       #
-      # Update the DB records.
-      #
+      # TODO in second iteration, when we will get accounts already delegated.
+      # Now we simply delegate and save record in a transaction.
+      accounts_to_delegate.each do |atd|
+        ActiveRecord::Base.transaction do
+          cli_resp = check_balance(
+            stake_account_address: atd.address,
+            urls: p.payload[:config_urls]
+          )['cli_response']
+
+          cli_balance = cli_resp['accountBalance']
+          raise InvalidStakeAccount, 'Insufficient balance.' \
+            unless atd.account_balance >= cli_balance
+
+          cli_active_stake = cli_resp['activeStake']
+          cli_delegated_stake = cli_resp['delegatedStake']
+          cli_delegated_vote_account_address = cli_resp['delegatedVoteAccountAddress']
+          raise InvalidStakeAccount, 'Stake already delegated.' if \
+            cli_active_stake == cli_delegated_stake && cli_delegated_vote_account_address.present?
+
+          cli_delegate_resp = delegate_stake_cli(
+            vote_account_address: atd.delegated_vote_account_address,
+            stake_account_address: atd.address,
+            urls: p.payload[:config_urls]
+          )
+
+          raise InvalidStakeAccount, "CLI error: #{cli_delegate_resp['cli_error']}" \
+            if cli_delegate_resp['cli_error'].present?
+
+          atd.save!
+        end
+      end
+
       # The solana command looks like this (testnet). In this example,
       # 2TqbsD5tW1bNRCZpRSDq7CejLVJwMNwuouvPaMdSdrk2 is the stake account
       # address, and 38QX3p44u4rrdAYvTh2Piq7LvfVps9mcLV9nnmUmK28x is the
@@ -486,7 +553,7 @@ module StakeBossLogic
   # get accound address based on STAKE_BOSS_ADDRESS and account id
   def find_address_by_seed(seed:, urls:)
     new_acc_address = cli_request("create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{seed} STAKE", urls)
-    new_acc_address['cli_response']
+    new_acc_address['cli_response'].strip
   end
 
   # Create new account in db and in solana
@@ -526,5 +593,25 @@ module StakeBossLogic
     )
     new_acc_from_cli.get
     new_acc_from_cli
+  end
+
+  def check_balance(stake_account_address:, urls:)
+    request_str = "stake-account #{stake_account_address}"
+    cli_request(request_str, urls)
+  end
+
+  def delegate_stake_cli(
+    stake_account_address:,
+    vote_account_address:,
+    urls:
+  )
+
+    method = [
+      'delegate-stake',
+      "--stake-authority #{STAKE_BOSS_KEYPAIR_FILE} #{stake_account_address} #{vote_account_address}",
+      "--fee-payer #{STAKE_BOSS_KEYPAIR_FILE}"
+    ].join(' ')
+
+    cli_request(method, urls)
   end
 end
