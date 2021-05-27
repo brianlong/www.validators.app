@@ -1,23 +1,18 @@
 module ValidatorsHelper
   def chart_line_color(score)
     return GREEN if score == 2
-
     return BLUE if score == 1
-
     LIGHT_GREY
   end
 
   def chart_fill_color(score)
     return GREEN_TRANSPARENT if score == 2
-
     return BLUE_TRANSPARENT if score == 1
-
     LIGHT_GREY_TRANSPARENT
   end
 
   def score_class(score)
     return 'text-danger' if score == -2
-
     'text-warning'
   end
 
@@ -43,5 +38,12 @@ module ValidatorsHelper
     else
       batch.software_version
     end
+  end
+
+  def skipped_vote_percent(validator, batch, skipped_vote_percent_best)
+    vahl = validator.vote_account_last&.vote_account_history_for(batch.uuid)
+    return unless vahl
+    skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
+    ((skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2)
   end
 end
