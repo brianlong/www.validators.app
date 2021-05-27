@@ -39,15 +39,6 @@
             <th class="name-column pr-1">
               Name <small class="text-muted">(Commission)</small><br />
               Active Stake <small class="text-muted">(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
-              Software
-              <small class="text-muted">
-                <% if params[:network] == 'mainnet' %>
-                  (<%= MAINNET_CLUSTER_VERSION %>)
-                <% else %>
-                  (<%= TESTNET_CLUSTER_VERSION %>)
-                <% end %>
-              </small>
-              <br />
               Scores <small class="text-muted">(total)</small>
             </th>
             <th class='percent-column'>
@@ -110,17 +101,6 @@
             <% i += 1 %>
             <tr id="row-<%=i%>">
               <td class="avatar-column">
-                <div class="number">
-                  <%=
-                    link_to i, validator_url(
-                      network: params[:network],
-                      account: validator.account,
-                      order: params[:order],
-                      page: params[:page],
-                      refresh: params[:refresh]
-                    )
-                  %>
-                </div>
                 <div class="avatar">
                   <% if validator.private_validator? %>
                     <div class="img-circle-medium-private">
@@ -140,7 +120,7 @@
               <td class="name-column">
                 <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                             class: 'font-weight-bold' do %>
-                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
+                  <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
                 <% end %>
                 <% unless validator.private_validator? %>
                   <small>
@@ -152,11 +132,6 @@
                 <small>
                   <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
                   (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
-                </small>
-                <br />
-                <span class="d-inline-block d-lg-none">Sofware version:&nbsp;</span>
-                <small class="<%= software_color_class(validator.software_version) %>">
-                  <%= validator.software_version || 'N/A' %>
                 </small>
                 <br />
                 <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>

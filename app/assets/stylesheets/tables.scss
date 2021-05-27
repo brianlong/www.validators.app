@@ -37,13 +37,7 @@ table, .table {
   .avatar-column {
     width: 75px;
     text-align: center;
-    padding: 0 5px;
-    .number {
-      font-weight: $font-weight-bold-primary;
-      @include font-family-alternative;
-      padding: $padding-standard 0 10px 0;
-      a { color: $grey-light; }
-    }
+    padding: 25px 0 0 0;
     .avatar {
       padding-bottom: 5px;
       .img-circle-medium-private {
