@@ -553,7 +553,7 @@ module StakeBossLogic
   # get accound address based on STAKE_BOSS_ADDRESS and account id
   def find_address_by_seed(seed:, urls:)
     new_acc_address = cli_request("create-address-with-seed --from #{STAKE_BOSS_ADDRESS} #{seed} STAKE", urls)
-    new_acc_address['cli_response']
+    new_acc_address['cli_response'].strip
   end
 
   # Create new account in db and in solana
