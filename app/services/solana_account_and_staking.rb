@@ -22,7 +22,7 @@ class SolanaAccountAndStaking
 
   def initialize(
     dir_path: Rails.root.join('tmp'),
-    keypair_file: 'stake_boss_testnet_keypair_file.json', #'my-keypair.json',
+    keypair_file: 'stake_boss_testnet_keypair_file.json', # 'my-keypair.json'
     url: 'https://api.testnet.solana.com',
     amount: 1,
     stake_account_file: 'stake-account.json'
@@ -69,6 +69,11 @@ class SolanaAccountAndStaking
     current_balance = check_balance[:cli_response].scan(/\d+/).first
 
     puts "#{amount} SOL tokens added. Current balance: #{current_balance}"
+  end
+
+  def transfer_sols(recipient: 'BossttsdneANBePn2mJhooAewt3fo4aLg7enmpgMvdoH', amount: 1)
+    transfer_command = "transfer --from #{@keypair_file_path} #{recipient} #{amount} --allow-unfunded-recipient --fee-payer #{@keypair_file_path}"
+    SolanaCliService.request(cli_method: transfer_command, rpc_url: @url)
   end
 
   def check_balance
@@ -172,14 +177,19 @@ class SolanaAccountAndStaking
     check_command = "create-address-with-seed --from #{stake_account_pubkey} #{seed_string} STAKE"
     cli_response = SolanaCliService.request(cli_method: check_command, rpc_url: @url)
 
-    @derived_stake_account ||= cli_response[:cli_response].strip
+    cli_response[:cli_response].strip
   end
 
   def withdraw_stake(amount: 1, stake_account: @stake_file_path)
     withdraw_command = "withdraw-stake --withdraw-authority #{@keypair_file_path} #{stake_account} #{wallet_pubkey} #{amount} \
     --fee-payer #{@keypair_file_path}"
 
-    cli_response = SolanaCliService.request(cli_method: withdraw_command, rpc_url: @url)
+    SolanaCliService.request(cli_method: withdraw_command, rpc_url: @url)
+  end
+
+  def merge_stake
+    "solana merge-stake 9qA3V5vUN9wcLa6DS3PTst8YMD4FVwXR15vUW4wiyvTB 5gcBNPaeX6DwcYoAUSasYnpTMuMhyRtKETBXZsbyg2mx --fee-payer /home/rstolarski/Polcode/FMA/www.validators.app/tmp/stake_boss_testnet_keypair_file.json --keypair /home/rstolarski/Polcode/FMA/www.validators.app/tmp/stake_boss_testnet_keypair_file.json
+    "
   end
 
   def check_balance_each_account(accounts: nil, number: 1)
@@ -188,8 +198,9 @@ class SolanaAccountAndStaking
       res = view_stake_account(stake_account: account)
       puts account
       puts res
+      puts "\n"
 
-      sleep 5
+      sleep 3
     end
   end
 
