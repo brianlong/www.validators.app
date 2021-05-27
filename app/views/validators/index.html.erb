@@ -170,7 +170,7 @@
                   <div class="d-none d-lg-block">
                     <%= render 'validators/spark_line_skipped_vote',
                                account: validator.account,
-                               value: skipped_vote_percent
+                               value: [skipped_vote_percent, -8].max
                     %>
                     <div class="text-center text-muted small mt-3">
                       <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
