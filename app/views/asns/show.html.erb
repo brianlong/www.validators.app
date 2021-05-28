@@ -1,0 +1,65 @@
+<h1 class="page-header"><%= params[:network].capitalize %> Autonomous System Number</h1>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <table class='table mb-0'>
+        <thead>
+          <tr>
+            <th colspan="2">
+              <strong> ASN: </strong>
+              <%= params[:asn] %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="category-column"><strong>Data Centers</strong></td>
+          <td>
+            <% @data_centers.uniq.each do |dc| %>
+              <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
+              <br \>
+            <% end %>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <table class='table mb-0'>
+        <thead>
+        <tr>
+          <th colspan="2">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Population</strong></td>
+            <td><%= @scores.count %></td>
+          </tr>
+          <tr>
+            <td><strong>Total Stake</strong></td>
+            <td>
+              <%= number_with_delimiter(lamports_to_sol(@asn_stake).round(0)) %>
+              (<%= number_to_percentage((@asn_stake/@total_stake.to_f)*100.0,
+                                        precision: 2) %>)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%= link_to 'Back to ASN list',
+            data_centers_url(network: params[:network], sort_by: 'asn'),
+            class: 'btn btn-sm btn-secondary mb-4' %>
+
+<%= render 'validators/basic_list', scores: @scores %>
+
+<%= link_to 'Back to ASN list',
+            data_centers_url(network: params[:network], sort_by: 'asn'),
+            class: 'btn btn-sm btn-secondary mb-4' %>

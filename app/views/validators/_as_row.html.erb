@@ -1,0 +1,43 @@
+<% # EXAMPLE: render '/validators/as_row', score: ValidatorScoreV1.first %> 
+
+<% this_validator = score.validator %>
+<tr>
+  <td class="d-none d-lg-table-cell">
+    <span class="avatar">
+      <% if this_validator && this_validator.avatar_url %>
+        <%= image_tag this_validator.avatar_url, class: 'img-circle mb-1' %>
+      <% else %>
+        <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle mb-1' %>
+      <% end %>
+    </span>
+    <% if score.delinquent? %>
+      <small class="text-danger">delinquent</small>
+    <% end %>
+  </td>
+  <td>
+    <div class="mb-2">
+      <div class="d-lg-none">Name & Stake:</div>
+      <%= link_to validator_display_name(this_validator) + ":",
+                  validator_url(network: params[:network], account: this_validator.account),
+                  class: 'font-weight-bold' %>
+      <%= number_with_delimiter lamports_to_sol(score.active_stake).round(2) %>
+      (<%= number_to_percentage((score.active_stake / @total_stake.to_f)*100.0, precision: 2) %>)
+    </div>
+    <div class="d-lg-none">Account:</div>
+    <%= link_to this_validator.account,
+                validator_url(network: params[:network],account: this_validator.account),
+                class: 'word-break-md' %>
+    <br />
+    <%= render 'validators/scores', validator: this_validator %>
+  </td>
+  <td>
+    <div class="mb-2">
+      <div class="d-lg-none">IP Address: </div>
+      <%= score.ip_address %>
+    </div>
+    <% if Ip.where(address: score.ip_address).first %>
+      <div class="d-lg-none">Data Center Gateway: </div>
+      <%= Ip.where(address: score.ip_address).first&.data_center_host %>
+    <% end %>
+  </td>
+</tr>

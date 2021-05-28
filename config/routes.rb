@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'asns/:network/:asn',
+      to: 'asns#show',
+      as: 'asn'
   # Pages for Log Deep Dives
   get 'log-deep-dives/',
       to: 'log_deep_dives#index',
