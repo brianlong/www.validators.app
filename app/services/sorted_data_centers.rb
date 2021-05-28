@@ -26,7 +26,10 @@ class SortedDataCenters
         AND score.active_stake > 0
       )
     "
-    @dc_sql = Ip.connection.execute(ActiveRecord::Base.send(:sanitize_sql, [sql, network]))
+    @dc_sql = Ip.connection.execute(
+      ActiveRecord::Base.send(:sanitize_sql, [sql, network])
+    )
+
     @scores = ValidatorScoreV1.where(network: network)
                               .where('active_stake > 0')
 
@@ -36,19 +39,18 @@ class SortedDataCenters
   end
 
   def sort_by_asn
-    asns = Hash.new([])
+    @dc_sql = @dc_sql.group_by { |dc| dc[1] }
     @dc_sql.each do |dc|
-      asns[dc[1]] += [dc[0]]
-    end
-    asns.keys.each do |asn|
-      population = @scores.where(data_center_key: asns[asn]).count || 0
-      active_stake = @scores.where(data_center_key: asns[asn]).sum(:active_stake)
+      dc_keys = dc[1].map { |x| x[0] }
+      population = @scores.where(data_center_key: dc_keys).count || 0
+      active_stake = @scores.where(data_center_key: dc_keys).sum(:active_stake)
       next if population.zero?
 
       @total_population += population
-      @results[asn] = {
-        asn: asn,
-        data_centers: asns[asn],
+
+      @results[dc[0]] = {
+        asn: dc[0],
+        data_centers: dc_keys,
         count: population,
         active_stake: active_stake
       }
@@ -62,8 +64,6 @@ class SortedDataCenters
       next if population.zero?
 
       @total_population += population
-      Rails.logger.info "#{dc.inspect} => #{population}"
-      Rails.logger.info "Active Stake: #{active_stake}"
 
       @results[dc[0]] = {
         aso: dc[1],
