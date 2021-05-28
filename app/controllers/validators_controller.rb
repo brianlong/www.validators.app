@@ -44,13 +44,10 @@ class ValidatorsController < ApplicationController
     validator_history =
       ValidatorHistoryQuery.new(params[:network], @batch.uuid)
 
-    return if params[:q].present?
-
     at_33_stake_validator = validator_history.at_33_stake&.validator
     @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
 
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
-
   end
 
   # GET /validators/1
