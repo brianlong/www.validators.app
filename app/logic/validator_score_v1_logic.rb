@@ -191,7 +191,7 @@ module ValidatorScoreV1Logic
 
 
         v.validator_score_v1.stake_concentration_score = \
-          v.validator_score_v1.active_stake >= at_33_active_stake ? -2 : 0
+          v.validator_score_v1.active_stake.to_i >= at_33_active_stake ? -2 : 0
 
       rescue StandardError => e
         Appsignal.send_error(e)
