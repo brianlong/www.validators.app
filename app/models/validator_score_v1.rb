@@ -71,6 +71,7 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_slot_moving_average_history, JSON
 
   scope :with_active_stake, ->(network) { where(network: network).where('active_stake > 0') }
+  scope :by_data_centers, ->(data_center_keys) { where(data_center_key: data_center_keys) }
 
   def calculate_total_score
     # Assign special scores before calculating the total score

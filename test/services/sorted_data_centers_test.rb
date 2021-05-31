@@ -4,7 +4,7 @@ class SortedDataCenterTest < ActiveSupport::TestCase
 
   setup do
     3.times do
-      ip = create(:ip_china)
+      ip = create(:ip, :ip_china)
       create(
         :validator_score_v1,
         ip_address: ip.address,
@@ -15,7 +15,8 @@ class SortedDataCenterTest < ActiveSupport::TestCase
     end
     2.times do
       ip = create(
-        :ip_berlin, 
+        :ip,
+        :ip_berlin,
         traits_autonomous_system_number: 12345
       )
       create(
@@ -27,7 +28,7 @@ class SortedDataCenterTest < ActiveSupport::TestCase
       )
     end
     3.times do
-      ip = create(:ip_berlin)
+      ip = create(:ip, :ip_berlin)
       create(
         :validator_score_v1,
         ip_address: ip.address,

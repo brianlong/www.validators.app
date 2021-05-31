@@ -6,12 +6,12 @@ class AsnsController < ApplicationController
     render file: "#{Rails.root}/public/404.html", status: 404 if @data_centers.empty?
 
     @scores = ValidatorScoreV1.includes(:validator).with_active_stake(asn_params[:network])
-                              .where(data_center_key: @data_centers)
+                              .by_data_centers(@data_centers)
 
     @asn_stake = @scores.sum(:active_stake)
 
     @total_stake = ValidatorScoreV1.with_active_stake(asn_params[:network])
-                                   .where(data_center_key: @data_centers)
+                                   .by_data_centers(@data_centers)
                                    .sum(:active_stake)
   end
 

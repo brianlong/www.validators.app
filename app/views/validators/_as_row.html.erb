@@ -4,11 +4,7 @@
 <tr>
   <td class="d-none d-lg-table-cell">
     <span class="avatar">
-      <% if avatar_present?(this_validator) %>
-        <%= image_tag this_validator.avatar_url, class: 'img-circle mb-1' %>
-      <% else %>
-        <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle mb-1' %>
-      <% end %>
+      <%= display_avatar(this_validator) %>
     </span>
     <% if score.delinquent? %>
       <small class="text-danger">delinquent</small>

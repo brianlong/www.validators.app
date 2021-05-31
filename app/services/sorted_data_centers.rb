@@ -42,8 +42,8 @@ class SortedDataCenters
     @dc_sql = @dc_sql.group_by { |dc| dc[1] }
     @dc_sql.each do |dc|
       dc_keys = dc[1].map { |x| x[0] }
-      population = @scores.where(data_center_key: dc_keys).count || 0
-      active_stake = @scores.where(data_center_key: dc_keys).sum(:active_stake)
+      population = @scores.by_data_centers(dc_keys).count || 0
+      active_stake = @scores.by_data_centers(dc_keys).sum(:active_stake)
       next if population.zero?
 
       @total_population += population
@@ -59,8 +59,8 @@ class SortedDataCenters
 
   def sort_by_data_centers
     @dc_sql.each do |dc|
-      population = @scores.where(data_center_key: dc[0]).count || 0
-      active_stake = @scores.where(data_center_key: dc[0]).sum(:active_stake)
+      population = @scores.by_data_centers(dc[0]).count || 0
+      active_stake = @scores.by_data_centers(dc[0]).sum(:active_stake)
       next if population.zero?
 
       @total_population += population

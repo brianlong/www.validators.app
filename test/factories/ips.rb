@@ -18,14 +18,14 @@ FactoryBot.define do
     traits_organization { 'Organization' }
     location_time_zone { 'Asia/Shanghai' }
 
-    factory :ip_berlin do
+    trait :ip_berlin do
       traits_autonomous_system_number { 54321 }
       data_center_key { '54321-DE-Europe/Berlin' }
       traits_autonomous_system_organization { 'Berlin Organisation' }
       country_iso_code { 'DE' }
     end
 
-    factory :ip_china do
+    trait :ip_china do
       traits_autonomous_system_number { 12345 }
       data_center_key { '12345-CN-Asia/Shanghai' }
       traits_autonomous_system_organization { 'Chinese Organisation' }
