@@ -13,8 +13,8 @@ class ReportLogicTest < ActiveSupport::TestCase
     @initial_payload = {
       # config_urls: Rails.application.credentials.solana[:testnet_urls],
       config_urls: [
+        'https://api.testnet.solana.com',
         'http://165.227.100.142:8899',
-        'http://testnet.solana.com:8899',
         'http://127.0.0.1:8899'
       ],
       network: 'testnet'
@@ -28,7 +28,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
     VCR.use_cassette('report_tower_height') do
       json_data = File.read("#{Rails.root}/test/json/validators.json")
-      SolanaCliService.stub(:request, json_data, ['validators', 'http://165.227.100.142:8899/']) do
+      SolanaCliService.stub(:request, json_data, ['validators', 'https://api.testnet.solana.com',]) do
         # Show that the pipeline runs & the expected values are not empty.
         p = Pipeline.new(200, @initial_payload)
                     .then(&batch_set)

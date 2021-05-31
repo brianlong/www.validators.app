@@ -35,14 +35,9 @@ table, .table {
   }
 
   .avatar-column {
-    width: 70px;
+    width: 75px;
     text-align: center;
-    .number {
-      font-weight: $font-weight-bold-primary;
-      @include font-family-alternative;
-      padding: $padding-standard 0 10px 0;
-      a { color: $grey-light; }
-    }
+    padding: 25px 0 0 0;
     .avatar {
       padding-bottom: 5px;
       .img-circle-medium-private {
@@ -52,7 +47,12 @@ table, .table {
   }
 
   .name-column {
-    width: 195px;
+    width: 190px;
+    padding-left: 0;
+    padding-right: 5px;
+    @media(max-width: $screen-lg-max) {
+      padding-left: 20px;
+    }
   }
 
   .category-column {
@@ -141,8 +141,18 @@ table, .table {
   width: 100%;
   table-layout: fixed;
 
+  .percent-column {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 130px;
+  }
+
   @media(max-width: $screen-lg-max) {
-    .percent-column { width: 96px; }
+    .percent-column {
+      width: 97px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
     .avatar-column { display: none; }
   }
 
@@ -168,11 +178,6 @@ table, .table {
       padding-left: 25px;
       width: 84%;
     }
-  }
-
-  #row-halt-line {
-    text-align: center;
-    color: $orange;
   }
 
 }

@@ -6,6 +6,8 @@ require 'rails/test_help'
 require 'faker'
 require 'minitest/mock'
 
+Dir[Rails.root.join("test/support/**/*")].each { |f| require f }
+
 VCR.configure do |config|
   config.cassette_library_dir = 'test/vcr_cassettes'
   config.hook_into :webmock
