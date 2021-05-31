@@ -57,8 +57,9 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     create(:validator_score_v1, active_stake: 100, network: 'testnet')
     create(:validator_score_v1, active_stake: 0, network: 'testnet')
     create(:validator_score_v1, active_stake: 100, network: 'mainnet')
-    
+
     res = ValidatorScoreV1.by_network_with_active_stake('testnet')
+
     assert_equal 1, res.count
     assert_equal 'testnet', res.first.network
     assert_equal 100, res.first.active_stake
