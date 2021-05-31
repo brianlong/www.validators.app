@@ -20,10 +20,11 @@
       (<%= percent_of_total_stake(score.active_stake, @total_stake) %>)
     </div>
     <div class="d-lg-none">Account:</div>
-    <%= link_to this_validator.account,
-                validator_url(network: params[:network],account: this_validator.account),
-                class: 'word-break-md' %>
-    <br />
+    <div class="mb-2">
+      <%= link_to this_validator.account,
+                  validator_url(network: params[:network],account: this_validator.account),
+                  class: 'word-break-md' %>
+    </div>
     <%= render 'validators/scores', validator: this_validator %>
   </td>
   <td>
