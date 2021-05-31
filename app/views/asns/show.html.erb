@@ -16,7 +16,7 @@
         <tr>
           <td class="category-column"><strong>Data Centers</strong></td>
           <td>
-            <% @data_centers.uniq.each do |dc| %>
+            <% @data_centers.each do |dc| %>
               <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
               <br \>
             <% end %>

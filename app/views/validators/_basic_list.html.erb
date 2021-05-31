@@ -22,7 +22,7 @@
     </thead>
     <tbody>
       <% scores.each do |sc| %>
-        <%= render '/validators/as_row', score: sc %>   
+        <%= render '/validators/as_row', score: sc, score_ip: Ip.where(address: sc.ip_address).first %>   
       <% end %>
     </tbody>
   </table>

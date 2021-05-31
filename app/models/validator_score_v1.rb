@@ -70,6 +70,8 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_vote_percent_moving_average_history, JSON
   serialize :skipped_slot_moving_average_history, JSON
 
+  scope :with_active_stake, ->(network) { where(network: network).where('active_stake > 0') }
+
   def calculate_total_score
     # Assign special scores before calculating the total score
     assign_published_information_score

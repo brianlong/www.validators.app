@@ -36,4 +36,12 @@ module ValidatorsHelper
     end
     number_to_percentage(position, precision: 0)
   end
+
+  def avatar_present?(validator)
+    validator&.avatar_url
+  end
+
+  def percent_of_total_stake(active_stake, total_stake)
+    number_to_percentage((active_stake / total_stake.to_f) * 100.0, precision: 2)
+  end
 end
