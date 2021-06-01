@@ -14,7 +14,9 @@
       <div class="col-6 col-md-3 mb-md-3">
         <small class="text-muted">Software Ver.:</small>
         <div class="h2 text-purple">
-          <%= current_software_version(@batch, params[:network]) %>
+          <%= params[:network] == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION %>
+
+          <%# current_software_version(@batch, params[:network]) %>
         </div>
       </div>
       <div class="col-6 col-md-3 mb-md-3">
