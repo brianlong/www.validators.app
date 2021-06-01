@@ -2,6 +2,7 @@ class SortedDataCenters
 
   def call
     @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
+
     @results = @results.sort_by { |_k, v| -v[:active_stake] }
     {
       total_population: @total_population,
@@ -50,6 +51,7 @@ class SortedDataCenters
 
       @results[dc[0]] = {
         asn: dc[0],
+        aso: dc[1][0][2],
         data_centers: dc_keys,
         count: population,
         active_stake: active_stake
