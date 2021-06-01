@@ -16,8 +16,12 @@
             <tbody>
             <% @software_versions.payload.each do |group| %>
               <tr>
-                <td><%= group.first[0] %></td>
-                <td><%= group.first[1] %></td>
+                <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
+                  <%= group.first[0] %>
+                </td>
+                <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
+                  <%= group.first[1] %>
+                </td>
               </tr>
             <% end %>
             </tbody>
