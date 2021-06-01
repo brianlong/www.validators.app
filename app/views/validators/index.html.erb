@@ -1,7 +1,6 @@
 <%= render 'validators/banner' %>
-<% unless @validators.empty? %>
-  <%= render 'validators/stats' %>
 
+<% unless @validators.empty? %>
   <div class="card">
     <div class="card-content pb-0">
       <h1 class="h2 card-heading">Solana <%= params[:network].capitalize %> Validators</h1>
@@ -281,4 +280,8 @@
     </div>
   </div>
 <% end %>
-<%= render 'validators/software_versions' %>
+
+<div class="row">
+  <%= render 'validators/software_versions' %>
+  <%= render 'validators/stats' %>
+</div>
