@@ -5,24 +5,29 @@ json.extract! validator,
               :network, :account, :name, :keybase_id, :www_url,
               :details, :created_at, :updated_at
 
-unless @score.nil?
-  json.total_score @score.total_score
-  json.root_distance_score @score.root_distance_score
-  json.vote_distance_score @score.vote_distance_score
-  json.skipped_slot_score @score.skipped_slot_score
-  json.software_version @score.software_version
-  json.software_version_score @score.software_version_score
-  json.stake_concentration_score @score.stake_concentration_score
-  json.data_center_concentration_score @score.data_center_concentration_score
-  json.published_information_score @score.published_information_score
-  json.security_report_score @score.security_report_score
-  json.active_stake @score.active_stake
-  json.commission @score.commission
-  json.delinquent @score.delinquent
-  json.data_center_key @score.data_center_key
-  json.data_center_host @score.data_center_host
-  unless @ip.nil?
-    json.autonomous_system_number @ip.traits_autonomous_system_number
+# TODO: fix it because we're missing scores and ips from index API endpoint
+# This json partial is used not only for the show page but for the index page as well.
+# HOTFIX
+score = validator.score
+ip = Ip.find_by(address: score.ip_address)
+unless score.nil?
+  json.total_score score.total_score
+  json.root_distance_score score.root_distance_score
+  json.vote_distance_score score.vote_distance_score
+  json.skipped_slot_score score.skipped_slot_score
+  json.software_version score.software_version
+  json.software_version_score score.software_version_score
+  json.stake_concentration_score score.stake_concentration_score
+  json.data_center_concentration_score score.data_center_concentration_score
+  json.published_information_score score.published_information_score
+  json.security_report_score score.security_report_score
+  json.active_stake score.active_stake
+  json.commission score.commission
+  json.delinquent score.delinquent
+  json.data_center_key score.data_center_key
+  json.data_center_host score.data_center_host
+  unless ip.nil?
+    json.autonomous_system_number ip.traits_autonomous_system_number
   end
 end
 
