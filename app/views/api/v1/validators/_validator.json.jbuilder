@@ -5,9 +5,6 @@ json.extract! validator,
               :network, :account, :name, :keybase_id, :www_url,
               :details, :created_at, :updated_at
 
-# TODO: fix it because we're missing scores and ips from index API endpoint
-# This json partial is used not only for the show page but for the index page as well.
-# HOTFIX
 score = validator.score
 ip = Ip.find_by(address: score.ip_address)
 unless score.nil?
