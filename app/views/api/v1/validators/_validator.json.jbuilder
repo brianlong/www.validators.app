@@ -9,6 +9,7 @@ json.extract! validator,
 # This json partial is used not only for the show page but for the index page as well.
 # HOTFIX
 @score ||= validator.score
+@ip = Ip.find_by(address: @score.ip_address)
 unless @score.nil?
   json.total_score @score.total_score
   json.root_distance_score @score.root_distance_score
