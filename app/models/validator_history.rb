@@ -5,17 +5,17 @@
 # Table name: validator_histories
 #
 #  id               :bigint           not null, primary key
-#  account          :string(255)
+#  account          :string(191)
 #  active_stake     :bigint           unsigned
-#  batch_uuid       :string(255)
+#  batch_uuid       :string(191)
 #  commission       :decimal(10, )    unsigned
 #  credits          :bigint           unsigned
 #  delinquent       :boolean          default(FALSE)
 #  last_vote        :bigint           unsigned
-#  network          :string(255)
+#  network          :string(191)
 #  root_block       :bigint           unsigned
-#  software_version :string(255)
-#  vote_account     :string(255)
+#  software_version :string(191)
+#  vote_account     :string(191)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

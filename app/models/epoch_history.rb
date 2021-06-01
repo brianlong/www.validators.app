@@ -3,10 +3,10 @@
 # Table name: epoch_histories
 #
 #  id             :bigint           not null, primary key
-#  batch_uuid     :string(255)
+#  batch_uuid     :string(191)
 #  current_slot   :bigint
 #  epoch          :integer
-#  network        :string(255)
+#  network        :string(191)
 #  slot_index     :integer
 #  slots_in_epoch :integer
 #  created_at     :datetime         not null
