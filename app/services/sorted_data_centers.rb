@@ -51,7 +51,7 @@ class SortedDataCenters
 
       @results[dc[0]] = {
         asn: dc[0],
-        aso: dc[1][0][2],
+        aso: dc[1].map { |d| d[2] }.uniq.join(', '),
         data_centers: dc_keys,
         count: population,
         active_stake: active_stake
