@@ -30,13 +30,21 @@ class Validator < ApplicationRecord
 
   # after_save :copy_data_to_score
 
-  # Returns an Array of account IDs for a given network
-  #
-  # Validator.accounts_for('testnet') => ['1234', '5678']
-  def self.accounts_for(network)
-    where(network: network)
-      .select('account')
-      .map(&:account)
+  class << self
+    # Returns an Array of account IDs for a given network
+    #
+    # Validator.accounts_for('testnet') => ['1234', '5678']
+    def accounts_for(network)
+      where(network: network)
+        .select('account')
+        .map(&:account)
+    end
+
+    # summarised active stake for all validators in the given network
+    def total_active_stake_for(network)
+      where(network: network).joins(:validator_score_v1).sum(:active_stake)
+    end
+
   end
 
   def validator_history_last
