@@ -5,7 +5,7 @@ require 'test_helper'
 # ValidatorsControllerTest
 class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @validator = validators(:one)
+    @validator = create(:validator, :with_score, network: 'testnet')
   end
 
   test 'should get index' do

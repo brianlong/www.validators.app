@@ -9,16 +9,16 @@
 #
 #  id                                  :bigint           not null, primary key
 #  activated_stake                     :bigint
-#  batch_uuid                          :string(255)
+#  batch_uuid                          :string(191)
 #  commission                          :integer
 #  credits                             :bigint
 #  credits_current                     :bigint
 #  last_vote                           :bigint
-#  network                             :string(255)
+#  network                             :string(191)
 #  root_slot                           :bigint
 #  skipped_vote_percent_moving_average :decimal(10, 4)
 #  slot_index_current                  :integer
-#  software_version                    :string(255)
+#  software_version                    :string(191)
 #  created_at                          :datetime         not null
 #  updated_at                          :datetime         not null
 #  vote_account_id                     :bigint           not null
@@ -44,22 +44,6 @@ class VoteAccountHistory < ApplicationRecord
 
   def skipped_vote_percent
     ((slot_index_current.to_i - credits_current.to_i)/slot_index_current.to_f).round(2)
-  end
-
-  def self.average_skipped_vote_percent_for(network:, batch_uuid:)
-    vah_skipped = where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).map(&:skipped_vote_percent)
-    vah_skipped.sum / vah_skipped.count
-  end
-
-  def self.median_skipped_vote_percent_for(network:, batch_uuid:)
-    vah_skipped = where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).map(&:skipped_vote_percent)
-    vah_skipped.sort[vah_skipped.length/2]
   end
 
   def self.average_skipped_vote_percent_moving_average_for(network:, batch_uuid:)

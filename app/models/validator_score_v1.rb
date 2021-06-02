@@ -22,11 +22,11 @@
 #  commission                                  :integer
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
-#  data_center_host                            :string(255)
-#  data_center_key                             :string(255)
+#  data_center_host                            :string(191)
+#  data_center_key                             :string(191)
 #  delinquent                                  :boolean
-#  ip_address                                  :string(255)
-#  network                                     :string(255)
+#  ip_address                                  :string(191)
+#  network                                     :string(191)
 #  ping_time_avg                               :decimal(10, 3)
 #  published_information_score                 :integer
 #  root_distance_history                       :text(65535)
@@ -39,7 +39,7 @@
 #  skipped_slot_score                          :integer
 #  skipped_vote_history                        :text(65535)
 #  skipped_vote_percent_moving_average_history :text(65535)
-#  software_version                            :string(255)
+#  software_version                            :string(191)
 #  software_version_score                      :integer
 #  stake_concentration                         :decimal(10, 3)
 #  stake_concentration_score                   :integer
@@ -84,18 +84,19 @@ class ValidatorScoreV1 < ApplicationRecord
     assign_software_version_score
     assign_security_report_score
 
-    if validator.private_validator?
-      self.total_score = 0
-    else
-      self.total_score = root_distance_score.to_i +
-                         vote_distance_score.to_i +
-                         skipped_slot_score.to_i +
-                         published_information_score.to_i +
-                         security_report_score.to_i +
-                         software_version_score.to_i +
-                         stake_concentration_score.to_i +
-                         data_center_concentration_score.to_i
-    end
+    self.total_score =
+      if validator.private_validator?
+        0
+      else
+        root_distance_score.to_i +
+          vote_distance_score.to_i +
+          skipped_slot_score.to_i +
+          published_information_score.to_i +
+          security_report_score.to_i +
+          software_version_score.to_i +
+          stake_concentration_score.to_i +
+          data_center_concentration_score.to_i
+      end
   end
 
   def delinquent?

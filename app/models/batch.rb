@@ -11,12 +11,12 @@
 #
 #  id                        :bigint           not null, primary key
 #  gathered_at               :datetime
-#  network                   :string(255)
+#  network                   :string(191)
 #  root_distance_all_average :float(24)
 #  root_distance_all_median  :integer
 #  scored_at                 :datetime
 #  software_version          :string(191)
-#  uuid                      :string(255)
+#  uuid                      :string(191)
 #  vote_distance_all_average :float(24)
 #  vote_distance_all_median  :integer
 #  created_at                :datetime         not null
@@ -30,6 +30,10 @@
 #
 class Batch < ApplicationRecord
   before_create :create_uuid
+
+  def self.last_scored(network)
+    where('network = ? and scored_at IS NOT NULL', network).last
+  end
 
   protected
 

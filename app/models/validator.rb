@@ -5,17 +5,17 @@
 # Table name: validators
 #
 #  id                  :bigint           not null, primary key
-#  account             :string(255)
-#  avatar_url          :string(255)
-#  details             :string(255)
-#  info_pub_key        :string(255)
-#  name                :string(255)
-#  network             :string(255)
-#  security_report_url :string(255)
-#  www_url             :string(255)
+#  account             :string(191)
+#  avatar_url          :string(191)
+#  details             :string(191)
+#  info_pub_key        :string(191)
+#  name                :string(191)
+#  network             :string(191)
+#  security_report_url :string(191)
+#  www_url             :string(191)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  keybase_id          :string(255)
+#  keybase_id          :string(191)
 #
 # Indexes
 #
@@ -35,9 +35,7 @@ class Validator < ApplicationRecord
     #
     # Validator.accounts_for('testnet') => ['1234', '5678']
     def accounts_for(network)
-      where(network: network)
-        .select('account')
-        .map(&:account)
+      where(network: network).select('account').map(&:account)
     end
 
     # summarised active stake for all validators in the given network
@@ -45,6 +43,26 @@ class Validator < ApplicationRecord
       where(network: network).joins(:validator_score_v1).sum(:active_stake)
     end
 
+    def index_order(order_param)
+      sort_order = case order_param
+                   when 'score'
+                     'validator_score_v1s.total_score desc, RAND()'
+                   when 'name'
+                     'validators.name asc'
+                   when 'stake'
+                     'validator_score_v1s.active_stake desc'
+                   when 'random'
+                     'RAND()'
+                   else
+                     'validator_score_v1s.total_score desc, RAND()'
+                   end
+
+      includes(:validator_score_v1).order(sort_order)
+    end
+
+    def total_active_stake
+      includes(:validator_score_v1).sum(:active_stake)
+    end
   end
 
   def validator_history_last
@@ -56,7 +74,7 @@ class Validator < ApplicationRecord
 
   # Return the vote account that was most recently used
   def vote_account_last
-    vote_accounts.order('updated_at desc').limit(1).first
+    vote_accounts.order('updated_at desc').first
   end
 
   def ping_times_to(limit = 100)
@@ -81,12 +99,12 @@ class Validator < ApplicationRecord
   end
 
   def copy_data_to_score
-    if validator_score_v1
-      validator_score_v1.ip_address = ip_address
-      ip_dc = Ip.where(address: ip_address).first&.data_center_key
-      validator_score_v1.data_center_key = ip_dc
-      validator_score_v1.save
-    end
+    return unless validator_score_v1
+
+    validator_score_v1.ip_address = ip_address
+    ip_dc = Ip.where(address: ip_address).first&.data_center_key
+    validator_score_v1.data_center_key = ip_dc
+    validator_score_v1.save
   end
 
   # Convenience methods

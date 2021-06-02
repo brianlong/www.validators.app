@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :validator_history do
+    network { "testnet" }
     batch_uuid { "MyString" }
     account { SecureRandom.hex }
     vote_account { "MyString" }

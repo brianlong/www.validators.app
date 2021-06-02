@@ -3,79 +3,50 @@
 # PublicController
 class PublicController < ApplicationController
   def index
-    @sort_order = if params[:order] == 'score'
-                    'validator_score_v1s.total_score desc, RAND()'
-                  elsif params[:order] == 'name'
-                    'validators.name asc'
-                  elsif params[:order] == 'stake'
-                    'validator_score_v1s.active_stake desc'
-                  elsif params[:order] == 'random'
-                    'RAND()'
-                  else
-                    params[:order] = 'score'
-                    'validator_score_v1s.total_score desc, RAND()'
-                  end
-
     validators = Validator.where(network: params[:network])
                           .joins(:validator_score_v1)
-                          .order(@sort_order)
-    @validators_count = validators.count
-    @validators = validators.page(params[:page])
+                          .index_order(validate_order)
+
+    @validators_count = validators.size
 
     unless params[:q].blank?
-      @validators = @validators.where(
-        ['name like :q or account like :q or validator_score_v1s.data_center_key like :q', q: "#{params[:q]}%"]
-      )
+      validators = ValidatorSearchQuery.new(validators).search(params[:q])
     end
 
-    @total_active_stake = Validator.where(network: params[:network])
-                                   .joins(:validator_score_v1)
-                                   .sum(:active_stake)
-
-    active_stakes = validators.pluck(:active_stake).compact
-    @at_33_stake = active_stakes.inject do |s, v|
-      if (s / @total_active_stake.to_f) >= 0.33
-        break active_stakes.index(v)
-      end
-      s + v
-    end
+    @validators = validators.page(params[:page])
 
     @software_versions = Report.where(
       network: params[:network],
       name: 'report_software_versions'
     ).last
 
-    @batch = Batch.where(
-      ["network = ? AND scored_at IS NOT NULL",  params[:network]]
-    ).last
+    @batch = Batch.last_scored(params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(
         network: params[:network],
         batch_uuid: @batch.uuid
       ).first
-      @skipped_slot_average = \
-        ValidatorBlockHistory.average_skipped_slot_percent_for(
-          params[:network],
-          @batch.uuid
-        )
-      @skipped_slot_median = \
-        ValidatorBlockHistory.median_skipped_slot_percent_for(
-          params[:network],
-          @batch.uuid
-        )
+
+      validator_block_history_query =
+        ValidatorBlockHistoryQuery.new(params[:network], @batch.uuid)
+
+      @skipped_slot_average =
+        validator_block_history_query.average_skipped_slot_percent
+      @skipped_slot_median =
+        validator_block_history_query.median_skipped_slot_percent
 
       # Calculate the best skipped vote percent.
-      @credits_current_max = VoteAccountHistory.where(
-        network: params[:network],
-        batch_uuid: @batch.uuid
-      ).maximum(:credits_current).to_i
-      @slot_index_current = VoteAccountHistory.where(
-        network: params[:network],
-        batch_uuid: @batch.uuid
-      ).maximum(:slot_index_current).to_i
-      @skipped_vote_percent_best = \
-        (@slot_index_current - @credits_current_max )/@slot_index_current.to_f
+      @skipped_vote_percent_best =
+        VoteAccountHistoryQuery.new(params[:network], @batch.uuid)
+                               .skipped_vote_percent_best
+
+      validator_history =
+        ValidatorHistoryQuery.new(params[:network], @batch.uuid)
+      @total_active_stake = validator_history.total_active_stake
+
+      at_33_stake_validator = validator_history.at_33_stake&.validator
+      @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
     end
 
     # flash[:error] = 'Due to an issue with our RPC server pool, the Skipped Slot % data may be inaccurate. I am aware of the problem and working on a solution. Thanks! -- Brian Long'
@@ -137,6 +108,13 @@ class PublicController < ApplicationController
   end
 
   private
+
+  def validate_order
+    valid_orders = %w[score name stake random]
+    return 'score' unless params[:order].in? valid_orders
+
+    params[:order]
+  end
 
   def contact_us_params
     params.require(:contact_request)

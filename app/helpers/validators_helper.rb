@@ -11,8 +11,7 @@ module ValidatorsHelper
     LIGHT_GREY_TRANSPARENT
   end
 
-  def score_class(score)
-    return 'text-danger' if score == -2
+  def score_class
     'text-warning'
   end
 
@@ -56,7 +55,12 @@ module ValidatorsHelper
   def skipped_vote_percent(validator, batch, skipped_vote_percent_best)
     vahl = validator.vote_account_last&.vote_account_history_for(batch.uuid)
     return unless vahl
+
     skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
     ((skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2)
+  end
+
+  def above_33percent_concentration?(validator)
+    validator.stake_concentration_score.negative?
   end
 end
