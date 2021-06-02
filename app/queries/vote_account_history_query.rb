@@ -38,7 +38,12 @@ class VoteAccountHistoryQuery < ApplicationQuery
 
   def median_skipped_vote_percent_moving_average
     @median_skipped_vote_percent_moving_average ||=
-      @relation.median(:skipped_vote_percent_moving_average)
+      vote_account_history_skipped_moving_average.median
+  end
+
+  def vote_account_history_skipped_moving_average
+    @vote_account_history_skipped_moving_average ||=
+      @relation.pluck(:skipped_vote_percent_moving_average)
   end
 
   def vote_account_history_skipped
@@ -59,5 +64,26 @@ class VoteAccountHistoryQuery < ApplicationQuery
   def skipped_vote_percent_best
     @skipped_vote_percent_best ||=
       (slot_index_current - credits_current_max) / slot_index_current.to_f
+  end
+
+  def skipped_votes_stats
+    {
+      min: vote_account_history_skipped.min,
+      max: vote_account_history_skipped.max,
+      median: median_skipped_vote_percent,
+      average: average_skipped_vote_percent,
+      history: vote_account_history_skipped,
+      best: skipped_vote_percent_best
+    }
+  end
+
+  def skipped_vote_moving_average_stats
+    {
+      min: vote_account_history_skipped_moving_average.min,
+      max: vote_account_history_skipped_moving_average.max,
+      median: median_skipped_vote_percent_moving_average,
+      average: average_skipped_vote_percent_moving_average,
+      history: vote_account_history_skipped_moving_average
+    }
   end
 end

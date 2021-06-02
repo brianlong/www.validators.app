@@ -25,4 +25,24 @@ class ValidatorBlockHistoryQuery < ApplicationQuery
     @median_skipped_slot_percent ||=
       @relation.median(:skipped_slot_percent_moving_average)
   end
+
+  def skipped_slot_percent_history_moving_average
+    @skipped_slot_percent_history_moving_average ||=
+      @relation.pluck(:skipped_slot_percent_moving_average)
+  end
+
+  def skipped_slot_percent_history
+    @skipped_slot_percent_history ||=
+      @relation.map(&:skipped_slot_percent)
+  end
+
+  def skipped_slot_stats
+    {
+      min: skipped_slot_percent_history_moving_average.min,
+      max: skipped_slot_percent_history_moving_average.max,
+      median: median_skipped_slot_percent,
+      average: average_skipped_slot_percent,
+      history: skipped_slot_percent_history_moving_average
+    }
+  end
 end

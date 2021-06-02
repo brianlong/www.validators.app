@@ -21,6 +21,7 @@ class ValidatorHistoryQuery < ApplicationQuery
     @for_batch ||= @relation
   end
 
+  # Mysql AVG is so far the fastest way to count average (compared to pluck and map)
   def average_root_block
     @average_root_block ||= for_batch.average(:root_block)
   end
@@ -42,7 +43,7 @@ class ValidatorHistoryQuery < ApplicationQuery
   end
 
   def median_last_vote
-    @median_last_vote ||= for_batch.median(:last_vote)
+    @median_last_vote ||= for_batch.pluck(:last_vote).median
   end
 
   def total_active_stake
