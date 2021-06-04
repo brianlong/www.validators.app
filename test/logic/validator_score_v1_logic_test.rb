@@ -124,10 +124,10 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .first
                      .validator_score_v1
                      .vote_distance_score
-    assert_equal(-1, p.payload[:validators]
+    assert_equal -2, p.payload[:validators]
                       .first
                       .validator_score_v1
-                      .stake_concentration_score)
+                      .stake_concentration_score
   end
 
   test 'block_history_get' do
@@ -383,7 +383,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     total_stake = 326713653288250133
 
     current_software_version = find_current_software_version(
-      software_versions: software_versions, 
+      software_versions: software_versions,
       total_stake: total_stake
     )
 
@@ -393,15 +393,15 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   test 'find_current_software_version \
     when most stake is under 66% \
     should return version earlier than one with most stake' do
-    software_versions = {
-      "1.6.7"=>209919552719104317,
-      "1.5.19"=>17288992031757525,
-      "1.6.6"=>10483084971314635,
-      "1.6.8"=>26015248337068090,
-      "1.6.4"=>246312332755,
-      "1.6.9"=>997717120,
-      nil=>6422600362200
-    }
+      software_versions = {
+        "1.6.7"=>209919552719104317,
+        "1.5.19"=>17288992031757525,
+        "1.6.6"=>10483084971314635,
+        "1.6.8"=>26015248337068090,
+        "1.6.4"=>246312332755,
+        "1.6.9"=>997717120,
+        nil=>6422600362200
+      }
     total_stake = 326713653288250133
 
     current_software_version = find_current_software_version(
