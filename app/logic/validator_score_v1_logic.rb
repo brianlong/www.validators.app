@@ -381,7 +381,7 @@ module ValidatorScoreV1Logic
       software_versions[version] = ((stake/total_stake.to_f) * 100.0)
     end
 
-    software_versions = software_versions.select { |ver, _| ver&.match /\d+\.\d+\.\d+/ }
+    software_versions = software_versions.select { |ver, _| ver&.match /\d+\.\d+\.\d+\z/ }
 
     if software_versions.empty?
       'unknown'
