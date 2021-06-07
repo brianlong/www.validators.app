@@ -338,6 +338,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&assign_software_version_score)
                 .then(&get_ping_times)
                 .then(&save_validators)
+
     assert_equal 75.0, p.payload[:validators]
                         .first
                         .validator_score_v1
@@ -410,5 +411,24 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     )
 
     assert_equal "1.6.6", current_software_version
-    end
+  end
+
+  test 'find_current_software_version \
+    when there are unexpected versions \
+    should return correct version' do
+    software_versions = {
+      "1.6.7"=>209919552719104317,
+      "1.5.19"=>17288992031757525,
+      "unknown"=>10483084971314635,
+      nil=>6422600362200
+    }
+    total_stake = 23769805232343223
+
+    current_software_version = find_current_software_version(
+      software_versions: software_versions,
+      total_stake: total_stake
+    )
+
+    assert_equal "1.6.7", current_software_version
+  end
 end

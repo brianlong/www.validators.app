@@ -1,31 +1,39 @@
-<div class="row">
-  <div class="col-md-8">
-    <% if @software_versions %>
-      <div class="card">
-        <div class="card-content">
-          <h2 class="card-heading mb-4">Software Versions</h2>
-        </div>
-        <div class="row">
-          <div class="col-lg-12">
-            <table class="table mb-0">
-              <thead>
-              <tr>
-                <th>Software Version</th>
-                <th>Count</th>
-              </tr>
-              </thead>
-              <tbody>
+<div class="col-md-7 col-lg-8 mb-4 pb-2 mb-md-0 pb-md-0">
+  <% if @software_versions %>
+    <div class="card">
+      <div class="card-content">
+        <h2 class="card-heading mb-4">Software Versions</h2>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <table class="table mb-0">
+            <thead>
+            <tr>
+              <th>Software Version</th>
+              <th>Stake %</th>
+              <th>Count</th>
+            </tr>
+            </thead>
+            <tbody>
               <% @software_versions.payload.each do |group| %>
-                <tr>
-                  <td><%= group.first[0] %></td>
-                  <td><%= group.first[1] %></td>
-                </tr>
+                <% if group.first[1].is_a?(Hash) %>
+                  <tr>
+                    <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
+                      <%= group.first[0] %>
+                    </td>
+                    <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
+                      <%= group.first[1]['stake_percent'] %>%
+                    </td>
+                    <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
+                      <%= group.first[1]['count'] %>
+                    </td>
+                  </tr>
+                <% end %>
               <% end %>
-              </tbody>
-            </table>
-          </div>
+            </tbody>
+          </table>
         </div>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
