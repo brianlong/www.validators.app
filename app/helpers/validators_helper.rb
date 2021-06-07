@@ -45,7 +45,7 @@ module ValidatorsHelper
   end
 
   def current_software_version(batch, network)
-    if batch.software_version.blank?
+    if batch&.software_version.blank?
       network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
     else
       batch.software_version
