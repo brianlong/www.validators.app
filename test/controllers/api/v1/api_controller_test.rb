@@ -87,22 +87,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal '{"test_key":"test_value"}', collector.payload
   end
 
-  test 'GET api_v1_validators_ with token should succeed' do
-    get api_v1_validators_url(network: 'testnet'),
-        headers: { 'Token' => @user.api_token }
-    assert_response 200
-    json = response_to_json(@response.body)
-    assert_equal '1234', json.first['account']
-  end
-
-  test 'GET api_v1_validators with token should succeed' do
-    get api_v1_validators_url(network: 'testnet', account: '1234'),
-        headers: { 'Token' => @user.api_token }
-    assert_response 200
-    json = response_to_json(@response.body)
-    assert_equal '1234', json.first['account']
-  end
-
   test 'GET api_v1_validators with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
     create(:vote_account, validator: validator)
