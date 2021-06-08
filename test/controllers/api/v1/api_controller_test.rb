@@ -16,28 +16,28 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     @user = User.create(@user_params)
   end
 
-  test 'request ping without token should get error' do
+  test 'GET api_v1_ping without token should get error' do
     get api_v1_ping_url
     assert_response 401
     expected_response = { 'error' => 'Unauthorized' }
     assert_equal expected_response, response_to_json(@response.body)
   end
 
-  test 'request ping with token should succeed' do
+  test 'GET api_v1_ping with token should succeed' do
     get api_v1_ping_url, headers: { 'Token' => @user.api_token }
     assert_response 200
     json = response_to_json(@response.body)
     assert_equal 'pong', json['answer']
   end
 
-  test 'post collector without token should get error' do
+  test 'POST api_v1_collector without token should get error' do
     post api_v1_collector_url, params: {}
     assert_response 401
     expected_response = { 'error' => 'Unauthorized' }
     assert_equal expected_response, response_to_json(@response.body)
   end
 
-  test 'post collector with empty params should get error' do
+  test 'POST api_v1_collector with empty params should get error' do
     expected_response = { 'status' => 'Parameter Missing' }
 
     # Completely empty params
@@ -55,7 +55,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_response, response_to_json(@response.body)
   end
 
-  test 'post collector with invalid params should get error' do
+  test 'POST api_v1_collector with invalid params should get error' do
     post api_v1_collector_url,
          headers: { 'Token' => @user.api_token },
          params: { collector: { one: 1, two: 2, three: 3 } }
@@ -64,7 +64,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_response, response_to_json(@response.body)
   end
 
-  test 'post collector with valid data should succeed' do
+  test 'POST api_v1_collector with valid data should succeed' do
     # Prepare the payload
     valid_payload = {
       payload_type: 'ping',
@@ -87,7 +87,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal '{"test_key":"test_value"}', collector.payload
   end
 
-  test 'GET validators with token should succeed' do
+  test 'GET api_v1_validators_ with token should succeed' do
     get api_v1_validators_url(network: 'testnet'),
         headers: { 'Token' => @user.api_token }
     assert_response 200
@@ -95,7 +95,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal '1234', json.first['account']
   end
 
-  test 'GET validator with token should succeed' do
+  test 'GET api_v1_validators with token should succeed' do
     get api_v1_validators_url(network: 'testnet', account: '1234'),
         headers: { 'Token' => @user.api_token }
     assert_response 200
