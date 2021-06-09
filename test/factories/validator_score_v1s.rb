@@ -22,8 +22,6 @@ FactoryBot.define do
     commission { 10 }
     ping_time_avg { nil }
     delinquent { false }
-    created_at { '2021-05-31 09:36:22.431402000 +0000' }
-    updated_at { '2021-05-31 09:44:56.249538000 +0000' }
     published_information_score { 0 }
     security_report_score { 0 }
     ip_address { '172.96.172.252' }
