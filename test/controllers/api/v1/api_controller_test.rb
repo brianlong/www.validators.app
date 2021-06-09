@@ -16,6 +16,10 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     @user = User.create(@user_params)
   end
 
+  def teardown
+    Validator.destroy_all
+  end
+
   test 'GET api_v1_ping without token should get error' do
     get api_v1_ping_url
     assert_response 401
@@ -87,6 +91,31 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal '{"test_key":"test_value"}', collector.payload
   end
 
+  test 'GET api_v1_validators with token returns only validators from chosen network' do
+    create_list(:validator, 3)
+    create_list(:validator, 3, :mainnet)
+
+    # Testnet
+    get api_v1_validators_url(network: 'testnet'),
+        headers: { 'Token' => @user.api_token }
+
+    json = response_to_json(@response.body)
+
+    assert_response 200
+    assert_equal 4, json.size
+    assert_equal 'testnet', json.first['network']
+
+    # Mainnet
+    get api_v1_validators_url(network: 'mainnet'),
+        headers: { 'Token' => @user.api_token }
+
+    json = response_to_json(@response.body)
+
+    assert_response 200
+    assert_equal 3, json.size
+    assert_equal 'mainnet', json.first['network']
+  end
+
   test 'GET api_v1_validators with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
     create(:vote_account, validator: validator)
@@ -100,7 +129,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
     validator_with_all_data = json.select { |j| j['account'] == 'Test Account' }.first
 
-    assert_equal 2, json.size
+    assert_equal 3, json.size
 
     # Adjust after adding/removing attributes in json builder
     assert_equal 29, validator_with_all_data.keys.size
