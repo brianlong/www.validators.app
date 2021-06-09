@@ -48,6 +48,7 @@ end
 
 every 1.day do
   ruby_script 'validators_update_avatar_url.rb'
+  ruby_script 'add_current_epoch.rb'
 end
 
 if environment == 'production'
