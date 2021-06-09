@@ -52,17 +52,17 @@ module SolanaLogic
         slot_index: epoch_json['slotIndex'],
         slots_in_epoch: epoch_json['slotsInEpoch']
       )
-      begin
-        EpochWallClock.create!(
-          network:        p.payload[:network],
-          epoch:          epoch_json['epoch'],
-          starting_slot:  epoch_json['absoluteSlot'] - epoch_json['slotIndex'],
-          slots_in_epoch: epoch_json['slotsInEpoch'],
-          ending_slot:    (epoch_json['absoluteSlot'] - epoch_json['slotIndex']) + epoch_json['slotsInEpoch']
-        )
-      rescue ActiveRecord::RecordNotUnique
-        # This epoch already exists.
-      end
+      # begin
+      #   EpochWallClock.create!(
+      #     network:        p.payload[:network],
+      #     epoch:          epoch_json['epoch'],
+      #     starting_slot:  epoch_json['absoluteSlot'] - epoch_json['slotIndex'],
+      #     slots_in_epoch: epoch_json['slotsInEpoch'],
+      #     ending_slot:    (epoch_json['absoluteSlot'] - epoch_json['slotIndex']) + epoch_json['slotsInEpoch']
+      #   )
+      # rescue ActiveRecord::RecordNotUnique
+      #   # This epoch already exists.
+      # end
 
       Pipeline.new(200, p.payload.merge(
                           epoch: epoch.epoch,
