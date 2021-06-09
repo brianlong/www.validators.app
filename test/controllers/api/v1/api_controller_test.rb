@@ -220,6 +220,19 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, json_response['autonomous_system_number']
   end
 
+  test 'GET api_v1_validator with token returns ValidatorNotFound when wrong account provided' do
+    get api_v1_validator_url(
+      network: 'testnet',
+      account: 'Wrong account'
+    ), headers: { 'Token' => @user.api_token }
+
+    json_response = response_to_json(@response.body)
+    expected_response = { 'status' => 'Validator Not Found' }
+
+    assert_response 404
+    assert_equal expected_response, json_response
+  end
+
   test 'GET api_v1_validator_block_history with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
     create(:vote_account, validator: validator)
@@ -243,6 +256,70 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json_response['blocks_produced']
     assert_equal 1, json_response['skipped_slots']
     assert_equal '0.25', json_response['skipped_slot_percent']
+  end
+
+  test 'GET api_v1_validator_block_history with token returns only validators from chosen network and validator' do
+    testnet_validator = create(:validator, account: 'Test Account')
+    mainnet_validator = create(:validator, :mainnet, account: 'Mainnet Account')
+
+    create(:vote_account, validator: testnet_validator)
+    create(:vote_account, validator: mainnet_validator)
+    create_list(:validator_block_history, 4, validator: testnet_validator)
+    create_list(:validator_block_history, 3, validator: mainnet_validator)
+
+    # Testnet
+    get api_v1_validator_block_history_url(
+      network: 'testnet',
+      account: testnet_validator.account
+    ), headers: { 'Token' => @user.api_token }
+
+    json_response = response_to_json(@response.body)
+
+    assert_response 200
+    assert_equal testnet_validator.validator_block_histories.size, json_response.size
+
+    # Mainnet
+    get api_v1_validator_block_history_url(
+      network: 'mainnet',
+      account: mainnet_validator.account
+    ), headers: { 'Token' => @user.api_token }
+
+    json_response = response_to_json(@response.body)
+
+    assert_response 200
+    assert_equal mainnet_validator.validator_block_histories.size, json_response.size
+  end
+
+  test 'GET api_v1_validator_block_history with token and limit returns correct number of items' do
+    testnet_validator = create(:validator, account: 'Test Account')
+    create(:vote_account, validator: testnet_validator)
+    create_list(:validator_block_history, 4, validator: testnet_validator)
+
+    limit = 1
+
+    get api_v1_validator_block_history_url(
+      network: 'testnet',
+      account: testnet_validator.account,
+      limit: limit
+    ), headers: { 'Token' => @user.api_token }
+
+    json_response = response_to_json(@response.body)
+
+    assert_response 200
+    assert_equal limit, json_response.size
+  end
+
+  test 'GET api_v1_validator_block_history with token returns ValidatorNotFound when wrong account provided' do
+    get api_v1_validator_block_history_url(
+      network: 'testnet',
+      account: 'Wrong account'
+    ), headers: { 'Token' => @user.api_token }
+
+    json_response = response_to_json(@response.body)
+    expected_response = { 'status' => 'Validator Not Found' }
+
+    assert_response 404
+    assert_equal expected_response, json_response
   end
 
   test 'request ping_times with token should show empty array' do
