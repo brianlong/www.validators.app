@@ -5,7 +5,8 @@ json.extract! validator,
               :network, :account, :name, :keybase_id, :www_url,
               :details, :created_at, :updated_at
 
-score = validator.validator_score_v1
+score = validator.score
+ip = Ip.find_by(address: score.ip_address)
 unless score.nil?
   json.total_score score.total_score
   json.root_distance_score score.root_distance_score
@@ -22,6 +23,9 @@ unless score.nil?
   json.delinquent score.delinquent
   json.data_center_key score.data_center_key
   json.data_center_host score.data_center_host
+  unless ip.nil?
+    json.autonomous_system_number ip.traits_autonomous_system_number
+  end
 end
 
 # Vote account data

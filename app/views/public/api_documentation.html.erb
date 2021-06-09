@@ -17,6 +17,7 @@
   <li><a href="#validator-block">Validator Block Production History</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#notes">Notes</a></li>
+  <li><a href="#epoch-index">Epoch Index</a></li>
 </ul>
 
 <hr />
@@ -119,6 +120,8 @@
     "commission":10,
     "delinquent":false,
     "data_center_key":"24940-FI-Helsinki",
+    "data_center_host":"host-name",
+    "autonomous_system_number":24940,
     "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
     "skipped_slots":664,
     "skipped_slot_percent":"0.5155",
@@ -164,6 +167,8 @@
   "commission":10,
   "delinquent":false,
   "data_center_key":"24940-FI-Helsinki",
+  "data_center_host":"host-name",
+  "autonomous_system_number":24940,
   "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
   "skipped_slots":664,
   "skipped_slot_percent":"0.5155",
@@ -196,6 +201,39 @@
   },
   ...
 ]
+    </pre>
+  </div>
+</div>
+
+<hr />
+
+<h4 id="epoch-index">Epoch Index</h4>
+<div class="row">
+  <div class="col-sm-12">
+    <p>The Epoch endpoint will return all epoch data. Replace `:network` with 'testnet' or 'mainnet' as desired. </p>
+    <p>Request:</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network'</pre>
+    <p>Parameter Options:</p>
+    <p>`per=NN` number of records per page, defaults to 50</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?per=50'</pre>
+    <p>`page=NN` page number, defaults to 1</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?per=50&page=1'</pre>
+    <p>Response:</p>
+    <pre>
+    {
+      epochs: [
+        {
+          "epoch": 169,
+          "starting_slot": 73008000,
+          "slots_in_epoch": 432000,
+          "network": "mainnet",
+          "created_at": "2021-04-12T10:03:52.401Z"
+        },
+        ...
+      ],
+      epochs_count: 169
+    }
+
     </pre>
   </div>
 </div>

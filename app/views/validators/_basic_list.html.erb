@@ -1,0 +1,29 @@
+<% # EXAMPLE: render 'validators/basic_list', scores: ValidatorScoreV1.all %>
+
+<div class="card mb-4">
+  <table class='table mb-0 table-block-sm'>
+    <thead>
+      <tr class="d-none d-lg-table-row">
+        <th class="avatar-column d-none d-lg-table-cell">&nbsp;</th>
+        <th class="wider-column">
+          Name: Stake (%)<br />
+          Account
+        </th>
+        <th class="wider-column">
+          IP Address<br />
+          Data Center Gateway
+        </th>
+      </tr>
+      <tr class="d-lg-none">
+        <th>
+          Validators
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% scores.each do |sc| %>
+        <%= render '/validators/as_row', score: sc, score_ip: Ip.where(address: sc.ip_address).first %>   
+      <% end %>
+    </tbody>
+  </table>
+</div>

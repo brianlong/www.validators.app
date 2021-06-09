@@ -2,13 +2,13 @@
   <div class="col-md-7 mb-2">
     <%= link_to 'Random',
                 url_for(order: 'random', page: params[:page], network: params[:network], refresh: params[:refresh]),
-                class: "btn btn-xs mr-1 mb-3 btn-secondary #{ 'active' unless %w[score name stake].include?(params[:order]) }" %>
+                class: "btn btn-xs mr-1 mb-3 btn-secondary #{ 'active' if params[:order] == 'random' }" %>
     <%= link_to 'Stake',
                 url_for(order: 'stake', page: params[:page], network: params[:network], refresh: params[:refresh]),
                 class: "btn btn-xs mr-1 mb-3 btn-secondary #{ 'active' if params[:order] == 'stake' }" %>
     <%= link_to 'Score',
                 url_for(order: 'score', page: params[:page], network: params[:network], refresh: params[:refresh]),
-                class: "btn btn-xs mr-1 mb-3 btn-secondary #{ 'active' if params[:order] == 'score' }" %>
+                class: "btn btn-xs mr-1 mb-3 btn-secondary #{ 'active' unless %w[random name stake].include?(params[:order]) }" %>
     <%= link_to 'Name',
                 url_for(order: 'name', page: params[:page], network: params[:network], refresh: params[:refresh]),
                 class: "btn btn-xs mb-3 btn-secondary #{ 'active' if params[:order] == 'name' }" %>

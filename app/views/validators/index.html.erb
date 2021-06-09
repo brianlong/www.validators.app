@@ -1,7 +1,6 @@
 <%= render 'validators/banner' %>
-<% unless @validators.empty? %>
-  <%= render 'validators/stats' %>
 
+<% unless @validators.empty? %>
   <div class="card">
     <div class="card-content pb-0">
       <h1 class="h2 card-heading">Solana <%= params[:network].capitalize %> Validators</h1>
@@ -39,18 +38,9 @@
             <th class="name-column pr-1">
               Name <small class="text-muted">(Commission)</small><br />
               Active Stake <small class="text-muted">(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
-              Software
-              <small class="text-muted">
-                <% if params[:network] == 'mainnet' %>
-                  (<%= MAINNET_CLUSTER_VERSION %>)
-                <% else %>
-                  (<%= TESTNET_CLUSTER_VERSION %>)
-                <% end %>
-              </small>
-              <br />
               Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='percent-column pl-1 text-right'>
+            <th class='percent-column'>
               Skipped Vote&nbsp;&percnt;
               <a data-toggle="tooltip" data-html="true" title="Distance from leader">
                 <i class="fas fa-question-circle ml-1"></i>
@@ -73,7 +63,7 @@
           <tr class="subhead">
             <td class="avatar-column"></td>
             <td></td>
-            <td class="text-right">
+            <td class="percent-column">
               Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
             </td>
             <td class="text-right">
@@ -109,18 +99,7 @@
           <% @validators.each do |validator| %>
             <% i += 1 %>
             <tr id="row-<%=i%>">
-              <td class="avatar-column p-0">
-                <div class="number">
-                  <%=
-                    link_to i, validator_url(
-                      network: params[:network],
-                      account: validator.account,
-                      order: params[:order],
-                      page: params[:page],
-                      refresh: params[:refresh]
-                    )
-                  %>
-                </div>
+              <td class="avatar-column">
                 <div class="avatar">
                   <% if validator.private_validator? %>
                     <div class="img-circle-medium-private">
@@ -140,7 +119,7 @@
               <td class="name-column">
                 <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                             class: 'font-weight-bold' do %>
-                  <span class="d-inline-block d-xl-none"><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
+                  <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
                 <% end %>
                 <% unless validator.private_validator? %>
                   <small>
@@ -154,34 +133,30 @@
                   (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
                 </small>
                 <br />
-                <span class="d-inline-block d-lg-none">Sofware version:&nbsp;</span>
-                <small class="<%= software_color_class(validator.software_version) %>">
-                  <%= validator.software_version || 'N/A' %>
-                </small>
-                <br />
                 <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
                 <%= render 'validators/scores', validator: validator %>
               </td>
 
               <!-- SKIPPED VOTE % -->
-              <td class="percent-column" id="skipped-vote-column-<%=i%>">
-                <%
-                  vahl = validator.vote_account_last&.vote_account_history_for(@batch.uuid)
-                  if vahl
-                    skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
-                  end
-                %>
-                <span class="d-inline-block d-lg-none">Skipped Vote&nbsp;% (distance from leader):&nbsp;</span>
-                <%=
-                  number_to_percentage(
-                    (@skipped_vote_percent_best - skipped_votes_percent)*100.0,
-                    precision: 2
-                  ) if vahl
-                  # number_to_percentage(
-                  #   ((vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f)*100.0,
-                  #   precision: 2
-                  # ) if vahl
-                %>
+              <td class="percent-column align-middle" id="skipped-vote-column-<%=i%>">
+                <% skipped_vote_percent = skipped_vote_percent(validator, @batch, @skipped_vote_percent_best) %>
+                <% if skipped_vote_percent %>
+                  <div class="d-none d-lg-block">
+                    <%= render 'validators/spark_line_skipped_vote',
+                               account: validator.account,
+                               value: [skipped_vote_percent, -8].max
+                    %>
+                    <div class="text-center text-muted small mt-3">
+                      <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
+                    </div>
+                  </div>
+                <% else %>
+                  <span class="d-none d-lg-block text-center text-muted">N/A</span>
+                <% end %>
+                <span class="d-inline-block d-lg-none">
+                  Skipped Vote&nbsp;% (distance from leader):
+                  <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
+                </span>
               </td>
 
               <td class="d-lg-none pt-0">
@@ -282,11 +257,11 @@
                 %>
               </td>
             </tr>
-            <% if params[:order] == 'stake' && i == @at_33_stake%>
-              <tr id="row-halt-line">
-                  <td colspan=6>
-                    CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
-                  </td>
+            <% if params[:order] == 'stake' && i == @at_33_stake_index%>
+              <tr class="heading-secondary text-warning text-center">
+                <td colspan=6>
+                  CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
+                </td>
               </tr>
             <% end %>
           <% end %>
@@ -305,4 +280,10 @@
     </div>
   </div>
 <% end %>
-<%= render 'validators/software_versions' %>
+
+<% unless @validators.empty? %>
+  <div class="row">
+    <%= render 'validators/software_versions' %>
+    <%= render 'validators/stats' %>
+  </div>
+<% end %>

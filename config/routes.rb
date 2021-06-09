@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'asns/:network/:asn',
+      to: 'asns#show',
+      as: 'asn'
   # Pages for Log Deep Dives
   get 'log-deep-dives/',
       to: 'log_deep_dives#index',
@@ -57,7 +60,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    namespace :v1 do
+    namespace :v1, defaults: { format: :json } do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
 
@@ -80,6 +83,9 @@ Rails.application.routes.draw do
       get 'validator_block_history/:network/:account',
           to: 'api#validator_block_history',
           as: 'validator_block_history'
+
+      # Epoch Wall Clock
+      get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
     end
   end
 
