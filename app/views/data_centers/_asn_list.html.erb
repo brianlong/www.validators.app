@@ -1,6 +1,9 @@
 <% @results[:results].each do |_, asn_data| %>
   <tr>
-    <td><%= link_to asn_data[:asn], asn_url(network: params[:network], asn:asn_data[:asn]) %></td>
+    <td>
+      <%= link_to asn_data[:asn], asn_url(network: params[:network], asn:asn_data[:asn]) %>
+      <p><%= asn_data[:aso] %></p>
+    </td>
     <td>
       <% asn_data[:data_centers].each do |dc| %>
         <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
