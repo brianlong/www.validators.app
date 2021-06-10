@@ -1,0 +1,43 @@
+<canvas id="spark_line_skipped_vote_<%= local_assigns[:account] %>"></canvas>
+<script type="text/javascript">
+    var ctx = document.getElementById("spark_line_skipped_vote_<%= local_assigns[:account] %>").getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'gauge',
+        data: {
+            datasets: [{
+                data: [-5, -3.0, 0.05],
+                value: <%= local_assigns[:value] %>,
+                minValue: -8,
+                maxValue: 0.05,
+                backgroundColor: [
+                    '<%= LIGHT_GREY_TRANSPARENT %>',
+                    '<%= BLUE_TRANSPARENT %>',
+                    '<%= GREEN_TRANSPARENT %>'
+                ],
+                borderColor: ['<%= LIGHT_GREY %>', '<%= BLUE %>', '<%= GREEN %>'],
+                borderWidth: 0.5
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: false
+            },
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0
+                }
+            },
+            needle: {
+                radiusPercentage: 0,
+                widthPercentage: 5,
+                lengthPercentage: 80,
+                color: '<%= DARK_GREY %>'
+            },
+            valueLabel: {
+                display: false
+            }
+        }
+    });
+</script>

@@ -76,7 +76,6 @@ class PublicController < ApplicationController
       ).maximum(:slot_index_current).to_i
       @skipped_vote_percent_best = \
         (@slot_index_current - @credits_current_max )/@slot_index_current.to_f
-
     end
 
     # flash[:error] = 'Due to an issue with our RPC server pool, the Skipped Slot % data may be inaccurate. I am aware of the problem and working on a solution. Thanks! -- Brian Long'
