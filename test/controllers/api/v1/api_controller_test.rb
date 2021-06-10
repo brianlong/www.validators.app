@@ -16,10 +16,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     @user = User.create(@user_params)
   end
 
-  def teardown
-    Validator.destroy_all
-  end
-
   test 'GET api_v1_ping without token should get error' do
     get api_v1_ping_url
     assert_response 401
