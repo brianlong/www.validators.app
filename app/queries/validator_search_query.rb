@@ -14,9 +14,15 @@ class ValidatorSearchQuery
   end
 
   def search(query)
+    vacs = VoteAccount.where('account LIKE ?', "#{query}%").pluck(:validator_id)
+
     @relation.where(
-      'name like :q or account like :q or validator_score_v1s.data_center_key like :q',
-      q: "#{query}%"
+      'name like :q or
+      account like :q or
+      validator_score_v1s.data_center_key like :q or
+      validators.id = :vacs',
+      q: "#{query}%",
+      vacs: vacs
     )
   end
 end
