@@ -94,9 +94,9 @@ module Api
       end
 
       def validators_show
-        @validator = Validator.where(
-          network: params[:network], account: params['account']
-        ).order('network, account').first
+        @validator = Validator.where(network: params[:network], account: params['account'])                     
+                              .includes(:validator_score_v1)
+                              .order('network, account').first
 
         raise ValidatorNotFound if @validator.nil?
 
