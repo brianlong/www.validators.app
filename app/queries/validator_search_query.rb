@@ -16,20 +16,18 @@ class ValidatorSearchQuery
   def search(query)
     # Return possible matches on Vote account in an Array
     # e.g. 888, 2331, 2267, 2670, 3184, 2241]
-    va_ids = if query.blank?
-               []
-             else
-               VoteAccount.where('account LIKE ?', "#{query}%")
-                          .pluck(:validator_id)
-             end
+    # va_ids = if query.blank?
+    #            []
+    #          else
+    #            VoteAccount.where('account LIKE ?', "#{query}%")
+    #                       .pluck(:validator_id)
+    #          end
 
     @relation.where(
       'name like :q or
       account like :q or
-      validator_score_v1s.data_center_key like :q or
-      validators.id IN :va_ids',
+      validator_score_v1s.data_center_key like :q',
       q: "#{query}%",
-      va_ids: "(#{va_ids.join(',')})"
     )
   end
 end
