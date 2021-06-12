@@ -2,6 +2,7 @@ class SortedDataCenters
 
   def call
     @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
+
     @results = @results.sort_by { |_k, v| -v[:active_stake] }
     {
       total_population: @total_population,
@@ -42,6 +43,7 @@ class SortedDataCenters
     @dc_sql = @dc_sql.group_by { |dc| dc[1] }
     @dc_sql.each do |dc|
       dc_keys = dc[1].map { |x| x[0] }
+      aso = dc[1].map { |d| d[2] }.compact.uniq.join(', ')
       population = @scores.by_data_centers(dc_keys).count || 0
       active_stake = @scores.by_data_centers(dc_keys).sum(:active_stake)
       next if population.zero?
@@ -50,6 +52,7 @@ class SortedDataCenters
 
       @results[dc[0]] = {
         asn: dc[0],
+        aso: aso,
         data_centers: dc_keys,
         count: population,
         active_stake: active_stake

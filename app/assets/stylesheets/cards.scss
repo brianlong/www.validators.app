@@ -18,9 +18,9 @@
       background-color: $card-border-color;
       margin: -35px auto 20px auto;
       height: 5px;
-      width: 300px;
-      margin-left: calc(50% - 15px - 300px/2);
-      @media(max-width: $screen-sm-max) {
+      width: 260px;
+      margin-left: calc(50% - 15px - 260px/2);
+      @media(max-width: $screen-md-max) {
         width: 200px;
         margin-left: calc(50% - 15px - 200px/2);
       }

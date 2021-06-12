@@ -390,15 +390,21 @@ module ValidatorScoreV1Logic
       software_versions[version] = ((stake/total_stake.to_f) * 100.0)
     end
 
-    software_version_sorted = software_versions.keys.compact.sort
-    mostly_used_percent = software_versions.values.max
-    mostly_used_version = software_versions.key(mostly_used_percent)
-    mostly_used_index = software_version_sorted.index(mostly_used_version)
+    software_versions = software_versions.select { |ver, _| ver&.match /\d+\.\d+\.\d+\z/ }
 
-    if mostly_used_percent >= 66
-      mostly_used_version
+    if software_versions.empty?
+      'unknown'
     else
-      software_version_sorted[mostly_used_index - 1]
+      software_version_sorted = software_versions.keys.compact.sort_by { |v| Gem::Version.new(v) }
+      mostly_used_percent = software_versions.values.max
+      mostly_used_version = software_versions.key(mostly_used_percent)
+      mostly_used_index = software_version_sorted.index(mostly_used_version)
+      
+      if mostly_used_percent >= 66
+        mostly_used_version
+      else
+        software_version_sorted[mostly_used_index - 1]
+      end
     end
   end
 end
