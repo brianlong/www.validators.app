@@ -53,8 +53,12 @@ module ValidatorsHelper
   end
 
   def skipped_vote_percent(validator, batch)
-    skipped_votes_percent = validator.score.skipped_vote_history[-1]
-    ((batch.best_skipped_vote - skipped_votes_percent.to_f) * 100.0).round(2)
+    if validator.score&.skipped_vote_history
+      skipped_votes_percent = validator.score.skipped_vote_history[-1]
+      ((batch.best_skipped_vote - skipped_votes_percent.to_f) * 100.0).round(2)
+    else
+      nil
+    end
   end
 
   def above_33percent_concentration?(validator)

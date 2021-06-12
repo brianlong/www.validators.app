@@ -78,17 +78,17 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                        .validator_score_v1
                        .active_stake
     assert_equal 0.167e0, p.payload[:validators]
-                       .first
-                       .validator_score_v1
-                       .stake_concentration
-    assert_equal [0.35], p.payload[:validators]
-                       .last
-                       .validator_score_v1
-                       .skipped_vote_history
-    assert_equal [0.35], p.payload[:validators]
-                       .last
-                       .validator_score_v1
-                       .skipped_vote_percent_moving_average_history
+                           .first
+                           .validator_score_v1
+                           .stake_concentration
+    assert_equal [0.3518806943896684], p.payload[:validators]
+                                        .last
+                                        .validator_score_v1
+                                        .skipped_vote_history
+    assert_equal [0.3519e0], p.payload[:validators]
+                              .last
+                              .validator_score_v1
+                              .skipped_vote_percent_moving_average_history
     refute p.payload[:validators]
             .first
             .validator_score_v1
@@ -96,30 +96,47 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test 'assign_block_and_vote_scores' do
+    5.times do
+      v = create(:validator)
+      vote_acc = create(:vote_account, validator_id: v.id, account: v.account)
+      create(
+        :validator_history,
+        network: 'testnet',
+        batch_uuid: '1234',
+        account: v.account
+      )
+      create(
+        :vote_account_history,
+        batch_uuid: '1234',
+        network: 'testnet',
+        vote_account_id: vote_acc.id
+      )
+    end
+
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&block_vote_history_get)
                 .then(&assign_block_and_vote_scores)
 
-    assert_equal [0], p.payload[:root_distance_all]
-    assert_equal 0.0, p.payload[:root_distance_all_average]
-    assert_equal 0.0, p.payload[:root_distance_all_median]
-    assert_equal 0.0, p.payload[:vote_distance_all_average]
-    assert_equal 0.0, p.payload[:vote_distance_all_median]
-    assert_equal p.payload[:root_distance_all_average], 
+    assert_equal [0, 1, 1, 1, 1, 1], p.payload[:root_distance_all]
+    assert_equal 0.8333333333333334, p.payload[:root_distance_all_average]
+    assert_equal 1.0, p.payload[:root_distance_all_median]
+    assert_equal 0.8333333333333334, p.payload[:vote_distance_all_average]
+    assert_equal 1.0, p.payload[:vote_distance_all_median]
+    assert_equal p.payload[:root_distance_all_average],
                  p.payload[:this_batch].root_distance_all_average
-    assert_equal p.payload[:root_distance_all_median], 
+    assert_equal p.payload[:root_distance_all_median],
                  p.payload[:this_batch].root_distance_all_median
-    assert_equal p.payload[:vote_distance_all_average], 
+    assert_equal p.payload[:vote_distance_all_average],
                  p.payload[:this_batch].vote_distance_all_average
-    assert_equal p.payload[:vote_distance_all_median], 
+    assert_equal p.payload[:vote_distance_all_median],
                  p.payload[:this_batch].vote_distance_all_median
 
-    puts p.payload[:this_batch].skipped_vote_all_median
-
-    assert_equal p.payload[:this_batch].skipped_vote_all_median
-    assert_equal p.payload[:this_batch].best_skipped_vote
+    assert_equal 0.3518806943896684, 
+                 p.payload[:this_batch].skipped_vote_all_median
+    assert_equal 0.3518806943896684, 
+                 p.payload[:this_batch].best_skipped_vote
 
     assert_equal 2, p.payload[:validators]
                      .first
@@ -144,7 +161,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
       v1 = Validator.first
       v2 = create(:validator)
       v3 = create(:validator)
-      v4 = create(:validator)
+      create(:validator)
 
       # Show that we start with one validator_block_histories
       assert_equal 0, v1.validator_block_histories.count
