@@ -134,7 +134,11 @@ module ValidatorScoreV1Logic
       p.payload[:validators].each do |v|
         root_distance_all += v.validator_score_v1.root_distance_history
         vote_distance_all += v.validator_score_v1.vote_distance_history
+
+        # Get all the most recent skipped_votes
         skipped_vote_all.push v.validator_score_v1.skipped_vote_history[-1]
+
+        # Find the best skipped vote
         if !best_skipped_vote || v.validator_score_v1.skipped_vote_history[-1] < best_skipped_vote
           best_skipped_vote = v.validator_score_v1.skipped_vote_history[-1]
         end
@@ -161,6 +165,7 @@ module ValidatorScoreV1Logic
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_median: #{root_distance_all_median}"
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_average: #{vote_distance_all_average}"
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_median: #{vote_distance_all_median}"
+      Rails.logger.warn "#{p.payload[:network]} skipped_vote_all_median: #{skipped_vote_all_median}"
 
       p.payload[:validators].each do |v|
         # Assign the root_distance_score
