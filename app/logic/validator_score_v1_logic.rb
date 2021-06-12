@@ -128,10 +128,16 @@ module ValidatorScoreV1Logic
       # get the average & median from the cluster history
       root_distance_all = []
       vote_distance_all = []
+      skipped_vote_all  = []
+      best_skipped_vote = nil
 
       p.payload[:validators].each do |v|
         root_distance_all += v.validator_score_v1.root_distance_history
         vote_distance_all += v.validator_score_v1.vote_distance_history
+        skipped_vote_all.push v.validator_score_v1.skipped_vote_history[-1]
+        if !best_skipped_vote || v.validator_score_v1.skipped_vote_history[-1] < best_skipped_vote
+          best_skipped_vote = v.validator_score_v1.skipped_vote_history[-1]
+        end
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -140,12 +146,15 @@ module ValidatorScoreV1Logic
       root_distance_all_median = array_median(root_distance_all)
       vote_distance_all_average = array_average(vote_distance_all)
       vote_distance_all_median = array_median(vote_distance_all)
+      skipped_vote_all_median = array_median(skipped_vote_all)
 
       p.payload[:this_batch].update(
         root_distance_all_average: root_distance_all_average,
         root_distance_all_median: root_distance_all_median,
         vote_distance_all_average: vote_distance_all_average,
-        vote_distance_all_median: vote_distance_all_median
+        vote_distance_all_median: vote_distance_all_median,
+        skipped_vote_all_median: skipped_vote_all_median,
+        best_skipped_vote: best_skipped_vote
       )
 
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_average: #{root_distance_all_average}"

@@ -116,6 +116,11 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal p.payload[:vote_distance_all_median], 
                  p.payload[:this_batch].vote_distance_all_median
 
+    puts p.payload[:this_batch].skipped_vote_all_median
+
+    assert_equal p.payload[:this_batch].skipped_vote_all_median
+    assert_equal p.payload[:this_batch].best_skipped_vote
+
     assert_equal 2, p.payload[:validators]
                      .first
                      .validator_score_v1
