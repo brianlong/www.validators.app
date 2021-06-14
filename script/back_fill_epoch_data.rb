@@ -11,27 +11,27 @@ EpochWallClock.delete_all
 }
 
 def get_last_epoch(http, uri)
-  params = @common_params.merge {
+  params = @common_params.merge( {
     "method" => "getEpochInfo"
-  }
+  })
   resp, _ = http.post(uri, params.to_json, { 'Content-Type' => 'application/json' } )
   JSON.parse(resp.body)['result']
 end
 
 def get_block_time(http, uri, block)
-  params = @common_params.merge {
+  params = @common_params.merge( {
     "method" => "getBlockTime",
     "params" => [block]
-  }
+  })
   resp, _ = http.post(uri, params.to_json, {'Content-Type' => 'application/json'})
   JSON.parse(resp.body)['result']
 end
 
 def get_confirmed_block(http, uri, slot)
-  params = @common_params.merge {
+  params = @common_params.merge( {
     "method" => "getConfirmedBlock", #TODO: This method is deprecated from solana 1.7
     "params" => [slot]
-  }
+  })
   resp, _ = http.post(uri, params.to_json, {'Content-Type' => 'application/json'})
   JSON.parse(resp.body)['result'] ? slot : nil
 end
