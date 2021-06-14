@@ -53,7 +53,7 @@ module ValidatorsHelper
   end
 
   def skipped_vote_percent(validator, batch)
-    if validator.score&.skipped_vote_history
+    if validator.score&.skipped_vote_history && batch.best_skipped_vote
       # Get the last skipped_vote data from history
       skipped_votes_percent = validator.score.skipped_vote_history[-1]
 

@@ -5,9 +5,9 @@
         type: 'gauge',
         data: {
             datasets: [{
-                data: [<%= -(@batch.skipped_vote_all_median * 20) %>, <%= -(@batch.skipped_vote_all_median * 10) %>, 0.05],
+                data: <%= local_assigns[:chart_steps] %>,
                 value: <%= local_assigns[:value] %>,
-                minValue: <%= -(@batch.skipped_vote_all_median * 30) %>,
+                minValue: <%= local_assigns[:min_value] %>,
                 maxValue: 0.05,
                 backgroundColor: [
                     '<%= LIGHT_GREY_TRANSPARENT %>',
