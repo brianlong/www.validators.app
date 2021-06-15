@@ -82,7 +82,7 @@ gem 'maxmind-geoip2'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'bullet'
+  gem 'bullet', '~> 6.1'
   gem 'factory_bot_rails'
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
   gem 'pry', '~> 0.12.2'

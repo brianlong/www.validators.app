@@ -395,7 +395,7 @@ DEPENDENCIES
   aws-sdk-s3
   bcrypt_pbkdf
   bootsnap (>= 1.4.2)
-  bullet
+  bullet (~> 6.1)
   bundler (>= 2.1)
   byebug
   capistrano-passenger (>= 0.2.1)
