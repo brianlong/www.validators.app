@@ -164,6 +164,20 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, validator_with_all_data['autonomous_system_number']
   end
 
+  test 'GET api_v1_validators with token returns all validators even without score' do
+    validator = create(:validator, account: 'Test Account Without Score')
+
+    get api_v1_validators_url(network: 'testnet'),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+
+    json = response_to_json(@response.body)
+    validator_without_score = json.select { |el| el['account']  ==  "Test Account Without Score" }
+
+    assert_equal 2, json.size
+    assert_equal 1, validator_without_score.size
+  end
+
   test 'GET api_v1_validator with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
     create(:vote_account, validator: validator)

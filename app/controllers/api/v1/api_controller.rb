@@ -74,11 +74,10 @@ module Api
 
         @limit = params[:limit] || 9999
 
-        @validators = Validator.where(network: params[:network])
-                               .left_outer_joins(:validator_score_v1)
+        @validators = Validator.includes(:validator_score_v1)
+                               .where(network: params[:network])
                                .order(@sort_order)
                                .limit(@limit)
-                               .all
 
         @skipped_slots_report = Report.where(
           network: params[:network],
@@ -96,7 +95,8 @@ module Api
       def validators_show
         @validator = Validator.where(network: params[:network], account: params['account'])                     
                               .includes(:validator_score_v1)
-                              .order('network, account').first
+                              .order('network, account')
+                              .first
 
         raise ValidatorNotFound if @validator.nil?
 
