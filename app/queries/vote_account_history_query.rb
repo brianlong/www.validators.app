@@ -57,7 +57,11 @@ class VoteAccountHistoryQuery < ApplicationQuery
   end
 
   def skipped_vote_percent_best
-    @skipped_vote_percent_best ||=
-      (slot_index_current - credits_current_max) / slot_index_current.to_f
+    if slot_index_current&.is_a?(Numeric) && slot_index_current.positive? && credits_current_max&.is_a?(Numeric)
+      @skipped_vote_percent_best ||=
+        (slot_index_current - credits_current_max) / slot_index_current.to_f
+    else
+      nil
+    end
   end
 end

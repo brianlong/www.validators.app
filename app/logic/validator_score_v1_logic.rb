@@ -71,6 +71,13 @@ module ValidatorScoreV1Logic
         p.payload[:batch_uuid]
       ).total_active_stake
 
+      best_skipped_vote = VoteAccountHistoryQuery.new(
+        p.payload[:network],
+        p.payload[:batch_uuid]
+      ).skipped_vote_percent_best
+
+      p.payload[:this_batch].update(best_skipped_vote: best_skipped_vote)
+
       # The to_a at the end ensures that the query is run here, instead of
       # inside of the `p.payload[:validators].each` block which eliminates an
       # N+1 query
@@ -83,6 +90,7 @@ module ValidatorScoreV1Logic
         network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
       ).where('vote_account.validator_id': p.payload[:validators].pluck(:id)).to_a
+
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
         vh = validator_histories.find { |vh| vh.account == validator.account }
@@ -129,7 +137,6 @@ module ValidatorScoreV1Logic
       root_distance_all = []
       vote_distance_all = []
       skipped_vote_all  = []
-      best_skipped_vote = nil
 
       p.payload[:validators].each do |v|
         root_distance_all += v.validator_score_v1.root_distance_history
@@ -137,11 +144,6 @@ module ValidatorScoreV1Logic
 
         # Get all the most recent skipped_votes
         skipped_vote_all.push v.validator_score_v1.skipped_vote_history[-1]
-
-        # Find the best skipped vote
-        if !best_skipped_vote || v.validator_score_v1.skipped_vote_history[-1] < best_skipped_vote
-          best_skipped_vote = v.validator_score_v1.skipped_vote_history[-1]
-        end
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -158,7 +160,6 @@ module ValidatorScoreV1Logic
         vote_distance_all_average: vote_distance_all_average,
         vote_distance_all_median: vote_distance_all_median,
         skipped_vote_all_median: skipped_vote_all_median,
-        best_skipped_vote: best_skipped_vote
       )
 
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_average: #{root_distance_all_average}"
