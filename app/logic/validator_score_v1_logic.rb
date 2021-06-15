@@ -76,8 +76,6 @@ module ValidatorScoreV1Logic
         p.payload[:batch_uuid]
       ).skipped_vote_percent_best
 
-      p.payload[:this_batch].update(best_skipped_vote: best_skipped_vote)
-
       # The to_a at the end ensures that the query is run here, instead of
       # inside of the `p.payload[:validators].each` block which eliminates an
       # N+1 query
@@ -91,12 +89,15 @@ module ValidatorScoreV1Logic
         batch_uuid: p.payload[:batch_uuid]
       ).where('vote_account.validator_id': p.payload[:validators].pluck(:id)).to_a
 
+      skipped_vote_all = []
+
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
         vh = validator_histories.find { |vh| vh.account == validator.account }
         vote_h = vote_histories.find { |vote_h| vote_h.vote_account.validator_id == validator.id }
         if vote_h
           validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
+          skipped_vote_all.push(((best_skipped_vote - vote_h.skipped_vote_percent) * 100).round(2))
           validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
         end
         if vh
@@ -122,6 +123,13 @@ module ValidatorScoreV1Logic
       rescue StandardError => e
         Appsignal.send_error(e)
       end
+
+      skipped_vote_all_median = array_median(skipped_vote_all)
+
+      p.payload[:this_batch].update(
+        best_skipped_vote: best_skipped_vote,
+        skipped_vote_all_median: skipped_vote_all_median,
+      )
 
       Pipeline.new(200, p.payload.merge(total_active_stake: total_active_stake))
     rescue StandardError => e
@@ -152,21 +160,18 @@ module ValidatorScoreV1Logic
       root_distance_all_median = array_median(root_distance_all)
       vote_distance_all_average = array_average(vote_distance_all)
       vote_distance_all_median = array_median(vote_distance_all)
-      skipped_vote_all_median = array_median(skipped_vote_all)
 
       p.payload[:this_batch].update(
         root_distance_all_average: root_distance_all_average,
         root_distance_all_median: root_distance_all_median,
         vote_distance_all_average: vote_distance_all_average,
         vote_distance_all_median: vote_distance_all_median,
-        skipped_vote_all_median: skipped_vote_all_median,
       )
 
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_average: #{root_distance_all_average}"
       Rails.logger.warn "#{p.payload[:network]} root_distance_all_median: #{root_distance_all_median}"
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_average: #{vote_distance_all_average}"
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_median: #{vote_distance_all_median}"
-      Rails.logger.warn "#{p.payload[:network]} skipped_vote_all_median: #{skipped_vote_all_median}"
 
       p.payload[:validators].each do |v|
         # Assign the root_distance_score

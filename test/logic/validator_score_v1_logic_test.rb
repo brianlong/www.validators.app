@@ -133,7 +133,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal p.payload[:vote_distance_all_median],
                  p.payload[:this_batch].vote_distance_all_median
 
-    assert_equal 0.3518806943896684, 
+    assert_equal 0.0, 
                  p.payload[:this_batch].skipped_vote_all_median
     assert_equal 0.3518806943896684, 
                  p.payload[:this_batch].best_skipped_vote
