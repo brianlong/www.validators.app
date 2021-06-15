@@ -99,6 +99,8 @@ module ValidatorScoreV1Logic
           validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
           skipped_vote_all.push(((best_skipped_vote - vote_h.skipped_vote_percent) * 100).round(2))
           validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
+        else
+          validator.score.skipped_vote_history_push(nil)
         end
         if vh
           root_distance = highest_root - vh.root_block.to_i
