@@ -78,14 +78,19 @@ end
 
     break unless confirmed_end_block
 
+    puts "confirmed block: #{confirmed_start_block}"
+
     current_epoch_start_unix = get_block_time(http, uri, confirmed_start_block).to_s
+
+    next unless current_epoch_start_unix
+
     current_epoch_created_at = DateTime.strptime(current_epoch_start_unix, '%s')
 
     ewc = EpochWallClock.create(
-      epoch: current_epoch, 
-      network: network, 
-      starting_slot: confirmed_start_block, 
-      slots_in_epoch: slots_in_epoch, 
+      epoch: current_epoch,
+      network: network,
+      starting_slot: confirmed_start_block,
+      slots_in_epoch: slots_in_epoch,
       created_at: current_epoch_created_at,
       ending_slot: confirmed_end_block
     )
