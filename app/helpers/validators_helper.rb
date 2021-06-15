@@ -56,7 +56,8 @@ module ValidatorsHelper
     if validator.score&.skipped_vote_history && batch.best_skipped_vote
       # Get the last skipped_vote data from history
       skipped_votes_percent = validator.score.skipped_vote_history[-1]
-
+      return unless skipped_votes_percent
+      
       # Calculate the distance from the best skipped vote and round
       ((batch.best_skipped_vote - skipped_votes_percent.to_f) * 100.0).round(2)
     else
