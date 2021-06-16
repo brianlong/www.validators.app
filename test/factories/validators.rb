@@ -9,7 +9,9 @@ FactoryBot.define do
     security_report_url { 'http://www.example.com' }
 
     trait :with_score do
-      validator_score_v1
+      after(:create) do |validator|
+        create :validator_score_v1, validator: validator
+      end
     end
   end
 end
