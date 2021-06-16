@@ -18,7 +18,7 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
     ]
 
     @validators.last.validator_score_v1 =
-    create(:validator_score_v1, data_center_key: 'Name1Center')
+      create(:validator_score_v1, data_center_key: 'Name1Center')
 
     val1 = create(:validator, :with_score)
     val2 = create(:validator, :with_score)
