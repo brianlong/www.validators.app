@@ -19,7 +19,7 @@ class Array
 
   def guard_numbers
     return if all? do |el|
-      el.class.in? [Numeric, Integer, BigDecimal, Float]
+      el.is_a? Numeric
     end
 
     raise ArgumentError, 'Works only for Floats, Decimals and Integers'
