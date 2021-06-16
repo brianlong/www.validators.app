@@ -1,29 +1,50 @@
 # frozen_string_literal: true
 
 # PublicController
-class ClusterStats < ApplicationController
+class ClusterStatsController < ApplicationController
   def index
-    batch = Batch.last_scored('mainnet')
-    mainnet_vah_query = VoteAccountHistoryQuery.new('mainnet', batch.uuid)
-    mainnet_vbh_query = ValidatorBlockHistoryQuery.new('mainnet', batch.uuid)
+    @mainnet = gather_stats_for('mainnet')
+    @testnet = gather_stats_for('testnet')
+  end
 
-    @mainnet = {
+  private
+
+  def gather_stats_for(network)
+    batch = Batch.last_scored(network)
+
+    return {} unless batch
+
+    vah_query = VoteAccountHistoryQuery.new(network, batch.uuid)
+    vbh_query = ValidatorBlockHistoryQuery.new(network, batch.uuid)
+    vs_query = ValidatorScoreQuery.new(network, batch.uuid)
+    software_report = Report.where(
+      network: params[:network],
+      name: 'report_software_versions'
+    ).last&.payload
+
+    {
+      top_staked_validators:
+        vs_query.top_staked_validators,
+      top_skipped_vote_validators:
+        vah_query.top_skipped_vote_percent,
+      top_root_distance_validators:
+        vs_query.top_root_distance_averages_validators,
+      top_vote_distance_validators:
+        vs_query.top_vote_distance_averages_validators,
+      top_skipped_slot_validators:
+        vbh_query.top_skipped_slot_percent,
       skipped_votes_percent:
-        mainnet_vah_query.skipped_votes_stats,
+        vah_query.skipped_votes_stats,
       skipped_votes_percent_moving_average:
-        mainnet_vah_query.skipped_vote_moving_average_stats,
-      root_distance: {},
-      vote_distance: {},
-      skipped_slots: {},
-      software_version: {}
-    }
-
-    @testnet = {
-      skipped_votes_percent: {},
-      root_distance: {},
-      vote_distance: {},
-      skipped_slots: {},
-      software_version: {}
+        vah_query.skipped_vote_moving_average_stats,
+      root_distance:
+        vs_query.root_distance_stats,
+      vote_distance:
+        vs_query.vote_distance_stats,
+      skipped_slots:
+        vbh_query.skipped_slot_stats,
+      software_version: software_report,
+      batch_uuid: batch.uuid
     }
   end
 end
