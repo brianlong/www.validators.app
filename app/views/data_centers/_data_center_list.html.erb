@@ -1,0 +1,11 @@
+<% @results[:results].each do |dc_key, dc_data| %>
+  <tr>
+    <td><%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %></td>
+    <td><%= dc_data[:aso] %></td>
+    <td><%= dc_data[:count] %></td>
+    <td>
+      <%= number_with_delimiter lamports_to_sol(dc_data[:active_stake]).round(0) %>
+      (<%= percent_of_total_stake(dc_data[:active_stake], @results[:total_stake]) %>)
+    </td>
+  </tr>
+<% end %>

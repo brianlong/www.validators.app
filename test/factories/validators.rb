@@ -13,5 +13,9 @@ FactoryBot.define do
         create :validator_score_v1, validator: validator
       end
     end
+
+    trait :mainnet do
+      network { 'mainnet' }
+    end
   end
 end
