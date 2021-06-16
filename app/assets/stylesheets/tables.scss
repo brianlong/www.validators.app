@@ -8,14 +8,17 @@ table, .table {
     background-color: $table-lines-color;
     th {
       border: none;
-      padding: $padding-standard 20px;
+      padding: $padding-standard;
     }
   }
 
   .subhead {
     @include font-size-smaller;
     background-color: darken($table-lines-color, 4%);
-    td { border-top: 1px solid $table-lines-color; }
+    td {
+      border-top: 1px solid $table-lines-color;
+      padding: $padding-standard;
+    }
   }
 
   tbody {
@@ -29,15 +32,15 @@ table, .table {
       background-color: darken($card-background-color, 2%);
     }
     td {
-      padding: $padding-standard 20px;
+      padding: $padding-standard;
       border-top: 1px solid $table-lines-color;
     }
   }
 
   .avatar-column {
-    width: 75px;
+    width: 80px;
     text-align: center;
-    padding: 25px 0 0 0;
+    padding: 0;
     .avatar {
       padding-bottom: 5px;
       .img-circle-medium-private {
@@ -47,7 +50,7 @@ table, .table {
   }
 
   .name-column {
-    width: 190px;
+    width: 180px;
     padding-left: 0;
     padding-right: 5px;
     @media(max-width: $screen-lg-max) {
@@ -62,27 +65,6 @@ table, .table {
     }
     @media(max-width: $screen-xs-max) {
       width: 37%;
-    }
-  }
-
-  .chart-column {
-    width: 22%;
-    padding: 25px $padding-standard 10px $padding-standard;
-    @media(max-width: $screen-lg-max) {
-      width: 25%;
-    }
-
-    .chart-top-container {
-      position: absolute;
-      padding-left: 28px;
-      width: 19%;
-    }
-    .chart-top-value {
-      font-size: 11px;
-      line-height: 9px;
-      color: #979797;
-      margin-top: -12px;
-      text-align: right;
     }
   }
 
@@ -141,18 +123,33 @@ table, .table {
   width: 100%;
   table-layout: fixed;
 
+  .chart-column {
+    width: 21%;
+    padding: 25px $padding-standard 10px $padding-standard;
+    @media(max-width: $screen-lg-max) {
+      width: 25%;
+    }
+
+    .chart-top-container {
+      position: absolute;
+      padding-left: 28px;
+      width: 18%;
+    }
+    .chart-top-value {
+      font-size: 11px;
+      line-height: 9px;
+      color: #979797;
+      margin-top: -12px;
+      text-align: right;
+    }
+  }
+
   .percent-column {
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 130px;
+    width: 16%;
+    padding: 20px 15px 15px 15px;
   }
 
   @media(max-width: $screen-lg-max) {
-    .percent-column {
-      width: 97px;
-      padding-left: 20px;
-      padding-right: 20px;
-    }
     .avatar-column { display: none; }
   }
 
@@ -161,15 +158,18 @@ table, .table {
     .subhead { display: none; }
     .avatar-column { display: none; }
     .percent-column, .chart-column {
-      padding-top: 0;
+      padding: 0 20px 10px 20px;
     }
     .chart-top-container {
       padding-left: 23px;
       width: 89%;
     }
-    .chart-link.active {
-      color: $link-color-secondary;
-      text-decoration: underline;
+    .chart-link {
+      padding-left: 5px;
+      &.active {
+        color: $link-color-secondary;
+        text-decoration: underline;
+      }
     }
   }
 
