@@ -87,9 +87,9 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal '{"test_key":"test_value"}', collector.payload
   end
 
-  test 'GET api_v1_validators with token returns only validators from chosen network' do
-    create_list(:validator, 3)
-    create_list(:validator, 3, :mainnet)
+  test 'GET api_v1_validators with token returns only validators from chosen network with scores' do
+    create_list(:validator, 3, :with_score,)
+    create_list(:validator, 3, :with_score, :mainnet)
 
     # Testnet
     get api_v1_validators_url(network: 'testnet'),
@@ -125,7 +125,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
     validator_with_all_data = json.select { |j| j['account'] == 'Test Account' }.first
 
-    assert_equal 3, json.size
+    assert_equal 2, json.size
 
     # Adjust after adding/removing attributes in json builder
     assert_equal 29, validator_with_all_data.keys.size

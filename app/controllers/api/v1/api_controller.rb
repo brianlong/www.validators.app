@@ -75,7 +75,8 @@ module Api
         @limit = params[:limit] || 9999
 
         @validators = Validator.where(network: params[:network])
-                               .left_outer_joins(:validator_score_v1)
+                               .includes(:validator_score_v1)
+                               .joins(:validator_score_v1)
                                .order(@sort_order)
                                .limit(@limit)
                                .all
