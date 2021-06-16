@@ -41,20 +41,18 @@
               Scores <small class="text-muted">(total)</small>
             </th>
             <th class='percent-column'>
-              Skipped Vote&nbsp;&percnt;
-              <a data-toggle="tooltip" data-html="true" title="Distance from leader">
-                <i class="fas fa-question-circle ml-1"></i>
-              </a>
+              Skipped Vote&nbsp;&percnt;<br />
+              <small class="text-muted">Distance from leader</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='percent-column'>
               Root Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column'>
               Vote Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column'>
               Skipped Slot&nbsp;&percnt;<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
@@ -66,21 +64,21 @@
             <td class="percent-column">
               Best: <%= number_to_percentage((100 - @batch.best_skipped_vote.to_f * 100.0), precision: 2) %>
             </td>
-            <td class="text-right">
+            <td class="percent-column">
               <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
                 Md: <%= @batch.root_distance_all_median %>
                 <br />
                 Av: <%= @batch.root_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td class="text-right">
+            <td class="">
               <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
                 Md: <%= @batch.vote_distance_all_median %>
                 <br />
                 Av: <%= @batch.vote_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td class="text-right">
+            <td class="">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
@@ -180,33 +178,24 @@
                   </div>
                 </div>
               </td>
+
               <!-- ROOT DISTANCE -->
-              <td class="chart-column d-none d-lg-table-cell" id="root-distance-<%=i%>">
-                <%
-                  vl = chart_x_scale(validator.score&.root_distance_history.to_a.count)
-                  line_color = chart_line_color(validator.root_distance_score)
-                  fill_color = chart_fill_color(validator.root_distance_score)
-                  vector = validator.score&.root_distance_history.to_a[-vl..-1]
-                %>
-                <% max_value = vector&.max %>
-                <% if max_value && max_value > Y_ROOT_DISTANCE_MAX %>
-                  <% max_value_position = max_value_position(vector) %>
-                  <% max_value_position_mobile = max_value_position(vector, min_position: false) %>
-                  <div class="chart-top-container">
-                    <div class="chart-top-value d-lg-none" style="width: <%=max_value_position_mobile%>">
-                      <%= max_value %>
-                    </div>
-                    <div class="chart-top-value d-none d-lg-block" style="width: <%=max_value_position%>">
-                      <%= max_value %>
-                    </div>
+              <!-- <td class="chart-column d-none d-lg-table-cell" id="root-distance-<%=i%>"> -->
+              <td class="percent-column align-middle d-none d-lg-table-cell" id="root-distance-<%=i%>">
+                <% root_distance_percent = -(validator.score&.vote_distance_history.to_a[-1]) %>
+                <% if root_distance_percent %>
+                  <%= render 'validators/spark_line_block_distance',
+                             account: validator.account,
+                             value: [root_distance_percent, @batch.root_distance_all_average.to_f * -2].max,
+                             chart_steps: [@batch.root_distance_all_average.to_f * -1, @batch.root_distance_all_median.to_f * -1, 0.05],
+                             min_value: @batch.root_distance_all_average.to_f * -2
+                  %>
+                  <div class="text-center text-muted small mt-3">
+                    <%= root_distance_percent %>
                   </div>
+                <% else %>
+                  <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
-                <%= render 'validators/spark_line_block_distance',
-                           account: validator.account,
-                           vector: vector,
-                           line_color: line_color,
-                           fill_color: fill_color
-                %>
               </td>
 
               <!-- VOTE DISTANCE -->
