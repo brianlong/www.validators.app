@@ -1,11 +1,11 @@
 <tr>
-  <th class="wider-column">ASN<br />&nbsp;</th>
-  <th class="wider-column">Data Centers<br />&nbsp;</th>
-  <th class="narrow-column">
+  <th class="medium-column">ASN<br />&nbsp;</th>
+  <th class="medium-column">Data Centers<br />&nbsp;</th>
+  <th class="narrower-column">
     Population<br />
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
-  <th class="wider-column">
+  <th class="medium-column">
     Active Stake<br />
     <small class="text-muted">
       <%= number_with_delimiter lamports_to_sol(@results[:total_stake]).round(0) %>

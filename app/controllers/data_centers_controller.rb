@@ -28,6 +28,7 @@ class DataCentersController < ApplicationController
     # "
     # @validators = Validator.connection.execute(sql)
     @scores = ValidatorScoreV1.by_network_with_active_stake(params[:network])
+                              .includes(:validator)
                               .by_data_centers(key)
                               .order('active_stake desc')
 
