@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :vote_account do
     # references { "" }
-    account { "MyString" }
+    validator
+    account { 'Test Account' }
+    network { 'testnet' }
   end
 end
