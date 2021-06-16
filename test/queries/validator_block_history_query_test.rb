@@ -41,4 +41,36 @@ class ValidatorBlockHistoryQueryTest < ActiveSupport::TestCase
     expected = @skipped_slot_percent.sort[@skipped_slot_percent.size / 2]
     assert_equal expected, @query.median_skipped_slot_percent
   end
+
+  test 'skipped_slot_percent_history_moving_average' do
+    expected = [0.12e0, 0.19e0, 0.11e0, 0.83e0]
+    assert_equal expected, @query.skipped_slot_percent_history_moving_average
+  end
+
+  test 'skipped_slot_percent_history' do
+    expected = [0.12e0, 0.19e0, 0.11e0, 0.83e0]
+    assert_equal expected, @query.skipped_slot_percent_history
+  end
+
+  test 'top_skipped_slot_percent' do
+    expected = [0.83e0, 0.19e0, 0.12e0, 0.11e0]
+    assert_equal expected, @query.top_skipped_slot_percent
+  end
+
+  test 'skipped_slot_stats' do
+    expected = {
+      min: 0.11e0, max: 0.83e0, median: 0.19e0, average: 0.3125e0
+    }
+    assert_equal expected, @query.skipped_slot_stats
+  end
+
+  test 'skipped_slot_stats with history' do
+    expected = {
+      min: 0.11e0, max: 0.83e0, median: 0.19e0, average: 0.3125e0,
+      history: [0.12e0, 0.19e0, 0.11e0, 0.83e0]
+    }
+
+    assert_equal expected, @query.skipped_slot_stats(with_history: true)
+  end
+
 end
