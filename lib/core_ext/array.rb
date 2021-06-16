@@ -9,8 +9,8 @@ class Array
 
   def average
     guard_numbers
-    return nil if array.empty?
-    return nil if array.sum.nil?
+    return nil if empty?
+    return nil if sum.nil?
 
     sum / size.to_f
   end
