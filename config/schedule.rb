@@ -48,6 +48,9 @@ end
 
 every 1.day do
   ruby_script 'validators_update_avatar_url.rb'
+end
+
+every 1.minute do
   ruby_script 'add_current_epoch.rb'
 end
 
