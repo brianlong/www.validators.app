@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-7 mb-2">
+  <div class="col-md-4 col-lg-3 mb-2">
     <%= link_to 'Score',
                 url_for(order: 'score', page: params[:page], network: params[:network], refresh: params[:refresh]),
                 class: "btn btn-xs mr-1 mb-3 btn-secondary #{ 'active' unless %w[random name stake].include?(params[:order]) }" %>
@@ -9,7 +9,7 @@
                 class: "btn btn-xs mr-1 mb-3 btn-secondary #{ 'active' if params[:order] == 'stake' }" %>
   </div>
 
-  <div class="col-md-5">
+  <div class="col-md-8 col-lg-9">
     <%= form_with(method: :get, local: true) do %>
       <div class="form-group-row">
         <div class="input-group mb-4">
