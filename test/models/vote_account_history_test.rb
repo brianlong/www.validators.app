@@ -5,7 +5,7 @@ require 'test_helper'
 class VoteAccountHistoryTest < ActiveSupport::TestCase
   test 'skipped_vote_percent' do
     create(:vote_account_history)
-    assert_equal 0.35, VoteAccountHistory.last.skipped_vote_percent
+    assert_equal 0.3518806943896684, VoteAccountHistory.last.skipped_vote_percent
   end
 
   test 'previous_24_hours' do
