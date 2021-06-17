@@ -38,7 +38,7 @@ table, .table {
   }
 
   .avatar-column {
-    width: 80px;
+    width: 75px;
     text-align: center;
     padding: 0;
     .avatar {
@@ -46,15 +46,6 @@ table, .table {
       .img-circle-medium-private {
         display: inline-block;
       }
-    }
-  }
-
-  .name-column {
-    width: 180px;
-    padding-left: 0;
-    padding-right: 5px;
-    @media(max-width: $screen-lg-max) {
-      padding-left: 20px;
     }
   }
 
@@ -123,8 +114,17 @@ table, .table {
   width: 100%;
   table-layout: fixed;
 
+  .name-column {
+    width: 200px;
+    padding-left: 0;
+    padding-right: 5px;
+    @media(max-width: $screen-lg-max) {
+      padding-left: 20px;
+    }
+  }
+
   .chart-column {
-    width: 21%;
+    width: 22%;
     padding: 25px $padding-standard 10px $padding-standard;
     @media(max-width: $screen-lg-max) {
       width: 25%;
@@ -133,7 +133,7 @@ table, .table {
     .chart-top-container {
       position: absolute;
       padding-left: 28px;
-      width: 18%;
+      width: 20%;
     }
     .chart-top-value {
       font-size: 11px;
@@ -145,8 +145,8 @@ table, .table {
   }
 
   .percent-column {
-    width: 16%;
-    padding: 20px 15px 15px 15px;
+    width: 17%;
+    padding: 20px 15px 10px 15px;
   }
 
   @media(max-width: $screen-lg-max) {
@@ -158,7 +158,7 @@ table, .table {
     .subhead { display: none; }
     .avatar-column { display: none; }
     .percent-column, .chart-column {
-      padding: 0 20px 10px 20px;
+      padding: 0 20px;
     }
     .chart-top-container {
       padding-left: 23px;
