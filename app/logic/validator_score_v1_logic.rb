@@ -30,6 +30,7 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       validators = Validator.where(network: p.payload[:network])
+                            .active
                             .includes(:validator_score_v1)
                             .order(:id)
                             .all
