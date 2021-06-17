@@ -11,8 +11,7 @@ module ValidatorsHelper
     LIGHT_GREY_TRANSPARENT
   end
 
-  def score_class(score)
-    return 'text-danger' if score == -2
+  def score_class
     'text-warning'
   end
 
@@ -32,8 +31,21 @@ module ValidatorsHelper
     number_to_percentage(position, precision: 0)
   end
 
+  def display_avatar(validator)
+    if validator&.avatar_url
+      image_tag validator.avatar_url, class: 'img-circle mb-1'
+    else
+      image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png',
+                class: 'img-circle mb-1'
+    end
+  end
+
+  def percent_of_total_stake(active_stake, total_stake)
+    number_to_percentage((active_stake / total_stake.to_f) * 100.0, precision: 2)
+  end
+
   def current_software_version(batch, network)
-    if batch.software_version.blank?
+    if batch&.software_version.blank?
       network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
     else
       batch.software_version
@@ -43,7 +55,12 @@ module ValidatorsHelper
   def skipped_vote_percent(validator, batch, skipped_vote_percent_best)
     vahl = validator.vote_account_last&.vote_account_history_for(batch.uuid)
     return unless vahl
+
     skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
     ((skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2)
+  end
+
+  def above_33percent_concentration?(validator)
+    validator.stake_concentration_score.negative?
   end
 end

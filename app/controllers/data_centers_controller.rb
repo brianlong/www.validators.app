@@ -1,51 +1,13 @@
 class DataCentersController < ApplicationController
-  # params[:network]
+
+  # index_params[:network]
+  # index_params[:sort_by]
   def index
-    sql = "
-      SELECT distinct data_center_key,
-             traits_autonomous_system_organization,
-             country_iso_code,
-             IF(ISNULL(city_name), location_time_zone, city_name) as location
-      FROM ips
-      WHERE ips.address IN (
-        SELECT score.ip_address
-        FROM validator_score_v1s score
-        WHERE score.network = '#{params[:network]}'
-        AND score.active_stake > 0
-      )
-    "
-    @dc_sql = Ip.connection.execute(sql)
-    @scores = ValidatorScoreV1.where(network: params[:network])
-                              .where('active_stake > 0')
-    @data_centers = {}
-    @total_stake = @scores.sum(:active_stake)
-    @total_population = 0
-
-    @dc_sql.each do |dc|
-      population = @scores.where(data_center_key: dc[0]).count || 0
-      active_stake = @scores.where(data_center_key: dc[0]).sum(:active_stake)
-      next if population.zero?
-
-      @total_population += population
-
-      Rails.logger.info "#{dc.inspect} => #{population}"
-      Rails.logger.info "Active Stake: #{active_stake}"
-      # Rails.logger.info dc[0]
-      # Rails.logger.info "@data_centers is a #{@data_centers.class}"
-      # Rails.logger.info @data_centers[dc[0]]
-      # Rails.logger.info (@data_centers[dc[0]]).to_s
-      # byebug
-      @data_centers[dc[0]] = {
-        aso: dc[1],
-        country: dc[2],
-        location: dc[3],
-        count: population,
-        active_stake: active_stake
-      }
-      # Rails.logger.info @data_centers.inspect
-    end
-    @data_centers = @data_centers.sort_by { |_k, v| -v[:active_stake] }
-    # Rails.logger.info @data_centers
+    @sort_by = index_params[:sort_by] == 'asn' ? 'asn' : 'data_center'
+    @results = SortedDataCenters.new(
+      sort_by: @sort_by, 
+      network: params[:network]
+    ).call
   end
 
   # params[:network]
@@ -65,15 +27,21 @@ class DataCentersController < ApplicationController
     #   ORDER BY val.account
     # "
     # @validators = Validator.connection.execute(sql)
-    @scores = ValidatorScoreV1.where(network: params[:network])
-                              .where(data_center_key: key)
-                              .where('active_stake > 0')
+    @scores = ValidatorScoreV1.by_network_with_active_stake(params[:network])
+                              .includes(:validator)
+                              .by_data_centers(key)
                               .order('active_stake desc')
 
-    @total_stake = ValidatorScoreV1.where(network: params[:network])
-                                   .where('active_stake > 0')
+    @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network])
                                    .sum(:active_stake)
+
     @dc_stake = @scores.where(data_center_key: key).sum(:active_stake)
     @dc_info = Ip.where(data_center_key: key).last || Ip.new(data_center_key: key)
+  end
+
+  private
+
+  def index_params
+    params.permit(:network, :sort_by)
   end
 end

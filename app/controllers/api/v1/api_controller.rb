@@ -61,11 +61,12 @@ module Api
 
       # Show the list of validators with scores
       def validators_list
-        @sort_order = if params[:order] == 'score'
+        @sort_order = case params[:order]
+                      when 'score'
                         'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
-                      elsif params[:order] == 'name'
+                      when 'name'
                         'validators.name asc'
-                      elsif params[:order] == 'stake'
+                      when 'stake'
                         'validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc'
                       else
                         'RAND()'
@@ -74,6 +75,7 @@ module Api
         @limit = params[:limit] || 9999
 
         @validators = Validator.where(network: params[:network])
+                               .includes(:validator_score_v1)
                                .joins(:validator_score_v1)
                                .order(@sort_order)
                                .limit(@limit)
@@ -93,9 +95,9 @@ module Api
       end
 
       def validators_show
-        @validator = Validator.where(
-          network: params[:network], account: params['account']
-        ).order('network, account').first
+        @validator = Validator.where(network: params[:network], account: params['account'])                     
+                              .includes(:validator_score_v1)
+                              .order('network, account').first
 
         raise ValidatorNotFound if @validator.nil?
 
@@ -104,6 +106,8 @@ module Api
           name: 'build_skipped_slot_percent'
         ).last
 
+        # @score = @validator.score
+        # @ip = Ip.find_by(address: @score.ip_address)
         render 'api/v1/validators/show', formats: :json
       rescue ValidatorNotFound
         render json: { 'status' => 'Validator Not Found' }, status: 404

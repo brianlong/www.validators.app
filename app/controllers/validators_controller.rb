@@ -7,64 +7,47 @@ class ValidatorsController < ApplicationController
   # GET /validators
   # GET /validators.json
   def index
-    @sort_order = if params[:order] == 'score'
-                    'validator_score_v1s.total_score desc, RAND()'
-                  elsif params[:order] == 'name'
-                    'validators.name asc'
-                  else
-                    'validator_score_v1s.active_stake desc'
-                  end
-
     validators = Validator.where(network: params[:network])
                           .joins(:validator_score_v1)
-                          .order(@sort_order)
-    @validators_count = validators.count
-    @validators = validators.page(params[:page])
+                          .index_order(validate_order)
 
-    @total_active_stake = Validator.where(network: params[:network])
-                                   .joins(:validator_score_v1)
-                                   .sum(:active_stake)
+    @validators_count = validators.size
+    @validators = validators.page(params[:page])
+    @total_active_stake = validators.total_active_stake
 
     @software_versions = Report.where(
       network: params[:network],
       name: 'report_software_versions'
     ).last
 
-    @batch = Batch.where(
-      ["network = ? AND scored_at IS NOT NULL",  params[:network]]
-    ).last
+    @batch = Batch.last_scored(params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(
         network: params[:network],
         batch_uuid: @batch.uuid
       ).first
-      @skipped_slot_average = \
-        ValidatorBlockHistory.average_skipped_slot_percent_for(
-          params[:network],
-          @batch.uuid
-        )
-      @skipped_slot_median = \
-        ValidatorBlockHistory.median_skipped_slot_percent_for(
-          params[:network],
-          @batch.uuid
-        )
+
+      validator_block_history_query =
+        ValidatorBlockHistoryQuery.new(params[:network], @batch.uuid)
+
+      @skipped_slot_average =
+        validator_block_history_query.average_skipped_slot_percent
+      @skipped_slot_median =
+        validator_block_history_query.median_skipped_slot_percent
     end
 
+    vote_account_history_query = VoteAccountHistoryQuery.new(params[:network], @batch.uuid)
     # Calculate the best skipped vote percent.
-    @credits_current_max = VoteAccountHistory.where(
-      network: params[:network],
-      batch_uuid: @batch.uuid
-    ).maximum(:credits_current).to_i
-    @slot_index_current = VoteAccountHistory.where(
-      network: params[:network],
-      batch_uuid: @batch.uuid
-    ).maximum(:slot_index_current).to_i
-    @skipped_vote_percent_best = \
-      (@slot_index_current - @credits_current_max )/@slot_index_current.to_f
+    @skipped_vote_percent_best = vote_account_history_query.skipped_vote_percent_best
+
+    validator_history =
+      ValidatorHistoryQuery.new(params[:network], @batch.uuid)
+
+    at_33_stake_validator = validator_history.at_33_stake&.validator
+    @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
 
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
-
   end
 
   # GET /validators/1
@@ -119,5 +102,12 @@ class ValidatorsController < ApplicationController
       network: params[:network],
       account: params[:account]
     ).first
+  end
+
+  def validate_order
+    valid_orders = %w[score name]
+    return 'score' unless params[:order].in? valid_orders
+
+    params[:order]
   end
 end

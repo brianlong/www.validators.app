@@ -46,22 +46,6 @@ class VoteAccountHistory < ApplicationRecord
     ((slot_index_current.to_i - credits_current.to_i)/slot_index_current.to_f).round(2)
   end
 
-  def self.average_skipped_vote_percent_for(network:, batch_uuid:)
-    vah_skipped = where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).map(&:skipped_vote_percent)
-    vah_skipped.sum / vah_skipped.count
-  end
-
-  def self.median_skipped_vote_percent_for(network:, batch_uuid:)
-    vah_skipped = where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).map(&:skipped_vote_percent)
-    vah_skipped.sort[vah_skipped.length/2]
-  end
-
   def self.average_skipped_vote_percent_moving_average_for(network:, batch_uuid:)
     where(
       network: network,

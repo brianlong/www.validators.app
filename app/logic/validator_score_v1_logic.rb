@@ -3,7 +3,6 @@
 # Logic to compile ValidatorScoreV1
 module ValidatorScoreV1Logic
   include PipelineLogic
-  STAKE_CONCENTRATION_FACTOR = 0.011
 
   # Payload starts with :network & :batch_uuid
   def set_this_batch
@@ -70,10 +69,10 @@ module ValidatorScoreV1Logic
         p.payload[:network],
         p.payload[:batch_uuid]
       )
-      total_active_stake = ValidatorHistory.total_active_stake_for(
+      total_active_stake = ValidatorHistoryQuery.new(
         p.payload[:network],
         p.payload[:batch_uuid]
-      )
+      ).total_active_stake
 
       # The to_a at the end ensures that the query is run here, instead of
       # inside of the `p.payload[:validators].each` block which eliminates an
@@ -187,15 +186,16 @@ module ValidatorScoreV1Logic
           end
 
         # Assign the stake concentration & score
+        at_33_active_stake =
+          ValidatorHistoryQuery.new(p.payload[:network], p.payload[:batch_uuid])
+                               .at_33_stake
+                               .validator
+                               .active_stake
+
+
         v.validator_score_v1.stake_concentration_score = \
-          if v.validator_score_v1.stake_concentration.to_f >= (STAKE_CONCENTRATION_FACTOR * 2)
-            # NOTE: I am only using -1 at the moment. -- BKL
-            -1
-          elsif v.validator_score_v1.stake_concentration.to_f >= STAKE_CONCENTRATION_FACTOR
-            -1
-          else
-            0
-          end
+          v.validator_score_v1.active_stake.to_i >= at_33_active_stake ? -2 : 0
+
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -384,15 +384,21 @@ module ValidatorScoreV1Logic
       software_versions[version] = ((stake/total_stake.to_f) * 100.0)
     end
 
-    software_version_sorted = software_versions.keys.compact.sort
-    mostly_used_percent = software_versions.values.max
-    mostly_used_version = software_versions.key(mostly_used_percent)
-    mostly_used_index = software_version_sorted.index(mostly_used_version)
+    software_versions = software_versions.select { |ver, _| ver&.match /\d+\.\d+\.\d+\z/ }
 
-    if mostly_used_percent >= 66
-      mostly_used_version
+    if software_versions.empty?
+      'unknown'
     else
-      software_version_sorted[mostly_used_index - 1]
+      software_version_sorted = software_versions.keys.compact.sort_by { |v| Gem::Version.new(v) }
+      mostly_used_percent = software_versions.values.max
+      mostly_used_version = software_versions.key(mostly_used_percent)
+      mostly_used_index = software_version_sorted.index(mostly_used_version)
+      
+      if mostly_used_percent >= 66
+        mostly_used_version
+      else
+        software_version_sorted[mostly_used_index - 1]
+      end
     end
   end
 end

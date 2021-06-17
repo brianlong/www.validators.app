@@ -70,24 +70,33 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_vote_percent_moving_average_history, JSON
   serialize :skipped_slot_moving_average_history, JSON
 
+  scope :by_network_with_active_stake, ->(network) do
+    where(network: network).where('active_stake > 0')
+  end
+
+  scope :by_data_centers, ->(data_center_keys) do
+    where(data_center_key: data_center_keys)
+  end
+
   def calculate_total_score
     # Assign special scores before calculating the total score
     assign_published_information_score
     assign_software_version_score
     assign_security_report_score
 
-    if validator.private_validator?
-      self.total_score = 0
-    else
-      self.total_score = root_distance_score.to_i +
-                         vote_distance_score.to_i +
-                         skipped_slot_score.to_i +
-                         published_information_score.to_i +
-                         security_report_score.to_i +
-                         software_version_score.to_i +
-                         stake_concentration_score.to_i +
-                         data_center_concentration_score.to_i
-    end
+    self.total_score =
+      if validator.private_validator?
+        0
+      else
+        root_distance_score.to_i +
+          vote_distance_score.to_i +
+          skipped_slot_score.to_i +
+          published_information_score.to_i +
+          security_report_score.to_i +
+          software_version_score.to_i +
+          stake_concentration_score.to_i +
+          data_center_concentration_score.to_i
+      end
   end
 
   def delinquent?

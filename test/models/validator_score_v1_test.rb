@@ -52,4 +52,26 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     score.assign_software_version_score
     assert_equal 1, score.reload.software_version_score
   end
+
+  test 'by_network_with_active_stake scope should return correct results' do
+    create(:validator_score_v1, active_stake: 100, network: 'testnet')
+    create(:validator_score_v1, active_stake: 0, network: 'testnet')
+    create(:validator_score_v1, active_stake: 100, network: 'mainnet')
+
+    res = ValidatorScoreV1.by_network_with_active_stake('testnet')
+
+    assert_equal 1, res.count
+    assert_equal 'testnet', res.first.network
+    assert_equal 100, res.first.active_stake
+  end
+
+  test 'by_data_centers scope should return correct results' do
+    create(:validator_score_v1, data_center_key: 'datacenter1')
+    create(:validator_score_v1, data_center_key: 'datacenter2')
+
+    res = ValidatorScoreV1.by_data_centers('datacenter1')
+
+    assert_equal 1, res.count
+    assert_equal 'datacenter1', res.first.data_center_key
+  end
 end

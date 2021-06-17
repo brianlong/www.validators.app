@@ -7,5 +7,13 @@ FactoryBot.define do
     name { 'john doe' }
     keybase_id { 'johndoe' }
     security_report_url { 'http://www.example.com' }
+
+    trait :with_score do
+      validator_score_v1
+    end
+
+    trait :mainnet do
+      network { 'mainnet' }
+    end
   end
 end

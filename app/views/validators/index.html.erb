@@ -1,7 +1,6 @@
 <%= render 'validators/banner' %>
-<% unless @validators.empty? %>
-  <%= render 'validators/stats' %>
 
+<% unless @validators.empty? %>
   <div class="card">
     <div class="card-content pb-0">
       <h1 class="h2 card-heading">Solana <%= params[:network].capitalize %> Validators</h1>
@@ -258,7 +257,7 @@
                 %>
               </td>
             </tr>
-            <% if params[:order] == 'stake' && i == @at_33_stake %>
+            <% if params[:order] == 'stake' && i == @at_33_stake_index%>
               <tr class="heading-secondary text-warning text-center">
                 <td colspan=6>
                   CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
@@ -281,4 +280,10 @@
     </div>
   </div>
 <% end %>
-<%= render 'validators/software_versions' %>
+
+<% unless @validators.empty? %>
+  <div class="row">
+    <%= render 'validators/software_versions' %>
+    <%= render 'validators/stats' %>
+  </div>
+<% end %>
