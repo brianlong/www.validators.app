@@ -31,6 +31,7 @@ class Validator < ApplicationRecord
   has_one :validator_score_v1, dependent: :destroy
 
   scope :active, -> { where(is_active: true) }
+  scope :scorable, -> { where(is_active: true, is_rpc: false) }
 
   # after_save :copy_data_to_score
 
