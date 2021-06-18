@@ -53,9 +53,9 @@
               Root Distance<br />
               <small class="text-muted">Distance from leader</small>
             </th>
-            <th class='chart-column'>
+            <th class='percent-column'>
               Vote Distance<br />
-              <small class="text-muted">60-Min Chart</small>
+              <small class="text-muted">Distance from leader</small>
             </th>
             <th class='chart-column'>
               Skipped Slot&nbsp;&percnt;<br />
@@ -167,7 +167,7 @@
 
               <!-- ROOT DISTANCE -->
               <td class="percent-column align-middle" id="root-distance-<%=i%>">
-                <% root_distance_percent = -(validator.score&.vote_distance_history.to_a[-1]) %>
+                <% root_distance_percent = -(validator.score&.root_distance_history.to_a[-1]) %>
                 <% if root_distance_percent %>
                   <div class="d-none d-lg-block">
                     <%= render 'validators/spark_line_block_distance',
@@ -184,53 +184,43 @@
                   <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
                 <span class="d-inline-block d-lg-none">
-                  Root Distance (distance from leader):
+                  Root Distance (from leader):
                   <%= root_distance_percent ? root_distance_percent : "N/A" %>
+                </span>
+              </td>
+
+              <!-- VOTE DISTANCE -->
+              <td class="percent-column align-middle" id=vote-distance-<%=i%>>
+                <% vote_distance_percent = -(validator.score&.vote_distance_history.to_a[-1]) %>
+                <% if vote_distance_percent %>
+                  <div class="d-none d-lg-block">
+                    <%= render 'validators/spark_line_vote_distance',
+                               account: validator.account,
+                               value: [vote_distance_percent, @batch.vote_distance_all_average.to_f * -2].max,
+                               chart_steps: [@batch.vote_distance_all_average.to_f * -1, @batch.vote_distance_all_median.to_f * -1, 0.05],
+                               min_value: @batch.vote_distance_all_average.to_f * -2
+                    %>
+                    <div class="text-center text-muted small mt-2">
+                      <%= vote_distance_percent %>
+                    </div>
+                  </div>
+                <% else %>
+                  <span class="d-none d-lg-block text-center text-muted">N/A</span>
+                <% end %>
+                <span class="d-inline-block d-lg-none">
+                  Vote Distance (from leader):
+                  <%= vote_distance_percent ? vote_distance_percent : "N/A" %>
                 </span>
               </td>
 
               <td class="d-lg-none pt-0">
                 <div class="row my-3">
-                  <div class="col pr-0">
-                    <a class="chart-link" data-iterator="<%=i%>" data-target="vote-distance" href="">
-                      Vote Distance
-                    </a>
-                  </div>
                   <div class="col">
                     <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">
                       Skipped Slots
                     </a>
                   </div>
                 </div>
-              </td>
-
-              <!-- VOTE DISTANCE -->
-              <td class="chart-column d-none d-lg-table-cell" id=vote-distance-<%=i%>>
-                <%
-                  vl = chart_x_scale(validator.score&.vote_distance_history.to_a.count)
-                  line_color = chart_line_color(validator.vote_distance_score)
-                  fill_color = chart_fill_color(validator.vote_distance_score)
-                  vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
-                %>
-                <% max_value = vote_vector&.max %>
-                <% if max_value && max_value > Y_VOTE_DISTANCE_MAX %>
-                  <% max_value_position = max_value_position(vote_vector) %>
-                  <% max_value_position_mobile = max_value_position(vote_vector, min_position: false) %>
-                  <div class="chart-top-container">
-                    <div class="chart-top-value d-lg-none" style="width: <%=max_value_position_mobile%>">
-                      <%= max_value %>
-                    </div>
-                    <div class="chart-top-value d-none d-lg-block" style="width: <%=max_value_position%>">
-                      <%= max_value %>
-                    </div>
-                  </div>
-                <% end %>
-                <%= render 'validators/spark_line_vote_distance',
-                           account: validator.account,
-                           vector: vote_vector,
-                           line_color: line_color,
-                           fill_color: fill_color
-                %>
               </td>
 
               <!-- SKIPPED SLOTS  -->
