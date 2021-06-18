@@ -1,0 +1,53 @@
+# frozen_string_literal: true
+
+class ValidatorCheckActiveWorker
+  include Sidekiq::Worker
+
+  # If stake lower of eqal this value validator becomes inactive
+  STAKE_EXCLUDE_HEIGHT = 0 # lamports
+
+  # if delinquent for this period of time validator becomes inactive
+  DELINQUENT_TIME = 24.hours
+
+  def perform
+    # Check for activity only validators that are active now
+    Validator.scorable.each do |validator|
+      unless acceptable_stake?(validator) && not_delinquent?(validator)
+        validator.update(is_active: false)
+      end
+    end
+  end
+
+  private
+
+  def not_delinquent?(validator)
+    # New Validators should not be delinquent
+    return true if ValidatorHistory.where(account: validator.account).count < 10
+
+    nondelinquent_history = ValidatorHistory.where(account: validator.account)
+                                            .where(
+                                              'created_at > ?',
+                                              DateTime.now - DELINQUENT_TIME
+                                            )
+                                            .where(delinquent: false)
+
+    nondelinquent_history.exists?
+  end
+
+  def acceptable_stake?(validator)
+    # New validators should not be checked for stake
+    return true if ValidatorHistory.where(account: validator.account).count < 10
+
+    with_acceptable_stake = ValidatorHistory.where(account: validator.account)
+                                            .where(
+                                              'created_at > ?',
+                                              DateTime.now - DELINQUENT_TIME
+                                            )
+                                            .where(
+                                              'active_stake > ?',
+                                              STAKE_EXCLUDE_HEIGHT
+                                            )
+
+    with_acceptable_stake.exists?
+  end
+end

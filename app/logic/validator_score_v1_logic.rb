@@ -136,6 +136,9 @@ module ValidatorScoreV1Logic
       p.payload[:validators].each do |v|
         root_distance_all += v.validator_score_v1.root_distance_history
         vote_distance_all += v.validator_score_v1.vote_distance_history
+        if v.validator_score_v1.root_distance_history > 100
+          puts v.account
+        end
       rescue StandardError => e
         Appsignal.send_error(e)
       end

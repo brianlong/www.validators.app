@@ -50,6 +50,10 @@ every 1.day do
   ruby_script 'validators_update_avatar_url.rb'
 end
 
+every 10.minutes do
+  ValidatorCheckActiveWorker.perform_async
+end
+
 if environment == 'production'
   every 1.day, at: '1:00am' do
     ruby_script 'prune_database_tables.rb'
