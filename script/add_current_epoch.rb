@@ -70,7 +70,7 @@ end
 
   break unless confirmed_start_block
 
-  EpochWallClock.create(
+  created_epoch = EpochWallClock.create(
     epoch: last_epoch['epoch'],
     network: network,
     starting_slot: confirmed_start_block,
@@ -78,6 +78,8 @@ end
     created_at: last_epoch_start_datetime,
     ending_slot: nil
   )
+
+  Rails.logger.warn "created new epoch #{created_epoch.epoch}"
 
   confirmed_end_block = nil
   block_search_count.times do |b_diff|
