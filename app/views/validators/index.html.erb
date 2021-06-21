@@ -64,7 +64,7 @@
             <td class="avatar-column"></td>
             <td></td>
             <td class="percent-column">
-              Best: <%= number_to_percentage((100 - @skipped_vote_percent_best.to_f * 100.0), precision: 2) %>
+              Best: <%= number_to_percentage((100 - @batch.best_skipped_vote.to_f * 100.0), precision: 2) %>
             </td>
             <td class="text-right">
               <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
@@ -139,12 +139,14 @@
 
               <!-- SKIPPED VOTE % -->
               <td class="percent-column align-middle" id="skipped-vote-column-<%=i%>">
-                <% skipped_vote_percent = skipped_vote_percent(validator, @batch, @skipped_vote_percent_best) %>
+                <% skipped_vote_percent = skipped_vote_percent(validator, @batch) %>
                 <% if skipped_vote_percent %>
                   <div class="d-none d-lg-block">
                     <%= render 'validators/spark_line_skipped_vote',
                                account: validator.account,
-                               value: [skipped_vote_percent, -8].max
+                               value: [skipped_vote_percent, @batch.skipped_vote_all_median.to_f * 3].max,
+                               chart_steps: [@batch.skipped_vote_all_median.to_f * 2, @batch.skipped_vote_all_median.to_f, 0.05],
+                               min_value: @batch.skipped_vote_all_median.to_f * 3
                     %>
                     <div class="text-center text-muted small mt-3">
                       <%= number_to_percentage(skipped_vote_percent, precision: 2) %>

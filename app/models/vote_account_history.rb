@@ -43,7 +43,7 @@ class VoteAccountHistory < ApplicationRecord
   end
 
   def skipped_vote_percent
-    ((slot_index_current.to_i - credits_current.to_i)/slot_index_current.to_f).round(2)
+    ((slot_index_current.to_i - credits_current.to_i)/slot_index_current.to_f)
   end
 
   def self.average_skipped_vote_percent_moving_average_for(network:, batch_uuid:)

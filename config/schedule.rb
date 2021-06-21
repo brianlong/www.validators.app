@@ -54,6 +54,10 @@ every 10.minutes do
   ValidatorCheckActiveWorker.perform_async
 end
 
+every 1.minute do
+  ruby_script 'add_current_epoch.rb'
+end
+
 if environment == 'production'
   every 1.day, at: '1:00am' do
     ruby_script 'prune_database_tables.rb'

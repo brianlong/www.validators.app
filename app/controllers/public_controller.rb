@@ -36,11 +36,6 @@ class PublicController < ApplicationController
       @skipped_slot_median =
         validator_block_history_query.median_skipped_slot_percent
 
-      # Calculate the best skipped vote percent.
-      @skipped_vote_percent_best =
-        VoteAccountHistoryQuery.new(params[:network], @batch.uuid)
-                               .skipped_vote_percent_best
-
       validator_history =
         ValidatorHistoryQuery.new(params[:network], @batch.uuid)
       @total_active_stake = validator_history.total_active_stake

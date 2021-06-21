@@ -5,9 +5,9 @@
         type: 'gauge',
         data: {
             datasets: [{
-                data: [-5, -3.0, 0.05],
+                data: <%= local_assigns[:chart_steps] %>,
                 value: <%= local_assigns[:value] %>,
-                minValue: -8,
+                minValue: <%= local_assigns[:min_value] %>,
                 maxValue: 0.05,
                 backgroundColor: [
                     '<%= LIGHT_GREY_TRANSPARENT %>',
