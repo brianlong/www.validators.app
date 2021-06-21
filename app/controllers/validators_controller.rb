@@ -38,8 +38,6 @@ class ValidatorsController < ApplicationController
     end
 
     vote_account_history_query = VoteAccountHistoryQuery.new(params[:network], @batch.uuid)
-    # Calculate the best skipped vote percent.
-    @skipped_vote_percent_best = vote_account_history_query.skipped_vote_percent_best
 
     validator_history =
       ValidatorHistoryQuery.new(params[:network], @batch.uuid)
