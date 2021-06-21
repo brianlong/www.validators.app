@@ -4,6 +4,7 @@
 class PublicController < ApplicationController
   def index
     validators = Validator.where(network: params[:network])
+                          .scorable
                           .joins(:validator_score_v1)
                           .index_order(validate_order)
 

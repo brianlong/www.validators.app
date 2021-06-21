@@ -194,7 +194,8 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      p.payload[:rpc_servers].update_all(is_rpc: true)
+      accounts = p.payload[:rpc_servers].keys.to_a
+      Validator.where(account: accounts).update_all(is_rpc: true)
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e

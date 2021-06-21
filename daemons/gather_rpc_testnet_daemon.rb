@@ -31,6 +31,7 @@ begin
                 .then(&validators_get)
                 .then(&vote_accounts_get)
                 .then(&reduce_validator_vote_accounts)
+                .then(&rpc_servers_save)
                 .then(&validators_save)
                 .then(&validator_block_history_get)
                 .then(&validator_block_history_save)

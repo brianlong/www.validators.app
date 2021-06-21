@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'sidekiq/testing'
 
-class ValidatorCheckActiveTest < ActiveSupport::TestCase
+class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   test 'validator with active stake and nondelinquent should be active' do
     create(:validator, :with_score, account: 'account1')
     11.times do
