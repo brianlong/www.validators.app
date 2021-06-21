@@ -3,6 +3,8 @@
 require 'uri'
 require 'net/http'
 
+require File.expand_path('../config/environment', __dir__)
+
 @common_params = {
   "jsonrpc" => "2.0", 
   "id" => 1
