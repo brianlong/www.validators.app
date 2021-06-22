@@ -24,12 +24,14 @@ class ValidatorCheckActiveWorker
     # New Validators should not be delinquent
     return true if ValidatorHistory.where(account: validator.account).count < 10
 
-    nondelinquent_history = ValidatorHistory.where(account: validator.account)
+    nondelinquent_history = ValidatorHistory.where(
+                                              account: validator.account,
+                                              delinquent: false
+                                            )
                                             .where(
                                               'created_at > ?',
                                               DateTime.now - DELINQUENT_TIME
                                             )
-                                            .where(delinquent: false)
 
     nondelinquent_history.exists?
   end
@@ -40,11 +42,8 @@ class ValidatorCheckActiveWorker
 
     with_acceptable_stake = ValidatorHistory.where(account: validator.account)
                                             .where(
-                                              'created_at > ?',
-                                              DateTime.now - DELINQUENT_TIME
-                                            )
-                                            .where(
-                                              'active_stake > ?',
+                                              'created_at > ? AND active_stake > ?',
+                                              DateTime.now - DELINQUENT_TIME,
                                               STAKE_EXCLUDE_HEIGHT
                                             )
 
