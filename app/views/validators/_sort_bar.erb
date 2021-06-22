@@ -18,7 +18,9 @@
           <%= hidden_field_tag(:order, params[:order]) %>
           <%= hidden_field_tag(:refresh, params[:refresh]) %>
           <div class="input-group-append">
-            <%= submit_tag("Search", class: 'btn btn-xs btn-primary') %>
+            <%= button_tag(type: "submit", class: 'btn btn-xs btn-primary') do %>
+              <i class="fas fa-search"></i>
+            <% end %>
           </div>
         </div>
       </div>

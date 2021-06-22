@@ -18,11 +18,11 @@
           <% if params[:refresh] == 'true' %>
             <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
                         url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
-            <p class="small muted toggle-label">REFRESH ON</p>
+            <p class="small muted toggle-label">Refresh ON</p>
           <% else %>
             <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'),
                         url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
-            <p class="small muted toggle-label">REFRESH OFF</p>
+            <p class="small muted toggle-label">Refresh OFF</p>
           <% end %>
         </div>
       </div>
@@ -35,7 +35,7 @@
           <thead>
           <tr>
             <th class="avatar-column align-middle">#</th>
-            <th class="name-column pr-1">
+            <th class="name-column align-middle">
               Name <small class="text-muted">(Commission)</small><br />
               Active Stake
               <small class="text-muted">
@@ -45,45 +45,45 @@
               </small><br />
               Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='percent-column'>
+            <th class='chart-column align-middle'>
               Skipped Vote&nbsp;&percnt;<br />
               <small class="text-muted">Distance from leader</small>
             </th>
-            <th class='percent-column'>
+            <th class='chart-column align-middle'>
               Root Distance<br />
               <small class="text-muted">Distance from leader</small>
             </th>
-            <th class='percent-column'>
+            <th class='chart-column align-middle'>
               Vote Distance<br />
               <small class="text-muted">Distance from leader</small>
             </th>
-            <th class='chart-column'>
+            <th class='chart-column align-middle'>
               Skipped Slot&nbsp;&percnt;<br />
-              <small class="text-muted">60-Min Chart</small>
+              <small class="text-muted">Distance from leader</small>
             </th>
           </tr>
 
           <tr class="subhead">
             <td class="avatar-column"></td>
             <td></td>
-            <td>
+            <td class="align-middle">
               Best: <%= number_to_percentage((100 - @batch.best_skipped_vote.to_f * 100.0), precision: 2) %>
             </td>
-            <td>
+            <td class="align-middle">
               <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
                 Md: <%= @batch.root_distance_all_median %>
                 <br />
                 Av: <%= @batch.root_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td>
+            <td class="align-middle">
               <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
                 Md: <%= @batch.vote_distance_all_median %>
                 <br />
                 Av: <%= @batch.vote_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td>
+            <td class="align-middle">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
@@ -142,7 +142,7 @@
               </td>
 
               <!-- SKIPPED VOTE % -->
-              <td class="percent-column align-middle" id="skipped-vote-column-<%=i%>">
+              <td class="chart-column align-middle">
                 <% skipped_vote_percent = skipped_vote_percent(validator, @batch) %>
                 <% if skipped_vote_percent %>
                   <div class="d-none d-lg-block">
@@ -160,13 +160,13 @@
                   <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
                 <span class="d-inline-block d-lg-none">
-                  Skipped Vote&nbsp;% (distance from leader):
+                  Skipped Vote&nbsp;%:
                   <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
                 </span>
               </td>
 
               <!-- ROOT DISTANCE -->
-              <td class="percent-column align-middle" id="root-distance-<%=i%>">
+              <td class="chart-column align-middle">
                 <% root_distance_percent = -(validator.score&.root_distance_history.to_a[-1]) %>
                 <% if root_distance_percent %>
                   <div class="d-none d-lg-block">
@@ -184,13 +184,13 @@
                   <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
                 <span class="d-inline-block d-lg-none">
-                  Root Distance (from leader):
+                  Root Distance:
                   <%= root_distance_percent ? root_distance_percent : "N/A" %>
                 </span>
               </td>
 
               <!-- VOTE DISTANCE -->
-              <td class="percent-column align-middle" id=vote-distance-<%=i%>>
+              <td class="chart-column align-middle">
                 <% vote_distance_percent = -(validator.score&.vote_distance_history.to_a[-1]) %>
                 <% if vote_distance_percent %>
                   <div class="d-none d-lg-block">
@@ -208,43 +208,40 @@
                   <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
                 <span class="d-inline-block d-lg-none">
-                  Vote Distance (from leader):
+                  Vote Distance:
                   <%= vote_distance_percent ? vote_distance_percent : "N/A" %>
                 </span>
               </td>
 
-              <td class="d-lg-none pt-0">
-                <div class="row my-3">
-                  <div class="col">
-                    <a class="chart-link" data-iterator="<%=i%>" data-target="skipped-slots" href="">
-                      Skipped Slots
-                    </a>
-                  </div>
-                </div>
-              </td>
-
               <!-- SKIPPED SLOTS  -->
-              <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
-                <%
-                  vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
-                  ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
-
-                  skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
-                  slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
-
-                  line_color = chart_line_color(validator.skipped_slot_score)
-                  fill_color = chart_fill_color(validator.skipped_slot_score)
-                %>
-                <%= render 'validators/spark_line_skipped_slots',
-                           account: validator.account,
-                           vector: slot_vector,
-                           line_color: line_color,
-                           fill_color: fill_color,
-                           moving_avg: skipped_slots_moving_avg
-                %>
+              <td class="chart-column align-middle">
+                <% skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-1].to_f*100.0.round(1)*-1 %>
+                <%#= TODO count md & avg in background job %>
+                <% chart_avg = @skipped_slot_average*100.round(2) %>
+                <% chart_median = @skipped_slot_median*100.round(2) %>
+                <% if skipped_slots_moving_avg %>
+                  <div class="d-none d-lg-block">
+                    <%= render 'validators/spark_line_skipped_slots',
+                               account: validator.account,
+                               value: [skipped_slots_moving_avg, chart_median.to_f * -2].max,
+                               chart_steps: [chart_avg.to_f * -1, chart_median.to_f * -1, 0.05],
+                               min_value: chart_median.to_f * -2
+                    %>
+                    <div class="text-center text-muted small mt-2">
+                      <%= skipped_slots_moving_avg.round(1) %>
+                    </div>
+                  </div>
+                <% else %>
+                  <span class="d-none d-lg-block text-center text-muted">N/A</span>
+                <% end %>
+                <span class="d-inline-block d-lg-none">
+                  Skipped Slot&nbsp;&percnt;:
+                  <%= skipped_slots_moving_avg ? number_to_percentage(skipped_slots_moving_avg, precision: 2) : "N/A" %>
+                </span>
               </td>
             </tr>
-            <% if params[:order] == 'stake' && i == @at_33_stake_index%>
+
+            <% if params[:order] == 'stake' && i == @at_33_stake_index %>
               <tr class="heading-secondary text-warning text-center">
                 <td colspan=6>
                   CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
