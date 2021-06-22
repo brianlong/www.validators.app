@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
-require 'open-uri'
+require 'uri'
+require 'net/http'
 # TODO: docs
 
 module Adapters
   class CoinGecko
     BASE_CURRENCY = 'usd'
     private_constant :BASE_CURRENCY
+
+    API_URL = 'https://api.coingecko.com/api/v3/'
+    private_constant :API_URL
 
     attr_reader :coin
 
@@ -17,10 +21,10 @@ module Adapters
     end
 
     def self.api_call(endpoint = 'coins')
-      url = "https://api.coingecko.com/api/v3/#{endpoint}"
+      url = URI("#{API_URL}#{endpoint}")
       puts url
-      res = open(url).read
-      JSON.parse(res)
+      res = Net::HTTP.get_response(url)
+      JSON.parse(res.body)
     end
 
     def self.list_coins
