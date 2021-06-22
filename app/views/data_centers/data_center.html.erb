@@ -71,7 +71,7 @@
             data_centers_url(network: params[:network]),
             class: 'btn btn-sm btn-secondary mb-4' %>
 
-<%= render 'validators/basic_list', scores: @scores %>
+<%= render 'validators/basic_list', scores: @scores, batch: @batch %>
 
 <%= link_to 'Back to Data Centers',
             data_centers_url(network: params[:network]),

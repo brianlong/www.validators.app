@@ -27,6 +27,7 @@ class DataCentersController < ApplicationController
     #   ORDER BY val.account
     # "
     # @validators = Validator.connection.execute(sql)
+    @batch = Batch.last_scored(params[:network])
     @scores = ValidatorScoreV1.by_network_with_active_stake(params[:network])
                               .includes(:validator)
                               .by_data_centers(key)
