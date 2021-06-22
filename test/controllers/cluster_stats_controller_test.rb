@@ -51,10 +51,11 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
       data[:validator_block_histories].map(&:skipped_slot_percent_moving_average)
                                       .sort.reverse
     skipped_votes_stats =
-      # :best as a Floats maaaagic
-      { min: 0.35, max: 0.35, median: 0.35, average: 0.35, best: 0.3518806943896684 }
+      { min: 0.3518806943896684, max: 0.3518806943896684, median: 0.3518806943896684,
+        average: 0.35188069438966835, best: 0.3518806943896684 }
     skipped_vote_moving_average_stats =
-      { min: 0.35, max: 0.35, median: 0.35, average: 0.35 }
+      { min: 0.3519e0, max: 0.3519e0, median: 0.3519e0, average: 0.3519e0}
+
     # root_distance_history, vote_distance_stats for each factored validator
     # is [1,2,3,4,5] and we use averages (which equals to 3) of root
     # distance for statistics

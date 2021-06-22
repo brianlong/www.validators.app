@@ -52,12 +52,17 @@ module ValidatorsHelper
     end
   end
 
-  def skipped_vote_percent(validator, batch, skipped_vote_percent_best)
-    vahl = validator.vote_account_last&.vote_account_history_for(batch.uuid)
-    return unless vahl
-
-    skipped_votes_percent = (vahl.slot_index_current.to_i - vahl.credits_current.to_i)/vahl.slot_index_current.to_f
-    ((skipped_vote_percent_best - skipped_votes_percent.to_f)*100.0).round(2)
+  def skipped_vote_percent(validator, batch)
+    if validator.score&.skipped_vote_history && batch.best_skipped_vote
+      # Get the last skipped_vote data from history
+      skipped_votes_percent = validator.score.skipped_vote_history[-1]
+      return unless skipped_votes_percent
+      
+      # Calculate the distance from the best skipped vote and round
+      ((batch.best_skipped_vote - skipped_votes_percent.to_f) * 100.0).round(2)
+    else
+      nil
+    end
   end
 
   def above_33percent_concentration?(validator)
