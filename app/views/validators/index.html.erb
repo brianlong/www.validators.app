@@ -177,7 +177,7 @@
                                min_value: @batch.root_distance_all_average.to_f * -2
                     %>
                     <div class="text-center text-muted small mt-2">
-                      <%= root_distance_percent %>
+                      <%= root_distance_percent.round(2) %>
                     </div>
                   </div>
                 <% else %>
@@ -201,7 +201,7 @@
                                min_value: @batch.vote_distance_all_average.to_f * -2
                     %>
                     <div class="text-center text-muted small mt-2">
-                      <%= vote_distance_percent %>
+                      <%= vote_distance_percent.round(2) %>
                     </div>
                   </div>
                 <% else %>
@@ -215,20 +215,20 @@
 
               <!-- SKIPPED SLOTS  -->
               <td class="chart-column align-middle">
-                <% skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-1].to_f*100.0.round(1)*-1 %>
+                <% skipped_slots_moving_average = -(validator.score&.skipped_slot_moving_average_history.to_a[-1].to_f*100.0) %>
                 <%#= TODO count md & avg in background job %>
-                <% chart_avg = @skipped_slot_average*100.round(2) %>
+                <% chart_average = @skipped_slot_average*100.round(2) %>
                 <% chart_median = @skipped_slot_median*100.round(2) %>
-                <% if skipped_slots_moving_avg %>
+                <% if skipped_slots_moving_average %>
                   <div class="d-none d-lg-block">
                     <%= render 'validators/spark_line_skipped_slots',
                                account: validator.account,
-                               value: [skipped_slots_moving_avg, chart_median.to_f * -2].max,
-                               chart_steps: [chart_avg.to_f * -1, chart_median.to_f * -1, 0.05],
+                               value: [skipped_slots_moving_average, chart_median.to_f * -2].max,
+                               chart_steps: [chart_average.to_f * -1, chart_median.to_f * -1, 0.05],
                                min_value: chart_median.to_f * -2
                     %>
                     <div class="text-center text-muted small mt-2">
-                      <%= skipped_slots_moving_avg.round(1) %>
+                      <%= number_to_percentage(skipped_slots_moving_average, precision: 2) %>
                     </div>
                   </div>
                 <% else %>
@@ -236,7 +236,7 @@
                 <% end %>
                 <span class="d-inline-block d-lg-none">
                   Skipped Slot&nbsp;&percnt;:
-                  <%= skipped_slots_moving_avg ? number_to_percentage(skipped_slots_moving_avg, precision: 2) : "N/A" %>
+                  <%= skipped_slots_moving_average ? number_to_percentage(skipped_slots_moving_average, precision: 2) : "N/A" %>
                 </span>
               </td>
             </tr>
