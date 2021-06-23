@@ -36,8 +36,6 @@ set :whenever_path, Whenever.path
 set :output, File.join(Whenever.path, 'log', 'whenever.log')
 job_type :ruby_script,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
-job_type :sidekiq,
-         "cd :path && :environment_variable=:environment bundle exec sidekiq-client push :task :output"
 
 every 1.hour do
   ruby_script 'validators_get_info.rb'
@@ -53,7 +51,7 @@ every 1.day do
 end
 
 every 10.minutes do
-  sidekiq 'ValidatorCheckActiveWorker'
+  runner "ValidatorCheckActiveWorker.perform_async"
 end
 
 every 1.minute do
