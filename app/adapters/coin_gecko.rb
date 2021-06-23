@@ -83,7 +83,16 @@ class CoinGecko
   end
 
   def price_for_yesterday
-    price_for_last_days
+    prices = price_for_last_days
+    prices.map do |price|
+      {
+        'time' => price[0],
+        'open' => price[1],
+        'high' => price[2],
+        'low' => price[3],
+        'close' => price[4]
+      }
+    end
   end
 
   private
