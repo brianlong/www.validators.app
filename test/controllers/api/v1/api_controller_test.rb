@@ -124,6 +124,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     json = response_to_json(@response.body)
     validator_with_all_data = json.select { |j| j['account'] == 'Test Account' }.first
+    validator_active_stake = validator.validator_score_v1.active_stake
 
     assert_equal 2, json.size
 
@@ -146,7 +147,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_nil validator_with_all_data['data_center_concentration_score']
     assert_equal 1, validator_with_all_data['published_information_score']
     assert_equal 1, validator_with_all_data['security_report_score']
-    assert_equal 206_356_743_328_737, validator_with_all_data['active_stake']
+    assert_equal validator_active_stake, validator_with_all_data['active_stake']
     assert_equal 10, validator_with_all_data['commission']
     assert_equal false, validator_with_all_data['delinquent']
     assert_equal '23470-US-America/Chicago', validator_with_all_data['data_center_key']
@@ -178,6 +179,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
 
     json_response = response_to_json(@response.body)
+    validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
     assert_equal 29, json_response.keys.size
@@ -198,7 +200,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_nil json_response['data_center_concentration_score']
     assert_equal 1, json_response['published_information_score']
     assert_equal 1, json_response['security_report_score']
-    assert_equal 206_356_743_328_737, json_response['active_stake']
+    assert_equal validator_active_stake, json_response['active_stake']
     assert_equal 10, json_response['commission']
     assert_equal false, json_response['delinquent']
     assert_equal '23470-US-America/Chicago', json_response['data_center_key']

@@ -237,16 +237,9 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      avg_skipped_slot_pct_all = \
-        ValidatorBlockHistory.average_skipped_slot_percent_for(
-          p.payload[:network],
-          p.payload[:batch_uuid]
-        )
-      med_skipped_slot_pct_all = \
-        ValidatorBlockHistory.median_skipped_slot_percent_for(
-          p.payload[:network],
-          p.payload[:batch_uuid]
-        )
+      vbh_query = ValidatorBlockHistoryQuery.new(p.payload[:network], p.payload[:batch_uuid])
+      avg_skipped_slot_pct_all = vbh_query.average_skipped_slot_percent
+      med_skipped_slot_pct_all = vbh_query.median_skipped_slot_percent
 
       vbh_sql = <<-SQL_END
         SELECT vbh.validator_id, vbh.skipped_slot_percent, vbh.skipped_slot_percent_moving_average

@@ -1,0 +1,16 @@
+<%= render 'validators/banner' %>
+<% unless @mainnet.empty? %>
+  Mainnet Stats: <br />
+  <%= @mainnet.inspect %>
+  <%#= render 'validators/stats' %>
+
+<% end %>
+
+<% unless @testnet.empty? %>
+  Testnet Stats: <br />
+  <%= @testnet.inspect %>
+  <%#= render 'validators/stats' %>
+
+<% end %>
+
+<%= render 'validators/software_versions' %>

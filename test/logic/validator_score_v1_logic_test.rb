@@ -303,7 +303,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_history_get)
                 .then(&assign_block_history_score)
 
-    assert_equal 0.25, p.payload[:avg_skipped_slot_pct_all]
+    assert_equal 0.175, p.payload[:avg_skipped_slot_pct_all]
     assert_equal 0.25, p.payload[:med_skipped_slot_pct_all]
     assert_equal [0.1], p.payload[:validators]
                          .first

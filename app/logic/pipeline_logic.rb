@@ -34,8 +34,10 @@ end
 # Monkey patch the .median method
 class ActiveRecord::Base
   def self.median(column_name)
-    median_index = (count / 2)
-    # order by the given column and pluck out the value exactly halfway
-    order(column_name).offset(median_index).limit(1).pluck(column_name)[0]
+    # pluck out the given column, order it and take out the value exactly halfway
+    # reduce the mysql queries
+    arry = pluck(column_name)
+    median_index = arry.size / 2
+    arry.sort[median_index]
   end
 end
