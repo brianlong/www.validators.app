@@ -1,6 +1,8 @@
-<canvas id="spark_line_skipped_vote_<%= local_assigns[:account] %>"></canvas>
+<!-- required parameters: canvas_name, chart_steps, value, min_value -->
+
+<canvas id="<%= local_assigns[:canvas_name] %>"></canvas>
 <script type="text/javascript">
-    var ctx = document.getElementById("spark_line_skipped_vote_<%= local_assigns[:account] %>").getContext('2d');
+    var ctx = document.getElementById("<%= local_assigns[:canvas_name] %>").getContext('2d');
     var chart = new Chart(ctx, {
         type: 'gauge',
         data: {
@@ -10,12 +12,12 @@
                 minValue: <%= local_assigns[:min_value] %>,
                 maxValue: 0.05,
                 backgroundColor: [
-                    '<%= LIGHT_GREY_TRANSPARENT %>',
-                    '<%= BLUE_TRANSPARENT %>',
-                    '<%= GREEN_TRANSPARENT %>'
+                    '<%= LIGHT_GREY_SPEEDOMETER %>',
+                    '<%= BLUE_SPEEDOMETER %>',
+                    '<%= GREEN_SPEEDOMETER %>'
                 ],
                 borderColor: ['<%= LIGHT_GREY %>', '<%= BLUE %>', '<%= GREEN %>'],
-                borderWidth: 0.5
+                borderWidth: 1
             }]
         },
         options: {
