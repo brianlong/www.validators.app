@@ -1,0 +1,167 @@
+<tbody>
+  <%
+    i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
+          0
+        else
+          (params[:page].to_i - 1) * Kaminari.config.default_per_page
+        end
+  %>
+  <% @validators.each do |validator| %>
+    <% i += 1 %>
+    <tr id="row-<%=i%>">
+      <td class="avatar-column align-middle">
+        <div class="avatar">
+          <% if validator.private_validator? %>
+            <div class="img-circle-medium-private">
+              <span class='fas fa-users-slash' title="Private Validator"></span>
+            </div>
+          <% elsif validator.avatar_url %>
+            <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
+          <% else %>
+            <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
+          <% end %>
+        </div>
+      </td>
+
+      <td class="name-column align-middle">
+        <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
+                    class: 'font-weight-bold' do %>
+          <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
+        <% end %>
+        <% unless validator.private_validator? %>
+          <small>
+            (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
+          </small>
+        <% end %>
+        <br />
+        <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+        <small>
+          <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
+          (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
+        </small>
+        <br />
+        <% if show_ip_and_gateway %>
+          <span class="d-inline-block d-lg-none">IP:&nbsp;</span>
+          <small><%= validator.score.ip_address %></small>
+          <br />
+          <% data_center_host = Ip.where(address: validator.score.ip_address).first&.data_center_host %>
+          <% if data_center_host %>
+            <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
+            <small><%= data_center_host %></small>
+            <br />
+          <% end %>
+        <% end %>
+        <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
+        <%= render 'validators/scores', validator: validator %>
+        <% if validator.delinquent? %>
+          <br />
+          <small class="text-danger">delinquent</small>
+        <% end %>
+      </td>
+
+      <!-- SKIPPED VOTE % -->
+      <td class="chart-column align-middle">
+        <% skipped_vote_percent = skipped_vote_percent(validator, @batch) %>
+        <% if skipped_vote_percent %>
+          <div class="d-none d-lg-block">
+            <%= render 'validators/speedometer_chart',
+                       canvas_name: "spark_line_skipped_vote_#{validator.account}",
+                       value: [skipped_vote_percent, @batch.skipped_vote_all_median.to_f * 3].max,
+                       chart_steps: [@batch.skipped_vote_all_median.to_f * 2, @batch.skipped_vote_all_median.to_f, 0.05],
+                       min_value: @batch.skipped_vote_all_median.to_f * 3
+            %>
+            <div class="text-center text-muted small mt-2">
+              <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
+            </div>
+          </div>
+        <% else %>
+          <span class="d-none d-lg-block text-center text-muted">N/A</span>
+        <% end %>
+        <span class="d-inline-block d-lg-none">
+                  Skipped Vote&nbsp;%:
+          <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
+                </span>
+      </td>
+
+      <!-- ROOT DISTANCE -->
+      <td class="chart-column align-middle">
+        <% root_distance_percent = -(validator.score&.root_distance_history.to_a[-1]) %>
+        <% if root_distance_percent %>
+          <div class="d-none d-lg-block">
+            <%= render 'validators/speedometer_chart',
+                       canvas_name: "spark_line_block_distance_#{validator.account}",
+                       value: [root_distance_percent, @batch.root_distance_all_average.to_f * -2].max,
+                       chart_steps: [@batch.root_distance_all_average.to_f * -1, @batch.root_distance_all_median.to_f * -1, 0.05],
+                       min_value: @batch.root_distance_all_average.to_f * -2
+            %>
+            <div class="text-center text-muted small mt-2">
+              <%= root_distance_percent.round(2) %>
+            </div>
+          </div>
+        <% else %>
+          <span class="d-none d-lg-block text-center text-muted">N/A</span>
+        <% end %>
+        <span class="d-inline-block d-lg-none">
+                  Root Distance:
+          <%= root_distance_percent ? root_distance_percent : "N/A" %>
+                </span>
+      </td>
+
+      <!-- VOTE DISTANCE -->
+      <td class="chart-column align-middle">
+        <% vote_distance_percent = -(validator.score&.vote_distance_history.to_a[-1]) %>
+        <% if vote_distance_percent %>
+          <div class="d-none d-lg-block">
+            <%= render 'validators/speedometer_chart',
+                       canvas_name: "spark_line_vote_distance_#{validator.account}",
+                       value: [vote_distance_percent, @batch.vote_distance_all_average.to_f * -2].max,
+                       chart_steps: [@batch.vote_distance_all_average.to_f * -1, @batch.vote_distance_all_median.to_f * -1, 0.05],
+                       min_value: @batch.vote_distance_all_average.to_f * -2
+            %>
+            <div class="text-center text-muted small mt-2">
+              <%= vote_distance_percent.round(2) %>
+            </div>
+          </div>
+        <% else %>
+          <span class="d-none d-lg-block text-center text-muted">N/A</span>
+        <% end %>
+        <span class="d-inline-block d-lg-none">
+                  Vote Distance:
+          <%= vote_distance_percent ? vote_distance_percent : "N/A" %>
+                </span>
+      </td>
+
+      <!-- SKIPPED SLOTS  -->
+      <td class="chart-column align-middle">
+        <% skipped_slots_average_percent = -(validator.score&.skipped_slot_moving_average_history.to_a[-1].to_f*100.0) %>
+        <% if skipped_slots_average_percent %>
+          <div class="d-none d-lg-block">
+            <%= render 'validators/speedometer_chart',
+                       canvas_name: "spark_line_skipped_slots_#{validator.account}",
+                       value: [skipped_slots_average_percent, @batch.skipped_slot_all_average.to_f * -2].max,
+                       chart_steps: [@batch.skipped_slot_all_average.to_f * -1, @batch.skipped_slot_all_median.to_f * -1, 0.05],
+                       min_value: @batch.skipped_slot_all_median.to_f * -2
+            %>
+            <div class="text-center text-muted small mt-2">
+              <%= number_to_percentage(skipped_slots_average_percent, precision: 2) %>
+            </div>
+          </div>
+        <% else %>
+          <span class="d-none d-lg-block text-center text-muted">N/A</span>
+        <% end %>
+        <span class="d-inline-block d-lg-none">
+                  Skipped Slot&nbsp;&percnt;:
+          <%= skipped_slots_average_percent ? number_to_percentage(skipped_slots_average_percent, precision: 2) : "N/A" %>
+                </span>
+      </td>
+    </tr>
+
+    <% if params[:order] == 'stake' && i == @at_33_stake_index %>
+      <tr class="heading-secondary text-warning text-center">
+        <td colspan=6>
+          CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+</tbody>

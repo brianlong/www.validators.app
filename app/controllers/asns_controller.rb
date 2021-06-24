@@ -8,11 +8,11 @@ class AsnsController < ApplicationController
     @scores = ValidatorScoreV1.includes(:validator)
                               .by_network_with_active_stake(asn_params[:network])
                               .by_data_centers(@data_centers)
-
-    @asn_stake = @scores.sum(:active_stake)
+    @validators = @scores.map { |s| s.validator }.compact
 
     @batch = Batch.last_scored(params[:network])
 
+    @asn_stake = @scores.sum(:active_stake)
     @total_stake = ValidatorScoreV1.by_network_with_active_stake(asn_params[:network])
                                    .by_data_centers(@data_centers)
                                    .sum(:active_stake)

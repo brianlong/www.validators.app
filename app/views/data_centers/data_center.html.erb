@@ -71,7 +71,16 @@
             data_centers_url(network: params[:network]),
             class: 'btn btn-sm btn-secondary mb-4' %>
 
-<%= render 'validators/basic_list', scores: @scores, batch: @batch %>
+<div class="card mb-4">
+  <table id="validators-table" class='table table-block-sm mb-0'>
+    <%= render 'validators/validators_table_head',
+               show_subhead: false,
+               show_ip_and_gateway: true,
+               show_mobile_head: true %>
+    <%= render 'validators/validators_table_body',
+               show_ip_and_gateway: true %>
+  </table>
+</div>
 
 <%= link_to 'Back to Data Centers',
             data_centers_url(network: params[:network]),
