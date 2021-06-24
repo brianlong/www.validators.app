@@ -28,23 +28,12 @@ class PublicController < ApplicationController
         batch_uuid: @batch.uuid
       ).first
 
-      validator_block_history_query =
-        ValidatorBlockHistoryQuery.new(params[:network], @batch.uuid)
-
-      @skipped_slot_average =
-        validator_block_history_query.average_skipped_slot_percent
-      @skipped_slot_median =
-        validator_block_history_query.median_skipped_slot_percent
-
-      validator_history =
-        ValidatorHistoryQuery.new(params[:network], @batch.uuid)
+      validator_history = ValidatorHistoryQuery.new(params[:network], @batch.uuid)
       @total_active_stake = validator_history.total_active_stake
 
       at_33_stake_validator = validator_history.at_33_stake&.validator
       @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
     end
-
-    # flash[:error] = 'Due to an issue with our RPC server pool, the Skipped Slot % data may be inaccurate. I am aware of the problem and working on a solution. Thanks! -- Brian Long'
 
     render 'validators/index'
   end

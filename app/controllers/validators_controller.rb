@@ -13,7 +13,6 @@ class ValidatorsController < ApplicationController
 
     @validators_count = validators.size
     @validators = validators.page(params[:page])
-    @total_active_stake = validators.total_active_stake
 
     @software_versions = Report.where(
       network: params[:network],
@@ -28,24 +27,13 @@ class ValidatorsController < ApplicationController
         batch_uuid: @batch.uuid
       ).first
 
-      validator_block_history_query =
-        ValidatorBlockHistoryQuery.new(params[:network], @batch.uuid)
+      validator_history = ValidatorHistoryQuery.new(params[:network], @batch.uuid)
+      @total_active_stake = validator_history.total_active_stake
 
-      @skipped_slot_average =
-        validator_block_history_query.average_skipped_slot_percent
-      @skipped_slot_median =
-        validator_block_history_query.median_skipped_slot_percent
+      at_33_stake_validator = validator_history.at_33_stake&.validator
+      @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
     end
 
-    vote_account_history_query = VoteAccountHistoryQuery.new(params[:network], @batch.uuid)
-
-    validator_history =
-      ValidatorHistoryQuery.new(params[:network], @batch.uuid)
-
-    at_33_stake_validator = validator_history.at_33_stake&.validator
-    @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
-
-    # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
 
   # GET /validators/1
