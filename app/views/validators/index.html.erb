@@ -84,9 +84,9 @@
               <% end %>
             </td>
             <td class="align-middle">
-              Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
+              Md: <%= number_to_percentage(@batch.skipped_slot_all_median.to_f, precision: 1) %>
               <br />
-              Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
+              Av: <%= number_to_percentage(@batch.skipped_slot_all_average.to_f, precision: 1) %>
             </td>
           </tr>
           </thead>
@@ -215,20 +215,17 @@
 
               <!-- SKIPPED SLOTS  -->
               <td class="chart-column align-middle">
-                <% skipped_slots_moving_average = -(validator.score&.skipped_slot_moving_average_history.to_a[-1].to_f*100.0) %>
-                <%#= TODO count md & avg in background job %>
-                <% chart_average = @skipped_slot_average*100.round(2) %>
-                <% chart_median = @skipped_slot_median*100.round(2) %>
-                <% if skipped_slots_moving_average %>
+                <% skipped_slots_average_percent = -(validator.score&.skipped_slot_moving_average_history.to_a[-1].to_f*100.0) %>
+                <% if skipped_slots_average_percent %>
                   <div class="d-none d-lg-block">
                     <%= render 'validators/spark_line_skipped_slots',
                                account: validator.account,
-                               value: [skipped_slots_moving_average, chart_median.to_f * -2].max,
-                               chart_steps: [chart_average.to_f * -1, chart_median.to_f * -1, 0.05],
-                               min_value: chart_median.to_f * -2
+                               value: [skipped_slots_average_percent, @batch.skipped_slot_all_average.to_f * -2].max,
+                               chart_steps: [@batch.skipped_slot_all_average.to_f * -1, @batch.skipped_slot_all_median.to_f * -1, 0.05],
+                               min_value: @batch.skipped_slot_all_median.to_f * -2
                     %>
                     <div class="text-center text-muted small mt-2">
-                      <%= number_to_percentage(skipped_slots_moving_average, precision: 2) %>
+                      <%= number_to_percentage(skipped_slots_average_percent, precision: 2) %>
                     </div>
                   </div>
                 <% else %>
@@ -236,7 +233,7 @@
                 <% end %>
                 <span class="d-inline-block d-lg-none">
                   Skipped Slot&nbsp;&percnt;:
-                  <%= skipped_slots_moving_average ? number_to_percentage(skipped_slots_moving_average, precision: 2) : "N/A" %>
+                  <%= skipped_slots_average_percent ? number_to_percentage(skipped_slots_average_percent, precision: 2) : "N/A" %>
                 </span>
               </td>
             </tr>
