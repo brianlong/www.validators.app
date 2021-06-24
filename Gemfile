@@ -101,6 +101,7 @@ group :development do
   gem 'annotate'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
+  gem 'influxdb'
 end
 
 group :test do

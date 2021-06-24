@@ -177,6 +177,7 @@ GEM
       ffi-compiler (>= 1.0, < 2.0)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
+    influxdb (0.8.1)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
@@ -412,6 +413,7 @@ DEPENDENCIES
   ed25519
   factory_bot_rails
   faker!
+  influxdb
   jbuilder (~> 2.7)
   json (>= 2.3.0)
   kaminari
@@ -441,4 +443,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-  2.1.4 
+   2.1.4
