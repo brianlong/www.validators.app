@@ -12,8 +12,12 @@ class ValidatorCheckActiveWorker
   def perform
     # Check for activity only validators that are active now
     Validator.scorable.each do |validator|
-      unless acceptable_stake?(validator) && not_delinquent?(validator)
-        validator.update(is_active: false)
+      if ValidatorHistory.where(account: validator.account).count > 10
+        unless acceptable_stake?(validator) && not_delinquent?(validator)
+          validator.update(is_active: false)
+        end
+      elsif validator.created_at < DateTime.now - DELINQUENT_TIME
+        validator.update(is_rpc: true)
       end
     end
   end
@@ -21,9 +25,6 @@ class ValidatorCheckActiveWorker
   private
 
   def not_delinquent?(validator)
-    # New Validators should not be delinquent
-    return true if ValidatorHistory.where(account: validator.account).count < 10
-
     nondelinquent_history = ValidatorHistory.where(
                                               account: validator.account,
                                               delinquent: false
@@ -37,9 +38,6 @@ class ValidatorCheckActiveWorker
   end
 
   def acceptable_stake?(validator)
-    # New validators should not be checked for stake
-    return true if ValidatorHistory.where(account: validator.account).count < 10
-
     with_acceptable_stake = ValidatorHistory.where(account: validator.account)
                                             .where(
                                               'created_at > ? AND active_stake > ?',
