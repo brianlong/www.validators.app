@@ -235,10 +235,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      block_history = cli_request('block-production', p.payload[:config_urls])
+      cli_method = "block-production --epoch #{p.payload[:epoch].to_i}"
+      block_history = cli_request(cli_method, p.payload[:config_urls])
 
       raise 'No data from block-production' if block_history.nil?
-
       # Data for the validator_block_history_stats table
       block_history_stats = {
         'batch_uuid' => p.payload[:batch_uuid],
