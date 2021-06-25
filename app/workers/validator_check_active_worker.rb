@@ -17,7 +17,7 @@ class ValidatorCheckActiveWorker
           validator.update(is_active: false)
         end
       elsif validator.created_at < DateTime.now - DELINQUENT_TIME && \
-        ValidatorHistory.where(account: validator.account).count < 10
+        ValidatorHistory.where(account: validator.account).count <= 10
 
         validator.update(is_rpc: true)
       end
