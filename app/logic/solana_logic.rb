@@ -404,6 +404,33 @@ module SolanaLogic
     end
   end
 
+  # Checks if the epoch has not changed during pipeline runtime.
+  def check_epoch
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      epoch_json = rpc_request(
+        'getEpochInfo',
+        p.payload[:config_urls]
+      )['result']
+
+      unless p.payload[:epoch] == epoch_json['epoch']
+        Batch.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        EpochHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        VoteAccountHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        ValidatorBlockHistoryStat.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        ValidatorBlockHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+
+        Pipeline.new(500, p.payload, 'Epoch has changed since pipeline start (check_epoch).', e)
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from check_epoch', e)
+    end
+  end
+
   # rpc_request will make a Solana RPC request and return the results in a
   # JSON object. API specifications are at:
   #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
