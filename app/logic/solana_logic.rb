@@ -415,7 +415,7 @@ module SolanaLogic
       )['result']
 
       unless p.payload[:epoch] == epoch_json['epoch']
-        Batch.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        Batch.where(uuid: p.payload[:batch_uuid]).destroy_all
         EpochHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
         ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
         VoteAccountHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
