@@ -168,6 +168,7 @@ module SolanaLogic
       rpc_servers = {}
       p.payload[:validators].each do |k, _v|
         if p.payload[:vote_accounts][k].nil?
+          Rails.logger.warn "no vote account for #{k}"
           rpc_servers[k] = p.payload[:validators][k]
         else
           validators_reduced[k] = \
