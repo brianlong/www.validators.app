@@ -16,8 +16,14 @@ class ValidatorCheckActiveWorker
         unless acceptable_stake?(validator) && not_delinquent?(validator)
           validator.update(is_active: false)
         end
-      elsif validator.created_at < DateTime.now - DELINQUENT_TIME && \
+      elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
         ValidatorHistory.where(account: validator.account).count <= 10
+        # not active if no validator history
+
+        validator.update(is_active: false)
+      elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
+        !validator.vote_account.exists?
+        # is rpc if no vote account
 
         validator.update(is_rpc: true)
       end
