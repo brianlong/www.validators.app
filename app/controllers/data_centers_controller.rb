@@ -31,7 +31,7 @@ class DataCentersController < ApplicationController
                               .includes(:validator)
                               .by_data_centers(key)
                               .order('active_stake desc')
-    @validators = @scores.map { |s| s.validator }.compact
+    @validators = @scores.map(&:validator).compact
 
     @batch = Batch.last_scored(params[:network])
 
