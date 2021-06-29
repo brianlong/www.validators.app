@@ -27,13 +27,15 @@ class DataCentersController < ApplicationController
     #   ORDER BY val.account
     # "
     # @validators = Validator.connection.execute(sql)
+
+    @per = 20
     @batch = Batch.last_scored(params[:network])
     @scores = ValidatorScoreV1.by_network_with_active_stake(params[:network])
                               .includes(:validator)
                               .by_data_centers(key)
                               .order('active_stake desc')
                               .page(params[:page])
-                              .per(20)
+                              .per(@per)
 
     @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network])
                                    .sum(:active_stake)
