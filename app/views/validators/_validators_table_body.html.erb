@@ -138,7 +138,7 @@
           <div class="d-none d-lg-block">
             <%= render 'validators/speedometer_chart',
                        canvas_name: "spark_line_skipped_slots_#{validator.account}",
-                       value: [skipped_slots_average_percent, @batch.skipped_slot_all_average.to_f * -2].max,
+                       value: [skipped_slots_average_percent, @batch.skipped_slot_all_median.to_f * -2].max,
                        chart_steps: [@batch.skipped_slot_all_average.to_f * -1, @batch.skipped_slot_all_median.to_f * -1, 0.05],
                        min_value: @batch.skipped_slot_all_median.to_f * -2
             %>
