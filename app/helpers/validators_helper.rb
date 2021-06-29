@@ -52,4 +52,12 @@ module ValidatorsHelper
   def above_33percent_concentration?(validator)
     validator.stake_concentration_score.negative?
   end
+
+  def set_iterator(params)
+    if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
+      0
+    else
+      (params[:page].to_i - 1) * Kaminari.config.default_per_page
+    end
+  end
 end
