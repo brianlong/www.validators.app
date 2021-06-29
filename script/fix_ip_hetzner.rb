@@ -2,8 +2,8 @@
 
 # RAILS_ENV=production bundle exec ruby script/fix_ip_hetzner.rb >> /tmp/fix_ip_hetzner.log 2>&1 &
 
-require_relative File.expand_path('./config/environment')
-require_relative File.expand_path('./script/concerns/fix_ip_module')
+require_relative '../config/environment'
+require_relative './concerns/fix_ip_module'
 
 include FixIpModule
 
