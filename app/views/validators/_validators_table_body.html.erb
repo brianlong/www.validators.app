@@ -85,7 +85,7 @@
 
       <!-- ROOT DISTANCE -->
       <td class="chart-column align-middle">
-        <% root_distance_percent = -(validator.score&.root_distance_history.to_a[-1]) %>
+        <% root_distance_percent = -(validator.score&.root_distance_history.to_a[-1].to_f) %>
         <% if root_distance_percent %>
           <div class="d-none d-lg-block">
             <%= render 'validators/speedometer_chart',
@@ -109,7 +109,7 @@
 
       <!-- VOTE DISTANCE -->
       <td class="chart-column align-middle">
-        <% vote_distance_percent = -(validator.score&.vote_distance_history.to_a[-1]) %>
+        <% vote_distance_percent = -(validator.score&.vote_distance_history.to_a[-1].to_f) %>
         <% if vote_distance_percent %>
           <div class="d-none d-lg-block">
             <%= render 'validators/speedometer_chart',
