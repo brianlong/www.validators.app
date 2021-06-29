@@ -60,6 +60,8 @@
 
 <%= render 'validators/basic_list', scores: @scores, batch: @batch %>
 
+<%= paginate @scores %>
+
 <%= link_to 'Back to ASN list',
             data_centers_url(network: params[:network], sort_by: 'asn'),
             class: 'btn btn-sm btn-secondary mb-4' %>

@@ -32,6 +32,8 @@ class DataCentersController < ApplicationController
                               .includes(:validator)
                               .by_data_centers(key)
                               .order('active_stake desc')
+                              .page(params[:page])
+                              .per(20)
 
     @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network])
                                    .sum(:active_stake)

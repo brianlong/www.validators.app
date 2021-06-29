@@ -73,6 +73,8 @@
 
 <%= render 'validators/basic_list', scores: @scores, batch: @batch %>
 
+<%= paginate @scores %>
+
 <%= link_to 'Back to Data Centers',
             data_centers_url(network: params[:network]),
             class: 'btn btn-sm btn-secondary' %>
