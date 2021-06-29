@@ -8,7 +8,7 @@ class AsnsController < ApplicationController
     @scores = ValidatorScoreV1.includes(:validator)
                               .by_network_with_active_stake(asn_params[:network])
                               .by_data_centers(@data_centers)
-    @validators = @scores.map { |s| s.validator }.compact
+    @validators = @scores.map(&:validator).compact
 
     @batch = Batch.last_scored(params[:network])
 
