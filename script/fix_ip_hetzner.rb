@@ -3,7 +3,7 @@
 # RAILS_ENV=production bundle exec ruby script/fix_ip_hetzner.rb >> /tmp/fix_ip_hetzner.log 2>&1 &
 
 require File.expand_path('../config/environment', __dir__)
-require File.expand_path('./concerns/fix_ip_module', __dir__)
+require_relative File.expand_path('./script/concerns/fix_ip_module')
 
 include FixIpModule
 
@@ -62,8 +62,9 @@ Ip.where(traits_autonomous_system_number: 24_940)
 
     host = ('H' + last_hetzner_ip).strip.split(' ')[1].strip
     setup_ip_override(ip: ip, host_data: host_data, host: host)
+    
+    Rails.logger.warn "added IP Override: #{ip} - #{host}"
 
-    # More stuff here
     break
   end
 end
