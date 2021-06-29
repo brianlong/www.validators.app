@@ -30,24 +30,24 @@
       <table class='table table-block-sm mb-0'>
         <tbody>
         <tr>
-          <td class="category-column"><strong>Name:</strong></td>
+          <td class="col-md-3"><strong>Name:</strong></td>
           <td>
             <%= @validator.name %>
           </td>
         </tr>
 
         <tr>
-          <td><strong>Details:</strong></td>
+          <td class="col-md-3"><strong>Details:</strong></td>
           <td><%= @validator.details %></td>
         </tr>
 
         <tr>
-          <td><strong>Identity:</strong></td>
+          <td class="col-md-3"><strong>Identity:</strong></td>
           <td><small class="word-break"><%= @validator.account %></small></td>
         </tr>
 
         <tr>
-          <td><strong>Software:</strong></td>
+          <td class="col-md-3"><strong>Software:</strong></td>
           <td>
             <%=
               @validator.validator_score_v1&.software_version
@@ -56,12 +56,12 @@
         </tr>
 
         <tr>
-          <td><strong>IP:</strong></td>
+          <td class="col-md-3"><strong>IP:</strong></td>
           <td><%= @validator.ip_address unless @validator.validator_ips.empty? %></td>
         </tr>
 
         <tr>
-          <td><strong>Data Center:</strong></td>
+          <td class="col-md-3"><strong>Data Center:</strong></td>
           <td>
             <%=
               link_to(@validator.data_center_key.to_s,
@@ -82,17 +82,17 @@
       <table class='table table-block-sm mb-0'>
         <tbody>
         <tr>
-          <td class="category-column"><strong>Keybase:</strong></td>
+          <td class="col-md-3"><strong>Keybase:</strong></td>
           <td><%= @validator.keybase_id %></td>
         </tr>
 
         <tr>
-          <td><strong>Website:</strong></td>
+          <td class="col-md-3"><strong>Website:</strong></td>
           <td><%= @validator.www_url %></td>
         </tr>
 
         <tr>
-          <td><strong>Vote Account:</strong></td>
+          <td class="col-md-3"><strong>Vote Account:</strong></td>
           <td>
             <small class="word-break">
               <%=
@@ -107,7 +107,7 @@
         </tr>
 
         <tr>
-          <td><strong>Active Stake:</strong></td>
+          <td class="col-md-3"><strong>Active Stake:</strong></td>
           <td>
             <%= number_with_delimiter(
                   (@validator.validator_score_v1&.active_stake * 0.000000001).round
@@ -116,7 +116,7 @@
         </tr>
 
         <tr>
-          <td><strong>Commission:</strong></td>
+          <td class="col-md-3"><strong>Commission:</strong></td>
           <%
             comm_class = 'text-danger' \
               if params[:network] == 'mainnet' &&
@@ -129,18 +129,14 @@
 
         <% unless @validator.security_report_url.blank? %>
           <tr>
-            <td>
-              <strong>Security Info:</strong>
-            </td>
+            <td class="col-md-3"><strong>Security Info:</strong></td>
             <td>
               <%= link_to @validator.security_report_url, @validator.security_report_url, target: '_blank' %>
             </td>
           </tr>
           <% end %>
           <tr>
-            <td>
-              <strong>Scores:</strong>
-            </td>
+            <td class="col-md-3"><strong>Scores:</strong></td>
             <td><%= render 'validators/scores', validator: @validator %></td>
           </tr>
         </tbody>

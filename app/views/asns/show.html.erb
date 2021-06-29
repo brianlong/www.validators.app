@@ -14,7 +14,7 @@
         </thead>
         <tbody>
         <tr>
-          <td class="category-column"><strong>Data Centers</strong></td>
+          <td class="col-5 col-md-4"><strong>Data Centers</strong></td>
           <td>
             <% @data_centers.each do |dc| %>
               <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
@@ -37,11 +37,11 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Population</strong></td>
+            <td class="col-5 col-md-4"><strong>Population</strong></td>
             <td><%= @scores.count %></td>
           </tr>
           <tr>
-            <td><strong>Total Stake</strong></td>
+            <td class="col-5 col-md-4"><strong>Total Stake</strong></td>
             <td>
               <%= number_with_delimiter(lamports_to_sol(@asn_stake).round(0)) %>
               (<%= number_to_percentage((@asn_stake/@total_stake.to_f)*100.0,
@@ -71,4 +71,4 @@
 
 <%= link_to 'Back to ASN list',
             data_centers_url(network: params[:network], sort_by: 'asn'),
-            class: 'btn btn-sm btn-secondary mb-4' %>
+            class: 'btn btn-sm btn-secondary' %>

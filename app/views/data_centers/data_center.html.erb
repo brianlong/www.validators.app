@@ -17,15 +17,15 @@
         </thead>
         <tbody>
         <tr>
-          <td class="category-column"><strong>ASN</strong></td>
+          <td class="col-5 col-md-4"><strong>ASN</strong></td>
           <td><%= @dc_info.traits_autonomous_system_number %></td>
         </tr>
         <tr>
-          <td><strong>Country</strong></td>
+          <td class="col-5 col-md-4"><strong>Country</strong></td>
           <td><%= @dc_info.country_name %></td>
         </tr>
         <tr>
-          <td><strong>Population</strong></td>
+          <td class="col-5 col-md-4"><strong>Population</strong></td>
           <td><%= @scores.count %></td>
         </tr>
         </tbody>
@@ -43,17 +43,17 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>ASO</strong></td>
+            <td class="col-5 col-md-4"><strong>ASO</strong></td>
             <td><%= @dc_info.traits_autonomous_system_organization %></td>
           </tr>
           <tr>
-            <td><strong>Location</strong></td>
+            <td class="col-5 col-md-4"><strong>Location</strong></td>
             <td>
               <%= @dc_info.city_name || @dc_info.location_time_zone %>
             </td>
           </tr>
           <tr>
-            <td><strong>Total Stake</strong></td>
+            <td class="col-5 col-md-4"><strong>Total Stake</strong></td>
             <td>
               <%= number_with_delimiter(lamports_to_sol(@dc_stake).round(0)) %>
               (<%= number_to_percentage((@dc_stake/@total_stake.to_f)*100.0,

@@ -37,49 +37,13 @@ table, .table {
     }
   }
 
-  .avatar-column {
-    width: 80px;
-    text-align: center;
-    padding: 0;
-    .avatar {
-      .img-circle-medium-private {
-        display: inline-block;
-      }
-    }
-  }
 
-  .category-column {
-    width: 28%;
-    @media(max-width: $screen-md-max) {
-      width: 26%;
-    }
-    @media(max-width: $screen-xs-max) {
-      width: 37%;
-    }
-  }
-
-  .wider-column {
-    min-width: 180px;
-  }
-
-  .medium-column {
-    width: 20%;
+  .col-sm {
     @media(max-width: $screen-sm-max) {
-      word-break: break-all;
-      min-width: 150px;
-    }
-  }
-
-  .narrower-column {
-    width: 17%;
-    @media(max-width: $screen-md-max) {
-      min-width: 140px;
-    }
-  }
-
-  .narrow-column {
-    @media(max-width: $screen-md-max) {
-      min-width: 135px;
+      &-120 { min-width: 120px;}
+      &-130 { min-width: 130px;}
+      &-140 { min-width: 140px;}
+      &-170 { min-width: 170px;}
     }
   }
 }
@@ -113,13 +77,21 @@ table, .table {
   width: 100%;
   table-layout: fixed;
 
+  .avatar-column {
+    width: 80px;
+    text-align: center;
+    padding: 0;
+    .avatar {
+      .img-circle-medium-private {
+        display: inline-block;
+      }
+    }
+  }
+
   .name-column {
     min-width: 200px;
     padding-left: 0;
     padding-right: 5px;
-    @media(max-width: $screen-lg-max) {
-      padding-left: 20px;
-    }
   }
 
   .chart-column {
@@ -129,6 +101,7 @@ table, .table {
 
   @media(max-width: $screen-lg-max) {
     .avatar-column { display: none; }
+    .name-column { padding-left: 20px; }
   }
 
   @media(max-width: $screen-md-max) {
