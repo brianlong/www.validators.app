@@ -54,10 +54,7 @@ module ValidatorsHelper
   end
 
   def set_iterator(params)
-    if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
-      0
-    else
-      (params[:page].to_i - 1) * Kaminari.config.default_per_page
-    end
+    return 0 if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
+    (params[:page].to_i - 1) * Kaminari.config.default_per_page
   end
 end
