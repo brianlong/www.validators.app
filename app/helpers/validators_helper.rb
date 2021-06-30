@@ -53,8 +53,9 @@ module ValidatorsHelper
     validator.stake_concentration_score.negative?
   end
 
-  def set_iterator(params)
+  def set_iterator(params, items_per_page)
+    items_per_page = Kaminari.config.default_per_page unless items_per_page
     return 0 if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
-    (params[:page].to_i - 1) * Kaminari.config.default_per_page
+    (params[:page].to_i - 1) * items_per_page
   end
 end

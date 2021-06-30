@@ -65,7 +65,8 @@
                show_ip_and_gateway: true,
                show_mobile_head: true %>
     <%= render 'validators/validators_table_body',
-               show_ip_and_gateway: true %>
+               show_ip_and_gateway: true,
+               items_per_page: @per %>
   </table>
 </div>
 

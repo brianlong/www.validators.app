@@ -30,7 +30,7 @@ class Validator < ApplicationRecord
 
   # after_save :copy_data_to_score
 
-   class << self
+  class << self
     # Returns an Array of account IDs for a given network
     #
     # Validator.accounts_for('testnet') => ['1234', '5678']

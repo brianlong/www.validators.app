@@ -2,33 +2,40 @@
 
 # RAILS_ENV=production bundle exec ruby script/fix_ip_hetzner.rb >> /tmp/fix_ip_hetzner.log 2>&1 &
 
-require File.expand_path('../config/environment', __dir__)
+require_relative '../config/environment'
+require_relative './concerns/fix_ip_module'
+
+include FixIpModule
 
 ASO = 'Hetzner Online GmbH'
-hetzner_hosts = {
+HETZNER_HOSTS = {
   'fsn1.hetzner.com' => {
     country_iso_code: 'DE',
     country_name: 'Germany',
     city_name: 'Falkenstein',
-    data_center_key: '24940-DE-Falkenstein'
+    data_center_key: '24940-DE-Falkenstein',
+    aso: ASO
   },
   'nbg1.hetzner.com' => {
     country_iso_code: 'DE',
     country_name: 'Germany',
     city_name: 'Nuremburg',
-    data_center_key: '24940-DE-Nuremburg'
+    data_center_key: '24940-DE-Nuremburg',
+    aso: ASO
   },
   'hel.hetzner.com' => {
     country_iso_code: 'FI',
     country_name: 'Finland',
     city_name: 'Helsinki',
-    data_center_key: '24940-FI-Helsinki'
+    data_center_key: '24940-FI-Helsinki',
+    aso: ASO
   },
   'hel1.hetzner.com' => {
     country_iso_code: 'FI',
     country_name: 'Finland',
     city_name: 'Helsinki',
-    data_center_key: '24940-FI-Helsinki'
+    data_center_key: '24940-FI-Helsinki',
+    aso: ASO
   }
 }
 
@@ -42,74 +49,28 @@ hetzner_hosts = {
 #   spine1.cloud1.nbg1.hetzner.com
 #   spine2.cloud1.hel1.hetzner.com
 
+HETZNER_REGEX = /(ex|sp).+\.(dc|cloud).+\.hetzner\.com/
+
 Ip.where(traits_autonomous_system_number: 24_940)
   .where('address not in (select address from ip_overrides)')
   .each do |ip|
-  puts ''
-  puts "Tracing #{ip.address}"
-  # Grab a traceroute to look for the data center host record.
-  # e.g. ex9k1.dc5.fsn1.hetzner.com
-  traceroute =  `traceroute -m 20 #{ip.address}`.split("\n")
-  traceroute.each do |line|
-    puts ".  #{line}"
-    next unless line.match?(/ex.+\.dc.+\.hetzner\.com/) ||
-                line.match?(/sp.+\.cloud.+\.hetzner\.com/)
 
-    # use the lines below for some tough-to-get addresses
-    # ||
-    # line.match?(/core.+\.[hfn].+\.hetzner\.com/)
+  last_hetzner_ip = get_matching_traceroute(ip: ip.address, reg: HETZNER_REGEX)
 
-    puts "M  #{line}"
-    hetzner_hosts.each do |k, v|
-      next unless line.include?(k)
+  HETZNER_HOSTS.each do |host_reg, host_data|
+    next unless last_hetzner_ip&.include?(host_reg)
 
-      puts "   #{v.inspect}"
-      ipor = IpOverride.find_or_create_by(address: ip.address)
-      ipor.traits_autonomous_system_number = ip.traits_autonomous_system_number
-      ipor.traits_autonomous_system_organization = ASO
-      ipor.country_iso_code = v[:country_iso_code]
-      ipor.country_name = v[:country_name]
-      ipor.city_name = v[:city_name]
-      ipor.data_center_key = v[:data_center_key]
-      host = line.match(/(\sex.+\.dc.+\.hetzner\.com\s)/)[1].strip.split(' ')[0] \
-             if line.match?(/(\sex.+\.dc.+\.hetzner\.com)/)
-      host = line.match(/(\ssp.+\.cloud.+\.hetzner\.com)/)[1].strip.split(' ')[0] \
-             if line.match?(/(\ssp.+\.cloud.+\.hetzner\.com)/)
-      ipor.data_center_host = host
-      ipor.save
-      break
-    end
+    host = ('H' + last_hetzner_ip).strip.split(' ')[1].strip
+    setup_ip_override(ip: ip, host_data: host_data, host: host)
+    
+    Rails.logger.warn "added IP Override: #{ip} - #{host}"
 
-    # More stuff here
     break
   end
-  sql1 = "
-    UPDATE ips ip
-    INNER JOIN ip_overrides ipor
-    ON ip.address = ipor.address
-    SET
-    ip.traits_autonomous_system_number = ipor.traits_autonomous_system_number,
-    ip.country_iso_code = ipor.country_iso_code,
-    ip.country_name = ipor.country_name,
-    ip.city_name = ipor.city_name,
-    ip.data_center_key = ipor.data_center_key,
-    ip.data_center_host = ipor.data_center_host,
-    ip.traits_autonomous_system_organization = ipor.traits_autonomous_system_organization,
-    ip.updated_at = NOW();
-  "
-  Ip.connection.execute(sql1)
-
-  sql2 = "
-    UPDATE validator_score_v1s sc
-    INNER JOIN ips ip
-    ON sc.ip_address = ip.address
-    SET sc.data_center_key = ip.data_center_key,
-    sc.data_center_host = ip.data_center_host,
-    sc.updated_at = NOW();
-  "
-  ValidatorScoreV1.connection.execute(sql2)
-  puts ''
 end
+
+update_ip_with_overrides
+update_validator_score_with_overrides
 puts 'End of Script'
 
 # SQL to use when manually creating IP ip_overrides

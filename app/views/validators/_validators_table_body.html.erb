@@ -1,5 +1,5 @@
 <tbody>
-  <% i = set_iterator(params) %>
+  <% i = set_iterator(params, items_per_page) %>
   <% @validators.each do |validator| %>
     <% i += 1 %>
     <tr id="row-<%=i%>">

@@ -37,7 +37,8 @@
                      show_ip_and_gateway: false,
                      show_mobile_head: false %>
           <%= render 'validators/validators_table_body',
-                     show_ip_and_gateway: false %>
+                     show_ip_and_gateway: false,
+                     items_per_page: @per %>
         </table>
         <div class="px-15">
           <p class="small muted">
