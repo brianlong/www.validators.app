@@ -81,6 +81,9 @@
                show_ip_and_gateway: true,
                items_per_page: @per %>
   </table>
+  <div class="pt-2 px-3">
+    <%= paginate @scores %>
+  </div>
 </div>
 
 <%= link_to 'Back to Data Centers',
