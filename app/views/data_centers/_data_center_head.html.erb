@@ -1,11 +1,11 @@
 <tr>
-  <th class="wider-column">Key<br />&nbsp;</th>
-  <th class="wider-column">ISP<br />&nbsp;</th>
-  <th class="narrow-column">
+  <th class="col-4 col-sm-120">Key<br />&nbsp;</th>
+  <th class="col-2">ISP<br />&nbsp;</th>
+  <th class="col-3">
     Population<br />
-    <small class="text-muted">(<%= @results[:total_population] %>)</small>
+    <small class="text-muted"><%= @results[:total_population] %></small>
   </th>
-  <th class="wider-column">
+  <th class="col-3 col-sm-130">
     Active Stake<br />
     <small class="text-muted">
       <%= number_with_delimiter lamports_to_sol(@results[:total_stake]).round(0) %>
