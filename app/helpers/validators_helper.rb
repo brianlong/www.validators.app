@@ -11,24 +11,8 @@ module ValidatorsHelper
     LIGHT_GREY_TRANSPARENT
   end
 
-  def score_class
-    'text-warning'
-  end
-
   def chart_x_scale(count)
     [X_SCALE_MAX, count].min
-  end
-
-  def max_value_position(vector, min_position: true)
-    max_value = vector.max
-    max_value_index = vector.index(max_value) + 1
-    position = max_value_index.to_f / vector.size * 100
-    position += 3
-    position = [position, 100].min # rejects values larger than 100
-    if min_position
-      position = [position, 11].max # rejects values smaller than 11
-    end
-    number_to_percentage(position, precision: 0)
   end
 
   def display_avatar(validator)
@@ -67,5 +51,11 @@ module ValidatorsHelper
 
   def above_33percent_concentration?(validator)
     validator.stake_concentration_score.negative?
+  end
+
+  def set_iterator(params, items_per_page)
+    items_per_page = Kaminari.config.default_per_page unless items_per_page
+    return 0 if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
+    (params[:page].to_i - 1) * items_per_page
   end
 end

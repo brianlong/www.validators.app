@@ -1,0 +1,75 @@
+<thead>
+  <tr>
+    <th class="avatar-column align-middle">#</th>
+    <th class="name-column align-middle">
+      Name <small class="text-muted">(Commission)</small><br />
+      Active Stake
+      <small class="text-muted">
+        <% if show_subhead %>
+          (<%= number_to_human(lamports_to_sol(@total_active_stake),
+                               format:'%n%u',
+                               units: { thousand: 'K', million: 'M', billion: 'B' }) %>)
+        <% else %>
+          (% of total)
+        <% end %>
+      </small><br />
+      <% if show_ip_and_gateway %>
+        IP & Gaweway<br />
+      <% end %>
+      Scores <small class="text-muted">(total)</small>
+    </th>
+    <th class='chart-column align-middle'>
+      Skipped Vote&nbsp;&percnt;<br />
+      <small class="text-muted">Distance from leader</small>
+    </th>
+    <th class='chart-column align-middle'>
+      Root Distance<br />
+      <small class="text-muted">Distance from leader</small>
+    </th>
+    <th class='chart-column align-middle'>
+      Vote Distance<br />
+      <small class="text-muted">Distance from leader</small>
+    </th>
+    <th class='chart-column align-middle'>
+      Skipped Slot&nbsp;&percnt;<br />
+      <small class="text-muted">Distance from leader</small>
+    </th>
+  </tr>
+
+  <% if show_subhead %>
+    <tr class="subhead">
+      <td class="avatar-column"></td>
+      <td></td>
+      <td class="align-middle">
+        Best: <%= number_to_percentage((100 - @batch.best_skipped_vote.to_f * 100.0), precision: 2) %>
+      </td>
+      <td class="align-middle">
+        <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
+          Md: <%= @batch.root_distance_all_median %>
+          <br />
+          Av: <%= @batch.root_distance_all_average.round(1) %>
+        <% end %>
+      </td>
+      <td class="align-middle">
+        <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
+          Md: <%= @batch.vote_distance_all_median %>
+          <br />
+          Av: <%= @batch.vote_distance_all_average.round(1) %>
+        <% end %>
+      </td>
+      <td class="align-middle">
+        Md: <%= number_to_percentage(@batch.skipped_slot_all_median.to_f, precision: 1) %>
+        <br />
+        Av: <%= number_to_percentage(@batch.skipped_slot_all_average.to_f, precision: 1) %>
+      </td>
+    </tr>
+  <% end %>
+</thead>
+
+<% if show_mobile_head %>
+  <thead class="d-block d-lg-none">
+    <tr>
+      <th>Validators</th>
+    </tr>
+  </thead>
+<% end %>

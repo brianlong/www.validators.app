@@ -29,18 +29,20 @@ class DataCentersController < ApplicationController
     # @validators = Validator.connection.execute(sql)
 
     @per = 20
-    @batch = Batch.last_scored(params[:network])
     @scores = ValidatorScoreV1.by_network_with_active_stake(params[:network])
                               .includes(:validator)
                               .by_data_centers(key)
                               .order('active_stake desc')
                               .page(params[:page])
                               .per(@per)
+    @validators = @scores.map(&:validator).compact
 
+    @batch = Batch.last_scored(params[:network])
+
+    @dc_stake = @scores.where(data_center_key: key).sum(:active_stake)
     @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network])
                                    .sum(:active_stake)
 
-    @dc_stake = @scores.where(data_center_key: key).sum(:active_stake)
     @dc_info = Ip.where(data_center_key: key).last || Ip.new(data_center_key: key)
   end
 

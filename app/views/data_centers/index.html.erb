@@ -1,6 +1,6 @@
 <h1 class="page-header"><%= params[:network].capitalize %> Data Centers</h1>
 <div class="row">
-  <div class=" mb-4 col-sm-4" role="toolbar" aria-label="filter">
+  <div class="col-12 mb-4" role="toolbar" aria-label="filter">
     <%= link_to "Data Centers", \
                 data_centers_url(network: params[:network], sort_by: :data_center), \
                 class: "btn btn-sm mr-1 #{[nil, 'data_center'].include?(@sort_by) ? 'btn-primary' : 'btn-secondary'}", \
@@ -13,7 +13,7 @@
     %>
   </div>
 </div>
-<div class="card mb-4">
+<div class="card">
   <div class="table-responsive-md">
     <table class='table mb-0'>
       <thead>
