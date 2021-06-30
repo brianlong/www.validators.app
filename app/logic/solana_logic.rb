@@ -165,11 +165,12 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       validators_reduced = {}
+      rpc_servers = {}
       p.payload[:validators].each do |k, _v|
-        next if p.payload[:vote_accounts][k].nil?
-
-        validators_reduced[k] = \
-          p.payload[:validators][k].merge(p.payload[:vote_accounts][k])
+        unless p.payload[:vote_accounts][k].nil?
+          validators_reduced[k] = \
+            p.payload[:validators][k].merge(p.payload[:vote_accounts][k])
+        end
       end
 
       Pipeline.new(

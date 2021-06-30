@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_104446) do
+ActiveRecord::Schema.define(version: 2021_06_24_075105) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -288,6 +288,8 @@ ActiveRecord::Schema.define(version: 2021_06_10_104446) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "software_version"
+    t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
+    t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
   end
@@ -350,6 +352,8 @@ ActiveRecord::Schema.define(version: 2021_06_10_104446) do
     t.string "info_pub_key"
     t.string "avatar_url"
     t.string "security_report_url"
+    t.boolean "is_rpc", default: false
+    t.boolean "is_active", default: true
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 

@@ -30,16 +30,20 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       validators = Validator.where(network: p.payload[:network])
+                            .active
                             .includes(:validator_score_v1)
                             .order(:id)
                             .all
 
-      # Make sure that we have a validator_score_v1 record for each validator
       validators.each do |validator|
-        validator.create_validator_score_v1 if validator.validator_score_v1.nil?
+        # Make sure that we have a validator_score_v1 record for each validator
+        if validator.validator_score_v1.nil?
+          validator.create_validator_score_v1(network: p.payload[:network])
+        end
       rescue StandardError => e
         Appsignal.send_error(e)
       end
+
       Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from validators_get', e)

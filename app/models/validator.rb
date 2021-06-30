@@ -9,6 +9,8 @@
 #  avatar_url          :string(191)
 #  details             :string(191)
 #  info_pub_key        :string(191)
+#  is_active           :boolean          default(TRUE)
+#  is_rpc              :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
 #  security_report_url :string(191)
@@ -27,6 +29,9 @@ class Validator < ApplicationRecord
   has_many :validator_ips, dependent: :destroy
   has_many :validator_block_histories, dependent: :destroy
   has_one :validator_score_v1, dependent: :destroy
+
+  scope :active, -> { where(is_active: true) }
+  scope :scorable, -> { where(is_active: true, is_rpc: false) }
 
   # after_save :copy_data_to_score
 
@@ -63,6 +68,10 @@ class Validator < ApplicationRecord
     def total_active_stake
       includes(:validator_score_v1).sum(:active_stake)
     end
+  end
+
+  def active?
+    is_active
   end
 
   def validator_history_last
