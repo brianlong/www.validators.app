@@ -45,14 +45,18 @@ class ValidatorCheckActiveWorker
     nondelinquent_history.exists?
   end
 
+  # NOTE: New validators will have zero stake for the remainder of the current
+  # epoch. We need to re-think the logic below to accomodate new validators.
   def acceptable_stake?(validator)
-    with_acceptable_stake = ValidatorHistory.where(account: validator.account)
-                                            .where(
-                                              'created_at > ? AND active_stake > ?',
-                                              DateTime.now - DELINQUENT_TIME,
-                                              STAKE_EXCLUDE_HEIGHT
-                                            )
-
-    with_acceptable_stake.exists?
+    return true
+    
+    # with_acceptable_stake = ValidatorHistory.where(account: validator.account)
+    #                                         .where(
+    #                                           'created_at > ? AND active_stake > ?',
+    #                                           DateTime.now - DELINQUENT_TIME,
+    #                                           STAKE_EXCLUDE_HEIGHT
+    #                                         )
+    #
+    # with_acceptable_stake.exists?
   end
 end
