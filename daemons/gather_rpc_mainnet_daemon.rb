@@ -29,13 +29,14 @@ begin
                 .then(&epoch_get)
                 .then(&validators_cli)
                 .then(&validators_get)
-                .then(&vote_accounts_get)
+                .then(&vote_accounts_get) 
                 .then(&reduce_validator_vote_accounts)
                 .then(&validators_save)
                 .then(&validator_block_history_get)
                 .then(&validator_block_history_save)
                 .then(&log_errors)
                 .then(&batch_touch)
+                .then(&check_epoch)
 
     if p.code == 200
       BuildSkippedSlotPercentWorker.set(queue: :high_priority).perform_async(

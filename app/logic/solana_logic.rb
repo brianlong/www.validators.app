@@ -165,11 +165,12 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       validators_reduced = {}
+      rpc_servers = {}
       p.payload[:validators].each do |k, _v|
-        next if p.payload[:vote_accounts][k].nil?
-
-        validators_reduced[k] = \
-          p.payload[:validators][k].merge(p.payload[:vote_accounts][k])
+        unless p.payload[:vote_accounts][k].nil?
+          validators_reduced[k] = \
+            p.payload[:validators][k].merge(p.payload[:vote_accounts][k])
+        end
       end
 
       Pipeline.new(
@@ -235,10 +236,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      block_history = cli_request('block-production', p.payload[:config_urls])
+      cli_method = "block-production --epoch #{p.payload[:epoch].to_i}"
+      block_history = cli_request(cli_method, p.payload[:config_urls])
 
       raise 'No data from block-production' if block_history.nil?
-
       # Data for the validator_block_history_stats table
       block_history_stats = {
         'batch_uuid' => p.payload[:batch_uuid],
@@ -401,6 +402,33 @@ module SolanaLogic
         "Error from validator_info_get_and_save on #{p.payload[:network]}",
         e
       )
+    end
+  end
+
+  # Checks if the epoch has not changed during pipeline runtime.
+  def check_epoch
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      epoch_json = rpc_request(
+        'getEpochInfo',
+        p.payload[:config_urls]
+      )['result']
+
+      unless p.payload[:epoch] == epoch_json['epoch']
+        Batch.where(uuid: p.payload[:batch_uuid]).destroy_all
+        EpochHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        VoteAccountHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        ValidatorBlockHistoryStat.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+        ValidatorBlockHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
+
+        Pipeline.new(500, p.payload, 'Epoch has changed since pipeline start (check_epoch).', e)
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from check_epoch', e)
     end
   end
 

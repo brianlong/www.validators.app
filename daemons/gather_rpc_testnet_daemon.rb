@@ -36,6 +36,8 @@ begin
                 .then(&validator_block_history_save)
                 .then(&log_errors)
                 .then(&batch_touch)
+                .then(&check_epoch)
+
 
     if p.code == 200
       BuildSkippedSlotPercentWorker.perform_async(

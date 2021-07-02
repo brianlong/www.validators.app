@@ -193,6 +193,24 @@ class SolanaLogicTest < ActiveSupport::TestCase
     assert_equal [], cli_request('validators', rpc_urls)
   end
 
+  test 'check_epoch removes epoch history when check fails' do
+    VCR.use_cassette('check_epoch') do
+      # Show that the pipeline runs & the expected values are not empty.
+      p = Pipeline.new(200, @initial_payload)
+
+      # First, save the epoch
+      assert_difference 'EpochHistory.count' do
+        p = p.then(&batch_set)
+                      .then(&epoch_get)
+      end
+
+      # Then, if epoch is different - removes epoch
+      assert_difference 'EpochHistory.count', -1 do
+        p.then(&check_epoch)
+      end
+    end
+  end
+
   # I use this test in development mode only.
   # test 'cli_block_production_mainnet' do
   #   VCR.use_cassette('cli_block_production_mainnet') do
