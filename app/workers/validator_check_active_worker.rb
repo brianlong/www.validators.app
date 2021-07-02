@@ -10,27 +10,38 @@ class ValidatorCheckActiveWorker
   DELINQUENT_TIME = 24.hours
 
   def perform
-    # Check for activity only validators that are active now
-    Validator.scorable.each do |validator|
-      if ValidatorHistory.where(account: validator.account).count > 10
-        unless acceptable_stake?(validator) && not_delinquent?(validator)
-          validator.update(is_active: false)
+    Validator.all.each do |validator|
+      if validator.scorable?
+        check_if_should_be_scorable(validator)
+      else
+        if acceptable_stake?(validator) && not_delinquent?(validator)
+          validator.update(is_active: true)
+        elsif validator.vote_accounts.exists?
+          validator.update(is_rpc: false) if validator.is_rpc
         end
-      elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
-        ValidatorHistory.where(account: validator.account).count <= 10
-        # not active if no validator history
-
-        validator.update(is_active: false)
-      elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
-        !validator.vote_account.exists?
-        # is rpc if no vote account
-
-        validator.update(is_rpc: true)
       end
     end
   end
 
   private
+
+  def check_if_should_be_scorable(validator)
+    if ValidatorHistory.where(account: validator.account).count > 10
+      unless acceptable_stake?(validator) && not_delinquent?(validator)
+        validator.update(is_active: false)
+      end
+    elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
+      ValidatorHistory.where(account: validator.account).count <= 10
+      # not active if no validator history
+
+      validator.update(is_active: false)
+    elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
+      !validator.vote_account.exists?
+      # is rpc if no vote account
+
+      validator.update(is_rpc: true)
+    end
+  end
 
   def not_delinquent?(validator)
     nondelinquent_history = ValidatorHistory.where(

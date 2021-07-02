@@ -74,6 +74,10 @@ class Validator < ApplicationRecord
     is_active
   end
 
+  def scorable?
+    is_active && !is_rpc
+  end
+
   def validator_history_last
     ValidatorHistory.where(
       network: network,
