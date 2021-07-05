@@ -165,6 +165,64 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, validator_with_all_data['autonomous_system_number']
   end
 
+  # 
+  # Pagination
+  #
+  test 'GET api_v1_validators with token, limit and page passed in returns limited data' do
+    create_list(:validator, 10, :with_score)
+    limit = 5
+    page = 3
+
+    get api_v1_validators_url(network: 'testnet', limit: limit, page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    # There are 11 validators, so last page with limit 5 should return 1 record.
+    assert_equal 1, json.size
+  end
+
+  test 'GET api_v1_validators with token and limit passed in returns limited data' do
+    create_list(:validator, 10, :with_score)
+    limit = 5
+
+    get api_v1_validators_url(network: 'testnet', limit: limit),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal limit, json.size
+  end
+
+  test 'GET api_v1_validators with token and page passed in returns limited data' do
+    create_list(:validator, 60, :with_score)
+    page = 1
+
+    get api_v1_validators_url(network: 'testnet', page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    # Default limit is 9999
+    assert_equal Validator.count, json.size
+  end
+
+  test 'GET api_v1_validators with token and last page passed no data when offset is above number of records' do
+    create_list(:validator, 10, :with_score)
+    page = 2
+
+    get api_v1_validators_url(network: 'testnet', page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 0, json.size
+  end
+
   test 'GET api_v1_validator with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
     create(:vote_account, validator: validator)
@@ -300,7 +358,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
       account: testnet_validator.account,
       limit: limit
     ), headers: { 'Token' => @user.api_token }
-
     json_response = response_to_json(@response.body)
 
     assert_response 200
