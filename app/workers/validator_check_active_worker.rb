@@ -15,7 +15,7 @@ class ValidatorCheckActiveWorker
         check_if_should_be_scorable(validator)
       else
         # Check validators that are currently not scorable in case they reactivate
-        if not_too_young?(validator) && acceptable_stake?(validator) && not_delinquent?(validator)
+        if acceptable_stake?(validator) && not_delinquent?(validator)
           validator.update(is_active: true)
 
         # Check if vote account has been created for rpc_node
@@ -37,18 +37,17 @@ class ValidatorCheckActiveWorker
     end
   end
 
-  def not_too_young?(validator)
-    validator.validator_block_histories
+  def too_young?(validator)
+    !validator.validator_block_histories
              .where(epoch: previous_epoch(validator.network))
              .exists?
   end
 
   def check_if_should_be_scorable(validator)
     if ValidatorHistory.where(account: validator.account).exists?
-      unless not_too_young?(validator) && \
-             acceptable_stake?(validator) && \
+      unless acceptable_stake?(validator) && \
              not_delinquent?(validator)
-        validator.update(is_active: false)
+        validator.update(is_active: false) if !too_young?(validator)
       end
     elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
       !validator.vote_account.exists?
