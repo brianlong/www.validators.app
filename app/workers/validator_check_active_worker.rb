@@ -28,6 +28,7 @@ class ValidatorCheckActiveWorker
 
   private
 
+  # number of previous by network
   def previous_epoch(network)
     current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).last
     if network == 'testnet'
@@ -37,6 +38,7 @@ class ValidatorCheckActiveWorker
     end
   end
 
+  # returns true if validator has no history from previous epoch
   def too_young?(validator)
     !validator.validator_block_histories
              .where(epoch: previous_epoch(validator.network))
@@ -51,12 +53,13 @@ class ValidatorCheckActiveWorker
       end
     elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
       !validator.vote_account.exists?
-      # is rpc if no vote account
 
+      # is rpc if no vote account
       validator.update(is_rpc: true)
     end
   end
 
+  # returns true if validator was not delinquent for any period of time since DELINQUENT_TIME
   def not_delinquent?(validator)
     nondelinquent_history = ValidatorHistory.where(
                                               account: validator.account,
@@ -70,6 +73,7 @@ class ValidatorCheckActiveWorker
     nondelinquent_history.exists?
   end
 
+  # returns true if if validator had stake gt STAKE_EXCLUDE_HEIGHT since DELINQUENT_TIME
   def acceptable_stake?(validator)
     with_acceptable_stake = ValidatorHistory.where(account: validator.account)
                                             .where(
