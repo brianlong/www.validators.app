@@ -14,8 +14,11 @@ class ValidatorCheckActiveWorker
       if validator.scorable?
         check_if_should_be_scorable(validator)
       else
-        if acceptable_stake?(validator) && not_delinquent?(validator)
+        # Check validators that are currently not scorable in case they reactivate
+        if not_too_young?(validator) && acceptable_stake?(validator) && not_delinquent?(validator)
           validator.update(is_active: true)
+
+        # Check if vote account has been created for rpc_node
         elsif validator.vote_accounts.exists?
           validator.update(is_rpc: false) if validator.is_rpc
         end
@@ -25,16 +28,28 @@ class ValidatorCheckActiveWorker
 
   private
 
+  def previous_epoch(network)
+    current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).last
+    if network == 'testnet'
+      @previous_epoch_testnet ||= current_epoch.epoch - 1
+    else
+      @previous_epoch_mainnet ||= current_epoch.epoch - 1
+    end
+  end
+
+  def not_too_young?(validator)
+    validator.validator_block_histories
+             .where(epoch: previous_epoch(validator.network))
+             .exists?
+  end
+
   def check_if_should_be_scorable(validator)
-    if ValidatorHistory.where(account: validator.account).count > 10
-      unless acceptable_stake?(validator) && not_delinquent?(validator)
+    if ValidatorHistory.where(account: validator.account).exists?
+      unless not_too_young?(validator) && \
+             acceptable_stake?(validator) && \
+             not_delinquent?(validator)
         validator.update(is_active: false)
       end
-    elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
-      ValidatorHistory.where(account: validator.account).count <= 10
-      # not active if no validator history
-
-      validator.update(is_active: false)
     elsif validator.created_at < (DateTime.now - DELINQUENT_TIME) && \
       !validator.vote_account.exists?
       # is rpc if no vote account
