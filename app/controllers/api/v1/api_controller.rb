@@ -81,6 +81,10 @@ module Api
                                .limit(@limit)
                                .all
 
+        unless params[:q].blank?
+          @validators = ValidatorSearchQuery.new(@validators).search(params[:q])
+        end
+
         @skipped_slots_report = Report.where(
           network: params[:network],
           name: 'build_skipped_slot_percent'

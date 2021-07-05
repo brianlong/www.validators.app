@@ -165,6 +165,24 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, validator_with_all_data['autonomous_system_number']
   end
 
+  test 'GET api_v1_validators with token and search query returns correct data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+    create(:vote_account, validator: validator)
+    create(:report, :build_skipped_slot_percent)
+    create(:ip, address: validator.score.ip_address)
+
+    search_query = 'john doe'
+    
+    get api_v1_validators_url(network: 'testnet', q: search_query),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+    
+    json = response_to_json(@response.body)
+
+    assert 1, json.size
+    assert search_query, json.first['name']
+  end
+
   test 'GET api_v1_validator with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
     create(:vote_account, validator: validator)
