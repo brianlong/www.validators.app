@@ -167,6 +167,35 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, validator_with_all_data['autonomous_system_number']
   end
 
+  test 'GET api_v1_validators with token and search query returns correct data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+
+    search_query = 'john doe'
+    
+    get api_v1_validators_url(network: 'testnet', q: search_query),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+    
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_equal search_query, json.first['name']
+  end
+
+  test 'GET api_v1_validators with token and not existing search query returns no data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+
+    search_query = '1234'
+    
+    get api_v1_validators_url(network: 'testnet', q: search_query),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+    
+    json = response_to_json(@response.body)
+
+    assert_equal 0, json.size
+  end
+  
   # 
   # Pagination
   #
@@ -235,6 +264,26 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
 
     assert_equal Validator.all.size, json.size
+  end
+  # 
+  # Pagination with search
+  # 
+  test 'GET api_v1_validators with token, search query, limit and page passed returns limited data' do
+    create(:validator, :with_score, name: 'search_query')
+    create_list(:validator, 5, :with_score)
+
+    limit = 5
+    page = 1
+    search_query = 'search_query'
+
+    get api_v1_validators_url(network: 'testnet', limit: limit, page: page, q: search_query),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_equal search_query, json.first['name']
   end
 
   test 'GET api_v1_validator with token returns all data' do
