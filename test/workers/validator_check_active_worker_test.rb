@@ -16,6 +16,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   end
 
   test 'validator with zero active stake should be inactive' do
+    skip
     create(:validator, :with_score, account: 'account3')
     11.times do
       create(:validator_history, account: 'account3', active_stake: 0)
