@@ -211,7 +211,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal Validator.count, json.size
   end
 
-  test 'GET api_v1_validators with token and last page passed no data when offset is above number of records' do
+  test 'GET api_v1_validators with token and page passed returns no data when offset is above number of records' do
     create_list(:validator, 10, :with_score)
     page = 2
 
@@ -221,7 +221,20 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
     json = response_to_json(@response.body)
 
+    # Default limit is 9999, so the offset is above number of records.
     assert_equal 0, json.size
+  end
+
+  test 'GET api_v1_validators with token but without page and limit returns all data' do
+    create_list(:validator, 10, :with_score)
+
+    get api_v1_validators_url(network: 'testnet'),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal Validator.all.size, json.size
   end
 
   test 'GET api_v1_validator with token returns all data' do
