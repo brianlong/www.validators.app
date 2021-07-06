@@ -14,6 +14,8 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
       password: 'password'
     }
     @user = User.create(@user_params)
+
+    Validator.destroy_all
   end
 
   test 'GET api_v1_ping without token should get error' do
@@ -98,7 +100,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
 
     assert_response 200
-    assert_equal 4, json.size
+    assert_equal 3, json.size
     assert_equal 'testnet', json.first['network']
 
     # Mainnet
@@ -126,7 +128,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_with_all_data = json.select { |j| j['account'] == 'Test Account' }.first
     validator_active_stake = validator.validator_score_v1.active_stake
 
-    assert_equal 2, json.size
+    assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
     assert_equal 29, validator_with_all_data.keys.size
@@ -171,7 +173,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
   test 'GET api_v1_validators with token, limit and page passed in returns limited data' do
     create_list(:validator, 10, :with_score)
     limit = 5
-    page = 3
+    page = 2
 
     get api_v1_validators_url(network: 'testnet', limit: limit, page: page),
         headers: { 'Token' => @user.api_token }
@@ -179,8 +181,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
     json = response_to_json(@response.body)
 
-    # There are 11 validators, so last page with limit 5 should return 1 record.
-    assert_equal 1, json.size
+    assert_equal 5, json.size
   end
 
   test 'GET api_v1_validators with token and limit passed in returns limited data' do
