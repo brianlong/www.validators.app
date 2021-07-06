@@ -15,7 +15,7 @@
             // dynamicly calculated. Look for othe options to control the y-axis if desired.
             datasets: [
                 {
-                    label: ' Moving Avg Skip %',
+                    label: ' Moving Average',
                     fill: false,
                     backgroundColor: '<%= GREEN_TRANSPARENT %>',
                     borderColor: '<%= GREEN %>',
@@ -24,7 +24,7 @@
                     data: <%= @data.map { |k,v| v[:skipped_slot_percent_moving_average].round(1) } %>
                 },
                 {
-                    label: ' Skip % ',
+                    label: ' Actual Skip Slots %',
                     fill: false,
                     backgroundColor: '<%= LIGHT_GREY_TRANSPARENT %>',
                     borderColor: '<%= LIGHT_GREY %>',
@@ -34,7 +34,7 @@
                     data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
                 },
                 {
-                    label: ' Cluster Moving Avg % ',
+                    label: ' Cluster Moving Average',
                     fill: false,
                     backgroundColor: '<%= BLUE_TRANSPARENT %>',
                     borderColor: '<%= BLUE %>',
@@ -54,9 +54,10 @@
             responsiveAnimationDuration: 0, // animation duration after a resize
             legend: {
                 labels: {
-                    fontColor: '<%= DARK_GREY %>'
-                }
+                    fontColor: '<%= DARK_GREY %>',
+                },
             },
+            title: { padding: 10 },
             scales: {
                 xAxes: [{
                     display: true,
