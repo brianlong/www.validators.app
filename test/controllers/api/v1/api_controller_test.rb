@@ -265,6 +265,26 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal Validator.all.size, json.size
   end
+  # 
+  # Pagination with search
+  # 
+  test 'GET api_v1_validators with token, search query, limit and page passed returns limited data' do
+    create(:validator, :with_score, name: 'search_query')
+    create_list(:validator, 5, :with_score)
+
+    limit = 5
+    page = 1
+    search_query = 'search_query'
+
+    get api_v1_validators_url(network: 'testnet', limit: limit, page: page, q: search_query),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_equal search_query, json.first['name']
+  end
 
   test 'GET api_v1_validator with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
