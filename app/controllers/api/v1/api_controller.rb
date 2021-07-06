@@ -73,7 +73,7 @@ module Api
                       end
 
         limit = params[:limit] || 9999
-        page = params[:page] || 1
+        page = params[:page]
 
         @validators = Validator.where(network: params[:network])
                                .includes(:validator_score_v1)
