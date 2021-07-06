@@ -436,7 +436,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
       total_stake: total_stake
     )
 
-    assert_equal "1.6.6", current_software_version
+    assert_equal "1.6.8", current_software_version
   end
 
   test 'find_current_software_version \

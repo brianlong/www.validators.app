@@ -15,7 +15,7 @@
             </tr>
             </thead>
             <tbody>
-              <% @software_versions.payload.each do |group| %>
+              <% sort_software_versions(@software_versions.payload).each do |group| %>
                 <% if group.first[1].is_a?(Hash) %>
                   <tr>
                     <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
