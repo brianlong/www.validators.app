@@ -178,8 +178,8 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     
     json = response_to_json(@response.body)
 
-    assert 1, json.size
-    assert search_query, json.first['name']
+    assert_equal 1, json.size
+    assert_equal search_query, json.first['name']
   end
 
   test 'GET api_v1_validators with token and not existing search query returns no data' do
@@ -193,7 +193,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     
     json = response_to_json(@response.body)
 
-    assert 0, json.size
+    assert_equal 0, json.size
   end
   
   # 
