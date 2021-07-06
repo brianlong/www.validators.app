@@ -72,14 +72,15 @@ module Api
                         'RAND()'
                       end
 
-        @limit = params[:limit] || 9999
+        limit = params[:limit] || 9999
+        page = params[:page]
 
         @validators = Validator.where(network: params[:network])
                                .includes(:validator_score_v1)
                                .joins(:validator_score_v1)
                                .order(@sort_order)
-                               .limit(@limit)
-                               .all
+                               .page(page)
+                               .per(limit)
 
         unless params[:q].blank?
           @validators = ValidatorSearchQuery.new(@validators).search(params[:q])
