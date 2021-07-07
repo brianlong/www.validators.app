@@ -11,7 +11,7 @@ class ValidatorCheckActiveService
   def update_validator_activity
     Validator.all.each do |validator|
       if validator.scorable?
-        check_if_should_be_scorable(validator)
+        update_scorable(validator)
       else
         # Check validators that are currently not scorable in case they reactivate
         if acceptable_stake?(validator) && not_delinquent?(validator)
@@ -24,6 +24,7 @@ class ValidatorCheckActiveService
       end
     end
   end
+
   private
 
   # number of previous by network
@@ -39,22 +40,35 @@ class ValidatorCheckActiveService
   # returns true if validator has no history from previous epoch
   def too_young?(validator)
     !validator.validator_block_histories
-             .where(epoch: previous_epoch(validator.network))
-             .exists?
+              .where(epoch: previous_epoch(validator.network))
+              .exists?
   end
 
-  def check_if_should_be_scorable(validator)
+  def became_inactive?(validator)
     if ValidatorHistory.where(account: validator.account).exists?
-      unless acceptable_stake?(validator) && \
-             not_delinquent?(validator)
-        validator.update(is_active: false) if !too_young?(validator)
+      unless acceptable_stake?(validator) && not_delinquent?(validator)
+        return true
       end
-    elsif validator.created_at < (DateTime.now - @delinquent_time) && \
-      !validator.vote_account.exists?
-
-      # is rpc if no vote account
-      validator.update(is_rpc: true)
     end
+
+    false
+  end
+
+  def is_rpc?(validator)
+    if validator.created_at < (DateTime.now - @delinquent_time) && \
+       !validator.vote_account.exists?
+      return true
+    end
+
+    false
+  end
+
+  def update_scorable(validator)
+    if !too_young?(validator) && became_inactive?(validator)
+      validator.update(is_active: false)
+    end
+
+    validator.update(is_rpc: true) if is_rpc?(validator)
   end
 
   # returns true if validator was not delinquent for any period of time since DELINQUENT_TIME
@@ -82,4 +96,5 @@ class ValidatorCheckActiveService
 
     with_acceptable_stake.exists?
   end
+
 end
