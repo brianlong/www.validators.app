@@ -86,7 +86,7 @@ class ValidatorsController < ApplicationController
         @data[i] = {
           skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
           skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-          cluster_skipped_slot_percent_moving_average: batch_stats.skipped_slot_percent_moving_average.to_f * 100.0
+          cluster_skipped_slot_percent_moving_average: Batch.find_by(uuid: batch_stats.batch_uuid).skipped_slot_all_average.to_f
         }
       end
     end
