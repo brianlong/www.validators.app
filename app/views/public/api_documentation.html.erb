@@ -95,7 +95,7 @@
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&limit=50'</pre>
     <p>`page=NN` will return the results from passed page. Works best with limit param.</p>
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&page=1&limit=50'</pre>
-    <p>`q=query` will limit the results to entries contain query. The query is compared with validator's name, account and score data center key.</p>
+    <p>`q=query` will limit the results to entries containing query. The query value is compared against validator's name, account and score data center key.</p>
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&q=query'</pre>
     <p>Response:</p>
     <p>An Array of validators.</p>
