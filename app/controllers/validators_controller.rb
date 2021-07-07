@@ -71,24 +71,30 @@ class ValidatorsController < ApplicationController
     if @validator.nil?
       render file: "#{Rails.root}/public/404.html" , status: 404
     else
-      @validator.validator_block_histories
-                .order('id desc')
-                .limit(@history_limit)
-                .reverse
-                .each do |vbh|
+      # @validator.validator_block_histories
+      #           .order('id desc')
+      #           .limit(@history_limit)
+      #           .reverse
+      #           .each do |vbh|
+      #
+      #   i += 1
+      #   batch_stats = ValidatorBlockHistoryStat.find_by(
+      #     network: params[:network],
+      #     batch_uuid: vbh.batch_uuid
+      #   )
+      #
+      #   @data[i] = {
+      #     skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
+      #     skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
+      #     cluster_skipped_slot_percent_moving_average: Batch.find_by(uuid: batch_stats.batch_uuid).skipped_slot_all_average.to_f
+      #   }
+      # end
 
-        i += 1
-        batch_stats = ValidatorBlockHistoryStat.find_by(
-          network: params[:network],
-          batch_uuid: vbh.batch_uuid
-        )
-
-        @data[i] = {
-          skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
-          skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-          cluster_skipped_slot_percent_moving_average: Batch.find_by(uuid: batch_stats.batch_uuid).skipped_slot_all_average.to_f
-        }
-      end
+      validator_block_histories = @validator.validator_block_histories.order('id desc').limit(@history_limit).reverse
+      batch_uuids = validator_block_histories.map(&:batch_uuid)
+      @skipped_slot_percent_array = validator_block_histories.map{ |vbh| (vbh.skipped_slot_percent.to_f * 100.0).round(1) }
+      @skipped_slot_percent_moving_average_array = validator_block_histories.map{ |vbh| (vbh.skipped_slot_percent_moving_average.to_f * 100.0).round(1) }
+      @cluster_skipped_slot_percent_moving_average_array = Batch.where(uuid: batch_uuids).limit(@history_limit).map{ |b| b.skipped_slot_all_average.to_f }
     end
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
