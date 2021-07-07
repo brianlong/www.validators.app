@@ -405,16 +405,16 @@ module ValidatorScoreV1Logic
     if software_versions.empty?
       'unknown'
     else
-      software_version_sorted = software_versions.keys.compact.sort_by { |v| Gem::Version.new(v) }
-      mostly_used_percent = software_versions.values.max
-      mostly_used_version = software_versions.key(mostly_used_percent)
-      mostly_used_index = software_version_sorted.index(mostly_used_version)
-      
-      if mostly_used_percent >= 66
-        mostly_used_version
-      else
-        software_version_sorted[mostly_used_index - 1]
+      software_versions_sorted = \
+        software_versions.sort_by { |k, v| Gem::Version.new(k)}.reverse
+
+      cumulative_sum = 0
+
+      software_versions_sorted.each do |ver, weight|
+        cumulative_sum += weight
+        return ver if cumulative_sum >= 66
       end
     end
   end
+
 end

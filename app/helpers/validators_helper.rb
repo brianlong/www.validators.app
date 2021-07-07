@@ -68,4 +68,8 @@ module ValidatorsHelper
   def above_33percent_concentration?(validator)
     validator.stake_concentration_score.negative?
   end
+
+  def sort_software_versions(versions)
+    versions.sort_by { |ver| ver.keys.first}.reverse
+  end
 end
