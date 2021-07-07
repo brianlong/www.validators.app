@@ -56,7 +56,7 @@ class ValidatorCheckActiveService
 
   def is_rpc?(validator)
     if validator.created_at < (DateTime.now - @delinquent_time) && \
-       !validator.vote_account.exists?
+       !validator.vote_accounts.exists?
       return true
     end
 

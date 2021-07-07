@@ -47,6 +47,16 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     assert_equal true, Validator.find_by(account: 'account4').is_active
   end
 
+  test 'validator without vote_account should become rpc' do
+    v = create(:validator, :with_score, account: 'account4', created_at: 2.days.ago)
+    create(:validator_history, account: 'account4', active_stake: 1000)
+    create(:validator_block_history, validator: v, epoch: 122)
+
+    ValidatorCheckActiveService.new.update_validator_activity
+
+    assert_equal true, Validator.find_by(account: 'account4').is_rpc
+  end
+
   test 'validator delinquent for too long should be inactive' do
     v = create(:validator, :with_score, account: 'account5')
     create(:validator_history, account: 'account5', delinquent: true)
