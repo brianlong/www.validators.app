@@ -14,7 +14,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
     ValidatorCheckActiveService.new.update_validator_activity
 
-    assert_equal true, Validator.find_by(account: 'account1').is_active
+    assert v.reload.is_active
   end
 
   test 'validator with zero active stake should be inactive' do
@@ -24,7 +24,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
     ValidatorCheckActiveService.new.update_validator_activity
 
-    assert_equal false, Validator.find_by(account: 'account2').is_active
+    refute v.reload.is_active
   end
 
   test 'validator with zero active stake but too young should be active' do
@@ -34,7 +34,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
     ValidatorCheckActiveService.new.update_validator_activity
 
-    assert_equal true, Validator.find_by(account: 'account3').is_active
+    assert v.reload.is_active
   end
 
   test 'inactive validator with active stake should become active' do
@@ -42,9 +42,11 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     create(:validator_history, account: 'account4', active_stake: 1000)
     create(:validator_block_history, validator: v, epoch: 122)
 
+    refute v.is_active
+
     ValidatorCheckActiveService.new.update_validator_activity
 
-    assert_equal true, Validator.find_by(account: 'account4').is_active
+    assert v.reload.is_active
   end
 
   test 'validator without vote_account should become rpc' do
@@ -52,9 +54,11 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     create(:validator_history, account: 'account4', active_stake: 1000)
     create(:validator_block_history, validator: v, epoch: 122)
 
+    refute v.is_rpc
+
     ValidatorCheckActiveService.new.update_validator_activity
 
-    assert_equal true, Validator.find_by(account: 'account4').is_rpc
+    assert v.reload.is_rpc
   end
 
   test 'validator delinquent for too long should be inactive' do
@@ -64,7 +68,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
     ValidatorCheckActiveService.new.update_validator_activity
 
-    assert_equal false, Validator.find_by(account: 'account5').is_active
+    refute v.reload.is_active
   end
 
 end

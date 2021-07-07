@@ -14,7 +14,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     Sidekiq::Testing.inline! do
       ValidatorCheckActiveWorker.perform_async
 
-      assert_equal true, Validator.find_by(account: 'account1').is_active
+      assert v.reload.is_active
     end
   end
 end
