@@ -70,6 +70,6 @@ module ValidatorsHelper
   end
 
   def sort_software_versions(versions)
-    versions.sort_by { |ver| -ver[ver.keys.first]['stake_percent'].to_f}
+    versions.sort_by { |ver| ver.keys.first}.reverse
   end
 end

@@ -405,7 +405,9 @@ module ValidatorScoreV1Logic
     if software_versions.empty?
       'unknown'
     else
-      software_versions_sorted = software_versions.sort_by { |k, v| -v}
+      software_versions_sorted = \
+        software_versions.sort_by { |k, v| Gem::Version.new(k)}.reverse
+
       cumulative_sum = 0
 
       software_versions_sorted.each do |ver, weight|
