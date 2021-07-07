@@ -10,6 +10,7 @@
         // The data for our dataset
         data: {
             // x-axis labels
+            labels: <%= @data.keys %>,
             // An Array of JSON hashes for each dataset to plot. The y-axis is
             // dynamicly calculated. Look for othe options to control the y-axis if desired.
             datasets: [
@@ -20,7 +21,7 @@
                     borderColor: '<%= GREEN %>',
                     borderWidth: 1,
                     radius: 0,
-                    data: <%= @skipped_slot_percent_moving_average_array %>
+                    data: <%= @data.map { |k,v| v[:skipped_slot_percent_moving_average].round(1) } %>
                 },
                 {
                     label: ' Actual Skip Slots %',
@@ -30,7 +31,7 @@
                     borderWidth: 1,
                     borderDash: [2, 2],
                     radius: 0,
-                    data: <%= @skipped_slot_percent_array %>
+                    data: <%= @data.map { |k,v| v[:skipped_slot_percent].round(1) }%>
                 },
                 {
                     label: ' Cluster Moving Average',
@@ -39,7 +40,7 @@
                     borderColor: '<%= BLUE %>',
                     borderWidth: 1,
                     radius: 0,
-                    data: <%= @cluster_skipped_slot_percent_moving_average_array %>
+                    data: <%= @data.map { |k,v| v[:cluster_skipped_slot_percent_moving_average].round(1) } %>
                 }
             ]
         },
@@ -64,7 +65,7 @@
                     gridLines: {display: false},
                     scaleLabel: {
                         display: true,
-                        labelString: "Previous <%= @history_limit %> Observations",
+                        labelString: "Previous <%= @data.count %> Observations",
                         fontColor: '<%= DARK_GREY %>'
                     }
                 }],
