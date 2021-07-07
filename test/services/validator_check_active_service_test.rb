@@ -12,6 +12,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     create(:validator_history, account: 'account1')
     create(:validator_block_history, validator: v, epoch: 122)
 
+    assert v.is_active
+
     ValidatorCheckActiveService.new.update_validator_activity
 
     assert v.reload.is_active
@@ -22,6 +24,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     create(:validator_history, account: 'account2', active_stake: 0)
     create(:validator_block_history, validator: v, epoch: 122)
 
+    assert v.is_active
+
     ValidatorCheckActiveService.new.update_validator_activity
 
     refute v.reload.is_active
@@ -31,6 +35,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     v = create(:validator, :with_score, account: 'account3')
     create(:validator_history, account: 'account3', active_stake: 0)
     create(:validator_block_history, validator: v, epoch: 123)
+
+    assert v.is_active
 
     ValidatorCheckActiveService.new.update_validator_activity
 
@@ -65,6 +71,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     v = create(:validator, :with_score, account: 'account5')
     create(:validator_history, account: 'account5', delinquent: true)
     create(:validator_block_history, validator: v, epoch: 122)
+
+    assert v.is_active
 
     ValidatorCheckActiveService.new.update_validator_activity
 
