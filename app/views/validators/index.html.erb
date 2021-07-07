@@ -81,9 +81,9 @@
               <% end %>
             </td>
             <td class="text-right">
-              Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
+              Md: <%= number_to_percentage(@batch.skipped_slot_all_median.to_f, precision: 1) %>
               <br />
-              Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
+              Av: <%= number_to_percentage(@batch.skipped_slot_all_average.to_f, precision: 1) %>
             </td>
           </tr>
           </thead>
