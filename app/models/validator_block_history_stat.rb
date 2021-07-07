@@ -27,18 +27,11 @@ class ValidatorBlockHistoryStat < ApplicationRecord
     self.class.where(network: network, created_at: 24.hours.ago..created_at)
   end
 
-  private
+  # private
 
   def set_skipped_slot_percent_moving_average
-    skipped_slot_percents = previous_24_hours.map do |vbhs|
-      vbhs.total_slots_skipped.to_f / vbhs.total_slots.to_f
-    end
-
-    average = skipped_slot_percents.sum(0.0) / skipped_slot_percents.length
-
-    unless average.nan?
-      self.skipped_slot_percent_moving_average = average
-      save
-    end
+    vbh_query = ValidatorBlockHistoryQuery.new(network, batch_uuid)
+    self.skipped_slot_percent_moving_average = vbh_query.average_skipped_slot_percent
+    save
   end
 end

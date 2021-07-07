@@ -78,12 +78,17 @@ class ValidatorsController < ApplicationController
                 .each do |vbh|
 
         i += 1
-        batch = Batch.find_by(uuid: vbh.batch_uuid, network: params[:network])
+        # batch = Batch.find_by(uuid: vbh.batch_uuid, network: params[:network])
+        batch_stats = ValidatorBlockHistoryStat.find_by(
+          network: params[:network],
+          batch_uuid: vbh.batch_uuid
+        )
 
         @data[i] = {
           skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
           skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-          cluster_skipped_slot_percent_moving_average: batch.skipped_slot_all_average.to_f
+          # cluster_skipped_slot_percent_moving_average: batch.skipped_slot_all_average.to_f
+          cluster_skipped_slot_percent_moving_average: batch_stats.skipped_slot_percent_moving_average.to_f * 100.0
         }
       end
     end
