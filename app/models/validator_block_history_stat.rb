@@ -27,7 +27,7 @@ class ValidatorBlockHistoryStat < ApplicationRecord
     self.class.where(network: network, created_at: 24.hours.ago..created_at)
   end
 
-  # private
+  private
 
   def set_skipped_slot_percent_moving_average
     vbh_query = ValidatorBlockHistoryQuery.new(network, batch_uuid)

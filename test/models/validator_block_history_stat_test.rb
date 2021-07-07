@@ -14,38 +14,29 @@ class ValidatorBlockHistoryStatTest < ActiveSupport::TestCase
     end
   end
 
-  test 'after_create, #skipped_slot_percent_moving_average is calculated as the moving average for the last 24 hours' do
+  test 'after_create, #skipped_slot_percent_moving_average is calculated as the moving average for whole batch' do
     ValidatorBlockHistoryStat.delete_all
-    vbhs1 = create(
+    ValidatorBlockHistory.delete_all
+    batch = create(:batch)
+    create(:validator_block_history, batch_uuid: batch.uuid, skipped_slot_percent: 0.10)
+    create(:validator_block_history, batch_uuid: batch.uuid, skipped_slot_percent: 0.20)
+    create(:validator_block_history, batch_uuid: batch.uuid, skipped_slot_percent: 0.30)
+    vbhs = create(
       :validator_block_history_stat,
-      total_slots: 100,
-      total_slots_skipped: 0,
-      created_at: 3.minutes.ago
+      batch_uuid: batch.uuid,
+      network: 'testnet'
     )
+    assert_equal(0.2, vbhs.skipped_slot_percent_moving_average)
 
-    vbhs2 = create(
+    create(:validator_block_history, batch_uuid: batch.uuid, skipped_slot_percent: 0.40)
+    create(:validator_block_history, batch_uuid: batch.uuid, skipped_slot_percent: 0.50)
+    create(:validator_block_history, batch_uuid: batch.uuid, skipped_slot_percent: 0.60)
+    ValidatorBlockHistoryStat.delete_all
+    vbhs = create(
       :validator_block_history_stat,
-      total_slots: 100,
-      total_slots_skipped: 25,
-      created_at: 2.minutes.ago
+      batch_uuid: batch.uuid,
+      network: 'testnet'
     )
-
-    vbhs3 = create(
-      :validator_block_history_stat,
-      total_slots: 100,
-      total_slots_skipped: 50,
-      created_at: 1.minute.ago
-    )
-
-    vbhs4 = create(
-      :validator_block_history_stat,
-      total_slots: 100,
-      total_slots_skipped: 75
-    )
-
-    assert_equal(0, vbhs1.skipped_slot_percent_moving_average)
-    assert_equal(0.125, vbhs2.skipped_slot_percent_moving_average)
-    assert_equal(0.25, vbhs3.skipped_slot_percent_moving_average)
-    assert_equal(0.375, vbhs4.skipped_slot_percent_moving_average)
+    assert_equal(0.35, vbhs.skipped_slot_percent_moving_average)
   end
 end
