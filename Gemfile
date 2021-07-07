@@ -78,7 +78,8 @@ gem 'kaminari'
 gem 'dnsruby'
 gem 'maxmind-geoip2'
 
-
+# use rack-cors for cross-origin api queries
+gem 'rack-cors'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

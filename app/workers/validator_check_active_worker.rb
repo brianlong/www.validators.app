@@ -6,5 +6,4 @@ class ValidatorCheckActiveWorker
   def perform
     ValidatorCheckActiveService.new.update_validator_activity
   end
-
 end
