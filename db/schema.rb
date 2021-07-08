@@ -71,8 +71,14 @@ ActiveRecord::Schema.define(version: 2021_07_09_093055) do
     t.string "batch_uuid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+<<<<<<< HEAD
     t.integer "epoch"
     t.float "epoch_completion"
+=======
+    t.string "network"
+    t.index ["network", "validator_id"], name: "index_commission_histories_on_network_and_validator_id"
+    t.index ["network"], name: "index_commission_histories_on_network"
+>>>>>>> Add network to commission histories
     t.index ["validator_id"], name: "index_commission_histories_on_validator_id"
   end
 
