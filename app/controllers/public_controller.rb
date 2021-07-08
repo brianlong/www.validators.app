@@ -103,6 +103,10 @@ class PublicController < ApplicationController
     @title = t('public.contact_us.title')
   end
 
+  def commission_histories
+    @commission_histories = CommissionHistory.where(network: params[:network])
+  end
+
   private
 
   def validate_order
