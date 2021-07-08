@@ -136,7 +136,7 @@ table, .table {
 }
 
 
-#validators-table, #basic-list-table {
+#validators-table {
   max-width: 100%;
   width: 100%;
   table-layout: fixed;
@@ -149,17 +149,16 @@ table, .table {
 
   @media(max-width: $screen-lg-max) {
     .percent-column {
-      width: 97px;
+      width: 100px;
       padding-left: 20px;
       padding-right: 20px;
     }
-    .avatar-column { display: none; }
+    .avatar-column { display: none !important; }
   }
 
   @media(max-width: $screen-md-max) {
     thead { display: none; }
     .subhead { display: none; }
-    .avatar-column { display: none; }
     .percent-column, .chart-column {
       padding-top: 0;
     }
