@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_24_075105) do
+ActiveRecord::Schema.define(version: 2021_07_08_073955) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -61,6 +61,16 @@ ActiveRecord::Schema.define(version: 2021_06_24_075105) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_collectors_on_user_id"
+  end
+
+  create_table "commission_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "validator_id", null: false
+    t.float "commission_before"
+    t.float "commission_after"
+    t.string "batch_uuid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["validator_id"], name: "index_commission_histories_on_validator_id"
   end
 
   create_table "contact_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -391,6 +401,7 @@ ActiveRecord::Schema.define(version: 2021_06_24_075105) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collectors", "users"
+  add_foreign_key "commission_histories", "validators"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
