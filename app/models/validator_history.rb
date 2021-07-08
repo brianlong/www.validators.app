@@ -30,19 +30,18 @@ class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
 
-  has_one :commission_history
-
   after_create :create_commission_history
 
   def create_commission_history
     CreateCommissionHistoryService.new(self).call
   end
 
+  # single previous record from the same validator
   def previous
     ValidatorHistory.where(account: account)
                     .where('created_at < ?', created_at)
                     .order(created_at: :desc)
-                    .last
+                    .first
   end
 
   class << self
