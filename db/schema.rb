@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_08_073955) do
+ActiveRecord::Schema.define(version: 2021_07_08_140201) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -70,6 +70,8 @@ ActiveRecord::Schema.define(version: 2021_07_08_073955) do
     t.string "batch_uuid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "epoch"
+    t.float "epoch_completion"
     t.index ["validator_id"], name: "index_commission_histories_on_validator_id"
   end
 

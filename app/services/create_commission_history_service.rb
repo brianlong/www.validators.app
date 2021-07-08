@@ -2,36 +2,46 @@
 
 # creates new commission_history for a validator if commission has changed
 class CreateCommissionHistoryService
-  def initialize(validator_history)
-    @recent_history = validator_history
-    @previous_history = @recent_history.previous
+  def initialize(score)
+    @score = score
   end
 
   # payload returns CommissionHistory object if it has been created
   # otherwise it returns false
   def call
-    result = commission_changed? ? create_commission : false
+    c_history = create_commission
   rescue StandardError => e
     OpenStruct.new({ success?: false, error: e })
   else
-    OpenStruct.new({ success?: true, payload: result })
+    OpenStruct.new({ success?: true, payload: c_history })
   end
 
   private
 
-  def commission_changed?
-    @recent_history.commission != @previous_history.commission
-  end
-
   def create_commission
-    associated_validator.commission_histories.create(
-      commission_before: @previous_history.commission,
-      commission_after: @recent_history.commission,
-      batch_uuid: @recent_history.batch_uuid
+    @score.validator.commission_histories.create(
+      commission_before: @score.commission_before_last_save,
+      commission_after: @score.commission,
+      batch_uuid: last_batch.uuid,
+      epoch: recent_epoch.epoch,
+      epoch_completion: recent_epoch_completion
     )
   end
 
-  def associated_validator
-    Validator.find_by(account: @recent_history.account)
+  def last_batch
+    @last_batch ||= Batch.where(network: @score.network)
+         .order(created_at: :desc)
+         .first
+  end
+
+  def recent_epoch
+    @recent_epoch ||= EpochHistory.find_by(
+      batch_uuid: last_batch.uuid,
+      network: @score.network
+    )
+  end
+
+  def recent_epoch_completion
+    (recent_epoch.slots_in_epoch / recent_epoch.slot_index.to_f).round(2)
   end
 end

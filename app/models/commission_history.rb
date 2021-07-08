@@ -6,6 +6,8 @@
 #  batch_uuid        :string(191)
 #  commission_after  :float(24)
 #  commission_before :float(24)
+#  epoch             :integer
+#  epoch_completion  :float(24)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  validator_id      :bigint           not null
