@@ -123,7 +123,10 @@
               @validator.commission.to_i == 100
           %>
           <td class="<%= comm_class %>">
-            <%= @validator.commission rescue 'N/A' %> &percnt;
+            <%= @validator.commission rescue 'N/A' %>&percnt;
+            <%= link_to '(See commission changes)',
+                        validator_commission_histories_path(network: params[:network], account: @validator.account),
+                        class: 'small' %>
           </td>
         </tr>
 
@@ -141,7 +144,9 @@
             <td>
               <strong>Scores:</strong>
             </td>
-            <td><%= render 'validators/scores', validator: @validator %></td>
+            <td>
+              <%= render 'validators/scores', validator: @validator %>
+            </td>
           </tr>
         </tbody>
       </table>

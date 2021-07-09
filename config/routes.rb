@@ -33,7 +33,8 @@ Rails.application.routes.draw do
       to: 'validators#show',
       as: 'validator'
   get 'validators/:network/:account/commission-changes',
-      to: 'validators#commission_histories'
+      to: 'validators#commission_histories',
+      as: 'validator_commission_histories'
 
   get 'tower/:network',
       to: 'public#tower',
