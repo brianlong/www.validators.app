@@ -93,13 +93,6 @@ class ValidatorsController < ApplicationController
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
 
-  # def commission_histories
-  #   @commission_histories = CommissionHistory.where(network: params[:network], validator_id: @validator.id)
-  #                                            .order(created_at: :desc)
-  #                                            .page(params[:page])
-  #                                            .per(20)
-  # end
-
   private
 
   # Use callbacks to share common setup or constraints between actions.

@@ -40,7 +40,9 @@
             <td><%= ch.batch_uuid %></td>
             <td class="text-center">
               <%= number_to_percentage(ch.commission_before, precision: 0) %><i class="fas fa-long-arrow-alt-right px-2"></i><%= number_to_percentage(ch.commission_after, precision: 0) %>
-              <%= render 'public/commission_changed_indicator', before: ch.commission_before, after: ch.commission_after %>
+              <%= render 'public/commission_changed_indicator',
+                         before: ch.commission_before,
+                         after: ch.commission_after %>
             </td>
             <td class="narrow-column"><%= ch.created_at %></td>
           </tr>
