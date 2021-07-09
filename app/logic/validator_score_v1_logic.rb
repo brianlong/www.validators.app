@@ -153,8 +153,8 @@ module ValidatorScoreV1Logic
       skipped_vote_all  = []
 
       p.payload[:validators].each do |v|
-        root_distance_all += v.validator_score_v1.root_distance_history
-        vote_distance_all += v.validator_score_v1.vote_distance_history
+        root_distance_all += v.validator_score_v1.root_distance_history.last(960)
+        vote_distance_all += v.validator_score_v1.vote_distance_history.last(960)
 
         # Get all the most recent skipped_votes
         skipped_vote_all.push v.validator_score_v1.skipped_vote_history[-1]
