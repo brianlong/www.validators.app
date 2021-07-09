@@ -96,7 +96,8 @@ class ValidatorsController < ApplicationController
   def commission_histories
     @commission_histories = CommissionHistory.where(network: params[:network], validator_id: @validator.id)
                                              .order(created_at: :desc)
-                                             # TODO add pagination
+                                             .page(params[:page])
+                                             .per(20)
   end
 
   private
