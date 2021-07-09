@@ -1,1 +1,37 @@
-Commission Changes for <%= validator_display_name(@validator) %>
+<div class="page-header">
+  <h1>Commission Changes</h1>
+  <h4 class="word-break"><%= validator_display_name(@validator) %></h4>
+</div>
+
+<div class="card mb-4">
+  <div class="table-responsive-md">
+    <table class='table mb-0'>
+      <thead>
+        <tr>
+          <th>Epoch (completion %)</th>
+          <th>Batch</th>
+          <th class="text-center">Before -> After</th>
+          <th class="narrow-column">Timestamp</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @commission_histories.each do |ch| %>
+          <tr>
+            <td>
+              <%= ch.epoch %>
+              (<%= number_to_percentage(ch.epoch_completion, precision: 1) %>)
+            </td>
+            <td><%= ch.batch_uuid %></td>
+            <td class="text-center"><%= ch.commission_before %> -> <%= ch.commission_after %></td>
+            <td class="narrow-column"><%= ch.created_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%= link_to 'Back to Validator page',
+            validator_url(network: params[:network], account: @validator.account),
+            class: 'btn btn-sm btn-secondary mb-4' %>
