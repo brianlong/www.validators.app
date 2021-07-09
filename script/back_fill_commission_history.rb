@@ -5,6 +5,8 @@
     last_history = ValidatorHistory.where(account: validator.account)
                                    .order(created_at: :desc)
                                    .first
+    next unless last_history
+    
     loop do
       changed_history = ValidatorHistory.where(account: validator.account)
                                         .where.not(commission: last_history.commission)
