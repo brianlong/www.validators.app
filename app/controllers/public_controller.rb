@@ -103,6 +103,22 @@ class PublicController < ApplicationController
     @title = t('public.contact_us.title')
   end
 
+  def commission_histories
+    if params[:validator_id]
+      @validator = Validator.find(params[:validator_id])
+      @commission_histories = CommissionHistory.where(network: params[:network], validator_id: @validator.id)
+                                               .order(created_at: :desc)
+                                               .page(params[:page])
+                                               .per(20)
+    else
+      @commission_histories = CommissionHistory.where(network: params[:network])
+                                               .includes(:validator)
+                                               .order(created_at: :desc)
+                                               .page(params[:page])
+                                               .per(20)
+    end
+  end
+
   private
 
   def validate_order

@@ -9,7 +9,7 @@
     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
   <% end %>
   <h1 class="word-break">
-    <%= validator_display_name(@validator) %>
+    <%= @validator.name || @validator.account %>
   </h1>
   <% if @validator.private_validator? %>
     <h5 class="text-danger">(Private Validator)</h5>
@@ -125,7 +125,7 @@
           <td class="<%= comm_class %>">
             <%= @validator.commission rescue 'N/A' %>&percnt;
             <%= link_to '(See commission changes)',
-                        validator_commission_histories_path(network: params[:network], account: @validator.account),
+                        commission_histories_path(network: params[:network], validator_id: @validator.id),
                         class: 'small' %>
           </td>
         </tr>

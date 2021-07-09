@@ -32,9 +32,6 @@ Rails.application.routes.draw do
   get 'validators/:network/:account',
       to: 'validators#show',
       as: 'validator'
-  get 'validators/:network/:account/commission-changes',
-      to: 'validators#commission_histories',
-      as: 'validator_commission_histories'
 
   get 'tower/:network',
       to: 'public#tower',
@@ -110,6 +107,10 @@ Rails.application.routes.draw do
   get 'privacy-policy', to: 'public#privacy_policy'
   get 'sample-chart', to: 'public#sample_chart'
   get 'terms-of-use', to: 'public#terms_of_use'
+
+  get ':network/commission-changes/(:validator_id)',
+      to: 'public#commission_histories',
+      as: 'commission_histories'
 
   get 'cluster-stats', to: 'cluster_stats#index'
 
