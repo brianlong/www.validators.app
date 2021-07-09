@@ -86,10 +86,8 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     )
     create(:epoch_history, network: 'testnet', batch_uuid: @batch.uuid)
 
-    refute CommissionHistory.exists?
-
-    score.update(commission: 20)
-
-    assert CommissionHistory.exists?
+    assert_difference('CommissionHistory.count') do
+      score.update(commission: 20)
+    end
   end
 end

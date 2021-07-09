@@ -30,8 +30,8 @@ class CreateCommissionHistoryService
 
   def last_batch
     @last_batch ||= Batch.where(network: @score.network)
-         .order(created_at: :desc)
-         .first
+                         .order(created_at: :desc)
+                         .first
   end
 
   def recent_epoch

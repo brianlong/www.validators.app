@@ -61,7 +61,7 @@ class ValidatorScoreV1 < ApplicationRecord
   # Touch the related validator to increment the updated_at attribute
   belongs_to :validator
   before_save :calculate_total_score
-  after_save :create_commission_history
+  after_save :create_commission_history, :if => :saved_change_to_commission?
 
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON
@@ -80,9 +80,11 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   def create_commission_history
-    if commission != commission_before_last_save
-      CreateCommissionHistoryService.new(self).call
-    end
+    CreateCommissionHistoryService.new(self).call
+  end
+
+  def saved_change_to_commission?
+    commission != commission_before_last_save
   end
 
   def calculate_total_score
