@@ -2,7 +2,7 @@
 
 # ValidatorsController
 class ValidatorsController < ApplicationController
-  before_action :set_validator, only: %i[show]
+  before_action :set_validator, only: %i[show commission_histories]
 
   # GET /validators
   # GET /validators.json
@@ -91,6 +91,12 @@ class ValidatorsController < ApplicationController
       end
     end
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
+  end
+
+  def commission_histories
+    @commission_histories = CommissionHistory.where(network: params[:network], validator_id: @validator.id)
+                                             .order(created_at: :desc)
+                                             # TODO add pagination
   end
 
   private
