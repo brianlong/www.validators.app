@@ -83,10 +83,6 @@ class ValidatorScoreV1 < ApplicationRecord
     CreateCommissionHistoryService.new(self).call
   end
 
-  def saved_change_to_commission?
-    commission != commission_before_last_save
-  end
-
   def calculate_total_score
     # Assign special scores before calculating the total score
     assign_published_information_score
