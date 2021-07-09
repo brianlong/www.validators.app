@@ -13,13 +13,16 @@
           <%= link_to 'API Documentation', api_documentation_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
-          <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
           <%= link_to t('footer.nav_links.faq'), faq_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Log Deep Dives', log_deep_dives_index_path, class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Commission Changes', commission_histories_path(network: params[:network]), class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to t('footer.nav_links.privacy_policy'), privacy_policy_path, class: 'nav-link' %>
