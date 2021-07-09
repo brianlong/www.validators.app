@@ -28,6 +28,7 @@ class Validator < ApplicationRecord
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
   has_many :validator_ips, dependent: :destroy
   has_many :validator_block_histories, dependent: :destroy
+  has_many :commission_histories, dependent: :destroy
   has_one :validator_score_v1, dependent: :destroy
 
   scope :active, -> { where(is_active: true) }
