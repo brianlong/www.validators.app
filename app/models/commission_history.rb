@@ -27,6 +27,6 @@ class CommissionHistory < ApplicationRecord
   belongs_to :validator
 
   def rising?
-    commission_after > commission_before
+    commission_after.to_i > commission_before.to_i
   end
 end
