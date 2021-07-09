@@ -42,6 +42,6 @@ class CreateCommissionHistoryService
   end
 
   def recent_epoch_completion
-    (recent_epoch.slots_in_epoch / recent_epoch.slot_index.to_f).round(2)
+    ((recent_epoch.slot_index / recent_epoch.slots_in_epoch.to_f) * 100).round(2)
   end
 end
