@@ -6,7 +6,7 @@
                                    .order(created_at: :desc)
                                    .first
     next unless last_history
-    
+
     loop do
       changed_history = ValidatorHistory.where(account: validator.account)
                                         .where.not(commission: last_history.commission)
@@ -25,7 +25,7 @@
         commission_after: last_history.commission,
         batch_uuid: changed_history.batch_uuid,
         epoch: epoch_info.epoch,
-        epoch_completion: (epoch_info.slots_in_epoch / epoch_info.slot_index.to_f).round(2)
+        epoch_completion: ((epoch_info.slot_index / epoch_info.slots_in_epoch.to_f) * 100).round(2)
       )
 
       last_history = changed_history
