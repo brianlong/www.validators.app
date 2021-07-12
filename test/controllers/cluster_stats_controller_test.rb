@@ -11,7 +11,7 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
     data = prepare_data_for_cluster_stats('testnet')
 
     sign_in @user
-    get cluster_stats_url
+    get cluster_stats_url(network: 'testnet')
 
     assert_response :success
     assert_data_for('testnet', data)
@@ -21,7 +21,7 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
     data = prepare_data_for_cluster_stats('mainnet')
 
     sign_in @user
-    get cluster_stats_url
+    get cluster_stats_url(network: 'mainnet')
 
     assert_response :success
     assert_data_for('mainnet', data)
