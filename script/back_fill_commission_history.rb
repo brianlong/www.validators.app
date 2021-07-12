@@ -9,6 +9,7 @@
 
     loop do
       changed_history = ValidatorHistory.where(account: validator.account)
+                                        .where(network: network)
                                         .where.not(commission: last_history.commission)
                                         .where('created_at < ?', last_history.created_at)
                                         .order(created_at: :desc)
