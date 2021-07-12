@@ -288,7 +288,7 @@
 
 <% unless @validators.empty? %>
   <div class="row">
-    <%= render 'validators/software_versions' %>
+    <%= render 'validators/software_versions', software_versions: @software_versions %>
     <%= render 'validators/stats' %>
   </div>
 <% end %>

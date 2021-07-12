@@ -1,16 +1,16 @@
-<%= render 'validators/banner' %>
-<% unless @mainnet.empty? %>
-  Mainnet Stats: <br />
-  <%= @mainnet.inspect %>
-  <%#= render 'validators/stats' %>
+<h1 class="page-header"><%= params[:network].capitalize %> Stats</h1>
 
+<% unless @stats.empty? %>
+  <% @stats.each do |key, value| %>
+    <strong><%= key %></strong><br />
+    <%= value %><br /><br />
+  <% end %>
 <% end %>
 
-<% unless @testnet.empty? %>
-  Testnet Stats: <br />
-  <%= @testnet.inspect %>
-  <%#= render 'validators/stats' %>
 
+<% unless @stats.empty? %>
+  <div class="row">
+    <%= render 'validators/software_versions', software_versions: @stats[:software_versions] %>
+    <%#= render 'validators/stats' %>
+  </div>
 <% end %>
-
-<%= render 'validators/software_versions' %>
