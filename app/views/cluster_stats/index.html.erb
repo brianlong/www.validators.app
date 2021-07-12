@@ -7,10 +7,114 @@
   <% end %>
 <% end %>
 
-
-<% unless @stats.empty? %>
-  <div class="row">
-    <%= render 'validators/software_versions', software_versions: @stats[:software_versions] %>
-    <%#= render 'validators/stats' %>
+<div class="card h-100">
+  <div class="card-content">
+    <h3 class="card-heading mb-4">Root Distance</h3>
+    <div class="row px-4 px-lg-6 text-center">
+      <div class="col-6 col-md-3 mb-md-4">
+        <small class="text-muted">Minimum:</small>
+        <div class="h2 text-purple"><%= @stats[:root_distance][:min].to_i %></div>
+      </div>
+      <div class="col-6 col-md-3 mb-md-4">
+        <small class="text-muted">Maximum:</small>
+        <div class="h2 text-purple"><%= @stats[:root_distance][:max].to_i %></div>
+      </div>
+      <div class="col-6 col-md-3 mb-md-4">
+        <small class="text-muted">Median:</small>
+        <div class="h2 text-purple">
+          <%= @stats[:root_distance][:median].to_i %>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 mb-md-4">
+        <small class="text-muted">Average:</small>
+        <div class="h2 text-purple">
+          <%= @stats[:root_distance][:average].to_f.round(1) %>
+        </div>
+      </div>
+    </div>
   </div>
-<% end %>
+</div>
+
+<div class="card h-100">
+  <div class="card-content">
+    <h3 class="card-heading mb-4">Vote Distance</h3>
+    <div class="row px-4 px-lg-6 text-center">
+      <div class="col-6 col-md-3 mb-md-4">
+        <small class="text-muted">Minimum:</small>
+        <div class="h2 text-purple"><%= @stats[:vote_distance][:min].to_i %></div>
+      </div>
+      <div class="col-6 col-md-3 mb-md-4">
+        <small class="text-muted">Maximum:</small>
+        <div class="h2 text-purple"><%= @stats[:vote_distance][:max].to_i %></div>
+      </div>
+      <div class="col-6 col-md-3 mb-md-4">
+        <small class="text-muted">Median:</small>
+        <div class="h2 text-purple"><%= @stats[:vote_distance][:median].to_i %></div>
+      </div>
+      <div class="col-6 col-md-3 mb-md-4">
+        <small class="text-muted">Average:</small>
+        <div class="h2 text-purple"><%= @stats[:vote_distance][:average].to_f.round(1) %></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="card h-100">
+      <div class="card-content">
+        <h3 class="card-heading mb-4">Skipped Slots</h3>
+        <div class="row px-4 px-lg-6 text-center">
+          <div class="col-6 col-md-3 mb-md-4">
+            <small class="text-muted">Minimum:</small>
+            <div class="h2 text-purple"><%= @stats[:skipped_slots][:min].to_i %></div>
+          </div>
+          <div class="col-6 col-md-3 mb-md-4">
+            <small class="text-muted">Maximum:</small>
+            <div class="h2 text-purple"><%= @stats[:skipped_slots][:max].to_i %></div>
+          </div>
+          <div class="col-6 col-md-3 mb-md-4">
+            <small class="text-muted">Median:</small>
+            <div class="h2 text-purple">
+              <%= number_to_percentage @stats[:skipped_slots][:median].to_f*100, precision: 1 %>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-md-4">
+            <small class="text-muted">Average:</small>
+            <div class="h2 text-purple">
+              <%= number_to_percentage @stats[:skipped_slots][:average].to_f*100, precision: 1 %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="row">
+  <%= render 'validators/software_versions',
+             software_versions: @stats[:software_version],
+             batch: @batch %>
+  <div class="col-md-5 col-lg-4">
+    <div class="card">
+      <div class="card-content">
+        <h2 class="card-heading mb-4">General Stats</h2>
+
+        <div class="row px-4 px-md-5 text-center">
+          <div class="col-6 col-md-12 mb-md-4">
+            <small class="text-muted">Epoch:</small>
+            <div class="h2 text-purple"><%= @this_epoch %></div>
+          </div>
+          <div class="col-6 col-md-12 mb-md-4">
+            <small class="text-muted">Validators:</small>
+            <div class="h2 text-purple">
+              <%= number_with_delimiter(@validators_count, delimiter: " ") %>
+            </div>
+          </div>
+          <div class="col-6 col-md-12 mb-md-4">
+            <small class="text-muted">Software Ver.:</small>
+            <div class="h2 text-purple">
+              <%= current_software_version(@batch, params[:network]) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
