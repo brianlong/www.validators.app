@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'rack/cors'
+require 'rack/test'
 
 # ApiControllerTest
 class ApiControllerTest < ActionDispatch::IntegrationTest
@@ -14,6 +16,45 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
       password: 'password'
     }
     @user = User.create(@user_params)
+
+    Validator.destroy_all
+  end
+
+  test 'When reaching the api \
+        from origin listed in whitelist \
+        should return 200' do
+    get api_v1_ping_url, headers: {
+      'Origin' => 'http://example.com' # this origin is in whitelist
+    }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+    assert_equal 'pong', json['answer']
+  end
+
+  test 'When reaching the api \
+        from foreign origin \
+        should return Unauthorized' do
+    get api_v1_ping_url, headers: {
+      'Origin' => 'http://foreign.com'
+    }
+
+    assert_response 401
+    json = response_to_json(@response.body)
+    assert_equal 'Unauthorized', json['error']
+  end
+
+  test 'When reaching the api \
+  from foreign origin but with correct token \
+  should return 200' do
+    get api_v1_ping_url, headers: {
+      'Token' => @user.api_token,
+      'Origin' => 'http://foreign.com'
+    }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+    assert_equal 'pong', json['answer']
   end
 
   test 'GET api_v1_ping without token should get error' do
@@ -98,7 +139,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
 
     assert_response 200
-    assert_equal 4, json.size
+    assert_equal 3, json.size
     assert_equal 'testnet', json.first['network']
 
     # Mainnet
@@ -126,7 +167,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_with_all_data = json.select { |j| j['account'] == 'Test Account' }.first
     validator_active_stake = validator.validator_score_v1.active_stake
 
-    assert_equal 2, json.size
+    assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
     assert_equal 29, validator_with_all_data.keys.size
@@ -163,6 +204,125 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     # IP
     assert_equal 0, validator_with_all_data['autonomous_system_number']
+  end
+
+  test 'GET api_v1_validators with token and search query returns correct data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+
+    search_query = 'john doe'
+    
+    get api_v1_validators_url(network: 'testnet', q: search_query),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+    
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_equal search_query, json.first['name']
+  end
+
+  test 'GET api_v1_validators with token and not existing search query returns no data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+
+    search_query = '1234'
+    
+    get api_v1_validators_url(network: 'testnet', q: search_query),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+    
+    json = response_to_json(@response.body)
+
+    assert_equal 0, json.size
+  end
+  
+  # 
+  # Pagination
+  #
+  test 'GET api_v1_validators with token, limit and page passed in returns limited data' do
+    create_list(:validator, 10, :with_score)
+    limit = 5
+    page = 2
+
+    get api_v1_validators_url(network: 'testnet', limit: limit, page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 5, json.size
+  end
+
+  test 'GET api_v1_validators with token and limit passed in returns limited data' do
+    create_list(:validator, 10, :with_score)
+    limit = 5
+
+    get api_v1_validators_url(network: 'testnet', limit: limit),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal limit, json.size
+  end
+
+  test 'GET api_v1_validators with token and page passed in returns limited data' do
+    create_list(:validator, 60, :with_score)
+    page = 1
+
+    get api_v1_validators_url(network: 'testnet', page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    # Default limit is 9999
+    assert_equal Validator.count, json.size
+  end
+
+  test 'GET api_v1_validators with token and page passed returns no data when offset is above number of records' do
+    create_list(:validator, 10, :with_score)
+    page = 2
+
+    get api_v1_validators_url(network: 'testnet', page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    # Default limit is 9999, so the offset is above number of records.
+    assert_equal 0, json.size
+  end
+
+  test 'GET api_v1_validators with token but without page and limit returns all data' do
+    create_list(:validator, 10, :with_score)
+
+    get api_v1_validators_url(network: 'testnet'),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal Validator.all.size, json.size
+  end
+  # 
+  # Pagination with search
+  # 
+  test 'GET api_v1_validators with token, search query, limit and page passed returns limited data' do
+    create(:validator, :with_score, name: 'search_query')
+    create_list(:validator, 5, :with_score)
+
+    limit = 5
+    page = 1
+    search_query = 'search_query'
+
+    get api_v1_validators_url(network: 'testnet', limit: limit, page: page, q: search_query),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_equal search_query, json.first['name']
   end
 
   test 'GET api_v1_validator with token returns all data' do
@@ -300,7 +460,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
       account: testnet_validator.account,
       limit: limit
     ), headers: { 'Token' => @user.api_token }
-
     json_response = response_to_json(@response.body)
 
     assert_response 200

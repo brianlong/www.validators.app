@@ -37,7 +37,6 @@ table, .table {
     }
   }
 
-
   .col-sm {
     @media(max-width: $screen-sm-max) {
       &-120 { min-width: 120px;}
@@ -100,7 +99,7 @@ table, .table {
   }
 
   @media(max-width: $screen-lg-max) {
-    .avatar-column { display: none; }
+    .avatar-column { display: none !important; }
     .name-column { padding-left: 20px; }
   }
 
@@ -109,7 +108,7 @@ table, .table {
     .subhead { display: none; }
     .name-column {
       line-height: 25px;
-      padding-bottom: 0px;
+      padding-bottom: 0;
     }
     .chart-column {
       padding: 3px 20px;
@@ -118,5 +117,4 @@ table, .table {
       }
     }
   }
-
 }

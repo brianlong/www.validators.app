@@ -4,6 +4,7 @@
 class PublicController < ApplicationController
   def index
     validators = Validator.where(network: params[:network])
+                          .scorable
                           .joins(:validator_score_v1)
                           .index_order(validate_order)
 
@@ -89,6 +90,18 @@ class PublicController < ApplicationController
 
   def contact_us
     @title = t('public.contact_us.title')
+  end
+
+  def commission_histories
+    if params[:validator_id]
+      @validator = Validator.find(params[:validator_id])
+      commission_histories = CommissionHistory.where(network: params[:network], validator_id: @validator.id)
+    else
+      commission_histories = CommissionHistory.where(network: params[:network]).includes(:validator)
+    end
+    @commission_histories = commission_histories.order(created_at: :desc)
+                                                .page(params[:page])
+                                                .per(20)
   end
 
   private

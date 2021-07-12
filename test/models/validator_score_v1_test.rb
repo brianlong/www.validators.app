@@ -74,4 +74,20 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal 1, res.count
     assert_equal 'datacenter1', res.first.data_center_key
   end
+
+  test 'should add new commission history when commission changed' do
+    @batch = create(:batch, network: 'testnet')
+    validator = create(:validator, network: 'testnet')
+    score = create(
+      :validator_score_v1,
+      validator: validator,
+      commission: 10,
+      network: 'testnet'
+    )
+    create(:epoch_history, network: 'testnet', batch_uuid: @batch.uuid)
+
+    assert_difference('CommissionHistory.count') do
+      score.update(commission: 20)
+    end
+  end
 end

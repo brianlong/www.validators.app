@@ -26,12 +26,17 @@ p = Pipeline.new(200, payload)
 puts "CODE: #{p[:code]}"
 puts "MESSAGE: #{p[:message]}"
 puts "ERROR: #{p[:errors].inspect}"
+puts p.errors.backtrace
 puts ''
 puts 'Data for 71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B:'
 puts ''
 puts p.payload[:validators]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
 puts ''
 puts p.payload[:vote_accounts]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
+puts ''
+puts p.payload[:validators_reduced].count
+puts ''
+puts p.payload[:rpc_servers].count
 puts ''
 puts \
   p.payload[:validators_reduced]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']

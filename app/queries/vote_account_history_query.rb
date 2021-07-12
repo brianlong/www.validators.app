@@ -11,9 +11,16 @@
 class VoteAccountHistoryQuery < ApplicationQuery
   def initialize(network, batch_uuid)
     super
+    scorable_vote_accounts_ids = Validator.scorable
+                                          .joins(:vote_accounts)
+                                          .pluck('vote_accounts.id')
 
     @relation ||=
-      VoteAccountHistory.where(network: network, batch_uuid: batch_uuid)
+      VoteAccountHistory.where(
+        network: network,
+        batch_uuid: batch_uuid,
+        vote_account_id: scorable_vote_accounts_ids
+      )
   end
 
   def average_skipped_vote_percent

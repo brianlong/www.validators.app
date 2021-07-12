@@ -58,4 +58,8 @@ module ValidatorsHelper
     return 0 if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
     (params[:page].to_i - 1) * items_per_page
   end
+
+  def sort_software_versions(versions)
+    versions.sort_by { |ver| ver.keys.first}.reverse
+  end
 end
