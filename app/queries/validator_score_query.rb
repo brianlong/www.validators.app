@@ -37,7 +37,7 @@ class ValidatorScoreQuery < ApplicationQuery
 
   def top_root_distance_averages_validators
     @top_root_distance_averages_validators ||=
-      root_distance_all_averages&.sort&.reverse
+      root_distance_all_averages&.sort
   end
 
   def root_distance_stats(with_history: false)
@@ -67,13 +67,13 @@ class ValidatorScoreQuery < ApplicationQuery
 
   def top_vote_distance_averages_validators
     @top_vote_distance_averages_validators ||=
-      vote_distance_all_averages&.sort&.reverse
+      vote_distance_all_averages&.sort
   end
 
   def top_staked_validators
     # map(&:to_i) handles nils
     @top_staked_validators ||=
-      for_batch.pluck(:active_stake).map(&:to_i).sort.reverse
+      for_batch.pluck(:active_stake).map(&:to_i).sort
 
   end
 

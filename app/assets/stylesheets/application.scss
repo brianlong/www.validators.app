@@ -141,6 +141,12 @@ hr {
     padding-right: $padding-standard;
     padding-left: $padding-standard;
   }
+  &x-lg-6 {
+    @media(min-width: $screen-lg-min) {
+      padding-left: 7rem !important;;
+      padding-right: 7rem !important;;
+    }
+  }
 }
 
 .toggle {

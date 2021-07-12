@@ -1,5 +1,5 @@
 <div class="col-md-7 col-lg-8 mb-4 pb-2 mb-md-0 pb-md-0">
-  <% if @software_versions %>
+  <% if software_versions %>
     <div class="card">
       <div class="card-content">
         <h2 class="card-heading mb-4">Software Versions</h2>
@@ -15,16 +15,16 @@
             </tr>
             </thead>
             <tbody>
-              <% sort_software_versions(software_versions.payload).each do |group| %>
+              <% sort_software_versions(software_versions).each do |group| %>
                 <% if group.first[1].is_a?(Hash) %>
                   <tr>
-                    <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
+                    <td class="<%= group.first[0] == current_software_version(batch, params[:network]) ? 'h4 text-success' : '' %>">
                       <%= link_to group.first[0], root_path(q: group.first[0]), title: 'Click to show validators with this version' %>
                     </td>
-                    <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
+                    <td class="<%= group.first[0] == current_software_version(batch, params[:network]) ? 'h4 text-success' : '' %>">
                       <%= group.first[1]['stake_percent'].to_f %>%
                     </td>
-                    <td class="<%= group.first[0] == current_software_version(@batch, params[:network]) ? 'h4 text-success' : '' %>">
+                    <td class="<%= group.first[0] == current_software_version(batch, params[:network]) ? 'h4 text-success' : '' %>">
                       <%= group.first[1]['count'] %>
                     </td>
                   </tr>

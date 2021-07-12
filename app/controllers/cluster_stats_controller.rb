@@ -4,6 +4,9 @@
 class ClusterStatsController < ApplicationController
   def index
     @stats = gather_stats_for(params[:network])
+    @batch = Batch.find_by(uuid: @stats[:batch_uuid])
+    @this_epoch = EpochHistory.where(network: params[:network], batch_uuid: @batch.uuid).first&.epoch
+    @validators_count = Validator.where(network: params[:network]).scorable.count
   end
 
   private
