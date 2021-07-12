@@ -107,6 +107,11 @@ Rails.application.routes.draw do
   get 'privacy-policy', to: 'public#privacy_policy'
   get 'sample-chart', to: 'public#sample_chart'
   get 'terms-of-use', to: 'public#terms_of_use'
+
+  get ':network/commission-changes/(:validator_id)',
+      to: 'public#commission_histories',
+      as: 'commission_histories'
+
   get 'cluster-stats', to: 'cluster_stats#index'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'

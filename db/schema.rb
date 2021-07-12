@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_08_140201) do
+ActiveRecord::Schema.define(version: 2021_07_09_093055) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2021_07_08_140201) do
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
+    t.index ["network"], name: "index_batches_on_network"
   end
 
   create_table "collectors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -70,8 +71,11 @@ ActiveRecord::Schema.define(version: 2021_07_08_140201) do
     t.string "batch_uuid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
     t.integer "epoch"
     t.float "epoch_completion"
+    t.index ["network", "validator_id"], name: "index_commission_histories_on_network_and_validator_id"
+    t.index ["network"], name: "index_commission_histories_on_network"
     t.index ["validator_id"], name: "index_commission_histories_on_validator_id"
   end
 
