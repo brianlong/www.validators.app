@@ -140,18 +140,17 @@
                 <% end %>
               </td>
 
-              <!-- SKIPPED VOTE % -->
-              <td class="percent-column align-middle" id="skipped-vote-column-<%=i%>">
+              <td class="percent-column align-middle">
                 <% skipped_vote_percent = skipped_vote_percent(validator, @batch) %>
                 <% if skipped_vote_percent %>
                   <div class="d-none d-lg-block">
-                    <%= render 'validators/spark_line_skipped_vote',
-                               account: validator.account,
+                    <%= render 'validators/speedometer_chart',
+                               canvas_name: "spark_line_skipped_vote_#{validator.account}",
                                value: [skipped_vote_percent, @batch.skipped_vote_all_median.to_f * 3].max,
                                chart_steps: [@batch.skipped_vote_all_median.to_f * 2, @batch.skipped_vote_all_median.to_f, 0.05],
                                min_value: @batch.skipped_vote_all_median.to_f * 3
                     %>
-                    <div class="text-center text-muted small mt-3">
+                    <div class="text-center text-muted small mt-2">
                       <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
                     </div>
                   </div>
@@ -159,7 +158,7 @@
                   <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
                 <span class="d-inline-block d-lg-none">
-                  Skipped Vote&nbsp;% (distance from leader):
+                  Skipped Vote&nbsp;%:
                   <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
                 </span>
               </td>
@@ -242,6 +241,7 @@
               </td>
 
               <!-- SKIPPED SLOTS  -->
+
               <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
                 <%
                   vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
