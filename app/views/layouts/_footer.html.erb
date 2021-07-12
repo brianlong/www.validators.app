@@ -8,7 +8,7 @@
 
   <nav class="navbar navbar-expand-lg">
     <div class="">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav flex-wrap">
         <li class="nav-item active">
           <%= link_to 'API Documentation', api_documentation_path, class: 'nav-link' %>
         </li>
@@ -20,6 +20,9 @@
         </li>
         <li class="nav-item">
           <%= link_to 'Commission Changes', commission_histories_path(network: params[:network]), class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Cluster Stats', cluster_stats_path(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>
