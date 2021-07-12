@@ -3,8 +3,7 @@
 # PublicController
 class ClusterStatsController < ApplicationController
   def index
-    @mainnet = gather_stats_for('mainnet')
-    @testnet = gather_stats_for('testnet')
+    @stats = gather_stats_for(params[:network])
   end
 
   private
