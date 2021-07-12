@@ -27,7 +27,8 @@
         batch_uuid: changed_history.batch_uuid,
         epoch: epoch_info.epoch,
         network: network,
-        epoch_completion: ((epoch_info.slot_index / epoch_info.slots_in_epoch.to_f) * 100).round(2)
+        epoch_completion: ((epoch_info.slot_index / epoch_info.slots_in_epoch.to_f) * 100).round(2),
+        created_at: changed_history.created_at
       )
 
       last_history = changed_history
