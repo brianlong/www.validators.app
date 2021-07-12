@@ -24,7 +24,7 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
     refute CommissionHistory.exists?
     load(Rails.root.join('script', 'back_fill_commission_history.rb'))
     assert_equal 5, CommissionHistory.count
-    assert_equal [10, 13, 10, 16, 10], CommissionHistory.pluck(:commission_after)
-    assert_equal [13, 10, 16, 10, 19], CommissionHistory.pluck(:commission_before)
+    assert_equal [10.0, 16.0, 10.0, 13.0, 10.0], CommissionHistory.pluck(:commission_after)
+    assert_equal [19.0, 10.0, 16.0, 10.0, 13.0], CommissionHistory.pluck(:commission_before)
   end
 end
