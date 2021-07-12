@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 2021_07_09_093055) do
     t.string "software_version"
     t.float "skipped_vote_all_median"
     t.float "best_skipped_vote"
+    t.float "skipped_slot_all_average"
+    t.float "skipped_slot_all_median"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"

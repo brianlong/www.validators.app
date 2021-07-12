@@ -48,7 +48,7 @@
     @include font-size-larger;
   }
   &-md {
-    font-weight: $font-weight-bold-secondary;
+    font-weight: $font-weight-normal;
     border-radius: 30px;
     padding: 14px 22px;
     @include font-size-base;
@@ -65,7 +65,7 @@
   &-xs {
     font-weight: $font-weight-normal;
     border-radius: 24px;
-    padding: 12px 16px;
+    padding: 11px 15px;
     @include font-size-smaller;
     @media(max-width: $screen-xs-max) {
       padding: 9px 11px;

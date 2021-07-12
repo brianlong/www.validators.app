@@ -7,15 +7,15 @@
   <table class='table table-block-sm mb-0'>
     <tbody>
     <tr>
-      <td><strong>Network:</strong></td>
+      <td class="col-lg-3"><strong>Network:</strong></td>
       <td><%= params[:network] %></td>
     </tr>
     <tr>
-      <td><strong>Vote Account:</strong></td>
+      <td class="col-lg-3"><strong>Vote Account:</strong></td>
       <td><%= @vote_account.account %></td>
     </tr>
     <tr>
-      <td><strong>Identity Account:</strong></td>
+      <td class="col-lg-3"><strong>Identity Account:</strong></td>
       <td>
         <%= link_to @vote_account.validator.account, validator_url(
           network: params[:network],
@@ -24,7 +24,7 @@
       </td>
     </tr>
     <tr>
-      <td><strong>Commission:</strong></td>
+      <td class="col-lg-3"><strong>Commission:</strong></td>
       <td><%= @vote_account.vote_account_histories.last.commission rescue 'N/A' %> &percnt;</td>
     </tr>
     </tbody>

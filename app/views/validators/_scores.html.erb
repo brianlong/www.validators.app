@@ -18,11 +18,11 @@
      title="Security Report Score = <%= validator.security_report_score.to_i %>"></i>&nbsp;
 
   <% if above_33percent_concentration?(validator) %>
-    <i class="fas fa-minus-circle <%= score_class %>" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
+    <i class="fas fa-minus-circle text-warning" title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
   <% end %>
 
   <% if validator.data_center_concentration_score < 0 %>
-    <i class="fas fa-minus-circle <%= score_class %>" title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>&nbsp;
+    <i class="fas fa-minus-circle text-warning" title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>&nbsp;
   <% end %>
 
   (<span class="d-inline-block d-lg-none">Total:&nbsp;</span><%= validator.total_score %>)

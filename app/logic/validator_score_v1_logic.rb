@@ -245,6 +245,11 @@ module ValidatorScoreV1Logic
       avg_skipped_slot_pct_all = vbh_query.average_skipped_slot_percent
       med_skipped_slot_pct_all = vbh_query.median_skipped_slot_percent
 
+      p.payload[:this_batch].update(
+        skipped_slot_all_average: (avg_skipped_slot_pct_all.to_f*100).round(1),
+        skipped_slot_all_median: (med_skipped_slot_pct_all.to_f*100).round(1)
+      )
+
       vbh_sql = <<-SQL_END
         SELECT vbh.validator_id, vbh.skipped_slot_percent, vbh.skipped_slot_percent_moving_average
         FROM validator_block_histories vbh

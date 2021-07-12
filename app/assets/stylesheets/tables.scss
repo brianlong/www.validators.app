@@ -8,14 +8,17 @@ table, .table {
     background-color: $table-lines-color;
     th {
       border: none;
-      padding: $padding-standard 20px;
+      padding: $padding-standard;
     }
   }
 
   .subhead {
     @include font-size-smaller;
     background-color: darken($table-lines-color, 4%);
-    td { border-top: 1px solid $table-lines-color; }
+    td {
+      border-top: 1px solid $table-lines-color;
+      padding: $padding-standard;
+    }
   }
 
   tbody {
@@ -29,85 +32,17 @@ table, .table {
       background-color: darken($card-background-color, 2%);
     }
     td {
-      padding: $padding-standard 20px;
+      padding: $padding-standard;
       border-top: 1px solid $table-lines-color;
     }
   }
 
-  .avatar-column {
-    width: 75px;
-    text-align: center;
-    padding: 25px 0 0 0;
-    .avatar {
-      padding-bottom: 5px;
-      .img-circle-medium-private {
-        display: inline-block;
-      }
-    }
-  }
-
-  .name-column {
-    width: 190px;
-    padding-left: 0;
-    padding-right: 5px;
-    @media(max-width: $screen-lg-max) {
-      padding-left: 20px;
-    }
-  }
-
-  .category-column {
-    width: 28%;
-    @media(max-width: $screen-md-max) {
-      width: 26%;
-    }
-    @media(max-width: $screen-xs-max) {
-      width: 37%;
-    }
-  }
-
-  .chart-column {
-    width: 22%;
-    padding: 25px $padding-standard 10px $padding-standard;
-    @media(max-width: $screen-lg-max) {
-      width: 25%;
-    }
-
-    .chart-top-container {
-      position: absolute;
-      padding-left: 28px;
-      width: 19%;
-    }
-    .chart-top-value {
-      font-size: 11px;
-      line-height: 9px;
-      color: #979797;
-      margin-top: -12px;
-      text-align: right;
-    }
-  }
-
-  .wider-column {
-    min-width: 180px;
-  }
-
-  .medium-column {
-    width: 20%;
+  .col-sm {
     @media(max-width: $screen-sm-max) {
-      word-break: break-all;
-      min-width: 150px;
-    }
-  }
-
-  .narrower-column {
-    width: 17%;
-    @media(max-width: $screen-md-max) {
-      min-width: 140px;
-    }
-  }
-
-  .narrow-column {
-    @media(max-width: $screen-md-max) {
-      min-width: 135px;
+      &-120 { min-width: 120px;}
+      &-130 { min-width: 130px;}
+      &-140 { min-width: 140px;}
+      &-170 { min-width: 170px;}
     }
   }
 }
@@ -141,42 +76,45 @@ table, .table {
   width: 100%;
   table-layout: fixed;
 
-  .percent-column {
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 130px;
+  .avatar-column {
+    width: 80px;
+    text-align: center;
+    padding: 0;
+    .avatar {
+      .img-circle-medium-private {
+        display: inline-block;
+      }
+    }
+  }
+
+  .name-column {
+    min-width: 200px;
+    padding-left: 0;
+    padding-right: 5px;
+  }
+
+  .chart-column {
+    width: 18%;
+    padding: 20px 30px 10px 10px;
   }
 
   @media(max-width: $screen-lg-max) {
-    .percent-column {
-      width: 100px;
-      padding-left: 20px;
-      padding-right: 20px;
-    }
     .avatar-column { display: none !important; }
+    .name-column { padding-left: 20px; }
   }
 
   @media(max-width: $screen-md-max) {
     thead { display: none; }
     .subhead { display: none; }
-    .percent-column, .chart-column {
-      padding-top: 0;
+    .name-column {
+      line-height: 25px;
+      padding-bottom: 0;
     }
-    .chart-top-container {
-      padding-left: 23px;
-      width: 89%;
-    }
-    .chart-link.active {
-      color: $link-color-secondary;
-      text-decoration: underline;
-    }
-  }
-
-  @media(max-width: $screen-xs-max) {
-    .chart-top-container {
-      padding-left: 25px;
-      width: 84%;
+    .chart-column {
+      padding: 3px 20px;
+      &:last-of-type {
+        padding-bottom: 15px;
+      }
     }
   }
-
 }
