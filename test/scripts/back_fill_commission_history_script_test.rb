@@ -7,7 +7,7 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
     v = create(:validator, network: 'testnet')
     commission = 10
     create(:batch, network: 'testnet')
-    create(:epoch_history, network: 'testnet', created_at: 10.minutes.ago)
+    create(:epoch_history, network: 'testnet', created_at: DateTime.new(2021, 7, 9) - 10.minutes)
 
     10.times do |i|
       this_commission = i % 3 == 0 ? commission + i : commission
@@ -15,7 +15,7 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
         account: v.account,
         commission: this_commission,
         network: v.network,
-        created_at: i.minutes.ago
+        created_at: DateTime.new(2021, 7, 9) - i.minutes
       )
     end
   end
