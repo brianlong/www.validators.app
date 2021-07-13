@@ -17,15 +17,12 @@
   <% if @validator.delinquent? %>
     <h5 class="text-danger">(delinquent)</h5>
   <% end %>
-</div>
-
-<div class="row mb-3">
-  <div class="solstake-url">
-    Delegate SOL to this validator: 
+  <h5 class="mt-2">
+    Delegate SOL to this validator:
     <%= link_to 'SolStake.io',
                 solstake_url(@validator.vote_account_last&.account),
                 target: :blank %>
-  </div>
+  </h5>
 </div>
 
 
