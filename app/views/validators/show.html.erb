@@ -11,19 +11,21 @@
   <h1 class="word-break">
     <%= @validator.name || @validator.account %>
   </h1>
-    <div class='solstake-url mt-4'>
-      Delegate SOL to this validator: 
-      <%= link_to 'SolStake.io',
-                solstake_url(@validator.vote_account_last&.account),
-                target: :blank %>
-    </div>
-
   <% if @validator.private_validator? %>
     <h5 class="text-danger">(Private Validator)</h5>
   <% end %>
   <% if @validator.delinquent? %>
     <h5 class="text-danger">(delinquent)</h5>
   <% end %>
+</div>
+
+<div class="row mb-3">
+  <div class="solstake-url">
+    Delegate SOL to this validator: 
+    <%= link_to 'SolStake.io',
+                solstake_url(@validator.vote_account_last&.account),
+                target: :blank %>
+  </div>
 </div>
 
 
