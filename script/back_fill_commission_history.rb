@@ -12,6 +12,7 @@
                                         .where(network: network)
                                         .where.not(commission: first_history.commission)
                                         .where('created_at > ?', first_history.created_at)
+                                        .where('created_at < ?', DateTime.new(2021, 7, 9))
                                         .order(created_at: :desc)
                                         .last
       break unless changed_history
