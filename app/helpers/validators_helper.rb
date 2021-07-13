@@ -72,4 +72,8 @@ module ValidatorsHelper
   def sort_software_versions(versions)
     versions.sort_by { |ver| ver.keys.first}.reverse
   end
+
+  def solstake_url(vote_key)
+    "https://solstake.io/#/app/validator/#{vote_key}"
+  end
 end
