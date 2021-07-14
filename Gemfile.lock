@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/Block-Logic/solana-rpc-ruby.git
+  revision: 07adf9fd4518228f63144181e2eed2503020f46f
+  branch: 177580443_create_wrapper_for_solana_rpc
+  specs:
+    solana_rpc_ruby (1.0.0.pre)
+
+GIT
   remote: https://github.com/faker-ruby/faker.git
   revision: 6867cf5c4dcd0710f860c9ce40607eadae413693
   branch: master
@@ -431,6 +438,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   sidekiq
+  solana_rpc_ruby!
   spring
   spring-watcher-listen (~> 2.0.0)
   timecop
