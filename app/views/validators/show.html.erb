@@ -58,7 +58,7 @@
           <td><strong>Software:</strong></td>
           <td>
             <%=
-              @validator.validator_score_v1&.software_version
+              @val_history&.software_version
             %>
           </td>
         </tr>
@@ -118,7 +118,7 @@
           <td><strong>Active Stake:</strong></td>
           <td>
             <%= number_with_delimiter(
-                  (@validator.validator_score_v1&.active_stake * 0.000000001).round
+                  (@val_history&.active_stake * 0.000000001).round
                 ) rescue 'N/A' %> SOL
           </td>
         </tr>
@@ -132,9 +132,11 @@
           %>
           <td class="<%= comm_class %>">
             <%= @validator.commission rescue 'N/A' %>&percnt;
-            <%= link_to '(See commission changes)',
-                        commission_histories_path(network: params[:network], validator_id: @validator.id),
-                        class: 'small' %>
+            <% if @validator.commission_histories.exists? %>
+              <%= link_to '(See commission changes)',
+                          commission_histories_path(network: params[:network], validator_id: @validator.id),
+                          class: 'small' %>
+            <% end %>
           </td>
         </tr>
 
@@ -153,7 +155,11 @@
               <strong>Scores:</strong>
             </td>
             <td>
-              <%= render 'validators/scores', validator: @validator %>
+              <% if @validator.scorable? %>
+                <%= render 'validators/scores', validator: @validator %>
+              <% else %>
+                inactive
+              <% end %>
             </td>
           </tr>
         </tbody>
