@@ -155,7 +155,11 @@
               <strong>Scores:</strong>
             </td>
             <td>
-              <%= render 'validators/scores', validator: @validator %>
+              <% if @validator.scorable? %>
+                <%= render 'validators/scores', validator: @validator %>
+              <% else %>
+                Inactive or zero-stake node. No score available
+              <% end %>
             </td>
           </tr>
         </tbody>
