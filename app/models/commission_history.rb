@@ -17,6 +17,10 @@
 #
 #  index_commission_histories_on_network                   (network)
 #  index_commission_histories_on_network_and_validator_id  (network,validator_id)
+#  index_commission_histories_on_validator_id              (validator_id)
+#
+# Foreign Keys
+#
 #  fk_rails_...  (validator_id => validators.id)
 #
 class CommissionHistory < ApplicationRecord
