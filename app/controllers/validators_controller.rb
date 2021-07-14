@@ -72,6 +72,19 @@ class ValidatorsController < ApplicationController
       render file: "#{Rails.root}/public/404.html" , status: 404
     else
       @val_history = @validator.validator_history_last
+      @val_histories = ValidatorHistory.where(
+        network: params[:network],
+        account: @validator.account
+      ).order(created_at: :asc).last(@history_limit)
+
+      @root_blocks = @val_histories.map do |vh|
+        ValidatorHistory.highest_root_block_for(params[:network], vh.batch_uuid) - vh.root_block
+      end
+
+      @vote_blocks = @val_histories.map do |vh|
+        ValidatorHistory.highest_last_vote_for(params[:network], vh.batch_uuid) - vh.last_vote
+      end
+
       @validator.validator_block_histories
                 .order('id desc')
                 .limit(@history_limit)
