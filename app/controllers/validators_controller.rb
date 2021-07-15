@@ -33,7 +33,7 @@ class ValidatorsController < ApplicationController
         ValidatorBlockHistoryQuery.new(params[:network], @batch.uuid)
 
       @skipped_slot_average =
-        validator_block_history_query.average_skipped_slot_percent
+        validator_block_history_query.scorable_average_skipped_slot_percent
       @skipped_slot_median =
         validator_block_history_query.median_skipped_slot_percent
     end
@@ -71,6 +71,20 @@ class ValidatorsController < ApplicationController
     if @validator.nil?
       render file: "#{Rails.root}/public/404.html" , status: 404
     else
+      @val_history = @validator.validator_history_last
+      @val_histories = ValidatorHistory.where(
+        network: params[:network],
+        account: @validator.account
+      ).order(created_at: :asc).last(@history_limit)
+
+      @root_blocks = @val_histories.map do |vh|
+        ValidatorHistory.highest_root_block_for(params[:network], vh.batch_uuid) - vh.root_block
+      end
+
+      @vote_blocks = @val_histories.map do |vh|
+        ValidatorHistory.highest_last_vote_for(params[:network], vh.batch_uuid) - vh.last_vote
+      end
+
       @validator.validator_block_histories
                 .order('id desc')
                 .limit(@history_limit)
@@ -78,15 +92,12 @@ class ValidatorsController < ApplicationController
                 .each do |vbh|
 
         i += 1
-        batch_stats = ValidatorBlockHistoryStat.find_by(
-          network: params[:network],
-          batch_uuid: vbh.batch_uuid
-        )
+        batch_stats = ValidatorBlockHistoryQuery.new(params[:network], vbh.batch_uuid)
 
         @data[i] = {
           skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
           skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-          cluster_skipped_slot_percent_moving_average: batch_stats.skipped_slot_percent_moving_average.to_f * 100.0
+          cluster_skipped_slot_percent_moving_average: batch_stats.average_skipped_slot_percent * 100
         }
       end
     end

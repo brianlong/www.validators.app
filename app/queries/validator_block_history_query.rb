@@ -25,6 +25,13 @@ class ValidatorBlockHistoryQuery < ApplicationQuery
       for_batch.average(:skipped_slot_percent_moving_average)
   end
 
+  def scorable_average_skipped_slot_percent
+    @average_skipped_slot_percent ||=
+      for_batch.joins(:validator)
+               .where('validator.is_rpc': false, 'validator.is_active': true)
+               .average(:skipped_slot_percent_moving_average)
+  end
+
   def median_skipped_slot_percent
     @median_skipped_slot_percent ||=
       for_batch.median(:skipped_slot_percent_moving_average)

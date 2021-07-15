@@ -34,27 +34,30 @@
         <table id="validators-table" class='table table-block-sm'>
           <thead>
           <tr>
-            <th class="avatar-column">#</th>
+            <th class="avatar-column align-middle">#</th>
             <th class="name-column pr-1">
               Name <small class="text-muted">(Commission)</small><br />
-              Active Stake <small class="text-muted">(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
+              Active Stake
+              <small class="text-muted">
+                (<%= number_to_human(lamports_to_sol(@total_active_stake),
+                                     format:'%n%u',
+                                     units: { thousand: 'K', million: 'M', billion: 'B' }) %>)
+              </small><br />
               Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='percent-column'>
-              Skipped Vote&nbsp;&percnt;
-              <a data-toggle="tooltip" data-html="true" title="Distance from leader">
-                <i class="fas fa-question-circle ml-1"></i>
-              </a>
+            <th class='percent-column align-middle'>
+              Skipped Vote&nbsp;&percnt;<br />
+              <small class="text-muted">Dist from leader</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column text-right pb-3 align-middle'>
               Root Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column text-right pb-3 align-middle'>
               Vote Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column text-right pb-3 align-middle'>
               Skipped Slot&nbsp;&percnt;<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
@@ -63,24 +66,24 @@
           <tr class="subhead">
             <td class="avatar-column"></td>
             <td></td>
-            <td class="percent-column">
+            <td class="percent-column align-middle">
               Best: <%= number_to_percentage((100 - @batch.best_skipped_vote.to_f * 100.0), precision: 2) %>
             </td>
-            <td class="text-right">
+            <td class="text-right align-middle">
               <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
                 Md: <%= @batch.root_distance_all_median %>
                 <br />
                 Av: <%= @batch.root_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td class="text-right">
+            <td class="text-right align-middle">
               <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
                 Md: <%= @batch.vote_distance_all_median %>
                 <br />
                 Av: <%= @batch.vote_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td class="text-right">
+            <td class="text-right align-middle">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
@@ -99,7 +102,7 @@
           <% @validators.each do |validator| %>
             <% i += 1 %>
             <tr id="row-<%=i%>">
-              <td class="avatar-column">
+              <td class="avatar-column align-middle">
                 <div class="avatar">
                   <% if validator.private_validator? %>
                     <div class="img-circle-medium-private">
@@ -111,12 +114,9 @@
                     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
                   <% end %>
                 </div>
-                <% if validator.delinquent? %>
-                  <small class="text-danger">delinquent</small>
-                <% end %>
               </td>
 
-              <td class="name-column">
+              <td class="name-column align-middle">
                 <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                             class: 'font-weight-bold' do %>
                   <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
@@ -135,6 +135,9 @@
                 <br />
                 <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
                 <%= render 'validators/scores', validator: validator %>
+                <% if validator.delinquent? %>
+                  <small class="text-danger">delinquent</small>
+                <% end %>
               </td>
 
               <!-- SKIPPED VOTE % -->

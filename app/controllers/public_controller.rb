@@ -33,7 +33,7 @@ class PublicController < ApplicationController
         ValidatorBlockHistoryQuery.new(params[:network], @batch.uuid)
 
       @skipped_slot_average =
-        validator_block_history_query.average_skipped_slot_percent
+        validator_block_history_query.scorable_average_skipped_slot_percent
       @skipped_slot_median =
         validator_block_history_query.median_skipped_slot_percent
 
