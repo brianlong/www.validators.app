@@ -403,8 +403,6 @@ module SolanaLogic
 
       epoch_json = solana_client(p.payload[:config_urls]).get_epoch_info.result
 
-      puts p.payload[:epoch] == epoch_json['epoch']
-
       unless p.payload[:epoch] == epoch_json['epoch']
         Batch.where(uuid: p.payload[:batch_uuid]).destroy_all
         EpochHistory.where(batch_uuid: p.payload[:batch_uuid]).destroy_all
