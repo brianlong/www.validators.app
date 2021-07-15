@@ -191,16 +191,13 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
-        <!-- Block History Chart -->
-        <% 
-           line_color = chart_line_color(@validator.score.root_distance_score)
-           fill_color = chart_fill_color(@validator.root_distance_score)
-        %>
-        <%= render 'validators/spark_line_block',
-                   account: @validator.account,
-                   vector_block: @root_blocks,
-                   line_color: line_color,
-                   fill_color: fill_color
+        <h2 class="text-center">Block History</h2>
+        <%= render 'validators/spark_line_chart',
+                   chart_name: "spark_line_block_distance_#{@validator.account}",
+                   vector: @root_blocks,
+                   line_color: SPARK_LINE_2,
+                   fill_color: SPARK_LINE_2_TRANSPARENT,
+                   label: 'Block Diff'
         %>
       </div>
     </div>
@@ -209,16 +206,13 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
-        <!-- Vote History Chart -->
-        <% 
-           line_color = chart_line_color(@validator.score.vote_distance_score)
-           fill_color = chart_fill_color(@validator.vote_distance_score)
-        %>
-        <%= render 'validators/spark_line_vote',
-                   account: @validator.account,
-                   vector_vote: @vote_blocks,
-                   line_color: line_color,
-                   fill_color: fill_color
+        <h2 class="text-center">Vote History</h2>
+        <%= render 'validators/spark_line_chart',
+                   chart_name: "spark_line_vote_distance_#{@validator.account}",
+                   vector: @vote_blocks,
+                   line_color: SPARK_LINE_2,
+                   fill_color: SPARK_LINE_2_TRANSPARENT,
+                   label: 'Vote Diff'
         %>
       </div>
     </div>
@@ -229,7 +223,7 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
-        <!-- Skipped Slot History -->
+        <h2 class="text-center">Skipped Slot History</h2>
         <%= render partial: 'block_history_chart' %>
       </div>
     </div>

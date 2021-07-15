@@ -1,54 +1,70 @@
-<% # EXAMPLE: render 'validators/basic_list', scores: ValidatorScoreV1.all %>
+<canvas id="<%= local_assigns[:chart_name] %>"></canvas>
+<script type="text/javascript">
+    var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
 
-<div class="card mb-4">
-  <table class='table mb-0 table-block-sm' id='validators-table'>
-    <thead>
-      <tr class="d-none d-lg-table-row">
-        <th class="avatar-column d-none d-lg-table-cell">&nbsp;</th>
-        <th class="name-column pr-1">
-          Name <small class="text-muted">(Commission)</small><br />
-          Active Stake <small class="text-muted">( % of total )</small><br />
-          IP<br />
-          Gateway<br />
-          Scores <small class="text-muted">(total)</small>
-        </th>
-        <th class='percent-column'>
-          Skipped Vote&nbsp;&percnt;
-          <a data-toggle="tooltip" data-html="true" title="Distance from leader">
-            <i class="fas fa-question-circle ml-1"></i>
-          </a>
-        </th>
-        <th class='chart-column text-right'>
-          Root Distance<br />
-          <small class="text-muted">60-Min Chart</small>
-        </th>
-        <th class='chart-column text-right'>
-          Vote Distance<br />
-          <small class="text-muted">60-Min Chart</small>
-        </th>
-        <th class='chart-column text-right'>
-          Skipped Slot&nbsp;&percnt;<br />
-          <small class="text-muted">60-Min Chart</small>
-        </th>
-      </tr>
-      <tr class="d-lg-none">
-        <th>
-          Validators
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <%
-        i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
-              0
-            else
-              (params[:page].to_i - 1) * items_per_page
-            end
-      %>
-      <% scores.each do |sc| %>
-        <% i += 1 %>
-        <%= render '/validators/as_row', validator: sc.validator, batch: batch, i: i, score_ip: Ip.where(address: sc.ip_address).first %>   
-      <% end %>
-    </tbody>
-  </table>
-</div>
+        // The data for our dataset
+        data: {
+            // x-axis labels
+            labels: <%= local_assigns[:vector].to_a.count.downto(1).to_a %>,
+            // An Array of JSON hashes for each dataset to plot. The y-axis is
+            // dynamicly calculated. Look for othe options to control the y-axis if desired.
+            datasets: [
+                {
+                    label: ' <%= local_assigns[:label] %> ',
+                    fill: true,
+                    backgroundColor: '<%= local_assigns[:fill_color] %>',
+                    borderColor: '<%= local_assigns[:line_color] %>',
+                    borderWidth: 1,
+                    radius: 0,
+                    data: <%= local_assigns[:vector] %>
+                }
+            ]
+        },
+
+        // Configuration options go here
+        options: {
+            animation: { duration: 0 }, // general animation time
+            elements: { line: { tension: 0 } }, // disables bezier curves
+            hover: { mode: null },
+            tooltips: { enabled: false },
+            responsiveAnimationDuration: 0, // animation duration after a resize
+            legend: {
+                labels: {
+                    fontColor: '<%= DARK_GREY %>'
+                },
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    ticks: {display: false},
+                    gridLines: {display: false},
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Previous <%= local_assigns[:vector].to_a.count %> Observations",
+                        fontColor: '<%= DARK_GREY %>'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        min: 0,
+                        padding: 5
+                    },
+                    gridLines: {
+                        display: true,
+                        zeroLineColor: '<%= CHART_LINE %>',
+                        color: '<%= CHART_LINE %>'
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Dist Behind Leader',
+                        fontColor: '<%= DARK_GREY %>'
+                    }
+                }]
+            }
+        }
+    });
+</script>
