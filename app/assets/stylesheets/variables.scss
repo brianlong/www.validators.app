@@ -20,11 +20,9 @@ $card-background-color: darken($background-color, 3%);
 $card-border-color: #342f4b;
 $table-border-color: darken($card-border-color, 5%);
 
-// Score colours:
+// Score and chart colors:
 $blue: #0091f2;
 $grey: #cacaca;
-
-// Chart colors:
 $green-transparent: rgba(0, 206, 153, 0.4);
 $orange-transparent: rgba(255, 193, 7, 0.4);
 $red-transparent: rgba(255, 82, 98, 0.4);
