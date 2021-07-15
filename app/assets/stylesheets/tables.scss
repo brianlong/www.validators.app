@@ -37,7 +37,7 @@ table, .table {
   .avatar-column {
     width: 75px;
     text-align: center;
-    padding: 25px 0 0 0;
+    padding: 0;
     .avatar {
       padding-bottom: 5px;
       .img-circle-medium-private {
@@ -144,12 +144,11 @@ table, .table {
   .percent-column {
     padding-left: 10px;
     padding-right: 10px;
-    width: 130px;
+    width: 135px;
   }
 
   @media(max-width: $screen-lg-max) {
     .percent-column {
-      width: 100px;
       padding-left: 20px;
       padding-right: 20px;
     }

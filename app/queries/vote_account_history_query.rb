@@ -80,7 +80,7 @@ class VoteAccountHistoryQuery < ApplicationQuery
 
   def top_skipped_vote_percent
     @top_skipped_vote_percent ||=
-      vote_account_history_skipped_moving_average.sort.reverse
+      vote_account_history_skipped_moving_average.sort
   end
 
   def skipped_votes_stats(with_history: false)
