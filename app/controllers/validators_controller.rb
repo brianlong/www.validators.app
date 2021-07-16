@@ -71,10 +71,14 @@ class ValidatorsController < ApplicationController
     if @validator.nil?
       render file: "#{Rails.root}/public/404.html" , status: 404
     else
-      @val_history = @validator.validator_history_last
+      vote_account = @validator.vote_account_last
+      @val_history = ValidatorHistory.where(
+        network: params[:network],
+        vote_account: vote_account
+      ).last
       @val_histories = ValidatorHistory.where(
         network: params[:network],
-        account: @validator.account
+        vote_account: vote_account
       ).order(created_at: :asc).last(@history_limit)
 
       @root_blocks = @val_histories.map do |vh|
