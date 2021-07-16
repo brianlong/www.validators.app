@@ -3,7 +3,7 @@
 # PublicController
 class PublicController < ApplicationController
   def index
-    validators = Validator.where(network: params[:network])
+    validators = Validator.where(network: index_params[:network])
                           .scorable
                           .joins(:validator_score_v1)
                           .index_order(validate_order)
@@ -11,13 +11,13 @@ class PublicController < ApplicationController
     @validators_count = validators.size
 
     unless params[:q].blank?
-      validators = ValidatorSearchQuery.new(validators).search(params[:q])
+      validators = ValidatorSearchQuery.new(validators).search(index_params[:q])
     end
 
-    @validators = validators.page(params[:page])
+    @validators = validators.page(index_params[:page])
 
     @software_versions = Report.where(
-      network: params[:network],
+      network: index_params[:network],
       name: 'report_software_versions'
     ).last
 
@@ -25,12 +25,12 @@ class PublicController < ApplicationController
 
     if @batch
       @this_epoch = EpochHistory.where(
-        network: params[:network],
+        network: index_params[:network],
         batch_uuid: @batch.uuid
       ).first
 
       validator_block_history_query =
-        ValidatorBlockHistoryQuery.new(params[:network], @batch.uuid)
+        ValidatorBlockHistoryQuery.new(index_params[:network], @batch.uuid)
 
       @skipped_slot_average =
         validator_block_history_query.scorable_average_skipped_slot_percent
@@ -38,7 +38,7 @@ class PublicController < ApplicationController
         validator_block_history_query.median_skipped_slot_percent
 
       validator_history =
-        ValidatorHistoryQuery.new(params[:network], @batch.uuid)
+        ValidatorHistoryQuery.new(index_params[:network], @batch.uuid)
       @total_active_stake = validator_history.total_active_stake
 
       at_33_stake_validator = validator_history.at_33_stake&.validator
