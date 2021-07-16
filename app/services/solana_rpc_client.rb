@@ -17,13 +17,13 @@ class SolanaRpcClient
 
   def mainnet_client
     @mainnet_client ||= SolanaRpcRuby::MethodsWrapper.new(
-      cluster: 'https://api.mainnet-beta.solana.com'
+      cluster: MAINNET_CLUSTER_VERSION
     )
   end
 
   def testnet_client
     @mainnet_client ||= SolanaRpcRuby::MethodsWrapper.new(
-      cluster: 'https://api.testnet.solana.com'
+      cluster: TESTNET_CLUSTER_VERSION
     )
   end
 end
