@@ -332,6 +332,7 @@ GEM
       redis (>= 4.2.0)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
+    solana_rpc_ruby (1.0.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -431,6 +432,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   sidekiq
+  solana_rpc_ruby
   spring
   spring-watcher-listen (~> 2.0.0)
   timecop
