@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_09_093055) do
+ActiveRecord::Schema.define(version: 2021_07_16_135023) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -308,6 +308,7 @@ ActiveRecord::Schema.define(version: 2021_07_09_093055) do
     t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
+    t.index ["network", "vote_account"], name: "index_validator_histories_on_network_and_vote_account"
   end
 
   create_table "validator_ips", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

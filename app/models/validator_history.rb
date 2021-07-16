@@ -25,6 +25,7 @@
 #  delinquent_by_account_index                              (account,delinquent,created_at)
 #  index_validator_histories_on_network_and_account_and_id  (network,account,id)
 #  index_validator_histories_on_network_and_batch_uuid      (network,batch_uuid)
+#  index_validator_histories_on_network_and_vote_account    (network,vote_account)
 #
 class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
