@@ -8,6 +8,8 @@ class SolanaLogicTest < ActiveSupport::TestCase
 
   def setup
     @testnet_url = 'https://api.testnet.solana.com'
+    @mainnet_url = 'https://api.mainnet-beta.solana.com'
+
     @local_url = 'http://127.0.0.1:8899'
     # Create our initial payload with the input values
     @initial_payload = {
@@ -198,6 +200,34 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_difference 'EpochHistory.count', -1 do
         p.then(&check_epoch)
       end
+    end
+  end
+
+  test 'solana_client_request returns data found in first cluster' do
+    clusters = [
+      @mainnet_url,
+      @testnet_url
+    ]
+
+    method = :get_epoch_info
+
+    VCR.use_cassette('solana_client_request') do
+      result = solana_client_request(clusters, :get_epoch_info)
+      assert_equal result["epoch"], 202
+    end
+  end
+
+  test 'solana_client_request returns data even if one of the clusters is incorrect' do
+    clusters = [
+      @local_url,
+      @testnet_url
+    ]
+
+    method = :get_epoch_info
+
+    VCR.use_cassette('solana_client_request incorrect cluster') do
+      result = solana_client_request(clusters, :get_epoch_info)
+      assert_equal result["epoch"], 209
     end
   end
 

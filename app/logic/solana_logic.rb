@@ -39,7 +39,10 @@ module SolanaLogic
 
   def epoch_get
     lambda do |p|
-      epoch_json = solana_client(p.payload[:config_urls]).get_epoch_info.result
+      epoch_json = solana_client_request(
+        p.payload[:config_urls],
+        :get_epoch_info
+      )
 
       epoch = EpochHistory.create(
         network: p.payload[:network],
@@ -99,7 +102,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      validators_json = solana_client(p.payload[:config_urls]).get_cluster_nodes.result
+      validators_json = solana_client_request(
+        p.payload[:config_urls], 
+        :get_cluster_nodes
+      )
 
       validators = {}
       validators_json.each do |hash|
@@ -122,7 +128,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      vote_accounts_json = solana_client(p.payload[:config_urls]).get_vote_accounts.result['current']
+      vote_accounts_json = solana_client_request(
+        p.payload[:config_urls], 
+        :get_vote_accounts
+      )['current']
 
       vote_accounts = {}
 
@@ -401,7 +410,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      epoch_json = solana_client(p.payload[:config_urls]).get_epoch_info.result
+      epoch_json = solana_client_request(
+        p.payload[:config_urls],
+        :get_epoch_info
+      )
 
       unless p.payload[:epoch] == epoch_json['epoch']
         Batch.where(uuid: p.payload[:batch_uuid]).destroy_all
@@ -457,8 +469,18 @@ module SolanaLogic
     []
   end
 
-  def solana_client(cluster)
-    cluster_url = cluster.first
-    SolanaRpcClient.new(cluster: cluster_url).client
+  # Clusters array, method symbol
+  def solana_client_request(clusters, method)
+    clusters.each do |cluster_url|
+      client = SolanaRpcClient.new(cluster: cluster_url).client
+      result = client.public_send(method).result
+      
+      return result unless result.blank?
+    rescue SolanaRpcRuby::ApiError => e
+      Appsignal.send_error(e) if Rails.env.in?(['stage', 'production'])
+      message = "Request to solana RPC failed:\n Method: #{method}\nCluster: #{cluster_url}\nCLASS: #{e.class}\n#{e.message}"
+      Rails.logger.error(message)
+      nil
+    end
   end
 end
