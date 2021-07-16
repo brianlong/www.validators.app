@@ -101,12 +101,22 @@ class SolanaLogicTest < ActiveSupport::TestCase
           ],
           network: 'testnet'
         }
+
         p = Pipeline.new(200, fail_over_payload)
                     .then(&batch_set)
                     .then(&epoch_get)
 
-        assert_equal 500, p.code
-        assert_equal p.errors.class, SolanaRpcRuby::ApiError
+        assert_equal 200, p.code
+        assert_not_nil p.payload[:epoch]
+        assert_not_nil p.payload[:batch_uuid]
+
+        # Find the EpochHistory record and show that the values match
+        epoch = EpochHistory.where(batch_uuid: p.payload[:batch_uuid]).first
+        assert_equal p.payload[:epoch], epoch.epoch
+        assert_equal p.payload[:batch_uuid], epoch.batch_uuid
+        assert_not_nil epoch.current_slot
+        assert_not_nil epoch.slot_index
+        assert_not_nil epoch.slots_in_epoch
       end
     end
   end
