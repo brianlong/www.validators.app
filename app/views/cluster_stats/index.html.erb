@@ -1,21 +1,47 @@
 <h1 class="page-header"><%= params[:network].capitalize %> Stats</h1>
 
-<% unless @stats.empty? %>
-  <strong>Top staked validators</strong><br />
-  <%= @stats[:top_staked_validators].first(50) %><br /><br />
 
-  <strong>Top skipped vote validators</strong><br />
-  <%= @stats[:top_skipped_vote_validators].first(50) %><br /><br />
+<div class="card">
+  <div class="card-content">
+    <h3 class="card-heading mb-4">Top Validators by:</h3>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#menu1">Stake</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu2">Skipped Vote&nbsp;&percnt;</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu3">Root Distance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu4">Vote Distance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu5">Skipped Slot&nbsp;&percnt;</a>
+      </li>
+    </ul>
 
-  <strong>Top root distance validators</strong><br />
-  <%= @stats[:top_root_distance_validators].first(50) %><br /><br />
-
-  <strong>Top vote distance validators</strong><br />
-  <%= @stats[:top_vote_distance_validators].first(50) %><br /><br />
-
-  <strong>Top skipped slot validators</strong><br />
-  <%= @stats[:top_skipped_slot_validators].first(50) %><br /><br />
-<% end %>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane container active" id="menu1">
+        <%= @stats[:top_staked_validators].first(50) %>
+      </div>
+      <div class="tab-pane container fade" id="menu2">
+        <%= @stats[:top_skipped_vote_validators].first(50) %>
+      </div>
+      <div class="tab-pane container fade" id="menu3">
+        <%= @stats[:top_root_distance_validators].first(50) %>
+      </div>
+      <div class="tab-pane container fade" id="menu4">
+        <%= @stats[:top_vote_distance_validators].first(50) %>
+      </div>
+      <div class="tab-pane container fade" id="menu5">
+        <%= @stats[:top_skipped_slot_validators].first(50) %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="row mb-4">
   <div class="col-12 col-md-6">
@@ -104,7 +130,7 @@
             </div>
           </div>
           <div class="stat col-7 my-auto">
-            <div class="text-muted"><i class="fas fa-circle text-success"></i>Best:</div>
+            <div class="text-muted"><i class="fas fa-trophy text-success"></i>Best:</div>
             <div class="h0 text-success">
               <%= number_to_percentage @stats[:skipped_votes_percent][:best].to_f*100, precision: 2 %>
             </div>
