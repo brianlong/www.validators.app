@@ -2,13 +2,13 @@
 
 .nav-tabs {
   border-bottom: none;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
 
   .nav-item {
     margin-bottom: 0;
 
     .nav-link {
+      margin-bottom: 20px;
       letter-spacing: 1px;
       @include font-size-base;
       border: 2px solid $green;

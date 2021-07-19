@@ -64,10 +64,19 @@ strong, .font-weight-bold {
     font-size: 15px;
     margin-right: 6px;
   }
-  .h0 {
-    font-size: 50px;
+  &-title-1 {
     font-weight: $font-weight-bold-secondary;
     @include font-family-alternative();
+    font-size: 52px;
+    @media(max-width: $screen-md-max) { font-size: $font-size-h1*.85; }
+    @media(max-width: $screen-sm-max) { font-size: $font-size-h1*.8; }
+  }
+  &-title-2 {
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+    font-size: $font-size-h1;
+    @media(max-width: $screen-md-max) { font-size: 34px; }
+    @media(max-width: $screen-sm-max) { font-size: 30px; }
   }
   small .fas {
     font-size: 11px;
