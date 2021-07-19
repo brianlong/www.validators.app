@@ -4,41 +4,141 @@
 <div class="card">
   <div class="card-content">
     <h3 class="card-heading mb-4">Top Validators by:</h3>
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#menu1">Stake</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu2">Skipped Vote&nbsp;&percnt;</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu3">Root Distance</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu4">Vote Distance</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu5">Skipped Slot&nbsp;&percnt;</a>
-      </li>
-    </ul>
+  </div>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <div class="tab-pane container active" id="menu1">
-        <%= @stats[:top_staked_validators].first(50) %>
-      </div>
-      <div class="tab-pane container fade" id="menu2">
-        <%= @stats[:top_skipped_vote_validators].first(50) %>
-      </div>
-      <div class="tab-pane container fade" id="menu3">
-        <%= @stats[:top_root_distance_validators].first(50) %>
-      </div>
-      <div class="tab-pane container fade" id="menu4">
-        <%= @stats[:top_vote_distance_validators].first(50) %>
-      </div>
-      <div class="tab-pane container fade" id="menu5">
-        <%= @stats[:top_skipped_slot_validators].first(50) %>
-      </div>
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#menu1">Stake</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu2">Skipped Vote&nbsp;&percnt;</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu3">Root Distance</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu4">Vote Distance</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu5">Skipped Slot&nbsp;&percnt;</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane active" id="menu1">
+      <table class='table mb-0'>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Validator</th>
+          <th>Stake</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @stats[:top_staked_validators].first(50).each.with_index do |v, index| %>
+          <tr>
+            <td><%= index + 1 %>.</td>
+            <td>Validator name</td>
+            <td><%= number_with_delimiter(v, delimiter: ',')  %></td>
+            <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tab-pane fade" id="menu2">
+      <table class='table mb-0'>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Validator</th>
+          <th>Skipped Vote</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @stats[:top_skipped_vote_validators].first(50).each.with_index do |v, index| %>
+          <tr>
+            <td><%= index + 1 %>.</td>
+            <td>Validator name</td>
+            <td><%= v.round(3) %></td>
+            <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tab-pane fade" id="menu3">
+      <table class='table mb-0'>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Validator</th>
+          <th>Root Distance</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @stats[:top_root_distance_validators].first(50).each.with_index do |v, index| %>
+          <tr>
+            <td><%= index + 1 %>.</td>
+            <td>Validator name</td>
+            <td><%= v.round(3) %></td>
+            <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tab-pane fade" id="menu4">
+      <table class='table mb-0'>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Validator</th>
+          <th>Vote Distance</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @stats[:top_vote_distance_validators].first(50).each.with_index do |v, index| %>
+          <tr>
+            <td><%= index + 1 %>.</td>
+            <td>Validator name</td>
+            <td><%= v.round(3) %></td>
+            <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tab-pane fade" id="menu5">
+      <table class='table mb-0'>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Validator</th>
+          <th>Skipped Slot</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @stats[:top_skipped_slot_validators].first(50).each.with_index do |v, index| %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td>Validator name</td>
+            <td><%= v.round(3) %></td>
+            <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
