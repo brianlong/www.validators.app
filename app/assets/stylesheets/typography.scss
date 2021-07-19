@@ -59,6 +59,21 @@ strong, .font-weight-bold {
   font-weight: $font-weight-bold-primary;
 }
 
+.stat {
+  .fas {
+    font-size: 15px;
+    margin-right: 6px;
+  }
+  .h0 {
+    font-size: 50px;
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+  }
+  small .fas {
+    font-size: 11px;
+  }
+}
+
 @for $i from 1 through 3 {
   h#{$i}, .h#{$i} {
     @include font-family-alternative();

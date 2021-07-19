@@ -7,85 +7,132 @@
   <% end %>
 <% end %>
 
-<div class="card h-100">
-  <div class="card-content">
-    <h3 class="card-heading mb-4">Root Distance</h3>
-    <div class="row px-4 px-lg-6 text-center">
-      <div class="col-6 col-md-3 mb-md-4">
-        <small class="text-muted">Minimum:</small>
-        <div class="h2 text-purple"><%= @stats[:root_distance][:min].to_i %></div>
-      </div>
-      <div class="col-6 col-md-3 mb-md-4">
-        <small class="text-muted">Maximum:</small>
-        <div class="h2 text-purple"><%= @stats[:root_distance][:max].to_i %></div>
-      </div>
-      <div class="col-6 col-md-3 mb-md-4">
-        <small class="text-muted">Median:</small>
-        <div class="h2 text-purple">
-          <%= @stats[:root_distance][:median].to_i %>
-        </div>
-      </div>
-      <div class="col-6 col-md-3 mb-md-4">
-        <small class="text-muted">Average:</small>
-        <div class="h2 text-purple">
-          <%= @stats[:root_distance][:average].to_f.round(1) %>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card h-100">
-  <div class="card-content">
-    <h3 class="card-heading mb-4">Vote Distance</h3>
-    <div class="row px-4 px-lg-6 text-center">
-      <div class="col-6 col-md-3 mb-md-4">
-        <small class="text-muted">Minimum:</small>
-        <div class="h2 text-purple"><%= @stats[:vote_distance][:min].to_i %></div>
-      </div>
-      <div class="col-6 col-md-3 mb-md-4">
-        <small class="text-muted">Maximum:</small>
-        <div class="h2 text-purple"><%= @stats[:vote_distance][:max].to_i %></div>
-      </div>
-      <div class="col-6 col-md-3 mb-md-4">
-        <small class="text-muted">Median:</small>
-        <div class="h2 text-purple"><%= @stats[:vote_distance][:median].to_i %></div>
-      </div>
-      <div class="col-6 col-md-3 mb-md-4">
-        <small class="text-muted">Average:</small>
-        <div class="h2 text-purple"><%= @stats[:vote_distance][:average].to_f.round(1) %></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    <div class="card h-100">
+<div class="row mb-4">
+  <div class="col-12 col-md-6">
+    <div class="card">
       <div class="card-content">
-        <h3 class="card-heading mb-4">Skipped Slots</h3>
-        <div class="row px-4 px-lg-6 text-center">
-          <div class="col-6 col-md-3 mb-md-4">
-            <small class="text-muted">Minimum:</small>
-            <div class="h2 text-purple"><%= @stats[:skipped_slots][:min].to_i %></div>
-          </div>
-          <div class="col-6 col-md-3 mb-md-4">
-            <small class="text-muted">Maximum:</small>
-            <div class="h2 text-purple"><%= @stats[:skipped_slots][:max].to_i %></div>
-          </div>
-          <div class="col-6 col-md-3 mb-md-4">
+        <h3 class="card-heading mb-4">Root Distance</h3>
+        <div class="row px-4 px-lg-5 mb-md-2">
+          <div class="stat col-5 my-auto">
             <small class="text-muted">Median:</small>
-            <div class="h2 text-purple">
-              <%= number_to_percentage @stats[:skipped_slots][:median].to_f*100, precision: 1 %>
+            <div class="h5 text-purple">
+              <%= @stats[:root_distance][:median].to_i %>
+            </div>
+            <small class="text-muted">Average:</small>
+            <div class="h5 text-purple">
+              <%= number_to_human(@stats[:root_distance][:average].to_f.round(1),
+                                  format:'%n%u',
+                                  units: { thousand: 'K', million: 'M', billion: 'B' }) %>
             </div>
           </div>
-          <div class="col-6 col-md-3 mb-md-4">
+          <div class="stat col-7 my-auto">
+            <div class="text-muted">
+              <i class="fas fa-long-arrow-alt-down text-purple"></i>Min &ndash;
+              <i class="fas fa-long-arrow-alt-up text-purple"></i>Max:
+            </div>
+            <div class="h1 text-purple">
+              <%= @stats[:root_distance][:min].to_i %> &ndash;
+              <%= number_to_human(@stats[:root_distance][:max].to_i,
+                                  format:'%n%u',
+                                  units: { thousand: 'K', million: 'M', billion: 'B' }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="card-heading mb-4">Vote Distance</h3>
+        <div class="row px-4 px-lg-5 mb-md-2">
+          <div class="stat col-5 my-auto">
+            <small class="text-muted">Median:</small>
+            <div class="h5 text-purple">
+              <%= @stats[:vote_distance][:median].to_i %>
+            </div>
             <small class="text-muted">Average:</small>
-            <div class="h2 text-purple">
+            <div class="h5 text-purple">
+              <%= number_to_human(@stats[:vote_distance][:average].to_f.round(1),
+                                  format:'%n%u',
+                                  units: { thousand: 'K', million: 'M', billion: 'B' }) %>
+            </div>
+          </div>
+          <div class="stat col-7 my-auto">
+            <div class="text-muted">
+              <i class="fas fa-long-arrow-alt-down text-purple"></i>Min &ndash;
+              <i class="fas fa-long-arrow-alt-up text-purple"></i>Max:
+            </div>
+            <div class="h1 text-purple">
+              <%= @stats[:vote_distance][:min].to_i %> &ndash;
+              <%= number_to_human(@stats[:vote_distance][:max].to_i,
+                                  format:'%n%u',
+                                  units: { thousand: 'K', million: 'M', billion: 'B' }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-12 col-md-6">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="card-heading mb-4">Skipped Vote&nbsp;&percnt;</h3>
+        <div class="row px-4 px-lg-5 mb-md-2">
+          <div class="stat col-5">
+            <small class="text-muted">Median:</small>
+            <div class="h5 text-success">
+              <%= number_to_percentage @stats[:skipped_votes_percent][:median].to_f*100, precision: 1 %>
+            </div>
+            <small class="text-muted">Average:</small>
+            <div class="h5 text-success">
+              <%= number_to_percentage @stats[:skipped_votes_percent][:average].to_f*100, precision: 1 %>
+            </div>
+          </div>
+          <div class="stat col-7 my-auto">
+            <div class="text-muted"><i class="fas fa-circle text-success"></i>Best:</div>
+            <div class="h0 text-success">
+              <%= number_to_percentage @stats[:skipped_votes_percent][:best].to_f*100, precision: 2 %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="card-heading mb-4">Skipped Slot&nbsp;&percnt;</h3>
+        <div class="row px-4 px-lg-5 mb-md-2">
+          <div class="stat col-5 my-auto">
+            <small class="text-muted">Median:</small>
+            <div class="h5 text-success">
+              <%= number_to_percentage @stats[:skipped_slots][:median].to_f*100, precision: 1 %>
+            </div>
+            <small class="text-muted">Average:</small>
+            <div class="h5 text-success">
               <%= number_to_percentage @stats[:skipped_slots][:average].to_f*100, precision: 1 %>
             </div>
           </div>
+          <div class="stat col-7 my-auto">
+            <div class="text-muted">
+              <i class="fas fa-long-arrow-alt-down text-success"></i>Min &ndash;
+              <i class="fas fa-long-arrow-alt-up text-success"></i>Max:
+            </div>
+            <div class="h0 text-success">
+              <%= @stats[:skipped_slots][:min].to_i %> &ndash; <%= @stats[:skipped_slots][:max].to_i %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
 <div class="row">
   <%= render 'validators/software_versions',
