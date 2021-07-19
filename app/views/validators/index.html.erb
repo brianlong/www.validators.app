@@ -289,7 +289,7 @@
 <% unless @validators.empty? %>
   <div class="row">
     <%= render 'validators/software_versions',
-               software_versions: @software_versions.payload,
+               software_versions: @software_versions&.payload,
                batch: @batch %>
     <%= render 'validators/stats' %>
   </div>

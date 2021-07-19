@@ -30,7 +30,7 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
   private
 
   def assert_data_for(network, data)
-    stats = assigns network.to_sym
+    stats = assigns :stats
 
     top_staked_validators =
       data[:validators].map { |v| v.validator_score_v1.active_stake }
