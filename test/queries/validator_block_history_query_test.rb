@@ -53,7 +53,7 @@ class ValidatorBlockHistoryQueryTest < ActiveSupport::TestCase
   end
 
   test 'top_skipped_slot_percent' do
-    expected = [0.83e0, 0.19e0, 0.12e0, 0.11e0]
+    expected = [0.11, 0.12, 0.19, 0.83]
     assert_equal expected, @query.top_skipped_slot_percent
   end
 
