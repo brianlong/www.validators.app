@@ -1,10 +1,20 @@
 <h1 class="page-header"><%= params[:network].capitalize %> Stats</h1>
 
 <% unless @stats.empty? %>
-  <% @stats.each do |key, value| %>
-    <strong><%= key %></strong><br />
-    <%= value %><br /><br />
-  <% end %>
+  <strong>Top staked validators</strong><br />
+  <%= @stats[:top_staked_validators].first(50) %><br /><br />
+
+  <strong>Top skipped vote validators</strong><br />
+  <%= @stats[:top_skipped_vote_validators].first(50) %><br /><br />
+
+  <strong>Top root distance validators</strong><br />
+  <%= @stats[:top_root_distance_validators].first(50) %><br /><br />
+
+  <strong>Top vote distance validators</strong><br />
+  <%= @stats[:top_vote_distance_validators].first(50) %><br /><br />
+
+  <strong>Top skipped slot validators</strong><br />
+  <%= @stats[:top_skipped_slot_validators].first(50) %><br /><br />
 <% end %>
 
 <div class="row mb-4">

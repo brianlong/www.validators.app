@@ -73,8 +73,7 @@ class ValidatorScoreQuery < ApplicationQuery
   def top_staked_validators
     # map(&:to_i) handles nils
     @top_staked_validators ||=
-      for_batch.pluck(:active_stake).map(&:to_i).sort
-
+      for_batch.pluck(:active_stake).map(&:to_i).sort.reverse
   end
 
   def vote_distance_stats(with_history: false)
