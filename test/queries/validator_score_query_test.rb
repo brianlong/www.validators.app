@@ -34,7 +34,7 @@ class ValidatorScoreQueryTest < ActiveSupport::TestCase
   end
 
   test 'top_staked_validators' do
-    expected = [0, 206356743321847, 206356743322528, 206356743324143, 206356743325097, 206356743325616]
+    expected = [206356743325616, 206356743325097, 206356743324143, 206356743322528, 206356743321847, 0]
 
     assert_equal expected, @vsq.top_staked_validators
   end
