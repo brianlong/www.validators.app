@@ -19,6 +19,7 @@ class ValidatorSearchQuery
     @relation.where(
       'name like :q or
       account like :q or
+      validator_score_v1s.software_version like :q or
       validator_score_v1s.data_center_key like :q or
       validators.id IN(:vacs)',
       q: "#{query}%",

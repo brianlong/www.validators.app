@@ -74,21 +74,39 @@ module SolanaLogic
       raise 'No results from `solana validators`' if \
         validators['validators'].blank?
 
+      validator_histories = {}
       # Create current validators
       validators['validators'].each do |validator|
-        ValidatorHistory.create(
-          network: p.payload[:network],
-          batch_uuid: p.payload[:batch_uuid],
-          account: validator['identityPubkey'],
-          vote_account: validator['voteAccountPubkey'],
-          commission: validator['commission'],
-          last_vote: validator['lastVote'],
-          root_block: validator['rootSlot'],
-          credits: validator['credits'],
-          active_stake: validator['activatedStake'],
-          software_version: validator['version'],
-          delinquent: validator['delinquent']
-        )
+        if existing_history = validator_histories[validator['identityPubkey']]
+          if existing_history.last_vote < validator['lastVote']
+            existing_history.update(
+              account: validator['identityPubkey'],
+              vote_account: validator['voteAccountPubkey'],
+              commission: validator['commission'],
+              last_vote: validator['lastVote'],
+              root_block: validator['rootSlot'],
+              credits: validator['credits'],
+              active_stake: validator['activatedStake'],
+              software_version: validator['version'],
+              delinquent: validator['delinquent']
+            )
+          end
+        else
+          vh = ValidatorHistory.create(
+            network: p.payload[:network],
+            batch_uuid: p.payload[:batch_uuid],
+            account: validator['identityPubkey'],
+            vote_account: validator['voteAccountPubkey'],
+            commission: validator['commission'],
+            last_vote: validator['lastVote'],
+            root_block: validator['rootSlot'],
+            credits: validator['credits'],
+            active_stake: validator['activatedStake'],
+            software_version: validator['version'],
+            delinquent: validator['delinquent']
+          )
+        end
+        validator_histories[validator['identityPubkey']] = vh
       end
 
       Pipeline.new(200, p.payload)
@@ -142,7 +160,6 @@ module SolanaLogic
         credits_total = hash['epochCredits'][-1][1].to_i
         credits_previous = hash['epochCredits'][-1][2].to_i
         credits_current = credits_total - credits_previous
-
         vote_accounts[hash['nodePubkey']] = {
           'vote_account' => hash['votePubkey'],
           'activated_stake' => hash['activatedStake'],
