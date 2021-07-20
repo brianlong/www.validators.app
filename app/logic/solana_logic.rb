@@ -39,10 +39,10 @@ module SolanaLogic
 
   def epoch_get
     lambda do |p|
-      epoch_json = rpc_request(
-        'getEpochInfo',
-        p.payload[:config_urls]
-      )['result']
+      epoch_json = solana_client_request(
+        p.payload[:config_urls],
+        :get_epoch_info
+      )
 
       epoch = EpochHistory.create(
         network: p.payload[:network],
@@ -120,10 +120,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      validators_json = rpc_request(
-        'getClusterNodes',
-        p.payload[:config_urls]
-      )['result']
+      validators_json = solana_client_request(
+        p.payload[:config_urls], 
+        :get_cluster_nodes
+      )
 
       validators = {}
       validators_json.each do |hash|
@@ -146,10 +146,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      vote_accounts_json = rpc_request(
-        'getVoteAccounts',
-        p.payload[:config_urls]
-      )['result']['current']
+      vote_accounts_json = solana_client_request(
+        p.payload[:config_urls], 
+        :get_vote_accounts
+      )['current']
 
       vote_accounts = {}
 
@@ -427,10 +427,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      epoch_json = rpc_request(
-        'getEpochInfo',
-        p.payload[:config_urls]
-      )['result']
+      epoch_json = solana_client_request(
+        p.payload[:config_urls],
+        :get_epoch_info
+      )
 
       unless p.payload[:epoch] == epoch_json['epoch']
         Batch.where(uuid: p.payload[:batch_uuid]).destroy_all
@@ -446,95 +446,6 @@ module SolanaLogic
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from check_epoch', e)
-    end
-  end
-
-  # rpc_request will make a Solana RPC request and return the results in a
-  # JSON object. API specifications are at:
-  #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
-  def rpc_request(rpc_method, rpc_urls)
-    # Parse the URL data into an URI object.
-    # The mainnet RPC endpoint is not on port 8899. I am now including the port
-    # with the URL inside of Rails credentials.
-    # uri = URI.parse(
-    #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
-    # )
-
-    rpc_urls.each do |rpc_url|
-      uri = URI.parse(rpc_url)
-
-      response_body = Timeout.timeout(RPC_TIMEOUT) do
-        # Create the HTTP session and send the request
-        response = Net::HTTP.start(
-                     uri.host,
-                     uri.port,
-                     use_ssl: uri.scheme == 'https'
-                   ) do |http|
-          request = Net::HTTP::Post.new(
-            uri.request_uri,
-            { 'Content-Type' => 'application/json' }
-          )
-          request.body = {
-            'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
-          }.to_json
-          http.request(request)
-        end
-
-        response.body
-      rescue Errno::ECONNREFUSED, Timeout::Error => e
-        Rails.logger.error "RPC TIMEOUT #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}"
-        nil
-      end
-
-      return JSON.parse(response_body) if response_body
-    rescue JSON::ParserError => e
-      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}\n#{response_body}"
-    end
-  end
-
-  # rpc_request will make a Solana RPC request with params and return the
-  # results in a JSON object. API specifications are at:
-  #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
-  def rpc_request_with_params(rpc_method, rpc_urls, params = [])
-    # Parse the URL data into an URI object.
-    # The mainnet RPC endpoint is not on port 8899. I am now including the port
-    # with the URL inside of Rails credentials.
-    # uri = URI.parse(
-    #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
-    # )
-
-    rpc_urls.each do |rpc_url|
-      uri = URI.parse(rpc_url)
-
-      response_body = Timeout.timeout(RPC_TIMEOUT) do
-        # Create the HTTP session and send the request
-        response = Net::HTTP.start(
-                     uri.host,
-                     uri.port,
-                     use_ssl: uri.scheme == 'https'
-                   ) do |http|
-          request = Net::HTTP::Post.new(
-            uri.request_uri,
-            { 'Content-Type' => 'application/json' }
-          )
-          request.body = {
-            'jsonrpc': '2.0',
-            'id': 1,
-            'method': rpc_method.to_s,
-            'params': params
-          }.to_json
-          http.request(request)
-        end
-
-        response.body
-      rescue Errno::ECONNREFUSED, Timeout::Error => e
-        Rails.logger.error "RPC TIMEOUT #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}"
-        nil
-      end
-
-      return JSON.parse(response_body) if response_body
-    rescue JSON::ParserError => e
-      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}\n#{response_body}"
     end
   end
 
@@ -573,5 +484,20 @@ module SolanaLogic
       Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
     end
     []
+  end
+
+  # Clusters array, method symbol
+  def solana_client_request(clusters, method)
+    clusters.each do |cluster_url|
+      client = SolanaRpcClient.new(cluster: cluster_url).client
+      result = client.public_send(method).result
+      
+      return result unless result.blank?
+    rescue SolanaRpcRuby::ApiError => e
+      Appsignal.send_error(e) if Rails.env.in?(['stage', 'production'])
+      message = "Request to solana RPC failed:\n Method: #{method}\nCluster: #{cluster_url}\nCLASS: #{e.class}\n#{e.message}"
+      Rails.logger.error(message)
+      nil
+    end
   end
 end
