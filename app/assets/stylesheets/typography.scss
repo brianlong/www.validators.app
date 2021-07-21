@@ -59,6 +59,30 @@ strong, .font-weight-bold {
   font-weight: $font-weight-bold-primary;
 }
 
+.stat {
+  .fas {
+    font-size: 15px;
+    margin-right: 6px;
+  }
+  &-title-1 {
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+    font-size: 52px;
+    @media(max-width: $screen-md-max) { font-size: $font-size-h1*.85; }
+    @media(max-width: $screen-sm-max) { font-size: $font-size-h1*.8; }
+  }
+  &-title-2 {
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+    font-size: $font-size-h1;
+    @media(max-width: $screen-md-max) { font-size: 34px; }
+    @media(max-width: $screen-sm-max) { font-size: 30px; }
+  }
+  small .fas {
+    font-size: 11px;
+  }
+}
+
 @for $i from 1 through 3 {
   h#{$i}, .h#{$i} {
     @include font-family-alternative();
