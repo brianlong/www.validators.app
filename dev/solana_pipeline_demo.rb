@@ -12,6 +12,7 @@ payload = {
 }
 
 p = Pipeline.new(200, payload)
+            .then(&validators_cli)
             .then(&validators_get)
             .then(&vote_accounts_get)
             .then(&reduce_validator_vote_accounts)
@@ -28,11 +29,11 @@ puts "MESSAGE: #{p[:message]}"
 puts "ERROR: #{p[:errors].inspect}"
 puts p.errors.backtrace
 puts ''
-puts 'Data for 71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B:'
+puts 'Data for D6beCFAZeFtXoZKio6JZV1GUmJ99Nz4XhtxMePFvuJWN:'
 puts ''
-puts p.payload[:validators]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
+puts p.payload[:validators]['D6beCFAZeFtXoZKio6JZV1GUmJ99Nz4XhtxMePFvuJWN']
 puts ''
-puts p.payload[:vote_accounts]['71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B']
+puts p.payload[:vote_accounts]['D6beCFAZeFtXoZKio6JZV1GUmJ99Nz4XhtxMePFvuJWN']
 puts ''
 puts p.payload[:validators_reduced].count
 puts ''

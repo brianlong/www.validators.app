@@ -85,7 +85,7 @@ class VoteAccountHistoryQueryTest < ActiveSupport::TestCase
   end
 
   test 'top_skipped_vote_percent' do
-    expected = [-0.39e2, -0.4675e2, -0.5775e2, -0.74e2, -0.99e2, -0.139e3]
+    expected = [-139.0, -99.0, -74.0, -57.75, -46.75, -39.0]
     assert_equal expected, @vahq.top_skipped_vote_percent
   end
 
@@ -114,7 +114,7 @@ class VoteAccountHistoryQueryTest < ActiveSupport::TestCase
   test 'skipped_vote_moving_average_stats with history' do
     expected = {
       min: -0.139e3, max: -0.39e2, median: -0.5775e2, average: -0.7591666667e2,
-      history: [-0.139e3, -0.99e2, -0.74e2, -0.5775e2, -0.4675e2, -0.39e2]
+      history: [-139.0, -99.0, -74.0, -57.75, -46.75, -39.0]
     }
     assert_equal expected, @vahq.skipped_vote_moving_average_stats(with_history: true)
   end
