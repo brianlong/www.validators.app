@@ -158,12 +158,15 @@ module ReportLogic
       return p unless p[:code] == 200
       raise StandardError, 'Missing p.payload[:network]' \
         unless p.payload[:network]
-      # raise StandardError, 'Missing p.payload[:batch_uuid]' \
-      #   unless p.payload[:batch_uuid]
+      raise StandardError, 'Missing p.payload[:batch_uuid]' \
+        unless p.payload[:batch_uuid]
+      
+      batch_created_at = Batch.find_by(uuid: p.payload[:batch_uuid])&.created_at
 
       sql = "SELECT software_version, count(*) as count, SUM(active_stake) as as_sum
              FROM validator_score_v1s 
              WHERE network = '#{p.payload[:network]}'
+             AND updated_at > '#{batch_created_at}'
              GROUP BY software_version;"
       # Grab the vote history for this batch
       software_versions_with_active_stake = ValidatorScoreV1.connection.execute(sql)

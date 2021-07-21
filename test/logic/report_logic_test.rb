@@ -69,8 +69,9 @@ class ReportLogicTest < ActiveSupport::TestCase
 
   test 'report_software_versions creates correct report and ignores empty software_versions' do
     network = 'mainnet'
-    batch_uuid = '12345'
-    
+    batch = Batch.create
+    batch_uuid = batch.uuid
+
     software_versions = ['1.6.8', '1.7.1', '1.7.2']
     software_versions.each do |sw|
       vals = create_list(:validator, 5, network: network)
