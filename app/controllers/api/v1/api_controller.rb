@@ -157,37 +157,37 @@ module Api
       end
 
       private
-      
+
       def validator_fields
         [ 
-          'network', 
           'account',
-          'name',
-          'keybase_id',
-          'www_url',
-          'details',
           'created_at',
+          'details',
+          'keybase_id',
+          'name',
+          'network', 
+          'www_url',
           'updated_at'
         ].map { |e| "validators.#{e}" }
       end
 
       def validator_score_v1_fields 
         [
-          'total_score',
+          'active_stake',
+          'commission',
+          'delinquent',
+          'data_center_concentration_score',
+          'data_center_key',
+          'data_center_host',
+          'published_information_score',
           'root_distance_score',
-          'vote_distance_score',
+          'security_report_score',
           'skipped_slot_score',
           'software_version',
           'software_version_score',
           'stake_concentration_score',
-          'data_center_concentration_score',
-          'published_information_score',
-          'security_report_score',
-          'active_stake',
-          'commission',
-          'delinquent',
-          'data_center_key',
-          'data_center_host'
+          'vote_distance_score',
+          'total_score'
         ].map { |e| "validator_score_v1s.#{e}" }
       end
     end
