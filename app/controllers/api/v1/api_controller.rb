@@ -75,7 +75,8 @@ module Api
         limit = params[:limit] || 9999
         page = params[:page]
 
-        @validators = Validator.where(network: params[:network])
+        @validators = Validator.select(validator_fields, validator_score_v1_fields)
+                               .where(network: params[:network])
                                .includes(:validator_score_v1)
                                .joins(:validator_score_v1)
                                .order(@sort_order)
@@ -153,6 +154,41 @@ module Api
           :payload_version,
           :payload
         )
+      end
+
+      private
+      
+      def validator_fields
+        [ 
+          'network', 
+          'account',
+          'name',
+          'keybase_id',
+          'www_url',
+          'details',
+          'created_at',
+          'updated_at'
+        ].map { |e| "validators.#{e}" }
+      end
+
+      def validator_score_v1_fields 
+        [
+          'total_score',
+          'root_distance_score',
+          'vote_distance_score',
+          'skipped_slot_score',
+          'software_version',
+          'software_version_score',
+          'stake_concentration_score',
+          'data_center_concentration_score',
+          'published_information_score',
+          'security_report_score',
+          'active_stake',
+          'commission',
+          'delinquent',
+          'data_center_key',
+          'data_center_host'
+        ].map { |e| "validator_score_v1s.#{e}" }
       end
     end
   end
