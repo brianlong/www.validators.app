@@ -57,7 +57,9 @@
         <tr>
           <td><strong>Software:</strong></td>
           <td>
-            <%= @validator&.score&.software_version %>
+            <%=
+              @val_history&.software_version
+            %>
           </td>
         </tr>
 

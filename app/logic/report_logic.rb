@@ -160,36 +160,36 @@ module ReportLogic
         unless p.payload[:network]
       raise StandardError, 'Missing p.payload[:batch_uuid]' \
         unless p.payload[:batch_uuid]
-      
-      batch_created_at = Batch.find_by(uuid: p.payload[:batch_uuid])&.created_at
 
-      sql = "SELECT software_version, count(*) as count, SUM(active_stake) as as_sum
-             FROM validator_score_v1s 
-             WHERE network = '#{p.payload[:network]}'
-             AND updated_at > '#{batch_created_at}'
-             GROUP BY software_version;"
       # Grab the vote history for this batch
-      software_versions_with_active_stake = ValidatorScoreV1.connection.execute(sql)
+      sql_results = VoteAccountHistory.connection.execute("
+        SELECT software_version, count(*) as count
+        FROM vote_account_histories
+        WHERE network = '#{p.payload[:network]}'
+        AND batch_uuid = '#{p.payload[:batch_uuid]}'
+        GROUP BY software_version;
+      ")
 
       total_active_stake = Validator.total_active_stake_for(p.payload[:network])
 
+      # gather the stake percent for each software version
+      grouped_by_version = ValidatorScoreV1.where(network: p.payload[:network]).select(
+        :software_version,
+        'SUM(active_stake) as as_sum'
+      ).group(:software_version)
+      grouped_by_version_hash = {}
+      grouped_by_version.map{ |v| grouped_by_version_hash[v.software_version] = v.as_sum }
+
       # Create a results array and insert the data
       result = []
-      software_versions_with_active_stake.each do |row|
-        software_version = row[0] 
-        count = row[1]  
-        active_stake_sum = row[2]
-
-        next if software_version.blank?
-
-        stake_percent = if active_stake_sum # as_sum
-                          ((active_stake_sum / total_active_stake.to_f) * 100).round(2)
-                        else
-                          nil
-                        end
-
-        result << { 
-          software_version => { count: count, stake_percent: stake_percent } 
+      sql_results.each do |row|
+        stake_percent = if grouped_by_version_hash[row[0]]
+          ((grouped_by_version_hash[row[0]] / total_active_stake.to_f) * 100).round(2)
+        else
+          nil
+        end
+        result << {
+          row[0] => { count: row[1], stake_percent: stake_percent }
         }
       end
       
