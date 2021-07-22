@@ -67,7 +67,7 @@ class ReportLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'report_software_versions creates correct report and ignores empty software_versions' do
+  test "report_software_versions creates correct report and ignores empty and 'unknown' software_versions" do
     network = 'mainnet'
     batch = Batch.create
     batch_uuid = batch.uuid
@@ -94,6 +94,15 @@ class ReportLogicTest < ActiveSupport::TestCase
       network: network
     )
 
+    # Setup score with 'unknown' software version, should be ignored in the report
+    val = create(:validator)
+    create(
+      :validator_score_v1, 
+      validator: val, 
+      software_version: 'unknown',
+      network: network
+    )
+
     payload = {
       network: network,
       batch_uuid: batch_uuid
@@ -108,7 +117,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
     assert_equal network, report.network
     assert_equal batch_uuid, report.batch_uuid
-    assert_equal report.payload.size, 3 # empty software_versions are ignored
+    assert_equal report.payload.size, 3 # empty and unknown software_versions are ignored
 
     software_versions.each do |sw|
       assert_equal report.payload.find { |v| v[sw] }[sw], expected_result

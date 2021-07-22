@@ -180,7 +180,7 @@ module ReportLogic
         count = row[1]  
         active_stake_sum = row[2]
 
-        next if software_version.blank?
+        next if software_version.blank? || software_version == 'unknown'
 
         stake_percent = if active_stake_sum # as_sum
                           ((active_stake_sum / total_active_stake.to_f) * 100).round(2)
