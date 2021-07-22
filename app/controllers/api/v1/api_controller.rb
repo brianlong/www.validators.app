@@ -77,7 +77,7 @@ module Api
 
         @validators = Validator.select(validator_fields, validator_score_v1_fields)
                                .where(network: params[:network])
-                               .includes(:validator_score_v1)
+                               .includes(:validator_score_v1, :vote_accounts)
                                .joins(:validator_score_v1)
                                .order(@sort_order)
                                .page(page)
