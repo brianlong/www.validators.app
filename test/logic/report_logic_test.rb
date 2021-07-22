@@ -67,51 +67,42 @@ class ReportLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'report_software_versions creates correct report and ignores empty software_versions' do
-    network = 'mainnet'
-    batch = Batch.create
-    batch_uuid = batch.uuid
+  test 'report_software_versions' do
+    create(:vote_account_history, batch_uuid: '1-2-3')
+    Sidekiq::Testing.inline! do
+      ReportSoftwareVersionWorker.perform_async(
+        batch_uuid: '1-2-3',
+        network: 'testnet'
+      )
+      # sleep(5) # wait for the report
+      report = Report.where(
+        network: 'testnet',
+        batch_uuid: '1-2-3',
+        name: 'report_software_versions'
+      ).last
 
-    software_versions = ['1.6.8', '1.7.1', '1.7.2']
-    software_versions.each do |sw|
-      vals = create_list(:validator, 5, network: network)
-      vals.each do |val|
-        create(
-          :validator_score_v1, 
-          validator: val, 
-          software_version: sw,
-          network: network
-        )
-      end
+      assert_equal 'testnet', report.network
+      assert_equal '1-2-3', report.batch_uuid
+      assert report.payload.count.positive?
     end
 
-    # Setup score with empty software version, should be ignored in the report
-    val = create(:validator)
-    create(
-      :validator_score_v1, 
-      validator: val, 
-      software_version: '',
-      network: network
-    )
-
-    payload = {
-      network: network,
-      batch_uuid: batch_uuid
-    }
-
-    _p = Pipeline.new(200, payload)
-                .then(&report_software_versions)
-
-    report = Report.find_by(name: 'report_software_versions', batch_uuid: batch_uuid)     
-    
-    expected_result = {"count"=>5, "stake_percent"=>33.33}
-
-    assert_equal network, report.network
-    assert_equal batch_uuid, report.batch_uuid
-    assert_equal report.payload.size, 3 # empty software_versions are ignored
-
-    software_versions.each do |sw|
-      assert_equal report.payload.find { |v| v[sw] }[sw], expected_result
-    end
+    # report_payload = {
+    #   network: 'testnet',
+    #   batch_uuid: '1-2-3'
+    # }
+    # p = Pipeline.new(200, report_payload)
+    #             .then(&report_software_versions)
+    # puts p.inspect
+    # assert_equal 200, p.code
+    #
+    # report = Report.where(
+    #   network: 'testnet',
+    #   batch_uuid: report_payload[:batch_uuid],
+    #   name: 'report_software_versions'
+    # ).last
+    #
+    # assert_equal p.payload[:network], report.network
+    # assert_equal p.payload[:batch_uuid], report.batch_uuid
+    # assert report.payload.count.positive?
   end
 end
