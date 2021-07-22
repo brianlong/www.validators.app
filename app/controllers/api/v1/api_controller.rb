@@ -82,7 +82,9 @@ module Api
                                .order(@sort_order)
                                .page(page)
                                .per(limit)
-
+                               
+        @ips = Ip.where(address: @validators.pluck('ip_address').compact)
+        
         unless params[:q].blank?
           @validators = ValidatorSearchQuery.new(@validators).search(params[:q])
         end
