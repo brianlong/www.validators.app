@@ -9,7 +9,7 @@ score = validator.score
 ip = if @ips
        @ips.select { |a| a.address == score.ip_address }.first 
      else
-      Ip.find_by(address: score.ip_address)
+       Ip.find_by(address: score.ip_address)
      end if score.present?
 
 unless score.nil?
