@@ -17,7 +17,9 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     validator_score_v1 = create(:validator_score_v1, validator: validator, ip_address: address)
     ip = create(:ip, address: address)
     
-    assert_equal ip, validator_score_v1.ip
+    assert validator_score_v1.ip_for_api
+    assert_equal validator_score_v1.ip_for_api.traits_autonomous_system_number, 0
+    assert_equal validator_score_v1.ip_for_api.address, address
   end
 
   test 'calculate_total_score assigns a score of 0 if commission is 100' do

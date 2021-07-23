@@ -57,11 +57,12 @@
 #
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
+  IP_FIELDS_FOR_API = ['ips.traits_autonomous_system_number', 'ips.address'].join(', ')
 
   # Touch the related validator to increment the updated_at attribute
   belongs_to :validator
   before_save :calculate_total_score
-  has_one :ip, primary_key: :ip_address, foreign_key: :address
+  has_one :ip_for_api, -> { select('ips.traits_autonomous_system_number, ips.address') }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
 
   after_save :create_commission_history, :if => :saved_change_to_commission?
 
@@ -215,5 +216,11 @@ class ValidatorScoreV1 < ApplicationRecord
     if skipped_slot_moving_average_history.length > MAX_HISTORY
       self.skipped_slot_moving_average_history = skipped_slot_moving_average_history[-MAX_HISTORY..-1]
     end
+  end
+
+  def ip_fields_for_api
+    [
+      'autonomous_system_number'
+    ].map { |e| "ips.#{e}" }
   end
 end
