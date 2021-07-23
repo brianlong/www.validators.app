@@ -82,7 +82,6 @@ module Api
                                .order(@sort_order)
                                .page(page)
                                .per(limit)
-
         unless params[:q].blank?
           @validators = ValidatorSearchQuery.new(@validators).search(params[:q])
         end
@@ -101,9 +100,9 @@ module Api
       end
 
       def validators_show
-        @validator = Validator.where(network: params[:network], account: params['account'])                     
-                              .includes(:validator_score_v1)
-                              .order('network, account').first
+        @validator = Validator.select(validator_fields, validator_score_v1_fields)
+                              .eager_load(:validator_score_v1)
+                              .find_by(network: params[:network], account: params['account'])                     
 
         raise ValidatorNotFound if @validator.nil?
 
@@ -163,11 +162,12 @@ module Api
           'account',
           'created_at',
           'details',
+          'id',
           'keybase_id',
           'name',
           'network', 
-          'www_url',
-          'updated_at'
+          'updated_at',
+          'www_url'
         ].map { |e| "validators.#{e}" }
       end
 
@@ -186,8 +186,9 @@ module Api
           'software_version',
           'software_version_score',
           'stake_concentration_score',
-          'vote_distance_score',
-          'total_score'
+          'total_score',
+          'validator_id',
+          'vote_distance_score'
         ].map { |e| "validator_score_v1s.#{e}" }
       end
     end
