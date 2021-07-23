@@ -61,6 +61,8 @@ class ValidatorScoreV1 < ApplicationRecord
   # Touch the related validator to increment the updated_at attribute
   belongs_to :validator
   before_save :calculate_total_score
+  has_one :ip, primary_key: :ip_address, foreign_key: :address
+
   after_save :create_commission_history, :if => :saved_change_to_commission?
 
   serialize :root_distance_history, JSON
