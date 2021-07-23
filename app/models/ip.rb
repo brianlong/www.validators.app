@@ -52,6 +52,7 @@
 #
 class Ip < ApplicationRecord
   before_save :assign_data_center_key
+  has_one :validator_score_v1, primary_key: :address, foreign_key: :ip_address
 
   private
 

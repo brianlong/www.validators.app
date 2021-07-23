@@ -11,6 +11,17 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal validator.id, score.validator_id
   end
 
+  test 'relationship has_one :ip' do
+    address = '192.123.23.2'
+    validator = create(:validator)
+    validator_score_v1 = create(:validator_score_v1, validator: validator, ip_address: address)
+    ip = create(:ip, address: address)
+    
+    assert validator_score_v1.ip_for_api
+    assert_equal validator_score_v1.ip_for_api.traits_autonomous_system_number, 0
+    assert_equal validator_score_v1.ip_for_api.address, address
+  end
+
   test 'calculate_total_score assigns a score of 0 if commission is 100' do
     validator_score_v1 = create(
       :validator_score_v1,
