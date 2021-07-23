@@ -6,11 +6,7 @@ json.extract! validator,
               :details, :created_at, :updated_at
 
 score = validator.score
-ip = if @ips
-       @ips.select { |a| a.address == score.ip_address }.first 
-     else
-       Ip.find_by(address: score.ip_address)
-     end if score.present?
+ip = Ip.find_by(address: score.ip_address) if score.present?
 
 unless score.nil?
   json.total_score score.total_score
@@ -28,7 +24,7 @@ unless score.nil?
   json.delinquent score.delinquent
   json.data_center_key score.data_center_key
   json.data_center_host score.data_center_host
-  unless ip.blank?
+  unless ip.nil?
     json.autonomous_system_number ip.traits_autonomous_system_number
   end
 end
