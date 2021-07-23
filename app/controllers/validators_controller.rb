@@ -71,25 +71,58 @@ class ValidatorsController < ApplicationController
     if @validator.nil?
       render file: "#{Rails.root}/public/404.html" , status: 404
     else
+      fields = 'validator_histories.*, '
       @val_history = @validator.validator_history_last
       @val_histories = ValidatorHistory.where(
-        network: params[:network],
-        account: @validator.account
-      ).order(created_at: :asc).last(@history_limit)
+                                        network: params[:network],
+                                        account: @validator.account
+                                       ).order(created_at: :asc)#.last(@history_limit)
+
+      batch_uuids = @val_histories.pluck(:batch_uuid)
+      @val_histories = @val_histories.last(@history_limit)
+      
+      sql = 'batch_uuid, MAX(`validator_histories`.`root_block`) as highest_root_block'
+      hash = { 
+        network: params[:network], 
+        account: @validator.account,
+        batch_uuid: batch_uuids
+      }
+      highest_root_blocks = ValidatorHistory.select(sql).where(hash).group(:batch_uuid)
+
+      time_start = Time.now
 
       @root_blocks = @val_histories.map do |vh|
-        ValidatorHistory.highest_root_block_for(params[:network], vh.batch_uuid) - vh.root_block
+        highest_root_blocks.find { |e| e.batch_uuid == vh.batch_uuid }.highest_root_block - vh.root_block
       end
+
+      time_stop = Time.now
+      time_overall = time_stop - time_start
+      puts time_overall
+
+      sql2 = 'batch_uuid, MAX(`validator_histories`.`last_vote`) as highest_last_vote'
+      hash2 = { 
+        network: params[:network], 
+        account: @validator.account,
+        batch_uuid: batch_uuids
+       }
+      highest_last_votes_for = ValidatorHistory.select(sql2).where(hash2).group(:batch_uuid)
+
+      time_start = Time.now
 
       @vote_blocks = @val_histories.map do |vh|
-        ValidatorHistory.highest_last_vote_for(params[:network], vh.batch_uuid) - vh.last_vote
+        highest_last_votes_for.find { |e| e.batch_uuid == vh.batch_uuid }.highest_last_vote - vh.last_vote
       end
 
-      @validator.validator_block_histories
-                .order('id desc')
-                .limit(@history_limit)
-                .reverse
-                .each do |vbh|
+      time_stop = Time.now      
+      time_overall = time_stop - time_start
+      puts time_overall
+
+      @validator_block_histories = @validator.validator_block_histories
+                                             .order('id desc')
+                                             .limit(@history_limit)
+                                             .reverse
+      @validator_block_histories_stat = ValidatorBlockHistoryStat.where(batch_uuid: batch_uuids)              
+      @validator_block_histories.each do |vbh|
 
         i += 1
         batch_stats = ValidatorBlockHistoryQuery.new(params[:network], vbh.batch_uuid)
