@@ -77,10 +77,12 @@ class ValidatorsController < ApplicationController
         account: @validator.account
       ).order(created_at: :asc).last(@history_limit)
 
+      # TODO use validator_score_v1s.root_distance_history for this!
       @root_blocks = @val_histories.map do |vh|
         ValidatorHistory.highest_root_block_for(params[:network], vh.batch_uuid) - vh.root_block
       end
 
+      # TODO use validator_score_v1s.vote_distance_history for this!
       @vote_blocks = @val_histories.map do |vh|
         ValidatorHistory.highest_last_vote_for(params[:network], vh.batch_uuid) - vh.last_vote
       end
