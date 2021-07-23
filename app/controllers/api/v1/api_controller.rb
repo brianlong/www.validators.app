@@ -77,11 +77,12 @@ module Api
 
         @validators = Validator.select(validator_fields, validator_score_v1_fields)
                                .where(network: params[:network])
-                               .includes(:validator_score_v1, :vote_accounts)
+                               .includes(:vote_accounts, validator_score_v1: [:ip_for_api])
                                .joins(:validator_score_v1)
                                .order(@sort_order)
                                .page(page)
                                .per(limit)
+
         unless params[:q].blank?
           @validators = ValidatorSearchQuery.new(@validators).search(params[:q])
         end
