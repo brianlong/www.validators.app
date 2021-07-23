@@ -21,7 +21,7 @@
   </tr>
   </thead>
   <tbody>
-    <% @validator.validator_block_histories.order('id desc').limit(60).each do |history| %>
+    <% @validator.validator_block_histories.order('id desc').limit(30).each do |history| %>
       <!-- TODO: Add `network` to this query -->
       <% block_stats = ValidatorBlockHistoryStat.where(network: params[:network], batch_uuid: history.batch_uuid).first %>
       <tr>
