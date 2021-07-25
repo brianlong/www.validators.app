@@ -87,9 +87,6 @@ class ValidatorsController < ApplicationController
         vh.vote_distance
       end.compact
 
-      # byebug
-
-
       @validator.validator_block_histories
                 .order('id desc')
                 .limit(@history_limit)
