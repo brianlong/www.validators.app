@@ -77,15 +77,18 @@ class ValidatorsController < ApplicationController
         account: @validator.account
       ).order(created_at: :asc).last(@history_limit)
 
-      # TODO Reduce this down to a single DB query. N+1 is bad.
+      # Grab the distances to show on the chart
       @root_blocks = @val_histories.map do |vh|
-        ValidatorHistory.highest_root_block_for(params[:network], vh.batch_uuid) - vh.root_block
-      end
+        vh.root_distance
+      end.compact
 
-      # TODO Reduce this down to a single DB query. N+1 is bad.
+      # Grab the distances to show on the chart
       @vote_blocks = @val_histories.map do |vh|
-        ValidatorHistory.highest_last_vote_for(params[:network], vh.batch_uuid) - vh.last_vote
-      end
+        vh.vote_distance
+      end.compact
+
+      # byebug
+
 
       @validator.validator_block_histories
                 .order('id desc')
