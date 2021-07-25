@@ -74,6 +74,31 @@ module SolanaLogic
       raise 'No results from `solana validators`' if \
         validators['validators'].blank?
 
+      # There were recent updates to the validators CLI response. This is the
+      # response struct as of 2021-07-25.
+      # "validators": [
+      #   {
+      #     "identityPubkey": "5bBECyn9rNvcTB8y9j2Rzs3myXUDR97m62oaJong8sg2",
+      #     "voteAccountPubkey": "5BTgeYMDUQz59sdNFr47FVmA119QmsoZNjUyGyeGb4sJ",
+      #     "commission": 2,
+      #     "lastVote": 88545169,
+      #     "rootSlot": 88545120,
+      #     "credits": 7409369,
+      #     "epochCredits": 156357,
+      #     "activatedStake": 404510903886025,
+      #     "version": "1.6.10",
+      #     "delinquent": false,
+      #     "skipRate": 37.745098039215684
+      #   },
+
+      max_root_height = validators['validators'].map { |v|
+        v['rootSlot']
+      }.max.to_i
+
+      max_vote_height = validators['validators'].map { |v|
+        v['lastVote']
+      }.max.to_i
+
       validator_histories = {}
       # Create current validators
       validators['validators'].each do |validator|
@@ -86,9 +111,15 @@ module SolanaLogic
               last_vote: validator['lastVote'],
               root_block: validator['rootSlot'],
               credits: validator['credits'],
+              epoch_credits: validator['epochCredits'],
               active_stake: validator['activatedStake'],
               software_version: validator['version'],
-              delinquent: validator['delinquent']
+              delinquent: validator['delinquent'],
+              slot_skip_rate: validator['skipRate'],
+              root_distance: max_root_height - validator['rootSlot'].to_i,
+              vote_distance: max_vote_height - validator['lastVote'].to_i,
+              max_root_height: max_root_height,
+              max_vote_height: max_vote_height
             )
           end
         else
@@ -101,9 +132,15 @@ module SolanaLogic
             last_vote: validator['lastVote'],
             root_block: validator['rootSlot'],
             credits: validator['credits'],
+            epoch_credits: validator['epochCredits'],
             active_stake: validator['activatedStake'],
             software_version: validator['version'],
-            delinquent: validator['delinquent']
+            delinquent: validator['delinquent'],
+            slot_skip_rate: validator['skipRate'],
+            root_distance: max_root_height - validator['rootSlot'].to_i,
+            vote_distance: max_vote_height - validator['lastVote'].to_i,
+            max_root_height: max_root_height,
+            max_vote_height: max_vote_height
           )
         end
         validator_histories[validator['identityPubkey']] = vh
@@ -121,7 +158,7 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       validators_json = solana_client_request(
-        p.payload[:config_urls], 
+        p.payload[:config_urls],
         :get_cluster_nodes
       )
 
@@ -147,7 +184,7 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       vote_accounts_json = solana_client_request(
-        p.payload[:config_urls], 
+        p.payload[:config_urls],
         :get_vote_accounts
       )['current']
 
@@ -491,7 +528,7 @@ module SolanaLogic
     clusters.each do |cluster_url|
       client = SolanaRpcClient.new(cluster: cluster_url).client
       result = client.public_send(method).result
-      
+
       return result unless result.blank?
     rescue SolanaRpcRuby::ApiError => e
       Appsignal.send_error(e) if Rails.env.in?(['stage', 'production'])
