@@ -6,7 +6,7 @@ json.extract! validator,
               :details, :created_at, :updated_at
 
 score = validator.score
-ip = Ip.find_by(address: score.ip_address) if score.present?
+ip = score.ip_for_api if score
 
 unless score.nil?
   json.total_score score.total_score
