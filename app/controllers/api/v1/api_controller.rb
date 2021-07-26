@@ -179,9 +179,9 @@ module Api
 
           unless this_report.first.nil?
             hash.merge!({
-              skipped_slots: this_report.first['skipped_slots'],
-              skipped_slot_percent: this_report.first['skipped_slot_percent'],
-              ping_time: nil # this_report.first['ping_time']
+              'skipped_slots' => this_report.first['skipped_slots'],
+              'skipped_slot_percent' => this_report.first['skipped_slot_percent'],
+              'ping_time' => nil # this_report.first['ping_time']
             })
           end
         end
