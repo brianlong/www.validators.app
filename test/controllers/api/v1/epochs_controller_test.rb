@@ -58,7 +58,7 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
     resp = response_to_json(@response.body)
 
     assert_response 200
-    assert_equal 50, resp['epochs'].count
+    assert_equal 25, resp['epochs'].count
     assert_equal 54, resp['epochs_count']
   end
 
