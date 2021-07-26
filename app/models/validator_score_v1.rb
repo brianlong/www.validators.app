@@ -219,4 +219,27 @@ class ValidatorScoreV1 < ApplicationRecord
       self.skipped_slot_moving_average_history = skipped_slot_moving_average_history[-MAX_HISTORY..-1]
     end
   end
+
+  def to_builder
+    Jbuilder.new do |vs_v1|
+      vs_v1.(
+        self, 
+        :total_score, 
+        :root_distance_score,
+        :vote_distance_score,
+        :skipped_slot_score,
+        :software_version,
+        :software_version_score,
+        :stake_concentration_score,
+        :data_center_concentration_score,
+        :published_information_score,
+        :security_report_score,
+        :active_stake,
+        :commission,
+        :delinquent,
+        :data_center_key,
+        :data_center_host
+      )
+    end
+  end
 end
