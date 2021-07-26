@@ -131,5 +131,5 @@ end
 
 Rails.application.routes.default_url_options = {
   host: 'www.validators.app',
-  use_ssl: true
+  protocol: 'https' 
 }
