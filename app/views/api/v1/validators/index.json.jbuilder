@@ -1,43 +1,17 @@
 # frozen_string_literal: true
 
+# json.array! @validators, partial: 'api/v1/validators/validator', as: :validator
+
 json.array! @validators do |validator|
-  json.extract! validator,
-              :network, :account, :name, :keybase_id, :www_url,
-              :details, :created_at, :updated_at
+  json.merge! validator.to_builder.attributes!
 
   score = validator.score
   ip = score.ip_for_api if score
-
-  unless score.nil?
-    json.total_score score.total_score
-    json.root_distance_score score.root_distance_score
-    json.vote_distance_score score.vote_distance_score
-    json.skipped_slot_score score.skipped_slot_score
-    json.software_version score.software_version
-    json.software_version_score score.software_version_score
-    json.stake_concentration_score score.stake_concentration_score
-    json.data_center_concentration_score score.data_center_concentration_score
-    json.published_information_score score.published_information_score
-    json.security_report_score score.security_report_score
-    json.active_stake score.active_stake
-    json.commission score.commission
-    json.delinquent score.delinquent
-    json.data_center_key score.data_center_key
-    json.data_center_host score.data_center_host
-    unless ip.nil?
-      json.autonomous_system_number ip.traits_autonomous_system_number
-    end
-  end
-
-  # Vote account data
   vote_account = validator.vote_accounts.last
-  unless vote_account.nil?
-    json.vote_account vote_account.account
 
-    # vote_account_history = vote_account.vote_account_histories.last
-    # json.software_version vote_account_history.software_version \
-    #   unless vote_account_history.nil?
-  end
+  json.merge! score.to_builder.attributes!
+  json.merge! ip.to_builder.attributes! unless ip.blank?
+  json.merge! vote_account.to_builder.attributes! unless vote_account.blank?
 
   # Data from the skipped_slots_report
   unless @skipped_slots_report.nil?
@@ -52,11 +26,5 @@ json.array! @validators do |validator|
     end
   end
 
-  # Show URl to this record in the API
-  json.url api_v1_validator_url(
-    network: params[:network],
-    account: validator.account,
-    format: :json
-  )
-
+  json.url validator.api_url
 end

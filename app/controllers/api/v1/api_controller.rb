@@ -92,7 +92,9 @@ module Api
           name: 'build_skipped_slot_percent'
         ).last
 
-        render 'api/v1/validators/index', formats: :json
+        json_result = @validators.map { |val| create_json_result(val) }
+        
+        render json: json_result
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
       rescue StandardError => e
@@ -112,9 +114,7 @@ module Api
           name: 'build_skipped_slot_percent'
         ).last
 
-        # @score = @validator.score
-        # @ip = Ip.find_by(address: @score.ip_address)
-        render 'api/v1/validators/show', formats: :json
+        render json: create_json_result(@validator)
       rescue ValidatorNotFound
         render json: { 'status' => 'Validator Not Found' }, status: 404
       rescue ActionController::ParameterMissing
@@ -157,6 +157,38 @@ module Api
       end
 
       private
+
+      def create_json_result(validator)
+        hash = {}
+
+        hash.merge!(validator.to_builder.attributes!)
+
+        score = validator.score
+        ip = score.ip_for_api if score
+        vote_account = validator.vote_accounts.last
+
+        hash.merge!(score.to_builder.attributes!)
+        hash.merge!(ip.to_builder.attributes!) unless ip.blank?
+        hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
+
+        # Data from the skipped_slots_report
+        unless @skipped_slots_report.nil?
+          this_report = @skipped_slots_report.payload.select do |ssr|
+            ssr['account'] == validator.account
+          end
+
+          unless this_report.first.nil?
+            hash.merge!({
+              skipped_slots: this_report.first['skipped_slots'],
+              skipped_slot_percent: this_report.first['skipped_slot_percent'],
+              ping_time: nil # this_report.first['ping_time']
+            })
+          end
+        end
+
+        hash.merge!({url: validator.api_url})
+        hash
+      end
 
       def validator_fields
         [ 
