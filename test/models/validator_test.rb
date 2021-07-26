@@ -3,6 +3,13 @@
 require 'test_helper'
 
 class ValidatorTest < ActiveSupport::TestCase
+  test '#api_url creates correct link for test environment' do
+    validator = build(:validator)
+    expected_url = "http://localhost:3000/api/v1/validators/#{validator.network}/#{validator.account}"
+
+    assert_equal expected_url, validator.api_url
+  end
+
   test 'ping_times_to' do
     assert_equal 3, validators(:one).ping_times_to.count
   end

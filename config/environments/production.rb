@@ -128,3 +128,8 @@ Rails.application.configure do
   }
   config.action_mailer.default_url_options = { host: 'www.validators.app' }
 end
+
+Rails.application.routes.default_url_options = {
+  host: 'www.validators.app',
+  use_ssl: true
+}
