@@ -103,6 +103,12 @@ module SolanaLogic
       # Create current validators
       validators['validators'].each do |validator|
         if existing_history = validator_histories[validator['identityPubkey']]
+          if validator['identityPubkey'] == '9pZZWsvdWsYiWSrt13MrxCuSigDcKfBzmc58HBfoZuwn'
+            # puts '--------'
+            # puts existing_history.last_vote
+            # puts validator['lastVote']
+            # puts "--------"
+          end
           if existing_history.last_vote < validator['lastVote']
             existing_history.update(
               account: validator['identityPubkey'],
@@ -121,6 +127,8 @@ module SolanaLogic
               max_root_height: max_root_height,
               max_vote_height: max_vote_height
             )
+
+            validator_histories[validator['identityPubkey']] = existing_history
           end
         else
           vh = ValidatorHistory.create(
@@ -142,8 +150,8 @@ module SolanaLogic
             max_root_height: max_root_height,
             max_vote_height: max_vote_height
           )
+          validator_histories[validator['identityPubkey']] = vh
         end
-        validator_histories[validator['identityPubkey']] = vh
       end
 
       Pipeline.new(200, p.payload)
@@ -289,7 +297,6 @@ module SolanaLogic
   def validator_block_history_get
     lambda do |p|
       return p unless p[:code] == 200
-
       cli_method = "block-production --epoch #{p.payload[:epoch].to_i}"
       block_history = cli_request(cli_method, p.payload[:config_urls])
 
