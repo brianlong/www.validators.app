@@ -103,12 +103,6 @@ module SolanaLogic
       # Create current validators
       validators['validators'].each do |validator|
         if existing_history = validator_histories[validator['identityPubkey']]
-          if validator['identityPubkey'] == '9pZZWsvdWsYiWSrt13MrxCuSigDcKfBzmc58HBfoZuwn'
-            # puts '--------'
-            # puts existing_history.last_vote
-            # puts validator['lastVote']
-            # puts "--------"
-          end
           if existing_history.last_vote < validator['lastVote']
             existing_history.update(
               account: validator['identityPubkey'],
