@@ -133,10 +133,17 @@
                   (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
                 </small>
                 <br />
+                <span class="d-inline-block d-lg-none">Version:&nbsp;</span>
+                <small>
+                  <span class="d-none d-lg-inline-block">Version:&nbsp;</span>
+                  <%= validator.score&.software_version %>
+                </small>
+                <br />
                 <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
                 <%= render 'validators/scores', validator: validator %>
+                <br />
                 <% if validator.delinquent? %>
-                  <small class="text-danger">delinquent</small>
+                  <br /><small class="text-danger">delinquent</small>
                 <% end %>
               </td>
 
