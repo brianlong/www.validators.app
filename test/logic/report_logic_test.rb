@@ -103,6 +103,15 @@ class ReportLogicTest < ActiveSupport::TestCase
       network: network
     )
 
+    # Setup score with malformed software version, should be ignored in the report
+    val = create(:validator)
+    create(
+      :validator_score_v1, 
+      validator: val, 
+      software_version: '1.3.9 e45f1df5',
+      network: network
+    )
+
     payload = {
       network: network,
       batch_uuid: batch_uuid
