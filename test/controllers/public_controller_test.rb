@@ -15,6 +15,7 @@ class PublicControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get index' do
+    create(:batch, network: 'mainnet')
     get root_url
     assert_response :success
   end
