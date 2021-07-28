@@ -73,9 +73,11 @@ class ReportLogicTest < ActiveSupport::TestCase
     batch_uuid = batch.uuid
 
     software_versions = ['1.6.8', '1.7.1', '1.7.2']
+    validator_lists = []
+
     software_versions.each do |sw|
-      vals = create_list(:validator, 5, network: network)
-      vals.each do |val|
+      list = create_list(:validator, 5, network: network)
+      list.each do |val|
         create(
           :validator_score_v1, 
           validator: val, 
@@ -83,6 +85,8 @@ class ReportLogicTest < ActiveSupport::TestCase
           network: network
         )
       end
+
+      validator_lists << list
     end
 
     # Setup score with empty software version, should be ignored in the report
@@ -95,7 +99,7 @@ class ReportLogicTest < ActiveSupport::TestCase
     )
 
     # Setup score with 'unknown' software version, should be ignored in the report
-    val = create(:validator)
+    val_unknown = create(:validator)
     create(
       :validator_score_v1, 
       validator: val, 
@@ -104,13 +108,26 @@ class ReportLogicTest < ActiveSupport::TestCase
     )
 
     # Setup score with malformed software version, should be ignored in the report
-    val = create(:validator)
+    val_malformed = create(:validator)
     create(
       :validator_score_v1, 
       validator: val, 
       software_version: '1.3.9 e45f1df5',
       network: network
     )
+
+    validator_lists.each do |list|
+      list.each do |val|
+        va = create(:vote_account, validator: val)
+        create(:vote_account_history, vote_account: va, batch_uuid: batch_uuid, network: network)
+      end
+    end
+
+    va_unknown = create(:vote_account, validator: val_unknown)
+    create(:vote_account_history, vote_account: va_unknown, batch_uuid: batch_uuid, network: network)
+  
+    va_malformed = create(:vote_account, validator: val_malformed)
+    create(:vote_account_history, vote_account: va_malformed, batch_uuid: batch_uuid, network: network)
 
     payload = {
       network: network,
@@ -126,7 +143,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
     assert_equal network, report.network
     assert_equal batch_uuid, report.batch_uuid
-    assert_equal report.payload.size, 3 # empty and unknown software_versions are ignored
+    assert_equal 3, report.payload.size # empty and unknown software_versions are ignored
 
     software_versions.each do |sw|
       assert_equal report.payload.find { |v| v[sw] }[sw], expected_result
