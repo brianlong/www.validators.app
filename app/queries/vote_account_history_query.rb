@@ -51,7 +51,8 @@ class VoteAccountHistoryQuery < ApplicationQuery
 
   def vote_account_history_skipped_moving_average
     @vote_account_history_skipped_moving_average ||=
-      @relation.pluck(:skipped_vote_percent_moving_average)
+      @relation.joins(:vote_account)
+               .pluck(:skipped_vote_percent_moving_average, 'vote_accounts.validator_id')
   end
 
   def vote_account_history_skipped
@@ -79,8 +80,7 @@ class VoteAccountHistoryQuery < ApplicationQuery
   end
 
   def top_skipped_vote_percent
-    @top_skipped_vote_percent ||=
-      vote_account_history_skipped_moving_average.sort
+    @top_skipped_vote_percent ||= vote_account_history_skipped_moving_average.sort.first(50)
   end
 
   def skipped_votes_stats(with_history: false)

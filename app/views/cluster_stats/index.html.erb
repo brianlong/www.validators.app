@@ -38,14 +38,14 @@
           </tr>
           </thead>
           <tbody>
-          <% @stats[:top_staked_validators].each.with_index do |stake_record, index| %>
+          <% @stats[:top_staked_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
               <td>
-                <% validator = Validator.find(stake_record.last) %>
+                <% validator = Validator.find(record.last) %>
                 <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
               </td>
-              <td><%= number_with_delimiter( lamports_to_sol(stake_record.first.to_i).round(0), delimiter: ',')  %></td>
+              <td><%= number_with_delimiter( lamports_to_sol(record.first.to_i).round(0), delimiter: ',')  %></td>
               <td class="text-right">
                 <%= link_to validator_path(network: params[:network], account: validator.account) do %>
                   <i class="fas fa-search text-purple"></i>
@@ -70,12 +70,19 @@
           </tr>
           </thead>
           <tbody>
-          <% @stats[:top_skipped_vote_validators].first(50).each.with_index do |v, index| %>
+          <% @stats[:top_skipped_vote_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
-              <td>Validator name</td>
-              <td><%= v.round(3) %></td>
-              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+              <td>
+                <% validator = Validator.find(record.last) %>
+                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
+              </td>
+              <td><%= record.first.to_f.round(3) %></td>
+              <td class="text-right">
+                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                  <i class="fas fa-search text-purple"></i>
+                <% end %>
+              </td>
             </tr>
           <% end %>
           </tbody>
