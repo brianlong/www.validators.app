@@ -90,8 +90,9 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def calculate_total_score
     # Assign special scores before calculating the total score
+    best_sw = Batch.last_scored(network)&.software_version
     assign_published_information_score
-    assign_software_version_score
+    assign_software_version_score(best_sw)
     assign_security_report_score
 
     self.total_score =
@@ -114,14 +115,18 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   # Evaluate the software version and assign a score
-  def assign_software_version_score
+  def assign_software_version_score(best_version)
     if software_version.blank?
       self.software_version_score = 0
       return
     end
 
     return unless ValidatorSoftwareVersion.valid_software_version?(software_version)
-    version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network)
+    version = ValidatorSoftwareVersion.new(
+      number: software_version,
+      network: validator.network,
+      best_version: best_version
+    )
 
     self.software_version_score = \
       if version.running_latest_or_newer?
