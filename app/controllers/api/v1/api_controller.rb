@@ -12,33 +12,7 @@ module Api
 
       # POST api/v1/collector
       def collector
-        # Rails.logger.debug params
-        # Rails.logger.debug collector_params
-
-        @collector = Collector.new(
-          collector_params.merge(
-            user_id: User.where(api_token: request.headers['Token']).first.id,
-            ip_address: request.remote_ip
-          )
-        )
-        # Rails.logger.debug @collector.inspect
-
-        if @collector.save
-          # TODO: Move this to a Sidekiq worker!
-          payload = { collector_id: @collector.id }
-          Pipeline.new(200, payload)
-                  .then(&ping_times_guard)
-                  .then(&ping_times_read)
-                  .then(&ping_times_calculate_stats)
-                  .then(&ping_times_save)
-                  .then(&log_errors)
-
-          render json: { 'status' => 'Accepted' }, status: 202
-        else
-          render json: { 'status' => 'Bad Request' }, status: 400
-        end
-      rescue ActionController::ParameterMissing
-        render json: { 'status' => 'Parameter Missing' }, status: 400
+        render json: { 'status' => 'Method Gone' }, status: 410
       end
 
       # This is a simple endpoint to test API connections.
@@ -48,15 +22,7 @@ module Api
       end
 
       def ping_times
-        limit = params[:limit] || 1000
-        render json: PingTime.where(network: params[:network])
-                             .order('created_at desc')
-                             .limit(limit).to_json, status: 200
-      rescue ActionController::ParameterMissing
-        render json: { 'status' => 'Parameter Missing' }, status: 400
-      rescue StandardError => e
-        Appsignal.send_error(e)
-        render json: { 'status' => e.message }, status: 500
+        render json: { 'status' => 'Method Gone' }, status: 410
       end
 
       # Show the list of validators with scores
@@ -93,7 +59,7 @@ module Api
         ).last
 
         json_result = @validators.map { |val| create_json_result(val) }
-        
+
         render json: json_result
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
@@ -105,7 +71,7 @@ module Api
       def validators_show
         @validator = Validator.select(validator_fields, validator_score_v1_fields)
                               .eager_load(:validator_score_v1)
-                              .find_by(network: params[:network], account: params['account'])                     
+                              .find_by(network: params[:network], account: params['account'])
 
         raise ValidatorNotFound if @validator.nil?
 
@@ -191,20 +157,20 @@ module Api
       end
 
       def validator_fields
-        [ 
+        [
           'account',
           'created_at',
           'details',
           'id',
           'keybase_id',
           'name',
-          'network', 
+          'network',
           'updated_at',
           'www_url'
         ].map { |e| "validators.#{e}" }
       end
 
-      def validator_score_v1_fields 
+      def validator_score_v1_fields
         [
           'active_stake',
           'commission',
