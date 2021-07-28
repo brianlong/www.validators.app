@@ -175,13 +175,15 @@ module ReportLogic
         AND vah.batch_uuid = ?;
       }.gsub(/\s+/, " ").strip
       
-      sanitized_vids_sql = VoteAccountHistory.sanitize_sql(
+      sanitized_validator_ids_sql = VoteAccountHistory.sanitize_sql(
         [validator_ids_for_batch_sql,
         p.payload[:network],
         p.payload[:batch_uuid]]
       )
 
-      validator_ids_for_batch_result = VoteAccountHistory.connection.execute(sanitized_vids_sql)
+      validator_ids_for_batch_result = VoteAccountHistory.connection.execute(
+                                        sanitized_validator_ids_sql
+                                      )
       
       validator_ids = validator_ids_for_batch_result.map { |e| e[0] }
 
