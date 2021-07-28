@@ -25,26 +25,17 @@ class ClusterStatsController < ApplicationController
     ).last&.payload
 
     {
-      top_staked_validators:
-        vs_query.top_staked_validators,
-      top_skipped_vote_validators:
-        vah_query.top_skipped_vote_percent,
-      top_root_distance_validators:
-        vs_query.top_root_distance_averages_validators,
-      top_vote_distance_validators:
-        vs_query.top_vote_distance_averages_validators,
-      top_skipped_slot_validators:
-        vbh_query.top_skipped_slot_percent,
-      skipped_votes_percent:
-        vah_query.skipped_votes_stats,
-      skipped_votes_percent_moving_average:
-        vah_query.skipped_vote_moving_average_stats,
-      root_distance:
-        vs_query.root_distance_stats,
-      vote_distance:
-        vs_query.vote_distance_stats,
-      skipped_slots:
-        vbh_query.skipped_slot_stats,
+      top_staked_validators: vs_query.top_staked_validators,
+      total_stake: vs_query.total_stake,
+      top_skipped_vote_validators: vah_query.top_skipped_vote_percent,
+      top_root_distance_validators: vs_query.top_root_distance_averages_validators,
+      top_vote_distance_validators: vs_query.top_vote_distance_averages_validators,
+      top_skipped_slot_validators: vbh_query.top_skipped_slot_percent,
+      skipped_votes_percent: vah_query.skipped_votes_stats,
+      skipped_votes_percent_moving_average: vah_query.skipped_vote_moving_average_stats,
+      root_distance: vs_query.root_distance_stats,
+      vote_distance: vs_query.vote_distance_stats,
+      skipped_slots: vbh_query.skipped_slot_stats,
       software_version: software_report,
       batch_uuid: batch.uuid
     }

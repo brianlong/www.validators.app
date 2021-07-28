@@ -38,12 +38,19 @@
           </tr>
           </thead>
           <tbody>
-          <% @stats[:top_staked_validators].first(50).each.with_index do |v, index| %>
+          <% @stats[:top_staked_validators].each.with_index do |stake_record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
-              <td>Validator name</td>
-              <td><%= number_with_delimiter( lamports_to_sol(v).round(0), delimiter: ',')  %></td>
-              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+              <td>
+                <% validator = Validator.find(stake_record.last) %>
+                <%= validator_display_name(validator) %>
+              </td>
+              <td><%= number_with_delimiter( lamports_to_sol(stake_record.first.to_i).round(0), delimiter: ',')  %></td>
+              <td class="text-right">
+                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                  <i class="fas fa-search text-purple"></i>
+                <% end %>
+              </td>
             </tr>
           <% end %>
           </tbody>
@@ -309,7 +316,7 @@
           <div class="col-6 col-md-12 mb-md-4">
             <small class="text-muted">Active Stake:</small>
             <div class="h2 text-purple">
-              <%= number_to_human(lamports_to_sol(@stats[:top_staked_validators].sum).round(0),
+              <%= number_to_human(lamports_to_sol(@stats[:total_stake]).round(0),
                                   format:'%n%u',
                                   units: { thousand: 'K', million: 'M', billion: 'B' }) %>
             </div>
