@@ -39,7 +39,7 @@ class ValidatorBlockHistoryQuery < ApplicationQuery
 
   def skipped_slot_percent_history_moving_average
     @skipped_slot_percent_history_moving_average ||=
-      for_batch.pluck(:skipped_slot_percent_moving_average)
+      for_batch.pluck(:skipped_slot_percent_moving_average, :validator_id)
   end
 
   def skipped_slot_percent_history
@@ -48,14 +48,13 @@ class ValidatorBlockHistoryQuery < ApplicationQuery
   end
 
   def top_skipped_slot_percent
-    @top_skipped_slot_percent ||=
-      skipped_slot_percent_history_moving_average.sort
+    @top_skipped_slot_percent ||= skipped_slot_percent_history_moving_average.sort.first(50)
   end
 
   def skipped_slot_stats(with_history: false)
     skipped_slot_stats = {
-      min: skipped_slot_percent_history_moving_average.min,
-      max: skipped_slot_percent_history_moving_average.max,
+      min: skipped_slot_percent_history_moving_average.map(&:first).min,
+      max: skipped_slot_percent_history_moving_average.map(&:first).max,
       median: median_skipped_slot_percent,
       average: average_skipped_slot_percent
     }

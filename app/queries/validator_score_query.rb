@@ -69,7 +69,11 @@ class ValidatorScoreQuery < ApplicationQuery
   end
 
   def top_staked_validators
-    @top_staked_validators ||= for_batch.pluck(:active_stake, :validator_id).sort.reverse.first(50)
+    @top_staked_validators ||= for_batch.pluck(:active_stake, :validator_id)
+                                        .map { |tsv| [tsv.first.to_i, tsv.last] }
+                                        .sort
+                                        .reverse
+                                        .first(50)
   end
 
   def total_stake
