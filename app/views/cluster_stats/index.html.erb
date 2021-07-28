@@ -43,7 +43,7 @@
               <td><%= index + 1 %>.</td>
               <td>
                 <% validator = Validator.find(stake_record.last) %>
-                <%= validator_display_name(validator) %>
+                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
               </td>
               <td><%= number_with_delimiter( lamports_to_sol(stake_record.first.to_i).round(0), delimiter: ',')  %></td>
               <td class="text-right">
