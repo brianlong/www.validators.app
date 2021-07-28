@@ -114,6 +114,7 @@ Rails.application.routes.draw do
       as: 'cluster_stats'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
+  get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
 
   # Default root path
   root to: 'public#index'
