@@ -171,11 +171,17 @@ module ReportLogic
         ON vah.vote_account_id = va.id
         INNER JOIN validators as v
         ON va.validator_id = v.id
-        WHERE vah.network = '#{p.payload[:network]}'
-        AND vah.batch_uuid = '#{p.payload[:batch_uuid]}';
+        WHERE vah.network = ?
+        AND vah.batch_uuid = ?;
       }.gsub(/\s+/, " ").strip
       
-      validator_ids_for_batch_result = VoteAccountHistory.connection.execute(validator_ids_for_batch_sql)
+      sanitized_vids_sql = VoteAccountHistory.sanitize_sql(
+        [validator_ids_for_batch_sql,
+        p.payload[:network],
+        p.payload[:batch_uuid]]
+      )
+
+      validator_ids_for_batch_result = VoteAccountHistory.connection.execute(sanitized_vids_sql)
       
       validator_ids = validator_ids_for_batch_result.map { |e| e[0] }
 
@@ -183,12 +189,18 @@ module ReportLogic
       software_version_score_sql = %Q{
         SELECT vsv1.software_version, count(*) as count, SUM(vsv1.active_stake) as as_sum
         FROM validator_score_v1s AS vsv1
-        WHERE vsv1.network = '#{p.payload[:network]}'
-        AND vsv1.validator_id IN (#{validator_ids.join(', ')})
+        WHERE vsv1.network = ?
+        AND vsv1.validator_id IN (?)
         GROUP BY vsv1.software_version;
       }.gsub(/\s+/, " ").strip
 
-      software_versions_with_active_stake = ValidatorScoreV1.connection.execute(software_version_score_sql)
+      sanitized_sw_sql = ValidatorScoreV1.sanitize_sql(
+        [software_version_score_sql,
+        p.payload[:network],
+        validator_ids]
+      )
+
+      software_versions_with_active_stake = ValidatorScoreV1.connection.execute(sanitized_sw_sql)
 
       total_active_stake = Validator.total_active_stake_for(p.payload[:network])
 
