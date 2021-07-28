@@ -24,28 +24,27 @@ class ValidatorScoreQuery < ApplicationQuery
   end
 
   def root_distance_all_history
-    @root_distance_all_history ||=
-      for_batch.map(&:root_distance_history)
+    @root_distance_all_history ||= for_batch.pluck(:root_distance_history, :validator_id)
   end
 
   def root_distance_all_averages
-    @root_distance_all_averages ||=
-      root_distance_all_history.map(&:average)
+    @root_distance_all_averages ||= root_distance_all_history.map do |root_dist|
+      [root_dist.first.average, root_dist.last]
+    end
   rescue NoMethodError
     nil
   end
 
   def top_root_distance_averages_validators
-    @top_root_distance_averages_validators ||=
-      root_distance_all_averages&.sort
+    @top_root_distance_averages_validators ||= root_distance_all_averages&.sort&.first(50)
   end
 
   def root_distance_stats(with_history: false)
     root_distance_stats = {
-      min: root_distance_all_averages&.min,
-      max: root_distance_all_averages&.max,
-      median: root_distance_all_averages&.median,
-      average: root_distance_all_averages&.average
+      min: root_distance_all_averages&.map(&:first)&.min,
+      max: root_distance_all_averages&.map(&:first)&.max,
+      median: root_distance_all_averages&.map(&:first)&.median,
+      average: root_distance_all_averages&.map(&:first)&.average
     }
 
     return root_distance_stats unless with_history
@@ -54,20 +53,19 @@ class ValidatorScoreQuery < ApplicationQuery
   end
 
   def vote_distance_all_history
-    @vote_distance_all_history ||=
-      for_batch&.map(&:vote_distance_history)
+    @vote_distance_all_history ||= for_batch&.pluck(:vote_distance_history, :validator_id)
   end
 
   def vote_distance_all_averages
-    @vote_distance_all_averages ||=
-      vote_distance_all_history&.map(&:average)
+    @vote_distance_all_averages ||= vote_distance_all_history&.map do |vote_dist|
+      [vote_dist.first.average, vote_dist.last]
+    end
   rescue NoMethodError
     nil
   end
 
   def top_vote_distance_averages_validators
-    @top_vote_distance_averages_validators ||=
-      vote_distance_all_averages&.sort
+    @top_vote_distance_averages_validators ||= vote_distance_all_averages&.sort&.first(50)
   end
 
   def top_staked_validators
@@ -80,10 +78,10 @@ class ValidatorScoreQuery < ApplicationQuery
 
   def vote_distance_stats(with_history: false)
     vote_distance_stats = {
-      min: vote_distance_all_averages&.min,
-      max: vote_distance_all_averages&.max,
-      median: vote_distance_all_averages&.median,
-      average: vote_distance_all_averages&.average
+      min: vote_distance_all_averages&.map(&:first)&.min,
+      max: vote_distance_all_averages&.map(&:first)&.max,
+      median: vote_distance_all_averages&.map(&:first)&.median,
+      average: vote_distance_all_averages&.map(&:first)&.average
     }
 
     return vote_distance_stats unless with_history

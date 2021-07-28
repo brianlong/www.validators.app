@@ -102,12 +102,19 @@
           </tr>
           </thead>
           <tbody>
-          <% @stats[:top_root_distance_validators].first(50).each.with_index do |v, index| %>
+          <% @stats[:top_root_distance_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
-              <td>Validator name</td>
-              <td><%= v.round(3) %></td>
-              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+              <td>
+                <% validator = Validator.find(record.last) %>
+                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
+              </td>
+              <td><%= record.first.to_f.round(3) %></td>
+              <td class="text-right">
+                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                  <i class="fas fa-search text-purple"></i>
+                <% end %>
+              </td>
             </tr>
           <% end %>
           </tbody>
@@ -127,12 +134,19 @@
           </tr>
           </thead>
           <tbody>
-          <% @stats[:top_vote_distance_validators].first(50).each.with_index do |v, index| %>
+          <% @stats[:top_vote_distance_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
-              <td>Validator name</td>
-              <td><%= v.round(3) %></td>
-              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+              <td>
+                <% validator = Validator.find(record.last) %>
+                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
+              </td>
+              <td><%= record.first.to_f.round(3) %></td>
+              <td class="text-right">
+                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                  <i class="fas fa-search text-purple"></i>
+                <% end %>
+              </td>
             </tr>
           <% end %>
           </tbody>
