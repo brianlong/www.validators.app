@@ -54,14 +54,53 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
 
   test 'assign_software_version_score persists a software_version_score' do
     score = create(:validator_score_v1, software_version: '1.5.4')
-    score.assign_software_version_score
+    score.assign_software_version_score('1.5.6')
     assert(score.software_version_score.present?)
   end
 
   test 'assign_software_version_score preserves the existing value if junk is passed' do
     score = create(:validator_score_v1, software_version: 'foo', software_version_score: 1)
-    score.assign_software_version_score
+    score.assign_software_version_score(nil)
     assert_equal 1, score.reload.software_version_score
+  end
+
+  test 'assign_software_version_score scores 2 points for correct versions' do
+    current_version = '1.5.4'
+    create(:batch, software_version: '1.5.4')
+    score1 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.4')
+    score2 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.5')
+    score3 = create(:validator_score_v1, network: 'testnet', software_version: '1.6.4')
+
+    score1.assign_software_version_score(current_version)
+    score2.assign_software_version_score(current_version)
+    score3.assign_software_version_score(current_version)
+
+    assert_equal 2, score1.reload.software_version_score
+    assert_equal 2, score2.reload.software_version_score
+    assert_equal 2, score3.reload.software_version_score
+  end
+
+  test 'assign_software_version_score scores 1 points for correct versions' do
+    current_version = '1.5.4'
+    create(:batch, software_version: current_version)
+    score1 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.3')
+    score2 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.1')
+
+    score1.assign_software_version_score(current_version)
+    score2.assign_software_version_score(current_version)
+
+    assert_equal 1, score1.reload.software_version_score
+    assert_equal 1, score2.reload.software_version_score
+  end
+
+  test 'assign_software_version_score scores 0 points for correct versions' do
+    current_version = '1.5.4'
+    create(:batch, software_version: current_version)
+    score1 = create(:validator_score_v1, network: 'testnet', software_version: '1.4.4')
+
+    score1.assign_software_version_score(current_version)
+
+    assert_equal 0, score1.reload.software_version_score
   end
 
   test 'by_network_with_active_stake scope should return correct results' do

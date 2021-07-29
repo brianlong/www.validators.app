@@ -341,7 +341,6 @@ module ValidatorScoreV1Logic
             validator.validator_score_v1.active_stake
         end
 
-        validator.validator_score_v1.assign_software_version_score
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -353,6 +352,11 @@ module ValidatorScoreV1Logic
       )
 
       p.payload[:this_batch].update(software_version: current_software_version)
+      
+      p.payload[:validators].each do |validator|
+        validator.validator_score_v1.assign_software_version_score(current_software_version)
+      end
+
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e

@@ -16,12 +16,13 @@ class PublicController < ApplicationController
 
     @validators = validators.page(index_params[:page])
 
-    @software_versions = Report.where(
-      network: index_params[:network],
-      name: 'report_software_versions'
-    ).last
-
     @batch = Batch.last_scored(params[:network])
+
+    @software_versions = Report.find_by(
+      network: index_params[:network],
+      name: 'report_software_versions',
+      batch_uuid: @batch.uuid
+    )
 
     if @batch
       @this_epoch = EpochHistory.where(
