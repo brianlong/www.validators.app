@@ -18,4 +18,11 @@ class BatchTest < ActiveSupport::TestCase
     assert_not_equal batch.created_at, batch.updated_at
     assert batch.updated_at > batch.created_at
   end
+
+  test 'has_many validator_block_histories relationship works correctly' do
+    batch = create(:batch)
+    create_list(:validator_block_history, 3, batch_uuid: batch.uuid)
+
+    assert_equal 3, batch.validator_block_histories.size
+  end
 end

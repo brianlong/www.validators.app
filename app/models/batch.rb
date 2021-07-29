@@ -36,6 +36,7 @@
 #
 class Batch < ApplicationRecord
   before_create :create_uuid
+  has_many :validator_block_histories, primary_key: :uuid, foreign_key: :batch_uuid
 
   def self.last_scored(network)
     where('network = ? and scored_at IS NOT NULL', network).last
