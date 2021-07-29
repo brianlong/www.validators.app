@@ -267,6 +267,8 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
+      p.payload[:this_batch].update(average_skipped_slot_percent: avg_skipped_slot_pct_all)
+
       Pipeline.new(
         200,
         p.payload.merge(

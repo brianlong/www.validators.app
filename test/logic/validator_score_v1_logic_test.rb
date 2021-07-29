@@ -294,6 +294,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_nil p.payload[:validators][3]
                          .validator_score_v1
                          .skipped_slot_moving_average_history
+
+    assert_equal 0.4667, p.payload[:this_batch].average_skipped_slot_percent
   end
 
   test 'assign_block_history_score' do
