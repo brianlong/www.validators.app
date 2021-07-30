@@ -88,18 +88,18 @@ class ValidatorsController < ApplicationController
       end.compact
 
       @validator.validator_block_histories
+                .includes(:batch)
                 .order('id desc')
                 .limit(@history_limit)
                 .reverse
                 .each do |vbh|
 
         i += 1
-        batch_stats = ValidatorBlockHistoryQuery.new(params[:network], vbh.batch_uuid)
 
         @data[i] = {
           skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
           skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-          cluster_skipped_slot_percent_moving_average: batch_stats.average_skipped_slot_percent * 100
+          cluster_skipped_slot_percent_moving_average: vbh.batch.skipped_slot_all_average * 100
         }
       end
     end
