@@ -14,7 +14,7 @@ Batch.find_each do |batch|
   vbhq = ValidatorBlockHistoryQuery.new(network, batch_uuid)
   average = vbhq.average_skipped_slot_percent
 
-  if batch.update(average_skipped_slot_percent: average)
+  if batch.update(skipped_slot_all_average: average)
     puts "Batch with uuid #{batch_uuid} from #{network} updated with average: #{average}.\n"
   end
   
