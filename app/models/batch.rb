@@ -16,8 +16,6 @@
 #  root_distance_all_average :float(24)
 #  root_distance_all_median  :integer
 #  scored_at                 :datetime
-#  skipped_slot_all_average  :float(24)
-#  skipped_slot_all_median   :float(24)
 #  skipped_vote_all_median   :float(24)
 #  software_version          :string(191)
 #  uuid                      :string(191)
