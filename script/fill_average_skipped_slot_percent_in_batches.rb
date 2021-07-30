@@ -3,7 +3,7 @@
 # RAILS_ENV=production bundle exec ruby script/back_fill_validator_histories.rb
 
 require_relative '../config/environment'
-log_path = File.join(Rails.root, 'log', 'fill_average_skipped_slot_percent_in_batches.txt')
+log_path = File.join(Rails.root, 'log', 'fill_average_skipped_slot_percent_in_batches.log')
 logger = Logger.new(log_path)
 
 Batch.find_each do |batch|
@@ -18,8 +18,8 @@ Batch.find_each do |batch|
     puts "Batch with uuid #{batch_uuid} from #{network} updated with average: #{average}.\n"
   end
   
-  rescue StandardError => e
-    logger.error "Batch id: #{batch.id}, message: #{e.message}\n#{e.backtrace}"
-    sleep(1)
-  # Go slow since this is just a 1-time backfill
+rescue StandardError => e
+  logger.error "Batch id: #{batch.id}, message: #{e.message}\n#{e.backtrace}"
+  sleep(1)
+# Go slow since this is just a 1-time backfill
 end
