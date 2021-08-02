@@ -66,6 +66,11 @@ class ValidatorsController < ApplicationController
     @data = {}
 
     @history_limit = 240
+    @block_histories = @validator.validator_block_histories.order('id desc').limit(25)
+    @block_history_stats = ValidatorBlockHistoryStat.where(
+      network: params[:network],
+      batch_uuid: @block_histories.pluck(:batch_uuid)
+    ).to_a
 
     i = 0
     if @validator.nil?
