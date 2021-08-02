@@ -9,7 +9,7 @@ class CommissionHistoryQuery
                   validator_id,
                   validators.account'
 
-  def initialize(network:, query:, time_range:)
+  def initialize(network:, query: nil, time_range:)
     @network = network
     @time_range = time_range
     @query = query
