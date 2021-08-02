@@ -267,6 +267,10 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
+      p.payload[:this_batch].update(
+        skipped_slot_all_median: med_skipped_slot_pct_all
+      )
+
       Pipeline.new(
         200,
         p.payload.merge(
