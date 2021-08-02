@@ -20,6 +20,7 @@ Batch.find_each do |batch|
   
 rescue StandardError => e
   logger.error "Batch id: #{batch.id}, message: #{e.message}\n#{e.backtrace}"
+  puts 'Error occurred, more info in log/fill_skipped_slot_all_average_in_batches.log'
   sleep(1)
 # Go slow since this is just a 1-time backfill
 end
