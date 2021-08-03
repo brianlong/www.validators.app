@@ -24,10 +24,19 @@ module SolanaLogic
 
   # At the end of a pipeline operation, we can modify batch.gathered_at to
   # calculate batch processing time.
+  # We can also set some attributes ie. skipped_slot_all_average.
   def batch_touch
     lambda do |p|
       # byebug
       batch = Batch.where(uuid: p.payload[:batch_uuid]).first
+
+      # IMPORTANT: Do not use this values on index page, it's only for show.
+      skipped_slot_percent_moving_average = ValidatorBlockHistory.average_skipped_slot_percent_for(
+        p.payload[:network], p.payload[:batch_uuid]
+      )
+      
+      batch&.skipped_slot_all_average = skipped_slot_percent_moving_average
+      ##### /IMPORTANT
       batch&.gathered_at = Time.now # instead of batch.touch if batch
       batch&.save
 
@@ -404,6 +413,7 @@ module SolanaLogic
           skipped_slot_percent: v['skipped_slot_percent'].round(4)
         )
       end
+
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(
