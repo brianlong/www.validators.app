@@ -6,9 +6,8 @@ require_relative '../config/environment'
 log_path = File.join(Rails.root, 'log', 'fill_skipped_slot_all_average_in_batches.log')
 logger = Logger.new(log_path)
 
-Batch.find_each do |batch|
-  # Skip if record is already updated 
-  next if batch.skipped_slot_all_average > 0.0
+Batch.where('skipped_slot_all_average = 0.0 OR skipped_slot_all_average IS NULL')
+     .find_each do |batch|
 
   batch_uuid = batch.uuid
   network = batch.network
