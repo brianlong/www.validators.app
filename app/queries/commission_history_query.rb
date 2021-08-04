@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 class CommissionHistoryQuery
-  QUERY_FIELDS = 'commission_histories.created_at,
-                  commission_before,
-                  commission_after,
-                  epoch,
-                  commission_histories.network,
-                  validator_id,
-                  validators.account'
+  CH_FIELDS = %w[
+    created_at
+    commission_before
+    commission_after
+    epoch
+    network
+    validator_id
+  ].freeze
+
+  VAL_FIELDS = %w[account].freeze
 
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
@@ -18,7 +21,7 @@ class CommissionHistoryQuery
 
   def all_records
     CommissionHistory.joins(:validator)
-                     .select(QUERY_FIELDS)
+                     .select(query_fields)
                      .where(
                        network: @network,
                        created_at: @time_range
@@ -29,7 +32,7 @@ class CommissionHistoryQuery
     validators_ids = matching_validators(query).pluck(:id)
 
     CommissionHistory.joins(:validator)
-                     .select(QUERY_FIELDS)
+                     .select(query_fields)
                      .where(
                        network: @network,
                        created_at: @time_range,
@@ -46,5 +49,17 @@ class CommissionHistoryQuery
 
     ValidatorSearchQuery.new(validators)
                         .search(query)
+  end
+
+  def query_fields
+    ch_fields = CH_FIELDS.map do |field|
+      "commission_histories.#{field}"
+    end.join(', ')
+
+    val_fields = VAL_FIELDS.map do |field|
+      "validators.#{field}"
+    end.join(', ')
+
+    [ch_fields, val_fields].join(', ')
   end
 end
