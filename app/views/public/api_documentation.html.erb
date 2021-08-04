@@ -17,6 +17,7 @@
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#notes">Notes</a></li>
   <li><a href="#epoch-index">Epoch Index</a></li>
+  <li><a href="#commission-change-index">Commission Change Index</a></li>
 </ul>
 
 <hr />
@@ -200,6 +201,42 @@
       ],
       epochs_count: 169
     }
+
+    </pre>
+  </div>
+</div>
+
+<hr />
+
+<h4 id="commission-change-index">Commission Change Index</h4>
+<div class="row">
+  <div class="col-sm-12">
+    <p>
+      The Commission Change endpoint will return all the changes in commission for a given period of time. 
+      Replace `:network` with 'testnet' or 'mainnet' as desired. 
+    </p>
+    <p>Request:</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network'</pre>
+    <p>Parameter Options:</p>
+    <p>`date_from=%year-%month-%dayT%hour:%minute:%second` begining of a search period. Defaults to 30 days ago</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?date_from=2021-07-01T11:02:12'</pre>
+    <p>`date_to=%year-%month-%dayT%hour:%minute:%second` end of a search period. Defaults to now</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?date_to=2021-07-28T11:02:12'</pre>
+    <p>`query=%account-or-key` returns data only for validators matching by name, pubkey or vote account</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?query=123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY'</pre>
+    <p>Response:</p>
+    <pre>
+      [
+        {
+          "created_at": "2021-07-27T08:47:16.803Z",
+          "commission_before": 9.0,
+          "commission_after": 10.0,
+          "epoch": 213,
+          "network": "testnet",
+          "account": "123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY"
+        },
+        ...
+      ]
 
     </pre>
   </div>

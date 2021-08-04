@@ -86,6 +86,7 @@ Rails.application.routes.draw do
 
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
+      get 'commission-changes/:network', to: 'commission_histories#index', as: 'commission_histories_index'
     end
   end
 
