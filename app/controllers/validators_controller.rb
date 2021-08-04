@@ -38,8 +38,6 @@ class ValidatorsController < ApplicationController
         validator_block_history_query.median_skipped_slot_percent
     end
 
-    vote_account_history_query = VoteAccountHistoryQuery.new(params[:network], @batch.uuid)
-
     validator_history =
       ValidatorHistoryQuery.new(params[:network], @batch.uuid)
 
@@ -73,40 +71,33 @@ class ValidatorsController < ApplicationController
     ).to_a
 
     i = 0
-    if @validator.nil?
-      render file: "#{Rails.root}/public/404.html" , status: 404
-    else
-      @val_history = @validator.validator_history_last
-      @val_histories = ValidatorHistory.where(
-        network: params[:network],
-        account: @validator.account
-      ).order(created_at: :asc).last(@history_limit)
 
-      # Grab the distances to show on the chart
-      @root_blocks = @val_histories.map do |vh|
-        vh.root_distance
-      end.compact
+    @val_history = @validator.validator_history_last
+    @val_histories = ValidatorHistory.where(
+      network: params[:network],
+      account: @validator.account
+    ).order(created_at: :asc).last(@history_limit)
 
-      # Grab the distances to show on the chart
-      @vote_blocks = @val_histories.map do |vh|
-        vh.vote_distance
-      end.compact
+    # Grab the distances to show on the chart
+    @root_blocks = @val_histories.map(&:root_distance).compact
 
-      @validator.validator_block_histories
-                .includes(:batch)
-                .order('id desc')
-                .limit(@history_limit)
-                .reverse
-                .each do |vbh|
+    # Grab the distances to show on the chart
+    @vote_blocks = @val_histories.map(&:vote_distance).compact
 
-        i += 1
+    @validator.validator_block_histories
+              .includes(:batch)
+              .order('id desc')
+              .limit(@history_limit)
+              .reverse
+              .each do |vbh|
 
-        @data[i] = {
-          skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
-          skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-          cluster_skipped_slot_percent_moving_average: vbh.batch.skipped_slot_all_average * 100
-        }
-      end
+      i += 1
+
+      @data[i] = {
+        skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
+        skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
+        cluster_skipped_slot_percent_moving_average: vbh.batch.skipped_slot_all_average * 100
+      }
     end
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
@@ -118,7 +109,7 @@ class ValidatorsController < ApplicationController
     @validator = Validator.where(
       network: params[:network],
       account: params[:account]
-    ).first
+    ).first or not_found
   end
 
   def validate_order

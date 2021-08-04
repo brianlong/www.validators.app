@@ -17,4 +17,10 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     get validator_url(network: 'testnet', account: @validator.account)
     assert_response :success
   end
+
+  test 'should raise ActiveRecord::RecordNotFound if validator not found' do
+    assert_raises 'ActiveRecord::RecordNotFound' do
+      get validator_url(network: 'testnet', account: 'notexistingaccount')
+    end
+  end
 end
