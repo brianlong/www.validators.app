@@ -39,7 +39,7 @@ class ValidatorBlockHistoryQuery < ApplicationQuery
 
   def skipped_slot_percent_history_moving_average
     @skipped_slot_percent_history_moving_average ||=
-      for_batch.pluck(:skipped_slot_percent_moving_average, :validator_id)
+      for_batch.joins(:validator).pluck(:skipped_slot_percent_moving_average, :account)
   end
 
   def skipped_slot_percent_history

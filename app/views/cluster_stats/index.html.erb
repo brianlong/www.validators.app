@@ -42,12 +42,11 @@
             <tr>
               <td><%= index + 1 %>.</td>
               <td>
-                <% validator = Validator.find(record.last) %>
-                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
+                <%= link_to record.last, validator_path(network: params[:network], account: record.last) %>
               </td>
               <td><%= number_with_delimiter( lamports_to_sol(record.first).round(0), delimiter: ',')  %></td>
               <td class="text-right">
-                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
               </td>
@@ -74,12 +73,11 @@
             <tr>
               <td><%= index + 1 %>.</td>
               <td>
-                <% validator = Validator.find(record.last) %>
-                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
+                <%= link_to record.last, validator_path(network: params[:network], account: record.last) %>
               </td>
               <td><%= record.first.to_f.round(3) %></td>
               <td class="text-right">
-                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
               </td>
@@ -106,12 +104,11 @@
             <tr>
               <td><%= index + 1 %>.</td>
               <td>
-                <% validator = Validator.find(record.last) %>
-                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
+                <%= link_to record.last, validator_path(network: params[:network], account: record.last) %>
               </td>
               <td><%= record.first.to_f.round(3) %></td>
               <td class="text-right">
-                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
               </td>
@@ -138,12 +135,11 @@
             <tr>
               <td><%= index + 1 %>.</td>
               <td>
-                <% validator = Validator.find(record.last) %>
-                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
+                <%= link_to record.last, validator_path(network: params[:network], account: record.last) %>
               </td>
               <td><%= record.first.to_f.round(3) %></td>
               <td class="text-right">
-                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
               </td>
@@ -170,13 +166,11 @@
             <tr>
               <td><%= index + 1 %></td>
               <td>
-                <% validator = Validator.find(record.last) %>
-                <%= link_to validator_display_name(validator), validator_path(network: params[:network], account: validator.account) %>
+                <%= link_to record.last, validator_path(network: params[:network], account: record.last) %>
               </td>
               <td><%= record.first.to_f.round(3) %></td>
               <td class="text-right">
-                <% validator = Validator.find(record.last) %>
-                <%= link_to validator_path(network: params[:network], account: validator.account) do %>
+                <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
               </td>

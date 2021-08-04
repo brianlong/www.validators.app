@@ -24,7 +24,8 @@ class ValidatorScoreQuery < ApplicationQuery
   end
 
   def root_distance_all_history
-    @root_distance_all_history ||= for_batch.pluck(:root_distance_history, :validator_id)
+    @root_distance_all_history ||= for_batch.joins(:validator)
+                                            .pluck(:root_distance_history, :account)
   end
 
   def root_distance_all_averages
@@ -53,7 +54,7 @@ class ValidatorScoreQuery < ApplicationQuery
   end
 
   def vote_distance_all_history
-    @vote_distance_all_history ||= for_batch&.pluck(:vote_distance_history, :validator_id)
+    @vote_distance_all_history ||= for_batch&.joins(:validator)&.pluck(:vote_distance_history, :account)
   end
 
   def vote_distance_all_averages
@@ -69,7 +70,8 @@ class ValidatorScoreQuery < ApplicationQuery
   end
 
   def top_staked_validators
-    @top_staked_validators ||= for_batch.pluck(:active_stake, :validator_id)
+    @top_staked_validators ||= for_batch.joins(:validator)
+                                        .pluck(:active_stake, :account)
                                         .map { |tsv| [tsv.first.to_i, tsv.last] }
                                         .sort
                                         .reverse
