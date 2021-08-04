@@ -66,6 +66,11 @@ class ValidatorsController < ApplicationController
     @data = {}
 
     @history_limit = 240
+    @block_histories = @validator.validator_block_histories.order('id desc').limit(25)
+    @block_history_stats = ValidatorBlockHistoryStat.where(
+      network: params[:network],
+      batch_uuid: @block_histories.pluck(:batch_uuid)
+    ).to_a
 
     i = 0
     if @validator.nil?
@@ -77,27 +82,29 @@ class ValidatorsController < ApplicationController
         account: @validator.account
       ).order(created_at: :asc).last(@history_limit)
 
+      # Grab the distances to show on the chart
       @root_blocks = @val_histories.map do |vh|
-        ValidatorHistory.highest_root_block_for(params[:network], vh.batch_uuid) - vh.root_block
-      end
+        vh.root_distance
+      end.compact
 
+      # Grab the distances to show on the chart
       @vote_blocks = @val_histories.map do |vh|
-        ValidatorHistory.highest_last_vote_for(params[:network], vh.batch_uuid) - vh.last_vote
-      end
+        vh.vote_distance
+      end.compact
 
       @validator.validator_block_histories
+                .includes(:batch)
                 .order('id desc')
                 .limit(@history_limit)
                 .reverse
                 .each do |vbh|
 
         i += 1
-        batch_stats = ValidatorBlockHistoryQuery.new(params[:network], vbh.batch_uuid)
 
         @data[i] = {
           skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
           skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-          cluster_skipped_slot_percent_moving_average: batch_stats.average_skipped_slot_percent * 100
+          cluster_skipped_slot_percent_moving_average: vbh.batch.skipped_slot_all_average * 100
         }
       end
     end

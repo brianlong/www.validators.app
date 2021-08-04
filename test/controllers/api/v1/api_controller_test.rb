@@ -71,63 +71,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'pong', json['answer']
   end
 
-  test 'POST api_v1_collector without token should get error' do
-    post api_v1_collector_url, params: {}
-    assert_response 401
-    expected_response = { 'error' => 'Unauthorized' }
-    assert_equal expected_response, response_to_json(@response.body)
-  end
-
-  test 'POST api_v1_collector with empty params should get error' do
-    expected_response = { 'status' => 'Parameter Missing' }
-
-    # Completely empty params
-    post api_v1_collector_url,
-         headers: { 'Token' => @user.api_token },
-         params: {}
-    assert_response 400
-    assert_equal expected_response, response_to_json(@response.body)
-
-    # Empty collector params
-    post api_v1_collector_url,
-         headers: { 'Token' => @user.api_token },
-         params: { collector: {} }
-    assert_response 400
-    assert_equal expected_response, response_to_json(@response.body)
-  end
-
-  test 'POST api_v1_collector with invalid params should get error' do
-    post api_v1_collector_url,
-         headers: { 'Token' => @user.api_token },
-         params: { collector: { one: 1, two: 2, three: 3 } }
-    assert_response 400
-    expected_response = { 'status' => 'Bad Request' }
-    assert_equal expected_response, response_to_json(@response.body)
-  end
-
-  test 'POST api_v1_collector with valid data should succeed' do
-    # Prepare the payload
-    valid_payload = {
-      payload_type: 'ping',
-      payload_version: 1,
-      payload: { 'test_key' => 'test_value' }.to_json
-    }
-
-    # Post the payload
-    post api_v1_collector_url,
-         headers: { 'Token' => @user.api_token },
-         params: { collector: valid_payload }
-    assert_response 202
-    json = response_to_json(@response.body)
-    assert_equal 'Accepted', json['status']
-
-    # Verify that the record was saved successfully
-    collector = Collector.last
-    assert_equal 'ping', collector.payload_type
-    assert_equal 1, collector.payload_version
-    assert_equal '{"test_key":"test_value"}', collector.payload
-  end
-
   test 'GET api_v1_validators with token returns only validators from chosen network with scores' do
     create_list(:validator, 3, :with_score,)
     create_list(:validator, 3, :with_score, :mainnet)
@@ -210,11 +153,11 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator = create(:validator, :with_score, account: 'Test Account')
 
     search_query = 'john doe'
-    
+
     get api_v1_validators_url(network: 'testnet', q: search_query),
         headers: { 'Token' => @user.api_token }
     assert_response 200
-    
+
     json = response_to_json(@response.body)
 
     assert_equal 1, json.size
@@ -225,17 +168,17 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator = create(:validator, :with_score, account: 'Test Account')
 
     search_query = '1234'
-    
+
     get api_v1_validators_url(network: 'testnet', q: search_query),
         headers: { 'Token' => @user.api_token }
     assert_response 200
-    
+
     json = response_to_json(@response.body)
 
     assert_equal 0, json.size
   end
-  
-  # 
+
+  #
   # Pagination
   #
   test 'GET api_v1_validators with token, limit and page passed in returns limited data' do
@@ -304,9 +247,9 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal Validator.all.size, json.size
   end
-  # 
+  #
   # Pagination with search
-  # 
+  #
   test 'GET api_v1_validators with token, search query, limit and page passed returns limited data' do
     create(:validator, :with_score, name: 'search_query')
     create_list(:validator, 5, :with_score)
@@ -477,13 +420,5 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 404
     assert_equal expected_response, json_response
-  end
-
-  test 'request ping_times with token should show empty array' do
-    get api_v1_ping_times_url(network: 'testnet', account: '1234'),
-        headers: { 'Token' => @user.api_token }
-    assert_response 200
-    json = response_to_json(@response.body)
-    assert_equal 3, json.count
   end
 end

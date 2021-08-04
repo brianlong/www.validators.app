@@ -6,15 +6,14 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
     val2 = create(:validator, :with_score, account: 'acc2', network: 'testnet')
 
     create(:commission_history, validator: val1)
-    create(:commission_history, validator: val2, created_at: 2.days.ago)
+    create(:commission_history, validator: val2, created_at: 32.days.ago)
   end
 
   test 'commission_history_query \
         should include results from correct time period' do
     result = CommissionHistoryQuery.new(
       network: 'testnet',
-      time_range: (1.day.ago..DateTime.now)
-    ).call
+    ).all_records
 
     assert_equal 1, result.size
     assert_equal 'acc1', result.last.account
@@ -25,9 +24,9 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
         should include results from correct validators' do
     result = CommissionHistoryQuery.new(
       network: 'testnet',
-      time_range: (3.day.ago..DateTime.now),
-      query: 'acc2'
-    ).call
+      time_from: 33.day.ago,
+      time_to: DateTime.now
+    ).by_query('acc2')
 
     assert_equal 1, result.size
     assert_equal 'acc2', result.last.account

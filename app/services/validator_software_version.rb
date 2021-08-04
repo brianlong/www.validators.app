@@ -1,7 +1,11 @@
 class ValidatorSoftwareVersion < ::Gem::Version
-  def initialize(number:, network: 'mainnet')
+  def initialize(number:, network: 'mainnet', best_version: nil)
     super(number)
-    @current_version_number = network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
+    if best_version
+      @current_version_number = best_version
+    else
+      @current_version_number = network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
+    end
   end
 
   def running_latest_or_newer?
@@ -26,11 +30,6 @@ class ValidatorSoftwareVersion < ::Gem::Version
   end
 
   def self.valid_software_version?(number)
-    begin
-      self.new(number: number)
-      true
-    rescue
-      false
-    end
+    Gem::Version.correct? number
   end
 end
