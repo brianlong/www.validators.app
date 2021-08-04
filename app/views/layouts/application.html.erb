@@ -28,6 +28,7 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
 
@@ -40,6 +41,9 @@
       _gs('GSN-651178-H');
       _gs('set', 'anonymizeIP', true);
     </script>
+
+    <!-- Vue templates -->
+    <%= javascript_pack_tag 'commission_histories/index' %>
   </head>
 
   <body>
