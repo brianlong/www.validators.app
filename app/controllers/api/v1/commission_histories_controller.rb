@@ -12,13 +12,13 @@ module Api
           time_from: index_params[:date_from]
         )
 
-        @commission_histories = if index_params[:query]
+        commission_histories = if index_params[:query]
           ch_query.by_query(index_params[:query])
         else
           ch_query.all_records
         end
 
-        render json: @commission_histories.as_json(except: [:validator_id]),
+        render json: commission_histories.as_json(except: [:validator_id]),
                status: :ok
       rescue ArgumentError => e
         render json: { error: e.message }, status: 400
