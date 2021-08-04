@@ -6,16 +6,17 @@ module Api
     class CommissionHistoriesController < BaseController
       # /api/v1/commission-changes/:network
       def index
-        time_r = time_range(
-          date_from: index_params[:date_from],
-          date_to: index_params[:date_to]
-        )
-
         @commission_histories = CommissionHistoryQuery.new(
           network: index_params[:network],
-          query: index_params[:query],
-          time_range: time_r
-        ).call
+          time_to: index_params[:date_to],
+          time_from: index_params[:date_from]
+        )
+
+        if index_params[:query]
+          @commission_histories = @commission_histories.by_query(index_params[:query])
+        else
+          @commission_histories = @commission_histories.all_records
+        end
 
         render json: @commission_histories.as_json(except: [:validator_id]),
                status: :ok
@@ -27,14 +28,6 @@ module Api
 
       def index_params
         params.permit(:date_from, :date_to, :network, :query)
-      end
-
-      # Set default time range or format range from params
-      def time_range(date_from:, date_to:)
-        date_from ||= 30.days.ago
-        date_to ||= DateTime.now
-
-        date_from.to_datetime..date_to.to_datetime
       end
     end
   end

@@ -9,45 +9,42 @@ class CommissionHistoryQuery
                   validator_id,
                   validators.account'
 
-  def initialize(network:, query: nil, time_range:)
-    @network = network
-    @time_range = time_range
-    @query = query
+  def initialize(options)
+    @network = options.fetch(:network, 'testnet')
+    @time_from = options.fetch(:time_from, 30.days.ago) || 30.days.ago
+    @time_to = options.fetch(:time_to, DateTime.now) || DateTime.now
+    @time_range = @time_from..@time_to
   end
 
-  def call
-    # If query is present, search for matching validators, 
-    # otherwise take all records from a time range
-    if @query
-      validators_ids = matching_validators.pluck(:id)
+  def all_records
+    CommissionHistory.joins(:validator)
+                     .select(QUERY_FIELDS)
+                     .where(
+                       network: @network,
+                       created_at: @time_range
+                     )
+  end
 
-      commission_histories = CommissionHistory.joins(:validator)
-                                              .select(QUERY_FIELDS)
-                                              .where(
-                                                network: @network,
-                                                created_at: @time_range,
-                                                validator_id: validators_ids
-                                              )
-    else
-      commission_histories = CommissionHistory.joins(:validator)
-                                              .select(QUERY_FIELDS)
-                                              .where(
-                                                network: @network,
-                                                created_at: @time_range
-                                              )
-    end
+  def by_query(query = nil)
+    validators_ids = matching_validators(query).pluck(:id)
 
-    commission_histories
+    CommissionHistory.joins(:validator)
+                     .select(QUERY_FIELDS)
+                     .where(
+                       network: @network,
+                       created_at: @time_range,
+                       validator_id: validators_ids
+                     )
   end
 
   private
 
-  def matching_validators
+  def matching_validators(query)
     validators = Validator.where(network: @network)
                           .scorable
                           .joins(:validator_score_v1)
 
     ValidatorSearchQuery.new(validators)
-                        .search(@query)
+                        .search(query)
   end
 end
