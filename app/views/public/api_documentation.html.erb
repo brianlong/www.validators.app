@@ -218,12 +218,12 @@
     <p>Request:</p>
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network'</pre>
     <p>Parameter Options:</p>
-    <p>`date_from=%year-%month-%dayT%hour:%minute:%second` begining of a search period. Defaults to 30 days ago</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?date_from=2021-07-01T11:02:12'</pre>
+    <p>`date_from=%year-%month-%dayT%hour:%minute:%second` beginning of a search period. Defaults to 30 days ago</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?date_from=2021-07-01T11:02:12'</pre>
     <p>`date_to=%year-%month-%dayT%hour:%minute:%second` end of a search period. Defaults to now</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?date_to=2021-07-28T11:02:12'</pre>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?date_to=2021-07-28T11:02:12'</pre>
     <p>`query=%account-or-key` returns data only for validators matching by name, pubkey or vote account</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?query=123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY'</pre>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?query=123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY'</pre>
     <p>Response:</p>
     <pre>
       [
