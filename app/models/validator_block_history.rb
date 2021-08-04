@@ -35,6 +35,7 @@ class ValidatorBlockHistory < ApplicationRecord
   include PipelineLogic
 
   belongs_to :validator
+  has_one :batch, primary_key: :batch_uuid, foreign_key: :uuid
 
   after_create :set_skipped_slot_percent_moving_average
 

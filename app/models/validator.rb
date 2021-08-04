@@ -213,4 +213,27 @@ class Validator < ApplicationRecord
   def private_validator?
     score&.commission == 100 && network == 'mainnet'
   end
+
+  def api_url
+    Rails.application.routes.url_helpers.api_v1_validator_url(
+      network: self.network,
+      account: self.account
+    )
+  end
+
+  def to_builder
+    Jbuilder.new do |validator|
+      validator.(
+        self, 
+        :network, 
+        :account, 
+        :name, 
+        :keybase_id, 
+        :www_url,
+        :details, 
+        :created_at, 
+        :updated_at
+      )
+    end
+  end
 end

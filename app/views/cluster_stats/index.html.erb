@@ -1,16 +1,313 @@
-<%= render 'validators/banner' %>
-<% unless @mainnet.empty? %>
-  Mainnet Stats: <br />
-  <%= @mainnet.inspect %>
-  <%#= render 'validators/stats' %>
+<h1 class="page-header"><%= params[:network].capitalize %> Stats</h1>
 
-<% end %>
 
-<% unless @testnet.empty? %>
-  Testnet Stats: <br />
-  <%= @testnet.inspect %>
-  <%#= render 'validators/stats' %>
+<div class="card">
+  <div class="card-content">
+    <h3 class="card-heading mb-3">Top Validators by:</h3>
+  </div>
 
-<% end %>
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#menu1">Stake</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu2">Skipped Vote&nbsp;&percnt;</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu3">Root Distance</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu4">Vote Distance</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu5">Skipped Slot&nbsp;&percnt;</a>
+    </li>
+  </ul>
 
-<%= render 'validators/software_versions' %>
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane active" id="menu1">
+      <div class="table-responsive-md">
+        <table class='table mb-0'>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Validator</th>
+            <th>Stake</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @stats[:top_staked_validators].first(50).each.with_index do |v, index| %>
+            <tr>
+              <td><%= index + 1 %>.</td>
+              <td>Validator name</td>
+              <td><%= number_with_delimiter(v, delimiter: ',')  %></td>
+              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="menu2">
+      <div class="table-responsive-md">
+        <table class='table mb-0'>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Validator</th>
+            <th>Skipped Vote</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @stats[:top_skipped_vote_validators].first(50).each.with_index do |v, index| %>
+            <tr>
+              <td><%= index + 1 %>.</td>
+              <td>Validator name</td>
+              <td><%= v.round(3) %></td>
+              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="menu3">
+      <div class="table-responsive-md">
+        <table class='table mb-0'>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Validator</th>
+            <th>Root Distance</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @stats[:top_root_distance_validators].first(50).each.with_index do |v, index| %>
+            <tr>
+              <td><%= index + 1 %>.</td>
+              <td>Validator name</td>
+              <td><%= v.round(3) %></td>
+              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="menu4">
+      <div class="table-responsive-md">
+        <table class='table mb-0'>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Validator</th>
+            <th>Vote Distance</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @stats[:top_vote_distance_validators].first(50).each.with_index do |v, index| %>
+            <tr>
+              <td><%= index + 1 %>.</td>
+              <td>Validator name</td>
+              <td><%= v.round(3) %></td>
+              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="menu5">
+      <div class="table-responsive-md">
+        <table class='table mb-0'>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Validator</th>
+            <th>Skipped Slot</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @stats[:top_skipped_slot_validators].first(50).each.with_index do |v, index| %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td>Validator name</td>
+              <td><%= v.round(3) %></td>
+              <td class="text-right"><i class="fas fa-search text-purple"></i></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-md-6 mb-4">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="card-heading mb-4">Root Distance</h3>
+        <div class="row px-3 px-xl-5 mb-md-2">
+          <div class="stat col-5 my-auto">
+            <small class="text-muted">Median:</small>
+            <div class="h5 text-purple">
+              <%= @stats[:root_distance][:median].to_i %>
+            </div>
+            <small class="text-muted">Average:</small>
+            <div class="h5 text-purple">
+              <%= number_to_human(@stats[:root_distance][:average].to_f.round(1),
+                                  format:'%n%u',
+                                  units: { thousand: 'K', million: 'M', billion: 'B' }) %>
+            </div>
+          </div>
+          <div class="stat col-7 my-auto px-0">
+            <div class="text-muted">
+              <i class="fas fa-long-arrow-alt-down text-purple"></i>Min &ndash;
+              <i class="fas fa-long-arrow-alt-up text-purple"></i>Max:
+            </div>
+            <div class="stat-title-2 text-purple">
+              <%= @stats[:root_distance][:min].to_i %> &ndash;
+              <%= number_to_human(@stats[:root_distance][:max].to_i,
+                                  format:'%n%u',
+                                  units: { thousand: 'K', million: 'M', billion: 'B' }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mb-4">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="card-heading mb-4">Vote Distance</h3>
+        <div class="row px-3 px-xl-5 mb-md-2">
+          <div class="stat col-5 my-auto">
+            <small class="text-muted">Median:</small>
+            <div class="h5 text-purple">
+              <%= @stats[:vote_distance][:median].to_i %>
+            </div>
+            <small class="text-muted">Average:</small>
+            <div class="h5 text-purple">
+              <%= number_to_human(@stats[:vote_distance][:average].to_f.round(1),
+                                  format:'%n%u',
+                                  units: { thousand: 'K', million: 'M', billion: 'B' }) %>
+            </div>
+          </div>
+          <div class="stat col-7 my-auto px-0">
+            <div class="text-muted">
+              <i class="fas fa-long-arrow-alt-down text-purple"></i>Min &ndash;
+              <i class="fas fa-long-arrow-alt-up text-purple"></i>Max:
+            </div>
+            <div class="stat-title-2 text-purple">
+              <%= @stats[:vote_distance][:min].to_i %> &ndash;
+              <%= number_to_human(@stats[:vote_distance][:max].to_i,
+                                  format:'%n%u',
+                                  units: { thousand: 'K', million: 'M', billion: 'B' }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-md-6 mb-4">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="card-heading mb-4">Skipped Vote&nbsp;&percnt;</h3>
+        <div class="row px-3 px-xl-5 mb-md-2">
+          <div class="stat col-5">
+            <small class="text-muted">Median:</small>
+            <div class="h5 text-success">
+              <%= number_to_percentage @stats[:skipped_votes_percent][:median].to_f*100, precision: 1 %>
+            </div>
+            <small class="text-muted">Average:</small>
+            <div class="h5 text-success">
+              <%= number_to_percentage @stats[:skipped_votes_percent][:average].to_f*100, precision: 1 %>
+            </div>
+          </div>
+          <div class="stat col-7 my-auto px-0">
+            <div class="text-muted"><i class="fas fa-trophy text-success"></i>Best:</div>
+            <div class="stat-title-1 text-success">
+              <%= number_to_percentage @stats[:skipped_votes_percent][:best].to_f*100, precision: 2 %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 mb-4">
+    <div class="card">
+      <div class="card-content">
+        <h3 class="card-heading mb-4">Skipped Slot&nbsp;&percnt;</h3>
+        <div class="row px-3 px-xl-5 mb-md-2">
+          <div class="stat col-5 my-auto">
+            <small class="text-muted">Median:</small>
+            <div class="h5 text-success">
+              <%= number_to_percentage @stats[:skipped_slots][:median].to_f * 100, precision: 1 %>
+            </div>
+            <small class="text-muted">Average:</small>
+            <div class="h5 text-success">
+              <%= number_to_percentage @stats[:skipped_slots][:average].to_f * 100, precision: 1 %>
+            </div>
+          </div>
+          <div class="stat col-7 my-auto px-0">
+            <div class="text-muted">
+              <i class="fas fa-long-arrow-alt-down text-success"></i>Min &ndash;
+              <i class="fas fa-long-arrow-alt-up text-success"></i>Max:
+            </div>
+            <div class="stat-title-1 text-success">
+              <%= @stats[:skipped_slots][:min].to_i %> &ndash; <%= @stats[:skipped_slots][:max].to_i %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <%= render 'validators/software_versions',
+             software_versions: @stats[:software_version],
+             batch: @batch %>
+  <div class="col-md-5 col-lg-4">
+    <div class="card">
+      <div class="card-content">
+        <h2 class="card-heading mb-4">General Stats</h2>
+
+        <div class="row px-4 px-md-5 text-center">
+          <div class="col-6 col-md-12 mb-md-4">
+            <small class="text-muted">Epoch:</small>
+            <div class="h2 text-purple"><%= @this_epoch %></div>
+          </div>
+          <div class="col-6 col-md-12 mb-md-4">
+            <small class="text-muted">Validators:</small>
+            <div class="h2 text-purple">
+              <%= number_with_delimiter(@validators_count, delimiter: " ") %>
+            </div>
+          </div>
+          <div class="col-6 col-md-12 mb-md-4">
+            <small class="text-muted">Software Ver.:</small>
+            <div class="h2 text-purple">
+              <%= current_software_version(@batch, params[:network]) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

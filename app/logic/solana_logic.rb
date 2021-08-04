@@ -24,10 +24,19 @@ module SolanaLogic
 
   # At the end of a pipeline operation, we can modify batch.gathered_at to
   # calculate batch processing time.
+  # We can also set some attributes ie. skipped_slot_all_average.
   def batch_touch
     lambda do |p|
       # byebug
       batch = Batch.where(uuid: p.payload[:batch_uuid]).first
+
+      # IMPORTANT: Do not use this values on index page, it's only for show.
+      skipped_slot_percent_moving_average = ValidatorBlockHistory.average_skipped_slot_percent_for(
+        p.payload[:network], p.payload[:batch_uuid]
+      )
+      
+      batch&.skipped_slot_all_average = skipped_slot_percent_moving_average
+      ##### /IMPORTANT
       batch&.gathered_at = Time.now # instead of batch.touch if batch
       batch&.save
 
@@ -39,10 +48,10 @@ module SolanaLogic
 
   def epoch_get
     lambda do |p|
-      epoch_json = rpc_request(
-        'getEpochInfo',
-        p.payload[:config_urls]
-      )['result']
+      epoch_json = solana_client_request(
+        p.payload[:config_urls],
+        :get_epoch_info
+      )
 
       epoch = EpochHistory.create(
         network: p.payload[:network],
@@ -74,21 +83,78 @@ module SolanaLogic
       raise 'No results from `solana validators`' if \
         validators['validators'].blank?
 
+      # There were recent updates to the validators CLI response. This is the
+      # response struct as of 2021-07-25.
+      # "validators": [
+      #   {
+      #     "identityPubkey": "5bBECyn9rNvcTB8y9j2Rzs3myXUDR97m62oaJong8sg2",
+      #     "voteAccountPubkey": "5BTgeYMDUQz59sdNFr47FVmA119QmsoZNjUyGyeGb4sJ",
+      #     "commission": 2,
+      #     "lastVote": 88545169,
+      #     "rootSlot": 88545120,
+      #     "credits": 7409369,
+      #     "epochCredits": 156357,
+      #     "activatedStake": 404510903886025,
+      #     "version": "1.6.10",
+      #     "delinquent": false,
+      #     "skipRate": 37.745098039215684
+      #   },
+
+      max_root_height = validators['validators'].map { |v|
+        v['rootSlot']
+      }.max.to_i
+
+      max_vote_height = validators['validators'].map { |v|
+        v['lastVote']
+      }.max.to_i
+
+      validator_histories = {}
       # Create current validators
       validators['validators'].each do |validator|
-        ValidatorHistory.create(
-          network: p.payload[:network],
-          batch_uuid: p.payload[:batch_uuid],
-          account: validator['identityPubkey'],
-          vote_account: validator['voteAccountPubkey'],
-          commission: validator['commission'],
-          last_vote: validator['lastVote'],
-          root_block: validator['rootSlot'],
-          credits: validator['credits'],
-          active_stake: validator['activatedStake'],
-          software_version: validator['version'],
-          delinquent: validator['delinquent']
-        )
+        if existing_history = validator_histories[validator['identityPubkey']]
+          if existing_history.last_vote < validator['lastVote']
+            existing_history.update(
+              account: validator['identityPubkey'],
+              vote_account: validator['voteAccountPubkey'],
+              commission: validator['commission'],
+              last_vote: validator['lastVote'],
+              root_block: validator['rootSlot'],
+              credits: validator['credits'],
+              epoch_credits: validator['epochCredits'],
+              active_stake: validator['activatedStake'],
+              software_version: validator['version'],
+              delinquent: validator['delinquent'],
+              slot_skip_rate: validator['skipRate'],
+              root_distance: max_root_height - validator['rootSlot'].to_i,
+              vote_distance: max_vote_height - validator['lastVote'].to_i,
+              max_root_height: max_root_height,
+              max_vote_height: max_vote_height
+            )
+
+            validator_histories[validator['identityPubkey']] = existing_history
+          end
+        else
+          vh = ValidatorHistory.create(
+            network: p.payload[:network],
+            batch_uuid: p.payload[:batch_uuid],
+            account: validator['identityPubkey'],
+            vote_account: validator['voteAccountPubkey'],
+            commission: validator['commission'],
+            last_vote: validator['lastVote'],
+            root_block: validator['rootSlot'],
+            credits: validator['credits'],
+            epoch_credits: validator['epochCredits'],
+            active_stake: validator['activatedStake'],
+            software_version: validator['version'],
+            delinquent: validator['delinquent'],
+            slot_skip_rate: validator['skipRate'],
+            root_distance: max_root_height - validator['rootSlot'].to_i,
+            vote_distance: max_vote_height - validator['lastVote'].to_i,
+            max_root_height: max_root_height,
+            max_vote_height: max_vote_height
+          )
+          validator_histories[validator['identityPubkey']] = vh
+        end
       end
 
       Pipeline.new(200, p.payload)
@@ -102,10 +168,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      validators_json = rpc_request(
-        'getClusterNodes',
-        p.payload[:config_urls]
-      )['result']
+      validators_json = solana_client_request(
+        p.payload[:config_urls],
+        :get_cluster_nodes
+      )
 
       validators = {}
       validators_json.each do |hash|
@@ -128,10 +194,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      vote_accounts_json = rpc_request(
-        'getVoteAccounts',
-        p.payload[:config_urls]
-      )['result']['current']
+      vote_accounts_json = solana_client_request(
+        p.payload[:config_urls],
+        :get_vote_accounts
+      )['current']
 
       vote_accounts = {}
 
@@ -142,7 +208,6 @@ module SolanaLogic
         credits_total = hash['epochCredits'][-1][1].to_i
         credits_previous = hash['epochCredits'][-1][2].to_i
         credits_current = credits_total - credits_previous
-
         vote_accounts[hash['nodePubkey']] = {
           'vote_account' => hash['votePubkey'],
           'activated_stake' => hash['activatedStake'],
@@ -235,7 +300,6 @@ module SolanaLogic
   def validator_block_history_get
     lambda do |p|
       return p unless p[:code] == 200
-
       cli_method = "block-production --epoch #{p.payload[:epoch].to_i}"
       block_history = cli_request(cli_method, p.payload[:config_urls])
 
@@ -349,6 +413,7 @@ module SolanaLogic
           skipped_slot_percent: v['skipped_slot_percent'].round(4)
         )
       end
+
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(
@@ -410,10 +475,10 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      epoch_json = rpc_request(
-        'getEpochInfo',
-        p.payload[:config_urls]
-      )['result']
+      epoch_json = solana_client_request(
+        p.payload[:config_urls],
+        :get_epoch_info
+      )
 
       unless p.payload[:epoch] == epoch_json['epoch']
         Batch.where(uuid: p.payload[:batch_uuid]).destroy_all
@@ -429,95 +494,6 @@ module SolanaLogic
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from check_epoch', e)
-    end
-  end
-
-  # rpc_request will make a Solana RPC request and return the results in a
-  # JSON object. API specifications are at:
-  #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
-  def rpc_request(rpc_method, rpc_urls)
-    # Parse the URL data into an URI object.
-    # The mainnet RPC endpoint is not on port 8899. I am now including the port
-    # with the URL inside of Rails credentials.
-    # uri = URI.parse(
-    #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
-    # )
-
-    rpc_urls.each do |rpc_url|
-      uri = URI.parse(rpc_url)
-
-      response_body = Timeout.timeout(RPC_TIMEOUT) do
-        # Create the HTTP session and send the request
-        response = Net::HTTP.start(
-                     uri.host,
-                     uri.port,
-                     use_ssl: uri.scheme == 'https'
-                   ) do |http|
-          request = Net::HTTP::Post.new(
-            uri.request_uri,
-            { 'Content-Type' => 'application/json' }
-          )
-          request.body = {
-            'jsonrpc': '2.0', 'id': 1, 'method': rpc_method.to_s
-          }.to_json
-          http.request(request)
-        end
-
-        response.body
-      rescue Errno::ECONNREFUSED, Timeout::Error => e
-        Rails.logger.error "RPC TIMEOUT #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}"
-        nil
-      end
-
-      return JSON.parse(response_body) if response_body
-    rescue JSON::ParserError => e
-      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}\n#{response_body}"
-    end
-  end
-
-  # rpc_request will make a Solana RPC request with params and return the
-  # results in a JSON object. API specifications are at:
-  #   https://docs.solana.com/apps/jsonrpc-api#json-rpc-api-reference
-  def rpc_request_with_params(rpc_method, rpc_urls, params = [])
-    # Parse the URL data into an URI object.
-    # The mainnet RPC endpoint is not on port 8899. I am now including the port
-    # with the URL inside of Rails credentials.
-    # uri = URI.parse(
-    #   "#{rpc_url}:#{Rails.application.credentials.solana[:rpc_port]}"
-    # )
-
-    rpc_urls.each do |rpc_url|
-      uri = URI.parse(rpc_url)
-
-      response_body = Timeout.timeout(RPC_TIMEOUT) do
-        # Create the HTTP session and send the request
-        response = Net::HTTP.start(
-                     uri.host,
-                     uri.port,
-                     use_ssl: uri.scheme == 'https'
-                   ) do |http|
-          request = Net::HTTP::Post.new(
-            uri.request_uri,
-            { 'Content-Type' => 'application/json' }
-          )
-          request.body = {
-            'jsonrpc': '2.0',
-            'id': 1,
-            'method': rpc_method.to_s,
-            'params': params
-          }.to_json
-          http.request(request)
-        end
-
-        response.body
-      rescue Errno::ECONNREFUSED, Timeout::Error => e
-        Rails.logger.error "RPC TIMEOUT #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}"
-        nil
-      end
-
-      return JSON.parse(response_body) if response_body
-    rescue JSON::ParserError => e
-      Rails.logger.error "RPC ERROR #{e.class} RPC: #{rpc_url} for #{rpc_method.to_s}\n#{response_body}"
     end
   end
 
@@ -556,5 +532,20 @@ module SolanaLogic
       Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
     end
     []
+  end
+
+  # Clusters array, method symbol
+  def solana_client_request(clusters, method)
+    clusters.each do |cluster_url|
+      client = SolanaRpcClient.new(cluster: cluster_url).client
+      result = client.public_send(method).result
+
+      return result unless result.blank?
+    rescue SolanaRpcRuby::ApiError => e
+      Appsignal.send_error(e) if Rails.env.in?(['stage', 'production'])
+      message = "Request to solana RPC failed:\n Method: #{method}\nCluster: #{cluster_url}\nCLASS: #{e.class}\n#{e.message}"
+      Rails.logger.error(message)
+      nil
+    end
   end
 end

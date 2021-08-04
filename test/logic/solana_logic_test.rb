@@ -8,6 +8,8 @@ class SolanaLogicTest < ActiveSupport::TestCase
 
   def setup
     @testnet_url = 'https://api.testnet.solana.com'
+    @mainnet_url = 'https://api.mainnet-beta.solana.com'
+
     @local_url = 'http://127.0.0.1:8899'
     # Create our initial payload with the input values
     @initial_payload = {
@@ -45,11 +47,22 @@ class SolanaLogicTest < ActiveSupport::TestCase
     p = Pipeline.new(200, @initial_payload)
                 .then(&batch_set)
 
+    batch = Batch.where(uuid: p[:payload][:batch_uuid]).first
+
+    list = create_list(
+      :validator_block_history, 3, 
+      batch_uuid: p[:payload][:batch_uuid],
+      network: p[:payload][:network]
+    )
+    list.each do |el|
+      # to skip callback
+      el.update_column(:skipped_slot_percent_moving_average, 5)
+    end
+
     assert_not_nil p[:payload][:batch_uuid]
     assert p[:payload][:batch_uuid].include?('-')
 
     # Show that the created_at * updated_at columns are equal.
-    batch = Batch.where(uuid: p[:payload][:batch_uuid]).first
     assert_equal batch.created_at, batch.updated_at
 
     # Sleep for a bit
@@ -62,6 +75,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     # Show that the created_at & updated_at columns are now different
     batch.reload
     assert_not_equal batch.created_at, batch.updated_at
+    assert_equal batch.skipped_slot_all_average, 5
   end
 
   test 'epoch_get' do
@@ -208,6 +222,34 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_difference 'EpochHistory.count', -1 do
         p.then(&check_epoch)
       end
+    end
+  end
+
+  test 'solana_client_request returns data found in first cluster' do
+    clusters = [
+      @mainnet_url,
+      @testnet_url
+    ]
+
+    method = :get_epoch_info
+
+    VCR.use_cassette('solana_client_request') do
+      result = solana_client_request(clusters, :get_epoch_info)
+      assert_equal result["epoch"], 202
+    end
+  end
+
+  test 'solana_client_request returns data even if one of the clusters is incorrect' do
+    clusters = [
+      @local_url,
+      @testnet_url
+    ]
+
+    method = :get_epoch_info
+
+    VCR.use_cassette('solana_client_request incorrect cluster') do
+      result = solana_client_request(clusters, :get_epoch_info)
+      assert_equal result["epoch"], 209
     end
   end
 

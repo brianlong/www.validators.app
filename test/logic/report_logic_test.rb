@@ -67,42 +67,86 @@ class ReportLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'report_software_versions' do
-    create(:vote_account_history, batch_uuid: '1-2-3')
-    Sidekiq::Testing.inline! do
-      ReportSoftwareVersionWorker.perform_async(
-        batch_uuid: '1-2-3',
-        network: 'testnet'
-      )
-      # sleep(5) # wait for the report
-      report = Report.where(
-        network: 'testnet',
-        batch_uuid: '1-2-3',
-        name: 'report_software_versions'
-      ).last
+  test "report_software_versions creates correct report and ignores empty and 'unknown' software_versions" do
+    network = 'mainnet'
+    batch = Batch.create
+    batch_uuid = batch.uuid
 
-      assert_equal 'testnet', report.network
-      assert_equal '1-2-3', report.batch_uuid
-      assert report.payload.count.positive?
+    software_versions = ['1.6.8', '1.7.1', '1.7.2']
+    validator_lists = []
+
+    software_versions.each do |sw|
+      list = create_list(:validator, 5, network: network)
+      list.each do |val|
+        create(
+          :validator_score_v1, 
+          validator: val, 
+          software_version: sw,
+          network: network
+        )
+      end
+
+      validator_lists << list
     end
 
-    # report_payload = {
-    #   network: 'testnet',
-    #   batch_uuid: '1-2-3'
-    # }
-    # p = Pipeline.new(200, report_payload)
-    #             .then(&report_software_versions)
-    # puts p.inspect
-    # assert_equal 200, p.code
-    #
-    # report = Report.where(
-    #   network: 'testnet',
-    #   batch_uuid: report_payload[:batch_uuid],
-    #   name: 'report_software_versions'
-    # ).last
-    #
-    # assert_equal p.payload[:network], report.network
-    # assert_equal p.payload[:batch_uuid], report.batch_uuid
-    # assert report.payload.count.positive?
+    # Setup score with empty software version, should be ignored in the report
+    val = create(:validator)
+    create(
+      :validator_score_v1, 
+      validator: val, 
+      software_version: '',
+      network: network
+    )
+
+    # Setup score with 'unknown' software version, should be ignored in the report
+    val_unknown = create(:validator)
+    create(
+      :validator_score_v1, 
+      validator: val, 
+      software_version: 'unknown',
+      network: network
+    )
+
+    # Setup score with malformed software version, should be ignored in the report
+    val_malformed = create(:validator)
+    create(
+      :validator_score_v1, 
+      validator: val, 
+      software_version: '1.3.9 e45f1df5',
+      network: network
+    )
+
+    validator_lists.each do |list|
+      list.each do |val|
+        va = create(:vote_account, validator: val)
+        create(:vote_account_history, vote_account: va, batch_uuid: batch_uuid, network: network)
+      end
+    end
+
+    va_unknown = create(:vote_account, validator: val_unknown)
+    create(:vote_account_history, vote_account: va_unknown, batch_uuid: batch_uuid, network: network)
+  
+    va_malformed = create(:vote_account, validator: val_malformed)
+    create(:vote_account_history, vote_account: va_malformed, batch_uuid: batch_uuid, network: network)
+
+    payload = {
+      network: network,
+      batch_uuid: batch_uuid
+    }
+
+    _p = Pipeline.new(200, payload)
+                .then(&report_software_versions)
+
+    report = Report.find_by(name: 'report_software_versions', batch_uuid: batch_uuid)     
+    
+    expected_result = {"count"=>5, "stake_percent"=>33.33}
+
+    assert_equal network, report.network
+    assert_equal batch_uuid, report.batch_uuid
+    assert_equal 3, report.payload.size # empty and unknown software_versions are ignored
+
+    software_versions.each do |sw|
+      assert_equal report.payload.find { |v| v[sw] }[sw], expected_result
+    end
   end
 end

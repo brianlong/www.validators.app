@@ -19,6 +19,7 @@
 @import "header";
 @import "footer";
 @import "cards";
+@import "tabs";
 @import "lists";
 @import "tables";
 @import "forms";
@@ -140,6 +141,12 @@ hr {
   &x-15 {
     padding-right: $padding-standard;
     padding-left: $padding-standard;
+  }
+  &x-lg-6 {
+    @media(min-width: $screen-lg-min) {
+      padding-left: 7rem !important;;
+      padding-right: 7rem !important;;
+    }
   }
 }
 

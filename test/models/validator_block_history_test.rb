@@ -61,4 +61,13 @@ class ValidatorBlockHistoryTest < ActiveSupport::TestCase
     assert_equal(0.25, vbh3.skipped_slot_percent_moving_average)
     assert_equal(0.375, vbh4.skipped_slot_percent_moving_average)
   end
+
+  test 'has_one batch relationship works correctly' do
+    batch = create(:batch)
+    vbhs = create_list(:validator_block_history, 3, batch_uuid: batch.uuid)
+
+    vbhs.each do |vbh|
+      assert_equal batch, vbh.batch
+    end
+  end 
 end

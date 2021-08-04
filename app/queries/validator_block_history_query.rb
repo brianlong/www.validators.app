@@ -49,7 +49,7 @@ class ValidatorBlockHistoryQuery < ApplicationQuery
 
   def top_skipped_slot_percent
     @top_skipped_slot_percent ||=
-      skipped_slot_percent_history_moving_average.sort.reverse
+      skipped_slot_percent_history_moving_average.sort
   end
 
   def skipped_slot_stats(with_history: false)
