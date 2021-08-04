@@ -18,7 +18,7 @@ module Api
           ch_query.all_records
         end
 
-        render json: commission_histories.as_json(except: [:validator_id]),
+        render json: commission_histories.as_json(except: [:validator_id, :id]),
                status: :ok
       rescue ArgumentError => e
         render json: { error: e.message }, status: 400
