@@ -1,11 +1,13 @@
 import Vue from 'vue/dist/vue.esm'
-import App from '../../app.vue'
 import IndexTemplate from './index_template'
-import axios from 'axios'
+import commission_history_row from './commission_history_row'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const app = new Vue({
+  const chindex = new Vue({
     el: '#commission-histories-index-vue',
     render: h => h(IndexTemplate),
+    component: {
+      'commission-history-row': commission_history_row
+    }
   })
 })

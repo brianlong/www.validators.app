@@ -14,25 +14,8 @@
             <th class="narrow-column">Timestamp</th>
           </tr>
         </thead>
-          <tr v-for="ch in commission_histories">
-            <td>
-              <a v-bind:href="ch.href" > {{ ch.account }} </a>
-            </td>
-            <td>
-              {{ ch.epoch }}
-              <!-- <small>{{ ch.epoch_completion }}</small> -->
-            </td>
-            <td> 
-              <!-- {{ ch.batch_uuid }} -->
-            </td>
-            <td>
-              {{ ch.commission_before }}
-              {{ ch.commission_after }}
-            </td>
-            <td> 
-              {{ ch.created_at }}
-            </td>
-          </tr>
+          <commission-history-row v-for="ch in commission_histories" :key="ch.account" :chistory="ch">
+          </commission-history-row>
         <tbody>
 
         </tbody>
