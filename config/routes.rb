@@ -92,9 +92,7 @@ Rails.application.routes.draw do
 
   # Public Controller
   get 'contact-us', to: 'public#contact_us'
-
   get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
-
   get 'api-documentation',
       to: 'public#api_documentation',
       as: 'api_documentation'
@@ -108,14 +106,16 @@ Rails.application.routes.draw do
   get 'privacy-policy', to: 'public#privacy_policy'
   get 'sample-chart', to: 'public#sample_chart'
   get 'terms-of-use', to: 'public#terms_of_use'
-
-  get ':network/commission-changes/(:validator_id)',
+  get 'commission-changes/:network/(:validator_id)',
       to: 'public#commission_histories',
       as: 'commission_histories'
 
-  get 'cluster-stats', to: 'cluster_stats#index'
+  get 'cluster-stats/:network',
+      to: 'cluster_stats#index',
+      as: 'cluster_stats'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
+  get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
 
   # Default root path
   root to: 'public#index'

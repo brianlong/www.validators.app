@@ -11,11 +11,17 @@
 #  commission       :decimal(10, )    unsigned
 #  credits          :bigint           unsigned
 #  delinquent       :boolean          default(FALSE)
+#  epoch_credits    :integer          unsigned
 #  last_vote        :bigint           unsigned
+#  max_root_height  :bigint           unsigned
+#  max_vote_height  :bigint           unsigned
 #  network          :string(191)
 #  root_block       :bigint           unsigned
+#  root_distance    :bigint           unsigned
+#  slot_skip_rate   :float(24)        unsigned
 #  software_version :string(191)
 #  vote_account     :string(191)
+#  vote_distance    :bigint           unsigned
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

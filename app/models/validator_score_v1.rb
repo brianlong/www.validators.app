@@ -57,10 +57,15 @@
 #
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
+  IP_FIELDS_FOR_API = [
+    'traits_autonomous_system_number', 'address'
+  ].map{ |e| "ips.#{e}" }.join(', ')
 
   # Touch the related validator to increment the updated_at attribute
   belongs_to :validator
   before_save :calculate_total_score
+  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
+
   after_save :create_commission_history, :if => :saved_change_to_commission?
 
   serialize :root_distance_history, JSON
@@ -85,8 +90,9 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def calculate_total_score
     # Assign special scores before calculating the total score
+    best_sv = Batch.last_scored(network)&.software_version
     assign_published_information_score
-    assign_software_version_score
+    assign_software_version_score(best_sv)
     assign_security_report_score
 
     self.total_score =
@@ -109,14 +115,19 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   # Evaluate the software version and assign a score
-  def assign_software_version_score
+  def assign_software_version_score(best_version)
     if software_version.blank?
       self.software_version_score = 0
       return
     end
 
     return unless ValidatorSoftwareVersion.valid_software_version?(software_version)
-    version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network)
+
+    version = ValidatorSoftwareVersion.new(
+      number: software_version,
+      network: validator.network,
+      best_version: best_version
+    )
 
     self.software_version_score = \
       if version.running_latest_or_newer?
@@ -212,6 +223,29 @@ class ValidatorScoreV1 < ApplicationRecord
 
     if skipped_slot_moving_average_history.length > MAX_HISTORY
       self.skipped_slot_moving_average_history = skipped_slot_moving_average_history[-MAX_HISTORY..-1]
+    end
+  end
+
+  def to_builder
+    Jbuilder.new do |vs_v1|
+      vs_v1.(
+        self, 
+        :total_score, 
+        :root_distance_score,
+        :vote_distance_score,
+        :skipped_slot_score,
+        :software_version,
+        :software_version_score,
+        :stake_concentration_score,
+        :data_center_concentration_score,
+        :published_information_score,
+        :security_report_score,
+        :active_stake,
+        :commission,
+        :delinquent,
+        :data_center_key,
+        :data_center_host
+      )
     end
   end
 end
