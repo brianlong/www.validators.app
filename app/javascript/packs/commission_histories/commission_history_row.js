@@ -8,7 +8,7 @@ import Vue from 'vue/dist/vue.esm'
         required: true
       }
     },
-    created: function() {
+    updated: function() {
       this.chistory.href = "/validators/" + this.chistory.network + "/" + this.chistory.account
       this.chistory.name = this.chistory.account.substring(0,5) + "..." + this.chistory.account.substring(this.chistory.account.length - 5)
     },
