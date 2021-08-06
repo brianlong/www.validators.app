@@ -441,7 +441,7 @@ DEPENDENCIES
   web-console (>= 3.3.0)
   webdrivers
   webmock
-  webpacker (~> 5.4.0)
+  webpacker (~> 5.4)
   websocket-extensions (>= 0.1.5)
   whenever
 
