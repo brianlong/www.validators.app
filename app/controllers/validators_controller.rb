@@ -94,7 +94,7 @@ class ValidatorsController < ApplicationController
 
       i += 1
 
-      # Sometimes there is no batch yet for the vbh.
+      # We want to skip if there is no batch yet for the vbh.
       skipped_slot_all_average = vbh.batch&.skipped_slot_all_average
       next unless skipped_slot_all_average
 
