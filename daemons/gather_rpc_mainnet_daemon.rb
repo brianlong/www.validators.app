@@ -38,28 +38,31 @@ begin
                 .then(&batch_touch)
                 .then(&check_epoch)
 
-    if p.code == 200
-      BuildSkippedSlotPercentWorker.set(queue: :high_priority).perform_async(
-        network: p.payload[:network],
-        batch_uuid: p.payload[:batch_uuid]
-      )
-      ReportTowerHeightWorker.set(queue: :high_priority).perform_async(
-        epoch: p.payload[:epoch],
-        batch_uuid: p.payload[:batch_uuid],
-        network: p.payload[:network]
-      )
-      ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(
-        batch_uuid: p.payload[:batch_uuid],
-        network: p.payload[:network]
-      )
-    else
-      raise SkipAndSleep
-    end
+    raise SkipAndSleep, p.code unless p.code == 200
+
+    BuildSkippedSlotPercentWorker.set(queue: :high_priority).perform_async(
+      network: p.payload[:network],
+      batch_uuid: p.payload[:batch_uuid]
+    )
+    ReportTowerHeightWorker.set(queue: :high_priority).perform_async(
+      epoch: p.payload[:epoch],
+      batch_uuid: p.payload[:batch_uuid],
+      network: p.payload[:network]
+    )
+    ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(
+      batch_uuid: p.payload[:batch_uuid],
+      network: p.payload[:network]
+    )
 
     break if interrupted
-  rescue SkipAndSleep
+  rescue SkipAndSleep => e
     break if interrupted
-    sleep(sleep_time)
+
+    if e.message.in? %w[500 502 503 504]
+      sleep(1.minute)
+    else
+      sleep(sleep_time)
+    end
   end
 rescue StandardError => e
   puts "#{e.class}\n#{e.message}"
