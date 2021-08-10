@@ -172,7 +172,9 @@ module ReportLogic
         INNER JOIN validators as v
         ON va.validator_id = v.id
         WHERE vah.network = ?
-        AND vah.batch_uuid = ?;
+        AND vah.batch_uuid = ?
+        AND v.is_rpc = false
+        AND v.is_active = true;
       }.gsub(/\s+/, " ").strip
       
       sanitized_validator_ids_sql = VoteAccountHistory.sanitize_sql(
