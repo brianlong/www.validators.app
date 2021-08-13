@@ -45,49 +45,4 @@ class ValidatorHistoryQueryTest < ActiveSupport::TestCase
     assert_equal results, @validator_histories.values_at(0, 1, 2, 3, 4, 5)
     assert_not_includes results, @validator_histories.last
   end
-
-  test 'average_root_block' do
-    expected = @root_blocks.sum / @root_blocks.size.to_f
-    assert_equal expected, @validator_history_query.average_root_block
-  end
-
-  test 'highest_root_block' do
-    expected = @root_blocks.max
-    assert_equal expected, @validator_history_query.highest_root_block
-  end
-
-  test 'median_root_block' do
-    expected = @root_blocks.sort[@root_blocks.size / 2]
-    assert_equal expected, @validator_history_query.median_root_block
-  end
-
-  test 'average_last_vote' do
-    expected = @last_votes.sum / @last_votes.size.to_f
-    assert_equal expected, @validator_history_query.average_last_vote
-  end
-
-  test 'highest_last_vote' do
-    expected = @last_votes.max
-    assert_equal expected, @validator_history_query.highest_last_vote
-  end
-
-  test 'median_last_vote' do
-    expected = @last_votes.sort[@last_votes.size / 2]
-    assert_equal expected, @validator_history_query.median_last_vote
-  end
-
-  test 'total_active_stake' do
-    expected = @active_stakes.sum
-    assert_equal expected, @validator_history_query.total_active_stake
-  end
-
-  test 'upto_33_stake' do
-    expected = @validator_histories.values_at(1, 4)
-    assert_equal expected, @validator_history_query.upto_33_stake
-  end
-
-  test 'at_33_stake' do
-    expected = @validator_histories[4]
-    assert_equal expected, @validator_history_query.at_33_stake
-  end
 end
