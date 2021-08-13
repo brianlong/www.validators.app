@@ -3,8 +3,8 @@ module Stats
     def initialize(network, batch_uuid)
       super
 
-      @relation =
-        ValidatorBlockHistoryQuery.new(network, batch_uuid)
+      @relation = ValidatorBlockHistoryQuery.new(network, batch_uuid)
+                                            .for_batch
     end
 
     def average_skipped_slot_percent

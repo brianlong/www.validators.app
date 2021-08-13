@@ -4,6 +4,7 @@ module Stats
       super
 
       @relation = ValidatorHistoryQuery.new(network, batch_uuid)
+                                       .for_batch
     end
 
     # Mysql AVG is so far the fastest way to count average (compared to pluck and map)
@@ -53,7 +54,7 @@ module Stats
       end
 
       @upto_33_stake =
-        ValidatorHistory.where(id: validator_ids).order(active_stake: :desc)
+        ::ValidatorHistory.where(id: validator_ids).order(active_stake: :desc)
     end
 
     # ValidatorHistory on the edge of top 33% stakes

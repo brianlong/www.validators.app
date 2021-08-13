@@ -6,6 +6,7 @@ module Stats
       super
 
       @relation = ValidatorScoreQuery.new(network, batch_uuid)
+                                     .for_batch
     end
 
     def root_distance_all_history

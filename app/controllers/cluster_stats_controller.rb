@@ -16,9 +16,9 @@ class ClusterStatsController < ApplicationController
 
     return {} unless batch
 
-    vah_query = VoteAccountHistoryQuery.new(network, batch.uuid)
-    vbh_query = ValidatorBlockHistoryQuery.new(network, batch.uuid)
-    vs_query = ValidatorScoreQuery.new(network, batch.uuid)
+    vah_query = Stats::VoteAccountHistory.new(network, batch.uuid)
+    vbh_query = Stats::ValidatorBlockHistory.new(network, batch.uuid)
+    vs_query = Stats::ValidatorScore.new(network, batch.uuid)
     software_report = Report.where(
       network: params[:network],
       name: 'report_software_versions'

@@ -4,6 +4,7 @@ module Stats
       super
 
       @relation = VoteAccountHistoryQuery.new(network, batch_uuid)
+                                         .for_batch
     end
 
     def average_skipped_vote_percent

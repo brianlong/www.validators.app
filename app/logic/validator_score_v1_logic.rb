@@ -70,12 +70,12 @@ module ValidatorScoreV1Logic
         p.payload[:network],
         p.payload[:batch_uuid]
       )
-      total_active_stake = ValidatorHistoryQuery.new(
+      total_active_stake = Stats::ValidatorHistory.new(
         p.payload[:network],
         p.payload[:batch_uuid]
       ).total_active_stake
 
-      best_skipped_vote = VoteAccountHistoryQuery.new(
+      best_skipped_vote = Stats::VoteAccountHistory.new(
         p.payload[:network],
         p.payload[:batch_uuid]
       ).skipped_vote_percent_best
@@ -210,10 +210,10 @@ module ValidatorScoreV1Logic
 
         # Assign the stake concentration & score
         at_33_active_stake =
-          ValidatorHistoryQuery.new(p.payload[:network], p.payload[:batch_uuid])
-                               .at_33_stake
-                               .validator
-                               .active_stake
+          Stats::ValidatorHistory.new(p.payload[:network], p.payload[:batch_uuid])
+                                 .at_33_stake
+                                 .validator
+                                 .active_stake
 
 
         v.validator_score_v1.stake_concentration_score = \
@@ -241,7 +241,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      vbh_query = ValidatorBlockHistoryQuery.new(p.payload[:network], p.payload[:batch_uuid])
+      vbh_query = Stats::ValidatorBlockHistory.new(p.payload[:network], p.payload[:batch_uuid])
       avg_skipped_slot_pct_all = vbh_query.average_skipped_slot_percent
       med_skipped_slot_pct_all = vbh_query.median_skipped_slot_percent
 
