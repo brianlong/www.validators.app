@@ -7,9 +7,18 @@ Vue.component('CommissionHistoryRow', {
     chistory: {
       type: Object,
       required: true
-    },
-    descending: {
-      type: Boolean
+    }
+  },
+  data() {
+    if(this.chistory.name == NIL){
+      var chistory_name = this.chistory.account.substring(0,6) + "..." + this.chistory.account.substring(this.chistory.account.length - 4)
+    } else {
+      var chistory_name = this.chistory.name
+    }
+    return {
+      chistory_href: "/validators/" + this.chistory.network + "/" + this.chistory.account,
+      chistory_name: chistory_name,
+      descending: (this.chistory.commission_before > this.chistory.commission_after) ? true : false
     }
   },
   watch: {
@@ -22,20 +31,15 @@ Vue.component('CommissionHistoryRow', {
   },
   methods: {
     prepareData: function() {
-      this.chistory.href = "/validators/" + this.chistory.network + "/" + this.chistory.account
-      if(this.chistory.name == NIL){
-        this.chistory.name = this.chistory.account.substring(0,6) + "..." + this.chistory.account.substring(this.chistory.account.length - 4)
-      }
+      // this.chistory.href = "/validators/" + this.chistory.network + "/" + this.chistory.account
       this.chistory.commission_before = this.chistory.commission_before ? this.chistory.commission_before : 0
       this.chistory.commission_after = this.chistory.commission_after ? this.chistory.commission_after : 0
-
-      this.descending = (this.chistory.commission_before > this.chistory.commission_after) ? true : false
     }
   },
   template: `
     <tr>
       <td>
-        <a v-bind:href="chistory.href" > {{ chistory.name }} </a>
+        <a v-bind:href="chistory_href" > {{ chistory_name }} </a>
       </td>
       <td>
         {{ chistory.epoch }}
