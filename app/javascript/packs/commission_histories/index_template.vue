@@ -4,23 +4,28 @@
       <table class='table mb-0'>
         <thead>
           <tr>
-            <th>Validator</th>
+            <th>
+              <a href="#" @click.prevent="sort_by_validator">Validator</a>
+            </th>
             <th class="narrow-column">
-              Epoch<br />
+              <a href="#" @click.prevent="sort_by_epoch">Epoch</a><br />
               <small>(completion %)</small>
             </th>
             <th class="wider-column">Batch</th>
             <th class="wider-column text-center">Before<i class="fas fa-long-arrow-alt-right px-2"></i>After</th>
-            <th class="narrow-column">Timestamp</th>
+            <th class="narrow-column">
+              <a href="#" @click.prevent="sort_by_timestamp">Timestamp</a>
+            </th>
           </tr>
         </thead>
-          <commission-history-row v-for="ch in commission_histories" :key="ch.account" :chistory="ch">
+          <commission-history-row v-for="ch in commission_histories" :key="ch.id" :chistory="ch">
           </commission-history-row>
         <tbody>
 
         </tbody>
       </table>
     </div>
+    <pagination v-model="page" :records="total_count" @paginate="paginate"/>
   </div>
 </template>
 
@@ -28,21 +33,56 @@
   import axios from 'axios'
 
   export default {
+    props: ['query'],
     data () {
-        return {
-        commission_histories: []
-        }
+      if(this.query && !this.query == ''){
+        var api_url = '/api/v1/commission-changes/mainnet?query=' + this.query + '&'
+      } else {
+        var api_url = '/api/v1/commission-changes/mainnet?'
+      }
+      return {
+        commission_histories: [],
+        page: 1,
+        total_count: 0,
+        sort_by: 'created_at_desc',
+        api_url: api_url
+      }
     },
     created () {
       var ctx = this
-      axios.get('/api/v1/commission-changes/mainnet')
-      .then(response => (
-        response.data.forEach(function(ch){
-          ch.href = "/validators/" + ch.network + "/" + ch.account
-          ch.commission_before = ch.commission_before ? ch.commission_before : 0
-          ctx.commission_histories.push(ch)
-        }) 
-      ))
+      axios.get(this.api_url + 'sort_by=' + ctx.sort_by)
+      .then(function (response){
+        ctx.commission_histories = response.data.commission_histories;
+        ctx.total_count = response.data.total_count;
+      })
     },
+    watch: {
+      sort_by: function(newVal, oldVal){
+        var ctx = this
+        axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page)
+        .then(function (response){
+          ctx.commission_histories = response.data.commission_histories;
+          ctx.total_count = response.data.total_count;
+        })
+      }
+    },
+    methods: {
+      paginate: function(){
+        var ctx = this
+        axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page)
+        .then(response => (
+          ctx.commission_histories = response.data.commission_histories
+        ))
+      },
+      sort_by_epoch: function(){
+        this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
+      },
+      sort_by_timestamp: function(){
+        this.sort_by = this.sort_by == 'timestamp_asc' ? 'timestamp_desc' : 'timestamp_asc'
+      },
+      sort_by_validator: function(){
+        this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc'
+      },
+    }
   }
 </script>

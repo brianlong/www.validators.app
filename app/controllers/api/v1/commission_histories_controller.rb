@@ -9,7 +9,8 @@ module Api
         ch_query = CommissionHistoryQuery.new(
           network: index_params[:network],
           time_to: index_params[:date_to],
-          time_from: index_params[:date_from]
+          time_from: index_params[:date_from],
+          sort_by: index_params[:sort_by]
         )
 
         commission_histories = if index_params[:query]
@@ -18,8 +19,14 @@ module Api
           ch_query.all_records
         end
 
-        render json: commission_histories.as_json(except: [:validator_id, :id]),
-               status: :ok
+        total_count = commission_histories.size
+        commission_histories = commission_histories.page(index_params[:page])
+
+        render json: {
+          commission_histories: commission_histories.as_json(except: [:validator_id]),
+          total_count: total_count
+        },
+        status: :ok
       rescue ArgumentError => e
         render json: { error: e.message }, status: 400
       end
@@ -27,7 +34,7 @@ module Api
       private
 
       def index_params
-        params.permit(:date_from, :date_to, :network, :query)
+        params.permit(:date_from, :date_to, :network, :query, :page, :sort_by)
       end
     end
   end

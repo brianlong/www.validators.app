@@ -8,39 +8,65 @@ class CommissionHistoryQuery
     epoch
     network
     validator_id
+    id
+    epoch_completion
+    batch_uuid
   ].freeze
 
-  VAL_FIELDS = %w[account].freeze
+  VAL_FIELDS = %w[
+    account
+    name
+  ].freeze
 
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
     @time_from = options.fetch(:time_from, 30.days.ago) || 30.days.ago
     @time_to = options.fetch(:time_to, DateTime.now) || DateTime.now
     @time_range = @time_from..@time_to
+    @sort_by = options.fetch(:sort_by, 'timestamp_desc') || 'timestamp_desc'
   end
 
   def all_records
-    CommissionHistory.joins(:validator)
-                     .select(query_fields)
-                     .where(
-                       network: @network,
-                       created_at: @time_range
-                     )
+    commission_histories = CommissionHistory.joins(:validator)
+                                            .select(query_fields)
+                                            .where(
+                                              network: @network,
+                                              created_at: @time_range
+                                            )
+    sorted(commission_histories)
   end
 
   def by_query(query = nil)
     validators_ids = matching_validators(query).pluck(:id)
 
-    CommissionHistory.joins(:validator)
-                     .select(query_fields)
-                     .where(
-                       network: @network,
-                       created_at: @time_range,
-                       validator_id: validators_ids
-                     )
+    commission_histories = CommissionHistory.joins(:validator)
+                                            .select(query_fields)
+                                            .where(
+                                              network: @network,
+                                              created_at: @time_range,
+                                              validator_id: validators_ids
+                                            )
+    sorted(commission_histories)
   end
 
   private
+
+  def sorted(commission_histories)
+    case @sort_by
+    when 'epoch_desc'
+      commission_histories.order(epoch: :desc)
+    when 'epoch_asc'
+      commission_histories.order(epoch: :asc)
+    when 'timestamp_asc'
+      commission_histories.order(created_at: :asc)
+    when 'validator_asc'
+      commission_histories.order(name: :asc)
+    when 'validator_desc'
+      commission_histories.order(name: :desc)
+    else
+      commission_histories.order(created_at: :desc)
+    end
+  end
 
   def matching_validators(query)
     validators = Validator.where(network: @network)
