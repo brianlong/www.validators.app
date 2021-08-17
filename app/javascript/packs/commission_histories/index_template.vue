@@ -18,10 +18,9 @@
             </th>
           </tr>
         </thead>
+        <tbody>
           <commission-history-row v-for="ch in commission_histories" :key="ch.id" :chistory="ch">
           </commission-history-row>
-        <tbody>
-
         </tbody>
       </table>
     </div>
