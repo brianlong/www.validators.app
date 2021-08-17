@@ -30,7 +30,8 @@ class Validator < ApplicationRecord
   has_many :validator_block_histories, dependent: :destroy
   has_many :commission_histories, dependent: :destroy
   has_one :validator_score_v1, dependent: :destroy
-
+  has_many :validator_histories, primary_key: :account, foreign_key: :account
+  
   scope :active, -> { where(is_active: true) }
   scope :scorable, -> { where(is_active: true, is_rpc: false) }
 

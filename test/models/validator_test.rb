@@ -3,6 +3,13 @@
 require 'test_helper'
 
 class ValidatorTest < ActiveSupport::TestCase
+  test 'relationships has_many validator_histories' do
+    validator = create(:validator)
+    create_list(:validator_history, 5, account: validator.account)
+
+    assert_equal 5, validator.validator_histories.size
+  end
+
   test '#api_url creates correct link for test environment' do
     validator = build(:validator)
     expected_url = "http://localhost:3000/api/v1/validators/#{validator.network}/#{validator.account}"
