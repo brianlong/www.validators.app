@@ -231,6 +231,7 @@ class Validator < ApplicationRecord
         :keybase_id, 
         :www_url,
         :details, 
+        :avatar_url,
         :created_at, 
         :updated_at
       )
