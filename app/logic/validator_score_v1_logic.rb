@@ -93,29 +93,29 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
-        vh = validator_histories.find { |vh| vh.account == validator.account }
-        vote_h = vote_histories.find { |vote_h| vote_h.vote_account.validator_id == validator.id }
-        if vote_h
-          validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
-          skipped_vote_all.push(((best_skipped_vote - vote_h.skipped_vote_percent) * 100).round(2))
-          validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
+        vhs = validator_histories.find { |vh| vh.account == validator.account }
+        vote_hs = vote_histories.find { |vote_h| vote_h.vote_account.validator_id == validator.id }
+        if vote_hs
+          validator.score.skipped_vote_history_push(vote_hs.skipped_vote_percent)
+          skipped_vote_all.push(((best_skipped_vote - vote_hs.skipped_vote_percent) * 100).round(2))
+          validator.score.skipped_vote_percent_moving_average_history_push(vote_hs.skipped_vote_percent_moving_average)
         else
           validator.score.skipped_vote_history_push(nil)
         end
-        if vh
-          root_distance = highest_root - vh.root_block.to_i
-          vote_distance = highest_vote - vh.last_vote.to_i
-          unless vh.commission.nil?
-            validator.validator_score_v1.commission = vh.commission
+        if vhs
+          root_distance = highest_root - vhs.root_block.to_i
+          vote_distance = highest_vote - vhs.last_vote.to_i
+          unless vhs.commission.nil?
+            validator.validator_score_v1.commission = vhs.commission
           end
-          unless vh.delinquent.nil?
-            validator.validator_score_v1.delinquent = vh.delinquent
+          unless vhs.delinquent.nil?
+            validator.validator_score_v1.delinquent = vhs.delinquent
           end
-          unless vh.active_stake.nil?
-            validator.validator_score_v1.active_stake = vh.active_stake
+          unless vhs.active_stake.nil?
+            validator.validator_score_v1.active_stake = vhs.active_stake
           end
           validator.validator_score_v1.stake_concentration = \
-            (vh.active_stake.to_f / total_active_stake.to_f)
+            (vhs.active_stake.to_f / total_active_stake)
         else
           root_distance = highest_root
           vote_distance = highest_vote
@@ -210,7 +210,6 @@ module ValidatorScoreV1Logic
                                  .at_33_stake
                                  .validator
                                  .active_stake
-
 
         v.validator_score_v1.stake_concentration_score = \
           v.validator_score_v1.active_stake.to_i >= at_33_active_stake ? -2 : 0
@@ -348,11 +347,10 @@ module ValidatorScoreV1Logic
       )
 
       p.payload[:this_batch].update(software_version: current_software_version)
-      
+
       p.payload[:validators].each do |validator|
         validator.validator_score_v1.assign_software_version_score(current_software_version)
       end
-
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -397,7 +395,7 @@ module ValidatorScoreV1Logic
 
   def find_current_software_version(software_versions:, total_stake:)
     software_versions.each do |version, stake|
-      software_versions[version] = ((stake/total_stake.to_f) * 100.0)
+      software_versions[version] = ((stake / total_stake.to_f) * 100.0)
     end
 
     software_versions = software_versions.select { |ver, _| ver&.match /\d+\.\d+\.\d+\z/ }
@@ -406,7 +404,7 @@ module ValidatorScoreV1Logic
       'unknown'
     else
       software_versions_sorted = \
-        software_versions.sort_by { |k, v| Gem::Version.new(k)}.reverse
+        software_versions.sort_by { |k, _v| Gem::Version.new(k) }.reverse
 
       cumulative_sum = 0
 
@@ -416,5 +414,4 @@ module ValidatorScoreV1Logic
       end
     end
   end
-
 end

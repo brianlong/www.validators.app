@@ -36,7 +36,6 @@ module Stats
       @total_active_stake ||= relation.sum(:active_stake)
     end
 
-
     # Lists all the ValidatorHistories that collects top 33% of the
     # all active stakes
     def upto_33_stake
@@ -45,7 +44,7 @@ module Stats
       active_stakes_sum = 0
       validator_ids = []
       active_stakes = relation.order(active_stake: :desc)
-                               .pluck(:id, :active_stake)
+                              .pluck(:id, :active_stake)
 
       active_stakes.each do |id, active_stake|
         active_stakes_sum += active_stake

@@ -15,8 +15,8 @@ module Stats
     def scorable_average_skipped_slot_percent
       @scorable_average_skipped_slot_percent ||=
         relation.joins(:validator)
-                 .where('validator.is_rpc': false, 'validator.is_active': true)
-                 .average(:skipped_slot_percent_moving_average)
+                .where('validator.is_rpc': false, 'validator.is_active': true)
+                .average(:skipped_slot_percent_moving_average)
     end
 
     def median_skipped_slot_percent
@@ -27,7 +27,7 @@ module Stats
     def skipped_slot_percent_history_moving_average
       @skipped_slot_percent_history_moving_average ||=
         relation.joins(:validator)
-                 .pluck(:skipped_slot_percent_moving_average, :account)
+                .pluck(:skipped_slot_percent_moving_average, :account)
     end
 
     def skipped_slot_percent_history

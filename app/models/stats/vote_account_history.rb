@@ -35,7 +35,7 @@ module Stats
     def vote_account_history_skipped_moving_average
       @vote_account_history_skipped_moving_average ||=
         relation.includes(vote_account: [:validator])
-                 .map { |vah| [vah.skipped_vote_percent_moving_average, vah.vote_account.validator.account] }
+                .map { |vah| [vah.skipped_vote_percent_moving_average, vah.vote_account.validator.account] }
     end
 
     def vote_account_history_skipped

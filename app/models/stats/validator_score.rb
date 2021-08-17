@@ -11,7 +11,7 @@ module Stats
 
     def root_distance_all_history
       @root_distance_all_history ||= relation.joins(:validator)
-                                              .pluck(:root_distance_history, :account)
+                                             .pluck(:root_distance_history, :account)
     end
 
     def root_distance_all_averages
@@ -57,11 +57,11 @@ module Stats
 
     def top_staked_validators
       @top_staked_validators ||= relation.joins(:validator)
-                                          .pluck(:active_stake, :account)
-                                          .map { |tsv| [tsv.first.to_i, tsv.last] }
-                                          .sort
-                                          .reverse
-                                          .first(50)
+                                         .pluck(:active_stake, :account)
+                                         .map { |tsv| [tsv.first.to_i, tsv.last] }
+                                         .sort
+                                         .reverse
+                                         .first(50)
     end
 
     def total_stake
