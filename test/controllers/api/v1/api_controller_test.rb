@@ -113,12 +113,13 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 29, validator_with_all_data.keys.size
+    assert_equal 30, validator_with_all_data.keys.size
 
     # Validator
     assert_equal 'testnet', validator_with_all_data['network']
     assert_equal 'john doe', validator_with_all_data['name']
     assert_equal 'johndoe', validator_with_all_data['keybase_id']
+    assert_equal 'http://www.avatar_url.com', validator_with_all_data['avatar_url']
 
     # Score
     assert_equal 7, validator_with_all_data['total_score']
@@ -285,12 +286,13 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 29, json_response.keys.size
+    assert_equal 30, json_response.keys.size
 
     # Validator
     assert_equal 'testnet', json_response['network']
     assert_equal 'john doe', json_response['name']
     assert_equal 'johndoe', json_response['keybase_id']
+    assert_equal 'http://www.avatar_url.com', json_response['avatar_url']
 
     # Score
     assert_equal 7, json_response['total_score']

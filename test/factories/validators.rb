@@ -7,6 +7,7 @@ FactoryBot.define do
     name { 'john doe' }
     keybase_id { 'johndoe' }
     security_report_url { 'http://www.example.com' }
+    avatar_url { 'http://www.avatar_url.com' }
 
     trait :with_score do
       after(:create) do |validator|

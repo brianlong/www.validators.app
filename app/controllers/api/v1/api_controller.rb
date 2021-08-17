@@ -166,7 +166,8 @@ module Api
           'name',
           'network',
           'updated_at',
-          'www_url'
+          'www_url',
+          'avatar_url'
         ].map { |e| "validators.#{e}" }
       end
 
