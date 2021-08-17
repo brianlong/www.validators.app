@@ -1,15 +1,12 @@
 import Vue from 'vue/dist/vue.esm'
 import IndexTemplate from './index_template'
 import CommissionHistoryRow from './commission_history_row'
-import Pagination from 'vue-pagination-2';
+// import Pagination from 'vue-pagination-2';
+import { PaginationPlugin } from "bootstrap-vue";
+import { BPagination } from "bootstrap-vue";
 
-Vue.component('Pagination', Pagination, 
-  {
-    options: {
-      theme: 'bootstrap3'    
-    }   
-  }
-)
+Vue.component('BPagination', BPagination)
+Vue.use(PaginationPlugin);
 
 document.addEventListener('DOMContentLoaded', () => {
   const chindex = new Vue({
@@ -23,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     component: {
       'CommissionHistoryRow': CommissionHistoryRow,
-      'Pagination': Pagination
+      'BPagination': BPagination
     }
   })
 })

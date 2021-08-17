@@ -25,7 +25,10 @@
         </tbody>
       </table>
     </div>
-    <pagination v-model="page" :records="total_count" @paginate="paginate"/>
+    <b-pagination 
+      v-model="page" 
+      :total-rows="total_count" 
+      :per-page="25" />
   </div>
 </template>
 
@@ -57,13 +60,16 @@
       })
     },
     watch: {
-      sort_by: function(newVal, oldVal){
+      sort_by: function(){
         var ctx = this
         axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page)
         .then(function (response){
           ctx.commission_histories = response.data.commission_histories;
           ctx.total_count = response.data.total_count;
         })
+      },
+      page: function(){
+        this.paginate()
       }
     },
     methods: {
