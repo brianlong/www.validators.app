@@ -322,10 +322,8 @@ module ValidatorScoreV1Logic
           vah = validator&.vote_accounts&.last&.vote_account_histories&.last
         end
         # This means we skip the software version for non-voting nodes.
-        if vah
-          if vah.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
-            validator.validator_score_v1.software_version = vah.software_version
-          end
+        if vah&.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
+          validator.validator_score_v1.software_version = vah.software_version
         end
 
         this_software_version = validator.validator_score_v1.software_version
