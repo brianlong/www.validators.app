@@ -9,11 +9,5 @@ module Stats
       @batch_uuid = batch_uuid
       @relation = ApplicationRecord.none
     end
-
-    private
-
-    def for_batch
-      @for_batch ||= relation
-    end
   end
 end

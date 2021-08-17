@@ -24,7 +24,7 @@ module Stats
 
     def average_skipped_vote_percent_moving_average
       @average_skipped_vote_percent_moving_average ||=
-        @relation.average(:skipped_vote_percent_moving_average)
+        relation.average(:skipped_vote_percent_moving_average)
     end
 
     def median_skipped_vote_percent_moving_average
@@ -34,20 +34,20 @@ module Stats
 
     def vote_account_history_skipped_moving_average
       @vote_account_history_skipped_moving_average ||=
-        @relation.includes(vote_account: [:validator])
+        relation.includes(vote_account: [:validator])
                  .map { |vah| [vah.skipped_vote_percent_moving_average, vah.vote_account.validator.account] }
     end
 
     def vote_account_history_skipped
-      @vote_account_history_skipped ||= @relation.map(&:skipped_vote_percent)
+      @vote_account_history_skipped ||= relation.map(&:skipped_vote_percent)
     end
 
     def credits_current_max
-      @credits_current_max ||= @relation.maximum(:credits_current).to_i
+      @credits_current_max ||= relation.maximum(:credits_current).to_i
     end
 
     def slot_index_current
-      @slot_index_current ||= @relation.maximum(:slot_index_current).to_i
+      @slot_index_current ||= relation.maximum(:slot_index_current).to_i
     end
 
     def skipped_vote_percent_best

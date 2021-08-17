@@ -10,7 +10,7 @@ module Stats
     end
 
     def root_distance_all_history
-      @root_distance_all_history ||= for_batch.joins(:validator)
+      @root_distance_all_history ||= relation.joins(:validator)
                                               .pluck(:root_distance_history, :account)
     end
 
@@ -40,7 +40,7 @@ module Stats
     end
 
     def vote_distance_all_history
-      @vote_distance_all_history ||= for_batch&.joins(:validator)&.pluck(:vote_distance_history, :account)
+      @vote_distance_all_history ||= relation&.joins(:validator)&.pluck(:vote_distance_history, :account)
     end
 
     def vote_distance_all_averages
@@ -56,7 +56,7 @@ module Stats
     end
 
     def top_staked_validators
-      @top_staked_validators ||= for_batch.joins(:validator)
+      @top_staked_validators ||= relation.joins(:validator)
                                           .pluck(:active_stake, :account)
                                           .map { |tsv| [tsv.first.to_i, tsv.last] }
                                           .sort
@@ -65,7 +65,7 @@ module Stats
     end
 
     def total_stake
-      @total_stake ||= for_batch.pluck(:active_stake).map(&:to_i).sum
+      @total_stake ||= relation.pluck(:active_stake).map(&:to_i).sum
     end
 
     def vote_distance_stats(with_history: false)
@@ -80,11 +80,5 @@ module Stats
 
       vote_distance_stats.merge({ history: vote_distance_all_history })
     end
-  end
-
-  private
-
-  def for_batch
-    @for_batch ||= @relation
   end
 end

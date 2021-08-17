@@ -9,32 +9,33 @@ module Stats
 
     # Mysql AVG is so far the fastest way to count average (compared to pluck and map)
     def average_root_block
-      @average_root_block ||= for_batch.average(:root_block)
+      @average_root_block ||= relation.average(:root_block)
     end
 
     def highest_root_block
-      @highest_root_block ||= for_batch.maximum(:root_block)
+      @highest_root_block ||= relation.maximum(:root_block)
     end
 
     def median_root_block
-      @median_root_block ||= for_batch.median(:root_block)
+      @median_root_block ||= relation.median(:root_block)
     end
 
     def average_last_vote
-      @average_last_vote ||= for_batch.average(:last_vote)
+      @average_last_vote ||= relation.average(:last_vote)
     end
 
     def highest_last_vote
-      @highest_last_vote ||= for_batch.maximum(:last_vote)
+      @highest_last_vote ||= relation.maximum(:last_vote)
     end
 
     def median_last_vote
-      @median_last_vote ||= for_batch.pluck(:last_vote).median
+      @median_last_vote ||= relation.pluck(:last_vote).median
     end
 
     def total_active_stake
-      @total_active_stake ||= for_batch.sum(:active_stake)
+      @total_active_stake ||= relation.sum(:active_stake)
     end
+
 
     # Lists all the ValidatorHistories that collects top 33% of the
     # all active stakes
@@ -43,7 +44,7 @@ module Stats
 
       active_stakes_sum = 0
       validator_ids = []
-      active_stakes = for_batch.order(active_stake: :desc)
+      active_stakes = relation.order(active_stake: :desc)
                                .pluck(:id, :active_stake)
 
       active_stakes.each do |id, active_stake|
@@ -66,10 +67,6 @@ module Stats
 
     def over_33_of_total?(value)
       value > (total_active_stake / 3.0)
-    end
-
-    def for_batch
-      @for_batch ||= @relation
     end
   end
 end
