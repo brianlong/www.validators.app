@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     render(createElement) {
       return createElement(IndexTemplate, {
         props: {
-          query: this.$el.attributes.query ? this.$el.attributes.query.value : null
+          query: this.$el.attributes.query ? this.$el.attributes.query.value : null,
+          network: this.$el.attributes.network ? this.$el.attributes.network.value : 'mainnet'
         }
       })
     },

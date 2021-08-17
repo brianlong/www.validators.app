@@ -36,12 +36,12 @@
   import axios from 'axios'
 
   export default {
-    props: ['query'],
+    props: ['query', 'network'],
     data () {
       if(this.query && !this.query == ''){
-        var api_url = '/api/v1/commission-changes/mainnet?query=' + this.query + '&'
+        var api_url = '/api/v1/commission-changes/' + this.network + '?query=' + this.query + '&'
       } else {
-        var api_url = '/api/v1/commission-changes/mainnet?'
+        var api_url = '/api/v1/commission-changes/' + this.network + '?'
       }
       return {
         commission_histories: [],

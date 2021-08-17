@@ -10,13 +10,13 @@
 </div>
 
 <% if @validator %>
-  <div id='commission-histories-index-vue' query=<%= @validator.account%> >
+  <div id='commission-histories-index-vue' query=<%= @validator.account%> network=<%= params[:network] %>>
   </div>
   <%= link_to 'Back to Validator page',
               validator_url(network: params[:network], account: @validator.account),
               class: 'btn btn-sm btn-secondary' %>
 <% else %>
-  <div id='commission-histories-index-vue'>
+  <div id='commission-histories-index-vue' network=<%= params[:network] %>>
   </div>
   <%= link_to 'Back to List of Validators',
               validators_path(network: params[:network]),
