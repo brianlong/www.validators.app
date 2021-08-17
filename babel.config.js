@@ -44,8 +44,7 @@ module.exports = function(api) {
       [
         '@babel/plugin-proposal-class-properties',
         {
-          //loose: true
-          loose: false
+          loose: true
         }
       ],
       [
@@ -64,6 +63,12 @@ module.exports = function(api) {
         '@babel/plugin-transform-regenerator',
         {
           async: false
+        }
+      ],
+      [
+        '@babel/plugin-proposal-private-property-in-object',
+        {
+          loose: true
         }
       ]
     ].filter(Boolean)
