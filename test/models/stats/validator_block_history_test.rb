@@ -74,5 +74,45 @@ module Stats
       assert_equal expected, @query.skipped_slot_stats(with_history: false)
       assert_equal expected_history, @query.skipped_slot_stats(with_history: true)[:history].map(&:first)
     end
+
+    test '::average_skipped_slot_percent_for returns the average of all skipped_slot_percent_moving_averages in the batch' do
+      vbh1 = create(
+        :validator_block_history,
+        batch_uuid: '42',
+        skipped_slot_percent: 0.75
+      )
+
+      vbh2 = create(
+        :validator_block_history,
+        batch_uuid: '42',
+        skipped_slot_percent: 0.25
+      )
+
+      result = Stats::ValidatorBlockHistory.new('testnet', '42').average_skipped_slot_percent
+      assert_equal 0.5, result
+    end
+
+    test '::median_skipped_slot_percent_for returns the median of all skipped_slot_percent_moving_averages in the batch' do
+      vbh1 = create(
+        :validator_block_history,
+        batch_uuid: '42',
+        skipped_slot_percent: 0.75
+      )
+
+      vbh2 = create(
+        :validator_block_history,
+        batch_uuid: '42',
+        skipped_slot_percent: 0.5
+      )
+
+      vbh3 = create(
+        :validator_block_history,
+        batch_uuid: '42',
+        skipped_slot_percent: 0.25
+      )
+
+      result = Stats::ValidatorBlockHistory.new('testnet', '42').median_skipped_slot_percent
+      assert_equal 0.5, result
+    end
   end
 end

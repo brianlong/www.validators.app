@@ -1,10 +1,22 @@
+# frozen_string_literal: true
+
 module Stats
+
+  # ValidatorBlockHistory set of stats scoped to certain batch.
+  #
+  # Usage: stats = Stats::ValidatorBlockHistory.new(network, batch_uuid)
+  #            # network    - 'testnet' or 'mainnet' atm
+  #            # batch_uuid - batch in which look for
+  #        stats.average_skipped_slot_percent
+  #        stats.scorable_average_skipped_slot_percent
+  #        stats.median_skipped_slot_percent
+  #        stats.skipped_slot_percent_history
+  #        ...
   class ValidatorBlockHistory < ApplicationStats
     def initialize(network, batch_uuid)
       super
 
-      @relation = ValidatorBlockHistoryQuery.new(network, batch_uuid)
-                                            .for_batch
+      @relation = ::ValidatorBlockHistory.for_batch(network, batch_uuid)
     end
 
     def average_skipped_slot_percent

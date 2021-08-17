@@ -1,10 +1,22 @@
+# frozen_string_literal: true
+
 module Stats
+
+  # ValidatorHistory set of stats scoped to certain batch.
+  #
+  # Usage: stats = Stats::ValidatorHistory.new(network, batch_uuid)
+  #            # network    - 'testnet' or 'mainnet' atm
+  #            # batch_uuid - batch in which look for
+  #        stats.average_root_block
+  #        stats.highest_root_block
+  #        stats.median_root_block
+  #        stats.average_last_vote
+  #        ...
   class ValidatorHistory < ApplicationStats
     def initialize(network, batch_uuid)
       super
 
-      @relation = ValidatorHistoryQuery.new(network, batch_uuid)
-                                       .for_batch
+      @relation = ::ValidatorHistory.for_batch(network, batch_uuid)
     end
 
     # Mysql AVG is so far the fastest way to count average (compared to pluck and map)

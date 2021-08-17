@@ -7,15 +7,13 @@
 #   query = ValidatorScoreQuery.new(network, batch_uuid)
 # Call query method on scoped @relation
 #   query.for_batch
-#   query.
 class ValidatorScoreQuery < ApplicationQuery
   def initialize(network, batch_uuid)
     super
 
-    @validators = ValidatorHistoryQuery.new(network, batch_uuid)
-                                       .for_batch
-                                       .map(&:validator)
-                                       .compact
+    @validators = ValidatorHistory.for_batch(network, batch_uuid)
+                                  .map(&:validator)
+                                  .compact
     @relation = ValidatorScoreV1.where(validator_id: @validators.map(&:id))
   end
 

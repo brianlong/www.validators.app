@@ -1,4 +1,17 @@
+# frozen_string_literal: true
+
 module Stats
+
+  # VoteAccountHistory set of stats scoped to certain batch.
+  #
+  # Usage: stats = Stats::VoteAccountHistory.new(network, batch_uuid)
+  #            # network    - 'testnet' or 'mainnet' atm
+  #            # batch_uuid - batch in which look for
+  #        stats.average_skipped_vote_percent
+  #        stats.median_skipped_vote_percent
+  #        stats.average_skipped_vote_percent_moving_average
+  #        stats.median_skipped_vote_percent_moving_average
+  #        ...
   class VoteAccountHistory < ApplicationStats
     def initialize(network, batch_uuid)
       super

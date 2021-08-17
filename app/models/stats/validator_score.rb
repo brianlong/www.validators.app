@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 module Stats
+
+  # ValidatorScore set of stats scoped to certain batch.
+  #
+  # Usage: stats = Stats::ValidatorScore.new(network, batch_uuid)
+  #            # network    - 'testnet' or 'mainnet' atm
+  #            # batch_uuid - batch in which look for
+  #        stats.root_distance_all_history
+  #        stats.root_distance_all_averages
+  #        stats.top_root_distance_averages_validators
+  #        stats.root_distance_stats(with_history: false)
+  #        ...
   class ValidatorScore < ApplicationStats
     def initialize(network, batch_uuid)
       super

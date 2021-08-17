@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
+# Stats module extracts stats from models
 module Stats
   class ApplicationStats
-    #self.abstract_class = true
-
     attr_reader :network, :batch_uuid, :relation
 
     def initialize(network, batch_uuid)

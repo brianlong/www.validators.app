@@ -6,8 +6,7 @@
 # Set @relation by network and batch_uuid in which query should run:
 #   query = VoteAccountHistoryQuery.new(network, batch_uuid)
 # Call query method on scoped @relation
-#   query.average_skipped_vote_percent
-#   query.median_skipped_vote_percent
+#   query.for_batch
 class VoteAccountHistoryQuery < ApplicationQuery
   def initialize(network, batch_uuid)
     super

@@ -36,6 +36,8 @@ class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
 
+  scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
+
   def validator
     Validator.find_by(network: network, account: account)
   end
