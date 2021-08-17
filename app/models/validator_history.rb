@@ -36,36 +36,6 @@ class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
 
-  class << self
-    def for_batch(network, batch_uuid)
-      where(network: network, batch_uuid: batch_uuid)
-    end
-
-    def average_root_block_for(network, batch_uuid)
-      for_batch(network, batch_uuid).batch.average(:root_block)
-    end
-
-    def highest_root_block_for(network, batch_uuid)
-      for_batch(network, batch_uuid).maximum(:root_block)
-    end
-
-    def median_root_block_for(network, batch_uuid)
-      for_batch(network, batch_uuid).median(:root_block)
-    end
-
-    def average_last_vote_for(network, batch_uuid)
-      for_batch(network, batch_uuid).average(:last_vote)
-    end
-
-    def highest_last_vote_for(network, batch_uuid)
-      for_batch(network, batch_uuid).maximum(:last_vote)
-    end
-
-    def median_last_vote_for(network, batch_uuid)
-      for_batch(network, batch_uuid).median(:last_vote)
-    end
-  end
-
   def validator
     Validator.find_by(network: network, account: account)
   end
