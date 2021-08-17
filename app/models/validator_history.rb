@@ -69,4 +69,13 @@ class ValidatorHistory < ApplicationRecord
   def validator
     Validator.find_by(network: network, account: account)
   end
+
+  def to_builder
+    Jbuilder.new do |validator_history|
+      validator_history.(
+        self,
+        :epoch_credits
+      )
+    end
+  end
 end

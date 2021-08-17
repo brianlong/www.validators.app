@@ -132,10 +132,12 @@ module Api
         score = validator.score
         ip = score.ip_for_api if score
         vote_account = validator.vote_accounts.last
+        validator_history = validator.validator_history_last
 
         hash.merge!(score.to_builder.attributes!)
         hash.merge!(ip.to_builder.attributes!) unless ip.blank?
         hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
+        hash.merge!(validator_history.to_builder.attributes!) unless validator_history.blank?
 
         # Data from the skipped_slots_report
         unless @skipped_slots_report.nil?
