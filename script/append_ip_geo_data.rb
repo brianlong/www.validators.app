@@ -9,7 +9,7 @@ require 'maxmind/geoip2'
 
 begin
   interrupted = false
-  trap('INT') { interrupted = true }
+  trap('INT') { interrupted = true }  unless Rails.env.test?
 
   verbose = true # Rails.env == 'development'
 

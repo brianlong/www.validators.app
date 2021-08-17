@@ -8,7 +8,7 @@ require File.expand_path('../config/environment', __dir__)
 include AgentLogic
 
 interrupted = false
-trap('INT') { interrupted = true }
+trap('INT') { interrupted = true }  unless Rails.env.test?
 
 # .picture > img:nth-child(1)
 image_css = '.picture > .img-circle'
