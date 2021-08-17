@@ -62,18 +62,14 @@ module ValidatorScoreV1Logic
       # Will it be faster to load the batch into memory and perform the
       # calculations in RAM? We could also eliminate the N+1 query a little
       # further below if we have the batch in RAM.
-      highest_root = ValidatorHistory.highest_root_block_for(
+      validator_history_stats = Stats::ValidatorHistory.new(
         p.payload[:network],
         p.payload[:batch_uuid]
       )
-      highest_vote = ValidatorHistory.highest_last_vote_for(
-        p.payload[:network],
-        p.payload[:batch_uuid]
-      )
-      total_active_stake = Stats::ValidatorHistory.new(
-        p.payload[:network],
-        p.payload[:batch_uuid]
-      ).total_active_stake
+
+      highest_root = validator_history_stats.highest_root_block
+      highest_vote = validator_history_stats.highest_last_vote
+      total_active_stake = validator_history_stats.total_active_stake
 
       best_skipped_vote = Stats::VoteAccountHistory.new(
         p.payload[:network],
