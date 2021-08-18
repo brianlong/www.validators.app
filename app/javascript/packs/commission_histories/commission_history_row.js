@@ -2,7 +2,7 @@ import { NIL } from 'uuid'
 import Vue from 'vue/dist/vue.esm'
 
 
-Vue.component('CommissionHistoryRow', {
+var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
   props: {
     chistory: {
       type: Object,
@@ -60,3 +60,5 @@ Vue.component('CommissionHistoryRow', {
     </tr>
   `
 })
+
+export default CommissionHistoryRow
