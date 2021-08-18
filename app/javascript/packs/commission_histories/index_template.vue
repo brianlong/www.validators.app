@@ -4,31 +4,34 @@
       <table class='table mb-0'>
         <thead>
           <tr>
-            <th>
+            <th class="narrower-column">
               <a href="#" @click.prevent="sort_by_validator">Validator</a>
             </th>
-            <th class="narrow-column">
+            <th class="narrower-column">
               <a href="#" @click.prevent="sort_by_epoch">Epoch</a><br />
               <small>(completion %)</small>
             </th>
             <th class="wider-column">Batch</th>
             <th class="wider-column text-center">Before<i class="fas fa-long-arrow-alt-right px-2"></i>After</th>
-            <th class="narrow-column">
+            <th class="narrower-column">
               <a href="#" @click.prevent="sort_by_timestamp">Timestamp</a>
             </th>
           </tr>
         </thead>
+        <tbody>
           <commission-history-row v-for="ch in commission_histories" :key="ch.id" :chistory="ch">
           </commission-history-row>
-        <tbody>
-
         </tbody>
       </table>
+      <div class="pt-2 px-3">
+        <b-pagination
+            v-model="page"
+            :total-rows="total_count"
+            :per-page="25"
+            first-text="« First"
+            last-text="Last »" />
+      </div>
     </div>
-    <b-pagination 
-      v-model="page" 
-      :total-rows="total_count" 
-      :per-page="25" />
   </div>
 </template>
 
