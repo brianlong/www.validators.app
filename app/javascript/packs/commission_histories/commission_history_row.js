@@ -1,4 +1,3 @@
-import { NIL } from 'uuid'
 import Vue from 'vue/dist/vue.esm'
 
 
@@ -10,7 +9,7 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
     }
   },
   data() {
-    if(this.chistory.name == NIL){
+    if(this.chistory.name == null){
       var chistory_name = this.chistory.account.substring(0,6) + "..." + this.chistory.account.substring(this.chistory.account.length - 4)
     } else {
       var chistory_name = this.chistory.name
