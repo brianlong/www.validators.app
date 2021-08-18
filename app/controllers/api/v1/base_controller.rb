@@ -11,11 +11,10 @@ module Api
       before_action :validate_api_token
 
       def validate_api_token
+        return true \
+          if request.headers['Authorization'] == Rails.application.credentials.api_authorization
+
         allowed_domains = Rails.application.credentials.cors_domain_whitelist
-        allowed_domains += ['https://validators.app', 'https://stage.validators.app']
-        if Rails.env.development?
-          allowed_domains += ['http://localhost:3000', nil]
-        end
         unless allowed_domains&.include? request.headers['origin'] # Rails.application.credentials.cors_domain_whitelist
           return unauthenticated! \
             if User.where(api_token: request.headers['Token']).first.nil?

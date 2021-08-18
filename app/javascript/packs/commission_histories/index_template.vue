@@ -38,6 +38,8 @@
 <script>
   import axios from 'axios'
 
+  axios.defaults.headers.get["Authorization"] = window.api_authorization
+
   export default {
     props: ['query', 'network'],
     data () {
