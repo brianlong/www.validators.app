@@ -67,8 +67,8 @@ module ValidatorScoreV1Logic
         p.payload[:batch_uuid]
       )
 
-      highest_root = validator_history_stats.highest_root_block
-      highest_vote = validator_history_stats.highest_last_vote
+      highest_root_block = validator_history_stats.highest_root_block
+      highest_last_vote = validator_history_stats.highest_last_vote
       total_active_stake = validator_history_stats.total_active_stake
 
       best_skipped_vote = Stats::VoteAccountHistory.new(
@@ -93,32 +93,32 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |validator|
         # Get the last root & vote for this validator
-        vhs = validator_histories.find { |vh| vh.account == validator.account }
-        vote_hs = vote_histories.find { |vote_h| vote_h.vote_account.validator_id == validator.id }
-        if vote_hs
-          validator.score.skipped_vote_history_push(vote_hs.skipped_vote_percent)
-          skipped_vote_all.push(((best_skipped_vote - vote_hs.skipped_vote_percent) * 100).round(2))
-          validator.score.skipped_vote_percent_moving_average_history_push(vote_hs.skipped_vote_percent_moving_average)
+        vh = validator_histories.find { |validator_history| validator_history.account == validator.account }
+        vote_h = vote_histories.find { |vote_history| vote_history.vote_account.validator_id == validator.id }
+        if vote_h
+          validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
+          skipped_vote_all.push(((best_skipped_vote - vote_h.skipped_vote_percent) * 100).round(2))
+          validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
         else
           validator.score.skipped_vote_history_push(nil)
         end
-        if vhs
-          root_distance = highest_root - vhs.root_block.to_i
-          vote_distance = highest_vote - vhs.last_vote.to_i
-          unless vhs.commission.nil?
-            validator.validator_score_v1.commission = vhs.commission
+        if vh
+          root_distance = highest_root_block - vh.root_block.to_i
+          vote_distance = highest_last_vote - vh.last_vote.to_i
+          unless vh.commission.nil?
+            validator.validator_score_v1.commission = vh.commission
           end
-          unless vhs.delinquent.nil?
-            validator.validator_score_v1.delinquent = vhs.delinquent
+          unless vh.delinquent.nil?
+            validator.validator_score_v1.delinquent = vh.delinquent
           end
-          unless vhs.active_stake.nil?
-            validator.validator_score_v1.active_stake = vhs.active_stake
+          unless vh.active_stake.nil?
+            validator.validator_score_v1.active_stake = vh.active_stake
           end
           validator.validator_score_v1.stake_concentration = \
-            (vhs.active_stake.to_f / total_active_stake)
+            (vh.active_stake.to_f / total_active_stake)
         else
-          root_distance = highest_root
-          vote_distance = highest_vote
+          root_distance = highest_root_block
+          vote_distance = highest_last_vote
         end
         validator.validator_score_v1.root_distance_history_push(root_distance)
         validator.validator_score_v1.vote_distance_history_push(vote_distance)
@@ -236,9 +236,9 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      vbh_query = Stats::ValidatorBlockHistory.new(p.payload[:network], p.payload[:batch_uuid])
-      avg_skipped_slot_pct_all = vbh_query.average_skipped_slot_percent
-      med_skipped_slot_pct_all = vbh_query.median_skipped_slot_percent
+      vbh_stats = Stats::ValidatorBlockHistory.new(p.payload[:network], p.payload[:batch_uuid])
+      avg_skipped_slot_pct_all = vbh_stats.average_skipped_slot_percent
+      med_skipped_slot_pct_all = vbh_stats.median_skipped_slot_percent
 
       vbh_sql = <<-SQL_END
         SELECT vbh.validator_id, vbh.skipped_slot_percent, vbh.skipped_slot_percent_moving_average

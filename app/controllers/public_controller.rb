@@ -38,11 +38,11 @@ class PublicController < ApplicationController
       @skipped_slot_median =
         validator_block_history_stats.median_skipped_slot_percent
 
-      validator_history =
+      validator_history_stats =
         Stats::ValidatorHistory.new(index_params[:network], @batch.uuid)
-      @total_active_stake = validator_history.total_active_stake
+      @total_active_stake = validator_history_stats.total_active_stake
 
-      at_33_stake_validator = validator_history.at_33_stake&.validator
+      at_33_stake_validator = validator_history_stats.at_33_stake&.validator
       @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
     end
 
