@@ -3,11 +3,11 @@
 require 'test_helper'
 
 class ValidatorTest < ActiveSupport::TestCase
-  test 'relationships has_many validator_histories' do
+  test 'relationships has_one most_recent_epoch_credits_by_account' do
     validator = create(:validator)
-    create_list(:validator_history, 5, account: validator.account)
+    create_list(:validator_history, 5, account: validator.account, epoch_credits: 100)
 
-    assert_equal 5, validator.validator_histories.size
+    assert_equal 100, validator.most_recent_epoch_credits_by_account.epoch_credits
   end
 
   test '#api_url creates correct link for test environment' do
