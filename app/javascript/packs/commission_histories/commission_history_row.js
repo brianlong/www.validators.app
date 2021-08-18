@@ -31,7 +31,6 @@ Vue.component('CommissionHistoryRow', {
   },
   methods: {
     prepareData: function() {
-      // this.chistory.href = "/validators/" + this.chistory.network + "/" + this.chistory.account
       this.chistory.commission_before = this.chistory.commission_before ? this.chistory.commission_before : 0
       this.chistory.commission_after = this.chistory.commission_after ? this.chistory.commission_after : 0
     }

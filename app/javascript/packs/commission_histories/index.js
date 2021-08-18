@@ -1,7 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
 import IndexTemplate from './index_template'
 import CommissionHistoryRow from './commission_history_row'
-// import Pagination from 'vue-pagination-2';
 import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";
 
