@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_02_122221) do
+ActiveRecord::Schema.define(version: 2021_08_19_085457) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -33,6 +33,18 @@ ActiveRecord::Schema.define(version: 2021_08_02_122221) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "asn_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.float "vote_distance_moving_average"
+    t.integer "traits_autonomous_system_number"
+    t.datetime "calculated_at"
+    t.integer "population"
+    t.float "active_stake"
+    t.text "data_centers"
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "batches", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "uuid"
     t.datetime "created_at", precision: 6, null: false
@@ -47,6 +59,7 @@ ActiveRecord::Schema.define(version: 2021_08_02_122221) do
     t.string "software_version"
     t.float "skipped_vote_all_median"
     t.float "best_skipped_vote"
+    t.float "average_skipped_slot_percent"
     t.float "skipped_slot_all_average", default: 0.0
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
