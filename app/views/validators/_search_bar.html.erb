@@ -5,7 +5,8 @@
             :q, '', 
             placeholder: 'Starts with...', 
             class: 'form-control',
-            value: params[:q]
+            value: params[:q],
+            required: true
       ) %>
       <%= hidden_field_tag(:network, params[:network]) %>
       <%= hidden_field_tag(:order, params[:order]) %>
