@@ -7,4 +7,9 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       resource '/api/v1/*', headers: :any, methods: %i[get post]
     end
   end
+
+  allow do
+    origins 'https://validators.app', 'https://stage.validators.app', 'localhost:3000'
+    resource '/api/v1/*', headers: :any, methods: %i[get post]
+  end
 end

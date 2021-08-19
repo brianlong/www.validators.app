@@ -1,9 +1,0 @@
-{
-  "name": "www.validators.app",
-  "private": true,
-  "version": "1.0.0",
-  "description": "www.validators.app",
-  "repository": "git@github.com:brianlong/www.validators.app.git",
-  "author": "Brian Long <brian.long@fmadata.com>",
-  "license": "MIT"
-}

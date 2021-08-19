@@ -128,12 +128,12 @@
               if params[:network] == 'mainnet' &&
               @validator.commission.to_i == 100
           %>
-          <td class="<%= comm_class %>">
+          <td class="<%= comm_class %>" data-turbolinks="false">
             <%= @validator.commission rescue 'N/A' %>&percnt;
             <% if @validator.commission_histories.exists? %>
               <%= link_to '(See commission changes)',
                           commission_histories_path(network: params[:network], validator_id: @validator.id),
-                          class: 'small' %>
+                          class: 'small'%>
             <% end %>
           </td>
         </tr>
