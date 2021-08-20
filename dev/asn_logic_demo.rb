@@ -13,6 +13,7 @@ p = Pipeline.new(200, payload)
             .then(&gather_scores)
             .then(&prepare_asn_stats)
             .then(&calculate_and_save_stats)
+            .then(&log_errors_to_file)
 
 # puts p.payload[:asn_stats].inspect
 

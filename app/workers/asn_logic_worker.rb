@@ -14,6 +14,7 @@ class AsnLogicWorker
             .then(&gather_scores)
             .then(&prepare_asn_stats)
             .then(&calculate_and_save_stats)
-            .then(&log_errors)
+            .then(&log_errors_to_file)
+
   end
 end

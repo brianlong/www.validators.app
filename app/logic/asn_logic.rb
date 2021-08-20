@@ -83,9 +83,26 @@ module AsnLogic
       Pipeline.new(500, p.payload, 'Error from calculate_stats', e)
     end
   end
+
+  def log_errors_to_file
+    lambda do |p|
+      unless p[:code] == 200
+        asn_logger.error(p.errors.message)
+        p.errors.backtrace.each do |line|
+          asn_logger.error(line)
+        end
+        Rails.logger.error "PIPELINE ERROR CODE: #{p[:code]} MESSAGE: #{p[:message]} CLASS: #{p[:errors].class}"
+      end
+      p
+    end
+  end
 end
 
 private
+
+def asn_logger
+  @@asn_logger ||= Logger.new("#{Rails.root}/log/asn_logic.log")
+end
 
 def ips_sql
   "
