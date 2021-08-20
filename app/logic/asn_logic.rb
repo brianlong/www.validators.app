@@ -66,7 +66,7 @@ module AsnLogic
         vote_distance_averages = []
 
         scores.each do |sc|
-          active_stake += sc.active_stake
+          active_stake += sc.active_stake.to_f
           vote_distance_averages.push sc.vote_distance_history.average
         end
 
