@@ -26,7 +26,7 @@ begin
            SELECT ips.address FROM ips
           )
          "
-  # sql = "#{sql} LIMIT 10" if Rails.env == 'development'
+  sql = "#{sql} LIMIT 10" if Rails.env == 'development'
 
   Ip.connection.execute(sql).each do |missing_ip|
     puts missing_ip[0].inspect if verbose
