@@ -24,12 +24,6 @@ class AsnLogicTest < ActiveSupport::TestCase
     @payload = {
       network: 'testnet'
     }
-    
-    # p = Pipeline.new(200, payload)
-    #             .then(&gather_asns)
-    #             .then(&gather_scores)
-    #             .then(&prepare_asn_stats)
-    #             .then(&calculate_and_save_stats)
   end
 
   test "gather_asns" do
