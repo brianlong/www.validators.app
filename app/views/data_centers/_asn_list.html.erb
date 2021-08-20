@@ -5,6 +5,9 @@
       <p><%= asn_data[:aso] %></p>
     </td>
     <td>
+      <%= AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn]).vote_distance_moving_average%>
+    </td>
+    <td>
       <% asn_data[:data_centers].each do |dc| %>
         <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
         <br \>

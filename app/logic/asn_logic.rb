@@ -59,7 +59,8 @@ module AsnLogic
                     .find { |stat| stat.traits_autonomous_system_number == asn }
 
         scores = p.payload[:scores].select do |score|
-          score.data_center_key.in?(asn_stat.data_centers)
+          score.data_center_key.in?(asn_stat.data_centers) && \
+          score.validator.scorable?
         end
 
         active_stake = 0
