@@ -81,7 +81,7 @@ gem 'maxmind-geoip2'
 # use rack-cors for cross-origin api queries
 gem 'rack-cors'
 
-gem 'solana_rpc_ruby'
+gem 'solana_rpc_ruby', git: 'https://github.com/Block-Logic/solana-rpc-ruby', branch: '178899484_add_websockets_to_solana_rpc_ruby'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -104,6 +104,7 @@ group :development do
   gem 'annotate'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
+  gem 'puma'
 end
 
 group :test do
