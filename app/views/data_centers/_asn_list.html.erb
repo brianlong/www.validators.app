@@ -5,7 +5,19 @@
       <p><%= asn_data[:aso] %></p>
     </td>
     <td>
-      <%= AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn]).vote_distance_moving_average%>
+      <%
+        asn_stat = AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn], network: params[:network])
+        chart_value = asn_stat&.vote_distance_moving_average <= 20 ? asn_stat.vote_distance_moving_average : 20
+      %>
+      <%= render 'asn_speedometer',
+                  canvas_name: "spark_line_skipped_vote_#{asn_data[:asn]}",
+                  value: chart_value,
+                  chart_steps: [2.5, 5, 7.5, 10, 20],
+                  min_value: 0
+      %>
+      <div class="text-center">
+        <%= AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn], network: params[:network]).vote_distance_moving_average%>
+      </div>
     </td>
     <td>
       <% asn_data[:data_centers].each do |dc| %>

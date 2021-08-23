@@ -67,12 +67,16 @@ module AsnLogic
         vote_distance_averages = []
 
         scores.each do |sc|
-          active_stake += sc.active_stake.to_f
-          vote_distance_averages.push sc.vote_distance_history.average
+          vote_dist_avg = sc.vote_distance_history.average
+          if vote_dist_avg < 50
+            active_stake += sc.active_stake.to_f
+            vote_distance_averages.push sc.vote_distance_history.average
+          end
         end
 
         asn_stat.population = scores.count
         asn_stat.vote_distance_moving_average = vote_distance_averages.average
+        puts "#{asn_stat.traits_autonomous_system_number} - #{asn_stat.network}: #{asn_stat.vote_distance_moving_average}"
         asn_stat.active_stake = active_stake
         asn_stat.calculated_at = DateTime.now
 
