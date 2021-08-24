@@ -20,7 +20,7 @@
 <%
 =end%>
       <div class="text-center">
-        <%= AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn], network: params[:network]).vote_distance_moving_average.round(3) %>
+        <%= AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn], network: params[:network]).vote_distance_moving_average.round(3) rescue ''%>
       </div>
     </td>
     <td>
