@@ -87,6 +87,8 @@ en:
       terms_of_use: 'Terms of use'
       contact_us: 'Contact us'
       contact_requests: 'Contact requests'
+      opt_out: 'Opt Out'
+      opt_out_requests: 'Opt Out requests'
     copyright_text: 'provides tools for the Solana validator community.'
   you:
     only_users_allowed: 'Only authenticated User are allowed'
