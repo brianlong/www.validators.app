@@ -43,7 +43,7 @@ module Api
 
         @validators = Validator.select(validator_fields, validator_score_v1_fields)
                                .where(network: params[:network])
-                               .includes(:vote_accounts, validator_score_v1: [:ip_for_api])
+                               .includes(:vote_accounts, :most_recent_epoch_credits_by_account, validator_score_v1: [:ip_for_api])
                                .joins(:validator_score_v1)
                                .order(@sort_order)
                                .page(page)
@@ -132,10 +132,12 @@ module Api
         score = validator.score
         ip = score.ip_for_api if score
         vote_account = validator.vote_accounts.last
+        validator_history = validator.most_recent_epoch_credits_by_account
 
         hash.merge!(score.to_builder.attributes!)
         hash.merge!(ip.to_builder.attributes!) unless ip.blank?
         hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
+        hash.merge!(validator_history.to_builder.attributes!) unless validator_history.blank?
 
         # Data from the skipped_slots_report
         unless @skipped_slots_report.nil?
