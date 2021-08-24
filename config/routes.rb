@@ -40,6 +40,10 @@ Rails.application.routes.draw do
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
 
+  resources :opt_out_requests, path: 'opt-out-requests', only: [:index, :new, :create, :destroy] do
+    collection { get 'thank-you' => 'opt_out_requests#thank_you' }
+  end
+
   devise_for :users
 
   # Free Sidekiq

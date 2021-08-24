@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ADMIN_EMAIL = ''
+ADMIN_EMAIL = 'brian.long@fmadata.com'
 ADMIN_SITE = ''
 COMPANY_AKA = 'validators.app'
 FMA = 'validators.app'

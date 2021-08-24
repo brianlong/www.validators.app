@@ -99,3 +99,12 @@ input[type=submit] {
     }
   }
 }
+
+.recaptcha {
+  border-radius: $border-radius;
+  width: 302px;
+  overflow: hidden;
+  @media(max-width: $screen-xs-max) {
+    width: 290px;
+  }
+}

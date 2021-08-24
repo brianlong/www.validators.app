@@ -1,0 +1,38 @@
+<div class="card mb-4">
+  <div class="card-content pb-0">
+    <h1 class="card-heading">Privacy Requests</h1>
+  </div>
+
+  <div class="table-responsive-md">
+    <table class='table'>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th style="width: 15%">Name</th>
+        <th style="width: 20%">Address</th>
+        <th>Meta</th>
+        <th style="width: 20%">Timestamp</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @opt_out_requests.each do |r| %>
+        <tr>
+          <td><%= r.id %></td>
+          <td><%= r.name %></td>
+          <td>
+            <%= r.street_address %><br />
+            <%= r.city %>, <%= r.state %> <%= r.postal_code %>
+          </td>
+          <td><%= r.meta_data %></td>
+          <td><%= r.created_at %></td>
+          <td>
+            <%= link_to 'Destroy', r, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+      <% end%>
+      </tbody>
+    </table>
+  </div>
+  <div class="px-15"><%= paginate @opt_out_requests %></div>
+</div>
