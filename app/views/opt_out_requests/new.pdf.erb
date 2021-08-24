@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8' />
+
+  <style>
+      body {
+          font-size: 16px;
+          font-family: sans-serif;
+      }
+      header {
+          text-align: center;
+          margin: 40px 0;
+      }
+      ol, ul {
+          padding-left: 25px;
+      }
+      li {
+          padding-left: 0px;
+          margin-bottom: 15px;
+      }
+      p {
+          margin-bottom: 15px;
+      }
+      .mb-larger {
+          margin-bottom: 25px;
+      }
+      .col {
+          display: inline-block;
+          width: 405px;
+          padding-right: 20px;
+      }
+      label {
+          margin-left: 35px;
+          display: inline-block;
+      }
+      input[type="checkbox-custom"] {
+          width: 11px;
+          height: 11px;
+          border: 2px solid black;
+          border-radius: 2px;
+          box-shadow: none;
+          position: absolute;
+          margin-top: -2px;
+      }
+      .label {
+          display: inline-block;
+      }
+      .detail {
+          display: inline-block;
+          border-bottom: 1px solid black;
+      }
+      .contact-label {
+          width: 150px;
+      }
+      .contact-detail {
+          width: 725px;
+          text-align: right;
+      }
+      .communication-label {
+          width: 450px;
+      }
+      .communication-detail {
+          width: 390px;
+      }
+      hr {
+          margin: 35px 0;
+      }
+      .signature-detail {
+          width: 335px;
+          display: inline-block;
+          border-bottom: 1px solid black;
+          margin-left: 15px;
+      }
+      .counter {
+          font-size: 14px;
+          text-align: center;
+          color: grey;
+          margin: 30px 0;
+      }
+  </style>
+</head>
+
+<body onload='number_pages'>
+<header>
+  <%= image_tag wicked_pdf_asset_base64('validators_logo.png'), height: 45 %>
+  <h1>Privacy Request Form</h1>
+</header>
+
+<main>
+  <h2>Instructions</h2>
+  <ol>
+    <div class="col">
+      <li>Print this form (one form per person).</li>
+      <li>Indicate your request type.</li>
+      <li>Indicate your communication preferences.</li>
+      <li>Provide complete and accurate Contact Information.</li>
+    </div>
+    <div class="col">
+      <li>Sign and date the form.</li>
+      <li>Mail to our Privacy Desk at the address below.</li>
+      <li>Do not send this form by email! Email is not secure.</li>
+      <li><%= THIS_HOST.capitalize %> will not send Personal Information by email.</li>
+    </div>
+  </ol>
+
+  <hr />
+
+  <h2>Request Type</h2>
+  <p>
+    Please indicate the type of Privacy Request. Note that some request types require separate verification
+    of your identity.
+  </p>
+  <p>
+    <input type="checkbox-custom" id="opt-out" name="opt-out">
+    <label for="opt-out">
+      I would like to <strong>opt-out</strong> of the sale of my Personal Information.
+    </label>
+  </p>
+  <p>
+    <input type="checkbox-custom" id="disclosure" name="disclosure">
+    <label for="disclosure">
+      I request <strong>disclosure</strong> of the categories, sources, business purpose, categories of third
+      parties, and/or specific pieces of Personal Information held about me (identity verification required).
+    </label>
+  </p>
+  <p>
+    <input type="checkbox-custom" id="deletion" name="deletion">
+    <label for="deletion">
+      I request the <strong>deletion</strong> of my personal information. Please note that removal may not be
+      possible in cases where movingleads.com has a legal business purpose to retain Personal Information
+      (identify verification required).
+    </label>
+  </p>
+
+  <hr />
+
+  <h2>Contact Information</h2>
+  <p class="mb-larger">
+    <%= THIS_HOST.capitalize %> generally holds the categories of Contact Information shown below. We require
+    your Contact Information to fulfill your Privacy Request. Please provide complete Contact Information for
+    each item. Be aware that your Privacy Request may be invalid without complete and accurate responses. Respond
+    with "N/A" if a particular item does not apply to you, or if you do not want to opt-out for that item.
+  </p>
+  <p class="mb-larger">
+    <strong class="label contact-label">Name:</strong>
+    <span class="detail contact-detail"><i>(first middle last)</i></span>
+  </p>
+  <p class="mb-larger">
+    <strong class="label contact-label">Postal Address:</strong>
+    <span class="detail contact-detail"></span>
+  </p>
+  <p>
+    <strong class="label contact-label">City, State Zip:</strong>
+    <span class="detail contact-detail"></span>
+  </p>
+
+  <hr />
+
+  <h2>Communication Preferences</h2>
+  <p class="mb-larger">I would like to receive communication about my Privacy Request via:</p>
+  <p class="mb-larger">
+    <input type="checkbox-custom" id="email" name="email">
+    <label for="email" class="label communication-label">Email at the address indicated to the right:</label>
+    <span class="detail communication-detail"></span>
+  </p>
+  <p class="mb-larger">
+    <input type="checkbox-custom" id="postal" name="postal">
+    <label for="postal" class="label communication-label">Postal mail at the address above or as indicated to the right:</label>
+    <span class="detail communication-detail"></span>
+  </p>
+  <p>
+    <label class="label communication-label"></label>
+    <span class="detail communication-detail"></span>
+  </p>
+
+  <p class="counter">1/2</p>
+
+  <h2>Certification</h2>
+  <p class="mb-larger">
+    I certify that the information on this Privacy Request Form is accurate and complete as of the date indicated
+    below (Authorized representatives should attach a copy of a signed representation agreement).
+  </p>
+  <strong class="label">Signature</strong><span class="detail signature-detail" style="margin-right: 65px"></span>
+  <strong class="label">Date</strong><span class="detail signature-detail"></span>
+
+  <hr />
+
+  <div class="col">
+    <h3>Mail To</h3>
+    <p>Privacy Desk</p>
+    <p>RE: <%= THIS_HOST %></p>
+    <p><%= OUR_STREET_ADDRESS %></p>
+    <p><%= OUR_CITY_STATE_ZIP %></p>
+  </div>
+  <div class="col">
+    <h3>Notes</h3>
+    <ol>
+      <li><%= THIS_HOST %> will respond within 45 days of a verified request.</li>
+      <li>Contact our Privacy Desk at (888) 598-1101 with questions about this process.</li>
+      <li>Do not send this form by email! Email is not secure.</li>
+    </ol>
+  </div>
+  <p class="counter" style="margin-top: 870px">2/2</p>
+</main>
+</body>
+</html>
