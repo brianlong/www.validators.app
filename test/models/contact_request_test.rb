@@ -2,7 +2,8 @@ require 'test_helper'
 
 class ContactRequestTest < ActiveSupport::TestCase
   setup do
-    @contact_request = ContactRequest.new(
+    @contact_request = build(
+      :contact_request,
       name: Faker::Internet.username(specifier: 10),
       email_address: Faker::Internet.email,
       telephone: Faker::PhoneNumber.phone_number,
