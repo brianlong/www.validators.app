@@ -6,6 +6,8 @@
     </td>
     <td>
       <%
+=begin%>
+ <%
         asn_stat = AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn], network: params[:network])
         chart_value = asn_stat&.vote_distance_moving_average <= 20 ? asn_stat.vote_distance_moving_average : 20
       %>
@@ -14,7 +16,9 @@
                   value: chart_value,
                   chart_steps: [2.5, 5, 7.5, 10, 20],
                   min_value: 0
-      %>
+      %> 
+<%
+=end%>
       <div class="text-center">
         <%= AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn], network: params[:network]).vote_distance_moving_average%>
       </div>
