@@ -102,9 +102,6 @@ Rails.application.routes.draw do
       as: 'api_documentation'
   get 'contact-requests', to: 'contact_requests#index'
   get 'cookie-policy', to: 'public#cookie_policy'
-  get '/do-not-sell-my-personal-information/',
-      to: 'public#do_not_sell_my_personal_information',
-      as: :do_not_sell_my_personal_information
   get 'faq', to: 'public#faq'
   get 'privacy-policy-california', to: 'public#privacy_policy_california'
   get 'privacy-policy', to: 'public#privacy_policy'
