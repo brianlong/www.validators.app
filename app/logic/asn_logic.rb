@@ -66,15 +66,19 @@ module AsnLogic
         active_stake = 0
         wage_sum = 0
         total_vote_distance_score = 0
+        total_vote_distance_history = 0
 
         scores.each do |sc|
           active_stake += sc.active_stake.to_f
-          wage_sum += sc.total_score * sc.vote_distance_history[-1]
-          total_vote_distance_score += sc.total_score
+          wage_sum += sc.total_score.to_i * sc.vote_distance_history.average
+          total_vote_distance_history += sc.vote_distance_history.average
+          total_vote_distance_score += sc.total_score.to_i
         end
 
+        puts total_vote_distance_score
+
         asn_stat.population = scores.count
-        asn_stat.vote_distance_moving_average = wage_sum / (total_vote_distance_score * active_stake)
+        asn_stat.vote_distance_moving_average = (wage_sum / (total_vote_distance_score * total_vote_distance_history).to_f) * 100
         puts "#{asn_stat.traits_autonomous_system_number} - #{asn_stat.network}: #{asn_stat.vote_distance_moving_average}"
         asn_stat.active_stake = active_stake
         asn_stat.calculated_at = DateTime.now
