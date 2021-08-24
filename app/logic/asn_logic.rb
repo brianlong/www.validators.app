@@ -75,13 +75,14 @@ module AsnLogic
           total_vote_distance_score += sc.vote_distance_score.to_i
         end
 
-        puts total_vote_distance_score
-
         asn_stat.population = scores.count
-        asn_stat.vote_distance_moving_average = (wage_sum.to_f / total_vote_distance_score.to_f).to_f
+        if total_vote_distance_score > 0
+          asn_stat.vote_distance_moving_average = (wage_sum.to_f / total_vote_distance_score.to_f)
+        else
+          asn_stat.vote_distance_moving_average = nil
+        end
         # puts "#{asn_stat.traits_autonomous_system_number} - #{asn_stat.network}: #{asn_stat.vote_distance_moving_average}"
         asn_stat.active_stake = active_stake
-        asn_stat.calculated_at = DateTime.now
 
         asn_stat.save
       end
