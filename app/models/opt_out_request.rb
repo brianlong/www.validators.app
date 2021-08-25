@@ -12,7 +12,8 @@ class OptOutRequest < ApplicationRecord
   attr_encrypted_options.merge!(
     key: Rails.application.credentials.attribute_key,
     prefix: '',
-    suffix: '_encrypted')
+    suffix: '_encrypted'
+  )
   attr_encrypted :name
   attr_encrypted :street_address
   attr_encrypted :city

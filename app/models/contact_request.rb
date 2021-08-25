@@ -25,7 +25,8 @@ class ContactRequest < ApplicationRecord
   attr_encrypted_options.merge!(
     key: Rails.application.credentials.attribute_key,
     prefix: '',
-    suffix: '_encrypted')
+    suffix: '_encrypted'
+  )
   attr_encrypted :name
   attr_encrypted :email_address
   attr_encrypted :telephone
