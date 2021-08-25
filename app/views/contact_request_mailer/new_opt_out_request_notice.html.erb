@@ -1,0 +1,11 @@
+<h1>New opt-out request</h1>
+<p>You received a new opt-out request from <%= THIS_SITE %>. Please review below.</p>
+<p>
+  <strong>Request type:</strong> <%= @opt_out_request.request_type %><br/>
+  <strong>Name:</strong> <%= @opt_out_request.name %><br/>
+  <strong>Address:</strong>
+  <%= @opt_out_request.street_address %>, <%= @opt_out_request.city %>,
+  <%= @opt_out_request.state %> <%= @opt_out_request.postal_code %><br/>
+  <strong>Date:</strong> <%= @opt_out_request.created_at %><br/>
+  <strong>Meta:</strong> <%= @opt_out_request.meta_data %>
+</p>

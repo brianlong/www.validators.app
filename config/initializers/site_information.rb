@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ADMIN_EMAIL = ''
+ADMIN_EMAIL = 'brian.long@fmadata.com'
 ADMIN_SITE = ''
 COMPANY_AKA = 'validators.app'
 FMA = 'validators.app'
@@ -13,4 +13,4 @@ OUR_LOGO = ''
 OUR_STREET_ADDRESS = '2575 PEARL ST STE 230'
 OUR_TELEPHONE = '(303) 443-2070'
 THIS_SITE = 'www.validators.app'
-THIS_HOST = 'www.validators.app'
+THIS_HOST = 'validators.app'

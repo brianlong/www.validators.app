@@ -76,8 +76,6 @@ class PublicController < ApplicationController
     @title = t('public.cookie_policy.title')
   end
 
-  def do_not_sell_my_personal_information; end
-
   def faq
     @title = t('public.faq.title')
   end

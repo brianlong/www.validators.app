@@ -1,0 +1,11 @@
+New opt-out request
+
+You received a new opt-out request from <%= THIS_SITE %>. Please review below.
+
+Request type: <%= @opt_out_request.request_type %>
+Name: <%= @opt_out_request.name %>
+Address:
+<%= @opt_out_request.street_address %>, <%= @opt_out_request.city %>,
+<%= @opt_out_request.state %> <%= @opt_out_request.postal_code %>
+Date: <%= @opt_out_request.created_at %>
+Meta: <%= @opt_out_request.meta_data %>
