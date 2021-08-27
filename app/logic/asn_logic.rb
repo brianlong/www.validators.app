@@ -63,21 +63,14 @@ module AsnLogic
           score.validator.scorable?
         end
 
-        active_stake = 0
-        wage_sum = 0
-        total_vote_distance_score = 0
-        total_vote_distance_history = 0
-
+        score_sum = 0
         scores.each do |sc|
-          active_stake += sc.active_stake.to_f
-          wage_sum += (sc.vote_distance_score.to_i * sc.vote_distance_history.average).to_f
-          total_vote_distance_history += sc.vote_distance_history.average
-          total_vote_distance_score += sc.vote_distance_score.to_i
+          score_sum += sc.total_score
         end
 
         asn_stat.population = scores.count
         if total_vote_distance_score > 0
-          asn_stat.vote_distance_moving_average = (wage_sum.to_f / total_vote_distance_score.to_f)
+          asn_stat.vote_distance_moving_average = (score_sum.to_f / asn_stat.population)
         else
           asn_stat.vote_distance_moving_average = nil
         end
