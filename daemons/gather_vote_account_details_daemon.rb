@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-interrupted = false
-trap('INT') { interrupted = true }
-
 require_relative '../config/environment'
 
 class SkipAndSleep < StandardError; end
@@ -23,8 +20,6 @@ begin
       sleep(1)
     end
   rescue SkipAndSleep => e
-    break if interrupted
-
     if e.message.in? %w[500 502 503 504]
       sleep(1.minute)
     else

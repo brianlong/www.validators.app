@@ -14,13 +14,14 @@ module Gatherers
     def call
       VoteAccount.where(network: @network).each do |vacc|
         vote_account_details = get_vote_account_details(vacc.account)
+        unless vote_account_details.blank?
+          vacc.update(
+            validator_identity: vote_account_details["validatorIdentity"],
+            authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
+          )
 
-        vacc.update(
-          validator_identity: vote_account_details["validatorIdentity"],
-          authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
-        )
-        
-        update_score(vacc)
+          update_score(vacc)
+        end
       end
     end
 
