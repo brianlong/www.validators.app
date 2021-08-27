@@ -101,6 +101,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.7.5)
       msgpack (~> 1.0)
+    browser (5.3.1)
     builder (3.2.4)
     bullet (6.1.4)
       activesupport (>= 3.0.0)
@@ -191,6 +192,14 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
+    launchy (2.5.0)
+      addressable (~> 2.7)
+    letter_opener (1.7.0)
+      launchy (~> 2.2)
+    letter_opener_web (1.4.0)
+      actionmailer (>= 3.2)
+      letter_opener (~> 1.0)
+      railties (>= 3.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -290,6 +299,8 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    recaptcha (5.8.1)
+      json
     redis (4.3.1)
     regexp_parser (2.1.1)
     responders (3.0.1)
@@ -387,6 +398,9 @@ GEM
     websocket-extensions (0.1.5)
     whenever (1.0.0)
       chronic (>= 0.6.3)
+    wicked_pdf (2.1.0)
+      activesupport
+    wkhtmltopdf-binary (0.12.6.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.4.2)
@@ -402,6 +416,7 @@ DEPENDENCIES
   aws-sdk-s3
   bcrypt_pbkdf
   bootsnap (>= 1.4.2)
+  browser
   bullet (~> 6.1)
   bundler (>= 2.1)
   byebug
@@ -418,6 +433,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   json (>= 2.3.0)
   kaminari
+  letter_opener_web
   listen (>= 3.0.5, < 3.2)
   maxmind-geoip2
   mechanize (>= 2.7.7)
@@ -427,6 +443,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 6.0)
   rails-controller-testing
+  recaptcha
   redis (~> 4.0)
   rubocop
   sass-rails (>= 6)
@@ -444,6 +461,8 @@ DEPENDENCIES
   webpacker (~> 5.4)
   websocket-extensions (>= 0.1.5)
   whenever
+  wicked_pdf
+  wkhtmltopdf-binary
 
 BUNDLED WITH
    2.1.4

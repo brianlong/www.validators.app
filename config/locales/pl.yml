@@ -76,4 +76,6 @@ pl:
       terms_of_use: 'Zasady użytkowania'
       contact_us: 'Kontakt'
       contact_requests: 'Prośby o kontakt'
+      opt_out: 'Złóż wniosek o usunięcie danych'
+      opt_out_requests: 'Wnioski o usunięcie danych'
     copyright_text: 'dostarcza narzędzi, których biznes używa do zgodności z ustawą o ochronie prywatności konsumentów (ang. CCPA).'

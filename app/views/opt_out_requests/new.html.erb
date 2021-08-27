@@ -1,0 +1,74 @@
+<div class="page-header">
+  <h1>Do Not Sell My Personal Information</h1>
+  <h4>You can exercise your privacy rights with the following options:</h4>
+</div>
+
+<h2 class="h3">1. Web Form</h2>
+<p>Use the form below to send a Privacy Request to <%= THIS_SITE %>.</p>
+<%= form_with model: @opt_out_request, local: true, class: 'mb-5' do |f| %>
+  <% if @opt_out_request.errors.any? %>
+    <div class="form-errors alert alert-danger">
+      <h6><%= pluralize(@opt_out_request.errors.count, "error") %> prohibited this request from being saved:</h6>
+      <ul>
+        <% @opt_out_request.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label(:opt_out_request, :request_type, class: 'required') %>
+    <%= f.select :request_type, OptOutRequest.request_types.keys.map { |w| [w.humanize, w] }, {}, { class: 'form-control' } %>
+  </div>
+  <div class="form-group">
+    <%= label :opt_out_request, 'Name', class: 'required' %>
+    <%= f.text_field :name, class: 'form-control', required: true %>
+  </div>
+  <div class="form-group">
+    <%= label(:opt_out_request, 'Address', nil, class: 'required') %>
+    <%= f.text_field :street_address, class: 'form-control', required: true, placeholder: 'Street Address' %>
+  </div>
+  <div class="row mb-3">
+    <div class='col-md-5 mb-3'>
+      <%= f.text_field :city, class: 'form-control', required: true, placeholder: 'City' %>
+    </div>
+    <div class='col-6 col-md-4 mb-3'>
+      <%= f.text_field :state, class: 'form-control', required: true, placeholder: 'State/Province' %>
+    </div>
+    <div class='col-6 col-md-3 mb-3'>
+      <%= f.text_field :postal_code, class: 'form-control', required: true, placeholder: 'Postal Code' %>
+    </div>
+  </div>
+  <div class="form-group recaptcha">
+    <%= recaptcha_tags %>
+  </div>
+  <%= submit_tag 'Submit', class: 'btn btn-primary' %>
+<% end %>
+
+<h2 class="h3">2. Mail-In Form</h2>
+<p>
+  If you prefer postal mail, you can print this
+  <%= link_to 'Privacy Request Form', new_opt_out_request_path(format: 'pdf') %>
+  and mail it to our Privacy Desk.
+</p>
+
+<hr class="my-4" />
+
+<h4>Legal Disclosures</h4>
+<p>
+  Depending on your location, you may have the legal right to opt-out of the resale of your personal information,
+  request disclosure of your personal information, or request the deletion of your personal information.
+  See the <%= THIS_HOST %> Privacy Policy at
+  <%= link_to "#{THIS_SITE}/privacy-policy", privacy_policy_path %>
+  for details.
+</p>
+<p>
+  Authorized representatives acting on behalf of a consumer should use the printable
+  <%= link_to 'Privacy Request Form', new_opt_out_request_path(format: 'pdf') %>
+  and include a copy of your signed representation agreement or power-of-attorney.
+</p>
+<p>
+  Consumers with disabilities may use the printable
+  <%= link_to 'Privacy Request Form', new_opt_out_request_path(format: 'pdf') %>.
+</p>
