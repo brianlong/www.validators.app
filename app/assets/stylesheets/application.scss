@@ -102,17 +102,21 @@ body {
   &.with-image {
     h1 {
       display: inline-block;
-      padding-left: 80px;
       margin-bottom: 0;
     }
     h5 {
-      padding-left: 80px;
       margin: 5px 0 0 0;
     }
     img, .img-circle, .img-circle-private {
       display: inline-block;
       position: absolute;
       margin-top: -6px;
+    }
+    .avatar-warning {
+      position: absolute;
+      top: 60px;
+      left: 35px;
+      z-index: 2;
     }
   }
 }
