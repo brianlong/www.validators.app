@@ -20,6 +20,7 @@ begin
         network: network,
         config_urls: config_urls
       ).call
+      sleep(1)
     end
   rescue SkipAndSleep => e
     break if interrupted
@@ -27,7 +28,7 @@ begin
     if e.message.in? %w[500 502 503 504]
       sleep(1.minute)
     else
-      sleep(sleep_time)
+      sleep(10.seconds)
     end
   end
 rescue StandardError => e
