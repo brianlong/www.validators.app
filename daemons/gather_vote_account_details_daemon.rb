@@ -13,7 +13,7 @@ begin
         Rails.application.credentials.solana[:mainnet_urls]
       end
 
-      Gatherers::GatherVoteAccountDetailsService.new(
+      Gatherers::VoteAccountDetailsService.new(
         network: network,
         config_urls: config_urls
       ).call

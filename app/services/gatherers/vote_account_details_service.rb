@@ -3,7 +3,7 @@
 module Gatherers
 
   # Assigns validator_identit
-  class GatherVoteAccountDetailsService
+  class VoteAccountDetailsService
     include SolanaLogic
 
     def initialize(network:, config_urls:)
@@ -37,7 +37,9 @@ module Gatherers
 
     # -2 points if withdrawer and id are the same
     def update_score(vacc)
-      if vacc && vacc.validator_identity == vacc.authorized_withdrawer
+      break unless vacc
+      
+      if vacc.validator_identity == vacc.authorized_withdrawer
         vacc.validator.validator_score_v1.authorized_withdrawer_score = -2
       else
         vacc.validator.validator_score_v1.authorized_withdrawer_score = 0

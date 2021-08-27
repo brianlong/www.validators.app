@@ -20,7 +20,7 @@ class GatherVoteAccountDetailsDaemonTest < ActiveSupport::TestCase
       "authorizedWithdrawer":"abcdef"
     }.to_json
     SolanaCliService.stub(:request, json_data, ['vote-account vote_account_1', @testnet_url]) do
-      Gatherers::GatherVoteAccountDetailsService.new(
+      Gatherers::VoteAccountDetailsService.new(
         network: 'testnet',
         config_urls: [@testnet_url]
       ).call
@@ -38,7 +38,7 @@ class GatherVoteAccountDetailsDaemonTest < ActiveSupport::TestCase
       "authorizedWithdrawer":"abcdefghi"
     }.to_json
     SolanaCliService.stub(:request, json_data, ['vote-account vote_account_1', @testnet_url]) do
-      Gatherers::GatherVoteAccountDetailsService.new(
+      Gatherers::VoteAccountDetailsService.new(
         network: 'testnet',
         config_urls: [@testnet_url]
       ).call
@@ -56,7 +56,7 @@ class GatherVoteAccountDetailsDaemonTest < ActiveSupport::TestCase
       "authorizedWithdrawer":"abcdef"
     }.to_json
     SolanaCliService.stub(:request, json_data, ['vote-account vote_account_1', @testnet_url]) do
-      Gatherers::GatherVoteAccountDetailsService.new(
+      Gatherers::VoteAccountDetailsService.new(
         network: 'testnet',
         config_urls: [@testnet_url]
       ).call
