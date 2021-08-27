@@ -17,7 +17,6 @@ begin
         network: network,
         config_urls: config_urls
       ).call
-      sleep(1)
     end
   rescue SkipAndSleep => e
     if e.message.in? %w[500 502 503 504]
