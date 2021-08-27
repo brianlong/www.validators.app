@@ -137,10 +137,7 @@ module ValidatorScoreV1Logic
         skipped_vote_all_median: skipped_vote_all_median,
       )
 
-      Pipeline.new(200, p.payload.merge(
-        total_active_stake: total_active_stake,
-        vote_account_with_histories: vote_histories
-      ))
+      Pipeline.new(200, p.payload.merge(total_active_stake: total_active_stake))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from block_vote_history_get', e)
     end

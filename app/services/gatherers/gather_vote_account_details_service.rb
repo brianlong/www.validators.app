@@ -26,6 +26,7 @@ module Gatherers
 
     private
 
+    # solana vote-account <account>
     def get_vote_account_details(account)
       cli_request(
         "vote-account #{account}",

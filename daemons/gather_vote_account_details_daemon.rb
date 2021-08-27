@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec ruby script/gather_vote_account_details.rb
-require File.expand_path('../config/environment', __dir__)
+interrupted = false
+trap('INT') { interrupted = true }
+
+require_relative '../config/environment'
+
+class SkipAndSleep < StandardError; end
 
 begin
   loop do
