@@ -37,8 +37,8 @@ module Gatherers
 
     # -2 points if withdrawer and id are the same
     def update_score(vacc)
-      break unless vacc
-      
+      return unless vacc
+
       if vacc.validator_identity == vacc.authorized_withdrawer
         vacc.validator.validator_score_v1.authorized_withdrawer_score = -2
       else
