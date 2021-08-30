@@ -15,7 +15,7 @@
 #   # application, you will need to migrate the encrypted data to the new
 #   # key namespace.
 #   # vault.application = Rails.application.credentials.dig(:vault, :application)
-#   vault.application = "donotsellmypersonalinformation"
+#   vault.application = "validators.app"
 #
 #   # vault.address = Rails.application.credentials.dig(:vault, :address)
 #   vault.address = ENV['VAULT_ADDR']

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_02_122221) do
+ActiveRecord::Schema.define(version: 2021_08_24_114443) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -174,6 +174,23 @@ ActiveRecord::Schema.define(version: 2021_08_02_122221) do
     t.string "data_center_host"
     t.index ["address"], name: "index_ips_on_address", unique: true
     t.index ["data_center_key"], name: "index_ips_on_data_center_key"
+  end
+
+  create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "request_type"
+    t.json "meta_data"
+    t.string "name_encrypted"
+    t.string "street_address_encrypted"
+    t.string "city_encrypted"
+    t.string "postal_code_encrypted"
+    t.string "state_encrypted"
+    t.string "name_encrypted_iv"
+    t.string "street_address_encrypted_iv"
+    t.string "city_encrypted_iv"
+    t.string "postal_code_encrypted_iv"
+    t.string "state_encrypted_iv"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

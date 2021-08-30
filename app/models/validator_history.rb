@@ -37,8 +37,64 @@ class ValidatorHistory < ApplicationRecord
   include PipelineLogic
 
   scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
+  scope :most_recent_epoch_credits_by_account, -> do
+    from(
+      <<~SQL
+        (
+          SELECT validator_histories.epoch_credits, validator_histories.account, validator_histories.created_at
+          FROM validator_histories JOIN (
+            SELECT account, max(created_at) AS created_at
+            FROM validator_histories
+            GROUP BY account
+          ) latest_by_account
+          ON validator_histories.created_at = latest_by_account.created_at
+          AND validator_histories.account = latest_by_account.account
+        ) validator_histories
+      SQL
+    )
+  end
+
+  class << self
+    
+    def for_batch(network, batch_uuid)
+      where(network: network, batch_uuid: batch_uuid)
+    end
+
+    def average_root_block_for(network, batch_uuid)
+      for_batch(network, batch_uuid).batch.average(:root_block)
+    end
+
+    def highest_root_block_for(network, batch_uuid)
+      for_batch(network, batch_uuid).maximum(:root_block)
+    end
+
+    def median_root_block_for(network, batch_uuid)
+      for_batch(network, batch_uuid).median(:root_block)
+    end
+
+    def average_last_vote_for(network, batch_uuid)
+      for_batch(network, batch_uuid).average(:last_vote)
+    end
+
+    def highest_last_vote_for(network, batch_uuid)
+      for_batch(network, batch_uuid).maximum(:last_vote)
+    end
+
+    def median_last_vote_for(network, batch_uuid)
+      for_batch(network, batch_uuid).median(:last_vote)
+    end
+  end
 
   def validator
     Validator.find_by(network: network, account: account)
+  end
+
+  def to_builder
+    Jbuilder.new do |validator_history|
+      validator_history.(
+        self,
+        :epoch_credits
+      )
+    end
   end
 end

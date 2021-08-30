@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ValidatorScoreV1Test < ActiveSupport::TestCase
   test 'relationship to validator' do
-    validator = FactoryBot.create(:validator)
+    validator = create(:validator)
     score = validator.create_validator_score_v1
 
     assert_not_nil score

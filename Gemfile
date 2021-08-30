@@ -31,8 +31,7 @@ gem 'mysql2', '>= 0.5.3'
 gem 'sass-rails', '>= 6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-# and https://mentalized.net/journal/2021/05/06/webpacker-conflict-files/
-gem 'webpacker', '~> 6.x'
+gem 'webpacker', '~> 5.4'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
@@ -91,6 +90,7 @@ group :development, :test do
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
   gem 'pry', '~> 0.12.2'
   gem 'rubocop'
+  gem 'letter_opener_web'
 end
 
 group :development do
@@ -141,3 +141,11 @@ gem 'aws-sdk-s3', require: false
 
 gem 'devise'
 gem 'devise-i18n'
+
+# https://github.com/ambethia/recaptcha
+gem 'recaptcha'
+
+gem 'browser'
+
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'

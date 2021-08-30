@@ -61,6 +61,10 @@ In the test and development modes you do not need an actual Vault server running
 
 To use Vault, search the project for 'vault' and read the comments.
 
+## Captcha
+Visit https://developers.google.com/recaptcha/intro to see how to use reCAPTCHA. You'll need to register your website at https://www.google.com/recaptcha/admin/, choose captcha type, and you'll get site_key and secret_key. Put them in the credentials.
+For development, you will find sample keys in config/credentials.yml.enc.
+
 ## How to run the test suite
   `rails test` # run all tests
   `rails test test/models` # run all tests from specific directory

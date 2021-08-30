@@ -1,5 +1,63 @@
 @import "variables";
 
+@mixin item($padding-y) {
+  display: inline-block;
+  margin-right: $margin-standard;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 2px solid $green;
+  border-radius: 0;
+  @include font-size-smaller;
+  font-weight: $font-weight-normal;
+  padding: $padding-y 0px;
+  @media(max-width: $screen-xs-max) {
+    padding: 9px 0px;
+  }
+}
+
+@mixin item-active($padding-y, $padding-x) {
+  background-color: $green;
+  border: 2px solid $green;
+  color: $background-color;
+  padding: $padding-y $padding-x;
+  @media(max-width: $screen-xs-max) {
+    padding: 9px 11px;
+  }
+}
+
+@mixin item-hover() {
+  background-color: $green;
+  border: 2px solid $green;
+  transition: .2s ease;
+  outline: none;
+  box-shadow: none;
+  a, .page-link { color: $background-color; }
+}
+
+@mixin item-first() {
+  border-top-left-radius: $border-radius;
+  border-bottom-left-radius: $border-radius;
+}
+
+@mixin item-last() {
+  border-top-right-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
+}
+
+@mixin link() {
+  color: $base-color;
+  padding: 12px 18px;
+  background-color: transparent;
+  border: none;
+  @media(max-width: $screen-xs-max) {
+    padding: 9px 11px;
+  }
+  &:focus, &.focus {
+    box-shadow: none;
+  }
+}
+
+
 .pagination {
   margin-bottom: $margin-standard*2;
   @media(max-width: $screen-md-max) {
@@ -7,56 +65,27 @@
   }
 
   .page, .first, .last {
-    display: inline-block;
-    margin-right: $margin-standard;
-    white-space: nowrap;
-    background-color: transparent;
-    border: 2px solid $green;
-    @include font-size-smaller;
-    font-weight: $font-weight-normal;
-    padding: 12px 0px;
-    @media(max-width: $screen-xs-max) {
-      padding: 9px 0px;
-    }
-
+    @include item(12px);
     a {
-      color: $base-color;
-      padding: 12px 18px;
-      @media(max-width: $screen-xs-max) {
-        padding: 9px 11px;
-      }
+      @include link();
     }
     &:hover, &:focus, &.focus {
-      background-color: $green;
-      border: 2px solid $green;
-      transition: .2s ease;
-      outline: none;
-      box-shadow: none;
-      a { color: $background-color; }
+      @include item-hover;
     }
+  }
+  .first {
+    @include item-first;
+  }
+  .last, .page-item:last-of-type {
+    @include item-last;
   }
 
   .prev, .next { display: none; }
 
-  .first {
-    border-top-left-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
-  }
-  .last {
-    border-top-right-radius: $border-radius;
-    border-bottom-right-radius: $border-radius;
-  }
 
   .page {
-    border-radius: 0;
     &.current {
-      background-color: $green;
-      border: 2px solid $green;
-      color: $background-color;
-      padding: 12px 18px;
-      @media(max-width: $screen-xs-max) {
-        padding: 9px 11px;
-      }
+      @include item-active(12px, 18px);
     }
     &.gap {
       background-color: transparent;
@@ -67,6 +96,31 @@
       @media(max-width: $screen-xs-max) {
         padding: 9px 11px;
       }
+    }
+  }
+
+
+  .page-item {
+    @include item(2px);
+    .page-link {
+      @include link;
+    }
+    &:not(.disabled):hover, &:not(.disabled):focus, &:not(.disabled).focus {
+      @include item-hover;
+    }
+
+    &.active {
+      @include item-active(2px, 0);
+      .page-link {
+        color: $background-color;
+      }
+    }
+
+    &:first-of-type {
+      @include item-first;
+    }
+    &:last-of-type {
+      @include item-last;
     }
   }
 }

@@ -157,20 +157,20 @@ class ValidatorScoreV1 < ApplicationRecord
     self.security_report_score = validator.security_report_url.blank? ? 0 : 1
   end
 
-  def avg_root_distance_history
-    array_average(root_distance_history)
+  def avg_root_distance_history(period = nil)
+    period ? array_average(root_distance_history.last(period)) : array_average(root_distance_history)
   end
 
-  def med_root_distance_history
-    array_median(root_distance_history)
+  def med_root_distance_history(period = nil)
+    period ? array_median(root_distance_history.last(period)) : array_median(root_distance_history)
   end
 
-  def avg_vote_distance_history
-    array_average(vote_distance_history)
+  def avg_vote_distance_history(period = nil)
+    period ? array_average(vote_distance_history.last(period)) : array_average(vote_distance_history)
   end
 
-  def med_vote_distance_history
-    array_median(vote_distance_history)
+  def med_vote_distance_history(period = nil)
+    period ? array_median(vote_distance_history.last(period)) : array_median(vote_distance_history)
   end
 
   def root_distance_history_push(val)

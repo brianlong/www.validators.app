@@ -98,6 +98,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
   test 'GET api_v1_validators with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
+    create(:validator_history, account: validator.account, epoch_credits: 100)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
     create(:ip, address: validator.score.ip_address)
@@ -113,12 +114,13 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 29, validator_with_all_data.keys.size
+    assert_equal 31, validator_with_all_data.keys.size
 
     # Validator
     assert_equal 'testnet', validator_with_all_data['network']
     assert_equal 'john doe', validator_with_all_data['name']
     assert_equal 'johndoe', validator_with_all_data['keybase_id']
+    assert_equal 'http://www.avatar_url.com', validator_with_all_data['avatar_url']
 
     # Score
     assert_equal 7, validator_with_all_data['total_score']
@@ -147,6 +149,9 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     # IP
     assert_equal 0, validator_with_all_data['autonomous_system_number']
+
+    # Validator history
+    assert_equal 100, validator_with_all_data['epoch_credits']
   end
 
   test 'GET api_v1_validators with token and search query returns correct data' do
@@ -270,6 +275,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
   test 'GET api_v1_validator with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
+    create(:validator_history, account: validator.account, epoch_credits: 100)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
     create(:ip, address: validator.score.ip_address)
@@ -285,12 +291,13 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 29, json_response.keys.size
+    assert_equal 31, json_response.keys.size
 
     # Validator
     assert_equal 'testnet', json_response['network']
     assert_equal 'john doe', json_response['name']
     assert_equal 'johndoe', json_response['keybase_id']
+    assert_equal 'http://www.avatar_url.com', json_response['avatar_url']
 
     # Score
     assert_equal 7, json_response['total_score']
@@ -319,6 +326,9 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     # IP
     assert_equal 0, json_response['autonomous_system_number']
+
+    # Validator history
+    assert_equal 100, json_response['epoch_credits']
   end
 
   test 'GET api_v1_validator with token returns ValidatorNotFound when wrong account provided' do

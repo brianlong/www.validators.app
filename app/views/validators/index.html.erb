@@ -292,6 +292,10 @@
   </div>
 <% end %>
 
+<% if @validators.blank? && !params[:q].blank? %>
+  <%= render 'validators/no_search_results'%>
+<% end %>
+
 <% unless @validators.empty? %>
   <div class="row">
     <%= render 'validators/software_versions',
