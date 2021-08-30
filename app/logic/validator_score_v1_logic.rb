@@ -42,6 +42,7 @@ module ValidatorScoreV1Logic
         end
       rescue StandardError => e
         Appsignal.send_error(e)
+        Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
       end
       puts 'validators_get'
       Pipeline.new(200, p.payload.merge(validators: validators))
@@ -128,6 +129,7 @@ module ValidatorScoreV1Logic
         validator.validator_score_v1.vote_distance_history_push(vote_distance)
       rescue StandardError => e
         Appsignal.send_error(e)
+        Pipeline.new(500, p.payload, 'Error from block_vote_history_get', e)
       end
 
       skipped_vote_all_median = array_median(skipped_vote_all)
@@ -160,6 +162,7 @@ module ValidatorScoreV1Logic
         skipped_vote_all.push v.validator_score_v1.skipped_vote_history[-1]
       rescue StandardError => e
         Appsignal.send_error(e)
+        Pipeline.new(500, p.payload, 'Error from assign_block_and_vote_scores', e)
       end
 
       root_distance_all_average = array_average(root_distance_all)
@@ -302,6 +305,7 @@ module ValidatorScoreV1Logic
           end
       rescue StandardError => e
         Appsignal.send_error(e)
+        Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
       end
       puts 'assign_block_history_score'
       Pipeline.new(200, p.payload)
@@ -376,6 +380,7 @@ module ValidatorScoreV1Logic
           validator.ping_times_to_avg
       rescue StandardError => e
         Appsignal.send_error(e)
+        Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
       end
       puts 'get_ping_times'
       Pipeline.new(200, p.payload)
@@ -394,6 +399,7 @@ module ValidatorScoreV1Logic
           validator.validator_score_v1.save
         rescue StandardError => e
           Appsignal.send_error(e)
+          Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
         end
       end
       puts 'save_validators'
