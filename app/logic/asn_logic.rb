@@ -60,7 +60,7 @@ module AsnLogic
 
         scores = p.payload[:scores].select do |score|
           score.data_center_key.in?(asn_stat.data_centers) && \
-          score.validator.scorable?
+            score.validator.scorable?
         end
 
         score_sum = 0
@@ -71,8 +71,12 @@ module AsnLogic
         end
 
         asn_stat.population = scores.count
-        asn_stat.vote_distance_moving_average = (score_sum.to_f / asn_stat.population)
+        if asn_stat.population&.positive?
+          asn_stat.vote_distance_moving_average = \
+            (score_sum.to_f / asn_stat.population)
+        end
         asn_stat.active_stake = active_stake
+
 
         asn_stat.save
       end

@@ -65,6 +65,6 @@ class AsnLogicTest < ActiveSupport::TestCase
     assert_nil p.errors
     assert_equal 54_321, AsnStat.last.traits_autonomous_system_number
     assert AsnStat.last.data_centers.include?(@ip.data_center_key)
-    assert_equal 2, AsnStat.last.vote_distance_moving_average
+    assert_equal 7, AsnStat.last.vote_distance_moving_average
   end
 end
