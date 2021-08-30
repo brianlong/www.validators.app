@@ -1,6 +1,6 @@
 <!-- required parameters: canvas_name, chart_steps, value, min_value -->
 
-<canvas id="<%= local_assigns[:canvas_name] %>"></canvas>
+<canvas id="<%= local_assigns[:canvas_name] %>" width="100px;"></canvas>
 <script type="text/javascript">
     var ctx = document.getElementById("<%= local_assigns[:canvas_name] %>").getContext('2d');
     var chart = new Chart(ctx, {
@@ -12,13 +12,12 @@
                 minValue: <%= local_assigns[:min_value] %>,
                 maxValue: 0.05,
                 backgroundColor: [
-                    '<%= GREEN_SPEEDOMETER %>',
-                    '<%= GREEN_SPEEDOMETER %>',
+                    '<%= LIGHT_GREY_SPEEDOMETER %>',
                     '<%= BLUE_SPEEDOMETER %>',
-                    '<%= BLUE_SPEEDOMETER %>',
-                    '<%= LIGHT_GREY_SPEEDOMETER %>'
+                    '<%= GREEN_SPEEDOMETER %>'
+                    
                 ],
-                borderColor: ['<%= GREEN %>', '<%= GREEN %>', '<%= BLUE %>', '<%= BLUE %>', '<%= LIGHT_GREY %>'],
+                borderColor: ['<%= LIGHT_GREY %>', '<%= BLUE %>', '<%= GREEN %>'],
                 borderWidth: 1
             }]
         },
