@@ -64,17 +64,14 @@ module AsnLogic
         end
 
         score_sum = 0
+        active_stake = 0
         scores.each do |sc|
           score_sum += sc.total_score
+          active_stake += sc.active_stake
         end
 
         asn_stat.population = scores.count
-        if total_vote_distance_score > 0
-          asn_stat.vote_distance_moving_average = (score_sum.to_f / asn_stat.population)
-        else
-          asn_stat.vote_distance_moving_average = nil
-        end
-        # puts "#{asn_stat.traits_autonomous_system_number} - #{asn_stat.network}: #{asn_stat.vote_distance_moving_average}"
+        asn_stat.vote_distance_moving_average = (score_sum.to_f / asn_stat.population)
         asn_stat.active_stake = active_stake
 
         asn_stat.save
@@ -103,7 +100,7 @@ end
 private
 
 def asn_logger
-  @@asn_logger ||= Logger.new("#{Rails.root}/log/asn_logic.log")
+  @asn_logger ||= Logger.new("#{Rails.root}/log/asn_logic.log")
 end
 
 def ips_sql

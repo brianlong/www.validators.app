@@ -9,22 +9,21 @@
 #
 # Table name: batches
 #
-#  id                           :bigint           not null, primary key
-#  average_skipped_slot_percent :float(24)
-#  best_skipped_vote            :float(24)
-#  gathered_at                  :datetime
-#  network                      :string(191)
-#  root_distance_all_average    :float(24)
-#  root_distance_all_median     :integer
-#  scored_at                    :datetime
-#  skipped_slot_all_average     :float(24)        default(0.0)
-#  skipped_vote_all_median      :float(24)
-#  software_version             :string(191)
-#  uuid                         :string(191)
-#  vote_distance_all_average    :float(24)
-#  vote_distance_all_median     :integer
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  id                        :bigint           not null, primary key
+#  best_skipped_vote         :float(24)
+#  gathered_at               :datetime
+#  network                   :string(191)
+#  root_distance_all_average :float(24)
+#  root_distance_all_median  :integer
+#  scored_at                 :datetime
+#  skipped_slot_all_average  :float(24)        default(0.0)
+#  skipped_vote_all_median   :float(24)
+#  software_version          :string(191)
+#  uuid                      :string(191)
+#  vote_distance_all_average :float(24)
+#  vote_distance_all_median  :integer
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
 #
 # Indexes
 #

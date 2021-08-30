@@ -5,7 +5,7 @@ require File.expand_path('../config/environment', __dir__)
 include AsnLogic
 
 payload = {
-  network: 'testnet'
+  network: 'mainnet'
 }
 
 p = Pipeline.new(200, payload)
