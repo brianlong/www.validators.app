@@ -134,6 +134,7 @@ GEM
     childprocess (3.0.0)
     chronic (0.10.2)
     coderay (1.1.3)
+    coingecko_ruby (0.4.2)
     concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     crack (0.4.5)
@@ -424,6 +425,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-sidekiq
   capybara (>= 2.15)
+  coingecko_ruby
   devise
   devise-i18n
   dnsruby
