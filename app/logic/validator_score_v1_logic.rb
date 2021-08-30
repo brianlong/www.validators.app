@@ -17,7 +17,7 @@ module ValidatorScoreV1Logic
       if this_batch.nil?
         raise "No batch: #{p.payload[:network]}, #{p.payload[:batch_uuid]}"
       end
-
+      puts 'set_this_batch'
       Pipeline.new(200, p.payload.merge(this_batch: this_batch))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
@@ -43,7 +43,7 @@ module ValidatorScoreV1Logic
       rescue StandardError => e
         Appsignal.send_error(e)
       end
-
+      puts 'validators_get'
       Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from validators_get', e)
@@ -136,7 +136,7 @@ module ValidatorScoreV1Logic
         best_skipped_vote: best_skipped_vote,
         skipped_vote_all_median: skipped_vote_all_median,
       )
-
+      puts 'block_vote_history_get'
       Pipeline.new(200, p.payload.merge(total_active_stake: total_active_stake))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from block_vote_history_get', e)
@@ -221,8 +221,9 @@ module ValidatorScoreV1Logic
 
       rescue StandardError => e
         Appsignal.send_error(e)
+        Pipeline.new(500, p.payload, 'Error from assign_block_and_vote_scores', e)
       end
-
+      puts 'assign_block_and_vote_scores'
       Pipeline.new(200, p.payload.merge(
                           root_distance_all: root_distance_all,
                           vote_distance_all: vote_distance_all,
@@ -265,8 +266,9 @@ module ValidatorScoreV1Logic
         validator.score.skipped_slot_moving_average_history_push(moving_average.to_f)
       rescue StandardError => e
         Appsignal.send_error(e)
+        Pipeline.new(500, p.payload, 'Error from block_history_get', e)
       end
-
+      puts 'block_history_get'
       Pipeline.new(
         200,
         p.payload.merge(
@@ -301,7 +303,7 @@ module ValidatorScoreV1Logic
       rescue StandardError => e
         Appsignal.send_error(e)
       end
-
+      puts 'assign_block_history_score'
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
@@ -343,6 +345,7 @@ module ValidatorScoreV1Logic
 
       rescue StandardError => e
         Appsignal.send_error(e)
+        Pipeline.new(500, p.payload, 'Error from assign_software_version_score', e)
       end
 
       # Calculate current version by stake
@@ -357,7 +360,7 @@ module ValidatorScoreV1Logic
         validator.validator_score_v1.assign_software_version_score(current_software_version)
       end
 
-
+      puts 'assign_software_version_score'
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_software_version_score', e)
@@ -374,7 +377,7 @@ module ValidatorScoreV1Logic
       rescue StandardError => e
         Appsignal.send_error(e)
       end
-
+      puts 'get_ping_times'
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_ping_times', e)
@@ -393,6 +396,7 @@ module ValidatorScoreV1Logic
           Appsignal.send_error(e)
         end
       end
+      puts 'save_validators'
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from save_validators', e)
