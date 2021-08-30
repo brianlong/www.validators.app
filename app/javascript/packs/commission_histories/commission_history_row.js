@@ -37,7 +37,8 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
   template: `
     <tr>
       <td>
-        <a v-bind:href="chistory_href" > {{ chistory_name }} </a>
+        {{ chistory_name }} 
+        <a v-bind:href="chistory_href" target="_blank"><i class="fas fa-external-link-alt ml-1"></i></a>
       </td>
       <td>
         {{ chistory.epoch }}
