@@ -11,24 +11,31 @@
 class VoteAccountHistoryQuery < ApplicationQuery
   def initialize(network, batch_uuid)
     super
+    scorable_vote_accounts_ids = Validator.scorable
+                                          .joins(:vote_accounts)
+                                          .pluck('vote_accounts.id')
 
     @relation ||=
-      VoteAccountHistory.where(network: network, batch_uuid: batch_uuid)
+      VoteAccountHistory.where(
+        network: network,
+        batch_uuid: batch_uuid,
+        vote_account_id: scorable_vote_accounts_ids
+      )
   end
 
   def average_skipped_vote_percent
     return @average_skipped_vote_percent if @average_skipped_vote_percent
+    return Float::NAN if vote_account_history_skipped.empty?
 
     @average_skipped_vote_percent =
-      vote_account_history_skipped.sum / vote_account_history_skipped.count
+      vote_account_history_skipped.sum / vote_account_history_skipped.size
   end
 
   def median_skipped_vote_percent
     return @median_skipped_vote_percent if @median_skipped_vote_percent
 
     middle_index = vote_account_history_skipped.length / 2
-    @median_skipped_vote_percent ||=
-      vote_account_history_skipped.sort[middle_index]
+    @median_skipped_vote_percent ||= vote_account_history_skipped.sort[middle_index]
   end
 
   def average_skipped_vote_percent_moving_average
@@ -38,22 +45,25 @@ class VoteAccountHistoryQuery < ApplicationQuery
 
   def median_skipped_vote_percent_moving_average
     @median_skipped_vote_percent_moving_average ||=
-      @relation.median(:skipped_vote_percent_moving_average)
+      vote_account_history_skipped_moving_average.map(&:first).median
+  end
+
+  def vote_account_history_skipped_moving_average
+    @vote_account_history_skipped_moving_average ||=
+      @relation.includes(vote_account: [:validator])
+               .map { |vah| [vah.skipped_vote_percent_moving_average, vah.vote_account.validator.account] }
   end
 
   def vote_account_history_skipped
-    @vote_account_history_skipped ||=
-      @relation.map(&:skipped_vote_percent)
+    @vote_account_history_skipped ||= @relation.map(&:skipped_vote_percent)
   end
 
   def credits_current_max
-    @credits_current_max ||=
-      @relation.maximum(:credits_current).to_i
+    @credits_current_max ||= @relation.maximum(:credits_current).to_i
   end
 
   def slot_index_current
-    @slot_index_current ||=
-      @relation.maximum(:slot_index_current).to_i
+    @slot_index_current ||= @relation.maximum(:slot_index_current).to_i
   end
 
   def skipped_vote_percent_best
@@ -63,5 +73,37 @@ class VoteAccountHistoryQuery < ApplicationQuery
     else
       nil
     end
+  end
+
+  def top_skipped_vote_percent
+    @top_skipped_vote_percent ||= vote_account_history_skipped_moving_average.sort.first(50)
+  end
+
+  def skipped_votes_stats(with_history: false)
+    skipped_votes_stats = {
+      min: vote_account_history_skipped.min,
+      max: vote_account_history_skipped.max,
+      median: median_skipped_vote_percent,
+      average: average_skipped_vote_percent,
+      best: skipped_vote_percent_best
+    }
+
+    return skipped_votes_stats unless with_history
+
+    skipped_votes_stats.merge(history: vote_account_history_skipped)
+  end
+
+  def skipped_vote_moving_average_stats(with_history: false)
+    skipped_vote_moving_average_stats = {
+      min: vote_account_history_skipped_moving_average.map(&:first).min,
+      max: vote_account_history_skipped_moving_average.map(&:first).max,
+      median: median_skipped_vote_percent_moving_average,
+      average: average_skipped_vote_percent_moving_average
+    }
+    return skipped_vote_moving_average_stats unless with_history
+
+    skipped_vote_moving_average_stats.merge(
+      history: vote_account_history_skipped_moving_average
+    )
   end
 end

@@ -23,13 +23,17 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal '1234', p.payload[:this_batch].uuid
   end
 
-  test 'get_validators' do
+  test 'validators_get' do
+    create(:validator)
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
 
-    assert_equal 1, p.payload[:validators].count
-    assert_not_nil p.payload[:validators].first.validator_score_v1
+    assert_equal 2, p.payload[:validators].count
+    p.payload[:validators].each do |validator|
+      assert_not_nil validator.validator_score_v1
+      assert_equal @initial_payload[:network], validator.validator_score_v1.network
+    end
   end
 
   test 'block_vote_history_get' do
@@ -303,7 +307,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_history_get)
                 .then(&assign_block_history_score)
 
-    assert_equal 0.25, p.payload[:avg_skipped_slot_pct_all]
+    assert_equal 0.175, p.payload[:avg_skipped_slot_pct_all]
     assert_equal 0.25, p.payload[:med_skipped_slot_pct_all]
     assert_equal [0.1], p.payload[:validators]
                          .first
@@ -432,7 +436,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
       total_stake: total_stake
     )
 
-    assert_equal "1.6.6", current_software_version
+    assert_equal "1.6.7", current_software_version
   end
 
   test 'find_current_software_version \

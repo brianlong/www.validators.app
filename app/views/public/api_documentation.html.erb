@@ -11,13 +11,13 @@
 <ul class="list-large list-no-bullets">
   <li><a href="#auhentication">Authentication</a></li>
   <li><a href="#ping">Ping</a></li>
-  <li><a href="#ping-times">Ping Times</a></li>
   <li><a href="#validators-list">Validators List</a></li>
   <li><a href="#validator-detail">Validator Detail</a></li>
   <li><a href="#validator-block">Validator Block Production History</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#notes">Notes</a></li>
   <li><a href="#epoch-index">Epoch Index</a></li>
+  <li><a href="#commission-change-index">Commission Change Index</a></li>
 </ul>
 
 <hr />
@@ -46,42 +46,6 @@
 
 <hr />
 
-<h4 id="ping-times">Ping Times</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>The ping-times endpoint will return recent ping times as reported by the participating validators. By default, the most recent 1,000 ping times will be returned. You can include a `limit` parameter to request more or fewer ping times. In the examples below, replace `:network` with 'testnet' or 'mainnet' as desired.</p>
-    <p>Request:</p>
-    <pre>$ curl -H "Token: secret-api-token" https://www.validators.app/api/v1/ping-times/:network.json</pre>
-    <p>or</p>
-    <pre>$ curl -H "Token: secret-api-token" https://www.validators.app/api/v1/ping-times/:network.json?limit=1</pre>
-    <p>Response:</p>
-    <p>An Array of response times.</p>
-    <pre>
-[
-  {
-    "id":614598,
-    "batch_uuid":"baf5c581-7ca3-471f-9a86-17a4f3c904a3",
-    "network":"testnet",
-    "from_account":"71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B",
-    "from_ip":"165.227.100.142",
-    "to_account":"HrTZp96AjUbgxFyaJUcWPLe93441D4TuEN1hC14TNTuJ",
-    "to_ip":"95.217.226.153",
-    "min_ms":"101.706",
-    "avg_ms":"101.778",
-    "max_ms":"101.872",
-    "mdev":"0.396",
-    "observed_at":"2020-06-19T12:54:50.000Z",
-    "created_at":"2020-06-19T12:54:50.559Z",
-    "updated_at":"2020-06-19T12:54:50.559Z"
-  },
-  ...
-]
-    </pre>
-  </div>
-</div>
-
-<hr />
-
 <h4 id="validators-list">Validators List</h4>
 <div class="row">
   <div class="col-sm-12">
@@ -93,6 +57,10 @@
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score'</pre>
     <p>`limit=NN` will limit the results to NN entries. The default is 9_999.</p>
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&limit=50'</pre>
+    <p>`page=NN` will return the results from passed page. Works best with limit param.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&page=1&limit=50'</pre>
+    <p>`q=query` will limit the results to entries containing query. The query value is compared against validator's name, account and score data center key.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&q=query'</pre>
     <p>Response:</p>
     <p>An Array of validators.</p>
     <pre>
@@ -104,6 +72,7 @@
     "keybase_id":null,
     "www_url":"https://www.example.com",
     "details":"Example validator located anywhere.",
+    "avatar_url":"www.avatar_url.com",
     "created_at":"2020-05-24T19:07:38.222Z",
     "updated_at":"2020-05-24T19:07:38.222Z",
     "total_score":10,
@@ -123,6 +92,7 @@
     "data_center_host":"host-name",
     "autonomous_system_number":24940,
     "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
+    "epoch_credits": 263538,
     "skipped_slots":664,
     "skipped_slot_percent":"0.5155",
     "ping_time":"205.703",
@@ -151,6 +121,7 @@
   "keybase_id":null,
   "www_url":"https://www.example.com",
   "details":"Example validator located anywhere.",
+  "avatar_url":"www.avatar_url.com",
   "created_at":"2020-05-24T19:07:38.222Z",
   "updated_at":"2020-05-24T19:07:38.222Z",
   "total_score":10,
@@ -170,6 +141,7 @@
   "data_center_host":"host-name",
   "autonomous_system_number":24940,
   "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
+  "epoch_credits": 263538,
   "skipped_slots":664,
   "skipped_slot_percent":"0.5155",
   "ping_time":"205.703",
@@ -233,6 +205,42 @@
       ],
       epochs_count: 169
     }
+
+    </pre>
+  </div>
+</div>
+
+<hr />
+
+<h4 id="commission-change-index">Commission Change Index</h4>
+<div class="row">
+  <div class="col-sm-12">
+    <p>
+      The Commission Change endpoint will return all the changes in commission for a given period of time. 
+      Replace `:network` with 'testnet' or 'mainnet' as desired. 
+    </p>
+    <p>Request:</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network'</pre>
+    <p>Parameter Options:</p>
+    <p>`date_from=%year-%month-%dayT%hour:%minute:%second` beginning of a search period. Defaults to 30 days ago</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?date_from=2021-07-01T11:02:12'</pre>
+    <p>`date_to=%year-%month-%dayT%hour:%minute:%second` end of a search period. Defaults to now</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?date_to=2021-07-28T11:02:12'</pre>
+    <p>`query=%account-or-key` returns data only for validators matching by name, pubkey or vote account</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?query=123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY'</pre>
+    <p>Response:</p>
+    <pre>
+      [
+        {
+          "created_at": "2021-07-27T08:47:16.803Z",
+          "commission_before": 9.0,
+          "commission_after": 10.0,
+          "epoch": 213,
+          "network": "testnet",
+          "account": "123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY"
+        },
+        ...
+      ]
 
     </pre>
   </div>

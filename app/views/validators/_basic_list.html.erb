@@ -1,17 +1,34 @@
 <% # EXAMPLE: render 'validators/basic_list', scores: ValidatorScoreV1.all %>
 
 <div class="card mb-4">
-  <table class='table mb-0 table-block-sm'>
+  <table class='table mb-0 table-block-sm' id='validators-table'>
     <thead>
       <tr class="d-none d-lg-table-row">
         <th class="avatar-column d-none d-lg-table-cell">&nbsp;</th>
-        <th class="wider-column">
-          Name: Stake (%)<br />
-          Account
+        <th class="name-column pr-1">
+          Name <small class="text-muted">(Commission)</small><br />
+          Active Stake <small class="text-muted">( % of total )</small><br />
+          IP<br />
+          Gateway<br />
+          Scores <small class="text-muted">(total)</small>
         </th>
-        <th class="wider-column">
-          IP Address<br />
-          Data Center Gateway
+        <th class='percent-column'>
+          Skipped Vote&nbsp;&percnt;
+          <a data-toggle="tooltip" data-html="true" title="Distance from leader">
+            <i class="fas fa-question-circle ml-1"></i>
+          </a>
+        </th>
+        <th class='chart-column text-right'>
+          Root Distance<br />
+          <small class="text-muted">60-Min Chart</small>
+        </th>
+        <th class='chart-column text-right'>
+          Vote Distance<br />
+          <small class="text-muted">60-Min Chart</small>
+        </th>
+        <th class='chart-column text-right'>
+          Skipped Slot&nbsp;&percnt;<br />
+          <small class="text-muted">60-Min Chart</small>
         </th>
       </tr>
       <tr class="d-lg-none">
@@ -21,8 +38,16 @@
       </tr>
     </thead>
     <tbody>
+      <%
+        i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
+              0
+            else
+              (params[:page].to_i - 1) * items_per_page
+            end
+      %>
       <% scores.each do |sc| %>
-        <%= render '/validators/as_row', score: sc, score_ip: Ip.where(address: sc.ip_address).first %>   
+        <% i += 1 %>
+        <%= render '/validators/as_row', validator: sc.validator, batch: batch, i: i, score_ip: Ip.where(address: sc.ip_address).first %>   
       <% end %>
     </tbody>
   </table>

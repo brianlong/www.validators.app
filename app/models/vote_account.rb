@@ -39,4 +39,10 @@ class VoteAccount < ApplicationRecord
   def set_network
     self.network = validator.network if validator && network.blank?
   end
+
+  def to_builder
+    Jbuilder.new do |vs_v1|
+      vs_v1.vote_account self.account
+    end
+  end
 end

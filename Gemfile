@@ -31,7 +31,7 @@ gem 'mysql2', '>= 0.5.3'
 gem 'sass-rails', '>= 6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 4.0'
+gem 'webpacker', '~> 5.4'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
@@ -70,7 +70,7 @@ gem 'capistrano-sidekiq', require: false
 gem 'appsignal'
 
 gem "mechanize", ">= 2.7.7"
-gem 'nokogiri', '1.11.0'
+gem 'nokogiri', '1.11.4'
 
 gem 'kaminari'
 
@@ -78,7 +78,10 @@ gem 'kaminari'
 gem 'dnsruby'
 gem 'maxmind-geoip2'
 
+# use rack-cors for cross-origin api queries
+gem 'rack-cors'
 
+gem 'solana_rpc_ruby'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -87,6 +90,7 @@ group :development, :test do
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
   gem 'pry', '~> 0.12.2'
   gem 'rubocop'
+  gem 'letter_opener_web'
 end
 
 group :development do
@@ -106,13 +110,14 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
+  gem 'rails-controller-testing'
   gem 'selenium-webdriver'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
+  gem 'timecop'
   # VCR to record & save network events in tests
   gem 'vcr'
+  # Easy installation and use of web drivers to run system tests with browsers
+  gem 'webdrivers'
   gem 'webmock'
-  gem 'timecop'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -136,3 +141,11 @@ gem 'aws-sdk-s3', require: false
 
 gem 'devise'
 gem 'devise-i18n'
+
+# https://github.com/ambethia/recaptcha
+gem 'recaptcha'
+
+gem 'browser'
+
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class ValidatorSearchQueryTest < ActiveSupport::TestCase
@@ -66,6 +67,15 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
     assert_equal 'Vote1Account', results.first.vote_accounts.first.account
     assert_equal 'Vote2Account', results.last.vote_accounts.first.account
     assert_equal 2, results.count
+  end
+
+  test 'returns proper results when search by software_version' do
+    v = create(:validator)
+    create(:validator_score_v1, validator: v, software_version: '1.6.9')
+    query = '1.6.7'
+    results = ValidatorSearchQuery.new.search(query)
+
+    assert_equal ['1.6.7'], results.pluck(:software_version).uniq
   end
 
 end

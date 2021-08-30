@@ -10,3 +10,4 @@ one:
   skipped_slot_percent: 0.1
   skipped_slots_after: 10
   skipped_slots_after_percent: 0.1
+  skipped_slot_percent_moving_average: 0.1

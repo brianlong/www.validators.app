@@ -59,6 +59,30 @@ strong, .font-weight-bold {
   font-weight: $font-weight-bold-primary;
 }
 
+.stat {
+  .fas {
+    font-size: 15px;
+    margin-right: 6px;
+  }
+  &-title-1 {
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+    font-size: 52px;
+    @media(max-width: $screen-md-max) { font-size: $font-size-h1*.85; }
+    @media(max-width: $screen-sm-max) { font-size: $font-size-h1*.8; }
+  }
+  &-title-2 {
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+    font-size: $font-size-h1;
+    @media(max-width: $screen-md-max) { font-size: 34px; }
+    @media(max-width: $screen-sm-max) { font-size: 30px; }
+  }
+  small .fas {
+    font-size: 11px;
+  }
+}
+
 @for $i from 1 through 3 {
   h#{$i}, .h#{$i} {
     @include font-family-alternative();
@@ -100,15 +124,15 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
 }
 .heading-primary {
   color: $white;
-  font-size: 68px;
-  line-height: 70px;
+  font-size: 50px;
+  line-height: 50px;
   @include font-family-alternative();
   font-weight: $font-weight-bold-primary;
   @media(max-width: $screen-md-max) {
-    font-size: 55px;
-    line-height: 55px;
+    font-size: 36px;
+    line-height: 36px;
   }
-  @media(max-width: $screen-sm-max) { font-size: 47px }
+  @media(max-width: $screen-sm-max) { font-size: 30px }
 }
 .heading-secondary {
   text-transform: uppercase;

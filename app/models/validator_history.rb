@@ -11,16 +11,24 @@
 #  commission       :decimal(10, )    unsigned
 #  credits          :bigint           unsigned
 #  delinquent       :boolean          default(FALSE)
+#  epoch_credits    :integer          unsigned
 #  last_vote        :bigint           unsigned
+#  max_root_height  :bigint           unsigned
+#  max_vote_height  :bigint           unsigned
 #  network          :string(191)
 #  root_block       :bigint           unsigned
+#  root_distance    :bigint           unsigned
+#  slot_skip_rate   :float(24)        unsigned
 #  software_version :string(191)
 #  vote_account     :string(191)
+#  vote_distance    :bigint           unsigned
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
 # Indexes
 #
+#  acceptable_stake_by_account_index                        (account,created_at,active_stake)
+#  delinquent_by_account_index                              (account,delinquent,created_at)
 #  index_validator_histories_on_network_and_account_and_id  (network,account,id)
 #  index_validator_histories_on_network_and_batch_uuid      (network,batch_uuid)
 #
@@ -28,7 +36,25 @@ class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
 
+  scope :most_recent_epoch_credits_by_account, -> do
+    from(
+      <<~SQL
+        (
+          SELECT validator_histories.epoch_credits, validator_histories.account, validator_histories.created_at
+          FROM validator_histories JOIN (
+            SELECT account, max(created_at) AS created_at
+            FROM validator_histories
+            GROUP BY account
+          ) latest_by_account
+          ON validator_histories.created_at = latest_by_account.created_at
+          AND validator_histories.account = latest_by_account.account
+        ) validator_histories
+      SQL
+    )
+  end
+
   class << self
+    
     def for_batch(network, batch_uuid)
       where(network: network, batch_uuid: batch_uuid)
     end
@@ -60,5 +86,14 @@ class ValidatorHistory < ApplicationRecord
 
   def validator
     Validator.find_by(network: network, account: account)
+  end
+
+  def to_builder
+    Jbuilder.new do |validator_history|
+      validator_history.(
+        self,
+        :epoch_credits
+      )
+    end
   end
 end

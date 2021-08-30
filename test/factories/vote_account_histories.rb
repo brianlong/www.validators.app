@@ -11,5 +11,6 @@ FactoryBot.define do
     credits_current { 193916 }
     slot_index_current { 299198 }
     skipped_vote_percent_moving_average { 0.1 }
+    root_slot { 2 }
   end
 end

@@ -4,11 +4,22 @@ require 'test_helper'
 
 class ValidatorScoreV1Test < ActiveSupport::TestCase
   test 'relationship to validator' do
-    validator = FactoryBot.create(:validator)
+    validator = create(:validator)
     score = validator.create_validator_score_v1
 
     assert_not_nil score
     assert_equal validator.id, score.validator_id
+  end
+
+  test 'relationship has_one :ip' do
+    address = '192.123.23.2'
+    validator = create(:validator)
+    validator_score_v1 = create(:validator_score_v1, validator: validator, ip_address: address)
+    ip = create(:ip, address: address)
+    
+    assert validator_score_v1.ip_for_api
+    assert_equal validator_score_v1.ip_for_api.traits_autonomous_system_number, 0
+    assert_equal validator_score_v1.ip_for_api.address, address
   end
 
   test 'calculate_total_score assigns a score of 0 if commission is 100' do
@@ -43,14 +54,53 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
 
   test 'assign_software_version_score persists a software_version_score' do
     score = create(:validator_score_v1, software_version: '1.5.4')
-    score.assign_software_version_score
+    score.assign_software_version_score('1.5.6')
     assert(score.software_version_score.present?)
   end
 
   test 'assign_software_version_score preserves the existing value if junk is passed' do
     score = create(:validator_score_v1, software_version: 'foo', software_version_score: 1)
-    score.assign_software_version_score
+    score.assign_software_version_score(nil)
     assert_equal 1, score.reload.software_version_score
+  end
+
+  test 'assign_software_version_score scores 2 points for correct versions' do
+    current_version = '1.5.4'
+    create(:batch, software_version: '1.5.4')
+    score1 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.4')
+    score2 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.5')
+    score3 = create(:validator_score_v1, network: 'testnet', software_version: '1.6.4')
+
+    score1.assign_software_version_score(current_version)
+    score2.assign_software_version_score(current_version)
+    score3.assign_software_version_score(current_version)
+
+    assert_equal 2, score1.reload.software_version_score
+    assert_equal 2, score2.reload.software_version_score
+    assert_equal 2, score3.reload.software_version_score
+  end
+
+  test 'assign_software_version_score scores 1 points for correct versions' do
+    current_version = '1.5.4'
+    create(:batch, software_version: current_version)
+    score1 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.3')
+    score2 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.1')
+
+    score1.assign_software_version_score(current_version)
+    score2.assign_software_version_score(current_version)
+
+    assert_equal 1, score1.reload.software_version_score
+    assert_equal 1, score2.reload.software_version_score
+  end
+
+  test 'assign_software_version_score scores 0 points for correct versions' do
+    current_version = '1.5.4'
+    create(:batch, software_version: current_version)
+    score1 = create(:validator_score_v1, network: 'testnet', software_version: '1.4.4')
+
+    score1.assign_software_version_score(current_version)
+
+    assert_equal 0, score1.reload.software_version_score
   end
 
   test 'by_network_with_active_stake scope should return correct results' do
@@ -73,5 +123,21 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
 
     assert_equal 1, res.count
     assert_equal 'datacenter1', res.first.data_center_key
+  end
+
+  test 'should add new commission history when commission changed' do
+    @batch = create(:batch, network: 'testnet')
+    validator = create(:validator, network: 'testnet')
+    score = create(
+      :validator_score_v1,
+      validator: validator,
+      commission: 10,
+      network: 'testnet'
+    )
+    create(:epoch_history, network: 'testnet', batch_uuid: @batch.uuid)
+
+    assert_difference('CommissionHistory.count') do
+      score.update(commission: 20)
+    end
   end
 end

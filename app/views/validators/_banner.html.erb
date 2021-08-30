@@ -1,9 +1,13 @@
 <section class="banner">
   <div class="heading-primary">Meet the <span>validators</span> who power Solana</div>
-  <h6 class="heading-secondary mb-4 mb-lg-5">the world's fastest blockchain!</h6>
+  <% unless @validators.blank? %>
+    <p class="lead">
+      The tables below show each validator by name and include some recent statistics for each. See our
+      <%= link_to 'FAQ', faq_url, target: '_blank' %> for a description of the scores shown below. Special thanks to
+      <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!
+    </p>
+  <% end %>
   <p class="lead">
-    The tables below show each validator by name and include some recent statistics for each. See our
-    <%= link_to 'FAQ', faq_url, target: '_blank' %> for a description of the scores shown below. Special thanks to
-    <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!
+    NEW! &mdash; You can now improve the security of the Solana blockchain by participating in stake pools. A stake pool spreads your delegation across hundreds of validators. Liquid stake pools allow you to move in and out of the pool without warm-up or cool-down periods. See <%= link_to 'Marinade Finance', 'https://marinade.finance', target: "_blank" %> to learn more about liquid staking.
   </p>
 </section>

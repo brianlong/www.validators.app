@@ -34,27 +34,30 @@
         <table id="validators-table" class='table table-block-sm'>
           <thead>
           <tr>
-            <th class="avatar-column">#</th>
+            <th class="avatar-column align-middle">#</th>
             <th class="name-column pr-1">
               Name <small class="text-muted">(Commission)</small><br />
-              Active Stake <small class="text-muted">(<%= number_to_human(lamports_to_sol(@total_active_stake)) %>)</small><br />
+              Active Stake
+              <small class="text-muted">
+                (<%= number_to_human(lamports_to_sol(@total_active_stake),
+                                     format:'%n%u',
+                                     units: { thousand: 'K', million: 'M', billion: 'B' }) %>)
+              </small><br />
               Scores <small class="text-muted">(total)</small>
             </th>
-            <th class='percent-column'>
-              Skipped Vote&nbsp;&percnt;
-              <a data-toggle="tooltip" data-html="true" title="Distance from leader">
-                <i class="fas fa-question-circle ml-1"></i>
-              </a>
+            <th class='percent-column align-middle'>
+              Skipped Vote&nbsp;&percnt;<br />
+              <small class="text-muted">Dist from leader</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column text-right pb-3 align-middle'>
               Root Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column text-right pb-3 align-middle'>
               Vote Distance<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
-            <th class='chart-column text-right'>
+            <th class='chart-column text-right pb-3 align-middle'>
               Skipped Slot&nbsp;&percnt;<br />
               <small class="text-muted">60-Min Chart</small>
             </th>
@@ -63,24 +66,24 @@
           <tr class="subhead">
             <td class="avatar-column"></td>
             <td></td>
-            <td class="percent-column">
+            <td class="percent-column align-middle">
               Best: <%= number_to_percentage((100 - @batch.best_skipped_vote.to_f * 100.0), precision: 2) %>
             </td>
-            <td class="text-right">
+            <td class="text-right align-middle">
               <% if @batch.root_distance_all_median && @batch.root_distance_all_average %>
                 Md: <%= @batch.root_distance_all_median %>
                 <br />
                 Av: <%= @batch.root_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td class="text-right">
+            <td class="text-right align-middle">
               <% if @batch.vote_distance_all_median && @batch.vote_distance_all_average %>
                 Md: <%= @batch.vote_distance_all_median %>
                 <br />
                 Av: <%= @batch.vote_distance_all_average.round(1) %>
               <% end %>
             </td>
-            <td class="text-right">
+            <td class="text-right align-middle">
               Md: <%= number_to_percentage(@skipped_slot_median.to_f * 100.0, precision: 1) %>
               <br />
               Av: <%= number_to_percentage(@skipped_slot_average.to_f * 100.0, precision: 1) %>
@@ -99,7 +102,7 @@
           <% @validators.each do |validator| %>
             <% i += 1 %>
             <tr id="row-<%=i%>">
-              <td class="avatar-column">
+              <td class="avatar-column align-middle">
                 <div class="avatar">
                   <% if validator.private_validator? %>
                     <div class="img-circle-medium-private">
@@ -111,12 +114,9 @@
                     <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
                   <% end %>
                 </div>
-                <% if validator.delinquent? %>
-                  <small class="text-danger">delinquent</small>
-                <% end %>
               </td>
 
-              <td class="name-column">
+              <td class="name-column align-middle">
                 <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                             class: 'font-weight-bold' do %>
                   <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
@@ -133,22 +133,30 @@
                   (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
                 </small>
                 <br />
+                <span class="d-inline-block d-lg-none">Version:&nbsp;</span>
+                <small>
+                  <span class="d-none d-lg-inline-block">Version:&nbsp;</span>
+                  <%= validator.score&.software_version %>
+                </small>
+                <br />
                 <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
                 <%= render 'validators/scores', validator: validator %>
+                <% if validator.delinquent? %>
+                  <br /><small class="text-danger">delinquent</small>
+                <% end %>
               </td>
 
-              <!-- SKIPPED VOTE % -->
-              <td class="percent-column align-middle" id="skipped-vote-column-<%=i%>">
+              <td class="percent-column align-middle">
                 <% skipped_vote_percent = skipped_vote_percent(validator, @batch) %>
                 <% if skipped_vote_percent %>
                   <div class="d-none d-lg-block">
-                    <%= render 'validators/spark_line_skipped_vote',
-                               account: validator.account,
+                    <%= render 'validators/speedometer_chart',
+                               canvas_name: "spark_line_skipped_vote_#{validator.account}",
                                value: [skipped_vote_percent, @batch.skipped_vote_all_median.to_f * 3].max,
                                chart_steps: [@batch.skipped_vote_all_median.to_f * 2, @batch.skipped_vote_all_median.to_f, 0.05],
                                min_value: @batch.skipped_vote_all_median.to_f * 3
                     %>
-                    <div class="text-center text-muted small mt-3">
+                    <div class="text-center text-muted small mt-2">
                       <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
                     </div>
                   </div>
@@ -156,7 +164,7 @@
                   <span class="d-none d-lg-block text-center text-muted">N/A</span>
                 <% end %>
                 <span class="d-inline-block d-lg-none">
-                  Skipped Vote&nbsp;% (distance from leader):
+                  Skipped Vote&nbsp;%:
                   <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
                 </span>
               </td>
@@ -239,6 +247,7 @@
               </td>
 
               <!-- SKIPPED SLOTS  -->
+
               <td class="chart-column d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
                 <%
                   vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
@@ -283,9 +292,15 @@
   </div>
 <% end %>
 
+<% if @validators.blank? && !params[:q].blank? %>
+  <%= render 'validators/no_search_results'%>
+<% end %>
+
 <% unless @validators.empty? %>
   <div class="row">
-    <%= render 'validators/software_versions' %>
+    <%= render 'validators/software_versions',
+               software_versions: @software_versions&.payload,
+               batch: @batch %>
     <%= render 'validators/stats' %>
   </div>
 <% end %>

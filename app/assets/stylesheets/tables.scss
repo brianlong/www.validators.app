@@ -1,11 +1,10 @@
 @import "variables";
-$table-lines-color: darken($card-border-color, 3%);
 
 table, .table {
   color: inherit;
 
   thead {
-    background-color: $table-lines-color;
+    background-color: $card-border-color;
     th {
       border: none;
       padding: $padding-standard 20px;
@@ -14,13 +13,13 @@ table, .table {
 
   .subhead {
     @include font-size-smaller;
-    background-color: darken($table-lines-color, 4%);
-    td { border-top: 1px solid $table-lines-color; }
+    background-color: $table-border-color;
+    td { border-top: 1px solid $table-border-color; }
   }
 
   tbody {
     tr {
-      border-top: 1px solid $table-lines-color;
+      border-top: 1px solid $table-border-color;
     }
     tr:nth-of-type(even) {
       background-color: $card-background-color;
@@ -30,14 +29,14 @@ table, .table {
     }
     td {
       padding: $padding-standard 20px;
-      border-top: 1px solid $table-lines-color;
+      border-top: 1px solid $table-border-color;
     }
   }
 
   .avatar-column {
     width: 75px;
     text-align: center;
-    padding: 25px 0 0 0;
+    padding: 0;
     .avatar {
       padding-bottom: 5px;
       .img-circle-medium-private {
@@ -47,7 +46,7 @@ table, .table {
   }
 
   .name-column {
-    width: 190px;
+    width: 195px;
     padding-left: 0;
     padding-right: 5px;
     @media(max-width: $screen-lg-max) {
@@ -144,22 +143,20 @@ table, .table {
   .percent-column {
     padding-left: 10px;
     padding-right: 10px;
-    width: 130px;
+    width: 135px;
   }
 
   @media(max-width: $screen-lg-max) {
     .percent-column {
-      width: 97px;
       padding-left: 20px;
       padding-right: 20px;
     }
-    .avatar-column { display: none; }
+    .avatar-column { display: none !important; }
   }
 
   @media(max-width: $screen-md-max) {
     thead { display: none; }
     .subhead { display: none; }
-    .avatar-column { display: none; }
     .percent-column, .chart-column {
       padding-top: 0;
     }

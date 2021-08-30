@@ -30,16 +30,20 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       validators = Validator.where(network: p.payload[:network])
+                            .active
                             .includes(:validator_score_v1)
                             .order(:id)
                             .all
 
-      # Make sure that we have a validator_score_v1 record for each validator
       validators.each do |validator|
-        validator.create_validator_score_v1 if validator.validator_score_v1.nil?
+        # Make sure that we have a validator_score_v1 record for each validator
+        if validator.validator_score_v1.nil?
+          validator.create_validator_score_v1(network: p.payload[:network])
+        end
       rescue StandardError => e
         Appsignal.send_error(e)
       end
+
       Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from validators_get', e)
@@ -149,8 +153,8 @@ module ValidatorScoreV1Logic
       skipped_vote_all  = []
 
       p.payload[:validators].each do |v|
-        root_distance_all += v.validator_score_v1.root_distance_history
-        vote_distance_all += v.validator_score_v1.vote_distance_history
+        root_distance_all += v.validator_score_v1.root_distance_history.last(960)
+        vote_distance_all += v.validator_score_v1.vote_distance_history.last(960)
 
         # Get all the most recent skipped_votes
         skipped_vote_all.push v.validator_score_v1.skipped_vote_history[-1]
@@ -177,8 +181,8 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |v|
         # Assign the root_distance_score
-        avg_root_distance = v.validator_score_v1.avg_root_distance_history
-        med_root_distance = v.validator_score_v1.med_root_distance_history
+        avg_root_distance = v.validator_score_v1.avg_root_distance_history(960)
+        med_root_distance = v.validator_score_v1.med_root_distance_history(960)
 
         Rails.logger.warn "#{p.payload[:network]} #{v.account} avg_root_distance: #{avg_root_distance}, med_root_distance: #{med_root_distance}"
 
@@ -192,8 +196,8 @@ module ValidatorScoreV1Logic
           end
 
         # Assign the vote distance score
-        avg_vote_distance = v.validator_score_v1.avg_vote_distance_history
-        med_vote_distance = v.validator_score_v1.med_vote_distance_history
+        avg_vote_distance = v.validator_score_v1.avg_vote_distance_history(960)
+        med_vote_distance = v.validator_score_v1.med_vote_distance_history(960)
 
         v.validator_score_v1.vote_distance_score = \
           if med_vote_distance <= vote_distance_all_median
@@ -237,16 +241,9 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
-      avg_skipped_slot_pct_all = \
-        ValidatorBlockHistory.average_skipped_slot_percent_for(
-          p.payload[:network],
-          p.payload[:batch_uuid]
-        )
-      med_skipped_slot_pct_all = \
-        ValidatorBlockHistory.median_skipped_slot_percent_for(
-          p.payload[:network],
-          p.payload[:batch_uuid]
-        )
+      vbh_query = ValidatorBlockHistoryQuery.new(p.payload[:network], p.payload[:batch_uuid])
+      avg_skipped_slot_pct_all = vbh_query.average_skipped_slot_percent
+      med_skipped_slot_pct_all = vbh_query.median_skipped_slot_percent
 
       vbh_sql = <<-SQL_END
         SELECT vbh.validator_id, vbh.skipped_slot_percent, vbh.skipped_slot_percent_moving_average
@@ -344,7 +341,6 @@ module ValidatorScoreV1Logic
             validator.validator_score_v1.active_stake
         end
 
-        validator.validator_score_v1.assign_software_version_score
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -356,6 +352,11 @@ module ValidatorScoreV1Logic
       )
 
       p.payload[:this_batch].update(software_version: current_software_version)
+      
+      p.payload[:validators].each do |validator|
+        validator.validator_score_v1.assign_software_version_score(current_software_version)
+      end
+
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -408,16 +409,16 @@ module ValidatorScoreV1Logic
     if software_versions.empty?
       'unknown'
     else
-      software_version_sorted = software_versions.keys.compact.sort_by { |v| Gem::Version.new(v) }
-      mostly_used_percent = software_versions.values.max
-      mostly_used_version = software_versions.key(mostly_used_percent)
-      mostly_used_index = software_version_sorted.index(mostly_used_version)
-      
-      if mostly_used_percent >= 66
-        mostly_used_version
-      else
-        software_version_sorted[mostly_used_index - 1]
+      software_versions_sorted = \
+        software_versions.sort_by { |k, v| Gem::Version.new(k)}.reverse
+
+      cumulative_sum = 0
+
+      software_versions_sorted.each do |ver, weight|
+        cumulative_sum += weight
+        return ver if cumulative_sum >= 66
       end
     end
   end
+
 end

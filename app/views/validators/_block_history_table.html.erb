@@ -21,9 +21,9 @@
   </tr>
   </thead>
   <tbody>
-    <% @validator.validator_block_histories.order('id desc').limit(60).each do |history| %>
+    <% @block_histories.each do |history| %>
       <!-- TODO: Add `network` to this query -->
-      <% block_stats = ValidatorBlockHistoryStat.where(batch_uuid: history.batch_uuid).first %>
+      <% block_stats = @block_history_stats.find{ |stat| stat.batch_uuid == history.batch_uuid } %>
       <tr>
         <td class='text-right'>
           <%= number_with_delimiter history.epoch %>

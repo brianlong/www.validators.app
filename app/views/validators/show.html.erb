@@ -11,11 +11,19 @@
   <h1 class="word-break">
     <%= @validator.name || @validator.account %>
   </h1>
+  <% unless @validator.private_validator? %>
+    <h5 class="mt-2">
+      Delegate SOL to this validator:
+      <%= link_to 'SolStake.io',
+                  solstake_url(@validator.vote_account_last&.account),
+                  target: :blank %>
+    </h5>
+  <% end %>
   <% if @validator.private_validator? %>
-    <h5 class="text-danger">(Private Validator)</h5>
+    <h5 class="text-danger mt-2">(Private Validator)</h5>
   <% end %>
   <% if @validator.delinquent? %>
-    <h5 class="text-danger">(delinquent)</h5>
+    <h5 class="text-danger mt-2">(delinquent)</h5>
   <% end %>
 </div>
 
@@ -49,9 +57,7 @@
         <tr>
           <td><strong>Software:</strong></td>
           <td>
-            <%=
-              @validator.validator_score_v1&.software_version
-            %>
+            <%= @validator&.score&.software_version %>
           </td>
         </tr>
 
@@ -110,7 +116,7 @@
           <td><strong>Active Stake:</strong></td>
           <td>
             <%= number_with_delimiter(
-                  (@validator.validator_score_v1&.active_stake * 0.000000001).round
+                  (@val_history&.active_stake * 0.000000001).round
                 ) rescue 'N/A' %> SOL
           </td>
         </tr>
@@ -122,8 +128,13 @@
               if params[:network] == 'mainnet' &&
               @validator.commission.to_i == 100
           %>
-          <td class="<%= comm_class %>">
-            <%= @validator.commission rescue 'N/A' %> &percnt;
+          <td class="<%= comm_class %>" data-turbolinks="false">
+            <%= @validator.commission rescue 'N/A' %>&percnt;
+            <% if @validator.commission_histories.exists? %>
+              <%= link_to '(See commission changes)',
+                          commission_histories_path(network: params[:network], validator_id: @validator.id),
+                          class: 'small'%>
+            <% end %>
           </td>
         </tr>
 
@@ -141,7 +152,13 @@
             <td>
               <strong>Scores:</strong>
             </td>
-            <td><%= render 'validators/scores', validator: @validator %></td>
+            <td>
+              <% if @validator.scorable? %>
+                <%= render 'validators/scores', validator: @validator %>
+              <% else %>
+                Inactive or zero-stake node. No score available
+              <% end %>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -172,20 +189,13 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
-        <!-- Block History Chart -->
-        <% vl = if @validator.score.root_distance_history&.count.to_i < @history_limit
-                  @validator.score.root_distance_history&.count.to_i
-                else
-                  @history_limit
-                end
-           line_color = chart_line_color(@validator.score.root_distance_score)
-           fill_color = chart_fill_color(@validator.root_distance_score)
-        %>
-        <%= render 'validators/spark_line_block',
-                   account: @validator.account,
-                   vector_block: @validator.score&.root_distance_history.to_a[-vl..-1],
-                   line_color: line_color,
-                   fill_color: fill_color
+        <h2 class="text-center">Block History</h2>
+        <%= render 'validators/spark_line_chart',
+                   chart_name: "spark_line_block_distance_#{@validator.account}",
+                   vector: @root_blocks,
+                   line_color: SPARK_LINE_2,
+                   fill_color: SPARK_LINE_2_TRANSPARENT,
+                   label: 'Block Diff'
         %>
       </div>
     </div>
@@ -194,20 +204,13 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
-        <!-- Vote History Chart -->
-        <% vl = if @validator.score.root_distance_history&.count.to_i < @history_limit
-                  @validator.score.root_distance_history&.count.to_i
-                else
-                  @history_limit
-                end
-           line_color = chart_line_color(@validator.score.vote_distance_score)
-           fill_color = chart_fill_color(@validator.vote_distance_score)
-        %>
-        <%= render 'validators/spark_line_vote',
-                   account: @validator.account,
-                   vector_vote: @validator.score&.vote_distance_history.to_a[-vl..-1],
-                   line_color: line_color,
-                   fill_color: fill_color
+        <h2 class="text-center">Vote History</h2>
+        <%= render 'validators/spark_line_chart',
+                   chart_name: "spark_line_vote_distance_#{@validator.account}",
+                   vector: @vote_blocks,
+                   line_color: SPARK_LINE_2,
+                   fill_color: SPARK_LINE_2_TRANSPARENT,
+                   label: 'Vote Diff'
         %>
       </div>
     </div>
@@ -218,7 +221,7 @@
   <div class="col-lg-6">
     <div class="card mb-4">
       <div class="card-content">
-        <!-- Skipped Slot History -->
+        <h2 class="text-center">Skipped Slot History</h2>
         <%= render partial: 'block_history_chart' %>
       </div>
     </div>

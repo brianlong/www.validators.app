@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'rack/cors'
+require 'rack/test'
 
 # ApiControllerTest
 class ApiControllerTest < ActionDispatch::IntegrationTest
@@ -14,6 +16,45 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
       password: 'password'
     }
     @user = User.create(@user_params)
+
+    Validator.destroy_all
+  end
+
+  test 'When reaching the api \
+        from origin listed in whitelist \
+        should return 200' do
+    get api_v1_ping_url, headers: {
+      'Origin' => 'http://example.com' # this origin is in whitelist
+    }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+    assert_equal 'pong', json['answer']
+  end
+
+  test 'When reaching the api \
+        from foreign origin \
+        should return Unauthorized' do
+    get api_v1_ping_url, headers: {
+      'Origin' => 'http://foreign.com'
+    }
+
+    assert_response 401
+    json = response_to_json(@response.body)
+    assert_equal 'Unauthorized', json['error']
+  end
+
+  test 'When reaching the api \
+  from foreign origin but with correct token \
+  should return 200' do
+    get api_v1_ping_url, headers: {
+      'Token' => @user.api_token,
+      'Origin' => 'http://foreign.com'
+    }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+    assert_equal 'pong', json['answer']
   end
 
   test 'GET api_v1_ping without token should get error' do
@@ -30,63 +71,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'pong', json['answer']
   end
 
-  test 'POST api_v1_collector without token should get error' do
-    post api_v1_collector_url, params: {}
-    assert_response 401
-    expected_response = { 'error' => 'Unauthorized' }
-    assert_equal expected_response, response_to_json(@response.body)
-  end
-
-  test 'POST api_v1_collector with empty params should get error' do
-    expected_response = { 'status' => 'Parameter Missing' }
-
-    # Completely empty params
-    post api_v1_collector_url,
-         headers: { 'Token' => @user.api_token },
-         params: {}
-    assert_response 400
-    assert_equal expected_response, response_to_json(@response.body)
-
-    # Empty collector params
-    post api_v1_collector_url,
-         headers: { 'Token' => @user.api_token },
-         params: { collector: {} }
-    assert_response 400
-    assert_equal expected_response, response_to_json(@response.body)
-  end
-
-  test 'POST api_v1_collector with invalid params should get error' do
-    post api_v1_collector_url,
-         headers: { 'Token' => @user.api_token },
-         params: { collector: { one: 1, two: 2, three: 3 } }
-    assert_response 400
-    expected_response = { 'status' => 'Bad Request' }
-    assert_equal expected_response, response_to_json(@response.body)
-  end
-
-  test 'POST api_v1_collector with valid data should succeed' do
-    # Prepare the payload
-    valid_payload = {
-      payload_type: 'ping',
-      payload_version: 1,
-      payload: { 'test_key' => 'test_value' }.to_json
-    }
-
-    # Post the payload
-    post api_v1_collector_url,
-         headers: { 'Token' => @user.api_token },
-         params: { collector: valid_payload }
-    assert_response 202
-    json = response_to_json(@response.body)
-    assert_equal 'Accepted', json['status']
-
-    # Verify that the record was saved successfully
-    collector = Collector.last
-    assert_equal 'ping', collector.payload_type
-    assert_equal 1, collector.payload_version
-    assert_equal '{"test_key":"test_value"}', collector.payload
-  end
-
   test 'GET api_v1_validators with token returns only validators from chosen network with scores' do
     create_list(:validator, 3, :with_score,)
     create_list(:validator, 3, :with_score, :mainnet)
@@ -98,7 +82,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
 
     assert_response 200
-    assert_equal 4, json.size
+    assert_equal 3, json.size
     assert_equal 'testnet', json.first['network']
 
     # Mainnet
@@ -114,6 +98,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
   test 'GET api_v1_validators with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
+    create(:validator_history, account: validator.account, epoch_credits: 100)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
     create(:ip, address: validator.score.ip_address)
@@ -124,16 +109,18 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     json = response_to_json(@response.body)
     validator_with_all_data = json.select { |j| j['account'] == 'Test Account' }.first
+    validator_active_stake = validator.validator_score_v1.active_stake
 
-    assert_equal 2, json.size
+    assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 29, validator_with_all_data.keys.size
+    assert_equal 31, validator_with_all_data.keys.size
 
     # Validator
     assert_equal 'testnet', validator_with_all_data['network']
     assert_equal 'john doe', validator_with_all_data['name']
     assert_equal 'johndoe', validator_with_all_data['keybase_id']
+    assert_equal 'http://www.avatar_url.com', validator_with_all_data['avatar_url']
 
     # Score
     assert_equal 7, validator_with_all_data['total_score']
@@ -146,7 +133,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_nil validator_with_all_data['data_center_concentration_score']
     assert_equal 1, validator_with_all_data['published_information_score']
     assert_equal 1, validator_with_all_data['security_report_score']
-    assert_equal 206_356_743_328_737, validator_with_all_data['active_stake']
+    assert_equal validator_active_stake, validator_with_all_data['active_stake']
     assert_equal 10, validator_with_all_data['commission']
     assert_equal false, validator_with_all_data['delinquent']
     assert_equal '23470-US-America/Chicago', validator_with_all_data['data_center_key']
@@ -162,10 +149,133 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     # IP
     assert_equal 0, validator_with_all_data['autonomous_system_number']
+
+    # Validator history
+    assert_equal 100, validator_with_all_data['epoch_credits']
+  end
+
+  test 'GET api_v1_validators with token and search query returns correct data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+
+    search_query = 'john doe'
+
+    get api_v1_validators_url(network: 'testnet', q: search_query),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_equal search_query, json.first['name']
+  end
+
+  test 'GET api_v1_validators with token and not existing search query returns no data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+
+    search_query = '1234'
+
+    get api_v1_validators_url(network: 'testnet', q: search_query),
+        headers: { 'Token' => @user.api_token }
+    assert_response 200
+
+    json = response_to_json(@response.body)
+
+    assert_equal 0, json.size
+  end
+
+  #
+  # Pagination
+  #
+  test 'GET api_v1_validators with token, limit and page passed in returns limited data' do
+    create_list(:validator, 10, :with_score)
+    limit = 5
+    page = 2
+
+    get api_v1_validators_url(network: 'testnet', limit: limit, page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 5, json.size
+  end
+
+  test 'GET api_v1_validators with token and limit passed in returns limited data' do
+    create_list(:validator, 10, :with_score)
+    limit = 5
+
+    get api_v1_validators_url(network: 'testnet', limit: limit),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal limit, json.size
+  end
+
+  test 'GET api_v1_validators with token and page passed in returns limited data' do
+    create_list(:validator, 60, :with_score)
+    page = 1
+
+    get api_v1_validators_url(network: 'testnet', page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    # Default limit is 9999
+    assert_equal Validator.count, json.size
+  end
+
+  test 'GET api_v1_validators with token and page passed returns no data when offset is above number of records' do
+    create_list(:validator, 10, :with_score)
+    page = 2
+
+    get api_v1_validators_url(network: 'testnet', page: page),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    # Default limit is 9999, so the offset is above number of records.
+    assert_equal 0, json.size
+  end
+
+  test 'GET api_v1_validators with token but without page and limit returns all data' do
+    create_list(:validator, 10, :with_score)
+
+    get api_v1_validators_url(network: 'testnet'),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal Validator.all.size, json.size
+  end
+  #
+  # Pagination with search
+  #
+  test 'GET api_v1_validators with token, search query, limit and page passed returns limited data' do
+    create(:validator, :with_score, name: 'search_query')
+    create_list(:validator, 5, :with_score)
+
+    limit = 5
+    page = 1
+    search_query = 'search_query'
+
+    get api_v1_validators_url(network: 'testnet', limit: limit, page: page, q: search_query),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_equal search_query, json.first['name']
   end
 
   test 'GET api_v1_validator with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
+    create(:validator_history, account: validator.account, epoch_credits: 100)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
     create(:ip, address: validator.score.ip_address)
@@ -178,14 +288,16 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
 
     json_response = response_to_json(@response.body)
+    validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 29, json_response.keys.size
+    assert_equal 31, json_response.keys.size
 
     # Validator
     assert_equal 'testnet', json_response['network']
     assert_equal 'john doe', json_response['name']
     assert_equal 'johndoe', json_response['keybase_id']
+    assert_equal 'http://www.avatar_url.com', json_response['avatar_url']
 
     # Score
     assert_equal 7, json_response['total_score']
@@ -198,7 +310,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_nil json_response['data_center_concentration_score']
     assert_equal 1, json_response['published_information_score']
     assert_equal 1, json_response['security_report_score']
-    assert_equal 206_356_743_328_737, json_response['active_stake']
+    assert_equal validator_active_stake, json_response['active_stake']
     assert_equal 10, json_response['commission']
     assert_equal false, json_response['delinquent']
     assert_equal '23470-US-America/Chicago', json_response['data_center_key']
@@ -214,6 +326,9 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     # IP
     assert_equal 0, json_response['autonomous_system_number']
+
+    # Validator history
+    assert_equal 100, json_response['epoch_credits']
   end
 
   test 'GET api_v1_validator with token returns ValidatorNotFound when wrong account provided' do
@@ -298,7 +413,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
       account: testnet_validator.account,
       limit: limit
     ), headers: { 'Token' => @user.api_token }
-
     json_response = response_to_json(@response.body)
 
     assert_response 200
@@ -316,13 +430,5 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 404
     assert_equal expected_response, json_response
-  end
-
-  test 'request ping_times with token should show empty array' do
-    get api_v1_ping_times_url(network: 'testnet', account: '1234'),
-        headers: { 'Token' => @user.api_token }
-    assert_response 200
-    json = response_to_json(@response.body)
-    assert_equal 3, json.count
   end
 end

@@ -1,0 +1,31 @@
+<!-- Vue templates -->
+<%= javascript_pack_tag 'commission_histories/index' %>
+
+<div class="page-header">
+  <h1>Commission Changes</h1>
+  <% if @validator %>
+    <h4 class="word-break"><%= @validator.name || @validator.account %></h4>
+  <% end %>
+  <div class="text-danger">This feature is work-in-progress. Please use the chat widget below to notify us of problems.</div>
+</div>
+
+<% if @validator %>
+  <div
+    id='commission-histories-index-vue'
+    query=<%= @validator.account%>
+    network=<%= params[:network] %>
+  >
+  </div>
+  <%= link_to 'Back to Validator page',
+              validator_url(network: params[:network], account: @validator.account),
+              class: 'btn btn-sm btn-secondary' %>
+<% else %>
+  <div 
+    id='commission-histories-index-vue'
+    network=<%= params[:network] %>
+  >
+  </div>
+  <%= link_to 'Back to List of Validators',
+              validators_path(network: params[:network]),
+              class: 'btn btn-sm btn-secondary' %>
+<% end %>

@@ -36,29 +36,33 @@ begin
                 .then(&validator_block_history_save)
                 .then(&log_errors)
                 .then(&batch_touch)
+                .then(&check_epoch)
 
-    if p.code == 200
-      BuildSkippedSlotPercentWorker.perform_async(
-        network: p.payload[:network],
-        batch_uuid: p.payload[:batch_uuid]
-      )
-      ReportTowerHeightWorker.perform_async(
-        epoch: p.payload[:epoch],
-        batch_uuid: p.payload[:batch_uuid],
-        network: p.payload[:network]
-      )
-      ReportSoftwareVersionWorker.perform_async(
-        batch_uuid: p.payload[:batch_uuid],
-        network: p.payload[:network]
-      )
+    raise SkipAndSleep, p.code unless p.code == 200
+
+    BuildSkippedSlotPercentWorker.perform_async(
+      network: p.payload[:network],
+      batch_uuid: p.payload[:batch_uuid]
+    )
+    ReportTowerHeightWorker.perform_async(
+      epoch: p.payload[:epoch],
+      batch_uuid: p.payload[:batch_uuid],
+      network: p.payload[:network]
+    )
+    ReportSoftwareVersionWorker.perform_async(
+      batch_uuid: p.payload[:batch_uuid],
+      network: p.payload[:network]
+    )
+
+    break if interrupted
+  rescue SkipAndSleep => e
+    break if interrupted
+
+    if e.message.in? %w[500 502 503 504]
+      sleep(2.minute)
     else
-      raise SkipAndSleep
+      sleep(sleep_time)
     end
-
-    break if interrupted
-  rescue SkipAndSleep
-    break if interrupted
-    sleep(sleep_time)
   end
 rescue StandardError => e
   puts "#{e.class}\n#{e.message}"

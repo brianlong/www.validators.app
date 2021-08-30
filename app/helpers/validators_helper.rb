@@ -68,4 +68,12 @@ module ValidatorsHelper
   def above_33percent_concentration?(validator)
     validator.stake_concentration_score.negative?
   end
+
+  def sort_software_versions(versions)
+    versions.sort_by { |ver| Gem::Version.new(ver.keys.first)}.reverse
+  end
+
+  def solstake_url(vote_key)
+    "https://solstake.io/#/app/validator/#{vote_key}"
+  end
 end

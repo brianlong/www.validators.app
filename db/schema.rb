@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_104446) do
+ActiveRecord::Schema.define(version: 2021_08_24_114443) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -47,9 +47,11 @@ ActiveRecord::Schema.define(version: 2021_06_10_104446) do
     t.string "software_version"
     t.float "skipped_vote_all_median"
     t.float "best_skipped_vote"
+    t.float "skipped_slot_all_average", default: 0.0
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
+    t.index ["network"], name: "index_batches_on_network"
   end
 
   create_table "collectors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -61,6 +63,21 @@ ActiveRecord::Schema.define(version: 2021_06_10_104446) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_collectors_on_user_id"
+  end
+
+  create_table "commission_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "validator_id", null: false
+    t.float "commission_before"
+    t.float "commission_after"
+    t.string "batch_uuid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
+    t.integer "epoch"
+    t.float "epoch_completion"
+    t.index ["network", "validator_id"], name: "index_commission_histories_on_network_and_validator_id"
+    t.index ["network"], name: "index_commission_histories_on_network"
+    t.index ["validator_id"], name: "index_commission_histories_on_validator_id"
   end
 
   create_table "contact_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -157,6 +174,23 @@ ActiveRecord::Schema.define(version: 2021_06_10_104446) do
     t.string "data_center_host"
     t.index ["address"], name: "index_ips_on_address", unique: true
     t.index ["data_center_key"], name: "index_ips_on_data_center_key"
+  end
+
+  create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "request_type"
+    t.json "meta_data"
+    t.string "name_encrypted"
+    t.string "street_address_encrypted"
+    t.string "city_encrypted"
+    t.string "postal_code_encrypted"
+    t.string "state_encrypted"
+    t.string "name_encrypted_iv"
+    t.string "street_address_encrypted_iv"
+    t.string "city_encrypted_iv"
+    t.string "postal_code_encrypted_iv"
+    t.string "state_encrypted_iv"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -288,6 +322,14 @@ ActiveRecord::Schema.define(version: 2021_06_10_104446) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "software_version"
+    t.integer "epoch_credits", unsigned: true
+    t.float "slot_skip_rate", unsigned: true
+    t.bigint "max_root_height", unsigned: true
+    t.bigint "root_distance", unsigned: true
+    t.bigint "max_vote_height", unsigned: true
+    t.bigint "vote_distance", unsigned: true
+    t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
+    t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
   end
@@ -350,6 +392,8 @@ ActiveRecord::Schema.define(version: 2021_06_10_104446) do
     t.string "info_pub_key"
     t.string "avatar_url"
     t.string "security_report_url"
+    t.boolean "is_rpc", default: false
+    t.boolean "is_active", default: true
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 
@@ -387,6 +431,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_104446) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collectors", "users"
+  add_foreign_key "commission_histories", "validators"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"

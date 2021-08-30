@@ -40,6 +40,10 @@ Rails.application.routes.draw do
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
 
+  resources :opt_out_requests, path: 'opt-out-requests', only: [:index, :new, :create, :destroy] do
+    collection { get 'thank-you' => 'opt_out_requests#thank_you' }
+  end
+
   devise_for :users
 
   # Free Sidekiq
@@ -86,29 +90,33 @@ Rails.application.routes.draw do
 
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
+      get 'commission-changes/:network', to: 'commission_histories#index', as: 'commission_histories_index'
     end
   end
 
   # Public Controller
   get 'contact-us', to: 'public#contact_us'
-
   get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
-
   get 'api-documentation',
       to: 'public#api_documentation',
       as: 'api_documentation'
   get 'contact-requests', to: 'contact_requests#index'
   get 'cookie-policy', to: 'public#cookie_policy'
-  get '/do-not-sell-my-personal-information/',
-      to: 'public#do_not_sell_my_personal_information',
-      as: :do_not_sell_my_personal_information
   get 'faq', to: 'public#faq'
   get 'privacy-policy-california', to: 'public#privacy_policy_california'
   get 'privacy-policy', to: 'public#privacy_policy'
   get 'sample-chart', to: 'public#sample_chart'
   get 'terms-of-use', to: 'public#terms_of_use'
+  get 'commission-changes/:network/(:validator_id)',
+      to: 'public#commission_histories',
+      as: 'commission_histories'
+
+  get 'cluster-stats/:network',
+      to: 'cluster_stats#index',
+      as: 'cluster_stats'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
+  get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
 
   # Default root path
   root to: 'public#index'

@@ -9,6 +9,8 @@
 #  avatar_url          :string(191)
 #  details             :string(191)
 #  info_pub_key        :string(191)
+#  is_active           :boolean          default(TRUE)
+#  is_rpc              :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
 #  security_report_url :string(191)
@@ -26,7 +28,15 @@ class Validator < ApplicationRecord
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
   has_many :validator_ips, dependent: :destroy
   has_many :validator_block_histories, dependent: :destroy
+  has_many :commission_histories, dependent: :destroy
+  has_many :validator_histories, primary_key: :account, foreign_key: :account
   has_one :validator_score_v1, dependent: :destroy
+  has_one :most_recent_epoch_credits_by_account, -> {
+    merge(ValidatorHistory.most_recent_epoch_credits_by_account)
+  }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
+  
+  scope :active, -> { where(is_active: true) }
+  scope :scorable, -> { where(is_active: true, is_rpc: false) }
 
   # after_save :copy_data_to_score
 
@@ -63,6 +73,14 @@ class Validator < ApplicationRecord
     def total_active_stake
       includes(:validator_score_v1).sum(:active_stake)
     end
+  end
+
+  def active?
+    is_active
+  end
+
+  def scorable?
+    is_active && !is_rpc
   end
 
   def validator_history_last
@@ -198,5 +216,29 @@ class Validator < ApplicationRecord
 
   def private_validator?
     score&.commission == 100 && network == 'mainnet'
+  end
+
+  def api_url
+    Rails.application.routes.url_helpers.api_v1_validator_url(
+      network: self.network,
+      account: self.account
+    )
+  end
+
+  def to_builder
+    Jbuilder.new do |validator|
+      validator.(
+        self, 
+        :network, 
+        :account, 
+        :name, 
+        :keybase_id, 
+        :www_url,
+        :details, 
+        :avatar_url,
+        :created_at, 
+        :updated_at
+      )
+    end
   end
 end
