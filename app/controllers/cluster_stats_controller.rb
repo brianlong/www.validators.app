@@ -25,12 +25,12 @@ class ClusterStatsController < ApplicationController
     ).last&.payload
 
     {
-      top_staked_validators: vs_stats.top_staked_validators,
+      top_staked_validators: vs_stats.top_staked_validators || [],
       total_stake: vs_stats.total_stake,
-      top_skipped_vote_validators: vah_stats.top_skipped_vote_percent,
-      top_root_distance_validators: vs_stats.top_root_distance_averages_validators,
-      top_vote_distance_validators: vs_stats.top_vote_distance_averages_validators,
-      top_skipped_slot_validators: vbh_stats.top_skipped_slot_percent,
+      top_skipped_vote_validators: vah_stats.top_skipped_vote_percent || [],
+      top_root_distance_validators: vs_stats.top_root_distance_averages_validators || [],
+      top_vote_distance_validators: vs_stats.top_vote_distance_averages_validators || [],
+      top_skipped_slot_validators: vbh_stats.top_skipped_slot_percent || [],
       skipped_votes_percent: vah_stats.skipped_votes_stats,
       skipped_votes_percent_moving_average: vah_stats.skipped_vote_moving_average_stats,
       root_distance: vs_stats.root_distance_stats,
