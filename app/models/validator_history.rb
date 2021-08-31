@@ -36,7 +36,25 @@ class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
 
+  scope :most_recent_epoch_credits_by_account, -> do
+    from(
+      <<~SQL
+        (
+          SELECT validator_histories.epoch_credits, validator_histories.account, validator_histories.created_at
+          FROM validator_histories JOIN (
+            SELECT account, max(created_at) AS created_at
+            FROM validator_histories
+            GROUP BY account
+          ) latest_by_account
+          ON validator_histories.created_at = latest_by_account.created_at
+          AND validator_histories.account = latest_by_account.account
+        ) validator_histories
+      SQL
+    )
+  end
+
   class << self
+    
     def for_batch(network, batch_uuid)
       where(network: network, batch_uuid: batch_uuid)
     end
@@ -68,5 +86,14 @@ class ValidatorHistory < ApplicationRecord
 
   def validator
     Validator.find_by(network: network, account: account)
+  end
+
+  def to_builder
+    Jbuilder.new do |validator_history|
+      validator_history.(
+        self,
+        :epoch_credits
+      )
+    end
   end
 end

@@ -11,7 +11,11 @@ module Api
       before_action :validate_api_token
 
       def validate_api_token
-        unless Rails.application.credentials.cors_domain_whitelist&.include? request.headers['origin'] # Rails.application.credentials.cors_domain_whitelist
+        return true \
+          if request.headers['Authorization'] && request.headers['Authorization'] == Rails.application.credentials.api_authorization
+
+        allowed_domains = Rails.application.credentials.cors_domain_whitelist
+        unless allowed_domains&.include? request.headers['origin'] # Rails.application.credentials.cors_domain_whitelist
           return unauthenticated! \
             if User.where(api_token: request.headers['Token']).first.nil?
         end

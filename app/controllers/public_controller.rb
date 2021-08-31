@@ -76,8 +76,6 @@ class PublicController < ApplicationController
     @title = t('public.cookie_policy.title')
   end
 
-  def do_not_sell_my_personal_information; end
-
   def faq
     @title = t('public.faq.title')
   end
@@ -107,13 +105,7 @@ class PublicController < ApplicationController
   def commission_histories
     if params[:validator_id]
       @validator = Validator.find(params[:validator_id])
-      commission_histories = CommissionHistory.where(network: params[:network], validator_id: @validator.id)
-    else
-      commission_histories = CommissionHistory.where(network: params[:network]).includes(:validator)
     end
-    @commission_histories = commission_histories.order(created_at: :desc)
-                                                .page(params[:page])
-                                                .per(20)
   end
 
   private
