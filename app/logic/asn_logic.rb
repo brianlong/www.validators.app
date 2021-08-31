@@ -72,7 +72,7 @@ module AsnLogic
 
         asn_stat.population = scores.count
         if asn_stat.population&.positive?
-          asn_stat.vote_distance_moving_average = \
+          asn_stat.average_score = \
             (score_sum.to_f / asn_stat.population)
         end
         asn_stat.active_stake = active_stake

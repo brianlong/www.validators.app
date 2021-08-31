@@ -7,16 +7,15 @@
     <td class="narrower-column">
       <%
         asn_stat = AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn], network: params[:network])
-        chart_value = asn_stat&.vote_distance_moving_average <= 20 ? asn_stat.vote_distance_moving_average : 20
       %>
       <%= render 'asn_speedometer',
                   canvas_name: "average_score_#{asn_data[:asn]}",
-                  value: chart_value,
+                  value: asn_stat.average_score || 0,
                   chart_steps: [4, 7, 10],
                   min_value: 0
       %> 
       <div class="text-center">
-        <%= AsnStat.find_by(traits_autonomous_system_number: asn_data[:asn], network: params[:network]).vote_distance_moving_average.round(3) rescue ''%>
+        <%= asn_stat.average_score.round(3) rescue ''%>
       </div>
     </td>
     <td>

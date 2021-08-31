@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_25_121130) do
+ActiveRecord::Schema.define(version: 2021_08_31_080835) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2021_08_25_121130) do
   end
 
   create_table "asn_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.float "vote_distance_moving_average"
+    t.float "average_score"
     t.integer "traits_autonomous_system_number"
     t.datetime "calculated_at"
     t.integer "population"
@@ -186,23 +186,6 @@ ActiveRecord::Schema.define(version: 2021_08_25_121130) do
     t.string "data_center_host"
     t.index ["address"], name: "index_ips_on_address", unique: true
     t.index ["data_center_key"], name: "index_ips_on_data_center_key"
-  end
-
-  create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "request_type"
-    t.json "meta_data"
-    t.string "name_encrypted"
-    t.string "street_address_encrypted"
-    t.string "city_encrypted"
-    t.string "postal_code_encrypted"
-    t.string "state_encrypted"
-    t.string "name_encrypted_iv"
-    t.string "street_address_encrypted_iv"
-    t.string "city_encrypted_iv"
-    t.string "postal_code_encrypted_iv"
-    t.string "state_encrypted_iv"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -388,7 +371,6 @@ ActiveRecord::Schema.define(version: 2021_08_25_121130) do
     t.text "skipped_slot_moving_average_history"
     t.text "skipped_vote_history"
     t.text "skipped_vote_percent_moving_average_history"
-    t.integer "authorized_withdrawer_score"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
@@ -436,8 +418,6 @@ ActiveRecord::Schema.define(version: 2021_08_25_121130) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "network"
-    t.string "validator_identity"
-    t.string "authorized_withdrawer"
     t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
     t.index ["network", "account"], name: "index_vote_accounts_on_network_and_account"
     t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
