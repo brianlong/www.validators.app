@@ -90,7 +90,7 @@ end
 # Send an interrupt with `ctrl-c` or `kill` to stop the script. Results will
 # not be posted to the validators.app server.
 interrupted = false
-trap('INT') { interrupted = true }
+trap('INT') { interrupted = true }  unless Rails.env.test?
 
 # CollectorLogic contains helper methods for the body of the script seen below.
 module CollectorLogic
