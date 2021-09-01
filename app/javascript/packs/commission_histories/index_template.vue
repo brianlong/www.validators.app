@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <commission-history-row v-for="ch in commission_histories" :key="ch.id" :chistory="ch">
+          <commission-history-row @filter_by_query="filter_by_query" v-for="ch in commission_histories" :key="ch.id" :chistory="ch">
           </commission-history-row>
         </tbody>
       </table>
@@ -41,7 +41,7 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
-    props: ['query', 'network'],
+    props: ['network'],
     data () {
       if(this.query && !this.query == ''){
         var api_url = '/api/v1/commission-changes/' + this.network + '?query=' + this.query + '&'
@@ -53,7 +53,8 @@
         page: 1,
         total_count: 0,
         sort_by: 'created_at_desc',
-        api_url: api_url
+        api_url: api_url,
+        query: this.query
       }
     },
     created () {
@@ -68,22 +69,36 @@
       sort_by: function(){
         var ctx = this
         axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page)
-        .then(function (response){
+        .then(function (response) {
           ctx.commission_histories = response.data.commission_histories;
           ctx.total_count = response.data.total_count;
+          ctx.query = '';
         })
       },
       page: function(){
         this.paginate()
+      },
+      query: function(account) {
+        var ctx = this
+        axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + 1 + '&query=' + account)
+             .then(function (response) {
+                ctx.commission_histories = response.data.commission_histories;
+                ctx.total_count = response.data.total_count;
+              })
       }
     },
     methods: {
       paginate: function(){
         var ctx = this
-        axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page)
-        .then(response => (
-          ctx.commission_histories = response.data.commission_histories
-        ))
+        var query = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
+        if (this.query !== '' && this.query !== undefined) {
+          query = query + '&query=' + this.query
+        }
+
+        axios.get(query)
+             .then(response => (
+               ctx.commission_histories = response.data.commission_histories
+             ))
       },
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
@@ -94,6 +109,9 @@
       sort_by_validator: function(){
         this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc'
       },
+      filter_by_query: function(query) {
+        this.query = query;
+      }
     }
   }
 </script>
