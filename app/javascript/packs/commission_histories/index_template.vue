@@ -94,12 +94,13 @@
     methods: {
       paginate: function(){
         var ctx = this
-        var query = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
-        if (this.query !== '' && this.query !== undefined) {
-          query = query + '&query=' + this.query
+        var url = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
+
+        if (this.query !== '' && typeOf(this.query) != 'undefined') {
+          url = url + '&query=' + this.query
         }
 
-        axios.get(query)
+        axios.get(url)
              .then(response => (
                ctx.commission_histories = response.data.commission_histories
              ))
