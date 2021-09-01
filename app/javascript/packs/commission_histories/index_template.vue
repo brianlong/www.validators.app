@@ -30,10 +30,11 @@
             :per-page="25"
             first-text="« First"
             last-text="Last »" />
-        <a href='#' 
+        <a href='#'
            @click.prevent="reset_filters"
-           :style="{visibility: this.query ? 'visible' : 'hidden'}" 
-           id='reset-filters'>Reset filters</a>
+           :style="{visibility: this.query ? 'visible' : 'hidden'}"
+           id='reset-filters'
+           class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a>
       </div>
     </div>
   </div>
