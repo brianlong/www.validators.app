@@ -14,7 +14,6 @@ class AsnLogicTest < ActiveSupport::TestCase
     create(
       :validator_score_v1,
       validator: val,
-      data_center_key: @ip.data_center_key,
       network: 'testnet',
       vote_distance_history: [1, 2, 3],
       ip_address: @ip.address,
@@ -24,6 +23,12 @@ class AsnLogicTest < ActiveSupport::TestCase
     @payload = {
       network: 'testnet'
     }
+  end
+
+  teardown do
+    if File.exist?("#{Rails.root}/log/test/asn_logic.log")
+      File.delete("#{Rails.root}/log/test/asn_logic.log")
+    end
   end
 
   test "gather_asns" do
@@ -66,5 +71,23 @@ class AsnLogicTest < ActiveSupport::TestCase
     assert_equal 54_321, AsnStat.last.traits_autonomous_system_number
     assert AsnStat.last.data_centers.include?(@ip.data_center_key)
     assert_equal 7, AsnStat.last.average_score
+  end
+
+  test 'log_errors_to_file' do
+    p = Pipeline.new(200, @payload)
+                .then(&gather_asns)
+                .then(&gather_scores)
+                .then(&prepare_asn_stats)
+                .then(&calculate_and_save_stats)
+    begin
+      throw 'test error'
+    rescue => e
+      p = Pipeline.new(500, p.payload, 'testing some error', e)
+    end
+    p.then(&log_errors_to_file)
+    
+    assert_equal true, File.exist?("#{Rails.root}/log/test/asn_logic.log")
+    error_lines = File.open("#{Rails.root}/log/test/asn_logic.log").map { |l| l }
+    assert_equal true, error_lines[1].include?('test error')
   end
 end

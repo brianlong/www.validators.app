@@ -77,7 +77,6 @@ module AsnLogic
         end
         asn_stat.active_stake = active_stake
 
-
         asn_stat.save
       end
 
@@ -104,7 +103,7 @@ end
 private
 
 def asn_logger
-  @asn_logger ||= Logger.new("#{Rails.root}/log/asn_logic.log")
+  @asn_logger ||= Logger.new("#{Rails.root}/log/#{Rails.env}/asn_logic.log")
 end
 
 def ips_sql
