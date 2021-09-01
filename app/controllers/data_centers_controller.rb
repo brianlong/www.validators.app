@@ -8,6 +8,10 @@ class DataCentersController < ApplicationController
       sort_by: @sort_by, 
       network: params[:network]
     ).call
+
+    if @sort_by == 'asn'
+      @asn_stat = AsnStat.where(network: params[:network])
+    end
   end
 
   # params[:network]
