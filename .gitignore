@@ -12,7 +12,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
-!/log/test/.gitignore
+!/log/test/.keep
 
 # Ignore uploaded files in development.
 /storage/*
