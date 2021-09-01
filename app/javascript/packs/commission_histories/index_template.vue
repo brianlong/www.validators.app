@@ -30,6 +30,10 @@
             :per-page="25"
             first-text="« First"
             last-text="Last »" />
+        <a href='#' 
+           @click.prevent="reset_filters"
+           :style="{visibility: this.query ? 'visible' : 'hidden'}" 
+           id='reset-filters'>Reset filters</a>
       </div>
     </div>
   </div>
@@ -111,6 +115,9 @@
       },
       filter_by_query: function(query) {
         this.query = query;
+      },
+      reset_filters: function() {
+        this.query = '';
       }
     }
   }
