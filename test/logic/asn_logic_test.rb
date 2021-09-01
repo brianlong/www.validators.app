@@ -86,7 +86,7 @@ class AsnLogicTest < ActiveSupport::TestCase
     end
     p.then(&log_errors_to_file)
     
-    assert_equal true, File.exist?("#{Rails.root}/log/test/asn_logic.log")
+    assert File.exist?("#{Rails.root}/log/test/asn_logic.log")
     error_lines = File.open("#{Rails.root}/log/test/asn_logic.log").map { |l| l }
     assert_equal true, error_lines[1].include?('test error')
   end
