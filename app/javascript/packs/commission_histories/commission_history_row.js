@@ -33,14 +33,14 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       this.chistory.commission_before = this.chistory.commission_before ? this.chistory.commission_before : 0
       this.chistory.commission_after = this.chistory.commission_after ? this.chistory.commission_after : 0
     },
-    clicked: function(e) {
+    filterByQuery: function(e) {
       this.$emit('filter_by_query', this.chistory.account);
     }
   },
   template: `
     <tr>
       <td>
-        <a href="#" v-bind:account="chistory_name" @click.prevent="clicked">{{ chistory_name }}</a>
+        <a href="#" v-bind:account="chistory_name" @click.prevent="filterByQuery">{{ chistory_name }}</a>
         <a v-bind:href="chistory_href" target="_blank"><i class="fas fa-external-link-alt ml-1"></i></a>
       </td>
       <td>
