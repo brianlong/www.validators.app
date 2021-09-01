@@ -32,7 +32,7 @@
             last-text="Last »" />
         <a href='#'
            @click.prevent="reset_filters"
-           :style="{visibility: this.query ? 'visible' : 'hidden'}"
+           :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
            id='reset-filters'
            class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a>
       </div>
@@ -46,7 +46,7 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
-    props: ['network'],
+    props: ['query', 'network'],
     data () {
       if(this.query && !this.query == ''){
         var api_url = '/api/v1/commission-changes/' + this.network + '?query=' + this.query + '&'
@@ -58,8 +58,7 @@
         page: 1,
         total_count: 0,
         sort_by: 'created_at_desc',
-        api_url: api_url,
-        query: this.query
+        api_url: api_url
       }
     },
     created () {
@@ -97,7 +96,7 @@
         var ctx = this
         var url = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
 
-        if (this.query !== '' && typeOf(this.query) != 'undefined') {
+        if (this.query !== '' && this.query != undefined && this.query != null)  {
           url = url + '&query=' + this.query
         }
 
@@ -120,6 +119,16 @@
       },
       reset_filters: function() {
         this.query = '';
+      },
+      resetFilterVisibility: function() {
+        // This checks if there is a account id in the link.
+        var props_query = this.$options.propsData['query']
+        
+        if (this.query != 'undefined' && this.query != '' && this.query != null && props_query == null) {
+          return true
+        } else {
+          return false
+        }
       }
     }
   }
