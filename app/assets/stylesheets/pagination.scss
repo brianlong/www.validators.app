@@ -35,13 +35,13 @@
 }
 
 @mixin item-first() {
-  border-top-left-radius: $border-radius;
-  border-bottom-left-radius: $border-radius;
+  border-top-left-radius: $border-radius-larger;
+  border-bottom-left-radius: $border-radius-larger;
 }
 
 @mixin item-last() {
-  border-top-right-radius: $border-radius;
-  border-bottom-right-radius: $border-radius;
+  border-top-right-radius: $border-radius-larger;
+  border-bottom-right-radius: $border-radius-larger;
 }
 
 @mixin link() {
@@ -60,8 +60,13 @@
 
 .pagination {
   margin-bottom: $margin-standard*2;
+  display: inline-block;
+  @media(max-width: $screen-lg-max) {
+    margin-bottom: 0;
+  }
   @media(max-width: $screen-md-max) {
     overflow-x: scroll;
+    display: flex;
   }
 
   .page, .first, .last {
@@ -104,6 +109,9 @@
     @include item(2px);
     .page-link {
       @include link;
+      @media(max-width: $screen-xs-max) {
+        padding: 2px 13px;
+      }
     }
     &:not(.disabled):hover, &:not(.disabled):focus, &:not(.disabled).focus {
       @include item-hover;
@@ -113,6 +121,9 @@
       @include item-active(2px, 0);
       .page-link {
         color: $background-color;
+        @media(max-width: $screen-xs-max) {
+          padding: 2px;
+        }
       }
     }
 
