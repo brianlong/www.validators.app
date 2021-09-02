@@ -58,12 +58,15 @@
         page: 1,
         total_count: 0,
         sort_by: 'created_at_desc',
-        api_url: api_url
+        api_url: api_url,
+        account_name: this.query
       }
     },
     created () {
       var ctx = this
-      axios.get(this.api_url + 'sort_by=' + ctx.sort_by)
+      var url = this.api_url + 'sort_by=' + ctx.sort_by
+
+      axios.get(url)
       .then(function (response){
         ctx.commission_histories = response.data.commission_histories;
         ctx.total_count = response.data.total_count;
@@ -72,19 +75,26 @@
     watch: {
       sort_by: function(){
         var ctx = this
-        axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page)
+        var url = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
+
+        if (this.checkAccountNamePresence())  {
+          url = url + '&query=' + this.account_name
+        }
+
+        axios.get(url)
         .then(function (response) {
           ctx.commission_histories = response.data.commission_histories;
           ctx.total_count = response.data.total_count;
-          ctx.query = '';
         })
       },
       page: function(){
         this.paginate()
       },
-      query: function(account) {
+      account_name: function() {
         var ctx = this
-        axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + 1 + '&query=' + account)
+        var url = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + 1 + '&query=' + this.account_name
+
+        axios.get(url)
              .then(function (response) {
                 ctx.commission_histories = response.data.commission_histories;
                 ctx.total_count = response.data.total_count;
@@ -96,7 +106,7 @@
         var ctx = this
         var url = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
 
-        if (this.query !== '' && this.query != undefined && this.query != null)  {
+        if (this.checkAccountNamePresence())  {
           url = url + '&query=' + this.query
         }
 
@@ -115,16 +125,25 @@
         this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc'
       },
       filter_by_query: function(query) {
-        this.query = query;
+        this.account_name = query;
       },
       reset_filters: function() {
-        this.query = '';
+        this.account_name = '';
       },
       resetFilterVisibility: function() {
         // This checks if there is a account id in the link.
         var props_query = this.$options.propsData['query']
         
-        if (this.query != 'undefined' && this.query != '' && this.query != null && props_query == null) {
+        if (this.checkAccountNamePresence() && props_query == null) {
+          return true
+        } else {
+          return false
+        }
+      },
+      checkAccountNamePresence: function() {
+        var ctx = this
+        
+        if (ctx.account_name !== '' && ctx.account_name != undefined && ctx.account_name != null) {
           return true
         } else {
           return false
