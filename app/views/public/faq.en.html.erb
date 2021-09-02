@@ -96,8 +96,20 @@
 </div>
 
 <h4>How is my Personal Data Protected?</h4>
-<div>
+<div class="mb-5">
   All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by
   clicking the lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is
   stored within our database.
+</div>
+
+<h4>Why is my validator marked "private"?</h4>
+<div class="mb-5">
+  It's based on commission rate. 100% commission means that you are not looking for delegations, so we mark you as "private".
+</div>
+
+<h4 id="withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning ml-1"></i> warning next to my validator?</h4>
+<div>
+  It informs visitors that your validator identity matches the withdraw authority on your vote account. It is a serious
+  security risk, eg. if someone hacks into your validator, they can steal from the vote account. Keep the withdraw
+  authority key offline to minimize the risk. Once you fix it, the warning will be taken off automatically within few hours.
 </div>

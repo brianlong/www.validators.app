@@ -14,9 +14,9 @@
     <h1 class="word-break">
       <%= @validator.name || @validator.account %>
       <% if @validator.score.authorized_withdrawer_score == -2 %>
-        <span class="text-danger" title="Withdrawer matches validator identity.">
-          <i class="fas fa-exclamation-triangle ml-1"></i>
-        </span>
+        <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
+          <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
+        <% end %>
       <% end %>
     </h1>
     <% unless @validator.private_validator? %>
