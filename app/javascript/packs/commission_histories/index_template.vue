@@ -64,7 +64,7 @@
     },
     created () {
       var ctx = this
-      var url = this.api_url + 'sort_by=' + ctx.sort_by
+      var url = ctx.api_url + 'sort_by=' + ctx.sort_by
 
       axios.get(url)
       .then(function (response){
@@ -75,24 +75,24 @@
     watch: {
       sort_by: function(){
         var ctx = this
-        var url = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
+        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
 
-        if (this.checkAccountNamePresence())  {
-          url = url + '&query=' + this.account_name
+        if (ctx.checkAccountNamePresence())  {
+          url = url + '&query=' + ctx.account_name
         }
 
         axios.get(url)
-        .then(function (response) {
-          ctx.commission_histories = response.data.commission_histories;
-          ctx.total_count = response.data.total_count;
-        })
+             .then(function (response) {
+               ctx.commission_histories = response.data.commission_histories;
+               ctx.total_count = response.data.total_count;
+             })
       },
       page: function(){
         this.paginate()
       },
       account_name: function() {
         var ctx = this
-        var url = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + 1 + '&query=' + this.account_name
+        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + 1 + '&query=' + ctx.account_name
 
         axios.get(url)
              .then(function (response) {
@@ -104,9 +104,9 @@
     methods: {
       paginate: function(){
         var ctx = this
-        var url = this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
+        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
 
-        if (this.checkAccountNamePresence())  {
+        if (ctx.checkAccountNamePresence())  {
           url = url + '&query=' + this.query
         }
 
@@ -140,10 +140,8 @@
           return false
         }
       },
-      checkAccountNamePresence: function() {
-        var ctx = this
-        
-        if (ctx.account_name !== '' && ctx.account_name != undefined && ctx.account_name != null) {
+      checkAccountNamePresence: function() {       
+        if (this.account_name !== '' && this.account_name != undefined && this.account_name != null) {
           return true
         } else {
           return false
