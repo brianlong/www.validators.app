@@ -26,7 +26,7 @@ module Stats
     end
 
     def root_distance_all_averages
-      @root_distance_all_averages ||= root_distance_all_history.map do |root_dist|
+      @root_distance_all_averages ||= root_distance_all_history&.last(960).map do |root_dist|
         begin
           [root_dist.first.average, root_dist.last]
         rescue NoMethodError
@@ -59,7 +59,7 @@ module Stats
     end
 
     def vote_distance_all_averages
-      @vote_distance_all_averages ||= vote_distance_all_history&.map do |vote_dist|
+      @vote_distance_all_averages ||= vote_distance_all_history&.last(960).map do |vote_dist|
         begin 
           [vote_dist.first.average, vote_dist.last]
         rescue NoMethodError
