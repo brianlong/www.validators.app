@@ -5,14 +5,13 @@
 require_relative '../config/environment'
 
 ValidatorHistory.where(["root_distance is null and created_at >= '2021-07-25'"]).find_each do |vh|
-  max_root_height = ValidatorHistory.highest_root_block_for(
-                                       vh.network,
-                                       vh.batch_uuid
-                                     ).to_i
-  max_vote_height = ValidatorHistory.highest_last_vote_for(
-                                       vh.network,
-                                       vh.batch_uuid
-                                     ).to_i
+  max_root_height = Stats::ValidatorHistory.new(vh.network, vh.batch_uuid)
+                                           .highest_root_block
+                                           .to_i
+
+  max_vote_height = Stats::ValidatorHistory.new(vh.network, vh.batch_uuid)
+                                           .highest_last_vote
+                                           .to_i
   vh.update(
     max_root_height: max_root_height,
     max_vote_height: max_vote_height,

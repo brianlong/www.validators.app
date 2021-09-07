@@ -37,21 +37,9 @@ class ValidatorBlockHistory < ApplicationRecord
   belongs_to :validator
   has_one :batch, primary_key: :batch_uuid, foreign_key: :uuid
 
+  scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
+
   after_create :set_skipped_slot_percent_moving_average
-
-  def self.average_skipped_slot_percent_for(network, batch_uuid)
-    where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).average(:skipped_slot_percent_moving_average)
-  end
-
-  def self.median_skipped_slot_percent_for(network, batch_uuid)
-    where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).median(:skipped_slot_percent_moving_average)
-  end
 
   # returns other ValidatorBlockHistory records created within the last 24 hours of `self`
   def previous_24_hours

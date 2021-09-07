@@ -3,44 +3,6 @@ require 'test_helper'
 class ValidatorBlockHistoryTest < ActiveSupport::TestCase
   setup { @validator = create(:validator) }
 
-  test '::average_skipped_slot_percent_for returns the average of all skipped_slot_percent_moving_averages in the batch' do
-    vbh1 = create(
-      :validator_block_history,
-      batch_uuid: '42',
-      skipped_slot_percent: 0.75
-    )
-
-    vbh2 = create(
-      :validator_block_history,
-      batch_uuid: '42',
-      skipped_slot_percent: 0.25
-    )
-
-    assert_equal(0.5, ValidatorBlockHistory.average_skipped_slot_percent_for('testnet', '42'))
-  end
-
-  test '::median_skipped_slot_percent_for returns the median of all skipped_slot_percent_moving_averages in the batch' do
-    vbh1 = create(
-      :validator_block_history,
-      batch_uuid: '42',
-      skipped_slot_percent: 0.75
-    )
-
-    vbh2 = create(
-      :validator_block_history,
-      batch_uuid: '42',
-      skipped_slot_percent: 0.5
-    )
-
-    vbh3 = create(
-      :validator_block_history,
-      batch_uuid: '42',
-      skipped_slot_percent: 0.25
-    )
-
-    assert_equal(0.5, ValidatorBlockHistory.median_skipped_slot_percent_for('testnet', '42'))
-  end
-
   test '#previous_24_hours returns other ValidatorBlockHistory records for the same validator created within 24 hours of the subject (`self`)' do
     create(:validator_block_history, created_at: 25.hours.ago, validator: @validator)
     vbh1 = create(:validator_block_history, created_at: 23.hours.ago, validator: @validator)
@@ -69,5 +31,27 @@ class ValidatorBlockHistoryTest < ActiveSupport::TestCase
     vbhs.each do |vbh|
       assert_equal batch, vbh.batch
     end
-  end 
+  end
+
+  test ':for_batch' do
+    network = 'testnet'
+    batch_uuid = create(:batch).uuid
+
+    @validator_block_histories = [
+      create(:validator_block_history, network: network, batch_uuid: batch_uuid,
+                                       skipped_slot_percent: 0.12),
+      create(:validator_block_history, network: network, batch_uuid: batch_uuid,
+                                       skipped_slot_percent: 0.19),
+      create(:validator_block_history, network: network, batch_uuid: batch_uuid,
+                                       skipped_slot_percent: 0.11),
+      create(:validator_block_history, network: network, batch_uuid: batch_uuid,
+                                       skipped_slot_percent: 0.83),
+      create(:validator_block_history, skipped_slot_percent: 0.45)
+    ]
+    expected = @validator_block_histories[0...-1]
+
+    assert_equal expected, ValidatorBlockHistory.for_batch(network, batch_uuid).to_a
+
+    @validator_block_histories.each(&:destroy)
+  end
 end

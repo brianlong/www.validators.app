@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <commission-history-row v-for="ch in commission_histories" :key="ch.id" :chistory="ch">
+          <commission-history-row @filter_by_query="filter_by_query" v-for="ch in commission_histories" :key="ch.id" :chistory="ch">
           </commission-history-row>
         </tbody>
       </table>
@@ -30,6 +30,11 @@
             :per-page="25"
             first-text="« First"
             last-text="Last »" />
+        <a href='#'
+           @click.prevent="reset_filters"
+           :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
+           id='reset-filters'
+           class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a>
       </div>
     </div>
   </div>
@@ -53,12 +58,15 @@
         page: 1,
         total_count: 0,
         sort_by: 'created_at_desc',
-        api_url: api_url
+        api_url: api_url,
+        account_name: this.query
       }
     },
     created () {
       var ctx = this
-      axios.get(this.api_url + 'sort_by=' + ctx.sort_by)
+      var url = ctx.api_url + 'sort_by=' + ctx.sort_by
+
+      axios.get(url)
       .then(function (response){
         ctx.commission_histories = response.data.commission_histories;
         ctx.total_count = response.data.total_count;
@@ -67,23 +75,45 @@
     watch: {
       sort_by: function(){
         var ctx = this
-        axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page)
-        .then(function (response){
-          ctx.commission_histories = response.data.commission_histories;
-          ctx.total_count = response.data.total_count;
-        })
+        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
+
+        if (ctx.checkAccountNamePresence())  {
+          url = url + '&query=' + ctx.account_name
+        }
+
+        axios.get(url)
+             .then(function (response) {
+               ctx.commission_histories = response.data.commission_histories;
+               ctx.total_count = response.data.total_count;
+             })
       },
       page: function(){
         this.paginate()
+      },
+      account_name: function() {
+        var ctx = this
+        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + 1 + '&query=' + ctx.account_name
+
+        axios.get(url)
+             .then(function (response) {
+                ctx.commission_histories = response.data.commission_histories;
+                ctx.total_count = response.data.total_count;
+              })
       }
     },
     methods: {
       paginate: function(){
         var ctx = this
-        axios.get(this.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page)
-        .then(response => (
-          ctx.commission_histories = response.data.commission_histories
-        ))
+        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
+
+        if (ctx.checkAccountNamePresence())  {
+          url = url + '&query=' + this.query
+        }
+
+        axios.get(url)
+             .then(response => (
+               ctx.commission_histories = response.data.commission_histories
+             ))
       },
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
@@ -94,6 +124,29 @@
       sort_by_validator: function(){
         this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc'
       },
+      filter_by_query: function(query) {
+        this.account_name = query;
+      },
+      reset_filters: function() {
+        this.account_name = '';
+      },
+      resetFilterVisibility: function() {
+        // This checks if there is a account id in the link.
+        var props_query = this.$options.propsData['query']
+        
+        if (this.checkAccountNamePresence() && props_query == null) {
+          return true
+        } else {
+          return false
+        }
+      },
+      checkAccountNamePresence: function() {       
+        if (this.account_name !== '' && this.account_name != undefined && this.account_name != null) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   }
 </script>

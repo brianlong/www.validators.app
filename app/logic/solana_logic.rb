@@ -31,11 +31,11 @@ module SolanaLogic
       batch = Batch.where(uuid: p.payload[:batch_uuid]).first
 
       # IMPORTANT: Do not use this values on index page, it's only for show.
-      skipped_slot_percent_moving_average = ValidatorBlockHistory.average_skipped_slot_percent_for(
+      average_skipped_slot_percent = Stats::ValidatorBlockHistory.new(
         p.payload[:network], p.payload[:batch_uuid]
-      )
+      ).average_skipped_slot_percent
       
-      batch&.skipped_slot_all_average = skipped_slot_percent_moving_average
+      batch&.skipped_slot_all_average = average_skipped_slot_percent
       ##### /IMPORTANT
       batch&.gathered_at = Time.now # instead of batch.touch if batch
       batch&.save

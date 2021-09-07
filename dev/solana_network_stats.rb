@@ -15,7 +15,7 @@
 require 'csv'
 
 interrupted = false
-trap('INT') { interrupted = true }
+trap('INT') { interrupted = true }  unless Rails.env.test?
 
 begin
   # Set short_run = true for short runs in development mode. false for
