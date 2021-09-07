@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_24_114443) do
+ActiveRecord::Schema.define(version: 2021_09_07_110222) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -239,6 +239,21 @@ ActiveRecord::Schema.define(version: 2021_08_24_114443) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "batch_uuid"], name: "index_reports_on_network_and_batch_uuid"
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
+  end
+
+  create_table "sol_prices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "exchange"
+    t.integer "currency"
+    t.integer "epoch_mainnet"
+    t.integer "epoch_testnet"
+    t.decimal "open", precision: 20, scale: 10
+    t.decimal "close", precision: 20, scale: 10
+    t.decimal "high", precision: 20, scale: 10
+    t.decimal "low", precision: 20, scale: 10
+    t.decimal "volume", precision: 20, scale: 10
+    t.datetime "datetime_from_exchange"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
