@@ -26,11 +26,15 @@ module Stats
     end
 
     def root_distance_all_averages
-      @root_distance_all_averages ||= root_distance_all_history.map do |root_dist|
-        [root_dist.first.average, root_dist.last]
+      @root_distance_all_averages ||= root_distance_all_history&.last(960).map do |root_dist|
+        begin
+          [root_dist.first.average, root_dist.last]
+        rescue NoMethodError
+          nil
+        end
       end
-    rescue NoMethodError
-      nil
+      
+      @root_distance_all_averages.compact
     end
 
     def top_root_distance_averages_validators
@@ -55,11 +59,15 @@ module Stats
     end
 
     def vote_distance_all_averages
-      @vote_distance_all_averages ||= vote_distance_all_history&.map do |vote_dist|
-        [vote_dist.first.average, vote_dist.last]
+      @vote_distance_all_averages ||= vote_distance_all_history&.last(960).map do |vote_dist|
+        begin 
+          [vote_dist.first.average, vote_dist.last]
+        rescue NoMethodError
+          nil
+        end
       end
-    rescue NoMethodError
-      nil
+
+      @vote_distance_all_averages.compact
     end
 
     def top_vote_distance_averages_validators
