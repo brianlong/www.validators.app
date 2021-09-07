@@ -49,7 +49,7 @@ module Api
                                .page(page)
                                .per(limit)
 
-        current_epoch = EpochHistory.last
+        current_epoch = EpochHistory.where(network: params[:network]).last
 
         unless params[:q].blank?
           @validators = ValidatorSearchQuery.new(@validators).search(params[:q])
