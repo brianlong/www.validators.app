@@ -36,6 +36,8 @@
 class VoteAccountHistory < ApplicationRecord
   belongs_to :vote_account
 
+  scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
+
   after_create :set_skipped_vote_percent_moving_average
 
   def previous_24_hours
@@ -43,33 +45,22 @@ class VoteAccountHistory < ApplicationRecord
   end
 
   def skipped_vote_percent
-    if slot_index_current.to_f > 0
+    if slot_index_current.to_f.positive?
       return ((slot_index_current.to_i - credits_current.to_i)/slot_index_current.to_f)
     end
+
     0
-  end
-
-  def self.average_skipped_vote_percent_moving_average_for(network:, batch_uuid:)
-    where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).average(:skipped_vote_percent_moving_average)
-  end
-
-  def self.median_skipped_vote_percent_moving_average_for(network:, batch_uuid:)
-    where(
-      network: network,
-      batch_uuid: batch_uuid
-    ).median(:skipped_vote_percent_moving_average)
   end
 
   private
 
   def set_skipped_vote_percent_moving_average
-    previous_24_hours_set = self.previous_24_hours.to_a
-    if previous_24_hours_set.count > 0
-      self.skipped_vote_percent_moving_average = previous_24_hours_set.map(&:skipped_vote_percent).sum/previous_24_hours_set.count
-    end
-    save
+    previous_24_hours_set = previous_24_hours.to_a
+    skipped_vote_percent_average =
+      previous_24_hours_set.map(&:skipped_vote_percent).average
+
+    self.skipped_vote_percent_moving_average = skipped_vote_percent_average
+
+    save if skipped_vote_percent_average
   end
 end
