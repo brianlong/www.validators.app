@@ -78,17 +78,22 @@ class SolPrices::ApiWrappers::FtxMarketTest < ActiveSupport::TestCase
   test '#historical_price' do
     vcr_cassette(@namespace, __method__) do
       # without params returns data for yesterday for every hour
-      response = @subject.historical_price
+      date = Date.strptime('2021-09-07', '%Y-%m-%d')
+
+      response = @subject.historical_price(
+        start_time: date, 
+        end_time: date
+      )
       parsed_body = JSON.parse(response.body)
 
       expected_response = {
-        "startTime"=>"2021-09-05T00:00:00+00:00", 
-        "time"=>1630800000000.0, 
-        "open"=>139.015, 
-        "high"=>142.1275, 
-        "low"=>137.92, 
-        "close"=>141.66, 
-        "volume"=>3308265.048075
+        "startTime"=>"2021-09-07T00:00:00+00:00", 
+        "time"=>1630972800000.0, 
+        "open"=>164.26, 
+        "high"=>169.575, 
+        "low"=>162.24, 
+        "close"=>169.525, 
+        "volume"=>19878244.3065
       }
       assert_equal 24, parsed_body['result'].size
       assert_equal expected_response, parsed_body['result'].first
