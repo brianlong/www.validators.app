@@ -3,16 +3,16 @@
 # Table name: sol_prices
 #
 #  id                     :bigint           not null, primary key
-#  close                  :decimal(20, 10)
+#  close                  :decimal(40, 20)
 #  currency               :integer
 #  datetime_from_exchange :datetime
 #  epoch_mainnet          :integer
 #  epoch_testnet          :integer
 #  exchange               :integer
-#  high                   :decimal(20, 10)
-#  low                    :decimal(20, 10)
-#  open                   :decimal(20, 10)
-#  volume                 :decimal(20, 10)
+#  high                   :decimal(40, 20)
+#  low                    :decimal(40, 20)
+#  open                   :decimal(40, 20)
+#  volume                 :decimal(40, 20)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
