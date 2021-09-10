@@ -19,6 +19,7 @@ module SolPrices
             high: high_price,
             low: low_price,
             close: close_price,
+            volume: volume,
             datetime_from_exchange: datetime
           }
         end
