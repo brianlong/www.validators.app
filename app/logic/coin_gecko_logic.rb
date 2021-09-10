@@ -95,8 +95,10 @@ module CoinGeckoLogic
     lambda do |p|
       p.payload[:prices_from_exchange].each do |sol_price|
         datetime_from_exchange = sol_price[:datetime_from_exchange]
-        SolPrice.where(datetime_from_exchange: datetime_from_exchange)
-                .first_or_create(sol_price)
+        SolPrice.where(
+          exchange: SolPrice.exchanges[:coingecko],
+          datetime_from_exchange: datetime_from_exchange
+        ).first_or_create(sol_price)
       end
               
       Pipeline.new(200, p.payload)
