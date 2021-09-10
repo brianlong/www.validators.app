@@ -52,6 +52,8 @@ end
 
 every 1.day, at: '0.01 am' do
   ruby_script 'sol_prices/coin_gecko/gather_yesterday_data.rb'
+  ruby_script 'sol_prices/ftx/gather_yesterday_prices.rb'
+
 end
 
 every 10.minutes do
