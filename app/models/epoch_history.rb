@@ -17,4 +17,13 @@
 #  index_epoch_histories_on_network_and_batch_uuid  (network,batch_uuid)
 #
 class EpochHistory < ApplicationRecord
+
+  def to_builder
+    Jbuilder.new do |epoch_history|
+      epoch_history.(
+        self,
+        :epoch
+      )
+    end
+  end
 end

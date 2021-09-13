@@ -167,7 +167,7 @@
               <td>
                 <%= link_to record.last, validator_path(network: params[:network], account: record.last) %>
               </td>
-              <td><%= record.first.to_f.round(3) %></td>
+              <td><%= (record.first.to_f).round(3) %></td>
               <td class="text-right">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
@@ -299,9 +299,12 @@
               <i class="fas fa-long-arrow-alt-down text-success"></i>Min &ndash;
               <i class="fas fa-long-arrow-alt-up text-success"></i>Max:
             </div>
-            <div class="stat-title-1 text-success">
-              <%= @stats[:skipped_slots][:min].to_i %> &ndash; <%= @stats[:skipped_slots][:max].to_i %>
-            </div>
+            <h2 class="stat-title-2 text-success mt-2">
+              <% skipped_slots_min = @stats[:skipped_slots][:min].to_f * 100%>
+              <%= skipped_slots_min > 0 ? skipped_slots_min : 0 %>
+              &ndash; 
+              <%= @stats[:skipped_slots][:max].to_f * 100 %>
+            </h2>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ require File.expand_path('../config/environment', __dir__)
 include KeybaseLogic
 
 interrupted = false
-trap('INT') { interrupted = true }
+trap('INT') { interrupted = true }  unless Rails.env.test?
 
 %w[testnet mainnet].each do |network|
   Validator.where(network: network).where.not(keybase_id: '').where.not(avatar_url: nil).each do |validator|

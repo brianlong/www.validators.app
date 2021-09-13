@@ -249,19 +249,19 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
       assert_equal 3, p.payload[:validators][i].validator_block_histories.count
     end
 
+    validator_block_history_stats =
+      Stats::ValidatorBlockHistory.new(
+        @initial_payload[:network],
+        @initial_payload[:batch_uuid]
+      )
+
     # These stats should only reflect this batch
     assert_equal 0.4667, p.payload[:avg_skipped_slot_pct_all]
-    assert_equal 0.4667, ValidatorBlockHistory.average_skipped_slot_percent_for(
-                        @initial_payload[:network],
-                        @initial_payload[:batch_uuid]
-                      )
+    assert_equal 0.4667, validator_block_history_stats.average_skipped_slot_percent
 
     # These stats should only reflect this batch
     assert_equal 0.4667, p.payload[:med_skipped_slot_pct_all]
-    assert_equal 0.4667, ValidatorBlockHistory.median_skipped_slot_percent_for(
-                        @initial_payload[:network],
-                        @initial_payload[:batch_uuid]
-                      )
+    assert_equal 0.4667, validator_block_history_stats.median_skipped_slot_percent
 
     assert_equal [0.1], p.payload[:validators][0]
                          .validator_score_v1

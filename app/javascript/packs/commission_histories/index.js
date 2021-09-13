@@ -9,7 +9,7 @@ Vue.use(PaginationPlugin);
 
 document.addEventListener('DOMContentLoaded', () => {
   const chindex = new Vue({
-    el: '#commission-histories-index-vue',
+    el: '#commission-histories-index-vue',    
     render(createElement) {
       return createElement(IndexTemplate, {
         props: {
