@@ -70,7 +70,7 @@ Ip.where(traits_autonomous_system_number: 24_940)
 end
 
 update_ip_with_overrides
-update_validator_score_with_overrides
+# update_validator_score_with_overrides
 puts 'End of Script'
 
 # SQL to use when manually creating IP ip_overrides
