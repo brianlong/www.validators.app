@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from 'vue'
 import IndexTemplate from './index_template'
 import CommissionHistoryRow from './commission_history_row'
 import { PaginationPlugin } from "bootstrap-vue";

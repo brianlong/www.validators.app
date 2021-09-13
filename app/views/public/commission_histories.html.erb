@@ -12,6 +12,7 @@
 <% if @validator %>
   <div
     id='commission-histories-index-vue'
+    ref="el"
     query=<%= @validator.account%>
     network=<%= params[:network] %>
   >

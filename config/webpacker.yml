@@ -32,7 +32,7 @@ default: &default
     - .woff
     - .woff2
 
-  extensions:
+extensions:
     - .vue
     - .mjs
     - .js
