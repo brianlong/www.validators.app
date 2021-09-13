@@ -1,5 +1,7 @@
 <h1 class="page-header"><%= params[:network].capitalize %> Stats</h1>
-
+<%= link_to 'Back to Homepage',
+            url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+            class: 'btn btn-sm btn-secondary mb-3' %>
 <div class="card">
   <div class="card-content">
     <h3 class="card-heading mb-3">Top Validators by:</h3>
