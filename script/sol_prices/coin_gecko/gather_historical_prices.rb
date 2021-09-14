@@ -14,7 +14,7 @@ include SolPrices::SharedLogic
 initial_payload = {
   exchange: SolPrice.exchanges[:coin_gecko],
   client: SolPrices::ApiWrappers::CoinGecko.new,
-  datetime: Time.now.utc.beginning_of_day.to_datetime,
+  datetime: DateTime.current.beginning_of_day,
   days: ARGV[0] || 'max'
 }
 
