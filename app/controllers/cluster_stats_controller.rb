@@ -3,10 +3,17 @@
 # PublicController
 class ClusterStatsController < ApplicationController
   def index
-    @stats = gather_stats_for(params[:network])
+    network = params[:network]
+
+    @stats = gather_stats_for(network)
     @batch = Batch.find_by(uuid: @stats[:batch_uuid])
-    @this_epoch = EpochHistory.where(network: params[:network], batch_uuid: @batch.uuid).first&.epoch
-    @validators_count = Validator.where(network: params[:network]).scorable.count
+    @this_epoch = EpochHistory.where(network: network, batch_uuid: @batch.uuid).first&.epoch
+    @validators_count = Validator.where(network: network).scorable.count
+    validator_history_stats = Stats::ValidatorHistory.new(
+      network,
+      @stats[:batch_uuid]
+    )
+    @total_active_stake = validator_history_stats.total_active_stake
   end
 
   private
