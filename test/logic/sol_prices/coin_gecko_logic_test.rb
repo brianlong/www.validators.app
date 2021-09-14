@@ -2,7 +2,7 @@
 require 'test_helper'
 
 # CoinGeckoLogicTest
-class CoinGeckoLogicTest < ActiveSupport::TestCase
+class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
   include CoinGeckoLogic
   include VcrHelper
 

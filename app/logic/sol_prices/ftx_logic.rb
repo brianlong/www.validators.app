@@ -1,4 +1,4 @@
-module FtxLogic
+module SolPrices::FtxLogic
   include SolPrices::Parsers::Ftx
 
   def get_prices_from_days

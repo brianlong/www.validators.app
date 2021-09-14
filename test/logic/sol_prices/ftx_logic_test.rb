@@ -2,7 +2,7 @@
 require 'test_helper'
 
 # CoinGeckoLogicTest
-class FtxLogicTest < ActiveSupport::TestCase
+class SolPrices::FtxLogicTest < ActiveSupport::TestCase
   include FtxLogic
   include VcrHelper
 

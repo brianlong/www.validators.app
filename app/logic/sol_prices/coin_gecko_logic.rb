@@ -1,4 +1,4 @@
-module CoinGeckoLogic
+module SolPrices::CoinGeckoLogic
   include SolPrices::Parsers::CoinGecko
 
   def get_prices_from_days
