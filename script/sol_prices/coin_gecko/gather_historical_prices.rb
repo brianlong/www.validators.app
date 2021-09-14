@@ -6,18 +6,19 @@
 # RAILS_ENV=production bundle exec rails r script/gather_historical_prices_from_coin_gecko.rb 365 
 
 require_relative '../../../config/environment'
-require 'coin_gecko_logic'
 
-include CoinGeckoLogic
+include SolPrices::CoinGeckoLogic
+include SolPrices::SharedLogic
 
 # Create our initial payload with the input values
 initial_payload = {
+  exchange: SolPrice.exchanges[:coin_gecko],
   client: SolPrices::ApiWrappers::CoinGecko.new,
   datetime: Time.now.utc.beginning_of_day.to_datetime,
   days: ARGV[0] || 'max'
 }
 
 p = Pipeline.new(200, initial_payload)
-            .then(&get_prices_from_days)
+            .then(&get_ohlc_prices)
             .then(&save_sol_prices)
 

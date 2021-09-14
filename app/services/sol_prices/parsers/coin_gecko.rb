@@ -10,7 +10,7 @@ module SolPrices
           close_price = row[4]
 
           {
-            exchange: SolPrice.exchanges[:coingecko],
+            exchange: SolPrice.exchanges[:coin_gecko],
             currency: SolPrice.currencies[:usd],
             open: open_price,
             high: high_price,

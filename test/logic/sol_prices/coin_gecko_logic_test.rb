@@ -4,6 +4,7 @@ require 'test_helper'
 # CoinGeckoLogicTest
 class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
   include CoinGeckoLogic
+  include SharedLogic
   include VcrHelper
 
   def setup
@@ -20,10 +21,10 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
     create(:epoch_history, network: 'mainnet', epoch: 205)
   end
 
-  test '#get_prices_from_days' do
+  test '#get_ohlc_prices' do
     vcr_cassette(@namespace, @vcr_name) do
       p = Pipeline.new(200, @initial_payload)
-                  .then(&get_prices_from_days)
+                  .then(&get_ohlc_prices)
 
       assert_not_nil p.payload[:prices_from_exchange]
     end
@@ -32,7 +33,7 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
   test '#filter_prices_by_date' do
     vcr_cassette(@namespace, @vcr_name) do
       p = Pipeline.new(200, @initial_payload)
-                  .then(&get_prices_from_days)
+                  .then(&get_ohlc_prices)
                   .then(&filter_prices_by_date)
 
       assert_not_nil p.payload[:sol_price]
@@ -58,19 +59,11 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test '#add_epoch' do
-    p = Pipeline.new(200, @initial_payload)
-                .then(&add_epoch)
-
-    assert_not_nil p.payload[:epoch_testnet]
-    assert_not_nil p.payload[:epoch_mainnet]
-  end
-
   test '#save_sol_price' do
     vcr_cassette(@namespace, @vcr_name) do
       assert_difference 'SolPrice.count' do
         p = Pipeline.new(200, @initial_payload)
-                    .then(&get_prices_from_days)
+                    .then(&get_ohlc_prices)
                     .then(&filter_prices_by_date)
                     .then(&get_volumes_from_days)
                     .then(&filter_volumes_by_date)
@@ -86,17 +79,6 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
         assert_equal sol_price_db.low, p.payload.dig(:sol_price, :low)
         assert_equal sol_price_db.epoch_testnet, p.payload.dig(:sol_price, :epoch_testnet)
         assert_equal sol_price_db.epoch_mainnet, p.payload.dig(:sol_price, :epoch_mainnet)
-      end
-    end
-  end
-
-  test '#save_sol_prices' do
-    @initial_payload[:days] = 'max'
-    vcr_cassette(@namespace, __method__) do
-      assert_difference 'SolPrice.count', 136 do
-        p = Pipeline.new(200, @initial_payload)
-                    .then(&get_prices_from_days)
-                    .then(&save_sol_prices)
       end
     end
   end
