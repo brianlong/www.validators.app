@@ -81,8 +81,10 @@ module CoinGeckoLogic
 
       datetime_from_exchange = p.payload.dig(:sol_price, :datetime_from_exchange)
 
-      SolPrice.where(datetime_from_exchange: datetime_from_exchange)
-              .first_or_create(p.payload[:sol_price])
+      SolPrice.where(
+        exchange: SolPrice.exchanges[:coin_gecko],
+        datetime_from_exchange: datetime_from_exchange
+      ).first_or_create(p.payload[:sol_price])
               
       Pipeline.new(200, p.payload)
     rescue StandardError => e
