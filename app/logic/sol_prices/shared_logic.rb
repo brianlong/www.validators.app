@@ -10,6 +10,10 @@ module SolPrices
 
         logger = Logger.new(log_path)
         logger.debug(p.payload)
+
+        Pipeline.new(200, p.payload)
+      rescue StandardError => e
+        Pipeline.new(500, p.payload, 'Error from log_info', e)
       end
     end
 
@@ -40,15 +44,15 @@ module SolPrices
           epoch_testnet = p.payload[:epoch_testnet] 
           epoch_mainnet = p.payload[:epoch_mainnet]
           
-          sol_price.epoch_testnet = epoch_testnet if epoch_testnet
-          sol_price.epoch_mainnet = epoch_mainnet if epoch_mainnet
+          sol_price[:epoch_testnet] = epoch_testnet if epoch_testnet
+          sol_price[:epoch_mainnet] = epoch_mainnet if epoch_mainnet
 
           SolPrice.where(
             exchange: p.payload[:exchange],
             datetime_from_exchange: datetime_from_exchange
           ).first_or_create(sol_price)
         end
-                
+
         Pipeline.new(200, p.payload)
       rescue StandardError => e
         Pipeline.new(500, p.payload, 'Error from save_sol_prices', e)
