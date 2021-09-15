@@ -18,6 +18,7 @@ initial_payload = {
 
 p = Pipeline.new(200, initial_payload)
             .then(&get_historical_prices)
+            .then(&find_epoch)
             .then(&save_sol_prices)
             .then(&log_info)
 
