@@ -13,7 +13,7 @@ module SolPrices
       end
     end
 
-    def add_epoch
+    def find_epoch
       lambda do |p|
         # We will run this pipeline just after the midnight 
         # so we can assume that last Epoch History will be correct.
@@ -29,7 +29,7 @@ module SolPrices
           )
         )
       rescue StandardError => e
-        Pipeline.new(500, p.payload, 'Error from add_epoch', e)
+        Pipeline.new(500, p.payload, 'Error from find_epoch', e)
       end
     end
 

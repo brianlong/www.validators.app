@@ -60,12 +60,12 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test '#add_epoch' do
+  test '#find_epoch' do
     create(:epoch_history, network: 'testnet', epoch: 200)
     create(:epoch_history, network: 'mainnet', epoch: 205)
     
     p = Pipeline.new(200, @initial_payload)
-                .then(&add_epoch)
+                .then(&find_epoch)
 
     assert_not_nil p.payload[:epoch_testnet]
     assert_not_nil p.payload[:epoch_mainnet]
