@@ -1,5 +1,18 @@
 module SolPrices
   module SharedLogic
+    def log_info
+      lambda do |p|
+        log_dir_path = File.join(Rails.root, 'log', 'sol_prices')
+        log_name = "#{DateTime.current}_sol_prices.log"
+        log_path = File.join(log_dir_path, log_name)
+        
+        FileUtils.mkdir_p(log_dir_path)
+
+        logger = Logger.new(log_path)
+        logger.debug(p.payload)
+      end
+    end
+
     def add_epoch
       lambda do |p|
         # We will run this pipeline just after the midnight 

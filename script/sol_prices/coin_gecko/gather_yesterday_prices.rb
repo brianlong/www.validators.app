@@ -24,4 +24,6 @@ p = Pipeline.new(200, initial_payload)
             .then(&filter_volumes_by_date)
             .then(&add_epoch)
             .then(&save_sol_price)
+            .then(&log_info)
+
 
