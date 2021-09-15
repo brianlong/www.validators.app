@@ -11,8 +11,8 @@ include SolPrices::SharedLogic
 initial_payload = {
   exchange: SolPrice.exchanges[:ftx],
   client: SolPrices::ApiWrappers::FtxMarket.new,
-  start_time: Date.yesterday.to_datetime,
-  end_time: Date.yesterday.to_datetime,
+  start_time: DateTime.current.beginning_of_day - 1.day,
+  end_time: DateTime.current.end_of_day - 1.day,
   resolution: 86400 # interval of returned data
 }
 
