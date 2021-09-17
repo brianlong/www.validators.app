@@ -21,6 +21,7 @@ module SolPrices
       lambda do |p|
         p.payload[:prices_from_exchange].each do |price|
           epochs = find_epochs(price)
+
           price[:epoch_testnet] = epochs[:epoch_testnet]
           price[:epoch_mainnet] = epochs[:epoch_mainnet]
         end
@@ -50,6 +51,7 @@ module SolPrices
 
     # Helper methods
     def find_epochs(price)
+      epochs = { epoch_testnet: nil, epoch_mainnet: nil }
       datetime = price[:datetime_from_exchange]
   
       before_condition = "network = ? AND created_at <= ?"
@@ -69,17 +71,22 @@ module SolPrices
                                         .order("created_at ASC")
                                         .limit(1).take
   
-      epoch_testnet_dates = [epoch_testnet_before, epoch_testnet_after]
-      epoch_mainnet_dates = [epoch_mainnet_before, epoch_mainnet_after]
+      epoch_testnet_dates = [epoch_testnet_before, epoch_testnet_after].compact
+      epoch_mainnet_dates = [epoch_mainnet_before, epoch_mainnet_after].compact
 
-      epoch_testnet = epoch_testnet_dates.sort_by do |date|
-         (date.created_at - datetime.to_time).abs 
-      end.first
-      epoch_mainnet = epoch_mainnet_dates.sort_by  do |date| 
-        (date.created_at - datetime.to_time).abs 
-      end.first
+      if epoch_testnet_dates.size == 2 && epoch_mainnet_dates.size == 2
+        epoch_testnet = epoch_testnet_dates.sort_by do |date|
+          (date.created_at - datetime.to_time).abs 
+        end.first
+        epoch_mainnet = epoch_mainnet_dates.sort_by  do |date| 
+          (date.created_at - datetime.to_time).abs 
+        end.first
 
-      { epoch_testnet: epoch_testnet.epoch, epoch_mainnet: epoch_mainnet.epoch }
+        epochs[:epoch_testnet] = epoch_testnet.epoch
+        epochs[:epoch_mainnet] = epoch_mainnet.epoch
+      end
+
+      epochs
     end
   end
 end
