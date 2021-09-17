@@ -35,11 +35,6 @@ module SolPrices
       lambda do |p|
         p.payload[:prices_from_exchange].each do |sol_price|
           datetime_from_exchange = sol_price[:datetime_from_exchange]
-          epoch_testnet = p.payload[:epoch_testnet] 
-          epoch_mainnet = p.payload[:epoch_mainnet]
-          
-          sol_price[:epoch_testnet] = epoch_testnet if epoch_testnet
-          sol_price[:epoch_mainnet] = epoch_mainnet if epoch_mainnet
 
           SolPrice.where(
             exchange: p.payload[:exchange],
