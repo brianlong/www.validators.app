@@ -39,8 +39,8 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
 
     price = p.payload[:prices_from_exchange].first
 
-    assert_equal 201, price[:testnet_epoch]
-    assert_equal 205, price[:mainnet_epoch]
+    assert_equal 201, price[:epoch_testnet]
+    assert_equal 205, price[:epoch_mainnet]
   end
   
   test '#save_sol_prices coin_gecko' do
@@ -87,8 +87,8 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
   test '#find_epochs' do
     result = find_epochs(@price_example)
     expected_result = { 
-      testnet_epoch: @epoch_history_testnet_2.epoch, 
-      mainnet_epoch: @epoch_history_mainnet_1.epoch 
+      epoch_testnet: @epoch_history_testnet_2.epoch, 
+      epoch_mainnet: @epoch_history_mainnet_1.epoch 
     }
 
     assert_equal result, expected_result

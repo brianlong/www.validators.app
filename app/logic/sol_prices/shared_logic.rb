@@ -21,8 +21,8 @@ module SolPrices
       lambda do |p|
         p.payload[:prices_from_exchange].each do |price|
           epochs = find_epochs(price)
-          price[:testnet_epoch] = epochs[:testnet_epoch]
-          price[:mainnet_epoch] = epochs[:mainnet_epoch]
+          price[:epoch_testnet] = epochs[:epoch_testnet]
+          price[:epoch_mainnet] = epochs[:epoch_mainnet]
         end
 
         Pipeline.new(200, p.payload)
@@ -69,17 +69,17 @@ module SolPrices
                                         .order("created_at ASC")
                                         .limit(1).take
   
-      testnet_epoch_dates = [epoch_testnet_before, epoch_testnet_after]
-      mainnet_epoch_dates = [epoch_mainnet_before, epoch_mainnet_after]
+      epoch_testnet_dates = [epoch_testnet_before, epoch_testnet_after]
+      epoch_mainnet_dates = [epoch_mainnet_before, epoch_mainnet_after]
 
-      testnet_epoch = testnet_epoch_dates.sort_by do |date|
+      epoch_testnet = epoch_testnet_dates.sort_by do |date|
          (date.created_at - datetime.to_time).abs 
       end.first
-      mainnet_epoch = mainnet_epoch_dates.sort_by  do |date| 
+      epoch_mainnet = epoch_mainnet_dates.sort_by  do |date| 
         (date.created_at - datetime.to_time).abs 
       end.first
 
-      { testnet_epoch: testnet_epoch.epoch, mainnet_epoch: mainnet_epoch.epoch }
+      { epoch_testnet: epoch_testnet.epoch, epoch_mainnet: epoch_mainnet.epoch }
     end
   end
 end
