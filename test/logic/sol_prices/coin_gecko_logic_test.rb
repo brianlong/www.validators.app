@@ -36,7 +36,7 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
                   .then(&get_ohlc_prices)
                   .then(&filter_prices_by_date)
 
-      assert_not_nil p.payload[:sol_price]
+      assert_equal 1, p.payload[:prices_from_exchange].size
     end
   end
 
@@ -55,31 +55,7 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
                   .then(&get_volumes_from_days)
                   .then(&filter_volumes_by_date)
 
-      assert_not_nil p.payload[:sol_price_volume]
-    end
-  end
-
-  test '#save_sol_price' do
-    vcr_cassette(@namespace, @vcr_name) do
-      assert_difference 'SolPrice.count' do
-        p = Pipeline.new(200, @initial_payload)
-                    .then(&get_ohlc_prices)
-                    .then(&filter_prices_by_date)
-                    .then(&get_volumes_from_days)
-                    .then(&filter_volumes_by_date)
-                    .then(&find_epoch)
-                    .then(&save_sol_price)
-              
-        sol_price_db = SolPrice.last
-
-        assert_equal sol_price_db.volume, p.payload.dig(:sol_price, :volume)
-        assert_equal sol_price_db.open, p.payload.dig(:sol_price, :open)
-        assert_equal sol_price_db.close, p.payload.dig(:sol_price, :close)
-        assert_equal sol_price_db.high, p.payload.dig(:sol_price, :high)
-        assert_equal sol_price_db.low, p.payload.dig(:sol_price, :low)
-        assert_equal sol_price_db.epoch_testnet, p.payload.dig(:sol_price, :epoch_testnet)
-        assert_equal sol_price_db.epoch_mainnet, p.payload.dig(:sol_price, :epoch_mainnet)
-      end
+      assert_not_nil p.payload[:volume]
     end
   end
 end

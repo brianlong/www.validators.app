@@ -14,12 +14,11 @@ module SolPrices::CoinGeckoLogic
 
   def filter_prices_by_date
     lambda do |p|
-      sol_price = find_price_for_date(
-        p.payload[:prices_from_exchange], 
-        p.payload[:datetime]
-      )
+      p.payload[:prices_from_exchange].reject! do |price| 
+        price[:datetime_from_exchange] != p.payload[:datetime]
+      end
 
-      Pipeline.new(200, p.payload.merge(sol_price: sol_price))
+      Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from filter_prices_by_date', e)
     end
@@ -46,29 +45,9 @@ module SolPrices::CoinGeckoLogic
         p.payload[:datetime]
       )
 
-      Pipeline.new(200, p.payload.merge(sol_price_volume: volume[:volume]))
+      Pipeline.new(200, p.payload.merge(volume: volume[:volume]))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from filter_volumes_by_date', e)
-    end
-  end
-
-  # For one, yesterday price.
-  def save_sol_price
-    lambda do |p|
-      p.payload[:sol_price][:volume] = p.payload[:sol_price_volume]
-      p.payload[:sol_price][:epoch_testnet] = p.payload[:epoch_testnet]
-      p.payload[:sol_price][:epoch_mainnet] = p.payload[:epoch_mainnet]
-
-      datetime_from_exchange = p.payload.dig(:sol_price, :datetime_from_exchange)
-
-      SolPrice.where(
-        exchange: p.payload[:exchange],
-        datetime_from_exchange: datetime_from_exchange
-      ).first_or_create(p.payload[:sol_price])
-              
-      Pipeline.new(200, p.payload)
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from save_sol_price', e)
     end
   end
 end

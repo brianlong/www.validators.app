@@ -17,23 +17,17 @@ module SolPrices
       end
     end
 
-    def find_epoch
+    def assign_epochs
       lambda do |p|
-        # We will run this pipeline just after the midnight 
-        # so we can assume that last Epoch History will be correct.
-        # 
-        # We can later find the closest record to the date to be more specific.
-        epoch_testnet = EpochHistory.where(network: 'testnet').last
-        epoch_mainnet = EpochHistory.where(network: 'mainnet').last
-  
-        Pipeline.new(
-          200, p.payload.merge(
-            epoch_testnet: epoch_testnet&.epoch,
-            epoch_mainnet: epoch_mainnet&.epoch
-          )
-        )
+        p.payload[:prices_from_exchange].each do |price|
+          epochs = find_epochs(price)
+          price[:testnet_epoch] = epochs[:testnet_epoch]
+          price[:mainnet_epoch] = epochs[:mainnet_epoch]
+        end
+
+        Pipeline.new(200, p.payload)
       rescue StandardError => e
-        Pipeline.new(500, p.payload, 'Error from find_epoch', e)
+        Pipeline.new(500, p.payload, 'Error from assign_epochs', e)
       end
     end
 
@@ -57,6 +51,40 @@ module SolPrices
       rescue StandardError => e
         Pipeline.new(500, p.payload, 'Error from save_sol_prices', e)
       end
+    end
+
+    # Helper methods
+    def find_epochs(price)
+      datetime = price[:datetime_from_exchange]
+  
+      before_condition = "network = ? AND created_at <= ?"
+      after_condition = "network = ? AND created_at >= ?"
+  
+      epoch_testnet_before = EpochHistory.where(before_condition, 'testnet', datetime)
+                                         .order("created_at DESC")
+                                         .limit(1).take
+      epoch_testnet_after = EpochHistory.where(after_condition, 'testnet', datetime)
+                                        .order("created_at ASC")
+                                        .limit(1).take
+  
+      epoch_mainnet_before = EpochHistory.where(before_condition, 'mainnet', datetime)
+                                        .order("created_at DESC")
+                                        .limit(1).take
+      epoch_mainnet_after = EpochHistory.where(after_condition, 'mainnet', datetime)
+                                        .order("created_at ASC")
+                                        .limit(1).take
+  
+      testnet_epoch_dates = [epoch_testnet_before, epoch_testnet_after]
+      mainnet_epoch_dates = [epoch_mainnet_before, epoch_mainnet_after]
+
+      testnet_epoch = testnet_epoch_dates.sort_by do |date|
+         (date.created_at - datetime.to_time).abs 
+      end.first
+      mainnet_epoch = mainnet_epoch_dates.sort_by  do |date| 
+        (date.created_at - datetime.to_time).abs 
+      end.first
+
+      { testnet_epoch: testnet_epoch.epoch, mainnet_epoch: mainnet_epoch.epoch }
     end
   end
 end
