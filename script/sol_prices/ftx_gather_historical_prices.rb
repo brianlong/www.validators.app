@@ -2,7 +2,7 @@
 # 
 # RAILS_ENV=production bundle exec rails r script/sol_prices/ftx/gather_yesterday_prices_from.rb 
 
-require_relative '../../../config/environment'
+require_relative '../../config/environment'
 
 include SolPrices::FtxLogic
 include SolPrices::SharedLogic
