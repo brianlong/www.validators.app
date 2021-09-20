@@ -12,13 +12,25 @@ module SolPrices
           {
             exchange: SolPrice.exchanges[:coin_gecko],
             currency: SolPrice.currencies[:usd],
+            datetime_from_exchange: datetime,
             open: open_price,
             high: high_price,
             low: low_price,
-            close: close_price,
-            datetime_from_exchange: datetime
+            close: close_price
           }
         end
+      end
+
+      def historical_price(response, datetime:)
+        price_hash = {
+          exchange: SolPrice.exchanges[:coin_gecko],
+          currency: SolPrice.currencies[:usd],
+          average_price: response.dig('market_data', 'current_price', 'usd'),
+          datetime_from_exchange: datetime,
+          volume: response.dig('market_data', 'total_volume', 'usd')
+        }
+
+        [price_hash]
       end
 
       # For getting volume from coingecko.

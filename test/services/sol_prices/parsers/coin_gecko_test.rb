@@ -25,6 +25,24 @@ module SolPrices
         end
       end
 
+      test '#historical_prices' do
+        vcr_cassette(@namespace, __method__) do
+          date = Date.new(2021,9,19).strftime("%d-%m-%Y")
+          response = @wrapper.historical_price(date: date)
+
+          expected_result = {
+            exchange: SolPrice.exchanges[:coin_gecko],
+            currency: SolPrice.currencies[:usd],
+            average_price: 170.10982401213687,
+            volume: 5288896343.368672
+          }
+
+          result = historical_price(response)
+
+          assert_equal expected_result, result
+        end
+      end
+
       test '#prices_from_ohlc 1 day' do
         vcr_cassette(@namespace, __method__) do
           response = @wrapper.ohlc(days: '1')        
