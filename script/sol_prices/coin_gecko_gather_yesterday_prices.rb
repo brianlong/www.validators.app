@@ -4,7 +4,7 @@
 
 # Script that runs 1-time per day, just after midnight UTC, 
 # to the get the price data for the previous day.
-require_relative('../config/environment')
+require_relative('../../config/environment')
 
 include SolPrices::CoinGeckoLogic
 include SolPrices::SharedLogic
@@ -13,15 +13,11 @@ include SolPrices::SharedLogic
 initial_payload = {
   exchange: SolPrice.exchanges[:coin_gecko],
   client: SolPrices::ApiWrappers::CoinGecko.new,
-  datetime: DateTime.current.beginning_of_day,
-  days: 1
+  datetime: DateTime.current.beginning_of_day - 1.day
 }
 
 p = Pipeline.new(200, initial_payload)
-            .then(&get_ohlc_prices)
-            .then(&filter_prices_by_date)
-            .then(&get_volumes_from_days)
-            .then(&filter_volumes_by_date)
+            .then(&get_historical_average_price)
             .then(&assign_epochs)
             .then(&save_sol_prices)
             .then(&log_info)
