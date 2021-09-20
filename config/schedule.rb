@@ -37,7 +37,7 @@ set :output, File.join(Whenever.path, 'log', 'whenever.log')
 job_type :ruby_script,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
 
-every 1.hour do
+every 1.hour do 
   ruby_script 'validators_get_info.rb'
   ruby_script 'validators_get_avatar_url.rb'
   ruby_script 'append_ip_geo_data.rb'
@@ -54,7 +54,7 @@ every 1.day do
 end
 
 every 1.minute do
-  ruby_script 'sol_prices/coin_gecko/gather_yesterday_prices.rb'
+  ruby_script 'gather_yesterday_prices.rb'
   ruby_script 'sol_prices/ftx/gather_yesterday_prices.rb'
 end
 

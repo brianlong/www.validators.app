@@ -4,7 +4,7 @@
 
 # Script that runs 1-time per day, just after midnight UTC, 
 # to the get the price data for the previous day.
-require_relative('../../../config/environment')
+require_relative('../config/environment')
 
 include SolPrices::CoinGeckoLogic
 include SolPrices::SharedLogic
