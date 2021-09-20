@@ -36,6 +36,8 @@ set :whenever_path, Whenever.path
 set :output, File.join(Whenever.path, 'log', 'whenever.log')
 job_type :ruby_script,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
+job_type :ruby_script_sol_prices,
+         'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/sol_prices/:task >> :whenever_path/log/:task.log 2>&1'
 
 every 1.hour do 
   ruby_script 'validators_get_info.rb'
@@ -53,9 +55,11 @@ every 1.day do
   ruby_script 'validators_update_avatar_url.rb'
 end
 
-every 1.minute do
-  ruby_script 'gather_yesterday_prices.rb'
-  ruby_script 'sol_prices/ftx/gather_yesterday_prices.rb'
+every 1.day, at: '0:10am' do
+  ruby_script_sol_prices 'coin_gecko_gather_yesterday_prices.rb'
+  ruby_script_sol_prices 'coin_gecko_gather_historical_prices.rb'
+  ruby_script_sol_prices 'ftx_gather_yesterday_prices.rb'
+  ruby_script_sol_prices 'ftx_gather_historical_prices.rb'
 end
 
 every 10.minutes do
