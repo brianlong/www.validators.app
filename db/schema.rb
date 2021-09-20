@@ -266,6 +266,7 @@ ActiveRecord::Schema.define(version: 2021_09_07_110222) do
     t.datetime "datetime_from_exchange"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "average_price", precision: 40, scale: 20
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

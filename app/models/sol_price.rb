@@ -3,6 +3,7 @@
 # Table name: sol_prices
 #
 #  id                     :bigint           not null, primary key
+#  average_price          :decimal(40, 20)
 #  close                  :decimal(40, 20)
 #  currency               :integer
 #  datetime_from_exchange :datetime
