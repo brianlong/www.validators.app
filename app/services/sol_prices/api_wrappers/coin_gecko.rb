@@ -50,6 +50,14 @@ module SolPrices
         @api_client.ohlc(@coin, currency: @currency, days: days)
       end
 
+      def historical_price(date: Date.yesterday)
+        @api_client.historical_price(
+          @coin, 
+          currency: @currency, 
+          date: date
+        )
+      end
+
       def daily_historical_price(days: '1')
         @api_client.daily_historical_price(
           @coin, 

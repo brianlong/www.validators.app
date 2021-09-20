@@ -43,6 +43,17 @@ class SolPrices::ApiWrappers::CoinGeckoTest < ActiveSupport::TestCase
     end
   end
 
+  test '#historical_price' do
+    vcr_cassette(@namespace, __method__) do
+      date = Date.new(2021,9,19).strftime("%d-%m-%Y")
+      response = @subject.historical_price(date: date)
+
+      assert_equal 170.10982401213687, response.dig('market_data', 'current_price', 'usd')
+      assert_equal 50565779823.43124, response.dig('market_data', 'market_cap', 'usd')
+      assert_equal 5288896343.368672, response.dig('market_data', 'total_volume', 'usd')
+    end
+  end
+
   test '#daily_historical_price' do
     vcr_cassette(@namespace, __method__) do
       expected_response = {
