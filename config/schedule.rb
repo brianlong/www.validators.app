@@ -53,7 +53,7 @@ every 1.day do
   ruby_script 'validators_update_avatar_url.rb'
 end
 
-every 1.day, at: '0.10 am' do
+every 1.minute do
   ruby_script 'sol_prices/coin_gecko/gather_yesterday_prices.rb'
   ruby_script 'sol_prices/ftx/gather_yesterday_prices.rb'
 end
