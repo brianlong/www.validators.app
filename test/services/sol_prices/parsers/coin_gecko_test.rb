@@ -27,19 +27,20 @@ module SolPrices
 
       test '#historical_prices' do
         vcr_cassette(@namespace, __method__) do
-          date = Date.new(2021,9,19).strftime("%d-%m-%Y")
-          response = @wrapper.historical_price(date: date)
+          datetime = DateTime.new(2021,9,19)
+          response = @wrapper.historical_price(date: datetime.strftime("%d-%m-%Y"))
 
           expected_result = {
             exchange: SolPrice.exchanges[:coin_gecko],
             currency: SolPrice.currencies[:usd],
             average_price: 170.10982401213687,
+            datetime_from_exchange: datetime,
             volume: 5288896343.368672
           }
 
-          result = historical_price(response)
+          result = historical_price(response, datetime: datetime)
 
-          assert_equal expected_result, result
+          assert_equal expected_result, result.first
         end
       end
 
