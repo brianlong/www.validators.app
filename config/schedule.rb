@@ -54,8 +54,8 @@ every 1.day do
 end
 
 every 1.minute do
-  ruby_script 'sol_prices/coin_gecko/gather_yesterday_prices.rb'
-  ruby_script 'sol_prices/ftx/gather_yesterday_prices.rb'
+  runner 'sol_prices/coin_gecko/gather_yesterday_prices.rb'
+  runner 'sol_prices/ftx/gather_yesterday_prices.rb'
 end
 
 every 10.minutes do
