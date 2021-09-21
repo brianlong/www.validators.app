@@ -2,8 +2,8 @@ module SolPrices
   module SharedLogic
     def log_info
       lambda do |p|
-        log_dir_path = File.join(Rails.root, 'log', 'sol_prices')
-        log_name = "#{DateTime.current}_sol_prices.log"
+        log_dir_path = File.join(Rails.root, 'log')
+        log_name = "sol_prices.log"
         log_path = File.join(log_dir_path, log_name)
         
         FileUtils.mkdir_p(log_dir_path)
