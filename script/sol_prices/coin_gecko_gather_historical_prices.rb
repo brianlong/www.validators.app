@@ -29,6 +29,8 @@ begin
                 .then(&log_info)
 
     datetime = datetime + 1.day
+
+    sleep 1
   end
 
 rescue StandardError => e
