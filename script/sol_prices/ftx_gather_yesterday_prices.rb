@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec rails r script/sol_prices/ftx/gather_yesterday_prices_from.rb 
+# RAILS_ENV=production bundle exec rails r script/sol_prices/ftx_gather_yesterday_prices.rb 
 
 require_relative '../../config/environment'
 

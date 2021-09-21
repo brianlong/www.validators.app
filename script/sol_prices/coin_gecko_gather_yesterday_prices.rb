@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec rails r script/sol_prices/gather_yesterday_prices.rb
+# RAILS_ENV=production bundle exec rails r script/sol_prices/coin_gecko_gather_historical_prices.rb 
 
 # Script that runs 1-time per day, just after midnight UTC, 
 # to the get the price data for the previous day.
