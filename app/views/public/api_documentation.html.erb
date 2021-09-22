@@ -61,6 +61,8 @@
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&page=1&limit=50'</pre>
     <p>`q=query` will limit the results to entries containing query. The query value is compared against validator's name, account and score data center key.</p>
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&q=query'</pre>
+    <p>`show_absent=true|false` if set to false will limit the results to validators that have been active in last 30 days</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?show_absent=true'</pre>
     <p>Response:</p>
     <p>An Array of validators.</p>
     <pre>
