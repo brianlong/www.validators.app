@@ -36,29 +36,69 @@
           <tr>
             <th class="avatar-column align-middle">#</th>
             <th class="name-column pr-1">
-              Name <small class="text-muted">(Commission)</small><br />
+              Name <small class="text-muted">(Commission)</small>
+              <i class="fas fa-info-circle" 
+                 data-toggle="tooltip" 
+                 data-placement="top" 
+                 title="<%= t('definitions.commission') %>">
+              </i>
+              <br />
               Active Stake
               <small class="text-muted">
                 (<%= number_to_human(lamports_to_sol(@total_active_stake),
                                      format:'%n%u',
                                      units: { thousand: 'K', million: 'M', billion: 'B' }) %>)
-              </small><br />
-              Scores <small class="text-muted">(total)</small>
+              </small>
+              <i class="fas fa-info-circle" 
+                 data-toggle="tooltip" 
+                 data-placement="top" 
+                 title="<%= t('definitions.active_stake') %>">
+              </i>
+              <br />
+              Scores <small class="text-muted">(total)</small> 
+              <i class="fas fa-info-circle" 
+                 data-toggle="tooltip" 
+                 data-placement="top" 
+                 title="<%= t('definitions.scores') %>">
+              </i>
             </th>
             <th class='percent-column align-middle'>
-              Skipped Vote&nbsp;&percnt;<br />
+              Skipped Vote&nbsp;&percnt;
+              <i class="fas fa-info-circle" 
+                 data-toggle="tooltip" 
+                 data-placement="top" 
+                 title="<%= t('definitions.skipped_vote') %>">
+              <br />
               <small class="text-muted">Dist from leader</small>
             </th>
             <th class='chart-column text-right pb-3 align-middle'>
-              Root Distance<br />
+              Root Distance
+              <i class="fas fa-info-circle" 
+                 data-toggle="tooltip" 
+                 data-placement="top" 
+                 title="<%= t('definitions.root_distance') %>">
+              </i>
+              <br />
               <small class="text-muted">60-Min Chart</small>
             </th>
             <th class='chart-column text-right pb-3 align-middle'>
-              Vote Distance<br />
+              Vote Distance
+              <i class="fas fa-info-circle" 
+                 data-toggle="tooltip" 
+                 data-placement="top" 
+                 title="<%= t('definitions.vote_distance') %>">
+              </i>
+              <br />
               <small class="text-muted">60-Min Chart</small>
             </th>
             <th class='chart-column text-right pb-3 align-middle'>
-              Skipped Slot&nbsp;&percnt;<br />
+              Skipped Slot&nbsp;&percnt;
+              <i class="fas fa-info-circle" 
+                 data-toggle="tooltip" 
+                 data-placement="top" 
+                 title="<%= t('definitions.skipped_slot') %>">
+              </i>
+              <br />
               <small class="text-muted">60-Min Chart</small>
             </th>
           </tr>
