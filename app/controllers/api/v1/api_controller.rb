@@ -55,6 +55,11 @@ module Api
           @validators = ValidatorSearchQuery.new(@validators).search(params[:q])
         end
 
+        if !params[:show_absent].nil? && \
+          (params[:show_absent].in?([false, "false"]))
+          @validators = @validators.where.not('validator_histories.epoch_credits': nil)
+        end
+
         @skipped_slots_report = Report.where(
           network: params[:network],
           name: 'build_skipped_slot_percent'

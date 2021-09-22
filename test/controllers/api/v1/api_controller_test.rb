@@ -158,6 +158,36 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
   end
 
+  test 'GET api_v1_validators with token and false show_absent flag returns correct data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+    create(:vote_account, validator: validator)
+    create(:report, :build_skipped_slot_percent)
+    create(:ip, address: validator.score.ip_address)
+
+    get api_v1_validators_url(network: 'testnet', show_absent: false),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 0, json.size
+  end
+
+  test 'GET api_v1_validators with token and true show_absent flag returns correct data' do
+    validator = create(:validator, :with_score, account: 'Test Account')
+    create(:vote_account, validator: validator)
+    create(:report, :build_skipped_slot_percent)
+    create(:ip, address: validator.score.ip_address)
+
+    get api_v1_validators_url(network: 'testnet', show_absent: true),
+        headers: { 'Token' => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+  end
+
   test 'GET api_v1_validators with token and search query returns correct data' do
     validator = create(:validator, :with_score, account: 'Test Account')
 
