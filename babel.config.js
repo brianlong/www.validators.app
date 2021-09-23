@@ -41,6 +41,7 @@ module.exports = function(api) {
       '@babel/plugin-syntax-dynamic-import',
       "transform-class-properties",
       "transform-object-rest-spread",
+      "@babel/plugin-transform-modules-commonjs",
       isTestEnv && 'babel-plugin-dynamic-import-node',
       '@babel/plugin-transform-destructuring',
       [
