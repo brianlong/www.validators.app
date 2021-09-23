@@ -10,13 +10,13 @@ module SolPrices::CoinGeckoLogic
 
       Pipeline.new(200, p.payload.merge(prices_from_exchange: price))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from get_prices_from_days', e)
+      Pipeline.new(500, p.payload, 'Error from get_historical_average_price', e)
     end
   end
 
   ### Methods below can be used to get open, close, high and low price from coin gecko
   # Unfortunataely, their API returns data in weird intervals - 30 minutes, 4 hours, 4 days.
-  # If they'll add new options to get data in daily intervals, methods below 
+  # If they'll add new options to get data in daily intervals, methods below
   # will be useful.
   ###
   def get_ohlc_prices
@@ -26,13 +26,13 @@ module SolPrices::CoinGeckoLogic
 
       Pipeline.new(200, p.payload.merge(prices_from_exchange: prices))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from get_prices_from_days', e)
+      Pipeline.new(500, p.payload, 'Error from get_ohlc_prices', e)
     end
   end
 
   def filter_prices_by_date
     lambda do |p|
-      p.payload[:prices_from_exchange].reject! do |price| 
+      p.payload[:prices_from_exchange].reject! do |price|
         price[:datetime_from_exchange] != p.payload[:datetime]
       end
 
@@ -59,7 +59,7 @@ module SolPrices::CoinGeckoLogic
   def filter_volumes_by_date
     lambda do |p|
       volume = find_volume_from_beginning_of_day(
-        p.payload[:volumes], 
+        p.payload[:volumes],
         p.payload[:datetime]
       )
 
