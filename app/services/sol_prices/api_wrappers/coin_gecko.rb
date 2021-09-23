@@ -32,7 +32,7 @@ module SolPrices
       end
 
       # ohlc - open, high, low, close
-      def ohlc(days: '1')
+      def ohlc(days: 1)
         # count must be one of: 1/7/14/30/90/180/365/max
         available_days = %w[1 7 14 30 90 180 365 max]
         unless days.to_s.in? available_days
@@ -44,7 +44,7 @@ module SolPrices
         # 3 - 30 days: 4 hours
         # 31 and before: 4 days
 
-        @api_client.ohlc(@coin, currency: @currency, days: days)
+        @api_client.ohlc(@coin, currency: @currency, days: days.to_s)
       end
 
       # Get historical data (name, price, market, stats) at a given date for a coin
