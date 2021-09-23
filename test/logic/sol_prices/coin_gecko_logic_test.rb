@@ -47,34 +47,4 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
       assert_equal 49, p.payload[:prices_from_exchange].size
     end
   end
-
-  test '#filter_prices_by_date' do
-    vcr_cassette(@namespace, @vcr_name) do
-      p = Pipeline.new(200, @initial_payload)
-                  .then(&get_ohlc_prices)
-                  .then(&filter_prices_by_date)
-
-      assert_equal 1, p.payload[:prices_from_exchange].size
-    end
-  end
-
-  test '#get_volumes_from_days' do
-    vcr_cassette(@namespace, @vcr_name) do
-      p = Pipeline.new(200, @initial_payload)
-                  .then(&get_volumes_from_days)
-
-      assert_equal 2, p.payload[:volumes].size
-      assert_equal 16_149_087_501.300968, p.payload[:volumes].first[:volume]
-    end
-  end
-
-  test '#filter_volumes_by_date' do
-    vcr_cassette(@namespace, @vcr_name) do
-      p = Pipeline.new(200, @initial_payload)
-                  .then(&get_volumes_from_days)
-                  .then(&filter_volumes_by_date)
-
-      assert_equal 16_149_087_501.300968,  p.payload[:volume]
-    end
-  end
 end

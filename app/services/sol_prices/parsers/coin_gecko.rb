@@ -50,29 +50,6 @@ module SolPrices
         }
       end
 
-      # For getting volume from coingecko.
-      def volume_from_daily_historical_price(response)
-        volumes = response['total_volumes']
-
-        volumes.map do |volume|
-          datetime = convert_to_datetime_utc(volume[0])
-
-          { datetime: datetime, volume: volume[1] }
-        end
-      end
-
-      def find_price_for_date(prices, date)
-        prices.find do |price|
-          price[:datetime_from_exchange] == date
-        end
-      end
-
-      def find_volume_from_beginning_of_day(volumes, date)
-        volumes.find do |volume|
-          volume[:datetime] == date
-        end
-      end
-
       # Convert timestamp to datetime
       def convert_to_datetime_utc(timestamp)
         timestamp = timestamp / 1000 # removes miliseconds

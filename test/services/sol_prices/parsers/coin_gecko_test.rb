@@ -68,21 +68,6 @@ module SolPrices
           assert_equal 49, sol_prices_array.size
         end
       end
-
-      test '#volume_from_daily_historical_price' do
-        vcr_cassette(@namespace, __method__) do
-          expected = [
-            5245858966.571948,
-            16149087501.300968,
-            13505195046.862394
-          ]
-
-          response = @wrapper.daily_historical_price(days: '2')
-          parsed = volume_from_daily_historical_price(response)
-
-          assert_equal expected, parsed.map { |e| e[:volume] }
-        end
-      end
     end
   end
 end
