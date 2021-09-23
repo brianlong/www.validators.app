@@ -10,13 +10,6 @@ class SolPrices::ApiWrappers::CoinGeckoTest < ActiveSupport::TestCase
     @namespace = File.join('services', 'api_wrappers', 'coin_gecko')
   end
 
-  test '#coins_list' do
-    vcr_cassette(@namespace, __method__) do
-      response = @subject.coins_list
-      assert_equal 9252, response.size
-    end
-  end
-
   test '#status' do
     vcr_cassette(@namespace, __method__) do
       expected_response = {"gecko_says"=>"(V3) To the Moon!"}

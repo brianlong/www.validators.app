@@ -11,7 +11,7 @@ module SolPrices
       attr_reader :coin
 
       def initialize(
-        api_client: CoingeckoRuby::Client.new, 
+        api_client: CoingeckoRuby::Client.new,
         coin: 'solana',
         currency: 'usd'
       )
@@ -20,10 +20,6 @@ module SolPrices
         @api_client = api_client
         @coin = coin
         @currency = currency
-      end
-
-      def coins_list
-        @api_client.coins_list
       end
 
       def status
@@ -52,28 +48,18 @@ module SolPrices
 
       def historical_price(date: Date.yesterday)
         @api_client.historical_price(
-          @coin, 
-          currency: @currency, 
+          @coin,
+          currency: @currency,
           date: date
         )
       end
 
       def daily_historical_price(days: '1')
         @api_client.daily_historical_price(
-          @coin, 
-          currency: @currency, 
+          @coin,
+          currency: @currency,
           days: days
         )
-      end
-
-      def price_for_range(from:, to:)
-        # Convert dates to UNIX timestamp
-        from = from.to_time.to_i
-        to = to.to_time.to_i
-        options = default_options.slice(:vs_currency)
-        query = { from: from, to: to }.merge(options).to_query
-
-        @api_client.send_request(endpoint)
       end
     end
   end
