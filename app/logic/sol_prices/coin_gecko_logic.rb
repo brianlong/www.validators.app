@@ -1,6 +1,6 @@
 module SolPrices::CoinGeckoLogic
   include SolPrices::Parsers::CoinGecko
-
+  # Fetches historical price data for a coin at a given date.
   def get_historical_average_price
     lambda do |p|
       datetime = p.payload[:datetime]
@@ -9,6 +9,24 @@ module SolPrices::CoinGeckoLogic
       price = historical_price(response, datetime: datetime)
 
       Pipeline.new(200, p.payload.merge(prices_from_exchange: price))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from get_historical_average_price', e)
+    end
+  end
+
+  # Fetches a coin's historical price data in daily ranges.
+  # Includes volume
+  def get_daily_historical_average_price(days: 'max')
+    lambda do |p|
+      prices = []
+      response = p.payload[:client].daily_historical_price(days: days)
+      response['prices'].each_with_index do |price, i|
+        volume = response['total_volumes'][i]
+
+        prices << daily_historical_price(price, volume)
+      end
+
+      Pipeline.new(200, p.payload.merge(prices_from_exchange: prices))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_historical_average_price', e)
     end

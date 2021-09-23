@@ -21,6 +21,24 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
     create(:epoch_history, network: 'mainnet', epoch: 205)
   end
 
+  test '#get_historical_average_price' do
+    vcr_cassette(@namespace, __method__) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_historical_average_price)
+
+      assert_equal 1, p.payload[:prices_from_exchange].size
+    end
+  end
+
+  test '#get_daily_historical_average_price' do
+    vcr_cassette(@namespace, __method__) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_daily_historical_average_price)
+
+      assert_equal 531, p.payload[:prices_from_exchange].size
+    end
+  end
+
   test '#get_ohlc_prices' do
     vcr_cassette(@namespace, @vcr_name) do
       p = Pipeline.new(200, @initial_payload)
