@@ -1,6 +1,7 @@
 module SolPrices::CoinGeckoLogic
   include SolPrices::Parsers::CoinGecko
   # Fetches historical price data for a coin at a given date.
+  # Adds to payload array with one price for given date.
   def get_historical_average_price
     lambda do |p|
       datetime = p.payload[:datetime]
@@ -16,6 +17,7 @@ module SolPrices::CoinGeckoLogic
 
   # Fetches a coin's historical price data in daily ranges.
   # Includes volume
+  # Adds to payload array with prices.
   def get_daily_historical_average_price(days: 'max')
     lambda do |p|
       prices = []
