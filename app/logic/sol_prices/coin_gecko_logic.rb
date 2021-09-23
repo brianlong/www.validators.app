@@ -28,7 +28,7 @@ module SolPrices::CoinGeckoLogic
 
       Pipeline.new(200, p.payload.merge(prices_from_exchange: prices))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from get_historical_average_price', e)
+      Pipeline.new(500, p.payload, 'Error from get_daily_historical_average_price', e)
     end
   end
 
