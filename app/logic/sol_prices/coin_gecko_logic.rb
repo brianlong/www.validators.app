@@ -6,7 +6,7 @@ module SolPrices::CoinGeckoLogic
       datetime = p.payload[:datetime]
 
       response = p.payload[:client].historical_price(date: datetime.strftime("%d-%m-%Y"))
-      price = historical_price(response, datetime: datetime)
+      price = historical_price_to_sol_price_hash(response, datetime: datetime)
 
       Pipeline.new(200, p.payload.merge(prices_from_exchange: price))
     rescue StandardError => e
@@ -23,7 +23,7 @@ module SolPrices::CoinGeckoLogic
       response['prices'].each_with_index do |price, i|
         volume = response['total_volumes'][i]
 
-        prices << daily_historical_price(price, volume)
+        prices << daily_historical_price_to_sol_price_hash(price, volume)
       end
 
       Pipeline.new(200, p.payload.merge(prices_from_exchange: prices))
@@ -40,7 +40,7 @@ module SolPrices::CoinGeckoLogic
   def get_ohlc_prices
     lambda do |p|
       response = p.payload[:client].ohlc(days: p.payload[:days])
-      prices = prices_from_ohlc(response)
+      prices = prices_from_ohlc_to_sol_price_hash(response)
 
       Pipeline.new(200, p.payload.merge(prices_from_exchange: prices))
     rescue StandardError => e

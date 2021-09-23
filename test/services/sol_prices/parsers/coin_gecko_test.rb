@@ -11,11 +11,11 @@ module SolPrices
         @wrapper = ApiWrappers::CoinGecko.new
       end
 
-      test '#prices_from_ohlc' do
+      test '#prices_from_ohlc_to_sol_price_hash' do
         vcr_cassette(@namespace, __method__) do
           response = @wrapper.ohlc(days: 'max')
 
-          sol_prices_array = prices_from_ohlc(response)
+          sol_prices_array = prices_from_ohlc_to_sol_price_hash(response)
 
           assert_equal 136, sol_prices_array.size
 
@@ -25,7 +25,7 @@ module SolPrices
         end
       end
 
-      test '#historical_price' do
+      test '#historical_price_to_sol_price_hash' do
         vcr_cassette(@namespace, __method__) do
           datetime = DateTime.new(2021,9,19)
           response = @wrapper.historical_price(date: datetime.strftime("%d-%m-%Y"))
@@ -38,13 +38,13 @@ module SolPrices
             volume: 5288896343.368672
           }
 
-          result = historical_price(response, datetime: datetime)
+          result = historical_price_to_sol_price_hash(response, datetime: datetime)
 
           assert_equal expected_result, result.first
         end
       end
 
-      test '#daily_historical_price' do
+      test '#daily_historical_price_to_sol_price_hash' do
         price = [1586563200000, 0.9576058280146803]
         volume = [1586563200000, 92672667.43447028]
 
@@ -56,17 +56,9 @@ module SolPrices
           volume: volume[1]
         }
 
-        result = daily_historical_price(price, volume)
+        result = daily_historical_price_to_sol_price_hash(price, volume)
 
         assert_equal expected_result, result
-      end
-
-      test '#prices_from_ohlc 1 day' do
-        vcr_cassette(@namespace, __method__) do
-          response = @wrapper.ohlc(days: '1')
-          sol_prices_array = prices_from_ohlc(response)
-          assert_equal 49, sol_prices_array.size
-        end
       end
     end
   end

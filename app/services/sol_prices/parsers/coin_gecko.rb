@@ -1,7 +1,7 @@
 module SolPrices
   module Parsers
     module CoinGecko
-      def prices_from_ohlc(response)
+      def prices_from_ohlc_to_sol_price_hash(response)
         response.map do |row|
           datetime = convert_to_datetime_utc(row[0])
           open_price = row[1]
@@ -21,7 +21,7 @@ module SolPrices
         end
       end
 
-      def historical_price(response, datetime:)
+      def historical_price_to_sol_price_hash(response, datetime:)
         price_hash = {
           exchange: SolPrice.exchanges[:coin_gecko],
           currency: SolPrice.currencies[:usd],
@@ -33,7 +33,7 @@ module SolPrices
         [price_hash]
       end
 
-      def daily_historical_price(price, volume)
+      def daily_historical_price_to_sol_price_hash(price, volume)
         # Compare timestamps
         return nil unless price[0] == volume[0]
 
