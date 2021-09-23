@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec rails r script/sol_prices/ftx_gather_yesterday_prices.rb 
+# RAILS_ENV=production bundle exec rails r script/sol_prices/ftx_gather_yesterday_prices.rb
 
 require_relative '../../config/environment'
 
@@ -21,5 +21,6 @@ p = Pipeline.new(200, initial_payload)
             .then(&assign_epochs)
             .then(&save_sol_prices)
             .then(&log_info)
+            .then(&log_errors)
 
 

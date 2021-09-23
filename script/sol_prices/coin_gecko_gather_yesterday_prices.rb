@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec rails r script/sol_prices/coin_gecko_gather_historical_prices.rb 
+# RAILS_ENV=production bundle exec rails r script/sol_prices/coin_gecko_gather_historical_prices.rb
 
-# Script that runs 1-time per day, just after midnight UTC, 
+# Script that runs 1-time per day, just after midnight UTC,
 # to the get the price data for the previous day.
 require_relative('../../config/environment')
 
@@ -21,5 +21,6 @@ p = Pipeline.new(200, initial_payload)
             .then(&assign_epochs)
             .then(&save_sol_prices)
             .then(&log_info)
+            .then(&log_errors)
 
 
