@@ -1,5 +1,5 @@
 module SolPrices
-  class ApiClient
+  class FtxApiClient
     def initialize(api_url:)
       @api_url = URI(api_url)
     end

@@ -21,7 +21,7 @@ module SolPrices
       attr_reader :coin
 
       def initialize(
-        api_client: SolPrices::ApiClient, 
+        api_client: SolPrices::FtxApiClient,
         coin: 'solana',
         currency: 'usd',
         market: 'SOL/USD'
@@ -50,13 +50,13 @@ module SolPrices
       end
 
       # https://docs.ftx.com/?python#get-historical-prices
-      # 
-      # resolution window length in seconds. 
+      #
+      # resolution window length in seconds.
       # options: 15, 60, 300, 900, 3600, 14400, 86400, or any multiple of 86400 up to 30*86400
       def historical_price(
-        market: @market, 
+        market: @market,
         resolution: 86400,
-        start_time: Date.yesterday, 
+        start_time: Date.yesterday,
         end_time: nil
       )
         query = { resolution: resolution }
@@ -70,7 +70,7 @@ module SolPrices
 
         @api_client.send_request(request)
       end
-      
+
       private
 
       def prepare_request(endpoint)
