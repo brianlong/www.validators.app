@@ -12,7 +12,6 @@ include SolPrices::SharedLogic
 include PipelineLogic
 
 # First day when sol price appeared.
-datetime = DateTime.new(2020,7,27)
 
 # Create our initial payload with the input values
 initial_payload = {
@@ -20,17 +19,9 @@ initial_payload = {
   client: SolPrices::ApiWrappers::CoinGecko.new
 }
 
-until datetime > DateTime.current
-  initial_payload[:datetime] = datetime
-
-  p = Pipeline.new(200, initial_payload)
-              .then(&get_historical_average_price)
-              .then(&assign_epochs)
-              .then(&save_sol_prices)
-              .then(&log_info)
-              .then(&log_errors)
-
-  datetime = datetime + 1.day
-
-  sleep 1
-end
+p = Pipeline.new(200, initial_payload)
+            .then(&get_daily_historical_average_price)
+            .then(&assign_epochs)
+            .then(&save_sol_prices)
+            .then(&log_info)
+            .then(&log_errors)
