@@ -7,7 +7,7 @@ require 'net/http'
 module SolPrices
   module ApiWrappers
     # https://docs.ftx.com/#overview
-    class FtxMarket
+    class Ftx
       API_URL = 'https://ftx.com/api'
       API_KEY = Rails.application.credentials.dig(:ftx_market, :api_key)
       API_SECRET = Rails.application.credentials.dig(:ftx_market, :api_secret)
@@ -23,7 +23,6 @@ module SolPrices
       def initialize(
         api_client: SolPrices::FtxApiClient,
         coin: 'solana',
-        currency: 'usd',
         market: 'SOL/USD'
       )
         raise 'Coin Not Supported' unless coin.in? %w[solana]
@@ -55,7 +54,7 @@ module SolPrices
       # options: 15, 60, 300, 900, 3600, 14400, 86400, or any multiple of 86400 up to 30*86400
       def historical_price(
         market: @market,
-        resolution: 86400,
+        resolution: 86_400,
         start_time: Date.yesterday,
         end_time: nil
       )
@@ -65,7 +64,7 @@ module SolPrices
 
         query = query.to_param
 
-        endpoint = "markets/#{@market}/candles?#{query}"
+        endpoint = "markets/#{market}/candles?#{query}"
         request = prepare_request(endpoint)
 
         @api_client.send_request(request)

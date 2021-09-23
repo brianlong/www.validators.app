@@ -10,7 +10,7 @@ include SolPrices::SharedLogic
 # Create our initial payload with the input values
 initial_payload = {
   exchange: SolPrice.exchanges[:ftx],
-  client: SolPrices::ApiWrappers::FtxMarket.new,
+  client: SolPrices::ApiWrappers::Ftx.new,
   start_time: DateTime.current.beginning_of_day - 1.day,
   end_time: DateTime.current.end_of_day - 1.day,
   resolution: 86400 # interval of returned data

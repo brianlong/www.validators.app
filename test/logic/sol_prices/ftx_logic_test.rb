@@ -9,7 +9,7 @@ class SolPrices::FtxLogicTest < ActiveSupport::TestCase
   def setup
     # Create our initial payload with the input values
     @initial_payload = {
-      client: SolPrices::ApiWrappers::FtxMarket.new,
+      client: SolPrices::ApiWrappers::Ftx.new,
       start_time: DateTime.new(2021,9,8),
       resolution: 86400,
     }

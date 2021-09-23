@@ -2,11 +2,11 @@
 
 require 'test_helper'
 
-class SolPrices::ApiWrappers::FtxMarketTest < ActiveSupport::TestCase
+class SolPrices::ApiWrappers::FtxTest < ActiveSupport::TestCase
   include VcrHelper
 
   setup do
-    @subject = SolPrices::ApiWrappers::FtxMarket.new
+    @subject = SolPrices::ApiWrappers::Ftx.new
     @namespace = File.join('services', 'api_wrappers', 'ftx')
   end
 
@@ -84,7 +84,7 @@ class SolPrices::ApiWrappers::FtxMarketTest < ActiveSupport::TestCase
         start_time: start_time,
         resolution: 86400
       )
-      
+
       parsed_body = JSON.parse(response.body)
 
       expected_response = {

@@ -8,8 +8,8 @@ module SolPrices
 
       setup do
         @namespace = File.join('services', 'sol_prices', 'parsers', 'coin_gecko')
-        @wrapper = ApiWrappers::FtxMarket.new
-      end 
+        @wrapper = ApiWrappers::Ftx.new
+      end
 
       test '#prices_from_historical_prices' do
         vcr_cassette(@namespace, __method__) do
