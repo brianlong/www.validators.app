@@ -2,7 +2,6 @@
 
 require 'uri'
 require 'net/http'
-# TODO: docs
 module SolPrices
   module ApiWrappers
     # https://www.coingecko.com/pl/api/documentation
@@ -22,13 +21,14 @@ module SolPrices
         @currency = currency
       end
 
+      # Fetches CoinGecko's API status.
       def status
         @api_client.status
       end
 
+      # Fetches the current price for a coin in the given coin or currency.
       def price(ids = @coin)
-        ids = ids
-        res = @api_client.price(ids)
+        @api_client.price(ids)
       end
 
       # ohlc - open, high, low, close
@@ -38,6 +38,7 @@ module SolPrices
         unless days.to_s.in? available_days
           raise ArgumentError, "Count must be one of #{available_days.join('/')}"
         end
+
         # resolution depends on count:
         # 1 - 2 days: 30 minutes
         # 3 - 30 days: 4 hours
@@ -46,6 +47,7 @@ module SolPrices
         @api_client.ohlc(@coin, currency: @currency, days: days)
       end
 
+      # Get historical data (name, price, market, stats) at a given date for a coin
       def historical_price(date: Date.yesterday)
         @api_client.historical_price(
           @coin,
@@ -54,6 +56,10 @@ module SolPrices
         )
       end
 
+      # Get historical market data include price, market cap, and 24h volume (granularity auto)
+      # Minutely data will be used for duration within 1 day,
+      # Hourly data will be used for duration between 1 day and 90 days,
+      # Daily data will be used for duration above 90 days.
       def daily_historical_price(days: '1')
         @api_client.daily_historical_price(
           @coin,
