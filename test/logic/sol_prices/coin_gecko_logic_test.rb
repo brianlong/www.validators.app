@@ -26,7 +26,7 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload)
                   .then(&get_ohlc_prices)
 
-      assert_not_nil p.payload[:prices_from_exchange]
+      assert_equal 49, p.payload[:prices_from_exchange].size
     end
   end
 
@@ -45,7 +45,8 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @initial_payload)
                   .then(&get_volumes_from_days)
 
-      assert_not_nil p.payload[:volumes]
+      assert_equal 2, p.payload[:volumes].size
+      assert_equal 16_149_087_501.300968, p.payload[:volumes].first[:volume]
     end
   end
 
@@ -55,7 +56,7 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
                   .then(&get_volumes_from_days)
                   .then(&filter_volumes_by_date)
 
-      assert_not_nil p.payload[:volume]
+      assert_equal 16_149_087_501.300968,  p.payload[:volume]
     end
   end
 end
