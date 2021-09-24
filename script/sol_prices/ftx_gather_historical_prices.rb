@@ -13,6 +13,7 @@ initial_payload = {
   exchange: SolPrice.exchanges[:ftx],
   client: SolPrices::ApiWrappers::Ftx.new,
   start_time: DateTime.new(2020,7,27), # first day when sol appeared
+  end_time: DateTime.current - 1.day,
   resolution: 86400 # interval of returned data
 }
 

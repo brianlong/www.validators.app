@@ -54,14 +54,13 @@ module SolPrices
       # options: 15, 60, 300, 900, 3600, 14400, 86400, or any multiple of 86400 up to 30*86400
       def historical_price(
         market: @market,
-        resolution: 86_400,
-        start_time: Date.yesterday,
+        resolution: 86400, # 24h interval
+        start_time: DateTime.new(2020,7,27), # first day when sol appeared
         end_time: nil
       )
         query = { resolution: resolution }
         query[:start_time] = start_time.beginning_of_day.to_i if start_time
-        query[:end_time] = start_time.beginning_of_day.to_i if end_time
-
+        query[:end_time] = end_time.beginning_of_day.to_i if end_time
         query = query.to_param
 
         endpoint = "markets/#{market}/candles?#{query}"
