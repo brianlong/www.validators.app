@@ -9,26 +9,22 @@ module SolPrices
           low_price = row[3]
           close_price = row[4]
 
-          {
-            exchange: SolPrice.exchanges[:coin_gecko],
-            currency: SolPrice.currencies[:usd],
+          shared_data.merge ({
             datetime_from_exchange: datetime,
             open: open_price,
             high: high_price,
             low: low_price,
             close: close_price
-          }
+          })
         end
       end
 
       def historical_price_to_sol_price_hash(response, datetime:)
-        price_hash = {
-          exchange: SolPrice.exchanges[:coin_gecko],
-          currency: SolPrice.currencies[:usd],
+        price_hash = shared_data.merge({
           average_price: response.dig('market_data', 'current_price', 'usd'),
           datetime_from_exchange: datetime,
           volume: response.dig('market_data', 'total_volume', 'usd')
-        }
+        })
 
         [price_hash]
       end
@@ -45,12 +41,17 @@ module SolPrices
         price = price[1]
         volume = volume[1]
 
-        {
-          exchange: SolPrice.exchanges[:coin_gecko],
-          currency: SolPrice.currencies[:usd],
+        shared_data.merge({
           average_price: price,
           datetime_from_exchange: datetime,
           volume: volume
+        })
+      end
+
+      def shared_data
+        {
+          exchange: SolPrice.exchanges[:coin_gecko],
+          currency: SolPrice.currencies[:usd]
         }
       end
 
