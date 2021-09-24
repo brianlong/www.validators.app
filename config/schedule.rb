@@ -39,7 +39,7 @@ job_type :ruby_script,
 job_type :ruby_script_sol_prices,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/sol_prices/:task >> :whenever_path/log/:task.log 2>&1'
 
-every 1.hour do 
+every 1.hour do
   ruby_script 'validators_get_info.rb'
   ruby_script 'validators_get_avatar_url.rb'
   ruby_script 'append_ip_geo_data.rb'
@@ -57,9 +57,7 @@ end
 
 every 1.day, at: '0:10am' do
   ruby_script_sol_prices 'coin_gecko_gather_yesterday_prices.rb'
-  ruby_script_sol_prices 'coin_gecko_gather_historical_prices.rb'
   ruby_script_sol_prices 'ftx_gather_yesterday_prices.rb'
-  ruby_script_sol_prices 'ftx_gather_historical_prices.rb'
 end
 
 every 10.minutes do
