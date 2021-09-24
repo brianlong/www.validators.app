@@ -8,6 +8,7 @@ require_relative('../../config/environment')
 
 include SolPrices::CoinGeckoLogic
 include SolPrices::SharedLogic
+include PipelineLogic
 
 # Create our initial payload with the input values
 initial_payload = {
