@@ -1,0 +1,65 @@
+<div class="card">
+  <div class="card-content">
+    <h3 class="card-heading mb-3">Sol Prices</h3>
+  </div>
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#menu1">CoinGecko</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu2">FTX</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane active" id="menu1">
+      <div class="table-responsive-md">
+        <table class='table mb-0'>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Average Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @coin_gecko_prices.each do |cg_price| %>
+              <tr>
+                <td><%= cg_price.datetime_from_exchange.to_date %></td>
+                <td><%= cg_price.average_price %> $</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="menu2">
+      <div class="table-responsive-md">
+        <table class='table mb-0'>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Open</th>
+              <th>Low</th>
+              <th>High</th>
+              <th>Close</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @ftx_prices.each do |ftx_price| %>
+              <tr>
+                <td><%= ftx_price.datetime_from_exchange.to_date %></td>
+                <td><%= ftx_price.open %> $</td>
+                <td><%= ftx_price.low %> $</td>
+                <td><%= ftx_price.high %> $</td>
+                <td><%= ftx_price.close %> $</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
