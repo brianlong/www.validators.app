@@ -38,6 +38,10 @@ module SolPrices
         return nil unless price[0] == volume[0]
 
         datetime = convert_to_datetime_utc(price[0])
+
+        # We want to save only data from whole day.
+        return nil unless datetime.to_s(:time) == '00:00'
+
         price = price[1]
         volume = volume[1]
 
