@@ -7,7 +7,7 @@ require("@rails/ujs").start()
 require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
-
+import Chart from 'chart.js/auto';
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
@@ -42,3 +42,20 @@ document.addEventListener("turbolinks:load", function() {
         })
     })
 });
+
+document.addEventListener('turbolinks:load', () => {
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: JSON.parse(ctx.canvas.dataset.labels),
+      datasets: [{
+        label: 'SOL Token Price',
+        data: JSON.parse(ctx.canvas.dataset.data),
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    },
+  });
+})
