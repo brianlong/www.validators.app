@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-content">
-    <h3 class="card-heading mb-3">Sol Prices</h3>
+    <h3 class="card-heading mb-3">Sol Token Prices</h3>
   </div>
 
   <ul class="nav nav-tabs">
@@ -15,6 +15,12 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <div class="tab-pane active" id="menu1">
+    <canvas id="myChart"
+        width="200px"
+        height="100px"
+        data-labels="<%= @coin_gecko_labels %>"
+        data-data="<%= @coin_gecko_data %>" >
+      </canvas>
       <div class="table-responsive-md">
         <table class='table mb-0'>
           <thead>
