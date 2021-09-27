@@ -21,24 +21,6 @@
         data-labels="<%= @coin_gecko_labels %>"
         data-data="<%= @coin_gecko_data %>" >
       </canvas>
-      <div class="table-responsive-md">
-        <table class='table mb-0'>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Average Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @coin_gecko_prices.each do |cg_price| %>
-              <tr>
-                <td><%= cg_price.datetime_from_exchange.to_date %></td>
-                <td><%= cg_price.average_price %> $</td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <div class="tab-pane fade" id="menu2">
@@ -47,30 +29,6 @@
         height="100px"
         data-data="<%= @ftx_data.to_json %>" >
       </canvas>
-      <div class="table-responsive-md">
-        <table class='table mb-0'>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Open</th>
-              <th>Low</th>
-              <th>High</th>
-              <th>Close</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @ftx_prices.each do |ftx_price| %>
-              <tr>
-                <td><%= ftx_price.datetime_from_exchange.to_date %></td>
-                <td><%= ftx_price.open %> $</td>
-                <td><%= ftx_price.low %> $</td>
-                <td><%= ftx_price.high %> $</td>
-                <td><%= ftx_price.close %> $</td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
     </div>
   </div>
 </div>
