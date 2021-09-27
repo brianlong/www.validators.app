@@ -1,7 +1,9 @@
 class SolPricesController < ApplicationController
   def index
     @coin_gecko_prices = SolPrice.where(exchange: SolPrice.exchanges[:coin_gecko])
+                                 .order(datetime_from_exchange: :asc)
     @ftx_prices = SolPrice.where(exchange: SolPrice.exchanges[:ftx])
+                          .order(datetime_from_exchange: :asc)
 
     @coin_gecko_labels = @coin_gecko_prices.pluck(:datetime_from_exchange).map do |datetime|
       datetime.to_date.to_s
