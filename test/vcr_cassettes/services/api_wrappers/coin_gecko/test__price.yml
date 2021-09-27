@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.coingecko.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 06 Sep 2021 14:44:47 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=30, public, must-revalidate, s-maxage=60
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - POST, PUT, DELETE, GET, OPTIONS
+      Access-Control-Request-Method:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept, Authorization
+      Access-Control-Expose-Headers:
+      - link, per-page, total
+      Vary:
+      - Accept-Encoding, Origin
+      Etag:
+      - W/"a054445ed506bccd4de5a23f91f7986a"
+      X-Request-Id:
+      - 46997506-800e-44df-8fdb-20c100864027
+      X-Runtime:
+      - '0.003687'
+      Alternate-Protocol:
+      - 443:npn-spdy/2
+      Cf-Cache-Status:
+      - EXPIRED
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 68a87a31ea1ecc8b-WAW
+    body:
+      encoding: ASCII-8BIT
+      string: '{"solana":{"usd":144.23}}'
+  recorded_at: Mon, 06 Sep 2021 14:44:47 GMT
+recorded_with: VCR 6.0.0

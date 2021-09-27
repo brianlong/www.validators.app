@@ -1,0 +1,129 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.coingecko.com/api/v3/coins/solana/ohlc?days=1&vs_currency=usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.coingecko.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 08 Sep 2021 11:50:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Cache-Control:
+      - max-age=30, public, must-revalidate, s-maxage=1800
+      Vary:
+      - Accept-Encoding, Origin
+      Etag:
+      - W/"2ee1397ce4efb4d516d290dc26170f55"
+      X-Request-Id:
+      - 644eb6bf-d940-403b-a2fb-373ed998eef2
+      X-Runtime:
+      - '0.120265'
+      Alternate-Protocol:
+      - 443:npn-spdy/2
+      Cf-Cache-Status:
+      - EXPIRED
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 68b7f5486ddecc87-WAW
+    body:
+      encoding: ASCII-8BIT
+      string: "[[1631016000000,183.36,183.36,183.36,183.36],[1631017800000,183.56,184.79,183.52,183.52],[1631019600000,181.73,182.4,180.65,182.4],[1631021400000,181.98,182.67,181.38,182.67],[1631023200000,183.5,184.29,181.66,181.66],[1631025000000,181.11,181.31,175.92,175.92],[1631026800000,174.99,174.99,164.7,164.7],[1631028600000,163.14,163.14,150.67,162.84],[1631030400000,162.47,169.88,162.47,169.88],[1631032200000,170.03,181.88,169.19,181.88],[1631034000000,185.86,187.12,185.74,187.12],[1631035800000,186.28,186.28,176.78,176.78],[1631037600000,175.6,176.55,174.89,175.16],[1631039400000,175.33,175.99,168.42,168.42],[1631041200000,172.68,176.06,172.08,172.08],[1631043000000,171.56,177.78,171.56,177.78],[1631044800000,177.86,177.86,175.64,176.0],[1631046600000,175.79,175.83,173.17,175.17],[1631048400000,174.77,174.77,170.18,172.3],[1631050200000,171.5,172.33,167.66,167.66],[1631052000000,165.68,166.17,164.65,166.02],[1631053800000,166.07,172.24,166.07,172.24],[1631055600000,173.22,174.25,172.26,172.26],[1631057400000,172.35,177.57,172.35,177.57],[1631059200000,177.51,177.51,173.31,173.31],[1631061000000,173.63,173.63,170.06,170.21],[1631062800000,171.65,172.34,171.02,172.34],[1631064600000,172.59,173.21,171.82,171.82],[1631066400000,172.21,178.74,172.21,178.74],[1631068200000,179.25,179.25,178.52,178.72],[1631070000000,178.04,178.04,175.44,175.44],[1631071800000,176.11,176.69,173.15,173.15],[1631073600000,172.9,174.79,172.9,173.84],[1631075400000,173.28,173.86,172.71,173.86],[1631077200000,174.28,174.28,172.53,172.53],[1631079000000,171.67,171.67,168.99,169.45],[1631080800000,169.61,169.61,163.3,163.3],[1631082600000,163.27,164.12,158.45,158.45],[1631084400000,158.65,160.51,158.65,159.88],[1631086200000,160.55,163.03,160.55,162.26],[1631088000000,161.02,161.02,154.06,154.06],[1631089800000,153.65,154.35,149.5,149.5],[1631091600000,152.83,161.11,152.83,160.74],[1631093400000,160.32,162.82,160.32,162.56],[1631095200000,162.78,164.5,162.66,164.5],[1631097000000,165.33,165.33,164.08,164.37],[1631098800000,163.14,163.14,159.56,163.11],[1631100600000,163.8,165.85,163.45,165.43],[1631102400000,165.06,165.06,163.53,163.6]]"
+  recorded_at: Wed, 08 Sep 2021 11:50:15 GMT
+- request:
+    method: get
+    uri: https://api.coingecko.com/api/v3/coins/solana/market_chart?days=1&interval=daily&vs_currency=usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.coingecko.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 08 Sep 2021 11:50:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=30, public, must-revalidate, s-maxage=30
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - POST, PUT, DELETE, GET, OPTIONS
+      Access-Control-Request-Method:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept, Authorization
+      Access-Control-Expose-Headers:
+      - link, per-page, total
+      Vary:
+      - Accept-Encoding, Origin
+      Etag:
+      - W/"e15b2ac068df0011bdf15800ad08b694"
+      X-Request-Id:
+      - 27336a5a-1e8b-42d9-b5a5-de4955cd104d
+      X-Runtime:
+      - '0.029159'
+      Alternate-Protocol:
+      - 443:npn-spdy/2
+      Cf-Cache-Status:
+      - EXPIRED
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 68b7f54b6f97cca7-WAW
+    body:
+      encoding: ASCII-8BIT
+      string: '{"prices":[[1631059200000,173.31109531018657],[1631101794000,163.5984863973379]],"market_caps":[[1631059200000,51322390022.245636],[1631101794000,47911051904.20695]],"total_volumes":[[1631059200000,16149087501.300968],[1631101794000,13514126608.554743]]}'
+  recorded_at: Wed, 08 Sep 2021 11:50:15 GMT
+recorded_with: VCR 6.0.0
