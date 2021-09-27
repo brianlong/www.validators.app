@@ -10,26 +10,7 @@ const resolver = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
     }
-  },
-  entry: [
-    'babel-polyfill',
-    './app-js/main',
-  ],
-  output: {
-    path: __dirname + '/app/assets/javascripts',
-    filename: 'app-js.js'
-  },
-  module: {
-    loaders: [
-      {
-        include: path.join(__dirname, 'app-js'),
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015']
-        }
-      }
-    ]
-  },
+  }
 }
 environment.config.merge(resolver)
 module.exports = environment
