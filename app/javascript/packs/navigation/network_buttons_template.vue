@@ -15,12 +15,6 @@
   </div>
 </template>
 
-<style scoped>
-  .btn {
-    cursor: pointer;
-  }
-</style>
-
 <script>
   export default {
     data(){
