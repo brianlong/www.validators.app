@@ -1,24 +1,22 @@
 <template>
-  <div class="btn-group btn-group-toggle">
+  <div class="btn-group btn-group-xs btn-group-toggle">
     <label 
-      class="btn btn-secondary" 
+      class="btn btn-secondary nav-link" 
       :class="{ active: is_mainnet() }"
       @click="change_network('mainnet')">
-      mainnet
+      <a class="">Mainnet</a>
     </label>
     <label 
-      class="btn btn-secondary" 
+      class="btn btn-secondary nav-link" 
       :class="{ active: is_testnet() }"
       @click="change_network('testnet')">
-      testnet
+      <a class="">Testnet</a>
     </label>
   </div>
 </template>
 
 <script>
-  import { defineComponent } from '@vue/composition-api'
-
-  export default defineComponent({
+  export default {
     data(){
       return {
         network: '',
@@ -52,5 +50,5 @@
         return true
       }
     }
-  })
+  }
 </script>

@@ -12,7 +12,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav ml-auto">
-        <div id="network-buttons"></div>
         <% if user_signed_in? %>
           <li class="nav-item">
             <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "nav-link btn btn-md btn-secondary" %>
@@ -22,9 +21,10 @@
             <%= link_to 'Log In', new_user_session_path, class: "nav-link" %>
           </li>
           <li class="nav-item">
-            <%= link_to 'Sign Up', new_user_registration_path, class: "nav-link btn btn-md btn-secondary" %>
+            <%= link_to 'Sign Up', new_user_registration_path, class: "nav-link" %>
           </li>
         <% end %>
+        <div id="network-buttons"></div>
       </ul>
     </div>
   </nav>
