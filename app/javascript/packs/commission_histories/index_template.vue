@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <commission-history-row @filter_by_query="filter_by_query" v-for="ch in commission_histories" :key="ch.id" :chistory="ch">
+          <commission-history-row @filter_by_query="filter_by_query" v-for="ch in commission_histories" :key="ch.id" :comm_history="ch">
           </commission-history-row>
         </tbody>
       </table>
