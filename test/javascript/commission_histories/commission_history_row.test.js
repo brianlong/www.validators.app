@@ -5,7 +5,7 @@ describe('commission_history_row', ()=> {
   it('has correct chistory_name', ()=>{
     const wrapper = shallowMount(CommissionHistoryRow, {
       propsData: {
-        chistory: {
+        comm_history: {
           account: '1234abcdef1234',
           name: 'customName',
           network: 'testnet',
@@ -14,13 +14,13 @@ describe('commission_history_row', ()=> {
         }
       }
     })
-    expect(wrapper.vm._data.chistory_name).toMatch("customName")
+    expect(wrapper.vm._data.comm_history_name).toMatch("customName")
   })
 
   it('has correct chistory_name when no name in props', ()=>{
     const wrapper = shallowMount(CommissionHistoryRow, {
       propsData: {
-        chistory: {
+        comm_history: {
           account: '123',
           name: null,
           network: 'testnet',
@@ -29,13 +29,13 @@ describe('commission_history_row', ()=> {
         }
       }
     })
-    expect(wrapper.vm._data.chistory_name).toMatch("123...123")
+    expect(wrapper.vm._data.comm_history_name).toMatch("123...123")
   })
 
   it('has correct descending', ()=>{
     const wrapper = shallowMount(CommissionHistoryRow, {
       propsData: {
-        chistory: {
+        comm_history: {
           account: '123',
           name: null,
           network: 'testnet',
