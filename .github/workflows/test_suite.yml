@@ -116,3 +116,4 @@ jobs:
           REDIS_URL: redis://127.0.0.1:${{ job.services.redis.ports[6379] }}/0
         run: |
           bundle exec rails test
+          yarn test
