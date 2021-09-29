@@ -22,8 +22,6 @@ document.addEventListener('turbolinks:load', () => {
   });
 
   const data2 = JSON.parse(ctx2.canvas.dataset.data)
-  // Converts string timestamp to Int for luxon
-  data2.forEach(el => el['x'] = parseInt(el['x']));
 
   var myChart2 = new Chart(ctx2, {
     type: 'candlestick',

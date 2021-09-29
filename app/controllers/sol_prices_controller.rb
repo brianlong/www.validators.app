@@ -12,7 +12,7 @@ class SolPricesController < ApplicationController
 
     @ftx_data = @ftx_prices.map do |ftx_price|
       {
-        x: ftx_price.datetime_from_exchange.to_datetime.strftime('%Q'),
+        x: ftx_price.datetime_from_exchange.to_datetime.strftime('%Q').to_i,
         o: ftx_price.open,
         h: ftx_price.high,
         l: ftx_price.low,
