@@ -20,7 +20,10 @@
         width="200px"
         height="100px"
         data-labels="<%= @coin_gecko_labels %>"
-        data-data="<%= @coin_gecko_data %>" >
+        data-data="<%= @coin_gecko_data %>" 
+        data-backgroundcolor="<%= SPARK_LINE_3_TRANSPARENT %>"
+        data-bordercolor="<%= SPARK_LINE_3 %>"
+      >
       </canvas>
     </div>
 
@@ -29,7 +32,10 @@
       <canvas id="myChart2"
         width="200px"
         height="100px"
-        data-data="<%= @ftx_data.to_json %>" >
+        data-data="<%= @ftx_data.to_json %>"
+        data-backgroundcolor="<%= SPARK_LINE_3_TRANSPARENT %>"
+        data-bordercolor="<%= SPARK_LINE_3 %>"
+      >
       </canvas>
     </div>
   </div>

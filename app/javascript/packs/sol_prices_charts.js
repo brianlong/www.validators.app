@@ -7,31 +7,37 @@ import '../lib/chart-financial';
 document.addEventListener('turbolinks:load', () => {
   var ctx = document.getElementById('myChart').getContext('2d');
   var ctx2 = document.getElementById('myChart2').getContext('2d');
+  const dataset = ctx.canvas.dataset
+  const dataset2 = ctx2.canvas.dataset
+
   var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: JSON.parse(ctx.canvas.dataset.labels),
+      labels: JSON.parse(dataset.labels),
       datasets: [{
         label: 'SOL Token Price',
-        data: JSON.parse(ctx.canvas.dataset.data),
+        data: JSON.parse(dataset.data),
         fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
+        tension: 0.1,
+        borderColor: dataset.bordercolor,
+        backgroundColor: dataset.backgroundcolor,
+        borderWidth: 1,
       }]
     },
   });
 
-  const data2 = JSON.parse(ctx2.canvas.dataset.data)
 
   var myChart2 = new Chart(ctx2, {
     type: 'candlestick',
     data: {
       datasets: [{
         label: 'SOL Token Price',
-        data: data2,
+        data: JSON.parse(dataset2.data),
         fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
+        tension: 0.1,
+        borderColor: dataset2.bordercolor,
+        backgroundColor: dataset2.backgroundcolor,
+        borderWidth: 1,
       }]
     },
   });
