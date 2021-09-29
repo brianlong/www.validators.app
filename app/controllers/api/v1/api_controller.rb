@@ -57,7 +57,9 @@ module Api
 
         if !params[:show_absent].nil? && \
           (params[:show_absent].in?([false, "false"]))
-          @validators = @validators.where.not('validator_histories.epoch_credits': nil)
+          puts 'do not show absent'
+          vhs = ValidatorHistory.where(network: params[:network]).pluck(:account).uniq
+          @validators = @validators.where('validators.account IN (?)', vhs)
         end
 
         @skipped_slots_report = Report.where(
