@@ -141,9 +141,9 @@ table, .table {
   table-layout: fixed;
 
   .percent-column {
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 135px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 145px;
   }
 
   @media(max-width: $screen-lg-max) {
