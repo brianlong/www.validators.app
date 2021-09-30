@@ -27,7 +27,7 @@
     "babel-preset-vue": "^2.0.2",
     "jest": "^27.2.0",
     "vue-jest": "^3.0.7",
-    "webpack-dev-server": "^4.2.1"
+    "webpack-dev-server": "^4.3.0"
   },
   "scripts": {
     "type": "module",

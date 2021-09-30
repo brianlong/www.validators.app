@@ -23,6 +23,4 @@ document.addEventListener('DOMContentLoaded', () => {
       'BPagination': BPagination
     }
   })
-
-  module.exports = chindex;
 })
