@@ -5,12 +5,19 @@ import 'chartjs-adapter-luxon';
 import '../lib/chart-financial';
 
 document.addEventListener('turbolinks:load', () => {
-  var ctx = document.getElementById('myChart').getContext('2d');
-  var ctx2 = document.getElementById('myChart2').getContext('2d');
+  const chartCoinGecko = document.getElementById('myChart')
+  const chartFtx = document.getElementById('myChart2')
+
+  if (chartCoinGecko == null && chartFtx == null) {
+    return null;
+  }
+
+  const ctx = chartCoinGecko.getContext('2d');
+  const ctx2 = chartFtx.getContext('2d');
   const dataset = ctx.canvas.dataset
   const dataset2 = ctx2.canvas.dataset
 
-  var myChart = new Chart(ctx, {
+  const myChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: JSON.parse(dataset.labels),
@@ -33,7 +40,7 @@ document.addEventListener('turbolinks:load', () => {
     }
   });
 
-  var myChart2 = new Chart(ctx2, {
+  const myChart2 = new Chart(ctx2, {
     type: 'candlestick',
     data: {
       datasets: [{
