@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.coingecko.com/api/v3/coins/solana/market_chart?days=1&interval=daily&vs_currency=usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.coingecko.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 31 Aug 2021 11:13:55 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - max-age=30, public, must-revalidate, s-maxage=30
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - POST, PUT, DELETE, GET, OPTIONS
+      Access-Control-Request-Method:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept, Authorization
+      Access-Control-Expose-Headers:
+      - link, per-page, total
+      Vary:
+      - Accept-Encoding, Origin
+      Etag:
+      - W/"4107ad2459553f06daa6c8bddee1d838"
+      X-Request-Id:
+      - fae89d41-c8fb-4650-bbdf-19a54fb49987
+      X-Runtime:
+      - '0.025189'
+      Alternate-Protocol:
+      - 443:npn-spdy/2
+      Cf-Cache-Status:
+      - MISS
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6875d50a6b1e5025-WAW
+    body:
+      encoding: ASCII-8BIT
+      string: '{"prices":[[1630368000000,109.6467328393857],[1630408428000,120.24526178067454]],"market_caps":[[1630368000000,31920673369.62922],[1630408428000,35122889644.84562]],"total_volumes":[[1630368000000,4827155957.583222],[1630408428000,5559612386.704307]]}'
+  recorded_at: Tue, 31 Aug 2021 11:13:55 GMT
+recorded_with: VCR 6.0.0

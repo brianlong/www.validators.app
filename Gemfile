@@ -82,6 +82,7 @@ gem 'maxmind-geoip2'
 gem 'rack-cors'
 
 gem 'solana_rpc_ruby'
+gem 'coingecko_ruby'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
