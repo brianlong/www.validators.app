@@ -19,13 +19,19 @@ document.addEventListener('turbolinks:load', () => {
         data: JSON.parse(dataset.data),
         fill: false,
         tension: 0.1,
-        borderColor: dataset.bordercolor,
-        backgroundColor: dataset.backgroundcolor,
+        borderColor: dataset.color,
+        backgroundColor: dataset.color,
         borderWidth: 1,
       }]
     },
+    options: {
+      plugins: {
+        legend: {
+          onClick: null
+        }
+      }
+    }
   });
-
 
   var myChart2 = new Chart(ctx2, {
     type: 'candlestick',
@@ -35,10 +41,14 @@ document.addEventListener('turbolinks:load', () => {
         data: JSON.parse(dataset2.data),
         fill: false,
         tension: 0.1,
-        borderColor: dataset2.bordercolor,
-        backgroundColor: dataset2.backgroundcolor,
-        borderWidth: 1,
       }]
     },
+    options: {
+      plugins: {
+        legend: {
+          onClick: null
+        }
+      }
+    }
   });
 })
