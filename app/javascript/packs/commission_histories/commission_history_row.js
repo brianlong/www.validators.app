@@ -3,25 +3,25 @@ import Vue from 'vue/dist/vue.esm'
 
 var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
   props: {
-    chistory: {
+    comm_history: {
       type: Object,
       required: true
     }
   },
   data() {
-    if(this.chistory.name == null){
-      var chistory_name = this.chistory.account.substring(0,6) + "..." + this.chistory.account.substring(this.chistory.account.length - 4)
+    if(this.comm_history.name == null){
+      var comm_history_name = this.comm_history.account.substring(0,6) + "..." + this.comm_history.account.substring(this.comm_history.account.length - 4)
     } else {
-      var chistory_name = this.chistory.name
+      var comm_history_name = this.comm_history.name
     }
     return {
-      chistory_href: "/validators/" + this.chistory.network + "/" + this.chistory.account,
-      chistory_name: chistory_name,
-      descending: (this.chistory.commission_before > this.chistory.commission_after) ? true : false
+      comm_history_href: "/validators/" + this.comm_history.network + "/" + this.comm_history.account,
+      comm_history_name: comm_history_name,
+      descending: (this.comm_history.commission_before > this.comm_history.commission_after) ? true : false
     }
   },
   watch: {
-    chistory: function() {
+    comm_history: function() {
       this.prepareData()
     }
   },
@@ -30,35 +30,35 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
   },
   methods: {
     prepareData: function() {
-      this.chistory.commission_before = this.chistory.commission_before ? this.chistory.commission_before : 0
-      this.chistory.commission_after = this.chistory.commission_after ? this.chistory.commission_after : 0
+      this.comm_history.commission_before = this.comm_history.commission_before ? this.comm_history.commission_before : 0
+      this.comm_history.commission_after = this.comm_history.commission_after ? this.comm_history.commission_after : 0
     },
     filterByQuery: function(e) {
-      this.$emit('filter_by_query', this.chistory.account);
+      this.$emit('filter_by_query', this.comm_history.account);
     }
   },
   template: `
     <tr>
       <td>
-        <a href="#" v-bind:account="chistory_name" @click.prevent="filterByQuery">{{ chistory_name }}</a>
-        <a v-bind:href="chistory_href" target="_blank"><i class="fas fa-external-link-alt ml-1"></i></a>
+        <a href="#" v-bind:account="comm_history_name" @click.prevent="filterByQuery">{{ comm_history_name }}</a>
+        <a v-bind:href="comm_history_href" target="_blank"><i class="fas fa-external-link-alt ml-1"></i></a>
       </td>
       <td>
-        {{ chistory.epoch }}
-        <small>({{ chistory.epoch_completion }}%)</small>
+        {{ comm_history.epoch }}
+        <small>({{ comm_history.epoch_completion }}%)</small>
       </td>
       <td> 
-        {{ chistory.batch_uuid }}
+        {{ comm_history.batch_uuid }}
       </td>
       <td class="text-center">
-        {{ chistory.commission_before }}%
+        {{ comm_history.commission_before }}%
         <i class="fas fa-long-arrow-alt-right px-2"></i>
-        {{ chistory.commission_after }}%
+        {{ comm_history.commission_after }}%
         <i class="fas fa-long-arrow-alt-down text-success" v-if="descending"></i>
         <i class="fas fa-long-arrow-alt-up text-danger" v-if="!descending"></i>
       </td>
       <td> 
-        {{ chistory.created_at }}
+        {{ comm_history.created_at }}
       </td>
     </tr>
   `
