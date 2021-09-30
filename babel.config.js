@@ -39,8 +39,7 @@ module.exports = function(api) {
     plugins: [
       'babel-plugin-macros',
       '@babel/plugin-syntax-dynamic-import',
-      "transform-class-properties",
-      "@babel/plugin-transform-modules-commonjs",
+      '@babel/plugin-proposal-private-methods',
       isTestEnv && 'babel-plugin-dynamic-import-node',
       '@babel/plugin-transform-destructuring',
       [
@@ -53,18 +52,6 @@ module.exports = function(api) {
         '@babel/plugin-proposal-object-rest-spread',
         {
           useBuiltIns: true
-        }
-      ],
-      [
-        "@babel/plugin-proposal-private-methods", 
-        { 
-          "loose": true 
-        }
-      ],
-      [
-        "@babel/plugin-proposal-private-property-in-object", 
-        { 
-          "loose": true 
         }
       ],
       [
