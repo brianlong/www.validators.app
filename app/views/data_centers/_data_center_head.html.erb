@@ -2,28 +2,41 @@
   <th class="wider-column">Key<br />&nbsp;</th>
   <th class="wider-column">
     ISP
-    <i class="fas fa-info-circle" 
-       data-toggle="tooltip" 
-       data-placement="top" 
+    <i class="fas fa-info-circle"
+       data-toggle="tooltip"
+       data-placement="top"
        title="<%= t('definitions.isp_full_name') %>">
     </i>
     <br />&nbsp;
   </th>
   <th class="narrow-column">
     Population
-    <i class="fas fa-info-circle" 
-       data-toggle="tooltip" 
-       data-placement="top" 
+    <i class="fas fa-info-circle"
+       data-toggle="tooltip"
+       data-placement="top"
        title="<%= t('definitions.population_isp') %>">
     </i>
     <br />
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
+  <th class="narrow-column">
+    Delinquent
+    <i class="fas fa-info-circle"
+       data-toggle="tooltip"
+       data-placement="top"
+       title="<%= t('definitions.delinquent') %>">
+    </i>
+    <br />
+    <small class="text-muted">
+      (<%= @results[:total_delinquent] %> |
+      <%= (@results[:total_delinquent].to_f / @results[:total_population].to_f * 100).round(2) %> %)
+    </small>
+  </th>
   <th class="wider-column">
     Active Stake
-    <i class="fas fa-info-circle" 
-       data-toggle="tooltip" 
-       data-placement="top" 
+    <i class="fas fa-info-circle"
+       data-toggle="tooltip"
+       data-placement="top"
        title="<%= t('definitions.active_stake') %>">
     </i>
     <br />
