@@ -6,9 +6,8 @@ header {
   }
 
   .navbar {
-    padding: 20px 0 20px 0;
+    padding: 25px 0 45px 0;
     @include font-size-larger();
-    border-bottom: 2px solid #342F4B;
   }
   .nav-link {
     color: $link-color;
