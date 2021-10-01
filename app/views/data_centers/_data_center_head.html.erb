@@ -17,7 +17,17 @@
        title="<%= t('definitions.population_isp') %>">
     </i>
     <br />
-    <small class="text-muted">(<%= @results[:total_population] %>)</small>
+    <small class="text-muted">(<%= @results[:total_delinquent] %>)</small>
+  </th>
+  <th class="narrow-column">
+    Delinquent
+    <i class="fas fa-info-circle" 
+       data-toggle="tooltip" 
+       data-placement="top" 
+       title="<%= t('definitions.delinquent') %>">
+    </i>
+    <br />
+    <small class="text-muted">(<%= @results[:total_delinquent] %>)</small>
   </th>
   <th class="wider-column">
     Active Stake
