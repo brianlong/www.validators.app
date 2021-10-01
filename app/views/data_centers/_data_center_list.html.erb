@@ -7,7 +7,7 @@
       <%= dc_data[:delinquent_validators] %>
       <% if dc_data[:delinquent_validators] > 0 %>
          <small class="text-muted">
-          (<%= (dc_data[:delinquent_validators].to_f / dc_data[:count].to_f * 100).round(2) %> %)
+          (<%= (count_percentage(dc_data[:delinquent_validators], dc_data[:count])) %> %)
         </small>
       <% end %>
     </td>

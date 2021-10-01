@@ -29,7 +29,7 @@
     <br />
     <small class="text-muted">
       (<%= @results[:total_delinquent] %> |
-      <%= (@results[:total_delinquent].to_f / @results[:total_population].to_f * 100).round(2) %> %)
+      <%= (count_percentage(@results[:total_delinquent], @results[:total_population])) %> %)
     </small>
   </th>
   <th class="wider-column">
