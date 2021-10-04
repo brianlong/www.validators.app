@@ -94,7 +94,7 @@ class SortedDataCenters
         location: dc[3],
         count: population,
         active_stake: active_stake,
-        delinquent_validators: dc[4],
+        delinquent_validators: delinquent_validators,
       }
     end
   end
