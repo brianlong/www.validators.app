@@ -3,7 +3,6 @@
     <td><%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %></td>
     <td><%= dc_data[:aso] %></td>
     <td><%= dc_data[:count] %></td>
-    <td><%= dc_data[:delinquent_validators] %></td>
     <td>
       <%= dc_data[:delinquent_validators] %>
       <% if dc_data[:delinquent_validators] > 0 %>
