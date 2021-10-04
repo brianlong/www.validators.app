@@ -49,8 +49,6 @@ module Api
                                .page(page)
                                .per(limit)
 
-        current_epoch = EpochHistory.where(network: params[:network]).last
-
         unless params[:q].blank?
           @validators = ValidatorSearchQuery.new(@validators).search(params[:q])
         end
@@ -60,7 +58,7 @@ module Api
           name: 'build_skipped_slot_percent'
         ).last
 
-        json_result = @validators.map { |val| create_json_result(val, current_epoch) }
+        json_result = @validators.map { |val| create_json_result(val) }
 
         render json: json_result
       rescue ActionController::ParameterMissing
@@ -128,7 +126,7 @@ module Api
 
       private
 
-      def create_json_result(validator, current_epoch)
+      def create_json_result(validator)
         hash = {}
 
         hash.merge!(validator.to_builder.attributes!)
@@ -142,7 +140,6 @@ module Api
         hash.merge!(ip.to_builder.attributes!) unless ip.blank?
         hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
         hash.merge!(validator_history.to_builder.attributes!) unless validator_history.blank?
-        hash.merge!(current_epoch.to_builder.attributes!) unless current_epoch.blank?
 
         # Data from the skipped_slots_report
         unless @skipped_slots_report.nil?

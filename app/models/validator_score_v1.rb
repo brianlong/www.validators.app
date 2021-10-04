@@ -19,6 +19,7 @@
 #
 #  id                                          :bigint           not null, primary key
 #  active_stake                                :bigint           unsigned
+#  authorized_withdrawer_score                 :integer
 #  commission                                  :integer
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
