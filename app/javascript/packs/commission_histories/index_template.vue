@@ -108,7 +108,7 @@
         var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
 
         if (ctx.checkAccountNamePresence())  {
-          url = url + '&query=' + this.query
+          url = url + '&query=' + ctx.account_name
         }
 
         axios.get(url)
