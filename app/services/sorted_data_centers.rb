@@ -60,13 +60,12 @@ class SortedDataCenters
       aso = dc[1].map { |d| d[2] }.compact.uniq.join(', ')
       population = @scores.by_data_centers(dc_keys).count || 0
       active_stake = @scores.by_data_centers(dc_keys).sum(:active_stake)
+      delinquent_validators = dc[1].inject(0) { |sum, el| sum + el[4] } || 0
 
-      delinquent_validators = @scores.where(delinquent: true).by_data_centers(dc_keys).count || 0
       next if population.zero?
 
       @total_population += population
       @total_delinquent += delinquent_validators
-
       @results[dc[0]] = {
         asn: dc[0],
         aso: aso,
@@ -81,8 +80,9 @@ class SortedDataCenters
   def sort_by_data_centers
     @dc_sql.each do |dc|
       population = @scores.by_data_centers(dc[0]).count || 0
-      delinquent_validators = @scores.where(delinquent: true).by_data_centers(dc[0]).count || 0
+      delinquent_validators = dc[4] || 0
       active_stake = @scores.by_data_centers(dc[0]).sum(:active_stake)
+
       next if population.zero?
 
       @total_population += population
