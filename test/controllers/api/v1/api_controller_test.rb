@@ -98,7 +98,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
   test 'GET api_v1_validators with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
-    create(:validator_history, account: validator.account, epoch_credits: 100)
+    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
     create(:ip, address: validator.score.ip_address)
@@ -154,7 +154,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 100, validator_with_all_data['epoch_credits']
 
     # Epoch
-    assert_equal 1, validator_with_all_data['epoch']
+    assert_equal 222, validator_with_all_data['epoch']
 
   end
 
@@ -279,7 +279,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
   test 'GET api_v1_validator with token returns all data' do
     validator = create(:validator, :with_score, account: 'Test Account')
-    create(:validator_history, account: validator.account, epoch_credits: 100)
+    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
     create(:ip, address: validator.score.ip_address)
@@ -335,7 +335,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 100, json_response['epoch_credits']
 
     # Epoch
-    assert_equal 1, json_response['epoch']
+    assert_equal 222, json_response['epoch']
   end
 
   test 'GET api_v1_validator with token returns ValidatorNotFound when wrong account provided' do

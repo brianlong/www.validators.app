@@ -82,7 +82,7 @@ module Api
 
         current_epoch = EpochHistory.last
 
-        render json: create_json_result(@validator, current_epoch)
+        render json: create_json_result(@validator)
       rescue ValidatorNotFound
         render json: { 'status' => 'Validator Not Found' }, status: 404
       rescue ActionController::ParameterMissing
