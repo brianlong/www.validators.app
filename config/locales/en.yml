@@ -97,6 +97,7 @@ en:
     asn_full_name: "Autonomous System Number"
     average_score: "Average score for validators from ASN."
     commission: "Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account."
+    delinquent: "Delinquent definition."
     isp_full_name: "Internet Service Provider"
     population_asn: "Number of validators for ASN."
     population_isp: "Number of validators for ISP."
