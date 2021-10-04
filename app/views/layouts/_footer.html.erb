@@ -13,9 +13,6 @@
           <%= link_to 'API Docs', api_documentation_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
-          <%= link_to t('footer.nav_links.faq'), faq_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
           <%= link_to 'Log Deep Dives', log_deep_dives_index_path, class: 'nav-link' %>
         </li>
         <li class="nav-item" data-turbolinks="false">
@@ -48,6 +45,18 @@
           </li>
           <li class="nav-item">
             <%= link_to t('footer.nav_links.opt_out_requests'), opt_out_requests_path, class: 'nav-link' %>
+          </li>
+        <% end %>
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "nav-link btn btn-md btn-secondary" %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to 'Log In', new_user_session_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Sign Up', new_user_registration_path, class: "nav-link" %>
           </li>
         <% end %>
       </ul>

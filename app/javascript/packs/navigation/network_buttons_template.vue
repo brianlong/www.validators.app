@@ -44,6 +44,8 @@
           this.url = this.url.replace(/network=(mainnet|testnet)/, "network=" + target_network)
         } else if(this.url.match(/\/(mainnet|testnet)/)){
           this.url = this.url.replace(/\/(mainnet|testnet)/,'/' + target_network)
+        } else {
+          this.url = this.url + '?network=' + target_network
         }
         console.log(this.url)
         window.location.href = this.url
