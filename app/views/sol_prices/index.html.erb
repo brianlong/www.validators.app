@@ -1,0 +1,39 @@
+<div class="card pb-3 pl-3 pr-3">
+  <div class="card-content">
+    <h3 class="card-heading mb-3">Sol Token Prices</h3>
+  </div>
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#menu1">CoinGecko</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu2">FTX</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane active" id="menu1">
+      <canvas id="myChart"
+        width="200px"
+        height="100px"
+        data-labels="<%= @coin_gecko_labels %>"
+        data-data="<%= @coin_gecko_data %>"
+        data-color="<%= SPARK_LINE_3 %>"
+      >
+      </canvas>
+      <p class='mt-3 text-center'>Average price of Sol Token from the last 100 days, powered by <a href="https://www.coingecko.com/en">CoinGecko</a>.</p>
+    </div>
+
+    <div class="tab-pane fade" id="menu2">
+      <canvas id="myChart2"
+        width="200px"
+        height="100px"
+        data-data="<%= @ftx_data.to_json %>""
+      >
+      </canvas>
+      <p class='mt-3 text-center'>Open, high, low and close price of Sol Token from the last 100 days, powered by <a href="https://ftx.com/">FTX Exchange</a>.</p>
+    </div>
+  </div>
+</div>

@@ -19,6 +19,12 @@
           <%= link_to 'Commission Changes', commission_histories_path(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item">
+          <%= link_to 'Cluster Stats', cluster_stats_path(network: params[:network]), class: 'nav-link' %>
+        </li>
+        <li class="nav-item" data-turbolinks="false">
+          <%= link_to 'Sol Prices', sol_prices_url, class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
           <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
@@ -43,7 +49,7 @@
         <% end %>
         <% if user_signed_in? %>
           <li class="nav-item">
-            <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "nav-link btn btn-md btn-secondary" %>
+            <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "nav-link" %>
           </li>
         <% else %>
           <li class="nav-item">
