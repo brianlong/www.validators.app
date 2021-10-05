@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_133806) do
+ActiveRecord::Schema.define(version: 2021_10_01_094326) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_133806) do
     t.bigint "root_distance", unsigned: true
     t.bigint "max_vote_height", unsigned: true
     t.bigint "vote_distance", unsigned: true
+    t.integer "epoch"
     t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
     t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
