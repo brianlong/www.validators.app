@@ -2,11 +2,11 @@
 
 header {
   .navbar-brand {
-    img { width: 330px; }
+    img { width: 250px; }
   }
 
   .navbar {
-    padding: 40px 0 60px 0;
+    padding: 25px 0 45px 0;
     @include font-size-larger();
   }
   .nav-link {

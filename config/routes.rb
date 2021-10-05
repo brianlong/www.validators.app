@@ -44,6 +44,9 @@ Rails.application.routes.draw do
     collection { get 'thank-you' => 'opt_out_requests#thank_you' }
   end
 
+  # SolPrices
+  get 'sol_prices', to:'sol_prices#index'
+
   devise_for :users
 
   # Free Sidekiq
