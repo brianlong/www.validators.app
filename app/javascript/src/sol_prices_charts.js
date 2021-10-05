@@ -5,6 +5,10 @@ import 'chartjs-adapter-luxon';
 import '../lib/chart-financial';
 
 document.addEventListener('turbolinks:load', () => {
+  drawChart();
+})
+
+function drawChart() {
   const chartCoinGecko = document.getElementById('myChart')
   const chartFtx = document.getElementById('myChart2')
 
@@ -58,4 +62,4 @@ document.addEventListener('turbolinks:load', () => {
       }
     }
   });
-})
+};
