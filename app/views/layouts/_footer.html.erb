@@ -13,6 +13,9 @@
           <%= link_to 'API Docs', api_documentation_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
+          <%= link_to 'Data Centers', data_centers_url(network: params[:network]), class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
           <%= link_to 'Log Deep Dives', log_deep_dives_index_path, class: 'nav-link' %>
         </li>
         <li class="nav-item" data-turbolinks="false">
