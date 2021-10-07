@@ -16,7 +16,7 @@ class SolPricesController < ApplicationController
              end
 
     @coin_gecko_prices = SolPrice.where(exchange: SolPrice.exchanges[:coin_gecko])
-                                 .order(datetime_from_exchange: :asc)
+                                 .order(datetime_from_exchange: :desc)
                                  .limit(filter)
     @ftx_prices = SolPrice.where(exchange: SolPrice.exchanges[:ftx])
                           .order(datetime_from_exchange: :desc)

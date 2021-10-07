@@ -24,10 +24,14 @@ module SolPricesHelper
   end
 
   def active_tab?(exchange)
+    return nil unless params[:exchange]
+    
     params[:exchange].to_sym == exchange ? 'active' : 'fade'
   end
 
   def active_button?(exchange)
-    'active' if params[:exchange].to_sym == exchange
+    return nil unless params[:exchange]
+
+    'active' if params[:exchange]&.to_sym == exchange
   end
 end
