@@ -125,6 +125,7 @@ function drawChart() {
     options: {
       plugins: {
         legend: {
+          display: false,
           onClick: null
         }
       }
@@ -144,7 +145,17 @@ function drawChart() {
     options: {
       plugins: {
         legend: {
+          display: false,
           onClick: null
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            major: {
+              enabled: false
+            }
+          }
         }
       }
     }
