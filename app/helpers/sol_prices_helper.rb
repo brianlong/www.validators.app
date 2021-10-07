@@ -27,7 +27,7 @@ module SolPricesHelper
     params[:exchange].to_sym == exchange ? 'active' : 'fade'
   end
 
-  def active_buttin?(exchange)
+  def active_button?(exchange)
     'active' if params[:exchange].to_sym == exchange
   end
 end
