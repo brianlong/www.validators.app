@@ -111,7 +111,6 @@ function drawChart() {
   const myChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: JSON.parse(dataset.labels),
       datasets: [{
         label: 'SOL Token Price',
         data: JSON.parse(dataset.data),
@@ -127,6 +126,13 @@ function drawChart() {
         legend: {
           display: false,
           onClick: null
+        }
+      },
+      scales: {
+        x: {
+          time: {
+            unit: 'year'
+          },
         }
       }
     }
@@ -151,11 +157,9 @@ function drawChart() {
       },
       scales: {
         x: {
-          ticks: {
-            major: {
-              enabled: false
-            }
-          }
+          time: {
+            unit: 'day'
+          },
         }
       }
     }
