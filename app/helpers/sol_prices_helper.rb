@@ -1,11 +1,11 @@
 module SolPricesHelper
   def create_filter_links
-    div_css_classes = ['btn-group', 'btn-group-sm mt-3', 'mb-3']
+    div_css_classes = ['btn-group', 'mt-3', 'mb-3' ]
     
     content_tag(:div, nil, class: div_css_classes) do
       
       [7, 30, 90, 'all'].map do |filter|
-        button_css_classes = 'btn btn-sm btn-secondary chartFilterButton'
+        button_css_classes = 'btn btn-xs btn-secondary nav-link chartFilterButton'
 
         if filter.to_s == params[:filtering]
           button_css_classes += ' active'
