@@ -130,9 +130,7 @@ function drawChart() {
       },
       scales: {
         x: {
-          time: {
-            unit: 'year'
-          },
+          
         }
       }
     }
