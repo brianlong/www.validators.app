@@ -4,13 +4,15 @@ module SolPricesHelper
     
     content_tag(:div, nil, class: div_css_classes) do
       
-      [7, 30, 90, 'all'].map do |filter|
+      @filter_days.map do |filter|
         button_css_classes = 'btn btn-xs btn-secondary nav-link chartFilterButton'
 
         if filter.to_s == params[:filtering]
           button_css_classes += ' active'
         end
-        link_text = filter.is_a?(Integer) ? "#{filter} days" : filter.capitalize
+
+        link_text = "#{filter} days"
+        
         link_to link_text, 
                 sol_prices_url(
                   network: params[:network], 

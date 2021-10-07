@@ -2,18 +2,9 @@ class SolPricesController < ApplicationController
   respond_to :html, :js
 
   def index
+    @filter_days = [7, 30, 60, 90]
+    filter = params[:filtering].to_i
     sol_price_count ||= SolPrice.count
-
-    filter = case params[:filtering]
-             when '7'
-               7
-             when '30'
-               30
-             when 'all'
-               sol_price_count
-             else
-               100
-             end
 
     @coin_gecko_prices = SolPrice.where(exchange: SolPrice.exchanges[:coin_gecko])
                                  .order(datetime_from_exchange: :asc)
