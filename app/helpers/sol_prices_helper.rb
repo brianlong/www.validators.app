@@ -22,4 +22,12 @@ module SolPricesHelper
       end.join.html_safe
     end
   end
+
+  def active_tab?(exchange)
+    params[:exchange].to_sym == exchange ? 'active' : 'fade'
+  end
+
+  def active_buttin?(exchange)
+    'active' if params[:exchange].to_sym == exchange
+  end
 end

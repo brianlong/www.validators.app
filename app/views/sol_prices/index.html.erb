@@ -5,14 +5,14 @@
 
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a class="nav-link active chartTabButton" 
+      <a class="nav-link chartTabButton <%= active_buttin?(:coin_gecko) %>" 
          data-toggle="tab" 
          href="#coinGeckoChartTab">
         CoinGecko
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link chartTabButton" 
+      <a class="nav-link chartTabButton <%= active_buttin?(:ftx) %>" 
          data-toggle="tab" 
          href="#ftxChartTab">
         FTX
@@ -24,12 +24,12 @@
 
   <!-- Tab panes -->
   <div class="tab-content" id='sol-prices-tab-content'>
-    <div class="tab-pane active solPriceChartTab" id="coinGeckoChartTab">
+    <div class="tab-pane solPriceChartTab <%= active_tab?(:coin_gecko) %>" id="coinGeckoChartTab">
       <%= render 'coin_gecko_chart' %>
     </div>
 
-      <div class="tab-pane fade solPriceChartTab" id="ftxChartTab">
-        <%= render 'ftx_chart' %>
-      </div>
+    <div class="tab-pane solPriceChartTab <%= active_tab?(:ftx) %>" id="ftxChartTab">
+      <%= render 'ftx_chart' %>
+    </div>
   </div>
 </div>
