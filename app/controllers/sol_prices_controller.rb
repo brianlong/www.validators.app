@@ -17,13 +17,14 @@ class SolPricesController < ApplicationController
 
     @coin_gecko_prices = SolPrice.where(exchange: SolPrice.exchanges[:coin_gecko])
                                  .order(datetime_from_exchange: :asc)
+                                 .limit(filter)
     @ftx_prices = SolPrice.where(exchange: SolPrice.exchanges[:ftx])
-                          .order(datetime_from_exchange: :asc)
-
-    @coin_gecko_labels = @coin_gecko_prices.pluck(:datetime_from_exchange).last(filter).map do |datetime|
+                          .order(datetime_from_exchange: :desc)
+                          .limit(filter)
+    @coin_gecko_labels = @coin_gecko_prices.pluck(:datetime_from_exchange).map do |datetime|
       datetime.to_date.to_s
     end
-    @coin_gecko_data = @coin_gecko_prices.pluck(:average_price).last(filter)
+    @coin_gecko_data = @coin_gecko_prices.pluck(:average_price)
 
     @ftx_data = @ftx_prices.map do |ftx_price|
       {
@@ -33,6 +34,6 @@ class SolPricesController < ApplicationController
         l: ftx_price.low,
         c: ftx_price.close
       }
-    end.last(filter) # This is number of records that is displayed fine on the chart.
+    end  # This is number of records that is displayed fine on the chart.
   end
 end
