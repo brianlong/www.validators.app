@@ -36,8 +36,7 @@ document.addEventListener('turbolinks:load', () => {
 })
 
 function removeActiveClass(chartFilterButtons) {
-  for (let index = 0; index < chartFilterButtons.length; index++) {
-    const chartFilterButton = chartFilterButtons[index]
+  for (const chartFilterButton of chartFilterButtons) {
     chartFilterButton.classList.remove('active')
   } 
 }
