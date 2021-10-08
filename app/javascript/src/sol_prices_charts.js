@@ -47,7 +47,7 @@ function addActiveClass(button) {
 
 function changeUrlBasedOnActiveFilter(chartFilterButton) {
   const href = chartFilterButton.href
-  window.history.replaceState(href, href, href);
+  window.history.replaceState(null, '', href);
 }
 
 function updateFilterUrl() {
@@ -57,7 +57,7 @@ function updateFilterUrl() {
     const href = chartFilterButton.href
     const hrefExchange = findExchangeInUrl(href)
     const currentUrlExchange = findExchangeInUrl(url)
-    const newUrl = replaceExchangeInUrl(href, hrefExchange, currentUrlExchange) 
+    const newUrl = replaceExchangeInUrl(null, '', currentUrlExchange) 
 
     chartFilterButton.href = newUrl
   }
