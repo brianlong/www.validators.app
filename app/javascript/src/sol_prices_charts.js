@@ -13,7 +13,7 @@ document.addEventListener('turbolinks:load', () => {
   drawChart();
   
   // Add event listeners to tab buttons.
-  const chartTabButtons = document.getElementsByClassName('chartTabButton');
+  const chartTabButtons = document.getElementsByClassName('solPricesChartTabButton');
   
   for (const chartTabButton of chartTabButtons) {
     chartTabButton.addEventListener('click', function() {
