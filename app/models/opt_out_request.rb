@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: opt_out_requests
+#
+#  id                          :bigint           not null, primary key
+#  city_encrypted              :string(191)
+#  city_encrypted_iv           :string(191)
+#  meta_data                   :json
+#  name_encrypted              :string(191)
+#  name_encrypted_iv           :string(191)
+#  postal_code_encrypted       :string(191)
+#  postal_code_encrypted_iv    :string(191)
+#  request_type                :integer
+#  state_encrypted             :string(191)
+#  state_encrypted_iv          :string(191)
+#  street_address_encrypted    :string(191)
+#  street_address_encrypted_iv :string(191)
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#
 class OptOutRequest < ApplicationRecord
   enum request_type: %i[opt_out disclosure deletion]
 

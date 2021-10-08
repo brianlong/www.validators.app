@@ -50,7 +50,8 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
         :validator_history, 
         account: validator.account, 
         created_at: arr[0], 
-        epoch_credits: arr[1]
+        epoch_credits: arr[1],
+        epoch: 222
       )
     end
 
@@ -59,6 +60,7 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     assert_equal Validator.all.size, most_recent_epoch_credits.size
     assert_equal validator.account, most_recent_epoch_credits[1].account
     assert_equal 300, most_recent_epoch_credits[1].epoch_credits
+    assert_equal 222, most_recent_epoch_credits[1].epoch
     assert_equal time, most_recent_epoch_credits[1].created_at
   end
 end
