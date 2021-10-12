@@ -207,8 +207,8 @@ module SolanaLogic
       # epoch, as an array of arrays containing: [epoch, credits,
       # previousCredits]
       vote_accounts_json.each do |hash|
-        credits_total = hash['epochCredits'][-1][1].to_i
-        credits_previous = hash['epochCredits'][-1][2].to_i
+        credits_total = hash['epochCredits'][-1][1].to_i rescue 0
+        credits_previous = hash['epochCredits'][-1][2].to_i rescue 0
         credits_current = credits_total - credits_previous
         vote_accounts[hash['nodePubkey']] = {
           'vote_account' => hash['votePubkey'],
