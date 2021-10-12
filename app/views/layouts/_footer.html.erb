@@ -25,7 +25,7 @@
           <%= link_to 'Cluster Stats', cluster_stats_path(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Sol Prices', sol_prices_url, class: 'nav-link' %>
+          <%= link_to 'Sol Prices', sol_prices_url(exchange: SolPrice::EXCHANGES[0], filtering: 7), class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>

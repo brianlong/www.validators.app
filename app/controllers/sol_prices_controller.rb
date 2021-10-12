@@ -1,16 +1,26 @@
 class SolPricesController < ApplicationController
+  respond_to :html, :js
+
   def index
-    @coin_gecko_prices = SolPrice.where(exchange: SolPrice.exchanges[:coin_gecko])
+    @filter_days = [7, 30, 60, 90]
+    filter = params[:filtering].to_i
+    sol_price_count ||= SolPrice.count
+
+    coin_gecko_prices = SolPrice.where(exchange: SolPrice.exchanges[:coin_gecko])
                                  .order(datetime_from_exchange: :asc)
-    @ftx_prices = SolPrice.where(exchange: SolPrice.exchanges[:ftx])
+                                 .last(filter)
+    ftx_prices = SolPrice.where(exchange: SolPrice.exchanges[:ftx])
                           .order(datetime_from_exchange: :asc)
+                          .last(filter)
 
-    @coin_gecko_labels = @coin_gecko_prices.pluck(:datetime_from_exchange).last(100).map do |datetime|
-      datetime.to_date.to_s
+    @coin_gecko_data = coin_gecko_prices.map do |coin_gecko_price|
+      {
+        x: coin_gecko_price.datetime_from_exchange.strftime("%b %d"),
+        y: coin_gecko_price.average_price
+      }
     end
-    @coin_gecko_data = @coin_gecko_prices.pluck(:average_price).last(100)
 
-    @ftx_data = @ftx_prices.map do |ftx_price|
+    @ftx_data = ftx_prices.map do |ftx_price|
       {
         x: ftx_price.datetime_from_exchange.to_datetime.strftime('%Q').to_i,
         o: ftx_price.open,
@@ -18,6 +28,6 @@ class SolPricesController < ApplicationController
         l: ftx_price.low,
         c: ftx_price.close
       }
-    end.last(100) # This is number of records that is displayed fine on the chart.
+    end  # This is number of records that is displayed fine on the chart.
   end
 end
