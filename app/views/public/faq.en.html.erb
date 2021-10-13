@@ -1,21 +1,21 @@
 <h1>Getting Started</h1>
 
-<div class="mb-5">
-  <p>
-    We did our best to include on this page all the necessery information to get you started with staking on Solana.
-    If you have any more questions or think there should be any additional info here please keep in mind that you can use our chat
-    in the bottom right corner. 
-  </p>
-</div>
+<p class="mb-5">
+  We did our best to include on this page all the necessery information to get you started with staking on Solana.
+  If you have any more questions or think there should be any additional info here please keep in mind that you can use
+  our chat in the bottom right corner.
+</p>
 
 <h3>Quick Reference</h3>
-<ul class="list-large list-no-bullets">
+<ul class="list-large list-no-bullets mb-5">
   <li><a href="#staking">What is staking</a></li>
-  <li><a href="#timeline">Staking Timeline</a></li>
+  <li><a href="#timeline">Staking timeline</a></li>
   <li><a href="#choosing-validator">Choosing the right validator</li>
   <li><a href="#score">How Does the Validator Score V1 Work?</a></li>
   <li><a href="#data-centers">Data Centers</a></li>
-  <h5 class="mb-2 mt-5">Dictionary:</h5>
+</ul>
+<h3>Dictionary</h3>
+<ul class="list-large list-no-bullets mb-5">
   <li><a href="#commission">Commission</a></li>
   <li><a href="#epoch">Epoch</a></li>
   <li><a href="#root-distance">Root distance</a></li>
@@ -24,63 +24,77 @@
   <li><a href="#delinquency">Delinquency</a></li>
   <li><a href="#concentration">Stake Concentration</a></li>
 </ul>
+<h3>FAQ</h3>
+<ul class="list-large list-no-bullets mb-5">
+  <li><a href="#personal-data">How is my Personal Data protected?</a></li>
+  <li><a href="#private-validator">Why is my validator marked "private"?</a></li>
+  <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
+</ul>
+
+
 
 <hr />
 
 <h4 id="staking">What is staking</h4>
 <div class="mb-5">
   <p>
-    <strong>Staking</strong> is the process of delegating your sols to one ore more validators, who process transactions and run the network.
-    Validators who have more stake delegated to are more likely to write transactions and gain more rewards while doing so. Delegators then get 
-    proportional amount of rewards reduced by the validators <a href="#commission">commission</a>. 
+    <strong>Staking</strong> is the process of delegating your sols to one ore more validators, who process transactions
+    and run the network. Validators who have more stake delegated to are more likely to write transactions and gain more
+    rewards while doing so. Delegators then get proportional amount of rewards reduced by the validators
+    <a href="#commission">commission</a>.
   </p>
   <p>
-    Keep in mind that staking brings up a risk of a process known as slashing. If any intentional malicious behaviour is detected for a validator,
-    some amount of stake delegated to it can be destroyed. 
+    Keep in mind that staking brings up a risk of a process known as slashing. If any intentional malicious behaviour
+    is detected for a validator, some amount of stake delegated to it can be destroyed.
   </p>
   <p>
-    In order to start dalegating your SOL tokens, it is necessery to create a separate stake account and choose a validator to delegate to.
-    You can do it either from <a href="https://docs.solana.com/cli">command line interface</a>
-    or by using one of the <a href="https://docs.solana.com/wallet-guide">supported wallets</a> 
+    In order to start dalegating your SOL tokens, it is necessery to create a separate stake account and choose
+    a validator to delegate to. You can do it either from <a href="https://docs.solana.com/cli">command line interface</a>
+    or by using one of the <a href="https://docs.solana.com/wallet-guide">supported wallets</a>.
   </p>
 </div>
 
-<h4 id="timeline">Staking Timeline</h4>
+<h4 id="timeline">Staking timeline</h4>
 <div class="mb-5">
   <p>
-    After you delegate your SOL tokens, you need to wait until the next <a href="#epoch">epoch</a> for the changes to take effect.
-    Throughout the epoch validator is voting and generates new transactions according to the leader schedule and only after one entire epoch ends,
-    the reward is added to your staking pool and is automatically delegated to the same validator.
+    After you delegate your SOL tokens, you need to wait until the next <a href="#epoch">epoch</a> for the changes
+    to take effect. Throughout the epoch validator is voting and generates new transactions according to the leader
+    schedule and only after one entire epoch ends, the reward is added to your staking pool and is automatically
+    delegated to the same validator.
   </p>
   <p>
     Please note that during the pending epoch your tokens cannot be withdrawn. 
   </p>
   <p>
-    If you wish to undelegate your tokens from the validator, you need to wait untill the end of the epoch. In this case your last reward will be added
-    to your stake account and will no longer be delegated. 
+    If you wish to undelegate your tokens from the validator, you need to wait untill the end of the epoch. In this case
+    your last reward will be added to your stake account and will no longer be delegated.
   </p>
 </div>
 
 <h4 id="choosing-validator">Choosing the right validator</h4>
 <div class="mb-5">
   <p>
-    There are a couple of things to consider while choosing the right validator to delegate your stake to. In order to be able to vote properly and create new transactions
-    it needs to have constant high speed network access and good overall performance. Another important thing is the <a href="#commission">commission</a> validator 
-    takes to cover it's costs - the less the better. You should also check if validator is credible and operates in a transparent manner.
+    There are a couple of things to consider while choosing the right validator to delegate your stake to. In order
+    to be able to vote properly and create new transactions it needs to have constant high speed network access and good
+    overall performance. Another important thing is the <a href="#commission">commission</a> validator takes to cover
+    it's costs - the less the better. You should also check if validator is credible and operates in a transparent manner.
   </p>
   <p>
-    <strong>Performance</strong> - we're gathering some statistical data to determine how well the validator operates within solana network.
-    <a href="#root-distance">root block distance</a> and <a href="#vote-distance">vote distance</a> show how far behind it is from the top of the blockchain while 
-    <a href="#skipped-vote">the skipped slot &percnt;</a>  measures the percent of the time that a leader fails to produce a block during their allocated slots.
+    <strong>Performance</strong> - we're gathering some statistical data to determine how well the validator operates
+    within solana network. <a href="#root-distance">Root block distance</a> and <a href="#vote-distance">vote distance</a>
+    show how far behind it is from the top of the blockchain while <a href="#skipped-vote">the skipped slot &percnt;</a> measures
+    the percent of the time that a leader fails to produce a block during their allocated slots.
   </p>
   <p>
     <strong>Commission</strong> - The important thing to notice here is that commissions can be changed in any moment, 
-    so it's crucial to check for particular validators 
-    <%= link_to "commission change history", commission_histories_path(network: params[:network]) %> and see if there's no malicious behaviour there.
+    so it's crucial to check for particular validators
+    <%= link_to "commission change history", commission_histories_path(network: params[:network]) %> and see if there's
+    no malicious behaviour there.
   </p>
   <p>
-    <strong>Reliability</strong> - if the validator has all the information filled up, has its own website and no malicious behaviour in the past is detected it
-    is more likely that it cares about reliability and thus is more trustworthy. 
+    <strong>Reliability</strong> - if the validator has all the information filled up, has its own website and no
+    malicious behaviour in the past is detected it is more likely that it cares about reliability and thus is more
+    trustworthy.
   </p>
 </div>
 
@@ -108,14 +122,15 @@
     </li>
     <li>
       <strong>Skipped Slot &percnt;</strong> <br />
-      For this metric, we track a trailing 24-hour moving average of the skip rate. The moving average (MA) is then compared to the cluster median(MA) and cluster average(MA). On the charts, a dotted line shows the spot reading that resets with every epoch. The solid line shows the 24-hour moving average.
-      <br />
-      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator skipped slot &percnt; is at, or below, the cluster median.
-      <br />
-      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the skipped slot &percnt; is at, or below, the cluster average.
-      <br />
-      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator average is higher than the cluster average.
-      <br />
+      For this metric, we track a trailing 24-hour moving average of the skip rate. The moving average (MA) is then
+      compared to the cluster median(MA) and cluster average(MA). On the charts, a dotted line shows the spot reading
+      that resets with every epoch. The solid line shows the 24-hour moving average.<br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator skipped slot &percnt; is at, or below,
+      the cluster median.<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the skipped slot &percnt; is at, or below, the cluster
+      average.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator average is higher than the cluster
+      average.<br />
       The moving averages reflect the previous 24-hours, and the spot reading resets with each new epoch.
     </li>
     <li>
@@ -155,16 +170,16 @@
       please consider high performing nodes without high stake concentrations.
     </li>
     <li>
-      <strong>Data Center Concentration</strong>
-      <br />
-      This is another contra-score that will DEDUCT points from validators located in data centers that host a high percentage of other Solana validators. A high data center concentration means that a problem with the hosting provider could take many of the nodes offline.
-      <br />
-      <i class="fas fa-minus-circle text-danger mr-1"></i> (-2 points) means that this validator is in a data center with a very high percent of the active stake.
-      <br />
-      <i class="fas fa-minus-circle text-warning mr-1"></i> (-1 point) means that this validator is in a data center with a high percent of the active stake.
-      <br />
-      If you are an investor who is delegating stake, please consider
-      high performing nodes without a high data center concentration.
+      <strong>Data Center Concentration</strong><br />
+      This is another contra-score that will DEDUCT points from validators located in data centers that host a high
+      percentage of other Solana validators. A high data center concentration means that a problem with the hosting
+      provider could take many of the nodes offline.<br />
+      <i class="fas fa-minus-circle text-danger mr-1"></i> (-2 points) means that this validator is in a data center
+      with a very high percent of the active stake.<br />
+      <i class="fas fa-minus-circle text-warning mr-1"></i> (-1 point) means that this validator is in a data center
+      with a high percent of the active stake.<br />
+      If you are an investor who is delegating stake, please consider high performing nodes without a high data center
+      concentration.
     </li>
   </ol>
 
@@ -175,76 +190,81 @@
 </div>
 
 <h4 id="data-centers">Data Centers</h4>
-<div class="mb-5">
-  <p>
-    For the security reasons it is recommended that the validators in solana cluster are spread among as many locations as possible. It reduces the possibility
-    of network collapse in case of a data center breakage. On our <%= link_to "data centers", data_centers_url(network: params[:network])%> page you can examine 
-    the validators distribution between data centers and organisations autonomous system numbers.
-  </p>
-</div>
+<p class="mb-5">
+  For the security reasons it is recommended that the validators in solana cluster are spread among as many locations
+  as possible. It reduces the possibility of network collapse in case of a data center breakage. On our
+  <%= link_to "data centers", data_centers_url(network: params[:network])%> page you can examine the validators
+  distribution between data centers and organisations Autonomous System Numbers (ASN).
+</p>
 
-<h3>Dictionary</h3>
 <hr />
 
-<h5 id="commission">Commission</h5>
-<div class="mb-5">
-  <p>
-    Commission is a percentage value set by a validator to determine how much of the rewards earned does it collect in order to incur the costs. It can be set
-    anywhere between 0% and 100% and can be changed in any moment. 
-    <%= link_to "Click here", commission_histories_path(network: params[:network])%> if you want to know more about current commissions.
-  </p>
-</div>
+<h4 class="mb-5">Dictionary</h4>
 
-<h5 id="epoch">Epoch</h5>
-<div class="mb-5">
-  <p>
-    Time determined by number of slots, for which the leader schedule is valid. 
-  </p>
-</div>
+<h6 id="commission">Commission</h6>
+<p class="mb-5">
+  Commission is a percentage value set by a validator to determine how much of the rewards earned does it collect
+  in order to incur the costs. It can be set anywhere between 0% and 100% and can be changed in any moment.
+  <%= link_to "Click here", commission_histories_path(network: params[:network])%> if you want to know more about
+  current commissions.
+</p>
 
-<h5 id="root-distance">Root Distance</h5>
-<div class="mb-5">
-  <p>
-    Measures the median & average distance in block height between the validator and the tower's highest block. 
-    Smaller numbers mean that the validator is near the top of the tower.
-  </p>
-</div>
+<h6 id="epoch">Epoch</h6>
+<p class="mb-5">
+  Time determined by number of slots, for which the leader schedule is valid.
+</p>
 
-<h5 id="vote-distance">Vote Distance</h5>
-<div class="mb-5">
-  <p>
-    Is very similar to the Root Block Distance score above. Lower numbers mean that the node is voting near the front of the group.
-  </p>
-</div>
+<h6 id="root-distance">Root Distance</h6>
+<p class="mb-5">
+  Measures the median & average distance in block height between the validator and the tower's highest block.
+  Smaller numbers mean that the validator is near the top of the tower.
+</p>
 
-<h5 id="skipped-vote">Skipped Slot</h5>
-<div class="mb-5">
-  <p>
-    Measures the percent of the time that a leader fails to produce a block during their allocated slots. 
-    A lower number means that the leader is making blocks at a very high rate.
-  </p>
-</div>
+<h6 id="vote-distance">Vote Distance</h6>
+<p class="mb-5">
+  Is very similar to the Root Block Distance score above. Lower numbers mean that the node is voting near the front
+  of the group.
+</p>
 
-<h5 id="delinquency">Delinquency</h5>
-<div class="mb-5">
-  <p>
-    If the validator is not active in the solana network it is considered to be delinquent. Short-time delinquencies are considered acceptable,
-    since it occurs while software updates or temporary internet outages. 
-  </p>
-</div>
+<h6 id="skipped-vote">Skipped Slot</h6>
+<p class="mb-5">
+  Measures the percent of the time that a leader fails to produce a block during their allocated slots.
+  A lower number means that the leader is making blocks at a very high rate.
+</p>
 
-<h5 id="concentration">Stake concentration</h5>
-<div class="mb-5">
-  <p>
-    Solana is a decentralized proof-of-stake blockchain. It is best for the network and for those who uses it, that the total stake is divided
-    among as many validators as possible. Keep this in mind while choosing a validator to delegate to. 
-  </p>
-</div>
+<h6 id="delinquency">Delinquency</h6>
+<p class="mb-5">
+  If the validator is not active in the solana network it is considered to be delinquent. Short-time delinquencies
+  are considered acceptable, since it occurs while software updates or temporary internet outages.
+</p>
 
-<h4>How is my Personal Data Protected?</h4>
-<div>
+<h6 id="concentration">Stake concentration</h6>
+<p class="mb-5">
+  Solana is a decentralized proof-of-stake blockchain. It is best for the network and for those who uses it, that
+  the total stake is divided among as many validators as possible. Keep this in mind while choosing a validator
+  to delegate to.
+</p>
+
+<hr />
+
+
+<h4 class="mb-5">FAQ</h4>
+
+<h6 id="personal-data">How is my Personal Data protected?</h6>
+<p class="mb-5">
   All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by
   clicking the lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is
   stored within our database.
-</div>
+</p>
 
+<h6 id="private-validator">Why is my validator marked "private"?</h6>
+<p class="mb-5">
+  It's based on commission rate. 100% commission means that you are not looking for delegations, so we mark you as "private".
+</p>
+
+<h6 id="withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</h6>
+<p>
+  It informs visitors that your validator identity matches the withdraw authority on your vote account. It is a serious
+  security risk, eg. if someone hacks into your validator, they can steal from the vote account. Keep the withdraw
+  authority key offline to minimize the risk. Once you fix it, the warning will be taken off automatically within few hours.
+</p>
