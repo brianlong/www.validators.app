@@ -1,18 +1,18 @@
 <tr>
   <th class="medium-column">
     ASN
-    <i class="fas fa-info-circle" 
-      data-toggle="tooltip" 
-      data-placement="top" 
+    <i class="fas fa-info-circle"
+      data-toggle="tooltip"
+      data-placement="top"
       title="<%= t('definitions.asn_full_name')%>">
     </i>
     <br />&nbsp;
   </th>
   <th class="narrower-column">
     Average score
-    <i class="fas fa-info-circle" 
-      data-toggle="tooltip" 
-      data-placement="top" 
+    <i class="fas fa-info-circle"
+      data-toggle="tooltip"
+      data-placement="top"
       title="<%= t('definitions.average_score') %>">
     </i>
     <br />&nbsp;
@@ -20,19 +20,32 @@
   <th class="category-column">Data Centers<br />&nbsp;</th>
   <th class="narrower-column">
     Population
-    <i class="fas fa-info-circle" 
-      data-toggle="tooltip" 
-      data-placement="top" 
+    <i class="fas fa-info-circle"
+      data-toggle="tooltip"
+      data-placement="top"
       title="<%= t('definitions.population_asn') %>">
     </i>
     <br />
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
+  <th class="narrow-column">
+    Delinquent
+    <i class="fas fa-info-circle"
+       data-toggle="tooltip"
+       data-placement="top"
+       title="<%= t('definitions.delinquent_asn') %>">
+    </i>
+    <br />
+    <small class="text-muted">
+      (<%= @results[:total_delinquent] %> |
+      <%= (count_percentage(@results[:total_delinquent], @results[:total_population])) %>%)
+    </small>
+  </th>
   <th class="medium-column">
     Active Stake
-    <i class="fas fa-info-circle" 
-      data-toggle="tooltip" 
-      data-placement="top" 
+    <i class="fas fa-info-circle"
+      data-toggle="tooltip"
+      data-placement="top"
       title="<%= t('definitions.active_stake') %>">
     </i>
     <br />

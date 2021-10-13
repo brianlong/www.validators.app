@@ -7,6 +7,7 @@ class SortedDataCenters
     {
       total_population: @total_population,
       total_stake: @total_stake,
+      total_delinquent: @total_delinquent,
       results: @results
     }
   end
@@ -14,18 +15,30 @@ class SortedDataCenters
   def initialize(sort_by:, network:)
     @sort_by = sort_by
     sql = "
-      SELECT distinct data_center_key,
-            traits_autonomous_system_number,
-            traits_autonomous_system_organization,
-            country_iso_code,
-            IF(ISNULL(city_name), location_time_zone, city_name) as location
+      SELECT DISTINCT
+        ips.data_center_key,
+        ips.traits_autonomous_system_number,
+        ips.traits_autonomous_system_organization,
+        ips.country_iso_code,
+        SUM(IF(validator_score_v1s.delinquent = true, 1, 0)) as delinquent_count,
+        IF(ISNULL(city_name), location_time_zone, city_name) as location
       FROM ips
+      JOIN validator_score_v1s
+      ON validator_score_v1s.ip_address = ips.address
       WHERE ips.address IN (
         SELECT score.ip_address
         FROM validator_score_v1s score
         WHERE score.network = ?
         AND score.active_stake > 0
       )
+      GROUP BY
+        ips.data_center_key,
+        ips.traits_autonomous_system_number,
+        ips.traits_autonomous_system_organization,
+        ips.country_iso_code,
+        ips.city_name,
+        ips.location_time_zone,
+        ips.city_name
     "
     @dc_sql = Ip.connection.execute(
       ActiveRecord::Base.send(:sanitize_sql, [sql, network])
@@ -36,6 +49,7 @@ class SortedDataCenters
 
     @total_stake = @scores.sum(:active_stake)
     @total_population = 0
+    @total_delinquent = 0
     @results = {}
   end
 
@@ -46,16 +60,19 @@ class SortedDataCenters
       aso = dc[1].map { |d| d[2] }.compact.uniq.join(', ')
       population = @scores.by_data_centers(dc_keys).count || 0
       active_stake = @scores.by_data_centers(dc_keys).sum(:active_stake)
+      delinquent_validators = dc[1].inject(0) { |sum, el| sum + el[4] } || 0
+
       next if population.zero?
 
       @total_population += population
-
+      @total_delinquent += delinquent_validators
       @results[dc[0]] = {
         asn: dc[0],
         aso: aso,
         data_centers: dc_keys,
         count: population,
-        active_stake: active_stake
+        active_stake: active_stake,
+        delinquent_validators: delinquent_validators
       }
     end
   end
@@ -63,17 +80,21 @@ class SortedDataCenters
   def sort_by_data_centers
     @dc_sql.each do |dc|
       population = @scores.by_data_centers(dc[0]).count || 0
+      delinquent_validators = dc[4] || 0
       active_stake = @scores.by_data_centers(dc[0]).sum(:active_stake)
+
       next if population.zero?
 
       @total_population += population
+      @total_delinquent += delinquent_validators
 
       @results[dc[0]] = {
         aso: dc[1],
         country: dc[2],
         location: dc[3],
         count: population,
-        active_stake: active_stake
+        active_stake: active_stake,
+        delinquent_validators: delinquent_validators,
       }
     end
   end
