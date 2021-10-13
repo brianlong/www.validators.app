@@ -1,17 +1,17 @@
 <h1>Getting Started</h1>
 
 <p class="mb-5">
-  We did our best to include on this page all the necessery information to get you started with staking on Solana.
-  If you have any more questions or think there should be any additional info here please keep in mind that you can use
-  our chat in the bottom right corner.
+  We did our best to&nbsp;include on this page all the&nbsp;necessery information to get you started with staking on Solana.
+  If you have any more questions or&nbsp;think there should be any additional info here please keep in&nbsp;mind that
+  you can use our chat in the&nbsp;bottom right corner.
 </p>
 
 <h3>Quick Reference</h3>
 <ul class="list-large list-no-bullets mb-5">
   <li><a href="#staking">What is staking</a></li>
   <li><a href="#timeline">Staking timeline</a></li>
-  <li><a href="#choosing-validator">Choosing the right validator</li>
-  <li><a href="#score">How Does the Validator Score V1 Work?</a></li>
+  <li><a href="#choosing-validator">Choosing the&nbsp;right validator</li>
+  <li><a href="#score">How Does the&nbsp;Validator Score V1 Work?</a></li>
   <li><a href="#data-centers">Data Centers</a></li>
 </ul>
 <h3>Dictionary</h3>
@@ -20,7 +20,7 @@
   <li><a href="#epoch">Epoch</a></li>
   <li><a href="#root-distance">Root distance</a></li>
   <li><a href="#vote-distance">Vote distance</a></li>
-  <li><a href="#skipped-vote">Skipped slot &percnt; </a></li>
+  <li><a href="#skipped-vote">Skipped slot&nbsp;&percnt; </a></li>
   <li><a href="#delinquency">Delinquency</a></li>
   <li><a href="#concentration">Stake Concentration</a></li>
 </ul>
@@ -38,148 +38,156 @@
 <h4 id="staking">What is staking</h4>
 <div class="mb-5">
   <p>
-    <strong>Staking</strong> is the process of delegating your sols to one ore more validators, who process transactions
-    and run the network. Validators who have more stake delegated to are more likely to write transactions and gain more
-    rewards while doing so. Delegators then get proportional amount of rewards reduced by the validators
-    <a href="#commission">commission</a>.
+    <strong>Staking</strong> is the&nbsp;process of delegating your sols to&nbsp;one or more validators, who process
+    transactions and run the&nbsp;network. Validators who have more stake delegated&nbsp;to are more likely to&nbsp;write
+    transactions and gain more rewards while doing&nbsp;so. Delegators then get proportional amount of&nbsp;rewards
+    reduced by the&nbsp;validators <a href="#commission">commission</a>.
   </p>
   <p>
-    Keep in mind that staking brings up a risk of a process known as slashing. If any intentional malicious behaviour
-    is detected for a validator, some amount of stake delegated to it can be destroyed.
+    Keep in&nbsp;mind that staking brings&nbsp;up a&nbsp;risk of a&nbsp;process known as slashing. If any intentional
+    malicious behaviour is detected for a&nbsp;validator, some amount of stake delegated to it can be destroyed.
   </p>
   <p>
-    In order to start dalegating your SOL tokens, it is necessery to create a separate stake account and choose
-    a validator to delegate to. You can do it either from <a href="https://docs.solana.com/cli">command line interface</a>
-    or by using one of the <a href="https://docs.solana.com/wallet-guide">supported wallets</a>.
+    In order to&nbsp;start dalegating your SOL tokens, it is necessery to&nbsp;create a&nbsp;separate stake account and
+    choose a&nbsp;validator to delegate to. You can do it either from <a href="https://docs.solana.com/cli">command line interface</a>
+    or by using one of the&nbsp;<a href="https://docs.solana.com/wallet-guide">supported wallets</a>.
   </p>
 </div>
 
 <h4 id="timeline">Staking timeline</h4>
 <div class="mb-5">
   <p>
-    After you delegate your SOL tokens, you need to wait until the next <a href="#epoch">epoch</a> for the changes
-    to take effect. Throughout the epoch validator is voting and generates new transactions according to the leader
-    schedule and only after one entire epoch ends, the reward is added to your staking pool and is automatically
-    delegated to the same validator.
+    After you delegate your SOL tokens, you need to&nbsp;wait until the&nbsp;next <a href="#epoch">epoch</a> for
+    the&nbsp;changes to&nbsp;take effect. Throughout the&nbsp;epoch validator is voting and generates new transactions
+    according to the&nbsp;leader schedule and only after one entire epoch ends, the reward is added to your staking pool
+    and is automatically delegated to the&nbsp;same validator.
   </p>
   <p>
-    Please note that during the pending epoch your tokens cannot be withdrawn. 
+    Please note that during the&nbsp;pending epoch your tokens cannot be withdrawn.
   </p>
   <p>
-    If you wish to undelegate your tokens from the validator, you need to wait untill the end of the epoch. In this case
-    your last reward will be added to your stake account and will no longer be delegated.
+    If you wish to undelegate your tokens from the&nbsp;validator, you need to&nbsp;wait untill the end of the&nbsp;epoch.
+    In this case your last reward will be added to&nbsp;your stake account and will no longer be delegated.
   </p>
 </div>
 
-<h4 id="choosing-validator">Choosing the right validator</h4>
+<h4 id="choosing-validator">Choosing the&nbsp;right validator</h4>
 <div class="mb-5">
   <p>
-    There are a couple of things to consider while choosing the right validator to delegate your stake to. In order
-    to be able to vote properly and create new transactions it needs to have constant high speed network access and good
-    overall performance. Another important thing is the <a href="#commission">commission</a> validator takes to cover
-    it's costs - the less the better. You should also check if validator is credible and operates in a transparent manner.
+    There are a&nbsp;couple of things to&nbsp;consider while choosing the&nbsp;right validator to&nbsp;delegate your
+    stake&nbsp;to. In order to be able to vote properly and create new transactions it needs to&nbsp;have constant high
+    speed network access and good overall performance. Another important thing is the&nbsp;<a href="#commission">commission</a>
+    validator takes to&nbsp;cover it's costs - the&nbsp;less the better. You should also check if validator is credible
+    and operates in a&nbsp;transparent manner.
   </p>
   <p>
-    <strong>Performance</strong> - we're gathering some statistical data to determine how well the validator operates
+    <strong>Performance</strong> - we're gathering some statistical data to&nbsp;determine how well the validator operates
     within solana network. <a href="#root-distance">Root block distance</a> and <a href="#vote-distance">vote distance</a>
-    show how far behind it is from the top of the blockchain while <a href="#skipped-vote">the skipped slot &percnt;</a> measures
-    the percent of the time that a leader fails to produce a block during their allocated slots.
+    show how far behind it is from the&nbsp;top of the&nbsp;blockchain while <a href="#skipped-vote">the skipped slot &percnt;</a>
+    measures the&nbsp;percent of the&nbsp;time that a&nbsp;leader fails to&nbsp;produce a&nbsp;block during their
+    allocated slots.
   </p>
   <p>
-    <strong>Commission</strong> - The important thing to notice here is that commissions can be changed in any moment, 
-    so it's crucial to check for particular validators
+    <strong>Commission</strong> - The&nbsp;important thing to&nbsp;notice here is that commissions can be changed in any
+    moment, so it's crucial to&nbsp;check for particular validators
     <%= link_to "commission change history", commission_histories_path(network: params[:network]) %> and see if there's
     no malicious behaviour there.
   </p>
   <p>
-    <strong>Reliability</strong> - if the validator has all the information filled up, has its own website and no
-    malicious behaviour in the past is detected it is more likely that it cares about reliability and thus is more
-    trustworthy.
+    <strong>Reliability</strong> - if the&nbsp;validator has all the&nbsp;information filled up, has its own website and
+    no malicious behaviour in the&nbsp;past is detected it is more likely that it cares about reliability and thus is
+    more trustworthy.
   </p>
 </div>
 
-<h4 id="score">How Does the Validator Score V1 Work?</h4>
+<h4 id="score">How Does the&nbsp;Validator Score V1 Work?</h4>
 <div class="mb-5">
   <p>
-    We track validator performance over several dimensions and assign a score in the range of (0..2) for each. The
-    scores also correlate with colored icons: <i class="fas fa-circle score-2"></i> is excellent,
+    We track validator performance over several dimensions and assign a&nbsp;score in the&nbsp;range of (0..2) for each.
+    The&nbsp;scores also correlate with colored icons: <i class="fas fa-circle score-2"></i> is excellent,
     <i class="fas fa-circle score-1"></i> is OK, and <i class="fas fa-circle score-0"></i> means there is room for
-    improvement. The scored dimensions are:
+    improvement. The&nbsp;scored dimensions are:
   </p>
 
   <ol class="list-with-numbers">
     <li>
       <strong>Root Block Distance</strong> <br />
-      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator median block distance is at, or below,
-      the cluster median.<br />
-      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the validator average block distance is at, or
-      below, the cluster average.<br />
-      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator average is higher than the cluster average.<br />
-      The medians and averages are calculated over a trailing 2-day period and do not reset with each epoch.
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the&nbsp;validator median block distance is at,
+      or below, the&nbsp;cluster median.<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the&nbsp;validator average block distance is at,
+      or below, the&nbsp;cluster average.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the&nbsp;validator average is higher than
+      the&nbsp;cluster average.<br />
+      The&nbsp;medians and averages are calculated over a&nbsp;trailing 2-day period and do not reset with each epoch.
     </li>
     <li>
-      <strong>Vote Distance</strong> The scoring rules are the same as Root Block Distance above.
+      <strong>Vote Distance</strong> The&nbsp;scoring rules are the&nbsp;same as Root Block Distance above.
     </li>
     <li>
       <strong>Skipped Slot &percnt;</strong> <br />
-      For this metric, we track a trailing 24-hour moving average of the skip rate. The moving average (MA) is then
-      compared to the cluster median(MA) and cluster average(MA). On the charts, a dotted line shows the spot reading
-      that resets with every epoch. The solid line shows the 24-hour moving average.<br />
-      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator skipped slot &percnt; is at, or below,
-      the cluster median.<br />
-      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the skipped slot &percnt; is at, or below, the cluster
-      average.<br />
-      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator average is higher than the cluster
-      average.<br />
-      The moving averages reflect the previous 24-hours, and the spot reading resets with each new epoch.
+      For this metric, we track a&nbsp;trailing 24-hour moving average of the&nbsp;skip rate. The moving average (MA) is
+      then compared to the cluster median(MA) and cluster average(MA). On the&nbsp;charts, a&nbsp;dotted line shows
+      the&nbsp;spot reading that resets with every epoch. The solid line shows the 24-hour moving average.<br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the&nbsp;validator skipped slot &percnt; is at, or below,
+      the&nbsp;cluster median.<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the&nbsp;skipped slot &percnt; is at, or below,
+      the&nbsp;cluster average.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the&nbsp;validator average is higher than
+      the&nbsp;cluster average.<br />
+      The&nbsp;moving averages reflect the&nbsp;previous 24-hours, and the&nbsp;spot reading resets with each new epoch.
     </li>
     <li>
       <strong>Published Information</strong><br />
-      Investors or delegators want to know who is running a node. The Published Information Score measures the contact
-      information that the validator has posted to the blockchain using the `solana validator-info` feature.<br />
-      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator has published all four data
+      Investors or delegators want to&nbsp;know who is running a&nbsp;node. The&nbsp;Published Information Score measures
+      the&nbsp;contact information that the&nbsp;validator has posted to the&nbsp;blockchain using the
+      `solana validator-info` feature.<br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the&nbsp;validator has published all four data
       elements (Name, Keybase ID, Website URL, and Details).<br />
-      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the validator has published two or three parts.<br />
-      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator has published only one, or zero,
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the&nbsp;validator has published two or three parts.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the&nbsp;validator has published only one, or zero,
       pieces of contact data.
     </li>
     <li>
       <strong>Software Version</strong><br />
-      This score is based on the Solana software version currently in use on this node.<br />
-      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the validator is using the correct major, minor, & patch versions.<br />
-      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the validator is using the correct major, & minor versions (but not patch).<br />
-      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator is only using the current major version (or less).<br />
-      This score is updated as soon as the validator starts voting with a new software update.
+      This score is based on the&nbsp;Solana software version currently in use on this node.<br />
+      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the&nbsp;validator is using the&nbsp;correct major,
+      minor, & patch versions.<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the&nbsp;validator is using the&nbsp;correct major,
+      &&nbsp;minor versions (but not patch).<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the&nbsp;validator is only using the&nbsp;current
+      major version (or less).<br />
+      This score is updated as soon as the&nbsp;validator starts voting with a&nbsp;new software update.
     </li>
     <li>
       <strong>Security Report</strong><br />
-      Security and operations are a critical component of a well-run validator. I am assigning one (1) point when a
-      validator has provided me with a URL to their web page related to security policies. Please be aware that I am
-      not evaluating the content on that web page. I will merely confirm that the web page discusses security or
-      operating procedures before posting the link to this site.<br />
-      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the validator has provided a valid URL.<br />
-      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the validator has not published a description of
-      their security policies.<br />
-      (Validators, please directly <%= link_to 'contact Brian Long', contact_us_path %> to provide the URL.)
+      Security and operations are a&nbsp;critical component of a&nbsp;well-run validator. I am assigning one (1) point
+      when a&nbsp;validator has provided me with a&nbsp;URL to their web page related to&nbsp;security policies. Please
+      be aware that I am not evaluating the&nbsp;content on that web page. I will merely confirm that the&nbsp;web page
+      discusses security or operating procedures before posting the&nbsp;link to this site.<br />
+      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the&nbsp;validator has provided a&nbsp;valid URL.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the&nbsp;validator has not published a&nbsp;description
+      of their security policies.<br />
+      (Validators, please directly <%= link_to 'contact Brian Long', contact_us_path %> to provide the&nbsp;URL.)
     </li>
     <li>
-      <strong>Stake Concentration</strong> is a contra-score and will DEDUCT points from a validator's total score:<br />
-      <i class="fas fa-minus-circle text-warning mr-1"></i> (-2 points) means that this validator is one of the top 33&percnt; active stake holders.<br />
-      The concentration of stake is a bad thing on a decentralized proof-of-stake blockchain. There is no deduction of
-      points, and no icon, if the validator controls less than 3%. If you are an investor who is delegating stake,
-      please consider high performing nodes without high stake concentrations.
+      <strong>Stake Concentration</strong> is a&nbsp;contra-score and will DEDUCT points from a&nbsp;validator's total score:<br />
+      <i class="fas fa-minus-circle text-warning mr-1"></i> (-2 points) means that this validator is one of
+      the&nbsp;top 33&percnt; active stake holders.<br />
+      The&nbsp;concentration of stake is a&nbsp;bad thing on a&nbsp;decentralized proof-of-stake blockchain. There is
+      no deduction of points, and no icon, if the validator controls less than 3%. If you are an investor who is
+      delegating stake, please consider high performing nodes without high stake concentrations.
     </li>
     <li>
       <strong>Data Center Concentration</strong><br />
-      This is another contra-score that will DEDUCT points from validators located in data centers that host a high
-      percentage of other Solana validators. A high data center concentration means that a problem with the hosting
-      provider could take many of the nodes offline.<br />
-      <i class="fas fa-minus-circle text-danger mr-1"></i> (-2 points) means that this validator is in a data center
-      with a very high percent of the active stake.<br />
-      <i class="fas fa-minus-circle text-warning mr-1"></i> (-1 point) means that this validator is in a data center
-      with a high percent of the active stake.<br />
-      If you are an investor who is delegating stake, please consider high performing nodes without a high data center
-      concentration.
+      This is another contra-score that will DEDUCT points from validators located in data centers that host a&nbsp;high
+      percentage of other Solana validators. A&nbsp;high data center concentration means that a&nbsp;problem with
+      the&nbsp;hosting provider could take many of the&nbsp;nodes offline.<br />
+      <i class="fas fa-minus-circle text-danger mr-1"></i> (-2 points) means that this validator is in a&nbsp;data center
+      with a&nbsp;very high percent of the active stake.<br />
+      <i class="fas fa-minus-circle text-warning mr-1"></i> (-1 point) means that this validator is in a&nbsp;data center
+      with a&nbsp;high percent of the&nbsp;active stake.<br />
+      If you are an&nbsp;investor who is delegating stake, please consider high performing nodes without a&nbsp;high data
+      center concentration.
     </li>
   </ol>
 
@@ -191,9 +199,9 @@
 
 <h4 id="data-centers">Data Centers</h4>
 <p class="mb-5">
-  For the security reasons it is recommended that the validators in solana cluster are spread among as many locations
-  as possible. It reduces the possibility of network collapse in case of a data center breakage. On our
-  <%= link_to "data centers", data_centers_url(network: params[:network])%> page you can examine the validators
+  For the&nbsp;security reasons it is recommended that the&nbsp;validators in solana cluster are spread among as many
+  locations as possible. It reduces the&nbsp;possibility of network collapse in case of a&nbsp;data center breakage.
+  On our <%= link_to "data centers", data_centers_url(network: params[:network])%> page you can examine the&nbsp;validators
   distribution between data centers and organisations Autonomous System Numbers (ASN).
 </p>
 
@@ -203,46 +211,46 @@
 
 <h6 id="commission">Commission</h6>
 <p class="mb-5">
-  Commission is a percentage value set by a validator to determine how much of the rewards earned does it collect
-  in order to incur the costs. It can be set anywhere between 0% and 100% and can be changed in any moment.
-  <%= link_to "Click here", commission_histories_path(network: params[:network])%> if you want to know more about
-  current commissions.
+  Commission is a&nbsp;percentage value set by a&nbsp;validator to&nbsp;determine how much of the&nbsp;rewards earned
+  does it collect in order to&nbsp;incur the&nbsp;costs. It can be set anywhere between 0% and 100% and can be changed
+  in any moment. <%= link_to "Click here", commission_histories_path(network: params[:network])%> if you want to&nbsp;know
+  more about current commissions.
 </p>
 
 <h6 id="epoch">Epoch</h6>
 <p class="mb-5">
-  Time determined by number of slots, for which the leader schedule is valid.
+  Time determined by number of slots, for which the&nbsp;leader schedule is valid.
 </p>
 
 <h6 id="root-distance">Root Distance</h6>
 <p class="mb-5">
-  Measures the median & average distance in block height between the validator and the tower's highest block.
-  Smaller numbers mean that the validator is near the top of the tower.
+  Measures the&nbsp;median & average distance in block height between the&nbsp;validator and the&nbsp;tower's highest
+  block. Smaller numbers mean that the&nbsp;validator is near the&nbsp;top of the&nbsp;tower.
 </p>
 
 <h6 id="vote-distance">Vote Distance</h6>
 <p class="mb-5">
-  Is very similar to the Root Block Distance score above. Lower numbers mean that the node is voting near the front
-  of the group.
+  Is very similar to the&nbsp;Root Block Distance score above. Lower numbers mean that the&nbsp;node is voting near
+  the&nbsp;front of the group.
 </p>
 
 <h6 id="skipped-vote">Skipped Slot</h6>
 <p class="mb-5">
-  Measures the percent of the time that a leader fails to produce a block during their allocated slots.
-  A lower number means that the leader is making blocks at a very high rate.
+  Measures the&nbsp;percent of the&nbsp;time that a&nbsp;leader fails to&nbsp;produce a&nbsp;block during their allocated
+  slots. A&nbsp;lower number means that the&nbsp;leader is making blocks at a&nbsp;very high rate.
 </p>
 
 <h6 id="delinquency">Delinquency</h6>
 <p class="mb-5">
-  If the validator is not active in the solana network it is considered to be delinquent. Short-time delinquencies
+  If the&nbsp;validator is not active in the&nbsp;solana network it is considered to be delinquent. Short-time delinquencies
   are considered acceptable, since it occurs while software updates or temporary internet outages.
 </p>
 
 <h6 id="concentration">Stake concentration</h6>
 <p class="mb-5">
-  Solana is a decentralized proof-of-stake blockchain. It is best for the network and for those who uses it, that
-  the total stake is divided among as many validators as possible. Keep this in mind while choosing a validator
-  to delegate to.
+  Solana is a&nbsp;decentralized proof-of-stake blockchain. It is best for the&nbsp;network and for those who uses it,
+  that the&nbsp;total stake is divided among as many validators as possible. Keep this in mind while choosing a&nbsp;validator
+  to delegate&nbsp;to.
 </p>
 
 <hr />
@@ -253,7 +261,7 @@
 <h6 id="personal-data">How is my Personal Data protected?</h6>
 <p class="mb-5">
   All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by
-  clicking the lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is
+  clicking the&nbsp;lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is
   stored within our database.
 </p>
 
@@ -264,7 +272,8 @@
 
 <h6 id="withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</h6>
 <p>
-  It informs visitors that your validator identity matches the withdraw authority on your vote account. It is a serious
-  security risk, eg. if someone hacks into your validator, they can steal from the vote account. Keep the withdraw
-  authority key offline to minimize the risk. Once you fix it, the warning will be taken off automatically within few hours.
+  It informs visitors that your validator identity matches the&nbsp;withdraw authority on your vote account. It is
+  a&nbsp;serious security risk, eg. if someone hacks into your validator, they can steal from the&nbsp;vote account.
+  Keep the&nbsp;withdraw authority key offline to minimize the&nbsp;risk. Once you fix it, the&nbsp;warning will be
+  taken off automatically within few hours.
 </p>
