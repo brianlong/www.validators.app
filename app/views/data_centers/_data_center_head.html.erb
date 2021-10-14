@@ -1,6 +1,6 @@
 <tr>
-  <th class="wider-column">Key<br />&nbsp;</th>
-  <th class="wider-column">
+  <th class="column-lg">Key<br />&nbsp;</th>
+  <th class="column-sm">
     ISP
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
@@ -9,7 +9,7 @@
     </i>
     <br />&nbsp;
   </th>
-  <th class="narrow-column">
+  <th class="column-md">
     Population
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
@@ -19,7 +19,7 @@
     <br />
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
-  <th class="narrow-column">
+  <th class="column-md">
     Delinquent
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
@@ -32,7 +32,7 @@
       <%= (count_percentage(@results[:total_delinquent], @results[:total_population])) %>%)
     </small>
   </th>
-  <th class="wider-column">
+  <th class="column-lg">
     Active Stake
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
