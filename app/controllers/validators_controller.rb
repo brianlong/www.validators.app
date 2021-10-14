@@ -115,6 +115,8 @@ class ValidatorsController < ApplicationController
       network: params[:network],
       account: params[:account]
     ).first or not_found
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def validate_order

@@ -104,7 +104,11 @@ class PublicController < ApplicationController
 
   def commission_histories
     if params[:validator_id]
-      @validator = Validator.find(params[:validator_id])
+      begin
+        @validator = Validator.find(params[:validator_id])
+      rescue
+        render_404
+      end
     end
   end
 
