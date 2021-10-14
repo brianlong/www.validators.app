@@ -1,15 +1,14 @@
 <tr>
-  <th class="column-lg">Key<br />&nbsp;</th>
-  <th class="column-sm">
+  <th class="column-lg align-middle">Key</th>
+  <th class="column-sm align-middle">
     ISP
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
        data-placement="top"
        title="<%= t('definitions.isp_full_name') %>">
     </i>
-    <br />&nbsp;
   </th>
-  <th class="column-md">
+  <th class="column-md align-middle">
     Population
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
@@ -19,7 +18,7 @@
     <br />
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
-  <th class="column-md">
+  <th class="column-md align-middle">
     Delinquent
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
@@ -32,12 +31,11 @@
       <%= (count_percentage(@results[:total_delinquent], @results[:total_population])) %>%)
     </small>
   </th>
-  <th class="column-lg">
-    Active Stake
-    <i class="fas fa-info-circle small"
-       data-toggle="tooltip"
-       data-placement="top"
-       title="<%= t('definitions.active_stake') %>">
+  <th class="column-lg align-middle">
+    Active Stake&nbsp;<i class="fas fa-info-circle small"
+                         data-toggle="tooltip"
+                         data-placement="top"
+                         title="<%= t('definitions.active_stake') %>">
     </i>
     <br />
     <small class="text-muted">

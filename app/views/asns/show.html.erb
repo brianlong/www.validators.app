@@ -14,7 +14,7 @@
         </thead>
         <tbody>
         <tr>
-          <td class="category-column"><strong>Data Centers</strong></td>
+          <td class="column-sm"><strong>Data Centers</strong></td>
           <td>
             <% @data_centers.each do |dc| %>
               <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
