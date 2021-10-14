@@ -7,14 +7,13 @@ class ValidatorsController < ApplicationController
   # GET /validators
   # GET /validators.json
   def index
+    @per = 25
     validators = Validator.where(network: params[:network])
                           .scorable
                           .joins(:validator_score_v1)
                           .index_order(validate_order)
 
-    @validators_count = validators.size
-    @validators = validators.page(params[:page])
-    @total_active_stake = validators.total_active_stake
+    @validators = validators.page(params[:page]).per(@per)
 
     @batch = Batch.last_scored(params[:network])
 
@@ -23,11 +22,6 @@ class ValidatorsController < ApplicationController
         network: params[:network],
         batch_uuid: @batch.uuid
       ).first
-
-      validator_block_history_stats = Stats::ValidatorBlockHistory.new(params[:network], @batch.uuid)
-
-      @skipped_slot_average = validator_block_history_stats.scorable_average_skipped_slot_percent
-      @skipped_slot_median = validator_block_history_stats.median_skipped_slot_percent
     end
 
     validator_history_stats = Stats::ValidatorHistory.new(params[:network], @batch.uuid)

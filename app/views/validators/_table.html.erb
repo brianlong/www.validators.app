@@ -69,36 +69,6 @@
       <small class="text-muted">60-Min Chart</small>
     </th>
   </tr>
-
-  <% if show_subhead %>
-    <%# TODO to remove in V2 %>
-    <tr class="subhead">
-      <td class="avatar-column"></td>
-      <td></td>
-      <td class="percent-column align-middle">
-        Best: <%= number_to_percentage((100 - batch.best_skipped_vote.to_f * 100.0), precision: 2) %>
-      </td>
-      <td class="align-middle">
-        <% if batch.root_distance_all_median && batch.root_distance_all_average %>
-          Md: <%= batch.root_distance_all_median %>
-          <br />
-          Av: <%= batch.root_distance_all_average.round(1) %>
-        <% end %>
-      </td>
-      <td class="align-middle">
-        <% if batch.vote_distance_all_median && batch.vote_distance_all_average %>
-          Md: <%= batch.vote_distance_all_median %>
-          <br />
-          Av: <%= batch.vote_distance_all_average.round(1) %>
-        <% end %>
-      </td>
-      <td class="align-middle">
-        Md: <%= number_to_percentage(skipped_slot_median.to_f * 100.0, precision: 1) %>
-        <br />
-        Av: <%= number_to_percentage(skipped_slot_average.to_f * 100.0, precision: 1) %>
-      </td>
-    </tr>
-  <% end %>
   </thead>
 
   <tbody>
@@ -106,7 +76,7 @@
     i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
           0
         else
-          (params[:page].to_i - 1) * Kaminari.config.default_per_page
+          (params[:page].to_i - 1) * items_per_page
         end
   %>
   <% validators.each do |validator| %>
@@ -143,12 +113,25 @@
           (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
         </small>
         <br />
-        <span class="d-inline-block d-lg-none">Version:&nbsp;</span>
-        <small>
-          <span class="d-none d-lg-inline-block">Version:&nbsp;</span>
-          <%= validator.score&.software_version %>
-        </small>
-        <br />
+        <% if show_ip_and_gateway %>
+          <span class="d-inline-block d-lg-none">IP:&nbsp;</span>
+          <small><%= validator.score.ip_address %></small>
+          <br />
+          <% data_center_host = Ip.where(address: validator.score.ip_address).first&.data_center_host %>
+          <% if data_center_host %>
+            <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
+            <small><%= data_center_host %></small>
+            <br />
+          <% end %>
+        <% end %>
+        <% if show_version %>
+          <span class="d-inline-block d-lg-none">Version:&nbsp;</span>
+          <small>
+            <span class="d-none d-lg-inline-block">Version:&nbsp;</span>
+            <%= validator.score&.software_version %>
+          </small>
+          <br />
+        <% end %>
         <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
         <%= render 'validators/scores', validator: validator %>
         <% if validator.delinquent? %>

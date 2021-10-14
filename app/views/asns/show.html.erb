@@ -58,9 +58,17 @@
             data_centers_url(network: params[:network], sort_by: 'asn'),
             class: 'btn btn-sm btn-secondary mb-4' %>
 
-<%= render 'validators/basic_list', scores: @scores, batch: @batch, items_per_page: @per %>
-
-<%= paginate @scores %>
+<div class="card mb-4">
+  <%= render 'validators/table',
+             batch: @batch,
+             validators: @validators,
+             show_ip_and_gateway: true,
+             show_version: false,
+             items_per_page: @per %>
+  <div class="px-15">
+    <%= paginate @scores %>
+  </div>
+</div>
 
 <%= link_to 'Back to ASN list',
             data_centers_url(network: params[:network], sort_by: 'asn'),

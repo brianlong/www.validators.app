@@ -33,12 +33,11 @@
       <div class="col-sm-12">
         <%= render 'validators/table',
                    batch: @batch,
-                   skipped_slot_median: @skipped_slot_median,
-                   skipped_slot_average: @skipped_slot_average,
                    validators: @validators,
                    at_33_stake_index: @at_33_stake_index,
                    show_ip_and_gateway: false,
-                   show_subhead: true %>
+                   show_version: true,
+                   items_per_page: @per %>
 
         <div class="px-15">
           <p class="small muted">
