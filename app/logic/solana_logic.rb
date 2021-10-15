@@ -207,8 +207,8 @@ module SolanaLogic
       # epoch, as an array of arrays containing: [epoch, credits,
       # previousCredits]
       vote_accounts_json.each do |hash|
-        credits_total = hash['epochCredits'][-1][1].to_i
-        credits_previous = hash['epochCredits'][-1][2].to_i
+        credits_total = hash['epochCredits'][-1][1].to_i rescue 0
+        credits_previous = hash['epochCredits'][-1][2].to_i rescue 0
         credits_current = credits_total - credits_previous
         vote_accounts[hash['nodePubkey']] = {
           'vote_account' => hash['votePubkey'],
@@ -305,12 +305,13 @@ module SolanaLogic
       cli_method = "block-production --epoch #{p.payload[:epoch].to_i}"
       block_history = cli_request(cli_method, p.payload[:config_urls])
 
-      raise 'No data from block-production' if block_history.nil?
+      raise 'No data from block-production' if block_history.blank? && block_history.is_a?(Hash)
+      
       # Data for the validator_block_history_stats table
       block_history_stats = {
         'batch_uuid' => p.payload[:batch_uuid],
         'epoch' => p.payload[:epoch].to_i,
-        'start_slot' => block_history['start_slot'].to_i,
+        'start_slot' => (block_history['start_slot'].to_i),
         'end_slot' => block_history['end_slot'].to_i,
         'total_slots' => block_history['total_slots'].to_i,
         'total_blocks_produced' => \
