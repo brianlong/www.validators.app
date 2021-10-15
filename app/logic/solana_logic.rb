@@ -538,10 +538,10 @@ module SolanaLogic
   end
 
   # Clusters array, method symbol
-  def solana_client_request(clusters, method)
+  def solana_client_request(clusters, method, params: [])
     clusters.each do |cluster_url|
       client = SolanaRpcClient.new(cluster: cluster_url).client
-      result = client.public_send(method).result
+      result = client.public_send(method, *params).result
 
       return result unless result.blank?
     rescue SolanaRpcRuby::ApiError => e

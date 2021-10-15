@@ -253,6 +253,21 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
+  test 'solana_client_request returns data with optional params' do
+    clusters = [
+      @mainnet_url
+    ]
+
+    method = :get_program_accounts
+    config_program_pubkey = 'Config1111111111111111111111111111111111111'
+    params = [config_program_pubkey, { encoding: 'jsonParsed' }]
+
+    VCR.use_cassette('solana_client_request optional params') do
+      result = solana_client_request(clusters, method, params: params)
+      assert_equal 863, result.size
+    end
+  end
+
   # I use this test in development mode only.
   # test 'cli_block_production_mainnet' do
   #   VCR.use_cassette('cli_block_production_mainnet') do
