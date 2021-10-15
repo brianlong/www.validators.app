@@ -234,7 +234,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     method = :get_epoch_info
 
     VCR.use_cassette('solana_client_request') do
-      result = solana_client_request(clusters, :get_epoch_info)
+      result = solana_client_request(clusters, method)
       assert_equal result["epoch"], 202
     end
   end
@@ -248,7 +248,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     method = :get_epoch_info
 
     VCR.use_cassette('solana_client_request incorrect cluster') do
-      result = solana_client_request(clusters, :get_epoch_info)
+      result = solana_client_request(clusters, method)
       assert_equal result["epoch"], 209
     end
   end
