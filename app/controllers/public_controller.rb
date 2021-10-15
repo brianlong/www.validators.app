@@ -106,7 +106,7 @@ class PublicController < ApplicationController
     if params[:validator_id]
       begin
         @validator = Validator.find(params[:validator_id])
-      rescue
+      rescue ActiveRecord::RecordNotFound
         render_404
       end
     end
