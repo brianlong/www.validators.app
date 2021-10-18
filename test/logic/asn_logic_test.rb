@@ -11,7 +11,7 @@ class AsnLogicTest < ActiveSupport::TestCase
     @ip = create(:ip, :ip_berlin) # asn: 54321
     val = create(:validator, network: 'testnet')
 
-    create(
+    @score = create(
       :validator_score_v1,
       validator: val,
       network: 'testnet',
@@ -71,6 +71,21 @@ class AsnLogicTest < ActiveSupport::TestCase
     assert_equal 54_321, AsnStat.last.traits_autonomous_system_number
     assert AsnStat.last.data_centers.include?(@ip.data_center_key)
     assert_equal 7, AsnStat.last.average_score
+  end
+
+  test "calculate_and_save_stats does not calc delinquent validator" do
+    @score.update(delinquent: true)
+
+    p = Pipeline.new(200, @payload)
+                .then(&gather_asns)
+                .then(&gather_scores)
+                .then(&prepare_asn_stats)
+                .then(&calculate_and_save_stats)
+
+    assert_nil p.errors
+    assert_equal 54_321, AsnStat.last.traits_autonomous_system_number
+    assert AsnStat.last.data_centers.include?(@ip.data_center_key)
+    assert_equal nil, AsnStat.last.average_score
   end
 
   test 'log_errors_to_file' do
