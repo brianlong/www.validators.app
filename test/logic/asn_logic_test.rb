@@ -9,11 +9,11 @@ class AsnLogicTest < ActiveSupport::TestCase
     ValidatorScoreV1.delete_all
 
     @ip = create(:ip, :ip_berlin) # asn: 54321
-    val = create(:validator, network: 'testnet')
+    @val = create(:validator, network: 'testnet')
 
     @score = create(
       :validator_score_v1,
-      validator: val,
+      validator: @val,
       network: 'testnet',
       vote_distance_history: [1, 2, 3],
       ip_address: @ip.address,
@@ -74,7 +74,7 @@ class AsnLogicTest < ActiveSupport::TestCase
   end
 
   test "calculate_and_save_stats does not calc delinquent validator" do
-    @score.update(delinquent: true)
+    @val.update(is_active: false)
 
     p = Pipeline.new(200, @payload)
                 .then(&gather_asns)
