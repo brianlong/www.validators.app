@@ -26,7 +26,7 @@ document.addEventListener("turbolinks:load", function() {
             var row = document.getElementById('row-'+i);
 
             // Show selected chart, hide the rest
-            var charts = row.getElementsByClassName("chart-column");
+            var charts = row.getElementsByClassName("column-chart");
             Array.prototype.forEach.call(charts, chart => {
                 chart.classList.add('d-none');
             })

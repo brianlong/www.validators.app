@@ -6,18 +6,18 @@
 <table class='table mb-0'>
   <thead>
   <tr>
-    <th class='text-right'>Epoch</th>
-    <th class='narrower-column text-right'>Leader Slots<br />Total Slots</th>
-    <th class='narrower-column text-right'>Leader Blocks<br />Total Blocks</th>
-    <th class='narrower-column text-right'>
+    <th class='column-xs text-right'>Epoch</th>
+    <th class='column-md text-right'>Leader Slots<br />Total Slots</th>
+    <th class='column-md text-right'>Leader Blocks<br />Total Blocks</th>
+    <th class='column-md text-right'>
       Skipped Slots<br />
       Skipped Total
     </th>
-    <th class='narrower-column text-right'>
+    <th class='column-md text-right'>
       &percnt; Skipped<br />
       &percnt; Total
     </th>
-    <th class="narrow-column">Timestamp</th>
+    <th class="column-md">Timestamp</th>
   </tr>
   </thead>
   <tbody>
@@ -28,25 +28,25 @@
         <td class='text-right'>
           <%= number_with_delimiter history.epoch %>
         </td>
-        <td class='narrower-column text-right'>
+        <td class='text-right'>
           <%= number_with_delimiter history.leader_slots %><br />
           <%= number_with_delimiter block_stats.total_slots unless block_stats.nil? %>
         </td>
-        <td class='narrower-column text-right'>
+        <td class='text-right'>
           <%= number_with_delimiter history.blocks_produced %><br />
           <%= number_with_delimiter block_stats.total_blocks_produced unless block_stats.nil? %>
         </td>
-        <td class='narrower-column text-right'>
+        <td class='text-right'>
           <%= number_with_delimiter history.skipped_slots %><br />
           <%= number_with_delimiter block_stats.total_slots_skipped unless block_stats.nil? %>
         </td>
-        <td class='narrower-column text-right'>
+        <td class='text-right'>
           <%= number_to_percentage (history.skipped_slot_percent.to_f*100.0) %><br />
           <%= number_to_percentage (
                                      block_stats.total_slots_skipped/block_stats.total_slots.to_f
                                    )*100.0 unless block_stats.nil? %>
         </td>
-        <td class="narrow-column">
+        <td>
           <%= history.created_at %>
         </td>
       </tr>
