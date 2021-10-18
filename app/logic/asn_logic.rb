@@ -60,7 +60,7 @@ module AsnLogic
 
         scores = p.payload[:scores].select do |score|
           score.data_center_key.in?(asn_stat.data_centers) && \
-            score.validator.scorable? && score.validator.is_active? && \
+            score.validator.scorable? && \
             !score.validator.private_validator?
         end
 
