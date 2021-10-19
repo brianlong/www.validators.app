@@ -75,6 +75,8 @@ module AsnLogic
         if asn_stat.population&.positive?
           asn_stat.average_score = \
             (score_sum.to_f / asn_stat.population)
+        else
+          asn_stat.average_score = 0
         end
         asn_stat.active_stake = active_stake
 
