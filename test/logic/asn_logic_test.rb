@@ -11,7 +11,7 @@ class AsnLogicTest < ActiveSupport::TestCase
     @ip = create(:ip, :ip_berlin) # asn: 54321
     @val = create(:validator, network: 'testnet')
 
-    @score = create(
+    create(
       :validator_score_v1,
       validator: @val,
       network: 'testnet',
