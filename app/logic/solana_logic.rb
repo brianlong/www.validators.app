@@ -191,6 +191,35 @@ module SolanaLogic
     end
   end
 
+  def validators_config
+    lambda do |p|
+      return p unless p[:code] == 200
+      
+      config_program_pubkey = 'Config1111111111111111111111111111111111111'
+      info_pubkey = 'Va1idator1nfo111111111111111111111111111111'
+      params = [config_program_pubkey, { encoding: 'jsonParsed' }]
+
+      validators_config = solana_client_request(
+        p.payload[:config_urls],
+        :get_program_accounts,
+        params: params
+      )
+
+      data = validators_config.map { |e| e.dig('account', 'data') }
+
+      keys = data.map do |e|
+        next if e.is_a?(Array)
+        e.dig('parsed', 'info', 'keys')
+      end.flatten.compact
+
+      pubkeys_signers = keys.reject { |e| e['pubkey'] == info_pubkey }
+      
+      Pipeline.new(200, p.payload.merge(validators_signers: pubkeys_signers))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from validators_config', e)
+    end
+  end
+
   # vote_accounts_get returns the data from RPC 'getVoteAccounts'
   def vote_accounts_get
     lambda do |p|

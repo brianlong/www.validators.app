@@ -12,7 +12,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
 
     @local_url = 'http://127.0.0.1:8899'
     # Create our initial payload with the input values
-    @initial_payload = {
+    @testnet_initial_payload = {
       # config_urls: Rails.application.credentials.solana[:testnet_urls],
       config_urls: [
         @testnet_url,
@@ -21,7 +21,13 @@ class SolanaLogicTest < ActiveSupport::TestCase
       network: 'testnet'
     }
 
-    
+    @mainnet_initial_payload = {
+      # config_urls: Rails.application.credentials.solana[:testnet_urls],
+      config_urls: [
+        @mainnet_url
+      ],
+      network: 'mainnet'
+    }
   end
 
   test 'array_average' do
@@ -36,7 +42,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
   end
 
   test 'batch_set' do
-    p = Pipeline.new(200, @initial_payload)
+    p = Pipeline.new(200, @testnet_initial_payload)
                 .then(&batch_set)
     assert_not_nil p[:payload][:batch_uuid]
     assert p[:payload][:batch_uuid].include?('-')
@@ -44,7 +50,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
 
   test 'batch_touch' do
     # Create a new batch record
-    p = Pipeline.new(200, @initial_payload)
+    p = Pipeline.new(200, @testnet_initial_payload)
                 .then(&batch_set)
 
     batch = Batch.where(uuid: p[:payload][:batch_uuid]).first
@@ -69,7 +75,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     sleep(2)
 
     # Touch the batch record
-    _p = Pipeline.new(200, @initial_payload.merge(batch_uuid: batch.uuid))
+    _p = Pipeline.new(200, @testnet_initial_payload .merge(batch_uuid: batch.uuid))
                  .then(&batch_touch)
 
     # Show that the created_at & updated_at columns are now different
@@ -81,7 +87,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
   test 'epoch_get' do
     VCR.use_cassette('epoch_get') do
       # Show that the pipeline runs & the expected values are not empty.
-      p = Pipeline.new(200, @initial_payload)
+      p = Pipeline.new(200, @testnet_initial_payload)
                   .then(&batch_set)
                   .then(&epoch_get)
 
@@ -161,7 +167,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
       VCR.use_cassette('validators_cli') do
 
         # Show that the pipeline runs & the expected values are not empty.
-        p = Pipeline.new(200, @initial_payload)
+        p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
                     .then(&epoch_get)
                     .then(&validators_cli)
@@ -210,7 +216,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
   test 'check_epoch removes epoch history when check fails' do
     VCR.use_cassette('check_epoch') do
       # Show that the pipeline runs & the expected values are not empty.
-      p = Pipeline.new(200, @initial_payload)
+      p = Pipeline.new(200, @testnet_initial_payload)
 
       # First, save the epoch
       assert_difference 'EpochHistory.count' do
@@ -222,6 +228,28 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_difference 'EpochHistory.count', -1 do
         p.then(&check_epoch)
       end
+    end
+  end
+
+  test 'validators_config' do
+    config_program_pubkey = 'Config1111111111111111111111111111111111111'
+
+    VCR.use_cassette('testnet_validators_config') do
+      # Show that the pipeline runs & the expected values are not empty.
+      p = Pipeline.new(200, @testnet_initial_payload)
+                  .then(&validators_config)
+
+      assert_equal 1381, p.payload[:validators_signers].size
+      assert p.payload[:validators_signers].all? { |e| e['signer'] == true }
+    end
+
+    VCR.use_cassette('mainnet_validators_config') do
+      # Show that the pipeline runs & the expected values are not empty.
+      p = Pipeline.new(200, @mainnet_initial_payload)
+                  .then(&validators_config)
+
+      assert_equal 865, p.payload[:validators_signers].size
+      assert p.payload[:validators_signers].all? { |e| e['signer'] == true }
     end
   end
 
