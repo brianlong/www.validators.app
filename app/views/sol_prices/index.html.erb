@@ -1,0 +1,35 @@
+<div class="card pb-3 pl-3 pr-3">
+  <div class="card-content">
+    <h3 class="card-heading mb-3">Sol Token Prices</h3>
+  </div>
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link solPricesChartTabButton <%= active_button?(:coin_gecko) %>" 
+         data-toggle="tab" 
+         href="#coinGeckoChartTab">
+        CoinGecko
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link solPricesChartTabButton <%= active_button?(:ftx) %>" 
+         data-toggle="tab" 
+         href="#ftxChartTab">
+        FTX
+      </a>
+    </li>
+  </ul>
+
+  <%= create_filter_links %>
+
+  <!-- Tab panes -->
+  <div class="tab-content" id='sol-prices-tab-content'>
+    <div class="tab-pane solPriceChartTab <%= active_tab?(:coin_gecko) %>" id="coinGeckoChartTab">
+      <%= render 'coin_gecko_chart' %>
+    </div>
+
+    <div class="tab-pane solPriceChartTab <%= active_tab?(:ftx) %>" id="ftxChartTab">
+      <%= render 'ftx_chart' %>
+    </div>
+  </div>
+</div>

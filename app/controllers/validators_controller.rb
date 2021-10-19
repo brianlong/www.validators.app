@@ -7,19 +7,13 @@ class ValidatorsController < ApplicationController
   # GET /validators
   # GET /validators.json
   def index
+    @per = 25
     validators = Validator.where(network: params[:network])
                           .scorable
                           .joins(:validator_score_v1)
                           .index_order(validate_order)
 
-    @validators_count = validators.size
-    @validators = validators.page(params[:page])
-    @total_active_stake = validators.total_active_stake
-
-    @software_versions = Report.where(
-      network: params[:network],
-      name: 'report_software_versions'
-    ).last
+    @validators = validators.page(params[:page]).per(@per)
 
     @batch = Batch.last_scored(params[:network])
 
@@ -28,20 +22,11 @@ class ValidatorsController < ApplicationController
         network: params[:network],
         batch_uuid: @batch.uuid
       ).first
-
-      validator_block_history_query =
-        ValidatorBlockHistoryQuery.new(params[:network], @batch.uuid)
-
-      @skipped_slot_average =
-        validator_block_history_query.scorable_average_skipped_slot_percent
-      @skipped_slot_median =
-        validator_block_history_query.median_skipped_slot_percent
     end
 
-    validator_history =
-      ValidatorHistoryQuery.new(params[:network], @batch.uuid)
+    validator_history_stats = Stats::ValidatorHistory.new(params[:network], @batch.uuid)
 
-    at_33_stake_validator = validator_history.at_33_stake&.validator
+    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
     @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
 
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'

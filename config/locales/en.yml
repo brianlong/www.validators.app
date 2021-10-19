@@ -82,7 +82,7 @@ en:
   footer:
     nav_links:
       cookie_policy: 'Cookie Policy'
-      faq: 'FAQ'
+      getting_started: 'Getting Started'
       privacy_policy: 'Privacy Policy'
       terms_of_use: 'Terms of use'
       contact_us: 'Contact us'
@@ -92,3 +92,18 @@ en:
     copyright_text: 'provides tools for the Solana validator community.'
   you:
     only_users_allowed: 'Only authenticated User are allowed'
+  definitions:
+    active_stake: "Sum of active stake from validator(s)."
+    asn_full_name: "Autonomous System Number"
+    average_score: "Average score for validators from ASN."
+    commission: "Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account."
+    delinquent_asn: "Number of delinquent validators for ASN."
+    delinquent_isp: "Number of delinquent validators in data center."
+    isp_full_name: "Internet Service Provider"
+    population_asn: "Number of validators for ASN."
+    population_isp: "Number of validators in data center."
+    root_distance: "Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower."
+    scores: "Our score system."
+    skipped_slot: "Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate."
+    skipped_vote: "Skipped vote measures the percent of the time that a leader fails to vote."
+    vote_distance: "Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group."

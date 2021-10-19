@@ -11,6 +11,7 @@
 #  commission       :decimal(10, )    unsigned
 #  credits          :bigint           unsigned
 #  delinquent       :boolean          default(FALSE)
+#  epoch            :integer
 #  epoch_credits    :integer          unsigned
 #  last_vote        :bigint           unsigned
 #  max_root_height  :bigint           unsigned
@@ -36,11 +37,12 @@ class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
 
+  scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
   scope :most_recent_epoch_credits_by_account, -> do
     from(
       <<~SQL
         (
-          SELECT validator_histories.epoch_credits, validator_histories.account, validator_histories.created_at
+          SELECT validator_histories.epoch_credits, validator_histories.account, validator_histories.created_at, validator_histories.epoch
           FROM validator_histories JOIN (
             SELECT account, max(created_at) AS created_at
             FROM validator_histories
@@ -92,7 +94,8 @@ class ValidatorHistory < ApplicationRecord
     Jbuilder.new do |validator_history|
       validator_history.(
         self,
-        :epoch_credits
+        :epoch_credits,
+        :epoch
       )
     end
   end

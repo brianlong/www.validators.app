@@ -45,14 +45,21 @@ module FixIpModule
   end
 
   def update_validator_score_with_overrides
-    sql2 = "
-      UPDATE validator_score_v1s sc
-      INNER JOIN ips ip
-      ON sc.ip_address = ip.address
-      SET sc.data_center_key = ip.data_center_key,
-      sc.data_center_host = ip.data_center_host,
-      sc.updated_at = NOW();
-    ".squish
-    ValidatorScoreV1.connection.execute(sql2)
+    Ip.all.each do |ip|
+      ValidatorScoreV1.where(ip_address: ip.address)
+                      .update_all(
+                        data_center_key: ip.data_center_key,
+                        data_center_host: ip.data_center_host
+                      )
+    end
+    # sql2 = "
+    #   UPDATE validator_score_v1s sc
+    #   INNER JOIN ips ip
+    #   ON sc.ip_address = ip.address
+    #   SET sc.data_center_key = ip.data_center_key,
+    #   sc.data_center_host = ip.data_center_host,
+    #   sc.updated_at = NOW();
+    # ".squish
+    # ValidatorScoreV1.connection.execute(sql2)
   end
 end

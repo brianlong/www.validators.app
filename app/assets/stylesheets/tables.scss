@@ -11,12 +11,6 @@ table, .table {
     }
   }
 
-  .subhead {
-    @include font-size-smaller;
-    background-color: $table-border-color;
-    td { border-top: 1px solid $table-border-color; }
-  }
-
   tbody {
     tr {
       border-top: 1px solid $table-border-color;
@@ -25,7 +19,7 @@ table, .table {
       background-color: $card-background-color;
     }
     tr:nth-of-type(odd) {
-      background-color: darken($card-background-color, 2%);
+      background-color: darken($card-background-color, 3%);
     }
     td {
       padding: $padding-standard 20px;
@@ -33,80 +27,81 @@ table, .table {
     }
   }
 
-  .avatar-column {
-    width: 75px;
-    text-align: center;
-    padding: 0;
-    .avatar {
-      padding-bottom: 5px;
-      .img-circle-medium-private {
-        display: inline-block;
-      }
-    }
-  }
-
-  .name-column {
-    width: 195px;
-    padding-left: 0;
-    padding-right: 5px;
-    @media(max-width: $screen-lg-max) {
-      padding-left: 20px;
-    }
-  }
-
-  .category-column {
-    width: 28%;
-    @media(max-width: $screen-md-max) {
-      width: 26%;
-    }
-    @media(max-width: $screen-xs-max) {
-      width: 37%;
-    }
-  }
-
-  .chart-column {
-    width: 22%;
-    padding: 25px $padding-standard 10px $padding-standard;
-    @media(max-width: $screen-lg-max) {
-      width: 25%;
-    }
-
-    .chart-top-container {
+  .chart {
+    &-top-container {
       position: absolute;
       padding-left: 28px;
       width: 19%;
+      @media(max-width: $screen-md-max) {
+        padding-left: 23px;
+        width: 89%;
+      }
+      @media(max-width: $screen-xs-max) {
+        padding-left: 25px;
+        width: 84%;
+      }
     }
-    .chart-top-value {
+    &-top-value {
       font-size: 11px;
       line-height: 9px;
       color: #979797;
-      margin-top: -12px;
+      margin-top: -13px;
       text-align: right;
     }
+    &-link.active {
+      color: $link-color-secondary;
+      text-decoration: underline;
+    }
   }
 
-  .wider-column {
-    min-width: 180px;
-  }
+  .column {
+    &-avatar {
+      width: 85px;
+      text-align: center;
+      padding: 0;
+      .avatar {
+        padding-bottom: 5px;
+        .img-circle-medium-private {
+          display: inline-block;
+        }
+      }
+    }
 
-  .medium-column {
-    width: 20%;
-    @media(max-width: $screen-sm-max) {
-      word-break: break-all;
+    &-chart {
+      width: 22%;
+      padding: 25px $padding-standard 10px $padding-standard;
+      @media(max-width: $screen-lg-max) {
+        width: 25%;
+      }
+    }
+
+    &-info {
+      width: 195px;
+      padding-left: 0;
+      padding-right: 0;
+      @media(max-width: $screen-lg-max) {
+        padding-left: 20px;
+      }
+    }
+
+    &-xs {
+      width: 10%;
+    }
+    &-sm {
+      width: 15%;
+      min-width: 90px;
+    }
+    &-md {
+      width: 20%;
+      min-width: 135px;
+    }
+    &-lg {
+      width: 25%;
       min-width: 150px;
     }
-  }
-
-  .narrower-column {
-    width: 17%;
-    @media(max-width: $screen-md-max) {
-      min-width: 140px;
-    }
-  }
-
-  .narrow-column {
-    @media(max-width: $screen-md-max) {
-      min-width: 135px;
+    &-xl {
+      width: 30%;
+      min-width: 200px;
     }
   }
 }
@@ -139,42 +134,7 @@ table, .table {
   max-width: 100%;
   width: 100%;
   table-layout: fixed;
-
-  .percent-column {
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 135px;
+  thead {
+    @media(max-width: $screen-md-max) { display: none; }
   }
-
-  @media(max-width: $screen-lg-max) {
-    .percent-column {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-    .avatar-column { display: none !important; }
-  }
-
-  @media(max-width: $screen-md-max) {
-    thead { display: none; }
-    .subhead { display: none; }
-    .percent-column, .chart-column {
-      padding-top: 0;
-    }
-    .chart-top-container {
-      padding-left: 23px;
-      width: 89%;
-    }
-    .chart-link.active {
-      color: $link-color-secondary;
-      text-decoration: underline;
-    }
-  }
-
-  @media(max-width: $screen-xs-max) {
-    .chart-top-container {
-      padding-left: 25px;
-      width: 84%;
-    }
-  }
-
 }

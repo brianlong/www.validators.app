@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_25_121130) do
+ActiveRecord::Schema.define(version: 2021_10_01_094326) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -31,6 +31,18 @@ ActiveRecord::Schema.define(version: 2021_08_25_121130) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "asn_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.float "average_score"
+    t.integer "traits_autonomous_system_number"
+    t.datetime "calculated_at"
+    t.integer "population"
+    t.float "active_stake"
+    t.text "data_centers"
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "batches", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -241,6 +253,22 @@ ActiveRecord::Schema.define(version: 2021_08_25_121130) do
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
   end
 
+  create_table "sol_prices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "exchange"
+    t.integer "currency"
+    t.integer "epoch_mainnet"
+    t.integer "epoch_testnet"
+    t.decimal "open", precision: 40, scale: 20
+    t.decimal "close", precision: 40, scale: 20
+    t.decimal "high", precision: 40, scale: 20
+    t.decimal "low", precision: 40, scale: 20
+    t.decimal "volume", precision: 40, scale: 20
+    t.datetime "datetime_from_exchange"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.decimal "average_price", precision: 40, scale: 20
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username", null: false
     t.string "encrypted_password", null: false
@@ -328,6 +356,7 @@ ActiveRecord::Schema.define(version: 2021_08_25_121130) do
     t.bigint "root_distance", unsigned: true
     t.bigint "max_vote_height", unsigned: true
     t.bigint "vote_distance", unsigned: true
+    t.integer "epoch"
     t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
     t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"

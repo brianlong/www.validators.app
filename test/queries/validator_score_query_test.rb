@@ -33,62 +33,10 @@ class ValidatorScoreQueryTest < ActiveSupport::TestCase
     @validator_histories.each(&:destroy)
   end
 
-  test 'top_staked_validators' do
-    expected = [206356743325616, 206356743325097, 206356743324143, 206356743322528, 206356743321847, 0]
-    assert_equal expected, @vsq.top_staked_validators.map(&:first)
-  end
+  test 'for_batch' do
+    expected = ValidatorScoreV1.where(validator_id: @validators.map(&:id))
 
-  test 'root_distance_stats' do
-    expected = {
-      min: 3.0,
-      max: 3.0,
-      median: 3.0,
-      average: 3.0
-    }
-    assert_equal expected, @vsq.root_distance_stats
-  end
-
-  test 'root_distance_stats with_history' do
-    expected = {
-      min: 3.0,
-      max: 3.0,
-      median: 3.0,
-      average: 3.0
-    }
-    expected_history = [
-      [1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5],
-      [1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]
-    ]
-
-    assert_equal expected, @vsq.root_distance_stats(with_history: false)
-    assert_equal expected_history, @vsq.root_distance_stats(with_history: true)[:history].map(&:first)
-  end
-
-  test 'vote_distance_stats' do
-    expected = {
-      min: 3.0,
-      max: 3.0,
-      median: 3.0,
-      average: 3.0
-    }
-
-    assert_equal expected, @vsq.vote_distance_stats
-  end
-
-  test 'vote_distance_stats with_history' do
-    expected = {
-      min: 3.0,
-      max: 3.0,
-      median: 3.0,
-      average: 3.0
-    }
-    expected_history = [
-      [5, 4, 3, 2, 1], [5, 4, 3, 2, 1], [5, 4, 3, 2, 1],
-      [5, 4, 3, 2, 1], [5, 4, 3, 2, 1], [5, 4, 3, 2, 1]
-    ]
-
-    assert_equal expected, @vsq.vote_distance_stats(with_history: false)
-    assert_equal expected_history, @vsq.vote_distance_stats(with_history: true)[:history].map(&:first)
+    assert_equal expected, @vsq.for_batch
   end
 end
 

@@ -7,8 +7,7 @@ require("@rails/ujs").start()
 require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
-
-
+import '../src/sol_prices_charts'
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
 // or the `imagePath` JavaScript helper below.
@@ -27,7 +26,7 @@ document.addEventListener("turbolinks:load", function() {
             var row = document.getElementById('row-'+i);
 
             // Show selected chart, hide the rest
-            var charts = row.getElementsByClassName("chart-column");
+            var charts = row.getElementsByClassName("column-chart");
             Array.prototype.forEach.call(charts, chart => {
                 chart.classList.add('d-none');
             })
@@ -42,3 +41,7 @@ document.addEventListener("turbolinks:load", function() {
         })
     })
 });
+
+document.addEventListener("turbolinks:load", function() {
+    $('[data-toggle="tooltip"]').tooltip()
+})

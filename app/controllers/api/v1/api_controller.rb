@@ -80,6 +80,8 @@ module Api
           name: 'build_skipped_slot_percent'
         ).last
 
+        current_epoch = EpochHistory.last
+
         render json: create_json_result(@validator)
       rescue ValidatorNotFound
         render json: { 'status' => 'Validator Not Found' }, status: 404
