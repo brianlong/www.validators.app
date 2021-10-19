@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'asns/:network/:asn',
+  get 'asns/:asn',
       to: 'asns#show',
       as: 'asn'
   # Pages for Log Deep Dives
@@ -14,26 +14,26 @@ Rails.application.routes.draw do
       as: 'log_deep_dives_slot_72677728'
 
   # Data Centers
-  get 'data-centers/:network',
+  get 'data-centers',
       to: 'data_centers#index',
       as: 'data_centers'
-  get 'data-centers/:network/:key',
+  get 'data-centers/:key',
       to: 'data_centers#data_center',
       as: 'data_center'
 
-  get 'vote_accounts/:network/:account',
+  get 'vote_accounts/:account',
       to: 'vote_accounts#show',
       as: 'vote_account'
 
   # Validators
-  get 'validators/:network',
+  get 'validators',
       to: 'validators#index',
       as: 'validators'
-  get 'validators/:network/:account',
+  get 'validators/:account',
       to: 'validators#show',
       as: 'validator'
 
-  get 'tower/:network',
+  get 'tower',
       to: 'public#tower',
       as: 'tower'
 
@@ -66,13 +66,38 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  # Public Controller
+  get 'contact-us', to: 'public#contact_us'
+  get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
+  get 'api-documentation',
+      to: 'public#api_documentation',
+      as: 'api_documentation'
+  get 'contact-requests', to: 'contact_requests#index'
+  get 'cookie-policy', to: 'public#cookie_policy'
+  get 'faq', to: 'public#faq'
+  get 'privacy-policy-california', to: 'public#privacy_policy_california'
+  get 'privacy-policy', to: 'public#privacy_policy'
+  get 'sample-chart', to: 'public#sample_chart'
+  get 'terms-of-use', to: 'public#terms_of_use'
+  get 'commission-changes/(:validator_id)',
+      to: 'public#commission_histories',
+      as: 'commission_histories'
+
+  get 'cluster-stats',
+      to: 'cluster_stats#index',
+      as: 'cluster_stats'
+
+  post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
+  get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
+
+  # Default root path
+  root to: 'public#index'
+
+  ### API
   namespace :api do
     namespace :v1, defaults: { format: :json } do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
-
-      # api_v1_ping_times GET /api/v1/ping_times
-      get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
 
       # api_v1_collector POST /api/v1/collector
       post 'collector', to: 'api#collector'
@@ -94,33 +119,9 @@ Rails.application.routes.draw do
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
       get 'commission-changes/:network', to: 'commission_histories#index', as: 'commission_histories_index'
+
+      # api_v1_ping_times GET /api/v1/ping_times
+      get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
     end
   end
-
-  # Public Controller
-  get 'contact-us', to: 'public#contact_us'
-  get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
-  get 'api-documentation',
-      to: 'public#api_documentation',
-      as: 'api_documentation'
-  get 'contact-requests', to: 'contact_requests#index'
-  get 'cookie-policy', to: 'public#cookie_policy'
-  get 'faq', to: 'public#faq'
-  get 'privacy-policy-california', to: 'public#privacy_policy_california'
-  get 'privacy-policy', to: 'public#privacy_policy'
-  get 'sample-chart', to: 'public#sample_chart'
-  get 'terms-of-use', to: 'public#terms_of_use'
-  get 'commission-changes/:network/(:validator_id)',
-      to: 'public#commission_histories',
-      as: 'commission_histories'
-
-  get 'cluster-stats/:network',
-      to: 'cluster_stats#index',
-      as: 'cluster_stats'
-
-  post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
-  get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
-
-  # Default root path
-  root to: 'public#index'
 end

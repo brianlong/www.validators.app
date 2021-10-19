@@ -15,7 +15,7 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       var comm_history_name = this.comm_history.name
     }
     return {
-      comm_history_href: "/validators/" + this.comm_history.network + "/" + this.comm_history.account,
+      comm_history_href: "/validators/" + this.comm_history.account + "?network=" + this.comm_history.network,
       comm_history_name: comm_history_name,
       descending: (this.comm_history.commission_before > this.comm_history.commission_after) ? true : false
     }
