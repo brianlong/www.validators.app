@@ -101,7 +101,7 @@
                     class: 'font-weight-bold' do %>
           <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
         <% end %>
-        <% unless validator.private_validator? %>
+        <% unless validator.private_validator? && !validator.lido? %>
           <small>
             (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
           </small>
