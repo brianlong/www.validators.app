@@ -99,7 +99,7 @@ class ValidatorsController < ApplicationController
     @validator = Validator.where(
       network: params[:network],
       account: params[:account]
-    ).first or not_found
+    ).first or render_404
   end
 
   def validate_order
