@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   get 'validators',
       to: 'validators#index',
       as: 'validators'
+  get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
+  get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
   get 'validators/:account',
       to: 'validators#show',
       as: 'validator'
