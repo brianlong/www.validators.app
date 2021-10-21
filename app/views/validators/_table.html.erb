@@ -106,6 +106,11 @@
             (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
           </small>
         <% end %>
+        <% if validator.score.authorized_withdrawer_score == -2 %>
+          <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
+            <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
+          <% end %>
+        <% end %>
         <br />
         <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
         <small>
