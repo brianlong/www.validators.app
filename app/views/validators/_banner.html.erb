@@ -3,8 +3,9 @@
   <% unless @validators.blank? %>
     <p class="lead">
       The tables below show each validator by name and include some recent statistics for each. See our
-      <%= link_to 'FAQ', faq_url, target: '_blank' %> for a&nbsp;description of the&nbsp;scores shown below. Special thanks to
-      <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!
+      <%= link_to 'Getting Started', faq_url(anchor: 'score'), target: '_blank' %> page for a&nbsp;description of the&nbsp;scores shown
+      below. Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %>
+      for their support!
     </p>
   <% end %>
 </section>
