@@ -4,12 +4,14 @@
 #
 # Table name: vote_accounts
 #
-#  id           :bigint           not null, primary key
-#  account      :string(191)
-#  network      :string(191)
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  validator_id :bigint           not null
+#  id                    :bigint           not null, primary key
+#  account               :string(191)
+#  authorized_withdrawer :string(191)
+#  network               :string(191)
+#  validator_identity    :string(191)
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  validator_id          :bigint           not null
 #
 # Indexes
 #

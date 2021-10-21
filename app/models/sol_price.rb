@@ -18,6 +18,9 @@
 #  updated_at             :datetime         not null
 #
 class SolPrice < ApplicationRecord
-  enum exchange: { coin_gecko: 0, ftx: 1 }, _prefix: true
-  enum currency: { usd: 0 }, _prefix: true
+  EXCHANGES = ['coin_gecko', 'ftx']
+  CURRENCIES = ['usd']
+  
+  enum exchange: EXCHANGES.to_h { |el| [el, EXCHANGES.find_index(el)] }, _prefix: true
+  enum currency: CURRENCIES.to_h { |el| [el, CURRENCIES.find_index(el)] }, _prefix: true
 end

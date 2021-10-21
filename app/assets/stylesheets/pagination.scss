@@ -62,7 +62,7 @@
   margin-bottom: $margin-standard*2;
   display: inline-block;
   @media(max-width: $screen-lg-max) {
-    margin-bottom: 0;
+    margin-bottom: $margin-standard;
   }
   @media(max-width: $screen-md-max) {
     overflow-x: scroll;

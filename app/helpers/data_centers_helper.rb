@@ -14,4 +14,8 @@ module DataCentersHelper
       render 'data_center_list'
     end
   end
+
+  def count_percentage(dividend, divisor)
+    (dividend.to_f / divisor.to_f * 100).round(2)
+  end
 end

@@ -44,4 +44,8 @@ class ApplicationController < ActionController::Base
   def not_found
     raise ActiveRecord::RecordNotFound, status: 404
   end
+
+  def render_404
+    render file: Rails.root.join('public/404.html'), layout: nil, status: 404
+  end
 end

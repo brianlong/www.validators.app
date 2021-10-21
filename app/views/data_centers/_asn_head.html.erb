@@ -1,40 +1,47 @@
 <tr>
-  <th class="medium-column">
+  <th class="column-md align-middle">
     ASN
-    <i class="fas fa-info-circle" 
-      data-toggle="tooltip" 
-      data-placement="top" 
+    <i class="fas fa-info-circle small"
+      data-toggle="tooltip"
+      data-placement="top"
       title="<%= t('definitions.asn_full_name')%>">
     </i>
-    <br />&nbsp;
   </th>
-  <th class="narrower-column">
-    Average score
-    <i class="fas fa-info-circle" 
-      data-toggle="tooltip" 
-      data-placement="top" 
-      title="<%= t('definitions.average_score') %>">
-    </i>
-    <br />&nbsp;
+  <th class="column-sm align-middle">
+    Average score&nbsp;<i class="fas fa-info-circle small ml-1"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="<%= t('definitions.average_score') %>"></i>
   </th>
-  <th class="category-column">Data Centers<br />&nbsp;</th>
-  <th class="narrower-column">
+  <th class="column-lg align-middle">Data Centers</th>
+  <th class="column-md align-middle">
     Population
-    <i class="fas fa-info-circle" 
-      data-toggle="tooltip" 
-      data-placement="top" 
+    <i class="fas fa-info-circle small"
+      data-toggle="tooltip"
+      data-placement="top"
       title="<%= t('definitions.population_asn') %>">
     </i>
     <br />
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
-  <th class="medium-column">
-    Active Stake
-    <i class="fas fa-info-circle" 
-      data-toggle="tooltip" 
-      data-placement="top" 
-      title="<%= t('definitions.active_stake') %>">
+  <th class="column-md align-middle">
+    Delinquent
+    <i class="fas fa-info-circle small"
+       data-toggle="tooltip"
+       data-placement="top"
+       title="<%= t('definitions.delinquent_asn') %>">
     </i>
+    <br />
+    <small class="text-muted">
+      (<%= @results[:total_delinquent] %> |
+      <%= (count_percentage(@results[:total_delinquent], @results[:total_population])) %>%)
+    </small>
+  </th>
+  <th class="column-lg align-middle">
+    Active Stake&nbsp;<i class="fas fa-info-circle small"
+                         data-toggle="tooltip"
+                         data-placement="top"
+                         title="<%= t('definitions.active_stake') %>"></i>
     <br />
     <small class="text-muted">
       <%= number_with_delimiter lamports_to_sol(@results[:total_stake]).round(0) %>
