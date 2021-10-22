@@ -191,32 +191,25 @@ module SolanaLogic
     end
   end
 
-  def validators_config
+  def program_accounts(
+    config_program_pubkey: 'Config1111111111111111111111111111111111111',
+    encoding: 'jsonParsed'
+  )
     lambda do |p|
       return p unless p[:code] == 200
       
-      config_program_pubkey = 'Config1111111111111111111111111111111111111'
-      info_pubkey = 'Va1idator1nfo111111111111111111111111111111'
-      params = [config_program_pubkey, { encoding: 'jsonParsed' }]
+      config_program_pubkey = config_program_pubkey
+      params = [config_program_pubkey, { encoding: encoding }]
 
-      validators_config = solana_client_request(
+      program_accounts = solana_client_request(
         p.payload[:config_urls],
         :get_program_accounts,
         params: params
       )
-
-      data = validators_config.map { |e| e.dig('account', 'data') }
-
-      keys = data.map do |e|
-        next if e.is_a?(Array)
-        e.dig('parsed', 'info', 'keys')
-      end.flatten.compact
-
-      pubkeys_signers = keys.reject { |e| e['pubkey'] == info_pubkey }
       
-      Pipeline.new(200, p.payload.merge(validators_signers: pubkeys_signers))
+      Pipeline.new(200, p.payload.merge(program_accounts: program_accounts))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from validators_config', e)
+      Pipeline.new(500, p.payload, 'Error from program_accounts', e)
     end
   end
 

@@ -231,25 +231,23 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validators_config' do
+  test 'program_accounts' do
     config_program_pubkey = 'Config1111111111111111111111111111111111111'
 
-    VCR.use_cassette('testnet_validators_config') do
+    VCR.use_cassette('testnet_program_accounts') do
       # Show that the pipeline runs & the expected values are not empty.
       p = Pipeline.new(200, @testnet_initial_payload)
-                  .then(&validators_config)
+                  .then(&program_accounts)
 
-      assert_equal 1381, p.payload[:validators_signers].size
-      assert p.payload[:validators_signers].all? { |e| e['signer'] == true }
+      assert_equal 1386, p.payload[:program_accounts].size
     end
 
-    VCR.use_cassette('mainnet_validators_config') do
+    VCR.use_cassette('mainnet_program_accounts') do
       # Show that the pipeline runs & the expected values are not empty.
       p = Pipeline.new(200, @mainnet_initial_payload)
-                  .then(&validators_config)
+                  .then(&program_accounts)
 
-      assert_equal 865, p.payload[:validators_signers].size
-      assert p.payload[:validators_signers].all? { |e| e['signer'] == true }
+      assert_equal 870, p.payload[:program_accounts].size
     end
   end
 
