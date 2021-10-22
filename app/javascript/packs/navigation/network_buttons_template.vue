@@ -42,8 +42,6 @@
         let splitted_url = this.url.split("/")
         if(this.url.includes('network=')){
           this.url = this.url.replace(/network=(mainnet|testnet)/, "network=" + target_network)
-        } else if(this.url.match(/\/(mainnet|testnet)/)){
-          this.url = this.url.replace(/\/(mainnet|testnet)/,'/' + target_network)
         } else {
           this.url = this.url + '?network=' + target_network
         }

@@ -18,9 +18,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should raise ActiveRecord::RecordNotFound if validator not found' do
-    assert_raises 'ActiveRecord::RecordNotFound' do
-      get validator_url(network: 'testnet', account: 'notexistingaccount')
-    end
+  test 'should redirect_to 404 if validator not found' do
+    get validator_url(network: 'testnet', account: 'notexistingaccount')
+
+    assert_select 'h1', "The page you're looking for does not exist."
   end
 end
