@@ -19,21 +19,16 @@
       about liquid staking.
     </p>
     <div class="row text-center mt-4 mb-3">
-      <div class="col-sm-4 offset-md-1 col-md mb-4 mb-sm-0">
-        <a href="https://lido.fi/solana" title="Lido" target="_blank">
-          <%= image_tag 'lido.png', class: 'w-100 px-4 px-sm-0 px-lg-4' %>
-        </a>
-      </div>
-      <div class="col-sm-4 col-md mb-4 mb-sm-0">
-        <a href="https://marinade.finance" title="Marinade Finance" target="_blank">
-          <%= image_tag 'marinade.png', class: 'w-100 px-4 px-sm-0 px-lg-4' %>
-        </a>
-      </div>
-      <div class="col-sm-4 col-md mb-4 mb-sm-0">
-        <a href="https://www.socean.fi" title="Socean" target="_blank">
-          <%= image_tag 'socean.png', class: 'w-100 px-4 px-sm-0 px-lg-4' %>
-        </a>
-      </div>
+      <% logos = [ ['https://lido.fi/solana', 'lido.png'],
+                   ['https://marinade.finance', 'marinade.png'],
+                   ['https://www.socean.fi', 'socean.png'] ].shuffle %>
+      <% logos.each_with_index do |logo, index| %>
+        <div class="col-sm-4 col-md mb-4 mb-sm-0 <%= 'offset-md-1' if index == 0 %>">
+          <%= link_to logo[0], target: "_blank" do %>
+            <%= image_tag logo[1], class: 'w-100 px-4 px-sm-0 px-lg-4' %>
+          <% end %>
+        </div>
+      <% end %>
       <div class="d-none d-md-block col-md-1"></div>
     </div>
   </div>
