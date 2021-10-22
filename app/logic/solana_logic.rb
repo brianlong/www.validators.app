@@ -213,6 +213,34 @@ module SolanaLogic
     end
   end
 
+  def reduce_validators_with_invalid_config
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      info_pubkey = 'Va1idator1nfo111111111111111111111111111111'
+
+      data = p.payload[:program_accounts].map { |e| e.dig('account', 'data') }
+
+      keys = data.map do |e|
+        next if e.is_a?(Array)
+        e.dig('parsed', 'info', 'keys')
+      end.flatten.compact
+
+      pubkeys_signers = keys.reject { |e| e['pubkey'] == info_pubkey }
+      false_signers = pubkeys_signers.select { |e| e['signer'] == false }
+
+      if false_signers.any?
+        false_signers.each do |signer|
+          p.payload[:validators].delete(signer['pubkey'])
+        end
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from reduce_validators_with_invalid_config', e)
+    end
+  end
+
   # vote_accounts_get returns the data from RPC 'getVoteAccounts'
   def vote_accounts_get
     lambda do |p|

@@ -251,6 +251,22 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
+  test 'reduce_validators_with_invalid_config' do
+    VCR.use_cassette('reduce_validators_with_invalid_config') do
+      p = Pipeline.new(200, @mainnet_initial_payload)
+                  .then(&validators_get)
+                  .then(&program_accounts)
+      
+      assert_equal 1948, p.payload[:validators].size
+
+      p.payload[:program_accounts][2]['account']['data']['parsed']['info']['keys'][1]['signer'] = false
+      p = p.then(&reduce_validators_with_invalid_config)
+
+      # One vailidator has been removed due to having false signer.
+      assert_equal 1947, p.payload[:validators].size
+    end
+  end
+
   test 'solana_client_request returns data found in first cluster' do
     clusters = [
       @mainnet_url,
