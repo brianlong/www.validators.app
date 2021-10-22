@@ -21,6 +21,6 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect_to 404 if validator not found' do
     get validator_url(network: 'testnet', account: 'notexistingaccount')
 
-    assert_select 'h1', "The page you're looking for does not exist."
+    assert_redirected_to root_url
   end
 end
