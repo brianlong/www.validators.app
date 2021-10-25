@@ -191,6 +191,10 @@ module SolanaLogic
     end
   end
 
+  # Fetches program accounts, default program is config,
+  # where you can check if signer is true for the validator.
+  # More program pubkeys can be found on 
+  # https://docs.solana.com/developing/runtime-facilities/programs
   def program_accounts(
     config_program_pubkey: 'Config1111111111111111111111111111111111111',
     encoding: 'jsonParsed'
@@ -213,6 +217,8 @@ module SolanaLogic
     end
   end
 
+  # Search for the validator's config where signer is false 
+  # and removes it from validators array.
   def reduce_validators_with_invalid_config
     lambda do |p|
       return p unless p[:code] == 200
