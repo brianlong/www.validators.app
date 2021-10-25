@@ -81,6 +81,12 @@ Rails.application.routes.draw do
   get 'privacy-policy', to: 'public#privacy_policy'
   get 'sample-chart', to: 'public#sample_chart'
   get 'terms-of-use', to: 'public#terms_of_use'
+  get 'commission-changes/mainnet/(:validator_id)',
+      to: redirect( '/commission-changes/%{validator_id}?network=mainnet'),
+      defaults: { validator_id: nil }
+  get 'commission-changes/testnet/(:validator_id)',
+      to: redirect( '/commission-changes/%{validator_id}?network=testnet'),
+      defaults: { validator_id: nil }
   get 'commission-changes/(:validator_id)',
       to: 'public#commission_histories',
       as: 'commission_histories'
