@@ -145,7 +145,7 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     create_validators_for_filtering_test
 
     assert_equal 1, ValidatorScoreV1.filtered_by(:delinquent).count
-    assert ValidatorScoreV1.filtered_by(:delinquent).first.delinquent
+    assert ValidatorScoreV1.filtered_by(:delinquent).all? { |val| val.delinquent }
   end
 
   test 'filter_by when filtered by inactive should return correct results' do
