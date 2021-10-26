@@ -18,7 +18,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should redirect_to 404 if validator not found' do
+  test 'should redirect_to home page if validator not found' do
     get validator_url(network: 'testnet', account: 'notexistingaccount')
 
     assert_redirected_to root_url
