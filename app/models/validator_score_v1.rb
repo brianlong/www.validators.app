@@ -93,7 +93,7 @@ class ValidatorScoreV1 < ApplicationRecord
     when :delinquent
       where(delinquent: true)
     when :inactive
-      select('validator_score_v1s.*, validator.is_active').joins(:validator).where('validator.is_active': false)
+      joins(:validator).where('validator.is_active': false)
     else
       self
     end
