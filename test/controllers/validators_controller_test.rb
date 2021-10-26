@@ -18,6 +18,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should redirect to new URL format if old format given' do
+    get "/validators/#{@validator.network}/#{@validator.account}"
+    assert_redirected_to validator_path(account: @validator.account, network: @validator.network)
+  end
+
   test 'should redirect_to home page if validator not found' do
     get validator_url(network: 'testnet', account: 'notexistingaccount')
 

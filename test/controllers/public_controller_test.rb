@@ -45,6 +45,14 @@ class PublicControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should redirect from old commission changes URL format' do
+    validator = create(:validator, :with_score, network: 'testnet')
+    get "/commission-changes/#{validator.network}/#{validator.id}"
+    assert_redirected_to commission_histories_path(validator_id: validator.id, network: validator.network)
+    get "/commission-changes/testnet"
+    assert_redirected_to "/commission-changes/?network=testnet"
+  end
+
   # test 'it creates contact request with correct params' do
   #   assert_difference('ContactRequest.count') do
   #     post contact_us_url, params: @contact_us_params

@@ -76,4 +76,12 @@ module ValidatorsHelper
   def solstake_url(vote_key)
     "https://solstake.io/#/app/validator/#{vote_key}"
   end
+
+  def shuffle_logos
+    [
+      ['https://lido.fi/solana', 'lido.png'],
+      ['https://marinade.finance', 'marinade.png'],
+      ['https://www.socean.fi', 'socean.png']
+    ].shuffle
+  end
 end
