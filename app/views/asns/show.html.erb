@@ -38,7 +38,7 @@
         <tbody>
           <tr>
             <td><strong>Population</strong></td>
-            <td><%= @scores.count %></td>
+            <td><%= @population %></td>
           </tr>
           <tr>
             <td><strong>Total Stake</strong></td>
@@ -66,7 +66,7 @@
              show_version: false,
              items_per_page: @per %>
   <div class="px-15">
-    <%= paginate @scores_page %>
+    <%= paginate @scores %>
   </div>
 </div>
 
