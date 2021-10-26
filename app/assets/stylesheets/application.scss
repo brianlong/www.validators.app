@@ -89,10 +89,6 @@ body {
   }
 }
 
-.deep-dive p {
-  font-size: 18px;
-}
-
 .page-header {
   margin-bottom: 40px;
   @media(max-width: $screen-xs-max) {
@@ -134,8 +130,8 @@ hr {
   }
   &x-lg-6 {
     @media(min-width: $screen-lg-min) {
-      padding-left: 7rem !important;;
-      padding-right: 7rem !important;;
+      padding-left: 7rem !important;
+      padding-right: 7rem !important;
     }
   }
 }

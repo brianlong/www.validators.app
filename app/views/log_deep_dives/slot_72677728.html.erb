@@ -1,38 +1,52 @@
-<div class='row'>
-  <div class="col-sm-12 deep-dive">
-    <h1>Log Deep Dive -- DRAFT</h1>
-    <h2>Slots 72677728-72677739</h2>
-    <p>
-      On 8-April-2021, I investigated my log file to get a better understanding of activity around a sequence of four skipped slots from my validator node. it was a good learning experience and this article is intended to show what I learned and help you better understand your logs.
-    </p>
-    <p>
-      See the  <%= link_to 'Solana Documentation', 'https://docs.solana.com/terminology' %> for a discussion of capitalized terms like Fork, Slot, Shred, etc.
-    </p>
-    <h3>Life Cycle of a Slot</h3>
-    <p>
-      The Solana Validator logs are very busy and it can be difficult to see the signal through the noise. Before digging deep into the skipped Slot sequence further below, here are some important milestones in the life-cycle of a successful Slot:
-    </p>
-    <p>
-      <%= image_tag 'deep-dive-72677728-1.png', width: '100%' %>
-    </p>
-    <p>
-      The first milestone is seen when the current leader transmits the first Shreds for a new Slot. The first Shreds look like this in your logs <pre>INFO  solana_metrics::metrics] datapoint: retransmit-first-shred slot=73210778i</pre>
-    </p>
-    <p>
-      After receiving new Shreds, your validator will create a new Fork for the slot. In your logs, you will see this <pre>INFO  solana_core::replay_stage] new fork:73210778 parent:73210777 root:73210740</pre> Normally, the new Fork will build on the Block from the prior Slot.
-    </p>
-    <p>
-      When the leader has filled a Block with Shreds, the leader will freeze the Bank indicating that the transactions are ready for verification and Voting. For example, <pre>INFO  solana_core::replay_stage] bank frozen: 73210778</pre>
-    </p>
-    <p>
-Finally, after the transactions and Block are determined to be valid, your validator will vote on the Fork. Votes look like this: <pre>INFO  solana_core::replay_stage] voting: 73210778 0</pre>
-    </p>
-    <p>
-On the "happy path" for each Slot, you will see those events in sequential order with a smooth transition from one Slot to the next.
-    </p>
-    <h2>Skipped Slot Investigation</h2>
-    <p>Given the following slot sequence, I am DDnA and I skipped all four of my slots:</p>
-    <p>
+<h1>Log Deep Dive -- DRAFT</h1>
+<h2>Slots 72677728-72677739</h2>
+<p>
+  On 8-April-2021, I investigated my log file to get a better understanding of activity around a sequence of four
+  skipped slots from my validator node. it was a good learning experience and this article is intended to show
+  what I learned and help you better understand your logs.
+</p>
+<p>
+  See the  <%= link_to 'Solana Documentation', 'https://docs.solana.com/terminology' %> for a discussion of
+  capitalized terms like Fork, Slot, Shred, etc.
+</p>
+
+<h3 class="mt-5">Life Cycle of a Slot</h3>
+<p>
+  The Solana Validator logs are very busy and it can be difficult to see the signal through the noise. Before
+  digging deep into the skipped Slot sequence further below, here are some important milestones in the life-cycle
+  of a successful Slot:
+</p>
+<p>
+  <%= image_tag 'deep-dive-72677728-1.png', width: '100%' %>
+</p>
+<p>
+  The first milestone is seen when the current leader transmits the first Shreds for a new Slot. The first Shreds
+  look like this in your logs
+  <pre>INFO  solana_metrics::metrics] datapoint: retransmit-first-shred slot=73210778i</pre>
+</p>
+<p>
+  After receiving new Shreds, your validator will create a new Fork for the slot. In your logs, you will see this
+  <pre>INFO  solana_core::replay_stage] new fork:73210778 parent:73210777 root:73210740</pre>
+  Normally, the new Fork will build on the Block from the prior Slot.
+</p>
+<p>
+  When the leader has filled a Block with Shreds, the leader will freeze the Bank indicating that the transactions
+  are ready for verification and Voting. For example,
+  <pre>INFO  solana_core::replay_stage] bank frozen: 73210778</pre>
+</p>
+<p>
+  Finally, after the transactions and Block are determined to be valid, your validator will vote on the Fork.
+  Votes look like this:
+  <pre>INFO  solana_core::replay_stage] voting: 73210778 0</pre>
+</p>
+<p>
+  On the "happy path" for each Slot, you will see those events in sequential order with a smooth transition from
+  one Slot to the next.
+</p>
+
+<h2 class="mt-5">Skipped Slot Investigation</h2>
+<p>Given the following slot sequence, I am DDnA and I skipped all four of my slots:</p>
+<p>
 <pre>
   `% solana block-production -v | grep -B 8 -A 8 DDnA`
     72677728        5XKJwdKB2Hs7pkEXzifAysjSk6q7Rt6k5KfHwmAMPtoQ
@@ -48,43 +62,60 @@ On the "happy path" for each Slot, you will see those events in sequential order
     72677738        EaRH6eMWnXKXhw1tqve6eUXnsoWYUFKeSbXUyBEqyPYJ
     72677739        EaRH6eMWnXKXhw1tqve6eUXnsoWYUFKeSbXUyBEqyPYJ
 </pre>
-    </p>
-    <p>
-      Here is a summary of the significant milestones within this sequence:
-    </p>
-    <p>
-      <%= image_tag 'deep-dive-72677728-2.png', width: '100%' %>
-    </p>
-    <p>
-      From the worksheet shown above, the most important event happens at 37.817. 5XKJ has not delivered a frozen bank for 727 within 800ms. DDnA thinks that 5XKJ has gone missing and DDnA creates a new fork building on the the work of Dq3p in 727.
-    </p>
-    <p>
-      At 38.498, 5XKJ delivered the frozen Bank for 728 and DDnA created a second Fork for 729 at 38.512. We now have TWO FORKS in play!
-    </p>
-    <p>
-      From this point on, 5XKJ continues to send updates for its Fork while DDnA is building on the alternate Fork. At 39.144, DDnA detects the partition and is finally ready to drop its own Fork and vote in the heavier 731 Fork.
-    </p>
-    <p>
-      A little time passes while DDnA resolves the Forks and it starts Voting again at 738.
-    </p>
-    <h2>Summary</h2>
-    <p>
-      For context, DDnA is located in New York, USA and 5XKJ is located in Frankfurt, Germany. Average ping times between the two nodes are about 87ms (43.5ms one-way). My logs reflect the times that events arrived at my node (i.e. network latency is embedded within the times).
-    </p>
-    <p>
-      Due to propagation delays, DDnA did not receive the required frozen_bank event from 5XKJ in a timely manner. After 800ms, roughly two slots plus some grace ticks, DDnA believed that 5XKJ went missing and then DDnA created a new fork. Please notice that this happened within the allotted time of 5XKJ's slots 728-731. I believe that this is an intentional design feature -- the next leader in line can make up a little "lost time" if the prior leader is missing.
-    </p>
-    <p>
-      Because DDnA is in the US and 5KXJ is in Europe, the other European validators may have had a chance to vote on frozen banks that DDnA didn't see in time. When the two forks were resolved, 5XKJ's fork was the heaviest and DDnA lost out.
-    </p>
-    <p>
-      In the end, the skipped Slots were caused by propagation issues or inefficiencies with Turbine (Solana's propagation library) that caused DDnA to not see the events in time. I originally suspected that proof-of-history played a role, but I do not think that is the case here.
-    </p>
-    <p>
-      Finally, if you find this type of article useful, please send feedback using the chat widget on the lower right-corner of this page. Thanks!
-    </p>
-    <h2>Log Entries</h2>
-    <p>
+</p>
+<p>
+  Here is a summary of the significant milestones within this sequence:
+</p>
+<p>
+  <%= image_tag 'deep-dive-72677728-2.png', width: '100%' %>
+</p>
+<p>
+  From the worksheet shown above, the most important event happens at 37.817. 5XKJ has not delivered a frozen bank
+  for 727 within 800ms. DDnA thinks that 5XKJ has gone missing and DDnA creates a new fork building on the the work
+  of Dq3p in 727.
+</p>
+<p>
+  At 38.498, 5XKJ delivered the frozen Bank for 728 and DDnA created a second Fork for 729 at 38.512. We now have
+  TWO FORKS in play!
+</p>
+<p>
+  From this point on, 5XKJ continues to send updates for its Fork while DDnA is building on the alternate Fork.
+  At 39.144, DDnA detects the partition and is finally ready to drop its own Fork and vote in the heavier 731 Fork.
+</p>
+<p>
+  A little time passes while DDnA resolves the Forks and it starts Voting again at 738.
+</p>
+
+<h2 class="mt-5">Summary</h2>
+<p>
+  For context, DDnA is located in New York, USA and 5XKJ is located in Frankfurt, Germany. Average ping times between
+  the two nodes are about 87ms (43.5ms one-way). My logs reflect the times that events arrived at my node (i.e. network
+  latency is embedded within the times).
+</p>
+<p>
+  Due to propagation delays, DDnA did not receive the required frozen_bank event from 5XKJ in a timely manner. After
+  800ms, roughly two slots plus some grace ticks, DDnA believed that 5XKJ went missing and then DDnA created a new
+  fork. Please notice that this happened within the allotted time of 5XKJ's slots 728-731. I believe that this is
+  an intentional design feature -- the next leader in line can make up a little "lost time" if the prior leader
+  is missing.
+</p>
+<p>
+  Because DDnA is in the US and 5KXJ is in Europe, the other European validators may have had a chance to vote on
+  frozen banks that DDnA didn't see in time. When the two forks were resolved, 5XKJ's fork was the heaviest and
+  DDnA lost out.
+</p>
+<p>
+  In the end, the skipped Slots were caused by propagation issues or inefficiencies with Turbine (Solana's propagation
+  library) that caused DDnA to not see the events in time. I originally suspected that proof-of-history played a role,
+  but I do not think that is the case here.
+</p>
+<p>
+  Finally, if you find this type of article useful, please send feedback using the chat widget on the lower
+  right-corner of this page. Thanks!
+</p>
+
+<h2 class="mt-5">Log Entries</h2>
+<p>
 <pre>
   $ sudo cat /var/log/syslog | grep -B 100 -A 300 'fork:7267773'
   Apr  8 00:21:36 solana-production-nyc solana-validator[32924]: [2021-04-08T00:21:36.155339404Z INFO  solana_metrics::metrics] datapoint: retransmit-num_nodes count=686i
@@ -749,6 +780,4 @@ On the "happy path" for each Slot, you will see those events in sequential order
   Apr  8 00:21:44 solana-production-nyc solana-validator[32924]: [2021-04-08T00:21:44.260869371Z INFO  solana_metrics::metrics] datapoint: shred_fetch_tvu_forwards index_overrun=0i shred_count=1471i slot_bad_deserialize=0i index_bad_deserialize=0i index_out_of_bounds=0i slot_out_of_range=0i duplicate_shred=0i
   Apr  8 00:21:44 solana-production-nyc solana-validator[32924]: [2021-04-08T00:21:44.286970185Z INFO  solana_core::cluster_info]
 </pre>
-    </p>
-  </div>
-</div>
+</p>
