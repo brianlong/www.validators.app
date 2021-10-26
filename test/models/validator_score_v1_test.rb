@@ -152,7 +152,7 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     create_validators_for_filtering_test
 
     assert_equal 1, ValidatorScoreV1.filtered_by(:inactive).count
-    refute ValidatorScoreV1.filtered_by(:inactive).first.validator.is_active
+    refute ValidatorScoreV1.filtered_by(:inactive).all? { |score| score.validator.is_active }
   end
 
   def create_validators_for_filtering_test
