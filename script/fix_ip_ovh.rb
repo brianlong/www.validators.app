@@ -97,7 +97,7 @@ OVH_HOSTS = {
 HOST_REGEX = /(be|bg|vl).+\.(lon1|rbx|bhs|waw|fra|gra|sbg|hil|vin|p19|gsw|dc1).+/
 
 Ip.where(traits_autonomous_system_number: 16_276)
-  .where.not(address: IpOverride.select(:address)).first(2)
+  .where.not(address: IpOverride.select(:address))
   .each do |ip|
   last_ovh_ip = get_matching_traceroute(ip: ip.address, reg: HOST_REGEX)
 
