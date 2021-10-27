@@ -36,10 +36,8 @@ class SortedDataCenters
         ips.traits_autonomous_system_number,
         ips.traits_autonomous_system_organization,
         ips.country_iso_code,
-        ips.city_name,
-        ips.location_time_zone,
-        ips.city_name
-    "
+        location
+      "
     @dc_sql = Ip.connection.execute(
       ActiveRecord::Base.send(:sanitize_sql, [sql, network])
     )
