@@ -45,14 +45,6 @@ module FixIpModule
   end
 
   def update_validator_score_with_overrides
-    Ip.all.each do |ip|
-      ValidatorScoreV1.where(ip_address: ip.address)
-                      .update_all(
-                        data_center_key: ip.data_center_key,
-                        data_center_host: ip.data_center_host
-                      )
-    end
-
     ValidatorScoreV1.in_batches(of: 500).each do |scores|
       ips = scores.pluck(:ip_address)
       sql2 = "
@@ -66,6 +58,5 @@ module FixIpModule
       ".squish
       ValidatorScoreV1.connection.execute(sql2)
     end
-
   end
 end
