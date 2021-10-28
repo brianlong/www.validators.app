@@ -386,18 +386,6 @@ module ValidatorScoreV1Logic
         end
       end
 
-      # update validator score with ips
-      sql2 = "
-        UPDATE validator_score_v1s sc
-        INNER JOIN ips ip
-        ON sc.ip_address = ip.address
-        SET sc.data_center_key = ip.data_center_key,
-        sc.data_center_host = ip.data_center_host,
-        sc.updated_at = NOW();
-      ".squish
-
-      ValidatorScoreV1.connection.execute(sql2)
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from save_validators', e)
