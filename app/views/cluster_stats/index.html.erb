@@ -4,11 +4,20 @@
             class: 'btn btn-sm btn-secondary mb-3' %>
 
 <div class="row">
-  <%= render partial: "root_distance" %>
-  <%= render partial: "vote_distance" %>
+  <div class="col-12 col-md-6 mb-4">
+    <%= render partial: "root_distance" %>
+  </div>
+  <div class="col-12 col-md-6 mb-4">
+    <%= render partial: "vote_distance" %>
+  </div>
+</div>
 <div class="row">
-  <%= render partial: "skipped_vote" %>
-  <%= render partial: "skipped_slot" %>
+  <div class="col-12 col-md-6 mb-4">
+    <%= render partial: "skipped_vote" %>
+  </div>
+  <div class="col-12 col-md-6 mb-4">
+    <%= render partial: "skipped_slot" %>
+  </div>
 </div>
 
 <div class="card">
