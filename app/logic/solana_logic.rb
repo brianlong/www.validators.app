@@ -228,7 +228,7 @@ module SolanaLogic
       data = p.payload[:program_accounts].map { |e| e.dig('account', 'data') }
 
       keys = data.map do |e|
-        next if e.is_a?(Array)
+        next if e.is_a?(Array) # Array contains base64 encoded strings with ie. Shakespeare's poem.
         e.dig('parsed', 'info', 'keys')
       end.flatten.compact
 
