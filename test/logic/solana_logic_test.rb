@@ -259,11 +259,13 @@ class SolanaLogicTest < ActiveSupport::TestCase
       
       assert_equal 1948, p.payload[:validators].size
 
-      p.payload[:program_accounts][2]['account']['data']['parsed']['info']['keys'][1]['signer'] = false
+      config_account = p.payload[:program_accounts][2]['account']['data']['parsed']['info']['keys'][1]
+      config_account['signer'] = false
+
       p = p.then(&reduce_validators_with_invalid_config)
 
-      # One vailidator has been removed due to having false signer.
-      assert_equal 1947, p.payload[:validators].size
+      # One vailidator has info set to empty hash due to having false signer.
+      assert_equal p.payload[:validators][config_account['pubkey']], {}
     end
   end
 

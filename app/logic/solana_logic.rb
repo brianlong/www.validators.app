@@ -237,7 +237,8 @@ module SolanaLogic
 
       if false_signers.any?
         false_signers.each do |signer|
-          p.payload[:validators].delete(signer['pubkey'])
+          # Clear info hash when validator signer is false.
+          p.payload[:validators][signer['pubkey']] = {}
         end
       end
 
