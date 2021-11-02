@@ -272,21 +272,57 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'reduce_validators_with_invalid_config' do
-    VCR.use_cassette('reduce_validators_with_invalid_config') do
-      p = Pipeline.new(200, @mainnet_initial_payload)
-                  .then(&validators_get)
+  test 'find_invalid_configs' do
+    #  To skip validators_info_get
+    payload = @mainnet_initial_payload.merge(
+      validators_info: @validators_info
+    )
+
+    VCR.use_cassette('find_invalid_configs') do
+      p = Pipeline.new(200, payload)
                   .then(&program_accounts)
       
-      assert_equal 1948, p.payload[:validators].size
+      assert_equal 899, p.payload[:validators_info].size
+      assert_equal 904, p.payload[:program_accounts].size
 
-      config_account = p.payload[:program_accounts][2]['account']['data']['parsed']['info']['keys'][1]
+      config_account = p.payload[:program_accounts][0]['account']['data']['parsed']['info']['keys'][1]
       config_account['signer'] = false
 
-      p = p.then(&reduce_validators_with_invalid_config)
+      p = p.then(&find_invalid_configs)
 
       # One vailidator has info set to empty hash due to having false signer.
-      assert_equal p.payload[:validators][config_account['pubkey']], {}
+      assert_equal config_account['pubkey'], p.payload[:false_signers].first[1]['pubkey']
+      assert_equal [
+          "4En2EzuCGjsXDAmWpecmQz2Z2sBrPZAfrDqP35qcTUhu", 
+          "DPe3AebFaHfSRJjt1rcFWZWfSUsEa3MmLpBLZNheLUXx", 
+          "H4hqVttu3AXbUZeUGtV5hxQRg1VUDMXdMzz84P76PLhN", 
+          "3j1hSHKYgLVydvv35DmcELex7YfoKSV4E7biK765ECZb"
+        ], 
+        p.payload[:duplicated_config].keys
+    end
+  end
+
+  test 'remove_invalid_configs' do
+    #  To skip validators_info_get
+    payload = @mainnet_initial_payload.merge(
+      validators_info: @validators_info
+    )
+
+    VCR.use_cassette('remove_invalid_configs') do
+      p = Pipeline.new(200, payload)
+                  .then(&program_accounts)
+                  
+      assert_equal 899, p.payload[:validators_info].size
+      assert_equal 904, p.payload[:program_accounts].size
+
+      config_account = p.payload[:program_accounts][0]['account']['data']['parsed']['info']['keys'][1]
+      config_account['signer'] = false
+
+      p = p.then(&find_invalid_configs)
+           .then(&remove_invalid_configs)
+
+      # One validator has info set to empty hash due to having false signer.
+      assert_equal 898, p.payload[:validators_info].size
     end
   end
 

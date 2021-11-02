@@ -217,34 +217,77 @@ module SolanaLogic
     end
   end
 
-  # Search for the validator's config where signer is false 
-  # and removes it from validators array.
-  def reduce_validators_with_invalid_config
+  # Search for the duplicated configs or config where signer is false
+  def find_invalid_configs
     lambda do |p|
       return p unless p[:code] == 200
 
       info_pubkey = 'Va1idator1nfo111111111111111111111111111111'
+      
+      data = {}
+      p.payload[:program_accounts].map do |e| 
+        data[e['pubkey']] = e.dig('account', 'data')
+      end
 
-      data = p.payload[:program_accounts].map { |e| e.dig('account', 'data') }
-
-      keys = data.map do |e|
-        next if e.is_a?(Array) # Array contains base64 encoded strings with ie. Shakespeare's poem.
-        e.dig('parsed', 'info', 'keys')
+      keys = {}
+      data.each do |e|
+        next if e[1].is_a?(Array) # Array contains base64 encoded strings with ie. Shakespeare's poem.
+        keys[e[0]] = e[1].dig('parsed', 'info', 'keys')
       end.flatten.compact
 
-      pubkeys_signers = keys.reject { |e| e['pubkey'] == info_pubkey }
-      false_signers = pubkeys_signers.select { |e| e['signer'] == false }
+      # Select validator's info pubkeys different than info_pubkey.
+      pubkeys_signers = {}
+      keys.each do |k, v|
+        next if v.nil?
+        pubkeys_signers[k] = v.select { |e| e['pubkey'] != info_pubkey }.first
+      end
 
-      if false_signers.any?
-        false_signers.each do |signer|
-          # Clear info hash when validator signer is false.
-          p.payload[:validators][signer['pubkey']] = {}
-        end
+      # Find false signers
+      false_signers = {}
+      pubkeys_signers.each do |k, v|
+        false_signers[k] = v if v['signer'] == false
+      end
+
+      # Find duplicated signers
+      duplicated = Hash.new(0)
+      pubkeys_signers.each do |k, v|
+        duplicated[v['pubkey']] += 1
+      end
+
+      # Leave only duplicated pubkeys
+      duplicated.each do |k, v|
+        duplicated.delete(k) unless v > 1
+      end
+
+      dpl = pubkeys_signers.select { |k, v| v['pubkey'].in? duplicated.keys }
+
+      dpl_data = data.select { |k,v| k.in? dpl.keys }
+
+      Pipeline.new(200, p.payload.merge(
+                          false_signers: false_signers,
+                          duplicated_config: dpl_data
+                        )
+      )
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from find_invalid_configs', e)
+    end
+  end
+
+  # Removes invalid configs from array
+  def remove_invalid_configs
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      false_signers_keys = p.payload[:false_signers].keys
+      if false_signers_keys.any?
+        p.payload[:validators_info].delete_if do |info| 
+          info['infoPubkey'].in?(false_signers_keys)
+        end      
       end
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from reduce_validators_with_invalid_config', e)
+      Pipeline.new(500, p.payload, 'Error from remove_invalid_configs', e)
     end
   end
 
