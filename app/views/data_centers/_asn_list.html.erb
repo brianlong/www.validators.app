@@ -5,7 +5,7 @@
       <br />
       <%= asn_data[:aso] %>
     </td>
-    <td class="column-sm">
+    <td class="column-sm" style="max-width: 180px;">
       <%
         asn_stat = @asn_stat.find { |stat| stat.traits_autonomous_system_number == asn_data[:asn] }
       %>
