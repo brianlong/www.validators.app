@@ -485,12 +485,28 @@ module SolanaLogic
     end
   end
 
-  def validator_info_get_and_save
+  def validators_info_get
     lambda do |p|
       return p unless p[:code] == 200
 
       results = cli_request('validator-info get', p.payload[:config_urls])
-      results.each do |result|
+
+      Pipeline.new(200, p.payload.merge(validators_info: results))
+    rescue StandardError => e
+      Pipeline.new(
+        500,
+        p.payload,
+        "Error from validators_info_get on #{p.payload[:network]}",
+        e
+      )
+    end
+  end
+
+  def validators_info_save
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      p.payload[:validators_info].each do |result|
         # puts result.inspect
         validator = Validator.find_or_create_by(
           network: p.payload[:network],
@@ -524,7 +540,7 @@ module SolanaLogic
       Pipeline.new(
         500,
         p.payload,
-        "Error from validator_info_get_and_save on #{p.payload[:network]}",
+        "Error from validators_info_save on #{p.payload[:network]}",
         e
       )
     end

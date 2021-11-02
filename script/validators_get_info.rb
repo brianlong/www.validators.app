@@ -13,7 +13,8 @@ include SolanaLogic
   }
 
   _p = Pipeline.new(200, payload)
-               .then(&validator_info_get_and_save)
+               .then(&validator_info_get)
+               .then(&validator_info_save)
                .then(&log_errors)
                .then(&batch_touch)
 end

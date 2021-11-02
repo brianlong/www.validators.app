@@ -28,6 +28,13 @@ class SolanaLogicTest < ActiveSupport::TestCase
       ],
       network: 'mainnet'
     }
+
+    validators_info
+  end
+
+  def validators_info
+    validators_info = file_fixture('validators_info.json')
+    @validators_info ||= JSON.parse(validators_info.read)
   end
 
   test 'array_average' do
@@ -248,6 +255,20 @@ class SolanaLogicTest < ActiveSupport::TestCase
                   .then(&program_accounts)
 
       assert_equal 870, p.payload[:program_accounts].size
+    end
+  end
+
+  test 'validators_info_save' do
+    #  To skip validators_info_get
+    payload = @mainnet_initial_payload.merge(
+      validators_info: @validators_info
+    )
+
+    VCR.use_cassette('validators_info_save') do
+      p = Pipeline.new(200, payload)
+                  .then(&program_accounts)
+                  .then(&validators_info_save)
+      assert_equal 898, Validator.count
     end
   end
 
