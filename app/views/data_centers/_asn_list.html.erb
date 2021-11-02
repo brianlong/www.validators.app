@@ -10,9 +10,9 @@
         asn_stat = @asn_stat.find { |stat| stat.traits_autonomous_system_number == asn_data[:asn] }
       %>
       <%= render 'validators/speedometer_chart',
-                 canvas_name: "2_average_score_#{asn_data[:asn]}",
-                 value: asn_stat&.average_score || 0,
-                 chart_steps: [4, 7, 10],
+                 canvas_name: "average_score_#{asn_data[:asn]}",
+                 value: [asn_stat&.average_score || 0, 11].min,
+                 chart_steps: [4, 7, 11],
                  min_value: 0,
                  max_value: 11
       %>
