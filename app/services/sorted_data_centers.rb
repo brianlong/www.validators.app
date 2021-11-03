@@ -54,6 +54,7 @@ class SortedDataCenters
   def sort_by_asn
     @dc_sql = @dc_sql.group_by { |dc| dc[1] }
     @dc_sql.each do |dc|
+      next if dc[0].blank?
       dc_keys = dc[1].map { |x| x[0] }
       aso = dc[1].map { |d| d[2] }.compact.uniq.join(', ')
       population = @scores.by_data_centers(dc_keys).count || 0
