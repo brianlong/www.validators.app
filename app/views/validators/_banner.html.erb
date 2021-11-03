@@ -18,15 +18,23 @@
       to&nbsp;move in and out of the&nbsp;pool without warm-up or cool-down periods. See the&nbsp;links below to&nbsp;learn more
       about liquid staking.
     </p>
-    <div class="row text-center mt-4 mb-3">
-      <% shuffle_logos.each_with_index do |logo, index| %>
-        <div class="col-sm-4 col-md mb-4 mb-sm-0 <%= 'offset-md-1' if index == 0 %>">
-          <%= link_to logo[0], target: "_blank" do %>
-            <%= image_tag logo[1], class: 'w-100 px-4 px-sm-0 px-lg-4' %>
-          <% end %>
-        </div>
-      <% end %>
-      <div class="d-none d-md-block col-md-1"></div>
+
+    <div id="carouselLogos" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <% shuffle_logos.each_slice(4).to_a.each_with_index do |group, index| %>
+          <div class="carousel-item <%= 'active' if index == 0 %>">
+            <div class="row text-center mt-4">
+              <% group.each do |logo| %>
+                <div class="col-sm-6 col-md-3 mb-4 mb-sm-0">
+                  <%= link_to logo[0], target: "_blank" do %>
+                    <%= image_tag logo[1], class: 'w-100 px-4 px-sm-1 px-lg-3 mb-4' %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

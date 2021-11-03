@@ -81,7 +81,9 @@ module ValidatorsHelper
     [
       ['https://lido.fi/solana', 'lido.png'],
       ['https://marinade.finance', 'marinade.png'],
-      ['https://www.socean.fi', 'socean.png']
+      ['https://www.socean.fi', 'socean.png'],
+      ['https://jpool.one/', 'jpool.png']
+      # add more stake pools here
     ].shuffle
   end
 end
