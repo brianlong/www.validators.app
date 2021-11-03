@@ -298,7 +298,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
           "H4hqVttu3AXbUZeUGtV5hxQRg1VUDMXdMzz84P76PLhN", 
           "3j1hSHKYgLVydvv35DmcELex7YfoKSV4E7biK765ECZb"
         ], 
-        p.payload[:duplicated_config].keys
+        p.payload[:duplicated_configs].keys
     end
   end
 

@@ -242,30 +242,32 @@ module SolanaLogic
         pubkeys_signers[k] = v.select { |e| e['pubkey'] != info_pubkey }.first
       end
 
-      # Find false signers
+      # Find false signers.
       false_signers = {}
       pubkeys_signers.each do |k, v|
         false_signers[k] = v if v['signer'] == false
       end
 
-      # Find duplicated signers
+      # Group and count config infos.
       duplicated = Hash.new(0)
       pubkeys_signers.each do |k, v|
         duplicated[v['pubkey']] += 1
       end
 
-      # Leave only duplicated pubkeys
+      # Leave config infos which are duplicated.
       duplicated.each do |k, v|
         duplicated.delete(k) unless v > 1
       end
 
-      dpl = pubkeys_signers.select { |k, v| v['pubkey'].in? duplicated.keys }
-
-      dpl_data = data.select { |k,v| k.in? dpl.keys }
+      # Find duplicated keys among all.
+      # 
+      # NOTE: We add this to paylaod but for now entries we found are identical
+      # so we do nothing with them.
+      duplicated_configs = pubkeys_signers.select { |k, v| v['pubkey'].in? duplicated.keys }
 
       Pipeline.new(200, p.payload.merge(
                           false_signers: false_signers,
-                          duplicated_config: dpl_data
+                          duplicated_configs: duplicated_configs
                         )
       )
     rescue StandardError => e
@@ -284,7 +286,6 @@ module SolanaLogic
           info['infoPubkey'].in?(false_signers_keys)
         end      
       end
-
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from remove_invalid_configs', e)
