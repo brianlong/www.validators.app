@@ -129,7 +129,7 @@
               <td>
                 <%= link_to record.last, validator_path(network: params[:network], account: record.last) %>
               </td>
-              <td><%= (record.first.to_f.round(3) * 100).to_s + "%" %></td>
+              <td><%= (record.first.to_f * 100).round(2).to_s + "%" %></td>
               <td class="text-right">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
@@ -222,7 +222,7 @@
               <td>
                 <%= link_to record.last, validator_path(network: params[:network], account: record.last) %>
               </td>
-              <td><%= ((record.first.to_f).round(3) * 100).to_s + "%" %></td>
+              <td><%= (record.first.to_f * 100).round(3).to_s + "%" %></td>
               <td class="text-right">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
