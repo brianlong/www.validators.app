@@ -225,50 +225,49 @@ module SolanaLogic
       info_pubkey = 'Va1idator1nfo111111111111111111111111111111'
       
       data = {}
-      p.payload[:program_accounts].map do |e| 
-        data[e['pubkey']] = e.dig('account', 'data')
+      p.payload[:program_accounts].map do |account| 
+        begin
+          data[account['pubkey']] = account.dig('account', 'data', 'parsed', 'info', 'keys')
+        rescue TypeError => e
+          # Sometimes value of 'parsed' key is an Array 
+          # that contains base64 encoded strings with ie. Shakespeare's poem.
+          # so we skip it.
+          next if e.message == 'no implicit conversion of String into Integer'
+        end
       end
 
-      keys = {}
-      data.each do |e|
-        next if e[1].is_a?(Array) # Array contains base64 encoded strings with ie. Shakespeare's poem.
-        keys[e[0]] = e[1].dig('parsed', 'info', 'keys')
-      end.flatten.compact
-
-      # Select validator's info pubkeys different than info_pubkey.
-      pubkeys_signers = {}
-      keys.each do |k, v|
-        next if v.nil?
-        pubkeys_signers[k] = v.select { |e| e['pubkey'] != info_pubkey }.first
-      end
-
-      # Find false signers.
+      # Find false and duplicated signers.
       false_signers = {}
-      pubkeys_signers.each do |k, v|
-        false_signers[k] = v if v['signer'] == false
+      duplicated_count = Hash.new { |hash, key| hash[key] = []}
+      duplicated_configs = Hash.new
+
+      data.each do |k, v|
+        next unless v.present?
+        
+        # Find false signers.
+        false_signers[k] = v[1] if v[1]['signer'] == false
+        
+        # Add config key to array of keys for validator's pubkey.
+        validator_key = v[1]['pubkey']
+        duplicated_count[validator_key] << k
+
+        # If validator has more than one config pubkey
+        # add to duplicated_configs hash.
+        if duplicated_count[validator_key].size > 1
+          duplicated_configs[k] = duplicated_count[validator_key]
+        end
       end
 
-      # Group and count config infos.
-      duplicated = Hash.new(0)
-      pubkeys_signers.each do |k, v|
-        duplicated[v['pubkey']] += 1
-      end
-
-      # Leave config infos which are duplicated.
-      duplicated.each do |k, v|
-        duplicated.delete(k) unless v > 1
-      end
-
-      # Find duplicated keys among all.
-      # 
-      # NOTE: We add this to paylaod but for now entries we found are identical
+      # NOTE: We add duplicated_configs to paylaod 
+      # but for now entries we found are identical
       # so we do nothing with them.
-      duplicated_configs = pubkeys_signers.select { |k, v| v['pubkey'].in? duplicated.keys }
-
-      Pipeline.new(200, p.payload.merge(
-                          false_signers: false_signers,
-                          duplicated_configs: duplicated_configs
-                        )
+      
+      Pipeline.new(
+        200, 
+        p.payload.merge(
+          false_signers: false_signers,
+          duplicated_configs: duplicated_configs
+        )
       )
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from find_invalid_configs', e)

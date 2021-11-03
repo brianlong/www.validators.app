@@ -294,11 +294,11 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_equal config_account['pubkey'], p.payload[:false_signers].first[1]['pubkey']
       assert_equal [
           "4En2EzuCGjsXDAmWpecmQz2Z2sBrPZAfrDqP35qcTUhu", 
-          "DPe3AebFaHfSRJjt1rcFWZWfSUsEa3MmLpBLZNheLUXx", 
           "H4hqVttu3AXbUZeUGtV5hxQRg1VUDMXdMzz84P76PLhN", 
+          "DPe3AebFaHfSRJjt1rcFWZWfSUsEa3MmLpBLZNheLUXx", 
           "3j1hSHKYgLVydvv35DmcELex7YfoKSV4E7biK765ECZb"
         ], 
-        p.payload[:duplicated_configs].keys
+        p.payload[:duplicated_configs].values.flatten
     end
   end
 
