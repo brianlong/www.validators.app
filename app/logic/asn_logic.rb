@@ -106,7 +106,13 @@ end
 private
 
 def asn_logger
-  @asn_logger ||= Logger.new("#{Rails.root}/log/#{Rails.env}/asn_logic.log")
+  log_path = File.join(Rails.root, 'log', Rails.env)
+  log_file_name = 'asn_logic.log'
+  log_file_path = File.join(log_path, log_file_name)
+
+  FileUtils.mkdir_p(log_path)
+
+  @asn_logger ||= Logger.new(log_file_path)
 end
 
 def ips_sql
