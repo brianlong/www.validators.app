@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_01_094326) do
+ActiveRecord::Schema.define(version: 2021_11_04_113011) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -267,6 +267,53 @@ ActiveRecord::Schema.define(version: 2021_10_01_094326) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "average_price", precision: 40, scale: 20
+  end
+
+  create_table "stake_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "account_balance"
+    t.integer "activation_epoch"
+    t.integer "active_stake"
+    t.integer "credits_observed"
+    t.integer "deactivating_stake"
+    t.integer "deactivation_epoch"
+    t.integer "delegated_stake"
+    t.string "delegated_vote_account_address"
+    t.integer "rent_exempt_reserve"
+    t.string "stake_pubkey"
+    t.string "stake_type"
+    t.string "staker"
+    t.string "withdrawer"
+    t.integer "stake_pool_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "batch_uuid"
+  end
+
+  create_table "stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "account_balance"
+    t.integer "activation_epoch"
+    t.integer "active_stake"
+    t.integer "credits_observed"
+    t.integer "deactivating_stake"
+    t.integer "deactivation_epoch"
+    t.integer "delegated_stake"
+    t.string "delegated_vote_account_address"
+    t.integer "rent_exempt_reserve"
+    t.string "stake_pubkey"
+    t.string "stake_type"
+    t.string "staker"
+    t.string "withdrawer"
+    t.integer "stake_pool_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "batch_uuid"
+  end
+
+  create_table "stake_pools", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "authority"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

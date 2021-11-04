@@ -36,4 +36,61 @@ module StakeLogic
       Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
     end
   end
+
+  def move_current_stakes_to_history
+    lambda do |p|
+      return p unless p.code == 200
+
+      account_histories = []
+      StakeAccount.where.not(batch_uuid: p.payload[:batch].uuid).each do |old_stake|
+        account_histories.push StakeAccountHistory.new(old_stake.attributes)
+      end
+
+      if account_histories.any?
+        StakeAccountHistory.transaction do
+          account_histories.each(&:save)
+        end
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from move_current_stakes_to_history', e)
+    end
+  end
+
+  def save_stake_accounts
+    lambda do |p|
+      return p unless p.code == 200
+
+      saved_accounts = []
+
+      p.payload[:stake_accounts].each do |acc|
+        s = StakeAccount.new(
+          account_balance: acc[:accountBalance],
+          activation_epoch: acc[:activationEpoch],
+          active_stake: acc[:activeStake],
+          credits_observed: acc[:creditsObserved],
+          deactivating_stake: acc[:deactivatingStake],
+          deactivation_epoch: acc[:deactivationEpoch],
+          delegated_stake: acc[:delegatedStake],
+          delegated_vote_account_address: acc[:delegatedVoteAccountAddress],
+          rent_exempt_reserve: acc[:rentExemptReserve],
+          stake_pubkey: acc[:stakePubkey],
+          stake_type: acc[:stakeType],
+          staker: acc[:staker],
+          withdrawer: acc[:withdrawer],
+          batch_uuid: p.payload[:batch].uuid
+        )
+        saved_accounts.push s
+      end
+
+      StakeAccount.transaction do
+        saved_accounts.each(&:save)
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from save_stake_accounts', e)
+    end
+  end
 end

@@ -13,7 +13,9 @@ payload = {
 
 p = Pipeline.new(200, payload)
             .then(&get_last_batch)
+            .then(&move_current_stakes_to_history)
             .then(&get_stake_accounts)
+            .then(&save_stake_accounts)
 
 puts "CODE: #{p[:code]}"
 puts "MESSAGE: #{p[:message]}"

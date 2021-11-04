@@ -1,0 +1,22 @@
+class CreateStakeAccountHistories < ActiveRecord::Migration[6.1]
+  def change
+    create_table :stake_account_histories do |t|
+      t.integer :account_balance
+      t.integer :activation_epoch
+      t.integer :active_stake
+      t.integer :credits_observed
+      t.integer :deactivating_stake
+      t.integer :deactivation_epoch
+      t.integer :delegated_stake
+      t.string :delegated_vote_account_address
+      t.integer :rent_exempt_reserve
+      t.string :stake_pubkey
+      t.string :stake_type
+      t.string :staker
+      t.string :withdrawer
+      t.integer :stake_pool_id
+
+      t.timestamps
+    end
+  end
+end
