@@ -4,7 +4,7 @@ module StakeLogic
   include PipelineLogic
   include SolanaLogic #for solana_client_request
 
-  def set_this_batch
+  def get_last_batch
     lambda do |p|
       return p unless p.code == 200
 
@@ -35,9 +35,5 @@ module StakeLogic
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
     end
-  end
-
-  def method_name
-    
   end
 end
