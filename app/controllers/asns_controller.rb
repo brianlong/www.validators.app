@@ -1,7 +1,9 @@
 class AsnsController < ApplicationController
   def show
     @data_centers = Ip.where(traits_autonomous_system_number: asn_params[:asn])
-                     .pluck(:data_center_key).uniq
+                      .joins(:validator_score_v1)
+                      .pluck(:data_center_key)
+                      .uniq
 
     render file: "#{Rails.root}/public/404.html", status: 404 if @data_centers.empty?
 
@@ -10,16 +12,20 @@ class AsnsController < ApplicationController
     @scores = ValidatorScoreV1.includes(:validator)
                               .by_network_with_active_stake(asn_params[:network])
                               .by_data_centers(@data_centers)
-                              .page(params[:page])
-                              .per(@per)
-    @validators = @scores.map(&:validator).compact
 
+    @asn_stake = @scores.sum(:active_stake)
+
+    @scores = @scores.page(params[:page])
+                     .per(@per)
+
+    @validators = @scores.map(&:validator).compact
     @batch = Batch.last_scored(params[:network])
+
+    @population = @scores.total_count
 
     @total_stake = ValidatorScoreV1.by_network_with_active_stake(asn_params[:network])
                                    .by_data_centers(@data_centers)
                                    .sum(:active_stake)
-    @asn_stake = @scores.sum(:active_stake)
   end
 
   private
