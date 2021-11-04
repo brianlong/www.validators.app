@@ -60,7 +60,8 @@ module AsnLogic
 
         scores = p.payload[:scores].select do |score|
           score.data_center_key.in?(asn_stat.data_centers) && \
-            score.validator.scorable?
+            score.validator.scorable? && \
+            !score.validator.private_validator?
         end
 
         score_sum = 0
@@ -74,6 +75,8 @@ module AsnLogic
         if asn_stat.population&.positive?
           asn_stat.average_score = \
             (score_sum.to_f / asn_stat.population)
+        else
+          asn_stat.average_score = 0
         end
         asn_stat.active_stake = active_stake
 

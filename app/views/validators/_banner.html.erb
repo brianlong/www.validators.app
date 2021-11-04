@@ -3,8 +3,9 @@
   <% unless @validators.blank? %>
     <p class="lead">
       The tables below show each validator by name and include some recent statistics for each. See our
-      <%= link_to 'FAQ', faq_url, target: '_blank' %> for a&nbsp;description of the&nbsp;scores shown below. Special thanks to
-      <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %> for their support!
+      <%= link_to 'Getting Started', faq_url(anchor: 'score'), target: '_blank' %> page for a&nbsp;description of the&nbsp;scores shown
+      below. Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %>
+      for their support!
     </p>
   <% end %>
 </section>
@@ -14,26 +15,17 @@
     <p class="lead">
       You can now improve the security of the&nbsp;Solana blockchain by participating in&nbsp;stake pools.
       A&nbsp;stake pool spreads your delegation across hundreds of&nbsp;validators. Liquid stake pools allow you
-      to&nbsp;move in and out of the&nbsp;pool without warm-up or cool-down periods. See
-      <%= link_to 'Lido', 'https://lido.fi/solana', target: "_blank" %>, <%= link_to 'Marinade Finance', 'https://marinade.finance', target: "_blank" %>
-      &&nbsp;<%= link_to 'Socean', 'https://www.socean.fi', target: "_blank" %> to&nbsp;learn more about liquid staking.
+      to&nbsp;move in and out of the&nbsp;pool without warm-up or cool-down periods. See the&nbsp;links below to&nbsp;learn more
+      about liquid staking.
     </p>
     <div class="row text-center mt-4 mb-3">
-      <div class="col-sm-4 offset-md-1 col-md mb-4 mb-sm-0">
-        <a href="https://lido.fi/solana" title="Lido" target="_blank">
-          <%= image_tag 'lido.png', class: 'w-100 px-4 px-sm-0 px-lg-4' %>
-        </a>
-      </div>
-      <div class="col-sm-4 col-md mb-4 mb-sm-0">
-        <a href="https://marinade.finance" title="Marinade Finance" target="_blank">
-          <%= image_tag 'marinade.png', class: 'w-100 px-4 px-sm-0 px-lg-4' %>
-        </a>
-      </div>
-      <div class="col-sm-4 col-md mb-4 mb-sm-0">
-        <a href="https://www.socean.fi" title="Socean" target="_blank">
-          <%= image_tag 'socean.png', class: 'w-100 px-4 px-sm-0 px-lg-4' %>
-        </a>
-      </div>
+      <% shuffle_logos.each_with_index do |logo, index| %>
+        <div class="col-sm-4 col-md mb-4 mb-sm-0 <%= 'offset-md-1' if index == 0 %>">
+          <%= link_to logo[0], target: "_blank" do %>
+            <%= image_tag logo[1], class: 'w-100 px-4 px-sm-0 px-lg-4' %>
+          <% end %>
+        </div>
+      <% end %>
       <div class="d-none d-md-block col-md-1"></div>
     </div>
   </div>

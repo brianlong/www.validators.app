@@ -36,10 +36,8 @@ class SortedDataCenters
         ips.traits_autonomous_system_number,
         ips.traits_autonomous_system_organization,
         ips.country_iso_code,
-        ips.city_name,
-        ips.location_time_zone,
-        ips.city_name
-    "
+        location
+      "
     @dc_sql = Ip.connection.execute(
       ActiveRecord::Base.send(:sanitize_sql, [sql, network])
     )
@@ -56,6 +54,7 @@ class SortedDataCenters
   def sort_by_asn
     @dc_sql = @dc_sql.group_by { |dc| dc[1] }
     @dc_sql.each do |dc|
+      next if dc[0].blank?
       dc_keys = dc[1].map { |x| x[0] }
       aso = dc[1].map { |d| d[2] }.compact.uniq.join(', ')
       population = @scores.by_data_centers(dc_keys).count || 0

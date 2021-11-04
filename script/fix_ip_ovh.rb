@@ -111,6 +111,6 @@ end
 
 # These two methods should run after everything else is done.
 update_ip_with_overrides
-# update_validator_score_with_overrides
+update_validator_score_with_overrides
 
 puts 'end of script'
