@@ -28,7 +28,6 @@ begin
                 .then(&validators_cli)
                 .then(&validators_get)
                 .then(&program_accounts)
-                .then(&reduce_validators_with_invalid_config)
                 .then(&vote_accounts_get)
                 .then(&reduce_validator_vote_accounts)
                 .then(&validators_save)
