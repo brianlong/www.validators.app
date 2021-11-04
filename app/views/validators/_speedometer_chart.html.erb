@@ -10,7 +10,7 @@
                 data: <%= local_assigns[:chart_steps] %>,
                 value: <%= local_assigns[:value] %>,
                 minValue: <%= local_assigns[:min_value] %>,
-                maxValue: 0.05,
+                maxValue: <%= local_assigns[:max_value] %>,
                 backgroundColor: [
                     '<%= LIGHT_GREY_SPEEDOMETER %>',
                     '<%= BLUE_SPEEDOMETER %>',
