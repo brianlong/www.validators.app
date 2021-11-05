@@ -62,34 +62,33 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      saved_accounts = []
-
-      p.payload[:stake_accounts].each do |acc|
-        s = StakeAccount.new(
-          account_balance: acc[:accountBalance],
-          activation_epoch: acc[:activationEpoch],
-          active_stake: acc[:activeStake],
-          credits_observed: acc[:creditsObserved],
-          deactivating_stake: acc[:deactivatingStake],
-          deactivation_epoch: acc[:deactivationEpoch],
-          delegated_stake: acc[:delegatedStake],
-          delegated_vote_account_address: acc[:delegatedVoteAccountAddress],
-          rent_exempt_reserve: acc[:rentExemptReserve],
-          stake_pubkey: acc[:stakePubkey],
-          stake_type: acc[:stakeType],
-          staker: acc[:staker],
-          withdrawer: acc[:withdrawer],
+      p.payload[:stake_accounts].each_with_index do |acc, ind|
+        StakeAccount.find_or_initialize_by(
+          stake_pubkey: acc['stakePubkey']
+        ).update(
+          account_balance: acc['accountBalance'],
+          activation_epoch: acc['activationEpoch'],
+          active_stake: acc['activeStake'],
+          credits_observed: acc['creditsObserved'],
+          deactivating_stake: acc['deactivatingStake'],
+          deactivation_epoch: acc['deactivationEpoch'],
+          delegated_stake: acc['delegatedStake'],
+          delegated_vote_account_address: acc['delegatedVoteAccountAddress'],
+          rent_exempt_reserve: acc['rentExemptReserve'],
+          stake_pubkey: acc['stakePubkey'],
+          stake_type: acc['stakeType'],
+          staker: acc['staker'],
+          withdrawer: acc['withdrawer'],
           batch_uuid: p.payload[:batch].uuid
         )
-        saved_accounts.push s
       end
 
-      StakeAccount.transaction do
-        saved_accounts.each(&:save)
-      end
+      StakeAccount.where.not(batch_uuid: p.payload[:batch].uuid).delete_all
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
+      puts e.message
+      puts e.backtrace
       Pipeline.new(500, p.payload, 'Error from save_stake_accounts', e)
     end
   end

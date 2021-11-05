@@ -8,7 +8,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     @testnet_url = 'https://api.testnet.solana.com'
     @mainnet_url = 'https://api.mainnet-beta.solana.com'
 
-    create(:batch, network: 'testnet', gathered_at: DateTime.now, scored_at: DateTime.now)
+    @batch = create(:batch, network: 'testnet', gathered_at: DateTime.now, scored_at: DateTime.now)
 
     # Create our initial payload with the input values
     @initial_payload = {
@@ -27,6 +27,21 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert p[:payload][:batch].uuid.include?('-')
   end
 
+  test 'move_current_stakes_to_history' do
+    create(:stake_account, batch_uuid: 'old-batch')
+
+    json_data = File.read("#{Rails.root}/test/json/stake_accounts.json")
+
+    SolanaCliService.stub(:request, json_data, ['stakes', @testnet_url]) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_last_batch)
+                  .then(&move_current_stakes_to_history)
+
+      assert_equal 1, StakeAccountHistory.count
+      assert_equal 'old-batch', StakeAccountHistory.last.batch_uuid
+    end
+  end
+
   test 'get_stake_accounts' do
     json_data = File.read("#{Rails.root}/test/json/stake_accounts.json")
 
@@ -37,6 +52,20 @@ class StakeLogicTest < ActiveSupport::TestCase
 
       assert_not_nil p[:payload][:stake_accounts]
       assert_equal 57_511, p[:payload][:stake_accounts].count
+    end
+  end
+
+  test 'save_stake_accounts' do
+    json_data = File.read("#{Rails.root}/test/json/stake_accounts.json")
+
+    SolanaCliService.stub(:request, json_data, ['stakes', @testnet_url]) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_last_batch)
+                  .then(&get_stake_accounts)
+                  .then(&save_stake_accounts)
+
+      assert_equal p[:payload][:stake_accounts].count, StakeAccount.count
+      assert StakeAccount.where.not(batch_uuid: @batch.uuid).empty?
     end
   end
 end
