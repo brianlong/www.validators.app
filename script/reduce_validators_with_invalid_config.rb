@@ -13,7 +13,7 @@ networks.each do |network|
   }
 
   begin
-    puts 'Looking for config accounts...'
+    puts "Looking for config accounts for #{network}..."
     p = Pipeline.new(200, payload)
                 .then(&validators_info_get)
                 .then(&program_accounts)
@@ -25,6 +25,8 @@ networks.each do |network|
       keys = false_signers.keys
       validators = Validator.where(info_pub_key: keys)
 
+      puts "Validators ids to update: #{validators.ids}"
+
       validators.update_all(
           name: nil,
           keybase_id: nil,
@@ -33,7 +35,7 @@ networks.each do |network|
           info_pub_key: nil
         )
     else
-      puts 'No false signers, nothing to remove.'
+      puts 'No false signers, nothing to update.'
     end
   rescue StandardError => e
     puts "#{e.class}\n#{e.message}\n#{e.backtrace}"
