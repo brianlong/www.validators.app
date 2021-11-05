@@ -61,11 +61,14 @@ module AsnLogic
         scores = p.payload[:scores].select do |score|
           score.data_center_key.in?(asn_stat.data_centers) && \
             score.validator.scorable? && \
-            !score.validator.private_validator?
+            !score.validator.private_validator? && \
+            score.total_score.present? && \
+            score.active_stake.present?
         end
 
         score_sum = 0
         active_stake = 0
+        
         scores.each do |sc|
           score_sum += sc.total_score
           active_stake += sc.active_stake
