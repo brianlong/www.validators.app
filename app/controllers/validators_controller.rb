@@ -69,7 +69,10 @@ class ValidatorsController < ApplicationController
     # Grab the distances to show on the chart
     @vote_blocks = @val_histories.map(&:vote_distance).compact
 
-
+    @commission_histories = CommissionHistoryQuery.new(
+      network: params[:network]
+    ).by_query(@validator.account)
+    
     @validator.validator_block_histories
               .includes(:batch)
               .order('id desc')

@@ -141,7 +141,7 @@
           %>
           <td class="<%= comm_class %>" data-turbolinks="false">
             <%= @validator.commission rescue 'N/A' %>&percnt;
-            <% if @validator.commission_histories.exists? %>
+            <% if @commission_histories.any? %>
               <%= link_to '(See commission changes)',
                           commission_histories_path(network: params[:network], validator_id: @validator.id),
                           class: 'small'%>
