@@ -42,7 +42,11 @@ module StakeLogic
       return p unless p.code == 200
 
       account_histories = []
-      StakeAccount.where.not(batch_uuid: p.payload[:batch].uuid).each do |old_stake|
+
+      StakeAccount.where.not(
+        batch_uuid: p.payload[:batch].uuid,
+        network: p.payload[:network]
+      ).each do |old_stake|
         account_histories.push StakeAccountHistory.new(old_stake.attributes)
       end
 
@@ -64,7 +68,8 @@ module StakeLogic
 
       p.payload[:stake_accounts].each_with_index do |acc, ind|
         StakeAccount.find_or_initialize_by(
-          stake_pubkey: acc['stakePubkey']
+          stake_pubkey: acc['stakePubkey'],
+          network: p.payload[:network]
         ).update(
           account_balance: acc['accountBalance'],
           activation_epoch: acc['activationEpoch'],

@@ -9,4 +9,6 @@
 #  updated_at :datetime         not null
 #
 class StakePool < ApplicationRecord
+  has_many :stake_accounts
+  has_many :stake_account_histories
 end

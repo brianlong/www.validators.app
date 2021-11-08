@@ -12,6 +12,7 @@
 #  deactivation_epoch             :integer
 #  delegated_stake                :bigint
 #  delegated_vote_account_address :string(191)
+#  network                        :string(191)
 #  rent_exempt_reserve            :bigint
 #  stake_pubkey                   :string(191)
 #  stake_type                     :string(191)
@@ -23,10 +24,11 @@
 #
 # Indexes
 #
-#  index_stake_accounts_on_stake_pool_id  (stake_pool_id)
-#  index_stake_accounts_on_stake_pubkey   (stake_pubkey)
-#  index_stake_accounts_on_staker         (staker)
-#  index_stake_accounts_on_withdrawer     (withdrawer)
+#  index_stake_accounts_on_stake_pool_id             (stake_pool_id)
+#  index_stake_accounts_on_stake_pubkey_and_network  (stake_pubkey,network)
+#  index_stake_accounts_on_staker_and_network        (staker,network)
+#  index_stake_accounts_on_withdrawer_and_network    (withdrawer,network)
 #
 class StakeAccount < ApplicationRecord
+  belongs_to :stake_pool
 end

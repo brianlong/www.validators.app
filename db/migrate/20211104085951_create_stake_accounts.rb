@@ -15,12 +15,13 @@ class CreateStakeAccounts < ActiveRecord::Migration[6.1]
       t.string :staker
       t.string :withdrawer
       t.integer :stake_pool_id
+      t.string :network
 
       t.timestamps
 
-      t.index :stake_pubkey
-      t.index :staker
-      t.index :withdrawer
+      t.index [:stake_pubkey, :network]
+      t.index [:staker, :network]
+      t.index [:withdrawer, :network]
       t.index :stake_pool_id
     end
   end
