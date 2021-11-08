@@ -2,7 +2,12 @@
   <div class="row">
     <div class="col-md-6 mb-3">
       <div class="card">
-        <h4 class="card-title text-center mt-3">Filter by</h4>
+        <div class="card-title mt-3 pr-3 pl-3">
+          <h3 class="float-left">Filter by</h3>
+          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-secondary active float-right">
+            clear filters
+          </a>
+        </div>
         <div class="card-content">
           <div class="form-group">
             <label>stake account</label>
@@ -17,7 +22,7 @@
     </div>
     <div class="col-md-6 mb-3">
       <div class="card">
-        <h4 class="card-title text-center mt-3">Statistics</h4>
+        <h3 class="card-title pl-3 mt-3">Statistics</h3>
         <div class="card-content">
           <table class="table table-block-sm mb-0">
             <tbody>
@@ -34,50 +39,52 @@
         </div>
       </div>
     </div>
-    <div class="card mb-4">
-      <div class="table-responsive-lg">
-        <table class='table mb-0'>
-          <thead>
-            <tr>
-              <th class="column-xl align-middle">
-                <a href="#" @click.prevent="sort_by_stake">Stake</a>
-              </th>
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="table-responsive-lg">
+          <table class='table mb-0'>
+            <thead>
+              <tr>
+                <th class="column-xl align-middle">
+                  <a href="#" @click.prevent="sort_by_stake">Stake</a>
+                </th>
 
-              <th class="column-md align-middle">
-                Stake Account
-                <br>
-                <a href="#" @click.prevent="sort_by_staker">Staker</a>
-              </th>
-              <th class="column-md align-middle">
-                <a href="#" @click.prevent="sort_by_withdrawer">Withdrawer</a>
-              </th>
-              <th>
-                <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <stake-account-row 
-              @filter_by_staker="filter_by_staker"
-              @filter_by_withdrawer="filter_by_withdrawer"
-              v-for="sa in stake_accounts" 
-              :key="sa.id" 
-              :stake_account="sa">
-            </stake-account-row>
-          </tbody>
-        </table>
-        <div class="pt-2 px-3">
-          <b-pagination
-              v-model="page"
-              :total-rows="total_count"
-              :per-page="25"
-              first-text="« First"
-              last-text="Last »" />
-          <!-- <a href='#'
-            @click.prevent="reset_filters"
-            :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
-            id='reset-filters'
-            class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a> -->
+                <th class="column-md align-middle">
+                  Stake Account
+                  <br>
+                  <a href="#" @click.prevent="sort_by_staker">Staker</a>
+                </th>
+                <th class="column-md align-middle">
+                  <a href="#" @click.prevent="sort_by_withdrawer">Withdrawer</a>
+                </th>
+                <th>
+                  <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <stake-account-row 
+                @filter_by_staker="filter_by_staker"
+                @filter_by_withdrawer="filter_by_withdrawer"
+                v-for="sa in stake_accounts" 
+                :key="sa.id" 
+                :stake_account="sa">
+              </stake-account-row>
+            </tbody>
+          </table>
+          <div class="pt-2 px-3">
+            <b-pagination
+                v-model="page"
+                :total-rows="total_count"
+                :per-page="25"
+                first-text="« First"
+                last-text="Last »" />
+            <!-- <a href='#'
+              @click.prevent="reset_filters"
+              :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
+              id='reset-filters'
+              class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a> -->
+          </div>
         </div>
       </div>
     </div>
@@ -175,8 +182,13 @@
         this.filter_withdrawer = withdrawer
       },
       reset_filters: function() {
-        console.log('reset filters')
+        this.filter_withdrawer = null
+        this.filter_staker = null
+        this.filter_account = null
       },
+      filters_present: function(){
+        return this.filter_withdrawer || this.filter_staker || this.filter_account
+      }
     }
   }
 </script>
