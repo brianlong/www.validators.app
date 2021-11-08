@@ -40,8 +40,8 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
   template: `
     <tr>
       <td>
-        <a href="#" v-bind:account="comm_history_name" @click.prevent="filterByQuery">{{ comm_history_name }}</a>
-        <a v-bind:href="comm_history_href" target="_blank"><i class="fas fa-external-link-alt ml-1"></i></a>
+        <a href="#" v-bind:account="comm_history_name" title="Click to show commission changes only for this validator." @click.prevent="filterByQuery">{{ comm_history_name }}</a>
+        <a v-bind:href="comm_history_href" title="Go to validator details." target="_blank"><i class="fas fa-external-link-alt ml-1"></i></a>
       </td>
       <td>
         {{ comm_history.epoch }}
