@@ -86,4 +86,14 @@ module ValidatorsHelper
       # add more stake pools here
     ].shuffle
   end
+
+  def link_to_validator_website(url)
+    return '' unless url.present?
+    
+    if url.start_with?('https', 'http')
+      link_to url, url, target: 'blank'
+    else
+      url
+    end
+  end
 end
