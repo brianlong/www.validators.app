@@ -88,11 +88,11 @@
     methods: {
       paginate: function(){
         var ctx = this
-        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
+        var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page } }
 
-        axios.get(url)
+        axios.get(ctx.api_url, query_params)
              .then(response => (
-               ctx.commission_histories = response.data.commission_histories
+               ctx.stake_accounts = response.data.stake_accounts
              ))
       },
       sort_by_epoch: function(){
