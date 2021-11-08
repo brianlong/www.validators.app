@@ -4,8 +4,10 @@ require File.expand_path('../config/environment', __dir__)
 
 include AsnLogic
 
+network = ARGV[0] || 'mainnet'
+
 payload = {
-  network: 'mainnet'
+  network: network
 }
 
 p = Pipeline.new(200, payload)
