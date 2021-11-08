@@ -1,43 +1,84 @@
 <template>
-  <div class="card mb-4">
-    <div class="table-responsive-lg">
-      <table class='table mb-0'>
-        <thead>
-          <tr>
-            <th class="column-xl align-middle">
-              <a href="#" @click.prevent="sort_by_stake">Stake</a>
-            </th>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <h4 class="card-title text-center mt-3">Filter by</h4>
+        <div class="card-content">
+          <div class="form-group">
+            <label>stake account</label>
+            <input v-model="filter_account" type="text" class="form-control mb-3">
+            <label>Staker</label>
+            <input v-model="filter_staker" type="text" class="form-control mb-3">
+            <label>Withdrawer</label>
+            <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <h4 class="card-title text-center mt-3">Statistics</h4>
+        <div class="card-content">
+          <table class="table table-block-sm mb-0">
+            <tbody>
+              <tr>
+                <td>total stake: </td>
+                <td>{{ (total_stake / 1000000000).toFixed(3) }} SOL</td>
+              </tr>
+              <tr>
+                <td>number of accounts: </td>
+                <td>{{ total_count }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-4">
+      <div class="table-responsive-lg">
+        <table class='table mb-0'>
+          <thead>
+            <tr>
+              <th class="column-xl align-middle">
+                <a href="#" @click.prevent="sort_by_stake">Stake</a>
+              </th>
 
-            <th class="column-md align-middle">
-              Stake Account
-              <br>
-              <a href="#" @click.prevent="sort_by_staker">Staker</a>
-            </th>
-            <th class="column-md align-middle">
-              <a href="#" @click.prevent="sort_by_withdrawer">Withdrawer</a>
-            </th>
-            <th>
-              <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <stake-account-row v-for="sa in stake_accounts" :key="sa.id" :stake_account="sa">
-          </stake-account-row>
-        </tbody>
-      </table>
-      <div class="pt-2 px-3">
-        <b-pagination
-            v-model="page"
-            :total-rows="total_count"
-            :per-page="25"
-            first-text="« First"
-            last-text="Last »" />
-        <!-- <a href='#'
-           @click.prevent="reset_filters"
-           :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
-           id='reset-filters'
-           class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a> -->
+              <th class="column-md align-middle">
+                Stake Account
+                <br>
+                <a href="#" @click.prevent="sort_by_staker">Staker</a>
+              </th>
+              <th class="column-md align-middle">
+                <a href="#" @click.prevent="sort_by_withdrawer">Withdrawer</a>
+              </th>
+              <th>
+                <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <stake-account-row 
+              @filter_by_staker="filter_by_staker"
+              @filter_by_withdrawer="filter_by_withdrawer"
+              v-for="sa in stake_accounts" 
+              :key="sa.id" 
+              :stake_account="sa">
+            </stake-account-row>
+          </tbody>
+        </table>
+        <div class="pt-2 px-3">
+          <b-pagination
+              v-model="page"
+              :total-rows="total_count"
+              :per-page="25"
+              first-text="« First"
+              last-text="Last »" />
+          <!-- <a href='#'
+            @click.prevent="reset_filters"
+            :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
+            id='reset-filters'
+            class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a> -->
+        </div>
       </div>
     </div>
   </div>
@@ -56,8 +97,12 @@
         stake_accounts: [],
         page: 1,
         total_count: 0,
+        total_stake: 0,
         sort_by: 'epoch_desc',
         api_url: api_url,
+        filter_withdrawer: null,
+        filter_staker: null,
+        filter_account: null
       }
     },
     created () {
@@ -68,32 +113,48 @@
       .then(function (response){
         ctx.stake_accounts = response.data.stake_accounts;
         ctx.total_count = response.data.total_count;
+        ctx.total_stake = response.data.total_stake;
       })
     },
     watch: {
       sort_by: function(){
+        this.refresh_results()
+      },
+      page: function(){
+        this.paginate()
+      },
+      filter_account: function(){
+        this.refresh_results()
+      },
+      filter_staker: function(){
+        this.refresh_results()
+      },
+      filter_withdrawer: function(){
+        this.refresh_results()
+      }
+    },
+    methods: {
+      paginate: function(){
+        this.refresh_results()
+      },
+      refresh_results: function(){
         var ctx = this
-        var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page } }
+        var query_params = { 
+          params: { 
+            sort_by: ctx.sort_by,
+            page: ctx.page,
+            filter_account: ctx.filter_account,
+            filter_staker: ctx.filter_staker,
+            filter_withdrawer: ctx.filter_withdrawer
+          }
+        }
 
         axios.get(ctx.api_url, query_params)
              .then(function (response) {
                ctx.stake_accounts = response.data.stake_accounts;
                ctx.total_count = response.data.total_count;
+               ctx.total_stake = response.data.total_stake;
              })
-      },
-      page: function(){
-        this.paginate()
-      }
-    },
-    methods: {
-      paginate: function(){
-        var ctx = this
-        var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page } }
-
-        axios.get(ctx.api_url, query_params)
-             .then(response => (
-               ctx.stake_accounts = response.data.stake_accounts
-             ))
       },
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
@@ -106,6 +167,12 @@
       },
       sort_by_withdrawer: function(){
         this.sort_by = this.sort_by == 'withdrawer_desc' ? 'withdrawer_asc' : 'withdrawer_desc'
+      },
+      filter_by_staker: function(staker){
+        this.filter_staker = staker
+      },
+      filter_by_withdrawer: function(withdrawer){
+        this.filter_withdrawer = withdrawer
       },
       reset_filters: function() {
         console.log('reset filters')

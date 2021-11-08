@@ -31,4 +31,8 @@
 #
 class StakeAccount < ApplicationRecord
   belongs_to :stake_pool
+
+  scope :filter_by_account, ->(account) { where('stake_pubkey LIKE ?', "#{account}%") }
+  scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
+  scope :filter_by_withdrawer, ->(withdrawer) { where('withdrawer LIKE ?', "#{withdrawer}%") }
 end

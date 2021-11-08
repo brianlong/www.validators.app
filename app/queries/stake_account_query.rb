@@ -21,6 +21,11 @@ class StakeAccountQuery
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
     @sort_by = options.fetch(:sort_by, 'epoch_desc') || 'epoch_desc'
+    @filter_by = {
+      account: options.fetch(:filter_account),
+      staker: options.fetch(:filter_staker),
+      withdrawer: options.fetch(:filter_withdrawer)
+    }
   end
 
   def all_records
@@ -29,6 +34,10 @@ class StakeAccountQuery
                                  .where(
                                    network: @network
                                  )
+
+    stake_accounts = stake_accounts.filter_by_account(@filter_by[:account]) unless @filter_by[:account].blank?
+    stake_accounts = stake_accounts.filter_by_staker(@filter_by[:staker]) unless @filter_by[:staker].blank?
+    stake_accounts = stake_accounts.filter_by_withdrawer(@filter_by[:withdrawer]) unless @filter_by[:withdrawer].blank?
 
     sorted(stake_accounts)
   end

@@ -17,7 +17,12 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
 
   },
   methods: {
-
+    filterByStaker: function(e) {
+      this.$emit('filter_by_staker', this.stake_account.staker);
+    },
+    filterByWithdrawer: function(e) {
+      this.$emit('filter_by_withdrawer', this.stake_account.withdrawer);
+    }
   },
   template: `
     <tr>
@@ -27,12 +32,12 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       <td>
         <small>{{ stake_account.stake_pubkey }}</small>
         <br>
-        <small>{{ stake_account.staker }}</small>
+        <small><a href="#" @click.prevent="filterByStaker">{{ stake_account.staker }}</a></small>
       </td>
       <td>
         {{ stake_account.name }}
         <br>
-        <small>{{ stake_account.withdrawer }}</small>
+        <small><a href="#" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a></small>
       </td>
       <td>
         {{ stake_account.activation_epoch }}
