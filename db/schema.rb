@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_01_094326) do
+ActiveRecord::Schema.define(version: 2021_11_09_121855) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -408,6 +408,41 @@ ActiveRecord::Schema.define(version: 2021_10_01_094326) do
     t.integer "authorized_withdrawer_score"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
+  end
+
+  create_table "validator_score_v2s", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "validator_id"
+    t.integer "total_score"
+    t.text "root_distance_history"
+    t.integer "root_distance_score"
+    t.text "vote_distance_history"
+    t.integer "vote_distance_score"
+    t.text "skipped_slot_history"
+    t.integer "skipped_slot_score"
+    t.text "skipped_slot_moving_average_history"
+    t.text "skipped_vote_history"
+    t.integer "skipped_vote_score"
+    t.text "skipped_vote_percent_moving_average_history"
+    t.string "software_version"
+    t.integer "software_version_score"
+    t.decimal "stake_concentration", precision: 10, scale: 3
+    t.integer "stake_concentration_score"
+    t.decimal "data_center_concentration", precision: 10, scale: 3
+    t.integer "data_center_concentration_score"
+    t.integer "authorized_withdrawer_score"
+    t.integer "published_information_score"
+    t.integer "security_report_score"
+    t.bigint "active_stake", unsigned: true
+    t.integer "commission"
+    t.boolean "delinquent"
+    t.string "ip_address"
+    t.string "network"
+    t.string "data_center_key"
+    t.string "data_center_host"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "data_center_key"], name: "index_validator_score_v2s_on_network_and_data_center_key"
+    t.index ["validator_id"], name: "index_validator_score_v2s_on_validator_id"
   end
 
   create_table "validators", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
