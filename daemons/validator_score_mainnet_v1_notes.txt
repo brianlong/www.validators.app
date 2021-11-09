@@ -8,6 +8,10 @@ Manually start, top, & restart with:
   systemctl --user stop validator_score_mainnet_v1
   systemctl --user status validator_score_mainnet_v1
   systemctl --user restart validator_score_mainnet_v1
+  systemctl --user start validator_score_mainnet_v2
+  systemctl --user stop validator_score_mainnet_v2
+  systemctl --user status validator_score_mainnet_v2
+  systemctl --user restart validator_score_mainnet_v2
 
 OR
 
@@ -15,3 +19,7 @@ systemctl --user start validator_score_testnet_v1
 systemctl --user stop validator_score_testnet_v1
 systemctl --user status validator_score_testnet_v1
 systemctl --user restart validator_score_testnet_v1
+systemctl --user start validator_score_testnet_v2
+systemctl --user stop validator_score_testnet_v2
+systemctl --user status validator_score_testnet_v2
+systemctl --user restart validator_score_testnet_v2
