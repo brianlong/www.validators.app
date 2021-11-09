@@ -1,3 +1,5 @@
+# TODO drop this file after moving to ValidatorScoreV2
+
 # frozen_string_literal: true
 
 # This is the model for version 1 of our ValidatorScore. This model will

@@ -1,9 +1,7 @@
-# TODO drop this file after moving to ValidatorScoreV2
-
 # frozen_string_literal: true
 
-# Logic to compile ValidatorScoreV1
-module ValidatorScoreV1Logic
+# Logic to compile ValidatorScoreV2
+module ValidatorScoreV2Logic
   include PipelineLogic
 
   # Payload starts with :network & :batch_uuid
@@ -26,21 +24,21 @@ module ValidatorScoreV1Logic
     end
   end
 
-  # Get all of the validators for this network + the validator_score_v1 records
+  # Get all of the validators for this network + the validator_score_v2 records
   def validators_get
     lambda do |p|
       return p unless p.code == 200
 
       validators = Validator.where(network: p.payload[:network])
                             .active
-                            .includes(:validator_score_v1)
+                            .includes(:validator_score_v2)
                             .order(:id)
                             .all
 
       validators.each do |validator|
-        # Make sure that we have a validator_score_v1 record for each validator
-        if validator.old_score.nil?
-          validator.create_validator_score_v1(network: p.payload[:network])
+        # Make sure that we have a validator_score_v2 record for each validator
+        if validator.score.nil?
+          validator.create_validator_score_v2(network: p.payload[:network])
         end
       rescue StandardError => e
         Appsignal.send_error(e)
@@ -98,32 +96,32 @@ module ValidatorScoreV1Logic
         vh = validator_histories.find { |validator_history| validator_history.account == validator.account }
         vote_h = vote_histories.find { |vote_history| vote_history.vote_account.validator_id == validator.id }
         if vote_h
-          validator.old_score.skipped_vote_history_push(vote_h.skipped_vote_percent)
+          validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
           skipped_vote_all.push(((best_skipped_vote - vote_h.skipped_vote_percent) * 100).round(2))
-          validator.old_score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
+          validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
         else
-          validator.old_score.skipped_vote_history_push(nil)
+          validator.score.skipped_vote_history_push(nil)
         end
         if vh
           root_distance = highest_root_block - vh.root_block.to_i
           vote_distance = highest_last_vote - vh.last_vote.to_i
           unless vh.commission.nil?
-            validator.old_score.commission = vh.commission
+            validator.score.commission = vh.commission
           end
           unless vh.delinquent.nil?
-            validator.old_score.delinquent = vh.delinquent
+            validator.score.delinquent = vh.delinquent
           end
           unless vh.active_stake.nil?
-            validator.old_score.active_stake = vh.active_stake
+            validator.score.active_stake = vh.active_stake
           end
-          validator.old_score.stake_concentration = \
+          validator.score.stake_concentration = \
             (vh.active_stake.to_f / total_active_stake)
         else
           root_distance = highest_root_block
           vote_distance = highest_last_vote
         end
-        validator.old_score.root_distance_history_push(root_distance)
-        validator.old_score.vote_distance_history_push(vote_distance)
+        validator.score.root_distance_history_push(root_distance)
+        validator.score.vote_distance_history_push(vote_distance)
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -151,11 +149,11 @@ module ValidatorScoreV1Logic
       skipped_vote_all  = []
 
       p.payload[:validators].each do |v|
-        root_distance_all += v.old_score.root_distance_history.last(960)
-        vote_distance_all += v.old_score.vote_distance_history.last(960)
+        root_distance_all += v.score.root_distance_history.last(960)
+        vote_distance_all += v.score.vote_distance_history.last(960)
 
         # Get all the most recent skipped_votes
-        skipped_vote_all.push v.old_score.skipped_vote_history[-1]
+        skipped_vote_all.push v.score.skipped_vote_history[-1]
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -179,12 +177,12 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |v|
         # Assign the root_distance_score
-        avg_root_distance = v.old_score.avg_root_distance_history(960)
-        med_root_distance = v.old_score.med_root_distance_history(960)
+        avg_root_distance = v.score.avg_root_distance_history(960)
+        med_root_distance = v.score.med_root_distance_history(960)
 
         Rails.logger.warn "#{p.payload[:network]} #{v.account} avg_root_distance: #{avg_root_distance}, med_root_distance: #{med_root_distance}"
 
-        v.old_score.root_distance_score = \
+        v.score.root_distance_score = \
           if med_root_distance <= root_distance_all_median
             2
           elsif avg_root_distance <= root_distance_all_average
@@ -194,10 +192,10 @@ module ValidatorScoreV1Logic
           end
 
         # Assign the vote distance score
-        avg_vote_distance = v.old_score.avg_vote_distance_history(960)
-        med_vote_distance = v.old_score.med_vote_distance_history(960)
+        avg_vote_distance = v.score.avg_vote_distance_history(960)
+        med_vote_distance = v.score.med_vote_distance_history(960)
 
-        v.old_score.vote_distance_score = \
+        v.score.vote_distance_score = \
           if med_vote_distance <= vote_distance_all_median
             2
           elsif avg_vote_distance <= vote_distance_all_average
@@ -213,8 +211,7 @@ module ValidatorScoreV1Logic
                                  .validator
                                  .active_stake
 
-        v.old_score.stake_concentration_score = \
-          v.old_score.active_stake.to_i >= at_33_active_stake ? -2 : 0
+        v.score.stake_concentration_score = v.score.active_stake.to_i >= at_33_active_stake ? -2 : 0
 
       rescue StandardError => e
         Appsignal.send_error(e)
@@ -256,10 +253,10 @@ module ValidatorScoreV1Logic
         next unless last_validator_block_history_for_validator.present?
 
         skipped_slot_percent = last_validator_block_history_for_validator[1]
-        validator.old_score.skipped_slot_history_push(skipped_slot_percent.to_f)
+        validator.score.skipped_slot_history_push(skipped_slot_percent.to_f)
 
         moving_average = last_validator_block_history_for_validator[2]
-        validator.old_score.skipped_slot_moving_average_history_push(moving_average.to_f)
+        validator.score.skipped_slot_moving_average_history_push(moving_average.to_f)
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -282,10 +279,10 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |validator|
         skipped_slot_percent = \
-          validator&.old_score&.skipped_slot_moving_average_history&.last
+          validator&.score&.skipped_slot_moving_average_history&.last
 
         # Assign the scores
-        validator.old_score.skipped_slot_score = \
+        validator.score.skipped_slot_score = \
           if skipped_slot_percent.nil?
             0
           elsif skipped_slot_percent.to_f <= p.payload[:med_skipped_slot_pct_all].to_f
@@ -325,15 +322,15 @@ module ValidatorScoreV1Logic
         end
         # This means we skip the software version for non-voting nodes.
         if vah&.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
-          validator.old_score.software_version = vah.software_version
+          validator.score.software_version = vah.software_version
         end
 
-        this_software_version = validator.old_score.software_version
+        this_software_version = validator.score.software_version
 
         # Gather software_version stat
-        if validator.old_score.active_stake
+        if validator.score.active_stake
           software_versions[this_software_version] += \
-            validator.old_score.active_stake
+            validator.score.active_stake
         end
 
       rescue StandardError => e
@@ -349,7 +346,7 @@ module ValidatorScoreV1Logic
       p.payload[:this_batch].update(software_version: current_software_version)
 
       p.payload[:validators].each do |validator|
-        validator.old_score.assign_software_version_score(current_software_version)
+        validator.score.assign_software_version_score(current_software_version)
       end
 
       Pipeline.new(200, p.payload)
@@ -363,8 +360,7 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       p.payload[:validators].each do |validator|
-        validator.old_score.ping_time_avg = \
-          validator.ping_times_to_avg
+        validator.score.ping_time_avg = validator.ping_times_to_avg
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -382,7 +378,7 @@ module ValidatorScoreV1Logic
       ActiveRecord::Base.transaction do
         p.payload[:validators].each do |validator|
           validator.save
-          validator.old_score.save
+          validator.score.save
         rescue StandardError => e
           Appsignal.send_error(e)
         end
