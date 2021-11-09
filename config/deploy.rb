@@ -146,7 +146,7 @@ namespace :rake do
   desc 'Update Stake Pools'
   task :add_stake_pool do
     within release_path do
-      execute :rake, 'add_stake_pool:mainnet'
+      execute 'rake add_stake_pool:mainnet'
     end
   end
 end
