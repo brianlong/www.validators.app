@@ -14,7 +14,7 @@ sql = "
   FROM ips
   WHERE ips.address IN (
     SELECT score.ip_address
-    FROM validator_score_v1s score
+    FROM validator_score_v2s score
     WHERE score.network = 'mainnet'
     AND score.active_stake > 0
   )
@@ -56,6 +56,6 @@ end
     score = 0
   end
   # puts "#{k} score = #{score}"
-  score_sql = "UPDATE validator_score_v1s SET data_center_concentration_score = #{score} WHERE network = 'mainnet' AND data_center_key = '#{k}';"
+  score_sql = "UPDATE validator_score_v2s SET data_center_concentration_score = #{score} WHERE network = 'mainnet' AND data_center_key = '#{k}';"
   ValidatorScoreV1.connection.execute(score_sql)
 end

@@ -14,4 +14,4 @@ insert into ip_overrides (address, traits_autonomous_system_number, traits_auton
 UPDATE ips ip INNER JOIN ip_overrides ipor ON ip.address = ipor.address SET ip.traits_autonomous_system_number = ipor.traits_autonomous_system_number, ip.country_iso_code = ipor.country_iso_code, ip.country_name = ipor.country_name, ip.city_name = ipor.city_name, ip.data_center_key = ipor.data_center_key, ip.data_center_host = ipor.data_center_host, ip.traits_autonomous_system_organization = ipor.traits_autonomous_system_organization, ip.updated_at = NOW();
 
 # Update the scores table:
-UPDATE validator_score_v1s sc INNER JOIN ips ip ON sc.ip_address = ip.address SET sc.data_center_key = ip.data_center_key, sc.data_center_host = ip.data_center_host, sc.updated_at = NOW();
+UPDATE validator_score_v2s sc INNER JOIN ips ip ON sc.ip_address = ip.address SET sc.data_center_key = ip.data_center_key, sc.data_center_host = ip.data_center_host, sc.updated_at = NOW();

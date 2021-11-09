@@ -109,7 +109,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     json = response_to_json(@response.body)
     validator_with_all_data = json.select { |j| j['account'] == 'Test Account' }.first
-    validator_active_stake = validator.validator_score_v1.active_stake
+    validator_active_stake = validator.score.active_stake
 
     assert_equal 1, json.size
 
@@ -292,7 +292,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
 
     json_response = response_to_json(@response.body)
-    validator_active_stake = validator.validator_score_v1.active_stake
+    validator_active_stake = validator.score.active_stake
 
     # Adjust after adding/removing attributes in json builder
     assert_equal 32, json_response.keys.size

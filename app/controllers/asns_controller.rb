@@ -1,7 +1,7 @@
 class AsnsController < ApplicationController
   def show
     @data_centers = Ip.where(traits_autonomous_system_number: asn_params[:asn])
-                      .joins(:validator_score_v1)
+                      .joins(:validator_score_v2)
                       .pluck(:data_center_key)
                       .uniq
 

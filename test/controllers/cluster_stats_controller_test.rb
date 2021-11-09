@@ -33,18 +33,18 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
     stats = assigns :stats
 
     top_staked_validators =
-      data[:validators].map { |v| v.validator_score_v1.active_stake }
+      data[:validators].map { |v| v.score.active_stake }
                        .sort.reverse
     top_skipped_vote_validators =
       data[:vote_account_histories].map(&:skipped_vote_percent_moving_average)
                                    .sort.reverse
 
     top_root_distance_validators =
-      data[:validators].map { |v| v.validator_score_v1.root_distance_history }
+      data[:validators].map { |v| v.score.root_distance_history }
                        .map(&:average).sort.reverse
 
     top_vote_distance_averages_validators =
-      data[:validators].map { |v| v.validator_score_v1.vote_distance_history }
+      data[:validators].map { |v| v.score.vote_distance_history }
                        .map(&:average).sort.reverse
 
     top_skipped_slot_percent =

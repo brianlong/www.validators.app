@@ -128,7 +128,7 @@ def ips_sql
     FROM ips
     WHERE ips.address IN (
       SELECT score.ip_address
-      FROM validator_score_v1s score
+      FROM validator_score_v2s score
       WHERE score.network = ?
       AND score.active_stake > 0
     )

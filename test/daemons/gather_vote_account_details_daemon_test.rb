@@ -15,6 +15,7 @@ class GatherVoteAccountDetailsDaemonTest < ActiveSupport::TestCase
   end
 
   test 'validator_identity and authorized_withdrawer should be updated' do
+    binding.pry
     json_data = {
       "validatorIdentity":"abcdef",
       "authorizedWithdrawer":"abcdef"
@@ -44,6 +45,7 @@ class GatherVoteAccountDetailsDaemonTest < ActiveSupport::TestCase
       ).call
 
       @v.score.reload
+      binding.pry
       assert_equal 0, @v.score.authorized_withdrawer_score
     end
   end

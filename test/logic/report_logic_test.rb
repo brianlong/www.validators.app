@@ -79,7 +79,7 @@ class ReportLogicTest < ActiveSupport::TestCase
       list = create_list(:validator, 5, network: network)
       list.each do |val|
         create(
-          :validator_score_v1, 
+          :validator_score_v2,
           validator: val, 
           software_version: sw,
           network: network
@@ -92,7 +92,7 @@ class ReportLogicTest < ActiveSupport::TestCase
     # Setup score with empty software version, should be ignored in the report
     val = create(:validator)
     create(
-      :validator_score_v1, 
+      :validator_score_v2,
       validator: val, 
       software_version: '',
       network: network
@@ -101,7 +101,7 @@ class ReportLogicTest < ActiveSupport::TestCase
     # Setup score with 'unknown' software version, should be ignored in the report
     val_unknown = create(:validator)
     create(
-      :validator_score_v1, 
+      :validator_score_v2,
       validator: val, 
       software_version: 'unknown',
       network: network
@@ -110,7 +110,7 @@ class ReportLogicTest < ActiveSupport::TestCase
     # Setup score with malformed software version, should be ignored in the report
     val_malformed = create(:validator)
     create(
-      :validator_score_v1, 
+      :validator_score_v2,
       validator: val, 
       software_version: '1.3.9 e45f1df5',
       network: network

@@ -12,7 +12,7 @@ class AsnLogicTest < ActiveSupport::TestCase
     @val = create(:validator, network: 'testnet')
 
     create(
-      :validator_score_v1,
+      :validator_score_v2,
       validator: @val,
       network: 'testnet',
       vote_distance_history: [1, 2, 3],

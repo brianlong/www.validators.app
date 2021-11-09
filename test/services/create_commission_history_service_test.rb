@@ -16,7 +16,7 @@ class CreateCommissionHistoryServiceTest < ActiveSupport::TestCase
   test 'when commission is different \
         commission_history should be created' do
     score = create(
-      :validator_score_v1,
+      :validator_score_v2,
       validator: @validator,
       commission: 10,
       network: 'testnet'

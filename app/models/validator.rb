@@ -51,28 +51,28 @@ class Validator < ApplicationRecord
 
     # summarised active stake for all validators in the given network
     def total_active_stake_for(network)
-      where(network: network).joins(:validator_score_v1).sum(:active_stake)
+      where(network: network).joins(:validator_score_v2).sum(:active_stake)
     end
 
     def index_order(order_param)
       sort_order = case order_param
                    when 'score'
-                     'validator_score_v1s.total_score desc, RAND()'
+                     'validator_score_v2s.total_score desc, RAND()'
                    when 'name'
                      'validators.name asc'
                    when 'stake'
-                     'validator_score_v1s.active_stake desc'
+                     'validator_score_v2s.active_stake desc'
                    when 'random'
                      'RAND()'
                    else
-                     'validator_score_v1s.total_score desc, RAND()'
+                     'validator_score_v2s.total_score desc, RAND()'
                    end
 
-      includes(:validator_score_v1).order(sort_order)
+      includes(:validator_score_v2).order(sort_order)
     end
 
     def total_active_stake
-      includes(:validator_score_v1).sum(:active_stake)
+      includes(:validator_score_v2).sum(:active_stake)
     end
   end
 
@@ -118,21 +118,17 @@ class Validator < ApplicationRecord
   end
 
   def copy_data_to_score
-    return unless validator_score_v1
+    return unless validator_score_v2
 
-    validator_score_v1.ip_address = ip_address
+    validator_score_v2.ip_address = ip_address
     ip_dc = Ip.where(address: ip_address).first&.data_center_key
-    validator_score_v1.data_center_key = ip_dc
-    validator_score_v1.save
+    validator_score_v2.data_center_key = ip_dc
+    validator_score_v2.save
   end
 
   # Convenience methods
   def score
     validator_score_v2
-  end
-
-  def old_score
-    validator_score_v1
   end
 
   def delinquent?

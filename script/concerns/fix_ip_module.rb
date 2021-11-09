@@ -48,7 +48,7 @@ module FixIpModule
     ValidatorScoreV1.in_batches(of: 500).each do |scores|
       ips = scores.pluck(:ip_address)
       sql2 = "
-      UPDATE validator_score_v1s sc
+      UPDATE validator_score_v2s sc
       INNER JOIN ips ip
       ON sc.ip_address = ip.address
       SET sc.data_center_key = ip.data_center_key,

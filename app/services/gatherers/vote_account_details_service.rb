@@ -40,11 +40,11 @@ module Gatherers
       return unless vacc
 
       if vacc.validator_identity == vacc.authorized_withdrawer
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = -2
+        vacc.validator.score.authorized_withdrawer_score = -2
       else
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = 0
+        vacc.validator.score.authorized_withdrawer_score = 0
       end
-      vacc.validator.validator_score_v1.save
+      vacc.validator.score.save
     end
   end
 end

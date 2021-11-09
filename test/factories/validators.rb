@@ -15,6 +15,7 @@ FactoryBot.define do
       end
     end
 
+    # TODO to be removed
     trait :with_old_score do
       after(:create) do |validator|
         create :validator_score_v1, validator: validator

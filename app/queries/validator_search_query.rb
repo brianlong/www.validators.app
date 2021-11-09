@@ -9,8 +9,8 @@
 #   validator_search_query.search(query)
 
 class ValidatorSearchQuery
-  def initialize(relation = Validator.joins(:validator_score_v1))
-    @relation = relation.joins(:validator_score_v1)
+  def initialize(relation = Validator.joins(:validator_score_v2))
+    @relation = relation.joins(:validator_score_v2)
   end
 
   def search(query)
@@ -19,8 +19,8 @@ class ValidatorSearchQuery
     @relation.where(
       'validators.name like :q or
       validators.account like :q or
-      validator_score_v1s.software_version like :q or
-      validator_score_v1s.data_center_key like :q or
+      validator_score_v2s.software_version like :q or
+      validator_score_v2s.data_center_key like :q or
       validators.id IN(:vacs)',
       q: "#{query}%",
       vacs: vacs

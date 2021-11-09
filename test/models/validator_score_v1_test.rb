@@ -1,3 +1,4 @@
+# TODO drop this file after switching to ValidatorScoreV2
 # frozen_string_literal: true
 
 require 'test_helper'

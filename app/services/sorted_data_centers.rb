@@ -20,14 +20,14 @@ class SortedDataCenters
         ips.traits_autonomous_system_number,
         ips.traits_autonomous_system_organization,
         ips.country_iso_code,
-        SUM(IF(validator_score_v1s.delinquent = true, 1, 0)) as delinquent_count,
+        SUM(IF(validator_score_v2s.delinquent = true, 1, 0)) as delinquent_count,
         IF(ISNULL(city_name), location_time_zone, city_name) as location
       FROM ips
-      JOIN validator_score_v1s
-      ON validator_score_v1s.ip_address = ips.address
+      JOIN validator_score_v2s
+      ON validator_score_v2s.ip_address = ips.address
       WHERE ips.address IN (
         SELECT score.ip_address
-        FROM validator_score_v1s score
+        FROM validator_score_v2s score
         WHERE score.network = ?
         AND score.active_stake > 0
       )
