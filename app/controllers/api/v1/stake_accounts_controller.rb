@@ -7,8 +7,8 @@ module Api
           sort_by: index_params[:sort_by],
           filter_account: index_params[:filter_account],
           filter_staker: index_params[:filter_staker],
-          filter_withdrawer: index_params[:filter_withdrawer]
-
+          filter_withdrawer: index_params[:filter_withdrawer],
+          filter_validator: index_params[:filter_validator]
         )
 
         stake_accounts = stake_accounts_query.all_records
@@ -29,7 +29,16 @@ module Api
       private
 
       def index_params
-        params.permit :network, :per, :page, :sort_by, :filter_account, :filter_staker, :filter_withdrawer
+        params.permit(
+          :network,
+          :per,
+          :page,
+          :sort_by,
+          :filter_account,
+          :filter_staker,
+          :filter_withdrawer,
+          :filter_validator
+        ) 
       end
     end
   end

@@ -29,7 +29,8 @@ class StakeAccountQuery
     @filter_by = {
       account: options.fetch(:filter_account),
       staker: options.fetch(:filter_staker),
-      withdrawer: options.fetch(:filter_withdrawer)
+      withdrawer: options.fetch(:filter_withdrawer),
+      validator: options.fetch(:filter_validator)
     }
   end
 
@@ -41,9 +42,20 @@ class StakeAccountQuery
                                    network: @network
                                  )
 
-    stake_accounts = stake_accounts.filter_by_account(@filter_by[:account]) unless @filter_by[:account].blank?
-    stake_accounts = stake_accounts.filter_by_staker(@filter_by[:staker]) unless @filter_by[:staker].blank?
-    stake_accounts = stake_accounts.filter_by_withdrawer(@filter_by[:withdrawer]) unless @filter_by[:withdrawer].blank?
+    stake_accounts = stake_accounts.filter_by_account(@filter_by[:account]) \
+      unless @filter_by[:account].blank?
+    stake_accounts = stake_accounts.filter_by_staker(@filter_by[:staker]) \
+      unless @filter_by[:staker].blank?
+    stake_accounts = stake_accounts.filter_by_withdrawer(@filter_by[:withdrawer]) \
+      unless @filter_by[:withdrawer].blank?
+
+    unless @filter_by[:validator].blank?
+      selected_validators = ValidatorSearchQuery.new(
+        Validator.where(network: @network)
+      ).search(@filter_by[:validator]).pluck(:id)
+
+      stake_accounts = stake_accounts.where(validator_id: selected_validators)
+    end
 
     sorted(stake_accounts)
   end

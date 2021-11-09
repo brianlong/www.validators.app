@@ -16,6 +16,8 @@
             <input v-model="filter_staker" type="text" class="form-control mb-3">
             <label>Withdrawer</label>
             <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
+            <label>Validator</label>
+            <input v-model="filter_validator" type="text" class="form-control mb-3">
           </div>
         </div>
       </div>
@@ -118,6 +120,7 @@
         filter_withdrawer: null,
         filter_staker: null,
         filter_account: null,
+        filter_validator: null,
         is_loading: true
       }
     },
@@ -148,6 +151,9 @@
       },
       filter_withdrawer: function(){
         this.refresh_results()
+      },
+      filter_validator: function(){
+        this.refresh_results()
       }
     },
     methods: {
@@ -163,7 +169,8 @@
             page: ctx.page,
             filter_account: ctx.filter_account,
             filter_staker: ctx.filter_staker,
-            filter_withdrawer: ctx.filter_withdrawer
+            filter_withdrawer: ctx.filter_withdrawer,
+            filter_validator: ctx.filter_validator
           }
         }
 
@@ -197,9 +204,10 @@
         this.filter_withdrawer = null
         this.filter_staker = null
         this.filter_account = null
+        this.filter_validator = null
       },
       filters_present: function(){
-        return this.filter_withdrawer || this.filter_staker || this.filter_account
+        return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
       }
     }
   }
