@@ -1,10 +1,8 @@
-# TODO drop this file after moving to ValidatorScoreV2
-
 # frozen_string_literal: true
 
-class ValidatorScoreV1Worker
+class ValidatorScoreV2Worker
   include Sidekiq::Worker
-  include ValidatorScoreV1Logic
+  include ValidatorScoreV2Logic
   include PipelineLogic
 
   def perform(args = {})
