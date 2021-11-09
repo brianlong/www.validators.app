@@ -38,6 +38,7 @@ class CreateValidatorScoreV2s < ActiveRecord::Migration[6.0]
       t.string :network
       t.string :data_center_key
       t.string :data_center_host
+      t.decimal :ping_time_avg, precision: 10, scale: 3
       t.timestamps
 
       t.index [:network, :data_center_key], name: 'index_validator_score_v2s_on_network_and_data_center_key'

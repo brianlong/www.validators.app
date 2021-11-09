@@ -439,6 +439,7 @@ ActiveRecord::Schema.define(version: 2021_11_09_121855) do
     t.string "network"
     t.string "data_center_key"
     t.string "data_center_host"
+    t.decimal "ping_time_avg", precision: 10, scale: 3
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network", "data_center_key"], name: "index_validator_score_v2s_on_network_and_data_center_key"

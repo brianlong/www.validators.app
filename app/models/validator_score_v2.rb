@@ -21,6 +21,7 @@
 #  delinquent                                  :boolean
 #  ip_address                                  :string(191)
 #  network                                     :string(191)
+#  ping_time_avg                               :decimal(10, 3)
 #  published_information_score                 :integer
 #  root_distance_history                       :text(65535)
 #  root_distance_score                         :integer
