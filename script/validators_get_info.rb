@@ -13,7 +13,11 @@ include SolanaLogic
   }
 
   _p = Pipeline.new(200, payload)
-               .then(&validator_info_get_and_save)
+               .then(&validators_info_get)
+               .then(&program_accounts)
+               .then(&find_invalid_configs)
+               .then(&remove_invalid_configs)
+               .then(&validators_info_save)               
                .then(&log_errors)
                .then(&batch_touch)
 end
