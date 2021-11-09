@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 2021_11_04_113011) do
     t.string "withdrawer"
     t.integer "stake_pool_id"
     t.string "network"
+    t.integer "validator_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "batch_uuid"
@@ -310,6 +311,7 @@ ActiveRecord::Schema.define(version: 2021_11_04_113011) do
     t.string "withdrawer"
     t.integer "stake_pool_id"
     t.string "network"
+    t.integer "validator_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "batch_uuid"
@@ -322,6 +324,7 @@ ActiveRecord::Schema.define(version: 2021_11_04_113011) do
   create_table "stake_pools", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "authority"
+    t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

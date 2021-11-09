@@ -21,6 +21,7 @@
 #  created_at                     :datetime         not null
 #  updated_at                     :datetime         not null
 #  stake_pool_id                  :integer
+#  validator_id                   :integer
 #
 # Indexes
 #
@@ -30,7 +31,8 @@
 #  index_stake_accounts_on_withdrawer_and_network    (withdrawer,network)
 #
 class StakeAccount < ApplicationRecord
-  belongs_to :stake_pool
+  belongs_to :stake_pool, optional: true
+  belongs_to :validator, optional: true
 
   scope :filter_by_account, ->(account) { where('stake_pubkey LIKE ?', "#{account}%") }
   scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }

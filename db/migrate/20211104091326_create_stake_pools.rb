@@ -3,6 +3,7 @@ class CreateStakePools < ActiveRecord::Migration[6.1]
     create_table :stake_pools do |t|
       t.string :name
       t.string :authority
+      t.string :network
 
       t.timestamps
     end

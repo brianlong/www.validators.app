@@ -16,6 +16,7 @@ class CreateStakeAccounts < ActiveRecord::Migration[6.1]
       t.string :withdrawer
       t.integer :stake_pool_id
       t.string :network
+      t.integer :validator_id
 
       t.timestamps
 

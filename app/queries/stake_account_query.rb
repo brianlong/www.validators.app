@@ -14,8 +14,13 @@ class StakeAccountQuery
     withdrawer
   ].freeze
 
-  STAKE_POOL_FIELDS = %w[
-    name
+  STAKE_POOL_FIELDS = [
+    'name as pool_name'
+  ].freeze
+
+  VALIDATOR_FIELDS =[
+    'name as validator_name',
+    'account as validator_account'
   ].freeze
 
   def initialize(options)
@@ -30,6 +35,7 @@ class StakeAccountQuery
 
   def all_records
     stake_accounts = StakeAccount.left_outer_joins(:stake_pool)
+                                 .left_outer_joins(:validator)
                                  .select(query_fields)
                                  .where(
                                    network: @network
@@ -76,7 +82,11 @@ class StakeAccountQuery
       "stake_pools.#{field}"
     end.join(', ')
 
-    [stake_account_fields, stake_pool_fields].join(', ')
+    validator_fields = VALIDATOR_FIELDS.map do |field|
+      "validators.#{field}"
+    end.join(', ')
+
+    [stake_account_fields, stake_pool_fields, validator_fields].join(', ')
   end
   
 end

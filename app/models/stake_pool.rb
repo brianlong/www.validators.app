@@ -5,6 +5,7 @@
 #  id         :bigint           not null, primary key
 #  authority  :string(191)
 #  name       :string(191)
+#  network    :string(191)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

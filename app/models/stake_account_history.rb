@@ -21,6 +21,7 @@
 #  created_at                     :datetime         not null
 #  updated_at                     :datetime         not null
 #  stake_pool_id                  :integer
+#  validator_id                   :integer
 #
 # Indexes
 #

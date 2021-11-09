@@ -66,7 +66,12 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      p.payload[:stake_accounts].each_with_index do |acc, ind|
+      p.payload[:stake_accounts].each do |acc|
+        val = VoteAccount.find_by(
+          network: p.payload[:network],
+          account: acc['delegatedVoteAccountAddress']
+        ).validator.id rescue nil
+
         StakeAccount.find_or_initialize_by(
           stake_pubkey: acc['stakePubkey'],
           network: p.payload[:network]
@@ -84,7 +89,8 @@ module StakeLogic
           stake_type: acc['stakeType'],
           staker: acc['staker'],
           withdrawer: acc['withdrawer'],
-          batch_uuid: p.payload[:batch].uuid
+          batch_uuid: p.payload[:batch].uuid,
+          validator_id: val
         )
       end
 
@@ -92,9 +98,21 @@ module StakeLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      puts e.message
-      puts e.backtrace
       Pipeline.new(500, p.payload, 'Error from save_stake_accounts', e)
+    end
+  end
+
+  def assign_stake_pools
+    lambda do |p|
+      return p unless p.code == 200
+      StakePool.where(network: p.payload[:network]).each do |pool|
+        StakeAccount.where(withdrawer: pool.authority, network: p.payload[:network])
+                    .update_all(stake_pool_id: pool.id)
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from assign_stake_pools', e)
     end
   end
 end

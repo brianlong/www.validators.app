@@ -24,7 +24,7 @@
       <div class="card">
         <h3 class="card-title pl-3 mt-3">Statistics</h3>
         <div class="card-content">
-          <table class="table table-block-sm mb-0">
+          <table class="table table-block-sm mb-0" v-if="!is_loading">
             <tbody>
               <tr>
                 <td>total stake: </td>
@@ -36,10 +36,13 @@
               </tr>
             </tbody>
           </table>
+          <div v-if="is_loading" class="text-center mt-5 mb-5">
+            loading ...
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-12">
+    <div class="col-12" v-if="!is_loading">
       <div class="card mb-4">
         <div class="table-responsive-lg">
           <table class='table mb-0'>
@@ -47,6 +50,8 @@
               <tr>
                 <th class="column-xl align-middle">
                   <a href="#" @click.prevent="sort_by_stake">Stake</a>
+                  <br>
+                  Delegated validator
                 </th>
 
                 <th class="column-md align-middle">
@@ -88,6 +93,9 @@
         </div>
       </div>
     </div>
+    <div v-if="is_loading" class="col-12 text-center mt-5">
+      loading ...
+    </div>
   </div>
 </template>
 
@@ -109,7 +117,8 @@
         api_url: api_url,
         filter_withdrawer: null,
         filter_staker: null,
-        filter_account: null
+        filter_account: null,
+        is_loading: true
       }
     },
     created () {
@@ -121,6 +130,7 @@
         ctx.stake_accounts = response.data.stake_accounts;
         ctx.total_count = response.data.total_count;
         ctx.total_stake = response.data.total_stake;
+        ctx.is_loading = false;
       })
     },
     watch: {
@@ -146,6 +156,7 @@
       },
       refresh_results: function(){
         var ctx = this
+        ctx.is_loading = true
         var query_params = { 
           params: { 
             sort_by: ctx.sort_by,
@@ -161,6 +172,7 @@
                ctx.stake_accounts = response.data.stake_accounts;
                ctx.total_count = response.data.total_count;
                ctx.total_stake = response.data.total_stake;
+               ctx.is_loading = false
              })
       },
       sort_by_epoch: function(){
