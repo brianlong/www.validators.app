@@ -91,7 +91,7 @@ end
 namespace :deploy do
   after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'sidekiq:restart'
-  after :restart, 'rake:add_stake_pool'
+  after :restart, 'rake_task:add_stake_pool'
   after :restart, 'daemons:restart'
 end
 
@@ -142,7 +142,7 @@ namespace :daemons do
   end
 end
 
-namespace :rake do
+namespace :rake_task do
   desc 'Update Stake Pools'
   task :add_stake_pool do
     on roles :all do
