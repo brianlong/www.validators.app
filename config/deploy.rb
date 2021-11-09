@@ -91,6 +91,7 @@ end
 namespace :deploy do
   after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'sidekiq:restart'
+  after :restart, 'rake:add_stake_pool'
   after :restart, 'daemons:restart'
 end
 
@@ -137,6 +138,15 @@ namespace :daemons do
           execute :systemctl, '--user', :restart, :gather_vote_account_details
         end
       end
+    end
+  end
+end
+
+namespace :rake do
+  desc 'Update Stake Pools'
+  task :add_stake_pool do
+    within release_path do
+      execute :rake, 'add_stake_pool:mainnet'
     end
   end
 end
