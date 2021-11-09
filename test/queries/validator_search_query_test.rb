@@ -19,7 +19,7 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
     ]
 
     @validators.last.validator_score_v1 =
-      create(:validator_score_v1, data_center_key: 'Name1Center')
+      create(:validator_score_v2, data_center_key: 'Name1Center')
 
     val1 = create(:validator, :with_score)
     val2 = create(:validator, :with_score)
@@ -71,7 +71,7 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
 
   test 'returns proper results when search by software_version' do
     v = create(:validator)
-    create(:validator_score_v1, validator: v, software_version: '1.6.9')
+    create(:validator_score_v2, validator: v, software_version: '1.6.9')
     query = '1.6.7'
     results = ValidatorSearchQuery.new.search(query)
 

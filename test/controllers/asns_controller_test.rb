@@ -10,7 +10,7 @@ class AsnControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get show with autonomous_system_number that exists and has at least one score' do
-    create(:validator_score_v1, ip_address: @ip.address)
+    create(:validator_score_v2, ip_address: @ip.address)
 
     get asn_url(network: 'testnet', asn: 12345)
     assert_response :success
