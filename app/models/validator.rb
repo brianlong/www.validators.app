@@ -128,6 +128,10 @@ class Validator < ApplicationRecord
 
   # Convenience methods
   def score
+    validator_score_v2
+  end
+
+  def old_score
     validator_score_v1
   end
 
