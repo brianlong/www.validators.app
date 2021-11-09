@@ -3,7 +3,7 @@
 # This is the model for version 2 of our ValidatorScore. This model will maintain scores for each
 # validator and also maintain a recent history of events that can be used for charting or quick analysis.
 # Factors that go into building the score are described in docs file:
-# app/views/public/api_documentation.html.erb
+# app/views/public/faq.en.html.erb
 #
 #
 # == Schema Information
@@ -49,6 +49,11 @@
 #
 
 class ValidatorScoreV2 < ApplicationRecord
+  # The constant below defines into how many groups we divide validators for scoring.
+  # The first group will be assigned with score 0, the next one with 1, and so on
+  # until we reach the limit of groups.
+  NUMBER_OF_GROUPS = 3
+
   MAX_HISTORY = 2_880
   IP_FIELDS_FOR_API = [
     'traits_autonomous_system_number', 'address'
