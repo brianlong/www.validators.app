@@ -36,6 +36,13 @@ begin
                 .then(&log_errors)
                 .then(&batch_touch)
                 .then(&check_epoch)
+    
+    # After switching to better server we exceed connection rate limit.
+    # We want to slow down a bit.
+    # 
+    # More info about limits:
+    # https://docs.solana.com/cluster/rpc-endpoints#mainnet-beta
+    sleep 2
 
     raise SkipAndSleep, p.code unless p.code == 200
 
