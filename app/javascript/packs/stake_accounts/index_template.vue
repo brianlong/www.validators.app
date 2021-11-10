@@ -10,10 +10,6 @@
         </div>
         <div class="card-content">
           <div class="form-group">
-            <label>stake account</label>
-            <input v-model="filter_account" type="text" class="form-control form-control-xs mb-3">
-            <label>Staker</label>
-            <input v-model="filter_staker" type="text" class="form-control form-control-xs mb-3">
             <label>Withdrawer</label>
             <input v-model="filter_withdrawer" type="text" class="form-control form-control-xs mb-1">
             <a 
@@ -21,13 +17,17 @@
               :key="pool.authority"
               href="#"
               @click.prevent="filter_by_withdrawer(pool.authority)"
-              class="btn btn-xxs btn-secondary active mb-3 mr-1"
+              class="btn btn-xxs btn-secondary mb-3 mr-1"
             >
               {{ pool.name }}
             </a>
             <br>
             <label>Validator</label>
             <input v-model="filter_validator" type="text" class="form-control form-control-xs mb-3">
+            <label>stake account</label>
+            <input v-model="filter_account" type="text" class="form-control form-control-xs mb-3">
+            <label>Staker</label>
+            <input v-model="filter_staker" type="text" class="form-control form-control-xs mb-3">
           </div>
         </div>
       </div>
