@@ -37,7 +37,8 @@ begin
                 .then(&batch_touch)
                 .then(&check_epoch)
     
-    # After switching to better server we exceed connection rate limit.
+    # After switching to better server we exceed connection rate limit:
+    # Maximum connection rate per 10 seconds per IP: 40
     # We want to slow down a bit.
     # 
     # More info about limits:
