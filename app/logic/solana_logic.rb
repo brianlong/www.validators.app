@@ -191,6 +191,106 @@ module SolanaLogic
     end
   end
 
+  # Fetches program accounts, default program is config,
+  # where you can check if signer is true for the validator.
+  # More program pubkeys can be found on 
+  # https://docs.solana.com/developing/runtime-facilities/programs
+  def program_accounts(
+    config_program_pubkey: 'Config1111111111111111111111111111111111111',
+    encoding: 'jsonParsed'
+  )
+    lambda do |p|
+      return p unless p[:code] == 200
+      
+      config_program_pubkey = config_program_pubkey
+      params = [config_program_pubkey, { encoding: encoding }]
+
+      program_accounts = solana_client_request(
+        p.payload[:config_urls],
+        :get_program_accounts,
+        params: params
+      )
+      
+      Pipeline.new(200, p.payload.merge(program_accounts: program_accounts))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from program_accounts', e)
+    end
+  end
+
+  # Search for the duplicated configs or config where signer is false
+  def find_invalid_configs
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      info_pubkey = 'Va1idator1nfo111111111111111111111111111111'
+      
+      data = {}
+      p.payload[:program_accounts].map do |account| 
+        begin
+          data[account['pubkey']] = account.dig('account', 'data', 'parsed', 'info', 'keys')
+        rescue TypeError => e
+          # Sometimes value of 'parsed' key is an Array 
+          # that contains base64 encoded strings with ie. Shakespeare's poem.
+          # so we skip it.
+          next if e.message == 'no implicit conversion of String into Integer'
+        end
+      end
+
+      # Find false and duplicated signers.
+      false_signers = {}
+      duplicated_count = Hash.new { |hash, key| hash[key] = []}
+      duplicated_configs = Hash.new
+
+      data.each do |k, v|
+        next unless v.present?
+        
+        # Find false signers.
+        false_signers[k] = v[1] if v[1]['signer'] == false
+        
+        # Add config key to array of keys for validator's pubkey.
+        validator_key = v[1]['pubkey']
+        duplicated_count[validator_key] << k
+
+        # If validator has more than one config pubkey
+        # add to duplicated_configs hash.
+        if duplicated_count[validator_key].size > 1
+          duplicated_configs[k] = duplicated_count[validator_key]
+        end
+      end
+
+      # NOTE: We add duplicated_configs to paylaod 
+      # but for now entries we found are identical
+      # so we do nothing with them.
+      
+      Pipeline.new(
+        200, 
+        p.payload.merge(
+          false_signers: false_signers,
+          duplicated_configs: duplicated_configs
+        )
+      )
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from find_invalid_configs', e)
+    end
+  end
+
+  # Removes invalid configs from array
+  def remove_invalid_configs
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      false_signers_keys = p.payload[:false_signers].keys
+      if false_signers_keys.any?
+        p.payload[:validators_info].delete_if do |info| 
+          info['infoPubkey'].in?(false_signers_keys)
+        end      
+      end
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from remove_invalid_configs', e)
+    end
+  end
+
   # vote_accounts_get returns the data from RPC 'getVoteAccounts'
   def vote_accounts_get
     lambda do |p|
@@ -428,12 +528,28 @@ module SolanaLogic
     end
   end
 
-  def validator_info_get_and_save
+  def validators_info_get
     lambda do |p|
       return p unless p[:code] == 200
 
       results = cli_request('validator-info get', p.payload[:config_urls])
-      results.each do |result|
+
+      Pipeline.new(200, p.payload.merge(validators_info: results))
+    rescue StandardError => e
+      Pipeline.new(
+        500,
+        p.payload,
+        "Error from validators_info_get on #{p.payload[:network]}",
+        e
+      )
+    end
+  end
+
+  def validators_info_save
+    lambda do |p|
+      return p unless p[:code] == 200
+
+      p.payload[:validators_info].each do |result|
         # puts result.inspect
         validator = Validator.find_or_create_by(
           network: p.payload[:network],
@@ -467,7 +583,7 @@ module SolanaLogic
       Pipeline.new(
         500,
         p.payload,
-        "Error from validator_info_get_and_save on #{p.payload[:network]}",
+        "Error from validators_info_save on #{p.payload[:network]}",
         e
       )
     end
@@ -538,10 +654,10 @@ module SolanaLogic
   end
 
   # Clusters array, method symbol
-  def solana_client_request(clusters, method)
+  def solana_client_request(clusters, method, params: [])
     clusters.each do |cluster_url|
       client = SolanaRpcClient.new(cluster: cluster_url).client
-      result = client.public_send(method).result
+      result = client.public_send(method, *params).result
 
       return result unless result.blank?
     rescue SolanaRpcRuby::ApiError => e

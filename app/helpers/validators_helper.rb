@@ -96,4 +96,28 @@ module ValidatorsHelper
       url
     end
   end
+
+  def create_avatar_link(validator)
+    link_params = {
+      network: params[:network],
+      account: validator.account,
+      order: params[:order],
+      page: params[:page],
+      refresh: params[:refresh]
+    }
+
+    if validator.private_validator?
+      link_to validator_url(link_params) do
+        content_tag :div, content_tag(:span, nil, class: 'fas fa-users-slash', title: "Private Validator"), class: "img-circle-medium-private"
+      end
+    elsif validator.avatar_url
+      link_to validator_url(link_params) do
+        image_tag validator.avatar_url, class: 'img-circle-medium'
+      end
+    else
+      link_to validator_url(link_params) do
+        image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium'
+      end
+    end
+  end
 end
