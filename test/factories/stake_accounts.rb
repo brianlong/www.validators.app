@@ -14,6 +14,5 @@ FactoryBot.define do
     staker { "staker" }
     withdrawer { "withdrawer" }
     batch_uuid {"123-abc"}
-    stake_pool_id { 1 }
   end
 end

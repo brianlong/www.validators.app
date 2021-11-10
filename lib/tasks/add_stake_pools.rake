@@ -8,7 +8,7 @@ namespace :add_stake_pool do
       },
       {
         name: 'Marinade',
-        authority: '4bZ6o3eUUNXhKuqjdCnCoPAoLgWiuLYixKaxoa8PpiKk',
+        authority: '9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco',
         network: 'mainnet'
       },
       {
@@ -25,7 +25,11 @@ namespace :add_stake_pool do
 
   task testnet: :environment do
     stake_pools = [
-
+      {
+        name: 'Jpool',
+        authority: '25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT',
+        network: 'mainnet'
+      }
     ]
 
     stake_pools.each do |sp|

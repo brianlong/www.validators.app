@@ -31,5 +31,6 @@
 #  index_stake_account_histories_on_withdrawer_and_network    (withdrawer,network)
 #
 class StakeAccountHistory < ApplicationRecord
-  belongs_to :stake_pool
+  belongs_to :stake_pool, optional: true
+  belongs_to :validator, optional: true
 end

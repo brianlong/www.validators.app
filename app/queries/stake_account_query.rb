@@ -18,7 +18,7 @@ class StakeAccountQuery
     'name as pool_name'
   ].freeze
 
-  VALIDATOR_FIELDS =[
+  VALIDATOR_FIELDS = [
     'name as validator_name',
     'account as validator_account'
   ].freeze

@@ -29,7 +29,6 @@ class StakeLogicTest < ActiveSupport::TestCase
 
   test 'move_current_stakes_to_history' do
     create(:stake_account, batch_uuid: 'old-batch')
-
     json_data = File.read("#{Rails.root}/test/json/stake_accounts.json")
 
     SolanaCliService.stub(:request, json_data, ['stakes', @testnet_url]) do
@@ -51,7 +50,7 @@ class StakeLogicTest < ActiveSupport::TestCase
                   .then(&get_stake_accounts)
 
       assert_not_nil p[:payload][:stake_accounts]
-      assert_equal 57_511, p[:payload][:stake_accounts].count
+      assert_equal 10, p[:payload][:stake_accounts].count
     end
   end
 
@@ -66,6 +65,27 @@ class StakeLogicTest < ActiveSupport::TestCase
 
       assert_equal p[:payload][:stake_accounts].count, StakeAccount.count
       assert StakeAccount.where.not(batch_uuid: @batch.uuid).empty?
+    end
+  end
+
+  test 'assign_stake_pools' do
+    json_data = File.read("#{Rails.root}/test/json/stake_accounts.json")
+    stake_pool = create(
+      :stake_pool,
+      network: 'testnet',
+      authority: 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
+    )
+
+    SolanaCliService.stub(:request, json_data, ['stakes', @testnet_url]) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_last_batch)
+                  .then(&get_stake_accounts)
+                  .then(&save_stake_accounts)
+                  .then(&assign_stake_pools)
+
+      assert_equal stake_pool.id, StakeAccount.where(
+        withdrawer: 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
+      ).first.stake_pool_id
     end
   end
 end
