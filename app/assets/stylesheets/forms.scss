@@ -20,6 +20,10 @@
   @media(max-width: $screen-xs-max) {
     height: 40px;
   }
+
+  &.form-control-xs {
+    height: 40px;
+  }
 }
 
 label {

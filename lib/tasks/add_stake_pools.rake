@@ -15,6 +15,11 @@ namespace :add_stake_pool do
         name: 'Jpool',
         authority: '25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT',
         network: 'mainnet'
+      },
+      {
+        name: 'Lido',
+        authority: 'W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5',
+        network: 'mainnet'
       }
     ]
 

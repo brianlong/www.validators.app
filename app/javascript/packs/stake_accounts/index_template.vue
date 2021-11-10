@@ -11,13 +11,23 @@
         <div class="card-content">
           <div class="form-group">
             <label>stake account</label>
-            <input v-model="filter_account" type="text" class="form-control mb-3">
+            <input v-model="filter_account" type="text" class="form-control form-control-xs mb-3">
             <label>Staker</label>
-            <input v-model="filter_staker" type="text" class="form-control mb-3">
+            <input v-model="filter_staker" type="text" class="form-control form-control-xs mb-3">
             <label>Withdrawer</label>
-            <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
+            <input v-model="filter_withdrawer" type="text" class="form-control form-control-xs mb-1">
+            <a 
+              v-for="pool in stake_pools" 
+              :key="pool.authority"
+              href="#"
+              @click.prevent="filter_by_withdrawer(pool.authority)"
+              class="btn btn-xxs btn-secondary active mb-3 mr-1"
+            >
+              {{ pool.name }}
+            </a>
+            <br>
             <label>Validator</label>
-            <input v-model="filter_validator" type="text" class="form-control mb-3">
+            <input v-model="filter_validator" type="text" class="form-control form-control-xs mb-3">
           </div>
         </div>
       </div>
@@ -25,7 +35,7 @@
     <div class="col-md-6 mb-3">
       <div class="card">
         <h3 class="card-title pl-3 mt-3">Statistics</h3>
-        <div class="card-content">
+        <div class="card-content row">
           <table class="table table-block-sm mb-0" v-if="!is_loading">
             <tbody>
               <tr>
@@ -38,7 +48,7 @@
               </tr>
             </tbody>
           </table>
-          <div v-if="is_loading" class="text-center mt-5 mb-5">
+          <div v-if="is_loading" class="text-center mt-5 mb-5 col-12">
             loading ...
           </div>
         </div>
@@ -121,7 +131,25 @@
         filter_staker: null,
         filter_account: null,
         filter_validator: null,
-        is_loading: true
+        is_loading: true,
+        stake_pools: [
+          {
+            name: 'Marinade',
+            authority: '9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco'
+          },
+          {
+            name: 'Socean',
+            authority: 'AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck'
+          },
+          {
+            name: 'Jpool',
+            authority: '25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT'
+          },
+          {
+            name: 'Lido',
+            authority: 'W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5'
+          }
+        ].sort((a, b) => 0.5 - Math.random())
       }
     },
     created () {
