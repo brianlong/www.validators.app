@@ -35,6 +35,16 @@
         </small>
       <% end %>
     </td>
+    <% if params[:network] == 'mainnet' %>
+      <td class="column-md">
+        <%= asn_data[:private_validators] %>
+        <% if asn_data[:private_validators] > 0 %>
+          <small class="text-muted">
+            (<%= (count_percentage(asn_data[:private_validators], asn_data[:count])) %>%)
+          </small>
+        <% end %>
+      </td>
+    <% end %>
     <td class="column-lg">
       <%= number_with_delimiter lamports_to_sol(asn_data[:active_stake]).round(0) %>
       (<%= percent_of_total_stake(asn_data[:active_stake], @results[:total_stake]) %>)
