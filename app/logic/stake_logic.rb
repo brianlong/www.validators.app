@@ -35,7 +35,7 @@ module StakeLogic
         puts pool.name
         puts pool_stake_acc
         puts "---------------------"
-        reduced_stake_accounts.push pool_stake_acc
+        reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
       end
       
 
