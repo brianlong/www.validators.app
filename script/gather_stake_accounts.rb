@@ -17,11 +17,12 @@ include StakeLogic
     network: network
   }
 
-  Pipeline.new(200, payload)
-          .then(&get_last_batch)
-          .then(&move_current_stakes_to_history)
-          .then(&get_stake_accounts)
-          .then(&save_stake_accounts)
-          .then(&assign_stake_pools)
-  puts "finished #{network}"
+  p = Pipeline.new(200, payload)
+              .then(&get_last_batch)
+              .then(&move_current_stakes_to_history)
+              .then(&get_stake_accounts)
+              .then(&save_stake_accounts)
+              .then(&assign_stake_pools)
+
+  puts "finished #{network} with status #{p[:code]}"
 end
