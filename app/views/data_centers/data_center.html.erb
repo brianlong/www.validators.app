@@ -67,9 +67,17 @@
 </div>
 
 
-<%= link_to 'Back to Data Centers',
-            data_centers_url(network: params[:network]),
-            class: 'btn btn-sm btn-secondary mb-4' %>
+<%= link_to 'Filter by delinquent',
+    data_center_url(network: params[:network], key: params[:key], filter_by: :delinquent),
+    class: "btn btn-sm btn-secondary mb-4 #{'active' if params[:filter_by] == 'delinquent'}" %>
+<%= link_to 'Filter by inactive',
+    data_center_url(network: params[:network], key: params[:key], filter_by: :inactive),
+    class: "btn btn-sm btn-secondary mb-4 #{'active' if params[:filter_by] == 'inactive'}" %>
+<% if !params[:filter_by].blank? %>
+  <%= link_to 'Reset filters',
+      data_center_url(network: params[:network], key: params[:key]),
+      class: 'btn btn-sm btn-secondary mb-4' %>
+<% end %>
 
 <div class="card mb-4">
   <%= render 'validators/table',
@@ -84,5 +92,5 @@
 </div>
 
 <%= link_to 'Back to Data Centers',
-            data_centers_url(network: params[:network]),
-            class: 'btn btn-sm btn-secondary' %>
+    data_centers_url(network: params[:network]),
+    class: 'btn btn-sm btn-secondary' %>

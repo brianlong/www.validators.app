@@ -28,11 +28,14 @@
     </td>
     <td class="column-md"><%= asn_data[:count] %></td>
     <td class="column-md">
-      <%= asn_data[:delinquent_validators] %>
       <% if asn_data[:delinquent_validators] > 0 %>
-         <small class="text-muted">
+        <%= link_to asn_data[:delinquent_validators],
+            asn_url(network: params[:network], asn: asn_data[:asn], filter_by: :delinquent) %>
+        <small class="text-muted">
           (<%= (count_percentage(asn_data[:delinquent_validators], asn_data[:count])) %>%)
         </small>
+      <% else %>
+        <%= asn_data[:delinquent_validators] %>
       <% end %>
     </td>
     <td class="column-lg">

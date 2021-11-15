@@ -140,4 +140,45 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
       score.update(commission: 20)
     end
   end
+
+  test 'filter_by when filtered by delinquent should return correct results' do
+    create_validators_for_filtering_test
+
+    assert_equal 1, ValidatorScoreV1.filtered_by(:delinquent).count
+    assert ValidatorScoreV1.filtered_by(:delinquent).all? { |val| val.delinquent }
+  end
+
+  test 'filter_by when filtered by inactive should return correct results' do
+    create_validators_for_filtering_test
+
+    assert_equal 1, ValidatorScoreV1.filtered_by(:inactive).count
+    refute ValidatorScoreV1.filtered_by(:inactive).all? { |score| score.validator.is_active }
+  end
+
+  def create_validators_for_filtering_test
+    validator1 = create(:validator, network: 'testnet', is_active: true)
+    create(
+      :validator_score_v1,
+      validator: validator1,
+      commission: 10,
+      network: 'testnet',
+      delinquent: false
+    )
+    validator2 = create(:validator, network: 'testnet', is_active: true)
+    create(
+      :validator_score_v1,
+      validator: validator2,
+      commission: 10,
+      network: 'testnet',
+      delinquent: true
+    )
+    validator1 = create(:validator, network: 'testnet', is_active: false)
+    create(
+      :validator_score_v1,
+      validator: validator1,
+      commission: 10,
+      network: 'testnet',
+      delinquent: false
+    )
+  end
 end

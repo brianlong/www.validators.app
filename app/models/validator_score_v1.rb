@@ -89,6 +89,17 @@ class ValidatorScoreV1 < ApplicationRecord
     CreateCommissionHistoryService.new(self).call
   end
 
+  def self.filtered_by(filter)
+    case filter
+    when :delinquent
+      where(delinquent: true)
+    when :inactive
+      includes(:validator).where('validator.is_active': false)
+    else
+      self
+    end
+  end
+
   def calculate_total_score
     # Assign special scores before calculating the total score
     best_sv = Batch.last_scored(network)&.software_version

@@ -17,7 +17,7 @@ class DataCentersController < ApplicationController
   # params[:network]
   # params[:key]
   def data_center
-    key = params[:key].gsub('-slash-', '/')
+    key = show_params[:key].gsub('-slash-', '/')
     # sql = "
     #   SELECT *
     #   FROM validators val
@@ -34,9 +34,10 @@ class DataCentersController < ApplicationController
 
     @per = 25
 
-    @scores = ValidatorScoreV1.by_network_with_active_stake(params[:network])
+    @scores = ValidatorScoreV1.by_network_with_active_stake(show_params[:network])
                               .includes(:validator)
                               .by_data_centers(key)
+                              .filtered_by(show_params[:filter_by]&.to_sym)
                               .order('active_stake desc')
     
     @dc_stake = @scores.where(data_center_key: key).sum(:active_stake)
@@ -60,5 +61,9 @@ class DataCentersController < ApplicationController
 
   def index_params
     params.permit(:network, :sort_by)
+  end
+
+  def show_params
+    params.permit(:network, :page, :key, :filter_by)
   end
 end

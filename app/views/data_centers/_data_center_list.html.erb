@@ -4,11 +4,14 @@
     <td class="column-sm"><%= dc_data[:aso] %></td>
     <td class="column-md"><%= dc_data[:count] %></td>
     <td class="column-md">
-      <%= dc_data[:delinquent_validators] %>
       <% if dc_data[:delinquent_validators] > 0 %>
-         <small class="text-muted">
+        <%= link_to dc_data[:delinquent_validators], 
+            data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :delinquent) %>
+        <small class="text-muted">
           (<%= (count_percentage(dc_data[:delinquent_validators], dc_data[:count])) %>%)
         </small>
+      <% else %>
+        <%= dc_data[:delinquent_validators] %>
       <% end %>
     </td>
     <td class="column-lg">
