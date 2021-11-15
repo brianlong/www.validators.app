@@ -19,7 +19,7 @@ class AsnsController < ApplicationController
     @scores = @scores.page(params[:page])
                      .per(@per)
 
-    @validators = @scores.map(&:validator).compact
+    @validators = @scores.includes(:validator).map(&:validator).compact
     @batch = Batch.last_scored(params[:network])
 
     @population = @scores.total_count
