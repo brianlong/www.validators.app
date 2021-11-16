@@ -96,7 +96,7 @@ class ValidatorScoreV1 < ApplicationRecord
     when :inactive
       includes(:validator).where('validator.is_active': false)
     else
-      self
+      all
     end
   end
 
