@@ -29,6 +29,9 @@
   <li><a href="#personal-data">How is my Personal Data protected?</a></li>
   <li><a href="#private-validator">Why is my validator marked "private"?</a></li>
   <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
+  <li><a href="#avatar">How can I change my avatar (validator logo)?</a></li>
+  <li><a href="#new-validator">How to become a validator?</a></li>
+  <li><a href="#best-validator">How to find the best validator?</a></li>
 </ul>
 
 
@@ -89,8 +92,10 @@
   <p>
     <strong>Commission</strong> - The&nbsp;important thing to&nbsp;notice here is that commissions can be changed in any
     moment, so it's crucial to&nbsp;check for particular validators
-    <%= link_to "commission change history", commission_histories_path(network: params[:network]) %> and see if there's
-    no malicious behaviour there.
+    <%= link_to "commission change history", commission_histories_path(network: params[:network]) %> and see if
+    there's no malicious behaviour there. Some of the&nbsp;validators are offering 0% commission as an&nbsp;introductory
+    offer. It's a&nbsp;good idea to&nbsp;contact them to&nbsp;see when the&nbsp;offer expires and the&nbsp;new rate
+    at that time.
   </p>
   <p>
     <strong>Reliability</strong> - if the&nbsp;validator has all the&nbsp;information filled up, has its own website and
@@ -247,15 +252,15 @@
 
 <h6 id="delinquency">Delinquency</h6>
 <p class="mb-5">
-  If the&nbsp;validator is not active in the&nbsp;solana network it is considered to be delinquent. Short-time delinquencies
-  are considered acceptable, since it occurs while software updates or temporary internet outages.
+  If the&nbsp;validator is not active in the&nbsp;solana network it is considered to&nbsp;be delinquent. Short-time
+  delinquencies are considered acceptable, since it occurs while software updates or temporary internet outages.
 </p>
 
 <h6 id="concentration">Stake concentration</h6>
 <p class="mb-5">
   Solana is a&nbsp;decentralized proof-of-stake blockchain. It is best for the&nbsp;network and for those who uses it,
-  that the&nbsp;total stake is divided among as many validators as possible. Keep this in mind while choosing a&nbsp;validator
-  to delegate&nbsp;to.
+  that the&nbsp;total stake is divided among as many validators as possible. Keep this in&nbsp;mind while choosing
+  a&nbsp;validator to delegate&nbsp;to.
 </p>
 
 <hr />
@@ -271,14 +276,35 @@
 
 <h6 id="private-validator">Why is my validator marked "private"?</h6>
 <p class="mb-5">
-  It's based on commission rate. 100% commission means that you are not looking for delegations, so we mark you as "private". 
-  Private validators are always assigned with total score 0, despite their performance. 
+  It's based on commission rate. 100% commission means that you are not looking for delegations, so we mark you
+  as "private". Private validators are always assigned with total score 0, despite their performance.
 </p>
 
-<h6 id="withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</h6>
-<p>
+<h6 id="withdraw-authority-warning">
+  Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?
+</h6>
+<p class="mb-5">
   It informs visitors that your validator identity matches the&nbsp;withdraw authority on your vote account. It is
   a&nbsp;serious security risk, eg. if someone hacks into your validator, they can steal from the&nbsp;vote account.
   Keep the&nbsp;withdraw authority key offline to minimize the&nbsp;risk. Once you fix it, the&nbsp;warning will be
   taken off automatically within few hours.
+</p>
+
+<h6 id="avatar">How can I change my avatar (validator logo)?</h6>
+<p class="mb-5">
+  The images come from the validator's Keybase profile. Once you change it on Keybase, we'll update avatar in our system
+  automatically within 24&nbsp;hours.
+</p>
+
+<h6 id="new-validator">How to become a validator?</h6>
+<p class="mb-5">
+  Please take a&nbsp;look at this detailed guide on Solana website:
+  <%= link_to "https://docs.solana.com/running-validator", "https://docs.solana.com/running-validator" %>.
+</p>
+
+<h6 id="best-validator">How to find the best validator?</h6>
+<p class="mb-5">
+  To find a good validator, start at the top of the 'Score' view on the home page and click through to see validator
+  details. Then please read <%= link_to 'Choosing Validator', '#choosing-validator' %> section on this page to find out
+  what you should watch out for.
 </p>
