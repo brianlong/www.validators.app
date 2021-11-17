@@ -243,4 +243,46 @@ module ReportLogic
       Pipeline.new(500, p.payload, 'report_software_versions', e)
     end
   end
+
+  def report_cluster_stats
+    lambda do |p|
+      batch = Batch.find_by(uuid: p.payload[:batch_uuid])
+      network = p.payload[:network]
+
+      vah_stats = Stats::VoteAccountHistory.new(network, batch.uuid)
+      vbh_stats = Stats::ValidatorBlockHistory.new(network, batch.uuid)
+      vs_stats  = Stats::ValidatorScore.new(network, batch.uuid)
+      software_report = Report.where(
+        network: network,
+        name: 'report_software_versions'
+      ).last&.payload
+
+      payload = {
+        top_staked_validators: vs_stats.top_staked_validators || [],
+        total_stake: vs_stats.total_stake,
+        top_skipped_vote_validators: vah_stats.top_skipped_vote_percent || [],
+        top_root_distance_validators: vs_stats.top_root_distance_averages_validators || [],
+        top_vote_distance_validators: vs_stats.top_vote_distance_averages_validators || [],
+        top_skipped_slot_validators: vbh_stats.top_skipped_slot_percent || [],
+        skipped_votes_percent: vah_stats.skipped_votes_stats,
+        skipped_votes_percent_moving_average: vah_stats.skipped_vote_moving_average_stats,
+        root_distance: vs_stats.root_distance_stats,
+        vote_distance: vs_stats.vote_distance_stats,
+        skipped_slots: vbh_stats.skipped_slot_stats,
+        software_version: software_report,
+        batch_uuid: batch.uuid
+      }
+
+      Report.create(
+        network: p.payload[:network],
+        batch_uuid: p.payload[:batch_uuid],
+        name: 'report_cluster_stats',
+        payload: payload
+      )
+
+      Pipeline.new(200, p.payload.merge(result: payload))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'report_cluster_stats', e)
+    end
+  end
 end
