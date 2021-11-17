@@ -28,13 +28,9 @@ module StakeLogic
         'stakes',
         p.payload[:config_urls]
       )
-      puts stake_accounts.count
       reduced_stake_accounts = []
       StakePool.where(network: p.payload[:network]).each do |pool|
         pool_stake_acc = stake_accounts.select{ |sa| sa['withdrawer'] == pool.authority }
-        puts pool.name
-        puts pool_stake_acc
-        puts "---------------------"
         reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
       end
       

@@ -43,6 +43,7 @@ class StakeLogicTest < ActiveSupport::TestCase
 
   test 'get_stake_accounts' do
     json_data = File.read("#{Rails.root}/test/json/stake_accounts.json")
+    create(:stake_pool, authority: 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b', network: 'testnet')
 
     SolanaCliService.stub(:request, json_data, ['stakes', @testnet_url]) do
       p = Pipeline.new(200, @initial_payload)
@@ -50,7 +51,8 @@ class StakeLogicTest < ActiveSupport::TestCase
                   .then(&get_stake_accounts)
 
       assert_not_nil p[:payload][:stake_accounts]
-      assert_equal 10, p[:payload][:stake_accounts].count
+      assert_equal JSON.parse(json_data).select{ |sa| sa['withdrawer'] == 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'}.count,
+        p[:payload][:stake_accounts].count
     end
   end
 
