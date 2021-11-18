@@ -8,7 +8,7 @@ Vue.component('BPagination', BPagination)
 Vue.use(PaginationPlugin);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const chindex = new Vue({
+  const stake_account_index = new Vue({
     el: '#stake-accounts-index-vue',    
     render(createElement) {
       return createElement(IndexTemplate, {

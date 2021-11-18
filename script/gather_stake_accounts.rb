@@ -6,10 +6,10 @@ require 'stake_logic'
 include StakeLogic
 
 %w[mainnet testnet].each do |network|
-  if network == 'mainnet'
-    config_urls = Rails.application.credentials.solana[:mainnet_urls]
+  config_urls = if network == 'mainnet'
+    Rails.application.credentials.solana[:mainnet_urls]
   else
-    config_urls = Rails.application.credentials.solana[:testnet_urls]
+    Rails.application.credentials.solana[:testnet_urls]
   end
 
   payload = {

@@ -13,9 +13,6 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       validator_url: "/validators/" + this.stake_account.validator_account + "?network=" + this.stake_account.network
     }
   },
-  watch: {
-
-  },
   methods: {
     filterByStaker: function(e) {
       this.$emit('filter_by_staker', this.stake_account.staker);
@@ -31,7 +28,6 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       } else {
         return ''
       }
-
     }
   },
   template: `

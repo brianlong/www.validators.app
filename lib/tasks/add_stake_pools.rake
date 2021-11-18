@@ -33,7 +33,7 @@ namespace :add_stake_pool do
       {
         name: 'Jpool',
         authority: '25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT',
-        network: 'mainnet'
+        network: 'testnet'
       }
     ]
 

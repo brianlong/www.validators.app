@@ -1,5 +1,5 @@
+# frozen_string_literal: true
+
 class StakeAccountsController < ApplicationController
-  def index
-    
-  end
+  # index
 end

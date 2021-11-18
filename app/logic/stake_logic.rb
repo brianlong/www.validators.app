@@ -8,13 +8,13 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      last_batch = Batch.last_scored(p.payload[:network])
+      batch = Batch.last_scored(p.payload[:network])
 
-      if last_batch.nil?
+      if batch.nil?
         raise "No batch: #{p.payload[:network]}, #{p.payload[:batch_uuid]}"
       end
 
-      Pipeline.new(200, p.payload.merge(batch: last_batch))
+      Pipeline.new(200, p.payload.merge(batch: batch))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
     end
@@ -28,12 +28,13 @@ module StakeLogic
         'stakes',
         p.payload[:config_urls]
       )
+
       reduced_stake_accounts = []
+
       StakePool.where(network: p.payload[:network]).each do |pool|
         pool_stake_acc = stake_accounts.select{ |sa| sa['withdrawer'] == pool.authority }
         reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
       end
-      
 
       Pipeline.new(200, p.payload.merge(
         stake_accounts: reduced_stake_accounts
@@ -68,15 +69,17 @@ module StakeLogic
     end
   end
 
-  def save_stake_accounts
+  def update_stake_accounts
     lambda do |p|
       return p unless p.code == 200
 
       p.payload[:stake_accounts].each do |acc|
-        val = VoteAccount.find_by(
+        vote_account = VoteAccount.find_by(
           network: p.payload[:network],
           account: acc['delegatedVoteAccountAddress']
-        ).validator.id rescue nil
+        )
+        
+        validator_id = vote_account ? vote_account.validator.id : nil
 
         StakeAccount.find_or_initialize_by(
           stake_pubkey: acc['stakePubkey'],
@@ -96,7 +99,7 @@ module StakeLogic
           staker: acc['staker'],
           withdrawer: acc['withdrawer'],
           batch_uuid: p.payload[:batch].uuid,
-          validator_id: val
+          validator_id: validator_id
         )
       end
 
@@ -111,6 +114,7 @@ module StakeLogic
   def assign_stake_pools
     lambda do |p|
       return p unless p.code == 200
+      
       StakePool.where(network: p.payload[:network]).each do |pool|
         StakeAccount.where(withdrawer: pool.authority, network: p.payload[:network])
                     .update_all(stake_pool_id: pool.id)

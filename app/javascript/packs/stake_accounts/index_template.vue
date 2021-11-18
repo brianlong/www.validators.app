@@ -5,7 +5,7 @@
         <div class="card-title mt-3 pr-3 pl-3">
           <h3 class="float-left">Filter by</h3>
           <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-secondary active float-right">
-            clear filters
+            Clear filters
           </a>
         </div>
         <div class="card-content">
@@ -24,7 +24,7 @@
             <br>
             <label>Validator</label>
             <input v-model="filter_validator" type="text" class="form-control form-control-xs mb-3">
-            <label>stake account</label>
+            <label>Stake account</label>
             <input v-model="filter_account" type="text" class="form-control form-control-xs mb-3">
             <label>Staker</label>
             <input v-model="filter_staker" type="text" class="form-control form-control-xs mb-3">
@@ -39,17 +39,17 @@
           <table class="table table-block-sm mb-0" v-if="!is_loading">
             <tbody>
               <tr>
-                <td>total stake: </td>
+                <td>Total stake: </td>
                 <td>{{ (total_stake / 1000000000).toFixed(3) }} SOL</td>
               </tr>
               <tr>
-                <td>number of accounts: </td>
+                <td>Number of accounts: </td>
                 <td>{{ total_count }}</td>
               </tr>
             </tbody>
           </table>
           <div v-if="is_loading" class="text-center mt-5 mb-5 col-12">
-            loading ...
+            Loading ...
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@
       </div>
     </div>
     <div v-if="is_loading" class="col-12 text-center mt-5">
-      loading ...
+      Loading ...
     </div>
   </div>
 </template>
@@ -157,12 +157,12 @@
       var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page } }
 
       axios.get(ctx.api_url, query_params)
-      .then(function (response){
-        ctx.stake_accounts = response.data.stake_accounts;
-        ctx.total_count = response.data.total_count;
-        ctx.total_stake = response.data.total_stake;
-        ctx.is_loading = false;
-      })
+           .then(function (response){
+             ctx.stake_accounts = response.data.stake_accounts;
+             ctx.total_count = response.data.total_count;
+             ctx.total_stake = response.data.total_stake;
+             ctx.is_loading = false;
+           })
     },
     watch: {
       sort_by: function(){

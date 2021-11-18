@@ -13,17 +13,9 @@ module Api
 
         stake_accounts = stake_accounts_query.all_records
 
-        total_count = stake_accounts.size
-        total_stake = stake_accounts.map(&:delegated_stake).compact.sum
-
-        stake_accounts = stake_accounts.page(index_params[:page])
-
-        render json: {
-          stake_accounts: stake_accounts.as_json,
-          total_count: total_count,
-          total_stake: total_stake
-        },
-        status: :ok
+        @total_count = stake_accounts.size
+        @total_stake = stake_accounts.map(&:delegated_stake).compact.sum
+        @stake_accounts = stake_accounts.page(index_params[:page])
       end
 
       private
