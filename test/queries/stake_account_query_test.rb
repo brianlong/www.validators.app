@@ -47,7 +47,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   end
 
   test 'when no data provided return all records' do
-
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet',
     ).all_records.payload
@@ -57,7 +56,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   end
 
   test 'when filter_account provided return correct records' do
-
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet'
     ).all_records
@@ -69,7 +67,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   end
 
   test 'when filter_staker provided return correct records' do
-
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet'
     ).all_records
@@ -81,7 +78,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   end
 
   test 'when filter_withdrawer provided return correct records' do
-
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet'
     ).all_records
@@ -93,7 +89,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   end
 
   test 'when filter_validator provided return correct records' do
-
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet'
     ).all_records
@@ -103,5 +98,4 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal 1, stake_accounts.size
     assert_equal @validator.name, stake_accounts.first.validator_name
   end
-
 end
