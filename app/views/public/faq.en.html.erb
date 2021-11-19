@@ -6,36 +6,49 @@
   you can use our chat in the&nbsp;bottom right corner.
 </p>
 
-<h3>Basics</h3>
-<ul class="list-large list-no-bullets mb-5">
-  <li><a href="#staking">What is staking</a></li>
-  <li><a href="#timeline">Staking timeline</a></li>
-  <li><a href="#choosing-validator">Choosing the&nbsp;right validator</li>
-  <li><a href="#score">How Does the&nbsp;Validator Score V1 Work?</a></li>
-  <li><a href="#data-centers">Data Centers</a></li>
-</ul>
-<h3>Dictionary</h3>
-<ul class="list-large list-no-bullets mb-5">
-  <li><a href="#commission">Commission</a></li>
-  <li><a href="#epoch">Epoch</a></li>
-  <li><a href="#root-distance">Root Distance</a></li>
-  <li><a href="#vote-distance">Vote Distance</a></li>
-  <li><a href="#skipped-vote">Skipped Slot&nbsp;&percnt;</a></li>
-  <li><a href="#delinquency">Delinquency</a></li>
-  <li><a href="#stake-concentration">Stake Concentration</a></li>
-  <li><a href="#stake-pool">Stake Pool</a></li>
-</ul>
-<h3>FAQ</h3>
-<ul class="list-large list-no-bullets mb-5">
-  <li><a href="#personal-data">How is my Personal Data protected?</a></li>
-  <li><a href="#private-validator">Why is my validator marked "private"?</a></li>
-  <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
-  <li><a href="#avatar">How can I change my avatar (validator logo)?</a></li>
-  <li><a href="#new-validator">How to become a validator?</a></li>
-  <li><a href="#best-validator">How to find the best validator?</a></li>
+<div class="row">
+  <div class="col-md-6">
+        <h3>Basics</h3>
+        <ul class="list-large list-no-bullets mb-5">
+          <li><a href="#staking">What is staking</a></li>
+          <li><a href="#timeline">Staking timeline</a></li>
+          <li><a href="#choosing-validator">Choosing the&nbsp;right validator</li>
+          <li><a href="#score">How Does the&nbsp;Validator Score V1 Work?</a></li>
+          <li><a href="#data-centers">Data Centers</a></li>
+        </ul>
+        <h3>Dictionary</h3>
+        <ul class="list-large list-no-bullets mb-5">
+          <li><a href="#commission">Commission</a></li>
+          <li><a href="#epoch">Epoch</a></li>
+          <li><a href="#root-distance">Root Distance</a></li>
+          <li><a href="#vote-distance">Vote Distance</a></li>
+          <li><a href="#skipped-vote">Skipped Slot&nbsp;&percnt;</a></li>
+          <li><a href="#delinquency">Delinquency</a></li>
+          <li><a href="#stake-concentration">Stake Concentration</a></li>
+          <li><a href="#stake-pool">Stake Pool</a></li>
+        </ul>
+      </div>
 
-</ul>
+  <div class="col-md-6">
+        <h3>
+          <%= image_tag 'solana_logo_white.png', height: '22', class: 'mr-1' %> FAQ - validators</h3>
+        <ul class="list-large list-no-bullets mb-5">
+          <li><a href="#new-validator">How to become a validator?</a></li>
+          <li><a href="#personal-data">How is my Personal Data protected?</a></li>
+          <li><a href="#private-validator">Why is my validator marked "private"?</a></li>
+          <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
+          <li><a href="#avatar">How can I change my avatar (validator logo)?</a></li>
+        </ul>
 
+        <h3>
+          <i class="fas fa-dollar-sign mr-1"></i> FAQ - investors</h3>
+        <ul class="list-large list-no-bullets mb-5">
+          <li><a href="#best-validator">How to find the best validator?</a></li>
+          <li><a href="#change-validator">How often can I change the validator?</a></li>
+          <li><a href="#staking-rewards">How often are the staking rewards paid out?</a></li>
+        </ul>
+      </div>
+</div>
 
 <hr />
 
@@ -276,6 +289,12 @@
 
 <h4 class="mb-5">FAQ</h4>
 
+<h6 id="new-validator">How to become a validator?</h6>
+<p class="mb-5">
+  Please take a&nbsp;look at this detailed guide on Solana website:
+  <%= link_to "https://docs.solana.com/running-validator", "https://docs.solana.com/running-validator" %>.
+</p>
+
 <h6 id="personal-data">How is my Personal Data protected?</h6>
 <p class="mb-5">
   All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by
@@ -305,15 +324,23 @@
   automatically within 24&nbsp;hours.
 </p>
 
-<h6 id="new-validator">How to become a validator?</h6>
-<p class="mb-5">
-  Please take a&nbsp;look at this detailed guide on Solana website:
-  <%= link_to "https://docs.solana.com/running-validator", "https://docs.solana.com/running-validator" %>.
-</p>
-
 <h6 id="best-validator">How to find the best validator?</h6>
 <p class="mb-5">
   To find a good validator, start at the top of the 'Score' view on the home page and click through to see validator
   details. Then please read <%= link_to 'Choosing Validator', '#choosing-validator' %> section on this page to find out
   what you should watch out for.
+</p>
+
+<h6 id="change-validator">How often can I change the validator? Is there a minimum period?</h6>
+<p class="mb-5">
+  It usually takes 1 epoch for stake to warm up or cool down. Try to split your stake across several validators. Please
+  also read our advice <%= link_to "how to choose the right validator", "#choosing-validator" %> and check out Solana
+  <%= link_to "stake pool", "https://spl.solana.com/stake-pool/overview" %> program.
+</p>
+
+<h6 id="staking-rewards">How often are the staking rewards paid out?</h6>
+<p class="mb-5">
+  It usually takes 1 epoch for stake to warm up or cool down. Try to split your stake across several validators. Please
+  also read our advice <%= link_to "how to choose the right validator", "#choosing-validator" %> and check out Solana
+  <%= link_to "stake pool", "https://spl.solana.com/stake-pool/overview" %> program.
 </p>
