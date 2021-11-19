@@ -23,15 +23,11 @@ class StakeAccountQuery
     'account as validator_account'
   ].freeze
 
-  def initialize(options)
-    @network = options.fetch(:network, 'testnet')
-    @sort_by = options.fetch(:sort_by, 'epoch_desc') || 'epoch_desc'
-    @filter_by = {
-      account: options.fetch(:filter_account),
-      staker: options.fetch(:filter_staker),
-      withdrawer: options.fetch(:filter_withdrawer),
-      validator: options.fetch(:filter_validator)
-    }
+  attr_reader :payload
+
+  def initialize(network: 'testnet', payload: nil)
+    @network = network
+    @payload = payload
   end
 
   def all_records
@@ -42,48 +38,61 @@ class StakeAccountQuery
                                    network: @network
                                  )
 
-    stake_accounts = stake_accounts.filter_by_account(@filter_by[:account]) \
-      unless @filter_by[:account].blank?
-    stake_accounts = stake_accounts.filter_by_staker(@filter_by[:staker]) \
-      unless @filter_by[:staker].blank?
-    stake_accounts = stake_accounts.filter_by_withdrawer(@filter_by[:withdrawer]) \
-      unless @filter_by[:withdrawer].blank?
+    StakeAccountQuery.new(network: @network, payload: stake_accounts)
+  end
 
-    unless @filter_by[:validator].blank?
+  def filter_by_account(account)
+    p = account.blank? ? @payload : @payload.filter_by_account(account)
+    StakeAccountQuery.new(network: @network, payload: p)
+  end
+
+  def filter_by_staker(staker)
+    p = staker.blank? ? @payload : @payload.filter_by_staker(staker)
+    StakeAccountQuery.new(network: @network, payload: p)
+  end
+
+  def filter_by_withdrawer(withdrawer)
+    p = withdrawer.blank? ? @payload : @payload.filter_by_withdrawer(withdrawer)
+    StakeAccountQuery.new(network: @network, payload: p)
+  end
+
+  def filter_by_validator(validator_query)
+    unless validator_query.blank?
       selected_validators = ValidatorSearchQuery.new(
         Validator.where(network: @network)
-      ).search(@filter_by[:validator]).pluck(:id)
+      ).search(validator_query).pluck(:id)
 
-      stake_accounts = stake_accounts.where(validator_id: selected_validators)
+      p = @payload.where(validator_id: selected_validators)
+      return StakeAccountQuery.new(network: @network, payload: p)
     end
+    StakeAccountQuery.new(network: @network, payload: @payload)
+  end
 
-    sorted(stake_accounts)
+  def sorted_by(sort_by)
+    case sort_by
+    when 'epoch_desc'
+      p = @payload.order(activation_epoch: :desc)
+    when 'epoch_asc'
+      p = @payload.order(activation_epoch: :asc)
+    when 'withdrawer_desc'
+      p = @payload.order(withdrawer: :desc)
+    when 'withdrawer_asc'
+      p = @payload.order(withdrawer: :asc)
+    when 'staker_desc'
+      p = @payload.order(staker: :desc)
+    when 'staker_asc'
+      p = @payload.order(staker: :asc)
+    when 'stake_desc'
+      p = @payload.order(delegated_stake: :desc)
+    when 'stake_asc'
+      p = @payload.order(delegated_stake: :asc)
+    else
+      p = @payload.order(created_at: :desc)
+    end
+    StakeAccountQuery.new(network: @network, payload: p)
   end
 
   private
-
-  def sorted(stake_accounts)
-    case @sort_by
-    when 'epoch_desc'
-      stake_accounts.order(activation_epoch: :desc)
-    when 'epoch_asc'
-      stake_accounts.order(activation_epoch: :asc)
-    when 'withdrawer_desc'
-      stake_accounts.order(withdrawer: :desc)
-    when 'withdrawer_asc'
-      stake_accounts.order(withdrawer: :asc)
-    when 'staker_desc'
-      stake_accounts.order(staker: :desc)
-    when 'staker_asc'
-      stake_accounts.order(staker: :asc)
-    when 'stake_desc'
-      stake_accounts.order(delegated_stake: :desc)
-    when 'stake_asc'
-      stake_accounts.order(delegated_stake: :asc)
-    else
-      stake_accounts.order(created_at: :desc)
-    end
-  end
 
   def query_fields
     stake_account_fields = STAKE_ACCOUNT_FIELDS.map do |field|

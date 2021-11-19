@@ -48,33 +48,21 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
 
   test 'when no data provided return all records' do
 
-    stake_accounts_query = StakeAccountQuery.new(
+    stake_accounts = StakeAccountQuery.new(
       network: 'testnet',
-      sort_by: nil,
-      filter_account: nil,
-      filter_staker: nil,
-      filter_withdrawer: nil,
-      filter_validator: nil
-    )
-
-    stake_accounts = stake_accounts_query.all_records
+    ).all_records.payload
 
     assert_equal 2, stake_accounts.size
-    assert_equal 2, stake_accounts.first.activation_epoch
+    assert_equal 1, stake_accounts.first.activation_epoch
   end
 
   test 'when filter_account provided return correct records' do
 
-    stake_accounts_query = StakeAccountQuery.new(
-      network: 'testnet',
-      sort_by: nil,
-      filter_account: 'stake_pubkey_1',
-      filter_staker: nil,
-      filter_withdrawer: nil,
-      filter_validator: nil
-    )
-
-    stake_accounts = stake_accounts_query.all_records
+    stake_accounts = StakeAccountQuery.new(
+      network: 'testnet'
+    ).all_records
+     .filter_by_account('stake_pubkey_1')
+     .payload
 
     assert_equal 1, stake_accounts.size
     assert_equal 'stake_pubkey_1', stake_accounts.first.stake_pubkey
@@ -82,16 +70,11 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
 
   test 'when filter_staker provided return correct records' do
 
-    stake_accounts_query = StakeAccountQuery.new(
-      network: 'testnet',
-      sort_by: nil,
-      filter_account: nil,
-      filter_staker: 'staker_key',
-      filter_withdrawer: nil,
-      filter_validator: nil
-    )
-
-    stake_accounts = stake_accounts_query.all_records
+    stake_accounts = StakeAccountQuery.new(
+      network: 'testnet'
+    ).all_records
+     .filter_by_staker('staker_key')
+     .payload
 
     assert_equal 1, stake_accounts.size
     assert_equal 'staker_key', stake_accounts.first.staker
@@ -99,16 +82,11 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
 
   test 'when filter_withdrawer provided return correct records' do
 
-    stake_accounts_query = StakeAccountQuery.new(
-      network: 'testnet',
-      sort_by: nil,
-      filter_account: nil,
-      filter_staker: nil,
-      filter_withdrawer: @stake_pool.authority,
-      filter_validator: nil
-    )
-
-    stake_accounts = stake_accounts_query.all_records
+    stake_accounts = StakeAccountQuery.new(
+      network: 'testnet'
+    ).all_records
+     .filter_by_withdrawer(@stake_pool.authority)
+     .payload
 
     assert_equal 1, stake_accounts.size
     assert_equal @stake_pool.authority, stake_accounts.first.withdrawer
@@ -116,16 +94,11 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
 
   test 'when filter_validator provided return correct records' do
 
-    stake_accounts_query = StakeAccountQuery.new(
-      network: 'testnet',
-      sort_by: nil,
-      filter_account: nil,
-      filter_staker: nil,
-      filter_withdrawer: nil,
-      filter_validator: @validator.name
-    )
-
-    stake_accounts = stake_accounts_query.all_records
+    stake_accounts = StakeAccountQuery.new(
+      network: 'testnet'
+    ).all_records
+     .filter_by_validator(@validator.name)
+     .payload
 
     assert_equal 1, stake_accounts.size
     assert_equal @validator.name, stake_accounts.first.validator_name
