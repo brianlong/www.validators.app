@@ -59,7 +59,7 @@ class StakeAccountQuery
       stake_accounts = stake_accounts.where(validator_id: selected_validators)
     end
 
-    sorted(stake_accounts)
+    @sort_by.blank? ? stake_accounts : sorted(stake_accounts)
   end
 
   private
