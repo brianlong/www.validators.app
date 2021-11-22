@@ -50,7 +50,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
 
     stake_accounts_query = StakeAccountQuery.new(
       network: 'testnet',
-      sort_by: nil,
       filter_account: nil,
       filter_staker: nil,
       filter_withdrawer: nil,
@@ -60,7 +59,7 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
     stake_accounts = stake_accounts_query.all_records
 
     assert_equal 2, stake_accounts.size
-    assert_equal 2, stake_accounts.first.activation_epoch
+    assert_equal 1, stake_accounts.first.activation_epoch
   end
 
   test 'when filter_account provided return correct records' do

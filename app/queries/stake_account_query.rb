@@ -25,7 +25,7 @@ class StakeAccountQuery
 
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
-    @sort_by = options.fetch(:sort_by, 'epoch_desc') || 'epoch_desc'
+    @sort_by = options.fetch(:sort_by, nil)
     @filter_by = {
       account: options.fetch(:filter_account),
       staker: options.fetch(:filter_staker),
