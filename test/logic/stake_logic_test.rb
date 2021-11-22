@@ -70,10 +70,11 @@ class StakeLogicTest < ActiveSupport::TestCase
   end
 
   test 'assign_stake_pools' do
+    authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
     stake_pool = create(
       :stake_pool,
       network: 'testnet',
-      authority: 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
+      authority: authority
     )
 
     SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
@@ -84,7 +85,7 @@ class StakeLogicTest < ActiveSupport::TestCase
                   .then(&assign_stake_pools)
 
       assert_equal stake_pool.id, StakeAccount.where(
-        withdrawer: 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
+        withdrawer: authority
       ).first.stake_pool_id
     end
   end
