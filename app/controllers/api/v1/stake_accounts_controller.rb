@@ -3,16 +3,15 @@ module Api
     class StakeAccountsController < BaseController
       def index
         stake_accounts_query = StakeAccountQuery.new(
-          network: index_params[:network]
+          network: index_params[:network],
+          sort_by: index_params[:sort_by],
+          filter_account: index_params[:filter_account],
+          filter_staker: index_params[:filter_staker],
+          filter_withdrawer: index_params[:filter_withdrawer],
+          filter_validator: index_params[:filter_validator]
         )
 
         stake_accounts = stake_accounts_query.all_records
-                                             .filter_by_account(index_params[:filter_account])
-                                             .filter_by_staker(index_params[:filter_staker])
-                                             .filter_by_withdrawer(index_params[:filter_withdrawer])
-                                             .filter_by_validator(index_params[:filter_validator])
-                                             .sorted_by(index_params[:sort_by])
-                                             .payload
 
         @total_count = stake_accounts.size
         @total_stake = stake_accounts.map(&:delegated_stake).compact.sum
