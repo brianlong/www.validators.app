@@ -49,7 +49,7 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   test 'when no data provided return all records' do
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet',
-    ).all_records.payload
+    ).all_records
 
     assert_equal 2, stake_accounts.size
     assert_equal 1, stake_accounts.first.activation_epoch
@@ -60,7 +60,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
       network: 'testnet'
     ).all_records
      .filter_by_account('stake_pubkey_1')
-     .payload
 
     assert_equal 1, stake_accounts.size
     assert_equal 'stake_pubkey_1', stake_accounts.first.stake_pubkey
@@ -71,7 +70,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
       network: 'testnet'
     ).all_records
      .filter_by_staker('staker_key')
-     .payload
 
     assert_equal 1, stake_accounts.size
     assert_equal 'staker_key', stake_accounts.first.staker
@@ -82,7 +80,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
       network: 'testnet'
     ).all_records
      .filter_by_withdrawer(@stake_pool.authority)
-     .payload
 
     assert_equal 1, stake_accounts.size
     assert_equal @stake_pool.authority, stake_accounts.first.withdrawer
@@ -93,7 +90,6 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
       network: 'testnet'
     ).all_records
      .filter_by_validator(@validator.name)
-     .payload
 
     assert_equal 1, stake_accounts.size
     assert_equal @validator.name, stake_accounts.first.validator_name

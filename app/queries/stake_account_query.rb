@@ -25,7 +25,7 @@ class StakeAccountQuery
 
   attr_reader :stake_accounts
 
-  def initialize(network: 'testnet', stake_accounts: )
+  def initialize(network: 'testnet', stake_accounts: nil)
     @network = network
     @stake_accounts = stake_accounts
   end
