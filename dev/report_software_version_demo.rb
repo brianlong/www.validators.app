@@ -9,4 +9,4 @@ payload = {
 p = Pipeline.new(200, payload)
              .then(&report_cluster_stats)
 
-puts p.errors.message
+puts p.errors

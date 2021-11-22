@@ -22,10 +22,10 @@
                       <%= link_to group.first[0], root_path(q: group.first[0]), title: 'Click to show validators with this version' %>
                     </td>
                     <td class="<%= group.first[0] == current_software_version(batch, params[:network]) ? 'h4 text-success' : '' %>">
-                      <%= group.first[1]['stake_percent'].to_f %>%
+                      <%= group.first[1][:stake_percent].to_f %>%
                     </td>
                     <td class="<%= group.first[0] == current_software_version(batch, params[:network]) ? 'h4 text-success' : '' %>">
-                      <%= group.first[1]['count'] %>
+                      <%= group.first[1][:count] %>
                     </td>
                   </tr>
                 <% end %>
