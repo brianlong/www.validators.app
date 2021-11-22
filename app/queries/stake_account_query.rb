@@ -23,67 +23,79 @@ class StakeAccountQuery
     'account as validator_account'
   ].freeze
 
-  attr_reader :stake_accounts
-
-  def initialize(network: 'testnet', stake_accounts: nil)
+  def initialize(network: 'testnet', relation: StakeAccount)
     @network = network
-    @stake_accounts = stake_accounts
+    @relation = relation
+  end
+
+  def call(
+    account: nil,
+    staker: nil,
+    withdrawer: nil,
+    sort: nil,
+    validator_query: nil
+  )
+
+    relation = all_records
+    relation = filter_by_account(relation, account) if account
+    relation = filter_by_staker(relation, staker) if staker
+    relation = filter_by_withdrawer(relation, withdrawer) if withdrawer
+    relation = sort(relation, sort) if sort
+    relation = filter_by_validator_ids(relation, validator_query: validator_query) if validator_query.present?
+
+    relation
   end
 
   def all_records
-    @stake_accounts = StakeAccount.left_outer_joins(:stake_pool)
-                                 .left_outer_joins(:validator)
-                                 .select(query_fields)
-                                 .where(
-                                   network: @network
-                                 )
+    @relation.left_outer_joins(:stake_pool)
+             .left_outer_joins(:validator)
+             .select(query_fields)
+             .where(network: @network)
   end
 
-  def filter_by_account(account)
-    @stake_accounts = account.blank? ? @stake_accounts : @stake_accounts.filter_by_account(account)
+  def filter_by_account(relation, account)
+    relation.filter_by_account(account)
   end
 
-  def filter_by_staker(staker)
-    @stake_accounts = staker.blank? ? @stake_accounts : @stake_accounts.filter_by_staker(staker)
+  def filter_by_staker(relation, staker)
+    relation.filter_by_staker(staker)
   end
 
-  def filter_by_withdrawer(withdrawer)
-    @stake_accounts = withdrawer.blank? ? @stake_accounts : @stake_accounts.filter_by_withdrawer(withdrawer)
+  def filter_by_withdrawer(relation, withdrawer)
+    relation.filter_by_withdrawer(withdrawer)
   end
 
-  def filter_by_validator(validator_query)
-    unless validator_query.blank?
-      selected_validators = ValidatorSearchQuery.new(
-        Validator.where(network: @network)
-      ).search(validator_query).pluck(:id)
+  def filter_by_validator_ids(relation, validator_query: nil)
+    validator_ids = ValidatorSearchQuery.new(
+      Validator.where(network: @network)
+    ).search(validator_query).pluck(:id)
 
-      @stake_accounts = @stake_accounts.where(validator_id: selected_validators)
-    end
-    @stake_accounts
+    relation.where(validator_id: validator_ids)
   end
 
-  def sorted_by(sort_by)
+  def sort(relation, sort_by)
     case sort_by
     when 'epoch_desc'
-      p = @stake_accounts.order(activation_epoch: :desc)
+      relation.order(activation_epoch: :desc)
     when 'epoch_asc'
-      p = @stake_accounts.order(activation_epoch: :asc)
+      relation.order(activation_epoch: :asc)
     when 'withdrawer_desc'
-      p = @stake_accounts.order(withdrawer: :desc)
+      relation.order(withdrawer: :desc)
     when 'withdrawer_asc'
-      p = @stake_accounts.order(withdrawer: :asc)
+      relation.order(withdrawer: :asc)
     when 'staker_desc'
-      p = @stake_accounts.order(staker: :desc)
+      relation.order(staker: :desc)
     when 'staker_asc'
-      p = @stake_accounts.order(staker: :asc)
+      relation.order(staker: :asc)
     when 'stake_desc'
-      p = @stake_accounts.order(delegated_stake: :desc)
+      relation.order(delegated_stake: :desc)
     when 'stake_asc'
-      p = @stake_accounts.order(delegated_stake: :asc)
+      relation.order(delegated_stake: :asc)
     else
-      p = @stake_accounts.order(created_at: :desc)
+      relation.order(created_at: :desc)
     end
-    @stake_accounts
+
+    relation
   end
 
   private
@@ -103,5 +115,4 @@ class StakeAccountQuery
 
     [stake_account_fields, stake_pool_fields, validator_fields].join(', ')
   end
-  
 end

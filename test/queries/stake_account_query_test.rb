@@ -49,7 +49,7 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   test 'when no data provided return all records' do
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet',
-    ).all_records
+    ).call
 
     assert_equal 2, stake_accounts.size
     assert_equal 1, stake_accounts.first.activation_epoch
@@ -58,8 +58,7 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   test 'when filter_account provided return correct records' do
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet'
-    ).all_records
-     .filter_by_account('stake_pubkey_1')
+    ).call(account: 'stake_pubkey_1')
 
     assert_equal 1, stake_accounts.size
     assert_equal 'stake_pubkey_1', stake_accounts.first.stake_pubkey
@@ -68,8 +67,7 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   test 'when filter_staker provided return correct records' do
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet'
-    ).all_records
-     .filter_by_staker('staker_key')
+    ).call(staker: 'staker_key')
 
     assert_equal 1, stake_accounts.size
     assert_equal 'staker_key', stake_accounts.first.staker
@@ -78,8 +76,7 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   test 'when filter_withdrawer provided return correct records' do
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet'
-    ).all_records
-     .filter_by_withdrawer(@stake_pool.authority)
+    ).call(withdrawer: @stake_pool.authority)
 
     assert_equal 1, stake_accounts.size
     assert_equal @stake_pool.authority, stake_accounts.first.withdrawer
@@ -88,10 +85,23 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
   test 'when filter_validator provided return correct records' do
     stake_accounts = StakeAccountQuery.new(
       network: 'testnet'
-    ).all_records
-     .filter_by_validator(@validator.name)
+    ).call(validator_query: @validator.name)
 
     assert_equal 1, stake_accounts.size
     assert_equal @validator.name, stake_accounts.first.validator_name
+  end
+
+  test 'all params' do
+    stake_accounts = StakeAccountQuery.new(
+      network: 'testnet'
+    ).call(
+      account: 'stake_pubkey_1',
+      staker: 'staker_key',
+      withdrawer: @stake_pool.authority,
+      sort: 'epoch_desc',
+      validator_query: @validator.name
+    )
+
+    assert_equal 1, stake_accounts.size
   end
 end
