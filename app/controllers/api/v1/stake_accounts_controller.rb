@@ -6,13 +6,13 @@ module Api
           network: index_params[:network]
         )
 
-        stake_accounts = stake_accounts_query.all_records
-                                             .filter_by_account(index_params[:filter_account])
-                                             .filter_by_staker(index_params[:filter_staker])
-                                             .filter_by_withdrawer(index_params[:filter_withdrawer])
-                                             .filter_by_validator(index_params[:filter_validator])
-                                             .sorted_by(index_params[:sort_by])
-                                             .payload
+        stake_accounts = stake_accounts_query.call(
+          account: index_params[:filter_account],
+          staker: index_params[:filter_staker],
+          withdrawer: index_params[:filter_withdrawer],
+          validator_query: index_params[:filter_validator],
+          sort: index_params[:sort_by]
+        )
 
         @total_count = stake_accounts.size
         @total_stake = stake_accounts.map(&:delegated_stake).compact.sum
