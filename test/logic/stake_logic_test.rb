@@ -52,7 +52,7 @@ class StakeLogicTest < ActiveSupport::TestCase
                   .then(&get_stake_accounts)
 
       assert_not_nil p[:payload][:stake_accounts]
-      assert_equal JSON.parse(@json_data).select{ |sa| sa['withdrawer'] == authority}.count,
+      assert_equal JSON.parse(@json_data).select { |sa| sa['withdrawer'] == authority }.count,
         p[:payload][:stake_accounts].count
     end
   end
