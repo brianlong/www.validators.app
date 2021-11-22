@@ -252,6 +252,7 @@ module ReportLogic
       vah_stats = Stats::VoteAccountHistory.new(network, batch.uuid)
       vbh_stats = Stats::ValidatorBlockHistory.new(network, batch.uuid)
       vs_stats  = Stats::ValidatorScore.new(network, batch.uuid)
+      
       software_report = Report.where(
         network: network,
         name: 'report_software_versions'
