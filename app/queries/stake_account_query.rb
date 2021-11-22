@@ -1,4 +1,4 @@
-class StakeAccountQuery
+class StakeAccountQuery < ApplicationQuery
   STAKE_ACCOUNT_FIELDS = %w[
     created_at
     activation_epoch
