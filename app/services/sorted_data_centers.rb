@@ -4,24 +4,40 @@ class SortedDataCenters
     @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
 
     @results = @results.sort_by { |_k, v| -v[:active_stake] }
-    {
+    result_hash = {
       total_population: @total_population,
       total_stake: @total_stake,
       total_delinquent: @total_delinquent,
       results: @results
     }
+
+    result_hash.merge!({total_private: @total_private}) if @network == 'mainnet'
+
+    result_hash
   end
 
   def initialize(sort_by:, network:)
     @sort_by = sort_by
+    @network = network
+
+    select_statement = [
+      "ips.data_center_key",
+      "ips.traits_autonomous_system_number",
+      "ips.traits_autonomous_system_organization",
+      "ips.country_iso_code",
+      'SUM(IF(validator_score_v1s.delinquent = true, 1, 0)) as delinquent_count',
+      "IF(ISNULL(city_name), location_time_zone, city_name) as location"
+    ]
+
+    # Private validators are only for mainnet
+    # so we don't need this count on testnet.
+    private_validators_count = "SUM(IF(validator_score_v1s.commission = 100, 1, 0)) as private_count"
+
+    select_statement << private_validators_count if @network == 'mainnet'
+
     sql = "
       SELECT DISTINCT
-        ips.data_center_key,
-        ips.traits_autonomous_system_number,
-        ips.traits_autonomous_system_organization,
-        ips.country_iso_code,
-        SUM(IF(validator_score_v1s.delinquent = true, 1, 0)) as delinquent_count,
-        IF(ISNULL(city_name), location_time_zone, city_name) as location
+        #{select_statement.join(', ')}
       FROM ips
       JOIN validator_score_v1s
       ON validator_score_v1s.ip_address = ips.address
@@ -38,16 +54,18 @@ class SortedDataCenters
         ips.country_iso_code,
         location
       "
+
     @dc_sql = Ip.connection.execute(
-      ActiveRecord::Base.send(:sanitize_sql, [sql, network])
+      ActiveRecord::Base.send(:sanitize_sql, [sql, @network])
     )
 
-    @scores = ValidatorScoreV1.where(network: network)
+    @scores = ValidatorScoreV1.where(network: @network)
                               .where('active_stake > 0')
 
     @total_stake = @scores.sum(:active_stake)
     @total_population = 0
     @total_delinquent = 0
+    @total_private = 0
     @results = {}
   end
 
@@ -73,6 +91,13 @@ class SortedDataCenters
         active_stake: active_stake,
         delinquent_validators: delinquent_validators
       }
+
+      # We count private validators only for mainnet.
+      if @network == 'mainnet'
+        private_validators = dc[1].inject(0) { |sum, el| sum + el[6] } || 0
+        @total_private += private_validators
+        @results[dc[0]].merge!({ private_validators: private_validators })
+      end
     end
   end
 
@@ -93,8 +118,15 @@ class SortedDataCenters
         location: dc[3],
         count: population,
         active_stake: active_stake,
-        delinquent_validators: delinquent_validators,
+        delinquent_validators: delinquent_validators
       }
+
+      # We count private validators only for mainnet.
+      if @network == 'mainnet'
+        private_validators = dc[6] || 0
+        @total_private += private_validators
+        @results[dc[0]].merge!({ private_validators: private_validators })
+      end
     end
   end
 end
