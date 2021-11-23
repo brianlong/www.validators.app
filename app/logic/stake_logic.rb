@@ -103,7 +103,7 @@ module StakeLogic
         )
       end
 
-      StakeAccount.where.not(batch_uuid: p.payload[:batch].uuid).delete_all
+      StakeAccount.where(network: p.payload[:network]).where.not(batch_uuid: p.payload[:batch].uuid).delete_all
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
