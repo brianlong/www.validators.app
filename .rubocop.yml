@@ -6,6 +6,7 @@ AllCops:
     - 'test/fixtures/**/*'
     - 'vendor/**/*'
     - 'tmp/**/*'
+    - 'log/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
   TargetRubyVersion: 2.6
   DisabledByDefault: true
