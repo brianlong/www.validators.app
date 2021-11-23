@@ -71,4 +71,14 @@
       padding: 9px 11px;
     }
   }
+  &-xxs {
+    font-weight: $font-weight-normal;
+    border-radius: 18px;
+    padding: 8px 10px;
+    min-width: 90px;
+    @include font-size-smaller;
+    @media(max-width: $screen-xs-max) {
+      padding: 6px 9px;
+    }
+  }
 }
