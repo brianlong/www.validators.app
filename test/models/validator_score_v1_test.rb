@@ -3,6 +3,14 @@
 require 'test_helper'
 
 class ValidatorScoreV1Test < ActiveSupport::TestCase
+  setup do
+    @validator = create(:validator, network: 'mainnet')
+    @validator_score_v1 = create(
+      :validator_score_v1,
+      validator: @validator
+    )
+  end
+
   test 'relationship to validator' do
     validator = create(:validator)
     score = validator.create_validator_score_v1
@@ -33,6 +41,22 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     )
 
     assert_equal 0, validator_score_v1.total_score
+  end
+
+  test 'calculate_total_score correctly calculate score' do
+    @validator_score_v1.assign_attributes(
+      root_distance_score: 2,
+      vote_distance_score: 2,
+      skipped_slot_score: 2,
+      published_information_score: 2,
+      security_report_score: 1,
+      software_version_score: 2,
+      stake_concentration_score: 2,
+      data_center_concentration_score: 2,
+      authorized_withdrawer_score: 0
+    )
+
+    assert_equal 14, @validator_score_v1.calculate_total_score
   end
 
   test 'assign_published_information_score' do
