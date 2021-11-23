@@ -21,7 +21,7 @@ include StakeLogic
               .then(&get_last_batch)
               .then(&move_current_stakes_to_history)
               .then(&get_stake_accounts)
-              .then(&save_stake_accounts)
+              .then(&update_stake_accounts)
               .then(&assign_stake_pools)
 
   puts "finished #{network} with status #{p[:code]}"
