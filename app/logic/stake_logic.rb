@@ -29,15 +29,15 @@ module StakeLogic
         p.payload[:config_urls]
       )
 
-      reduced_stake_accounts = []
+      # reduced_stake_accounts = []
 
-      StakePool.where(network: p.payload[:network]).each do |pool|
-        pool_stake_acc = stake_accounts.select{ |sa| sa['withdrawer'] == pool.authority }
-        reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
-      end
+      # StakePool.where(network: p.payload[:network]).each do |pool|
+      #   pool_stake_acc = stake_accounts.select{ |sa| sa['withdrawer'] == pool.authority }
+      #   reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
+      # end
 
       Pipeline.new(200, p.payload.merge(
-        stake_accounts: reduced_stake_accounts
+        stake_accounts: stake_accounts
       ))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
