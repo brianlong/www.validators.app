@@ -118,7 +118,8 @@ class ValidatorScoreV1 < ApplicationRecord
           security_report_score.to_i +
           software_version_score.to_i +
           stake_concentration_score.to_i +
-          data_center_concentration_score.to_i
+          data_center_concentration_score.to_i +
+          authorized_withdrawer_score.to_i
       end
   end
 
