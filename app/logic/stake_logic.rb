@@ -37,7 +37,7 @@ module StakeLogic
       end
 
       Pipeline.new(200, p.payload.merge(
-        stake_accounts: stake_accounts
+        stake_accounts: reduced_stake_accounts
       ))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
