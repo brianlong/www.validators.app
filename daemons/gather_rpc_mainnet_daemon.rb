@@ -19,7 +19,8 @@ begin
     # Create our initial payload with the input values
     payload = {
       config_urls: Rails.application.credentials.solana[:mainnet_urls],
-      network: network
+      network: network,
+      use_token: true
     }
 
     p = Pipeline.new(200, payload)
