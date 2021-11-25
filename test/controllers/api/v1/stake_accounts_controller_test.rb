@@ -24,7 +24,12 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
   test 'request should return correct results' do
     create(:stake_account, network: 'testnet')
-    create(:stake_pool, network: 'testnet')
+    create(
+      :stake_pool,
+      network: 'testnet',
+      name: 'TestName',
+      
+    )
     get api_v1_stake_accounts_index_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
     assert_response 200
 
