@@ -24,11 +24,16 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
   test 'request should return correct results' do
     create(:stake_account, network: 'testnet')
-    create(
-      :stake_pool,
+
+    stake_pool_attrs = {
       network: 'testnet',
       name: 'TestName',
-      
+      authority: 'authority'
+    }
+    
+    create(
+      :stake_pool,
+      stake_pool_attrs
     )
     get api_v1_stake_accounts_index_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
     assert_response 200
@@ -38,5 +43,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, response_to_json(@response.body)['total_count']
     assert_equal 200, response_to_json(@response.body)['total_stake']
     assert_equal 1, response_to_json(@response.body)['stake_pools'].size
+    assert_equal stake_pool_attrs, \
+      response_to_json(@response.body)['stake_pools'][0].symbolize_keys.extract!(:network, :name, :authority)
   end
 end
