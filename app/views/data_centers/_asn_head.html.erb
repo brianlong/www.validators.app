@@ -37,6 +37,21 @@
       <%= (count_percentage(@results[:total_delinquent], @results[:total_population])) %>%)
     </small>
   </th>
+  <% if params[:network] == 'mainnet' %>
+    <th class="column-md align-middle">
+      Private
+      <i class="fas fa-info-circle small"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="<%= t('definitions.private') %>">
+      </i>
+      <br />
+      <small class="text-muted">
+        (<%= @results[:total_private] %> |
+        <%= (count_percentage(@results[:total_private], @results[:total_population])) %>%)
+      </small>
+    </th>
+  <% end %>
   <th class="column-lg align-middle">
     Active Stake&nbsp;<i class="fas fa-info-circle small"
                          data-toggle="tooltip"

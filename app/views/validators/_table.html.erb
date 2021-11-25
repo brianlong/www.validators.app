@@ -84,15 +84,7 @@
     <tr id="row-<%= i %>">
       <td class="column-avatar d-none d-xl-table-cell align-middle">
         <div class="avatar">
-          <% if validator.private_validator? %>
-            <div class="img-circle-medium-private">
-              <span class='fas fa-users-slash' title="Private Validator"></span>
-            </div>
-          <% elsif validator.avatar_url %>
-            <%= image_tag validator.avatar_url, class: 'img-circle-medium' %>
-          <% else %>
-            <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
-          <% end %>
+          <%= create_avatar_link(validator) %>
         </div>
       </td>
 

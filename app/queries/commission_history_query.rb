@@ -49,6 +49,14 @@ class CommissionHistoryQuery
     sorted(commission_histories)
   end
 
+  def exists_for_validator?(validator_id)
+    CommissionHistory.where(
+      network: @network,
+      created_at: @time_range,
+      validator_id: validator_id
+    ).exists?
+  end
+
   private
 
   def sorted(commission_histories)

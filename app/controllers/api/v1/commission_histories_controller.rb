@@ -21,6 +21,7 @@ module Api
 
         total_count = commission_histories.size
         commission_histories = commission_histories.page(index_params[:page])
+                                                   .per(index_params[:per])
 
         render json: {
           commission_histories: commission_histories.as_json(except: [:validator_id]),
@@ -34,7 +35,7 @@ module Api
       private
 
       def index_params
-        params.permit(:date_from, :date_to, :network, :query, :page, :sort_by)
+        params.permit(:date_from, :date_to, :network, :query, :page, :per, :sort_by)
       end
     end
   end

@@ -1,0 +1,17 @@
+github:
+  slug: brianlong/www.validators.app
+ # e.g.: abinoam/highline
+  access_token: <%= Rails.application.credentials.dig(:github_pronto_access_token) %>
+  api_endpoint: https://api.github.com/
+  web_endpoint: https://github.com/
+max_warnings: 150
+verbose: true
+
+rubocop:
+  # Map of RuboCop severity level to Pronto severity level
+  severities:
+    refactor: info
+    warning: error
+
+  # Enable suggestions
+  suggestions: true

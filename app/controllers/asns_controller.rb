@@ -12,13 +12,14 @@ class AsnsController < ApplicationController
     @scores = ValidatorScoreV1.includes(:validator)
                               .by_network_with_active_stake(asn_params[:network])
                               .by_data_centers(@data_centers)
+                              .filtered_by(asn_params[:filter_by]&.to_sym)
 
     @asn_stake = @scores.sum(:active_stake)
 
     @scores = @scores.page(params[:page])
                      .per(@per)
 
-    @validators = @scores.map(&:validator).compact
+    @validators = @scores.includes(:validator).map(&:validator).compact
     @batch = Batch.last_scored(params[:network])
 
     @population = @scores.total_count
@@ -31,6 +32,6 @@ class AsnsController < ApplicationController
   private
 
   def asn_params
-    params.permit :asn, :network
+    params.permit :asn, :network, :filter_by, :page
   end
 end

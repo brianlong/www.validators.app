@@ -7,7 +7,7 @@ class SkipAndSleep < StandardError; end
 begin
   loop do
     %w[mainnet testnet].each do |network|
-      config_urls = if @network == 'testnet'
+      config_urls = if network == 'testnet'
         Rails.application.credentials.solana[:testnet_urls]
       else
         Rails.application.credentials.solana[:mainnet_urls]
