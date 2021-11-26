@@ -1,4 +1,5 @@
-# Solana Rpc Client
+# frozen_string_literal: true
+
 class SolanaRpcClient
   attr_reader :cluster
 
