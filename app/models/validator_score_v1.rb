@@ -95,6 +95,8 @@ class ValidatorScoreV1 < ApplicationRecord
       where(delinquent: true)
     when :inactive
       includes(:validator).where('validator.is_active': false)
+    when :private
+      where(commission: 100, network: "mainnet")
     else
       all
     end
