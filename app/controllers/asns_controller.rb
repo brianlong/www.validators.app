@@ -14,6 +14,10 @@ class AsnsController < ApplicationController
                               .by_data_centers(@data_centers)
                               .filtered_by(asn_params[:filter_by]&.to_sym)
 
+    if params[:show_private]
+      @scores = @scores.with_private(show: params[:show_private])
+    end
+    
     @asn_stake = @scores.sum(:active_stake)
 
     @scores = @scores.page(params[:page])

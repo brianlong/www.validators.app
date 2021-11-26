@@ -102,6 +102,14 @@ class ValidatorScoreV1 < ApplicationRecord
     end
   end
 
+  def self.with_private(show: "true")
+    if show == "true"
+      all
+    else
+      where.not(commission: 100)
+    end
+  end
+
   def calculate_total_score
     # Assign special scores before calculating the total score
     best_sv = Batch.last_scored(network)&.software_version

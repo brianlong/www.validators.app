@@ -81,7 +81,9 @@
       data_center_url(network: params[:network], key: params[:key]),
       class: 'btn btn-sm btn-secondary mr-1 mb-4' %>
 <% end %>
-
+<% if params[:filter_by].blank? && params[:network] == "mainnet" %>
+  <%= create_link_to_toggle_private(type: :data_center) %>
+<% end %>
 <div class="card mb-4">
   <%= render 'validators/table',
              batch: @batch,
