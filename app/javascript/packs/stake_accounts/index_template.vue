@@ -2,55 +2,56 @@
   <div class="row">
     <div class="col-md-6 mb-3">
       <div class="card">
-        <div class="card-title mt-3 pr-3 pl-3">
-          <h3 class="float-left">Filter by</h3>
-          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-secondary active float-right">
-            Clear filters
-          </a>
-        </div>
         <div class="card-content">
+          <h3 class="card-heading mb-4">Filter by</h3>
           <div class="form-group">
             <label>Withdrawer</label>
-            <input v-model="filter_withdrawer" type="text" class="form-control form-control-xs mb-1">
-            <a 
-              v-for="pool in stake_pools" 
+            <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
+            <a v-for="pool in stake_pools"
               :key="pool.authority"
               href="#"
               @click.prevent="filter_by_withdrawer(pool.authority)"
-              class="btn btn-xxs btn-secondary mb-3 mr-1"
-            >
+              class="btn btn-xs btn-secondary mb-2 mr-1">
               {{ pool.name }}
             </a>
-            <br>
-            <label>Validator</label>
-            <input v-model="filter_validator" type="text" class="form-control form-control-xs mb-3">
-            <label>Stake account</label>
-            <input v-model="filter_account" type="text" class="form-control form-control-xs mb-3">
-            <label>Staker</label>
-            <input v-model="filter_staker" type="text" class="form-control form-control-xs mb-3">
           </div>
+          <div class="form-group">
+            <label>Validator</label>
+            <input v-model="filter_validator" type="text" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Stake account</label>
+            <input v-model="filter_account" type="text" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Staker</label>
+            <input v-model="filter_staker" type="text" class="form-control">
+          </div>
+          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-tertiary mb-2">
+            Clear filters
+          </a>
         </div>
       </div>
     </div>
-    <div class="col-md-6 mb-3">
+    <div class="col-md-6">
       <div class="card">
-        <h3 class="card-title pl-3 mt-3">Statistics</h3>
-        <div class="card-content row">
-          <table class="table table-block-sm mb-0" v-if="!is_loading">
-            <tbody>
-              <tr>
-                <td>Total stake: </td>
-                <td>{{ (total_stake / 1000000000).toFixed(3) }} SOL</td>
-              </tr>
-              <tr>
-                <td>Number of accounts: </td>
-                <td>{{ total_count }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div v-if="is_loading" class="text-center mt-5 mb-5 col-12">
-            Loading ...
-          </div>
+        <div class="card-content">
+          <h3 class="card-heading mb-4">Statistics</h3>
+        </div>
+        <table class="table table-block-sm mb-0" v-if="!is_loading">
+          <tbody>
+            <tr>
+              <td>Total stake: </td>
+              <td>{{ (total_stake / 1000000000).toFixed(3) }} SOL</td>
+            </tr>
+            <tr>
+              <td>Number of accounts: </td>
+              <td>{{ total_count }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="is_loading" class="text-center mt-5 mb-5 col-12">
+          Loading ...
         </div>
       </div>
     </div>
@@ -100,7 +101,7 @@
               @click.prevent="reset_filters"
               :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
               id='reset-filters'
-              class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a> -->
+              class='btn btn-sm btn-primary'>Reset filters</a> -->
           </div>
         </div>
       </div>
