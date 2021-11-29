@@ -70,8 +70,5 @@
     padding: 8px 12px;
     min-width: 70px;
     @include font-size-smaller;
-    //@media(max-width: $screen-xs-max) {
-    //  padding: 8px 11px;
-    //}
   }
 }
