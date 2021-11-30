@@ -2,16 +2,16 @@
 
 @mixin item($padding-y) {
   display: inline-block;
-  margin-right: $margin-standard;
+  margin: 0 $margin-standard 0 0;
   white-space: nowrap;
   background-color: transparent;
   border: 2px solid $green;
   border-radius: 0;
   @include font-size-smaller;
   font-weight: $font-weight-normal;
-  padding: $padding-y 0px;
+  padding: $padding-y 0;
   @media(max-width: $screen-xs-max) {
-    padding: 9px 0px;
+    padding: 9px 0;
   }
 }
 
@@ -56,11 +56,8 @@
 
 
 .pagination {
-  margin-bottom: $margin-standard*2;
   display: inline-block;
-  @media(max-width: $screen-lg-max) {
-    margin-bottom: $margin-standard;
-  }
+  margin-bottom: $margin-standard;
   @media(max-width: $screen-md-max) {
     overflow-x: scroll;
     display: flex;

@@ -1,7 +1,7 @@
 <template>
   <div class="card mb-4">
     <div class="table-responsive-lg">
-      <table class='table mb-0'>
+      <table class='table'>
         <thead>
           <tr>
             <th class="column-xl align-middle">
@@ -23,7 +23,7 @@
           </commission-history-row>
         </tbody>
       </table>
-      <div class="pt-2 px-3">
+      <div class="py-2 px-3">
         <b-pagination
             v-model="page"
             :total-rows="total_count"
@@ -32,9 +32,9 @@
             last-text="Last »" />
         <a href='#'
            @click.prevent="reset_filters"
-           :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
+           :style="{display: resetFilterVisibility() ? 'inline-block' : 'none'}"
            id='reset-filters'
-           class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a>
+           class='btn btn-xs btn-primary'>Reset filters</a>
       </div>
     </div>
   </div>

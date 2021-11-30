@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-6 mb-3">
-      <div class="card">
+      <div class="card mb-3">
         <div class="card-content">
           <h3 class="card-heading mb-4">Filter by</h3>
           <div class="form-group">
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="card">
+      <div class="card mb-3">
         <div class="card-content">
           <h3 class="card-heading mb-4">Statistics</h3>
         </div>
@@ -58,7 +58,7 @@
     <div class="col-12" v-if="!is_loading">
       <div class="card mb-4">
         <div class="table-responsive-lg">
-          <table class='table mb-0'>
+          <table class='table'>
             <thead>
               <tr>
                 <th class="column-xl align-middle">
@@ -90,20 +90,15 @@
               </stake-account-row>
             </tbody>
           </table>
-          <div class="pt-2 px-3">
-            <b-pagination
-                v-model="page"
-                :total-rows="total_count"
-                :per-page="25"
-                first-text="« First"
-                last-text="Last »" />
-            <!-- <a href='#'
-              @click.prevent="reset_filters"
-              :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
-              id='reset-filters'
-              class='btn btn-sm btn-primary'>Reset filters</a> -->
-          </div>
         </div>
+        <div class="px-15">
+          <b-pagination
+           v-model="page"
+           total-rows="total_count"
+           :per-page="25"
+           first-text="« First"
+           last-text="Last »" />
+         </div>
       </div>
     </div>
     <div v-if="is_loading" class="col-12 text-center mt-5">
