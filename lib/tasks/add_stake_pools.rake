@@ -3,27 +3,27 @@ namespace :add_stake_pool do
     stake_pools = [
       {
         name: "Socean",
-        ticker: 'SCNSOL',
-        authority: 'AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck',
-        network: 'mainnet'
+        ticker: "SCNSOL",
+        authority: "AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck",
+        network: "mainnet"
       },
       {
-        name: 'Marinade',
-        ticker: 'MSOL',
-        authority: '9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco',
-        network: 'mainnet'
+        name: "Marinade",
+        ticker: "MSOL",
+        authority: "9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco",
+        network: "mainnet"
       },
       {
-        name: 'Jpool',
-        ticker: 'JSOL',
-        authority: 'HbJTxftxnXgpePCshA8FubsRj9MW4kfPscfuUfn44fnt',
-        network: 'mainnet'
+        name: "Jpool",
+        ticker: "JSOL",
+        authority: "HbJTxftxnXgpePCshA8FubsRj9MW4kfPscfuUfn44fnt",
+        network: "mainnet"
       },
       {
-        name: 'Lido',
-        ticker: 'STSOL',
-        authority: 'W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5',
-        network: 'mainnet'
+        name: "Lido",
+        ticker: "STSOL",
+        authority: "W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5",
+        network: "mainnet"
       }
     ]
 
@@ -41,9 +41,9 @@ namespace :add_stake_pool do
   task testnet: :environment do
     stake_pools = [
       {
-        name: 'Jpool',
-        authority: '25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT',
-        network: 'testnet'
+        name: "Jpool",
+        authority: "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+        network: "testnet"
       }
     ]
 
