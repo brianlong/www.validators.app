@@ -19,6 +19,6 @@ class ClusterStatsController < ApplicationController
   private
 
   def gather_stats_for(network)
-    Report.where(name: 'report_cluster_stats', network: network).last.payload.deep_symbolize_keys
+    Report.where(name: "report_cluster_stats", network: network).last.payload.deep_symbolize_keys
   end
 end
