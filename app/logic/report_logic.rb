@@ -283,7 +283,7 @@ module ReportLogic
 
       Pipeline.new(200, p.payload.merge(result: payload))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'report_cluster_stats', e)
+      Pipeline.new(500, p.payload, "report_cluster_stats", e)
     end
   end
 end
