@@ -90,7 +90,7 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
     assert_equal skipped_votes_stats, 
                  stats[:skipped_votes_percent], "Skipped Vote Stats"
     assert_equal skipped_vote_moving_average_stats, 
-                 stats[:skipped_votes_percent_moving_average] , 'skipped_vote_moving_average_stats'
+                 stats[:skipped_votes_percent_moving_average] , "skipped_vote_moving_average_stats"
     assert_equal root_distance_stats, 
                  stats[:root_distance], 'root_distance_stats'
     assert_equal vote_distance_stats, 
