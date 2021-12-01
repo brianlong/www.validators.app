@@ -103,11 +103,7 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   def self.with_private(show: "true")
-    if show == "true"
-      all
-    else
-      where.not(commission: 100)
-    end
+    show == "true" ? all : where.not(commission: 100)
   end
 
   def calculate_total_score
@@ -252,8 +248,8 @@ class ValidatorScoreV1 < ApplicationRecord
   def to_builder
     Jbuilder.new do |vs_v1|
       vs_v1.(
-        self, 
-        :total_score, 
+        self,
+        :total_score,
         :root_distance_score,
         :vote_distance_score,
         :skipped_slot_score,
