@@ -77,7 +77,7 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal stats[:batch_uuid], Batch.last_scored(network).uuid
     assert_equal top_staked_validators, stats[:top_staked_validators].map(&:first), 'Top Staked Validators'
-    assert_equal top_skipped_vote_validators.map(&:to_s), stats[:top_skipped_vote_validators].map(&:first), 'Top Skipped Vote'
+    assert_equal top_skipped_vote_validators.map(&:to_s), stats[:top_skipped_vote_validators].map(&:first), "Top Skipped Vote"
     assert_equal top_root_distance_validators, stats[:top_root_distance_validators].map(&:first), 'Top Root Distance'
     assert_equal top_vote_distance_averages_validators, stats[:top_vote_distance_validators].map(&:first), 'Top Vote Distance'
     assert_equal top_skipped_slot_percent.map(&:to_s), stats[:top_skipped_slot_validators].map(&:first), 'Top Skipped Slot'
