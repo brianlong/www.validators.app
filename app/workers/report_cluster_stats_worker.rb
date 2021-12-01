@@ -12,7 +12,7 @@ class ReportClusterStatsWorker
     # byebug
     payload = {
       network: args["network"],
-      batch_uuid: args['batch_uuid']
+      batch_uuid: args["batch_uuid"]
     }
 
     _p = Pipeline.new(200, payload)
