@@ -31,21 +31,33 @@ manager_fees = {
 namespace :add_stake_pool do
   task mainnet: :environment do
     stake_pools.each do |sp|
-      StakePool.find_or_create_by(sp)
+      StakePool.find_or_initialize_by(
+        name: sp[:name],
+        network: sp[:network]
+      ).update(
+        ticker: sp[:ticker],
+        authority: sp[:authority],
+      )
     end
   end
 
   task testnet: :environment do
     stake_pools = [
       {
-        name: 'Jpool',
-        authority: '25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT',
-        network: 'testnet'
+        name: "Jpool",
+        authority: "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+        network: "testnet"
       }
     ]
 
     stake_pools.each do |sp|
-      StakePool.find_or_create_by(sp)
+      StakePool.find_or_initialize_by(
+        name: sp[:name],
+        network: sp[:network]
+      ).update(
+        ticker: sp[:ticker],
+        authority: sp[:authority],
+      )
     end
   end
 end
