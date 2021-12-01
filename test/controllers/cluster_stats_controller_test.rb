@@ -20,7 +20,7 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
 
   test 'Cluster Stats Index shows proper data for mainnet' do
     data = prepare_data_for_cluster_stats('mainnet')
-    generate_report('mainnet')
+    generate_report("mainnet")
     sign_in @user
     get cluster_stats_url(network: 'mainnet')
 
