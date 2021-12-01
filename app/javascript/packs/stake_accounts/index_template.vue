@@ -50,8 +50,8 @@
             </tr>
           </tbody>
         </table>
-        <div v-if="is_loading" class="text-center mt-5 mb-5 col-12">
-          Loading ...
+        <div v-if="is_loading" class="text-center my-5">
+          <img v-bind:src="loading_image" width="100">
         </div>
       </div>
     </div>
@@ -99,14 +99,15 @@
          last-text="Last »" />
       </div>
     </div>
-    <div v-if="is_loading" class="col-12 text-center mt-5">
-      Loading ...
+    <div v-if="is_loading" class="col-12 text-center my-5">
+      <img v-bind:src="loading_image" width="100">
     </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
+  import loadingImage from 'loading.gif'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -126,6 +127,7 @@
         filter_account: null,
         filter_validator: null,
         is_loading: true,
+        loading_image: loadingImage,
         stake_pools: [
           {
             name: 'Marinade',
