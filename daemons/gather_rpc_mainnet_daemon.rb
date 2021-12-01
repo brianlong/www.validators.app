@@ -52,10 +52,6 @@ begin
       batch_uuid: p.payload[:batch_uuid],
       network: p.payload[:network]
     )
-    ReportClusterStatsWorker.set(queue: :high_priority).perform_async(
-      batch_uuid: p.payload[:batch_uuid],
-      network: p.payload[:network]
-    )
 
     break if interrupted
   rescue SkipAndSleep => e

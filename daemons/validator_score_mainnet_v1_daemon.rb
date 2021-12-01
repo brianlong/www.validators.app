@@ -45,6 +45,11 @@ begin
     batch.scored_at = Time.now
     batch.save
 
+    ReportClusterStatsWorker.set(queue: :high_priority).perform_async(
+      batch_uuid: batch.uuid,
+      network: p.payload[:network]
+    )
+
     break if interrupted
   rescue SkipAndSleep
     break if interrupted
