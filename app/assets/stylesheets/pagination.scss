@@ -57,7 +57,8 @@
 
 .pagination {
   display: inline-block;
-  margin-bottom: $margin-standard;
+  margin-bottom: 20px;
+  padding: 0 $padding-standard;
   @media(max-width: $screen-md-max) {
     overflow-x: scroll;
     display: flex;

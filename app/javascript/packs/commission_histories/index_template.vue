@@ -23,19 +23,17 @@
           </commission-history-row>
         </tbody>
       </table>
-      <div class="py-2 px-3">
-        <b-pagination
-            v-model="page"
-            :total-rows="total_count"
-            :per-page="25"
-            first-text="« First"
-            last-text="Last »" />
-        <a href='#'
-           @click.prevent="reset_filters"
-           :style="{display: resetFilterVisibility() ? 'inline-block' : 'none'}"
-           id='reset-filters'
-           class='btn btn-xs btn-primary'>Reset filters</a>
-      </div>
+      <b-pagination
+          v-model="page"
+          :total-rows="total_count"
+          :per-page="25"
+          first-text="« First"
+          last-text="Last »" />
+      <a href='#'
+         @click.prevent="reset_filters"
+         :style="{display: resetFilterVisibility() ? 'inline-block' : 'none'}"
+         id='reset-filters'
+         class='btn btn-xs btn-primary'>Reset filters</a>
     </div>
   </div>
 </template>

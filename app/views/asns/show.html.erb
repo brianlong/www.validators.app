@@ -75,9 +75,7 @@
              show_ip_and_gateway: true,
              show_version: false,
              items_per_page: @per %>
-  <div class="px-15">
-    <%= paginate @scores %>
-  </div>
+  <%= paginate @scores %>
 </div>
 
 <%= link_to 'Back to ASN list',

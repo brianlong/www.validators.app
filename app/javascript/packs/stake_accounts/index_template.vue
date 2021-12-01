@@ -91,14 +91,12 @@
             </tbody>
           </table>
         </div>
-        <div class="px-15">
-          <b-pagination
-           v-model="page"
-           total-rows="total_count"
-           :per-page="25"
-           first-text="« First"
-           last-text="Last »" />
-         </div>
+        <b-pagination
+         v-model="page"
+         total-rows="total_count"
+         :per-page="25"
+         first-text="« First"
+         last-text="Last »" />
       </div>
     </div>
     <div v-if="is_loading" class="col-12 text-center mt-5">
