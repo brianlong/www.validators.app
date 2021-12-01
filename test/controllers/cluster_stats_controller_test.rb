@@ -82,7 +82,7 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
     assert_equal top_skipped_vote_validators.map(&:to_s), 
                  stats[:top_skipped_vote_validators].map(&:first), "Top Skipped Vote"
     assert_equal top_root_distance_validators, 
-                 stats[:top_root_distance_validators].map(&:first), 'Top Root Distance'
+                 stats[:top_root_distance_validators].map(&:first), "Top Root Distance"
     assert_equal top_vote_distance_averages_validators, 
                  stats[:top_vote_distance_validators].map(&:first), 'Top Vote Distance'
     assert_equal top_skipped_slot_percent.map(&:to_s), 
