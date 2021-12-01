@@ -28,7 +28,7 @@
             <input v-model="filter_staker" type="text" class="form-control">
           </div>
           <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-tertiary mb-2">
-            Clear filters
+            Reset filters
           </a>
         </div>
       </div>

@@ -42,10 +42,10 @@
     @include btn-hover($green, $green, $background-color);
   }
   &-tertiary {
-    background-color: $purple;
-    border-color: $purple;
+    background-color: $link-color;
+    border-color: $link-color;
     color: $background-color;
-    @include btn-hover(transparent, $purple, $white);
+    @include btn-hover(transparent, $link-color, $white);
   }
   &-lg {
     border-radius: 34px;
