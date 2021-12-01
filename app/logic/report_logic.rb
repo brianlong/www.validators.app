@@ -277,7 +277,7 @@ module ReportLogic
       Report.create(
         network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid],
-        name: 'report_cluster_stats',
+        name: "report_cluster_stats",
         payload: payload
       )
 
