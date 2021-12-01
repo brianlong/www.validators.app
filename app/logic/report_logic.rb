@@ -255,7 +255,7 @@ module ReportLogic
       
       software_report = Report.where(
         network: network,
-        name: 'report_software_versions'
+        name: "report_software_versions"
       ).last&.payload
 
       payload = {
