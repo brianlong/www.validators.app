@@ -11,7 +11,7 @@ class ReportClusterStatsWorker
   def perform(args = {})
     # byebug
     payload = {
-      network: args['network'],
+      network: args["network"],
       batch_uuid: args['batch_uuid']
     }
 
