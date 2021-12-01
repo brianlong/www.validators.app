@@ -66,14 +66,14 @@
     asn_url(network: params[:network], asn: params[:asn], filter_by: :private),
     class: "btn btn-sm btn-secondary mr-1 mb-4 #{'active' if params[:filter_by] == 'private'}" %>
 
+<% if params[:filter_by].blank? && params[:network] == "mainnet" %>
+  <%= link_to_toggle_private(type: :asn, url_params: params) %>
+<% end %>
+
 <% unless params[:filter_by].blank? %>
   <%= link_to 'Reset filters',
       asn_url(network: params[:network], asn: params[:asn]),
-      class: 'btn btn-sm btn-secondary mr-1 mb-4' %>
-<% end %>
-
-<% if params[:filter_by].blank? && params[:network] == "mainnet" %>
-  <%= link_to_toggle_private(type: :asn, url_params: params) %>
+      class: 'btn btn-sm btn-secondary mr-1 mb-4 float-right' %>
 <% end %>
 
 <div class="card mb-4">

@@ -76,14 +76,16 @@
 <%= link_to 'Filter by private',
     data_center_url(network: params[:network], key: params[:key], filter_by: :private),
     class: "btn btn-sm btn-secondary mr-1 mb-4 #{'active' if params[:filter_by] == 'private'}" %>
-<% if !params[:filter_by].blank? %>
-  <%= link_to 'Reset filters',
-      data_center_url(network: params[:network], key: params[:key]),
-      class: 'btn btn-sm btn-secondary mr-1 mb-4' %>
-<% end %>
 <% if params[:filter_by].blank? && params[:network] == "mainnet" %>
   <%= link_to_toggle_private(type: :data_center, url_params: params) %>
 <% end %>
+
+<% if !params[:filter_by].blank? %>
+  <%= link_to 'Reset filters',
+      data_center_url(network: params[:network], key: params[:key]),
+      class: 'btn btn-sm btn-secondary mr-1 mb-4 float-right' %>
+<% end %>
+
 <div class="card mb-4">
   <%= render 'validators/table',
              batch: @batch,
