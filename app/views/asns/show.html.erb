@@ -73,7 +73,7 @@
 <% end %>
 
 <% if params[:filter_by].blank? && params[:network] == "mainnet" %>
-  <%= create_link_to_toggle_private(type: :asn) %>
+  <%= link_to_toggle_private(type: :asn, url_params: params) %>
 <% end %>
 
 <div class="card mb-4">
