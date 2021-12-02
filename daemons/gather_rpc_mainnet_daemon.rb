@@ -19,7 +19,8 @@ begin
     # Create our initial payload with the input values
     payload = {
       config_urls: Rails.application.credentials.solana[:mainnet_urls],
-      network: network
+      network: network,
+      use_token: true
     }
 
     p = Pipeline.new(200, payload)
@@ -36,6 +37,14 @@ begin
                 .then(&log_errors)
                 .then(&batch_touch)
                 .then(&check_epoch)
+    
+    # After switching to better server we exceed connection rate limit:
+    # Maximum connection rate per 10 seconds per IP: 40
+    # We want to slow down a bit.
+    # 
+    # More info about limits:
+    # https://docs.solana.com/cluster/rpc-endpoints#mainnet-beta
+    sleep 2
 
     raise SkipAndSleep, p.code unless p.code == 200
 

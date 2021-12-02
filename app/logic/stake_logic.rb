@@ -54,7 +54,7 @@ module StakeLogic
         batch_uuid: p.payload[:batch].uuid,
         network: p.payload[:network]
       ).each do |old_stake|
-        account_histories.push StakeAccountHistory.new(old_stake.attributes)
+        account_histories.push StakeAccountHistory.new(old_stake.attributes.except("id"))
       end
 
       if account_histories.any?

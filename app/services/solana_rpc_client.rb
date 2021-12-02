@@ -1,6 +1,13 @@
+# frozen_string_literal: true
+
 class SolanaRpcClient
-  def initialize(cluster: nil)
-    @cluster = cluster
+  attr_reader :cluster
+
+  def initialize(cluster: nil, use_token: false)
+    token = Rails.application.credentials.dig(:solana, :rpc_token)
+    cluster_url = use_token ? "#{cluster}/#{token}" : cluster
+
+    @cluster = cluster_url
   end
 
   def client

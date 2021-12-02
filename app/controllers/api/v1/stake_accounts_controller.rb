@@ -13,6 +13,7 @@ module Api
 
         stake_accounts = stake_accounts_query.all_records
 
+        @stake_pools = StakePool.where(network: index_params[:network])
         @total_count = stake_accounts.size
         @total_stake = stake_accounts.map(&:delegated_stake).compact.sum
         @stake_accounts = stake_accounts.page(index_params[:page])

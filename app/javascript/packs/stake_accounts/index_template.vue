@@ -127,25 +127,8 @@
         filter_account: null,
         filter_validator: null,
         is_loading: true,
-        loading_image: loadingImage,
-        stake_pools: [
-          {
-            name: 'Marinade',
-            authority: '9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco'
-          },
-          {
-            name: 'Socean',
-            authority: 'AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck'
-          },
-          {
-            name: 'Jpool',
-            authority: '25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT'
-          },
-          {
-            name: 'Lido',
-            authority: 'W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5'
-          }
-        ].sort((a, b) => 0.5 - Math.random())
+        stake_pools: null,
+        loading_image: loadingImage
       }
     },
     created () {
@@ -155,6 +138,7 @@
       axios.get(ctx.api_url, query_params)
            .then(function (response){
              ctx.stake_accounts = response.data.stake_accounts;
+             ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.total_count = response.data.total_count;
              ctx.total_stake = response.data.total_stake;
              ctx.is_loading = false;
