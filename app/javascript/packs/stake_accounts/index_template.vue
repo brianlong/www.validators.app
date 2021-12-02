@@ -61,21 +61,21 @@
           <table class='table'>
             <thead>
               <tr>
-                <th class="column-xl align-middle">
+                <th class="column-md align-middle">
                   <a href="#" @click.prevent="sort_by_stake">Stake</a>
                   <br>
                   Delegated validator
                 </th>
 
-                <th class="column-md align-middle">
+                <th class="column-xl align-middle">
                   Stake Account
                   <br>
                   <a href="#" @click.prevent="sort_by_staker">Staker</a>
                 </th>
-                <th class="column-md align-middle">
+                <th class="column-xl align-middle">
                   <a href="#" @click.prevent="sort_by_withdrawer">Withdrawer</a>
                 </th>
-                <th>
+                <th class="column-sm align-middle">
                   <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
                 </th>
               </tr>
