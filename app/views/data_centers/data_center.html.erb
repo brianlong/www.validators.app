@@ -80,10 +80,10 @@
   <%= link_to_toggle_private(type: :data_center, url_params: params) %>
 <% end %>
 
-<% if !params[:filter_by].blank? %>
+<% unless params[:filter_by].blank? %>
   <%= link_to 'Reset filters',
       data_center_url(network: params[:network], key: params[:key]),
-      class: 'btn btn-sm btn-secondary mr-1 mb-4 float-md-right' %>
+      class: 'btn btn-sm btn-tertiary mr-1 mb-4 float-md-right' %>
 <% end %>
 
 <div class="card mb-4">
@@ -93,9 +93,7 @@
              show_ip_and_gateway: true,
              show_version: false,
              items_per_page: @per %>
-  <div class="px-15">
-    <%= paginate @scores %>
-  </div>
+  <%= paginate @scores %>
 </div>
 
 <%= link_to 'Back to Data Centers',

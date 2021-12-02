@@ -50,7 +50,8 @@ module SolanaLogic
     lambda do |p|
       epoch_json = solana_client_request(
         p.payload[:config_urls],
-        :get_epoch_info
+        :get_epoch_info,
+        use_token: p.payload[:use_token]
       )
 
       epoch = EpochHistory.create(
@@ -172,7 +173,8 @@ module SolanaLogic
 
       validators_json = solana_client_request(
         p.payload[:config_urls],
-        :get_cluster_nodes
+        :get_cluster_nodes,
+        use_token: p.payload[:use_token]
       )
 
       validators = {}
@@ -208,7 +210,8 @@ module SolanaLogic
       program_accounts = solana_client_request(
         p.payload[:config_urls],
         :get_program_accounts,
-        params: params
+        params: params,
+        use_token: p.payload[:use_token]
       )
       
       Pipeline.new(200, p.payload.merge(program_accounts: program_accounts))
@@ -298,7 +301,8 @@ module SolanaLogic
 
       vote_accounts_json = solana_client_request(
         p.payload[:config_urls],
-        :get_vote_accounts
+        :get_vote_accounts,
+        use_token: p.payload[:use_token]
       )['current']
 
       vote_accounts = {}
@@ -596,7 +600,8 @@ module SolanaLogic
 
       epoch_json = solana_client_request(
         p.payload[:config_urls],
-        :get_epoch_info
+        :get_epoch_info,
+        use_token: p.payload[:use_token]
       )
 
       unless p.payload[:epoch] == epoch_json['epoch']
@@ -654,9 +659,9 @@ module SolanaLogic
   end
 
   # Clusters array, method symbol
-  def solana_client_request(clusters, method, params: [])
+  def solana_client_request(clusters, method, params: [], use_token: false)
     clusters.each do |cluster_url|
-      client = SolanaRpcClient.new(cluster: cluster_url).client
+      client = SolanaRpcClient.new(cluster: cluster_url, use_token: use_token).client
       result = client.public_send(method, *params).result
 
       return result unless result.blank?

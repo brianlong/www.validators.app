@@ -1,80 +1,81 @@
 <template>
   <div class="row">
     <div class="col-md-6 mb-3">
-      <div class="card">
-        <div class="card-title mt-3 pr-3 pl-3">
-          <h3 class="float-left">Filter by</h3>
-          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-secondary active float-right">
-            Clear filters
-          </a>
-        </div>
+      <div class="card mb-3">
         <div class="card-content">
+          <h3 class="card-heading mb-4">Filter by</h3>
           <div class="form-group">
             <label>Withdrawer</label>
-            <input v-model="filter_withdrawer" type="text" class="form-control form-control-xs mb-1">
-            <a 
-              v-for="pool in stake_pools" 
+            <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
+            <a v-for="pool in stake_pools"
               :key="pool.authority"
               href="#"
               @click.prevent="filter_by_withdrawer(pool.authority)"
-              class="btn btn-xxs btn-secondary mb-3 mr-1"
-            >
+              class="btn btn-xs btn-secondary mb-2 mr-1">
               {{ pool.name }}
             </a>
-            <br>
-            <label>Validator</label>
-            <input v-model="filter_validator" type="text" class="form-control form-control-xs mb-3">
-            <label>Stake account</label>
-            <input v-model="filter_account" type="text" class="form-control form-control-xs mb-3">
-            <label>Staker</label>
-            <input v-model="filter_staker" type="text" class="form-control form-control-xs mb-3">
           </div>
+          <div class="form-group">
+            <label>Validator</label>
+            <input v-model="filter_validator" type="text" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Stake account</label>
+            <input v-model="filter_account" type="text" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Staker</label>
+            <input v-model="filter_staker" type="text" class="form-control">
+          </div>
+          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-tertiary mb-2">
+            Reset filters
+          </a>
         </div>
       </div>
     </div>
-    <div class="col-md-6 mb-3">
-      <div class="card">
-        <h3 class="card-title pl-3 mt-3">Statistics</h3>
-        <div class="card-content row">
-          <table class="table table-block-sm mb-0" v-if="!is_loading">
-            <tbody>
-              <tr>
-                <td>Total stake: </td>
-                <td>{{ (total_stake / 1000000000).toFixed(3) }} SOL</td>
-              </tr>
-              <tr>
-                <td>Number of accounts: </td>
-                <td>{{ total_count }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div v-if="is_loading" class="text-center mt-5 mb-5 col-12">
-            Loading ...
-          </div>
+    <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-content">
+          <h3 class="card-heading mb-4">Statistics</h3>
+        </div>
+        <table class="table table-block-sm mb-0" v-if="!is_loading">
+          <tbody>
+            <tr>
+              <td>Total stake: </td>
+              <td>{{ (total_stake / 1000000000).toFixed(3) }} SOL</td>
+            </tr>
+            <tr>
+              <td>Number of accounts: </td>
+              <td>{{ total_count }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="is_loading" class="text-center my-5">
+          <img v-bind:src="loading_image" width="100">
         </div>
       </div>
     </div>
     <div class="col-12" v-if="!is_loading">
       <div class="card mb-4">
         <div class="table-responsive-lg">
-          <table class='table mb-0'>
+          <table class='table'>
             <thead>
               <tr>
-                <th class="column-xl align-middle">
+                <th class="column-md align-middle">
                   <a href="#" @click.prevent="sort_by_stake">Stake</a>
                   <br>
                   Delegated validator
                 </th>
 
-                <th class="column-md align-middle">
+                <th class="column-xl align-middle">
                   Stake Account
                   <br>
                   <a href="#" @click.prevent="sort_by_staker">Staker</a>
                 </th>
-                <th class="column-md align-middle">
+                <th class="column-xl align-middle">
                   <a href="#" @click.prevent="sort_by_withdrawer">Withdrawer</a>
                 </th>
-                <th>
+                <th class="column-sm align-middle">
                   <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
                 </th>
               </tr>
@@ -89,30 +90,24 @@
               </stake-account-row>
             </tbody>
           </table>
-          <div class="pt-2 px-3">
-            <b-pagination
-                v-model="page"
-                :total-rows="total_count"
-                :per-page="25"
-                first-text="« First"
-                last-text="Last »" />
-            <!-- <a href='#'
-              @click.prevent="reset_filters"
-              :style="{visibility: resetFilterVisibility() ? 'visible' : 'hidden'}"
-              id='reset-filters'
-              class='btn btn-sm btn-primary mr-2 mb-3 mb-lg-0'>Reset filters</a> -->
-          </div>
         </div>
+        <b-pagination
+         v-model="page"
+         total-rows="total_count"
+         :per-page="25"
+         first-text="« First"
+         last-text="Last »" />
       </div>
     </div>
-    <div v-if="is_loading" class="col-12 text-center mt-5">
-      Loading ...
+    <div v-if="is_loading" class="col-12 text-center my-5">
+      <img v-bind:src="loading_image" width="100">
     </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
+  import loadingImage from 'loading.gif'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -132,24 +127,8 @@
         filter_account: null,
         filter_validator: null,
         is_loading: true,
-        stake_pools: [
-          {
-            name: 'Marinade',
-            authority: '9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco'
-          },
-          {
-            name: 'Socean',
-            authority: 'AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck'
-          },
-          {
-            name: 'Jpool',
-            authority: '25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT'
-          },
-          {
-            name: 'Lido',
-            authority: 'W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5'
-          }
-        ].sort((a, b) => 0.5 - Math.random())
+        stake_pools: null,
+        loading_image: loadingImage
       }
     },
     created () {
@@ -159,6 +138,7 @@
       axios.get(ctx.api_url, query_params)
            .then(function (response){
              ctx.stake_accounts = response.data.stake_accounts;
+             ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.total_count = response.data.total_count;
              ctx.total_stake = response.data.total_stake;
              ctx.is_loading = false;
