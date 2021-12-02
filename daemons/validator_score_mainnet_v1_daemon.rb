@@ -47,7 +47,7 @@ begin
 
     ReportClusterStatsWorker.set(queue: :high_priority).perform_async(
       batch_uuid: batch.uuid,
-      network: p.payload[:network]
+      network: _p.payload[:network]
     )
 
     break if interrupted
