@@ -6,6 +6,7 @@
 #  authority             :string(191)
 #  average_delinquent    :float(24)
 #  average_skipped_slots :float(24)
+#  average_uptime        :float(24)
 #  name                  :string(191)
 #  network               :string(191)
 #  ticker                :string(191)

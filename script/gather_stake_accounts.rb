@@ -23,6 +23,7 @@ include StakeLogic
               .then(&get_stake_accounts)
               .then(&update_stake_accounts)
               .then(&assign_stake_pools)
+              .then(&update_validator_stats)
 
   puts "finished #{network} with status #{p[:code]}"
 end

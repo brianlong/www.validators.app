@@ -136,14 +136,24 @@ module StakeLogic
         validator_ids = pool.stake_accounts.pluck(:validator_id)
         delinquent_count = 0
         last_skipped_slots = []
+        uptimes = []
 
         Validator.where(id: validator_ids).each do |validator|
           score = validator.score
-          validator.validator_histories.order(created_at: :desc).where()
+
+          last_delinquent = validator.validator_histories
+                                     .order(created_at: :desc)
+                                     .where(delinquent: true)
+                                     .first
+                                     &.created_at || (DateTime.now - 30.days)
+
+          uptime = (DateTime.now - last_delinquent).to_i
+          uptimes.push uptime
           delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
           last_skipped_slots.push score.skipped_slot_history&.last
         end
 
+        pool.average_uptime = uptimes.average
         pool.average_delinquent = (delinquent_count / validator_ids.size) * 100
         pool.average_skipped_slots = last_skipped_slots.compact.average
       end
