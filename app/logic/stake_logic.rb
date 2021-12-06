@@ -147,7 +147,7 @@ module StakeLogic
                                      .first
                                      &.created_at || (DateTime.now - 30.days)
 
-          uptime = (DateTime.now - last_delinquent).to_i
+          uptime = (DateTime.now - last_delinquent.to_datetime).to_i
           uptimes.push uptime
           delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
           last_skipped_slots.push score.skipped_slot_history&.last

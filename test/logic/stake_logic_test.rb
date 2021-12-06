@@ -89,4 +89,59 @@ class StakeLogicTest < ActiveSupport::TestCase
       ).first.stake_pool_id
     end
   end
+
+  test 'update_validator_stats' do
+    authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
+
+    validator = create(
+      :validator,
+      network: 'testnet',
+      account: 'account123'
+    )
+
+    validator_history = create(
+      :validator_history,
+      network: 'testnet',
+      delinquent: 'true',
+      created_at: DateTime.now - 3.days,
+      account: 'account123'
+    )
+
+    score = create(
+      :validator_score_v1,
+      validator: validator,
+      skipped_slot_history: [2, 5],
+      delinquent: false,
+      network: 'testnet'
+    )
+
+    vote_account = create(
+      :vote_account,
+      network: 'testnet',
+      account: 'vote_acc'
+    )
+
+    stake_pool = create(
+      :stake_pool,
+      network: 'testnet',
+      authority: authority
+    )
+
+    stake_account = create(
+      :stake_account,
+      stake_pool: stake_pool,
+      delegated_vote_account_address: 'vote_acc',
+      network: 'testnet',
+      validator: validator
+    )
+
+    payload = @initial_payload.merge(stake_pools: [stake_pool])
+    p = Pipeline.new(200, payload)
+                .then(&update_validator_stats)
+
+    assert_equal p.code, 200
+    assert_equal 3, stake_pool.average_uptime
+    assert_equal 0, stake_pool.average_delinquent
+    assert_equal 5, stake_pool.average_skipped_slots
+  end
 end
