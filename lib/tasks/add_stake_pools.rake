@@ -10,7 +10,7 @@ stake_pools = [
     network: 'mainnet',
   },
   {
-    name: 'Jpool',
+    name: "Jpool",
     authority: 'HbJTxftxnXgpePCshA8FubsRj9MW4kfPscfuUfn44fnt',
     network: 'mainnet',
   },
