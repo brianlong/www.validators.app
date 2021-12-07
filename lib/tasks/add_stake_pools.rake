@@ -6,7 +6,7 @@ stake_pools = [
   },
   {
     name: "Marinade",
-    authority: '9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco',
+    authority: "9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco",
     network: 'mainnet',
   },
   {
