@@ -15,7 +15,7 @@ stake_pools = [
     network: "mainnet",
   },
   {
-    name: 'Lido',
+    name: "Lido",
     authority: 'W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5',
     network: 'mainnet',
   }
