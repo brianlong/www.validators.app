@@ -11,7 +11,7 @@ stake_pools = [
   },
   {
     name: "Jpool",
-    authority: 'HbJTxftxnXgpePCshA8FubsRj9MW4kfPscfuUfn44fnt',
+    authority: "HbJTxftxnXgpePCshA8FubsRj9MW4kfPscfuUfn44fnt",
     network: 'mainnet',
   },
   {
