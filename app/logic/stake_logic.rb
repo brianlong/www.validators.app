@@ -73,6 +73,8 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
+      current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).last.epoch
+
       p.payload[:stake_accounts].each do |acc|
         vote_account = VoteAccount.find_by(
           network: p.payload[:network],
@@ -99,7 +101,8 @@ module StakeLogic
           staker: acc['staker'],
           withdrawer: acc['withdrawer'],
           batch_uuid: p.payload[:batch].uuid,
-          validator_id: validator_id
+          validator_id: validator_id,
+          epoch: current_epoch
         )
       end
 

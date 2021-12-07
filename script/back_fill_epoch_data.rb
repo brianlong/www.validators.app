@@ -24,6 +24,7 @@ def get_block_time(http, uri, block)
     "params" => [block]
   })
   resp, _ = http.post(uri, params.to_json, {'Content-Type' => 'application/json'})
+  puts JSON.parse(resp.body)
   JSON.parse(resp.body)['result']
 end
 

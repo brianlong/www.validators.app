@@ -12,6 +12,7 @@
 #  deactivation_epoch             :integer
 #  delegated_stake                :bigint
 #  delegated_vote_account_address :string(191)
+#  epoch                          :integer
 #  network                        :string(191)
 #  rent_exempt_reserve            :bigint
 #  stake_pubkey                   :string(191)
