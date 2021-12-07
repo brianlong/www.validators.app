@@ -10,6 +10,7 @@ class ValidatorsController < ApplicationController
     @per = 25
     validators = Validator.where(network: params[:network])
                           .scorable
+                          .preload(:validator_score_v1)
                           .joins(:validator_score_v1)
                           .index_order(validate_order)
 

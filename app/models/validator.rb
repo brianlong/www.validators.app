@@ -67,7 +67,7 @@ class Validator < ApplicationRecord
                      'validator_score_v1s.total_score desc, RAND()'
                    end
 
-      includes(:validator_score_v1).order(sort_order)
+      order(sort_order)
     end
 
     def total_active_stake
