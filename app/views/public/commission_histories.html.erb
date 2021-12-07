@@ -6,6 +6,11 @@
   <% if @validator %>
     <h4 class="word-break"><%= @validator.name || @validator.account %></h4>
   <% end %>
+  <p>
+    Be careful if you see that a validator raises commission to 100% just before the end of an epoch (to get 100%
+    of the rewards), and then lowers it again just after the new epoch. See our
+    <%= link_to 'FAQ page', faq_path(anchor: 'choosing-validator') %> to learn more.
+  </p>
   <div class="text-danger">This feature is work-in-progress. Please use the chat widget below to notify us of problems.</div>
 </div>
 
