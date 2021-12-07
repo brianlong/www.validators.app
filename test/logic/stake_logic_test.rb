@@ -90,21 +90,21 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'update_validator_stats' do
+  test "update_validator_stats" do
     authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
 
     validator = create(
       :validator,
-      network: 'testnet',
-      account: 'account123'
+      network: "testnet",
+      account: "account123"
     )
 
     validator_history = create(
       :validator_history,
-      network: 'testnet',
-      delinquent: 'true',
+      network: "testnet",
+      delinquent: "true",
       created_at: DateTime.now - 3.days,
-      account: 'account123'
+      account: "account123"
     )
 
     score = create(
@@ -112,26 +112,26 @@ class StakeLogicTest < ActiveSupport::TestCase
       validator: validator,
       skipped_slot_history: [2, 5],
       delinquent: false,
-      network: 'testnet'
+      network: "testnet"
     )
 
     vote_account = create(
       :vote_account,
-      network: 'testnet',
-      account: 'vote_acc'
+      network: "testnet",
+      account: "vote_acc"
     )
 
     stake_pool = create(
       :stake_pool,
-      network: 'testnet',
+      network: "testnet",
       authority: authority
     )
 
     stake_account = create(
       :stake_account,
       stake_pool: stake_pool,
-      delegated_vote_account_address: 'vote_acc',
-      network: 'testnet',
+      delegated_vote_account_address: "vote_acc",
+      network: "testnet",
       validator: validator
     )
 

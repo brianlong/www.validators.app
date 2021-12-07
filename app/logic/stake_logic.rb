@@ -164,7 +164,7 @@ module StakeLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from update_validator_stats', e)
+      Pipeline.new(500, p.payload, "Error from update_validator_stats", e)
     end
   end
 end
