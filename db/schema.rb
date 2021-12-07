@@ -327,6 +327,8 @@ ActiveRecord::Schema.define(version: 2021_12_07_143027) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "manager_fee"
+    t.float "average_validators_commission"
     t.string "ticker"
   end
 
