@@ -24,6 +24,7 @@ def get_block_time(http, uri, block)
     "params" => [block]
   } )
   resp, _ = http.post(uri, params.to_json, {'Content-Type' => 'application/json'})
+  puts JSON.parse(resp.body)
   JSON.parse(resp.body)['result']
 end
 
@@ -58,7 +59,6 @@ end
 
   last_epoch = get_last_epoch(http, uri)
   last_epoch_start_slot = last_epoch['absoluteSlot'] - last_epoch['slotIndex']
-  last_epoch_start_datetime = DateTime.strptime(get_block_time(http, uri, last_epoch_start_slot).to_s, '%s')
 
   next if EpochWallClock.where(network: network).find_by(epoch: last_epoch['epoch'])
 
@@ -69,6 +69,8 @@ end
   end
 
   break unless confirmed_start_block
+
+  last_epoch_start_datetime = DateTime.strptime(get_block_time(http, uri, confirmed_start_block).to_s, '%s')
 
   created_epoch = EpochWallClock.create(
     epoch: last_epoch['epoch'],
