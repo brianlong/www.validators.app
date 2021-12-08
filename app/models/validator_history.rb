@@ -30,7 +30,6 @@
 #
 #  acceptable_stake_by_account_index                        (account,created_at,active_stake)
 #  delinquent_by_account_index                              (account,delinquent,created_at)
-#  index_validator_histories_on_active_stake                (active_stake)
 #  index_validator_histories_on_network_and_account_and_id  (network,account,id)
 #  index_validator_histories_on_network_and_batch_uuid      (network,batch_uuid)
 #
