@@ -178,6 +178,15 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     refute ValidatorScoreV1.filtered_by(:inactive).all? { |score| score.validator.is_active }
   end
 
+  test "filter_by when filtered by private should return correct results" do
+    create_validators_for_filtering_test
+
+    assert_equal 1, ValidatorScoreV1.filtered_by(:private).count
+    assert ValidatorScoreV1.filtered_by(:private).all? do |score| 
+      score.commission == 100 && score.network == "mainnet"
+    end
+  end
+
   def create_validators_for_filtering_test
     validator1 = create(:validator, network: 'testnet', is_active: true)
     create(
@@ -201,6 +210,14 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
       validator: validator1,
       commission: 10,
       network: 'testnet',
+      delinquent: false
+    )
+    validator_mainnet = create(:validator, network: "mainnet", is_active: true) 
+    create(
+      :validator_score_v1,
+      validator: validator_mainnet,
+      commission: 100,
+      network: "mainnet",
       delinquent: false
     )
   end

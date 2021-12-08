@@ -144,4 +144,21 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 0, stake_pool.average_delinquent
     assert_equal 5, stake_pool.average_skipped_slots
   end
+  
+  test "count_average_validators_commission" do
+    stake_pool = create(:stake_pool, network: "testnet")
+    validator = create(:validator)
+    validator2 = create(:validator)
+    score = create(:validator_score_v1, validator: validator, commission: 5)
+    score2 = create(:validator_score_v1, validator: validator2, commission: 10)
+    stake_account = create(:stake_account, validator: validator, stake_pool: stake_pool)
+    stake_account2 = create(:stake_account, validator: validator2, stake_pool: stake_pool)
+
+    refute stake_pool.average_validators_commission
+
+    p = Pipeline.new(200, @initial_payload)
+                .then(&count_average_validators_commission)
+
+    assert_equal 7.5, stake_pool.reload.average_validators_commission
+  end
 end

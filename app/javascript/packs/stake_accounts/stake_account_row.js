@@ -34,19 +34,19 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     <tr>
       <td>
         {{ (stake_account.delegated_stake / 1000000000).toFixed(3) }} SOL
-        <br>
+        <br />
         <small>
           <a :href="validator_url" target="_blank">{{ name_or_account() }}</a>
         </small>
       </td>
-      <td>
+      <td class="word-break-md">
         <small>{{ stake_account.stake_pubkey }}</small>
-        <br>
+        <br />
         <small><a href="#" @click.prevent="filterByStaker">{{ stake_account.staker }}</a></small>
       </td>
-      <td>
+      <td class="word-break-md">
         {{ stake_account.pool_name }}
-        <br>
+        <br />
         <small><a href="#" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a></small>
       </td>
       <td>

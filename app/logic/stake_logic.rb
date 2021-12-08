@@ -161,10 +161,28 @@ module StakeLogic
       StakePool.transaction do
         p.payload[:stake_pools].each(&:save)
       end
-
+      
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from update_validator_stats", e)
+    end
+  end
+
+  def count_average_validators_commission
+    lambda do |p|
+      return p unless p.code == 200
+
+      StakePool.where(network: p.payload[:network]).each do |pool|
+        validator_ids = pool.stake_accounts.pluck(:validator_id)
+        average_commission = ValidatorScoreV1.where(validator_id: validator_ids)
+                                             .average(:commission)
+
+        pool.update_attribute(:average_validators_commission, average_commission)
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from count_average_validator_fee", e)
     end
   end
 end

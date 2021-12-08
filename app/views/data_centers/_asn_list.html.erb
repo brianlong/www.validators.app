@@ -40,11 +40,14 @@
     </td>
     <% if params[:network] == 'mainnet' %>
       <td class="column-md">
-        <%= asn_data[:private_validators] %>
         <% if asn_data[:private_validators] > 0 %>
+          <%= link_to asn_data[:private_validators],
+            asn_url(network: params[:network], asn: asn_data[:asn], filter_by: :private) %>
           <small class="text-muted">
             (<%= (count_percentage(asn_data[:private_validators], asn_data[:count])) %>%)
           </small>
+        <% else %>
+          <%= asn_data[:private_validators] %>
         <% end %>
       </td>
     <% end %>

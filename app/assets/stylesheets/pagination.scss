@@ -2,16 +2,16 @@
 
 @mixin item($padding-y) {
   display: inline-block;
-  margin-right: $margin-standard;
+  margin: 0 $margin-standard 0 0;
   white-space: nowrap;
   background-color: transparent;
   border: 2px solid $green;
   border-radius: 0;
   @include font-size-smaller;
   font-weight: $font-weight-normal;
-  padding: $padding-y 0px;
+  padding: $padding-y 0;
   @media(max-width: $screen-xs-max) {
-    padding: 9px 0px;
+    padding: 9px 0;
   }
 }
 
@@ -46,12 +46,9 @@
 
 @mixin link() {
   color: $base-color;
-  padding: 12px 18px;
+  padding: 8px 12px;
   background-color: transparent;
   border: none;
-  @media(max-width: $screen-xs-max) {
-    padding: 9px 11px;
-  }
   &:focus, &.focus {
     box-shadow: none;
   }
@@ -59,18 +56,16 @@
 
 
 .pagination {
-  margin-bottom: $margin-standard*2;
   display: inline-block;
-  @media(max-width: $screen-lg-max) {
-    margin-bottom: $margin-standard;
-  }
+  margin-bottom: 20px;
+  padding: 0 $padding-standard;
   @media(max-width: $screen-md-max) {
     overflow-x: scroll;
     display: flex;
   }
 
   .page, .first, .last {
-    @include item(12px);
+    @include item(8px);
     a {
       @include link();
     }
@@ -90,17 +85,14 @@
 
   .page {
     &.current {
-      @include item-active(12px, 18px);
+      @include item-active(8px, 12px);
     }
     &.gap {
       background-color: transparent;
       border: 2px solid $green;
       color: $base-color;
       font-weight: $font-weight-bold-secondary;
-      padding: 12px 18px;
-      @media(max-width: $screen-xs-max) {
-        padding: 9px 11px;
-      }
+      padding: 8px 12px;
     }
   }
 
