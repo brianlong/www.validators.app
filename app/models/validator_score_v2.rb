@@ -50,17 +50,16 @@
 #
 
 class ValidatorScoreV2 < ApplicationRecord
-  IP_FIELDS_FOR_API = [
-    "traits_autonomous_system_number", "address"
-  ].map{ |e| "ips.#{e}" }.join(", ")
+  # IP_FIELDS_FOR_API = [
+  #   "traits_autonomous_system_number", "address"
+  # ].map{ |e| "ips.#{e}" }.join(", ")
 
-  # Touch the related validator to increment the updated_at attribute
   belongs_to :validator
-  before_save :calculate_total_score
-  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: "Ip",
-                                                         primary_key: :ip_address,
-                                                         foreign_key: :address
   has_one :validator_score_v1, through: :validator
+  before_save :calculate_total_score
+  # has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: "Ip",
+  #                                                        primary_key: :ip_address,
+  #                                                        foreign_key: :address
 
   scope :by_network_with_active_stake, ->(network) do
     where(network: network).where("active_stake > 0")
