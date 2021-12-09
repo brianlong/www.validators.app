@@ -1,41 +1,77 @@
 <h1>Getting Started</h1>
 
-<p class="mb-5">
+<p class="lead mb-5">
   We did our best to&nbsp;include on this page all the&nbsp;necessary information to get you started with staking on Solana.
   If you have any more questions or&nbsp;think there should be any additional info here please keep in&nbsp;mind that
   you can use our chat in the&nbsp;bottom right corner.
 </p>
 
-<h3>Basics</h3>
-<ul class="list-large list-no-bullets mb-5">
-  <li><a href="#staking">What is staking</a></li>
-  <li><a href="#timeline">Staking timeline</a></li>
-  <li><a href="#choosing-validator">Choosing the&nbsp;right validator</li>
-  <li><a href="#score">How Does the&nbsp;Validator Score V1 Work?</a></li>
-  <li><a href="#scorev2">How Does the&nbsp;Validator Score V2 Work?</a></li>
-  <li><a href="#data-centers">Data Centers</a></li>
-</ul>
-<h3>Dictionary</h3>
-<ul class="list-large list-no-bullets mb-5">
-  <li><a href="#commission">Commission</a></li>
-  <li><a href="#epoch">Epoch</a></li>
-  <li><a href="#root-distance">Root distance</a></li>
-  <li><a href="#vote-distance">Vote distance</a></li>
-  <li><a href="#skipped-vote">Skipped slot&nbsp;&percnt; </a></li>
-  <li><a href="#delinquency">Delinquency</a></li>
-  <li><a href="#concentration">Stake Concentration</a></li>
-</ul>
-<h3>FAQ</h3>
-<ul class="list-large list-no-bullets mb-5">
-  <li><a href="#personal-data">How is my Personal Data protected?</a></li>
-  <li><a href="#private-validator">Why is my validator marked "private"?</a></li>
-  <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
-</ul>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-content">
+        <h2 class="card-heading"><i class="fas fa-sliders-h mr-1"></i> Basics</h2>
+        <ul class="list-large list-no-bullets text-center">
+          <li><a href="#staking">What is staking</a></li>
+          <li><a href="#timeline">Staking timeline</a></li>
+          <li><a href="#choosing-validator">Choosing the&nbsp;right validator</li>
+          <li><a href="#score">How Does the&nbsp;Validator Score V1 Work?</a></li>
+          <li><a href="#score-v2">How Does the&nbsp;Validator Score V2 Work?</a></li>
+          <li><a href="#data-centers">Data Centers</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card mb-4">
+      <div class="card-content">
+        <h2 class="card-heading"><i class="fas fa-spell-check mr-1"></i> Dictionary</h2>
+        <ul class="list-large list-no-bullets text-center">
+          <li><a href="#commission">Commission</a></li>
+          <li><a href="#epoch">Epoch</a></li>
+          <li><a href="#root-distance">Root Distance</a></li>
+          <li><a href="#vote-distance">Vote Distance</a></li>
+          <li><a href="#skipped-vote">Skipped Slot&nbsp;&percnt;</a></li>
+          <li><a href="#delinquency">Delinquency</a></li>
+          <li><a href="#stake-concentration">Stake Concentration</a></li>
+          <li><a href="#stake-pool">Stake Pool</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-content">
+        <h2 class="card-heading">
+          <%= image_tag 'solana_logo_white.png', height: '22', class: 'mr-1' %> FAQ - validators</h2>
+        <ul class="list-large list-no-bullets text-center">
+          <li><a href="#new-validator">How to become a validator?</a></li>
+          <li><a href="#personal-data">How is my Personal Data protected?</a></li>
+          <li><a href="#private-validator">Why is my validator marked "private"?</a></li>
+          <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
+          <li><a href="#avatar">How can I change my avatar (validator logo)?</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card mb-4">
+      <div class="card-content">
+        <h2 class="card-heading">
+          <i class="fas fa-dollar-sign mr-1"></i> FAQ - investors</h2>
+        <ul class="list-large list-no-bullets text-center">
+          <li><a href="#best-validator">How to find the best validator?</a></li>
+          <li><a href="#change-validator">How often can I change the validator?</a></li>
+          <li><a href="#staking-rewards">How often are the staking rewards paid out?</a></li>
+          <li><a href="#apy">Where can I find the APY?</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
 <hr />
 
-<h4 id="staking">What is staking</h4>
+<h2 class="mb-5">Basics</h2>
+
+<h3 class="h5" id="staking">What is staking</h3>
 <div class="mb-5">
   <p>
     <strong>Staking</strong> is the&nbsp;process of delegating your sols to&nbsp;one or more validators, who process
@@ -54,7 +90,7 @@
   </p>
 </div>
 
-<h4 id="timeline">Staking timeline</h4>
+<h3 class="h5" id="timeline">Staking timeline</h3>
 <div class="mb-5">
   <p>
     After you delegate your SOL tokens, you need to&nbsp;wait until the&nbsp;next <a href="#epoch">epoch</a> for
@@ -71,7 +107,7 @@
   </p>
 </div>
 
-<h4 id="choosing-validator">Choosing the&nbsp;right validator</h4>
+<h3 class="h5" id="choosing-validator">Choosing the&nbsp;right validator</h3>
 <div class="mb-5">
   <p>
     There are a&nbsp;couple of things to&nbsp;consider while choosing the&nbsp;right validator to&nbsp;delegate your
@@ -90,8 +126,10 @@
   <p>
     <strong>Commission</strong> - The&nbsp;important thing to&nbsp;notice here is that commissions can be changed in any
     moment, so it's crucial to&nbsp;check for particular validators
-    <%= link_to "commission change history", commission_histories_path(network: params[:network]) %> and see if there's
-    no malicious behaviour there.
+    <%= link_to "commission change history", commission_histories_path(network: params[:network]) %> and see if
+    there's no malicious behaviour there. Some of the&nbsp;validators are offering 0% commission as an&nbsp;introductory
+    offer. It's a&nbsp;good idea to&nbsp;contact them to&nbsp;see when the&nbsp;offer expires and the&nbsp;new rate
+    at that time.
   </p>
   <p>
     <strong>Reliability</strong> - if the&nbsp;validator has all the&nbsp;information filled up, has its own website and
@@ -100,7 +138,7 @@
   </p>
 </div>
 
-<h4 id="score">How Does the&nbsp;Validator Score V1 Work?</h4>
+<h3 class="h5" id="score">How Does the&nbsp;Validator Score V1 Work?</h3>
 <div class="mb-5">
   <p>
     We track validator performance over several dimensions and assign a&nbsp;score in the&nbsp;range of (0..2) for each.
@@ -189,6 +227,12 @@
       If you are an&nbsp;investor who is delegating stake, please consider high performing nodes without a&nbsp;high data
       center concentration.
     </li>
+    <li>
+      <strong>Authorized Withdrawer Score</strong><br />
+      Validator identity matching authorized withdrawer is a security risk.<br />
+      <i class="fas fa-minus-circle text-danger mr-1"></i> (-2 points) means that this validator identity is the same as the authorized withdrawer identity.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 point) means that that this validator identity is different than the authorized withdrawer identity.<br />
+    </li>
   </ol>
 
   <p>
@@ -198,12 +242,12 @@
 </div>
 
 <!-- TODO -->
-<h4 id="scorev2">How Does the&nbsp;Validator Score V2 Work?</h4>
+<h3 class="h5" id="scorev-v2">How Does the&nbsp;Validator Score V2 Work?</h3>
 <div class="mb-5">
   <p>TBA</p>
 </div>
 
-<h4 id="data-centers">Data Centers</h4>
+<h3 class="h5" id="data-centers">Data Centers</h3>
 <p class="mb-5">
   For the&nbsp;security reasons it is recommended that the&nbsp;validators in solana cluster are spread among as many
   locations as possible. It reduces the&nbsp;possibility of network collapse in case of a&nbsp;data center breakage.
@@ -213,73 +257,122 @@
 
 <hr />
 
-<h4 class="mb-5">Dictionary</h4>
+<h2 class="mb-5">Dictionary</h2>
 
-<h6 id="commission">Commission</h6>
+<h3 class="h5" id="commission">Commission</h3>
 <p class="mb-5">
   Commission is a&nbsp;percentage value set by a&nbsp;validator to&nbsp;determine how much of the&nbsp;rewards earned
-  does it collect in order to&nbsp;incur the&nbsp;costs. It can be set anywhere between 0% and 100% and can be changed
-  in any moment. <%= link_to "Click here", commission_histories_path(network: params[:network])%> if you want to&nbsp;know
+  does it collect in order to&nbsp;incur the&nbsp;costs. It's automatically deducted from your rewards pay outs. It
+  can be set anywhere between 0% and 100% and can be changed in any moment.
+  <%= link_to "Click here", commission_histories_path(network: params[:network])%> if you want to&nbsp;know
   more about current commissions.
 </p>
 
-<h6 id="epoch">Epoch</h6>
+<h3 class="h5" id="epoch">Epoch</h3>
 <p class="mb-5">
   Time determined by number of slots, for which the&nbsp;leader schedule is valid.
 </p>
 
-<h6 id="root-distance">Root Distance</h6>
+<h3 class="h5" id="root-distance">Root Distance</h3>
 <p class="mb-5">
   Measures the&nbsp;median & average distance in block height between the&nbsp;validator and the&nbsp;tower's highest
   block. Smaller numbers mean that the&nbsp;validator is near the&nbsp;top of the&nbsp;tower.
 </p>
 
-<h6 id="vote-distance">Vote Distance</h6>
+<h3 class="h5" id="vote-distance">Vote Distance</h3>
 <p class="mb-5">
   Is very similar to the&nbsp;Root Block Distance score above. Lower numbers mean that the&nbsp;node is voting near
   the&nbsp;front of the group.
 </p>
 
-<h6 id="skipped-vote">Skipped Slot</h6>
+<h3 class="h5" id="skipped-vote">Skipped Slot&nbsp;&percnt;</h3>
 <p class="mb-5">
   Measures the&nbsp;percent of the&nbsp;time that a&nbsp;leader fails to&nbsp;produce a&nbsp;block during their allocated
   slots. A&nbsp;lower number means that the&nbsp;leader is making blocks at a&nbsp;very high rate.
 </p>
 
-<h6 id="delinquency">Delinquency</h6>
+<h3 class="h5" id="delinquency">Delinquency</h3>
 <p class="mb-5">
-  If the&nbsp;validator is not active in the&nbsp;solana network it is considered to be delinquent. Short-time delinquencies
-  are considered acceptable, since it occurs while software updates or temporary internet outages.
+  If the&nbsp;validator is not active in the&nbsp;solana network it is considered to&nbsp;be delinquent. Short-time
+  delinquencies are considered acceptable, since it occurs while software updates or temporary internet outages.
 </p>
 
-<h6 id="concentration">Stake concentration</h6>
+<h3 class="h5" id="stake-concentration">Stake Concentration</h3>
 <p class="mb-5">
   Solana is a&nbsp;decentralized proof-of-stake blockchain. It is best for the&nbsp;network and for those who uses it,
-  that the&nbsp;total stake is divided among as many validators as possible. Keep this in mind while choosing a&nbsp;validator
-  to delegate&nbsp;to.
+  that the&nbsp;total stake is divided among as many validators as possible. Keep this in&nbsp;mind while choosing
+  a&nbsp;validator to delegate&nbsp;to.
+</p>
+
+<h5 id="stake-pool">Stake Pool</h5>
+<p class="mb-5">
+  Stake pools are an&nbsp;alternative method of&nbsp;earning staking rewards. This program allows SOL holders
+  to&nbsp;stake and earn rewards without managing stakes. Read more about the program on
+  <%= link_to "Solana website", "https://spl.solana.com/stake-pool/overview" %>.
 </p>
 
 <hr />
 
-<h4 class="mb-5">FAQ</h4>
+<h2 id="questions" class="mb-5">FAQ</h2>
 
-<h6 id="personal-data">How is my Personal Data protected?</h6>
+<h3 class="h5" id="new-validator">How to become a validator?</h3>
+<p class="mb-5">
+  Please take a&nbsp;look at this detailed guide on Solana website:
+  <%= link_to "https://docs.solana.com/running-validator", "https://docs.solana.com/running-validator" %>.
+</p>
+
+<h3 class="h5" id="personal-data">How is my Personal Data protected?</h3>
 <p class="mb-5">
   All Consumer Personal Information is encrypted in transit via HTTPS. You can see our secure certificate by
   clicking the&nbsp;lock icon in your browser location bar. We also encrypt all Personal Information at rest when it is
   stored within our database.
 </p>
 
-<h6 id="private-validator">Why is my validator marked "private"?</h6>
+<h3 class="h5" id="private-validator">Why is my validator marked "private"?</h3>
 <p class="mb-5">
-  It's based on commission rate. 100% commission means that you are not looking for delegations, so we mark you as "private". 
-  Private validators are always assigned with total score 0, despite their performance. 
+  It's based on commission rate. 100% commission means that you are not looking for delegations, so we mark you
+  as "private". Private validators are always assigned with total score 0, despite their performance.
 </p>
 
-<h6 id="withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</h6>
-<p>
+<h3 class="h5" id="withdraw-authority-warning">
+  Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?
+</h3>
+<p class="mb-5">
   It informs visitors that your validator identity matches the&nbsp;withdraw authority on your vote account. It is
   a&nbsp;serious security risk, eg. if someone hacks into your validator, they can steal from the&nbsp;vote account.
   Keep the&nbsp;withdraw authority key offline to minimize the&nbsp;risk. Once you fix it, the&nbsp;warning will be
   taken off automatically within few hours.
+</p>
+
+<h3 class="h5" id="avatar">How can I change my avatar (validator logo)?</h3>
+<p class="mb-5">
+  The images come from the&nbsp;validator's Keybase profile. Once you change it on Keybase, we'll update avatar in our
+  system automatically within 24&nbsp;hours.
+</p>
+
+<h3 class="h5" id="best-validator">How to find the best validator?</h3>
+<p class="mb-5">
+  To find a&nbsp;good validator, please start at the&nbsp;top of the 'Score' view on the&nbsp;home page and click through
+  to&nbsp;see validator details. Then read <%= link_to 'Choosing Validator', '#choosing-validator' %> section on this
+  page to&nbsp;find out what you should watch out for.
+</p>
+
+<h3 class="h5" id="change-validator">How often can I change the validator? Is there a minimum period?</h3>
+<p class="mb-5">
+  It usually takes 1 epoch for stake to warm up or cool down. Try to split your stake across several validators. Please
+  also read our advice <%= link_to "how to choose the right validator", "#choosing-validator" %> and check out Solana
+  <%= link_to "stake pool", "https://spl.solana.com/stake-pool/overview" %> program.
+</p>
+
+<h3 class="h5" id="staking-rewards">How often are the staking rewards paid out?</h3>
+<p class="mb-5">
+  It usually takes 1 epoch for stake to&nbsp;warm up or cool down. Try to&nbsp;split your stake across several validators.
+  Please also read our advice <%= link_to "how to choose the right validator", "#choosing-validator" %> and check out
+  Solana <%= link_to "stake pool", "https://spl.solana.com/stake-pool/overview" %> program.
+</p>
+
+<h3 class="h5" id="apy">Where can I find the APY?</h3>
+<p class="mb-5">
+  We do not show APY on&nbsp;validators.app. See <%= link_to "https://www.stakeview.app", "https://www.stakeview.app" %>
+  for a&nbsp;good look at&nbsp;APY.
 </p>

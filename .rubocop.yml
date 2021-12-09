@@ -1,8 +1,113 @@
-Layout/LineLength:
-  Max: 80
+AllCops:
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'test/fixtures/**/*'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
+    - !ruby/regexp /old_and_unused\.rb$/
+  TargetRubyVersion: 2.6
+  DisabledByDefault: true
+
+Style/Encoding:
+  Enabled: true
+
+Style/FrozenStringLiteralComment:
+  AutoCorrect: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/PerlBackrefs:
+  Enabled: true
+  AutoCorrect: false
+
+Style/MutableConstant:
+  Enabled: true
+  AutoCorrect: false
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: true
+  Exclude:
+    - 'test/**/*.rb'
+
 Metrics/BlockLength:
-  Max: 999
-Metrics/MethodLength:
-  Max: 999
+  Max: 30
+  Enabled: true
+  Exclude:
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'test/**/*.rb'
+
+Metrics/ModuleLength:
+  Enabled: true
+  Max: 500
+  Exclude:
+    - 'test/**/*.rb'
+
+Layout/LineLength:
+  Enabled: true
+  Max: 120
+  Exclude:
+    - 'Gemfile'
+
 Metrics/ClassLength:
-  Max: 999
+  Enabled: true
+  Max: 500
+
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Max: 15
+
+Metrics/MethodLength:
+  Enabled: true
+  Max: 30
+  Exclude:
+    - 'test/**/*.rb'
+
+Metrics/AbcSize:
+  Enabled: true
+  Max: 25
+  Exclude:
+    - 'test/**/*.rb'
+
+# Mixing the styles looks just silly.
+Style/HashSyntax:
+  Enabled: true
+  EnforcedStyle: ruby19_no_mixed_keys
+
+Style/CollectionMethods:
+  Enabled: true
+  PreferredMethods:
+    # inject seems more common in the community.
+    reduce: inject
+    collect: map
+
+# Enforcing the names of variables? To single letter ones? Just no.
+Style/SingleLineBlockParams:
+  Enabled: false
+
+# Shadowing outer local variables with block parameters is often useful
+# to not reinvent a new name for the same thing, it highlights the relation
+# between the outer variable and the parameter. The cases where it's actually
+# confusing are rare, and usually bad for other reasons already, for example
+# because the method is too long.
+Lint/ShadowingOuterLocalVariable:
+  Enabled: false
+
+# Single quotes being faster is hardly measurable and only affects parse time.
+# Enforcing double quotes reduces the times where you need to change them
+# when introducing an interpolation. Use single quotes only if their semantics
+# are needed.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+  Exclude:
+    - 'Gemfile'

@@ -1,12 +1,15 @@
 <section class="banner">
   <div class="heading-primary">Meet the <span>validators</span> who power Solana</div>
   <% unless @validators.blank? %>
-    <p class="lead">
-      The tables below show each validator by name and include some recent statistics for each. See our
-      <%= link_to 'Getting Started', faq_url(anchor: 'score'), target: '_blank' %> page for a&nbsp;description of the&nbsp;scores shown
-      below. Special thanks to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %>
-      for their support!
+    <p class="lead mb-4">
+      The tables below show each validator by name and include some recent statistics for each. Special thanks
+      to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %>
+      for their support! See the links below to learn more about our website.
     </p>
+    <%= link_to 'Getting Started', faq_path(anchor: ''), class: 'btn btn-md btn-secondary mr-1 mb-3' %>
+    <%= link_to 'Choosing the right validator', faq_path(anchor: 'choosing-validator'), class: 'btn btn-md btn-secondary mr-1 mb-3' %>
+    <%= link_to 'Our Scoring System', faq_path(anchor: 'score'), class: 'btn btn-md btn-secondary mr-1 mb-3' %>
+    <%= link_to 'FAQ', faq_path(anchor: 'questions'), class: 'btn btn-md btn-secondary mr-1 mb-3' %>
   <% end %>
 </section>
 <div class="card">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_09_121855) do
+ActiveRecord::Schema.define(version: 2021_12_02_090220) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -267,6 +267,72 @@ ActiveRecord::Schema.define(version: 2021_11_09_121855) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "average_price", precision: 40, scale: 20
+  end
+
+  create_table "stake_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "account_balance"
+    t.integer "activation_epoch"
+    t.bigint "active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.integer "deactivation_epoch"
+    t.bigint "delegated_stake"
+    t.string "delegated_vote_account_address"
+    t.bigint "rent_exempt_reserve"
+    t.string "stake_pubkey"
+    t.string "stake_type"
+    t.string "staker"
+    t.string "withdrawer"
+    t.integer "stake_pool_id"
+    t.string "network"
+    t.integer "validator_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "batch_uuid"
+    t.index ["stake_pool_id"], name: "index_stake_account_histories_on_stake_pool_id"
+    t.index ["stake_pubkey", "network"], name: "index_stake_account_histories_on_stake_pubkey_and_network"
+    t.index ["staker", "network"], name: "index_stake_account_histories_on_staker_and_network"
+    t.index ["withdrawer", "network"], name: "index_stake_account_histories_on_withdrawer_and_network"
+  end
+
+  create_table "stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "account_balance"
+    t.integer "activation_epoch"
+    t.bigint "active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.integer "deactivation_epoch"
+    t.bigint "delegated_stake"
+    t.string "delegated_vote_account_address"
+    t.bigint "rent_exempt_reserve"
+    t.string "stake_pubkey"
+    t.string "stake_type"
+    t.string "staker"
+    t.string "withdrawer"
+    t.integer "stake_pool_id"
+    t.string "network"
+    t.integer "validator_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "batch_uuid"
+    t.index ["stake_pool_id"], name: "index_stake_accounts_on_stake_pool_id"
+    t.index ["stake_pubkey", "network"], name: "index_stake_accounts_on_stake_pubkey_and_network"
+    t.index ["staker", "network"], name: "index_stake_accounts_on_staker_and_network"
+    t.index ["withdrawer", "network"], name: "index_stake_accounts_on_withdrawer_and_network"
+  end
+
+  create_table "stake_pools", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "authority"
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.float "manager_fee"
+    t.float "average_validators_commission"
+    t.string "ticker"
+    t.float "average_delinquent"
+    t.float "average_skipped_slots"
+    t.float "average_uptime"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

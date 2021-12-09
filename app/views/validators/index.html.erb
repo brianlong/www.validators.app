@@ -39,12 +39,10 @@
                    show_version: true,
                    items_per_page: @per %>
 
-        <div class="px-15">
-          <p class="small muted">
+          <p class="px-3 small muted">
             Score updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
           </p>
           <%= paginate @validators %>
-        </div>
 
       </div>
     </div>

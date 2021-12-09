@@ -39,6 +39,10 @@ class DataCentersController < ApplicationController
                               .by_data_centers(key)
                               .filtered_by(show_params[:filter_by]&.to_sym)
                               .order('active_stake desc')
+
+    if params[:show_private]
+      @scores = @scores.with_private(show: params[:show_private])
+    end
     
     @dc_stake = @scores.where(data_center_key: key).sum(:active_stake)
           

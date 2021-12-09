@@ -4,7 +4,7 @@
 
 require File.expand_path('../config/environment', __dir__)
 
-MAX_DATA_CENTER_STAKE = 25.0
+MAX_DATA_CENTER_STAKE = 10.0
 
 sql = "
   SELECT distinct data_center_key,

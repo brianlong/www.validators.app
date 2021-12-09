@@ -97,9 +97,15 @@ class ValidatorScoreV1 < ApplicationRecord
       where(delinquent: true)
     when :inactive
       includes(:validator).where('validator.is_active': false)
+    when :private
+      where(commission: 100, network: "mainnet")
     else
-      self
+      all
     end
+  end
+
+  def self.with_private(show: "true")
+    show == "true" ? all : where.not(commission: 100)
   end
 
   def calculate_total_score
@@ -120,7 +126,8 @@ class ValidatorScoreV1 < ApplicationRecord
           security_report_score.to_i +
           software_version_score.to_i +
           stake_concentration_score.to_i +
-          data_center_concentration_score.to_i
+          data_center_concentration_score.to_i +
+          authorized_withdrawer_score.to_i
       end
   end
 
@@ -243,8 +250,8 @@ class ValidatorScoreV1 < ApplicationRecord
   def to_builder
     Jbuilder.new do |vs_v1|
       vs_v1.(
-        self, 
-        :total_score, 
+        self,
+        :total_score,
         :root_distance_score,
         :vote_distance_score,
         :skipped_slot_score,

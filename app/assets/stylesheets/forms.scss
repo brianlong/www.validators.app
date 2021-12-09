@@ -6,7 +6,7 @@
 
 .form-control {
   border-radius: $border-radius;
-  height: 47px;
+  height: 39.5px;
   padding-left: 18px;
   color: $background-color;
   transition: .1s ease;
@@ -16,9 +16,6 @@
     box-shadow: 0 0 0 3px $green-transparent;
     color: $background-color;
     transition: .1s ease;
-  }
-  @media(max-width: $screen-xs-max) {
-    height: 40px;
   }
 }
 

@@ -1,6 +1,6 @@
 module SolPricesHelper
   def create_filter_links
-    div_css_classes = ['btn-group', 'mt-3', 'mb-3' ]
+    div_css_classes = ["btn-group"]
     
     content_tag(:div, nil, class: div_css_classes) do
       

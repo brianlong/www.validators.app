@@ -89,6 +89,9 @@ group :development, :test do
   gem 'bullet', '~> 6.1'
   gem 'factory_bot_rails'
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
+  gem 'pronto'
+  gem 'pronto-flay', require: false
+  gem 'pronto-rubocop', require: false
   gem 'pry', '~> 0.12.2'
   gem 'rubocop'
   gem 'letter_opener_web'

@@ -215,6 +215,10 @@ class Validator < ApplicationRecord
     score&.data_center_concentration_score || 0
   end
 
+  def authorized_withdrawer_score
+    score&.authorized_withdrawer_score
+  end
+
   def private_validator?
     score&.commission == 100 && network == 'mainnet'
   end
