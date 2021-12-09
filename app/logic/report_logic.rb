@@ -192,7 +192,7 @@ module ReportLogic
       # Get software versions with count and active stake for current batch.
       software_version_score_sql = %Q{
         SELECT vsv1.software_version, count(*) as count, SUM(vsv1.active_stake) as as_sum
-        FROM validator_score_v2s AS vsv1
+        FROM validator_score_v1s AS vsv1
         WHERE vsv1.network = ?
         AND vsv1.validator_id IN (?)
         GROUP BY vsv1.software_version;

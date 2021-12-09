@@ -11,7 +11,7 @@ FactoryBot.define do
 
     trait :with_score do
       after(:create) do |validator|
-        create :validator_score_v2, validator: validator
+        create :validator_score_v1, validator: validator
       end
     end
 

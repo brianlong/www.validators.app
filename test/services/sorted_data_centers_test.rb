@@ -9,7 +9,7 @@ class SortedDataCenterTest < ActiveSupport::TestCase
     3.times do
       ip = create(:ip, :ip_china)
       score = create(
-        :validator_score_v2,
+        :validator_score_v1,
         ip_address: ip.address,
         active_stake: 100,
         network: 'testnet',
@@ -24,7 +24,7 @@ class SortedDataCenterTest < ActiveSupport::TestCase
         traits_autonomous_system_number: 12345
       )
       score = create(
-        :validator_score_v2,
+        :validator_score_v1,
         ip_address: ip.address,
         active_stake: 100,
         network: 'testnet',
@@ -36,7 +36,7 @@ class SortedDataCenterTest < ActiveSupport::TestCase
     3.times do
       ip = create(:ip, :ip_berlin)
       score = create(
-        :validator_score_v2,
+        :validator_score_v1,
         ip_address: ip.address,
         active_stake: 100,
         network: 'testnet',

@@ -10,7 +10,7 @@ class ValidatorsController < ApplicationController
     @per = 25
     validators = Validator.where(network: params[:network])
                           .scorable
-                          .joins(:validator_score_v2)
+                          .joins(:validator_score_v1)
                           .index_order(validate_order)
 
     @validators = validators.page(params[:page]).per(@per)

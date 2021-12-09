@@ -6,7 +6,7 @@ class PublicController < ApplicationController
     @per = 25
     validators = Validator.where(network: index_params[:network])
                           .scorable
-                          .joins(:validator_score_v2)
+                          .joins(:validator_score_v1)
                           .index_order(validate_order)
 
     unless params[:q].blank?

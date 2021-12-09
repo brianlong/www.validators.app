@@ -81,7 +81,7 @@ begin
   end
 
   puts '' if verbose
-  # Update validator_score_v2s with the latest data
+  # Update validator_score_v1s with the latest data
   ValidatorScoreV1.find_each do |vs1|
     next unless vs1.validator && vs1.validator&.ip_address
 
@@ -99,7 +99,7 @@ begin
   # Clean up the scores table to remove data_center_host if the node moved out
   # of Hetzner
   ValidatorScoreV1.connection.execute(
-    "update validator_score_v2s set data_center_host = null where data_center_key not like '24940%' and data_center_host is not null;"
+    "update validator_score_v1s set data_center_host = null where data_center_key not like '24940%' and data_center_host is not null;"
   )
 
 rescue StandardError => e

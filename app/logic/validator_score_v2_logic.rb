@@ -24,7 +24,7 @@ module ValidatorScoreV2Logic
     end
   end
 
-  # Get all of the validators for this network + the validator_score_v2 records
+  # Get all of the validators for this network + the validator_score_v1 records
   def validators_get
     lambda do |p|
       return p unless p.code == 200

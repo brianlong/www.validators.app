@@ -39,11 +39,11 @@ class SortedDataCenters
       SELECT DISTINCT
         #{select_statement.join(', ')}
       FROM ips
-      JOIN validator_score_v2s
-      ON validator_score_v2s.ip_address = ips.address
+      JOIN validator_score_v1s
+      ON validator_score_v1s.ip_address = ips.address
       WHERE ips.address IN (
         SELECT score.ip_address
-        FROM validator_score_v2s score
+        FROM validator_score_v1s score
         WHERE score.network = ?
         AND score.active_stake > 0
       )

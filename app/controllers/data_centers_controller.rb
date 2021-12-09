@@ -21,7 +21,7 @@ class DataCentersController < ApplicationController
     # sql = "
     #   SELECT *
     #   FROM validators val
-    #   INNER JOIN validator_score_v2s score ON val.id = score.validator_id
+    #   INNER JOIN validator_score_v1s score ON val.id = score.validator_id
     #   WHERE score.network = '#{params[:network]}'
     #   AND score.active_stake > 0
     #   AND score.ip_address IN (

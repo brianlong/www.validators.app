@@ -29,11 +29,11 @@ module Api
       def validators_list
         @sort_order = case params[:order]
                       when 'score'
-                        'validator_score_v2s.total_score desc,  validator_score_v2s.active_stake desc'
+                        'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
                       when 'name'
                         'validators.name asc'
                       when 'stake'
-                        'validator_score_v2s.active_stake desc, validator_score_v2s.total_score desc'
+                        'validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc'
                       else
                         'RAND()'
                       end
@@ -41,10 +41,10 @@ module Api
         limit = params[:limit] || 9999
         page = params[:page]
 
-        @validators = Validator.select(validator_fields, validator_score_v2_fields)
+        @validators = Validator.select(validator_fields, validator_score_v1_fields)
                                .where(network: params[:network])
-                               .includes(:vote_accounts, :most_recent_epoch_credits_by_account, validator_score_v2: [:ip_for_api])
-                               .joins(:validator_score_v2)
+                               .includes(:vote_accounts, :most_recent_epoch_credits_by_account, validator_score_v1: [:ip_for_api])
+                               .joins(:validator_score_v1)
                                .order(@sort_order)
                                .page(page)
                                .per(limit)
@@ -69,8 +69,8 @@ module Api
       end
 
       def validators_show
-        @validator = Validator.select(validator_fields, validator_score_v2_fields)
-                              .eager_load(:validator_score_v2)
+        @validator = Validator.select(validator_fields, validator_score_v1_fields)
+                              .eager_load(:validator_score_v1)
                               .find_by(network: params[:network], account: params['account'])
 
         raise ValidatorNotFound if @validator.nil?
@@ -175,7 +175,7 @@ module Api
         ].map { |e| "validators.#{e}" }
       end
 
-      def validator_score_v2_fields
+      def validator_score_v1_fields
         [
           'active_stake',
           'commission',
@@ -193,7 +193,7 @@ module Api
           'total_score',
           'validator_id',
           'vote_distance_score'
-        ].map { |e| "validator_score_v2s.#{e}" }
+        ].map { |e| "validator_score_v1s.#{e}" }
       end
     end
   end

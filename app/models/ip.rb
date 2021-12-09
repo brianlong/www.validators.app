@@ -52,7 +52,7 @@
 #
 class Ip < ApplicationRecord
   before_save :assign_data_center_key
-  has_one :validator_score_v2, primary_key: :address, foreign_key: :ip_address
+  has_one :validator_score_v1, primary_key: :address, foreign_key: :ip_address
 
   def to_builder
     Jbuilder.new do |vs_v1|

@@ -3,7 +3,7 @@ require 'test_helper'
 class GatherVoteAccountDetailsDaemonTest < ActiveSupport::TestCase
   setup do
     @v = create(:validator, network: 'testnet')
-    create(:validator_score_v2, validator: @v, network: 'testnet')
+    create(:validator_score_v1, validator: @v, network: 'testnet')
     create(
       :vote_account,
       account: 'vote_account_1',
