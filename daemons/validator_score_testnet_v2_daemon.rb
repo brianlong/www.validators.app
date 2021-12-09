@@ -41,8 +41,13 @@ begin
                  .then(&log_errors)
 
     # Mark the batch as scored
-    batch.scored_at = Time.now
+    batch.scored_at_v2 = Time.now
     batch.save
+
+    ReportClusterStatsWorker.perform_async(
+      batch_uuid: batch.uuid,
+      network: _p.payload[:network]
+    )
 
     break if interrupted
   rescue SkipAndSleep
