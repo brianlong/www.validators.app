@@ -5,7 +5,7 @@
     <td class="column-md"><%= dc_data[:count] %></td>
     <td class="column-md">
       <% if dc_data[:delinquent_validators] > 0 %>
-        <%= link_to dc_data[:delinquent_validators], 
+        <%= link_to dc_data[:delinquent_validators],
             data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :delinquent) %>
         <small class="text-muted">
           (<%= (count_percentage(dc_data[:delinquent_validators], dc_data[:count])) %>%)
@@ -16,11 +16,14 @@
     </td>
     <% if params[:network] == 'mainnet' %>
       <td class="column-md">
-        <%= dc_data[:private_validators] %>
         <% if dc_data[:private_validators] > 0 %>
+         <%= link_to dc_data[:private_validators],
+            data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :private) %>
           <small class="text-muted">
             (<%= (count_percentage(dc_data[:private_validators], dc_data[:count])) %>%)
           </small>
+        <% else %>
+          <%= dc_data[:private_validators] %>
         <% end %>
       </td>
     <% end %>
