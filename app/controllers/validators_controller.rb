@@ -15,7 +15,7 @@ class ValidatorsController < ApplicationController
 
     @validators = validators.page(params[:page]).per(@per)
 
-    @batch = Batch.last_scored(params[:network])
+    @batch = Batch.last_scored_v2(params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(

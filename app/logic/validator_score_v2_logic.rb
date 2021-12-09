@@ -78,7 +78,8 @@ module ValidatorScoreV2Logic
         Appsignal.send_error(e)
       end
 
-      sorted_by_root_distance.each_slice(p.payload[:validators_count_in_each_group])
+      sorted_by_root_distance.reverse
+                             .each_slice(p.payload[:validators_count_in_each_group])
                              .each_with_index do |group, index|
         group.each do |validator|
           validator.score_v2.root_distance_score = index
@@ -97,32 +98,14 @@ module ValidatorScoreV2Logic
     lambda do |p|
       return p unless p.code == 200
 
-      # Assign root_distance scores
-
-      sorted_by_root_distance = p.payload[:validators].sort_by do |validator|
-        validator.score.root_distance_history.to_a[-1].to_f
-      rescue StandardError => e
-        Appsignal.send_error(e)
-      end
-
-      sorted_by_root_distance.each_slice(p.payload[:validators_count_in_each_group])
-                             .each_with_index do |group, index|
-        group.each do |validator|
-          validator.score_v2.root_distance_score = index
-        end
-      rescue StandardError => e
-        Appsignal.send_error(e)
-      end
-
-      # Assign vote_distance scores
-
       sorted_by_vote_distance = p.payload[:validators].sort_by do |validator|
         validator.score.vote_distance_history.to_a[-1].to_f
       rescue StandardError => e
         Appsignal.send_error(e)
       end
 
-      sorted_by_vote_distance.each_slice(p.payload[:validators_count_in_each_group])
+      sorted_by_vote_distance.reverse
+                             .each_slice(p.payload[:validators_count_in_each_group])
                              .each_with_index do |group, index|
         group.each do |validator|
           validator.score_v2.vote_distance_score = index
@@ -147,7 +130,8 @@ module ValidatorScoreV2Logic
         Appsignal.send_error(e)
       end
 
-      sorted_by_skipped_slot.each_slice(p.payload[:validators_count_in_each_group])
+      sorted_by_skipped_slot.reverse
+                            .each_slice(p.payload[:validators_count_in_each_group])
                             .each_with_index do |group, index|
         group.each do |validator|
           validator.score_v2.skipped_slot_score = index
