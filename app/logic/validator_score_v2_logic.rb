@@ -64,7 +64,7 @@ module ValidatorScoreV2Logic
 
       Pipeline.new(200, p.payload.merge(validators_count_in_each_group: validators_count_in_each_group))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_validators_groups', e)
+      Pipeline.new(500, p.payload, "Error from set_validators_groups", e)
     end
   end
 
@@ -89,7 +89,7 @@ module ValidatorScoreV2Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from assign_root_distance_scores', e)
+      Pipeline.new(500, p.payload, "Error from assign_root_distance_scores", e)
     end
   end
 
@@ -133,7 +133,7 @@ module ValidatorScoreV2Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from assign_vote_distance_scores', e)
+      Pipeline.new(500, p.payload, "Error from assign_vote_distance_scores", e)
     end
   end
 
@@ -158,7 +158,7 @@ module ValidatorScoreV2Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from assign_skipped_slot_score', e)
+      Pipeline.new(500, p.payload, "Error from assign_skipped_slot_score", e)
     end
   end
 
@@ -177,7 +177,7 @@ module ValidatorScoreV2Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from save_validators', e)
+      Pipeline.new(500, p.payload, "Error from save_validators", e)
     end
   end
 end

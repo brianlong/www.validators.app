@@ -40,7 +40,7 @@ Lint/AmbiguousBlockAssociation:
     - 'test/**/*.rb'
 
 Metrics/BlockLength:
-  Max: 30
+  Max: 35
   Enabled: true
   Exclude:
     - 'Rakefile'
@@ -69,7 +69,7 @@ Metrics/CyclomaticComplexity:
 
 Metrics/MethodLength:
   Enabled: true
-  Max: 30
+  Max: 35
   Exclude:
     - 'test/**/*.rb'
 
