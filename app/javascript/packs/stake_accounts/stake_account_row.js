@@ -33,7 +33,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
   template: `
     <tr>
       <td>
-        {{ (stake_account.delegated_stake / 1000000000).toFixed(3) }} SOL
+        {{ ((stake_account.delegated_stake / 1000000000)).toLocaleString(undefined, { maximumFractionDigits: 2 }) }} SOL
         <br />
         <small>
           <a :href="validator_url" target="_blank">{{ name_or_account() }}</a>
