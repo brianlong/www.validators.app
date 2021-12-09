@@ -68,7 +68,32 @@ module ValidatorScoreV2Logic
     end
   end
 
-  def assign_block_and_vote_scores
+  def assign_root_distance_scores
+    lambda do |p|
+      return p unless p.code == 200
+
+      sorted_by_root_distance = p.payload[:validators].sort_by do |validator|
+        validator.score.root_distance_history.to_a[-1].to_f
+      rescue StandardError => e
+        Appsignal.send_error(e)
+      end
+
+      sorted_by_root_distance.each_slice(p.payload[:validators_count_in_each_group])
+                             .each_with_index do |group, index|
+        group.each do |validator|
+          validator.score_v2.root_distance_score = index
+        end
+      rescue StandardError => e
+        Appsignal.send_error(e)
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from assign_root_distance_scores', e)
+    end
+  end
+
+  def assign_vote_distance_scores
     lambda do |p|
       return p unless p.code == 200
 
@@ -108,7 +133,7 @@ module ValidatorScoreV2Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from assign_block_and_vote_scores', e)
+      Pipeline.new(500, p.payload, 'Error from assign_vote_distance_scores', e)
     end
   end
 

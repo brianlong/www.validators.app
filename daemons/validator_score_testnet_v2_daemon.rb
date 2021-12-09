@@ -34,9 +34,9 @@ begin
                  .then(&set_this_batch)
                  .then(&validators_get)
                  .then(&set_validators_groups)
-                 .then(&assign_block_and_vote_scores)
+                 .then(&assign_root_distance_scores)
+                 .then(&assign_vote_distance_scores)
                  .then(&assign_skipped_slot_score)
-                 .then(&assign_software_version_score)
                  .then(&save_validators)
                  .then(&log_errors)
 
