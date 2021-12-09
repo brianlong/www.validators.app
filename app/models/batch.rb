@@ -16,6 +16,7 @@
 #  root_distance_all_average :float(24)
 #  root_distance_all_median  :integer
 #  scored_at                 :datetime
+#  scored_at_v2              :datetime
 #  skipped_slot_all_average  :float(24)        default(0.0)
 #  skipped_vote_all_median   :float(24)
 #  software_version          :string(191)
@@ -27,10 +28,11 @@
 #
 # Indexes
 #
-#  index_batches_on_network                 (network)
-#  index_batches_on_network_and_created_at  (network,created_at)
-#  index_batches_on_network_and_scored_at   (network,scored_at)
-#  index_batches_on_network_and_uuid        (network,uuid)
+#  index_batches_on_network                   (network)
+#  index_batches_on_network_and_created_at    (network,created_at)
+#  index_batches_on_network_and_scored_at     (network,scored_at)
+#  index_batches_on_network_and_scored_at_v2  (network,scored_at_v2)
+#  index_batches_on_network_and_uuid          (network,uuid)
 #
 class Batch < ApplicationRecord
   before_create :create_uuid

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_02_090220) do
+ActiveRecord::Schema.define(version: 2021_12_09_115540) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -60,8 +60,10 @@ ActiveRecord::Schema.define(version: 2021_12_02_090220) do
     t.float "skipped_vote_all_median"
     t.float "best_skipped_vote"
     t.float "skipped_slot_all_average", default: 0.0
+    t.datetime "scored_at_v2"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
+    t.index ["network", "scored_at_v2"], name: "index_batches_on_network_and_scored_at_v2"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
     t.index ["network"], name: "index_batches_on_network"
   end
@@ -327,9 +329,9 @@ ActiveRecord::Schema.define(version: 2021_12_02_090220) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "ticker"
     t.float "manager_fee"
     t.float "average_validators_commission"
-    t.string "ticker"
     t.float "average_delinquent"
     t.float "average_skipped_slots"
     t.float "average_uptime"
