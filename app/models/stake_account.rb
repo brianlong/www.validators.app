@@ -6,6 +6,7 @@
 #  account_balance                :bigint
 #  activation_epoch               :integer
 #  active_stake                   :bigint
+#  apy                            :float(24)
 #  batch_uuid                     :string(191)
 #  credits_observed               :bigint
 #  deactivating_stake             :bigint
