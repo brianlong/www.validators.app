@@ -40,7 +40,7 @@ class ValidatorsController < ApplicationController
                           .scorable
                           .includes(:validator_score_v1)
                           .includes(:validator_score_v2)
-                          .index_order(validate_order)
+                          .index_order_v2(validate_order)
     @validators = validators.page(params[:page]).per(@per)
 
     @batch = Batch.last_scored_v2(params[:network])

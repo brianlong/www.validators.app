@@ -165,7 +165,8 @@
             </td>
             <td>
               <% if @validator.scorable? %>
-                <%= render 'validators/scores', validator: @validator %>
+                V1:&nbsp;<%= render 'validators/scores', validator: @validator, score_version: 'v1' %><br/>
+                V2:&nbsp;<%= render 'validators/scores', validator: @validator, score_version: 'v2' %>
               <% else %>
                 Inactive or zero-stake node. No score available
               <% end %>
@@ -181,7 +182,7 @@
 <div class="row mb-3">
   <div class="col-md-9 col-lg-10">
     <%= link_to 'Back to List of Validators',
-                url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+                url_for(controller: 'validators', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
                 class: 'btn btn-sm btn-secondary mb-3' %>
   </div>
 
@@ -240,7 +241,7 @@
 </div>
 
 <%= link_to 'Back to List of Validators',
-            url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+            url_for(controller: 'validators', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
             class: 'btn btn-sm btn-secondary mb-4' %>
 
 <div class="card mb-4">
@@ -249,5 +250,5 @@
 
 
 <%= link_to 'Back to List of Validators',
-            url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+            url_for(controller: 'validators', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
             class: 'btn btn-sm btn-secondary' %>

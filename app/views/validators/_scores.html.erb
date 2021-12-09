@@ -1,12 +1,23 @@
 <small>
-  <i class="fas fa-circle score-<%= validator.root_distance_score %>"
-     title="Root Distance Score = <%= validator.root_distance_score %>"></i>&nbsp;
+  <% if score_version == 'v1' %>
+    <i class="fas fa-circle score-<%= validator.root_distance_score %>"
+       title="Root Distance Score = <%= validator.root_distance_score %>"></i>&nbsp;
 
-  <i class="fas fa-circle score-<%= validator.vote_distance_score %>"
-     title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>&nbsp;
+    <i class="fas fa-circle score-<%= validator.vote_distance_score %>"
+       title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>&nbsp;
 
-  <i class="fas fa-circle score-<%= validator.skipped_slot_score %>"
-     title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>&nbsp;
+    <i class="fas fa-circle score-<%= validator.skipped_slot_score %>"
+       title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>&nbsp;
+  <% elsif score_version == 'v2' %>
+    <i class="fas fa-circle score-<%= validator.score_v2.root_distance_score %>"
+       title="Root Distance Score = <%= validator.score_v2.root_distance_score %>"></i>&nbsp;
+
+    <i class="fas fa-circle score-<%= validator.score_v2.vote_distance_score %>"
+       title="Vote Distance Score = <%= validator.score_v2.vote_distance_score %>"></i>&nbsp;
+
+    <i class="fas fa-circle score-<%= validator.score_v2.skipped_slot_score %>"
+       title="Skipped Slot Score = <%= validator.score_v2.skipped_slot_score %>"></i>&nbsp;
+  <% end %>
 
   <i class="fas fa-circle score-<%= validator.published_information_score.to_i %>"
      title="Published Information Score = <%= validator.published_information_score.to_i %>"></i>&nbsp;
@@ -32,5 +43,9 @@
        title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>&nbsp;
   <% end %>
 
-  (<span class="d-inline-block d-lg-none">Total:&nbsp;</span><%= validator.total_score %>)
+  <% if score_version == 'v1' %>
+    (<span class="d-inline-block d-lg-none">Total:&nbsp;</span><%= validator.total_score %>)
+  <% elsif score_version == 'v2' %>
+    (<span class="d-inline-block d-lg-none">Total:&nbsp;</span><%= validator.score_v2.total_score %>)
+  <% end %>
 </small>
