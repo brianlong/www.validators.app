@@ -100,7 +100,8 @@ module ValidatorScoreV1Logic
         if vote_h
           validator.validator_score_v1.skipped_vote_history_push(vote_h.skipped_vote_percent)
           skipped_vote_all.push(((best_skipped_vote - vote_h.skipped_vote_percent) * 100).round(2))
-          validator.validator_score_v1.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
+          validator.validator_score_v1
+                   .skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
         else
           validator.validator_score_v1.skipped_vote_history_push(nil)
         end

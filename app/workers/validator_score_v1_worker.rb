@@ -9,8 +9,8 @@ class ValidatorScoreV1Worker
 
   def perform(args = {})
     payload = {
-      network: args['network'],
-      batch_uuid: args['batch_uuid']
+      network: args["network"],
+      batch_uuid: args["batch_uuid"]
     }
 
     _p = Pipeline.new(200, payload)

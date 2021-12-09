@@ -57,15 +57,18 @@ class ValidatorScoreV2 < ApplicationRecord
 
   MAX_HISTORY = 2_880
   IP_FIELDS_FOR_API = [
-    'traits_autonomous_system_number', 'address'
-  ].map{ |e| "ips.#{e}" }.join(', ')
+    "traits_autonomous_system_number", "address"
+  ].map{ |e| "ips.#{e}" }.join(", ")
 
   # Touch the related validator to increment the updated_at attribute
   belongs_to :validator
   before_save :calculate_total_score
-  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
+  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: "Ip",
+                                                         primary_key: :ip_address,
+                                                         foreign_key: :address
+  has_one :validator_score_v1, through: :validator
 
-  after_save :create_commission_history, :if => :saved_change_to_commission?
+  # after_save :create_commission_history, if: :saved_change_to_commission?
 
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON
@@ -75,7 +78,7 @@ class ValidatorScoreV2 < ApplicationRecord
   serialize :skipped_slot_moving_average_history, JSON
 
   scope :by_network_with_active_stake, ->(network) do
-    where(network: network).where('active_stake > 0')
+    where(network: network).where("active_stake > 0")
   end
 
   scope :by_data_centers, ->(data_center_keys) do
