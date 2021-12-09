@@ -23,7 +23,7 @@ begin
     # Skip & sleep a few seconds if this batch was already scored.
     # We are waiting for the next batch
     raise SkipAndSleep if batch.nil?
-    raise SkipAndSleep unless batch.scored_at.nil?
+    raise SkipAndSleep unless (batch.scored_at_v2.nil? && batch.scored_at.present?)
 
     payload = {
       network: network,
@@ -33,16 +33,14 @@ begin
     _p = Pipeline.new(200, payload)
                  .then(&set_this_batch)
                  .then(&validators_get)
-                 .then(&block_vote_history_get)
+                 .then(&set_validators_groups)
                  .then(&assign_block_and_vote_scores)
-                 .then(&block_history_get)
-                 .then(&assign_block_history_score)
-                 .then(&assign_software_version_score)
+                 .then(&assign_skipped_slot_score)
                  .then(&save_validators)
                  .then(&log_errors)
 
     # Mark the batch as scored
-    batch.scored_at = Time.now
+    batch.scored_at_v2 = Time.now
     batch.save
 
     break if interrupted
