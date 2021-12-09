@@ -102,7 +102,7 @@ Rails.application.routes.draw do
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
 
   # Default root path
-  root to: 'public#index'
+  root to: 'validators#index'
 
   ### API
   namespace :api do
