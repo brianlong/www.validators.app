@@ -11,6 +11,6 @@ class IpTest < ActiveSupport::TestCase
     )
     ip = create(:ip, address: address)
 
-    assert_equal score, ip.score
+    assert_equal score, ip.validator_score_v1
   end
 end
