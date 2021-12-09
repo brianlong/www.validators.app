@@ -40,6 +40,7 @@ module Stats
 
     test 'top_staked_validators' do
       expected = [206356743325616, 206356743325097, 206356743324143, 206356743322528, 206356743321847, 0]
+      #expected = [206356743325938, 206356743325097, 206356743324609, 206356743324143, 206356743322528, 0]
       assert_equal expected, @vsq.top_staked_validators.map(&:first)
     end
 
