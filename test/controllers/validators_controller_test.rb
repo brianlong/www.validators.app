@@ -6,10 +6,16 @@ require 'test_helper'
 class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @validator = create(:validator, :with_score, network: 'testnet')
+    create(:batch, network: 'testnet')
   end
 
   test 'should get index' do
     get validators_url(network: 'testnet')
+    assert_response :success
+  end
+
+  test 'should get root' do
+    get root_url(network: 'testnet')
     assert_response :success
   end
 
