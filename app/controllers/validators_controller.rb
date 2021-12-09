@@ -35,22 +35,26 @@ class ValidatorsController < ApplicationController
   # GET /validators_v2
   # GET /validators_v2.json
   def index_v2
+    @per = 25
+    validators = Validator.where(network: params[:network])
+                          .scorable
+                          .includes(:validator_score_v1)
+                          .includes(:validator_score_v2)
+                          .index_order(validate_order)
+    @validators = validators.page(params[:page]).per(@per)
 
+    @batch = Batch.last_scored_v2(params[:network])
+
+    validator_history_stats = Stats::ValidatorHistory.new(params[:network], @batch.uuid)
+    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
+    @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
   end
 
   # GET /validators/1
   # GET /validators/1.json
   def show
     # Sometimes @validator is nil
-    @ping_times = []
-    # @ping_times = if @validator.nil?
-    #                 []
-    #               else
-    #                   PingTime.where(
-    #                   network: params[:network],
-    #                   to_account: @validator.account
-    #                 ).order('created_at desc').limit(30)
-    #               end
+    @ping_times = [] # set_ping_times
 
     @data = {}
 
@@ -109,6 +113,17 @@ class ValidatorsController < ApplicationController
       network: params[:network],
       account: params[:account]
     ).first or redirect_to(root_url(network: params[:network]))
+  end
+
+  def set_ping_times
+    @ping_times = if @validator.nil?
+                    []
+                  else
+                      PingTime.where(
+                      network: params[:network],
+                      to_account: @validator.account
+                    ).order('created_at desc').limit(30)
+                  end
   end
 
   def validate_order

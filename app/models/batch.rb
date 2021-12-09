@@ -41,6 +41,10 @@ class Batch < ApplicationRecord
     where('network = ? and scored_at IS NOT NULL', network).last
   end
 
+  def self.last_scored_v2(network)
+    where('network = ? and scored_at_v2 IS NOT NULL', network).last
+  end
+
   protected
 
   # Internal method assigns a UUID to a Host object's uuid attribute. This
