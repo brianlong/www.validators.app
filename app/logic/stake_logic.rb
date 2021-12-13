@@ -171,7 +171,7 @@ module StakeLogic
         previous_acc = StakeAccountHistory.where(
           stake_pubkey: acc.stake_pubkey,
           epoch: acc.epoch - 1
-        ).last
+        ).first
 
         next unless previous_acc && acc.delegated_stake
 
