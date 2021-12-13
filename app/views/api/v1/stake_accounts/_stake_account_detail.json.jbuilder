@@ -10,4 +10,7 @@ json.extract! stake_account,
   :stake_pool_id,
   :network,
   :batch_uuid,
-  :formatted_delegated_stake
+  :formatted_delegated_stake,
+  :pool_name,
+  :validator_name,
+  :validator_account
