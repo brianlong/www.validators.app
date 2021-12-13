@@ -55,7 +55,7 @@ module ValidatorScoreV2Logic
     end
   end
 
-  # Get the block vote history for each validator TODO change method name
+  # Get the block vote history for each validator
   def set_validators_groups
     lambda do |p|
       return p unless p.code == 200
