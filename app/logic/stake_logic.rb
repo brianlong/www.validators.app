@@ -149,4 +149,28 @@ module StakeLogic
       Pipeline.new(500, p.payload, "Error from count_average_validator_fee", e)
     end
   end
+
+  def calculate_apy
+    lambda do |p|
+      return p unless p.code == 200
+
+      StakeAccount.where(network: p.payload[:network]).each do |acc|
+        previous_acc = StakeAccountHistory.where(
+          stake_pubkey: acc.stake_pubkey,
+          epoch: acc.epoch - 1
+        ).last
+
+        next unless previous_acc
+
+        credits_diff = acc.credits_observed - previous_acc.credits_observed
+        credits_diff_percent = credits_diff / (acc.delegated_stake + previous_acc.credits_observed).to_f
+
+        puts credits_diff_percent
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from calculate_apy", e)
+    end
+  end
 end
