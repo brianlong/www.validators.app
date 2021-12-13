@@ -175,8 +175,8 @@ module StakeLogic
 
         next unless previous_acc && acc.delegated_stake
 
-        credits_diff = acc.credits_observed - previous_acc.credits_observed
-        credits_diff_percent = credits_diff / (acc.delegated_stake + previous_acc.credits_observed).to_f
+        credits_diff = acc.delegated_stake - previous_acc.delegated_stake
+        credits_diff_percent = credits_diff / previous_acc.delegated_stake
 
         apy = ((1 + credits_diff_percent) ** num_of_epochs) - 1
 
