@@ -27,4 +27,6 @@ include StakeLogic
               .then(&calculate_apy)
 
   puts "finished #{network} with status #{p[:code]}"
+  puts "MESSAGE: #{p[:message]}"
+  puts "ERROR: #{p[:errors].inspect}"
 end
