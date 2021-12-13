@@ -154,6 +154,19 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
+      last_epoch = EpochWallClock.where(
+        network: p.payload[:network]
+      ).last
+
+      previous_epoch = EpochWallClock.where(
+        network: p.payload[:network],
+        epoch: last_epoch.epoch - 1
+      ).last
+
+      num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
+
+      puts num_of_epochs
+
       StakeAccount.where(network: p.payload[:network]).each do |acc|
         previous_acc = StakeAccountHistory.where(
           stake_pubkey: acc.stake_pubkey,
@@ -165,7 +178,9 @@ module StakeLogic
         credits_diff = acc.credits_observed - previous_acc.credits_observed
         credits_diff_percent = credits_diff / (acc.delegated_stake + previous_acc.credits_observed).to_f
 
-        puts credits_diff_percent
+        apy = ((1 + credits_diff_percent) ** num_of_epochs) - 1
+
+        acc.update(apy: apy)
       end
 
       Pipeline.new(200, p.payload)

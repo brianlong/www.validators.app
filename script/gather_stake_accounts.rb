@@ -24,6 +24,7 @@ include StakeLogic
               .then(&update_stake_accounts)
               .then(&assign_stake_pools)
               .then(&count_average_validators_commission)
+              .then(&calculate_apy)
 
   puts "finished #{network} with status #{p[:code]}"
 end
