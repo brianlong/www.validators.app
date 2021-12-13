@@ -173,7 +173,7 @@ module StakeLogic
           epoch: acc.epoch - 1
         ).last
 
-        next unless previous_acc
+        next unless previous_acc && acc.delegated_stake
 
         credits_diff = acc.credits_observed - previous_acc.credits_observed
         credits_diff_percent = credits_diff / (acc.delegated_stake + previous_acc.credits_observed).to_f
