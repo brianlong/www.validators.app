@@ -77,6 +77,8 @@ class StakeLogicTest < ActiveSupport::TestCase
       authority: authority
     )
 
+    create(:epoch_wall_clock, network: 'testnet', epoch: 5)
+
     SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
       p = Pipeline.new(200, @initial_payload)
                   .then(&get_last_batch)
@@ -84,6 +86,7 @@ class StakeLogicTest < ActiveSupport::TestCase
                   .then(&update_stake_accounts)
                   .then(&assign_stake_pools)
 
+      assert_equal 200, p.code
       assert_equal stake_pool.id, StakeAccount.where(
         withdrawer: authority
       ).first.stake_pool_id

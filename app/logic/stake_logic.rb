@@ -221,7 +221,6 @@ module StakeLogic
         apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
         apy = apy < 100 && apy > 0 ? apy.round(2) : nil
 
-        puts "pubkey: #{acc.stake_pubkey}, apy: #{apy}"
         acc.update(apy: apy)
       end
 
