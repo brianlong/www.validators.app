@@ -180,7 +180,7 @@ module StakeLogic
 
         apy = ((1 + credits_diff_percent) ** num_of_epochs) - 1
 
-        next if apy > 1 || apy > 0
+        next if apy > 1 || apy < 0
         acc.update(apy: apy)
       end
 
