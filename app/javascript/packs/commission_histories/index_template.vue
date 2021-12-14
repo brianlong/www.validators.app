@@ -39,7 +39,6 @@
 </template>
 
 <script>
-  //axios = require('axios')
   import axios from 'axios'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
