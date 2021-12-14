@@ -17,7 +17,9 @@ p = Pipeline.new(200, payload)
             .then(&get_stake_accounts)
             .then(&update_stake_accounts)
             .then(&assign_stake_pools)
+            .then(&update_validator_stats)
             .then(&calculate_apy)
+
 end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
 duration = end_time - start_time

@@ -56,6 +56,7 @@
         <h2 class="card-heading">
           <i class="fas fa-dollar-sign mr-1"></i> FAQ - investors</h2>
         <ul class="list-large list-no-bullets text-center">
+          <li><a href="#investing">How do I start investing?</a></li>
           <li><a href="#best-validator">How to find the best validator?</a></li>
           <li><a href="#change-validator">How often can I change the validator?</a></li>
           <li><a href="#staking-rewards">How often are the staking rewards paid out?</a></li>
@@ -343,25 +344,38 @@
   system automatically within 24&nbsp;hours.
 </p>
 
+
+<h3 class="h5" id="investing">How do I start investing?</h3>
+<p class="mb-5">
+  First, you'll need some SOLs. You can buy them on <%= link_to "Coinbase", "https://www.coinbase.com/" %>. Then send
+  them to&nbsp;your web wallet, such as <%= link_to "Phantom", "https://phantom.app/" %> or
+  <%= link_to "Solflare", "https://solflare.com/" %>. For other options check out
+  <%= link_to "Solana web wallets", "https://docs.solana.com/wallet-guide/web-wallets" %> or
+  <%= link_to "Solana mobile wallets", "https://docs.solana.com/wallet-guide/apps" %>. You are ready to stake! To learn
+  more about staking see <%= link_to "Solana staking docs", "https://docs.solana.com/staking" %>. Then check out
+  our advice on <%= link_to "how to choose the right validator", "#choosing-validator" %>.
+</p>
+
 <h3 class="h5" id="best-validator">How to find the best validator?</h3>
 <p class="mb-5">
   To find a&nbsp;good validator, please start at the&nbsp;top of the 'Score' view on the&nbsp;home page and click through
-  to&nbsp;see validator details. Then read <%= link_to 'Choosing Validator', '#choosing-validator' %> section on this
+  to&nbsp;see validator details. Then read <%= link_to "Choosing Validator", "#choosing-validator" %> section on this
   page to&nbsp;find out what you should watch out for.
 </p>
 
 <h3 class="h5" id="change-validator">How often can I change the validator? Is there a minimum period?</h3>
 <p class="mb-5">
   It usually takes 1 epoch for stake to warm up or cool down. Try to split your stake across several validators. Please
-  also read our advice <%= link_to "how to choose the right validator", "#choosing-validator" %> and check out Solana
+  also read our advice on <%= link_to "how to choose the right validator", "#choosing-validator" %> and check out Solana
   <%= link_to "stake pool", "https://spl.solana.com/stake-pool/overview" %> program.
 </p>
 
 <h3 class="h5" id="staking-rewards">How often are the staking rewards paid out?</h3>
 <p class="mb-5">
-  It usually takes 1 epoch for stake to&nbsp;warm up or cool down. Try to&nbsp;split your stake across several validators.
-  Please also read our advice <%= link_to "how to choose the right validator", "#choosing-validator" %> and check out
-  Solana <%= link_to "stake pool", "https://spl.solana.com/stake-pool/overview" %> program.
+  It usually takes 1 epoch for stake to&nbsp;warm up or cool down. After that, you should see rewards in your wallet. For
+  better results, try to&nbsp;split your stake across several validators. Please also read our advice on
+  <%= link_to "how to choose the right validator", "#choosing-validator" %> or check out Solana
+  <%= link_to "stake pool", "https://spl.solana.com/stake-pool/overview" %> program.
 </p>
 
 <h3 class="h5" id="apy">Where can I find the APY?</h3>
@@ -369,3 +383,4 @@
   We do not show APY on&nbsp;validators.app. See <%= link_to "https://www.stakeview.app", "https://www.stakeview.app" %>
   for a&nbsp;good look at&nbsp;APY.
 </p>
+
