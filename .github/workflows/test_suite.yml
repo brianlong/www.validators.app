@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-20.04
     services:
       mysql:
-        image: mysql:8.0.23
+        image: mysql:8.0.27
         env:
           MYSQL_ROOT_PASSWORD: password
         ports:
@@ -72,7 +72,7 @@ jobs:
       - name: Verify MySQL connection from host
         run: |
           sudo apt-get update
-          sudo apt-get install -y mysql-client-8.0  libmysqlclient21 mysql-common
+          sudo apt-get install -y mysql-client-8.0  libmysqlclient21 mysql-common mysql-client-core-8.0 
           mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -ppassword -e "SHOW GRANTS FOR 'root'@'localhost'"
           mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -ppassword mysql
 
