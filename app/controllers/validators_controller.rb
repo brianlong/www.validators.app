@@ -122,7 +122,7 @@ class ValidatorsController < ApplicationController
                       PingTime.where(
                       network: params[:network],
                       to_account: @validator.account
-                    ).order('created_at desc').limit(30)
+                    ).order("created_at desc").limit(30)
                   end
   end
 

@@ -42,7 +42,7 @@ class Batch < ApplicationRecord
   end
 
   def self.last_scored_v2(network)
-    where('network = ? and scored_at_v2 IS NOT NULL', network).last
+    where("network = ? and scored_at_v2 IS NOT NULL", network).last
   end
 
   protected

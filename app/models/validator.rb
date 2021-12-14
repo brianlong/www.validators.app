@@ -56,16 +56,16 @@ class Validator < ApplicationRecord
 
     def index_order(order_param)
       sort_order = case order_param
-                   when 'score'
-                     'validator_score_v1s.total_score desc, RAND()'
-                   when 'name'
-                     'validators.name asc'
-                   when 'stake'
-                     'validator_score_v1s.active_stake desc'
-                   when 'random'
-                     'RAND()'
+                   when "score"
+                     "validator_score_v1s.total_score desc, RAND()"
+                   when "name"
+                     "validators.name asc"
+                   when "stake"
+                     "validator_score_v1s.active_stake desc"
+                   when "random"
+                     "RAND()"
                    else
-                     'validator_score_v1s.total_score desc, RAND()'
+                     "validator_score_v1s.total_score desc, RAND()"
                    end
 
       includes(:validator_score_v1).order(sort_order)
@@ -73,16 +73,16 @@ class Validator < ApplicationRecord
 
     def index_order_v2(order_param)
       sort_order = case order_param
-                   when 'score'
-                     'validator_score_v2s.total_score desc, RAND()'
-                   when 'name'
-                     'validators.name asc'
-                   when 'stake'
-                     'validator_score_v1s.active_stake desc'
-                   when 'random'
-                     'RAND()'
+                   when "score"
+                     "validator_score_v2s.total_score desc, RAND()"
+                   when "name"
+                     "validators.name asc"
+                   when "stake"
+                     "validator_score_v1s.active_stake desc"
+                   when "random"
+                     "RAND()"
                    else
-                     'validator_score_v2s.total_score desc, RAND()'
+                     "validator_score_v2s.total_score desc, RAND()"
                    end
 
       order(sort_order)
