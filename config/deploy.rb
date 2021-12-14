@@ -156,9 +156,11 @@ namespace :rake_task do
   
   desc 'Update manager fees to Stake Pools'
   task :update_fee_in_stake_pools do
-    on roles :all do |_role|
-      with rails_env: fetch(:rails_env) do
-        execute :rake, 'update_fee_in_stake_pools:mainnet'
+    on release_roles([:all]) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'update_fee_in_stake_pools:mainnet'
+        end
       end
     end
   end
