@@ -37,11 +37,4 @@ class StakeAccount < ApplicationRecord
   scope :filter_by_account, ->(account) { where('stake_pubkey LIKE ?', "#{account}%") }
   scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
   scope :filter_by_withdrawer, ->(withdrawer) { where('withdrawer LIKE ?', "#{withdrawer}%") }
-
-  def formatted_delegated_stake
-    return "0.00" unless delegated_stake.is_a?(Numeric)
-
-    stake_in_sol = (delegated_stake / 1_000_000_000.to_f)
-    ActiveSupport::NumberHelper.number_to_currency(stake_in_sol, precision: 2, unit: "")
-  end
 end

@@ -5,6 +5,7 @@ module Api
     # This is the base controller for the V1 API. It handles token
     # authentication.
     class BaseController < ActionController::API
+      helper ApplicationHelper
       # Special error classes:
       class ValidatorNotFound < StandardError; end
 
