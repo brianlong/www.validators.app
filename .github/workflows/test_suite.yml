@@ -72,7 +72,7 @@ jobs:
       - name: Verify MySQL connection from host
         run: |
           sudo apt-get update
-          sudo apt-get install -y mysql-client-8.0.27-0ubuntu0.20.04.1 libmysqlclient21 mysql-common mysql-client-core-8.0.27-0ubuntu0.20.04.1 
+          sudo apt-get install -y mysql-client-8.0.27 libmysqlclient21 mysql-common mysql-client-core-8.0.27
           mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -ppassword -e "SHOW GRANTS FOR 'root'@'localhost'"
           mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -ppassword mysql
 
