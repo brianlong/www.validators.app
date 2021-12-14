@@ -38,9 +38,9 @@ end
 
 %w[mainnet testnet].each do |network|
   if Rails.env.test?
-    url = 'https://api.testnet.solana.com'
+    url = "https://api.testnet.solana.com"
   else
-    url = if network == 'mainnet'
+    url = if network == "mainnet"
       Rails.application.credentials.solana[:mainnet_urls][0]
     else
       Rails.application.credentials.solana[:testnet_urls][0]
