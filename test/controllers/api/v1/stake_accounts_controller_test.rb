@@ -65,6 +65,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Validator", json_response["stake_accounts"].first["validator_name"]
     assert_equal "Account", json_response["stake_accounts"].first["validator_account"]
     assert_equal "5,000.00", json_response["stake_accounts"].first["delegated_stake"]
-    assert_equal "delegated_vote_account_address", json_response["stake_accounts"].first["delegated_vote_account_address"]
+    assert_equal "delegated_vote_account_address", \
+      json_response["stake_accounts"].first["delegated_vote_account_address"]
   end
 end
