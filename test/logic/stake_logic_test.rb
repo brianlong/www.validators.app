@@ -106,4 +106,33 @@ class StakeLogicTest < ActiveSupport::TestCase
 
     assert_equal 7.5, stake_pool.reload.average_validators_commission
   end
+
+  test "calculate apy" do
+    create(:epoch_wall_clock, network: 'testnet', epoch: 1, created_at: 3.days.ago)
+    create(:epoch_wall_clock, network: 'testnet', epoch: 2)
+
+    create(
+      :stake_account_history,
+      network: 'testnet',
+      delegated_stake: 10000,
+      epoch: 1,
+      stake_pubkey: 'pubkey_123'
+    )
+
+    acc = create(
+      :stake_account,
+      network: 'testnet',
+      delegated_stake: 10002,
+      epoch: 2,
+      stake_pubkey: 'pubkey_123'
+    )
+
+    p = Pipeline.new(200, @initial_payload)
+                .then(&calculate_apy)
+    
+    acc.reload
+                
+    assert_equal 200, p.code
+    assert_equal 2.45, acc.apy
+  end
 end

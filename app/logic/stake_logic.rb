@@ -165,22 +165,21 @@ module StakeLogic
 
       num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
 
-      puts num_of_epochs
-
       StakeAccount.where(network: p.payload[:network]).each do |acc|
         previous_acc = StakeAccountHistory.where(
           stake_pubkey: acc.stake_pubkey,
           epoch: acc.epoch - 1
         ).first
-
+        
         next unless previous_acc && acc.delegated_stake
 
         credits_diff = acc.delegated_stake - previous_acc.delegated_stake
-        credits_diff_percent = credits_diff / previous_acc.delegated_stake
+        credits_diff_percent = credits_diff / previous_acc.delegated_stake.to_f
 
-        apy = ((1 + credits_diff_percent) ** num_of_epochs) - 1
+        apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
+        apy = apy < 100 && apy > 0 ? apy.round(2) : nil
 
-        next if apy > 1 || apy < 0
+        puts "pubkey: #{acc.stake_pubkey}, apy: #{apy}"
         acc.update(apy: apy)
       end
 
