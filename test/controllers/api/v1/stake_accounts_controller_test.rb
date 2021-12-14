@@ -36,8 +36,8 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
     validator = create(
       :validator,
-      name: 'Validator',
-      account: 'Account'
+      name: "Validator",
+      account: "Account"
     )
 
     create(
