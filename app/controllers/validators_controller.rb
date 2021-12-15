@@ -11,7 +11,6 @@ class ValidatorsController < ApplicationController
     validators = Validator.where(network: params[:network])
                           .scorable
                           .preload(:validator_score_v1)
-                          .joins(:validator_score_v1)
                           .index_order(validate_order)
 
     @validators = validators.page(params[:page]).per(@per)
@@ -69,11 +68,11 @@ class ValidatorsController < ApplicationController
 
     # Grab the distances to show on the chart
     @vote_blocks = @val_histories.map(&:vote_distance).compact
-    
+
     @commission_histories = CommissionHistoryQuery.new(
       network: params[:network]
     ).exists_for_validator?(@validator.id)
-    
+
     @validator.validator_block_histories
               .includes(:batch)
               .order('id desc')
