@@ -115,14 +115,56 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
       
-      StakePool.where(network: p.payload[:network]).each do |pool|
+      stake_pools = StakePool.where(network: p.payload[:network])
+
+      stake_pools.each do |pool|
         StakeAccount.where(withdrawer: pool.authority, network: p.payload[:network])
                     .update_all(stake_pool_id: pool.id)
       end
 
-      Pipeline.new(200, p.payload)
+      Pipeline.new(200, p.payload.merge(stake_pools: stake_pools))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_stake_pools', e)
+    end
+  end
+
+  def update_validator_stats
+    lambda do |p|
+      return p unless p.code == 200
+
+      p.payload[:stake_pools].each do |pool|
+        validator_ids = pool.stake_accounts.pluck(:validator_id)
+        delinquent_count = 0
+        last_skipped_slots = []
+        uptimes = []
+
+        Validator.where(id: validator_ids).each do |validator|
+          score = validator.score
+
+          last_delinquent = validator.validator_histories
+                                     .order(created_at: :desc)
+                                     .where(delinquent: true)
+                                     .first
+                                     &.created_at || (DateTime.now - 30.days)
+
+          uptime = (DateTime.now - last_delinquent.to_datetime).to_i
+          uptimes.push uptime
+          delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
+          last_skipped_slots.push score.skipped_slot_history&.last
+        end
+
+        pool.average_uptime = uptimes.average
+        pool.average_delinquent = (delinquent_count / validator_ids.size) * 100
+        pool.average_skipped_slots = last_skipped_slots.compact.average
+      end
+
+      StakePool.transaction do
+        p.payload[:stake_pools].each(&:save)
+      end
+      
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from update_validator_stats", e)
     end
   end
 

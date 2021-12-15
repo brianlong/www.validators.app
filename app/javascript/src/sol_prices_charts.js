@@ -18,7 +18,6 @@ document.addEventListener('turbolinks:load', () => {
   for (const chartTabButton of chartTabButtons) {
     chartTabButton.addEventListener('click', function() {
       changeUrlBasedOnActiveTab(chartTabButton);
-      updateFilterUrl();
     })
   }
 
@@ -48,19 +47,6 @@ function addActiveClass(button) {
 function changeUrlBasedOnActiveFilter(chartFilterButton) {
   const href = chartFilterButton.href
   window.history.replaceState(null, '', href);
-}
-
-function updateFilterUrl() {
-  const chartFilterButtons = document.getElementsByClassName('chartFilterButton')
-  for (const chartFilterButton of chartFilterButtons) {
-    const url = window.location.href
-    const href = chartFilterButton.href
-    const hrefExchange = findExchangeInUrl(href)
-    const currentUrlExchange = findExchangeInUrl(url)
-    const newUrl = replaceExchangeInUrl(null, '', currentUrlExchange) 
-
-    chartFilterButton.href = newUrl
-  }
 }
 
 function changeUrlBasedOnActiveTab(button) {

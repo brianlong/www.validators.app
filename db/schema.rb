@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2021_12_07_131716) do
-
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -330,6 +329,9 @@ ActiveRecord::Schema.define(version: 2021_12_07_131716) do
     t.float "manager_fee"
     t.float "average_validators_commission"
     t.string "ticker"
+    t.float "average_delinquent"
+    t.float "average_skipped_slots"
+    t.float "average_uptime"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
