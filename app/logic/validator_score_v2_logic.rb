@@ -68,12 +68,12 @@ module ValidatorScoreV2Logic
     end
   end
 
-  def assign_root_distance_scores
+  def assign_root_distance_score
     lambda do |p|
       return p unless p.code == 200
 
       sorted_by_root_distance = p.payload[:validators].sort_by do |validator|
-        validator.score.root_distance_history.to_a[-1].to_f
+        validator.score.med_root_distance_history(960).to_f
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -90,16 +90,16 @@ module ValidatorScoreV2Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from assign_root_distance_scores", e)
+      Pipeline.new(500, p.payload, "Error from assign_root_distance_score", e)
     end
   end
 
-  def assign_vote_distance_scores
+  def assign_vote_distance_score
     lambda do |p|
       return p unless p.code == 200
 
       sorted_by_vote_distance = p.payload[:validators].sort_by do |validator|
-        validator.score.vote_distance_history.to_a[-1].to_f
+        validator.score.med_vote_distance_history(960).to_f
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -116,7 +116,7 @@ module ValidatorScoreV2Logic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from assign_vote_distance_scores", e)
+      Pipeline.new(500, p.payload, "Error from assign_vote_distance_score", e)
     end
   end
 
@@ -125,7 +125,7 @@ module ValidatorScoreV2Logic
       return p unless p.code == 200
 
       sorted_by_skipped_slot = p.payload[:validators].sort_by do |validator|
-        validator.score.skipped_slot_history.to_a[-1].to_f
+        validator.score.skipped_slot_moving_average_history.last.to_f
       rescue StandardError => e
         Appsignal.send_error(e)
       end
