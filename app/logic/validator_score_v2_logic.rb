@@ -73,6 +73,7 @@ module ValidatorScoreV2Logic
       return p unless p.code == 200
 
       sorted_by_root_distance = p.payload[:validators].sort_by do |validator|
+        # sort by validator's root distance average from last 2 days
         validator.score.med_root_distance_history(960).to_f
       rescue StandardError => e
         Appsignal.send_error(e)
@@ -99,6 +100,7 @@ module ValidatorScoreV2Logic
       return p unless p.code == 200
 
       sorted_by_vote_distance = p.payload[:validators].sort_by do |validator|
+        # sort by validator's vote distance average from last 2 days
         validator.score.med_vote_distance_history(960).to_f
       rescue StandardError => e
         Appsignal.send_error(e)
@@ -125,6 +127,7 @@ module ValidatorScoreV2Logic
       return p unless p.code == 200
 
       sorted_by_skipped_slot = p.payload[:validators].sort_by do |validator|
+        # sort by validator's skipped slot moving average
         validator.score.skipped_slot_moving_average_history.last.to_f
       rescue StandardError => e
         Appsignal.send_error(e)
