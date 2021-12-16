@@ -331,7 +331,6 @@ ActiveRecord::Schema.define(version: 2021_12_16_135320) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "ticker"
     t.float "manager_fee"
-    t.string "ticker"
     t.float "average_validators_commission"
     t.float "average_delinquent"
     t.float "average_skipped_slots"
