@@ -331,10 +331,12 @@ ActiveRecord::Schema.define(version: 2021_12_16_135320) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "ticker"
     t.float "manager_fee"
+    t.string "ticker"
     t.float "average_validators_commission"
     t.float "average_delinquent"
     t.float "average_skipped_slots"
     t.float "average_uptime"
+    t.integer "average_lifetime"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
