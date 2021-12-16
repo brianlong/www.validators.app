@@ -24,7 +24,7 @@ FactoryBot.define do
     published_information_score { 0 }
     security_report_score { 0 }
     ip_address { "172.96.172.252" }
-    network { "mainnet" }
+    network { "testnet" }
     data_center_key { "23470-US-America/Chicago" }
     data_center_host { nil }
     skipped_slot_moving_average_history { [0.2051] }
