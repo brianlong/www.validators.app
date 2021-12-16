@@ -46,6 +46,7 @@
 # Indexes
 #
 #  index_validator_score_v2s_on_network_and_data_center_key  (network,data_center_key)
+#  index_validator_score_v2s_on_total_score                  (total_score)
 #  index_validator_score_v2s_on_validator_id                 (validator_id)
 #
 
