@@ -95,7 +95,7 @@
         <% end %>
         <% unless validator.private_validator? && !validator.lido? %>
           <small>
-            (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.score&.commission %>%)
+            (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
           </small>
         <% end %>
         <% if validator.score&.authorized_withdrawer_score == -2 %>
@@ -106,8 +106,8 @@
         <br />
         <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
         <small>
-          <%= number_with_delimiter lamports_to_sol(validator.score&.active_stake).round(0) %>
-          (<%= number_to_percentage(validator.score&.stake_concentration.to_f * 100.0, precision: 1) %>)
+          <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
+          (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
         </small>
         <br />
         <% if show_ip_and_gateway %>
