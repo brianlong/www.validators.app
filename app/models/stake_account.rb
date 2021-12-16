@@ -6,14 +6,12 @@
 #  account_balance                :bigint
 #  activation_epoch               :integer
 #  active_stake                   :bigint
-#  apy                            :float(24)
 #  batch_uuid                     :string(191)
 #  credits_observed               :bigint
 #  deactivating_stake             :bigint
 #  deactivation_epoch             :integer
 #  delegated_stake                :bigint
 #  delegated_vote_account_address :string(191)
-#  epoch                          :integer
 #  network                        :string(191)
 #  rent_exempt_reserve            :bigint
 #  stake_pubkey                   :string(191)
