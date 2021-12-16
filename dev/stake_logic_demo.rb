@@ -26,7 +26,10 @@ duration = end_time - start_time
 
 puts "CODE: #{p[:code]}"
 puts "MESSAGE: #{p[:message]}"
-puts "ERROR: #{p[:errors].inspect}"
+if p[:errors]
+  puts "ERROR: #{p[:errors].inspect}"
+  puts p[:errors].backtrace
+end
 puts "DURATION: #{duration}"
 
 puts "\nFIRST STAKE ACC: "
