@@ -38,8 +38,7 @@ class ValidatorsController < ApplicationController
     @per = 25
     validators = Validator.where(network: params[:network])
                           .scorable
-                          .includes(:validator_score_v1)
-                          .includes(:validator_score_v2)
+                          .preload(:validator_score_v1, :validator_score_v2)
                           .index_order_v2(validate_order)
     @validators = validators.page(params[:page]).per(@per)
 
@@ -127,7 +126,7 @@ class ValidatorsController < ApplicationController
   end
 
   def validate_order
-    valid_orders = %w[score name]
+    valid_orders = %w[score name stake]
     return 'score' unless params[:order].in? valid_orders
 
     params[:order]
