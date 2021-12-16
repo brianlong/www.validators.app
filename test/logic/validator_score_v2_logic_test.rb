@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 # ValidatorScoreV1LogicTest
 class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
@@ -26,7 +26,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
            root_distance_history: [2, 4, 4, 2], # average 3
            vote_distance_history: [2, 4, 4, 2], # average 3
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.3]) # last record 0.3
-    @v3 = create(:validator, network: 'testnet')
+    @v3 = create(:validator, network: "testnet")
     create(:validator_score_v1,
            validator: @v3,
            root_distance_history: [2, 0, 2, 0], # average 1
