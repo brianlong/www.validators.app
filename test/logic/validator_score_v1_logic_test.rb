@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 # ValidatorScoreV1LogicTest
 class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
@@ -9,21 +9,21 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   def setup
     # Create our initial payload with the input values
     @initial_payload = {
-      network: 'testnet',
-      batch_uuid: '1234'
+      network: "testnet",
+      batch_uuid: "1234"
     }
   end
 
-  test 'set_this_batch' do
+  test "set_this_batch" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
 
     assert_equal 200, p.code
-    assert_equal 'testnet', p.payload[:this_batch].network
-    assert_equal '1234', p.payload[:this_batch].uuid
+    assert_equal "testnet", p.payload[:this_batch].network
+    assert_equal "1234", p.payload[:this_batch].uuid
   end
 
-  test 'validators_get' do
+  test "validators_get" do
     create(:validator)
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
@@ -36,7 +36,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'block_vote_history_get' do
+  test "block_vote_history_get" do
     # create enough records to confirm via logs we don't have an N+1 query when
     # getting ValidatorHistory for all accounts for this batch
     5.times do
@@ -44,14 +44,14 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
       vote_acc = create(:vote_account, validator_id: v.id, account: v.account)
       create(
         :validator_history,
-        network: 'testnet',
-        batch_uuid: '1234',
+        network: "testnet",
+        batch_uuid: "1234",
         account: v.account
       )
       create(
         :vote_account_history,
-        batch_uuid: '1234',
-        network: 'testnet',
+        batch_uuid: "1234",
+        network: "testnet",
         vote_account_id: vote_acc.id
       )
     end
@@ -99,20 +99,20 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
             .delinquent
   end
 
-  test 'assign_block_and_vote_scores' do
+  test "assign_block_and_vote_scores" do
     5.times do
       v = create(:validator)
       vote_acc = create(:vote_account, validator_id: v.id, account: v.account)
       create(
         :validator_history,
-        network: 'testnet',
-        batch_uuid: '1234',
+        network: "testnet",
+        batch_uuid: "1234",
         account: v.account
       )
       create(
         :vote_account_history,
-        batch_uuid: '1234',
-        network: 'testnet',
+        batch_uuid: "1234",
+        network: "testnet",
         vote_account_id: vote_acc.id
       )
     end
@@ -156,7 +156,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                       .stake_concentration_score
   end
 
-  test 'block_history_get' do
+  test "block_history_get" do
 
     # Empty the previous ValidatorBlockHistory table
     ValidatorBlockHistory.destroy_all
@@ -177,7 +177,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
         create(
           :validator_block_history,
           network: @initial_payload[:network],
-          batch_uuid: 'previous',
+          batch_uuid: "previous",
           validator: v1,
           skipped_slot_percent: 0.5
         )
@@ -198,7 +198,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
         create(
           :validator_block_history,
           network: @initial_payload[:network],
-          batch_uuid: 'previous',
+          batch_uuid: "previous",
           validator: v2,
           skipped_slot_percent: 0.6
         )
@@ -218,7 +218,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
         create(
           :validator_block_history,
           network: @initial_payload[:network],
-          batch_uuid: 'previous',
+          batch_uuid: "previous",
           validator: v3,
           skipped_slot_percent: 0.7
         )
@@ -296,8 +296,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                          .skipped_slot_moving_average_history
   end
 
-  test 'assign_block_history_score' do
-    create(:validator_block_history, network: 'testnet', batch_uuid: '1234')
+  test "assign_block_history_score" do
+    create(:validator_block_history, network: "testnet", batch_uuid: "1234")
 
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
@@ -319,7 +319,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .skipped_slot_score
   end
 
-  test 'assign_software_version_score' do
+  test "assign_software_version_score" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -335,9 +335,9 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .software_version_score
   end
 
-  test 'asign_software_version_score skips `software_version` assignment if the version is junk' do
-    Validator.last.validator_score_v1.update!(software_version: '1.5.6')
-    Validator.last.validator_history_last.update!(software_version: 'junk')
+  test "asign_software_version_score skips `software_version` assignment if the version is junk" do
+    Validator.last.validator_score_v1.update!(software_version: "1.5.6")
+    Validator.last.validator_history_last.update!(software_version: "junk")
 
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
@@ -349,11 +349,11 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&assign_software_version_score)
                 .then(&save_validators)
 
-    assert_equal '1.5.6', p.payload[:this_batch].software_version
-    assert_equal('1.5.6', Validator.last.validator_score_v1.software_version)
+    assert_equal "1.5.6", p.payload[:this_batch].software_version
+    assert_equal("1.5.6", Validator.last.validator_score_v1.software_version)
   end
 
-  test 'get_ping_times' do
+  test "get_ping_times" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -374,8 +374,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                                 .ping_time_avg
   end
 
-  test 'save_validators' do
-    create(:validator_block_history, network: 'testnet', batch_uuid: '1234')
+  test "save_validators" do
+    create(:validator_block_history, network: "testnet", batch_uuid: "1234")
 
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
@@ -395,9 +395,9 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal 2, Validator.first.validator_score_v1.skipped_slot_score
   end
 
-  test 'find_current_software_version \
+  test "find_current_software_version \
         when most stake is over 66% \
-        should return version with most stake' do
+        should return version with most stake" do
     software_versions = {
       "1.6.7"=>279919552719104317,
       "1.5.19"=>10288992031757525,
@@ -417,9 +417,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal "1.6.7", current_software_version
   end
 
-  test 'find_current_software_version \
-    when most stake is under 66% \
-    should return version earlier than one with most stake' do
+  test "find_current_software_version when most stake is under 66% \
+        should return version earlier than one with most stake" do
       software_versions = {
         "1.6.7"=>209919552719104317,
         "1.5.19"=>17288992031757525,
@@ -439,9 +438,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal "1.6.7", current_software_version
   end
 
-  test 'find_current_software_version \
-    when there are unexpected versions \
-    should return correct version' do
+  test "find_current_software_version when there are unexpected versions \
+        should return correct version" do
     software_versions = {
       "1.6.7"=>209919552719104317,
       "1.5.19"=>17288992031757525,

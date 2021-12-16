@@ -9,18 +9,18 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
   def setup
     # Create our initial payload with the input values
     @initial_payload = {
-      network: 'testnet',
-      batch_uuid: '1234'
+      network: "testnet",
+      batch_uuid: "1234"
     }
     # Create validator data needed for scores
     Validator.destroy_all
-    @v1 = create(:validator, network: 'testnet')
+    @v1 = create(:validator, network: "testnet")
     create(:validator_score_v1,
            validator: @v1,
            root_distance_history: [2, 1, 2, 3], # average 2
            vote_distance_history: [2, 1, 2, 3], # average 2
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.2]) # last record 0.2
-    @v2 = create(:validator, network: 'testnet')
+    @v2 = create(:validator, network: "testnet")
     create(:validator_score_v1,
            validator: @v2,
            root_distance_history: [2, 4, 4, 2], # average 3
@@ -34,16 +34,16 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.1]) # last record 0.1
   end
 
-  test 'set_this_batch' do
+  test "set_this_batch" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
 
     assert_equal 200, p.code
-    assert_equal 'testnet', p.payload[:this_batch].network
-    assert_equal '1234', p.payload[:this_batch].uuid
+    assert_equal "testnet", p.payload[:this_batch].network
+    assert_equal "1234", p.payload[:this_batch].uuid
   end
 
-  test 'validators_get' do
+  test "validators_get" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -57,16 +57,16 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'set_validators_groups' do
+  test "set_validators_groups" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&set_validators_groups)
-    assert_equal 3, Validator.where(network: 'testnet').count
+    assert_equal 3, Validator.where(network: "testnet").count
     assert_equal 1, p.payload[:validators_count_in_each_group]
   end
 
-  test 'assign_root_distance_score' do
+  test "assign_root_distance_score" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -79,7 +79,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     assert_equal 2, p.payload[:validators].find(@v3.id).score_v2.root_distance_score
   end
 
-  test 'assign_vote_distance_score' do
+  test "assign_vote_distance_score" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -93,7 +93,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     assert_equal 2, p.payload[:validators].find(@v3.id).score_v2.vote_distance_score
   end
 
-  test 'assign_skipped_slot_score' do
+  test "assign_skipped_slot_score" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -106,7 +106,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     assert_equal 2, p.payload[:validators].find(@v3.id).score_v2.skipped_slot_score
   end
 
-  test 'save_validators' do
+  test "save_validators" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)

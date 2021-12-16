@@ -14,7 +14,7 @@ FactoryBot.define do
     skipped_slot_score { 0 }
     skipped_after_history { nil }
     skipped_after_score { nil }
-    software_version { '1.6.7' }
+    software_version { "1.6.7" }
     software_version_score { 2 }
     stake_concentration { 0.1e-2 }
     stake_concentration_score { 0 }
@@ -25,9 +25,9 @@ FactoryBot.define do
     delinquent { false }
     published_information_score { 0 }
     security_report_score { 0 }
-    ip_address { '172.96.172.252' }
-    network { 'testnet' }
-    data_center_key { '23470-US-America/Chicago' }
+    ip_address { "172.96.172.252" }
+    network { "testnet" }
+    data_center_key { "23470-US-America/Chicago" }
     data_center_host { nil }
     skipped_slot_moving_average_history { [0.2051] }
     skipped_vote_percent_moving_average_history { nil }
