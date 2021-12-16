@@ -8,7 +8,8 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     @validator = create(:validator, network: 'mainnet')
     @validator_score_v1 = create(
       :validator_score_v1,
-      validator: @validator
+      validator: @validator,
+      network: 'mainnet'
     )
   end
 
