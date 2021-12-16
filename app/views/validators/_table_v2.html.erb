@@ -95,7 +95,7 @@
         <% end %>
         <% unless validator.private_validator? && !validator.lido? %>
           <small>
-            (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
+            (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.score.commission %>%)
           </small>
         <% end %>
         <% if validator.score.authorized_withdrawer_score == -2 %>
@@ -106,8 +106,8 @@
         <br />
         <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
         <small>
-          <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
-          (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
+          <%= number_with_delimiter lamports_to_sol(validator.score.active_stake).round(0) %>
+          (<%= number_to_percentage(validator.score.stake_concentration.to_f * 100.0, precision: 1) %>)
         </small>
         <br />
         <% if show_ip_and_gateway %>
@@ -183,8 +183,8 @@
       <td class="column-chart d-none d-lg-table-cell align-middle" id="root-distance-<%=i%>">
         <%
           vl = chart_x_scale(validator.score&.root_distance_history.to_a.count)
-          line_color = chart_line_color(validator.root_distance_score)
-          fill_color = chart_fill_color(validator.root_distance_score)
+          line_color = chart_line_color(validator.score.root_distance_score)
+          fill_color = chart_fill_color(validator.score.root_distance_score)
           vector = validator.score&.root_distance_history.to_a[-vl..-1]
         %>
         <% max_value = vector&.max %>
@@ -212,8 +212,8 @@
       <td class="column-chart d-none d-lg-table-cell align-middle" id=vote-distance-<%=i%>>
         <%
           vl = chart_x_scale(validator.score&.vote_distance_history.to_a.count)
-          line_color = chart_line_color(validator.vote_distance_score)
-          fill_color = chart_fill_color(validator.vote_distance_score)
+          line_color = chart_line_color(validator.score.vote_distance_score)
+          fill_color = chart_fill_color(validator.score.vote_distance_score)
           vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
         %>
         <% max_value = vote_vector&.max %>
@@ -246,8 +246,8 @@
           skipped_slots_moving_avg = validator.score&.skipped_slot_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
           slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
-          line_color = chart_line_color(validator.skipped_slot_score)
-          fill_color = chart_fill_color(validator.skipped_slot_score)
+          line_color = chart_line_color(validator.score.skipped_slot_score)
+          fill_color = chart_fill_color(validator.score.skipped_slot_score)
         %>
         <%= render 'validators/spark_line_skipped_slots',
                    account: validator.account,
