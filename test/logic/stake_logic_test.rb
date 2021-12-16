@@ -96,7 +96,8 @@ class StakeLogicTest < ActiveSupport::TestCase
     validator = create(
       :validator,
       network: "testnet",
-      account: "account123"
+      account: "account123",
+      created_at: 10.days.ago
     )
 
     validator_history = create(
@@ -141,6 +142,7 @@ class StakeLogicTest < ActiveSupport::TestCase
 
     assert_equal p.code, 200
     assert_equal 3, stake_pool.average_uptime
+    assert_equal 10, stake_pool.average_lifetime
     assert_equal 0, stake_pool.average_delinquent
     assert_equal 5, stake_pool.average_skipped_slots
   end
