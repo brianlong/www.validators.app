@@ -33,9 +33,9 @@ module StakeLogic
 
       StakePool.where(network: p.payload[:network]).each do |pool|
         pool_stake_acc = stake_accounts.select do |sa| 
-          sa['withdrawer'] == pool.authority || sa['staker'] == pool.authority
+          sa["withdrawer"] == pool.authority || sa["staker"] == pool.authority
         end
-        
+
         reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
       end
 
