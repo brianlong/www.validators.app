@@ -1,5 +1,5 @@
 json.stake_accounts do
-  json.array! @stake_accounts
+  json.array! @stake_accounts, partial: "api/v1/stake_accounts/stake_account_detail", as: :stake_account
 end
 
 json.stake_pools do
