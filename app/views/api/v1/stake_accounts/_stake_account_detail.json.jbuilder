@@ -1,7 +1,7 @@
 json.extract! stake_account,
   :id,
   :activation_epoch,
-  :active_stake,
+  :delegated_stake,
   :delegated_vote_account_address,
   :stake_pubkey,
   :staker,
@@ -13,4 +13,4 @@ json.extract! stake_account,
   :validator_name,
   :validator_account
 
-json.delegated_stake lamports_as_formatted_sol(stake_account.delegated_stake)
+json.active_stake lamports_as_formatted_sol(stake_account.active_stake)

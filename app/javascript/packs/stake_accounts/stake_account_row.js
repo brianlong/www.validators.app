@@ -33,7 +33,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
   template: `
     <tr>
       <td>
-        {{ stake_account.delegated_stake }} SOL
+        {{ stake_account.active_stake }} SOL
         <br />
         <small>
           <a :href="validator_url" target="_blank">{{ name_or_account() }}</a>
