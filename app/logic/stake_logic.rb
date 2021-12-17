@@ -146,6 +146,7 @@ module StakeLogic
         delinquent_count = 0
         last_skipped_slots = []
         uptimes = []
+        lifetimes = []
 
         Validator.where(id: validator_ids).each do |validator|
           score = validator.score
@@ -157,12 +158,15 @@ module StakeLogic
                                      &.created_at || (DateTime.now - 30.days)
 
           uptime = (DateTime.now - last_delinquent.to_datetime).to_i
+          lifetime = (DateTime.now - validator.created_at.to_datetime).to_i
           uptimes.push uptime
+          lifetimes.push lifetime
           delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
           last_skipped_slots.push score.skipped_slot_history&.last
         end
 
         pool.average_uptime = uptimes.average
+        pool.average_lifetime = lifetimes.average
         pool.average_delinquent = (delinquent_count / validator_ids.size) * 100
         pool.average_skipped_slots = last_skipped_slots.compact.average
       end

@@ -32,6 +32,7 @@
 #  index_stake_accounts_on_staker_and_network        (staker,network)
 #  index_stake_accounts_on_withdrawer_and_network    (withdrawer,network)
 #
+
 class StakeAccount < ApplicationRecord
   belongs_to :stake_pool, optional: true
   belongs_to :validator, optional: true
