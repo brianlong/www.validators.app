@@ -10,7 +10,9 @@ class ValidatorCheckActiveService
 
   def update_validator_activity
     Validator.all.each do |validator|
-      if validator.scorable?
+      if should_be_destroyed?(validator)
+        validator.update(is_active: false, is_destroyed: true)
+      elsif validator.scorable?
         update_scorable(validator)
       else
         # Check validators that are currently not scorable in case they reactivate
@@ -26,6 +28,16 @@ class ValidatorCheckActiveService
   end
 
   private
+
+  def should_be_destroyed?(validator)
+    if validator.validator_histories.where("created_at > ?", @delinquent_time)
+      if validator.validator_histories.where('created_at < ?', @delinquent_time).exists?
+        true
+      end
+    end
+
+    false
+  end
 
   # number of previous by network
   def previous_epoch(network)

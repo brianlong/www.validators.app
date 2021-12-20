@@ -10,6 +10,7 @@
 #  details             :string(191)
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
+#  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
@@ -35,8 +36,8 @@ class Validator < ApplicationRecord
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
 
-  scope :active, -> { where(is_active: true) }
-  scope :scorable, -> { where(is_active: true, is_rpc: false) }
+  scope :active, -> { where(is_active: true, is_destroyed: false) }
+  scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
 
   # after_save :copy_data_to_score
 
