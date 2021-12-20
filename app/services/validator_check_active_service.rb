@@ -30,8 +30,8 @@ class ValidatorCheckActiveService
   private
 
   def should_be_destroyed?(validator)
-    if !validator.validator_histories.where("created_at < ?", @delinquent_time).exists?
-      if validator.validator_histories.where('created_at > ?', @delinquent_time).exists?
+    if !validator.validator_histories.where("created_at > ?", @delinquent_time.ago).exists?
+      if validator.validator_histories.where('created_at < ?', @delinquent_time.ago).exists?
         return true
       end
     end
