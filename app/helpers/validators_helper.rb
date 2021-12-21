@@ -79,11 +79,11 @@ module ValidatorsHelper
 
   def shuffle_logos
     [
-      ['https://lido.fi/solana', 'lido.png'],
-      ['https://marinade.finance', 'marinade.png'],
-      ['https://www.socean.fi', 'socean.png'],
-      ['https://jpool.one/', 'jpool.png'],
-      ['https://daopool.monkedao.io/', 'daopool.png']
+      ["https://lido.fi/solana", "lido.png"],
+      ["https://marinade.finance", "marinade.png"],
+      ["https://www.socean.fi", "socean.png"],
+      ["https://jpool.one/", "jpool.png"],
+      ["https://daopool.monkedao.io/", "daopool.png"]
       # add more stake pools here
     ].shuffle
   end
