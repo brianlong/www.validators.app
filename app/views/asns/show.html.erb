@@ -54,17 +54,9 @@
   </div>
 </div>
 
-<%= link_to 'Filter by delinquent',
-    asn_url(network: params[:network], asn: params[:asn], filter_by: :delinquent),
-    class: "btn btn-sm btn-secondary mr-1 mb-4 #{'active' if params[:filter_by] == 'delinquent'}" %>
-
-<%= link_to 'Filter by inactive',
-    asn_url(network: params[:network], asn: params[:asn], filter_by: :inactive),
-    class: "btn btn-sm btn-secondary mr-1 mb-4 #{'active' if params[:filter_by] == 'inactive'}" %>
-
-<%= link_to 'Filter by private',
-    asn_url(network: params[:network], asn: params[:asn], filter_by: :private),
-    class: "btn btn-sm btn-secondary mr-1 mb-4 #{'active' if params[:filter_by] == 'private'}" %>
+<%= create_filter_link(view: 'asn', params_list: params, filter_by: "delinquent") %>
+<%= create_filter_link(view: 'asn', params_list: params, filter_by: "inactive") %>
+<%= create_filter_link(view: 'asn', params_list: params, filter_by: "private") %>
 
 <% if params[:filter_by].blank? && params[:network] == "mainnet" %>
   <%= link_to_toggle_private(type: :asn, url_params: params) %>
