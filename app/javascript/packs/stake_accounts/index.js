@@ -1,6 +1,7 @@
 import Vue from 'vue/dist/vue.esm'
 import IndexTemplate from './index_template'
 import StakeAccountRow from './stake_account_row'
+import StakePoolStats from './pool_stats'
 import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";
 
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     component: {
       'StakeAccountRow': StakeAccountRow,
+      'StakePoolStats': StakePoolStats,
       'BPagination': BPagination
     }
   })

@@ -27,7 +27,6 @@
       </div>
     </div>
 
-
     <div class="col-md-6">
       <div class="card mb-3">
         <div class="card-content">
@@ -70,6 +69,11 @@
         </div>
       </div>
     </div>
+
+    <div class="col-12 mb-4" v-if="selected_pool && !is_loading">
+      <stake-pool-stats :pool="selected_pool" />
+    </div>
+
     <div class="col-12" v-if="!is_loading">
       <div class="card mb-4">
         <div class="table-responsive-lg">
