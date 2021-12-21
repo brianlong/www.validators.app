@@ -71,7 +71,7 @@
     </div>
 
     <div class="col-12 mb-4" v-if="selected_pool && !is_loading">
-      <stake-pool-stats :pool="selected_pool" />
+      <stake-pool-stats :pool="selected_pool" :total_stake="total_stake" />
     </div>
 
     <div class="col-12" v-if="!is_loading">
