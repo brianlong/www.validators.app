@@ -9,7 +9,7 @@ class ValidatorCheckActiveService
   end
 
   def update_validator_activity
-    Validator.all.each do |validator|
+    Validator.includes(:vote_accounts).each do |validator|
       if should_be_destroyed?(validator)
         validator.update(is_active: false, is_destroyed: true)
       elsif validator.scorable?
@@ -30,10 +30,9 @@ class ValidatorCheckActiveService
   private
 
   def should_be_destroyed?(validator)
-    if !validator.validator_histories.where("created_at > ?", @delinquent_time.ago).exists?
-      if validator.validator_histories.where('created_at < ?', @delinquent_time.ago).exists?
-        return true
-      end
+    if !validator.validator_histories.where("created_at > ?", @delinquent_time.ago).exists? && \
+       validator.validator_histories.where("created_at < ?", @delinquent_time.ago).exists?
+      return true
     end
 
     false
@@ -41,11 +40,11 @@ class ValidatorCheckActiveService
 
   # number of previous by network
   def previous_epoch(network)
-    current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).last
+    @current_epoch ||= EpochWallClock.where(network: network).order(created_at: :desc).last
     if network == 'testnet'
-      @previous_epoch_testnet ||= current_epoch.epoch - 1
+      @previous_epoch_testnet ||= @current_epoch.epoch - 1
     else
-      @previous_epoch_mainnet ||= current_epoch.epoch - 1
+      @previous_epoch_mainnet ||= @current_epoch.epoch - 1
     end
   end
 
