@@ -22,13 +22,13 @@
       about liquid staking.
     </p>
 
-    <div id="carouselLogos" class="carousel slide" data-ride="carousel">
+    <div id="carouselLogos" class="carousel slide d-none d-md-block" data-ride="carousel">
       <div class="carousel-inner">
-        <% shuffle_logos.each_slice(4).to_a.each_with_index do |group, index| %>
-          <div class="carousel-item <%= 'active' if index == 0 %>">
-            <div class="row text-center mt-4">
-              <% group.each do |logo| %>
-                <div class="col-sm-6 col-md-3 mb-4 mb-sm-0">
+        <% shuffle_logos.each_slice(3).to_a.each_with_index do |group, index_slide| %>
+          <div class="carousel-item <%= 'active' if index_slide == 0 %>">
+            <div class="row text-center px-lg-5 mt-4">
+              <% group.each_with_index do |logo, index_col| %>
+                <div class="col-md-4 mb-4 mb-sm-0 <%= 'offset-md-2' if index_slide == 1 && index_col == 0 %>">
                   <%= link_to logo[0], target: "_blank" do %>
                     <%= image_tag logo[1], class: 'w-100 px-4 px-sm-1 px-lg-3 mb-4' %>
                   <% end %>
@@ -38,6 +38,24 @@
           </div>
         <% end %>
       </div>
+    </div>
+    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-ride="carousel">
+      <div class="carousel-inner">
+        <% shuffle_logos.each_with_index do |logo, index_slide| %>
+          <div class="carousel-item <%= 'active' if index_slide == 0 %>">
+            <%= link_to logo[0], target: "_blank" do %>
+              <%= image_tag logo[1], class: 'w-100 px-4 px-sm-1' %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <ol class="carousel-indicators">
+        <li data-target="#carouselLogosMobile" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselLogosMobile" data-slide-to="1"></li>
+        <li data-target="#carouselLogosMobile" data-slide-to="2"></li>
+        <li data-target="#carouselLogosMobile" data-slide-to="3"></li>
+        <li data-target="#carouselLogosMobile" data-slide-to="4"></li>
+      </ol>
     </div>
   </div>
 </div>
