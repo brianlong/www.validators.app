@@ -289,6 +289,8 @@ ActiveRecord::Schema.define(version: 2021_12_20_084849) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "batch_uuid"
+    t.integer "epoch"
+    t.float "apy"
     t.index ["stake_pool_id"], name: "index_stake_account_histories_on_stake_pool_id"
     t.index ["stake_pubkey", "network"], name: "index_stake_account_histories_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_account_histories_on_staker_and_network"
@@ -315,6 +317,8 @@ ActiveRecord::Schema.define(version: 2021_12_20_084849) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "batch_uuid"
+    t.integer "epoch"
+    t.float "apy"
     t.index ["stake_pool_id"], name: "index_stake_accounts_on_stake_pool_id"
     t.index ["stake_pubkey", "network"], name: "index_stake_accounts_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_accounts_on_staker_and_network"

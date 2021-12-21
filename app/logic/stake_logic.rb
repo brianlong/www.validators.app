@@ -32,7 +32,10 @@ module StakeLogic
       reduced_stake_accounts = []
 
       StakePool.where(network: p.payload[:network]).each do |pool|
-        pool_stake_acc = stake_accounts.select{ |sa| sa['withdrawer'] == pool.authority }
+        pool_stake_acc = stake_accounts.select do |sa| 
+          sa["withdrawer"] == pool.authority || sa["staker"] == pool.authority
+        end
+
         reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
       end
 
@@ -73,6 +76,11 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
+      current_epoch = EpochWallClock.where(network: p.payload[:network])
+                                    .order(created_at: :desc)
+                                    .first
+                                    .epoch
+
       p.payload[:stake_accounts].each do |acc|
         vote_account = VoteAccount.find_by(
           network: p.payload[:network],
@@ -99,7 +107,8 @@ module StakeLogic
           staker: acc['staker'],
           withdrawer: acc['withdrawer'],
           batch_uuid: p.payload[:batch].uuid,
-          validator_id: validator_id
+          validator_id: validator_id,
+          epoch: current_epoch
         )
       end
 
@@ -187,6 +196,44 @@ module StakeLogic
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from count_average_validator_fee", e)
+    end
+  end
+
+  def calculate_apy
+    lambda do |p|
+      return p unless p.code == 200
+
+      last_epoch = EpochWallClock.where(
+        network: p.payload[:network]
+      ).last
+
+      previous_epoch = EpochWallClock.where(
+        network: p.payload[:network],
+        epoch: last_epoch.epoch - 1
+      ).last
+
+      num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
+
+      StakeAccount.where(network: p.payload[:network]).each do |acc|
+        previous_acc = StakeAccountHistory.where(
+          stake_pubkey: acc.stake_pubkey,
+          epoch: acc.epoch - 1
+        ).first
+        
+        next unless previous_acc && acc.delegated_stake
+
+        credits_diff = acc.delegated_stake - previous_acc.delegated_stake
+        credits_diff_percent = credits_diff / previous_acc.delegated_stake.to_f
+
+        apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
+        apy = apy < 100 && apy > 0 ? apy.round(2) : nil
+
+        acc.update(apy: apy)
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from calculate_apy", e)
     end
   end
 end
