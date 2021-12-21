@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_15_082149) do
+ActiveRecord::Schema.define(version: 2021_12_20_084849) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -331,13 +331,13 @@ ActiveRecord::Schema.define(version: 2021_12_15_082149) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "manager_fee"
     t.string "ticker"
     t.float "average_validators_commission"
     t.float "average_delinquent"
     t.float "average_skipped_slots"
     t.float "average_uptime"
-    t.float "manager_fee"
-    t.float "average_validators_commission"
+    t.integer "average_lifetime"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -496,6 +496,7 @@ ActiveRecord::Schema.define(version: 2021_12_15_082149) do
     t.string "security_report_url"
     t.boolean "is_rpc", default: false
     t.boolean "is_active", default: true
+    t.boolean "is_destroyed", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 
