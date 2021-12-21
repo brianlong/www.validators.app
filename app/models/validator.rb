@@ -10,7 +10,6 @@
 #  details             :string(191)
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
-#  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
