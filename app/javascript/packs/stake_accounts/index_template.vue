@@ -7,13 +7,6 @@
           <div class="form-group">
             <label>Withdrawer</label>
             <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
-            <a v-for="pool in stake_pools"
-              :key="pool.authority"
-              href="#"
-              @click.prevent="filter_by_withdrawer(pool.authority)"
-              class="btn btn-xs btn-secondary mb-2 mr-1">
-              {{ pool.name }}
-            </a>
           </div>
           <div class="form-group">
             <label>Validator</label>
@@ -33,7 +26,29 @@
         </div>
       </div>
     </div>
+
+
     <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-content">
+          <h3 class="card-heading mb-4">Stake Pools</h3>
+        </div>
+        <div class="row" v-if="!is_loading">
+          <a class="col-6 text-center mb-5" 
+               v-for="pool in stake_pools" 
+               :key="pool.id"
+               href="#"
+               @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
+          >
+            <img v-bind:src="pool_images[pool.name.toLowerCase()]" width="150">
+          </a>
+        </div>
+        
+        <div v-if="is_loading" class="text-center my-5">
+          <img v-bind:src="loading_image" width="100">
+        </div>
+      </div>
+
       <div class="card mb-3">
         <div class="card-content">
           <h3 class="card-heading mb-4">Statistics</h3>
@@ -108,6 +123,10 @@
 <script>
   import axios from 'axios'
   import loadingImage from 'loading.gif'
+  import marinadeImage from 'marinade.png'
+  import soceanImage from 'socean.png'
+  import lidoImage from 'lido.png'
+  import jpoolImage from 'jpool.png'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -128,7 +147,14 @@
         filter_validator: null,
         is_loading: true,
         stake_pools: null,
-        loading_image: loadingImage
+        selected_pool: null,
+        loading_image: loadingImage,
+        pool_images: {
+          marinade: marinadeImage,
+          socean: soceanImage,
+          lido: lidoImage,
+          jpool: jpoolImage
+        }
       }
     },
     created () {
