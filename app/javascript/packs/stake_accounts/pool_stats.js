@@ -27,8 +27,8 @@ var StakePoolStats = Vue.component('StakePoolStats', {
           <h2 class="float-left"> {{ pool.name }} ({{ pool.ticker }}) statistics </h2>
         </div>
 
-        <div class="col-4">
-          <table class="table table-block-sm mb-0" v-if="!is_loading">
+        <div class="col-12 col-md-4">
+          <table class="table table-block-sm mb-3">
             <tbody>
               <tr>
                 <td>APY: </td>
@@ -46,8 +46,8 @@ var StakePoolStats = Vue.component('StakePoolStats', {
           </table>
         </div>
 
-        <div class="col-4">
-          <table class="table table-block-sm mb-0" v-if="!is_loading">
+        <div class="col-12 col-md-4">
+          <table class="table table-block-sm mb-3">
             <tbody>
               <tr>
                 <td>Total Stake: </td>
@@ -65,8 +65,8 @@ var StakePoolStats = Vue.component('StakePoolStats', {
           </table>
         </div>
 
-        <div class="col-4">
-          <table class="table table-block-sm mb-0" v-if="!is_loading">
+        <div class="col-12 col-md-4">
+          <table class="table table-block-sm mb-3">
             <tbody>
               <tr>
                 <td>Average Skipped Slots: </td>
