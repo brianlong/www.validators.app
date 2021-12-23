@@ -162,14 +162,14 @@ module StakeLogic
           lifetime = (DateTime.now - validator.created_at.to_datetime).to_i
           uptimes.push uptime
           lifetimes.push lifetime
-          scores.push score.total_score
+          scores.push score.total_score.to_i
           delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
           last_skipped_slots.push score.skipped_slot_history&.last
         end
 
         pool.average_uptime = uptimes.average
         pool.average_lifetime = lifetimes.average
-        pool.average_score = scores.average.floor
+        pool.average_score = scores.average.round(2)
         pool.average_delinquent = (delinquent_count / validator_ids.size) * 100
         pool.average_skipped_slots = last_skipped_slots.compact.average
       end

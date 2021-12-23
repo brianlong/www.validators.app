@@ -338,7 +338,7 @@ ActiveRecord::Schema.define(version: 2021_12_22_130146) do
     t.float "average_skipped_slots"
     t.float "average_uptime"
     t.integer "average_lifetime"
-    t.integer "average_score"
+    t.float "average_score"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

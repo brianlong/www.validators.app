@@ -6,7 +6,7 @@
 #  authority                     :string(191)
 #  average_delinquent            :float(24)
 #  average_lifetime              :integer
-#  average_score                 :integer
+#  average_score                 :float(24)
 #  average_skipped_slots         :float(24)
 #  average_uptime                :float(24)
 #  average_validators_commission :float(24)
