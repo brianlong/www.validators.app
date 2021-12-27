@@ -11,15 +11,15 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
       load(Rails.root.join('script', 'add_current_epoch.rb'))
 
       assert_equal 2, EpochWallClock.count
-      assert_equal 200, EpochWallClock.last.epoch
+      assert_equal 263, EpochWallClock.last.epoch
       assert_equal 432000, EpochWallClock.last.slots_in_epoch
       assert_nil EpochWallClock.last.ending_slot
     end
   end
 
   test 'script when there are some epochs should also update previous epoch' do
-    create(:epoch_wall_clock, epoch: 199, network: 'testnet')
-    create(:epoch_wall_clock, epoch: 199, network: 'mainnet')
+    create(:epoch_wall_clock, epoch: 262, network: "testnet")
+    create(:epoch_wall_clock, epoch: 199, network: "mainnet")
 
     VCR.use_cassette(
       'add_current_epoch_script/with_previous_epochs',
@@ -27,7 +27,7 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
     ) do
       load(Rails.root.join('script', 'add_current_epoch.rb') )
 
-      assert_equal 808_762_55, EpochWallClock.where(epoch: 199, network: 'testnet')
+      assert_equal 1_080_922_55, EpochWallClock.where(epoch: 262, network: "testnet")
                                              .last
                                              .ending_slot
     end

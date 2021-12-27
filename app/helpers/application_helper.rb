@@ -36,6 +36,13 @@ module ApplicationHelper
     lamports / 1_000_000_000.to_f
   end
 
+  def lamports_as_formatted_sol(lamports)
+    return "0.00" unless lamports.is_a?(Numeric)
+
+    sol = lamports_to_sol(lamports)
+    ActiveSupport::NumberHelper.number_to_currency(sol, precision: 2, unit: "")
+  end
+
   def software_color_class(software_version)
     return 'text-danger' if software_version.nil?
     return 'text-danger' if software_version.blank?

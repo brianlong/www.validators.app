@@ -11,6 +11,7 @@
 #  details             :string(191)
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
+#  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
@@ -35,9 +36,9 @@ class Validator < ApplicationRecord
   has_one :most_recent_epoch_credits_by_account, -> {
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
-  
-  scope :active, -> { where(is_active: true) }
-  scope :scorable, -> { where(is_active: true, is_rpc: false) }
+
+  scope :active, -> { where(is_active: true, is_destroyed: false) }
+  scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
 
   # after_save :copy_data_to_score
 
@@ -68,7 +69,7 @@ class Validator < ApplicationRecord
                      'validator_score_v1s.total_score desc, RAND()'
                    end
 
-      includes(:validator_score_v1).order(sort_order)
+      joins(:validator_score_v1).order(sort_order)
     end
 
     def total_active_stake
@@ -237,15 +238,15 @@ class Validator < ApplicationRecord
   def to_builder
     Jbuilder.new do |validator|
       validator.(
-        self, 
-        :network, 
-        :account, 
-        :name, 
-        :keybase_id, 
+        self,
+        :network,
+        :account,
+        :name,
+        :keybase_id,
         :www_url,
-        :details, 
+        :details,
         :avatar_url,
-        :created_at, 
+        :created_at,
         :updated_at
       )
     end

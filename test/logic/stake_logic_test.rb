@@ -77,6 +77,8 @@ class StakeLogicTest < ActiveSupport::TestCase
       authority: authority
     )
 
+    create(:epoch_wall_clock, network: "testnet", epoch: 5)
+
     SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
       p = Pipeline.new(200, @initial_payload)
                   .then(&get_last_batch)
@@ -84,6 +86,7 @@ class StakeLogicTest < ActiveSupport::TestCase
                   .then(&update_stake_accounts)
                   .then(&assign_stake_pools)
 
+      assert_equal 200, p.code
       assert_equal stake_pool.id, StakeAccount.where(
         withdrawer: authority
       ).first.stake_pool_id
@@ -96,7 +99,8 @@ class StakeLogicTest < ActiveSupport::TestCase
     validator = create(
       :validator,
       network: "testnet",
-      account: "account123"
+      account: "account123",
+      created_at: 10.days.ago
     )
 
     validator_history = create(
@@ -141,6 +145,7 @@ class StakeLogicTest < ActiveSupport::TestCase
 
     assert_equal p.code, 200
     assert_equal 3, stake_pool.average_uptime
+    assert_equal 10, stake_pool.average_lifetime
     assert_equal 0, stake_pool.average_delinquent
     assert_equal 5, stake_pool.average_skipped_slots
   end
@@ -160,5 +165,34 @@ class StakeLogicTest < ActiveSupport::TestCase
                 .then(&count_average_validators_commission)
 
     assert_equal 7.5, stake_pool.reload.average_validators_commission
+  end
+
+  test "calculate apy" do
+    create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
+    create(:epoch_wall_clock, network: "testnet", epoch: 2)
+
+    create(
+      :stake_account_history,
+      network: "testnet",
+      delegated_stake: 10000,
+      epoch: 1,
+      stake_pubkey: "pubkey_123"
+    )
+
+    acc = create(
+      :stake_account,
+      network: "testnet",
+      delegated_stake: 10002,
+      epoch: 2,
+      stake_pubkey: "pubkey_123"
+    )
+
+    p = Pipeline.new(200, @initial_payload)
+                .then(&calculate_apy)
+    
+    acc.reload
+                
+    assert_equal 200, p.code
+    assert_equal 2.45, acc.apy
   end
 end

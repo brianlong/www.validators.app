@@ -289,6 +289,8 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "batch_uuid"
+    t.integer "epoch"
+    t.float "apy"
     t.index ["stake_pool_id"], name: "index_stake_account_histories_on_stake_pool_id"
     t.index ["stake_pubkey", "network"], name: "index_stake_account_histories_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_account_histories_on_staker_and_network"
@@ -315,6 +317,8 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "batch_uuid"
+    t.integer "epoch"
+    t.float "apy"
     t.index ["stake_pool_id"], name: "index_stake_accounts_on_stake_pool_id"
     t.index ["stake_pubkey", "network"], name: "index_stake_accounts_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_accounts_on_staker_and_network"
@@ -328,11 +332,12 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.float "manager_fee"
-    t.float "average_validators_commission"
     t.string "ticker"
+    t.float "average_validators_commission"
     t.float "average_delinquent"
     t.float "average_skipped_slots"
     t.float "average_uptime"
+    t.integer "average_lifetime"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -473,6 +478,7 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
+    t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
 
@@ -491,6 +497,7 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.boolean "is_rpc", default: false
     t.boolean "is_active", default: true
     t.string "admin_warning"
+    t.boolean "is_destroyed", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 
