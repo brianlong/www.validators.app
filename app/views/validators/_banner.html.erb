@@ -23,7 +23,7 @@
       about liquid staking.
     </p>
 
-    <div id="carouselLogos" class="carousel slide d-none d-md-block" data-ride="carousel">
+    <div id="carouselLogos" class="carousel slide d-none d-md-block" data-ride="carousel" data-interval="4000">
       <div class="carousel-inner">
         <% shuffle_logos.each_slice(3).to_a.each_with_index do |group, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
@@ -40,7 +40,7 @@
         <% end %>
       </div>
     </div>
-    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-ride="carousel">
+    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-ride="carousel" data-interval="4000">
       <div class="carousel-inner">
         <% shuffle_logos.each_with_index do |logo, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
