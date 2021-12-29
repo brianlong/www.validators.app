@@ -40,8 +40,8 @@ document.addEventListener("turbolinks:load", function() {
             link.classList.add('active');
         })
     })
-});
 
-document.addEventListener("turbolinks:load", function() {
+    $('.carousel').carousel({ interval: 4000 });
+
     $('[data-toggle="tooltip"]').tooltip()
 })
