@@ -1,4 +1,5 @@
 import Vue from 'vue/dist/vue.esm'
+import axios from 'axios'
 
 
 var StakeAccountRow = Vue.component('StakeAccountRow', {
@@ -6,11 +7,30 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     stake_account: {
       type: Object,
       required: true
+    },
+    idx: {
+      type: Number,
+      required: true
+    },
+    batch: {
+      type: Object,
+      required: true
     }
   },
   data() {
     return {
+      validator: null,
       validator_url: "/validators/" + this.stake_account.validator_account + "?network=" + this.stake_account.network
+    }
+  },
+  created () {
+    var ctx = this
+    if(this.stake_account.validator_account){
+      axios.get('/api/v1/validators/' + this.stake_account["network"] + '/' + this.stake_account.validator_account)
+      .then(function (response){
+        ctx.validator = response.data
+        console.log(ctx.validator)
+      })
     }
   },
   methods: {
@@ -32,26 +52,33 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
   },
   template: `
     <tr>
-      <td>
-        {{ stake_account.active_stake }} SOL
-        <br />
-        <small>
-          <a :href="validator_url" target="_blank">{{ name_or_account() }}</a>
-        </small>
-      </td>
-      <td class="word-break-md">
-        <small>{{ stake_account.stake_pubkey }}</small>
-        <br />
-        <small><a href="#" @click.prevent="filterByStaker">{{ stake_account.staker }}</a></small>
-      </td>
-      <td class="word-break-md">
-        {{ stake_account.pool_name }}
-        <br />
-        <small><a href="#" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a></small>
-      </td>
-      <td>
-        {{ stake_account.activation_epoch }}
-      </td>
+      <table width="100%">
+        <tr>
+          <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
+        </tr>
+        <tr>
+          <td>
+            {{ stake_account.active_stake }} SOL
+            <br />
+            <small>
+              <a :href="validator_url" target="_blank">{{ name_or_account() }}</a>
+            </small>
+          </td>
+          <td class="word-break-md">
+            <small>{{ stake_account.stake_pubkey }}</small>
+            <br />
+            <small><a href="#" @click.prevent="filterByStaker">{{ stake_account.staker }}</a></small>
+          </td>
+          <td class="word-break-md">
+            {{ stake_account.pool_name }}
+            <br />
+            <small><a href="#" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a></small>
+          </td>
+          <td>
+            {{ stake_account.activation_epoch }}
+          </td>
+        </tr>
+      </table>
     </tr>
   `
 })

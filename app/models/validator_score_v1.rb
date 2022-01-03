@@ -264,7 +264,10 @@ class ValidatorScoreV1 < ApplicationRecord
         :commission,
         :delinquent,
         :data_center_key,
-        :data_center_host
+        :data_center_host,
+        :authorized_withdrawer_score,
+        :stake_concentration,
+        :software_version
       )
     end
   end

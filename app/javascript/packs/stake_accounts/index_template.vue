@@ -80,7 +80,7 @@
           <table class='table'>
             <thead>
               <tr>
-                <th class="column-md align-middle">
+                <!-- <th class="column-md align-middle">
                   <a href="#" @click.prevent="sort_by_stake">Stake</a>
                   <br>
                   Delegated validator
@@ -96,16 +96,18 @@
                 </th>
                 <th class="column-sm align-middle">
                   <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
-                </th>
+                </th> -->
               </tr>
             </thead>
             <tbody>
-              <stake-account-row 
+              <stake-account-row
                 @filter_by_staker="filter_by_staker"
                 @filter_by_withdrawer="filter_by_withdrawer"
-                v-for="sa in stake_accounts" 
+                v-for="(sa, index) in stake_accounts" 
                 :key="sa.id" 
-                :stake_account="sa">
+                :stake_account="sa"
+                :idx="index"
+                :batch="batch">
               </stake-account-row>
             </tbody>
           </table>
@@ -152,6 +154,7 @@
         is_loading: true,
         stake_pools: null,
         selected_pool: null,
+        batch: null,
         loading_image: loadingImage,
         pool_images: {
           marinade: marinadeImage,
@@ -163,15 +166,16 @@
     },
     created () {
       var ctx = this
-      var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page } }
+      var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page, with_batch: true } }
 
       axios.get(ctx.api_url, query_params)
            .then(function (response){
-             ctx.stake_accounts = response.data.stake_accounts;
+             ctx.stake_accounts = response.data.stake_accounts.filter( function(sa){ return sa['validator_account'] != null } );
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.total_count = response.data.total_count;
              ctx.total_stake = response.data.total_stake;
              ctx.is_loading = false;
+             ctx.batch = response.data.batch
            })
     },
     watch: {

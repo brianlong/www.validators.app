@@ -17,6 +17,9 @@ module Api
         @total_count = stake_accounts.size
         @total_stake = stake_accounts.map(&:delegated_stake).compact.sum
         @stake_accounts = stake_accounts.page(index_params[:page])
+        if index_params[:with_batch]
+          @batch = Batch.last_scored(index_params[:network]) 
+        end
       end
 
       private
@@ -30,7 +33,8 @@ module Api
           :filter_account,
           :filter_staker,
           :filter_withdrawer,
-          :filter_validator
+          :filter_validator,
+          :with_batch
         ) 
       end
     end
