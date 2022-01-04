@@ -26,10 +26,9 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
   created () {
     var ctx = this
     if(this.stake_account.validator_account){
-      axios.get('/api/v1/validators/' + this.stake_account["network"] + '/' + this.stake_account.validator_account)
+      axios.get('/api/v1/validators/' + this.stake_account["network"] + '/' + this.stake_account.validator_account + '?with_history=true')
       .then(function (response){
         ctx.validator = response.data
-        console.log(ctx.validator)
       })
     }
   },

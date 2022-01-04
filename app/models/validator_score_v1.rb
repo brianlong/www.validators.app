@@ -63,6 +63,27 @@ class ValidatorScoreV1 < ApplicationRecord
     'traits_autonomous_system_number', 'address'
   ].map{ |e| "ips.#{e}" }.join(', ')
 
+  ATTRIBUTES_FOR_BUILDER = %i[
+    total_score
+    root_distance_score
+    vote_distance_score
+    skipped_slot_score
+    software_version
+    software_version_score
+    stake_concentration_score
+    data_center_concentration_score
+    published_information_score
+    security_report_score
+    active_stake
+    commission
+    delinquent
+    data_center_key
+    data_center_host
+    authorized_withdrawer_score
+    stake_concentration
+    software_version
+  ]
+
   # Touch the related validator to increment the updated_at attribute
   belongs_to :validator
   before_save :calculate_total_score
@@ -246,29 +267,26 @@ class ValidatorScoreV1 < ApplicationRecord
     end
   end
 
-  def to_builder
+  def to_builder(with_history: false)
+    history_fields = %i[
+      root_distance_history
+      vote_distance_history
+      skipped_slot_history
+      skipped_vote_history
+    ]
+
     Jbuilder.new do |vs_v1|
-      vs_v1.(
-        self,
-        :total_score,
-        :root_distance_score,
-        :vote_distance_score,
-        :skipped_slot_score,
-        :software_version,
-        :software_version_score,
-        :stake_concentration_score,
-        :data_center_concentration_score,
-        :published_information_score,
-        :security_report_score,
-        :active_stake,
-        :commission,
-        :delinquent,
-        :data_center_key,
-        :data_center_host,
-        :authorized_withdrawer_score,
-        :stake_concentration,
-        :software_version
-      )
+      if with_history
+        vs_v1.(
+          self,
+          *(ATTRIBUTES_FOR_BUILDER + history_fields)
+        )
+      else
+        vs_v1.(
+          self,
+          *ATTRIBUTES_FOR_BUILDER
+        )
+      end
     end
   end
 end

@@ -38,7 +38,59 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
     lamports_to_sol(lamports) {
       return lamports / 1000000000
+    },
+    skipped_vote_percent() {
+      console.log(this.validator['skipped_vote_history'] + '/' + this.batch['best_skipped_vote'])
+      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
+        var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
+        
+        return skipped_votes_percent ? ((batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).round(2) : null
+      } else {
+        return null
+      }
     }
+  },
+  mounted: function () {
+    var speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
+    var chart = new Chart(speedometer, {
+        type: 'gauge',
+        data: {
+            datasets: [{
+                data: [this.batch['skipped_vote_all_median'] * 2, this.batch['skipped_vote_all_median'], 0.05],
+                value: Math.max.apply(Math, [this.skipped_vote_percent(), this.batch['skipped_vote_all_median'] * 3]),
+                minValue: this.batch['skipped_vote_all_median'] * 3,
+                maxValue: 0.05,
+                backgroundColor: [
+                  'rgba(202, 202, 202, 0.45)',
+                  'rgba(0, 145, 242, 0.4)',
+                  'rgba(0, 206, 153, 0.55)'
+                ],
+                borderColor: ['#cacaca', '#0091f2', '#00ce99'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: false
+            },
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0
+                }
+            },
+            needle: {
+                radiusPercentage: 0,
+                widthPercentage: 5,
+                lengthPercentage: 80,
+                color: '#979797'
+            },
+            valueLabel: {
+                display: false
+            }
+        }
+    });
   },
   template: `
     <tr :id="row_index()">
@@ -101,27 +153,14 @@ var ValidatorRow = Vue.component('validatorRow', {
       </td>
 
       <td class="column-sm align-middle">
-        <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
-        <% if skipped_vote_percent %>
+        <div v-if="skipped_vote_percent">
           <div class="d-none d-lg-block">
-            <%= render 'validators/speedometer_chart',
-                       canvas_name: "spark_line_skipped_vote_#{validator.account}",
-                       value: [skipped_vote_percent, batch.skipped_vote_all_median.to_f * 3].max,
-                       chart_steps: [batch.skipped_vote_all_median.to_f * 2, batch.skipped_vote_all_median.to_f, 0.05],
-                       min_value: batch.skipped_vote_all_median.to_f * 3,
-                       max_value: 0.05
-            %>
+            <canvas :id=" 'spark_line_skipped_vote_' + validator['account'] "></canvas>
             <div class="text-center text-muted small mt-2">
-              <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
+              {{ skipped_vote_percent() }}
             </div>
           </div>
-        <% else %>
-          <span class="d-none d-lg-block text-center text-muted">N/A</span>
-        <% end %>
-        <span class="d-inline-block d-lg-none">
-          Skipped Vote&nbsp;%:
-          <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
-        </span>
+        </div>
       </td>
 
     </tr>

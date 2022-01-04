@@ -82,7 +82,7 @@ module Api
 
         current_epoch = EpochHistory.last
 
-        render json: create_json_result(@validator)
+        render json: create_json_result(@validator, params[:with_history] || false)
       rescue ValidatorNotFound
         render json: { 'status' => 'Validator Not Found' }, status: 404
       rescue ActionController::ParameterMissing
@@ -126,7 +126,7 @@ module Api
 
       private
 
-      def create_json_result(validator)
+      def create_json_result(validator, with_history = false)
         hash = {}
 
         hash.merge!(validator.to_builder.attributes!)
@@ -136,7 +136,8 @@ module Api
         vote_account = validator.vote_accounts.last
         validator_history = validator.most_recent_epoch_credits_by_account
 
-        hash.merge!(score.to_builder.attributes!)
+        
+        hash.merge!(score.to_builder(with_history: with_history).attributes!)
         hash.merge!(ip.to_builder.attributes!) unless ip.blank?
         hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
         hash.merge!(validator_history.to_builder.attributes!) unless validator_history.blank?
