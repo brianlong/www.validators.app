@@ -148,6 +148,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 10, stake_pool.average_lifetime
     assert_equal 0, stake_pool.average_delinquent
     assert_equal 5, stake_pool.average_skipped_slots
+    assert_equal score.total_score, stake_pool.average_score
   end
   
   test "count_average_validators_commission" do
@@ -165,6 +166,44 @@ class StakeLogicTest < ActiveSupport::TestCase
                 .then(&count_average_validators_commission)
 
     assert_equal 7.5, stake_pool.reload.average_validators_commission
+  end
+
+  test "count average_score" do
+    stake_pool = create(:stake_pool)
+    validator = create(:validator)
+    validator2 = create(:validator)
+    score = create(:validator_score_v1, validator: validator)
+    score2 = create(:validator_score_v1, validator: validator2)
+    score.update_columns(total_score: 10)
+    score2.update_columns(total_score: 9)
+    create(:stake_account, validator: validator, stake_pool: stake_pool)
+    create(:stake_account, validator: validator2, stake_pool: stake_pool)
+
+    refute stake_pool.average_score
+
+    payload = @initial_payload.merge(stake_pools: [stake_pool])
+    Pipeline.new(200, payload).then(&update_validator_stats)
+
+    assert_equal 9.5, stake_pool.reload.average_score
+
+    score2.update_columns(total_score: 6)
+    Pipeline.new(200, payload).then(&update_validator_stats)
+
+    assert_equal 8, stake_pool.reload.average_score
+
+    validator3 = create(:validator)
+    score3 = create(:validator_score_v1, validator: validator3)
+    score3.update_columns(total_score: nil)
+    create(:stake_account, validator: validator3, stake_pool: stake_pool)
+    Pipeline.new(200, payload).then(&update_validator_stats)
+
+    assert_equal 5.33, stake_pool.reload.average_score
+
+    score3.update_columns(total_score: 4)
+    create(:stake_account, validator: validator3, stake_pool: stake_pool)
+    Pipeline.new(200, payload).then(&update_validator_stats)
+
+    assert_equal 6.67, stake_pool.reload.average_score
   end
 
   test "calculate apy" do
