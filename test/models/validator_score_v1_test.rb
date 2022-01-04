@@ -37,6 +37,13 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal 0, @validator_score_v1.total_score
   end
 
+  test 'calculate_total_score assigns a score of 0 if validator has admin_warning' do
+    @validator.update(admin_warning: 'test warning')
+    @validator_score_v1.calculate_total_score
+
+    assert_equal 0, @validator_score_v1.total_score
+  end
+
   test 'calculate_total_score correctly calculate score' do
     @validator_score_v1.assign_attributes(
       root_distance_score: 2,

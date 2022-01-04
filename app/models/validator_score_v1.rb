@@ -115,7 +115,7 @@ class ValidatorScoreV1 < ApplicationRecord
     assign_security_report_score
 
     self.total_score =
-      if validator.private_validator?
+      if validator.private_validator? || validator.admin_warning
         0
       else
         root_distance_score.to_i +

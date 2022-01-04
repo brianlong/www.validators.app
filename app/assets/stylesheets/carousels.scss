@@ -1,0 +1,21 @@
+@import "variables";
+
+.carousel {
+  &-indicators {
+    position: relative;
+    margin: 10px 0 0 0;
+    display: block;
+    text-align: center;
+    li {
+      display: inline-block;
+      margin: 0 2px;
+      padding: 0;
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+      opacity: 1;
+      background-color: $green-transparent;
+      &.active { background-color: $green; }
+    }
+  }
+}

@@ -18,6 +18,11 @@ stake_pools = [
     name: "Lido",
     authority: "W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5",
     network: "mainnet",
+  },
+  {
+    name: "DAOPool",
+    authority: "BbyX1GwUNsfbcoWwnkZDo8sqGmwNDzs2765RpjyQ1pQb",
+    network: "mainnet",
   }
 ]
 
@@ -25,7 +30,8 @@ manager_fees = {
   socean: 0.16,
   marinade: 2,
   jpool: 0,
-  lido: 10
+  lido: 10,
+  daopool: 2
 }
 
 namespace :add_stake_pool do
