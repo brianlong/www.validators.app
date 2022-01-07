@@ -76,11 +76,11 @@
 
     <div class="col-12" v-if="!is_loading">
       <div class="card mb-4">
-        <div class="table-responsive-lg">
-          <table class='table'>
+        <!-- <div class="table-responsive-lg"> -->
+          <!-- <table class='table'>
             <thead>
               <tr>
-                <!-- <th class="column-md align-middle">
+                <th class="column-md align-middle">
                   <a href="#" @click.prevent="sort_by_stake">Stake</a>
                   <br>
                   Delegated validator
@@ -96,10 +96,10 @@
                 </th>
                 <th class="column-sm align-middle">
                   <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
-                </th> -->
+                </th>
               </tr>
-            </thead>
-            <tbody>
+            </thead> -->
+            <!-- <tbody> -->
               <stake-account-row
                 @filter_by_staker="filter_by_staker"
                 @filter_by_withdrawer="filter_by_withdrawer"
@@ -109,9 +109,9 @@
                 :idx="index"
                 :batch="batch">
               </stake-account-row>
-            </tbody>
-          </table>
-        </div>
+            <!-- </tbody> -->
+          <!-- </table> -->
+        <!-- </div> -->
         <b-pagination
          v-model="page"
          total-rows="total_count"

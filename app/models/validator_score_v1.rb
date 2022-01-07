@@ -273,6 +273,7 @@ class ValidatorScoreV1 < ApplicationRecord
       vote_distance_history
       skipped_slot_history
       skipped_vote_history
+      skipped_slot_moving_average_history
     ]
 
     Jbuilder.new do |vs_v1|

@@ -1,0 +1,149 @@
+import chart_vars from './chart_variables'
+
+export default {
+  props: {
+    validator: {
+      type: Object,
+      required: true
+    },
+    idx: {
+      type: Number,
+      required: true
+    },
+    batch: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    var skipped_slots_vl = Math.max.apply(Math, [60, this.validator['skipped_slot_history'].length])
+    var skipped_slots_ma = Math.max.apply(Math, [60, this.validator['skipped_slot_moving_average_history'].length])
+    var skipped_slots_ma_vector = this.validator['skipped_slot_moving_average_history'].slice(Math.max(this.validator['skipped_slot_moving_average_history'].length - skipped_slots_ma, 0))
+    skipped_slots_ma_vector.forEach(function(part, index) {
+      this[index] = part * 100;
+    }, skipped_slots_ma_vector)
+    var skipped_slots_vector = this.validator['vote_distance_history'].slice(Math.max(this.validator['vote_distance_history'].length - skipped_slots_vl, 0))
+    return {
+      y_root_distance_max: 20,
+      skipped_slots_distance_chart: {
+        vl: skipped_slots_vl,
+        line_color: this.chart_line_color(this.validator['skipped_slot_score']),
+        fill_color: this.chart_fill_color(this.validator['skipped_slot_score']),
+        vector: skipped_slots_vector,
+        moving_avg: skipped_slots_ma_vector,
+        max_value: Math.max.apply(Math, skipped_slots_vector),
+        max_value_position: this.max_value_position(skipped_slots_vector),
+        max_value_position_mobile: this.max_value_position(skipped_slots_vector, false)
+      }
+    }
+  },
+  methods: {
+    chart_line_color(val) {
+      if (val == 2) {
+        return chart_vars.chart_green
+      } else if(val == 1) {
+        return chart_vars.chart_blue
+      }
+      return chart_vars.chart_lightgrey
+    },
+    chart_fill_color(val) {
+      if (val == 2) {
+        return chart_vars.chart_green_t
+      } else if(val == 1) {
+        return chart_vars.chart_blue_t
+      }
+      return chart_vars.chart_lightgrey_t
+    },
+    max_value_position(vector, min_position = true) {
+      var max_value = Math.max.apply(Math, vector)
+      var max_value_index = vector.indexOf(max_value) + 1
+      var position = max_value_index.to_f / vector.size * 100
+      position += 3
+      position = Math.min.apply(Math, [position, 100])
+      if (min_position){
+        position = Math.max.apply(Math, [position, 100])
+      }
+      return position
+    }
+  },
+  mounted: function () {
+    var skipped_slots_el = document.getElementById("spark_line_skipped_slots_" + this.validator['account']).getContext('2d');
+    new Chart(skipped_slots_el, {
+        type: 'line',
+        data: {
+            labels: Array.from(Array(this.skipped_slots_distance_chart['vector'].length).keys()).reverse(),
+            datasets: [
+                {
+                    label: 'Skip %',
+                    fill: false,
+                    borderColor: this.skipped_slots_distance_chart['line_color'],
+                    borderWidth: 1,
+                    borderDash: [2, 2],
+                    radius: 0,
+                    data: this.skipped_slots_distance_chart['vector']
+                },
+                {
+                    label: '24h Moving Avg Skip %',
+                    fill: false,
+                    borderColor: this.skipped_slots_distance_chart['line_color'],
+                    borderWidth: 1,
+                    radius: 0,
+                    data: this.skipped_slots_distance_chart['moving_avg']
+                }
+            ]
+        },
+
+        // Configuration options go here
+        options: {
+            animation: { duration: 0 }, // general animation time
+            elements: { line: { tension: 0 } }, // disables bezier curves
+            hover: { mode: null },
+            tooltips: { enabled: false },
+            responsiveAnimationDuration: 0, // animation duration after a resize
+            legend: { display: false },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    ticks: { display: false },
+                    gridLines: { display: false },
+                    scaleLabel: {
+                        display: false,
+                        labelString: ''
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: false,
+                        padding: 3,
+                        fontColor: chart_vars.chart_lightgrey
+                    },
+                    gridLines: {
+                        display: true,
+                        zeroLineColor: '#322f3d'
+                    },
+                    scaleLabel: {
+                        display: false,
+                        labelString: ''
+                    }
+                }]
+            }
+        }
+    });
+  },
+  template: `
+    <td class="column-chart d-none d-lg-table-cell align-middle" :id="' skipped-slots-' + idx ">
+      <div v-if="skipped_slots_distance_chart['max_value'] && skipped_slots_distance_chart['max_value'] > y_root_distance_max">
+        <div class="chart-top-container">
+          <div class="chart-top-value d-lg-none" :style=" 'width: ' + skipped_slots_distance_chart['max_value_position_mobile']">
+            {{ skipped_slots_distance_chart['max_value_position'] }}
+          </div>
+          <div class="chart-top-value d-none d-lg-block" :style=" 'width: ' + skipped_slots_distance_chart['max_value_position']">
+            {{ skipped_slots_distance_chart['max_value'] }}
+          </div>
+        </div>
+      </div>
+      <canvas :id=" 'spark_line_skipped_slots_' + validator['account'] " width="5%"></canvas>
+    </td>
+  `
+}

@@ -1,4 +1,15 @@
 import Vue from 'vue/dist/vue.esm'
+import rootDistanceChart from './charts/root_distance_chart'
+import voteDistanceChart from './charts/vote_distance_chart'
+import skippedSlotsChart from './charts/skipped_slot_chart'
+import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
+
+var chart_green = '#00ce99'
+var chart_blue = '#0091f2'
+var chart_lightgrey = '#cacaca'
+var chart_green_t = 'rgba(0, 206, 153, 0.4)'
+var chart_blue_t = 'rgba(0, 145, 242, 0.25)'
+var chart_lightgrey_t = 'rgba(202, 202, 202, 0.3)'
 
 var ValidatorRow = Vue.component('validatorRow', {
   props: {
@@ -14,6 +25,12 @@ var ValidatorRow = Vue.component('validatorRow', {
       type: Object,
       required: true
     }
+  },
+  components: {
+    'root-distance-chart': rootDistanceChart,
+    'vote-distance-chart': voteDistanceChart,
+    'skipped-slots-chart': skippedSlotsChart,
+    'skipped-vote-speedometer': skippedVoteSpeedometer
   },
   methods: {
     create_avatar_link() {
@@ -40,7 +57,6 @@ var ValidatorRow = Vue.component('validatorRow', {
       return lamports / 1000000000
     },
     skipped_vote_percent() {
-      console.log(this.validator['skipped_vote_history'] + '/' + this.batch['best_skipped_vote'])
       if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
         var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
         
@@ -48,49 +64,34 @@ var ValidatorRow = Vue.component('validatorRow', {
       } else {
         return null
       }
+    },
+    chart_line_color(val) {
+      if (val == 2) {
+        return chart_green
+      } else if(val == 1) {
+        return chart_blue
+      }
+      return chart_lightgrey
+    },
+    chart_fill_color(val) {
+      if (val == 2) {
+        return chart_green_t
+      } else if(val == 1) {
+        return chart_blue_t
+      }
+      return chart_lightgrey_t
+    },
+    max_value_position(vector, min_position = true) {
+      var max_value = Math.max.apply(Math, vector)
+      var max_value_index = vector.indexOf(max_value) + 1
+      var position = max_value_index.to_f / vector.size * 100
+      position += 3
+      position = Math.min.apply(Math, [position, 100])
+      if (min_position){
+        position = Math.max.apply(Math, [position, 100])
+      }
+      return position
     }
-  },
-  mounted: function () {
-    var speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
-    var chart = new Chart(speedometer, {
-        type: 'gauge',
-        data: {
-            datasets: [{
-                data: [this.batch['skipped_vote_all_median'] * 2, this.batch['skipped_vote_all_median'], 0.05],
-                value: Math.max.apply(Math, [this.skipped_vote_percent(), this.batch['skipped_vote_all_median'] * 3]),
-                minValue: this.batch['skipped_vote_all_median'] * 3,
-                maxValue: 0.05,
-                backgroundColor: [
-                  'rgba(202, 202, 202, 0.45)',
-                  'rgba(0, 145, 242, 0.4)',
-                  'rgba(0, 206, 153, 0.55)'
-                ],
-                borderColor: ['#cacaca', '#0091f2', '#00ce99'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            title: {
-                display: false
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0
-                }
-            },
-            needle: {
-                radiusPercentage: 0,
-                widthPercentage: 5,
-                lengthPercentage: 80,
-                color: '#979797'
-            },
-            valueLabel: {
-                display: false
-            }
-        }
-    });
   },
   template: `
     <tr :id="row_index()">
@@ -152,16 +153,33 @@ var ValidatorRow = Vue.component('validatorRow', {
         <br /><small v-if="validator['delinquent']" class="text-danger">delinquent</small>
       </td>
 
-      <td class="column-sm align-middle">
-        <div v-if="skipped_vote_percent">
-          <div class="d-none d-lg-block">
-            <canvas :id=" 'spark_line_skipped_vote_' + validator['account'] "></canvas>
-            <div class="text-center text-muted small mt-2">
-              {{ skipped_vote_percent() }}
-            </div>
+      <skipped-vote-speedometer :validator="validator" :idx="idx" :batch="batch" />
+
+      <td class="d-lg-none pt-0">
+        <div class="row mb-3">
+          <div class="col pr-0">
+            <a class="chart-link" :data-iterator="idx" data-target="root-distance" href="">
+              Root <br class="d-xxs-inline-block" />Distance
+            </a>
+          </div>
+          <div class="col pr-0">
+            <a class="chart-link" :data-iterator="idx" data-target="vote-distance" href="">
+              Vote <br class="d-xxs-inline-block" />Distance
+            </a>
+          </div>
+          <div class="col">
+            <a class="chart-link" :data-iterator="idx" data-target="skipped-slots" href="">
+              Skipped <br class="d-xxs-inline-block" />Slots
+            </a>
           </div>
         </div>
       </td>
+
+      <root-distance-chart :validator="validator" :idx="idx" :batch="batch" />
+
+      <vote-distance-chart :validator="validator" :idx="idx" :batch="batch" />
+
+      <skipped-slots-chart :validator="validator" :idx="idx" :batch="batch" />
 
     </tr>
   `

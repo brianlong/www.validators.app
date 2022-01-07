@@ -50,35 +50,44 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     }
   },
   template: `
-    <tr>
-      <table width="100%">
-        <tr>
-          <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
-        </tr>
-        <tr>
-          <td>
-            {{ stake_account.active_stake }} SOL
-            <br />
-            <small>
-              <a :href="validator_url" target="_blank">{{ name_or_account() }}</a>
-            </small>
-          </td>
-          <td class="word-break-md">
-            <small>{{ stake_account.stake_pubkey }}</small>
-            <br />
-            <small><a href="#" @click.prevent="filterByStaker">{{ stake_account.staker }}</a></small>
-          </td>
-          <td class="word-break-md">
-            {{ stake_account.pool_name }}
-            <br />
-            <small><a href="#" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a></small>
-          </td>
-          <td>
-            {{ stake_account.activation_epoch }}
-          </td>
-        </tr>
-      </table>
-    </tr>
+    <div>
+      <div class="table-responsive-lg">
+        <table >
+          <tbody>
+            <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
+          </tbody>
+        </table>
+      </div>
+  
+      <div class="table-responsive-lg">
+        <table class="table table-block-sm">
+          <tbody>
+            <tr>
+              <td>
+                {{ stake_account.active_stake }} SOL
+                <br />
+                <small>
+                  <a :href="validator_url" target="_blank">{{ name_or_account() }}</a>
+                </small>
+              </td>
+              <td class="word-break-md">
+                <small>{{ stake_account.stake_pubkey }}</small>
+                <br />
+                <small><a href="#" @click.prevent="filterByStaker">{{ stake_account.staker }}</a></small>
+              </td>
+              <td class="word-break-md">
+                {{ stake_account.pool_name }}
+                <br />
+                <small><a href="#" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a></small>
+              </td>
+              <td>
+                {{ stake_account.activation_epoch }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   `
 })
 
