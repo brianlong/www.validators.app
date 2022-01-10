@@ -37,8 +37,8 @@ class Validator < ApplicationRecord
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
 
-  scope :active, -> { where(is_active: true) }
-  scope :scorable, -> { where(is_active: true, is_rpc: false) }
+  scope :active, -> { where(is_active: true, is_destroyed: false) }
+  scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
 
   # after_save :copy_data_to_score
 
