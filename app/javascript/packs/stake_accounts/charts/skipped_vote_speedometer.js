@@ -60,7 +60,7 @@ export default {
         data: {
             datasets: [{
                 data: [this.batch['skipped_vote_all_median'] * 2, this.batch['skipped_vote_all_median'], 0.05],
-                value: Math.max.apply(Math, [this.skipped_vote_percent(), this.batch['skipped_vote_all_median'] * 3]),
+                value: Math.min.apply(Math, [this.skipped_vote_percent(), this.batch['skipped_vote_all_median'] * 3]),
                 minValue: this.batch['skipped_vote_all_median'] * 3,
                 maxValue: 0.05,
                 backgroundColor: [
