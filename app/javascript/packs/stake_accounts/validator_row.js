@@ -103,7 +103,7 @@ var ValidatorRow = Vue.component('validatorRow', {
 
       <td class="column-info align-middle">
         <a :href="validator_url()" class="font-weight-bold">
-          <span>{{idx}}.&nbsp;</span> {{ validator_name() }}
+          <span>{{idx+1}}.&nbsp;</span> {{ validator_name() }}
         </a>
         <small>
           (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)
