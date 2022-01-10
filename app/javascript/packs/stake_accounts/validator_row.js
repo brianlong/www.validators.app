@@ -102,7 +102,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       </td>
 
       <td class="column-info align-middle">
-        <a :href="validator_url" class="font-weight-bold">
+        <a :href="validator_url()" class="font-weight-bold">
           <span>{{idx}}.&nbsp;</span> {{ validator_name() }}
         </a>
         <small>
