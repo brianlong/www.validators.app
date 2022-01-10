@@ -22,6 +22,9 @@ export default {
     var skipped_slots_vector = this.validator['vote_distance_history'].slice(Math.max(this.validator['vote_distance_history'].length - skipped_slots_vl, 0))
     skipped_slots_vector.forEach(function(part, index) {
       this[index] = part * 100;
+    }, skipped_slots_vector)
+    skipped_slots_ma_vector.forEach(function(part, index) {
+      this[index] = part * 100;
     }, skipped_slots_ma_vector)
     return {
       y_root_distance_max: 20,
