@@ -13,12 +13,13 @@ module Api
 
         stake_accounts = stake_accounts_query.all_records.where.not(validator_id: nil)
 
+        page = index_params[:page].to_i <= 0 ? 1 : index_params[:page].to_i
         @stake_pools = StakePool.where(network: index_params[:network])
         @total_count = stake_accounts.size
-        @total_stake = stake_accounts.map(&:delegated_stake).compact.sum
+        @total_stake = stake_accounts&.map(&:delegated_stake).compact.sum
         stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
-        sa_keys = stake_accounts.keys[((index_params[:page].to_i - 1) * 25)...((index_params[:page].to_i - 1) * 25 + 25)]
-        @stake_accounts = sa_keys.map {|k| {stake_accounts[k][0].validator_account => stake_accounts[k]}}
+        sa_keys = stake_accounts.keys[((page - 1) * 25)...((page - 1) * 25 + 25)]
+        @stake_accounts = sa_keys&.map {|k| {stake_accounts[k][0].validator_account => stake_accounts[k]}}
 
         if index_params[:with_batch]
           @batch = Batch.last_scored(index_params[:network]) 

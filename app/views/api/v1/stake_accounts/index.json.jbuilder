@@ -13,7 +13,8 @@ json.stake_pools do
     :average_skipped_slots,
     :average_uptime,
     :average_lifetime,
-    :validators_count
+    :validators_count,
+    :authority
 end
 
 json.total_count @total_count

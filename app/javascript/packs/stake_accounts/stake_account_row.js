@@ -58,7 +58,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
           <tbody>
             <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
               <td>
-                {{ stake_account.active_stake }} SOL
+                {{ (stake_account.active_stake / 1000000000).toLocaleString('en-US') }} SOL
               </td>
               <td class="word-break-md">
                 <small>{{ stake_account.stake_pubkey }}</small>

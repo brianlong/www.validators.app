@@ -6,10 +6,12 @@
 #
 #  id                  :bigint           not null, primary key
 #  account             :string(191)
+#  admin_warning       :string(191)
 #  avatar_url          :string(191)
 #  details             :string(191)
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
+#  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)

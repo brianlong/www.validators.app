@@ -80,8 +80,6 @@ class ValidatorScoreV1 < ApplicationRecord
     data_center_key
     data_center_host
     authorized_withdrawer_score
-    stake_concentration
-    software_version
   ]
 
   # Touch the related validator to increment the updated_at attribute
@@ -274,6 +272,8 @@ class ValidatorScoreV1 < ApplicationRecord
       skipped_slot_history
       skipped_vote_history
       skipped_slot_moving_average_history
+      stake_concentration
+      software_version
     ]
 
     Jbuilder.new do |vs_v1|
