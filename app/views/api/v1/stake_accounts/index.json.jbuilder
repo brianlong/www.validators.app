@@ -1,9 +1,19 @@
-json.stake_accounts do
-  json.array! @stake_accounts, partial: "api/v1/stake_accounts/stake_account_detail", as: :stake_account
-end
+json.stake_accounts @stake_accounts
 
 json.stake_pools do
-  json.array! @stake_pools
+  json.array! @stake_pools,
+    :id,
+    :name,
+    :network,
+    :manager_fee,
+    :ticker,
+    :average_validators_commission,
+    :average_delinquent,
+    :average_apy,
+    :average_skipped_slots,
+    :average_uptime,
+    :average_lifetime,
+    :validators_count
 end
 
 json.total_count @total_count

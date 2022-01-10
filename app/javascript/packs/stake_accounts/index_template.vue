@@ -75,43 +75,88 @@
     </div>
 
     <div class="col-12" v-if="!is_loading">
+      <div class="card mb-0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
+              <th class="column-sm align-middle">
+                Name <small class="text-muted">(Commission)</small>
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="commission">
+                </i>
+                <br />
+                Active Stake
+                <small class="text-muted">(% of total)</small>
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="active stake">
+                </i>
+                <br />
+                Scores <small class="text-muted">(total)</small>
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="scores">
+                </i>
+              </th>
+              <th class='column-sm align-middle pr-0'>
+                Skipped Vote&nbsp;&percnt;
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="skipped vote">
+                </i>
+                <br />
+                <small class="text-muted">Dist from leader</small>
+              </th>
+              <th class='column-chart py-3 align-middle'>
+                Root Distance
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="root distance">
+                </i>
+                <br />
+                <small class="text-muted">60-Min Chart</small>
+              </th>
+              <th class='column-chart py-3 align-middle'>
+                Vote Distance
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="vote distance">
+                </i>
+                <br />
+                <small class="text-muted">60-Min Chart</small>
+              </th>
+              <th class='column-chart py-3 align-middle'>
+                Skipped Slot&nbsp;&percnt;
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="skipped slot">
+                </i>
+                <br />
+                <small class="text-muted">60-Min Chart</small>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
       <div class="card mb-4">
-        <!-- <div class="table-responsive-lg"> -->
-          <!-- <table class='table'>
-            <thead>
-              <tr>
-                <th class="column-md align-middle">
-                  <a href="#" @click.prevent="sort_by_stake">Stake</a>
-                  <br>
-                  Delegated validator
-                </th>
-
-                <th class="column-xl align-middle">
-                  Stake Account
-                  <br>
-                  <a href="#" @click.prevent="sort_by_staker">Staker</a>
-                </th>
-                <th class="column-xl align-middle">
-                  <a href="#" @click.prevent="sort_by_withdrawer">Withdrawer</a>
-                </th>
-                <th class="column-sm align-middle">
-                  <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
-                </th>
-              </tr>
-            </thead> -->
-            <!-- <tbody> -->
-              <stake-account-row
-                @filter_by_staker="filter_by_staker"
-                @filter_by_withdrawer="filter_by_withdrawer"
-                v-for="(sa, index) in stake_accounts" 
-                :key="sa.id" 
-                :stake_account="sa"
-                :idx="index"
-                :batch="batch">
-              </stake-account-row>
-            <!-- </tbody> -->
-          <!-- </table> -->
-        <!-- </div> -->
+        <stake-account-row
+          @filter_by_staker="filter_by_staker"
+          @filter_by_withdrawer="filter_by_withdrawer"
+          v-for="(sa, index) in stake_accounts" 
+          :key="sa.id" 
+          :stake_accounts="sa"
+          :idx="index"
+          :batch="batch">
+        </stake-account-row>
         <b-pagination
          v-model="page"
          total-rows="total_count"
@@ -125,6 +170,12 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+  .table {
+    margin-bottom: 0;
+  }
+</style>
 
 <script>
   import axios from 'axios'
@@ -170,7 +221,7 @@
 
       axios.get(ctx.api_url, query_params)
            .then(function (response){
-             ctx.stake_accounts = response.data.stake_accounts.filter( function(sa){ return sa['validator_account'] != null } );
+             ctx.stake_accounts = response.data.stake_accounts
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.total_count = response.data.total_count;
              ctx.total_stake = response.data.total_stake;

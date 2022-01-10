@@ -4,7 +4,7 @@ import axios from 'axios'
 
 var StakeAccountRow = Vue.component('StakeAccountRow', {
   props: {
-    stake_account: {
+    stake_accounts: {
       type: Object,
       required: true
     },
@@ -18,15 +18,18 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     }
   },
   data() {
+    var stake_accounts_for_val = this.stake_accounts[Object.keys(this.stake_accounts)[0]]
     return {
       validator: null,
-      validator_url: "/validators/" + this.stake_account.validator_account + "?network=" + this.stake_account.network
+      validator_url: "/validators/" + this.val_account + "?network=" + stake_accounts_for_val[0].network,
+      stake_accounts_for_val: stake_accounts_for_val,
+      val_account: Object.keys(this.stake_accounts)[0]
     }
   },
   created () {
     var ctx = this
-    if(this.stake_account.validator_account){
-      axios.get('/api/v1/validators/' + this.stake_account["network"] + '/' + this.stake_account.validator_account + '?with_history=true')
+    if(this.val_account){
+      axios.get('/api/v1/validators/' + this.stake_accounts_for_val[0]["network"] + '/' + this.val_account + '?with_history=true')
       .then(function (response){
         ctx.validator = response.data
       })
@@ -38,20 +41,11 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     },
     filterByWithdrawer: function(e) {
       this.$emit('filter_by_withdrawer', this.stake_account.withdrawer);
-    },
-    name_or_account: function() {
-      if (this.stake_account.validator_name) {
-        return this.stake_account.validator_name
-      } else if (this.stake_account.validator_account) {
-        return this.stake_account.validator_account.substring(0,5) + "..." + this.stake_account.validator_account.substring(this.stake_account.validator_account.length - 5)
-      } else {
-        return ''
-      }
     }
   },
   template: `
     <div>
-      <div class="table-responsive-lg">
+      <div class="table-responsive-lg" v-if="validator">
         <table >
           <tbody>
             <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
@@ -62,13 +56,9 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       <div class="table-responsive-lg">
         <table class="table table-block-sm">
           <tbody>
-            <tr>
+            <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
               <td>
                 {{ stake_account.active_stake }} SOL
-                <br />
-                <small>
-                  <a :href="validator_url" target="_blank">{{ name_or_account() }}</a>
-                </small>
               </td>
               <td class="word-break-md">
                 <small>{{ stake_account.stake_pubkey }}</small>

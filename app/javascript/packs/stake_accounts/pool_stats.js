@@ -32,11 +32,11 @@ var StakePoolStats = Vue.component('StakePoolStats', {
             <tbody>
               <tr>
                 <td>APY: </td>
-                <td></td>
+                <td>{{ pool.average_apy || 'N / A'}}</td>
               </tr>
               <tr>
                 <td>Manager Fee: </td>
-                <td>{{ pool.manager_fee }}%</td>
+                <td>{{ pool.manager_fee ? pool.manager_fee + '%' : 'N / A' }}</td>
               </tr>
               <tr>
                 <td>Average Commission: </td>
@@ -55,10 +55,10 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               </tr>
               <tr>
                 <td>Number of Validators </td>
-                <td></td>
+                <td>{{ pool.validators_count }}</td>
               </tr>
               <tr>
-                <td>Average Delinquent: </td>
+                <td> Delinquent: </td>
                 <td> {{ pool.average_delinquent }} </td>
               </tr>
             </tbody>
@@ -74,11 +74,11 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               </tr>
               <tr>
                 <td>Average Lifetime: </td>
-                <td> {{ pool.average_lifetime }} </td>
+                <td> {{ pool.average_lifetime }} days</td>
               </tr>
               <tr>
                 <td>Average Uptime: </td>
-                <td> {{ pool.average_uptime }} </td>
+                <td> {{ pool.average_uptime }} days</td>
               </tr>
             </tbody>
           </table>

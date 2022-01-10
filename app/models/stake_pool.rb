@@ -20,4 +20,12 @@
 class StakePool < ApplicationRecord
   has_many :stake_accounts
   has_many :stake_account_histories
+
+  def average_apy
+    stake_accounts.pluck(:apy).compact.average
+  end
+
+  def validators_count
+    stake_accounts.pluck(:validator_id).compact.uniq.count
+  end
 end
