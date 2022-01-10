@@ -45,9 +45,8 @@ export default {
     },
     skipped_vote_percent() {
       if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
-        var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
-        
-        return skipped_votes_percent ? ((batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).round(2) : null
+        var skipped_votes_percent = this.validator['skipped_vote_history'].at(-1)
+        return skipped_votes_percent ? ((this.batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).toFixed(2) : null
       } else {
         return null
       }
@@ -60,7 +59,7 @@ export default {
         data: {
             datasets: [{
                 data: [this.batch['skipped_vote_all_median'] * 2, this.batch['skipped_vote_all_median'], 0.05],
-                value: Math.min.apply(Math, [this.skipped_vote_percent(), this.batch['skipped_vote_all_median'] * 3]),
+                value: Math.max.apply(Math, [this.skipped_vote_percent(), this.batch['skipped_vote_all_median'] * 3]),
                 minValue: this.batch['skipped_vote_all_median'] * 3,
                 maxValue: 0.05,
                 backgroundColor: [
