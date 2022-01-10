@@ -184,3 +184,5 @@ var ValidatorRow = Vue.component('validatorRow', {
     </tr>
   `
 })
+
+export default ValidatorRow
