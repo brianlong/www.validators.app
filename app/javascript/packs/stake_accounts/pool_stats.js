@@ -24,7 +24,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
     <div class="card">
       <div class="card-content row">
         <div class="col-12">
-          <h2 class="float-left"> {{ pool.name }} ({{ pool.ticker }}) statistics </h2>
+          <h2 class="float-left"> {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : 'N / A' }} statistics </h2>
         </div>
 
         <div class="col-12 col-md-4">
@@ -78,7 +78,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               </tr>
               <tr>
                 <td>Average Uptime: </td>
-                <td> {{ pool.average_uptime }} days</td>
+                <td> {{ pool.average_uptime.toFixed(1) }} days</td>
               </tr>
             </tbody>
           </table>

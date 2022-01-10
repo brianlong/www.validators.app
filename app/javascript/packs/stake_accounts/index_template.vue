@@ -180,10 +180,12 @@
 <script>
   import axios from 'axios'
   import loadingImage from 'loading.gif'
+  
   import marinadeImage from 'marinade.png'
   import soceanImage from 'socean.png'
   import lidoImage from 'lido.png'
   import jpoolImage from 'jpool.png'
+  import daopoolImage from 'daopool.png'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -211,7 +213,8 @@
           marinade: marinadeImage,
           socean: soceanImage,
           lido: lidoImage,
-          jpool: jpoolImage
+          jpool: jpoolImage,
+          daopool: daopoolImage
         }
       }
     },
