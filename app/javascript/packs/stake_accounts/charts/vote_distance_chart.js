@@ -16,7 +16,7 @@ export default {
     }
   },
   data() {
-    var vote_distance_vl = Math.max.apply(Math, [60, this.validator['vote_distance_history'].length])
+    var vote_distance_vl = Math.min.apply(Math, [60, this.validator['vote_distance_history'].length])
     var vote_distance_vector = this.validator['vote_distance_history'].slice(Math.max(this.validator['vote_distance_history'].length - vote_distance_vl, 0))
     return {
       y_root_distance_max: 20,

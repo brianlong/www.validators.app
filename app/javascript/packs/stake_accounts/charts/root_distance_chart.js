@@ -45,7 +45,7 @@ export default {
     }
   },
   data() {
-    var root_distance_vl = Math.max.apply(Math, [60, this.validator['root_distance_history'].length])
+    var root_distance_vl = Math.min.apply(Math, [60, this.validator['root_distance_history'].length])
     var root_distance_vector = this.validator['root_distance_history'].slice(Math.max(this.validator['root_distance_history'].length - root_distance_vl, 0))
     console.log("root_distance_vl: " + root_distance_vl)
     console.log("root_distance_vector_length: " + root_distance_vector.length)
