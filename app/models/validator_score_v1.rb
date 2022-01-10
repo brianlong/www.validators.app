@@ -80,7 +80,7 @@ class ValidatorScoreV1 < ApplicationRecord
     data_center_key
     data_center_host
     authorized_withdrawer_score
-  ]
+  ].freeze
 
   # Touch the related validator to increment the updated_at attribute
   belongs_to :validator

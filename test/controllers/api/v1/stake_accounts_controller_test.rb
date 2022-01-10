@@ -43,8 +43,8 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     create(
       :vote_account,
       validator: validator,
-      account: 'vote_account',
-      network: 'testnet'
+      account: "vote_account",
+      network: "testnet"
     )
 
     create(
@@ -61,7 +61,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
     json_response = response_to_json(@response.body)
 
-    response_stake_account = json_response["stake_accounts"][0]['Account'][0]
+    response_stake_account = json_response["stake_accounts"][0]["Account"][0]
 
     assert_equal 1, json_response["stake_accounts"].size
     assert_equal 1, json_response["stake_pools"].size
