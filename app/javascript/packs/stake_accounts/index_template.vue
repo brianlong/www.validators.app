@@ -75,12 +75,13 @@
     </div>
 
     <div class="col-12" v-if="!is_loading">
-      <div class="card mb-0">
-        <table class="table">
+      <div class="card">
+
+        <table class="table table-block-sm" id="validators-table">
           <thead>
             <tr>
               <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
-              <th class="column-sm align-middle">
+              <th class="column-info align-middle">
                 Name <small class="text-muted">(Commission)</small>
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
@@ -145,18 +146,17 @@
               </th>
             </tr>
           </thead>
+          <stake-account-row
+            @filter_by_staker="filter_by_staker"
+            @filter_by_withdrawer="filter_by_withdrawer"
+            v-for="(sa, index) in stake_accounts"
+            :key="sa.id"
+            :stake_accounts="sa"
+            :idx="index"
+            :batch="batch">
+          </stake-account-row>
         </table>
-      </div>
-      <div class="card mb-4">
-        <stake-account-row
-          @filter_by_staker="filter_by_staker"
-          @filter_by_withdrawer="filter_by_withdrawer"
-          v-for="(sa, index) in stake_accounts" 
-          :key="sa.id" 
-          :stake_accounts="sa"
-          :idx="index"
-          :batch="batch">
-        </stake-account-row>
+
         <b-pagination
          v-model="page"
          total-rows="total_count"
@@ -170,12 +170,6 @@
     </div>
   </div>
 </template>
-
-<style scoped>
-  .table {
-    margin-bottom: 0;
-  }
-</style>
 
 <script>
   import axios from 'axios'

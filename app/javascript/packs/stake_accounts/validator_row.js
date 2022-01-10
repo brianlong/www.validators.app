@@ -125,29 +125,28 @@ var ValidatorRow = Vue.component('validatorRow', {
         </small>
         <br />
         <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
-        <small>
-          <i :class=" 'fas fa-circle score-' + validator['root_distance_score'] "
-            :title=" 'Root Distance Score = ' + validator['root_distance_score'] "></i>&nbsp;
-          <i :class=" 'fas fa-circle score-' + validator['vote_distance_score'] "
-            :title=" 'Vote Distance Score = ' + validator['vote_distance_score'] "></i>&nbsp;
-          <i :class=" 'fas fa-circle score-' + validator['skipped_slot_score'] "
-            :title=" 'Skipped Slot Score = ' + validator['skipped_slot_score'] "></i>&nbsp;
-          <i :class=" 'fas fa-circle score-' + validator['published_information_score'] "
-            :title=" 'Published Information Score = ' + validator['published_information_score'] "></i>&nbsp;
-          <i :class=" 'fas fa-circle score-' + validator['software_version_score'] "
-            :title=" 'Software Version Score = ' + validator['software_version_score'] "></i>&nbsp;
-          <i :class=" 'fas fa-circle score-' + validator['security_report_score'] "
-            :title=" 'Security Report Score = ' + validator['security_report_score'] "></i>&nbsp;
-          <i class="fas fa-minus-circle text-warning"
+        <small class="text-nowrap">
+          <i :class=" 'fas fa-circle mr-1 score-' + validator['root_distance_score'] "
+            :title=" 'Root Distance Score = ' + validator['root_distance_score'] "></i>
+          <i :class=" 'fas fa-circle mr-1 score-' + validator['vote_distance_score'] "
+            :title=" 'Vote Distance Score = ' + validator['vote_distance_score'] "></i>
+          <i :class=" 'fas fa-circle mr-1 score-' + validator['skipped_slot_score'] "
+            :title=" 'Skipped Slot Score = ' + validator['skipped_slot_score'] "></i>
+          <i :class=" 'fas fa-circle mr-1 score-' + validator['published_information_score'] "
+            :title=" 'Published Information Score = ' + validator['published_information_score'] "></i>
+          <i :class=" 'fas fa-circle mr-1 score-' + validator['software_version_score'] "
+            :title=" 'Software Version Score = ' + validator['software_version_score'] "></i>
+          <i :class=" 'fas fa-circle mr-1 score-' + validator['security_report_score'] "
+            :title=" 'Security Report Score = ' + validator['security_report_score'] "></i>
+          <i class="fas fa-minus-circle mr-1 text-warning"
             v-if="validator['authorized_withdrawer_score'] < 0"
-            :title=" 'Authorized Withdrawer Score = ' + validator['authorized_withdrawer_score'] "></i>&nbsp;
-          <i class="fas fa-minus-circle text-warning"
+            :title=" 'Authorized Withdrawer Score = ' + validator['authorized_withdrawer_score'] "></i>
+          <i class="fas fa-minus-circle mr-1 text-warning"
             v-if="validator['stake_concentration_score'] < 0"
-            :title=" 'Stake Concentration Score = ' + validator['stake_concentration_score'] "></i>&nbsp;
-          <i class="fas fa-minus-circle text-warning"
+            :title=" 'Stake Concentration Score = ' + validator['stake_concentration_score'] "></i>
+          <i class="fas fa-minus-circle mr-1 text-warning"
             v-if="validator['data_center_concentration_score'] < 0"
-            :title=" 'Data Center Concentration Score = ' + validator['data_center_concentration_score'] "></i>&nbsp;
-          
+            :title=" 'Data Center Concentration Score = ' + validator['data_center_concentration_score'] "></i>
           (<span class="d-inline-block d-lg-none">Total:&nbsp;</span>{{ validator['total_score'] }})
         </small>
         <br /><small v-if="validator['delinquent']" class="text-danger">delinquent</small>

@@ -156,14 +156,24 @@ a {
 
 .word-break {
   word-break: break-all;
-}
-.word-break-md {
-  @media(max-width: $screen-md-max) {
-    word-break: break-all;
+  &-sm {
+    @media(max-width: $screen-sm-max) {
+      word-break: break-all;
+    }
   }
-}
-.word-break-sm {
-  @media(max-width: $screen-sm-max) {
-    word-break: break-all;
+  &-md {
+    @media(max-width: $screen-md-max) {
+      word-break: break-all;
+    }
+  }
+  &-lg {
+    @media(max-width: $screen-lg-max) {
+      word-break: break-all;
+    }
+  }
+  &-xl {
+    @media(max-width: $screen-xl-max) {
+      word-break: break-all;
+    }
   }
 }

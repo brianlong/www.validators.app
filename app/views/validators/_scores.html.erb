@@ -1,35 +1,35 @@
-<small>
-  <i class="fas fa-circle score-<%= validator.root_distance_score %>"
-     title="Root Distance Score = <%= validator.root_distance_score %>"></i>&nbsp;
+<small class="text-nowrap">
+  <i class="fas fa-circle mr-1 score-<%= validator.root_distance_score %>"
+     title="Root Distance Score = <%= validator.root_distance_score %>"></i>
 
-  <i class="fas fa-circle score-<%= validator.vote_distance_score %>"
-     title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>&nbsp;
+  <i class="fas fa-circle mr-1 score-<%= validator.vote_distance_score %>"
+     title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>
 
-  <i class="fas fa-circle score-<%= validator.skipped_slot_score %>"
-     title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>&nbsp;
+  <i class="fas fa-circle mr-1 score-<%= validator.skipped_slot_score %>"
+     title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>
 
-  <i class="fas fa-circle score-<%= validator.published_information_score.to_i %>"
-     title="Published Information Score = <%= validator.published_information_score.to_i %>"></i>&nbsp;
+  <i class="fas fa-circle mr-1 score-<%= validator.published_information_score.to_i %>"
+     title="Published Information Score = <%= validator.published_information_score.to_i %>"></i>
 
-  <i class="fas fa-circle score-<%= validator.software_version_score %>"
-     title="Software Version Score = <%= validator.software_version_score %>"></i>&nbsp;
+  <i class="fas fa-circle mr-1 score-<%= validator.software_version_score %>"
+     title="Software Version Score = <%= validator.software_version_score %>"></i>
 
-  <i class="fas fa-circle score-<%= validator.security_report_score.to_i %>"
-     title="Security Report Score = <%= validator.security_report_score.to_i %>"></i>&nbsp;
+  <i class="fas fa-circle mr-1 score-<%= validator.security_report_score.to_i %>"
+     title="Security Report Score = <%= validator.security_report_score.to_i %>"></i>
 
   <% if validator.authorized_withdrawer_score.to_i < 0 %>
-    <i class="fas fa-minus-circle <%= score_class %>"
-       title="Authorized Withdrawer Score = <%= validator.authorized_withdrawer_score.to_i %>"></i>&nbsp;
+    <i class="fas fa-minus-circle mr-1 <%= score_class %>"
+       title="Authorized Withdrawer Score = <%= validator.authorized_withdrawer_score.to_i %>"></i>
   <% end %>
 
   <% if above_33percent_concentration?(validator) %>
-    <i class="fas fa-minus-circle <%= score_class %>"
-       title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>&nbsp;
+    <i class="fas fa-minus-circle mr-1 <%= score_class %>"
+       title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>
   <% end %>
 
   <% if validator.data_center_concentration_score < 0 %>
-    <i class="fas fa-minus-circle <%= score_class %>"
-       title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>&nbsp;
+    <i class="fas fa-minus-circle mr-1 <%= score_class %>"
+       title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>
   <% end %>
 
   (<span class="d-inline-block d-lg-none">Total:&nbsp;</span><%= validator.total_score %>)
