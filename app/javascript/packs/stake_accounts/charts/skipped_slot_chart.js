@@ -19,10 +19,10 @@ export default {
     var skipped_slots_vl = Math.min.apply(Math, [60, this.validator['skipped_slot_history'].length])
     var skipped_slots_ma = Math.min.apply(Math, [60, this.validator['skipped_slot_moving_average_history'].length])
     var skipped_slots_ma_vector = this.validator['skipped_slot_moving_average_history'].slice(Math.max(this.validator['skipped_slot_moving_average_history'].length - skipped_slots_ma, 0))
-    skipped_slots_ma_vector.forEach(function(part, index) {
+    var skipped_slots_vector = this.validator['vote_distance_history'].slice(Math.max(this.validator['vote_distance_history'].length - skipped_slots_vl, 0))
+    skipped_slots_vector.forEach(function(part, index) {
       this[index] = part * 100;
     }, skipped_slots_ma_vector)
-    var skipped_slots_vector = this.validator['vote_distance_history'].slice(Math.max(this.validator['vote_distance_history'].length - skipped_slots_vl, 0))
     return {
       y_root_distance_max: 20,
       skipped_slots_distance_chart: {
