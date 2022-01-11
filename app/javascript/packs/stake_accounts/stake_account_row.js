@@ -54,7 +54,9 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <th class="column-lg align-middle">Stake Account & Staker</th>
                 <th class="column-lg align-middle">Withdrawer</th>
                 <th class="column-sm align-middle">Stake</th>
-                <th class="column-xs align-middle text-lg-right">Act Epoch</th>
+                <th class="column-xs align-middle text-lg-right">
+                  <span title="Account Activation Epoch">Act Epoch</span>
+                </th>
               </tr>
             </thead>
             <tbody class="small">
@@ -62,12 +64,14 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
               <td class="word-break-lg">
                 <span class="d-inline-block d-lg-none">Stake Account:&nbsp;</span>{{ stake_account.stake_pubkey }}
                 <br />
-                <a href="#" @click.prevent="filterByStaker">{{ stake_account.staker }}</a>
+                {{ stake_account.staker }}
+                <!--<a href="#" title="Filter by staker" @click.prevent="filterByStaker">{{ stake_account.staker }}</a>-->
               </td>
               <td class="word-break-lg">
                 <span class="d-inline-block d-lg-none">Withdrawer:&nbsp;</span>{{ stake_account.pool_name }}
                 <br />
-                <a href="#" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a>
+                {{ stake_account.withdrawer }}
+                <!--<a href="#" title="Filter by withdrawer" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a>-->
               </td>
               <td>
                 <span class="d-inline-block d-lg-none">Stake:&nbsp;</span>{{ (stake_account.active_stake / 1000000000).toLocaleString('en-US') }} SOL
