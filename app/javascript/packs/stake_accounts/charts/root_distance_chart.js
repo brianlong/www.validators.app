@@ -32,17 +32,6 @@ export default {
       }
       return chart_vars.chart_lightgrey_t
     },
-    max_value_position(vector, min_position = true) {
-      var max_value = Math.max.apply(Math, vector)
-      var max_value_index = vector.indexOf(max_value) + 1
-      var position = max_value_index.to_f / vector.size * 100
-      position += 3
-      position = Math.min.apply(Math, [position, 100])
-      if (min_position){
-        position = Math.max.apply(Math, [position, 100])
-      }
-      return position
-    }
   },
   data() {
     var root_distance_vl = Math.min.apply(Math, [60, this.validator['root_distance_history'].length])
@@ -53,10 +42,7 @@ export default {
         vl: root_distance_vl,
         line_color: this.chart_line_color(this.validator['root_distance_score']),
         fill_color: this.chart_fill_color(this.validator['root_distance_score']),
-        vector: root_distance_vector,
-        max_value: Math.max.apply(Math, root_distance_vector),
-        max_value_position: this.max_value_position(root_distance_vector),
-        max_value_position_mobile: this.max_value_position(root_distance_vector, false)
+        vector: root_distance_vector
       },
     }
   },
@@ -117,16 +103,8 @@ export default {
     });
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell align-middle" :id="' root-distance-' + idx ">
-    <div class="chart-top-container" v-if="root_distance_chart['max_value'] && root_distance_chart['max_value'] > y_root_distance_max">
-      <div class="chart-top-value d-lg-none" :style=" 'width: ' + root_distance_chart['max_value_position_mobile']">
-        {{ root_distance_chart['max_value_position'] }}
-      </div>
-      <div class="chart-top-value d-none d-lg-block" :style=" 'width: ' + root_distance_chart['max_value_position']">
-        {{ root_distance_chart['max_value'] }}
-      </div>
-    </div>
-    <canvas :id=" 'spark_line_block_distance_' + validator['account'] " width="5%"></canvas>
-  </td>
+    <td class="column-chart d-none d-lg-table-cell align-middle pt-lg-3" :id="' root-distance-' + idx ">
+      <canvas :id=" 'spark_line_block_distance_' + validator['account'] " width="5%"></canvas>
+    </td>
   `
 }

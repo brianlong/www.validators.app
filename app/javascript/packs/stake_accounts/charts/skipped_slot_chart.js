@@ -33,10 +33,7 @@ export default {
         line_color: this.chart_line_color(this.validator['skipped_slot_score']),
         fill_color: this.chart_fill_color(this.validator['skipped_slot_score']),
         vector: skipped_slots_vector,
-        moving_avg: skipped_slots_ma_vector,
-        max_value: Math.max.apply(Math, skipped_slots_vector),
-        max_value_position: this.max_value_position(skipped_slots_vector),
-        max_value_position_mobile: this.max_value_position(skipped_slots_vector, false)
+        moving_avg: skipped_slots_ma_vector
       }
     }
   },
@@ -57,17 +54,6 @@ export default {
       }
       return chart_vars.chart_lightgrey_t
     },
-    max_value_position(vector, min_position = true) {
-      var max_value = Math.max.apply(Math, vector)
-      var max_value_index = vector.indexOf(max_value) + 1
-      var position = max_value_index.to_f / vector.size * 100
-      position += 3
-      position = Math.min.apply(Math, [position, 100])
-      if (min_position){
-        position = Math.max.apply(Math, [position, 100])
-      }
-      return position
-    }
   },
   mounted: function () {
     var skipped_slots_el = document.getElementById("spark_line_skipped_slots_" + this.validator['account']).getContext('2d');
@@ -135,17 +121,7 @@ export default {
     });
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell align-middle" :id="' skipped-slots-' + idx ">
-      <div v-if="skipped_slots_distance_chart['max_value'] && skipped_slots_distance_chart['max_value'] > y_root_distance_max">
-        <div class="chart-top-container">
-          <div class="chart-top-value d-lg-none" :style=" 'width: ' + skipped_slots_distance_chart['max_value_position_mobile']">
-            {{ skipped_slots_distance_chart['max_value_position'] }}
-          </div>
-          <div class="chart-top-value d-none d-lg-block" :style=" 'width: ' + skipped_slots_distance_chart['max_value_position']">
-            {{ skipped_slots_distance_chart['max_value'] }}
-          </div>
-        </div>
-      </div>
+    <td class="column-chart d-none d-lg-table-cell align-middle pt-lg-3" :id="' skipped-slots-' + idx ">
       <canvas :id=" 'spark_line_skipped_slots_' + validator['account'] " width="5%"></canvas>
     </td>
   `
