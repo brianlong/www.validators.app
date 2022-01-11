@@ -54,7 +54,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <th class="column-lg align-middle">Stake Account & Staker</th>
                 <th class="column-lg align-middle">Withdrawer</th>
                 <th class="column-sm align-middle">Stake</th>
-                <th class="column-xs align-middle">Act Epoch</th>
+                <th class="column-xs align-middle text-lg-right">Act Epoch</th>
               </tr>
             </thead>
             <tbody class="small">
@@ -72,7 +72,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
               <td>
                 <span class="d-inline-block d-lg-none">Stake:&nbsp;</span>{{ (stake_account.active_stake / 1000000000).toLocaleString('en-US') }} SOL
               </td>
-              <td>
+              <td class="text-lg-right">
                 <span class="d-inline-block d-lg-none">Activation Epoch:&nbsp;</span>{{ stake_account.activation_epoch }}
               </td>
             </tr>
