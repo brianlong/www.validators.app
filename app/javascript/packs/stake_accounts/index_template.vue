@@ -69,7 +69,6 @@
 
     <div class="col-12" v-if="!is_loading">
       <div class="card">
-
         <table class="table table-block-sm" id="validators-table">
           <thead>
             <tr>
