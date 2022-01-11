@@ -109,7 +109,7 @@ export default {
                     },
                     gridLines: {
                         display: true,
-                        zeroLineColor: '#322f3d'
+                        zeroLineColor: 'transparent'
                     },
                     scaleLabel: {
                         display: false,
