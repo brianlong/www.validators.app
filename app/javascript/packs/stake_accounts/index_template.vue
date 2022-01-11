@@ -86,7 +86,7 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="commission">
+                  title="Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account.">
                 </i>
                 <br />
                 Active Stake
@@ -94,14 +94,14 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="active stake">
+                  title="Sum of active stake from validator(s).">
                 </i>
                 <br />
                 Scores <small class="text-muted">(total)</small>
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="scores">
+                  title="Our score system.">
                 </i>
               </th>
               <th class='column-sm align-middle pr-0'>
@@ -109,7 +109,7 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="skipped vote">
+                  title="Skipped vote measures the percent of the time that a leader fails to vote.">
                 </i>
                 <br />
                 <small class="text-muted">Dist from leader</small>
@@ -119,7 +119,7 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="root distance">
+                  title="Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
@@ -129,7 +129,7 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="vote distance">
+                  title="Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
@@ -139,7 +139,7 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="skipped slot">
+                  title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
