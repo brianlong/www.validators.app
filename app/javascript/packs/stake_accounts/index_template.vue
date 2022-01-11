@@ -3,31 +3,18 @@
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <h3 class="card-heading mb-3">Filter by Stake Pool</h3>
+          <h3 class="card-heading mb-4">Filter by Stake Pool</h3>
 
           <div class="row" v-if="!is_loading">
-            <div class="col-sm-6 d-flex flex-column justify-content-center text-center">
-              <a class=""
-                 v-for="pool in stake_pools.slice(0, 3)"
-                 :key="pool.id"
-                 href="#"
-                 title="Filter by Stake Pool"
-                 @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
-              >
-                <img class="img-link w-100 px-5 px-sm-3 px-md-1 px-lg-3 px-xl-4 py-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
-              </a>
-            </div>
-            <div class="col-sm-6 d-flex flex-column justify-content-center text-center">
-              <a class=""
-                 v-for="pool in stake_pools.slice(3, 5)"
-                 :key="pool.id"
-                 href="#"
-                 title="Filter by Stake Pool"
-                 @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
-              >
-                <img class="img-link w-100 px-5 px-sm-3 px-md-1 px-lg-3 px-xl-4 py-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
-              </a>
-            </div>
+            <a class="col-sm-6 text-center"
+               v-for="pool in stake_pools"
+               :key="pool.id"
+               href="#"
+               title="Filter by Stake Pool"
+               @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
+            >
+              <img class="img-link w-100 px-5 px-sm-3 px-md-1 px-lg-3 px-xl-4 py-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
+            </a>
           </div>
         </div>
         
