@@ -74,7 +74,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <!--<a href="#" title="Filter by withdrawer" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a>-->
               </td>
               <td>
-                <strong class="d-inline-block d-lg-none">Stake:&nbsp;&nbsp;</strong>{{ (stake_account.active_stake / 1000000000).toLocaleString('en-US') }} SOL
+                <strong class="d-inline-block d-lg-none">Stake:&nbsp;&nbsp;</strong>{{ (stake_account.active_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
               </td>
               <td class="text-lg-right">
                 <strong class="d-inline-block d-lg-none">Activation Epoch:&nbsp;&nbsp;</strong>{{ stake_account.activation_epoch }}
