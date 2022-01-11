@@ -45,7 +45,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
                 <i class="fas fa-dollar-sign text-purple mr-1"></i>
                 Stake:&nbsp;
               </span>
-              <strong class="text-purple">{{ (total_stake / 1000000000).toFixed(2) }}</strong>
+              <strong class="text-purple">{{ (total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
             </div>
           </div>
           
@@ -65,7 +65,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               <span class="stat-title-3">
                 <i class="fas fa-chart-line text-purple mr-2"></i>APY:&nbsp;
               </span>
-              <strong class="text-purple">{{ pool.average_apy || 'N / A' }}</strong>
+              <strong class="text-purple">{{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}</strong>
             </div>
           </div>
 
