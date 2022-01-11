@@ -144,6 +144,8 @@ table, .table {
 }
 
 .stake-accounts-table {
+  margin-bottom: 0px;
+
   tbody, thead {
     tr {
       background-color: $card-background-color !important;
