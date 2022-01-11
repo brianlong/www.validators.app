@@ -30,7 +30,6 @@ Ip.where(traits_autonomous_system_number: 18_450)
   .where.not(address: IpOverride.select(:address))
   .each do |ip|
   last_webnx_ip = get_matching_traceroute(ip: ip.address, reg: HOST_REGEX)
-  puts last_webnx_ip
 
   WEBNX_HOSTS.each do |host_reg, host_data|
     next unless last_webnx_ip&.include?(host_reg)
