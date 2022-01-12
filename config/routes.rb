@@ -49,8 +49,8 @@ Rails.application.routes.draw do
   # SolPrices
   get 'sol_prices', to:'sol_prices#index'
 
-  # Stake Accounts
-  get 'stake_accounts', to: 'stake_accounts#index'
+  # Stake Pools
+  get 'stake-pools', to: 'stake_accounts#index'
 
   devise_for :users
 
