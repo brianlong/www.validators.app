@@ -229,7 +229,7 @@ module StakeLogic
         credits_diff_percent = credits_diff / previous_acc.delegated_stake.to_f
 
         apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
-        apy = apy < 100 && apy > 0 ? apy.round(2) : nil
+        apy = apy < 100 && apy > 0 ? apy.round(6) : nil
 
         acc.update(apy: apy)
       end

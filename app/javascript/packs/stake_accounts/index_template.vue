@@ -1,19 +1,36 @@
 <template>
   <div class="row">
-    <div class="col-md-6 mb-3">
-      <div class="card mb-3">
+    <div class="col-md-6 mb-4">
+      <div class="card h-100">
         <div class="card-content">
-          <h3 class="card-heading mb-4">Filter by</h3>
-          <div class="form-group">
+          <h3 class="card-heading mb-2">Filter by Stake Pool</h3>
+          <div class="text-center text-muted small mb-3">Click on stake pool logo to see pool stats</div>
+
+          <div class="row" v-if="!is_loading">
+            <a class="col-sm-6 text-center"
+               v-for="pool in stake_pools"
+               :key="pool.id"
+               href="#"
+               title="Filter by Stake Pool"
+               @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
+            >
+              <img class="img-link w-100 px-5 px-sm-3 px-md-1 px-lg-3 px-xl-4 py-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
+            </a>
+          </div>
+        </div>
+        
+        <div v-if="is_loading" class="text-center my-5">
+          <img v-bind:src="loading_image" width="100">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-content">
+          <div class="form-group pt-xl-3">
             <label>Withdrawer</label>
             <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
-            <a v-for="pool in stake_pools"
-              :key="pool.authority"
-              href="#"
-              @click.prevent="filter_by_withdrawer(pool.authority)"
-              class="btn btn-xs btn-secondary mb-2 mr-1">
-              {{ pool.name }}
-            </a>
           </div>
           <div class="form-group">
             <label>Validator</label>
@@ -33,68 +50,97 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="card mb-3">
-        <div class="card-content">
-          <h3 class="card-heading mb-4">Statistics</h3>
-        </div>
-        <table class="table table-block-sm mb-0" v-if="!is_loading">
-          <tbody>
-            <tr>
-              <td>Total stake: </td>
-              <td>{{ (total_stake / 1000000000).toFixed(3) }} SOL</td>
-            </tr>
-            <tr>
-              <td>Number of accounts: </td>
-              <td>{{ total_count }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div v-if="is_loading" class="text-center my-5">
-          <img v-bind:src="loading_image" width="100">
-        </div>
-      </div>
-    </div>
-    <div class="col-12" v-if="!is_loading">
-      <div class="card mb-4">
-        <div class="table-responsive-lg">
-          <table class='table'>
-            <thead>
-              <tr>
-                <th class="column-md align-middle">
-                  <a href="#" @click.prevent="sort_by_stake">Stake</a>
-                  <br>
-                  Delegated validator
-                </th>
 
-                <th class="column-xl align-middle">
-                  Stake Account
-                  <br>
-                  <a href="#" @click.prevent="sort_by_staker">Staker</a>
-                </th>
-                <th class="column-xl align-middle">
-                  <a href="#" @click.prevent="sort_by_withdrawer">Withdrawer</a>
-                </th>
-                <th class="column-sm align-middle">
-                  <a href="#" @click.prevent="sort_by_epoch">Activation Epoch</a>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <stake-account-row 
-                @filter_by_staker="filter_by_staker"
-                @filter_by_withdrawer="filter_by_withdrawer"
-                v-for="sa in stake_accounts" 
-                :key="sa.id" 
-                :stake_account="sa">
-              </stake-account-row>
-            </tbody>
-          </table>
-        </div>
+    <div class="col-12 mb-4" v-if="selected_pool && !is_loading">
+      <stake-pool-stats :pool="selected_pool" :total_stake="total_stake" />
+    </div>
+
+    <div class="col-12" v-if="!is_loading">
+      <div class="card">
+        <table class="table table-block-sm" id="validators-table">
+          <thead>
+            <tr>
+              <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
+              <th class="column-info align-middle">
+                Name <small class="text-muted">(Commission)</small>
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account.">
+                </i>
+                <br />
+                Active Stake
+                <small class="text-muted">(% of total)</small>
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Sum of active stake from validator(s).">
+                </i>
+                <br />
+                Scores <small class="text-muted">(total)</small>
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Our score system.">
+                </i>
+              </th>
+              <th class='column-sm align-middle pr-0'>
+                Skipped Vote&nbsp;&percnt;
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Skipped vote measures the percent of the time that a leader fails to vote.">
+                </i>
+                <br />
+                <small class="text-muted">Dist from leader</small>
+              </th>
+              <th class='column-chart py-3 align-middle'>
+                Root Distance
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower.">
+                </i>
+                <br />
+                <small class="text-muted">60-Min Chart</small>
+              </th>
+              <th class='column-chart py-3 align-middle'>
+                Vote Distance
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group.">
+                </i>
+                <br />
+                <small class="text-muted">60-Min Chart</small>
+              </th>
+              <th class='column-chart py-3 align-middle'>
+                Skipped Slot&nbsp;&percnt;
+                <i class="fas fa-info-circle small"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
+                </i>
+                <br />
+                <small class="text-muted">60-Min Chart</small>
+              </th>
+            </tr>
+          </thead>
+          <stake-account-row
+            @filter_by_staker="filter_by_staker"
+            @filter_by_withdrawer="filter_by_withdrawer"
+            v-for="(sa, index) in stake_accounts"
+            :key="sa.id"
+            :stake_accounts="sa"
+            :idx="index + (page - 1) * 20"
+            :batch="batch">
+          </stake-account-row>
+        </table>
+
         <b-pagination
          v-model="page"
-         total-rows="total_count"
-         :per-page="25"
+         :total-rows="total_count"
+         :per-page="20"
          first-text="« First"
          last-text="Last »" />
       </div>
@@ -108,6 +154,12 @@
 <script>
   import axios from 'axios'
   import loadingImage from 'loading.gif'
+  
+  import marinadeImage from 'marinade.png'
+  import soceanImage from 'socean.png'
+  import lidoImage from 'lido.png'
+  import jpoolImage from 'jpool.png'
+  import daopoolImage from 'daopool.png'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -128,20 +180,30 @@
         filter_validator: null,
         is_loading: true,
         stake_pools: null,
-        loading_image: loadingImage
+        selected_pool: null,
+        batch: null,
+        loading_image: loadingImage,
+        pool_images: {
+          marinade: marinadeImage,
+          socean: soceanImage,
+          lido: lidoImage,
+          jpool: jpoolImage,
+          daopool: daopoolImage
+        }
       }
     },
     created () {
       var ctx = this
-      var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page } }
+      var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page, with_batch: true } }
 
       axios.get(ctx.api_url, query_params)
            .then(function (response){
-             ctx.stake_accounts = response.data.stake_accounts;
+             ctx.stake_accounts = response.data.stake_accounts
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.total_count = response.data.total_count;
              ctx.total_stake = response.data.total_stake;
              ctx.is_loading = false;
+             ctx.batch = response.data.batch
            })
     },
     watch: {
@@ -213,6 +275,7 @@
         this.filter_staker = null
         this.filter_account = null
         this.filter_validator = null
+        this.selected_pool = null
       },
       filters_present: function(){
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator

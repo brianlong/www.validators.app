@@ -11,12 +11,19 @@ module Api
           filter_validator: index_params[:filter_validator]
         )
 
-        stake_accounts = stake_accounts_query.all_records
+        stake_accounts = stake_accounts_query.all_records.where.not(validator_id: nil)
 
+        page = index_params[:page].to_i <= 0 ? 1 : index_params[:page].to_i
         @stake_pools = StakePool.where(network: index_params[:network])
-        @total_count = stake_accounts.size
-        @total_stake = stake_accounts.map(&:delegated_stake).compact.sum
-        @stake_accounts = stake_accounts.page(index_params[:page])
+        @total_stake = stake_accounts&.map(&:delegated_stake).compact.sum
+        stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
+        @total_count = stake_accounts.keys.size
+        sa_keys = stake_accounts.keys[((page - 1) * 20)...((page - 1) * 20 + 20)]
+        @stake_accounts = sa_keys&.map {|k| {stake_accounts[k][0].validator_account => stake_accounts[k]}}
+
+        if index_params[:with_batch]
+          @batch = Batch.last_scored(index_params[:network]) 
+        end
       end
 
       private
@@ -30,7 +37,8 @@ module Api
           :filter_account,
           :filter_staker,
           :filter_withdrawer,
-          :filter_validator
+          :filter_validator,
+          :with_batch
         ) 
       end
     end

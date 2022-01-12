@@ -41,6 +41,13 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     )
 
     create(
+      :vote_account,
+      validator: validator,
+      account: "vote_account",
+      network: "testnet"
+    )
+
+    create(
       :stake_account,
       network: "testnet",
       validator: validator,
@@ -54,19 +61,21 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
     json_response = response_to_json(@response.body)
 
+    response_stake_account = json_response["stake_accounts"][0]["Account"][0]
+
     assert_equal 1, json_response["stake_accounts"].size
     assert_equal 1, json_response["stake_pools"].size
 
-    assert_equal "testnet", json_response["stake_accounts"].first["network"]
+    assert_equal "testnet", response_stake_account["network"]
     assert_equal 1, json_response["total_count"]
     assert_equal 5000000000000, json_response["total_stake"]
     assert_equal stake_pool_attrs, \
       json_response["stake_pools"][0].symbolize_keys.extract!(:network, :name, :authority)
-    assert_equal "TestName", json_response["stake_accounts"].first["pool_name"]
-    assert_equal "Validator", json_response["stake_accounts"].first["validator_name"]
-    assert_equal "Account", json_response["stake_accounts"].first["validator_account"]
-    assert_equal "5,000.00", json_response["stake_accounts"].first["active_stake"]
+    assert_equal "TestName", response_stake_account["pool_name"]
+    assert_equal "Validator", response_stake_account["validator_name"]
+    assert_equal "Account", response_stake_account["validator_account"]
+    assert_equal 5000000000000, response_stake_account["active_stake"]
     assert_equal "delegated_vote_account_address", \
-      json_response["stake_accounts"].first["delegated_vote_account_address"]
+      response_stake_account["delegated_vote_account_address"]
   end
 end

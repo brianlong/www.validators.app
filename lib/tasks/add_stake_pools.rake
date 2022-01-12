@@ -3,21 +3,25 @@ stake_pools = [
     name: "Socean",
     authority: "AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck",
     network: "mainnet",
+    ticker: "scnsol"
   },
   {
     name: "Marinade",
     authority: "9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco",
     network: "mainnet",
+    ticker: "msol"
   },
   {
     name: "Jpool",
     authority: "HbJTxftxnXgpePCshA8FubsRj9MW4kfPscfuUfn44fnt",
     network: "mainnet",
+    ticker: "jsol"
   },
   {
     name: "Lido",
     authority: "W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5",
     network: "mainnet",
+    ticker: "stsol"
   },
   {
     name: "DAOPool",
