@@ -147,6 +147,26 @@
     <div v-if="is_loading" class="col-12 text-center my-5">
       <img v-bind:src="loading_image" width="100">
     </div>
+    <div class="container mt-5">
+      <h2> Metrics Explanation </h2>
+      <h4>Nodes</h4>
+      <p>
+        <strong>Total</strong> - number of validators in stake pool.
+        <br />
+        <strong>Delinquent</strong> - number of delinquent validators in stake pool.
+        <br />
+        <strong>Stake</strong> - total stake of the stake pool.
+      </p>
+      <h4>Fees</h4>
+      <p>
+        <strong>Manager Fee</strong> - commission that stake pool substracts from the total profit to maintain their operation.
+        <br />
+        <strong>Avg Commission</strong> - average commission of all the validators used by the stake pool. See 
+        <a href="/faq#commission">what is validator commission?</a>
+        <br />
+        <strong>APY</strong> - total stake of the stake pool.
+      </p>
+    </div>
   </div>
 </template>
 
