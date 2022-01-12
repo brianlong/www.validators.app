@@ -25,6 +25,10 @@ table, .table {
       padding: $padding-standard 20px;
       border-top: 1px solid $table-border-color;
     }
+
+    &+tbody {
+      border-top: 2px solid $card-border-color;
+    }
   }
 
   .chart {
@@ -136,5 +140,21 @@ table, .table {
   table-layout: fixed;
   thead {
     @media(max-width: $screen-md-max) { display: none; }
+  }
+}
+
+.stake-accounts-table {
+  margin-bottom: 0px;
+
+  tbody, thead {
+    tr {
+      background-color: $card-background-color !important;
+    }
+  }
+
+  &.table-block-sm {
+    @media(max-width: $screen-md-max) {
+      tr td:not(:last-of-type) { padding-bottom: 0; }
+    }
   }
 }

@@ -78,6 +78,13 @@ strong, .font-weight-bold {
     @media(max-width: $screen-md-max) { font-size: 34px; }
     @media(max-width: $screen-sm-max) { font-size: 30px; }
   }
+  &-title-3 {
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+    font-size: $font-size-h4;
+    @media(max-width: $screen-md-max) { font-size: $font-size-h4*.85; }
+    @media(max-width: $screen-sm-max) { font-size: $font-size-h4*.8; }
+  }
   small .fas {
     font-size: 11px;
   }
@@ -156,14 +163,24 @@ a {
 
 .word-break {
   word-break: break-all;
-}
-.word-break-md {
-  @media(max-width: $screen-md-max) {
-    word-break: break-all;
+  &-sm {
+    @media(max-width: $screen-sm-max) {
+      word-break: break-all;
+    }
   }
-}
-.word-break-sm {
-  @media(max-width: $screen-sm-max) {
-    word-break: break-all;
+  &-md {
+    @media(max-width: $screen-md-max) {
+      word-break: break-all;
+    }
+  }
+  &-lg {
+    @media(max-width: $screen-lg-max) {
+      word-break: break-all;
+    }
+  }
+  &-xl {
+    @media(max-width: $screen-xl-max) {
+      word-break: break-all;
+    }
   }
 }

@@ -35,5 +35,12 @@
       @include img-private(4px, 6px, 16px);
     }
   }
+}
 
+.img-link {
+  transition: filter 200ms linear;
+  &:hover {
+    filter: grayscale(70%) brightness(160%);
+    transition: filter 200ms linear;
+  }
 }

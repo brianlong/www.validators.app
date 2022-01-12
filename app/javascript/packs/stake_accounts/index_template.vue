@@ -1,9 +1,32 @@
 <template>
   <div class="row">
-    <div class="col-md-6 mb-3">
-      <div class="card mb-3">
+    <div class="col-md-6 mb-4">
+      <div class="card h-100">
         <div class="card-content">
-          <h3 class="card-heading mb-4">Filter by</h3>
+          <h3 class="card-heading mb-4">Filter by Stake Pool</h3>
+
+          <div class="row" v-if="!is_loading">
+            <a class="col-sm-6 text-center"
+               v-for="pool in stake_pools"
+               :key="pool.id"
+               href="#"
+               title="Filter by Stake Pool"
+               @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
+            >
+              <img class="img-link w-100 px-5 px-sm-3 px-md-1 px-lg-3 px-xl-4 py-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
+            </a>
+          </div>
+        </div>
+        
+        <div v-if="is_loading" class="text-center my-5">
+          <img v-bind:src="loading_image" width="100">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-content">
           <div class="form-group">
             <label>Withdrawer</label>
             <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
@@ -27,65 +50,22 @@
       </div>
     </div>
 
-    <div class="col-md-6">
-      <div class="card mb-3">
-        <div class="card-content">
-          <h3 class="card-heading mb-4">Stake Pools</h3>
-        </div>
-        <div class="row" v-if="!is_loading">
-          <a class="col-6 text-center mb-5" 
-               v-for="pool in stake_pools" 
-               :key="pool.id"
-               href="#"
-               @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
-          >
-            <img v-bind:src="pool_images[pool.name.toLowerCase()]" width="150">
-          </a>
-        </div>
-        
-        <div v-if="is_loading" class="text-center my-5">
-          <img v-bind:src="loading_image" width="100">
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-content">
-          <h3 class="card-heading mb-4">Statistics</h3>
-        </div>
-        <table class="table table-block-sm mb-0" v-if="!is_loading">
-          <tbody>
-            <tr>
-              <td>Total stake: </td>
-              <td>{{ (total_stake / 1000000000).toFixed(3) }} SOL</td>
-            </tr>
-            <tr>
-              <td>Number of accounts: </td>
-              <td>{{ total_count }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div v-if="is_loading" class="text-center my-5">
-          <img v-bind:src="loading_image" width="100">
-        </div>
-      </div>
-    </div>
-
     <div class="col-12 mb-4" v-if="selected_pool && !is_loading">
       <stake-pool-stats :pool="selected_pool" :total_stake="total_stake" />
     </div>
 
     <div class="col-12" v-if="!is_loading">
-      <div class="card mb-0">
-        <table class="table">
+      <div class="card">
+        <table class="table table-block-sm" id="validators-table">
           <thead>
             <tr>
               <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
-              <th class="column-sm align-middle">
+              <th class="column-info align-middle">
                 Name <small class="text-muted">(Commission)</small>
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="commission">
+                  title="Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account.">
                 </i>
                 <br />
                 Active Stake
@@ -93,14 +73,14 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="active stake">
+                  title="Sum of active stake from validator(s).">
                 </i>
                 <br />
                 Scores <small class="text-muted">(total)</small>
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="scores">
+                  title="Our score system.">
                 </i>
               </th>
               <th class='column-sm align-middle pr-0'>
@@ -108,7 +88,7 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="skipped vote">
+                  title="Skipped vote measures the percent of the time that a leader fails to vote.">
                 </i>
                 <br />
                 <small class="text-muted">Dist from leader</small>
@@ -118,7 +98,7 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="root distance">
+                  title="Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
@@ -128,7 +108,7 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="vote distance">
+                  title="Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
@@ -138,25 +118,24 @@
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="skipped slot">
+                  title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
               </th>
             </tr>
           </thead>
+          <stake-account-row
+            @filter_by_staker="filter_by_staker"
+            @filter_by_withdrawer="filter_by_withdrawer"
+            v-for="(sa, index) in stake_accounts"
+            :key="sa.id"
+            :stake_accounts="sa"
+            :idx="index"
+            :batch="batch">
+          </stake-account-row>
         </table>
-      </div>
-      <div class="card mb-4">
-        <stake-account-row
-          @filter_by_staker="filter_by_staker"
-          @filter_by_withdrawer="filter_by_withdrawer"
-          v-for="(sa, index) in stake_accounts" 
-          :key="sa.id" 
-          :stake_accounts="sa"
-          :idx="index"
-          :batch="batch">
-        </stake-account-row>
+
         <b-pagination
          v-model="page"
          total-rows="total_count"
@@ -170,12 +149,6 @@
     </div>
   </div>
 </template>
-
-<style scoped>
-  .table {
-    margin-bottom: 0;
-  }
-</style>
 
 <script>
   import axios from 'axios'

@@ -44,40 +44,47 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     }
   },
   template: `
-    <div>
-      <div class="table-responsive-lg" v-if="validator">
-        <table >
-          <tbody>
-            <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
-          </tbody>
-        </table>
-      </div>
-  
-      <div class="table-responsive-lg">
-        <table class="table table-block-sm">
-          <tbody>
+    <tbody>
+      <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
+      <tr>
+        <td colspan="6" class="p-0">
+          <table class="table table-block-sm stake-accounts-table">
+            <thead class="small">
+              <tr>
+                <th class="column-lg align-middle">Stake Account & Staker</th>
+                <th class="column-lg align-middle">Withdrawer</th>
+                <th class="column-sm align-middle">Stake</th>
+                <th class="column-xs align-middle text-lg-right">
+                  <span title="Account Activation Epoch">Act Epoch</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="small">
             <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
-              <td>
-                {{ (stake_account.active_stake / 1000000000).toLocaleString('en-US') }} SOL
-              </td>
-              <td class="word-break-md">
-                <small>{{ stake_account.stake_pubkey }}</small>
+              <td class="word-break-lg">
+                <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
                 <br />
-                <small><a href="#" @click.prevent="filterByStaker">{{ stake_account.staker }}</a></small>
+                <strong class="d-inline-block d-lg-none">Staker:&nbsp;&nbsp;</strong>{{ stake_account.staker }}
+                <!--<a href="#" title="Filter by staker" @click.prevent="filterByStaker">{{ stake_account.staker }}</a>-->
               </td>
-              <td class="word-break-md">
-                {{ stake_account.pool_name }}
+              <td class="word-break-lg">
+                <strong class="d-inline-block d-lg-none">Withdrawer:&nbsp;&nbsp;</strong>{{ stake_account.pool_name }}
                 <br />
-                <small><a href="#" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a></small>
+                {{ stake_account.withdrawer }}
+                <!--<a href="#" title="Filter by withdrawer" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a>-->
               </td>
               <td>
-                {{ stake_account.activation_epoch }}
+                <strong class="d-inline-block d-lg-none">Stake:&nbsp;&nbsp;</strong>{{ (stake_account.active_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
+              </td>
+              <td class="text-lg-right">
+                <strong class="d-inline-block d-lg-none">Activation Epoch:&nbsp;&nbsp;</strong>{{ stake_account.activation_epoch }}
               </td>
             </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
   `
 })
 
