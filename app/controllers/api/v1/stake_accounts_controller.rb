@@ -15,10 +15,10 @@ module Api
 
         page = index_params[:page].to_i <= 0 ? 1 : index_params[:page].to_i
         @stake_pools = StakePool.where(network: index_params[:network])
-        @total_count = stake_accounts.size
         @total_stake = stake_accounts&.map(&:delegated_stake).compact.sum
         stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
-        sa_keys = stake_accounts.keys[((page - 1) * 25)...((page - 1) * 25 + 25)]
+        @total_count = stake_accounts.keys.size
+        sa_keys = stake_accounts.keys[((page - 1) * 10)...((page - 1) * 10 + 10)]
         @stake_accounts = sa_keys&.map {|k| {stake_accounts[k][0].validator_account => stake_accounts[k]}}
 
         if index_params[:with_batch]

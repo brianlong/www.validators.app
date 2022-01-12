@@ -21,7 +21,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
     <div class="card h-100">
       <div class="card-content">
         <h3 class="card-heading">
-          {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : 'N / A' }} statistics
+          {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} statistics
         </h3>
         
         <div class="row pl-lg-4 pl-xl-5">
@@ -59,7 +59,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
             </div>
             <div class="mb-4">
               <span class="text-muted">Avg Commission:&nbsp;</span>
-              <strong class="text-success">{{ pool.average_validators_commission.toFixed(2) }}%</strong>
+              <strong class="text-success">{{ pool.average_validators_commission ? pool.average_validators_commission.toFixed(2) : 'N / A' }}%</strong>
             </div>
             <div class="mb-3">
               <span class="stat-title-3">
@@ -77,15 +77,15 @@ var StakePoolStats = Vue.component('StakePoolStats', {
             </div>
             <div>
               <span class="text-muted">Avg Skipped Slots:&nbsp;</span>
-              <strong class="text-success">{{ pool.average_skipped_slots.toFixed(2) }}&percnt;</strong>
+              <strong class="text-success">{{ pool.average_skipped_slots ? pool.average_skipped_slots.toFixed(2) : 'N / A' }}&percnt;</strong>
             </div>
             <div>
               <span class="text-muted">Avg Lifetime:&nbsp;</span>
-              <strong class="text-success">{{ pool.average_lifetime || 'N / A' }} days</strong>
+              <strong class="text-success">{{ pool.average_lifetime ? pool.average_lifetime + ' days' : 'N / A' }}</strong>
             </div>
             <div>
               <span class="text-muted">Avg Uptime:&nbsp;</span>
-              <strong class="text-success">{{ pool.average_uptime.toFixed(1) }} days</strong>
+              <strong class="text-success">{{ pool.average_uptime ? pool.average_uptime.toFixed(1) + ' days': 'N / A' }}</strong>
             </div>
             <div class="">
               <span class="text-muted">Avg Score:&nbsp;</span>
