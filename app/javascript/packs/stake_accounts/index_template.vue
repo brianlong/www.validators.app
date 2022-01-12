@@ -3,7 +3,8 @@
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <h3 class="card-heading mb-4">Filter by Stake Pool</h3>
+          <h3 class="card-heading mb-2">Filter by Stake Pool</h3>
+          <div class="text-center text-muted small mb-3">Click on stake pool logo to see pool stats</div>
 
           <div class="row" v-if="!is_loading">
             <a class="col-sm-6 text-center"
@@ -27,7 +28,7 @@
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <div class="form-group">
+          <div class="form-group pt-xl-3">
             <label>Withdrawer</label>
             <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
           </div>
