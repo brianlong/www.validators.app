@@ -112,12 +112,6 @@ var ValidatorRow = Vue.component('validatorRow', {
           <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
         </a>
         <br />
-        <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-        <small>
-          {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', {maximumFractionDigits: 0}) }}
-          ({{ validator['stake_concentration'] * 100.0 }}%)
-        </small>
-        <br />
         <span class="d-inline-block d-lg-none">Version:&nbsp;</span>
         <small>
           <span class="d-none d-lg-inline-block">Version:&nbsp;</span>
