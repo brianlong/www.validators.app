@@ -232,6 +232,6 @@ class StakeLogicTest < ActiveSupport::TestCase
     acc.reload
                 
     assert_equal 200, p.code
-    assert_equal 2.45, acc.apy
+    assert_equal 2.44927, acc.apy
   end
 end
