@@ -18,7 +18,7 @@ module Api
         @total_stake = stake_accounts&.map(&:delegated_stake).compact.sum
         stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
         @total_count = stake_accounts.keys.size
-        sa_keys = stake_accounts.keys[((page - 1) * 10)...((page - 1) * 10 + 10)]
+        sa_keys = stake_accounts.keys[((page - 1) * 20)...((page - 1) * 20 + 20)]
         @stake_accounts = sa_keys&.map {|k| {stake_accounts[k][0].validator_account => stake_accounts[k]}}
 
         if index_params[:with_batch]

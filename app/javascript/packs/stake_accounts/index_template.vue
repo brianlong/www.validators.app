@@ -132,7 +132,7 @@
             v-for="(sa, index) in stake_accounts"
             :key="sa.id"
             :stake_accounts="sa"
-            :idx="index + (page - 1) * 10"
+            :idx="index + (page - 1) * 20"
             :batch="batch">
           </stake-account-row>
         </table>
@@ -140,7 +140,7 @@
         <b-pagination
          v-model="page"
          :total-rows="total_count"
-         :per-page="10"
+         :per-page="20"
          first-text="« First"
          last-text="Last »" />
       </div>
