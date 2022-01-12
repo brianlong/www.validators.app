@@ -142,7 +142,7 @@ module StakeLogic
       return p unless p.code == 200
 
       p.payload[:stake_pools].each do |pool|
-        validator_ids = pool.stake_accounts.pluck(:validator_id)
+        validator_ids = pool.stake_accounts.active.pluck(:validator_id)
         delinquent_count = 0
         last_skipped_slots = []
         uptimes = []
@@ -189,7 +189,7 @@ module StakeLogic
       return p unless p.code == 200
 
       StakePool.where(network: p.payload[:network]).each do |pool|
-        validator_ids = pool.stake_accounts.pluck(:validator_id)
+        validator_ids = pool.stake_accounts.active.pluck(:validator_id)
         average_commission = ValidatorScoreV1.where(validator_id: validator_ids)
                                              .average(:commission)
 
