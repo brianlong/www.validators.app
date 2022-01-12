@@ -14,7 +14,8 @@ json.stake_pools do
     :average_uptime,
     :average_lifetime,
     :validators_count,
-    :authority
+    :authority,
+    :average_score
 end
 
 json.total_count @total_count
