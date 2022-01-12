@@ -274,6 +274,7 @@
         this.filter_staker = null
         this.filter_account = null
         this.filter_validator = null
+        this.selected_pool = null
       },
       filters_present: function(){
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
