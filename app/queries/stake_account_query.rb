@@ -39,8 +39,9 @@ class StakeAccountQuery
                                  .left_outer_joins(:validator)
                                  .select(query_fields)
                                  .where(
-                                   network: @network
+                                   network: @network,
                                  )
+                                 .where.not(active_stake: [nil, 0])
 
     stake_accounts = stake_accounts.filter_by_account(@filter_by[:account]) \
       unless @filter_by[:account].blank?
