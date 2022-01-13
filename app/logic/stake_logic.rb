@@ -223,10 +223,13 @@ module StakeLogic
           epoch: acc.epoch - 1
         ).first
         
-        next unless previous_acc && acc.delegated_stake
+        next unless previous_acc && acc.delegated_stake > 0 && previous_acc.delegated_stake > 0
 
         credits_diff = acc.delegated_stake - previous_acc.delegated_stake
+        puts "------------"
         puts credits_diff
+        puts previous_acc.delegated_stake.to_f
+        next unless credits_diff > 0
         credits_diff_percent = credits_diff / previous_acc.delegated_stake.to_f
 
         apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
