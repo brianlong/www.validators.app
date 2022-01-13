@@ -45,7 +45,7 @@ module FixIpModule
   end
 
   def update_validator_score_with_overrides
-    ValidatorScoreV1.in_batches(of: 200).each do |scores|
+    ValidatorScoreV1.in_batches(of: 50).each do |scores|
       ids = scores.pluck(:id)
       sql2 = "
       UPDATE validator_score_v1s sc
