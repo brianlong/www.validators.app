@@ -41,11 +41,11 @@ module FixIpModule
       ip.traits_autonomous_system_organization = ipor.traits_autonomous_system_organization,
       ip.updated_at = NOW();
     ".squish
-    Ip.connection.execute(sql)1
+    Ip.connection.execute(sql1)
   end
 
   def update_validator_score_with_overrides
-    ValidatorScoreV1.in_batches(of: 500).each do |scores|
+    ValidatorScoreV1.in_batches(of: 200).each do |scores|
       ids = scores.pluck(:id)
       sql2 = "
       UPDATE validator_score_v1s sc
