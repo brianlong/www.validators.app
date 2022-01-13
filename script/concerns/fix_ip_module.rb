@@ -47,6 +47,7 @@ module FixIpModule
   def update_validator_score_with_overrides
     ValidatorScoreV1.in_batches(of: 500).each do |scores|
       ips = scores.pluck(:ip_address)
+      puts ips.to_s[1..-2]
       sql2 = "
       UPDATE validator_score_v1s sc
       INNER JOIN ips ip
