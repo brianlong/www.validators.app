@@ -129,7 +129,7 @@ module StakeLogic
       stake_pools = StakePool.where(network: p.payload[:network])
 
       stake_pools.each do |pool|
-        db_stake_accounts.where(withdrawer: pool.authority)
+        p.payload[:db_stake_accounts].where(withdrawer: pool.authority)
                     .update_all(stake_pool_id: pool.id)
       end
 
