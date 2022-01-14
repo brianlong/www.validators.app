@@ -18,6 +18,7 @@
   <li><a href="#notes">Notes</a></li>
   <li><a href="#epoch-index">Epoch Index</a></li>
   <li><a href="#commission-change-index">Commission Change Index</a></li>
+  <li><a href="#stake-pools">Stake Pools</a></li>
 </ul>
 
 <hr />
@@ -216,8 +217,8 @@
 <div class="row">
   <div class="col-sm-12">
     <p>
-      The Commission Change endpoint will return all the changes in commission for a given period of time. 
-      Replace `:network` with 'testnet' or 'mainnet' as desired. 
+      The Commission Change endpoint will return all the changes in commission for a given period of time.
+      Replace `:network` with 'testnet' or 'mainnet' as desired.
     </p>
     <p>Request:</p>
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network'</pre>
@@ -252,6 +253,43 @@
     </pre>
   </div>
 </div>
+
+<h4 id="stake-pools">Stake Pools</h4>
+<div class="row">
+  <div class="col-sm-12">
+    <p>
+      The Stake Pools endpoint will return all the stake pools.
+    </p>
+    <p>Request:</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-pools/:network'</pre>
+    <p>Response:</p>
+    <pre>
+      { "stake_pools":
+        [
+          {
+          "id": 72,
+          "authority": "authority",
+          "average_apy": 12,
+          "average_delinquent": 1,
+          "average_lifetime": 22,
+          "average_score": 7,
+          "average_skipped_slots": 12,
+          "average_uptime": 1,
+          "average_validators_commission": 2,
+          "manager_fee": 0,
+          "name": "TestName",
+          "network": "testnet",
+          "ticker": 'ticker',
+          "validators_count": 0
+          },
+          ...
+        ]
+      }
+
+    </pre>
+  </div>
+</div>
+
 
 <hr />
 
