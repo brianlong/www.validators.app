@@ -114,7 +114,9 @@ module StakeLogic
 
       StakeAccount.where(network: p.payload[:network]).where.not(batch_uuid: p.payload[:batch].uuid).delete_all
 
-      Pipeline.new(200, p.payload)
+      db_stake_accounts = StakeAccount.where(network: p.payload[:network])
+
+      Pipeline.new(200, p.payload.merge(db_stake_accounts: db_stake_accounts))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from save_stake_accounts', e)
     end
@@ -127,7 +129,7 @@ module StakeLogic
       stake_pools = StakePool.where(network: p.payload[:network])
 
       stake_pools.each do |pool|
-        StakeAccount.where(withdrawer: pool.authority, network: p.payload[:network])
+        db_stake_accounts.where(withdrawer: pool.authority)
                     .update_all(stake_pool_id: pool.id)
       end
 
@@ -202,10 +204,30 @@ module StakeLogic
     end
   end
 
+  def get_rewards
+    lambda do |p|
+      stake_accounts = p.payload[:db_stake_accounts]
+      reward_info = solana_client_request(
+        p.payload[:config_urls],
+        'get_inflation_reward',
+        params: [stake_accounts.pluck(:stake_pubkey)]
+      )
+
+      account_rewards = {}
+
+      stake_accounts.each_with_index do |sa, idx|
+        account_rewards[sa["stake_pubkey"]] = reward_info[idx]
+      end
+      Pipeline.new(200, p.payload.merge(account_rewards: account_rewards))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from get_rewards", e)
+    end
+  end
+
   def calculate_apy
     lambda do |p|
       return p unless p.code == 200
-
+      puts p.payload[:account_rewards]
       last_epoch = EpochWallClock.where(
         network: p.payload[:network]
       ).last
@@ -217,23 +239,23 @@ module StakeLogic
 
       num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
 
-      StakeAccount.where(network: p.payload[:network]).each do |acc|
+      p.payload[:db_stake_accounts].each do |acc|
         previous_acc = StakeAccountHistory.where(
           stake_pubkey: acc.stake_pubkey,
           epoch: acc.epoch - 1
         ).first
         
-        next unless previous_acc && acc.delegated_stake > 0 && previous_acc.delegated_stake > 0
+        next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
 
-        credits_diff = acc.delegated_stake - previous_acc.delegated_stake
+        rewards = p.payload[:account_rewards][acc.stake_pubkey]
+        credits_diff = rewards["amount"]
         puts "------------"
         puts credits_diff
-        puts previous_acc.delegated_stake.to_f
         next unless credits_diff > 0
-        credits_diff_percent = credits_diff / previous_acc.delegated_stake.to_f
+        credits_diff_percent = credits_diff / (rewards["postBalance"] - credits_diff).to_f
 
         apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
-        # apy = apy < 100 && apy > 0 ? apy.round(6) : nil
+        apy = apy < 100 && apy > 0 ? apy.round(6) : nil
         puts apy
         acc.update(apy: apy)
       end
