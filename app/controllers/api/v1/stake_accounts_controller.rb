@@ -39,7 +39,8 @@ module Api
           :filter_staker,
           :filter_withdrawer,
           :filter_validator,
-          :with_batch
+          :with_batch,
+          :format
         )
       end
     end
