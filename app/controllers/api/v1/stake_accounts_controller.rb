@@ -20,7 +20,9 @@ module Api
 
         grouped_stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
         sa_keys = grouped_stake_accounts.keys[((page - 1) * 20)...((page - 1) * 20 + 20)]
-        @stake_accounts = sa_keys&.map { |k| { grouped_stake_accounts[k][0].validator_account => grouped_stake_accounts[k] } }
+        @stake_accounts = sa_keys&.map do |k|
+          { grouped_stake_accounts[k][0].validator_account => grouped_stake_accounts[k] }
+        end
 
         if index_params[:with_batch]
           @batch = Batch.last_scored(index_params[:network])
