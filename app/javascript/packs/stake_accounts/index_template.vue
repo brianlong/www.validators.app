@@ -145,7 +145,7 @@
          last-text="Last »" />
       </div>
     </div>
-    <div v-if="!is_loading_stake_accounts && !is_loading_stake_pools" class="col-12 text-center my-5">
+    <div v-if="is_loading_stake_accounts && is_loading_stake_pools" class="col-12 text-center my-5">
       <img v-bind:src="loading_image" width="100">
     </div>
   </div>
@@ -260,7 +260,7 @@
                ctx.stake_accounts = response.data.stake_accounts;
                ctx.total_count = response.data.total_count;
                ctx.total_stake = response.data.total_stake;
-               ctx.is_loading_stake_accounts = false
+               ctx.is_loading_stake_accounts = false;
              })
       },
       sort_by_epoch: function(){
