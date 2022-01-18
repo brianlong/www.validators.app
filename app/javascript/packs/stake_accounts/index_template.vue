@@ -198,9 +198,16 @@
     },
     created () {
       var ctx = this
-      var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page, with_batch: true } }
+      var stake_accounts_query_params = {
+        params: {
+          sort_by: ctx.sort_by,
+          page: ctx.page,
+          with_batch: true,
+          grouped_by: 'delegated_vote_accounts_address'
+        }
+      }
 
-      axios.get(ctx.stake_accounts_api_url, query_params)
+      axios.get(ctx.stake_accounts_api_url, stake_accounts_query_params)
            .then(function (response){
              ctx.stake_accounts = response.data.stake_accounts
              ctx.total_count = response.data.total_count;
@@ -209,7 +216,7 @@
              ctx.batch = response.data.batch
            })
 
-      axios.get(ctx.stake_pools_api_url, query_params)
+      axios.get(ctx.stake_pools_api_url)
            .then(function (response){
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.is_loading_stake_pools = false
@@ -251,7 +258,8 @@
             filter_account: ctx.filter_account,
             filter_staker: ctx.filter_staker,
             filter_withdrawer: ctx.filter_withdrawer,
-            filter_validator: ctx.filter_validator
+            filter_validator: ctx.filter_validator,
+            grouped_by: 'delegated_vote_accounts_address'
           }
         }
 

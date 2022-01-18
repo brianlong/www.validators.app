@@ -18,10 +18,19 @@ module Api
 
         page = index_params[:page].to_i <= 0 ? 1 : index_params[:page].to_i
 
-        grouped_stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
-        sa_keys = grouped_stake_accounts.keys[((page - 1) * 20)...((page - 1) * 20 + 20)]
-        @stake_accounts = sa_keys&.map do |k|
-          { grouped_stake_accounts[k][0].validator_account => grouped_stake_accounts[k] }
+        # This param is used by frontend Vue view.
+        if params[:grouped_by] == "delegated_vote_accounts_address"
+          stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
+
+          sa_keys = stake_accounts.keys[((page - 1) * 20)...((page - 1) * 20 + 20)]
+
+          @stake_accounts = sa_keys&.map do |k|
+            { stake_accounts[k][0].validator_account => stake_accounts[k] }
+          end
+        else
+          page = params[:page]
+          limit = params[:per]
+          @stake_accounts = stake_accounts.page(page).per(limit)
         end
 
         if index_params[:with_batch]

@@ -14,6 +14,9 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
       authority: "authority",
     }
 
+    @params = { network: "testnet" }
+    @headers = { "Token" => @user.api_token }
+
     stake_pool = create(
       :stake_pool,
       @stake_pool_attrs
@@ -64,7 +67,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "request without token should get error" do
-    get api_v1_stake_accounts_index_url(network: "testnet")
+    get api_v1_stake_accounts_index_url(@params)
     assert_response 401
     expected_response = { "error" => "Unauthorized" }
 
@@ -72,12 +75,36 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "request with token should succeed" do
-    get api_v1_stake_accounts_index_url(network: "testnet"), headers: { "Token" => @user.api_token }
+    get api_v1_stake_accounts_index_url(@params), headers: @headers
     assert_response 200
   end
 
-  test "request should return correct results" do
-    get api_v1_stake_accounts_index_url(network: "testnet"), headers: { "Token" => @user.api_token }
+  test "request with no additional params should return all results" do
+    get api_v1_stake_accounts_index_url(@params), headers: @headers
+
+    assert_response 200
+
+    json_response = response_to_json(@response.body)
+
+    assert_equal 3, json_response["stake_accounts"].size
+  end
+
+  test "request with page and limit params should return limited results" do
+    params = @params.merge({ page: 1, per: 2 })
+
+    get api_v1_stake_accounts_index_url(params), headers: @headers
+
+    assert_response 200
+
+    json_response = response_to_json(@response.body)
+
+    assert_equal 2, json_response["stake_accounts"].size
+  end
+
+  test "request with grouped_by param should return correct grouped results" do
+    params = @params.merge({grouped_by: "delegated_vote_accounts_address"})
+
+    get api_v1_stake_accounts_index_url(params), headers: @headers
 
     assert_response 200
 
@@ -105,7 +132,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
       filter_staker: "staker1"
     }
 
-    get api_v1_stake_accounts_index_url(params), headers: { "Token" => @user.api_token }
+    get api_v1_stake_accounts_index_url(params), headers: @headers
 
     json_response = response_to_json(@response.body)
 
