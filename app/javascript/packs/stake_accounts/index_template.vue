@@ -148,24 +148,62 @@
     <div v-if="is_loading" class="col-12 text-center my-5">
       <img v-bind:src="loading_image" width="100">
     </div>
-    <div class="container mt-5">
+    <div class="container mt-5" id="metrics">
       <h2> Metrics Explanation </h2>
-      <h4>Nodes</h4>
+      <hr />
+      <h4>Nodes total</h4>
       <p>
-        <strong>Total</strong> - number of validators in stake pool.
-        <br />
-        <strong>Delinquent</strong> - number of delinquent validators in stake pool.
-        <br />
-        <strong>Stake</strong> - total stake of the stake pool.
+        Number of validators used by the stake pool.
       </p>
-      <h4>Fees</h4>
+      <br />
+      <h4>Nodes Delinquent</h4>
       <p>
-        <strong>Manager Fee</strong> - commission that stake pool substracts from the total profit to maintain their operation.
-        <br />
-        <strong>Avg Commission</strong> - average commission of all the validators used by the stake pool. See 
+        Number of delinquent validators used by the stake pool.
+      </p>
+      <br />
+      <h4>Nodes Stake</h4>
+      <p>
+        Total stake of the stake pool divided among the validators.
+      </p>
+      <br />
+      <h4>Manager Fee</h4>
+      <p>
+        Commission that stake pool substracts from the total profit to maintain their operation.
+      </p>
+      <br />
+      <h4>Avg Commission</h4>
+      <p>
+        Average commission of all the validators used by the stake pool. See 
         <a href="/faq#commission">what is validator commission?</a>
-        <br />
-        <strong>APY</strong> - total stake of the stake pool.
+      </p>
+      <br />
+      <h4>APY</h4>
+      <p>
+        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the average APY of
+        all validators used by the pool. <br />
+        APY of the validator is calculated based on rewards from the last epoch as follows:<br /><br />
+        <strong> ((1 + rewards_percent) ^ number_of_epochs_per_year) - 1 </strong>
+      </p>
+      <br />
+      <h4>Avg Skipped Slot</h4>
+      <p>
+        Average skipped slot of all the validators used by the stake pool. See 
+        <a href="/faq#skipped-vote">what is validator skipped slot?</a>
+      </p>
+      <br />
+      <h4>Avg Lifetime</h4>
+      <p>
+        Average number of days since each validator from the stake pool was created.
+      </p>
+      <br />
+      <h4>Avg Uptime</h4>
+      <p>
+        Average number of days each validator operates continuously without shutting down.
+      </p>
+      <br />
+      <h4>Avg Score</h4>
+      <p>
+        Average score of the validators from the stake pool. See <a href="/faq#score">how are scores calculated?</a>
       </p>
     </div>
   </div>

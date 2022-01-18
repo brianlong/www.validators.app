@@ -15,7 +15,9 @@ var StakePoolStats = Vue.component('StakePoolStats', {
     return {}
   },
   methods: {
-
+    go_to_metrics() {
+      document.getElementById("metrics").scrollIntoView()
+    }
   },
   template: `
     <div class="card h-100">
@@ -92,6 +94,9 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               <strong class="text-success">{{ pool.average_score || 'N / A' }}</strong>
             </div>
           </div>
+        </div>
+        <div class="text-center">
+          <small><a href="#" @click.prevent="go_to_metrics()">go to metrics explanation</a><small>
         </div>
       </div>
     </div>
