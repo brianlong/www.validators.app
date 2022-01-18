@@ -14,5 +14,6 @@ FactoryBot.define do
     staker { "staker" }
     withdrawer { "withdrawer" }
     batch_uuid {"123-abc"}
+    network { "testnet" }
   end
 end
