@@ -45,8 +45,8 @@ module FixIpModule
   end
 
   def update_validator_score_with_overrides
-    ValidatorScoreV1.in_batches(of: 500).each do |scores|
-      ips = scores.pluck(:ip_address)
+    ValidatorScoreV1.in_batches(of: 50).each do |scores|
+      ids = scores.pluck(:id)
       sql2 = "
       UPDATE validator_score_v1s sc
       INNER JOIN ips ip
@@ -54,7 +54,7 @@ module FixIpModule
       SET sc.data_center_key = ip.data_center_key,
       sc.data_center_host = ip.data_center_host,
       sc.updated_at = NOW()
-      WHERE sc.ip_address IN(#{ips.to_s[1..-2]});
+      WHERE sc.id IN(#{ids.join(', ')});
       ".squish
       ValidatorScoreV1.connection.execute(sql2)
     end

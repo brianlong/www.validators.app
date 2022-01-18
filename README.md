@@ -27,6 +27,7 @@ This project requires Ruby 2.7+ as denoted in the `.ruby-version` file. This pro
   - MySQL 5.7+
   - Redis
   - Yarn
+  - Node 16.13.2
   - shared-mime-info
 
 ## Configuration
