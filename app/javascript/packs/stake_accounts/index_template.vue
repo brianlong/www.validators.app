@@ -153,7 +153,7 @@
       <hr />
       <h4>Nodes total</h4>
       <p>
-        Number of validators used by the stake pool.
+        Number of validators used by the stake pool. Bigger validator diversity helps to maintain good network health.
       </p>
       <br />
       <h4>Nodes Delinquent</h4>
