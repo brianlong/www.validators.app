@@ -299,6 +299,16 @@
     </p>
     <p>Request:</p>
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network'</pre>
+    <p>Parameter Options:</p>
+    <p>`filter_[account|staker|withdrawer|validator]=` Filters by chosen value.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?filter_account=7hTEVqbQmt3UPQQKcavaxzzakt1FWbwVXyE8MZGadhW6'</pre>
+    <p>`sort_by=[epoch_|withdrawer_|staker_|stake_]` will sort the results by epoch, withdrawer, staker or stake. NOTE: after underscore add `asc` or `desc`, example below.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?sort_by=epoch_desc'</pre>
+    <p>`page=NN` will return the results from passed page.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?page=1'</pre>
+    <p>`per=NN` number of records per page.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?per=50'</pre>
+
     <p>Response:</p>
     <pre>
     {
@@ -327,16 +337,6 @@
       ...
     }
     </pre>
-    <p>Parameter Options:</p>
-    <p>`filter_[account|staker|withdrawer|validator]=` Filters by chosen value.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?filter_account=7hTEVqbQmt3UPQQKcavaxzzakt1FWbwVXyE8MZGadhW6'</pre>
-    <p>`sort_by=[epoch_|withdrawer_|staker_|stake_]` will sort the results by epoch, withdrawer, staker or stake. NOTE: after underscore add `asc` or `desc`, example below.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?sort_by=epoch_desc'</pre>
-    <p>`page=NN` will return the results from passed page.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?page=1'</pre>
-    <p>`per=NN` number of records per page.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?per=50'</pre>
-
   </div>
 </div>
 
