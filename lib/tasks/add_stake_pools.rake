@@ -27,6 +27,7 @@ stake_pools = [
     name: "DAOPool",
     authority: "BbyX1GwUNsfbcoWwnkZDo8sqGmwNDzs2765RpjyQ1pQb",
     network: "mainnet",
+    ticker: "daosol"
   }
 ]
 
