@@ -241,7 +241,8 @@
             filter_account: ctx.filter_account,
             filter_staker: ctx.filter_staker,
             filter_withdrawer: ctx.filter_withdrawer,
-            filter_validator: ctx.filter_validator
+            filter_validator: ctx.filter_validator,
+            seed: ctx.seed
           }
         }
 
