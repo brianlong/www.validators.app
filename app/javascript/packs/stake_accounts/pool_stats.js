@@ -22,9 +22,12 @@ var StakePoolStats = Vue.component('StakePoolStats', {
   template: `
     <div class="card h-100">
       <div class="card-content">
-        <h3 class="card-heading">
+        <h3 class="card-heading mb-2">
           {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} statistics
         </h3>
+        <div class="text-center text-muted small mb-4">
+          <a href="#" @click.prevent="go_to_metrics()">See metrics explanation</a>
+        </div>
         
         <div class="row pl-lg-4 pl-xl-5">
           <div class="col-md-4 pl-lg-4 pl-xl-5">
@@ -94,9 +97,6 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               <strong class="text-success">{{ pool.average_score || 'N / A' }}</strong>
             </div>
           </div>
-        </div>
-        <div class="text-center">
-          <small><a href="#" @click.prevent="go_to_metrics()">go to metrics explanation</a><small>
         </div>
       </div>
     </div>
