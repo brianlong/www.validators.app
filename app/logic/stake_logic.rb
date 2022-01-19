@@ -207,7 +207,7 @@ module StakeLogic
       stake_accounts = StakeAccount.where(network: p.payload[:network])
       reward_info = solana_client_request(
         p.payload[:config_urls],
-        'get_inflation_reward',
+        "get_inflation_reward",
         params: [stake_accounts.pluck(:stake_pubkey)]
       )
 
