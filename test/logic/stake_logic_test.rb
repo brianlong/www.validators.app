@@ -206,7 +206,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 6.67, stake_pool.reload.average_score
   end
 
-  test 'get_rewards' do
+  test "get_rewards" do
     stake_pool = create(:stake_pool)
     validator = create(:validator)
     validator2 = create(:validator)
