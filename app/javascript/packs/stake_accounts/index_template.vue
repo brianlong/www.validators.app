@@ -244,6 +244,7 @@
         selected_pool: null,
         batch: null,
         loading_image: loadingImage,
+        seed: Math.floor(Math.random() * 1000),
         pool_images: {
           marinade: marinadeImage,
           socean: soceanImage,
@@ -255,7 +256,7 @@
     },
     created () {
       var ctx = this
-      var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page, with_batch: true } }
+      var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page, with_batch: true, seed: ctx.seed } }
 
       axios.get(ctx.api_url, query_params)
            .then(function (response){
@@ -301,7 +302,8 @@
             filter_account: ctx.filter_account,
             filter_staker: ctx.filter_staker,
             filter_withdrawer: ctx.filter_withdrawer,
-            filter_validator: ctx.filter_validator
+            filter_validator: ctx.filter_validator,
+            seed: ctx.seed
           }
         }
 
