@@ -217,7 +217,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     create(:stake_account, validator: validator, stake_pool: stake_pool)
     create(:stake_account, validator: validator2, stake_pool: stake_pool)
 
-    VCR.use_cassette('stake_logic_get_rewards') do
+    VCR.use_cassette("stake_logic_get_rewards") do
       p = Pipeline.new(200, @initial_payload)
                   .then(&get_rewards)
 
