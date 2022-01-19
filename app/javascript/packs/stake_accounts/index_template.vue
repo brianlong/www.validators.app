@@ -148,6 +148,67 @@
     <div v-if="is_loading" class="col-12 text-center my-5">
       <img v-bind:src="loading_image" width="100">
     </div>
+    <div class="container mt-5" id="metrics">
+      <h2> Metrics Explanation </h2>
+      <hr />
+      <h4 class="h5">Nodes total</h4>
+      <p class="mb-5">
+        Number of validators used by the stake pool. Bigger validator diversity helps to maintain good network health.
+      </p>
+
+      <h4 class="h5">Nodes Delinquent</h4>
+      <p class="mb-5">
+        Number of delinquent validators used by the stake pool.
+      </p>
+
+      <h4 class="h5">Nodes Stake</h4>
+      <p class="mb-5">
+        Total stake of the stake pool divided among the validators.
+      </p>
+
+      <h4 class="h5">Manager Fee</h4>
+      <p class="mb-5">
+        Commission that stake pool substracts from the total profit to maintain their operation.
+      </p>
+
+      <h4 class="h5">Avg Commission</h4>
+      <p class="mb-5">
+        Average commission of all the validators used by the stake pool. See 
+        <a href="/faq#commission" target="_blank">what is validator commission?</a>
+      </p>
+
+      <h4 class="h5">APY</h4>
+      <p>
+        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the average APY of
+        all validators used by the pool. <br />
+        APY of the validator is calculated based on rewards from the last epoch as follows:
+      </p>
+      <p class="mb-5">
+        <strong> ((1 + rewards_percent) ^ number_of_epochs_per_year) - 1 </strong>
+      </p>
+
+      <h4 class="h5">Avg Skipped Slot</h4>
+      <p class="mb-5">
+        Average skipped slot of all the validators used by the stake pool. See 
+        <a href="/faq#skipped-vote" target="_blank">what is validator skipped slot?</a>
+      </p>
+
+      <h4 class="h5">Avg Lifetime</h4>
+      <p class="mb-5">
+        Average number of days since each validator from the stake pool was created.
+      </p>
+
+      <h4 class="h5">Avg Uptime</h4>
+      <p class="mb-5">
+        Average number of days each validator operates continuously without shutting down.
+      </p>
+
+      <h4 class="h5">Avg Score</h4>
+      <p>
+        Average score of the validators from the stake pool. See
+        <a href="/faq#score" target="_blank">how are scores calculated?</a>
+      </p>
+    </div>
   </div>
 </template>
 
