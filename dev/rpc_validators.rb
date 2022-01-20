@@ -171,7 +171,7 @@ rpc_ips= %w[
 require 'csv'
 file = "my_file.csv"
 CSV.open( file, 'w' ) do |writer|
-  writer << ['ip', name, account]
+  writer << ['ip', 'name', 'account']
   rpc_ips.each do |ip|
     score = ValidatorScoreV1.find_by(ip_address: ip)
     next unless score
