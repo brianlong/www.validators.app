@@ -82,7 +82,7 @@ class Validator < ApplicationRecord
   end
 
   def scorable?
-    is_active && !is_rpc
+    is_active && !is_rpc && !is_destroyed
   end
 
   def validator_history_last

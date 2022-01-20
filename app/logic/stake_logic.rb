@@ -202,6 +202,26 @@ module StakeLogic
     end
   end
 
+  def get_rewards
+    lambda do |p|
+      stake_accounts = StakeAccount.where(network: p.payload[:network])
+      reward_info = solana_client_request(
+        p.payload[:config_urls],
+        "get_inflation_reward",
+        params: [stake_accounts.pluck(:stake_pubkey)]
+      )
+
+      account_rewards = {}
+
+      stake_accounts.each_with_index do |sa, idx|
+        account_rewards[sa["stake_pubkey"]] = reward_info[idx]
+      end
+      Pipeline.new(200, p.payload.merge(account_rewards: account_rewards))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from get_rewards", e)
+    end
+  end
+
   def calculate_apy
     lambda do |p|
       return p unless p.code == 200
@@ -223,14 +243,15 @@ module StakeLogic
           epoch: acc.epoch - 1
         ).first
         
-        next unless previous_acc && acc.delegated_stake
+        next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
 
-        credits_diff = acc.delegated_stake - previous_acc.delegated_stake
-        credits_diff_percent = credits_diff / previous_acc.delegated_stake.to_f
+        rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
+        credits_diff = rewards[:amount]
+        next unless credits_diff > 0
+        credits_diff_percent = credits_diff / (rewards[:postBalance] - credits_diff).to_f
 
         apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
         apy = apy < 100 && apy > 0 ? apy.round(6) : nil
-
         acc.update(apy: apy)
       end
 
