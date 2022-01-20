@@ -28,8 +28,8 @@ module Api
             { stake_accounts[k][0].validator_account => stake_accounts[k] }
           end
         else
-          page = params[:page]
-          limit = params[:per]
+          page = page
+          limit = index_params[:per]
           @stake_accounts = stake_accounts.page(page).per(limit)
         end
 
