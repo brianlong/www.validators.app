@@ -206,6 +206,25 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 6.67, stake_pool.reload.average_score
   end
 
+  test "get_rewards" do
+    stake_pool = create(:stake_pool)
+    validator = create(:validator)
+    validator2 = create(:validator)
+    score = create(:validator_score_v1, validator: validator)
+    score2 = create(:validator_score_v1, validator: validator2)
+    score.update_columns(total_score: 10)
+    score2.update_columns(total_score: 9)
+    create(:stake_account, validator: validator, stake_pool: stake_pool)
+    create(:stake_account, validator: validator2, stake_pool: stake_pool)
+
+    VCR.use_cassette("stake_logic_get_rewards") do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_rewards)
+
+      refute p.payload[:account_rewards].empty?
+    end
+  end
+
   test "calculate apy" do
     create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
     create(:epoch_wall_clock, network: "testnet", epoch: 2)
@@ -213,7 +232,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     create(
       :stake_account_history,
       network: "testnet",
-      delegated_stake: 10000,
+      delegated_stake: 2893868758268,
       epoch: 1,
       stake_pubkey: "pubkey_123"
     )
@@ -221,17 +240,28 @@ class StakeLogicTest < ActiveSupport::TestCase
     acc = create(
       :stake_account,
       network: "testnet",
-      delegated_stake: 10002,
+      delegated_stake: 2922232803431,
       epoch: 2,
       stake_pubkey: "pubkey_123"
     )
 
+    @initial_payload.merge!(
+      account_rewards: {
+        "pubkey_123" => {
+          "amount": 2836404516,
+          "commission": 10,
+          "effectiveSlot": 113276257,
+          "epoch": 2,
+          "postBalance": 2922232803431
+        }
+      }
+    )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy)
     
     acc.reload
-                
+
     assert_equal 200, p.code
-    assert_equal 2.44927, acc.apy
+    assert_equal 12.4685, acc.apy
   end
 end

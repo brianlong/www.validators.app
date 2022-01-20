@@ -40,6 +40,10 @@ module Api
 
       private
 
+      def random_by_seed(seed: )
+        Random.new(seed || rand(1..1000))
+      end
+
       def index_params
         params.permit(
           :network,
@@ -51,7 +55,8 @@ module Api
           :filter_withdrawer,
           :filter_validator,
           :with_batch,
-          :format
+          :format,
+          :seed
         )
       end
     end
