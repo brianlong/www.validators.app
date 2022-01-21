@@ -51,6 +51,11 @@ var StakePoolStats = Vue.component('StakePoolStats', {
                 Stake:&nbsp;
               </span>
               <strong class="text-purple">{{ (total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
+              <br />
+              <span class="text-muted ml-4">
+                &nbsp;Avg Stake:&nbsp;
+              </span>
+              <small class="text-purple">{{ ((total_stake / pool.validators_count) / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</small>
             </div>
           </div>
           

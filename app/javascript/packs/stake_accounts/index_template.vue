@@ -166,6 +166,11 @@
         Total stake of the stake pool divided among the validators.
       </p>
 
+      <h4 class="h5">Avg Stake</h4>
+      <p class="mb-5">
+        Average stake that the pool delegates to a single validator.
+      </p>
+
       <h4 class="h5">Manager Fee</h4>
       <p class="mb-5">
         Commission that stake pool substracts from the total profit to maintain their operation.
