@@ -77,6 +77,26 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
     refute stake_accounts.where(active_stake: nil).exists?
   end
 
+  test 'returns all fields declared in query class' do
+    stake_accounts_query = StakeAccountQuery.new(
+      network: 'testnet',
+      filter_account: nil,
+      filter_staker: nil,
+      filter_withdrawer: nil,
+      filter_validator: nil
+    )
+
+    number_of_fields =
+      StakeAccountQuery::STAKE_ACCOUNT_FIELDS.size +
+      StakeAccountQuery::STAKE_POOL_FIELDS.size +
+      StakeAccountQuery::VALIDATOR_FIELDS.size +
+      StakeAccountQuery::VALIDATOR_SCORE_V1_FIELDS.size
+
+    stake_accounts = stake_accounts_query.all_records
+
+    assert_equal number_of_fields, stake_accounts.first.attributes.size
+  end
+
   test 'when filter_account provided return correct records' do
 
     stake_accounts_query = StakeAccountQuery.new(

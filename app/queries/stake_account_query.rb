@@ -23,6 +23,8 @@ class StakeAccountQuery
     'account as validator_account'
   ].freeze
 
+  VALIDATOR_SCORE_V1_FIELDS = ['active_stake as validator_active_stake'].freeze
+
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
     @sort_by = options.fetch(:sort_by, nil)
@@ -36,7 +38,7 @@ class StakeAccountQuery
 
   def all_records
     stake_accounts = StakeAccount.left_outer_joins(:stake_pool)
-                                 .left_outer_joins(:validator)
+                                 .left_outer_joins(validator: [:validator_score_v1])
                                  .select(query_fields)
                                  .where(
                                    network: @network,
@@ -101,7 +103,11 @@ class StakeAccountQuery
       "validators.#{field}"
     end.join(', ')
 
-    [stake_account_fields, stake_pool_fields, validator_fields].join(', ')
+    validator_score_v1_fields = VALIDATOR_SCORE_V1_FIELDS.map do |field|
+      "validator_score_v1s.#{field}"
+    end.join(', ')
+
+    [stake_account_fields, stake_pool_fields, validator_fields, validator_score_v1_fields].join(', ')
   end
-  
+
 end
