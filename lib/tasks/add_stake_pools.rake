@@ -32,7 +32,7 @@ stake_pools = [
 ]
 
 manager_fees = {
-  socean: 0.16,
+  socean: 2,
   marinade: 2,
   jpool: 0,
   lido: 10,
