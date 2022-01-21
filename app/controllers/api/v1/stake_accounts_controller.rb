@@ -39,9 +39,10 @@ module Api
       def records_for_vue_frontend(stake_accounts, page)
         stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
 
-        sa_keys = stake_accounts.keys[((page - 1) * 20)...((page - 1) * 20 + 20)]
+        shuffled_keys = stake_accounts.keys.shuffle(random: random_by_seed(seed: index_params[:seed].to_i))
+        paginated_keys = shuffled_keys[((page - 1) * 20)...((page - 1) * 20 + 20)]
 
-        sa_keys&.map do |k|
+        paginated_keys&.map do |k|
           { stake_accounts[k][0].validator_account => stake_accounts[k] }
         end
       end
