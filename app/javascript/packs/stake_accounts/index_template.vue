@@ -6,7 +6,7 @@
           <h3 class="card-heading mb-2">Filter by Stake Pool</h3>
           <div class="text-center text-muted small mb-3">Click on stake pool logo to see pool stats</div>
 
-          <div class="row" v-if="!is_loading">
+          <div class="row" v-if="!is_loading_stake_pools">
             <a class="col-sm-6 text-center"
                v-for="pool in stake_pools"
                :key="pool.id"
@@ -18,8 +18,8 @@
             </a>
           </div>
         </div>
-        
-        <div v-if="is_loading" class="text-center my-5">
+
+        <div v-if="is_loading_stake_pools" class="text-center my-5">
           <img v-bind:src="loading_image" width="100">
         </div>
       </div>
@@ -51,11 +51,11 @@
       </div>
     </div>
 
-    <div class="col-12 mb-4" v-if="selected_pool && !is_loading">
+    <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_accounts && !is_loading_stake_pools">
       <stake-pool-stats :pool="selected_pool" :total_stake="total_stake" />
     </div>
 
-    <div class="col-12" v-if="!is_loading">
+    <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
         <table class="table table-block-sm" id="validators-table">
           <thead>
@@ -145,7 +145,7 @@
          last-text="Last »" />
       </div>
     </div>
-    <div v-if="is_loading" class="col-12 text-center my-5">
+    <div v-if="is_loading_stake_accounts && is_loading_stake_pools" class="col-12 text-center my-5">
       <img v-bind:src="loading_image" width="100">
     </div>
     <div class="container mt-5" id="metrics">
@@ -173,7 +173,7 @@
 
       <h4 class="h5">Avg Commission</h4>
       <p class="mb-5">
-        Average commission of all the validators used by the stake pool. See 
+        Average commission of all the validators used by the stake pool. See
         <a href="/faq#commission" target="_blank">what is validator commission?</a>
       </p>
 
@@ -189,7 +189,7 @@
 
       <h4 class="h5">Avg Skipped Slot</h4>
       <p class="mb-5">
-        Average skipped slot of all the validators used by the stake pool. See 
+        Average skipped slot of all the validators used by the stake pool. See
         <a href="/faq#skipped-vote" target="_blank">what is validator skipped slot?</a>
       </p>
 
@@ -215,7 +215,7 @@
 <script>
   import axios from 'axios'
   import loadingImage from 'loading.gif'
-  
+
   import marinadeImage from 'marinade.png'
   import soceanImage from 'socean.png'
   import lidoImage from 'lido.png'
@@ -227,19 +227,23 @@
   export default {
     props: ['query', 'network'],
     data () {
-      var api_url = '/api/v1/stake-accounts/' + this.network
+      var stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network
+      var stake_pools_api_url = '/api/v1/stake-pools/' + this.network
+
       return {
         stake_accounts: [],
         page: 1,
         total_count: 0,
         total_stake: 0,
         sort_by: 'epoch_desc',
-        api_url: api_url,
+        stake_accounts_api_url: stake_accounts_api_url,
+        stake_pools_api_url: stake_pools_api_url,
         filter_withdrawer: null,
         filter_staker: null,
         filter_account: null,
         filter_validator: null,
-        is_loading: true,
+        is_loading_stake_accounts: true,
+        is_loading_stake_pools: true,
         stake_pools: null,
         selected_pool: null,
         batch: null,
@@ -256,16 +260,29 @@
     },
     created () {
       var ctx = this
-      var query_params = { params: { sort_by: ctx.sort_by, page: ctx.page, with_batch: true, seed: ctx.seed } }
+      var stake_accounts_query_params = {
+        params: {
+          sort_by: ctx.sort_by,
+          page: ctx.page,
+          with_batch: true,
+          seed: ctx.seed,
+          grouped_by: 'delegated_vote_accounts_address'
+        }
+      }
 
-      axios.get(ctx.api_url, query_params)
+      axios.get(ctx.stake_accounts_api_url, stake_accounts_query_params)
            .then(function (response){
              ctx.stake_accounts = response.data.stake_accounts
-             ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.total_count = response.data.total_count;
              ctx.total_stake = response.data.total_stake;
-             ctx.is_loading = false;
+             ctx.is_loading_stake_accounts = false;
              ctx.batch = response.data.batch
+           })
+
+      axios.get(ctx.stake_pools_api_url)
+           .then(function (response){
+             ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
+             ctx.is_loading_stake_pools = false
            })
     },
     watch: {
@@ -294,25 +311,28 @@
       },
       refresh_results: function(){
         var ctx = this
-        ctx.is_loading = true
-        var query_params = { 
-          params: { 
+
+        ctx.is_loading_stake_accounts = true
+
+        var query_params = {
+          params: {
             sort_by: ctx.sort_by,
             page: ctx.page,
             filter_account: ctx.filter_account,
             filter_staker: ctx.filter_staker,
             filter_withdrawer: ctx.filter_withdrawer,
             filter_validator: ctx.filter_validator,
+            grouped_by: 'delegated_vote_accounts_address',
             seed: ctx.seed
           }
         }
 
-        axios.get(ctx.api_url, query_params)
+        axios.get(ctx.stake_accounts_api_url, query_params)
              .then(function (response) {
                ctx.stake_accounts = response.data.stake_accounts;
                ctx.total_count = response.data.total_count;
                ctx.total_stake = response.data.total_stake;
-               ctx.is_loading = false
+               ctx.is_loading_stake_accounts = false;
              })
       },
       sort_by_epoch: function(){

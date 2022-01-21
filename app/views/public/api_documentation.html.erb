@@ -18,6 +18,8 @@
   <li><a href="#notes">Notes</a></li>
   <li><a href="#epoch-index">Epoch Index</a></li>
   <li><a href="#commission-change-index">Commission Change Index</a></li>
+  <li><a href="#stake-pools">Stake Pools</a></li>
+  <li><a href="#stake-accounts">Stake Accounts</a></li>
 </ul>
 
 <hr />
@@ -216,8 +218,8 @@
 <div class="row">
   <div class="col-sm-12">
     <p>
-      The Commission Change endpoint will return all the changes in commission for a given period of time. 
-      Replace `:network` with 'testnet' or 'mainnet' as desired. 
+      The Commission Change endpoint will return all the changes in commission for a given period of time.
+      Replace `:network` with 'testnet' or 'mainnet' as desired.
     </p>
     <p>Request:</p>
     <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network'</pre>
@@ -249,6 +251,91 @@
         ...
       ]
 
+    </pre>
+  </div>
+</div>
+
+<h4 id="stake-pools">Stake Pools</h4>
+<div class="row">
+  <div class="col-sm-12">
+    <p>
+      The Stake Pools endpoint will return all the stake pools. Replace `:network` with 'testnet' or 'mainnet' as desired.
+    </p>
+    <p>Request:</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-pools/:network'</pre>
+    <p>Response:</p>
+    <pre>
+      { "stake_pools":
+        [
+          {
+          "id": 72,
+          "authority": "authority",
+          "average_apy": 12,
+          "average_delinquent": 1,
+          "average_lifetime": 22,
+          "average_score": 7,
+          "average_skipped_slots": 12,
+          "average_uptime": 1,
+          "average_validators_commission": 2,
+          "manager_fee": 0,
+          "name": "TestName",
+          "network": "testnet",
+          "ticker": 'ticker',
+          "validators_count": 0
+          },
+          ...
+        ]
+      }
+
+    </pre>
+  </div>
+</div>
+
+<h4 id="stake-accounts">Stake Accounts</h4>
+<div class="row">
+  <div class="col-sm-12">
+    <p>
+      The Stake Accounts endpoint will return all the stake accounts grouped by vote accounts. Replace `:network` with 'testnet' or 'mainnet' as desired.
+    </p>
+    <p>Request:</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network'</pre>
+    <p>Parameter Options:</p>
+    <p>`filter_[account|staker|withdrawer|validator]=` Filters by chosen value.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?filter_account=7hTEVqbQmt3UPQQKcavaxzzakt1FWbwVXyE8MZGadhW6'</pre>
+    <p>`sort_by=[epoch_|withdrawer_|staker_|stake_]` will sort the results by epoch, withdrawer, staker or stake. NOTE: after underscore add `asc` or `desc`, example below.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?sort_by=epoch_desc'</pre>
+    <p>`page=NN` will return the results from passed page.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?page=1'</pre>
+    <p>`per=NN` number of records per page.</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?per=50'</pre>
+
+    <p>Response:</p>
+    <pre>
+    {
+      "stake_accounts": [
+        {
+          "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp": [
+            {
+              "created_at": "2021-11-17T15:53:25.266Z",
+              "activation_epoch": 232,
+              "active_stake": 2000001000000,
+              "delegated_stake": 2000001000000,
+              "network": "testnet",
+              "delegated_vote_account_address": "5HNvXiPTUKPtPxz1Y4cUj9BMDbhupi5Bd6mp7AqJhSGN",
+              "id": 16,
+              "stake_pubkey": "5eJuknGqijkJJzR3Yt35Kr71WrHqDivEhtSeSm3tTYCy",
+              "batch_uuid": "4aac4a2c-3312-4189-9433-d535d1908754",
+              "stake_pool_id": 5,
+              "staker": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+              "withdrawer": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+              "pool_name": "Jpool",
+              "validator_name": "linap",
+              "validator_account": "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp"
+            }
+          ]
+        },
+      ...
+    }
     </pre>
   </div>
 </div>
