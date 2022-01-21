@@ -91,6 +91,26 @@ var ValidatorRow = Vue.component('validatorRow', {
         position = Math.max.apply(Math, [position, 100])
       }
       return position
+    },
+    display_chart(target, event){
+      var i = this.idx;
+      var target = target+'-'+i;
+      var row = document.getElementById('row-'+i);
+
+      // Show selected chart, hide the rest
+      var charts = row.getElementsByClassName("column-chart");
+      Array.prototype.forEach.call(charts, chart => {
+          chart.classList.add('d-none');
+      })
+      console.log(target)
+      document.getElementById(target).classList.remove('d-none');
+
+      // Set active link
+      var ls = row.getElementsByClassName("chart-link");
+      Array.prototype.forEach.call(ls, l => {
+          l.classList.remove('active')
+      });
+      event.target.classList.add('active');
     }
   },
   template: `
@@ -151,17 +171,17 @@ var ValidatorRow = Vue.component('validatorRow', {
       <td class="d-lg-none pt-0">
         <div class="row mb-3">
           <div class="col pr-0">
-            <a class="chart-link" :data-iterator="idx" data-target="root-distance" href="">
+            <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('root-distance', $event)" href="">
               Root <br class="d-xxs-inline-block" />Distance
             </a>
           </div>
           <div class="col pr-0">
-            <a class="chart-link" :data-iterator="idx" data-target="vote-distance" href="">
+            <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('vote-distance', $event)" href="">
               Vote <br class="d-xxs-inline-block" />Distance
             </a>
           </div>
           <div class="col">
-            <a class="chart-link" :data-iterator="idx" data-target="skipped-slots" href="">
+            <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('skipped-slots', $event)" href="">
               Skipped <br class="d-xxs-inline-block" />Slots
             </a>
           </div>

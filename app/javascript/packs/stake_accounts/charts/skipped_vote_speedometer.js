@@ -88,7 +88,7 @@ export default {
     <td class="column-sm align-middle pb-lg-0 pt-lg-1">
       <div v-if="skipped_vote_percent">
         <div class="d-none d-lg-block">
-          <canvas :id=" 'spark_line_skipped_vote_' + validator['account'] " width="5%"></canvas>
+          <canvas :id="'spark_line_skipped_vote_' + validator['account'] " width="5%"></canvas>
           <div class="text-center text-muted small mt-2">
             {{ skipped_vote_percent() }}
           </div>
