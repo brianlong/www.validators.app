@@ -46,16 +46,17 @@ var StakePoolStats = Vue.component('StakePoolStats', {
             </div>
 
             <div class="mb-3">
-              <span class="stat-title-3">
-                <i class="fas fa-dollar-sign text-purple mr-1"></i>
-                Stake:&nbsp;
-              </span>
-              <strong class="text-purple">{{ (total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
-              <br />
-              <span class="text-muted ml-4">
-                &nbsp;Avg Stake:&nbsp;
-              </span>
-              <small class="text-purple">{{ ((total_stake / pool.validators_count) / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</small>
+              <div class="stat-title-3 mb-2">
+                <i class="fas fa-dollar-sign text-purple mr-1"></i>Stake
+              </div>
+              <div>
+                <span class="text-muted">Total:&nbsp;</span>
+                <strong class="text-purple">{{ (total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
+              </div>
+              <div>
+                <span class="text-muted">Avg Stake:&nbsp;</span>
+                <strong class="text-purple">{{ ((total_stake / pool.validators_count) / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
+              </div>
             </div>
           </div>
           
@@ -71,6 +72,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               <span class="text-muted">Avg Commission:&nbsp;</span>
               <strong class="text-success">{{ pool.average_validators_commission ? pool.average_validators_commission.toFixed(2) : 'N / A' }}%</strong>
             </div>
+            
             <div class="mb-3">
               <span class="stat-title-3">
                 <i class="fas fa-chart-line text-purple mr-2"></i>APY:&nbsp;
