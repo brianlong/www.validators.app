@@ -77,9 +77,9 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
     refute stake_accounts.where(active_stake: nil).exists?
   end
 
-  test 'returns all fields declared in query class' do
+  test "returns all fields declared in query class" do
     stake_accounts_query = StakeAccountQuery.new(
-      network: 'testnet',
+      network: "testnet",
       filter_account: nil,
       filter_staker: nil,
       filter_withdrawer: nil,

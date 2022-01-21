@@ -15,15 +15,15 @@ class StakeAccountQuery
   ].freeze
 
   STAKE_POOL_FIELDS = [
-    'name as pool_name'
+    "name as pool_name"
   ].freeze
 
   VALIDATOR_FIELDS = [
-    'name as validator_name',
-    'account as validator_account'
+    "name as validator_name",
+    "account as validator_account"
   ].freeze
 
-  VALIDATOR_SCORE_V1_FIELDS = ['active_stake as validator_active_stake'].freeze
+  VALIDATOR_SCORE_V1_FIELDS = ["active_stake as validator_active_stake"].freeze
 
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
@@ -93,21 +93,21 @@ class StakeAccountQuery
   def query_fields
     stake_account_fields = STAKE_ACCOUNT_FIELDS.map do |field|
       "stake_accounts.#{field}"
-    end.join(', ')
+    end.join(", ")
 
     stake_pool_fields = STAKE_POOL_FIELDS.map do |field|
       "stake_pools.#{field}"
-    end.join(', ')
+    end.join(", ")
 
     validator_fields = VALIDATOR_FIELDS.map do |field|
       "validators.#{field}"
-    end.join(', ')
+    end.join(", ")
 
     validator_score_v1_fields = VALIDATOR_SCORE_V1_FIELDS.map do |field|
       "validator_score_v1s.#{field}"
-    end.join(', ')
+    end.join(", ")
 
-    [stake_account_fields, stake_pool_fields, validator_fields, validator_score_v1_fields].join(', ')
+    [stake_account_fields, stake_pool_fields, validator_fields, validator_score_v1_fields].join(", ")
   end
 
 end
