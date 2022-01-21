@@ -80,6 +80,10 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 </span>
                 <span v-else>
                   {{ (stake_account.active_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
+                  <br />
+                  <span class="text-muted">
+                    {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator stake
+                  </span>
                 </span>
               </td>
               <td class="text-lg-right">
