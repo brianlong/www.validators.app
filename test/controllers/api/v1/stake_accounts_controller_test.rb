@@ -107,6 +107,21 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, json_response["stake_accounts"].size
   end
 
+  test "request should return correct current epoch" do
+    create(
+      :epoch_wall_clock,
+      network: "testnet",
+      epoch: 99
+    )
+    params = @params.merge({ page: 1, per: 2 })
+
+    get api_v1_stake_accounts_index_url(params), headers: @headers
+
+    json_response = response_to_json(@response.body)
+
+    assert_equal 99, json_response["current_epoch"]
+  end
+
   test "request with grouped_by param should return correct grouped results" do
     params = @params.merge({grouped_by: "delegated_vote_accounts_address"})
 
