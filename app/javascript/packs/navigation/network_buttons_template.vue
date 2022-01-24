@@ -45,7 +45,6 @@
         } else {
           this.url = this.url + '?network=' + target_network
         }
-        console.log(this.url)
         window.location.href = this.url
         return true
       }

@@ -121,7 +121,7 @@ export default {
     });
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell align-middle pt-lg-3" :id="' skipped-slots-' + idx ">
+    <td class="column-chart d-none d-lg-table-cell align-middle pt-lg-3" :id="'skipped-slots-' + idx ">
       <canvas :id=" 'spark_line_skipped_slots_' + validator['account'] " width="5%"></canvas>
     </td>
   `
