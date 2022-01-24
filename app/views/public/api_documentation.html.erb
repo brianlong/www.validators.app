@@ -114,6 +114,9 @@
     <p>The validators endpoint will return a single validator for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.</p>
     <p>Request:</p>
     <pre>curl -H "Token: secret-api-token" https://www.validators.app/api/v1/validators/:network/:account.json</pre>
+    <p>Parameter Options:</p>
+    <p>`with_history=true` will return history fields for validator (root_distance_history, vote_distance_history, skipped_slot_history, skipped_vote_history, skipped_slot_moving_average_history, stake_concentration and software_version).</p>
+    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json/:account.json?with_history=true'</pre>
     <p>Response:</p>
     <pre>
 {
