@@ -102,7 +102,6 @@ var ValidatorRow = Vue.component('validatorRow', {
       Array.prototype.forEach.call(charts, chart => {
           chart.classList.add('d-none');
       })
-      console.log(target)
       document.getElementById(target).classList.remove('d-none');
 
       // Set active link
