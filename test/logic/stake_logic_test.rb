@@ -261,7 +261,9 @@ class StakeLogicTest < ActiveSupport::TestCase
     
     acc.reload
 
+    puts p.errors
+
     assert_equal 200, p.code
-    assert_equal 12.4685, acc.apy
+    assert_equal 12.5502, acc.apy
   end
 end
