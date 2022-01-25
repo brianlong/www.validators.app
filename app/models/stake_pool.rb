@@ -24,7 +24,7 @@ class StakePool < ApplicationRecord
 
   def average_apy
     apy_data = stake_accounts.map do |sa| 
-      if sa.apy && sa.active_stake > 0
+      if sa.apy && sa.active_stake && sa.active_stake > 0
         [sa.active_stake, sa.apy]
       else
         nil
