@@ -246,9 +246,9 @@ module StakeLogic
         next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
 
         rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
-        
+
         if fee = acc.stake_pool.manager_fee
-          credits_diff = rewards[:amount] - rewards[:amount] * fee
+          credits_diff = rewards[:amount] - rewards[:amount] * (fee / 100)
         else
           credits_diff = rewards[:amount]
         end

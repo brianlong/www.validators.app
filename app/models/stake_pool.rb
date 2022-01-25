@@ -23,7 +23,7 @@ class StakePool < ApplicationRecord
   has_many :stake_account_histories
 
   def average_apy
-    apy_data = stake_accounts.map{ |sa| sa.apy ? [sa.active_stake, sa.apy] : nil}
+    apy_data = stake_accounts.map{ |sa| sa.apy && sa.active_stake > 0 ? [sa.active_stake, sa.apy] : nil}
     weighted_avg = apy_data.compact.inject(0) { |sum, n| sum + (n[0] * n[1]) }
     weighted_avg / stake_accounts.where.not(apy: nil, active_stake: nil).sum(:active_stake)
   end
