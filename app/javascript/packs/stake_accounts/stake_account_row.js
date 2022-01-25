@@ -15,6 +15,10 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     batch: {
       type: Object,
       required: true
+    },
+    current_epoch: {
+      type: Number,
+      required: true
     }
   },
   data() {
@@ -54,8 +58,13 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <th class="column-xl align-middle">Stake Account & Staker</th>
                 <th class="column-xl align-middle">Withdrawer</th>
                 <th class="column-sm align-middle">Stake</th>
-                <th class="column-xs align-middle text-lg-right">
-                  <span title="Account Activation Epoch">Act Epoch</span>
+                <th class="column-xs align-middle text-lg-right pl-lg-0">
+                  Act Epoch&nbsp;<i class="fas fa-info-circle small" 
+                                    data-toggle="tooltip" 
+                                    data-placement="top" 
+                                    title="Stake Account Activation Epoch">
+                                 </i><br />
+                  <small class="text-muted">Current: {{ current_epoch }}</small>
                 </th>
               </tr>
             </thead>
@@ -90,7 +99,10 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 </span>
               </td>
               <td class="text-lg-right">
-                <strong class="d-inline-block d-lg-none">Activation Epoch:&nbsp;&nbsp;</strong>{{ stake_account.activation_epoch }}
+                <strong class="d-inline-block d-lg-none">Stake Account Activation Epoch:&nbsp;&nbsp;</strong>{{ stake_account.activation_epoch }}
+                <div class="d-block d-lg-none">
+                  <small class="text-muted">Current Epoch: {{ current_epoch }}&nbsp;&nbsp;</small>
+                </div>
               </td>
             </tr>
             </tbody>

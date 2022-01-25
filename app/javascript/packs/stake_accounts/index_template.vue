@@ -133,7 +133,9 @@
             :key="sa.id"
             :stake_accounts="sa"
             :idx="index + (page - 1) * 20"
-            :batch="batch">
+            :batch="batch"
+            :current_epoch="current_epoch"
+          >
           </stake-account-row>
         </table>
 
@@ -209,9 +211,14 @@
       </p>
 
       <h4 class="h5">Avg Score</h4>
-      <p>
+      <p class="mb-5">
         Average score of the validators from the stake pool. See
         <a href="/faq#score" target="_blank">how are scores calculated?</a>
+      </p>
+
+      <h4 class="h5">Stake Account Activation Epoch</h4>
+      <p>
+        Number of epoch in which the account was first activated.
       </p>
     </div>
   </div>
@@ -252,6 +259,7 @@
         stake_pools: null,
         selected_pool: null,
         batch: null,
+        current_epoch: null,
         loading_image: loadingImage,
         seed: Math.floor(Math.random() * 1000),
         pool_images: {
@@ -281,6 +289,7 @@
              ctx.total_count = response.data.total_count;
              ctx.total_stake = response.data.total_stake;
              ctx.is_loading_stake_accounts = false;
+             ctx.current_epoch = response.data.current_epoch
              ctx.batch = response.data.batch
            })
 
@@ -337,6 +346,7 @@
                ctx.stake_accounts = response.data.stake_accounts;
                ctx.total_count = response.data.total_count;
                ctx.total_stake = response.data.total_stake;
+               ctx.current_epoch = response.data.current_epoch;
                ctx.is_loading_stake_accounts = false;
              })
       },

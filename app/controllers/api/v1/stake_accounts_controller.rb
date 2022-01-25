@@ -8,6 +8,7 @@ module Api
         @stake_accounts = get_correct_records(stake_accounts, page)
         @total_stake = stake_accounts&.map(&:delegated_stake).compact.sum
         @total_count = stake_accounts.size
+        @current_epoch = EpochWallClock.where(network: index_params[:network]).last&.epoch
 
         if index_params[:with_batch]
           @batch = Batch.last_scored(index_params[:network])
