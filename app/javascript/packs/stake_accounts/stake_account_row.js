@@ -59,7 +59,6 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <th class="column-xl align-middle">Withdrawer</th>
                 <th class="column-sm align-middle">Stake</th>
                 <th class="column-xs align-middle text-lg-right">
-                <th class='column-xs align-middle pr-0'>
                   Act Epoch&nbsp;
                   <i class="fas fa-info-circle small"
                     data-toggle="tooltip"
@@ -102,11 +101,10 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
               </td>
               <td class="text-lg-right">
                 <strong class="d-inline-block d-lg-none">Stake Account Activation Epoch:&nbsp;&nbsp;</strong>{{ stake_account.activation_epoch }}
+                <div class="d-block d-lg-none">
+                  <small class="text-muted">Current Epoch: {{ current_epoch }}&nbsp;&nbsp;</small>
+                </div>
               </td>
-              <td class="text-muted">
-                <small class="d-inline-block d-lg-none">Current Epoch: {{ current_epoch }}&nbsp;&nbsp;</small>
-              </td>
-
             </tr>
             </tbody>
           </table>
