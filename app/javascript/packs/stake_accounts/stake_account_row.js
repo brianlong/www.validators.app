@@ -51,8 +51,8 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
           <table class="table table-block-sm stake-accounts-table">
             <thead class="small">
               <tr>
-                <th class="column-lg align-middle">Stake Account & Staker</th>
-                <th class="column-lg align-middle">Withdrawer</th>
+                <th class="column-md align-middle">Stake Account & Staker</th>
+                <th class="column-md align-middle">Withdrawer</th>
                 <th class="column-sm align-middle">Stake</th>
                 <th class="column-xs align-middle text-lg-right">
                   <span title="Account Activation Epoch">Act Epoch</span>
