@@ -11,6 +11,7 @@ json.extract! stake_account,
   :batch_uuid,
   :pool_name,
   :validator_name,
-  :validator_account
+  :validator_account,
+  :validator_active_stake
 
 json.active_stake lamports_as_formatted_sol(stake_account.active_stake)

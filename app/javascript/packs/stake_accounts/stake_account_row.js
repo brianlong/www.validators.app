@@ -51,8 +51,8 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
           <table class="table table-block-sm stake-accounts-table">
             <thead class="small">
               <tr>
-                <th class="column-lg align-middle">Stake Account & Staker</th>
-                <th class="column-lg align-middle">Withdrawer</th>
+                <th class="column-xl align-middle">Stake Account & Staker</th>
+                <th class="column-xl align-middle">Withdrawer</th>
                 <th class="column-sm align-middle">Stake</th>
                 <th class="column-xs align-middle text-lg-right">
                   <span title="Account Activation Epoch">Act Epoch</span>
@@ -61,13 +61,13 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
             </thead>
             <tbody class="small">
             <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
-              <td class="word-break-lg">
+              <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
                 <br />
                 <strong class="d-inline-block d-lg-none">Staker:&nbsp;&nbsp;</strong>{{ stake_account.staker }}
                 <!--<a href="#" title="Filter by staker" @click.prevent="filterByStaker">{{ stake_account.staker }}</a>-->
               </td>
-              <td class="word-break-lg">
+              <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Withdrawer:&nbsp;&nbsp;</strong>{{ stake_account.pool_name }}
                 <br />
                 {{ stake_account.withdrawer }}
@@ -76,10 +76,17 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
               <td>
                 <strong class="d-inline-block d-lg-none">Stake:&nbsp;&nbsp;</strong>
                 <span v-if="stake_account.active_stake < 500000000">
-                  <0.5 SOL
+                  <0.5 SOL<br />
+                  <span class="text-muted">
+                    {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator stake
+                  </span>
                 </span>
                 <span v-else>
                   {{ (stake_account.active_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
+                  <br />
+                  <span class="text-muted">
+                    {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator stake
+                  </span>
                 </span>
               </td>
               <td class="text-lg-right">

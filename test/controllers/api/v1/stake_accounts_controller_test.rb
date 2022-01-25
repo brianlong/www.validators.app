@@ -28,6 +28,12 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
       account: "Account"
     )
 
+    validator_score_v1s = create(
+      :validator_score_v1,
+      validator_id: validator.id,
+      active_stake: 100_000_000_000
+    )
+
     create(
       :vote_account,
       validator: validator,
@@ -86,8 +92,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
     json_response = response_to_json(@response.body)
 
-    assert_equal 3, json_response["stake_accounts"].size
-    assert_equal 15, json_response['stake_accounts'].first.keys.size
+    assert_equal 16, json_response["stake_accounts"].first.keys.size
   end
 
   test "request with page and limit params should return limited results" do
@@ -114,8 +119,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     response_stake_account = json_response["stake_accounts"][0]["Account"][0]
 
     assert_equal 1, json_response["stake_accounts"].size
-    assert_equal 15,response_stake_account.keys.size
-
+    assert_equal 16,response_stake_account.keys.size
     assert_equal "testnet", response_stake_account["network"]
     assert_equal 3, json_response["total_count"]
     assert_equal 12_000_000_000_000, json_response["total_stake"]
@@ -125,6 +129,8 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 5_000_000_000_000, response_stake_account["active_stake"]
     assert_equal "delegated_vote_account_address", \
       response_stake_account["delegated_vote_account_address"]
+    assert_equal 100_000_000_000, \
+      response_stake_account["validator_active_stake"]
   end
 
   test "request with additional params should return correct results" do
