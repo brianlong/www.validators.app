@@ -352,7 +352,7 @@
                ctx.stake_accounts = response.data.stake_accounts;
                ctx.total_count = response.data.total_count;
                ctx.current_epoch = response.data.current_epoch;
-               ctx.is_loading_stake_accounts = false
+               ctx.is_loading_stake_accounts = false;
              })
       },
       sort_by_epoch: function(){
