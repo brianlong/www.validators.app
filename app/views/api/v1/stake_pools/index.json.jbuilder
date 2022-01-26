@@ -13,5 +13,7 @@ json.stake_pools do
     :name,
     :network,
     :ticker,
-    :validators_count
+    :validators_count,
+    :total_stake,
+    :average_stake
 end

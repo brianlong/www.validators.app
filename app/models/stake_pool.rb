@@ -29,4 +29,13 @@ class StakePool < ApplicationRecord
   def validators_count
     stake_accounts.pluck(:validator_id).compact.uniq.count
   end
+
+  def total_stake
+    stake_accounts&.map(&:delegated_stake).compact.sum
+  end
+
+  def average_stake
+    return 0 if validators_count == 0
+    total_stake / validators_count
+  end
 end

@@ -59,7 +59,7 @@
 
     <!-- Stake pool stats -->
     <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_accounts && !is_loading_stake_pools">
-      <stake-pool-stats :pool="selected_pool" :total_stake="total_stake" />
+      <stake-pool-stats :pool="selected_pool"/>
     </div>
 
     <!-- Validators and accounts table -->
@@ -254,7 +254,6 @@
         stake_accounts: [],
         page: 1,
         total_count: 0,
-        total_stake: 0,
         sort_by: 'epoch_desc',
         stake_accounts_api_url: stake_accounts_api_url,
         stake_pools_api_url: stake_pools_api_url,
@@ -295,7 +294,6 @@
            .then(function (response){
              ctx.stake_accounts = response.data.stake_accounts
              ctx.total_count = response.data.total_count;
-             ctx.total_stake = response.data.total_stake;
              ctx.is_loading_stake_accounts = false;
              ctx.current_epoch = response.data.current_epoch
              ctx.batch = response.data.batch
@@ -305,6 +303,7 @@
            .then(function (response){
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.is_loading_stake_pools = false
+             console.log(ctx.stake_pools);
            })
     },
     watch: {
@@ -353,9 +352,8 @@
              .then(function (response) {
                ctx.stake_accounts = response.data.stake_accounts;
                ctx.total_count = response.data.total_count;
-               ctx.total_stake = response.data.total_stake;
                ctx.current_epoch = response.data.current_epoch;
-               ctx.is_loading_stake_accounts = false;
+               ctx.is_loading_stake_accounts = false
              })
       },
       sort_by_epoch: function(){
