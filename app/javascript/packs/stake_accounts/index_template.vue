@@ -178,7 +178,7 @@
         Commission that stake pool substracts from the total profit to maintain their operation.
       </p>
 
-      <h4 class="h5">Avg Commission</h4>
+      <h4 class="h5">Avg Validators Fee</h4>
       <p class="mb-5">
         Average commission of all the validators used by the stake pool. See
         <a href="/faq#commission" target="_blank">what is validator commission?</a>
