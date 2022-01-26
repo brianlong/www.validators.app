@@ -31,7 +31,7 @@ class StakePool < ApplicationRecord
   end
 
   def total_stake
-    stake_accounts&.pluck(&:delegated_stake).compact.sum
+    stake_accounts&.pluck(:delegated_stake).compact.sum
   end
 
   def average_stake
