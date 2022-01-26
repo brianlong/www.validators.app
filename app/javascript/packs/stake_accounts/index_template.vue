@@ -25,6 +25,7 @@
       </div>
     </div>
 
+    <!-- Form -->
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
@@ -51,10 +52,17 @@
       </div>
     </div>
 
+    <!-- Stake pools overview -->
+    <div class="col-12 mb-4" v-if="!selected_pool && !is_loading_stake_pools">
+      <stake-pools-overview :stake_pools="stake_pools" />
+    </div>
+
+    <!-- Stake pool stats -->
     <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_accounts && !is_loading_stake_pools">
       <stake-pool-stats :pool="selected_pool" :total_stake="total_stake" />
     </div>
 
+    <!-- Validators and accounts table -->
     <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
         <table class="table table-block-sm" id="validators-table">
