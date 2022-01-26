@@ -187,7 +187,7 @@
       <h4 class="h5">APY</h4>
       <p>
         <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the average APY of
-        all validators used by the pool. <br />
+        all validators reduced by manager fee. <br />
         APY of the validator is calculated based on rewards from the last epoch as follows:
       </p>
       <p class="mb-5">

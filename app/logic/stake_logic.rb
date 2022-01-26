@@ -246,11 +246,17 @@ module StakeLogic
         next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
 
         rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
-        credits_diff = rewards[:amount]
+
+        if fee = acc.stake_pool&.manager_fee || nil
+          credits_diff = rewards[:amount] - rewards[:amount] * (fee / 100)
+        else
+          credits_diff = rewards[:amount]
+        end
+
         next unless credits_diff > 0
         credits_diff_percent = credits_diff / (rewards[:postBalance] - credits_diff).to_f
 
-        apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
+        apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
         apy = apy < 100 && apy > 0 ? apy.round(6) : nil
         acc.update(apy: apy)
       end
