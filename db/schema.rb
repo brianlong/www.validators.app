@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_27_132812) do
+ActiveRecord::Schema.define(version: 2022_01_25_131522) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -339,6 +339,8 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.float "average_uptime"
     t.integer "average_lifetime"
     t.float "average_score"
+    t.float "withdrawal_fee"
+    t.float "deposit_fee"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -497,8 +499,8 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.string "security_report_url"
     t.boolean "is_rpc", default: false
     t.boolean "is_active", default: true
-    t.string "admin_warning"
     t.boolean "is_destroyed", default: false
+    t.string "admin_warning"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 

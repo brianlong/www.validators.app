@@ -32,11 +32,27 @@ stake_pools = [
 ]
 
 manager_fees = {
-  socean: 2,
+  socean: 0.16,
   marinade: 2,
   jpool: 0,
   lido: 10,
   daopool: 2
+}
+
+withdrawal_fees = {
+  socean: 0.3,
+  marinade: 0,
+  jpool: 0,
+  lido: 0,
+  daopool: 0
+}
+
+deposit_fees = {
+  socean: 0.15,
+  marinade: 0,
+  jpool: 0,
+  lido: 0,
+  daopool: 0
 }
 
 namespace :add_stake_pool do
@@ -83,7 +99,9 @@ namespace :update_fee_in_stake_pools do
 
       key = sp[:name].downcase.to_sym
       stake_pool.update!(
-        manager_fee: manager_fees[key]
+        manager_fee: manager_fees[key],
+        withdrawal_fee: withdrawal_fees[key],
+        deposit_fee: deposit_fees[key]
       )
     end
   end
