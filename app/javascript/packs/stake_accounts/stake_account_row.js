@@ -98,7 +98,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                   </span>
                 </span>
               </td>
-              <td class="text-lg-right">
+              <td class="align-middle text-lg-right">
                 <strong class="d-inline-block d-lg-none">Stake Account Activation Epoch:&nbsp;&nbsp;</strong>{{ stake_account.activation_epoch }}
                 <div class="d-block d-lg-none">
                   <small class="text-muted">Current Epoch: {{ current_epoch }}&nbsp;&nbsp;</small>

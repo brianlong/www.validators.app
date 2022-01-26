@@ -1,0 +1,84 @@
+import Vue from 'vue/dist/vue.esm'
+
+var StakePoolsOverview = Vue.component('StakePoolsOverview', {
+  props: {
+    stake_pools: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {}
+  },
+  methods: {
+    go_to_metrics() {
+      document.getElementById("metrics").scrollIntoView()
+    }
+  },
+  template: `
+    <div class="card h-100">
+      <div class="card-content">
+        <h3 class="card-heading mb-2">
+          Stake Pools overview
+        </h3>
+        <div class="text-center text-muted small mb-4">
+          <a href="#" @click.prevent="go_to_metrics()">See metrics explanation</a>
+        </div>
+      </div>
+
+      <div class="table-responsive-lg">
+        <table class="table mb-0">
+          <thead>
+          <tr>
+            <th class="column-sm align-middle">Stake Pool</th>
+            <th class="column-sm align-middle">
+              Nodes<br />
+              <small class="text-muted">(Delinquent)</small>
+            </th>
+            <th class="column-md align-middle">
+              Total Stake<br />
+              <small class="text-muted">Average</small>
+            </th>
+            <th class="column-md align-middle">
+              Manager Fee<br />
+              <small class="text-muted">Avg Validators Fee</small>
+            </th>
+            <th class="column-xs align-middle">APY</th>
+            <th class="column-md align-middle">
+              Avg Score<br />
+              <small class="text-muted">Maximum: 11</small>
+            </th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr v-for="pool in stake_pools">
+            <td class="align-middle">
+              {{ pool.name }}
+            </td>
+            <td class="align-middle">
+              {{ pool.validators_count }}&nbsp;<span class="text-muted">({{ pool.average_delinquent }})</span>
+            </td>
+            <td>
+              {{ (pool.total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL<br />
+              <small class="text-muted">{{ (pool.average_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</small>
+            </td>
+            <td>
+              {{ pool.manager_fee ? pool.manager_fee + '%' : '0%' }}<br />
+              <small class="text-muted">{{ pool.average_validators_commission ? pool.average_validators_commission.toFixed(2) : 0 }}%</small>
+            </td>
+            <td class="align-middle">
+              {{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}
+            </td>
+            <td class="align-middle">
+              {{ pool.average_score || 0 }}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `
+})
+
+export default StakePoolsOverview

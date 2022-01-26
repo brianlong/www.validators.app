@@ -5,10 +5,6 @@ var StakePoolStats = Vue.component('StakePoolStats', {
     pool: {
       type: Object,
       required: true
-    },
-    total_stake: {
-      type: Number,
-      required: true
     }
   },
   data() {
@@ -51,11 +47,11 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               </div>
               <div>
                 <span class="text-muted">Total:&nbsp;</span>
-                <strong class="text-purple">{{ (total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
+                <strong class="text-purple">{{ (pool.total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
               </div>
               <div>
                 <span class="text-muted">Avg Stake:&nbsp;</span>
-                <strong class="text-purple">{{ ((total_stake / pool.validators_count) / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
+                <strong class="text-purple">{{ (pool.average_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL</strong>
               </div>
             </div>
           </div>
@@ -66,7 +62,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
             </div>
             <div>
               <span class="text-muted">Manager Fee:&nbsp;</span>
-              <strong class="text-success">{{ pool.manager_fee ? pool.manager_fee + '%' : 0 }}</strong>
+              <strong class="text-success">{{ pool.manager_fee ? pool.manager_fee + '%' : '0%' }}</strong>
             </div>
             <div class="mb-4">
               <span class="text-muted">Avg Validators Fee:&nbsp;</span>
