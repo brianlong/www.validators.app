@@ -31,19 +31,19 @@ class StakePoolTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validators_count' do
+  test "validators_count" do
     assert_equal 2, @stake_pool.reload.validators_count
   end
 
-  test 'total_stake' do
+  test "total_stake" do
     assert_equal 12_000_000_000_000, @stake_pool.reload.total_stake
   end
 
-  test 'average_stake' do
+  test "average_stake" do
     assert_equal 6_000_000_000_000, @stake_pool.reload.average_stake
   end
 
-  test 'average_stake if no validators assigned' do
+  test "average_stake if no validators assigned" do
     StakeAccount.all.each do |sa|
       sa.update validator_id: nil
     end
