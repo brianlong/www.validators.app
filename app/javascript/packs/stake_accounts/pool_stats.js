@@ -19,7 +19,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
     <div class="card h-100">
       <div class="card-content">
         <h3 class="card-heading mb-2">
-          {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} statistics
+          {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} Statistics
         </h3>
         <div class="text-center text-muted small mb-4">
           <a href="#" @click.prevent="go_to_metrics()">See metrics explanation</a>
@@ -68,7 +68,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               <span class="text-muted">Avg Validators Fee:&nbsp;</span>
               <strong class="text-success">{{ pool.average_validators_commission ? pool.average_validators_commission.toFixed(2) : 0 }}%</strong>
             </div>
-            
+
             <div class="mb-3">
               <span class="stat-title-3">
                 <i class="fas fa-chart-line text-purple mr-2"></i>APY:&nbsp;
