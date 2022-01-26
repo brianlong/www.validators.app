@@ -303,7 +303,6 @@
            .then(function (response){
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.is_loading_stake_pools = false
-             console.log(ctx.stake_pools);
            })
     },
     watch: {

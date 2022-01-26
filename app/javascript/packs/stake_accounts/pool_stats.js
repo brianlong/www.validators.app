@@ -62,7 +62,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
             </div>
             <div>
               <span class="text-muted">Manager Fee:&nbsp;</span>
-              <strong class="text-success">{{ pool.manager_fee ? pool.manager_fee + '%' : 0 }}</strong>
+              <strong class="text-success">{{ pool.manager_fee ? pool.manager_fee + '%' : '0%' }}</strong>
             </div>
             <div class="mb-4">
               <span class="text-muted">Avg Validators Fee:&nbsp;</span>
