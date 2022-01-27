@@ -10,6 +10,9 @@ module FixIpModule
       # furthest ovh ip from traceroute
       last_ovh_ip = line
     end
+    puts ip
+    puts last_ovh_ip
+    puts '---------------'
     last_ovh_ip
   end
 
