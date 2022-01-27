@@ -149,6 +149,12 @@ class ValidatorScoreV1 < ApplicationRecord
       end
   end
 
+  def displayed_total_score
+    return 'N/A' if validator.private_validator?
+    return 'N/A' if validator.admin_warning
+    total_score
+  end
+
   def delinquent?
     delinquent == true
   end
