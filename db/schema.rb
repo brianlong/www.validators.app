@@ -497,8 +497,8 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.string "security_report_url"
     t.boolean "is_rpc", default: false
     t.boolean "is_active", default: true
-    t.string "admin_warning"
     t.boolean "is_destroyed", default: false
+    t.string "admin_warning"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 

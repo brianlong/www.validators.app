@@ -19,7 +19,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
     <div class="card h-100">
       <div class="card-content">
         <h3 class="card-heading mb-2">
-          Stake Pools overview
+          Stake Pools Overview
         </h3>
         <div class="text-center text-muted small mb-4">
           <a href="#" @click.prevent="go_to_metrics()">See metrics explanation</a>
