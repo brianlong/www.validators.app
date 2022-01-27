@@ -71,7 +71,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
               {{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}
             </td>
             <td class="align-middle">
-              {{ pool.average_score || 0 }}
+              {{ pool.average_score || 'N / A' }}
             </td>
           </tr>
           </tbody>

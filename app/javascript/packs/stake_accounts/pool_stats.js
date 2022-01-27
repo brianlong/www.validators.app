@@ -97,7 +97,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
             </div>
             <div class="">
               <span class="text-muted">Avg Score:&nbsp;</span>
-              <strong class="text-success">{{ pool.average_score || 0 }}</strong>
+              <strong class="text-success">{{ pool.average_score || 'N / A' }}</strong>
             </div>
           </div>
         </div>
