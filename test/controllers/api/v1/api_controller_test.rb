@@ -114,7 +114,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 33, validator_with_all_data.keys.size
+    assert_equal 34, validator_with_all_data.keys.size
 
     # Validator
     assert_equal 'testnet', validator_with_all_data['network']
@@ -295,7 +295,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 33, json_response.keys.size
+    assert_equal 34, json_response.keys.size
 
     # Validator
     assert_equal 'testnet', json_response['network']
@@ -357,7 +357,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 39, json_response.keys.size
+    assert_equal 40, json_response.keys.size
 
     # Score
     assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
