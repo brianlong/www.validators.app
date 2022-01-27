@@ -110,7 +110,16 @@ var ValidatorRow = Vue.component('validatorRow', {
           l.classList.remove('active')
       });
       event.target.classList.add('active');
-    }
+    },
+    displayed_total_score() {
+      if(this.validator["commission"] == 100 && this.validator["network"] == 'mainnet'){
+        return 'N/A'
+      } else if(this.validator["admin_warning"]) {
+        return 'N/A'
+      } else {
+        return this.validator["total_score"]
+      }
+    },
   },
   template: `
     <tr :id="row_index()">
@@ -160,7 +169,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           <i class="fas fa-minus-circle mr-1 text-warning"
             v-if="validator['data_center_concentration_score'] < 0"
             :title=" 'Data Center Concentration Score = ' + validator['data_center_concentration_score'] "></i>
-          (<span class="d-inline-block d-lg-none">Total:&nbsp;</span>{{ validator['total_score'] }})
+          (<span class="d-inline-block d-lg-none">Total:&nbsp;</span>{{ displayed_total_score() }})
         </small>
         <br /><small v-if="validator['delinquent']" class="text-danger">delinquent</small>
       </td>

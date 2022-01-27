@@ -247,7 +247,8 @@ class Validator < ApplicationRecord
         :details,
         :avatar_url,
         :created_at,
-        :updated_at
+        :updated_at,
+        :admin_warning
       )
     end
   end
