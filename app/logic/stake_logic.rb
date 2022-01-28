@@ -254,7 +254,7 @@ module StakeLogic
         end
 
         next unless credits_diff > 0
-        credits_diff_percent = credits_diff / (rewards[:postBalance] - credits_diff).to_f
+        credits_diff_percent = credits_diff / (rewards[:postBalance] - rewards[:amount]).to_f
 
         apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
         apy = apy < 100 && apy > 0 ? apy.round(6) : nil
