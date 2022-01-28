@@ -94,7 +94,7 @@ OVH_HOSTS = {
   }
 }
 
-HOST_REGEX = /(be|bg|vl).+\.(lon1|rbx|bhs|waw|fra|gra|sbg|hil|vin|p19|gsw|dc1).+/
+HOST_REGEX = /(be|bg|vl|fra1-lim1).+\.(lon1|rbx|bhs|waw|fra|gra|sbg|hil|vin|p19|gsw|dc1|de).+/
 
 Ip.where(traits_autonomous_system_number: 16_276)
   .where.not(address: IpOverride.select(:address))
