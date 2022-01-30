@@ -59,9 +59,9 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <th class="column-xl align-middle">Withdrawer</th>
                 <th class="column-sm align-middle">Stake</th>
                 <th class="column-xs align-middle text-lg-right pl-lg-0">
-                  Act Epoch&nbsp;<i class="fas fa-info-circle small" 
-                                    data-toggle="tooltip" 
-                                    data-placement="top" 
+                  Act Epoch&nbsp;<i class="fas fa-info-circle small"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
                                     title="Stake Account Activation Epoch">
                                  </i><br />
                   <small class="text-muted">Current: {{ current_epoch }}</small>
@@ -87,14 +87,14 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <span v-if="stake_account.active_stake < 500000000">
                   <0.5 SOL<br />
                   <span class="text-muted">
-                    {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator stake
+                    {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator's stake
                   </span>
                 </span>
                 <span v-else>
                   {{ (stake_account.active_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
                   <br />
                   <span class="text-muted">
-                    {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator stake
+                    {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator's stake
                   </span>
                 </span>
               </td>
