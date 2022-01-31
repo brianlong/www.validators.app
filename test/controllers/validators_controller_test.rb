@@ -14,6 +14,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get index_v2" do
+    get validators_v2_url(network: "testnet")
+    assert_response :success
+  end
+
   test "should get root" do
     get root_url(network: "testnet")
     assert_response :success

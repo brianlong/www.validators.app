@@ -10,6 +10,7 @@ class ValidatorsController < ApplicationController
     @per = 25
     validators = Validator.where(network: index_params[:network])
                           .scorable
+                          .preload(:validator_score_v1)
                           .index_order(validate_order)
 
     unless params[:q].blank?
@@ -40,6 +41,7 @@ class ValidatorsController < ApplicationController
     @per = 25
     validators = Validator.where(network: index_params[:network])
                           .scorable
+                          .preload(:validator_score_v1, :validator_score_v2)
                           .index_order_v2(validate_order)
 
     unless params[:q].blank?
