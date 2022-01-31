@@ -276,13 +276,16 @@ module StakeLogic
           epoch: p.payload[:previous_epoch].epoch
         ).select("DISTINCT(stake_pubkey) active_stake")
         puts history_accounts
+        total_stake = 0
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
-          stake = history_accounts.select{ |h| h.stake_pubkey == sa.stake_pubkey }.first.stake
+          stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first.active_stake
+          total_stake += stake
           if stake && stake > 0 && sa.apy
             sum + sa.apy * stake
           end
         end
-        puts weighted_apy_sum
+        puts "sum: #{weighted_apy_sum}"
+        pool.update(average_apy: weighted_apy_sum / total_stake)
       end
       Pipeline.new(200, p.payload)
     rescue StandardError => e
