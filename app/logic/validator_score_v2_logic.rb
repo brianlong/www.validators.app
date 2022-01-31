@@ -60,7 +60,7 @@ module ValidatorScoreV2Logic
     lambda do |p|
       return p unless p.code == 200
 
-      validators_count_in_each_group = (p.payload[:validators].count/NUMBER_OF_GROUPS).ceil
+      validators_count_in_each_group = (p.payload[:validators].count/NUMBER_OF_GROUPS.to_f).ceil
 
       Pipeline.new(200, p.payload.merge(validators_count_in_each_group: validators_count_in_each_group))
     rescue StandardError => e
