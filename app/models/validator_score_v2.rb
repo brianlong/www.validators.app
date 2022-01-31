@@ -58,9 +58,6 @@ class ValidatorScoreV2 < ApplicationRecord
   belongs_to :validator
   has_one :validator_score_v1, through: :validator
   before_save :calculate_total_score
-  # has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: "Ip",
-  #                                                        primary_key: :ip_address,
-  #                                                        foreign_key: :address
 
   scope :by_network_with_active_stake, ->(network) do
     where(network: network).where("active_stake > 0")
@@ -82,8 +79,15 @@ class ValidatorScoreV2 < ApplicationRecord
           validator_score_v1.security_report_score.to_i +
           validator_score_v1.software_version_score.to_i +
           validator_score_v1.stake_concentration_score.to_i +
-          validator_score_v1.data_center_concentration_score.to_i
+          validator_score_v1.data_center_concentration_score.to_i +
+          validator_score_v1.authorized_withdrawer_score.to_i
       end
+  end
+
+  def displayed_total_score
+    return "N/A" if validator.private_validator?
+    return "N/A" if validator.admin_warning
+    total_score
   end
 
   def delinquent?
