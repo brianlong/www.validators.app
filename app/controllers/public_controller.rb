@@ -82,10 +82,6 @@ class PublicController < ApplicationController
           )
   end
 
-  def index_params
-    params.permit(:network, :order, :page, :q)
-  end
-
   def send_email_to_admins_about_new_request
     admins = User.where(is_admin: true)
     ContactRequestMailer.new_contact_request_notice(admins).deliver_now

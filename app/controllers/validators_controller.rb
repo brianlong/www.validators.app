@@ -8,45 +8,60 @@ class ValidatorsController < ApplicationController
   # GET /validators.json
   def index
     @per = 25
-    validators = Validator.where(network: params[:network])
+    validators = Validator.where(network: index_params[:network])
                           .scorable
-                          .preload(:validator_score_v1)
                           .index_order(validate_order)
 
-    @validators = validators.page(params[:page]).per(@per)
+    unless params[:q].blank?
+      validators = ValidatorSearchQuery.new(validators).search(index_params[:q])
+    end
+
+    @validators = validators.page(index_params[:page]).per(@per)
 
     @batch = Batch.last_scored_v2(params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(
-        network: params[:network],
+        network: index_params[:network],
         batch_uuid: @batch.uuid
       ).first
+
+      validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], @batch.uuid)
+      at_33_stake_validator = validator_history_stats.at_33_stake&.validator
+      @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
     end
 
-    validator_history_stats = Stats::ValidatorHistory.new(params[:network], @batch.uuid)
-
-    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
-    @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
-
-    # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
+    # flash[:error] = 'Due to an issue with our RPC server pool, the Skipped Slot % data may be inaccurate. I am aware of the problem and working on a solution. Thanks! -- Brian Long'
   end
 
   # GET /validators_v2
   # GET /validators_v2.json
   def index_v2
     @per = 25
-    validators = Validator.where(network: params[:network])
+    validators = Validator.where(network: index_params[:network])
                           .scorable
-                          .preload(:validator_score_v1, :validator_score_v2)
                           .index_order_v2(validate_order)
-    @validators = validators.page(params[:page]).per(@per)
+
+    unless params[:q].blank?
+      validators = ValidatorSearchQuery.new(validators).search(index_params[:q])
+    end
+
+    @validators = validators.page(index_params[:page]).per(@per)
 
     @batch = Batch.last_scored_v2(params[:network])
 
-    validator_history_stats = Stats::ValidatorHistory.new(params[:network], @batch.uuid)
-    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
-    @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
+    if @batch
+      @this_epoch = EpochHistory.where(
+        network: index_params[:network],
+        batch_uuid: @batch.uuid
+      ).first
+
+      validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], @batch.uuid)
+      at_33_stake_validator = validator_history_stats.at_33_stake&.validator
+      @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
+    end
+
+    # flash[:error] = 'Due to an issue with our RPC server pool, the Skipped Slot % data may be inaccurate. I am aware of the problem and working on a solution. Thanks! -- Brian Long'
   end
 
   # GET /validators/1
@@ -105,6 +120,10 @@ class ValidatorsController < ApplicationController
   end
 
   private
+
+  def index_params
+    params.permit(:network, :order, :page, :q)
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_validator
