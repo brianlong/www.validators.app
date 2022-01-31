@@ -33,38 +33,34 @@ class ValidatorScoreV2Test < ActiveSupport::TestCase
   test 'relationship to validator' do
     assert_not_nil @validator_score_v2
     assert_equal @validator.id, @validator_score_v2.validator_id
+    assert_equal @validator_score_v1.id, @validator_score_v2.validator_score_v1.id
   end
 
   test '#calculate_total_score assigns a score of 0 if commission is 100' do
-    @validator_score_v2.update(
-      commission: 100,
-    )
+    @validator_score_v1.update(commission: 100)
 
-    assert_equal 0, @validator_score_v2.total_score
+    assert_equal true, @validator.private_validator?
+    assert_equal 0, @validator_score_v2.calculate_total_score
     assert_equal "N/A", @validator_score_v2.displayed_total_score
   end
 
   test '#calculate_total_score assigns a score of 0 if validator has admin_warning' do
     @validator.update(admin_warning: 'test warning')
-    @validator_score_v2.calculate_total_score
 
-    assert_equal 0, @validator_score_v2.total_score
+    assert_equal 0, @validator_score_v2.calculate_total_score
     assert_equal "N/A", @validator_score_v2.displayed_total_score
   end
 
   test '#calculate_total_score correctly calculates score including proper values from v1 and v2' do
     assert_equal 10, @validator_score_v2.calculate_total_score
 
-    @validator_score_v1.update(
-      stake_concentration_score: -2
-    )
-    @validator_score_v2.update(
+    @validator_score_v2.update_columns(
       root_distance_score: 1,
       vote_distance_score: 1,
       skipped_slot_score: 1
     )
 
-    assert_equal 6, @validator_score_v2.calculate_total_score
+    assert_equal 7, @validator_score_v2.calculate_total_score
   end
 
   test '#delinquent? returns corrent boolean value' do

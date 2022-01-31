@@ -51,21 +51,9 @@
 #
 
 class ValidatorScoreV2 < ApplicationRecord
-  # IP_FIELDS_FOR_API = [
-  #   "traits_autonomous_system_number", "address"
-  # ].map{ |e| "ips.#{e}" }.join(", ")
-
   belongs_to :validator
   has_one :validator_score_v1, through: :validator
   before_save :calculate_total_score
-
-  scope :by_network_with_active_stake, ->(network) do
-    where(network: network).where("active_stake > 0")
-  end
-
-  scope :by_data_centers, ->(data_center_keys) do
-    where(data_center_key: data_center_keys)
-  end
 
   def calculate_total_score
     self.total_score =
@@ -93,27 +81,4 @@ class ValidatorScoreV2 < ApplicationRecord
   def delinquent?
     validator_score_v1.delinquent == true
   end
-
-  # def to_builder
-  #   Jbuilder.new do |vs_v2|
-  #     vs_v2.(
-  #       self,
-  #       :total_score,
-  #       :root_distance_score,
-  #       :vote_distance_score,
-  #       :skipped_slot_score,
-  #       :software_version,
-  #       :software_version_score,
-  #       :stake_concentration_score,
-  #       :data_center_concentration_score,
-  #       :published_information_score,
-  #       :security_report_score,
-  #       :active_stake,
-  #       :commission,
-  #       :delinquent,
-  #       :data_center_key,
-  #       :data_center_host
-  #     )
-  #   end
-  # end
 end
