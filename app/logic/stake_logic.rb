@@ -274,8 +274,8 @@ module StakeLogic
         history_accounts = StakeAccountHistory.where(
           stake_pool: pool,
           epoch: p.payload[:previous_epoch].epoch
-        ).select("DISTINCT(stake_pubkey) active_stake")
-        puts history_accounts
+        ).select("DISTINCT(stake_pubkey) stake_pubkey, active_stake")
+        puts history_accounts.inspect
         total_stake = 0
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first.active_stake
