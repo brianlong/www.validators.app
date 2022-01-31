@@ -4,16 +4,19 @@
 #
 #  id                            :bigint           not null, primary key
 #  authority                     :string(191)
+#  average_apy                   :float(24)
 #  average_delinquent            :float(24)
 #  average_lifetime              :integer
 #  average_score                 :float(24)
 #  average_skipped_slots         :float(24)
 #  average_uptime                :float(24)
 #  average_validators_commission :float(24)
+#  deposit_fee                   :float(24)
 #  manager_fee                   :float(24)
 #  name                          :string(191)
 #  network                       :string(191)
 #  ticker                        :string(191)
+#  withdrawal_fee                :float(24)
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
 #
@@ -23,7 +26,13 @@ class StakePool < ApplicationRecord
   has_many :stake_account_histories
 
   def average_apy
-    stake_accounts.pluck(:apy).compact.average
+    weighted_apy_sum = stake_accounts.inject(0) do |sum, sa|
+      if sa.active_stake && sa.active_stake > 0 && sa.apy
+        sum + sa.apy * sa.active_stake
+      end
+    end
+
+    weighted_apy_sum / stake_accounts.where.not(apy: nil)&.pluck(:active_stake).compact.sum
   end
 
   def validators_count
@@ -31,7 +40,7 @@ class StakePool < ApplicationRecord
   end
 
   def total_stake
-    stake_accounts&.pluck(:delegated_stake).compact.sum
+    stake_accounts&.pluck(:active_stake).compact.sum
   end
 
   def average_stake

@@ -19,7 +19,8 @@ p = Pipeline.new(200, payload)
             .then(&assign_stake_pools)
             .then(&update_validator_stats)
             .then(&get_rewards)
-            .then(&calculate_apy)
+            .then(&calculate_apy_for_accounts)
+            .then(&calculate_apy_for_pools)
 
 end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
@@ -44,3 +45,5 @@ puts StakeAccount.first.inspect
 
 puts "\n DB STAKE ACCOUNT COUNT: "
 puts StakeAccount.count
+
+puts p.payload

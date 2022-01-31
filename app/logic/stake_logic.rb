@@ -216,13 +216,13 @@ module StakeLogic
       stake_accounts.each_with_index do |sa, idx|
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
-      Pipeline.new(200, p.payload.merge(account_rewards: account_rewards))
+      Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from get_rewards", e)
     end
   end
 
-  def calculate_apy
+  def calculate_apy_for_accounts
     lambda do |p|
       return p unless p.code == 200
 
@@ -243,7 +243,7 @@ module StakeLogic
           epoch: acc.epoch - 1
         ).first
         
-        next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
+        next unless p.payload[:account_rewards][acc.stake_pubkey]
 
         rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
 
@@ -260,10 +260,33 @@ module StakeLogic
         apy = apy < 100 && apy > 0 ? apy.round(6) : nil
         acc.update(apy: apy)
       end
+      puts last_epoch
+      puts previous_epoch
+      Pipeline.new(200, p.payload.merge!(previous_epoch: previous_epoch))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from calculate_apy_for_accounts", e)
+    end
+  end
 
+  def calculate_apy_for_pools
+    lambda do |p|
+      p.payload[:stake_pools].each do |pool|
+        history_accounts = StakeAccountHistory.where(
+          stake_pool: pool,
+          epoch: p.payload[:previous_epoch].epoch
+        ).select("DISTINCT ON(stake_accounts.stake_pubkey) models.*")
+        puts history_accounts
+        weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
+          stake = history_accounts.select{ |h| h.stake_pubkey == sa.stake_pubkey }.first.stake
+          if stake && stake > 0 && sa.apy
+            sum + sa.apy * stake
+          end
+        end
+        puts weighted_apy_sum
+      end
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from calculate_apy", e)
+      Pipeline.new(500, p.payload, "Error from calculate_apy_for_pools", e)
     end
   end
 end
