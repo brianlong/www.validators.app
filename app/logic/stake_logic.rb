@@ -280,6 +280,7 @@ module StakeLogic
 
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
+          puts stake
           if stake && stake > 0
             total_stake += stake
             if stake && stake > 0 && sa.apy
