@@ -56,12 +56,12 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
       published_information_score: 2,
       security_report_score: 1,
       software_version_score: 2,
-      stake_concentration_score: 2,
-      data_center_concentration_score: 2,
+      stake_concentration_score: 0,
+      data_center_concentration_score: 0,
       authorized_withdrawer_score: 0
     )
 
-    assert_equal 14, @validator_score_v1.calculate_total_score
+    assert_equal 10, @validator_score_v1.calculate_total_score
   end
 
   test 'assign_published_information_score' do
