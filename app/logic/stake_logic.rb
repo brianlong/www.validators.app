@@ -279,17 +279,16 @@ module StakeLogic
         total_stake = 0
 
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
-          stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first.active_stake
+          stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
           if stake && stake > 0
             total_stake += stake
             if stake && stake > 0 && sa.apy
-              return sum + sa.apy * stake
+              sum = sum + sa.apy * stake
             end
           end
-          return sum
+          sum
         end
         average_apy = weighted_apy_sum / total_stake.to_f
-        puts average_apy
         pool.update(average_apy: average_apy)
       end
       Pipeline.new(200, p.payload)

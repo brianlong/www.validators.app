@@ -45,5 +45,3 @@ puts StakeAccount.first.inspect
 
 puts "\n DB STAKE ACCOUNT COUNT: "
 puts StakeAccount.count
-
-puts p.payload
