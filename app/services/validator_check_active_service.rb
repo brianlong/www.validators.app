@@ -9,13 +9,15 @@ class ValidatorCheckActiveService
   end
 
   def update_validator_activity
-    Validator.all.each do |validator|
-      if validator.scorable?
+    Validator.includes(:vote_accounts).each do |validator|
+      if should_be_destroyed?(validator)
+        validator.update(is_active: false, is_destroyed: true)
+      elsif validator.scorable?
         update_scorable(validator)
       else
         # Check validators that are currently not scorable in case they reactivate
         if acceptable_stake?(validator) && not_delinquent?(validator)
-          validator.update(is_active: true)
+          validator.update(is_active: true, is_destroyed: false)
 
         # Check if vote account has been created for rpc_node
         elsif validator.vote_accounts.exists?
@@ -27,13 +29,22 @@ class ValidatorCheckActiveService
 
   private
 
+  def should_be_destroyed?(validator)
+    if !validator.validator_histories.where("created_at > ?", @delinquent_time.ago).exists? && \
+       validator.validator_histories.where("created_at < ?", @delinquent_time.ago).exists?
+      return true
+    end
+
+    false
+  end
+
   # number of previous by network
   def previous_epoch(network)
-    current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).last
+    @current_epoch ||= EpochWallClock.where(network: network).order(created_at: :desc).last
     if network == 'testnet'
-      @previous_epoch_testnet ||= current_epoch.epoch - 1
+      @previous_epoch_testnet ||= @current_epoch.epoch - 1
     else
-      @previous_epoch_mainnet ||= current_epoch.epoch - 1
+      @previous_epoch_mainnet ||= @current_epoch.epoch - 1
     end
   end
 

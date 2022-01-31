@@ -16,19 +16,20 @@
   <div class="card-content">
     <h2 class="card-heading mb-4">NEW! Stake Pools</h2>
     <p class="lead">
-      You can now improve the security of the&nbsp;Solana blockchain by participating in&nbsp;stake pools.
+      You can now improve the security of the&nbsp;Solana blockchain by participating in
+      <%= link_to 'stake pools', stake_pools_path, target: '_blank' %>.
       A&nbsp;stake pool spreads your delegation across hundreds of&nbsp;validators. Liquid stake pools allow you
       to&nbsp;move in and out of the&nbsp;pool without warm-up or cool-down periods. See the&nbsp;links below to&nbsp;learn more
       about liquid staking.
     </p>
 
-    <div id="carouselLogos" class="carousel slide" data-ride="carousel">
+    <div id="carouselLogos" class="carousel slide d-none d-md-block" data-ride="carousel" data-interval="4000">
       <div class="carousel-inner">
-        <% shuffle_logos.each_slice(4).to_a.each_with_index do |group, index| %>
-          <div class="carousel-item <%= 'active' if index == 0 %>">
-            <div class="row text-center mt-4">
-              <% group.each do |logo| %>
-                <div class="col-sm-6 col-md-3 mb-4 mb-sm-0">
+        <% shuffle_logos.each_slice(3).to_a.each_with_index do |group, index_slide| %>
+          <div class="carousel-item <%= 'active' if index_slide == 0 %>">
+            <div class="row text-center px-lg-5 mt-4">
+              <% group.each_with_index do |logo, index_col| %>
+                <div class="col-md-4 mb-4 mb-sm-0 <%= 'offset-md-2' if index_slide == 1 && index_col == 0 %>">
                   <%= link_to logo[0], target: "_blank" do %>
                     <%= image_tag logo[1], class: 'w-100 px-4 px-sm-1 px-lg-3 mb-4' %>
                   <% end %>
@@ -38,6 +39,22 @@
           </div>
         <% end %>
       </div>
+    </div>
+    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-ride="carousel" data-interval="4000">
+      <div class="carousel-inner">
+        <% shuffle_logos.each_with_index do |logo, index_slide| %>
+          <div class="carousel-item <%= 'active' if index_slide == 0 %>">
+            <%= link_to logo[0], target: "_blank" do %>
+              <%= image_tag logo[1], class: 'w-100 px-4 px-sm-1' %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <ol class="carousel-indicators">
+        <% shuffle_logos.count.times do |index| %>
+          <li data-target="#carouselLogosMobile" data-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></li>
+        <% end %>
+      </ol>
     </div>
   </div>
 </div>

@@ -18,13 +18,19 @@ p = Pipeline.new(200, payload)
             .then(&update_stake_accounts)
             .then(&assign_stake_pools)
             .then(&update_validator_stats)
+            .then(&get_rewards)
+            .then(&calculate_apy)
+
 end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
 duration = end_time - start_time
 
 puts "CODE: #{p[:code]}"
 puts "MESSAGE: #{p[:message]}"
-puts "ERROR: #{p[:errors].inspect}"
+if p[:errors]
+  puts "ERROR: #{p[:errors].inspect}"
+  puts p[:errors].backtrace
+end
 puts "DURATION: #{duration}"
 
 puts "\nFIRST STAKE ACC: "

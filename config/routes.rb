@@ -52,8 +52,8 @@ Rails.application.routes.draw do
   # SolPrices
   get 'sol_prices', to:'sol_prices#index'
 
-  # Stake Accounts
-  get 'stake_accounts', to: 'stake_accounts#index'
+  # Stake Pools
+  get 'stake-pools', to: 'stake_accounts#index'
 
   devise_for :users
 
@@ -133,8 +133,9 @@ Rails.application.routes.draw do
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
       get 'commission-changes/:network', to: 'commission_histories#index', as: 'commission_histories_index'
-      get 'stake-accounts/:network', to: 'stake_accounts#index', as: 'stake_accounts_index'
 
+      get 'stake-accounts/:network', to: 'stake_accounts#index', as: 'stake_accounts_index'
+      get 'stake-pools/:network', to: 'stake_pools#index', as: 'stake_pools_index'
 
       # api_v1_ping_times GET /api/v1/ping_times
       get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'

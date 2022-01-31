@@ -6,10 +6,12 @@
 #
 #  id                  :bigint           not null, primary key
 #  account             :string(191)
+#  admin_warning       :string(191)
 #  avatar_url          :string(191)
 #  details             :string(191)
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
+#  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
@@ -36,8 +38,8 @@ class Validator < ApplicationRecord
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
 
-  scope :active, -> { where(is_active: true) }
-  scope :scorable, -> { where(is_active: true, is_rpc: false) }
+  scope :active, -> { where(is_active: true, is_destroyed: false) }
+  scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
 
   # after_save :copy_data_to_score
 
@@ -98,7 +100,7 @@ class Validator < ApplicationRecord
   end
 
   def scorable?
-    is_active && !is_rpc
+    is_active && !is_rpc && !is_destroyed
   end
 
   def validator_history_last
@@ -267,7 +269,8 @@ class Validator < ApplicationRecord
         :details,
         :avatar_url,
         :created_at,
-        :updated_at
+        :updated_at,
+        :admin_warning
       )
     end
   end

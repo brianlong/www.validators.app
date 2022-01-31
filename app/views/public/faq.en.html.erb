@@ -7,8 +7,8 @@
 </p>
 
 <div class="row">
-  <div class="col-md-6">
-    <div class="card mb-4">
+  <div class="col-md-6 mb-4">
+    <div class="card h-100">
       <div class="card-content">
         <h2 class="card-heading"><i class="fas fa-sliders-h mr-1"></i> Basics</h2>
         <ul class="list-large list-no-bullets text-center">
@@ -21,7 +21,28 @@
         </ul>
       </div>
     </div>
-    <div class="card mb-4">
+  </div>
+  <div class="col-md-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <h2 class="card-heading">
+          <%= image_tag 'solana_logo_white.png', height: '22', class: 'mr-1' %> FAQ - validators</h2>
+        <ul class="list-large list-no-bullets text-center">
+          <li><a href="#new-validator">How to become a validator?</a></li>
+          <li><a href="#personal-data">How is my Personal Data protected?</a></li>
+          <li><a href="#private-validator">Why is my validator marked "private"?</a></li>
+          <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
+          <li><a href="#admin-warning">Why do I see <i class="fas fa-exclamation-triangle text-danger mx-1"></i> warning next to my validator?</a></li>
+          <li><a href="#avatar">How can I change my avatar (validator logo)?</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <div class="card h-100">
       <div class="card-content">
         <h2 class="card-heading"><i class="fas fa-spell-check mr-1"></i> Dictionary</h2>
         <ul class="list-large list-no-bullets text-center">
@@ -37,22 +58,8 @@
       </div>
     </div>
   </div>
-
-  <div class="col-md-6">
-    <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="card-heading">
-          <%= image_tag 'solana_logo_white.png', height: '22', class: 'mr-1' %> FAQ - validators</h2>
-        <ul class="list-large list-no-bullets text-center">
-          <li><a href="#new-validator">How to become a validator?</a></li>
-          <li><a href="#personal-data">How is my Personal Data protected?</a></li>
-          <li><a href="#private-validator">Why is my validator marked "private"?</a></li>
-          <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
-          <li><a href="#avatar">How can I change my avatar (validator logo)?</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="card mb-4">
+  <div class="col-md-6 mb-4">
+    <div class="card h-100">
       <div class="card-content">
         <h2 class="card-heading">
           <i class="fas fa-dollar-sign mr-1"></i> FAQ - investors</h2>
@@ -382,6 +389,15 @@
   a&nbsp;serious security risk, eg. if someone hacks into your validator, they can steal from the&nbsp;vote account.
   Keep the&nbsp;withdraw authority key offline to minimize the&nbsp;risk. Once you fix it, the&nbsp;warning will be
   taken off automatically within few hours.
+</p>
+
+<h3 class="h5" id="admin-warning">
+  Why do I see <i class="fas fa-exclamation-triangle text-danger mx-1"></i> warning next to my validator?
+</h3>
+<p class="mb-5">
+  It informs visitors that validator's actions are malicious or harmful to the&nbsp;cluster. Hover your mouse over
+  the&nbsp;warning symbol next to validator's name to see the&nbsp;details. Validators with red warnings are always
+  assigned with total score 0, despite their performance.
 </p>
 
 <h3 class="h5" id="avatar">How can I change my avatar (validator logo)?</h3>

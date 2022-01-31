@@ -32,7 +32,10 @@ module StakeLogic
       reduced_stake_accounts = []
 
       StakePool.where(network: p.payload[:network]).each do |pool|
-        pool_stake_acc = stake_accounts.select{ |sa| sa['withdrawer'] == pool.authority }
+        pool_stake_acc = stake_accounts.select do |sa| 
+          sa["withdrawer"] == pool.authority || sa["staker"] == pool.authority
+        end
+
         reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
       end
 
@@ -73,6 +76,11 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
+      current_epoch = EpochWallClock.where(network: p.payload[:network])
+                                    .order(created_at: :desc)
+                                    .first
+                                    .epoch
+
       p.payload[:stake_accounts].each do |acc|
         vote_account = VoteAccount.find_by(
           network: p.payload[:network],
@@ -99,7 +107,8 @@ module StakeLogic
           staker: acc['staker'],
           withdrawer: acc['withdrawer'],
           batch_uuid: p.payload[:batch].uuid,
-          validator_id: validator_id
+          validator_id: validator_id,
+          epoch: current_epoch
         )
       end
 
@@ -133,11 +142,12 @@ module StakeLogic
       return p unless p.code == 200
 
       p.payload[:stake_pools].each do |pool|
-        validator_ids = pool.stake_accounts.pluck(:validator_id)
+        validator_ids = pool.stake_accounts.active.pluck(:validator_id)
         delinquent_count = 0
         last_skipped_slots = []
         uptimes = []
         lifetimes = []
+        scores = []
 
         Validator.where(id: validator_ids).each do |validator|
           score = validator.score
@@ -152,12 +162,14 @@ module StakeLogic
           lifetime = (DateTime.now - validator.created_at.to_datetime).to_i
           uptimes.push uptime
           lifetimes.push lifetime
+          scores.push score.total_score.to_i
           delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
           last_skipped_slots.push score.skipped_slot_history&.last
         end
 
         pool.average_uptime = uptimes.average
         pool.average_lifetime = lifetimes.average
+        pool.average_score = scores.average.round(2)
         pool.average_delinquent = (delinquent_count / validator_ids.size) * 100
         pool.average_skipped_slots = last_skipped_slots.compact.average
       end
@@ -177,7 +189,7 @@ module StakeLogic
       return p unless p.code == 200
 
       StakePool.where(network: p.payload[:network]).each do |pool|
-        validator_ids = pool.stake_accounts.pluck(:validator_id)
+        validator_ids = pool.stake_accounts.active.pluck(:validator_id)
         average_commission = ValidatorScoreV1.where(validator_id: validator_ids)
                                              .average(:commission)
 
@@ -187,6 +199,71 @@ module StakeLogic
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from count_average_validator_fee", e)
+    end
+  end
+
+  def get_rewards
+    lambda do |p|
+      stake_accounts = StakeAccount.where(network: p.payload[:network])
+      reward_info = solana_client_request(
+        p.payload[:config_urls],
+        "get_inflation_reward",
+        params: [stake_accounts.pluck(:stake_pubkey)]
+      )
+
+      account_rewards = {}
+
+      stake_accounts.each_with_index do |sa, idx|
+        account_rewards[sa["stake_pubkey"]] = reward_info[idx]
+      end
+      Pipeline.new(200, p.payload.merge(account_rewards: account_rewards))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from get_rewards", e)
+    end
+  end
+
+  def calculate_apy
+    lambda do |p|
+      return p unless p.code == 200
+
+      last_epoch = EpochWallClock.where(
+        network: p.payload[:network]
+      ).last
+
+      previous_epoch = EpochWallClock.where(
+        network: p.payload[:network],
+        epoch: last_epoch.epoch - 1
+      ).last
+
+      num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
+
+      StakeAccount.where(network: p.payload[:network]).each do |acc|
+        previous_acc = StakeAccountHistory.where(
+          stake_pubkey: acc.stake_pubkey,
+          epoch: acc.epoch - 1
+        ).first
+        
+        next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
+
+        rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
+
+        if fee = acc.stake_pool&.manager_fee || nil
+          credits_diff = rewards[:amount] - rewards[:amount] * (fee / 100)
+        else
+          credits_diff = rewards[:amount]
+        end
+
+        next unless credits_diff > 0
+        credits_diff_percent = credits_diff / (rewards[:postBalance] - credits_diff).to_f
+
+        apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
+        apy = apy < 100 && apy > 0 ? apy.round(6) : nil
+        acc.update(apy: apy)
+      end
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from calculate_apy", e)
     end
   end
 end

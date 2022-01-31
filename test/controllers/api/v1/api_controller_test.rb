@@ -114,7 +114,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 32, validator_with_all_data.keys.size
+    assert_equal 34, validator_with_all_data.keys.size
 
     # Validator
     assert_equal 'testnet', validator_with_all_data['network']
@@ -295,7 +295,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.score.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 32, json_response.keys.size
+    assert_equal 34, json_response.keys.size
 
     # Validator
     assert_equal 'testnet', json_response['network']
@@ -336,6 +336,37 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     # Epoch
     assert_equal 222, json_response['epoch']
+  end
+
+  test "GET api_v1_validator with token and with_history=true returns all data with history fields" do
+    validator = create(:validator, :with_score, account: "Test Account")
+    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
+    create(:vote_account, validator: validator)
+    create(:report, :build_skipped_slot_percent)
+    create(:ip, address: validator.score.ip_address)
+
+    get api_v1_validator_url(
+      network: "testnet",
+      account: validator.account
+    ), headers: { "Token" => @user.api_token },
+    params: { with_history: true }
+
+    assert_response 200
+
+    json_response = response_to_json(@response.body)
+    validator_active_stake = validator.validator_score_v1.active_stake
+
+    # Adjust after adding/removing attributes in json builder
+    assert_equal 40, json_response.keys.size
+
+    # Score
+    assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
+    assert_equal [5, 4, 3, 2, 1], json_response["vote_distance_history"]
+    assert_equal [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1], json_response["skipped_slot_history"]
+    assert_equal [0.2051], json_response["skipped_slot_moving_average_history"]
+    assert_equal [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], json_response["skipped_vote_history"]
+    assert_equal "0.001", json_response["stake_concentration"]
+    assert_equal "1.6.7", json_response["software_version"]
   end
 
   test 'GET api_v1_validator with token returns ValidatorNotFound when wrong account provided' do

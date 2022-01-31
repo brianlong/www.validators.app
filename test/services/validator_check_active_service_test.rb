@@ -79,4 +79,37 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     refute v.reload.is_active
   end
 
+  test "validator with no recent history should be marked as destroyed" do
+    v = create(:validator, :with_score, account: "account6")
+    create(:validator_history, account: "account6", created_at: 25.hours.ago)
+
+    refute v.is_destroyed
+
+    ValidatorCheckActiveService.new.update_validator_activity
+
+    assert v.reload.is_destroyed
+  end
+
+  test "validator with recent history should not be marked as destroyed" do
+    v = create(:validator, :with_score, account: "account7")
+    create(:validator_history, account: "account7", created_at: 22.hours.ago)
+
+    refute v.is_destroyed
+
+    ValidatorCheckActiveService.new.update_validator_activity
+
+    refute v.reload.is_destroyed
+  end
+
+  test "validator with recent history that is marked as destroyed should not be destroyed" do
+    v = create(:validator, :with_score, account: "account7", is_destroyed: true)
+    create(:validator_history, account: "account7", created_at: 22.hours.ago)
+
+    assert v.is_destroyed
+
+    ValidatorCheckActiveService.new.update_validator_activity
+
+    refute v.reload.is_destroyed
+  end
+
 end

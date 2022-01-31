@@ -18,6 +18,11 @@
           <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
         <% end %>
       <% end %>
+      <% if @validator.admin_warning %>
+        <%= link_to '/faq#admin-warning', title: "#{@validator.admin_warning}" do %>
+          <i class="fas fa-exclamation-triangle text-danger ml-1"></i>
+        <% end %>
+      <% end %>
     </h1>
     <% unless @validator.private_validator? %>
       <h5 class="mt-2">
