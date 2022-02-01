@@ -289,9 +289,12 @@ module StakeLogic
           end
           sum
         end
-        average_apy = weighted_apy_sum / total_stake.to_f
-        puts "#{average_apy} = #{weighted_apy_sum} + #{total_stake.to_f}"
-        pool.update(average_apy: average_apy)
+        
+        if total_stake > 0
+          average_apy = weighted_apy_sum / total_stake.to_f
+          puts "#{average_apy} = #{weighted_apy_sum} + #{total_stake.to_f}"
+          pool.update(average_apy: average_apy)
+        end
       end
       Pipeline.new(200, p.payload)
     rescue StandardError => e
