@@ -290,6 +290,7 @@ module StakeLogic
           sum
         end
         average_apy = weighted_apy_sum / total_stake.to_f
+        puts "#{average_apy} = #{weighted_apy_sum} + #{total_stake.to_f}"
         pool.update(average_apy: average_apy)
       end
       Pipeline.new(200, p.payload)
