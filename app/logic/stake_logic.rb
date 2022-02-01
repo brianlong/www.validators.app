@@ -208,7 +208,8 @@ module StakeLogic
       reward_info = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
-        params: [stake_accounts.pluck(:stake_pubkey)]
+        params: [stake_accounts.pluck(:stake_pubkey)],
+        use_token: p.payload[:use_token]
       )
 
       account_rewards = {}
