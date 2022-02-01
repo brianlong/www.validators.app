@@ -14,7 +14,7 @@ class SolanaRpcClient
 
   def initialize(cluster: nil, use_token: false)
     token = Rails.application.credentials.dig(:solana, :rpc_token)
-    cluster_url = use_token ? "#{cluster}/#{token}" : cluster
+    cluster_url = cluster
 
     @cluster = cluster_url
   end
