@@ -659,7 +659,7 @@ module SolanaLogic
   end
 
   # Clusters array, method symbol
-  def solana_client_request(clusters, method, params: [], use_token: false)
+  def solana_client_request(clusters, method, params: [], use_token: true)
     clusters.each do |cluster_url|
       client = SolanaRpcClient.new(cluster: cluster_url, use_token: use_token).client
       result = client.public_send(method, *params).result
