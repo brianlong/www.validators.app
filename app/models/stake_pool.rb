@@ -25,16 +25,6 @@ class StakePool < ApplicationRecord
   has_many :stake_accounts
   has_many :stake_account_histories
 
-  # def average_apy
-  #   weighted_apy_sum = stake_accounts.inject(0) do |sum, sa|
-  #     if sa.active_stake && sa.active_stake > 0 && sa.apy
-  #       sum + sa.apy * sa.active_stake
-  #     end
-  #   end
-
-  #   weighted_apy_sum / stake_accounts.where.not(apy: nil)&.pluck(:active_stake).compact.sum
-  # end
-
   def validators_count
     stake_accounts.pluck(:validator_id).compact.uniq.count
   end

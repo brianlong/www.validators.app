@@ -260,8 +260,7 @@ module StakeLogic
         apy = apy < 100 && apy > 0 ? apy.round(6) : nil
         acc.update(apy: apy)
       end
-      puts last_epoch
-      puts previous_epoch
+
       Pipeline.new(200, p.payload.merge!(previous_epoch: previous_epoch))
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from calculate_apy_for_accounts", e)
@@ -280,7 +279,7 @@ module StakeLogic
 
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
-          puts stake
+
           if stake && stake > 0
             total_stake += stake
             if stake && stake > 0 && sa.apy
@@ -289,13 +288,13 @@ module StakeLogic
           end
           sum
         end
-        
+
         if total_stake > 0
           average_apy = weighted_apy_sum / total_stake.to_f
-          puts "#{average_apy} = #{weighted_apy_sum} + #{total_stake.to_f}"
           pool.update(average_apy: average_apy)
         end
       end
+
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from calculate_apy_for_pools", e)
