@@ -268,7 +268,7 @@ class StakeLogicTest < ActiveSupport::TestCase
   test "calculate_apy_for_pools should return correct average apy" do
     previous_epoch = create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
     create(:epoch_wall_clock, network: "testnet", epoch: 2)
-    stake_pool = create(:stake_pool, network: 'testnet')
+    stake_pool = create(:stake_pool, network: "testnet")
 
     create(
       :stake_account_history,
