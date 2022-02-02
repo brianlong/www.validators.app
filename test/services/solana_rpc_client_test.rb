@@ -7,7 +7,6 @@ class SolanaRpcClientTest < ActiveSupport::TestCase
   setup do
     @cluster_url = "https://api.rpcpool.com"
     @client = SolanaRpcClient.new(cluster: @cluster_url)
-    @client_with_token = SolanaRpcClient.new(cluster: @cluster_url)
     @namespace = File.join("services", "solana_rpc_client")
   end
 
