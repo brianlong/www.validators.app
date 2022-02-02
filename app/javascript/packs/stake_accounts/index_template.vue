@@ -364,7 +364,7 @@
                ctx.current_epoch = response.data.current_epoch;
                ctx.is_loading_stake_accounts = false;
              })
-      }, 1000),
+      }, 2000),
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
       },
