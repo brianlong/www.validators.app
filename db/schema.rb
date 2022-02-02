@@ -339,8 +339,6 @@ ActiveRecord::Schema.define(version: 2022_01_31_114027) do
     t.float "average_uptime"
     t.integer "average_lifetime"
     t.float "average_score"
-    t.float "withdrawal_fee"
-    t.float "deposit_fee"
     t.float "average_apy"
   end
 
