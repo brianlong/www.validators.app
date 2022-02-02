@@ -10,7 +10,7 @@ class SolanaRpcClientTest < ActiveSupport::TestCase
     @namespace = File.join("services", "solana_rpc_client")
   end
 
-  test " #initialize sets token correctly" do
+  test " #initialize sets cluster url correctly" do
     assert_equal @cluster_url, @client.cluster
   end
 
