@@ -7,17 +7,12 @@ class SolanaRpcClientTest < ActiveSupport::TestCase
   setup do
     @cluster_url = "https://api.rpcpool.com"
     @client = SolanaRpcClient.new(cluster: @cluster_url)
-    @client_with_token = SolanaRpcClient.new(cluster: @cluster_url, use_token: true)
+    @client_with_token = SolanaRpcClient.new(cluster: @cluster_url)
     @namespace = File.join("services", "solana_rpc_client")
   end
 
-  test " #initialize does not use token by default" do
+  test " #initialize sets token correctly" do
     assert_equal @cluster_url, @client.cluster
-  end
-
-  test "#initialize correctly add token to cluster url when use_token is true" do
-    cluster_url_with_token = "https://api.rpcpool.com/rpc_token_test"
-    assert_equal cluster_url_with_token, @client_with_token.cluster
   end
 
   test "#client returns response" do

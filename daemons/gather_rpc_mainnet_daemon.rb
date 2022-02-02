@@ -19,8 +19,7 @@ begin
     # Create our initial payload with the input values
     payload = {
       config_urls: Rails.application.credentials.solana[:mainnet_urls],
-      network: network,
-      use_token: true
+      network: network
     }
 
     p = Pipeline.new(200, payload)
@@ -29,7 +28,7 @@ begin
                 .then(&validators_cli)
                 .then(&validators_get)
                 .then(&program_accounts)
-                .then(&vote_accounts_get) 
+                .then(&vote_accounts_get)
                 .then(&reduce_validator_vote_accounts)
                 .then(&validators_save)
                 .then(&validator_block_history_get)
@@ -37,11 +36,11 @@ begin
                 .then(&log_errors)
                 .then(&batch_touch)
                 .then(&check_epoch)
-    
+
     # After switching to better server we exceed connection rate limit:
     # Maximum connection rate per 10 seconds per IP: 40
     # We want to slow down a bit.
-    # 
+    #
     # More info about limits:
     # https://docs.solana.com/cluster/rpc-endpoints#mainnet-beta
     sleep 2

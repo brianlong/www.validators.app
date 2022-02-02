@@ -14,8 +14,7 @@ include StakeLogic
 
   payload = {
     config_urls: config_urls,
-    network: network,
-    use_token: true
+    network: network
   }
 
   p = Pipeline.new(200, payload)

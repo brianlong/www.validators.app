@@ -32,7 +32,7 @@ module StakeLogic
       reduced_stake_accounts = []
 
       StakePool.where(network: p.payload[:network]).each do |pool|
-        pool_stake_acc = stake_accounts.select do |sa| 
+        pool_stake_acc = stake_accounts.select do |sa|
           sa["withdrawer"] == pool.authority || sa["staker"] == pool.authority
         end
 
@@ -86,7 +86,7 @@ module StakeLogic
           network: p.payload[:network],
           account: acc['delegatedVoteAccountAddress']
         )
-        
+
         validator_id = vote_account ? vote_account.validator.id : nil
 
         StakeAccount.find_or_initialize_by(
@@ -123,7 +123,7 @@ module StakeLogic
   def assign_stake_pools
     lambda do |p|
       return p unless p.code == 200
-      
+
       stake_pools = StakePool.where(network: p.payload[:network])
 
       stake_pools.each do |pool|
@@ -177,7 +177,7 @@ module StakeLogic
       StakePool.transaction do
         p.payload[:stake_pools].each(&:save)
       end
-      
+
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from update_validator_stats", e)
@@ -208,8 +208,7 @@ module StakeLogic
       reward_info = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
-        params: [stake_accounts.pluck(:stake_pubkey)],
-        use_token: p.payload[:use_token]
+        params: [stake_accounts.pluck(:stake_pubkey)]
       )
 
       account_rewards = {}
@@ -243,7 +242,7 @@ module StakeLogic
           stake_pubkey: acc.stake_pubkey,
           epoch: acc.epoch - 1
         ).first
-        
+
         next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
 
         rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
