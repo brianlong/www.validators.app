@@ -213,6 +213,9 @@ module StakeLogic
         params: [stake_accounts.pluck(:stake_pubkey)]
       )
 
+      raise 'No results from `get_inflation_reward`' \
+        if reward_info.blank?
+
       account_rewards = {}
 
       stake_accounts.each_with_index do |sa, idx|
