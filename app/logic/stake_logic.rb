@@ -226,38 +226,21 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      last_epoch = EpochWallClock.where(
-        network: p.payload[:network]
-      ).last
-
-      previous_epoch = EpochWallClock.where(
-        network: p.payload[:network],
-        epoch: last_epoch.epoch - 1
-      ).last
+      last_epoch, previous_epoch = set_epochs(p.payload[:network])
 
       num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
-        previous_acc = StakeAccountHistory.where(
-          stake_pubkey: acc.stake_pubkey,
-          epoch: acc.epoch - 1
-        ).first
+        previous_acc = acc.history_from_epoch(previous_epoch.epoch)
         
         next unless p.payload[:account_rewards][acc.stake_pubkey]
 
         rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
-
-        if fee = acc.stake_pool&.manager_fee || nil
-          credits_diff = rewards[:amount] - rewards[:amount] * (fee / 100)
-        else
-          credits_diff = rewards[:amount]
-        end
+        credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
 
         next unless credits_diff > 0
-        credits_diff_percent = credits_diff / (rewards[:postBalance] - rewards[:amount]).to_f
 
-        apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
-        apy = apy < 100 && apy > 0 ? apy.round(6) : nil
+        apy = calculate_apy(credits_diff, rewards, num_of_epochs)
         acc.update(apy: apy)
       end
 
@@ -299,5 +282,34 @@ module StakeLogic
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from calculate_apy_for_pools", e)
     end
+  end
+
+  private
+
+  def set_epochs(network)
+    last_epoch = EpochWallClock.where(
+      network: network
+    ).last
+
+    previous_epoch = EpochWallClock.where(
+      network: network,
+      epoch: last_epoch.epoch - 1
+    ).last
+
+    [last_epoch, previous_epoch]
+  end
+
+  def reward_with_fee(manager_fee, rewards)
+    if fee = manager_fee || nil
+      return rewards - rewards * (fee / 100)
+    end
+    rewards
+  end
+
+  def calculate_apy(credits_diff, rewards, num_of_epochs)
+    credits_diff_percent = credits_diff / (rewards[:postBalance] - rewards[:amount]).to_f
+
+    apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
+    apy < 100 && apy > 0 ? apy.round(6) : nil
   end
 end
