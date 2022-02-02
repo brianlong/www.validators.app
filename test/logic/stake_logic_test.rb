@@ -42,7 +42,9 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'get_stake_accounts' do
+  test "get_stake_accounts \
+        when getting correct response \
+        should save correct payload" do
     authority = 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'
     create(:stake_pool, authority: authority, network: 'testnet')
 
@@ -54,6 +56,22 @@ class StakeLogicTest < ActiveSupport::TestCase
       assert_not_nil p[:payload][:stake_accounts]
       assert_equal JSON.parse(@json_data).select { |sa| sa['withdrawer'] == authority }.count,
         p[:payload][:stake_accounts].count
+    end
+  end
+
+  test "get_stake_accounts \
+        when getting no response \
+        should raise error" do
+    authority = 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'
+    create(:stake_pool, authority: authority, network: 'testnet')
+
+    SolanaCliService.stub(:request, [], ['stakes', @testnet_url]) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_last_batch)
+                  .then(&get_stake_accounts)
+
+      assert_nil p[:payload][:stake_accounts]
+      assert_equal 500, p.code
     end
   end
 

@@ -29,6 +29,8 @@ module StakeLogic
         p.payload[:config_urls]
       )
 
+      raise 'No results from `solana stakes`' if stake_accounts.blank?
+
       reduced_stake_accounts = []
 
       StakePool.where(network: p.payload[:network]).each do |pool|
