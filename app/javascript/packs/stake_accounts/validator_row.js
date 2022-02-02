@@ -139,6 +139,9 @@ var ValidatorRow = Vue.component('validatorRow', {
         <a v-if="validator['authorized_withdrawer_score']== -2" href="/faq#withdraw-authority-warning" title="Withdrawer matches validator identity.">
           <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
         </a>
+        <a href="/faq#admin-warning" v-if="validator['admin_warning']" :title="validator['admin_warning']" >
+          <i class="fas fa-exclamation-triangle text-danger ml-1"></i>
+        </a>
         <br />
         <span class="d-inline-block d-lg-none">Version:&nbsp;</span>
         <small>
