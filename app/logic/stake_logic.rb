@@ -253,10 +253,12 @@ module StakeLogic
   def calculate_apy_for_pools
     lambda do |p|
       p.payload[:stake_pools].each do |pool|
-        history_accounts = StakeAccountHistory.where(
+        history_accounts = StakeAccountHistory.select(
+          "DISTINCT(stake_pubkey) stake_pubkey, active_stake"
+        ).where(
           stake_pool: pool,
           epoch: p.payload[:previous_epoch].epoch
-        ).select("DISTINCT(stake_pubkey) stake_pubkey, active_stake")
+        )
 
         total_stake = 0
 
@@ -265,7 +267,7 @@ module StakeLogic
 
           if stake && stake > 0
             total_stake += stake
-            if stake && stake > 0 && sa.apy
+            if sa.apy
               sum = sum + sa.apy * stake
             end
           end

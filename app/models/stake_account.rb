@@ -43,9 +43,9 @@ class StakeAccount < ApplicationRecord
   scope :active, ->() { where.not(active_stake: [0, nil]) }
 
   def history_from_epoch(epoch)
-    StakeAccountHistory.where(
+    StakeAccountHistory.find_by(
       stake_pubkey: stake_pubkey,
       epoch: epoch
-    ).first
+    )
   end
 end
