@@ -10,7 +10,7 @@ module Api
       private
 
       def ping_thing_params
-        params.require(:ping_thing).permit!
+        params.permit(:amount, :time, :signature, :transaction_type)
       end
     end
   end
