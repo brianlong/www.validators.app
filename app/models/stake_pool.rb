@@ -4,6 +4,7 @@
 #
 #  id                            :bigint           not null, primary key
 #  authority                     :string(191)
+#  average_apy                   :float(24)
 #  average_delinquent            :float(24)
 #  average_lifetime              :integer
 #  average_score                 :float(24)

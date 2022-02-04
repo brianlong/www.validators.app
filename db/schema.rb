@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_27_132812) do
+ActiveRecord::Schema.define(version: 2022_02_03_141647) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -205,6 +205,13 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "token"
+    t.text "raw_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "batch_uuid"
     t.decimal "overall_min_time", precision: 10, scale: 3
@@ -339,6 +346,7 @@ ActiveRecord::Schema.define(version: 2021_12_27_132812) do
     t.float "average_uptime"
     t.integer "average_lifetime"
     t.float "average_score"
+    t.float "average_apy"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
