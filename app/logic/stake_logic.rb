@@ -228,12 +228,13 @@ module StakeLogic
 
       last_epoch, previous_epoch = set_epochs(p.payload[:network])
 
+      # number of epochs in year calculated using the duration of last finished epoch
       num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
-        previous_acc = acc.history_from_epoch(previous_epoch.epoch)
         
-        next unless p.payload[:account_rewards][acc.stake_pubkey]
+        # do nothing if the account has no rewards      
+        next unless p.payload[:account_rewards][acc.stake_pubkey] 
 
         rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
         credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
@@ -253,6 +254,8 @@ module StakeLogic
   def calculate_apy_for_pools
     lambda do |p|
       p.payload[:stake_pools].each do |pool|
+
+        # select single history for each pubkey from the previous epoch
         history_accounts = StakeAccountHistory.select(
           "DISTINCT(stake_pubkey) stake_pubkey, active_stake"
         ).where(
@@ -260,12 +263,15 @@ module StakeLogic
           epoch: p.payload[:previous_epoch].epoch
         )
 
+        # total stake of all accounts in the pool
         total_stake = 0
 
+        # sum of apy * stake
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
 
-          if stake && stake > 0
+          # we don't want to include accounts with no stake
+          if stake && stake > 0 
             total_stake += stake
             if sa.apy
               sum = sum + sa.apy * stake
@@ -288,6 +294,7 @@ module StakeLogic
 
   private
 
+  # returns [epoch that's not finished yet, last finished epoch]
   def set_epochs(network)
     last_epoch = EpochWallClock.where(
       network: network
@@ -301,13 +308,13 @@ module StakeLogic
     [last_epoch, previous_epoch]
   end
 
+  # returns reward from the account minus stake pool fee
   def reward_with_fee(manager_fee, rewards)
-    if fee = manager_fee || nil
-      return rewards - rewards * (fee / 100)
-    end
-    rewards
+    return rewards unless manager_fee
+    return rewards - rewards * (manager_fee / 100)
   end
 
+  # returns APY for a single account or nil
   def calculate_apy(credits_diff, rewards, num_of_epochs)
     credits_diff_percent = credits_diff / (rewards[:postBalance] - rewards[:amount]).to_f
 
