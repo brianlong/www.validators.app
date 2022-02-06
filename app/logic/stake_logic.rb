@@ -280,7 +280,7 @@ module StakeLogic
           sum
         end
 
-        if total_stake > 0
+        next unless total_stake > 0
           average_apy = weighted_apy_sum / total_stake.to_f
           pool.update(average_apy: average_apy)
         end
@@ -319,6 +319,6 @@ module StakeLogic
     credits_diff_percent = credits_diff / (rewards[:postBalance] - rewards[:amount]).to_f
 
     apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
-    apy < 100 && apy > 0 ? apy.round(6) : nil
+    apy.between?(1, 99) ? apy.round(6) : nil
   end
 end
