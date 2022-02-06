@@ -274,7 +274,7 @@ module StakeLogic
           sum
         end
 
-        if total_stake > 0
+        next unless total_stake > 0
           average_apy = weighted_apy_sum / total_stake.to_f
           pool.update(average_apy: average_apy)
         end
