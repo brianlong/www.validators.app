@@ -229,14 +229,6 @@ class StakeLogicTest < ActiveSupport::TestCase
     create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
     create(:epoch_wall_clock, network: "testnet", epoch: 2)
 
-    create(
-      :stake_account_history,
-      network: "testnet",
-      delegated_stake: 2893868758268,
-      epoch: 1,
-      stake_pubkey: "pubkey_123"
-    )
-
     acc = create(
       :stake_account,
       network: "testnet",
@@ -262,6 +254,30 @@ class StakeLogicTest < ActiveSupport::TestCase
     acc.reload
     assert_equal 200, p.code
     assert_equal 12.5502, acc.apy
+  end
+
+  test "calculate_apy_for_accounts should return nil apy if there are no rewards" do
+    create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
+    create(:epoch_wall_clock, network: "testnet", epoch: 2)
+
+    acc = create(
+      :stake_account,
+      network: "testnet",
+      delegated_stake: 2922232803431,
+      epoch: 2,
+      stake_pubkey: "pubkey_123",
+      apy: 1234
+    )
+
+    @initial_payload.merge!(
+      account_rewards: {}
+    )
+    p = Pipeline.new(200, @initial_payload)
+                .then(&calculate_apy_for_accounts)
+    
+    acc.reload
+    assert_equal 200, p.code
+    assert_nil acc.apy
   end
 
   test "calculate_apy_for_pools should return correct average apy" do
@@ -307,5 +323,52 @@ class StakeLogicTest < ActiveSupport::TestCase
     acc.reload
     assert_equal 200, p.code
     assert_equal 12.5502, stake_pool.average_apy
+  end
+
+  test "calculate_apy_for_pools should return nil if there's no stake" do
+    previous_epoch = create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
+    create(:epoch_wall_clock, network: "testnet", epoch: 2)
+    stake_pool = create(:stake_pool, network: "testnet")
+
+    create(
+      :stake_account_history,
+      network: "testnet",
+      delegated_stake: 0,
+      active_stake: 0,
+      epoch: 1,
+      stake_pubkey: "pubkey_123",
+      stake_pool_id: stake_pool.id
+    )
+
+    acc = create(
+      :stake_account,
+      network: "testnet",
+      delegated_stake: 0,
+      active_stake: 0,
+      epoch: 2,
+      stake_pubkey: "pubkey_123",
+      stake_pool_id: stake_pool.id,
+      apy: 12.5502
+    )
+
+    @initial_payload.merge!(
+      stake_pools: [stake_pool],
+      previous_epoch: previous_epoch,
+      account_rewards: {
+        "pubkey_123" => {
+          "amount": 2836404516,
+          "commission": 10,
+          "effectiveSlot": 113276257,
+          "epoch": 2,
+          "postBalance": 0
+        }
+      }
+    )
+    p = Pipeline.new(200, @initial_payload)
+                .then(&calculate_apy_for_pools)
+    
+    acc.reload
+    assert_equal 200, p.code
+    assert_nil stake_pool.average_apy
   end
 end

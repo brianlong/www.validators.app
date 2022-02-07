@@ -232,16 +232,16 @@ module StakeLogic
       num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
-        
-        # do nothing if the account has no rewards      
-        next unless p.payload[:account_rewards][acc.stake_pubkey] 
+        apy = nil  
+        if p.payload[:account_rewards][acc.stake_pubkey]
 
-        rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
-        credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
+          rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
+          credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
 
-        next unless credits_diff > 0
+          next unless credits_diff > 0
 
-        apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+          apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+        end
         acc.update(apy: apy)
       end
 
@@ -280,7 +280,7 @@ module StakeLogic
           sum
         end
 
-        next unless total_stake > 0
+        if total_stake > 0
           average_apy = weighted_apy_sum / total_stake.to_f
           pool.update(average_apy: average_apy)
         end
@@ -319,6 +319,6 @@ module StakeLogic
     credits_diff_percent = credits_diff / (rewards[:postBalance] - rewards[:amount]).to_f
 
     apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
-    apy.between?(1, 99) ? apy.round(6) : nil
+    apy < 100 && apy > 0 ? apy.round(6) : nil
   end
 end
