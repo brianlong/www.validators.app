@@ -59,22 +59,6 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "get_stake_accounts \
-        when getting no response \
-        should raise error" do
-    authority = 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'
-    create(:stake_pool, authority: authority, network: 'testnet')
-
-    SolanaCliService.stub(:request, [], ['stakes', @testnet_url]) do
-      p = Pipeline.new(200, @initial_payload)
-                  .then(&get_last_batch)
-                  .then(&get_stake_accounts)
-
-      assert_nil p[:payload][:stake_accounts]
-      assert_equal 500, p.code
-    end
-  end
-
   test 'update_stake_accounts' do
     SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
       p = Pipeline.new(200, @initial_payload)
