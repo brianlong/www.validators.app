@@ -114,7 +114,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 34, validator_with_all_data.keys.size
+    assert_equal 36, validator_with_all_data.keys.size
 
     # Validator
     assert_equal "testnet", validator_with_all_data["network"]
@@ -149,7 +149,10 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_nil validator_with_all_data["ping_time"]
 
     # IP
+    assert_nil validator_with_all_data["address"]
     assert_equal 0, validator_with_all_data["autonomous_system_number"]
+    assert_nil validator_with_all_data["latitude"]
+    assert_nil validator_with_all_data["longitude"]
 
     # Validator history
     assert_equal 100, validator_with_all_data["epoch_credits"]
@@ -315,7 +318,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 34, json_response.keys.size
+    assert_equal 36, json_response.keys.size
 
     # Validator
     assert_equal "testnet", json_response["network"]
@@ -377,7 +380,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 40, json_response.keys.size
+    assert_equal 42, json_response.keys.size
 
     # Score
     assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
