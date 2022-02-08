@@ -61,4 +61,14 @@ module ApplicationHelper
       'text-danger'
     end
   end
+
+  def transaction_type_icon(transaction_type_string)
+    case transaction_type_string
+    when "transfer"
+      '<i class="fas fa-exchange-alt text-success mr-1"></i>'
+    # TODO add more types
+    else
+      '<i class="fas fa-random text-success mr-1"></i>'
+    end
+  end
 end

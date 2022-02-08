@@ -6,21 +6,26 @@
       <table class='table mb-0'>
         <thead>
           <tr>
-            <th>Created At</th>
-            <th>Time</th>
-            <th>Signature</th>
-            <th>Transaction Type</th>
-            <th>Posted by</th>
+            <th class="align-middle">Created At</th>
+            <th class="align-middle">Time</th>
+            <th class="align-middle">Signature</th>
+            <th class="align-middle">Transaction Type</th>
+            <th class="align-middle">Posted by</th>
           </tr>
         </thead>
         <tbody>
           <% @ping_things.each do |pt| %>
             <tr>
-              <td><%= pt.created_at %></td>
-              <td><%= pt.response_time %> ms</td>
-              <td><%= pt.signature[0..10] + "..."%></td>
-              <td><%= pt.transaction_type %></td>
-              <td><%= pt.user.username %></td>
+              <td class="align-middle small text-muted"><%= pt.created_at %></td>
+              <td class="align-middle">
+                <strong class="text-success h6"><%= pt.response_time %></strong>&nbsp;ms
+              </td>
+              <td class="align-middle small text-muted">
+                <%= pt.signature[0..15] + "..."%>
+              </td>
+              <td class="align-middle">
+                <%= transaction_type_icon(pt.transaction_type).html_safe %>&nbsp;<%= pt.transaction_type %></td>
+              <td class="align-middle text-muted"><%= pt.user.username %></td>
             </tr>
           <% end %>
         </tbody>
