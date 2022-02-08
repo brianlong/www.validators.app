@@ -32,7 +32,7 @@ module StakeLogic
       reduced_stake_accounts = []
 
       StakePool.where(network: p.payload[:network]).each do |pool|
-        pool_stake_acc = stake_accounts.select do |sa| 
+        pool_stake_acc = stake_accounts.select do |sa|
           sa["withdrawer"] == pool.authority || sa["staker"] == pool.authority
         end
 
@@ -86,7 +86,7 @@ module StakeLogic
           network: p.payload[:network],
           account: acc['delegatedVoteAccountAddress']
         )
-        
+
         validator_id = vote_account ? vote_account.validator.id : nil
 
         StakeAccount.find_or_initialize_by(
@@ -123,7 +123,7 @@ module StakeLogic
   def assign_stake_pools
     lambda do |p|
       return p unless p.code == 200
-      
+
       stake_pools = StakePool.where(network: p.payload[:network])
 
       stake_pools.each do |pool|
@@ -177,7 +177,7 @@ module StakeLogic
       StakePool.transaction do
         p.payload[:stake_pools].each(&:save)
       end
-      
+
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from update_validator_stats", e)
@@ -242,15 +242,21 @@ module StakeLogic
           stake_pubkey: acc.stake_pubkey,
           epoch: acc.epoch - 1
         ).first
-        
+
         next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
 
         rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
-        credits_diff = rewards[:amount]
+
+        if fee = acc.stake_pool&.manager_fee || nil
+          credits_diff = rewards[:amount] - rewards[:amount] * (fee / 100)
+        else
+          credits_diff = rewards[:amount]
+        end
+
         next unless credits_diff > 0
         credits_diff_percent = credits_diff / (rewards[:postBalance] - credits_diff).to_f
 
-        apy = (((1 + credits_diff_percent) ** num_of_epochs.to_i) - 1) * 100
+        apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
         apy = apy < 100 && apy > 0 ? apy.round(6) : nil
         acc.update(apy: apy)
       end

@@ -172,7 +172,8 @@ module Api
           'network',
           'updated_at',
           'www_url',
-          'avatar_url'
+          'avatar_url',
+          'admin_warning'
         ].map { |e| "validators.#{e}" }
       end
 

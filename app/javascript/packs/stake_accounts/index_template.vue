@@ -25,6 +25,7 @@
       </div>
     </div>
 
+    <!-- Form -->
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
@@ -51,10 +52,17 @@
       </div>
     </div>
 
-    <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_accounts && !is_loading_stake_pools">
-      <stake-pool-stats :pool="selected_pool" :total_stake="total_stake" />
+    <!-- Stake pools overview -->
+    <div class="col-12 mb-4" v-if="!selected_pool && !is_loading_stake_pools">
+      <stake-pools-overview :stake_pools="stake_pools" />
     </div>
 
+    <!-- Stake pool stats -->
+    <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_accounts && !is_loading_stake_pools">
+      <stake-pool-stats :pool="selected_pool"/>
+    </div>
+
+    <!-- Validators and accounts table -->
     <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
         <table class="table table-block-sm" id="validators-table">
@@ -133,7 +141,9 @@
             :key="sa.id"
             :stake_accounts="sa"
             :idx="index + (page - 1) * 20"
-            :batch="batch">
+            :batch="batch"
+            :current_epoch="current_epoch"
+          >
           </stake-account-row>
         </table>
 
@@ -186,7 +196,7 @@
         Fee paid while withdrawing any amount of stake from the stake pool.
       </p>
 
-      <h4 class="h5">Avg Commission</h4>
+      <h4 class="h5">Avg Validators Fee</h4>
       <p class="mb-5">
         Average commission of all the validators used by the stake pool. See
         <a href="/faq#commission" target="_blank">what is validator commission?</a>
@@ -195,11 +205,19 @@
       <h4 class="h5">APY</h4>
       <p>
         <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the average APY of
-        all validators used by the pool. <br />
-        APY of the validator is calculated based on rewards from the last epoch as follows:
+        all validators reduced by pool <strong>manager fee</strong>. <br />
+        APY of the validator is calculated as follows:
+      </p>
+      <p>
+        <strong> ((1 + rewards_percent) ^ number_of_epochs_per_year) - 1 </strong>
+      </p>
+      <p>
+        Where number_of_epochs_per_year is calculated as follows:
+        <strong>seconds_in_year / duration_of_last_epoch_in_seconds</strong><br />
+        This gives the number of epochs in a year assuming all epochs were as long as the last epoch.
       </p>
       <p class="mb-5">
-        <strong> ((1 + rewards_percent) ^ number_of_epochs_per_year) - 1 </strong>
+        And <strong>rewards_percent</strong> is the interest rate of validator, based on the reward from the last epoch.
       </p>
 
       <h4 class="h5">Avg Skipped Slot</h4>
@@ -219,9 +237,14 @@
       </p>
 
       <h4 class="h5">Avg Score</h4>
-      <p>
+      <p class="mb-5">
         Average score of the validators from the stake pool. See
         <a href="/faq#score" target="_blank">how are scores calculated?</a>
+      </p>
+
+      <h4 class="h5">Stake Account Activation Epoch</h4>
+      <p>
+        Number of epoch in which the account was first activated.
       </p>
     </div>
   </div>
@@ -249,7 +272,6 @@
         stake_accounts: [],
         page: 1,
         total_count: 0,
-        total_stake: 0,
         sort_by: 'epoch_desc',
         stake_accounts_api_url: stake_accounts_api_url,
         stake_pools_api_url: stake_pools_api_url,
@@ -262,6 +284,7 @@
         stake_pools: null,
         selected_pool: null,
         batch: null,
+        current_epoch: null,
         loading_image: loadingImage,
         seed: Math.floor(Math.random() * 1000),
         pool_images: {
@@ -289,8 +312,8 @@
            .then(function (response){
              ctx.stake_accounts = response.data.stake_accounts
              ctx.total_count = response.data.total_count;
-             ctx.total_stake = response.data.total_stake;
              ctx.is_loading_stake_accounts = false;
+             ctx.current_epoch = response.data.current_epoch
              ctx.batch = response.data.batch
            })
 
@@ -346,7 +369,7 @@
              .then(function (response) {
                ctx.stake_accounts = response.data.stake_accounts;
                ctx.total_count = response.data.total_count;
-               ctx.total_stake = response.data.total_stake;
+               ctx.current_epoch = response.data.current_epoch;
                ctx.is_loading_stake_accounts = false;
              })
       },

@@ -107,6 +107,21 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, json_response["stake_accounts"].size
   end
 
+  test "request should return correct current epoch" do
+    create(
+      :epoch_wall_clock,
+      network: "testnet",
+      epoch: 99
+    )
+    params = @params.merge({ page: 1, per: 2 })
+
+    get api_v1_stake_accounts_index_url(params), headers: @headers
+
+    json_response = response_to_json(@response.body)
+
+    assert_equal 99, json_response["current_epoch"]
+  end
+
   test "request with grouped_by param should return correct grouped results" do
     params = @params.merge({grouped_by: "delegated_vote_accounts_address"})
 
@@ -122,7 +137,6 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 16,response_stake_account.keys.size
     assert_equal "testnet", response_stake_account["network"]
     assert_equal 3, json_response["total_count"]
-    assert_equal 12_000_000_000_000, json_response["total_stake"]
     assert_equal "TestName", response_stake_account["pool_name"]
     assert_equal "Validator", response_stake_account["validator_name"]
     assert_equal "Account", response_stake_account["validator_account"]

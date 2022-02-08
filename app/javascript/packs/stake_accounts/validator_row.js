@@ -110,7 +110,16 @@ var ValidatorRow = Vue.component('validatorRow', {
           l.classList.remove('active')
       });
       event.target.classList.add('active');
-    }
+    },
+    displayed_total_score() {
+      if(this.validator["commission"] == 100 && this.validator["network"] == 'mainnet'){
+        return 'N/A'
+      } else if(this.validator["admin_warning"]) {
+        return 'N/A'
+      } else {
+        return this.validator["total_score"]
+      }
+    },
   },
   template: `
     <tr :id="row_index()">
@@ -129,6 +138,9 @@ var ValidatorRow = Vue.component('validatorRow', {
         </small>
         <a v-if="validator['authorized_withdrawer_score']== -2" href="/faq#withdraw-authority-warning" title="Withdrawer matches validator identity.">
           <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
+        </a>
+        <a href="/faq#admin-warning" v-if="validator['admin_warning']" :title="validator['admin_warning']" >
+          <i class="fas fa-exclamation-triangle text-danger ml-1"></i>
         </a>
         <br />
         <span class="d-inline-block d-lg-none">Version:&nbsp;</span>
@@ -160,7 +172,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           <i class="fas fa-minus-circle mr-1 text-warning"
             v-if="validator['data_center_concentration_score'] < 0"
             :title=" 'Data Center Concentration Score = ' + validator['data_center_concentration_score'] "></i>
-          (<span class="d-inline-block d-lg-none">Total:&nbsp;</span>{{ validator['total_score'] }})
+          (<span class="d-inline-block d-lg-none">Total:&nbsp;</span>{{ displayed_total_score() }})
         </small>
         <br /><small v-if="validator['delinquent']" class="text-danger">delinquent</small>
       </td>
