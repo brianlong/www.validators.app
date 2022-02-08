@@ -12,7 +12,7 @@
                :key="pool.id"
                href="#"
                title="Filter by Stake Pool"
-               @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
+               @click.prevent="filter_by_withdrawer(pool)"
             >
               <img class="img-link w-100 px-5 px-sm-3 px-md-1 px-lg-3 px-xl-4 py-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
             </a>
@@ -54,7 +54,10 @@
 
     <!-- Stake pools overview -->
     <div class="col-12 mb-4" v-if="!selected_pool && !is_loading_stake_pools">
-      <stake-pools-overview :stake_pools="stake_pools" />
+      <stake-pools-overview
+        :stake_pools="stake_pools"
+        @filter_by_withdrawer="filter_by_withdrawer"
+      />
     </div>
 
     <!-- Stake pool stats -->
@@ -388,8 +391,9 @@
       filter_by_staker: function(staker){
         this.filter_staker = staker
       },
-      filter_by_withdrawer: function(withdrawer){
-        this.filter_withdrawer = withdrawer
+      filter_by_withdrawer: function(pool){
+        this.filter_withdrawer = pool.authority
+        this.selected_pool = pool
       },
       reset_filters: function() {
         this.filter_withdrawer = null
