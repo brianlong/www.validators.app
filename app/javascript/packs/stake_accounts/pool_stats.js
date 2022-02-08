@@ -1,11 +1,11 @@
 import Vue from 'vue/dist/vue.esm'
 
 const DELEGATION_STRATEGY_URLS = {
-  "DAOPool": "https://solana.foundation/stake-pools",
+  "DAOPool": "https://monkedao.medium.com/daosol-the-next-step-in-decentralizing-solana-7519e3b2bded",
   "Jpool": "https://docs.jpool.one/technical-stuff/staking-strategy",
   "Marinade": "https://docs.marinade.finance/marinade-protocol/validators",
   "Lido": "https://solana.foundation/stake-pools",
-  "Socean": "https://docs.socean.fi/whitepaper#delegation-strategy"
+  "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {
