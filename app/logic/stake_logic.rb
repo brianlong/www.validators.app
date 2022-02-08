@@ -4,6 +4,8 @@ module StakeLogic
   include PipelineLogic
   include SolanaLogic #for solana_client_request
 
+  class NoResultsFromSolana < StandardError; end
+
   def get_last_batch
     lambda do |p|
       return p unless p.code == 200
@@ -28,6 +30,8 @@ module StakeLogic
         'stakes',
         p.payload[:config_urls]
       )
+
+      raise NoResultsFromSolana.new('No results from `solana stakes`') if stake_accounts.blank?
 
       reduced_stake_accounts = []
 
@@ -210,6 +214,9 @@ module StakeLogic
         "get_inflation_reward",
         params: [stake_accounts.pluck(:stake_pubkey)]
       )
+
+      raise NoResultsFromSolana.new('No results from `get_inflation_reward`') \
+        if reward_info.blank?
 
       account_rewards = {}
 

@@ -42,7 +42,9 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'get_stake_accounts' do
+  test "get_stake_accounts \
+        when getting correct response \
+        should save correct payload" do
     authority = 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'
     create(:stake_pool, authority: authority, network: 'testnet')
 
@@ -206,7 +208,9 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 6.67, stake_pool.reload.average_score
   end
 
-  test "get_rewards" do
+  test "get_rewards \
+        when response is correct \
+        should have correct payload" do
     stake_pool = create(:stake_pool)
     validator = create(:validator)
     validator2 = create(:validator)
