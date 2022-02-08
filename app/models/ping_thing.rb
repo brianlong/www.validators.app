@@ -26,6 +26,7 @@ class PingThing < ApplicationRecord
   belongs_to :user
 
   validates_presence_of :user_id, :response_time, :signature, :token, :network
+  validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
 
 end

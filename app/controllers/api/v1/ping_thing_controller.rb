@@ -7,7 +7,8 @@ module Api
         PingThingRaw.create(
           raw_data: ping_thing_params.to_json,
           token: params[:token],
-          api_token: api_token
+          api_token: api_token,
+          network: params[:network]
         )
         render json: {status: "ok"}, status: :ok
       end

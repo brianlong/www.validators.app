@@ -12,6 +12,7 @@ class PingThingTest < ActiveSupport::TestCase
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
       transaction_type: "transfer",
       token: 'token',
+      network: 'testnet',
       user_id: @user.id
     )
   end
@@ -22,6 +23,7 @@ class PingThingTest < ActiveSupport::TestCase
       response_time: "234",
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
       transaction_type: "transfer",
+      network: "testnet",
       token: 'token'
     )
 
@@ -42,6 +44,7 @@ class PingThingTest < ActiveSupport::TestCase
     assert errors.include? "Token can't be blank"
     assert errors.include? "Response time can't be blank"
     assert errors.include? "Signature can't be blank"
+    assert errors.include? "Network can't be blank"
   end
 
   test "create with too short transaction_type should return error" do
@@ -50,7 +53,8 @@ class PingThingTest < ActiveSupport::TestCase
       response_time: "234",
       signature: "5zxrAiJ",
       transaction_type: "transfer",
-      token: 'token',
+      token: "token",
+      network: "testnet",
       user_id: @user.id
     )
 
