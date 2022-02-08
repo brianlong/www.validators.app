@@ -325,7 +325,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 12.5502, stake_pool.average_apy
   end
 
-  test "calculate_apy_for_pools should return nil if there's no stake" do
+  test "calculate_apy_for_pools returns nil if there's no stake" do
     previous_epoch = create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
     create(:epoch_wall_clock, network: "testnet", epoch: 2)
     stake_pool = create(:stake_pool, network: "testnet")
