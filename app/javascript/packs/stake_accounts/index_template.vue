@@ -186,6 +186,16 @@
         Commission that stake pool substracts from the total profit to maintain their operation.
       </p>
 
+      <h4 class="h5">Deposit Fee</h4>
+      <p class="mb-5">
+        Fee paid while depositing new stake to the stake pool.
+      </p>
+
+      <h4 class="h5">Withdrawal Fee</h4>
+      <p class="mb-5">
+        Fee paid while withdrawing any amount of stake from the stake pool.
+      </p>
+
       <h4 class="h5">Avg Validators Fee</h4>
       <p class="mb-5">
         Average commission of all the validators used by the stake pool. See
