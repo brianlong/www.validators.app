@@ -10,6 +10,8 @@ json.stake_pools do
     :average_uptime,
     :average_validators_commission,
     :manager_fee,
+    :deposit_fee,
+    :withdrawal_fee,
     :name,
     :network,
     :ticker,
