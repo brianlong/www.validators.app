@@ -135,8 +135,6 @@
             </tr>
           </thead>
           <stake-account-row
-            @filter_by_staker="filter_by_staker"
-            @filter_by_withdrawer="filter_by_withdrawer"
             v-for="(sa, index) in stake_accounts"
             :key="sa.id"
             :stake_accounts="sa"
