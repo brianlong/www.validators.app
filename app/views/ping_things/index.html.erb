@@ -1,44 +1,54 @@
 <h1 class="page-header"><%= params[:network].capitalize %> Ping Thing</h1>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="card mb-4">
-      <div class="table-responsive-lg">
-        <table class='table mb-0'>
-          <thead>
-          <tr>
-            <th class="align-middle column-sm">Time</th>
-            <th class="align-middle column-lg">Created At</th>
-            <th class="align-middle column-lg">Signature</th>
-            <th class="align-middle column-lg">Transaction Type</th>
-            <th class="align-middle column-md">Posted by</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <% @ping_things.each.with_index do |pt, index| %>
-            <tr>
-              <td class="align-middle">
-                <strong class="text-success h6"><%= pt.response_time %></strong>&nbsp;ms
-              </td>
-              <td class="align-middle small text-muted"><%= pt.created_at %></td>
-              <td class="align-middle small">
-                <a data-toggle="collapse" href="#collapseExample<%=index%>" aria-expanded="false" class="text-muted">
-                  <%= pt.signature.truncate(18) %>
-                </a>
-                <div class="collapse word-break" id="collapseExample<%=index%>">
-                  <%= pt.signature %>
-                </div>
-
-              </td>
-              <td class="align-middle">
-                <%= transaction_type_icon(pt.transaction_type).html_safe %>&nbsp;<%= pt.transaction_type %></td>
-              <td class="align-middle text-muted"><%= pt.user.username %></td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<div class="card mb-4">
+  <div class="card-content">
+    <%= render 'validators/spark_line_chart',
+               chart_name: "spark_line_response_times",
+               vector: @ping_things.pluck(:response_time).reverse,
+               line_color: SPARK_LINE_2,
+               fill_color: SPARK_LINE_2_TRANSPARENT,
+               label: 'Response Time (ms)',
+               y_axis_desc: ''
+    %>
   </div>
 </div>
+
+<div class="card">
+  <div class="table-responsive-lg">
+    <table class='table mb-0'>
+      <thead>
+      <tr>
+        <th class="align-middle column-sm">Time</th>
+        <th class="align-middle column-lg">Created At</th>
+        <th class="align-middle column-lg">Signature</th>
+        <th class="align-middle column-lg">Transaction Type</th>
+        <th class="align-middle column-md">Posted by</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @ping_things.each.with_index do |pt, index| %>
+        <tr>
+          <td class="align-middle">
+            <strong class="text-success h6"><%= pt.response_time %></strong>&nbsp;ms
+          </td>
+          <td class="align-middle small text-muted"><%= pt.created_at %></td>
+          <td class="align-middle small">
+            <a data-toggle="collapse" href="#collapseExample<%=index%>" aria-expanded="false" class="text-muted">
+              <%= pt.signature.truncate(18) %>
+            </a>
+            <div class="collapse word-break" id="collapseExample<%=index%>">
+              <%= pt.signature %>
+            </div>
+
+          </td>
+          <td class="align-middle">
+            <%= transaction_type_icon(pt.transaction_type).html_safe %>&nbsp;<%= pt.transaction_type %></td>
+          <td class="align-middle text-muted"><%= pt.user.username %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
