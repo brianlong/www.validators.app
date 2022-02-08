@@ -39,8 +39,8 @@ class StakeLogicEmptyResponsesTest < ActiveSupport::TestCase
   end
 
   test "get_rewards \
-    when response is empty \
-    should raise error" do
+       when response is empty \
+       should raise error" do
     stake_pool = create(:stake_pool)
     validator = create(:validator)
     validator2 = create(:validator)
