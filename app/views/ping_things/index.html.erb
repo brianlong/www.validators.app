@@ -1,0 +1,30 @@
+<h1 class="page-header"><%= params[:network].capitalize %> Ping Thing</h1>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <table class='table mb-0'>
+        <thead>
+          <tr>
+            <th>Created At</th>
+            <th>Time</th>
+            <th>Signature</th>
+            <th>Transaction Type</th>
+            <th>Posted by</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @ping_things.each do |pt| %>
+            <tr>
+              <td><%= pt.created_at %></td>
+              <td><%= pt.response_time %> ms</td>
+              <td><%= pt.signature[0..10] + "..."%></td>
+              <td><%= pt.transaction_type %></td>
+              <td><%= pt.user.username %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
