@@ -16,7 +16,7 @@ module StakeLogic::ApyHelper
   # returns reward from the account minus stake pool fee
   def reward_with_fee(manager_fee, rewards)
     return rewards unless manager_fee
-    return rewards - rewards * (manager_fee / 100)
+    rewards - rewards * (manager_fee / 100)
   end
 
   # returns APY for a single account or nil
