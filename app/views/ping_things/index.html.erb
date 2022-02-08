@@ -3,33 +3,42 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card mb-4">
-      <table class='table mb-0'>
-        <thead>
+      <div class="table-responsive-md">
+        <table class='table mb-0'>
+          <thead>
           <tr>
-            <th class="align-middle">Created At</th>
-            <th class="align-middle">Time</th>
-            <th class="align-middle">Signature</th>
-            <th class="align-middle">Transaction Type</th>
-            <th class="align-middle">Posted by</th>
+            <th class="align-middle column-md">Created At</th>
+            <th class="align-middle column-sm">Time</th>
+            <th class="align-middle column-lg">Signature</th>
+            <th class="align-middle column-lg">Transaction Type</th>
+            <th class="align-middle column-md">Posted by</th>
           </tr>
-        </thead>
-        <tbody>
-          <% @ping_things.each do |pt| %>
+          </thead>
+
+          <tbody>
+          <% @ping_things.each.with_index do |pt, index| %>
             <tr>
               <td class="align-middle small text-muted"><%= pt.created_at %></td>
               <td class="align-middle">
                 <strong class="text-success h6"><%= pt.response_time %></strong>&nbsp;ms
               </td>
               <td class="align-middle small text-muted">
-                <%= pt.signature[0..15] + "..."%>
+                <a data-toggle="collapse" href="#collapseExample<%=index%>" aria-expanded="false" class="base-color">
+                  <%= pt.signature.truncate(15) %>
+                </a>
+                <div class="collapse word-break" id="collapseExample<%=index%>">
+                  <%= pt.signature %>
+                </div>
+
               </td>
               <td class="align-middle">
                 <%= transaction_type_icon(pt.transaction_type).html_safe %>&nbsp;<%= pt.transaction_type %></td>
               <td class="align-middle text-muted"><%= pt.user.username %></td>
             </tr>
           <% end %>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
