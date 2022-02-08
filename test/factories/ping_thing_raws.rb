@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :ping_thing_raw do
     token { "token" }
+    api_token { "api_token" }
     raw_data { 
       {
         amount: rand(1..100),

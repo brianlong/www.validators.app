@@ -5,20 +5,56 @@ class PingThingTest < ActiveSupport::TestCase
     @user = create(:user)
   end
 
-  test "attributes_from_raw should return correct attributes" do
-    raw = {
+  test "create with correct data should succeed" do
+    assert PingThing.create(
       amount: "1",
-      time: "234",
+      response_time: "234",
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
-      transaction_type: "transfer"
-    }.to_json
+      transaction_type: "transfer",
+      token: 'token',
+      user_id: @user.id
+    )
+  end
 
-    token = @user.api_token
-    params = PingThing.attributes_from_raw(raw, token)
+  test "create with no user should return error" do
+    pt = PingThing.create(
+      amount: "1",
+      response_time: "234",
+      signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
+      transaction_type: "transfer",
+      token: 'token'
+    )
 
-    assert params[:amount].is_a? Integer
-    assert params[:response_time].is_a? Integer
-    refute params[:signature].blank?
-    refute params[:transaction_type].blank?
+    refute pt.valid?
+    assert_equal ["User must exist", "User can't be blank"], pt.errors.full_messages
+  end
+
+  test "create with no required data should return error" do
+    pt = PingThing.create(
+      amount: "1",
+      transaction_type: "transfer",
+      user_id: @user.id
+    )
+
+    errors = pt.errors.full_messages
+
+    refute pt.valid?
+    assert errors.include? "Token can't be blank"
+    assert errors.include? "Response time can't be blank"
+    assert errors.include? "Signature can't be blank"
+  end
+
+  test "create with too short transaction_type should return error" do
+    pt = PingThing.create(
+      amount: "1",
+      response_time: "234",
+      signature: "5zxrAiJ",
+      transaction_type: "transfer",
+      token: 'token',
+      user_id: @user.id
+    )
+
+    refute pt.valid?
+    assert_equal ["Signature is too short (minimum is 64 characters)"], pt.errors.full_messages
   end
 end

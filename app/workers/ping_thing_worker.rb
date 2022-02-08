@@ -2,8 +2,10 @@ class PingThingWorker
   include Sidekiq::Worker
 
   def perform(args = {})
-    PingThingRaw.first(50).each do |raw|
-      PingThing.create_from_raw(JSON.parse(raw.raw_data)) rescue nil
+    PingThingRaw.first(100).each do |raw|
+      params = raw.attributes_from_raw
+      user = User.find_by(api_token: raw.api_token)
+      PingThing.create(params.merge(user: user, token: raw.token))
       raw.delete
     end
   end

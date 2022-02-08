@@ -3,8 +3,13 @@ module Api
     class PingThingController < BaseController
       
       def create
-        PingThingRaw.create(raw_data: ping_thing_params.to_json, token: params[:token])
-        render json: {status: 'ok'}, status: :ok
+        api_token = request.headers["Token"]
+        PingThingRaw.create(
+          raw_data: ping_thing_params.to_json,
+          token: params[:token],
+          api_token: api_token
+        )
+        render json: {status: "ok"}, status: :ok
       end
 
       private

@@ -67,7 +67,8 @@ every 10.minutes do
 end
 
 every 1.minute do
-  ruby_script 'add_current_epoch.rb'
+  ruby_script "add_current_epoch.rb"
+  runner "PingThingWorker.perform_async"
 end
 
 if environment == 'production'
