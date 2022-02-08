@@ -239,8 +239,6 @@ module StakeLogic
           rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
           credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
 
-          next unless credits_diff > 0
-
           apy = calculate_apy(credits_diff, rewards, num_of_epochs)
         end
         acc.update(apy: apy)
