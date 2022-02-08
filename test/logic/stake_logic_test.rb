@@ -256,7 +256,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 12.5502, acc.apy
   end
 
-  test "calculate_apy_for_accounts should return nil apy if there are no rewards" do
+  test "calculate_apy_for_accounts returns nil apy if there are no rewards" do
     create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
     create(:epoch_wall_clock, network: "testnet", epoch: 2)
 
