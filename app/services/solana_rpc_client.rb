@@ -4,7 +4,7 @@ class SolanaRpcClient
   attr_reader :cluster
 
   # Usage:
-  # client  = SolanaRpcClient.new(cluster: 'custom_cluster', use_token: boolean) # your custom cluster
+  # client  = SolanaRpcClient.new(cluster: 'custom_cluster') # your custom cluster
   # default = SolanaRpcClient.new.default_client # uses cluster from initializers/solana_rpc_ruby
   # testnet = SolanaRpcClient.new.testnet_client # uses testnet client
   # mainnet = SolanaRpcClient.new.mainnet_client # uses mainnet client
@@ -12,11 +12,8 @@ class SolanaRpcClient
   # mainnet.cluster # returns currently used cluster
   # mainnet.id # returns request id
 
-  def initialize(cluster: nil, use_token: false)
-    token = Rails.application.credentials.dig(:solana, :rpc_token)
-    cluster_url = use_token ? "#{cluster}/#{token}" : cluster
-
-    @cluster = cluster_url
+  def initialize(cluster: nil)
+    @cluster = cluster
   end
 
   def client

@@ -33,7 +33,7 @@ module StakeLogic
       reduced_stake_accounts = []
 
       StakePool.where(network: p.payload[:network]).each do |pool|
-        pool_stake_acc = stake_accounts.select do |sa| 
+        pool_stake_acc = stake_accounts.select do |sa|
           sa["withdrawer"] == pool.authority || sa["staker"] == pool.authority
         end
 
@@ -87,7 +87,7 @@ module StakeLogic
           network: p.payload[:network],
           account: acc['delegatedVoteAccountAddress']
         )
-        
+
         validator_id = vote_account ? vote_account.validator.id : nil
 
         StakeAccount.find_or_initialize_by(
@@ -124,7 +124,7 @@ module StakeLogic
   def assign_stake_pools
     lambda do |p|
       return p unless p.code == 200
-      
+
       stake_pools = StakePool.where(network: p.payload[:network])
 
       stake_pools.each do |pool|
@@ -178,7 +178,7 @@ module StakeLogic
       StakePool.transaction do
         p.payload[:stake_pools].each(&:save)
       end
-      
+
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from update_validator_stats", e)

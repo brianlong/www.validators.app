@@ -195,11 +195,19 @@
       <h4 class="h5">APY</h4>
       <p>
         <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the average APY of
-        all validators reduced by manager fee. <br />
-        APY of the validator is calculated based on rewards from the last epoch as follows:
+        all validators reduced by pool <strong>manager fee</strong>. <br />
+        APY of the validator is calculated as follows:
+      </p>
+      <p>
+        <strong> ((1 + rewards_percent) ^ number_of_epochs_per_year) - 1 </strong>
+      </p>
+      <p>
+        Where number_of_epochs_per_year is calculated as follows:
+        <strong>seconds_in_year / duration_of_last_epoch_in_seconds</strong><br />
+        This gives the number of epochs in a year assuming all epochs were as long as the last epoch.
       </p>
       <p class="mb-5">
-        <strong> ((1 + rewards_percent) ^ number_of_epochs_per_year) - 1 </strong>
+        And <strong>rewards_percent</strong> is the interest rate of validator, based on the reward from the last epoch.
       </p>
 
       <h4 class="h5">Avg Skipped Slot</h4>
