@@ -223,10 +223,12 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       info_pubkey = 'Va1idator1nfo111111111111111111111111111111'
-
       data = {}
+
       p.payload[:program_accounts].map do |account|
         begin
+          next unless account.is_a?(Hash)
+
           data[account['pubkey']] = account.dig('account', 'data', 'parsed', 'info', 'keys')
         rescue TypeError => e
           # Sometimes value of 'parsed' key is an Array

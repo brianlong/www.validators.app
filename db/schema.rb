@@ -362,6 +362,8 @@ ActiveRecord::Schema.define(version: 2022_02_09_162927) do
     t.integer "average_lifetime"
     t.float "average_score"
     t.float "average_apy"
+    t.float "withdrawal_fee"
+    t.float "deposit_fee"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
