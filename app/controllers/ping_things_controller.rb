@@ -1,3 +1,5 @@
+#frozen_string_literal: true
+
 class PingThingsController < ApplicationController
   def index
     @ping_things = PingThing.where(network: params[:network])

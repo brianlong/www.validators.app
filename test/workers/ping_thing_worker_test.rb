@@ -1,4 +1,6 @@
 require 'test_helper'
+#frozen_string_literal: true
+
 require 'sidekiq/testing'
 
 class PingThingWorkerTest < ActiveSupport::TestCase
