@@ -15,7 +15,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     }
   end
 
-  test "request without token should return error" do
+  test "request without token returns error" do
     post api_v1_ping_thing_path(token: 'token', network: 'testnet')
     assert_response 401
     expected_response = { "error" => "Unauthorized" }
