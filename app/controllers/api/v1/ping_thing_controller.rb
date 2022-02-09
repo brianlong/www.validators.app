@@ -1,6 +1,6 @@
 module Api
   module V1
-    class PingThingController < BaseController
+    class PingThingsController < BaseController
       
       def create
         api_token = request.headers["Token"]
