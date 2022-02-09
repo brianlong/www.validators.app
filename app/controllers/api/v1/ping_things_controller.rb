@@ -10,9 +10,9 @@ module Api
           network: params[:network]
         )
         if ping_thing.save
-          render json: { status: "ok" }, status: :created
+          render json: { status: "created" }, status: :created
         else
-          render json: ping_thing.errors.to_json, status: 400
+          render json: ping_thing.errors.to_json, status: :bad_request
         end
       end
 

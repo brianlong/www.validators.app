@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PingThingValidationServiceTest < ActiveSupport::TestCase
+class ProcessPingThingsServiceTest < ActiveSupport::TestCase
   setup do
     @user = create(:user)
   end
@@ -13,7 +13,7 @@ class PingThingValidationServiceTest < ActiveSupport::TestCase
       create(:ping_thing_raw, api_token: @user.api_token)
     end
 
-    PingThingValidationService.new(records_count: 10).call
+    ProcessPingThingsService.new(records_count: 10).call
 
     assert PingThingRaw.all.blank?
     assert 10, PingThing.count
@@ -28,7 +28,7 @@ class PingThingValidationServiceTest < ActiveSupport::TestCase
       create(:ping_thing_raw, api_token: nil)
     end
 
-    PingThingValidationService.new(records_count: 10).call
+    ProcessPingThingsService.new(records_count: 10).call
 
     assert PingThingRaw.all.blank?
     refute PingThing.exists?
@@ -38,6 +38,6 @@ class PingThingValidationServiceTest < ActiveSupport::TestCase
         when there is no raw data \
         should not return error' do
 
-    assert PingThingValidationService.new(records_count: 10).call
+    assert ProcessPingThingsService.new(records_count: 10).call
   end
 end

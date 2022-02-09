@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PingThingValidationService
+class ProcessPingThingsService
 
   def initialize(records_count: 100)
     @records_count = records_count
@@ -27,6 +27,6 @@ class PingThingValidationService
   private
 
   def records_to_process
-    @records_to_process ||= PingThingRaw.first(@records_count)
+    PingThingRaw.first(@records_count)
   end
 end
