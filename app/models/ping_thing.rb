@@ -14,7 +14,9 @@
 #
 # Indexes
 #
-#  index_ping_things_on_user_id  (user_id)
+#  index_ping_things_on_network_and_transaction_type  (network,transaction_type)
+#  index_ping_things_on_network_and_user_id           (network,user_id)
+#  index_ping_things_on_user_id                       (user_id)
 #
 # Foreign Keys
 #
