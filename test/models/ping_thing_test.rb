@@ -8,7 +8,6 @@ class PingThingTest < ActiveSupport::TestCase
       response_time: "234",
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
       transaction_type: "transfer",
-      token: 'token',
       network: 'testnet',
       user_id: @user.id
     }
@@ -26,12 +25,11 @@ class PingThingTest < ActiveSupport::TestCase
   end
 
   test "create with no required data should return error" do
-    pt = PingThing.create @params.except(:token, :response_time, :signature, :network)
+    pt = PingThing.create @params.except(:response_time, :signature, :network)
 
     errors = pt.errors.full_messages
 
     refute pt.valid?
-    assert errors.include? "Token can't be blank"
     assert errors.include? "Response time can't be blank"
     assert errors.include? "Signature can't be blank"
     assert errors.include? "Network can't be blank"

@@ -7,7 +7,6 @@
 #  network          :string(191)
 #  response_time    :integer
 #  signature        :string(191)
-#  token            :string(191)
 #  transaction_type :string(191)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -25,7 +24,7 @@ class PingThing < ApplicationRecord
 
   belongs_to :user
 
-  validates_presence_of :user_id, :response_time, :signature, :token, :network
+  validates_presence_of :user_id, :response_time, :signature, :network
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
 

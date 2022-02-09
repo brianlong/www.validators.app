@@ -13,7 +13,6 @@ class PingThingValidationService
 
       params.merge!(
         user: user,
-        token: raw.token,
         network: raw.network,
         created_at: raw.created_at
       )

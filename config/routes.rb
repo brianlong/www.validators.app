@@ -100,7 +100,7 @@ Rails.application.routes.draw do
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
-  get "ping-things", to: "ping_things#index", as: "ping_things"
+  get "ping-thing", to: "ping_things#index", as: "ping_things"
 
   # Default root path
   root to: 'public#index'
@@ -138,7 +138,7 @@ Rails.application.routes.draw do
       # api_v1_ping_times GET /api/v1/ping_times
       get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
 
-      post 'ping-things/:network/:token', to: 'ping_things#create', as: 'ping_things'
+      post 'ping-things/:network', to: 'ping_things#create', as: 'ping_things'
     end
   end
 end

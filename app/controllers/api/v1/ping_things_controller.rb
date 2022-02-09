@@ -6,7 +6,6 @@ module Api
         api_token = request.headers["Token"]
         ping_thing = PingThingRaw.new(
           raw_data: ping_thing_params.to_json,
-          token: params[:token],
           api_token: api_token,
           network: params[:network]
         )

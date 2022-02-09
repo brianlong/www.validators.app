@@ -16,7 +16,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "request without token returns error" do
-    post api_v1_ping_things_path(token: 'token', network: 'testnet')
+    post api_v1_ping_things_path(network: 'testnet')
     assert_response 401
     expected_response = { "error" => "Unauthorized" }
 
@@ -25,7 +25,6 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
   test "request with token should return 200 and save the data" do
     post api_v1_ping_things_path(
-      token: @user.api_token,
       network: 'testnet'
     ), headers: { "Token" => @user.api_token }, params: @params_sample
     assert_response 201
@@ -37,7 +36,6 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
   test "request with wrong data length should return 400 error" do
     post api_v1_ping_things_path(
-      token: @user.api_token,
       network: 'testnet'
     ), headers: { "Token" => @user.api_token }, params: {}
     assert_response 400
