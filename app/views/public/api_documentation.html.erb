@@ -18,6 +18,7 @@
   <li><a href="#commission-change-index">Commission Change Index</a></li>
   <li><a href="#stake-pools">Stake Pools</a></li>
   <li><a href="#stake-accounts">Stake Accounts</a></li>
+  <li><a href="#ping-thing">Ping Thing</a></li>
   <li><a href="#notes">Notes</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
 </ul>
@@ -344,6 +345,25 @@
       ...
     }
     </pre>
+  </div>
+</div>
+
+<hr />
+
+<h4 id="ping-thing">Ping Thing</h4>
+<div class="row">
+  <div class="col-sm-12">
+    <p>The ping thing endpoint allows you to push information about transaction times.</p>
+    <p>Request:</p>
+    <pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"amount": "NN", "time": "NN", "signature": "signature", "transaction_type": "transfer"}' 
+    https://validators.app/api/v1/ping-thing/:network</pre>
+    <p>Parameters:</p>
+    <p><strong>`amount: NN`</strong> number of lamports transfered</p>
+    <p><strong>`time: NN`</strong> time of transaction in miliseconds</p>
+    <p><strong>`signature: string`</strong> transaction signature</p>
+    <p><strong>`transaction_type: [transfer | mango]`</strong> type of transaction</p>
+    <p>Response:</p>
+    <pre>{"status":"ok"}</pre>
   </div>
 </div>
 

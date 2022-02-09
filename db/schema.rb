@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_31_114027) do
+ActiveRecord::Schema.define(version: 2022_02_09_162927) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -203,6 +203,28 @@ ActiveRecord::Schema.define(version: 2022_01_31_114027) do
     t.string "state_encrypted_iv"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "raw_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "api_token"
+    t.string "network"
+  end
+
+  create_table "ping_things", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "amount"
+    t.string "signature"
+    t.integer "response_time"
+    t.string "transaction_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
+    t.index ["network", "transaction_type"], name: "index_ping_things_on_network_and_transaction_type"
+    t.index ["network", "user_id"], name: "index_ping_things_on_network_and_user_id"
+    t.index ["user_id"], name: "index_ping_things_on_user_id"
   end
 
   create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -542,6 +564,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_114027) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
+  add_foreign_key "ping_things", "users"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
