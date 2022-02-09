@@ -12,7 +12,7 @@
                :key="pool.id"
                href="#"
                title="Filter by Stake Pool"
-               @click.prevent="filter_by_withdrawer(pool.authority); selected_pool = pool"
+               @click.prevent="filter_by_withdrawer(pool)"
             >
               <img class="img-link w-100 px-5 px-sm-3 px-md-1 px-lg-3 px-xl-4 py-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
             </a>
@@ -54,7 +54,10 @@
 
     <!-- Stake pools overview -->
     <div class="col-12 mb-4" v-if="!selected_pool && !is_loading_stake_pools">
-      <stake-pools-overview :stake_pools="stake_pools" />
+      <stake-pools-overview
+        :stake_pools="stake_pools"
+        @filter_by_withdrawer="filter_by_withdrawer"
+      />
     </div>
 
     <!-- Stake pool stats -->
@@ -135,8 +138,6 @@
             </tr>
           </thead>
           <stake-account-row
-            @filter_by_staker="filter_by_staker"
-            @filter_by_withdrawer="filter_by_withdrawer"
             v-for="(sa, index) in stake_accounts"
             :key="sa.id"
             :stake_accounts="sa"
@@ -186,6 +187,16 @@
         Commission that stake pool substracts from the total profit to maintain their operation.
       </p>
 
+      <h4 class="h5">Deposit Fee</h4>
+      <p class="mb-5">
+        Fee paid while depositing new stake to the stake pool.
+      </p>
+
+      <h4 class="h5">Withdrawal Fee</h4>
+      <p class="mb-5">
+        Fee paid while withdrawing any amount of stake from the stake pool.
+      </p>
+
       <h4 class="h5">Avg Validators Fee</h4>
       <p class="mb-5">
         Average commission of all the validators used by the stake pool. See
@@ -194,8 +205,8 @@
 
       <h4 class="h5">APY</h4>
       <p>
-        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the average APY of
-        all validators reduced by pool <strong>manager fee</strong>. <br />
+        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the weighted average of the APY's 
+        from all the validators reduced by the <strong>manager fee</strong>. Validators weight is proportional to the active_stake of the accounts.<br />
         APY of the validator is calculated as follows:
       </p>
       <p>
@@ -249,6 +260,8 @@
   import lidoImage from 'lido.png'
   import jpoolImage from 'jpool.png'
   import daopoolImage from 'daopool.png'
+
+  import debounce from 'lodash/debounce'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -337,7 +350,7 @@
       paginate: function(){
         this.refresh_results()
       },
-      refresh_results: function(){
+      refresh_results: debounce(function() {
         var ctx = this
 
         ctx.is_loading_stake_accounts = true
@@ -362,7 +375,7 @@
                ctx.current_epoch = response.data.current_epoch;
                ctx.is_loading_stake_accounts = false;
              })
-      },
+      }, 2000),
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
       },
@@ -378,8 +391,9 @@
       filter_by_staker: function(staker){
         this.filter_staker = staker
       },
-      filter_by_withdrawer: function(withdrawer){
-        this.filter_withdrawer = withdrawer
+      filter_by_withdrawer: function(pool){
+        this.filter_withdrawer = pool.authority
+        this.selected_pool = pool
       },
       reset_filters: function() {
         this.filter_withdrawer = null

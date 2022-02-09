@@ -39,14 +39,6 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       })
     }
   },
-  methods: {
-    filterByStaker: function(e) {
-      this.$emit('filter_by_staker', this.stake_account.staker);
-    },
-    filterByWithdrawer: function(e) {
-      this.$emit('filter_by_withdrawer', this.stake_account.withdrawer);
-    }
-  },
   template: `
     <tbody>
       <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
@@ -74,13 +66,11 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
                 <br />
                 <strong class="d-inline-block d-lg-none">Staker:&nbsp;&nbsp;</strong>{{ stake_account.staker }}
-                <!--<a href="#" title="Filter by staker" @click.prevent="filterByStaker">{{ stake_account.staker }}</a>-->
               </td>
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Withdrawer:&nbsp;&nbsp;</strong>{{ stake_account.pool_name }}
                 <br />
                 {{ stake_account.withdrawer }}
-                <!--<a href="#" title="Filter by withdrawer" @click.prevent="filterByWithdrawer">{{ stake_account.withdrawer }}</a>-->
               </td>
               <td>
                 <strong class="d-inline-block d-lg-none">Stake:&nbsp;&nbsp;</strong>
