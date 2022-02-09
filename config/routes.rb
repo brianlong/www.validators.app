@@ -138,7 +138,7 @@ Rails.application.routes.draw do
       # api_v1_ping_times GET /api/v1/ping_times
       get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
 
-      post 'ping-things/:network', to: 'ping_things#create', as: 'ping_things'
+      post 'ping-thing/:network', to: 'ping_things#create', as: 'ping_things'
     end
   end
 end
