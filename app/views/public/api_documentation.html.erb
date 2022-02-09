@@ -355,7 +355,7 @@
   <div class="col-sm-12">
     <p>The ping thing endpoint allows you to push information about transaction times.</p>
     <p>Request:</p>
-    <pre>curl -X POST -H "Token: secret-api-token" -d '{"amount": "NN", "time": "NN", "signature": "signature", "transaction_type": "transfer"}' 
+    <pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"amount": "NN", "time": "NN", "signature": "signature", "transaction_type": "transfer"}' 
     https://validators.app/api/v1/ping-thing/:network</pre>
     <p>Parameters:</p>
     <p><strong>`amount: NN`</strong> number of lamports transfered</p>
