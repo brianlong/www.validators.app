@@ -2,18 +2,6 @@ class PingThingWorker
   include Sidekiq::Worker
 
   def perform(args = {})
-    PingThingRaw.first(100).each do |raw|
-      params = raw.attributes_from_raw
-      user = User.find_by(api_token: raw.api_token)
-      PingThing.create(
-        params.merge(
-          user: user,
-          token: raw.token,
-          network: raw.network,
-          created_at: raw.created_at
-        )
-      )
-      raw.delete
-    end
+    PingThingValidationService.new(records_count: 100).call
   end
 end
