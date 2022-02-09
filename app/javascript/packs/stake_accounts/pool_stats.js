@@ -1,5 +1,13 @@
 import Vue from 'vue/dist/vue.esm'
 
+const DELEGATION_STRATEGY_URLS = {
+  "DAOPool": "https://monkedao.medium.com/daosol-the-next-step-in-decentralizing-solana-7519e3b2bded",
+  "Jpool": "https://docs.jpool.one/technical-stuff/staking-strategy",
+  "Marinade": "https://docs.marinade.finance/marinade-protocol/validators",
+  "Lido": "https://solana.foundation/stake-pools",
+  "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds"
+}
+
 var StakePoolStats = Vue.component('StakePoolStats', {
   props: {
     pool: {
@@ -11,8 +19,8 @@ var StakePoolStats = Vue.component('StakePoolStats', {
     return {}
   },
   methods: {
-    go_to_metrics() {
-      document.getElementById("metrics").scrollIntoView()
+    delegation_strategy_url() {
+      return DELEGATION_STRATEGY_URLS[this.pool.name]
     }
   },
   template: `
@@ -22,7 +30,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
           {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} Statistics
         </h3>
         <div class="text-center text-muted small mb-4">
-          <a href="#" @click.prevent="go_to_metrics()">See metrics explanation</a>
+          <a v-bind:href="delegation_strategy_url()" target="_blank">See delegation strategy</a>
         </div>
 
         <div class="row pl-lg-4 pl-xl-5">
