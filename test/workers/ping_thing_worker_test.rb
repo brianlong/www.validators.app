@@ -1,5 +1,5 @@
 require 'test_helper'
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 require 'sidekiq/testing'
 

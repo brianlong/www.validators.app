@@ -1,6 +1,6 @@
 require "test_helper"
 
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 class PingThingTest < ActiveSupport::TestCase
   setup do
