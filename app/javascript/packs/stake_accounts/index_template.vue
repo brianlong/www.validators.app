@@ -207,8 +207,8 @@
 
       <h4 class="h5">APY</h4>
       <p>
-        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the average APY of
-        all validators reduced by pool <strong>manager fee</strong>. <br />
+        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the weighted average of the APY's 
+        from all the validators reduced by the <strong>manager fee</strong>. Validators weight is proportional to the active_stake of the accounts.<br />
         APY of the validator is calculated as follows:
       </p>
       <p>
