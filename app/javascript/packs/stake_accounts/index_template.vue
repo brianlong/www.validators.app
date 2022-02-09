@@ -250,7 +250,7 @@
   import jpoolImage from 'jpool.png'
   import daopoolImage from 'daopool.png'
 
-  import _ from 'lodash'
+  import debounce from 'lodash/debounce'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -339,7 +339,7 @@
       paginate: function(){
         this.refresh_results()
       },
-      refresh_results: _.debounce(function() {
+      refresh_results: debounce(function() {
         var ctx = this
 
         ctx.is_loading_stake_accounts = true
