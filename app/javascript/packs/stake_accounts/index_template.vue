@@ -261,6 +261,8 @@
   import jpoolImage from 'jpool.png'
   import daopoolImage from 'daopool.png'
 
+  import debounce from 'lodash/debounce'
+
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
@@ -348,7 +350,7 @@
       paginate: function(){
         this.refresh_results()
       },
-      refresh_results: function(){
+      refresh_results: debounce(function() {
         var ctx = this
 
         ctx.is_loading_stake_accounts = true
@@ -373,7 +375,7 @@
                ctx.current_epoch = response.data.current_epoch;
                ctx.is_loading_stake_accounts = false;
              })
-      },
+      }, 2000),
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
       },
