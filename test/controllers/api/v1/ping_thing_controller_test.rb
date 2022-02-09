@@ -28,10 +28,21 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
       token: @user.api_token,
       network: 'testnet'
     ), headers: { "Token" => @user.api_token }, params: @params_sample
-    assert_response 200
+    assert_response 201
     expected_response = { "status" => "ok" }
 
     assert_equal expected_response, response_to_json(@response.body)
     assert_equal @params_sample, JSON.parse(PingThingRaw.last.raw_data).symbolize_keys
+  end
+
+  test "request with wrong data length should return 400 error" do
+    post api_v1_ping_thing_path(
+      token: @user.api_token,
+      network: 'testnet'
+    ), headers: { "Token" => @user.api_token }, params: {}
+    assert_response 400
+    expected_response = {"base"=>["Provided data length is not valid"]}
+
+    assert_equal expected_response, response_to_json(@response.body)
   end
 end

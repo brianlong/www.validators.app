@@ -32,10 +32,10 @@ class PingThingWorkerTest < ActiveSupport::TestCase
     end
 
     Sidekiq::Testing.inline! do
-    PingThingWorker.perform_async
+      PingThingWorker.perform_async
 
-    assert PingThingRaw.all.blank?
-    refute PingThing.exists?
+      assert PingThingRaw.all.blank?
+      refute PingThing.exists?
     end
   end
 

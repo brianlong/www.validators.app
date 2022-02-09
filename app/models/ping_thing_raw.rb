@@ -12,15 +12,16 @@
 #
 class PingThingRaw < ApplicationRecord
 
-  POSSIBLE_TRANSACTION_TYPES = ['transfer'] #TODO Add transaction types
+  validate :raw_data_size
+  POSSIBLE_TRANSACTION_TYPES = %w(transfer mango).freeze #TODO Add transaction types
 
   def attributes_from_raw
     params = JSON.parse(raw_data).symbolize_keys
     transaction_type = if params[:transaction_type].in? POSSIBLE_TRANSACTION_TYPES
-      params[:transaction_type]
-    else
-      nil
-    end
+                        params[:transaction_type]
+                      else
+                        nil
+                      end
 
     {
       amount: params[:amount].to_i,
@@ -28,5 +29,12 @@ class PingThingRaw < ApplicationRecord
       signature: params[:signature],
       transaction_type: transaction_type
     }
+  end
+
+  private
+
+  def raw_data_size
+    errors.add :base, "Provided data length is not valid" \
+      unless raw_data.size.between? 20, 300
   end
 end

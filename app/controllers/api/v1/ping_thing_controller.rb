@@ -4,13 +4,17 @@ module Api
       
       def create
         api_token = request.headers["Token"]
-        PingThingRaw.create(
+        ping_thing = PingThingRaw.new(
           raw_data: ping_thing_params.to_json,
           token: params[:token],
           api_token: api_token,
           network: params[:network]
         )
-        render json: {status: "ok"}, status: :ok
+        if ping_thing.save
+          render json: { status: "ok" }, status: :created
+        else
+          render json: ping_thing.errors.to_json, status: 400
+        end
       end
 
       private
