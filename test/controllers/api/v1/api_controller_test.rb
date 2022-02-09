@@ -101,7 +101,12 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
-    create(:ip, address: validator.score.ip_address)
+    create(
+      :ip,
+      address: validator.score.ip_address,
+      location_latitude: 48.8582,
+      location_longitude: 2.3387
+    )
 
     get api_v1_validators_url(network: "testnet"),
         headers: { "Token" => @user.api_token }
@@ -149,10 +154,9 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_nil validator_with_all_data["ping_time"]
 
     # IP
-    assert_nil validator_with_all_data["address"]
     assert_equal 0, validator_with_all_data["autonomous_system_number"]
-    assert_nil validator_with_all_data["latitude"]
-    assert_nil validator_with_all_data["longitude"]
+    assert_equal "48.8582", validator_with_all_data["latitude"]
+    assert_equal "2.3387", validator_with_all_data["longitude"]
 
     # Validator history
     assert_equal 100, validator_with_all_data["epoch_credits"]
