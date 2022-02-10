@@ -2,13 +2,14 @@
 
 <div class="card mb-4">
   <div class="card-content">
-    <%= render 'validators/spark_line_chart',
-               chart_name: "spark_line_response_times",
-               vector: @ping_things.pluck(:response_time).reverse,
+    <%= render 'bubble_chart',
+               chart_name: "response_times_chart",
+               vector: @ping_things_array_for_chart,
                line_color: SPARK_LINE_2,
-               fill_color: SPARK_LINE_2_TRANSPARENT,
+               fill_color: SPARK_LINE_2,
                label: 'Response Time (ms)',
-               y_axis_desc: ''
+               y_axis_desc: '',
+               x_axis_desc: "Last #{@ping_things_count} Observations"
     %>
   </div>
 </div>
