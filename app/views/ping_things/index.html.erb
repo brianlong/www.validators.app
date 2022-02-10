@@ -1,14 +1,13 @@
-<h1 class="page-header"><%= params[:network].capitalize %> Ping Thing</h1>
-
 <div class="card mb-4">
   <div class="card-content">
-    <%= render 'validators/spark_line_chart',
-               chart_name: "spark_line_response_times",
-               vector: @ping_things.pluck(:response_time).reverse,
+    <h3 class="card-heading mb-4"><%= params[:network].capitalize %> Ping Thing</h3>
+    <%= render 'scatter_chart',
+               chart_name: "scatter_chart_response_times",
+               vector: @ping_things_array_for_chart,
                line_color: SPARK_LINE_2,
                fill_color: SPARK_LINE_2_TRANSPARENT,
-               label: 'Response Time (ms)',
-               y_axis_desc: ''
+               y_axis_desc: 'Response Time (ms)',
+               x_axis_desc: "Last #{@ping_things_count} Observations"
     %>
   </div>
 </div>

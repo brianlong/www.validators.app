@@ -1,0 +1,71 @@
+<canvas id="<%= local_assigns[:chart_name] %>"></canvas>
+<script type="text/javascript">
+    var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'scatter',
+
+        // The data for our dataset
+        data: {
+            datasets: [
+                {
+                    data: <%= local_assigns[:vector] %>.map( (vector_element, index) => ({ x: index, y: vector_element }) ),
+                    backgroundColor: '<%= local_assigns[:fill_color] %>',
+                    borderColor: '<%= local_assigns[:line_color] %>',
+                }
+            ],
+        },
+
+        // Configuration options
+        options: {
+            legend: {
+                display: false,
+                labels: {
+                    fontColor: '<%= DARK_GREY %>'
+                },
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    ticks: { display: false },
+                    gridLines: { display: false },
+                    scaleLabel: {
+                        display: true,
+                        labelString: "<%= local_assigns[:x_axis_desc] ? local_assigns[:x_axis_desc] : 'X Axis Desc' %>",
+                        fontColor: '<%= DARK_GREY %>'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        //min: 0,
+                        padding: 10
+                    },
+                    gridLines: {
+                        display: true,
+                        zeroLineColor: '<%= CHART_LINE %>',
+                        color: '<%= CHART_LINE %>'
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: "<%= local_assigns[:y_axis_desc] ? local_assigns[:y_axis_desc] : 'Y Axis Desc' %>",
+                        fontColor: '<%= DARK_GREY %>',
+                        padding: 5
+                    }
+                }]
+            },
+            elements: {
+                point: {
+                    radius: 3
+                }
+            },
+            tooltips: {
+                displayColors: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return tooltipItem.yLabel.toString().concat(' ms');
+                    },
+                },
+            },
+        }
+    });
+</script>
