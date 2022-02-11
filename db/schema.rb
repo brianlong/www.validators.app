@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_11_121408) do
+ActiveRecord::Schema.define(version: 2022_02_11_160853) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -487,6 +487,11 @@ ActiveRecord::Schema.define(version: 2022_02_11_121408) do
     t.string "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "data_center_id"
+    t.boolean "is_overridden", default: false
+    t.string "traits_ip_address"
+    t.string "traits_network"
+    t.index ["data_center_id"], name: "index_validator_ips_on_data_center_id"
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
     t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
   end
@@ -586,6 +591,7 @@ ActiveRecord::Schema.define(version: 2022_02_11_121408) do
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
   add_foreign_key "validator_block_histories", "validators"
+  add_foreign_key "validator_ips", "data_centers"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
   add_foreign_key "vote_accounts", "validators"
