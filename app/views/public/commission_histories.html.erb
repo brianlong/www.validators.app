@@ -11,7 +11,6 @@
     of the rewards), and then lowers it again just after the new epoch. See our
     <%= link_to 'FAQ page', faq_path(anchor: 'choosing-validator') %> to learn more.
   </p>
-  <div class="text-danger">This feature is work-in-progress. Please use the chat widget below to notify us of problems.</div>
 </div>
 
 <% if @validator %>
@@ -25,7 +24,7 @@
               validator_url(network: params[:network], account: @validator.account),
               class: 'btn btn-sm btn-secondary' %>
 <% else %>
-  <div 
+  <div
     id='commission-histories-index-vue'
     network=<%= params[:network] %>
   >

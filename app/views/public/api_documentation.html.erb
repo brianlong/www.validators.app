@@ -355,13 +355,12 @@
   <div class="col-sm-12">
     <p>The ping thing endpoint allows you to push information about transaction times.</p>
     <p>Request:</p>
-    <pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"amount": "NN", "time": "NN", "signature": "signature", "transaction_type": "transfer"}' 
+    <pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"time": "NN", "signature": "signature", "transaction_type": "transfer"}'
     https://validators.app/api/v1/ping-thing/:network</pre>
     <p>Parameters:</p>
-    <p><strong>`amount: NN`</strong> number of lamports transfered</p>
-    <p><strong>`time: NN`</strong> time of transaction in miliseconds</p>
-    <p><strong>`signature: string`</strong> transaction signature</p>
-    <p><strong>`transaction_type: [transfer | mango]`</strong> type of transaction</p>
+    <p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
+    <p><strong>`signature: string`</strong> Transaction signature</p>
+    <p><strong>`transaction_type: string`</strong> A string to describe the type of transaction. e.g. 'transfer', 'defi-swap', or anything meaningful to the sender.</p>
     <p>Response:</p>
     <pre>{"status":"ok"}</pre>
   </div>
@@ -392,7 +391,3 @@
   <dt class="col-2 col-sm-1">500</dt>
   <dd class="col-10 col-sm-11">Server Error (Admin has been notified)</dd>
 </dl>
-
-
-
-
