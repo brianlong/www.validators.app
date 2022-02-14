@@ -228,7 +228,7 @@ module StakeLogic
         "get_inflation_reward",
         params: [lido_vote_accounts]
       )
-
+      puts lido_rewards
       raise NoResultsFromSolana.new('No results from `get_inflation_reward`') \
         if reward_info.blank? || lido_rewards.blank?
 
