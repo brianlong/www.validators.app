@@ -228,7 +228,6 @@ module StakeLogic
         "get_inflation_reward",
         params: [lido_vote_accounts]
       )
-      puts lido_rewards
       raise NoResultsFromSolana.new('No results from `get_inflation_reward`') \
         if reward_info.blank? || lido_rewards.blank?
 
@@ -266,6 +265,7 @@ module StakeLogic
       lido = StakePool.find_by(name: "Lido")
 
       val_accounts = lido.stake_accounts.map{ |sa| sa.validator.account}
+      puts val_accounts
 
       lido_histories = ValidatorHistory.select(
         "DISTINCT(account) account, active_stake"
@@ -274,6 +274,7 @@ module StakeLogic
         epoch: p.paylaod[:previous_epoch].epoch,
         account: val_accounts
       )
+      puts lido_histories
       Pipeline.new(200, p.payload.merge!(lido_histories: lido_histories))
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from get_validator_history_for_lido", e)
@@ -299,7 +300,6 @@ module StakeLogic
           else
             apy = calculate_apy(credits_diff, rewards, num_of_epochs)
           end
-          puts apy
         end
         acc.update(apy: apy)
       end
