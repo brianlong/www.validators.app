@@ -76,13 +76,27 @@ class PingThingTest < ActiveSupport::TestCase
   test "commitment_level raise argument error when wrong level is being assigned" do
     pt = build(:ping_thing, user_id: @user.id)
     
+    # string instead of integer
+    assert_raise ArgumentError do
+      pt.commitment_level = "0"
+    end
+
+    # Integer out of range
     assert_raise ArgumentError do
        pt.commitment_level = 3
     end
 
+    # Random string instead of valid commitment levels
     assert_raise ArgumentError do
       pt.commitment_level = "I am not valid :C"
-   end
+    end
+  end
+
+  test "commitment_level allows nils" do
+    pt = build(:ping_thing, user_id: @user.id, commitment_level: nil)
+    
+    assert_nil pt.commitment_level
+    assert pt.valid?
   end
 
   test "success field is true by default" do
