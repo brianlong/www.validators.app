@@ -20,9 +20,12 @@ class PingThingRaw < ApplicationRecord
 
     {
       amount: params[:amount].to_i,
+      application: params[:application],
+      commitment_level: params[:commitment_level],
       response_time: params[:time].to_i,
       signature: params[:signature],
-      transaction_type: params[:transaction_type]
+      transaction_type: params[:transaction_type],
+      success: params[:success]
     }
   end
 

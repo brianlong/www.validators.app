@@ -21,7 +21,15 @@ module Api
       private
 
       def ping_thing_params
-        params.permit(:amount, :time, :signature, :transaction_type)
+        params.permit(
+          :amount,
+          :application,
+          :commitment_level,
+          :signature,
+          :success,
+          :time,
+          :transaction_type
+        )
       end
     end
   end

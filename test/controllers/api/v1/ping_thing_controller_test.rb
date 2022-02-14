@@ -9,8 +9,11 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     @user = create(:user)
     @params_sample = {
       amount: "1",
-      time: "234",
+      application: 'mango',
+      commitment_level: "1",
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
+      success: "true",
+      time: "234",
       transaction_type: "transfer"
     }
   end
