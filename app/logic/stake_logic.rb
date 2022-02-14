@@ -249,6 +249,7 @@ module StakeLogic
 
   def assign_epochs
     lambda do |p|
+      return p unless p.code == 200
       current_epoch, previous_epoch = set_epochs(p.payload[:network])
 
       Pipeline.new(200, p.payload.merge!(
@@ -262,6 +263,7 @@ module StakeLogic
 
   def get_validator_history_for_lido
     lambda do |p|
+      return p unless p.code == 200
       lido = StakePool.find_by(name: "Lido")
 
       val_accounts = lido.stake_accounts.map{ |sa| sa.validator.account}
@@ -310,6 +312,7 @@ module StakeLogic
 
   def calculate_apy_for_pools
     lambda do |p|
+      return p unless p.code == 200
       p.payload[:stake_pools].each do |pool|
 
         # select single history for each pubkey from the previous epoch
