@@ -266,7 +266,12 @@ module StakeLogic
           rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
           credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
           puts credits_diff
-          apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+          if acc.stake_pool.name == "Lido"
+            active_stake = acc.validator.score.active_stake
+            apy = calculate_apy(credits_diff, rewards, num_of_epochs, active_stake)
+          else
+            apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+          end
           puts apy
         end
         puts "=============="
