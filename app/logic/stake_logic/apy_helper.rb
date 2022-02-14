@@ -27,6 +27,6 @@ module StakeLogic::ApyHelper
 
     apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
     puts apy
-    apy < 100 && apy > 0 ? apy.round(6) : nil
+    apy #< 100 && apy > 0 ? apy.round(6) : nil
   end
 end
