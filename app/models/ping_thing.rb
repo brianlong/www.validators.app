@@ -6,9 +6,12 @@
 #
 #  id               :bigint           not null, primary key
 #  amount           :bigint
+#  application      :string(191)
+#  commitment_level :integer
 #  network          :string(191)
 #  response_time    :integer
 #  signature        :string(191)
+#  success          :boolean          default(TRUE)
 #  transaction_type :string(191)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -25,11 +28,13 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class PingThing < ApplicationRecord
+  COMMITMENT_LEVELS = { processed: 0, confirmed: 1, finalized: 2 }
 
   belongs_to :user
+
+  enum commitment_level: COMMITMENT_LEVELS
 
   validates_presence_of :user_id, :response_time, :signature, :network
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
-
 end

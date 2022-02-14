@@ -44,4 +44,34 @@ class PingThingTest < ActiveSupport::TestCase
     refute pt.valid?
     assert_equal ["Signature is too short (minimum is 64 characters)"], pt.errors.full_messages
   end
+
+  test "commitment_level is being correctly assigned and returns correct values" do
+    pt = build(:ping_thing, user_id: @user.id)
+
+    pt.commitment_level = 0
+    assert pt.valid?
+    assert_equal 'processed', pt.commitment_level 
+
+    pt.commitment_level = 1
+    assert pt.valid?
+    assert_equal 'confirmed', pt.commitment_level 
+
+    pt.commitment_level = 2
+    assert pt.valid?
+    assert_equal 'finalized', pt.commitment_level
+  end
+
+  test "commitment_level raise argument error when wrong level is being assigned" do
+    pt = build(:ping_thing, user_id: @user.id)
+    
+    assert_raise ArgumentError do
+       pt.commitment_level = 3
+    end
+  end
+
+  test "success field is true by default" do
+    pt = PingThing.new
+
+    assert pt.success
+  end
 end
