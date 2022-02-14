@@ -216,14 +216,32 @@ module StakeLogic
         params: [stake_accounts.pluck(:stake_pubkey)]
       )
 
+      lido_stake_accounts = stake_accounts.joins(:stake_pool)
+                                          .where('stake_pools.name = ?', 'Lido')
+
+      lido_vote_accounts = lido_stake_accounts.map do |lsa|
+        lsa.validator.vote_accounts.last.account
+      end
+
+      lido_rewards = solana_client_request(
+        p.payload[:config_urls],
+        "get_inflation_reward",
+        params: [lido_vote_accounts]
+      )
+
       raise NoResultsFromSolana.new('No results from `get_inflation_reward`') \
-        if reward_info.blank?
+        if reward_info.blank? || lido_rewards.blank?
 
       account_rewards = {}
 
       stake_accounts.each_with_index do |sa, idx|
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
+
+      lido_stake_accounts.each_with_index do |sa, idx|
+        account_rewards[sa["stake_pubkey"]] = lido_rewards[idx]
+      end
+
       Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from get_rewards", e)
