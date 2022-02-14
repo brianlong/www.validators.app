@@ -259,13 +259,10 @@ module StakeLogic
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
         apy = nil
-        puts acc.stake_pool.name
-        puts p.payload[:account_rewards][acc.stake_pubkey]
         if p.payload[:account_rewards][acc.stake_pubkey]
 
           rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
           credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
-          puts credits_diff
           if acc.stake_pool.name == "Lido"
             active_stake = acc.validator.score.active_stake
             apy = calculate_apy(credits_diff, rewards, num_of_epochs, active_stake)
@@ -274,7 +271,6 @@ module StakeLogic
           end
           puts apy
         end
-        puts "=============="
         acc.update(apy: apy)
       end
 
@@ -302,7 +298,9 @@ module StakeLogic
         # sum of apy * stake
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
-
+          if sa.stake_pool.name == "Lido"
+            stake = sa.validator.vote_accounts.last.active_stake
+          end
           # we don't want to include accounts with no stake
           if stake && stake > 0 
             total_stake += stake
