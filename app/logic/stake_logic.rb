@@ -299,7 +299,7 @@ module StakeLogic
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
           if sa.stake_pool.name == "Lido"
-            stake = sa.validator.vote_accounts.last.active_stake
+            stake = sa.validator.score.active_stake
           end
           # we don't want to include accounts with no stake
           if stake && stake > 0 
