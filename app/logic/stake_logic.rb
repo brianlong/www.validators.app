@@ -271,8 +271,8 @@ module StakeLogic
       lido_histories = ValidatorHistory.select(
         "DISTINCT(account) account, active_stake"
       ).where(
-        network: p.paylaod[:network],
-        epoch: p.paylaod[:previous_epoch].epoch,
+        network: p.payload[:network],
+        epoch: p.payload[:previous_epoch].epoch,
         account: val_accounts
       )
       Pipeline.new(200, p.payload.merge!(lido_histories: lido_histories))
