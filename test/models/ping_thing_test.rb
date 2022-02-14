@@ -52,11 +52,23 @@ class PingThingTest < ActiveSupport::TestCase
     assert pt.valid?
     assert_equal 'processed', pt.commitment_level 
 
+    pt.commitment_level = 'processed'
+    assert pt.valid?
+    assert_equal 'processed', pt.commitment_level 
+
     pt.commitment_level = 1
+    assert pt.valid?
+    assert_equal 'confirmed', pt.commitment_level
+
+    pt.commitment_level = 'confirmed'
     assert pt.valid?
     assert_equal 'confirmed', pt.commitment_level 
 
     pt.commitment_level = 2
+    assert pt.valid?
+    assert_equal 'finalized', pt.commitment_level
+
+    pt.commitment_level = 'finalized'
     assert pt.valid?
     assert_equal 'finalized', pt.commitment_level
   end
@@ -67,6 +79,10 @@ class PingThingTest < ActiveSupport::TestCase
     assert_raise ArgumentError do
        pt.commitment_level = 3
     end
+
+    assert_raise ArgumentError do
+      pt.commitment_level = "I am not valid :C"
+   end
   end
 
   test "success field is true by default" do
