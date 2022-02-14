@@ -258,14 +258,18 @@ module StakeLogic
       num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
-        apy = nil  
+        apy = nil
+        puts acc.stake_pool.name
+        puts p.payload[:account_rewards][acc.stake_pubkey]
         if p.payload[:account_rewards][acc.stake_pubkey]
 
           rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
           credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
-
+          puts credits_diff
           apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+          puts apy
         end
+        puts "=============="
         acc.update(apy: apy)
       end
 
