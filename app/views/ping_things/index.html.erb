@@ -42,6 +42,7 @@
         <th class="align-middle column-sm">Time</th>
         <th class="align-middle column-lg">Created At</th>
         <th class="align-middle column-lg">Signature</th>
+        <th class="align-middle column-lg">Application</th>
         <th class="align-middle column-lg">Transaction Type</th>
         <th class="align-middle column-md">Posted by</th>
       </tr>
@@ -61,10 +62,11 @@
             <div class="collapse word-break" id="collapseExample<%=index%>">
               <%= pt.signature %>
             </div>
-
           </td>
+          <td class="align-middle">&nbsp;<%= pt.application %></td>
           <td class="align-middle">
-            <%= transaction_type_icon(pt.transaction_type).html_safe %>&nbsp;<%= pt.transaction_type %></td>
+            <%= transaction_type_icon(pt.transaction_type).html_safe %>&nbsp;<%= pt.transaction_type %>
+          </td>
           <td class="align-middle text-muted"><%= pt.user.username %></td>
         </tr>
       <% end %>
