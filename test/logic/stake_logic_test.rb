@@ -353,6 +353,53 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 12.5502, stake_pool.average_apy
   end
 
+  test "calculate_apy_for_pools should return correct average apy for lido" do
+    stake_pool = create(:stake_pool, network: "testnet", name: "Lido")
+    create(:validator_history, account: "lido_account", active_stake: 100)
+    val = create(:validator, account: "lido_account")
+
+    create(
+      :stake_account_history,
+      network: "testnet",
+      delegated_stake: 2893868758268,
+      epoch: 1,
+      stake_pubkey: "pubkey_123",
+      stake_pool_id: stake_pool.id
+    )
+
+    acc = create(
+      :stake_account,
+      network: "testnet",
+      delegated_stake: 2922232803431,
+      epoch: 2,
+      stake_pubkey: "pubkey_123",
+      stake_pool_id: stake_pool.id,
+      apy: 12.5502,
+      validator: val
+    )
+
+    @initial_payload.merge!(
+      stake_pools: [stake_pool],
+      previous_epoch: @previous_epoch,
+      account_rewards: {
+        "pubkey_123" => {
+          "amount": 2836404516,
+          "commission": 10,
+          "effectiveSlot": 113276257,
+          "epoch": 2,
+          "postBalance": 2922232803431
+        }
+      },
+      lido_histories: ValidatorHistory.all.select(:account, :active_stake)
+    )
+    p = Pipeline.new(200, @initial_payload)
+                .then(&calculate_apy_for_pools)
+    
+    acc.reload
+    assert_equal 200, p.code
+    assert_equal 12.5502, stake_pool.average_apy
+  end
+
   test "calculate_apy_for_pools returns nil if there's no stake" do
     stake_pool = create(:stake_pool, network: "testnet")
 
