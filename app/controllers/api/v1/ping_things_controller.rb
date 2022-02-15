@@ -46,7 +46,6 @@ module Api
         hash = {}
         hash.merge!(ping_thing.to_builder.attributes!)
         hash.merge!(ping_thing.user.to_builder.attributes!)
-        hash
       end
     end
   end
