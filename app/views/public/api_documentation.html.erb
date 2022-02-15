@@ -366,13 +366,8 @@ curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d
 </p>
 <p>Request:</p>
 <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/ping-things/:network'</pre>
-<p>Parameters:</p>
-<p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
-<p><strong>`signature: string`</strong> Transaction signature</p>
-<p>
-  <strong>`transaction_type: string`</strong> A string to describe the type of transaction. e.g. 'transfer', 'defi-swap',
-  'nft-mint', or anything meaningful to the sender.
-</p>
+<p>`limit=NN` will limit the results to NN entries. The default is 240. The maximum is 11_520.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/ping-things/:network?limit=10'</pre>
 <p>Response:</p>
 <pre>
 [

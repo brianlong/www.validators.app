@@ -5,18 +5,17 @@ module Api
     class PingThingsController < BaseController
 
       def index
-        # TODO add custom limit, default to 240
+        limit = [(index_params[:limit] || 240).to_i, 11520].min
         ping_things = PingThing.where(network: index_params[:network])
                                .includes(:user)
-                               .order(created_at: :desc)
-                               .first(240)
+                               .first(limit)
         json_result = ping_things.map { |pt| create_json_result(pt) }
         render json: json_result
       rescue ActionController::ParameterMissing
-        render json: { 'status' => 'Parameter Missing' }, status: 400
+        render json: { "status" => "Parameter Missing" }, status: 400
       rescue StandardError => e
         Appsignal.send_error(e)
-        render json: { 'status' => e.message }, status: 500
+        render json: { "status" => e.message }, status: 500
       end
 
       def create
@@ -36,7 +35,7 @@ module Api
       private
 
       def index_params
-        params.permit(:network)
+        params.permit(:network, :limit)
       end
 
       def ping_thing_params
