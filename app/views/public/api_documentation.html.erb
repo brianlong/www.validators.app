@@ -1,16 +1,16 @@
 <h1>API Documentation</h1>
-<div class='row'>
-  <div class="col-sm-12">
-    <p>
-      Our API provides several different endpoints to query the validators database. You must have a verified account in order to make requests against the JSON API. Your user account and an API token are used to secure this API. You can create a <%= link_to 'New Account', new_user_registration_path %> or <%= link_to 'Sign In', new_user_session_path %> to see your API token.
-    </p>
-  </div>
-</div>
+<p>
+  Our API provides several different endpoints to query the validators database. You must have a verified account
+  in order to make requests against the JSON API. Your user account and an API token are used to secure this API.
+  You can create a <%= link_to 'New Account', new_user_registration_path %> or
+  <%= link_to 'Sign In', new_user_session_path %> to see your API token.
+</p>
+
 
 <h3>Quick Reference</h3>
 <ul class="list-large list-no-bullets">
   <li><a href="#auhentication">Authentication</a></li>
-  <li><a href="#ping">Ping</a></li>
+  <li><a href="#ping">Server Ping</a></li>
   <li><a href="#validators-list">Validators List</a></li>
   <li><a href="#validator-detail">Validator Detail</a></li>
   <li><a href="#validator-block">Validator Block Production History</a></li>
@@ -18,55 +18,56 @@
   <li><a href="#commission-change-index">Commission Change Index</a></li>
   <li><a href="#stake-pools">Stake Pools</a></li>
   <li><a href="#stake-accounts">Stake Accounts</a></li>
-  <li><a href="#ping-thing">Ping Thing</a></li>
-  <li><a href="#notes">Notes</a></li>
+  <li><a href="#ping-thing">Ping Thing Post</a></li>
+  <li><a href="#ping-thing">Ping Thing List</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
+  <li><a href="#notes">Notes</a></li>
 </ul>
 
 <hr />
 
 <h3 id="auhentication">Authentication</h3>
-<div class="row">
-  <div class="col-sm-12">
-    <p>Pass your API token in as the Token header, like in this curl example:</p>
-    <pre>$ curl -H "Token: secret-api-token" https://www.validators.app/api/v1/ping.json</pre>
-    <p>Examples in this API guide are demonstrated using curl, but you can use an HTTP library of your choice. All responses are JSON.</p>
-  </div>
-</div>
+<p>Pass your API token in as the Token header, like in this curl example:</p>
+<pre>$ curl -H "Token: secret-api-token" https://www.validators.app/api/v1/ping.json</pre>
+<p>
+  Examples in this API guide are demonstrated using curl, but you can use an HTTP library of your choice.
+  All responses are JSON.
+</p>
 
 <hr />
 
-<h4 id="ping">Ping</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>The ping endpoint will allow you to test your connection to the server.</p>
-    <p>Request:</p>
-    <pre>$ curl -H "Token: secret-api-token" https://www.validators.app/api/v1/ping.json</pre>
-    <p>Response:</p>
-    <pre>{"answer":"pong"}</pre>
-  </div>
-</div>
+<h4 id="ping">Server Ping</h4>
+<p>The ping endpoint will allow you to test your connection to the server.</p>
+<p>Request:</p>
+<pre>$ curl -H "Token: secret-api-token" https://www.validators.app/api/v1/ping.json</pre>
+<p>Response:</p>
+<pre>{"answer":"pong"}</pre>
+
 
 <hr />
 
 <h4 id="validators-list">Validators List</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>The validators endpoint will return a list of validators for the requested network. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired.</p>
-    <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json'</pre>
-    <p>Parameter Options:</p>
-    <p>`order=[score, name, stage]` will sort the results by score descending, name, or stake.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score'</pre>
-    <p>`limit=NN` will limit the results to NN entries. The default is 9_999.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&limit=50'</pre>
-    <p>`page=NN` will return the results from passed page. Works best with limit param.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&page=1&limit=50'</pre>
-    <p>`q=query` will limit the results to entries containing query. The query value is compared against validator's name, account and score data center key.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&q=query'</pre>
-    <p>Response:</p>
-    <p>An Array of validators.</p>
-    <pre>
+<p>
+  The validators endpoint will return a list of validators for the requested network. In the example below,
+  replace `:network` with 'testnet' or 'mainnet' as desired.
+</p>
+<p>Request:</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json'</pre>
+<p>Parameter Options:</p>
+<p>`order=[score, name, stage]` will sort the results by score descending, name, or stake.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score'</pre>
+<p>`limit=NN` will limit the results to NN entries. The default is 9_999.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&limit=50'</pre>
+<p>`page=NN` will return the results from passed page. Works best with limit param.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&page=1&limit=50'</pre>
+<p>
+  `q=query` will limit the results to entries containing query. The query value is compared against validator's
+  name, account and score data center key.
+</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json?order=score&q=query'</pre>
+<p>Response:</p>
+<p>An Array of validators.</p>
+<pre>
 [
   {
     "network":"testnet",
@@ -105,23 +106,25 @@
   },
   ...
 ]
-    </pre>
-  </div>
-</div>
+</pre>
 
 <hr />
 
 <h4 id="validator-detail">Validator Detail</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>The validators endpoint will return a single validator for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.</p>
-    <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" https://www.validators.app/api/v1/validators/:network/:account.json</pre>
-    <p>Parameter Options:</p>
-    <p>`with_history=true` will return history fields for validator (root_distance_history, vote_distance_history, skipped_slot_history, skipped_vote_history, skipped_slot_moving_average_history, stake_concentration and software_version).</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json/:account.json?with_history=true'</pre>
-    <p>Response:</p>
-    <pre>
+<p>
+  The validators endpoint will return a single validator for the requested network and account. In the example
+  below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.
+</p>
+<p>Request:</p>
+<pre>curl -H "Token: secret-api-token" https://www.validators.app/api/v1/validators/:network/:account.json</pre>
+<p>Parameter Options:</p>
+<p>
+  `with_history=true` will return history fields for validator (root_distance_history, vote_distance_history,
+  skipped_slot_history, skipped_vote_history, skipped_slot_moving_average_history, stake_concentration and software_version).
+</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validators/:network.json/:account.json?with_history=true'</pre>
+<p>Response:</p>
+<pre>
 {
   "network":"testnet",
   "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
@@ -157,20 +160,20 @@
   "ping_time":"205.703",
   "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
 }
-    </pre>
-  </div>
-</div>
+</pre>
 
 <hr />
 
 <h4 id="validator-block">Validator Block Production History</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>The validator_block_history endpoint will return a history of block production stats for the requested network and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID. You can also include a `limit` parameter to request more or fewer datapoints. </p>
-    <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validator_block_history/:network/:account.json?limit=100'</pre>
-    <p>Response:</p>
-    <pre>
+<p>
+  The validator_block_history endpoint will return a history of block production stats for the requested network
+  and account. In the example below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account`
+  with the desired account ID. You can also include a `limit` parameter to request more or fewer datapoints.
+</p>
+<p>Request:</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/validator_block_history/:network/:account.json?limit=100'</pre>
+<p>Response:</p>
+<pre>
 [
   {
     "epoch":143,
@@ -183,204 +186,207 @@
   },
   ...
 ]
-    </pre>
-  </div>
-</div>
+</pre>
 
 <hr />
 
 <h4 id="epoch-index">Epoch Index</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>The Epoch endpoint will return all epoch data. Replace `:network` with 'testnet' or 'mainnet' as desired. </p>
-    <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network'</pre>
-    <p>Parameter Options:</p>
-    <p>`per=NN` number of records per page, defaults to 50</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?per=50'</pre>
-    <p>`page=NN` page number, defaults to 1</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?per=50&page=1'</pre>
-    <p>Response:</p>
-    <pre>
+<p>The Epoch endpoint will return all epoch data. Replace `:network` with 'testnet' or 'mainnet' as desired. </p>
+<p>Request:</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network'</pre>
+<p>Parameter Options:</p>
+<p>`per=NN` number of records per page, defaults to 50</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?per=50'</pre>
+<p>`page=NN` page number, defaults to 1</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network?per=50&page=1'</pre>
+<p>Response:</p>
+<pre>
+{
+  epochs: [
     {
-      epochs: [
-        {
-          "epoch": 169,
-          "starting_slot": 73008000,
-          "slots_in_epoch": 432000,
-          "network": "mainnet",
-          "created_at": "2021-04-12T10:03:52.401Z"
-        },
-        ...
-      ],
-      epochs_count: 169
-    }
-
-    </pre>
-  </div>
-</div>
+      "epoch": 169,
+      "starting_slot": 73008000,
+      "slots_in_epoch": 432000,
+      "network": "mainnet",
+      "created_at": "2021-04-12T10:03:52.401Z"
+    },
+    ...
+  ],
+  epochs_count: 169
+}
+</pre>
 
 <hr />
 
 <h4 id="commission-change-index">Commission Change Index</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>
-      The Commission Change endpoint will return all the changes in commission for a given period of time.
-      Replace `:network` with 'testnet' or 'mainnet' as desired.
-    </p>
-    <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network'</pre>
-    <p>Parameter Options:</p>
-    <p>`date_from=%year-%month-%dayT%hour:%minute:%second` beginning of a search period. Defaults to 30 days ago</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?date_from=2021-07-01T11:02:12'</pre>
-    <p>`date_to=%year-%month-%dayT%hour:%minute:%second` end of a search period. Defaults to now</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?date_to=2021-07-28T11:02:12'</pre>
+<p>
+  The Commission Change endpoint will return all the changes in commission for a given period of time.
+  Replace `:network` with 'testnet' or 'mainnet' as desired.
+</p>
+<p>Request:</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network'</pre>
+<p>Parameter Options:</p>
+<p>`date_from=%year-%month-%dayT%hour:%minute:%second` beginning of a search period. Defaults to 30 days ago</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?date_from=2021-07-01T11:02:12'</pre>
+<p>`date_to=%year-%month-%dayT%hour:%minute:%second` end of a search period. Defaults to now</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?date_to=2021-07-28T11:02:12'</pre>
 
-    <p>`per=NN` number of records per page. Defaults to 25</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?per=50'</pre>
-    <p>`page=NN` page number. Defaults to 1</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?page=2'</pre>
+<p>`per=NN` number of records per page. Defaults to 25</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?per=50'</pre>
+<p>`page=NN` page number. Defaults to 1</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?page=2'</pre>
 
-
-    <p>`query=%account-or-key` returns data only for validators matching by name, pubkey or vote account</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?query=123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY'</pre>
-    <p>Response:</p>
-    <pre>
-      [
-        {
-          "created_at": "2021-07-27T08:47:16.803Z",
-          "commission_before": 9.0,
-          "commission_after": 10.0,
-          "epoch": 213,
-          "network": "testnet",
-          "account": "123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY"
-        },
-        ...
-      ]
-
-    </pre>
-  </div>
-</div>
+<p>`query=%account-or-key` returns data only for validators matching by name, pubkey or vote account</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?query=123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY'</pre>
+<p>Response:</p>
+<pre>
+[
+  {
+    "created_at": "2021-07-27T08:47:16.803Z",
+    "commission_before": 9.0,
+    "commission_after": 10.0,
+    "epoch": 213,
+    "network": "testnet",
+    "account": "123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY"
+  },
+  ...
+]
+</pre>
 
 <hr />
 
 <h4 id="stake-pools">Stake Pools</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>
-      The Stake Pools endpoint will return all the stake pools. Replace `:network` with 'testnet' or 'mainnet' as desired.
-    </p>
-    <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-pools/:network'</pre>
-    <p>Response:</p>
-    <pre>
-      { "stake_pools":
-        [
-          {
-          "id": 72,
-          "authority": "authority",
-          "average_apy": 12,
-          "average_delinquent": 1,
-          "average_lifetime": 22,
-          "average_score": 7,
-          "average_skipped_slots": 12,
-          "average_uptime": 1,
-          "average_validators_commission": 2,
-          "manager_fee": 0,
-          "name": "TestName",
-          "network": "testnet",
-          "ticker": 'ticker',
-          "validators_count": 0
-          },
-          ...
-        ]
-      }
-
-    </pre>
-  </div>
-</div>
+<p>
+  The Stake Pools endpoint will return all the stake pools. Replace `:network` with 'testnet' or
+  'mainnet' as desired.
+</p>
+<p>Request:</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-pools/:network'</pre>
+<p>Response:</p>
+<pre>
+{ "stake_pools":
+  [
+    {
+    "id": 72,
+    "authority": "authority",
+    "average_apy": 12,
+    "average_delinquent": 1,
+    "average_lifetime": 22,
+    "average_score": 7,
+    "average_skipped_slots": 12,
+    "average_uptime": 1,
+    "average_validators_commission": 2,
+    "manager_fee": 0,
+    "name": "TestName",
+    "network": "testnet",
+    "ticker": 'ticker',
+    "validators_count": 0
+    },
+    ...
+  ]
+}
+</pre>
 
 <hr />
 
 <h4 id="stake-accounts">Stake Accounts</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>
-      The Stake Accounts endpoint will return all the stake accounts grouped by vote accounts. Replace `:network` with 'testnet' or 'mainnet' as desired.
-    </p>
-    <p>Request:</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network'</pre>
-    <p>Parameter Options:</p>
-    <p>`filter_[account|staker|withdrawer|validator]=` Filters by chosen value.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?filter_account=7hTEVqbQmt3UPQQKcavaxzzakt1FWbwVXyE8MZGadhW6'</pre>
-    <p>`sort_by=[epoch_|withdrawer_|staker_|stake_]` will sort the results by epoch, withdrawer, staker or stake. NOTE: after underscore add `asc` or `desc`, example below.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?sort_by=epoch_desc'</pre>
-    <p>`page=NN` will return the results from passed page.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?page=1'</pre>
-    <p>`per=NN` number of records per page.</p>
-    <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?per=50'</pre>
+<p>
+  The Stake Accounts endpoint will return all the stake accounts grouped by vote accounts. Replace `:network`
+  with 'testnet' or 'mainnet' as desired.
+</p>
+<p>Request:</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network'</pre>
 
-    <p>Response:</p>
-    <pre>
+<p>Parameter Options:</p>
+<p>`filter_[account|staker|withdrawer|validator]=` Filters by chosen value.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?filter_account=7hTEVqbQmt3UPQQKcavaxzzakt1FWbwVXyE8MZGadhW6'</pre>
+<p>
+  `sort_by=[epoch_|withdrawer_|staker_|stake_]` will sort the results by epoch, withdrawer, staker or stake.
+  NOTE: after underscore add `asc` or `desc`, example below.
+</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?sort_by=epoch_desc'</pre>
+<p>`page=NN` will return the results from passed page.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?page=1'</pre>
+<p>`per=NN` number of records per page.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/stake-accounts/:network?per=50'</pre>
+
+<p>Response:</p>
+<pre>
+{
+  "stake_accounts": [
     {
-      "stake_accounts": [
+      "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp": [
         {
-          "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp": [
-            {
-              "created_at": "2021-11-17T15:53:25.266Z",
-              "activation_epoch": 232,
-              "active_stake": 2000001000000,
-              "delegated_stake": 2000001000000,
-              "network": "testnet",
-              "delegated_vote_account_address": "5HNvXiPTUKPtPxz1Y4cUj9BMDbhupi5Bd6mp7AqJhSGN",
-              "id": 16,
-              "stake_pubkey": "5eJuknGqijkJJzR3Yt35Kr71WrHqDivEhtSeSm3tTYCy",
-              "batch_uuid": "4aac4a2c-3312-4189-9433-d535d1908754",
-              "stake_pool_id": 5,
-              "staker": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
-              "withdrawer": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
-              "pool_name": "Jpool",
-              "validator_name": "linap",
-              "validator_account": "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp"
-            }
-          ]
-        },
-      ...
-    }
-    </pre>
-  </div>
-</div>
+          "created_at": "2021-11-17T15:53:25.266Z",
+          "activation_epoch": 232,
+          "active_stake": 2000001000000,
+          "delegated_stake": 2000001000000,
+          "network": "testnet",
+          "delegated_vote_account_address": "5HNvXiPTUKPtPxz1Y4cUj9BMDbhupi5Bd6mp7AqJhSGN",
+          "id": 16,
+          "stake_pubkey": "5eJuknGqijkJJzR3Yt35Kr71WrHqDivEhtSeSm3tTYCy",
+          "batch_uuid": "4aac4a2c-3312-4189-9433-d535d1908754",
+          "stake_pool_id": 5,
+          "staker": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+          "withdrawer": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+          "pool_name": "Jpool",
+          "validator_name": "linap",
+          "validator_account": "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp"
+        }
+      ]
+    },
+  ...
+}
+</pre>
 
 <hr />
 
-<h4 id="ping-thing">Ping Thing</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>The ping thing endpoint allows you to push information about transaction times.</p>
-    <p>Request:</p>
-    <pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"time": "NN", "signature": "signature", "transaction_type": "transfer"}'
-    https://www.validators.app/api/v1/ping-thing/:network</pre>
-    <p>Parameters:</p>
-    <p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
-    <p><strong>`signature: string`</strong> Transaction signature</p>
-    <p><strong>`transaction_type: string`</strong> A string to describe the type of transaction. e.g. 'transfer', 'defi-swap', 'nft-mint', or anything meaningful to the sender.</p>
-    <p>Response:</p>
-    <pre>{"status":"ok"}</pre>
-  </div>
-</div>
+<h4 id="ping-thing">Ping Thing Post</h4>
+
+<p>The ping thing endpoint allows you to push information about transaction times.</p>
+<p>Request:</p>
+<pre>
+curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"time": "NN", "signature": "signature", "transaction_type": "transfer"}' https://www.validators.app/api/v1/ping-thing/:network</pre>
+<p>Parameters:</p>
+<p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
+<p><strong>`signature: string`</strong> Transaction signature</p>
+<p>
+  <strong>`transaction_type: string`</strong> A string to describe the type of transaction. e.g. 'transfer', 'defi-swap',
+  'nft-mint', or anything meaningful to the sender.
+</p>
+<p>Response:</p>
+<pre>{"status":"ok"}</pre>
 
 <hr />
 
-<h3 id="notes">NOTES:</h3>
-<div class="row">
-  <div class="col-sm-12">
-    <p>Active stake is shown in Lamports.</p>
-    <p>Commision is shown in percent. e.g. 10&percnt;.</p>
-    <p>Our database uses null values when there is no data. You should expect to see `null` as a possible return value for any attribute. If an attribute is missing from the output, then you can also assume the value is null.</p>
-    <p class="text-muted">Version 1 of this API is still in development. Check back here to see updates!</p>
-  </div>
-</div>
+<h4 id="ping-thing">Ping Thing List</h4>
+<p>
+  This ping thing endpoint will return a list of pings for the requested network. In the example below,
+  replace `:network` with 'testnet' or 'mainnet' as desired.
+</p>
+<p>Request:</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/ping-things/:network'</pre>
+<p>Parameters:</p>
+<p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
+<p><strong>`signature: string`</strong> Transaction signature</p>
+<p>
+  <strong>`transaction_type: string`</strong> A string to describe the type of transaction. e.g. 'transfer', 'defi-swap',
+  'nft-mint', or anything meaningful to the sender.
+</p>
+<p>Response:</p>
+<pre>
+[
+  {
+    "network":"testnet",
+    "response_time":396,
+    "created_at":"2022-02-10T13:37:42.097Z",
+    "signature":"5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
+    "transaction_type":"transfer",
+    "username":"brianlong"
+  },
+  ...
+]
+</pre>
 
 <hr />
 
@@ -395,3 +401,14 @@
   <dt class="col-2 col-sm-1">500</dt>
   <dd class="col-10 col-sm-11">Server Error (Admin has been notified)</dd>
 </dl>
+
+<hr />
+
+<h3 id="notes">NOTES:</h3>
+<p>Active stake is shown in Lamports.</p>
+<p>Commision is shown in percent. e.g. 10&percnt;.</p>
+<p>
+  Our database uses null values when there is no data. You should expect to see `null` as a possible return value
+  for any attribute. If an attribute is missing from the output, then you can also assume the value is null.
+</p>
+<p class="text-muted">Version 1 of this API is still in development. Check back here to see updates!</p>
