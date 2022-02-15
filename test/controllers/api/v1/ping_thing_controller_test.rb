@@ -9,7 +9,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     @user = create(:user)
     @params_sample = {
       amount: "1",
-      application: 'mango',
+      application: "mango",
       commitment_level: "finalized",
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
       success: "true",
@@ -19,7 +19,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "request without token returns error" do
-    post api_v1_ping_thing_path(network: 'testnet')
+    post api_v1_ping_thing_path(network: "testnet")
     assert_response 401
     expected_response = { "error" => "Unauthorized" }
 
@@ -28,7 +28,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
   test "request with token should return 200 and save the data" do
     post api_v1_ping_thing_path(
-      network: 'testnet'
+      network: "testnet"
     ), headers: { "Token" => @user.api_token }, params: @params_sample
     assert_response 201
     expected_response = { "status" => "created" }
@@ -39,7 +39,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
   test "request with wrong data length should return 400 error" do
     post api_v1_ping_thing_path(
-      network: 'testnet'
+      network: "testnet"
     ), headers: { "Token" => @user.api_token }, params: {}
     assert_response 400
     expected_response = {"base"=>["Provided data length is not valid"]}

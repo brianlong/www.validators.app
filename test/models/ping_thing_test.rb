@@ -10,7 +10,7 @@ class PingThingTest < ActiveSupport::TestCase
       response_time: "234",
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
       transaction_type: "transfer",
-      network: 'testnet',
+      network: "testnet",
       user_id: @user.id
     }
   end
@@ -50,27 +50,27 @@ class PingThingTest < ActiveSupport::TestCase
 
     pt.commitment_level = 0
     assert pt.valid?
-    assert_equal 'processed', pt.commitment_level 
+    assert_equal "processed", pt.commitment_level 
 
-    pt.commitment_level = 'processed'
+    pt.commitment_level = "processed"
     assert pt.valid?
-    assert_equal 'processed', pt.commitment_level 
+    assert_equal "processed", pt.commitment_level 
 
     pt.commitment_level = 1
     assert pt.valid?
-    assert_equal 'confirmed', pt.commitment_level
+    assert_equal "confirmed", pt.commitment_level
 
-    pt.commitment_level = 'confirmed'
+    pt.commitment_level = "confirmed"
     assert pt.valid?
-    assert_equal 'confirmed', pt.commitment_level 
+    assert_equal "confirmed", pt.commitment_level 
 
     pt.commitment_level = 2
     assert pt.valid?
-    assert_equal 'finalized', pt.commitment_level
+    assert_equal "finalized", pt.commitment_level
 
-    pt.commitment_level = 'finalized'
+    pt.commitment_level = "finalized"
     assert pt.valid?
-    assert_equal 'finalized', pt.commitment_level
+    assert_equal "finalized", pt.commitment_level
   end
 
   test "commitment_level raise argument error when wrong level is being assigned" do

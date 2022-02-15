@@ -7,8 +7,8 @@ FactoryBot.define do
     raw_data { 
       {
         amount: rand(1..100),
-        application: 'Mango',
-        commitment_level: 'finalized',
+        application: "Mango",
+        commitment_level: "finalized",
         signature: SecureRandom.hex(46),
         success: true,
         time: rand(1..1000),

@@ -1,4 +1,4 @@
-# frozen_string_literagbl: true
+# frozen_string_literal: true
 
 FactoryBot.define do
   factory :ping_thing do
@@ -7,9 +7,9 @@ FactoryBot.define do
     signature { "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s" }
     response_time { 1 }
     transaction_type { "MyString" }
-    network { 'mainnet' }
+    network { "mainnet" }
     success { true }
-    application { 'Mango' }
+    application { "Mango" }
 
     trait :processed do
       commitment_level { 0 }
