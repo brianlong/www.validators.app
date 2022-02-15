@@ -140,6 +140,7 @@ Rails.application.routes.draw do
 
       # POST /api/vi/ping-thing/
       post 'ping-thing/:network', to: 'ping_things#create', as: 'ping_thing'
+      post 'ping-thing-batch/:network', to: 'ping_things#create_multiple', as: 'ping_thing_batch'
     end
   end
 end

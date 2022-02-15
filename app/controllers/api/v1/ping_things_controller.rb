@@ -3,6 +3,8 @@
 module Api
   module V1
     class PingThingsController < BaseController
+
+      class InvalidRecordCount < StandardError; end
       
       def create
         api_token = request.headers["Token"]
@@ -18,10 +20,36 @@ module Api
         end
       end
 
+      def create_multiple
+        api_token = request.headers["Token"]
+
+        begin
+          raise InvalidRecordCount, "Too many records" \
+            if ping_thing_batch_params[:transactions].count > 50
+
+          txs = ping_thing_batch_params[:transactions].map do |tx|
+            {
+              raw_data: tx.to_h,
+              api_token: api_token,
+              network: params[:network]
+            }
+          end
+
+          PingThingRaw.create! txs
+          render json: { status: "created" }, status: :created
+        rescue ActiveRecord::RecordInvalid, InvalidRecordCount => e
+          render json: e.to_json, status: :bad_request
+        end
+      end
+
       private
 
       def ping_thing_params
         params.permit(:amount, :time, :signature, :transaction_type)
+      end
+
+      def ping_thing_batch_params
+        params.permit(transactions: [:amount, :time, :signature, :transaction_type])
       end
     end
   end
