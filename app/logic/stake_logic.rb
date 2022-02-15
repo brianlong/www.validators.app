@@ -217,7 +217,7 @@ module StakeLogic
       )
 
       lido_stake_accounts = stake_accounts.joins(:stake_pool)
-                                          .where('stake_pools.name = ?', 'Lido')
+                                          .where("stake_pools.name = ?", "Lido")
 
       lido_vote_accounts = lido_stake_accounts.map do |lsa|
         lsa.validator.vote_accounts.last.account
@@ -266,7 +266,7 @@ module StakeLogic
       return p unless p.code == 200
       lido = StakePool.find_by(name: "Lido")
 
-      val_accounts = lido.stake_accounts.map{ |sa| sa.validator.account}
+      val_accounts = lido.stake_accounts.map{ |sa| sa.validator.account }
 
       lido_histories = ValidatorHistory.select(
         "DISTINCT(account) account, active_stake"
