@@ -294,7 +294,7 @@ module StakeLogic
 
           rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
           credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
-          if acc.stake_pool.name == "Lido"
+          if acc.stake_pool.lido?
             active_stake = p.payload[:lido_histories].select{ |lh| lh.account == acc.validator.account }[0].active_stake
             apy = calculate_apy(credits_diff, rewards, num_of_epochs, active_stake)
           else
@@ -328,7 +328,7 @@ module StakeLogic
 
         # sum of apy * stake
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
-          if sa.stake_pool.name == "Lido"
+          if sa.stake_pool.lido?
             stake = p.payload[:lido_histories].select{ |lh| lh.account == sa.validator.account }[0].active_stake
           else
             stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
