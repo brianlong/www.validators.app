@@ -59,7 +59,13 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     end
     get api_v1_ping_things_path(network: "testnet", limit: 2), headers: { "Token" => @user.api_token }
     assert_response 200
+    assert_equal 2, response_to_json(@response.body).size
+  end
+
+  test "GET api_v1_ping_things with limit returns correct pings starting from the newest" do
+    create(:ping_thing, network: "testnet", response_time: 123)
+    get api_v1_ping_things_path(network: "testnet", limit: 1), headers: { "Token" => @user.api_token }
     json = response_to_json(@response.body)
-    assert_equal 2, json.size
+    assert_equal 123, json.first["response_time"]
   end
 end

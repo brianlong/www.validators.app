@@ -8,7 +8,7 @@ module Api
         limit = [(index_params[:limit] || 240).to_i, 11520].min
         ping_things = PingThing.where(network: index_params[:network])
                                .includes(:user)
-                               .first(limit)
+                               .last(limit)
         json_result = ping_things.map { |pt| create_json_result(pt) }
         render json: json_result
       rescue ActionController::ParameterMissing
