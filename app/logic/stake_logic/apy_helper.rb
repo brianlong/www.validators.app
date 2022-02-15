@@ -25,6 +25,6 @@ module StakeLogic::ApyHelper
     credits_diff_percent = credits_diff / (active_stake - rewards[:amount]).to_f
 
     apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
-    apy #< 100 && apy > 0 ? apy.round(6) : nil
+    apy < 100 && apy > 0 ? apy.round(6) : nil
   end
 end
