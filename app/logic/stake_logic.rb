@@ -329,9 +329,7 @@ module StakeLogic
         # sum of apy * stake
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           if sa.stake_pool.name == "Lido"
-            puts "lido stake: "
             stake = p.payload[:lido_histories].select{ |lh| lh.account == sa.validator.account }[0].active_stake
-            puts stake
           else
             stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
           end
