@@ -48,29 +48,17 @@ class PingThingTest < ActiveSupport::TestCase
   test "commitment_level is being correctly assigned and returns correct values" do
     pt = build(:ping_thing, user_id: @user.id)
 
-    pt.commitment_level = 0
-    assert pt.valid?
-    assert_equal "processed", pt.commitment_level 
+    PingThing.commitment_levels.each_key do |key|
+      pt.commitment_level = key
+      assert pt.valid?
+      assert_equal key, pt.commitment_level 
+    end
 
-    pt.commitment_level = "processed"
-    assert pt.valid?
-    assert_equal "processed", pt.commitment_level 
-
-    pt.commitment_level = 1
-    assert pt.valid?
-    assert_equal "confirmed", pt.commitment_level
-
-    pt.commitment_level = "confirmed"
-    assert pt.valid?
-    assert_equal "confirmed", pt.commitment_level 
-
-    pt.commitment_level = 2
-    assert pt.valid?
-    assert_equal "finalized", pt.commitment_level
-
-    pt.commitment_level = "finalized"
-    assert pt.valid?
-    assert_equal "finalized", pt.commitment_level
+    PingThing.commitment_levels.each_value do |value|
+      pt.commitment_level = value
+      assert pt.valid?
+      assert_equal PingThing.commitment_levels.keys[value], pt.commitment_level 
+    end
   end
 
   test "commitment_level raise argument error when wrong level is being assigned" do
