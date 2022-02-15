@@ -28,11 +28,9 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class PingThing < ApplicationRecord
-  COMMITMENT_LEVELS = { processed: 0, confirmed: 1, finalized: 2 }
-
   belongs_to :user
 
-  enum commitment_level: COMMITMENT_LEVELS
+  enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
 
   validates_presence_of :user_id, :response_time, :signature, :network
   validates :network, inclusion: { in: %w(mainnet testnet) }
