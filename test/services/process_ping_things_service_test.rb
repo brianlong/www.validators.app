@@ -12,13 +12,13 @@ class ProcessPingThingsServiceTest < ActiveSupport::TestCase
         should create new data' do
 
     10.times do |n|
-      create(:ping_thing_raw, api_token: @user.api_token)
+      create(:ping_thing_raw, api_token: @user.api_token, network: 'testnet')
     end
 
     ProcessPingThingsService.new(records_count: 10).call
 
     assert PingThingRaw.all.blank?
-    assert 10, PingThing.count
+    assert_equal 10, PingThing.count
   end
 
   test 'service \
