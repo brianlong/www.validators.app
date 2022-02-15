@@ -55,8 +55,10 @@ class Ip < ApplicationRecord
   has_one :validator_score_v1, primary_key: :address, foreign_key: :ip_address
 
   def to_builder
-    Jbuilder.new do |vs_v1|
-      vs_v1.autonomous_system_number self.traits_autonomous_system_number
+    Jbuilder.new do |ip|
+      ip.autonomous_system_number self.traits_autonomous_system_number
+      ip.latitude self.location_latitude
+      ip.longitude self.location_longitude
     end
   end
 
