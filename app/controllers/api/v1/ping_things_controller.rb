@@ -20,12 +20,13 @@ module Api
         end
       end
 
-      def create_multiple
+      def create_batch
+        max_records = 50
         api_token = request.headers["Token"]
 
         begin
-          raise InvalidRecordCount, "Too many records" \
-            if ping_thing_batch_params[:transactions].count > 50
+          raise InvalidRecordCount, "Number of records exceeds #{max_records}" \
+            if ping_thing_batch_params[:transactions].count > max_records
 
           txs = ping_thing_batch_params[:transactions].map do |tx|
             {

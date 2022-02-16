@@ -80,7 +80,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
       network: 'testnet'
     ), headers: { "Token" => @user.api_token }, params: params_batch
     assert_response 400
-    expected_response = "Too many records"
+    expected_response = "Number of records exceeds 50"
 
     assert_equal expected_response, response_to_json(@response.body)
   end
