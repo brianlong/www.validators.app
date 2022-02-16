@@ -176,10 +176,10 @@
       <!-- ROOT DISTANCE -->
       <td class="column-chart d-none d-lg-table-cell align-middle" id="root-distance-<%=i%>">
         <%
-          vl = chart_x_scale(validator.score&.root_distance_history.to_a.count)
+          vl_root_dist_histories_count = chart_x_scale(validator.score&.root_distance_history.to_a.count)
           line_color = chart_line_color(validator.score_v2&.root_distance_score)
           fill_color = chart_fill_color(validator.score_v2&.root_distance_score)
-          vector = validator.score&.root_distance_history.to_a[-vl..-1]
+          vector = validator.score&.root_distance_history.to_a[-vl_root_dist_histories_count..-1]
         %>
         <% max_value = vector&.max %>
         <% if max_value && max_value > Y_ROOT_DISTANCE_MAX %>
@@ -205,10 +205,10 @@
       <!-- VOTE DISTANCE -->
       <td class="column-chart d-none d-lg-table-cell align-middle" id=vote-distance-<%=i%>>
         <%
-          vl = chart_x_scale(validator.score&.vote_distance_history.to_a.count)
+          vl_vote_dist_histories_count = chart_x_scale(validator.score&.vote_distance_history.to_a.count)
           line_color = chart_line_color(validator.score_v2&.vote_distance_score)
           fill_color = chart_fill_color(validator.score_v2&.vote_distance_score)
-          vote_vector = validator.score&.vote_distance_history.to_a[-vl..-1]
+          vote_vector = validator.score&.vote_distance_history.to_a[-vl_vote_dist_histories_count..-1]
         %>
         <% max_value = vote_vector&.max %>
         <% if max_value && max_value > Y_VOTE_DISTANCE_MAX %>
