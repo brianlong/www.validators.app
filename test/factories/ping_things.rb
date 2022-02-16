@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :ping_thing do
-    user { nil }
+    user
     amount { "" }
     signature { "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s" }
     response_time { 1 }
@@ -21,6 +21,14 @@ FactoryBot.define do
 
     trait :finalized do
       commitment_level { 2 }
+    end
+
+    trait :mainnet do
+      network { "mainnet" }
+    end
+
+    trait :testnet do
+      network { "testnet" }
     end
   end
 end
