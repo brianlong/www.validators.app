@@ -121,4 +121,9 @@ module ValidatorsHelper
       end
     end
   end
+
+  def beginning_index_number(page, items_per_page)
+    return 0 if page.nil? || page.empty? || page.to_i.zero?
+    (page.to_i - 1) * items_per_page
+  end
 end

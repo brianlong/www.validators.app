@@ -41,4 +41,15 @@ class ValidatorsHelperTest < ActiveSupport::TestCase
     sorted_versions = sort_software_versions(@versions_array)
     assert_equal expected_order, sorted_versions.map{ |e| e.keys }.flatten
   end
+
+  test "#beginning_index_number returns correct beginning index for the first page" do
+    assert_equal 0, beginning_index_number(nil, 25)
+    assert_equal 0, beginning_index_number("1", 25)
+    assert_equal 0, beginning_index_number("", 25)
+  end
+
+  test "#beginning_index_number returns correct beginning index for page larger than first" do
+    assert_equal 25, beginning_index_number("2", 25)
+    assert_equal 50, beginning_index_number("3", 25)
+  end
 end

@@ -72,13 +72,7 @@
   </thead>
 
   <tbody>
-  <%
-    i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
-          0
-        else
-          (params[:page].to_i - 1) * items_per_page
-        end
-  %>
+  <% i = beginning_index_number(params[:page], items_per_page) %>
   <% validators.each do |validator| %>
     <% i += 1 %>
     <tr id="row-<%= i %>">
