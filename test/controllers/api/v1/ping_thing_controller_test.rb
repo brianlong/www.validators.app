@@ -45,7 +45,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create_multiple request without token returns error" do
-    post api_v1_ping_thing_batch_path(network: 'testnet')
+    post api_v1_ping_thing_batch_path(network: "testnet")
     assert_response 401
     expected_response = { "error" => "Unauthorized" }
 
