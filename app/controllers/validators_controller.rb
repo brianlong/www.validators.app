@@ -22,10 +22,10 @@ class ValidatorsController < ApplicationController
     @batch = Batch.last_scored_v2(index_params[:network])
 
     if @batch
-      @this_epoch = EpochHistory.where(
+      @this_epoch = EpochHistory.find_by(
         network: index_params[:network],
         batch_uuid: @batch.uuid
-      ).first
+      )
 
       validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], @batch.uuid)
       at_33_stake_validator = validator_history_stats.at_33_stake&.validator
@@ -53,10 +53,10 @@ class ValidatorsController < ApplicationController
     @batch = Batch.last_scored_v2(index_params[:network])
 
     if @batch
-      @this_epoch = EpochHistory.where(
+      @this_epoch = EpochHistory.find_by(
         network: index_params[:network],
         batch_uuid: @batch.uuid
-      ).first
+      )
 
       validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], @batch.uuid)
       at_33_stake_validator = validator_history_stats.at_33_stake&.validator
@@ -136,10 +136,11 @@ class ValidatorsController < ApplicationController
   end
 
   def set_ping_times
+    # TODO replace by new ping-thing feature
     @ping_times = if @validator.nil?
                     []
                   else
-                      PingTime.where(
+                    PingTime.where(
                       network: params[:network],
                       to_account: @validator.account
                     ).order("created_at desc").limit(30)
