@@ -342,23 +342,20 @@
 <hr />
 
 <h4 id="ping-thing">Ping Thing Post</h4>
-<div class="row">
-  <div class="col-sm-12">
-    <p>The ping thing endpoint allows you to push information about transaction times.</p>
-    <p>Request:</p>
-    <pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"time": "NN", "signature": "signature", "transaction_type": "transfer"}'
-    https://www.validators.app/api/v1/ping-thing/:network</pre>
-    <p>Parameters:</p>
-    <p><strong>`application: string`</strong> Application type</p>
-    <p><strong>`commitment_level: string`</strong> Possible values: 'processed' OR 'confirmed' OR 'finalized'</p>
-    <p><strong>`signature: string`</strong> Transaction signature</p>
-    <p><strong>`success: boolean`</strong> True or false (if empty default true will be set)</p>
-    <p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
-    <p><strong>`transaction_type: string`</strong> A string to describe the type of transaction. e.g. 'transfer', 'defi-swap', 'nft-mint', or anything meaningful to the sender.</p>
-    <p>Response:</p>
-    <pre>{"status":"ok"}</pre>
-  </div>
-</div>
+
+<p>The ping thing endpoint allows you to push information about transaction times.</p>
+<p>Request:</p>
+<pre>
+curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"time": "NN", "signature": "signature", "transaction_type": "transfer"}' https://www.validators.app/api/v1/ping-thing/:network</pre>
+<p>Parameters:</p>
+<p><strong>`application: string`</strong> Application type</p>
+<p><strong>`commitment_level: string`</strong> Possible values: 'processed' OR 'confirmed' OR 'finalized'</p>
+<p><strong>`signature: string`</strong> Transaction signature</p>
+<p><strong>`success: boolean`</strong> True or false (if empty default true will be set)</p>
+<p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
+<p><strong>`transaction_type: string`</strong> A string to describe the type of transaction. e.g. 'transfer', 'defi-swap', 'nft-mint', or anything meaningful to the sender.</p>
+<p>Response:</p>
+<pre>{"status":"ok"}</pre>
 
 <hr />
 
@@ -375,12 +372,15 @@
 <pre>
 [
   {
-    "network": "testnet",
-    "response_time": 396,
+    "application": "mango",
+    "commitment_level": "finalized",
     "created_at": "2022-02-10T13:37:42.097Z",
+    "response_time": 396,
+    "network": "testnet",
     "signature": "0d7f418e4d1a3f80dc8a266cd867f766b73d9c80feea36524dfd074068bdef9221e356c192ac6ac71b71404d",
+    "success": true
     "transaction_type": "transfer",
-    "username": "sample_user"
+    "username": "sample_user",
   },
   ...
 ]
