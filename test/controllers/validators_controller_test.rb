@@ -20,7 +20,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET without network param returns index_v2 with default network" do
-    get validators_v2_url(network: "testnet")
+    get validators_v2_url
     assert_response :success
   end
 
