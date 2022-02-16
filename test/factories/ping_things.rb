@@ -8,4 +8,12 @@ FactoryBot.define do
     response_time { 1 }
     transaction_type { "transfer" }
   end
+
+  trait :mainnet do
+    network { "mainnet" }
+  end
+
+  trait :testnet do
+    network { "testnet" }
+  end
 end

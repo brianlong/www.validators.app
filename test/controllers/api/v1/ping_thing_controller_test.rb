@@ -45,9 +45,11 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_ping_things with correct network returns pings from chosen network" do
-    create(:ping_thing, network: "testnet")
-    create(:ping_thing, network: "mainnet")
+    create(:ping_thing, :testnet)
+    create(:ping_thing, :mainnet)
+
     get api_v1_ping_things_path(network: "testnet"), headers: { "Token" => @user.api_token }
+
     assert_response 200
     json = response_to_json(@response.body)
     assert_equal 1, json.size
@@ -55,16 +57,20 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_ping_things with limit present returns pings for chosen limit" do
     3.times do
-      create(:ping_thing, network: "testnet")
+      create(:ping_thing, :testnet)
     end
+
     get api_v1_ping_things_path(network: "testnet", limit: 2), headers: { "Token" => @user.api_token }
+
     assert_response 200
     assert_equal 2, response_to_json(@response.body).size
   end
 
   test "GET api_v1_ping_things with limit returns correct pings starting from the newest" do
-    create(:ping_thing, network: "testnet", response_time: 123)
+    create(:ping_thing, :testnet, response_time: 123)
+
     get api_v1_ping_things_path(network: "testnet", limit: 1), headers: { "Token" => @user.api_token }
+
     json = response_to_json(@response.body)
     assert_equal 123, json.first["response_time"]
   end
