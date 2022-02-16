@@ -29,7 +29,7 @@ module Api
 
           txs = ping_thing_batch_params[:transactions].map do |tx|
             {
-              raw_data: tx.to_h,
+              raw_data: tx.to_json,
               api_token: api_token,
               network: params[:network]
             }
