@@ -13,13 +13,13 @@ class ValidatorsController < ApplicationController
                           .preload(:validator_score_v1)
                           .index_order(validate_order)
 
-    unless params[:q].blank?
+    unless index_params[:q].blank?
       validators = ValidatorSearchQuery.new(validators).search(index_params[:q])
     end
 
     @validators = validators.page(index_params[:page]).per(@per)
 
-    @batch = Batch.last_scored_v2(params[:network])
+    @batch = Batch.last_scored_v2(index_params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(
@@ -44,13 +44,13 @@ class ValidatorsController < ApplicationController
                           .preload(:validator_score_v1, :validator_score_v2)
                           .index_order_v2(validate_order)
 
-    unless params[:q].blank?
+    unless index_params[:q].blank?
       validators = ValidatorSearchQuery.new(validators).search(index_params[:q])
     end
 
     @validators = validators.page(index_params[:page]).per(@per)
 
-    @batch = Batch.last_scored_v2(params[:network])
+    @batch = Batch.last_scored_v2(index_params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(
