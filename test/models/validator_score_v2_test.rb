@@ -39,7 +39,7 @@ class ValidatorScoreV2Test < ActiveSupport::TestCase
   test '#calculate_total_score assigns a score of 0 if commission is 100' do
     @validator_score_v1.update(commission: 100)
 
-    assert_equal true, @validator.private_validator?
+    assert @validator.private_validator?
     assert_equal 0, @validator_score_v2.calculate_total_score
     assert_equal "N/A", @validator_score_v2.displayed_total_score
   end
@@ -64,6 +64,9 @@ class ValidatorScoreV2Test < ActiveSupport::TestCase
   end
 
   test '#delinquent? returns corrent boolean value' do
-    @validator_score_v2.delinquent?
+    refute @validator_score_v2.delinquent?
+
+    @validator_score_v2.validator_score_v1.delinquent = true
+    assert @validator_score_v2.delinquent?
   end
 end
