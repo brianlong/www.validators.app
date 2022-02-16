@@ -45,7 +45,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create_multiple request without token returns error" do
-    post api_v1_ping_thing_batch_path(network: 'testnet')
+    post api_v1_ping_thing_batch_path(network: "testnet")
     assert_response 401
     expected_response = { "error" => "Unauthorized" }
 
@@ -60,7 +60,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     }
 
     post api_v1_ping_thing_batch_path(
-      network: 'testnet'
+      network: "testnet"
     ), headers: { "Token" => @user.api_token }, params: params_batch
     assert_response 201
     expected_response = { "status" => "created" }
@@ -77,7 +77,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     }
 
     post api_v1_ping_thing_batch_path(
-      network: 'testnet'
+      network: "testnet"
     ), headers: { "Token" => @user.api_token }, params: params_batch
     assert_response 400
     expected_response = "Number of records exceeds 50"
