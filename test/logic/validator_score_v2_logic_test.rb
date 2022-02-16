@@ -50,7 +50,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.4]) # last record 0.4
   end
 
-  test "set_this_batch" do
+  test "#set_this_batch sets batch to process" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
 
@@ -73,7 +73,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "set_validators_groups" do
+  test "#set_validators_groups calculates number of validators in a group" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -83,7 +83,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     assert_equal 2, p.payload[:validators_count_in_each_group] # (validators_count / NUMBER_OF_GROUPS).ceil
   end
 
-  test "assign_root_distance_score" do
+  test "#assign_root_distance_score sets correct scores in pipeline" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -98,12 +98,11 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     assert_equal 2, p.payload[:validators].find(@v3.id).score_v2.root_distance_score # root dist avg 1
   end
 
-  test "assign_vote_distance_score" do
+  test "#assign_vote_distance_score sets correct scores in pipeline" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&set_validators_groups)
-                .then(&assign_root_distance_score)
                 .then(&assign_vote_distance_score)
                 .then(&save_validators)
 
@@ -114,7 +113,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     assert_equal 2, p.payload[:validators].find(@v3.id).score_v2.vote_distance_score # vote dist avg 1
   end
 
-  test "assign_skipped_slot_score" do
+  test "#assign_skipped_slot_score sets correct scores in pipeline" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
@@ -129,7 +128,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     assert_equal 2, p.payload[:validators].find(@v3.id).score_v2.skipped_slot_score # last avg 0.1
   end
 
-  test "save_validators" do
+  test "#save_validators saves correct values to validators calculated in the pipeline" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
