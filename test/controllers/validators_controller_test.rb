@@ -9,32 +9,32 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     create(:batch, network: "testnet")
   end
 
-  test "should get index" do
+  test "GET with network param returns index" do
     get validators_url(network: "testnet")
     assert_response :success
   end
 
-  test "should get index_v2" do
+  test "GET with network param returns index_v2" do
     get validators_v2_url(network: "testnet")
     assert_response :success
   end
 
-  test "should get root" do
+  test "GET with network param returns root" do
     get root_url(network: "testnet")
     assert_response :success
   end
 
-  test "should show validator" do
+  test "GET validator with account param returns validator details" do
     get validator_url(network: 'testnet', account: @validator.account)
     assert_response :success
   end
 
-  test "should redirect to new URL format if old format given" do
+  test "GET with old validator format redirects to new URL format" do
     get "/validators/#{@validator.network}/#{@validator.account}"
     assert_redirected_to validator_path(account: @validator.account, network: @validator.network)
   end
 
-  test "should redirect_to home page if validator not found" do
+  test "GET with incorrect account param redirects to home page" do
     get validator_url(network: "testnet", account: "notexistingaccount")
 
     assert_redirected_to root_url

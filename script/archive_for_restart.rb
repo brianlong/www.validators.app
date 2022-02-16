@@ -56,7 +56,7 @@ puts "Archiving data for #{network} #{today}"
   end
   # Reset the validator_score_v2s
   Validator.where(network: network)
-           .joins(:validator_score_v2)
+           .includes(:validator_score_v2)
            .find_each do |validator|
     validator.validator_score_v2.update(
       total_score: 0,

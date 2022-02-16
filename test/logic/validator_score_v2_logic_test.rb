@@ -20,24 +20,28 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
            root_distance_history: [2, 1, 2, 3], # average 2
            vote_distance_history: [2, 1, 2, 3], # average 2
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.2]) # last record 0.2
+
     @v2 = create(:validator, network: "testnet")
     create(:validator_score_v1,
            validator: @v2,
            root_distance_history: [2, 4, 4, 2], # average 3
            vote_distance_history: [2, 4, 4, 2], # average 3
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.3]) # last record 0.3
+
     @v3 = create(:validator, network: "testnet")
     create(:validator_score_v1,
            validator: @v3,
            root_distance_history: [2, 0, 2, 0], # average 1
            vote_distance_history: [2, 0, 2, 0], # average 1
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.1]) # last record 0.1
+
     @v4 = create(:validator, network: "testnet")
     create(:validator_score_v1,
            validator: @v4,
            root_distance_history: [5, 5, 5, 5], # average 5
            vote_distance_history: [5, 3, 4, 4], # average 4
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.5]) # last record 0.5
+
     @v5 = create(:validator, network: "testnet")
     create(:validator_score_v1,
            validator: @v5,
