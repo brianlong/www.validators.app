@@ -6,28 +6,43 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+@networks = %w(mainnet testnet)
 
 def create_users
-  @admin = User.create(
+  @admin = User.find_or_initialize_by(
     username: 'brianlong',
-    email: 'brian.long@fmaprivacy.com',
-    is_admin: true,
-    password: 'Password1',
-    password_confirmation: 'Password1'
-  )
+    is_admin: true
+  ) do |admin|
+    admin.email = 'brian.long@fmaprivacy.com'
+    admin.password = 'Password1'
+    admin.password_confirmation = 'Password1'
+  end
+
+  @admin.save
   @admin.confirm
+
+  @user = User.find_or_initialize_by(
+    username: 'testuser',
+    is_admin: false
+  ) do |user|
+    user.email = 'test.user@fmaprivacy.com'
+    user.password = 'Password1'
+    user.password_confirmation = 'Password1'
+  end
+
+  @user.save
 end
 
-def create_ping_things
+def create_ping_things(number)
   apps = ['application1', 'application2', 'application3']
 
-  240.times do 
+  number.times do 
     PingThing.create(
       amount: 1, 
       application: apps.sample,
-      network: 'testnet', 
+      network: @networks.sample, 
       response_time: rand(200..400),
-      signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s", 
+      signature: SecureRandom.hex(32), 
       success: true,
       transaction_type: 'transfer', 
       user_id: @admin.id
@@ -37,8 +52,8 @@ end
 
 if Rails.env.development?
   PingThing.destroy_all
-  User.destroy_all
+  # User.destroy_all # uncomment to destroy users, regenerate api_tokens etc.
 
   create_users
-  create_ping_things
+  create_ping_things(240)
 end

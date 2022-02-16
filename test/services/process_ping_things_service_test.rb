@@ -21,9 +21,7 @@ class ProcessPingThingsServiceTest < ActiveSupport::TestCase
     assert 10, PingThing.count
   end
 
-  test 'service \
-    with correct input \
-    correctly assigns all fields' do
+  test "#call with correct input correctly assigns all fields" do
 
     ptr = create(:ping_thing_raw, api_token: @user.api_token)
     ptr_attributes = ptr.attributes_from_raw
