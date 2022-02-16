@@ -102,7 +102,9 @@ namespace :daemons do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :start, :validator_score_mainnet_v1
+          execute :systemctl, '--user', :start, :validator_score_mainnet_v2
           execute :systemctl, '--user', :start, :validator_score_testnet_v1
+          execute :systemctl, '--user', :start, :validator_score_testnet_v2
           execute :systemctl, '--user', :start, :gather_rpc_mainnet
           execute :systemctl, '--user', :start, :gather_rpc_testnet
           execute :systemctl, '--user', :start, :gather_vote_account_details
