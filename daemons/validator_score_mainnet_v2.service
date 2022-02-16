@@ -1,5 +1,5 @@
 [Unit]
-Description=Validator Score Mainnet V1
+Description=Validator Score Mainnet V2
 After=syslog.target network.target
 
 [Service]
