@@ -3,6 +3,9 @@
 module StakeLogic
   include PipelineLogic
   include SolanaLogic #for solana_client_request
+  include ApyHelper
+
+  class NoResultsFromSolana < StandardError; end
 
   def get_last_batch
     lambda do |p|
@@ -29,10 +32,12 @@ module StakeLogic
         p.payload[:config_urls]
       )
 
+      raise NoResultsFromSolana.new('No results from `solana stakes`') if stake_accounts.blank?
+
       reduced_stake_accounts = []
 
       StakePool.where(network: p.payload[:network]).each do |pool|
-        pool_stake_acc = stake_accounts.select do |sa| 
+        pool_stake_acc = stake_accounts.select do |sa|
           sa["withdrawer"] == pool.authority || sa["staker"] == pool.authority
         end
 
@@ -86,7 +91,7 @@ module StakeLogic
           network: p.payload[:network],
           account: acc['delegatedVoteAccountAddress']
         )
-        
+
         validator_id = vote_account ? vote_account.validator.id : nil
 
         StakeAccount.find_or_initialize_by(
@@ -123,7 +128,7 @@ module StakeLogic
   def assign_stake_pools
     lambda do |p|
       return p unless p.code == 200
-      
+
       stake_pools = StakePool.where(network: p.payload[:network])
 
       stake_pools.each do |pool|
@@ -177,7 +182,7 @@ module StakeLogic
       StakePool.transaction do
         p.payload[:stake_pools].each(&:save)
       end
-      
+
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from update_validator_stats", e)
@@ -211,59 +216,85 @@ module StakeLogic
         params: [stake_accounts.pluck(:stake_pubkey)]
       )
 
+      raise NoResultsFromSolana.new('No results from `get_inflation_reward`') \
+        if reward_info.blank?
+
       account_rewards = {}
 
       stake_accounts.each_with_index do |sa, idx|
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
-      Pipeline.new(200, p.payload.merge(account_rewards: account_rewards))
+      Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from get_rewards", e)
     end
   end
 
-  def calculate_apy
+  def calculate_apy_for_accounts
     lambda do |p|
       return p unless p.code == 200
 
-      last_epoch = EpochWallClock.where(
-        network: p.payload[:network]
-      ).last
+      last_epoch, previous_epoch = set_epochs(p.payload[:network])
 
-      previous_epoch = EpochWallClock.where(
-        network: p.payload[:network],
-        epoch: last_epoch.epoch - 1
-      ).last
-
+      # number of epochs in year calculated using the duration of last finished epoch
       num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
-        previous_acc = StakeAccountHistory.where(
-          stake_pubkey: acc.stake_pubkey,
-          epoch: acc.epoch - 1
-        ).first
-        
-        next unless previous_acc && p.payload[:account_rewards][acc.stake_pubkey]
+        apy = nil  
+        if p.payload[:account_rewards][acc.stake_pubkey]
 
-        rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
+          rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
+          credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
 
-        if fee = acc.stake_pool&.manager_fee || nil
-          credits_diff = rewards[:amount] - rewards[:amount] * (fee / 100)
-        else
-          credits_diff = rewards[:amount]
+          apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+        end
+        acc.update(apy: apy)
+      end
+
+      Pipeline.new(200, p.payload.merge!(previous_epoch: previous_epoch))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from calculate_apy_for_accounts", e)
+    end
+  end
+
+  def calculate_apy_for_pools
+    lambda do |p|
+      p.payload[:stake_pools].each do |pool|
+
+        # select single history for each pubkey from the previous epoch
+        history_accounts = StakeAccountHistory.select(
+          "DISTINCT(stake_pubkey) stake_pubkey, active_stake"
+        ).where(
+          stake_pool: pool,
+          epoch: p.payload[:previous_epoch].epoch
+        )
+
+        # total stake of all accounts in the pool
+        total_stake = 0
+
+        # sum of apy * stake
+        weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
+          stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
+
+          # we don't want to include accounts with no stake
+          if stake && stake > 0 
+            total_stake += stake
+            if sa.apy
+              sum = sum + sa.apy * stake
+            end
+          end
+          sum
         end
 
-        next unless credits_diff > 0
-        credits_diff_percent = credits_diff / (rewards[:postBalance] - credits_diff).to_f
-
-        apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
-        apy = apy < 100 && apy > 0 ? apy.round(6) : nil
-        acc.update(apy: apy)
+        if total_stake > 0
+          average_apy = weighted_apy_sum / total_stake.to_f
+          pool.update(average_apy: average_apy)
+        end
       end
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from calculate_apy", e)
+      Pipeline.new(500, p.payload, "Error from calculate_apy_for_pools", e)
     end
   end
 end

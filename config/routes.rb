@@ -103,6 +103,7 @@ Rails.application.routes.draw do
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
+  get "ping-thing", to: "ping_things#index", as: "ping_things"
 
   # Default root path
   root to: 'validators#index'
@@ -113,6 +114,7 @@ Rails.application.routes.draw do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
 
+      # TODO to remove - endpoint no longer in use
       # api_v1_collector POST /api/v1/collector
       post 'collector', to: 'api#collector'
 
@@ -126,19 +128,31 @@ Rails.application.routes.draw do
           to: 'api#validators_show',
           as: 'validator'
 
+      # GET /api/v1/validator_block_history/:network/:account
       get 'validator_block_history/:network/:account',
           to: 'api#validator_block_history',
           as: 'validator_block_history'
 
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
+
+      # GET /api/v1/commission-changes/:network
       get 'commission-changes/:network', to: 'commission_histories#index', as: 'commission_histories_index'
 
+      # GET /api/v1/stake-accounts/:network
       get 'stake-accounts/:network', to: 'stake_accounts#index', as: 'stake_accounts_index'
+
+      # GET /api/v1/stake-pools/:network
       get 'stake-pools/:network', to: 'stake_pools#index', as: 'stake_pools_index'
 
+      # TODO to remove - endpoint no longer in use
       # api_v1_ping_times GET /api/v1/ping_times
       get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
+
+      # POST /api/v1/ping-thing/
+      post 'ping-thing/:network', to: 'ping_things#create', as: 'ping_thing'
+      # GET /api/v1/ping-thing/
+      get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
     end
   end
 end

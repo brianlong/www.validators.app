@@ -1,5 +1,13 @@
 import Vue from 'vue/dist/vue.esm'
 
+const DELEGATION_STRATEGY_URLS = {
+  "DAOPool": "https://monkedao.medium.com/daosol-the-next-step-in-decentralizing-solana-7519e3b2bded",
+  "Jpool": "https://docs.jpool.one/technical-stuff/staking-strategy",
+  "Marinade": "https://docs.marinade.finance/marinade-protocol/validators",
+  "Lido": "https://solana.foundation/stake-pools",
+  "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds"
+}
+
 var StakePoolStats = Vue.component('StakePoolStats', {
   props: {
     pool: {
@@ -11,8 +19,8 @@ var StakePoolStats = Vue.component('StakePoolStats', {
     return {}
   },
   methods: {
-    go_to_metrics() {
-      document.getElementById("metrics").scrollIntoView()
+    delegation_strategy_url() {
+      return DELEGATION_STRATEGY_URLS[this.pool.name]
     }
   },
   template: `
@@ -22,7 +30,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
           {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} Statistics
         </h3>
         <div class="text-center text-muted small mb-4">
-          <a href="#" @click.prevent="go_to_metrics()">See metrics explanation</a>
+          <a v-bind:href="delegation_strategy_url()" target="_blank">See delegation strategy</a>
         </div>
 
         <div class="row pl-lg-4 pl-xl-5">
@@ -64,6 +72,14 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               <span class="text-muted">Manager Fee:&nbsp;</span>
               <strong class="text-success">{{ pool.manager_fee ? pool.manager_fee + '%' : '0%' }}</strong>
             </div>
+            <div>
+              <span class="text-muted">Deposit Fee:&nbsp;</span>
+              <strong class="text-success">{{ pool.deposit_fee ? pool.deposit_fee + '%' : 0 }}</strong>
+            </div>
+            <div>
+              <span class="text-muted">Withdrawal Fee:&nbsp;</span>
+              <strong class="text-success">{{ pool.withdrawal_fee ? pool.withdrawal_fee + '%' : 0 }}</strong>
+            </div>
             <div class="mb-4">
               <span class="text-muted">Avg Validators Fee:&nbsp;</span>
               <strong class="text-success">{{ pool.average_validators_commission ? pool.average_validators_commission.toFixed(2) : 0 }}%</strong>
@@ -73,7 +89,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               <span class="stat-title-3">
                 <i class="fas fa-chart-line text-purple mr-2"></i>APY:&nbsp;
               </span>
-              <strong class="text-purple">{{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}</strong>
+              <strong class="text-purple">{{ (pool.average_apy && pool.name != 'Lido') ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}</strong>
             </div>
           </div>
 

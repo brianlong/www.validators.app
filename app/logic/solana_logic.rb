@@ -34,7 +34,7 @@ module SolanaLogic
       average_skipped_slot_percent = Stats::ValidatorBlockHistory.new(
         p.payload[:network], p.payload[:batch_uuid]
       ).average_skipped_slot_percent
-      
+
       batch&.skipped_slot_all_average = average_skipped_slot_percent
       ##### /IMPORTANT
       batch&.gathered_at = Time.now # instead of batch.touch if batch
@@ -50,8 +50,7 @@ module SolanaLogic
     lambda do |p|
       epoch_json = solana_client_request(
         p.payload[:config_urls],
-        :get_epoch_info,
-        use_token: p.payload[:use_token]
+        :get_epoch_info
       )
 
       epoch = EpochHistory.create(
@@ -173,8 +172,7 @@ module SolanaLogic
 
       validators_json = solana_client_request(
         p.payload[:config_urls],
-        :get_cluster_nodes,
-        use_token: p.payload[:use_token]
+        :get_cluster_nodes
       )
 
       validators = {}
@@ -195,7 +193,7 @@ module SolanaLogic
 
   # Fetches program accounts, default program is config,
   # where you can check if signer is true for the validator.
-  # More program pubkeys can be found on 
+  # More program pubkeys can be found on
   # https://docs.solana.com/developing/runtime-facilities/programs
   def program_accounts(
     config_program_pubkey: 'Config1111111111111111111111111111111111111',
@@ -203,17 +201,16 @@ module SolanaLogic
   )
     lambda do |p|
       return p unless p[:code] == 200
-      
+
       config_program_pubkey = config_program_pubkey
       params = [config_program_pubkey, { encoding: encoding }]
 
       program_accounts = solana_client_request(
         p.payload[:config_urls],
         :get_program_accounts,
-        params: params,
-        use_token: p.payload[:use_token]
+        params: params
       )
-      
+
       Pipeline.new(200, p.payload.merge(program_accounts: program_accounts))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from program_accounts', e)
@@ -226,13 +223,15 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       info_pubkey = 'Va1idator1nfo111111111111111111111111111111'
-      
       data = {}
-      p.payload[:program_accounts].map do |account| 
+
+      p.payload[:program_accounts].map do |account|
         begin
+          next unless account.is_a?(Hash)
+
           data[account['pubkey']] = account.dig('account', 'data', 'parsed', 'info', 'keys')
         rescue TypeError => e
-          # Sometimes value of 'parsed' key is an Array 
+          # Sometimes value of 'parsed' key is an Array
           # that contains base64 encoded strings with ie. Shakespeare's poem.
           # so we skip it.
           next if e.message == 'no implicit conversion of String into Integer'
@@ -246,10 +245,10 @@ module SolanaLogic
 
       data.each do |k, v|
         next unless v.present?
-        
+
         # Find false signers.
         false_signers[k] = v[1] if v[1]['signer'] == false
-        
+
         # Add config key to array of keys for validator's pubkey.
         validator_key = v[1]['pubkey']
         duplicated_count[validator_key] << k
@@ -261,12 +260,12 @@ module SolanaLogic
         end
       end
 
-      # NOTE: We add duplicated_configs to paylaod 
+      # NOTE: We add duplicated_configs to paylaod
       # but for now entries we found are identical
       # so we do nothing with them.
-      
+
       Pipeline.new(
-        200, 
+        200,
         p.payload.merge(
           false_signers: false_signers,
           duplicated_configs: duplicated_configs
@@ -284,9 +283,9 @@ module SolanaLogic
 
       false_signers_keys = p.payload[:false_signers].keys
       if false_signers_keys.any?
-        p.payload[:validators_info].delete_if do |info| 
+        p.payload[:validators_info].delete_if do |info|
           info['infoPubkey'].in?(false_signers_keys)
-        end      
+        end
       end
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -301,8 +300,7 @@ module SolanaLogic
 
       vote_accounts_json = solana_client_request(
         p.payload[:config_urls],
-        :get_vote_accounts,
-        use_token: p.payload[:use_token]
+        :get_vote_accounts
       )['current']
 
       vote_accounts = {}
@@ -410,7 +408,7 @@ module SolanaLogic
       block_history = cli_request(cli_method, p.payload[:config_urls])
 
       raise 'No data from block-production' if block_history.blank? && block_history.is_a?(Hash)
-      
+
       # Data for the validator_block_history_stats table
       block_history_stats = {
         'batch_uuid' => p.payload[:batch_uuid],
@@ -600,8 +598,7 @@ module SolanaLogic
 
       epoch_json = solana_client_request(
         p.payload[:config_urls],
-        :get_epoch_info,
-        use_token: p.payload[:use_token]
+        :get_epoch_info
       )
 
       unless p.payload[:epoch] == epoch_json['epoch']
@@ -659,9 +656,9 @@ module SolanaLogic
   end
 
   # Clusters array, method symbol
-  def solana_client_request(clusters, method, params: [], use_token: false)
+  def solana_client_request(clusters, method, params: [])
     clusters.each do |cluster_url|
-      client = SolanaRpcClient.new(cluster: cluster_url, use_token: use_token).client
+      client = SolanaRpcClient.new(cluster: cluster_url).client
       result = client.public_send(method, *params).result
 
       return result unless result.blank?

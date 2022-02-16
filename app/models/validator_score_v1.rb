@@ -62,8 +62,11 @@
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
   IP_FIELDS_FOR_API = [
-    'traits_autonomous_system_number', 'address'
-  ].map{ |e| "ips.#{e}" }.join(', ')
+    "address",
+    "location_latitude",
+    "location_longitude",
+    "traits_autonomous_system_number"
+  ].map{ |e| "ips.#{e}" }.join(", ")
 
   ATTRIBUTES_FOR_BUILDER = %i[
     total_score
