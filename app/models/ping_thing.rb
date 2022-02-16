@@ -32,4 +32,16 @@ class PingThing < ApplicationRecord
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
 
+  def to_builder
+    Jbuilder.new do |ping_thing|
+      ping_thing.(
+        self,
+          :network,
+          :response_time,
+          :created_at,
+          :signature,
+          :transaction_type
+      )
+    end
+  end
 end
