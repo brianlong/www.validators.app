@@ -17,7 +17,7 @@ class SkipAndSleep < StandardError; end
 begin
   loop do
     # Select the most recently gathered batch
-    batch = Batch.where(["network = ? AND gathered_at IS NOT NULL", network])
+    batch = Batch.where("network = ? AND gathered_at IS NOT NULL", network)
                  .last
 
     # Skip & sleep a few seconds if this batch was already scored.
@@ -41,8 +41,7 @@ begin
                  .then(&log_errors)
 
     # Mark the batch as scored
-    batch.scored_at_v2 = Time.now
-    batch.save
+    batch.update scored_at_v2: Time.now
 
     ReportClusterStatsWorker.perform_async(
       batch_uuid: batch.uuid,
