@@ -148,8 +148,8 @@ Rails.application.routes.draw do
 
       # POST /api/v1/ping-thing/
       post 'ping-thing/:network', to: 'ping_things#create', as: 'ping_thing'
-      # GET /api/v1/ping-things/
-      get 'ping-things/:network', to: 'ping_things#index', as: 'ping_things'
+      # GET /api/v1/ping-thing/
+      get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
     end
   end
 end
