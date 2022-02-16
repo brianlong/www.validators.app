@@ -75,7 +75,6 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
 
   test "#set_validators_groups calculates number of validators in a group" do
     p = Pipeline.new(200, @initial_payload)
-                .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&set_validators_groups)
     validators_count = Validator.where(network: "testnet").count
@@ -85,7 +84,6 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
 
   test "#assign_root_distance_score sets correct scores in pipeline" do
     p = Pipeline.new(200, @initial_payload)
-                .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&set_validators_groups)
                 .then(&assign_root_distance_score)
@@ -100,7 +98,6 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
 
   test "#assign_vote_distance_score sets correct scores in pipeline" do
     p = Pipeline.new(200, @initial_payload)
-                .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&set_validators_groups)
                 .then(&assign_vote_distance_score)
@@ -115,7 +112,6 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
 
   test "#assign_skipped_slot_score sets correct scores in pipeline" do
     p = Pipeline.new(200, @initial_payload)
-                .then(&set_this_batch)
                 .then(&validators_get)
                 .then(&set_validators_groups)
                 .then(&assign_skipped_slot_score)
