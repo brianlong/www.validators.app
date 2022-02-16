@@ -48,6 +48,8 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
            root_distance_history: [5, 3, 5, 3], # average 4
            vote_distance_history: [5, 5, 4, 6], # average 5
            skipped_slot_moving_average_history: [0, 0, 0.1, 0.4]) # last record 0.4
+
+    @validators_count = 5
   end
 
   test "#set_this_batch sets batch to process" do
@@ -64,7 +66,7 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
                 .then(&set_this_batch)
                 .then(&validators_get)
 
-    assert_equal 5, p.payload[:validators].count
+    assert_equal @validators_count, p.payload[:validators].count
     p.payload[:validators].each do |validator|
       assert_not_nil validator.validator_score_v1
       assert_not_nil validator.validator_score_v2
@@ -77,8 +79,8 @@ class ValidatorScoreV2LogicTest < ActiveSupport::TestCase
     p = Pipeline.new(200, @initial_payload)
                 .then(&validators_get)
                 .then(&set_validators_groups)
-    validators_count = Validator.where(network: "testnet").count
-    assert_equal 5, validators_count
+
+    assert_equal @validators_count, Validator.where(network: "testnet").count
     assert_equal 2, p.payload[:validators_count_in_each_group] # (validators_count / NUMBER_OF_GROUPS).ceil
   end
 
