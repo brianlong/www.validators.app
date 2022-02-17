@@ -48,14 +48,29 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_ping_things with correct network returns pings from chosen network" do
-    create(:ping_thing, :testnet)
+    ping_thing_time = create(:ping_thing, :testnet, :processed)
     create(:ping_thing, :mainnet)
 
     get api_v1_ping_things_path(network: "testnet"), headers: { "Token" => @user.api_token }
 
     assert_response 200
+
     json = response_to_json(@response.body)
+    json_record = json.first
+    signature = "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s"
+    
     assert_equal 1, json.size
+    assert_equal 9, json_record.size
+
+    assert_equal "Mango",                         json_record["application"]
+    assert_equal "processed",                     json_record["commitment_level"]
+    assert                                        json_record["created_at"]
+    assert_equal "testnet",                       json_record["network"]
+    assert_equal 1,                               json_record["response_time"]
+    assert_equal signature,                       json_record["signature"]
+    assert_equal true,                            json_record["success"]
+    assert_equal "transfer",                      json_record["transaction_type"]
+    assert_equal ping_thing_time.user.username,   json_record["username"]
   end
 
   test "GET api_v1_ping_things with limit present returns pings for chosen limit" do

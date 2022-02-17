@@ -40,11 +40,14 @@ class PingThing < ApplicationRecord
     Jbuilder.new do |ping_thing|
       ping_thing.(
         self,
-          :network,
-          :response_time,
-          :created_at,
-          :signature,
-          :transaction_type
+        :application,
+        :commitment_level,
+        :created_at,
+        :network,
+        :response_time,
+        :signature,
+        :success,
+        :transaction_type
       )
     end
   end

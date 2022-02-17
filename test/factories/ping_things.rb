@@ -2,14 +2,14 @@
 
 FactoryBot.define do
   factory :ping_thing do
-    user
     amount { "" }
-    signature { "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s" }
-    response_time { 1 }
-    transaction_type { "MyString" }
-    network { "mainnet" }
-    success { true }
     application { "Mango" }
+    network { "mainnet" }
+    response_time { 1 }
+    signature { "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s" }
+    success { true }
+    transaction_type { "transfer" }
+    user
 
     trait :processed do
       commitment_level { 0 }
