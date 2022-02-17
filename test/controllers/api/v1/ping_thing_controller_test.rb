@@ -61,7 +61,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
     post api_v1_ping_thing_batch_path(
       network: "testnet"
-    ), headers: { "Token" => @user.api_token }, params: params_batch
+    ), headers: { "Token" => @user.api_token }, params: params_batch.to_json
     assert_response 201
     expected_response = { "status" => "created" }
 
