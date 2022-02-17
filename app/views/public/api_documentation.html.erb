@@ -347,7 +347,7 @@
 <p>The ping thing endpoint allows you to push information about transaction times.</p>
 <p>Request:</p>
 <pre>
-curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"time": "NN", "signature": "signature", "transaction_type": "transfer", "reported_at": "%year-%month-%dayT%hour:%minute:%second"}' https://www.validators.app/api/v1/ping-thing/:network</pre>
+curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"time": "NN", "signature": "signature", "transaction_type": "transfer", "reported_at": "2021-07-01T11:02:12"}' https://www.validators.app/api/v1/ping-thing/:network</pre>
 <p>Parameters:</p>
 <p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
 <p><strong>`signature: string`</strong> Transaction signature</p>
@@ -366,7 +366,7 @@ curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d
 
 <p>The ping thing batch endpoint allows you to push multiple transaction informations at once.</p>
 <p>Request:</p>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "reported_at": "%year-%month-%dayT%hour:%minute:%second"}]'
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "reported_at": "2021-07-01T11:02:12"}, ...]'
 https://www.validators.app/api/v1/ping-thing-batch/:network</pre>
 <p>Parameters:</p>
 <p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
