@@ -40,9 +40,12 @@
       <thead>
       <tr>
         <th class="align-middle column-sm">Time</th>
+        <th class="align-middle column-sm">Success</th>
         <th class="align-middle column-lg">Created At</th>
         <th class="align-middle column-lg">Signature</th>
+        <th class="align-middle column-lg">Application</th>
         <th class="align-middle column-lg">Transaction Type</th>
+        <th class="align-middle column-lg">Commitment Level</th>
         <th class="align-middle column-md">Posted by</th>
       </tr>
       </thead>
@@ -53,6 +56,7 @@
           <td class="align-middle">
             <strong class="text-success h6"><%= pt.response_time %></strong>&nbsp;ms
           </td>
+          <td class="align-middle text-center"><%= success_icon(pt.success).html_safe %></td>
           <td class="align-middle small text-muted"><%= pt.created_at %></td>
           <td class="align-middle small">
             <a data-toggle="collapse" href="#collapseExample<%=index%>" aria-expanded="false" class="text-muted">
@@ -61,10 +65,12 @@
             <div class="collapse word-break" id="collapseExample<%=index%>">
               <%= pt.signature %>
             </div>
-
           </td>
+          <td class="align-middle small word-break text-muted">&nbsp;<%= pt.application %></td>
           <td class="align-middle">
-            <%= transaction_type_icon(pt.transaction_type).html_safe %>&nbsp;<%= pt.transaction_type %></td>
+            <%= transaction_type_icon(pt.transaction_type).html_safe %><%= pt.transaction_type %>
+          </td>
+          <td class="align-middle"><%= pt.commitment_level %></td>
           <td class="align-middle text-muted"><%= pt.user.username %></td>
         </tr>
       <% end %>
