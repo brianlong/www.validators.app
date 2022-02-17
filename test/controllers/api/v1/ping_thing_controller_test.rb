@@ -71,7 +71,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
   test "create_multiple request with token should return 400 when there's too much data" do
     transactions = []
-    51.times {transactions.push(@params_sample)}
+    1001.times {transactions.push(@params_sample)}
     params_batch = {
       transactions: transactions
     }
@@ -80,11 +80,11 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
       network: "testnet"
     ), headers: { "Token" => @user.api_token }, params: params_batch
     assert_response 400
-    expected_response = "Number of records exceeds 50"
+    expected_response = "Number of records exceeds 1000"
 
     assert_equal expected_response, response_to_json(@response.body)
   end
-  
+
   test "GET api_v1_ping_things with correct network returns pings from chosen network" do
     create(:ping_thing, :testnet)
     create(:ping_thing, :mainnet)

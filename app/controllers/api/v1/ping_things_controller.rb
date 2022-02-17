@@ -5,6 +5,8 @@ module Api
     class PingThingsController < BaseController
 
       class InvalidRecordCount < StandardError; end
+
+      MAX_RECORDS = 1000
       
       def index
         limit = [(index_params[:limit] || 240).to_i, 11520].min
@@ -35,12 +37,11 @@ module Api
       end
 
       def create_batch
-        max_records = 50
         api_token = request.headers["Token"]
 
         begin
-          raise InvalidRecordCount, "Number of records exceeds #{max_records}" \
-            if ping_thing_batch_params[:transactions].count > max_records
+          raise InvalidRecordCount, "Number of records exceeds #{MAX_RECORDS}" \
+            if ping_thing_batch_params[:transactions].count > MAX_RECORDS
 
           txs = ping_thing_batch_params[:transactions].map do |tx|
             {
