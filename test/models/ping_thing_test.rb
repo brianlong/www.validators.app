@@ -11,7 +11,8 @@ class PingThingTest < ActiveSupport::TestCase
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
       transaction_type: "transfer",
       network: 'testnet',
-      user_id: @user.id
+      user_id: @user.id,
+      reported_at: DateTime.now
     }
   end
 
