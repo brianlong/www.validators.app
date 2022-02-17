@@ -19,6 +19,7 @@
 #
 #  index_ping_things_on_created_at_and_network_and_transaction_type  (created_at,network,transaction_type)
 #  index_ping_things_on_created_at_and_network_and_user_id           (created_at,network,user_id)
+#  index_ping_things_on_reported_at                                  (reported_at)
 #  index_ping_things_on_user_id                                      (user_id)
 #
 # Foreign Keys
