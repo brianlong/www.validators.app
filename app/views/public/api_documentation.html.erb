@@ -351,7 +351,7 @@ curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d
 <p><strong>`application: string`</strong> Application type</p>
 <p><strong>`commitment_level: string`</strong> Possible values: 'processed' OR 'confirmed' OR 'finalized'</p>
 <p><strong>`signature: string`</strong> Transaction signature</p>
-<p><strong>`success: boolean`</strong> True or false (if empty default true will be set)</p>
+<p><strong>`success: boolean`</strong> Optional, true or false, default true, if empty success will be set to true. Only false value sets `success` field to false.</p>
 <p><strong>`time: NN`</strong> Confirmation time in miliseconds</p>
 <p><strong>`transaction_type: string`</strong> A string to describe the type of transaction. e.g. 'transfer', 'defi-swap', 'nft-mint', or anything meaningful to the sender.</p>
 <p>Response:</p>

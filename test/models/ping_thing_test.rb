@@ -13,7 +13,7 @@ class PingThingTest < ActiveSupport::TestCase
       network: "testnet",
       user_id: @user.id
     }
-    @ping_thing = build(:ping_thing, user_id: @user.id)
+    @ping_thing = build(:ping_thing, user_id: @user.id, success: nil)
   end
 
   test "validates application length" do
@@ -24,6 +24,32 @@ class PingThingTest < ActiveSupport::TestCase
 
     @ping_thing.application = "application"
     assert @ping_thing.valid?
+  end
+
+
+  test "success different values" do
+    ActiveRecord::Type::Boolean::FALSE_VALUES.each do |value|
+      @ping_thing.success = nil
+
+      assert @ping_thing.valid?
+      refute @ping_thing.success
+    end
+
+    @ping_thing.success = nil
+    assert @ping_thing.valid? # it's valid because column is allowed to have null value
+    assert_nil @ping_thing.success
+
+    @ping_thing.success = true
+    assert @ping_thing.valid?
+    assert @ping_thing.success
+
+    @ping_thing.success = "true"
+    assert @ping_thing.valid?
+    assert @ping_thing.success
+
+    @ping_thing.success = "I am also true" # String is also casted to true
+    assert @ping_thing.valid?
+    assert @ping_thing.success
   end
 
   test "create with correct data should succeed" do
