@@ -346,7 +346,7 @@
 <p>The ping thing endpoint allows you to push information about transaction times.</p>
 <p>Request:</p>
 <pre>
-curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"time": "NN", "signature": "signature", "transaction_type": "transfer"}' https://www.validators.app/api/v1/ping-thing/:network</pre>
+curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer"}' https://www.validators.app/api/v1/ping-thing/:network</pre>
 <p>Parameters:</p>
 <p><strong>`application: string`</strong> Application type</p>
 <p><strong>`commitment_level: string`</strong> Possible values: 'processed' OR 'confirmed' OR 'finalized'</p>
@@ -378,9 +378,9 @@ curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d
     "network": "testnet",
     "response_time": 396,
     "signature": "0d7f418e4d1a3f80dc8a266cd867f766b73d9c80feea36524dfd074068bdef9221e356c192ac6ac71b71404d",
-    "success": true
+    "success": true,
     "transaction_type": "transfer",
-    "username": "sample_user",
+    "username": "sample_user"
   },
   ...
 ]
