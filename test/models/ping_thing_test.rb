@@ -13,6 +13,17 @@ class PingThingTest < ActiveSupport::TestCase
       network: "testnet",
       user_id: @user.id
     }
+    @ping_thing = build(:ping_thing, user_id: @user.id)
+  end
+
+  test "validates application length" do
+    application = "a" * 81
+    @ping_thing.application = application
+
+    refute @ping_thing.valid?
+
+    @ping_thing.application = "application"
+    assert @ping_thing.valid?
   end
 
   test "create with correct data should succeed" do

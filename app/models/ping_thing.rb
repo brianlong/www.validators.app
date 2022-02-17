@@ -33,6 +33,7 @@ class PingThing < ApplicationRecord
   enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
 
   validates_presence_of :user_id, :response_time, :signature, :network
+  validates_length_of :application, maximum: 80, allow_blank: true
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
 
