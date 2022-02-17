@@ -10,7 +10,7 @@ interrupted = false
 trap('INT') { interrupted = true }  unless Rails.env.test?
 
 network = 'testnet'
-sleep_time = 15 # seconds
+sleep_time = 7 # seconds
 
 class SkipAndSleep < StandardError; end
 
