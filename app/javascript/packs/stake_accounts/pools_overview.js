@@ -76,7 +76,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
               <small class="text-muted">{{ pool.average_validators_commission ? pool.average_validators_commission.toFixed(2) : 0 }}%</small>
             </td>
             <td class="align-middle">
-              {{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}
+              {{ (pool.average_apy && pool.name != 'Lido') ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}
             </td>
             <td class="align-middle">
               {{ pool.average_score || 'N / A' }}
