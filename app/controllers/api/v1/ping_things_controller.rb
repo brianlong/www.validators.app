@@ -46,11 +46,11 @@ module Api
       private
 
       def ping_thing_params
-        params.permit(:amount, :time, :signature, :transaction_type)
+        params.permit(:amount, :time, :signature, :transaction_type, :reported_at)
       end
 
       def ping_thing_batch_params
-        params.permit(transactions: [:amount, :time, :signature, :transaction_type])
+        params.permit(transactions: [:amount, :time, :signature, :transaction_type, :reported_at])
       end
     end
   end

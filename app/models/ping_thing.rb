@@ -7,6 +7,7 @@
 #  id               :bigint           not null, primary key
 #  amount           :bigint
 #  network          :string(191)
+#  reported_at      :datetime
 #  response_time    :integer
 #  signature        :string(191)
 #  transaction_type :string(191)
@@ -16,9 +17,9 @@
 #
 # Indexes
 #
-#  index_ping_things_on_network_and_transaction_type  (network,transaction_type)
-#  index_ping_things_on_network_and_user_id           (network,user_id)
-#  index_ping_things_on_user_id                       (user_id)
+#  index_ping_things_on_created_at_and_network_and_transaction_type  (created_at,network,transaction_type)
+#  index_ping_things_on_created_at_and_network_and_user_id           (created_at,network,user_id)
+#  index_ping_things_on_user_id                                      (user_id)
 #
 # Foreign Keys
 #

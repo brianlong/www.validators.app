@@ -17,12 +17,13 @@ class PingThingRaw < ApplicationRecord
 
   def attributes_from_raw
     params = JSON.parse(raw_data).symbolize_keys
-
+    reported_at = params[:reported_at]&.to_datetime rescue nil
     {
       amount: params[:amount].to_i,
       response_time: params[:time].to_i,
       signature: params[:signature],
-      transaction_type: params[:transaction_type]
+      transaction_type: params[:transaction_type],
+      reported_at: reported_at || DateTime.now
     }
   end
 
