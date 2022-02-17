@@ -44,7 +44,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_response, response_to_json(@response.body)
   end
 
-  test "create_multiple request without token returns error" do
+  test "POST api_v1_ping_thing_batch_path without token returns error" do
     post api_v1_ping_thing_batch_path(network: "testnet")
     assert_response 401
     expected_response = { "error" => "Unauthorized" }
@@ -52,7 +52,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_response, response_to_json(@response.body)
   end
 
-  test "create_multiple request with token should return 200 and save the data" do
+  test "POST api_v1_ping_thing_batch_path with token should return 200 and save the data" do
     params_batch = {
       transactions: [
         @params_sample, @params_sample
@@ -61,7 +61,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
     post api_v1_ping_thing_batch_path(
       network: "testnet"
-    ), headers: { "Token" => @user.api_token }, params: params_batch.to_json
+    ), headers: { "Token" => @user.api_token }, params: params_batch
     assert_response 201
     expected_response = { "status" => "created" }
 
@@ -69,7 +69,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     assert_equal params_batch[:transactions].last, JSON.parse(PingThingRaw.last.raw_data).symbolize_keys
   end
 
-  test "create_multiple request with token should return 400 when there's too much data" do
+  test "POST api_v1_ping_thing_batch_path with token should return 400 when there's too much data" do
     transactions = []
     1001.times {transactions.push(@params_sample)}
     params_batch = {
