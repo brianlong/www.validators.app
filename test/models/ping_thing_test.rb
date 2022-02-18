@@ -14,6 +14,43 @@ class PingThingTest < ActiveSupport::TestCase
       user_id: @user.id,
       reported_at: DateTime.now
     }
+    @ping_thing = build(:ping_thing, user_id: @user.id, success: nil)
+  end
+
+  test "validates application length" do
+    application = "a" * 81
+    @ping_thing.application = application
+
+    refute @ping_thing.valid?
+
+    @ping_thing.application = "application"
+    assert @ping_thing.valid?
+  end
+
+
+  test "success different values" do
+    ActiveRecord::Type::Boolean::FALSE_VALUES.each do |value|
+      @ping_thing.success = nil
+
+      assert @ping_thing.valid?
+      refute @ping_thing.success
+    end
+
+    @ping_thing.success = nil
+    assert @ping_thing.valid? # it's valid because column is allowed to have null value
+    assert_nil @ping_thing.success
+
+    @ping_thing.success = true
+    assert @ping_thing.valid?
+    assert @ping_thing.success
+
+    @ping_thing.success = "true"
+    assert @ping_thing.valid?
+    assert @ping_thing.success
+
+    @ping_thing.success = "I am also true" # String is also casted to true
+    assert @ping_thing.valid?
+    assert @ping_thing.success
   end
 
   test "create with correct data should succeed" do
@@ -44,5 +81,53 @@ class PingThingTest < ActiveSupport::TestCase
 
     refute pt.valid?
     assert_equal ["Signature is too short (minimum is 64 characters)"], pt.errors.full_messages
+  end
+
+  test "commitment_level is being correctly assigned and returns correct values" do
+    pt = build(:ping_thing, user_id: @user.id)
+
+    PingThing.commitment_levels.each_key do |key|
+      pt.commitment_level = key
+      assert pt.valid?
+      assert_equal key, pt.commitment_level 
+    end
+
+    PingThing.commitment_levels.each_value do |value|
+      pt.commitment_level = value
+      assert pt.valid?
+      assert_equal PingThing.commitment_levels.keys[value], pt.commitment_level 
+    end
+  end
+
+  test "commitment_level raise argument error when wrong level is being assigned" do
+    pt = build(:ping_thing, user_id: @user.id)
+    
+    # string instead of integer
+    assert_raise ArgumentError do
+      pt.commitment_level = "0"
+    end
+
+    # Integer out of range
+    assert_raise ArgumentError do
+       pt.commitment_level = 3
+    end
+
+    # Random string instead of valid commitment levels
+    assert_raise ArgumentError do
+      pt.commitment_level = "I am not valid :C"
+    end
+  end
+
+  test "commitment_level allows nils" do
+    pt = build(:ping_thing, user_id: @user.id, commitment_level: nil)
+    
+    assert_nil pt.commitment_level
+    assert pt.valid?
+  end
+
+  test "success field is true by default" do
+    pt = PingThing.new
+
+    assert pt.success
   end
 end

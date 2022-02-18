@@ -222,6 +222,9 @@ ActiveRecord::Schema.define(version: 2022_02_17_092117) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "network"
+    t.integer "commitment_level"
+    t.boolean "success", default: true
+    t.string "application"
     t.datetime "reported_at"
     t.index ["created_at", "network", "transaction_type"], name: "index_ping_things_on_created_at_and_network_and_transaction_type"
     t.index ["created_at", "network", "user_id"], name: "index_ping_things_on_created_at_and_network_and_user_id"

@@ -65,11 +65,32 @@ module Api
       end
 
       def ping_thing_params
-        params.permit(:amount, :time, :signature, :transaction_type, :reported_at)
+        params.permit(
+          :amount,
+          :application,
+          :commitment_level,
+          :signature,
+          :success,
+          :time,
+          :transaction_type,
+          :reported_at
+        )
       end
 
       def ping_thing_batch_params
-        params.permit(transactions: [:amount, :time, :signature, :transaction_type, :reported_at])
+        params.permit(
+          transactions: [
+            :amount,
+            :application,
+            :commitment_level,
+            :signature,
+            :success,
+            :time,
+            :transaction_type,
+            :reported_at
+            ]
+          )
+
       end
 
       def create_json_result(ping_thing)
