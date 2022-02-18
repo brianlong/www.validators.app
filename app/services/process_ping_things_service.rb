@@ -17,7 +17,8 @@ class ProcessPingThingsService
         created_at: raw.created_at
       )
 
-      PingThing.create(params) ? raw.delete : next
+      PingThing.create(params)
+      raw.delete
     # in case of passing wrong commitment_level, which is an enum
     # that raises an ArgumentError when wrong value is assigned
     rescue ArgumentError => e
