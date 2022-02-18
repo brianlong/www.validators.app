@@ -30,7 +30,7 @@ class PingThingRaw < ApplicationRecord
     optional_params[:amount] = params[:amount].to_i if params[:amount].present?
     optional_params[:application] = params[:application] if params[:application].present?
     optional_params[:commitment_level] = params[:commitment_level] if params[:commitment_level].present?
-    optional_params[:success] = params[:success] if params[:success].present?
+    optional_params[:success] = params[:success] if params[:success].present? || params[:success] == false
     optional_params[:transaction_type] = params[:transaction_type] if params[:transaction_type].present?
 
     required_params.merge(optional_params)
