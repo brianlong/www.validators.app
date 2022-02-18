@@ -65,6 +65,20 @@ class ProcessPingThingsServiceTest < ActiveSupport::TestCase
     assert pt.success
   end
 
+  test "#call success is set to true when success param is not present in raw data" do
+    ptr = create(:ping_thing_raw, :success_empty, api_token: @user.api_token)
+    ptr_attributes = ptr.attributes_from_raw
+
+    assert_difference "PingThing.count" do
+      ProcessPingThingsService.new(records_count: 1).call
+    end
+    
+    pt = PingThing.last
+
+    assert PingThingRaw.all.blank?
+    assert pt.success
+  end
+
   test 'service \
       with incorrect input \
       should not create new data \
