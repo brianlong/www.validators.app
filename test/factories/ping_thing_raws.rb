@@ -15,5 +15,19 @@ FactoryBot.define do
         transaction_type: "transfer"
       }.to_json
     }
+
+    trait :invalid_commitment_level do
+      raw_data {
+        {
+          amount: rand(1..100),
+          application: "Mango",
+          commitment_level: "finished",
+          signature: SecureRandom.hex(46),
+          success: true,
+          time: rand(1..1000),
+          transaction_type: "transfer"
+        }.to_json
+      }
+    end
   end
 end
