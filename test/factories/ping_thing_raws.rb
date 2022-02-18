@@ -29,5 +29,15 @@ FactoryBot.define do
         }.to_json
       }
     end
+
+    trait :success_empty do
+      raw_data {
+        {
+          signature: "0d7f418e4d1a3f80dc8a266cd867f766b73d9c80feea36524dfd074068bdef9221e356c192ac6ac71b71404d",
+          time: 2,
+          transaction_type: "transfer"
+        }.to_json
+      }
+    end
   end
 end
