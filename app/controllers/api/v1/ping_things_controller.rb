@@ -4,6 +4,10 @@ module Api
   module V1
     class PingThingsController < BaseController
 
+      class InvalidRecordCount < StandardError; end
+
+      MAX_RECORDS = 1000
+      
       def index
         limit = [(index_params[:limit] || 240).to_i, 11520].min
         ping_things = PingThing.where(network: index_params[:network])
@@ -32,6 +36,28 @@ module Api
         end
       end
 
+      def create_batch
+        api_token = request.headers["Token"]
+
+        begin
+          raise InvalidRecordCount, "Number of records exceeds #{MAX_RECORDS}" \
+            if ping_thing_batch_params[:transactions].count > MAX_RECORDS
+
+          txs = ping_thing_batch_params[:transactions].map do |tx|
+            {
+              raw_data: tx.to_json,
+              api_token: api_token,
+              network: params[:network]
+            }
+          end
+
+          PingThingRaw.create! txs
+          render json: { status: "created" }, status: :created
+        rescue ActiveRecord::RecordInvalid, InvalidRecordCount => e
+          render json: e.to_json, status: :bad_request
+        end
+      end
+
       private
 
       def index_params
@@ -46,8 +72,25 @@ module Api
           :signature,
           :success,
           :time,
-          :transaction_type
+          :transaction_type,
+          :reported_at
         )
+      end
+
+      def ping_thing_batch_params
+        params.permit(
+          transactions: [
+            :amount,
+            :application,
+            :commitment_level,
+            :signature,
+            :success,
+            :time,
+            :transaction_type,
+            :reported_at
+            ]
+          )
+
       end
 
       def create_json_result(ping_thing)

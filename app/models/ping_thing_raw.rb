@@ -17,17 +17,25 @@ class PingThingRaw < ApplicationRecord
 
   def attributes_from_raw
     params = JSON.parse(raw_data).symbolize_keys
+    reported_at = params[:reported_at].to_datetime rescue DateTime.now
 
-    {
-      amount: params[:amount].to_i,
-      application: params[:application],
-      commitment_level: params[:commitment_level],
-      network: params[:network],
+    # params that are required by ping_thing model to be present
+    required_params = {
       response_time: params[:time].to_i,
       signature: params[:signature],
-      success: params[:success],
-      transaction_type: params[:transaction_type]
+      network: params[:network],
+      reported_at: reported_at
     }
+
+    # optional params
+    optional_params = {}
+    optional_params[:amount] = params[:amount].to_i if params[:amount].present?
+    optional_params[:application] = params[:application] if params[:application].present?
+    optional_params[:commitment_level] = params[:commitment_level] if params[:commitment_level].present?
+    optional_params[:success] = params[:success] if params[:success].present? || params[:success] == false
+    optional_params[:transaction_type] = params[:transaction_type] if params[:transaction_type].present?
+
+    required_params.merge(optional_params)
   end
 
   private
