@@ -47,6 +47,47 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_response, response_to_json(@response.body)
   end
 
+  test "POST api_v1_ping_thing_batch_path without token returns error" do
+    post api_v1_ping_thing_batch_path(network: "testnet")
+    assert_response 401
+    expected_response = { "error" => "Unauthorized" }
+
+    assert_equal expected_response, response_to_json(@response.body)
+  end
+
+  test "POST api_v1_ping_thing_batch_path with token should return 200 and save the data" do
+    params_batch = {
+      transactions: [
+        @params_sample, @params_sample
+      ]
+    }
+
+    post api_v1_ping_thing_batch_path(
+      network: "testnet"
+    ), headers: { "Token" => @user.api_token }, params: params_batch
+    assert_response 201
+    expected_response = { "status" => "created" }
+
+    assert_equal expected_response, response_to_json(@response.body)
+    assert_equal params_batch[:transactions].last, JSON.parse(PingThingRaw.last.raw_data).symbolize_keys
+  end
+
+  test "POST api_v1_ping_thing_batch_path with token should return 400 when there's too much data" do
+    transactions = []
+    1001.times {transactions.push(@params_sample)}
+    params_batch = {
+      transactions: transactions
+    }
+
+    post api_v1_ping_thing_batch_path(
+      network: "testnet"
+    ), headers: { "Token" => @user.api_token }, params: params_batch
+    assert_response 400
+    expected_response = "Number of records exceeds 1000"
+
+    assert_equal expected_response, response_to_json(@response.body)
+  end
+
   test "GET api_v1_ping_things with correct network returns pings from chosen network" do
     ping_thing_time = create(:ping_thing, :testnet, :processed)
     create(:ping_thing, :mainnet)

@@ -17,12 +17,14 @@ class PingThingRaw < ApplicationRecord
 
   def attributes_from_raw
     params = JSON.parse(raw_data).symbolize_keys
+    reported_at = params[:reported_at].to_datetime rescue DateTime.now
 
     # params that are required by ping_thing model to be present
     required_params = {
       response_time: params[:time].to_i,
       signature: params[:signature],
       network: params[:network],
+      reported_at: reported_at
     }
 
     # optional params
