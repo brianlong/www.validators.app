@@ -365,8 +365,7 @@ curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d
 
 <p>The ping thing batch endpoint allows you to push multiple transaction informations at once.</p>
 <p>Request:</p>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "reported_at": "2021-07-01T11:02:12"}, ...]'
-https://www.validators.app/api/v1/ping-thing-batch/:network</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "reported_at": "2021-07-01T11:02:12"}, ...]}' https://www.validators.app/api/v1/ping-thing-batch/:network</pre>
 <p>Parameters:</p>
 <p><strong>`application: string`</strong> Application type</p>
 <p><strong>`commitment_level: string`</strong> Possible values: 'processed' OR 'confirmed' OR 'finalized'</p>
