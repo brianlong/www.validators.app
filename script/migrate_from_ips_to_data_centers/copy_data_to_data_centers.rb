@@ -6,7 +6,7 @@ require_relative '../../config/environment'
 
 @file ||= File.open("tmp/copy_data_to_data_centers.txt", "w")
 
-def create_data_center_from_ip(ip)
+def create_data_center_with_host_from_ip(ip)
   data_center = DataCenter.find_or_create_by!(
     continent_code: ip.continent_code,
     continent_geoname_id: ip.continent_geoname_id,
@@ -15,7 +15,6 @@ def create_data_center_from_ip(ip)
     country_iso_code: ip.country_iso_code,
     country_geoname_id: ip.country_geoname_id,
     country_name: ip.country_name,
-    data_center_host: ip.data_center_host,
     registered_country_iso_code: ip.registered_country_iso_code,
     registered_country_geoname_id: ip.registered_country_geoname_id,
     registered_country_name: ip.registered_country_name,
@@ -45,29 +44,34 @@ def create_data_center_from_ip(ip)
     subdivision_name: ip.subdivision_name
   )
 
-  @file.write "Data Center #{data_center.data_center_key} found or created.\n"
-  data_center
+  data_center_host = DataCenterHost.find_or_create_by!(
+    host: ip.data_center_host,
+    data_center: data_center
+  )
+
+  @file.write "Data Center #{data_center.data_center_key} found or created, data_center_host #{data_center_host.host} with id: #{data_center_host.id} assigned.\n"
+  data_center_host
 end
 
-def create_or_update_validator_ip(ip, data_center)
+def create_or_update_validator_ip(ip, data_center_host)
   val_ip = ValidatorIp.find_by(address: ip.address)
 
   if val_ip
     val_ip.update(
-      data_center_id: data_center.id,
+      data_center_host_id: data_center_host.id,
       traits_ip_address: ip.traits_ip_address,
       traits_network: ip.traits_network,
     )
-    @file.write "Validator IP with id #{val_ip.id} updated with data center #{val_ip.data_center_id}: #{data_center.data_center_key}.\n"
+    @file.write "Validator IP with id #{val_ip.id} updated with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
   else
-    val = ValidatorIp.create!(
+    val_ip = ValidatorIp.create!(
       address: ip.address,
-      data_center_id: data_center.id,
+      data_center_host_id: data_center_host.id,
       traits_ip_address: ip.traits_ip_address,
       traits_network: ip.traits_network
     )
 
-    @file.write "Validator IP created for address #{ip.address} with data center #{val.data_center_id}: #{data_center.data_center_key}.\n"
+    @file.write "Validator IP created for address #{ip.address} with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
   end
 end
 
@@ -76,30 +80,37 @@ end
 def update_validator_ip_from_ip_override(ip_override)
   val_ip = ValidatorIp.find_by(address: ip_override.address)
   ip = Ip.find_by(address: ip_override.address)
+
   data_center = DataCenter.find_by(
     traits_autonomous_system_number: ip_override.traits_autonomous_system_number,
     traits_autonomous_system_organization: ip_override.traits_autonomous_system_organization,
     country_iso_code: ip_override.country_iso_code,
     country_name: ip_override.country_name,
-    data_center_key: ip_override.data_center_key,
-    data_center_host: ip_override.data_center_host
+    data_center_key: ip_override.data_center_key
   )
 
-  if data_center && val_ip
-    val_ip.update(is_overridden: true, data_center_id: data_center.id)
+  data_center_host = DataCenterHost.find_or_create_by!(
+    host: ip_override.data_center_host,
+    data_center: data_center
+  )
+
+  if data_center_host && val_ip
+    val_ip.update(is_overridden: true, data_center_host_id: data_center_host.id)
 
     @file.write "Validator IP with id: #{val_ip.id} 
-                updated with data center id: #{data_center.id}, 
-                data_center_key: #{ip_override.data_center_key},
-                data_center_host: #{ip_override.data_center_host},
+                updated with data center host  #{ip_override.data_center_host}, id: #{data_center_host.id},
+                ip_override.data_center_key: #{ip_override.data_center_key}, data_center.data_center_key: #{data_center.data_center_key}
                 is_overridden set to true.\n"
   else
-    @file.write "Data center not found for
-                  traits_autonomous_system_number: #{ip_override.traits_autonomous_system_number}, 
-                  traits_autonomous_system_organization: #{ip_override.traits_autonomous_system_organization}, 
-                  data_center_key: #{ip_override.data_center_key},
-                  data_center_host: #{ip_override.data_center_host}.
-                  ip_override: #{ip_override.id}.\n" unless data_center
+    @file.write "Data center host not found for
+                  host: #{ip_override.data_center_host}.
+                  ip_override: #{ip_override.id}.\n" unless data_center_host
+    # @file.write "Data center host not found for
+    #               traits_autonomous_system_number: #{ip_override.traits_autonomous_system_number}, 
+    #               traits_autonomous_system_organization: #{ip_override.traits_autonomous_system_organization}, 
+    #               data_center_key: #{ip_override.data_center_key},
+    #               data_center_host: #{ip_override.data_center_host}.
+    #               ip_override: #{ip_override.id}.\n" unless data_center
     @file.write "Validator IP not found for id: #{ip_override.id}, ip address #{ip_override.address}.\n" unless ip_override
   end
 end
@@ -107,8 +118,8 @@ end
 Ip.find_in_batches do |batch|
   puts "Ips migration started..."
   batch.each do |ip|
-    data_center = create_data_center_from_ip(ip)
-    create_or_update_validator_ip(ip, data_center)
+    data_center_host = create_data_center_with_host_from_ip(ip)
+    create_or_update_validator_ip(ip, data_center_host)
     @file.write "------------------------\n"
   end
 end
