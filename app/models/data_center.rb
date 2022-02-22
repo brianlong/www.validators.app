@@ -28,11 +28,8 @@
 #  traits_anonymous                      :boolean
 #  traits_autonomous_system_number       :integer
 #  traits_autonomous_system_organization :string(191)
-#  traits_domain                         :string(191)
 #  traits_hosting_provider               :boolean
-#  traits_ip_address                     :string(191)
 #  traits_isp                            :string(191)
-#  traits_network                        :string(191)
 #  traits_organization                   :string(191)
 #  traits_user_type                      :string(191)
 #  created_at                            :datetime         not null

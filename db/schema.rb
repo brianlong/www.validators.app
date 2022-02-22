@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_22_133137) do
+ActiveRecord::Schema.define(version: 2022_02_22_170715) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -129,11 +129,8 @@ ActiveRecord::Schema.define(version: 2022_02_22_133137) do
     t.string "traits_user_type"
     t.integer "traits_autonomous_system_number"
     t.string "traits_autonomous_system_organization"
-    t.string "traits_domain"
     t.string "traits_isp"
     t.string "traits_organization"
-    t.string "traits_ip_address"
-    t.string "traits_network"
     t.integer "city_confidence"
     t.integer "city_geoname_id"
     t.string "city_name"
