@@ -10,7 +10,6 @@
 #  country_confidence                    :integer
 #  country_iso_code                      :string(191)
 #  country_name                          :string(191)
-#  data_center_host                      :string(191)
 #  data_center_key                       :string(191)
 #  location_accuracy_radius              :integer
 #  location_average_income               :integer
