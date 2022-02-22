@@ -23,7 +23,6 @@ def create_data_center_with_host_from_ip(ip)
     traits_user_type: ip.traits_user_type,
     traits_autonomous_system_number: ip.traits_autonomous_system_number,
     traits_autonomous_system_organization: ip.traits_autonomous_system_organization,
-    traits_domain: ip.traits_domain,
     traits_isp: ip.traits_isp,
     traits_organization: ip.traits_organization,
     city_confidence: ip.city_confidence,
@@ -61,6 +60,7 @@ def create_or_update_validator_ip(ip, data_center_host)
       data_center_host_id: data_center_host.id,
       traits_ip_address: ip.traits_ip_address,
       traits_network: ip.traits_network,
+      traits_domain: ip.traits_domain
     )
     @file.write "Validator IP with id #{val_ip.id} updated with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
   else
@@ -68,7 +68,8 @@ def create_or_update_validator_ip(ip, data_center_host)
       address: ip.address,
       data_center_host_id: data_center_host.id,
       traits_ip_address: ip.traits_ip_address,
-      traits_network: ip.traits_network
+      traits_network: ip.traits_network,
+      traits_domain: ip.traits_domain
     )
 
     @file.write "Validator IP created for address #{ip.address} with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
