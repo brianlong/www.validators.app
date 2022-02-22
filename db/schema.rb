@@ -496,6 +496,7 @@ ActiveRecord::Schema.define(version: 2022_02_22_133137) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "data_center_host_id"
     t.boolean "is_overridden", default: false
+    t.string "traits_domain"
     t.string "traits_ip_address"
     t.string "traits_network"
     t.index ["data_center_host_id"], name: "index_validator_ips_on_data_center_host_id"
