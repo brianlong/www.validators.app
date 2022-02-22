@@ -38,7 +38,10 @@
                     display: true,
                     ticks: {
                         //min: 0,
-                        padding: 10
+                        padding: 10,
+                        callback: function(value, index, values) {
+                            return value.toLocaleString('en-US')
+                        }
                     },
                     gridLines: {
                         display: true,
