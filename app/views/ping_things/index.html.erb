@@ -39,18 +39,16 @@
     <table class='table mb-0'>
       <thead>
       <tr>
-        <th class="align-middle column-sm">Success / Time</th>
+        <th class="align-middle column-md-sm">Success / Time</th>
+        <th class="align-middle column-xl">
+          Created&nbsp;At<br />
+          <span class="small text-muted">Signature</span>
+        </th>
         <th class="align-middle column-lg">
-          Created At
-          <br /> 
-          <span class="text-muted">Signature</span>
+          Application<br />
+          <span class="small text-muted">Type (Commitment Level)</span>
         </th>
-        <th class="align-middle column-sm">
-          Application
-          <br />
-          <span class="text-muted">Transaction Type (Commitment Level)</span>
-        </th>
-        <th class="align-middle column-xs">Posted by</th>
+        <th class="align-middle column-xs">Posted&nbsp;By</th>
       </tr>
       </thead>
 
@@ -59,21 +57,19 @@
         <tr>
           <td class="align-middle">
             <%= success_icon(pt.success).html_safe %>
-            <strong class="text-success h6">
-              &nbsp;<%= number_with_delimiter(pt.response_time) %>
-            </strong>&nbsp;ms
+            <strong class="text-success h6"><%= number_with_delimiter(pt.response_time) %></strong>&nbsp;ms
           </td>
-          <td class="align-middle">
-            <%= pt.created_at %>
-            <br />
-              <%= link_to pt.signature, link_from_signature(pt.signature), target: "_blank", class: "small"%>
+          <td class="align-middle small">
+            <%= pt.created_at %><br />
+            <span class="word-break"><%= link_to pt.signature, link_from_signature(pt.signature), target: "_blank", class: "small"%></span>
           </td>
-          <td class="align-middle">
-            <%= pt.application %>
-            <br />
-            <span class="small text-muted">
+          <td class="align-middle small">
+            <% if pt.application %>
+              <%= pt.application %><br />
+            <% end %>
+            <span class="text-muted">
               <%= transaction_type_icon(pt.transaction_type).html_safe %><%= pt.transaction_type %>
-              (<%= pt.commitment_level %>)
+              <% if pt.commitment_level %>(<%= pt.commitment_level %>)<% end %>
             </span>
           </td>
           <td class="align-middle text-muted"><%= pt.user.username %></td>
