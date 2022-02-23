@@ -21,7 +21,7 @@ module StakeLogic::ApyHelper
 
   # returns APY for a single account or nil
   def calculate_apy(credits_diff, rewards, num_of_epochs, active_stake = nil)
-    active_stake = active_stake ? active_stake : rewards[:postBalance]
+    active_stake ||= rewards[:postBalance]
     credits_diff_percent = credits_diff / (active_stake - rewards[:amount]).to_f
 
     apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100

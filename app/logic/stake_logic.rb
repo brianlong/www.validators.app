@@ -257,7 +257,7 @@ module StakeLogic
         current_epoch: current_epoch
       ))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from calculate_apy_for_accounts", e)
+      Pipeline.new(500, p.payload, "Error from assign_epochs", e)
     end
   end
 
@@ -286,7 +286,7 @@ module StakeLogic
       return p unless p.code == 200
 
       # number of epochs in year calculated using the duration of last finished epoch
-      num_of_epochs = 1.year.to_i / (p.payload[:current_epoch].created_at - p.payload[:previous_epoch].created_at).to_i.to_f
+      num_of_epochs = 1.year.to_i / (p.payload[:current_epoch].created_at - p.payload[:previous_epoch].created_at).to_f
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
         apy = nil
