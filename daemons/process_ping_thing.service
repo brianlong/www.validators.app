@@ -30,7 +30,7 @@ LimitNOFILE=infinity
 LimitMEMLOCK=infinity
 
 # This will default to "bundler" if we don't specify it
-SyslogIdentifier=gather_vote_account_details_daemon
+SyslogIdentifier=process_ping_thing_daemon
 
 [Install]
 WantedBy=default.target
