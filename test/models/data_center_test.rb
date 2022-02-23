@@ -24,7 +24,7 @@ class DataCenterTest < ActiveSupport::TestCase
     validator = create(:validator)
     dch = create(:data_center_host, data_center: @data_center)
     vip = create(:validator_ip, data_center_host: dch, validator: validator)
-    vip2 = create(:validator_ip, data_center_host: dch, validator: validator, address: '0.0.0.0')
+    vip2 = create(:validator_ip, data_center_host: dch, validator: validator, address: "0.0.0.0")
 
     assert_equal 2, @data_center.validator_ips.size
     assert_includes @data_center.validator_ips, vip
