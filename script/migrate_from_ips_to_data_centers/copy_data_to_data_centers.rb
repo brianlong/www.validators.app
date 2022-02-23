@@ -123,7 +123,9 @@ def update_validator_ip_from_ip_override(ip_override)
   end
 end
 
-Ip.find_in_batches do |batch|
+val_ip_addresses_empty_host = ValidatorIp.where(data_center_host: nil).pluck(:address)
+
+Ip.where(address: val_ip_addresses_empty_host).find_in_batches do |batch|
   puts "Ips migration started..."
   batch.each do |ip|
     data_center_host = create_data_center_with_host_from_ip(ip)
@@ -142,5 +144,5 @@ IpOverride.find_in_batches do |batch|
 end
 
 puts "Updating validator_ips finished.\n"
-puts "Check /tmp/copy_data_to_data_centers.txt for more info."
+puts "Check log/copy_data_to_data_centers.txt for more info."
 puts "Script is finished.\n"
