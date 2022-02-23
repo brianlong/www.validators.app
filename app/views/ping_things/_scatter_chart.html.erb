@@ -65,7 +65,7 @@
                 displayColors: false,
                 callbacks: {
                     label: function(tooltipItem, data) {
-                        return tooltipItem.yLabel.toString().concat(' ms');
+                        return tooltipItem.yLabel.toLocaleString('en-US').concat(' ms');
                     },
                 },
             },

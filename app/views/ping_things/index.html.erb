@@ -54,7 +54,7 @@
       <% @ping_things.each.with_index do |pt, index| %>
         <tr>
           <td class="align-middle">
-            <strong class="text-success h6"><%= pt.response_time %></strong>&nbsp;ms
+            <strong class="text-success h6"><%= number_with_delimiter(pt.response_time) %></strong>&nbsp;ms
           </td>
           <td class="align-middle text-center"><%= success_icon(pt.success).html_safe %></td>
           <td class="align-middle small text-muted"><%= pt.created_at %></td>
