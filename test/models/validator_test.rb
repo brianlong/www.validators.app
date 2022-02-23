@@ -10,7 +10,7 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal 100, validator.most_recent_epoch_credits_by_account.epoch_credits
   end
 
-  test 'relationships has_one data_center_host through validator_ips' do
+  test "relationships has_one data_center_host through validator_ips" do
     validator = create(:validator)
     data_center_host = create(:data_center_host)
     validator_ip = create(:validator_ip, validator: validator, data_center_host: data_center_host)
