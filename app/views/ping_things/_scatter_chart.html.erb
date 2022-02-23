@@ -38,7 +38,10 @@
                     display: true,
                     ticks: {
                         //min: 0,
-                        padding: 10
+                        padding: 10,
+                        callback: function(value, index, values) {
+                            return value.toLocaleString('en-US')
+                        }
                     },
                     gridLines: {
                         display: true,
@@ -62,7 +65,7 @@
                 displayColors: false,
                 callbacks: {
                     label: function(tooltipItem, data) {
-                        return tooltipItem.yLabel.toString().concat(' ms');
+                        return tooltipItem.yLabel.toLocaleString('en-US').concat(' ms');
                     },
                 },
             },
