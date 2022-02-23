@@ -111,14 +111,24 @@ def update_validator_ip_from_ip_override(ip_override)
   if data_center_host && val_ip
     val_ip.update(is_overridden: true, data_center_host_id: data_center_host.id)
 
-    @logger.info "Validator IP with id: #{val_ip.id} 
-                updated with data_center_host  #{ip_override.data_center_host}, id: #{data_center_host.id},
-                ip_override.data_center_key: #{ip_override.data_center_key}, data_center.data_center_key: #{data_center.data_center_key}
-                is_overridden set to true."
+    info = <<-EOS 
+      \n
+      Validator IP with id: #{val_ip.id} 
+      updated with data_center_host  #{ip_override.data_center_host}, id: #{data_center_host.id},
+      ip_override.data_center_key: #{ip_override.data_center_key}, data_center.data_center_key: #{data_center.data_center_key}
+      is_overridden set to true."
+    EOS
+    @logger.info info
   else
-    @logger.warn "Data center host not found for
-                  host: #{ip_override.data_center_host}.
-                  ip_override: #{ip_override.id}.\n" unless data_center_host
+    unless data_center_host
+      warn = <<-EOS
+        "Data center host not found for
+        host: #{ip_override.data_center_host}.
+        ip_override: #{ip_override.id}.\n" 
+      EOS
+      @logger.warn warn
+    end
+    
     @logger.warn "Validator IP not found for id: #{ip_override.id}, ip address #{ip_override.address}.\n" unless ip_override
   end
 end
