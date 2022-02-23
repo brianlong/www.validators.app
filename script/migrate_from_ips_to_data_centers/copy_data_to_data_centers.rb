@@ -3,8 +3,8 @@
 # RAILS_ENV=production bundle exec rails r script/migrate_from_ips_to_data_centers/copy_data_to_data_centers.rb
 
 require_relative '../../config/environment'
-
-@file ||= File.open("tmp/copy_data_to_data_centers.txt", "w")
+log_path = Rails.root.join('log', 'copy_data_to_data_centers.txt')
+@logger ||= Logger.new(log_path)
 
 def create_data_center_with_host_from_ip(ip)
   data_center = DataCenter.find_or_create_by!(
@@ -48,7 +48,7 @@ def create_data_center_with_host_from_ip(ip)
     data_center: data_center
   )
 
-  @file.write "Data Center #{data_center.data_center_key} found or created, data_center_host #{data_center_host.host} with id: #{data_center_host.id} assigned.\n"
+  @logger.info "Data Center #{data_center.data_center_key} found or created, data_center_host #{data_center_host.host} with id: #{data_center_host.id} assigned.\n"
   data_center_host
 end
 
@@ -62,7 +62,7 @@ def create_or_update_validator_ip(ip, data_center_host)
       traits_network: ip.traits_network,
       traits_domain: ip.traits_domain
     )
-    @file.write "Validator IP with id #{val_ip.id} updated with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
+    @logger.info "Validator IP with id #{val_ip.id} updated with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
   else
     val_ip = ValidatorIp.create!(
       address: ip.address,
@@ -72,7 +72,7 @@ def create_or_update_validator_ip(ip, data_center_host)
       traits_domain: ip.traits_domain
     )
 
-    @file.write "Validator IP created for address #{ip.address} with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
+    @logger.info "Validator IP created for address #{ip.address} with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
   end
 end
 
@@ -98,21 +98,21 @@ def update_validator_ip_from_ip_override(ip_override)
   if data_center_host && val_ip
     val_ip.update(is_overridden: true, data_center_host_id: data_center_host.id)
 
-    @file.write "Validator IP with id: #{val_ip.id} 
+    @logger.info "Validator IP with id: #{val_ip.id} 
                 updated with data center host  #{ip_override.data_center_host}, id: #{data_center_host.id},
                 ip_override.data_center_key: #{ip_override.data_center_key}, data_center.data_center_key: #{data_center.data_center_key}
                 is_overridden set to true.\n"
   else
-    @file.write "Data center host not found for
+    @logger.warn "Data center host not found for
                   host: #{ip_override.data_center_host}.
                   ip_override: #{ip_override.id}.\n" unless data_center_host
-    # @file.write "Data center host not found for
+    # @logger.write "Data center host not found for
     #               traits_autonomous_system_number: #{ip_override.traits_autonomous_system_number}, 
     #               traits_autonomous_system_organization: #{ip_override.traits_autonomous_system_organization}, 
     #               data_center_key: #{ip_override.data_center_key},
     #               data_center_host: #{ip_override.data_center_host}.
     #               ip_override: #{ip_override.id}.\n" unless data_center
-    @file.write "Validator IP not found for id: #{ip_override.id}, ip address #{ip_override.address}.\n" unless ip_override
+    @logger.warn "Validator IP not found for id: #{ip_override.id}, ip address #{ip_override.address}.\n" unless ip_override
   end
 end
 
@@ -121,7 +121,7 @@ Ip.find_in_batches do |batch|
   batch.each do |ip|
     data_center_host = create_data_center_with_host_from_ip(ip)
     create_or_update_validator_ip(ip, data_center_host)
-    @file.write "------------------------\n"
+    @logger.debug "------------------------\n"
   end
 end
 puts "Ips migration finished."
