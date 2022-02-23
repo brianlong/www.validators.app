@@ -95,7 +95,7 @@ def update_validator_ip_from_ip_override(ip_override)
   val_ip = ValidatorIp.find_by(address: ip_override.address)
   ip = Ip.find_by(address: ip_override.address)
 
-  data_center = DataCenter.find_by(
+  data_center = DataCenter.find_or_create_by!(
     traits_autonomous_system_number: ip_override.traits_autonomous_system_number,
     traits_autonomous_system_organization: ip_override.traits_autonomous_system_organization,
     country_iso_code: ip_override.country_iso_code,
