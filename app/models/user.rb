@@ -84,4 +84,10 @@ class User < ApplicationRecord
   def will_save_change_to_email?
     false
   end
+
+  def to_builder
+    Jbuilder.new do |user|
+      user.(self, :username)
+    end
+  end
 end

@@ -61,4 +61,21 @@ module ApplicationHelper
       'text-danger'
     end
   end
+
+  def transaction_type_icon(transaction_type_string)
+    case transaction_type_string
+    when "transfer"
+      '<i class="fas fa-exchange-alt text-success mr-1"></i>'
+    else
+      '<i class="fas fa-random text-success mr-1"></i>'
+    end
+  end
+
+  def success_icon(success)
+    if success
+      '<i class="fas fa-check-circle text-success"></i>'
+    else
+      '<i class="fas fa-times-circle text-danger"></i>'
+    end
+  end
 end

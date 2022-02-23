@@ -60,7 +60,7 @@
                     },
                     scaleLabel: {
                         display: true,
-                        labelString: 'Dist Behind Leader',
+                        labelString: "<%= local_assigns[:y_axis_desc] ? local_assigns[:y_axis_desc] : 'Dist Behind Leader' %>",
                         fontColor: '<%= DARK_GREY %>'
                     }
                 }]

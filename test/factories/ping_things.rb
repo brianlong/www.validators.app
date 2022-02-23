@@ -1,0 +1,34 @@
+# frozen_string_literal: true
+
+FactoryBot.define do
+  factory :ping_thing do
+    amount { "" }
+    application { "Mango" }
+    network { "mainnet" }
+    response_time { 1 }
+    signature { "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s" }
+    success { true }
+    transaction_type { "transfer" }
+    user
+
+    trait :processed do
+      commitment_level { 0 }
+    end
+
+    trait :confirmed do
+      commitment_level { 1 }
+    end
+
+    trait :finalized do
+      commitment_level { 2 }
+    end
+
+    trait :mainnet do
+      network { "mainnet" }
+    end
+
+    trait :testnet do
+      network { "testnet" }
+    end
+  end
+end

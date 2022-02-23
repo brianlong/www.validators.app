@@ -13,6 +13,9 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
   methods: {
     go_to_metrics() {
       document.getElementById("metrics").scrollIntoView()
+    },
+    filterByWithdrawer: function(pool) {
+      this.$emit('filter_by_withdrawer', pool);
     }
   },
   template: `
@@ -54,7 +57,12 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
           <tbody>
           <tr v-for="pool in stake_pools">
             <td class="align-middle">
-              {{ pool.name }}
+              <a href="#"
+                 title="Show more details about stake pool"
+                 @click.prevent="filterByWithdrawer(pool)"
+              >
+                {{ pool.name }}
+              </a>
             </td>
             <td class="align-middle">
               {{ pool.validators_count }}&nbsp;<span class="text-muted">({{ pool.average_delinquent }})</span>
@@ -68,7 +76,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
               <small class="text-muted">{{ pool.average_validators_commission ? pool.average_validators_commission.toFixed(2) : 0 }}%</small>
             </td>
             <td class="align-middle">
-              {{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}
+              {{ (pool.average_apy && pool.name != 'Lido') ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}
             </td>
             <td class="align-middle">
               {{ pool.average_score || 'N / A' }}

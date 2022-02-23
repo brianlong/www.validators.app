@@ -253,6 +253,33 @@ ActiveRecord::Schema.define(version: 2022_02_22_170715) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "raw_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "api_token"
+    t.string "network"
+  end
+
+  create_table "ping_things", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "amount"
+    t.string "signature"
+    t.integer "response_time"
+    t.string "transaction_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
+    t.integer "commitment_level"
+    t.boolean "success", default: true
+    t.string "application"
+    t.datetime "reported_at"
+    t.index ["created_at", "network", "transaction_type"], name: "index_ping_things_on_created_at_and_network_and_transaction_type"
+    t.index ["created_at", "network", "user_id"], name: "index_ping_things_on_created_at_and_network_and_user_id"
+    t.index ["reported_at"], name: "index_ping_things_on_reported_at"
+    t.index ["user_id"], name: "index_ping_things_on_user_id"
+  end
+
   create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "batch_uuid"
     t.decimal "overall_min_time", precision: 10, scale: 3
@@ -389,6 +416,7 @@ ActiveRecord::Schema.define(version: 2022_02_22_170715) do
     t.float "average_score"
     t.float "withdrawal_fee"
     t.float "deposit_fee"
+    t.float "average_apy"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -595,6 +623,7 @@ ActiveRecord::Schema.define(version: 2022_02_22_170715) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
+  add_foreign_key "ping_things", "users"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"
