@@ -119,12 +119,6 @@ def update_validator_ip_from_ip_override(ip_override)
     @logger.warn "Data center host not found for
                   host: #{ip_override.data_center_host}.
                   ip_override: #{ip_override.id}.\n" unless data_center_host
-    # @logger.write "Data center host not found for
-    #               traits_autonomous_system_number: #{ip_override.traits_autonomous_system_number}, 
-    #               traits_autonomous_system_organization: #{ip_override.traits_autonomous_system_organization}, 
-    #               data_center_key: #{ip_override.data_center_key},
-    #               data_center_host: #{ip_override.data_center_host}.
-    #               ip_override: #{ip_override.id}.\n" unless data_center
     @logger.warn "Validator IP not found for id: #{ip_override.id}, ip address #{ip_override.address}.\n" unless ip_override
   end
 end
