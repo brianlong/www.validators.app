@@ -48,7 +48,12 @@ def create_data_center_with_host_from_ip(ip)
     data_center: data_center
   )
 
-  @logger.info "Data Center #{data_center.data_center_key} found or created, data_center_host #{data_center_host.host} with id: #{data_center_host.id} assigned.\n"
+  info = <<-EOS 
+    Data Center #{data_center.data_center_key} found or created (id: #{data_center.id}), 
+    data_center_host #{data_center_host.host} (id: #{data_center_host.id}) assigned.
+  EOS
+  @logger.info info.squish
+  
   data_center_host
 end
 
@@ -62,7 +67,11 @@ def create_or_update_validator_ip(ip, data_center_host)
       traits_network: ip.traits_network,
       traits_domain: ip.traits_domain
     )
-    @logger.info "Validator IP with id #{val_ip.id} updated with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
+    info = <<-EOS
+      Validator IP with id #{val_ip.id} updated with data_center_host_id: #{val_ip.data_center_host_id} 
+      assigned to data center: #{data_center_host.data_center_key}.
+    EOS
+    @logger.info info.squish
   else
     val_ip = ValidatorIp.create!(
       address: ip.address,
@@ -72,7 +81,11 @@ def create_or_update_validator_ip(ip, data_center_host)
       traits_domain: ip.traits_domain
     )
 
-    @logger.info "Validator IP created for address #{ip.address} with data center host id: #{val_ip.data_center_host_id} assigned to data center: #{data_center_host.data_center_key}.\n"
+    info = <<-EOS
+      Validator IP created for address #{ip.address} with data_center_host_id: #{val_ip.data_center_host_id} 
+      assigned to data center: #{data_center_host.data_center_key}.
+    EOS
+    @logger.info info.squish
   end
 end
 
@@ -99,9 +112,9 @@ def update_validator_ip_from_ip_override(ip_override)
     val_ip.update(is_overridden: true, data_center_host_id: data_center_host.id)
 
     @logger.info "Validator IP with id: #{val_ip.id} 
-                updated with data center host  #{ip_override.data_center_host}, id: #{data_center_host.id},
+                updated with data_center_host  #{ip_override.data_center_host}, id: #{data_center_host.id},
                 ip_override.data_center_key: #{ip_override.data_center_key}, data_center.data_center_key: #{data_center.data_center_key}
-                is_overridden set to true.\n"
+                is_overridden set to true."
   else
     @logger.warn "Data center host not found for
                   host: #{ip_override.data_center_host}.
