@@ -39,14 +39,16 @@
     <table class='table mb-0'>
       <thead>
       <tr>
-        <th class="align-middle column-sm">Time</th>
-        <th class="align-middle column-sm">Success</th>
-        <th class="align-middle column-lg">Created At</th>
-        <th class="align-middle column-lg">Signature</th>
-        <th class="align-middle column-lg">Application</th>
-        <th class="align-middle column-lg">Transaction Type</th>
-        <th class="align-middle column-lg">Commitment Level</th>
-        <th class="align-middle column-md">Posted by</th>
+        <th class="align-middle column-md-sm">Success / Time</th>
+        <th class="align-middle column-xl">
+          Created&nbsp;At<br />
+          <span class="small text-muted">Signature</span>
+        </th>
+        <th class="align-middle column-lg">
+          Application<br />
+          <span class="small text-muted">Type (Commitment Level)</span>
+        </th>
+        <th class="align-middle column-xs">Posted&nbsp;By</th>
       </tr>
       </thead>
 
@@ -54,23 +56,22 @@
       <% @ping_things.each.with_index do |pt, index| %>
         <tr>
           <td class="align-middle">
+            <%= success_icon(pt.success).html_safe %>
             <strong class="text-success h6"><%= number_with_delimiter(pt.response_time) %></strong>&nbsp;ms
           </td>
-          <td class="align-middle text-center"><%= success_icon(pt.success).html_safe %></td>
-          <td class="align-middle small text-muted"><%= pt.created_at %></td>
           <td class="align-middle small">
-            <a data-toggle="collapse" href="#collapseExample<%=index%>" aria-expanded="false" class="text-muted">
-              <%= pt.signature.truncate(18) %>
-            </a>
-            <div class="collapse word-break" id="collapseExample<%=index%>">
-              <%= pt.signature %>
-            </div>
+            <%= pt.created_at %><br />
+            <span class="word-break"><%= link_to pt.signature, link_from_signature(pt.signature), target: "_blank", class: "small"%></span>
           </td>
-          <td class="align-middle small word-break text-muted">&nbsp;<%= pt.application %></td>
-          <td class="align-middle">
-            <%= transaction_type_icon(pt.transaction_type).html_safe %><%= pt.transaction_type %>
+          <td class="align-middle small">
+            <% if pt.application %>
+              <%= pt.application %><br />
+            <% end %>
+            <span class="text-muted">
+              <%= transaction_type_icon(pt.transaction_type).html_safe %><%= pt.transaction_type %>
+              <% if pt.commitment_level %>(<%= pt.commitment_level %>)<% end %>
+            </span>
           </td>
-          <td class="align-middle"><%= pt.commitment_level %></td>
           <td class="align-middle text-muted"><%= pt.user.username %></td>
         </tr>
       <% end %>
