@@ -50,7 +50,8 @@ class PingThing < ApplicationRecord
         :response_time,
         :signature,
         :success,
-        :transaction_type
+        :transaction_type,
+        :reported_at
       )
     end
   end
