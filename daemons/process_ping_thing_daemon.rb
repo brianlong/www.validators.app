@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../config/environment'
+# require_relative '../config/environment'
+require Rails.root.join('config/environment')
 
 class SkipAndSleep < StandardError; end
 
