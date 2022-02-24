@@ -3,7 +3,7 @@
 # RAILS_ENV=production bundle exec rails r script/migrate_from_ips_to_data_centers/copy_data_to_data_centers.rb
 
 require_relative '../../config/environment'
-log_path = Rails.root.join('log', 'copy_data_to_data_centers.txt')
+log_path = Rails.root.join('log', 'copy_data_to_data_centers.log')
 @logger ||= Logger.new(log_path)
 
 def create_data_center_with_host_from_ip(ip)
