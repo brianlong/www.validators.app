@@ -6,7 +6,9 @@ After=syslog.target network.target
 Type=simple
 WorkingDirectory=/home/deploy/validators.app/current/
 
-ExecStart=/bin/bash -lc "/usr/bin/bundle exec /usr/bin/ruby daemons/process_ping_thing_daemon.rb"
+Environment=RAILS_ENV=production
+
+ExecStart=/usr/bin/bundle exec /usr/bin/ruby daemons/process_ping_thing_daemon.rb
 
 UMask=0002
 
@@ -14,8 +16,6 @@ UMask=0002
 # https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/
 # Environment=MALLOC_ARENA_MAX=2
 # Environment=LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.1
-
-Environment=RAILS_ENV=production
 
 # if we crash, restart
 RestartSec=10
