@@ -41,7 +41,7 @@
       <tr>
         <th class="align-middle column-md-sm">Success / Time</th>
         <th class="align-middle column-lg">
-          Created&nbsp;At<br />
+          Reported&nbsp;At<br />
           <span class="small text-muted">Signature</span>
         </th>
         <th class="align-middle column-lg">
@@ -60,7 +60,7 @@
             <strong class="text-success h6"><%= number_with_delimiter(pt.response_time) %></strong>&nbsp;ms
           </td>
           <td class="align-middle small">
-            <%= pt.created_at %><br />
+            <%= pt.reported_at %><br />
             <span class="word-break"><%= link_to shorten_key(pt.signature), link_from_signature(pt.signature), target: "_blank", class: "small"%></span>
           </td>
           <td class="align-middle small">
