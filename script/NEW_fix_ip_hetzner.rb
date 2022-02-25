@@ -3,7 +3,7 @@
 # RAILS_ENV=production bundle exec ruby script/fix_ip_hetzner.rb >> /tmp/fix_ip_hetzner.log 2>&1 &
 
 require_relative '../config/environment'
-require_relative './concerns/fix_ip_module'
+require_relative './concerns/NEW_fix_ip_module'
 
 include FixIpModule
 
@@ -50,28 +50,27 @@ HETZNER_HOSTS = {
 #   spine2.cloud1.hel1.hetzner.com
 
 HETZNER_REGEX = /(ex|sp).+\.(dc|cloud).+\.hetzner\.com/
-ValidatorIp.joins(:data_center).where("data_center_host_id IS NULL AND data_centers.traits_autonomous_system_number = ?", 24_940)
-           .each do |vip|
-end
-Ip.where(traits_autonomous_system_number: 24_940)
-  .where('address not in (select address from ip_overrides)')
-  .each do |ip|
 
-  last_hetzner_ip = get_matching_traceroute(ip: ip.address, reg: HETZNER_REGEX)
+ValidatorIp.joins(:data_center)
+           .where("is_overridden = ? AND data_centers.traits_autonomous_system_number = ?", false, 24_940)
+           .each do |vip|
+
+  last_hetzner_ip = get_matching_traceroute(ip: vip.address, reg: HETZNER_REGEX)
 
   HETZNER_HOSTS.each do |host_reg, host_data|
     next unless last_hetzner_ip&.include?(host_reg)
 
     host = ('H' + last_hetzner_ip).strip.split(' ')[1].strip
-    setup_ip_override(ip: ip, host_data: host_data, host: host)
+    setup_ip_override(vip: vip, host_data: host_data, host: host)
     
-    Rails.logger.warn "added IP Override: #{ip} - #{host}"
+    Rails.logger.warn "added IP Override: #{vip} - #{host}"
 
     break
   end
 end
 
-update_ip_with_overrides
+# I think it won't be needed
+# update_ip_with_overrides
 update_validator_score_with_overrides
 puts 'End of Script'
 
