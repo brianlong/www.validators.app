@@ -33,8 +33,10 @@ module FixIpModule
       host: host,
       data_center: data_center
     )
+    
+    puts "new host assigned to vip: #{vip.id}: #{host} (data_center_host: #{data_center_host.id})"
 
-    vip.update(data_center_host: data_center_host)
+    vip.update(data_center_host: data_center_host, is_overridden: true)
   end
 
   # I think this won't be needed 

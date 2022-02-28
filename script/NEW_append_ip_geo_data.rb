@@ -68,7 +68,7 @@ begin
     data_center.postal_code = record.postal.code if data_center.postal_code.blank?
     data_center.postal_confidence = record.postal.confidence if data_center.postal_confidence.blank?
     data_center.traits_isp = record.traits.isp if data_center.traits_isp.blank?
-    data_center.traits_organization = record.traits.organization data_center.organization.blank?
+    data_center.traits_organization = record.traits.organization if data_center.traits_organization.blank?
 
     unless record.most_specific_subdivision.nil?
       data_center.subdivision_confidence = record.most_specific_subdivision.confidence if data_center.subdivision_confidence.blank?
