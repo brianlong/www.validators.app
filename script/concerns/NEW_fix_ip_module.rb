@@ -34,7 +34,7 @@ module FixIpModule
       data_center: data_center
     )
     
-    puts "new host assigned to vip: #{vip.id}: #{host} (data_center_host: #{data_center_host.id})"
+    puts "new host #{host} assigned to vip: #{vip.id} (data_center_host id: #{data_center_host.id})"
 
     vip.update(data_center_host: data_center_host, is_overridden: true)
   end

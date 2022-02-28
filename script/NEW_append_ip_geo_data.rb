@@ -29,9 +29,7 @@ begin
   ValidatorIp.connection.execute(sql).each do |missing_ip|
     puts missing_ip[0].inspect if verbose
     # Skip private IPs
-    next if missing_ip[0][0..2] == '10.'
-    next if missing_ip[0][0..3] == '192.'
-    next if missing_ip[0][0..3] == '127.'
+    next if missing_ip[0].match(/^(10|192|127)\..+/).present?
 
     record = client.insights(missing_ip[0])
 
@@ -102,7 +100,6 @@ begin
     validator_ip = validator.validator_ips.order('updated_at desc').first
 
     ip = validator_ip.address
-    puts ip if verbose
 
     vs1.network = validator.network
     vs1.ip_address = ip
