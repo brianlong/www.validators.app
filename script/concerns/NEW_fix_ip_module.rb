@@ -24,10 +24,7 @@ module FixIpModule
       country_name: host_data[:country_name],
       city_name: host_data[:city_name],
       data_center_key: host_data[:data_center_key]
-    )
-
-    # if data_center is new
-    # assign rest of the data from existing data_center
+    ) # that's all the data we have from host_data
 
     data_center_host = DataCenterHost.find_or_create_by(
       host: host,
