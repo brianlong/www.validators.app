@@ -35,12 +35,11 @@ begin
 
     record = client.insights(missing_ip[0])
 
-    data_center = DataCenter.find_or_create_by!(
+    data_center = DataCenter.find_or_initialize_by(
       # address: missing_ip[0],
       continent_code: record.continent.code,
       continent_geoname_id: record.continent.geoname_id,
       continent_name: record.continent.name,
-      country_confidence: record.country.confidence,
       country_iso_code: record.country.iso_code,
       country_geoname_id: record.country.geoname_id,
       country_name: record.country.name,
@@ -52,30 +51,33 @@ begin
       traits_user_type: record.traits.user_type,
       traits_autonomous_system_number: record.traits.autonomous_system_number,
       traits_autonomous_system_organization: record.traits.autonomous_system_organization,
-      traits_isp: record.traits.isp,
-      traits_organization: record.traits.organization,
-      city_confidence: record.city.confidence,
-      city_geoname_id: record.city.geoname_id,
       city_name: record.city.name,
-      location_average_income: record.location.average_income,
-      location_population_density: record.location.population_density,
-      location_accuracy_radius: record.location.accuracy_radius,
-      location_latitude: record.location.latitude,
-      location_longitude: record.location.longitude,
       location_metro_code: record.location.metro_code,
       location_time_zone: record.location.time_zone,
-      postal_confidence: record.postal.confidence,
-      postal_code: record.postal.code
     )
-  
+
+    # This data cause duplicated data_center records
+    data_center.city_confidence = record.city.confidence if data_center.city_confidence.blank?
+    data_center.city_geoname_id = record.city.geoname_id if data_center.city_geoname_id.blank?
+    data_center.country_confidence = record.country.confidence if record.country.confidence.blank?
+    data_center.location_accuracy_radius = record.location.accuracy_radius if data_center.location_accuracy_radius.blank?
+    data_center.location_average_income = record.location.average_income if data_center.location_average_income.blank?
+    data_center.location_latitude = record.location.latitude if data_center.location_latitude.blank?
+    data_center.location_longitude = record.location.longitude if data_center.location_longitude.blank?
+    data_center.location_population_density = record.location.population_density if data_center.location_population_density.blank?
+    data_center.postal_code = record.postal.code if data_center.postal_code.blank?
+    data_center.postal_confidence = record.postal.confidence if data_center.postal_confidence.blank?
+    data_center.traits_isp = record.traits.isp if data_center.traits_isp.blank?
+    data_center.traits_organization = record.traits.organization data_center.organization.blank?
+
     unless record.most_specific_subdivision.nil?
-      data_center.update(
-        subdivision_confidence: record.most_specific_subdivision.confidence,
-        subdivision_iso_code: record.most_specific_subdivision.iso_code,
-        subdivision_geoname_id: record.most_specific_subdivision.geoname_id,
-        subdivision_name: record.most_specific_subdivision.name
-      )
+      data_center.subdivision_confidence = record.most_specific_subdivision.confidence if data_center.subdivision_confidence.blank?
+      data_center.subdivision_iso_code = record.most_specific_subdivision.iso_code if data_center.subdivision_iso_code.blank?
+      data_center.subdivision_geoname_id = record.most_specific_subdivision.geoname_id if data_center.subdivision_geoname_id.blank?
+      data_center.subdivision_name = record.most_specific_subdivision.name if data_center.subdivision_name.blank?
     end
+    
+    data_center.save!
 
     data_center_host = DataCenterHost.find_or_create_by!(
       data_center: data_center,
