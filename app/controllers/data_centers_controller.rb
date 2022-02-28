@@ -4,7 +4,7 @@ class DataCentersController < ApplicationController
   # index_params[:sort_by]
   def index
     @sort_by = index_params[:sort_by] == 'asn' ? 'asn' : 'data_center'
-    @results = SortedDataCenters.new(
+    @results = NewSortedDataCenters.new(
       sort_by: @sort_by, 
       network: params[:network]
     ).call

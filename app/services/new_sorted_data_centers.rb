@@ -1,0 +1,121 @@
+class NewSortedDataCenters
+
+  def call
+    @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
+
+    @results = @results.sort_by { |_k, v| -v[:active_stake] }
+    result_hash = {
+      total_population: @total_population,
+      total_stake: @total_stake,
+      total_delinquent: @total_delinquent,
+      results: @results
+    }
+
+    result_hash.merge!({total_private: @total_private}) if @network == "mainnet"
+
+    result_hash
+  end
+
+  def initialize(sort_by:, network:)
+    @sort_by = sort_by
+    @network = network
+
+    select_statement = [
+      "data_centers.data_center_key",
+      "data_centers.traits_autonomous_system_number",
+      "data_centers.traits_autonomous_system_organization",
+      "data_centers.country_iso_code",
+      "SUM(IF(validator_score_v1s.delinquent = true, 1, 0)) as delinquent_count",
+      "IF(ISNULL(city_name), location_time_zone, city_name) as location",
+      "SUM(IF(validator_score_v1s.commission = 100, 1, 0)) as private_count"
+    ]
+
+    group = [
+      "data_centers.data_center_key", 
+      "data_centers.traits_autonomous_system_number",
+      "data_centers.traits_autonomous_system_organization", 
+      "data_centers.country_iso_code", 
+      "location"
+    ]
+
+    # Private validators are only for mainnet
+    # so we don't need this count on testnet.
+    private_validators_count = "SUM(IF(validator_score_v1s.commission = 100, 1, 0)) as private_count"
+
+    select_statement << private_validators_count if @network == "mainnet"
+
+    @dc_sql = DataCenter.select(select_statement).joins(:validator_score_v1s).where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > 0", @network).group(group)
+
+    @scores = ValidatorScoreV1.where("network = ? AND active_stake > ?", @network, 0)
+
+    @total_stake = @scores.sum(:active_stake)
+    @total_population = 0
+    @total_delinquent = 0
+    @total_private = 0
+    @results = {}
+  end
+
+  def sort_by_asn
+    @dc_sql = @dc_sql.group_by { |dc| dc.traits_autonomous_system_number }
+
+    @dc_sql.each do |data_center_key, data_centers|
+      next if data_center_key.blank?
+      dc_keys = data_centers.map { |dc| dc.data_center_key }
+      aso = data_centers.map { |dc| dc.traits_autonomous_system_organization }.compact.uniq.join(', ')
+      population = @scores.by_data_centers(dc_keys).count || 0
+      active_stake = @scores.by_data_centers(dc_keys).sum(:active_stake)
+      delinquent_validators = data_centers.inject(0) { |sum, dc| sum + dc.delinquent_count } || 0
+
+      next if population.zero?
+
+      @total_population += population
+      @total_delinquent += delinquent_validators
+      @results[data_center_key] = {
+        asn: data_center_key,
+        aso: aso,
+        data_centers: dc_keys,
+        count: population,
+        active_stake: active_stake,
+        delinquent_validators: delinquent_validators
+      }
+
+      # We count private validators only for mainnet.
+      if @network == 'mainnet'
+        private_validators = data_centers.inject(0) { |sum, dc| sum + dc.private_count } || 0
+        @total_private += private_validators
+        @results[data_center_key].merge!({ private_validators: private_validators })
+      end
+    end
+  end
+
+  def sort_by_data_centers
+    @dc_sql.each do |dc|
+      data_center_key = dc.data_center_key
+
+      population = @scores.by_data_centers(data_center_key).count || 0
+      delinquent_validators = dc.delinquent_count || 0
+      active_stake = @scores.by_data_centers(data_center_key).sum(:active_stake)
+
+      next if population.zero?
+
+      @total_population += population
+      @total_delinquent += delinquent_validators
+
+      @results[data_center_key] = {
+        aso: dc.traits_autonomous_system_number,
+        country: dc.traits_autonomous_system_organization,
+        location: dc.country_iso_code,
+        count: population,
+        active_stake: active_stake,
+        delinquent_validators: delinquent_validators
+      }
+
+      # We count private validators only for mainnet.
+      if @network == 'mainnet'
+        private_validators = dc&.private_count || 0
+        @total_private += private_validators
+        @results[data_center_key].merge!({ private_validators: private_validators })
+      end
+    end
+  end
+end

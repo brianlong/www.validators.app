@@ -50,6 +50,7 @@ class DataCenter < ApplicationRecord
   before_save :assign_data_center_key
   has_many :data_center_hosts
   has_many :validator_ips, through: :data_center_hosts
+  has_many :validator_score_v1s, through: :validator_ips
 
   def to_builder
     Jbuilder.new do |data_center|
