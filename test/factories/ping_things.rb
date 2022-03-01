@@ -9,6 +9,7 @@ FactoryBot.define do
     signature { "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s" }
     success { true }
     transaction_type { "transfer" }
+    reported_at { Time.now }
     user
 
     trait :processed do
