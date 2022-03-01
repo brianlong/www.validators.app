@@ -32,7 +32,8 @@ class DataCenterTest < ActiveSupport::TestCase
   end
 
   test "#to_builder returns correct data" do
-    assert_equal "{\"autonomous_system_number\":12345}", @data_center.to_builder.target!
+    json = "{\"autonomous_system_number\":12345,\"latitude\":\"51.2993\",\"longitude\":\"9.491\"}"
+    assert_equal json, @data_center.to_builder.target!
   end
 
   test "before_save #assign_data_center_key assigns key correctly" do

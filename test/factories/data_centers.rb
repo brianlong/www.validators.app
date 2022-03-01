@@ -24,6 +24,8 @@ FactoryBot.define do
       traits_autonomous_system_organization { "Germany Organisation" }
       traits_organization { "Germany Organisation" }
       traits_isp { "Germany ISP" }
+      location_latitude { 0.512993e2 }
+      location_longitude { 0.9491e1 }
     end
 
     trait :frankfurt do
@@ -44,6 +46,8 @@ FactoryBot.define do
       traits_autonomous_system_organization { "Germany Organisation" }
       traits_organization { "Germany Organisation" }
       traits_isp { "Germany ISP" }
+      location_latitude {  0.488582e2 }
+      location_longitude { 0.23387e1 }
     end
 
     trait :china do
@@ -65,6 +69,8 @@ FactoryBot.define do
       traits_autonomous_system_organization { "Chinese Organisation" }
       traits_organization { "Chinese Organisation" }
       traits_isp { "Chinese ISP" }
+      location_latitude { 1 }
+      location_longitude { 2 }
     end
   end
 end

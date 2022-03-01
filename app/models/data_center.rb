@@ -55,6 +55,8 @@ class DataCenter < ApplicationRecord
   def to_builder
     Jbuilder.new do |data_center|
       data_center.autonomous_system_number self.traits_autonomous_system_number
+      data_center.latitude self.location_latitude
+      data_center.longitude self.location_longitude
     end
   end
 
