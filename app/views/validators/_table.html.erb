@@ -119,10 +119,10 @@
           <span class="d-inline-block d-lg-none">IP:&nbsp;</span>
           <small><%= validator.score.ip_address %></small>
           <br />
-          <% data_center_host = Ip.where(address: validator.score.ip_address).first&.data_center_host %>
+          <% data_center_host = validator.validator_ip.data_center_host %>
           <% if data_center_host %>
             <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
-            <small><%= data_center_host %></small>
+            <small><%= data_center_host.host %></small>
             <br />
           <% end %>
         <% end %>

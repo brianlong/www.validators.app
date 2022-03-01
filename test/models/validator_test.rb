@@ -3,6 +3,11 @@
 require 'test_helper'
 
 class ValidatorTest < ActiveSupport::TestCase
+  def setup
+    @validator = create(:validator)
+    @validator_ip = create(:validator_ip, validator: @validator)
+  end
+
   test 'relationships has_one most_recent_epoch_credits_by_account' do
     validator = create(:validator)
     create_list(:validator_history, 5, account: validator.account, epoch_credits: 100)
@@ -58,5 +63,13 @@ class ValidatorTest < ActiveSupport::TestCase
 
     assert_equal special_chars_sentence, v.name
     assert_equal special_chars_sentence, v.details
+  end
+
+  test "#validator_ip returns last updated validator_ip" do
+    assert_equal @validator_ip, @validator.validator_ip
+  end
+
+  test "#ip_address returns validator ip address" do
+    assert_equal @validator_ip.address, @validator.ip_address
   end
 end

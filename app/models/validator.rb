@@ -114,8 +114,12 @@ class Validator < ApplicationRecord
     ary.sum / ary.length.to_f
   end
 
+  def validator_ip
+    validator_ips.order("updated_at desc").first
+  end
+
   def ip_address
-    validator_ips.order('updated_at desc').first&.address
+    validator_ip&.address
   end
 
   def copy_data_to_score
