@@ -286,7 +286,7 @@ module StakeLogic
       return p unless p.code == 200
 
       # number of epochs in year calculated using the duration of last finished epoch
-      num_of_epochs = 1.year.to_i / (p.payload[:current_epoch].created_at - p.payload[:previous_epoch].created_at).to_f
+      num_of_epochs = number_of_epochs(p.payload[:current_epoch].created_at, p.payload[:previous_epoch].created_at)
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
         apy = nil
