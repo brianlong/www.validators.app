@@ -276,7 +276,7 @@ ActiveRecord::Schema.define(version: 2022_03_02_092140) do
     t.datetime "reported_at"
     t.index ["created_at", "network", "transaction_type"], name: "index_ping_things_on_created_at_and_network_and_transaction_type"
     t.index ["created_at", "network", "user_id"], name: "index_ping_things_on_created_at_and_network_and_user_id"
-    t.index ["reported_at"], name: "index_ping_things_on_reported_at"
+    t.index ["reported_at", "network"], name: "index_ping_things_on_reported_at_and_network"
     t.index ["user_id"], name: "index_ping_things_on_user_id"
   end
 
@@ -369,17 +369,17 @@ ActiveRecord::Schema.define(version: 2022_03_02_092140) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.float "manager_fee"
     t.string "ticker"
+    t.float "manager_fee"
     t.float "average_validators_commission"
     t.float "average_delinquent"
     t.float "average_skipped_slots"
     t.float "average_uptime"
     t.integer "average_lifetime"
     t.float "average_score"
+    t.float "average_apy"
     t.float "withdrawal_fee"
     t.float "deposit_fee"
-    t.float "average_apy"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

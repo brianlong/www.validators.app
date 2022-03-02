@@ -101,7 +101,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     signature = "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s"
     
     assert_equal 1, json.size
-    assert_equal 9, json_record.size
+    assert_equal 10, json_record.size
 
     assert_equal "Mango",                         json_record["application"]
     assert_equal "processed",                     json_record["commitment_level"]
