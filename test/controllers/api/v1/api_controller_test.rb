@@ -101,7 +101,12 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
-    create(:ip, address: validator.score.ip_address)
+    create(
+      :ip,
+      address: validator.score.ip_address,
+      location_latitude: 48.8582,
+      location_longitude: 2.3387
+    )
 
     get api_v1_validators_url(network: "testnet"),
         headers: { "Token" => @user.api_token }
@@ -114,7 +119,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 34, validator_with_all_data.keys.size
+    assert_equal 36, validator_with_all_data.keys.size
 
     # Validator
     assert_equal "testnet", validator_with_all_data["network"]
@@ -150,6 +155,8 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
 
     # IP
     assert_equal 0, validator_with_all_data["autonomous_system_number"]
+    assert_equal "48.8582", validator_with_all_data["latitude"]
+    assert_equal "2.3387", validator_with_all_data["longitude"]
 
     # Validator history
     assert_equal 100, validator_with_all_data["epoch_credits"]
@@ -315,7 +322,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 34, json_response.keys.size
+    assert_equal 36, json_response.keys.size
 
     # Validator
     assert_equal "testnet", json_response["network"]
@@ -377,7 +384,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 40, json_response.keys.size
+    assert_equal 42, json_response.keys.size
 
     # Score
     assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
