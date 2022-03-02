@@ -231,14 +231,15 @@ module StakeLogic
       lido_vote_accounts = {}
 
       lido_stake_accounts.map do |lsa|
-        lido_vote_accounts[lsa.validator.vote_accounts.last.account] = lsa.stake_pubkey
+        lido_vote_accounts[lsa.validator.vote_accounts.last.account] = lsa["stake_pubkey"]
       end
 
       lido_rewards = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
-        params: [lido_vote_accounts]
+        params: [lido_vote_accounts.keys]
       )
+      
       raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
         if reward_info.blank? || lido_rewards.blank?
 
