@@ -75,6 +75,10 @@ class Validator < ApplicationRecord
     end
   end
 
+  def data_center
+    validator_ip&.data_center
+  end
+
   def active?
     is_active
   end
