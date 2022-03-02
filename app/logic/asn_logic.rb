@@ -5,11 +5,10 @@ module AsnLogic
 
   def gather_asns
     lambda do |p|
-      distinct_data_centers = Ip.connection.execute(
+      data_centers = DataCenter.connection.execute(
         ActiveRecord::Base.send(:sanitize_sql, [ips_sql, p.payload[:network]])
       )
-
-      sorted_by_asn = distinct_data_centers.group_by { |dc| dc[1] }
+      sorted_by_asn = data_centers.group_by { |dc| dc[1] }
 
       Pipeline.new(200, p.payload.merge(asns: sorted_by_asn))
     rescue StandardError => e
@@ -120,17 +119,14 @@ end
 
 def ips_sql
   "
-    SELECT distinct data_center_key,
-          traits_autonomous_system_number,
-          traits_autonomous_system_organization,
-          country_iso_code,
-          IF(ISNULL(city_name), location_time_zone, city_name) as location
-    FROM ips
-    WHERE ips.address IN (
-      SELECT score.ip_address
-      FROM validator_score_v1s score
-      WHERE score.network = ?
-      AND score.active_stake > 0
-    )
+    SELECT data_centers.data_center_key,
+           data_centers.traits_autonomous_system_number,
+           data_centers.traits_autonomous_system_organization,
+           data_centers.country_iso_code,
+           IF(ISNULL(city_name), location_time_zone, city_name) as location
+    FROM data_centers
+    JOIN validator_score_v1s score
+    WHERE score.network = ?
+    AND score.active_stake > 0
   "
 end

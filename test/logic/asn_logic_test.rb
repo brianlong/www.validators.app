@@ -8,16 +8,18 @@ class AsnLogicTest < ActiveSupport::TestCase
   setup do
     ValidatorScoreV1.delete_all
 
-    @ip = create(:ip, :ip_berlin) # asn: 54321
-    @val = create(:validator, network: 'testnet')
+    @data_center = create(:data_center, :berlin)
+    @data_center_host = create(:data_center_host, data_center: @data_center)
+    @validator = create(:validator, network: 'testnet')
+    @validator_ip = create(:validator_ip, validator: @validator, data_center_host: @data_center_host)
 
     create(
       :validator_score_v1,
-      validator: @val,
+      validator: @validator,
       network: 'testnet',
       vote_distance_history: [1, 2, 3],
-      ip_address: @ip.address,
-      data_center_key: @ip.data_center_key
+      ip_address: @validator_ip.address,
+      data_center_key: @data_center.data_center_key
     )
 
     @payload = {
@@ -36,7 +38,7 @@ class AsnLogicTest < ActiveSupport::TestCase
                 .then(&gather_asns)
 
     assert_nil p.errors
-    assert_equal [54_321], p.payload[:asns].keys
+    assert_equal [12_345], p.payload[:asns].keys
   end
 
   test "gather_scores" do
@@ -46,7 +48,7 @@ class AsnLogicTest < ActiveSupport::TestCase
 
     assert_nil p.errors
     assert_equal 1, p.payload[:scores].count
-    assert_equal @ip.address, p.payload[:scores].last.ip_address
+    assert_equal @validator_ip.address, p.payload[:scores].last.ip_address
   end
 
   test "prepare_asn_stats" do
@@ -57,7 +59,7 @@ class AsnLogicTest < ActiveSupport::TestCase
 
     assert_nil p.errors
     assert_equal 1, p.payload[:asn_stats].count
-    assert_equal 54_321, p.payload[:asn_stats].last.traits_autonomous_system_number
+    assert_equal 12_345, p.payload[:asn_stats].last.traits_autonomous_system_number
   end
 
   test "calculate_and_save_stats" do
@@ -68,13 +70,13 @@ class AsnLogicTest < ActiveSupport::TestCase
                 .then(&calculate_and_save_stats)
 
     assert_nil p.errors
-    assert_equal 54_321, AsnStat.last.traits_autonomous_system_number
-    assert AsnStat.last.data_centers.include?(@ip.data_center_key)
+    assert_equal 12_345, AsnStat.last.traits_autonomous_system_number
+    assert AsnStat.last.data_centers.include?(@data_center.data_center_key)
     assert_equal 7, AsnStat.last.average_score
   end
 
   test "calculate_and_save_stats does not calc delinquent validator" do
-    @val.update(is_active: false)
+    @validator.update(is_active: false)
 
     p = Pipeline.new(200, @payload)
                 .then(&gather_asns)
@@ -83,8 +85,8 @@ class AsnLogicTest < ActiveSupport::TestCase
                 .then(&calculate_and_save_stats)
 
     assert_nil p.errors
-    assert_equal 54_321, AsnStat.last.traits_autonomous_system_number
-    assert AsnStat.last.data_centers.include?(@ip.data_center_key)
+    assert_equal 12_345, AsnStat.last.traits_autonomous_system_number
+    assert AsnStat.last.data_centers.include?(@data_center.data_center_key)
     assert_equal 0, AsnStat.last.average_score
   end
 

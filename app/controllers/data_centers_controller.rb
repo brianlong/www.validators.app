@@ -58,7 +58,7 @@ class DataCentersController < ApplicationController
     @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network])
                                    .sum(:active_stake)
                                    
-    @dc_info = Ip.where(data_center_key: key).last || Ip.new(data_center_key: key)
+    @dc_info = DataCenter.find_by(data_center_key: key) || DataCenter.new(data_center_key: key)
   end
 
   private

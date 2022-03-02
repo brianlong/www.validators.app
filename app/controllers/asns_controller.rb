@@ -1,9 +1,8 @@
 class AsnsController < ApplicationController
   def show
-    @data_centers = Ip.where(traits_autonomous_system_number: asn_params[:asn])
-                      .joins(:validator_score_v1)
-                      .pluck(:data_center_key)
-                      .uniq
+    @data_centers = DataCenter.where(traits_autonomous_system_number: asn_params[:asn])
+                              .pluck(:data_center_key)
+                              .uniq
 
     render file: "#{Rails.root}/public/404.html", status: 404 if @data_centers.empty?
 
