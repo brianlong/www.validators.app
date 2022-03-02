@@ -37,4 +37,8 @@ class StakePool < ApplicationRecord
     return 0 if validators_count == 0
     total_stake / validators_count
   end
+
+  def lido?
+    name == "Lido"
+  end
 end
