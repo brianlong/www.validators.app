@@ -35,17 +35,6 @@ class ValidatorsController < ApplicationController
   # GET /validators/1
   # GET /validators/1.json
   def show
-    # Sometimes @validator is nil
-    @ping_times = []
-    # @ping_times = if @validator.nil?
-    #                 []
-    #               else
-    #                   PingTime.where(
-    #                   network: params[:network],
-    #                   to_account: @validator.account
-    #                 ).order('created_at desc').limit(30)
-    #               end
-
     @data = {}
 
     @history_limit = 240

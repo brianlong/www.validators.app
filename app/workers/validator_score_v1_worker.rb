@@ -21,7 +21,5 @@ class ValidatorScoreV1Worker
                  .then(&assign_software_version_score)
                  .then(&save_validators)
                  .then(&log_errors)
-
-    # .then(&get_ping_times) was after assign_software_version_score
   end
 end

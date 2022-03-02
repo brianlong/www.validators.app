@@ -356,23 +356,6 @@ module ValidatorScoreV1Logic
     end
   end
 
-  def get_ping_times
-    lambda do |p|
-      return p unless p.code == 200
-
-      p.payload[:validators].each do |validator|
-        validator.validator_score_v1.ping_time_avg = \
-          validator.ping_times_to_avg
-      rescue StandardError => e
-        Appsignal.send_error(e)
-      end
-
-      Pipeline.new(200, p.payload)
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from get_ping_times', e)
-    end
-  end
-
   def save_validators
     lambda do |p|
       return p unless p.code == 200

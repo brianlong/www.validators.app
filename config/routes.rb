@@ -142,10 +142,6 @@ Rails.application.routes.draw do
       # GET /api/v1/stake-pools/:network
       get 'stake-pools/:network', to: 'stake_pools#index', as: 'stake_pools_index'
 
-      # TODO to remove - endpoint no longer in use
-      # api_v1_ping_times GET /api/v1/ping_times
-      get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
-
       # POST /api/v1/ping-thing/
       post 'ping-thing/:network', to: 'ping_things#create', as: 'ping_thing'
       # POST /api/v1/ping-thing-batch/

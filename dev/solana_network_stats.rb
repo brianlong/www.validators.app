@@ -134,21 +134,6 @@ begin
           ].join(' | ')
   end
 
-  # Append Individual Validator Ping Times to a CSV file
-  CSV.open('solana_validator_ping_times.csv', 'a') do |csv|
-    nodes.each do |k,v|
-      csv << [my_address,
-              my_ip,
-              k,
-              v[:ip],
-              (v[:min_ms].nil?  ? '' : sprintf('%.2f', v[:min_ms])),
-              (v[:avg_ms].nil?  ? '' : sprintf('%.2f', v[:avg_ms])),
-              (v[:max_ms].nil?  ? '' : sprintf('%.2f', v[:max_ms])),
-              (v[:mdev_ms].nil? ? '' : sprintf('%.2f', v[:mdev_ms])),
-              v[:timestamp]]
-    end
-  end
-
   # write overall stats to a separate CSV file
   CSV.open('solana_network_stats.csv', 'a') do |csv|
     csv << [my_address,

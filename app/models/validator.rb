@@ -97,23 +97,6 @@ class Validator < ApplicationRecord
     vote_accounts.order('updated_at desc').first
   end
 
-  def ping_times_to(limit = 100)
-    PingTime.where(
-      network: network,
-      to_account: account
-    ).order('created_at desc').limit(limit)
-  end
-
-  def ping_times_to_avg
-    ary = ping_times_to.all.map do |pt|
-      pt.avg_ms.to_f.round(2)
-    end
-
-    return nil if ary.empty?
-
-    ary.sum / ary.length.to_f
-  end
-
   def ip_address
     validator_ips.order('updated_at desc').first&.address
   end
@@ -182,10 +165,6 @@ class Validator < ApplicationRecord
 
   def skipped_slot_score
     score&.skipped_slot_score
-  end
-
-  def ping_time_avg
-    score&.ping_time_avg
   end
 
   def software_version_score

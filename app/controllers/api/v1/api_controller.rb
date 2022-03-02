@@ -7,22 +7,12 @@ module Api
   module V1
     # This is the V1 API controller.
     class ApiController < BaseController
-      include CollectorLogic
       include ActionController::ImplicitRender
-
-      # POST api/v1/collector
-      def collector
-        render json: { 'status' => 'Method Gone' }, status: 410
-      end
 
       # This is a simple endpoint to test API connections.
       # GET api/v1/ping => { 'answer' => 'pong' }
       def ping
         render json: { 'answer' => 'pong' }, status: 200
-      end
-
-      def ping_times
-        render json: { 'status' => 'Method Gone' }, status: 410
       end
 
       # Show the list of validators with scores
@@ -151,8 +141,7 @@ module Api
           unless this_report.first.nil?
             hash.merge!({
               'skipped_slots' => this_report.first['skipped_slots'],
-              'skipped_slot_percent' => this_report.first['skipped_slot_percent'],
-              'ping_time' => nil # this_report.first['ping_time']
+              'skipped_slot_percent' => this_report.first['skipped_slot_percent']
             })
           end
         end
