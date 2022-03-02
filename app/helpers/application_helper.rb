@@ -73,9 +73,9 @@ module ApplicationHelper
 
   def success_icon(success)
     if success
-      '<i class="fas fa-check-circle text-success"></i>'
+      '<i class="fas fa-check-circle text-success mr-1"></i>'
     else
-      '<i class="fas fa-times-circle text-danger"></i>'
+      '<i class="fas fa-times-circle text-danger mr-1"></i>'
     end
   end
 end
