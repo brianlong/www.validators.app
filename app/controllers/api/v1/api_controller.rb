@@ -43,7 +43,7 @@ module Api
 
         @validators = Validator.select(validator_fields, validator_score_v1_fields)
                                .where(network: params[:network])
-                               .includes(:vote_accounts, :most_recent_epoch_credits_by_account, validator_score_v1: [:ip_for_api])
+                               .includes(:vote_accounts, :most_recent_epoch_credits_by_account, :validator_score_v1)
                                .joins(:validator_score_v1)
                                .order(@sort_order)
                                .page(page)
@@ -132,13 +132,12 @@ module Api
         hash.merge!(validator.to_builder.attributes!)
 
         score = validator.score
-        ip = score.ip_for_api if score
+        data_center = validator.validator_ip&.data_center
         vote_account = validator.vote_accounts.last
         validator_history = validator.most_recent_epoch_credits_by_account
-
         
         hash.merge!(score.to_builder(with_history: with_history).attributes!)
-        hash.merge!(ip.to_builder.attributes!) unless ip.blank?
+        hash.merge!(data_center.to_builder.attributes!) unless data_center.blank?
         hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
         hash.merge!(validator_history.to_builder.attributes!) unless validator_history.blank?
 
