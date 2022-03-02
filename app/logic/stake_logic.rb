@@ -210,17 +210,30 @@ module StakeLogic
   def get_rewards
     lambda do |p|
       stake_accounts = StakeAccount.where(network: p.payload[:network])
+
+      account_rewards = {}
+
+      stake_accounts.each do |sa|
+        account_rewards[sa.stake_pubkey] = nil
+      end
+
       reward_info = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
         params: [stake_accounts.pluck(:stake_pubkey)]
       )
 
+      stake_accounts.each_with_index do |sa, idx|
+        account_rewards[sa["stake_pubkey"]] = reward_info[idx]
+      end
+
       lido_stake_accounts = stake_accounts.joins(:stake_pool)
                                           .where("stake_pools.name = ?", "Lido")
 
-      lido_vote_accounts = lido_stake_accounts.map do |lsa|
-        lsa.validator.vote_accounts.last.account
+      lido_vote_accounts = {}
+
+      lido_stake_accounts.map do |lsa|
+        lido_vote_accounts[lsa.validator.vote_accounts.last.account] = lsa.stake_pubkey
       end
 
       lido_rewards = solana_client_request(
@@ -231,14 +244,8 @@ module StakeLogic
       raise NoResultsFromSolana.new('No results from `get_inflation_reward`') \
         if reward_info.blank? || lido_rewards.blank?
 
-      account_rewards = {}
-
-      stake_accounts.each_with_index do |sa, idx|
-        account_rewards[sa["stake_pubkey"]] = reward_info[idx]
-      end
-
-      lido_stake_accounts.each_with_index do |sa, idx|
-        account_rewards[sa["stake_pubkey"]] = lido_rewards[idx]
+      lido_vote_accounts.keys.each_with_index do |key, idx|
+        account_rewards[lido_vote_accounts[key]] = lido_rewards[idx]
       end
 
       Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
