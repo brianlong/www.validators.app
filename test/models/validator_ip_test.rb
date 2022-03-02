@@ -3,7 +3,8 @@ require 'test_helper'
 class ValidatorIpTest < ActiveSupport::TestCase
   def setup
     @validator = create(:validator)
-    @data_center = create(:data_center)
+    @validator_score_v1 = create(:validator_score_v1, validator: @validator)
+    @data_center = create(:data_center, :berlin)
     @data_center_host = create(:data_center_host, data_center_id: @data_center.id)
     @vip = build(:validator_ip, validator: @validator, data_center_host_id: @data_center_host.id)
   end
@@ -30,5 +31,15 @@ class ValidatorIpTest < ActiveSupport::TestCase
 
   test "#relationships has_one data_center returns data_center" do
     assert_equal @data_center, @vip.data_center
+  end
+
+  test "callbacks #copy_data_to_score after_touch copies data_center_key from data_center to score" do
+    @validator_score_v1.update(data_center_key: nil)
+    assert_nil @validator_score_v1.reload.data_center_key
+
+    @vip.save
+    @vip.touch
+
+    assert_equal @data_center.data_center_key, @validator_score_v1.reload.data_center_key
   end
 end

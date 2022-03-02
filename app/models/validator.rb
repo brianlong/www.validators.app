@@ -40,8 +40,6 @@ class Validator < ApplicationRecord
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
 
-  # after_save :copy_data_to_score
-
   class << self
     # Returns an Array of account IDs for a given network
     #
@@ -126,8 +124,8 @@ class Validator < ApplicationRecord
     return unless validator_score_v1
 
     validator_score_v1.ip_address = ip_address
-    ip_dc = Ip.where(address: ip_address).first&.data_center_key
-    validator_score_v1.data_center_key = ip_dc
+    data_center_key = validator_ip&.data_center.data_center_key
+    validator_score_v1.data_center_key = data_center_key
     validator_score_v1.save
   end
 
