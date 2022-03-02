@@ -24,6 +24,9 @@
         <li class="nav-item">
           <%= link_to 'Cluster Stats', cluster_stats_path(network: params[:network]), class: 'nav-link' %>
         </li>
+        <li class="nav-item">
+          <%= link_to 'Ping Thing', ping_things_path(network: params[:network]), class: 'nav-link' %>
+        </li>
         <li class="nav-item" data-turbolinks="false">
           <%= link_to 'Sol Prices', sol_prices_url(exchange: SolPrice::EXCHANGES[0], filtering: 7), class: 'nav-link' %>
         </li>
@@ -69,10 +72,10 @@
   <div class="row footer-disclaimer">
     <div class="col-12">
       <hr class="footer-separator"/>
-      First Movers Advantage, LLC ("FMA") is the operator of this website. FMA PROVIDES THE DATA HEREIN ON AN “AS IS”
+      Block Logic, LLC ("BLOCK LOGIC") is the operator of this website. BLOCK LOGIC PROVIDES THE DATA HEREIN ON AN “AS IS”
       BASIS WITH NO WARRANTIES, AND HEREBY DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING
       THE IMPLIED WARRANTIES OF MERCHANTABILITY, QUALITY, AND FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT,
-      AND ANY WARRANTIES ARISING FROM A COURSE OF DEALING, COURSE OF PERFORMANCE, TRADE USAGE, OR TRADE PRACTICE. FMA
+      AND ANY WARRANTIES ARISING FROM A COURSE OF DEALING, COURSE OF PERFORMANCE, TRADE USAGE, OR TRADE PRACTICE. BLOCK LOGIC
       DOES NOT WARRANT THAT THE DATA WILL BE ERROR-FREE OR THAT ANY ERRORS WILL BE CORRECTED. ALL INFORMATION SHOULD
       BE INDEPENDENTLY VERIFIED BEFORE MAKING AN INVESTMENT OR DELEGATION DECISION.
     </div>

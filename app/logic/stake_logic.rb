@@ -210,17 +210,15 @@ module StakeLogic
   def get_rewards
     lambda do |p|
       stake_accounts = StakeAccount.where(network: p.payload[:network])
-
       account_rewards = {}
 
       stake_accounts.each do |sa|
         account_rewards[sa.stake_pubkey] = nil
       end
-
       reward_info = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
-        params: [stake_accounts.pluck(:stake_pubkey)]
+        params: [account_rewards.keys]
       )
 
       stake_accounts.each_with_index do |sa, idx|
@@ -241,7 +239,7 @@ module StakeLogic
         "get_inflation_reward",
         params: [lido_vote_accounts]
       )
-      raise NoResultsFromSolana.new('No results from `get_inflation_reward`') \
+      raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
         if reward_info.blank? || lido_rewards.blank?
 
       lido_vote_accounts.keys.each_with_index do |key, idx|

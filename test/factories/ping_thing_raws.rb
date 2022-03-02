@@ -3,13 +3,52 @@
 FactoryBot.define do
   factory :ping_thing_raw do
     api_token { "api_token" }
+    network { "mainnet" }
     raw_data { 
       {
         amount: rand(1..100),
-        time: rand(1..1000),
+        application: "Mango",
+        commitment_level: "finalized",
         signature: SecureRandom.hex(46),
+        success: true,
+        time: rand(1..1000),
         transaction_type: "transfer"
       }.to_json
     }
+
+    trait :invalid_commitment_level do
+      raw_data {
+        {
+          amount: rand(1..100),
+          application: "Mango",
+          commitment_level: "finished",
+          signature: SecureRandom.hex(46),
+          success: true,
+          time: rand(1..1000),
+          transaction_type: "transfer"
+        }.to_json
+      }
+    end
+
+    trait :success_empty do
+      raw_data {
+        {
+          signature: "0d7f418e4d1a3f80dc8a266cd867f766b73d9c80feea36524dfd074068bdef9221e356c192ac6ac71b71404d",
+          time: 2,
+          transaction_type: "transfer"
+        }.to_json
+      }
+    end
+
+    trait :success_false do
+      raw_data {
+        {
+          success: false,
+          signature: "0d7f418e4d1a3f80dc8a266cd867f766b73d9c80feea36524dfd074068bdef9221e356c192ac6ac71b71404d",
+          time: 2,
+          transaction_type: "transfer"
+        }.to_json
+      }
+    end
   end
 end
