@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class SortedDataCenterTest < ActiveSupport::TestCase
 
@@ -6,41 +6,75 @@ class SortedDataCenterTest < ActiveSupport::TestCase
     scores_china = []
     scores_berlin = []
 
+    data_center_china = create(:data_center, :china)
+    data_center_berlin = create(:data_center, :berlin)
+    data_center_frankfurt = create(:data_center, :frankfurt)
+
     3.times do
-      ip = create(:ip, :ip_china)
+      ip_address = Faker::Internet.ip_v4_address 
+      validator = create(:validator)
+      data_center_host = create(:data_center_host, data_center: data_center_china)
+      validator_ip = create(
+        :validator_ip, 
+        address: ip_address, 
+        validator: validator,
+        data_center_host: data_center_host
+      )
+
       score = create(
         :validator_score_v1,
-        ip_address: ip.address,
+        ip_address: ip_address,
         active_stake: 100,
-        network: 'testnet',
-        data_center_key: ip.data_center_key
+        network: "testnet",
+        data_center_key: data_center_china.data_center_key,
+        validator: validator
       )
       scores_china << score
     end
+
     2.times do
-      ip = create(
-        :ip,
-        :ip_berlin,
-        traits_autonomous_system_number: 12345
+      ip_address = Faker::Internet.ip_v4_address
+      validator = create(:validator)
+      data_center_host = create(:data_center_host, data_center: data_center_berlin)
+
+      validator_ip = create(
+        :validator_ip, 
+        address: ip_address, 
+        validator: validator,
+        data_center_host: data_center_host
       )
+
       score = create(
         :validator_score_v1,
-        ip_address: ip.address,
+        ip_address: ip_address,
         active_stake: 100,
-        network: 'testnet',
-        data_center_key: ip.data_center_key
+        network: "testnet",
+        data_center_key: data_center_berlin.data_center_key,
+        validator: validator
       )
 
       scores_berlin << score
     end
+
     3.times do
-      ip = create(:ip, :ip_berlin)
+      ip_address = Faker::Internet.ip_v4_address
+      validator = create(:validator)
+      data_center_host = create(:data_center_host, data_center: data_center_frankfurt)
+
+      validator_ip = create(
+        :validator_ip, 
+        address: ip_address, 
+        validator: validator,
+        data_center_host: data_center_host
+      )
+
       score = create(
         :validator_score_v1,
-        ip_address: ip.address,
+        ip_address: ip_address,
         active_stake: 100,
-        network: 'testnet',
-        data_center_key: ip.data_center_key
+        network: "testnet",
+        data_center_key: data_center_frankfurt.data_center_key,
+        validator: validator
       )
 
       scores_berlin << score
@@ -51,10 +85,10 @@ class SortedDataCenterTest < ActiveSupport::TestCase
     scores_berlin.last.update(delinquent: true)
   end
 
-  test 'SortedDataCenters when sort_by_asn returns correct result' do
+  test "when sort_by_asn returns correct result" do
     result = SortedDataCenters.new(
-      sort_by: 'asn',
-      network: 'testnet'
+      sort_by: "asn",
+      network: "testnet"
     ).call
 
     assert_equal 8, result[:total_population]
@@ -66,10 +100,10 @@ class SortedDataCenterTest < ActiveSupport::TestCase
 
   end
 
-  test 'SortedDataCenters when sort_by_data_centers returns correct result' do
+  test "when sort_by_data_centers returns correct result" do
     result = SortedDataCenters.new(
-      sort_by: 'data_center',
-      network: 'testnet'
+      sort_by: "data_center",
+      network: "testnet"
     ).call
 
     assert_equal 8, result[:total_population]
