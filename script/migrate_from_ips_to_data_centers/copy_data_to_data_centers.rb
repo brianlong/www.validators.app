@@ -7,11 +7,10 @@ log_path = Rails.root.join('log', 'copy_data_to_data_centers.log')
 @logger ||= Logger.new(log_path)
 
 def create_data_center_with_host_from_ip(ip)
-  data_center = DataCenter.find_or_create_by!(
+  data_center = DataCenter.find_or_initialize_by(
     continent_code: ip.continent_code,
     continent_geoname_id: ip.continent_geoname_id,
     continent_name: ip.continent_name,
-    country_confidence: ip.country_confidence,
     country_iso_code: ip.country_iso_code,
     country_geoname_id: ip.country_geoname_id,
     country_name: ip.country_name,
@@ -23,25 +22,30 @@ def create_data_center_with_host_from_ip(ip)
     traits_user_type: ip.traits_user_type,
     traits_autonomous_system_number: ip.traits_autonomous_system_number,
     traits_autonomous_system_organization: ip.traits_autonomous_system_organization,
-    traits_isp: ip.traits_isp,
-    traits_organization: ip.traits_organization,
-    city_confidence: ip.city_confidence,
-    city_geoname_id: ip.city_geoname_id,
     city_name: ip.city_name,
-    location_average_income: ip.location_average_income,
-    location_population_density: ip.location_population_density,
-    location_accuracy_radius: ip.location_accuracy_radius,
-    location_latitude: ip.location_latitude,
-    location_longitude: ip.location_longitude,
     location_metro_code: ip.location_metro_code,
-    location_time_zone: ip.location_time_zone,
-    postal_confidence: ip.postal_confidence,
-    postal_code: ip.postal_code,
-    subdivision_confidence: ip.subdivision_confidence,
-    subdivision_iso_code: ip.subdivision_iso_code,
-    subdivision_geoname_id: ip.subdivision_geoname_id,
-    subdivision_name: ip.subdivision_name
+    location_time_zone: ip.location_time_zone
   )
+
+  # This data cause duplicated data_center records
+  data_center.city_confidence = ip.city_confidence if data_center.city_confidence.blank?
+  data_center.city_geoname_id = ip.city_geoname_id if data_center.city_geoname_id.blank?
+  data_center.country_confidence = ip.country_confidence if data_center.country_confidence.blank?
+  data_center.location_accuracy_radius = ip.location_accuracy_radius if data_center.location_accuracy_radius.blank?
+  data_center.location_average_income = ip.location_average_income if data_center.location_average_income.blank?
+  data_center.location_latitude = ip.location_latitude if data_center.location_latitude.blank?
+  data_center.location_longitude = ip.location_longitude if data_center.location_longitude.blank?
+  data_center.location_population_density = ip.location_population_density if data_center.location_population_density.blank?
+  data_center.postal_code = ip.postal_code if data_center.postal_code.blank?
+  data_center.postal_confidence = ip.postal_confidence if data_center.postal_confidence.blank?
+  data_center.subdivision_confidence = ip.subdivision_confidence if data_center.subdivision_confidence.blank?
+  data_center.subdivision_geoname_id = ip.subdivision_geoname_id if data_center.subdivision_geoname_id.blank?
+  data_center.subdivision_iso_code = ip.subdivision_iso_code if data_center.subdivision_iso_code.blank?
+  data_center.subdivision_name = ip.subdivision_name if data_center.subdivision_name.blank?
+  data_center.traits_isp = ip.traits_isp if data_center.traits_isp.blank?
+  data_center.traits_organization = ip.traits_organization if data_center.traits_organization.blank?
+
+  data_center.save!
 
   data_center_host = DataCenterHost.find_or_create_by!(
     host: ip.data_center_host,
