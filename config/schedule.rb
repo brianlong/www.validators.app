@@ -51,6 +51,12 @@ every 1.hour do
 
   runner "AsnLogicWorker.perform_async(network: 'mainnet')"
   runner "AsnLogicWorker.perform_async(network: 'testnet')"
+
+  ruby_script 'NEW_append_ip_geo_data.rb'
+  ruby_script 'NEW_assign_data_center_scores.rb'
+  ruby_script 'NEW_fix_ip_hetzner.rb'
+  ruby_script 'NEW_fix_ip_ovh.rb'
+  ruby_script 'NEW_fix_ip_webnx.rb'
 end
 
 every 1.day do
