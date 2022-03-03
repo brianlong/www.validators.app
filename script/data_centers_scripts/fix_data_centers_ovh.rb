@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require File.expand_path('../config/environment', __dir__)
-require File.expand_path('./concerns/NEW_fix_ip_module', __dir__)
+require_relative '../../config/environment'
+require_relative '../concerns/NEW_fix_ip_module'
 
 include FixIpModule
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require File.expand_path("../config/environment", __dir__)
-require File.expand_path("./concerns/fix_ip_module", __dir__)
+require_relative '../../config/environment'
+require_relative '../concerns/NEW_fix_ip_module'
 
 include FixIpModule
 
@@ -39,9 +39,7 @@ ValidatorIp.joins(:data_center)
     setup_ip_override(vip: vip, host_data: host_data, host: host)
   end
 end
-          
-# These two methods should run after everything else is done.
-# update_ip_with_overrides
+
 update_validator_score_with_overrides
 
 puts "end of script"

@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec ruby script/assign_data_center_scores.rb >> /tmp/assign_data_center_scores.log 2>&1 &
+# RAILS_ENV=production bundle exec ruby script/data_centers_scripts/assign_data_center_scores.rb >> /tmp/assign_data_center_scores.log 2>&1 &
 
-require File.expand_path('../config/environment', __dir__)
+require_relative '../../config/environment'
 
 MAX_DATA_CENTER_STAKE = 10.0
 
-dch_ids = ValidatorIp.select('validator_ips.data_center_host_id').joins(validator: [:validator_score_v1]).where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", 'mainnet', 0).pluck(:data_center_host_id).compact.uniq
+dch_ids = ValidatorIp.select('validator_ips.data_center_host_id')
+                     .joins(validator: [:validator_score_v1])
+                     .where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", 'mainnet', 0)
+                     .pluck(:data_center_host_id)
+                     .compact
+                     .uniq
+                     
 data_center_hosts = DataCenterHost.includes(:data_center).where(id: dch_ids)
 
 @scores = ValidatorScoreV1.where(network: 'mainnet')
@@ -24,11 +30,6 @@ data_center_hosts.each do |dch|
 
   @total_population += population
 
-  # Rails.logger.info dc[0]
-  # Rails.logger.info "@data_centers is a #{@data_centers.class}"
-  # Rails.logger.info @data_centers[dc[0]]
-  # Rails.logger.info (@data_centers[dc[0]]).to_s
-  # byebug
   @data_centers[dc.data_center_key] = {
     aso: dc.traits_autonomous_system_organization,
     country: dc.country_iso_code,
@@ -36,7 +37,6 @@ data_center_hosts.each do |dch|
     count: population,
     active_stake: active_stake
   }
-  # Rails.logger.info @data_centers.inspect
 end
 
 @data_centers = @data_centers.sort_by { |_k, v| -v[:count] }
@@ -46,7 +46,7 @@ end
   else
     score = 0
   end
-  # puts "#{k} score = #{score}"
+
   score_sql = "UPDATE validator_score_v1s SET data_center_concentration_score = #{score} WHERE network = 'mainnet' AND data_center_key = '#{k}';"
 
   ValidatorScoreV1.connection.execute(score_sql)

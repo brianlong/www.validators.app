@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec ruby script/append_ip_geo_data.rb
-require File.expand_path('../config/environment', __dir__)
+# RAILS_ENV=production bundle exec ruby script/data_centers_scripts/append_data_centers_geo_data.rb
+require_relative '../../config/environment'
 require 'json'
 require 'net/http'
 require 'uri'
@@ -28,13 +28,13 @@ begin
 
   ValidatorIp.connection.execute(sql).each do |missing_ip|
     puts missing_ip[0].inspect if verbose
+
     # Skip private IPs
     next if missing_ip[0].match(/^(10|192|127)\..+/).present?
 
     record = client.insights(missing_ip[0])
 
     data_center = DataCenter.find_or_initialize_by(
-      # address: missing_ip[0],
       continent_code: record.continent.code,
       continent_geoname_id: record.continent.geoname_id,
       continent_name: record.continent.name,
@@ -121,77 +121,3 @@ rescue StandardError => e
   puts e.backtrace
   puts ''
 end
-
-# puts ''
-# puts record.inspect
-# puts ''
-#
-# puts 'Continent:'
-# puts record.continent.code
-# puts record.continent.geoname_id
-# puts record.continent.name
-# puts ''
-#
-# puts 'Country:'
-# puts record.country.confidence
-# puts record.country.iso_code
-# puts record.country.geoname_id
-# puts record.country.name
-# puts ''
-#
-# puts 'Registered Country:'
-# puts record.registered_country.iso_code
-# puts record.registered_country.geoname_id
-# puts record.registered_country.name
-# puts ''
-#
-# # Represented Country
-# # puts record.represented_country
-#
-# puts 'Traits:'
-# puts record.traits.anonymous?
-# puts record.traits.hosting_provider?
-# puts record.traits.user_type
-# puts record.traits.autonomous_system_number
-# puts record.traits.autonomous_system_organization
-# puts record.traits.domain
-# puts record.traits.isp
-# puts record.traits.organization
-# puts record.traits.ip_address
-# puts record.traits.network
-# puts ''
-#
-# puts 'City:'
-# puts record.city.confidence
-# puts record.city.geoname_id
-# puts record.city.name
-# puts ''
-#
-# puts 'Location:'
-# puts record.location.average_income
-# puts record.location.population_density
-# puts record.location.accuracy_radius
-# puts record.location.latitude
-# puts record.location.longitude
-# puts record.location.metro_code
-# puts record.location.time_zone
-# puts ''
-#
-# puts 'Postal:'
-# puts record.postal.confidence
-# puts record.postal.code
-# puts ''
-# puts ''
-#
-# puts 'Subdivision:'
-# puts record.most_specific_subdivision.confidence
-# puts record.most_specific_subdivision.iso_code
-# puts record.most_specific_subdivision.geoname_id
-# puts record.most_specific_subdivision.name
-# puts ''
-#
-# puts 'MaxMind:'
-# puts record.maxmind.queries_remaining
-# puts ''
-
-# puts 'Updated proxy_ips/max_mind_insights.txt'
