@@ -215,22 +215,75 @@ module StakeLogic
       stake_accounts.each do |sa|
         account_rewards[sa.stake_pubkey] = nil
       end
-      
       reward_info = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
         params: [account_rewards.keys]
       )
 
-      raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
-        if reward_info.blank?
-
-      account_rewards.keys.each_with_index do |pubkey, idx|
-        account_rewards[pubkey] = reward_info[idx]
+      stake_accounts.each_with_index do |sa, idx|
+        account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
+
+      lido_stake_accounts = stake_accounts.joins(:stake_pool)
+                                          .where("stake_pools.name = ?", "Lido")
+
+      lido_vote_accounts = {}
+
+      lido_stake_accounts.map do |lsa|
+        lido_vote_accounts[lsa.validator.vote_accounts.last.account] = lsa["stake_pubkey"]
+      end
+
+      lido_rewards = solana_client_request(
+        p.payload[:config_urls],
+        "get_inflation_reward",
+        params: [lido_vote_accounts.keys]
+      )
+      
+      raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
+        if reward_info.blank? || lido_rewards.blank?
+
+      lido_vote_accounts.keys.each_with_index do |key, idx|
+        account_rewards[lido_vote_accounts[key]] = lido_rewards[idx]
+      end
+
       Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from get_rewards", e)
+    end
+  end
+
+  def assign_epochs
+    lambda do |p|
+      return p unless p.code == 200
+      current_epoch, previous_epoch = set_epochs(p.payload[:network])
+
+      Pipeline.new(200, p.payload.merge!(
+        previous_epoch: previous_epoch,
+        current_epoch: current_epoch
+      ))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from assign_epochs", e)
+    end
+  end
+
+  def get_validator_history_for_lido
+    lambda do |p|
+      return p unless p.code == 200
+      lido = StakePool.find_by(name: "Lido")
+
+      val_accounts = lido.stake_accounts.map{ |sa| sa.validator.account }
+
+      lido_histories = ValidatorHistory.select(
+        "DISTINCT(account) account, active_stake"
+      ).where(
+        network: p.payload[:network],
+        epoch: p.payload[:previous_epoch].epoch,
+        account: val_accounts
+      )
+      Pipeline.new(200, p.payload.merge!(lido_histories: lido_histories))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from get_validator_history_for_lido", e)
     end
   end
 
@@ -238,24 +291,26 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      last_epoch, previous_epoch = set_epochs(p.payload[:network])
-
       # number of epochs in year calculated using the duration of last finished epoch
-      num_of_epochs = 1.year.to_i / (last_epoch.created_at - previous_epoch.created_at).to_i.to_f
+      num_of_epochs = number_of_epochs(p.payload[:current_epoch].created_at, p.payload[:previous_epoch].created_at)
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
-        apy = nil  
+        apy = nil
         if p.payload[:account_rewards][acc.stake_pubkey]
 
           rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
           credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
-
-          apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+          if acc.stake_pool.lido?
+            active_stake = p.payload[:lido_histories].select{ |lh| lh.account == acc.validator.account }[0].active_stake
+            apy = calculate_apy(credits_diff, rewards, num_of_epochs, active_stake)
+          else
+            apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+          end
         end
         acc.update(apy: apy)
       end
 
-      Pipeline.new(200, p.payload.merge!(previous_epoch: previous_epoch))
+      Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from calculate_apy_for_accounts", e)
     end
@@ -263,6 +318,7 @@ module StakeLogic
 
   def calculate_apy_for_pools
     lambda do |p|
+      return p unless p.code == 200
       p.payload[:stake_pools].each do |pool|
 
         # select single history for each pubkey from the previous epoch
@@ -278,8 +334,11 @@ module StakeLogic
 
         # sum of apy * stake
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
-          stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
-
+          if sa.stake_pool.lido?
+            stake = p.payload[:lido_histories].select{ |lh| lh.account == sa.validator.account }[0].active_stake
+          else
+            stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
+          end
           # we don't want to include accounts with no stake
           if stake && stake > 0 
             total_stake += stake
