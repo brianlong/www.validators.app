@@ -5,17 +5,18 @@ FactoryBot.define do
     traits_anonymous { true }
     traits_hosting_provider { true }
     traits_user_type { "hosting" }
+    traits_autonomous_system_number { 00000 }
+    traits_isp { "Organization" }
+    traits_organization { "Organization" }
 
     trait :berlin do
       city_name { "Berlin" }
-      city_confidence { 89 }
       continent_code { "EU" }
       country_confidence { 99 }
       country_geoname_id { 276 }
       country_iso_code { "DE" }
       continent_name { "Europe" }
       country_name { "Germany" }
-      data_center_key { "54321-DE-Europe/Berlin" }
       location_time_zone { "Europe/CET" }
       registered_country_iso_code { "DE" }
       registered_country_geoname_id { 276 }
@@ -37,7 +38,6 @@ FactoryBot.define do
       country_iso_code { "DE" }
       continent_name { "Europe" }
       country_name { "Germany" }
-      data_center_key { "54321-DE-Europe/Frankfurt" }
       location_time_zone { "Europe/CET" }
       registered_country_iso_code { "DE" }
       registered_country_geoname_id { 276 }
@@ -60,7 +60,6 @@ FactoryBot.define do
       country_geoname_id { 1814991 }
       country_iso_code { "CN" }
       country_name { "China" }
-      data_center_key { "12345-CN-Asia/Shanghai" }
       location_time_zone { "Asia/Shanghai" }
       registered_country_iso_code { "CN" }
       registered_country_geoname_id { 1814991 }

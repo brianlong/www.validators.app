@@ -12,7 +12,7 @@
 #
 # Indexes
 #
-#  index_data_center_hosts_on_data_center_id  (data_center_id)
+#  index_data_center_hosts_on_data_center_id_and_host  (data_center_id,host) UNIQUE
 #
 class DataCenterHost < ApplicationRecord
   belongs_to :data_center

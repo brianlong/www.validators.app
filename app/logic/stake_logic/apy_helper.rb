@@ -16,14 +16,19 @@ module StakeLogic::ApyHelper
   # returns reward from the account minus stake pool fee
   def reward_with_fee(manager_fee, rewards)
     return rewards unless manager_fee
-    rewards - rewards * (manager_fee / 100)
+    rewards - rewards * (manager_fee / 100.0)
   end
 
   # returns APY for a single account or nil
-  def calculate_apy(credits_diff, rewards, num_of_epochs)
-    credits_diff_percent = credits_diff / (rewards[:postBalance] - rewards[:amount]).to_f
+  def calculate_apy(credits_diff, rewards, num_of_epochs, active_stake = nil)
+    active_stake ||= rewards[:postBalance]
+    credits_diff_percent = credits_diff / (active_stake - rewards[:amount]).to_f
 
     apy = (((1 + credits_diff_percent) ** num_of_epochs) - 1) * 100
     apy < 100 && apy > 0 ? apy.round(6) : nil
+  end
+
+  def number_of_epochs(current_epoch_created_at, previous_epoch_created_at)
+    1.year.to_i / (current_epoch_created_at - previous_epoch_created_at).to_f
   end
 end
