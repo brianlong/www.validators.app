@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_24_142533) do
+ActiveRecord::Schema.define(version: 2022_03_03_103235) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 2022_02_24_142533) do
     t.string "host"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["data_center_id"], name: "index_data_center_hosts_on_data_center_id"
+    t.index ["data_center_id", "host"], name: "index_data_center_hosts_on_data_center_id_and_host", unique: true
   end
 
   create_table "data_centers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
