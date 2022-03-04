@@ -1,6 +1,7 @@
 class AsnsController < ApplicationController
   def show
     @data_centers = DataCenter.where(traits_autonomous_system_number: asn_params[:asn])
+                              .joins(:validator_score_v1s)
                               .pluck(:data_center_key)
                               .uniq
 
