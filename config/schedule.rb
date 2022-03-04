@@ -54,11 +54,11 @@ every 1.hour do
   runner "AsnLogicWorker.perform_async(network: 'mainnet')"
   runner "AsnLogicWorker.perform_async(network: 'testnet')"
 
-  ruby_script 'append_data_centers_geo_data.rb'
-  ruby_script 'assign_data_center_scores.rb'
-  ruby_script 'fix_data_centers_hetzner.rb'
-  ruby_script 'fix_data_centers_ovh.rb'
-  ruby_script 'fix_data_centers_webnx.rb'
+  ruby_script_data_centers 'append_data_centers_geo_data.rb'
+  ruby_script_data_centers 'assign_data_center_scores.rb'
+  ruby_script_data_centers 'fix_data_centers_hetzner.rb'
+  ruby_script_data_centers 'fix_data_centers_ovh.rb'
+  ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
 every 1.day do
