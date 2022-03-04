@@ -128,8 +128,8 @@ class Validator < ApplicationRecord
     return unless validator_score_v1
 
     validator_score_v1.ip_address = ip_address
-    data_center_key = validator_ip&.data_center.data_center_key
-    validator_score_v1.data_center_key = data_center_key
+    data_center_key = validator_ip&.data_center&.data_center_key
+    validator_score_v1.data_center_key = data_center_key if data_center_key
     validator_score_v1.save
   end
 

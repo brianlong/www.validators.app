@@ -27,7 +27,6 @@ class SortedDataCenters
       "data_centers.country_iso_code",
       "SUM(IF(validator_score_v1s.delinquent = true, 1, 0)) as delinquent_count",
       "IF(ISNULL(city_name), location_time_zone, city_name) as location",
-      "SUM(IF(validator_score_v1s.commission = 100, 1, 0)) as private_count"
     ]
 
     group = [
