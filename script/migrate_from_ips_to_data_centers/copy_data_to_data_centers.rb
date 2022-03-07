@@ -77,12 +77,16 @@ def create_or_update_validator_ip(ip, data_center_host)
       EOS
       @logger.info info.squish
     else
+      validator_score_v1 = ip.validator_score_v1
+      validator = validator_score_v1.validator
+
       val_ip = ValidatorIp.create!(
         address: ip.address,
         data_center_host_id: data_center_host.id,
         traits_ip_address: ip.traits_ip_address,
         traits_network: ip.traits_network,
-        traits_domain: ip.traits_domain
+        traits_domain: ip.traits_domain,
+        validator_id: validator.id
       )
 
       info = <<-EOS
