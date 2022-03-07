@@ -47,6 +47,7 @@ class SortedDataCenters
         WHERE score.network = ?
         AND score.active_stake > 0
       )
+      AND validator_score_v1s.network = ?
       GROUP BY
         ips.data_center_key,
         ips.traits_autonomous_system_number,
@@ -56,7 +57,7 @@ class SortedDataCenters
       "
 
     @dc_sql = Ip.connection.execute(
-      ActiveRecord::Base.send(:sanitize_sql, [sql, @network])
+      ActiveRecord::Base.send(:sanitize_sql, [sql, @network, @network])
     )
 
     @scores = ValidatorScoreV1.where(network: @network)
