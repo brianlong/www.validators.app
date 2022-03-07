@@ -62,34 +62,35 @@ def create_data_center_with_host_from_ip(ip)
 end
 
 def create_or_update_validator_ip(ip, data_center_host)
-  val_ip = ValidatorIp.find_by(address: ip.address)
+  val_ips = ValidatorIp.where(address: ip.address)
+  val_ips.each do |val_ip|
+    if val_ip
+      val_ip.update(
+        data_center_host_id: data_center_host.id,
+        traits_ip_address: ip.traits_ip_address,
+        traits_network: ip.traits_network,
+        traits_domain: ip.traits_domain
+      )
+      info = <<-EOS
+        Validator IP with id #{val_ip.id} updated with data_center_host_id: #{val_ip.data_center_host_id} 
+        assigned to data center: #{data_center_host.data_center_key}.
+      EOS
+      @logger.info info.squish
+    else
+      val_ip = ValidatorIp.create!(
+        address: ip.address,
+        data_center_host_id: data_center_host.id,
+        traits_ip_address: ip.traits_ip_address,
+        traits_network: ip.traits_network,
+        traits_domain: ip.traits_domain
+      )
 
-  if val_ip
-    val_ip.update(
-      data_center_host_id: data_center_host.id,
-      traits_ip_address: ip.traits_ip_address,
-      traits_network: ip.traits_network,
-      traits_domain: ip.traits_domain
-    )
-    info = <<-EOS
-      Validator IP with id #{val_ip.id} updated with data_center_host_id: #{val_ip.data_center_host_id} 
-      assigned to data center: #{data_center_host.data_center_key}.
-    EOS
-    @logger.info info.squish
-  else
-    val_ip = ValidatorIp.create!(
-      address: ip.address,
-      data_center_host_id: data_center_host.id,
-      traits_ip_address: ip.traits_ip_address,
-      traits_network: ip.traits_network,
-      traits_domain: ip.traits_domain
-    )
-
-    info = <<-EOS
-      Validator IP created for address #{ip.address} with data_center_host_id: #{val_ip.data_center_host_id} 
-      assigned to data center: #{data_center_host.data_center_key}.
-    EOS
-    @logger.info info.squish
+      info = <<-EOS
+        Validator IP created for address #{ip.address} with data_center_host_id: #{val_ip.data_center_host_id} 
+        assigned to data center: #{data_center_host.data_center_key}.
+      EOS
+      @logger.info info.squish
+    end
   end
 end
 
