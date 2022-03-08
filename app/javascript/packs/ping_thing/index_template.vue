@@ -17,7 +17,6 @@
 
 <script>
   import axios from 'axios'
-  import loadingImage from 'loading.gif'
   import scatterChart from './scatter_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'

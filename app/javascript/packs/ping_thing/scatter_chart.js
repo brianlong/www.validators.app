@@ -13,9 +13,6 @@ export default {
       required: true
     }
   },
-  methods: {
-
-  },
   data() {
     return {
       dark_grey: "#979797",
