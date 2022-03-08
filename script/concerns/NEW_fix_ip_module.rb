@@ -46,7 +46,7 @@ module FixIpModule
                       .where(id: ids)
                       .each do |vs1|
         
-        vip = ValidatorIp.find_by(address: vs1.ip_address)
+        vip = ValidatorIp.find_by(address: vs1.ip_address, is_active: true)
 
         # Check that again
         next if vip.blank?
