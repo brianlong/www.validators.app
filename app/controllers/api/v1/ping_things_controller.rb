@@ -9,11 +9,14 @@ module Api
       MAX_RECORDS = 1000
       
       def index
-        limit = [(index_params[:limit] || 240).to_i, 11520].min
+        limit = [(index_params[:limit] || 240).to_i, 240].min
+        page = index_params[:page] || 1
+
         ping_things = PingThing.where(network: index_params[:network])
                                .includes(:user)
-                               .order(reported_at: :asc)
-                               .last(limit)
+                               .order(reported_at: :desc)
+                               .page(page)
+                               .per(limit)
         json_result = ping_things.map { |pt| create_json_result(pt) }
         render json: json_result
       rescue ActionController::ParameterMissing
@@ -62,7 +65,7 @@ module Api
       private
 
       def index_params
-        params.permit(:network, :limit)
+        params.permit(:network, :limit, :page)
       end
 
       def ping_thing_params
