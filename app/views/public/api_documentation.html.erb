@@ -386,8 +386,10 @@ curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d
 </p>
 <p>Request:</p>
 <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/ping-thing/:network'</pre>
-<p>`limit=NN` will limit the results to NN entries. The default is 240. The maximum is 11_520.</p>
+<p>`limit=NN` will limit the results to NN entries. Default to 240.</p>
 <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/ping-thing/:network?limit=10'</pre>
+<p>`page=NN` will return the results from passed page. Defaults to 1.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/ping-thing/:network?page=1'</pre>
 <p>Response:</p>
 <pre>
 [
