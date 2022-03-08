@@ -82,13 +82,15 @@ begin
       host: nil
     )
 
-    val_ip = ValidatorIp.find_by(address: missing_ip.first)
-    val_ip.update(
-      data_center_host: data_center_host,
-      traits_domain: record.traits.domain, 
-      traits_ip_address: record.traits.ip_address,
-      traits_network: record.traits.network
-    )
+    val_ips = ValidatorIp.where(address: missing_ip.first)
+    val_ips.each do |val_ip|
+      val_ip.update(
+        data_center_host: data_center_host,
+        traits_domain: record.traits.domain, 
+        traits_ip_address: record.traits.ip_address,
+        traits_network: record.traits.network
+      )
+    end
   end
 
   puts '' if verbose
