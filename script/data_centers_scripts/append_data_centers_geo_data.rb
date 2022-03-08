@@ -22,7 +22,8 @@ begin
   # SQL statement to find un-appended IPs
   sql = "SELECT DISTINCT address
          FROM validator_ips v
-         WHERE v.data_center_host_id IS NULL"
+         WHERE v.is_active = true
+         AND v.data_center_host_id IS NULL"
 
   sql = "#{sql} LIMIT 10" if Rails.env == 'development'
 
@@ -82,22 +83,30 @@ begin
       host: nil
     )
 
-    val_ip = ValidatorIp.find_by(address: missing_ip.first)
-    val_ip.update(
-      data_center_host: data_center_host,
-      traits_domain: record.traits.domain, 
-      traits_ip_address: record.traits.ip_address,
-      traits_network: record.traits.network
+    val_ips = ValidatorIp.where(
+      is_active: true, 
+      address: missing_ip.first
     )
+
+    val_ips.each do |val_ip|
+      val_ip.update(
+        data_center_host: data_center_host,
+        traits_domain: record.traits.domain, 
+        traits_ip_address: record.traits.ip_address,
+        traits_network: record.traits.network
+      )
+    end
   end
 
   puts '' if verbose
   # Update validator_score_v1s with the latest data
   ValidatorScoreV1.find_each do |vs1|
-    next unless vs1.validator && vs1.validator&.ip_address
+    next unless vs1.validator && vs1.validator&.validator_ip_active&.address
 
     validator = vs1.validator
-    validator_ip = validator.validator_ips.order('updated_at desc').first
+    validator_ip = validator.validator_ip_active
+
+    next unless validator_ip
 
     ip = validator_ip.address
 

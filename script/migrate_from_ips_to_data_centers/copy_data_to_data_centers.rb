@@ -62,34 +62,41 @@ def create_data_center_with_host_from_ip(ip)
 end
 
 def create_or_update_validator_ip(ip, data_center_host)
-  val_ip = ValidatorIp.find_by(address: ip.address)
+  val_ips = ValidatorIp.where(address: ip.address)
+  val_ips.each do |val_ip|
+    if val_ip
+      val_ip.update(
+        data_center_host_id: data_center_host.id,
+        traits_ip_address: ip.traits_ip_address,
+        traits_network: ip.traits_network,
+        traits_domain: ip.traits_domain
+      )
+      info = <<-EOS
+        Validator IP with id #{val_ip.id} updated with data_center_host_id: #{val_ip.data_center_host_id} 
+        assigned to data center: #{data_center_host.data_center_key}.
+      EOS
+      @logger.info info.squish
+    else
+      validator_score_v1 = ip.validator_score_v1
+      validator = validator_score_v1&.validator
+      
+      next unless validator
 
-  if val_ip
-    val_ip.update(
-      data_center_host_id: data_center_host.id,
-      traits_ip_address: ip.traits_ip_address,
-      traits_network: ip.traits_network,
-      traits_domain: ip.traits_domain
-    )
-    info = <<-EOS
-      Validator IP with id #{val_ip.id} updated with data_center_host_id: #{val_ip.data_center_host_id} 
-      assigned to data center: #{data_center_host.data_center_key}.
-    EOS
-    @logger.info info.squish
-  else
-    val_ip = ValidatorIp.create!(
-      address: ip.address,
-      data_center_host_id: data_center_host.id,
-      traits_ip_address: ip.traits_ip_address,
-      traits_network: ip.traits_network,
-      traits_domain: ip.traits_domain
-    )
+      val_ip = ValidatorIp.create!(
+        address: ip.address,
+        data_center_host_id: data_center_host.id,
+        traits_ip_address: ip.traits_ip_address,
+        traits_network: ip.traits_network,
+        traits_domain: ip.traits_domain,
+        validator_id: validator.id
+      )
 
-    info = <<-EOS
-      Validator IP created for address #{ip.address} with data_center_host_id: #{val_ip.data_center_host_id} 
-      assigned to data center: #{data_center_host.data_center_key}.
-    EOS
-    @logger.info info.squish
+      info = <<-EOS
+        Validator IP created for address #{ip.address} with data_center_host_id: #{val_ip.data_center_host_id} 
+        assigned to data center: #{data_center_host.data_center_key}.
+      EOS
+      @logger.info info.squish
+    end
   end
 end
 
@@ -139,8 +146,9 @@ end
 
 val_ip_addresses_empty_host = ValidatorIp.where(data_center_host: nil).pluck(:address)
 
+puts "Ips migration started..."
+
 Ip.where(address: val_ip_addresses_empty_host).find_in_batches do |batch|
-  puts "Ips migration started..."
   batch.each do |ip|
     data_center_host = create_data_center_with_host_from_ip(ip)
     create_or_update_validator_ip(ip, data_center_host)
@@ -149,8 +157,9 @@ Ip.where(address: val_ip_addresses_empty_host).find_in_batches do |batch|
 end
 puts "Ips migration finished."
 
+puts "Ip overrides updates started..."
+
 IpOverride.find_in_batches do |batch|
-  puts "Ip overrides updates started..."
 
   batch.each do |ip_override|
     update_validator_ip_from_ip_override(ip_override)

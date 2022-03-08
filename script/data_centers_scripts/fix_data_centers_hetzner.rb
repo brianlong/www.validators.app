@@ -52,7 +52,7 @@ HETZNER_HOSTS = {
 HETZNER_REGEX = /(ex|sp).+\.(dc|cloud).+\.hetzner\.com/
 
 ValidatorIp.joins(:data_center)
-           .where("is_overridden = ? AND data_centers.traits_autonomous_system_number = ?", false, 24_940)
+           .where("is_active = ? AND is_overridden = ? AND data_centers.traits_autonomous_system_number = ?", true, false, 24_940)
            .each do |vip|
 
   last_hetzner_ip = get_matching_traceroute(ip: vip.address, reg: HETZNER_REGEX)
