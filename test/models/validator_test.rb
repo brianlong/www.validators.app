@@ -18,6 +18,14 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal data_center_host, validator.validator_ips.first.data_center_host
   end
 
+  test "relationships has_one validator_ip_active" do
+    validator = create(:validator)
+    validator_ip = create(:validator_ip, validator: validator)
+    validator_ip2 = create(:validator_ip, :active, validator: validator)
+    
+    assert_equal validator_ip2, validator.validator_ip_active
+  end
+
   test '#api_url creates correct link for test environment' do
     validator = build(:validator)
     expected_url = "http://localhost:3000/api/v1/validators/#{validator.network}/#{validator.account}"
