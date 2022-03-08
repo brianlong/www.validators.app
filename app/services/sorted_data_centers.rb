@@ -41,13 +41,13 @@ class SortedDataCenters
       FROM ips
       JOIN validator_score_v1s
       ON validator_score_v1s.ip_address = ips.address
-      WHERE ips.address IN (
+      WHERE validator_score_v1s.network = ?
+      AND ips.address IN (
         SELECT score.ip_address
         FROM validator_score_v1s score
         WHERE score.network = ?
         AND score.active_stake > 0
-      )
-      AND validator_score_v1s.network = ?
+      ) 
       GROUP BY
         ips.data_center_key,
         ips.traits_autonomous_system_number,
