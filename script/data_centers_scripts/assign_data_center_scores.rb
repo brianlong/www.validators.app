@@ -5,10 +5,10 @@
 require_relative '../../config/environment'
 
 MAX_DATA_CENTER_STAKE = 10.0
-
+where_clause = "validator_ips.is_active = ? AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?"
 dch_ids = ValidatorIp.select('validator_ips.data_center_host_id')
                      .joins(validator: [:validator_score_v1])
-                     .where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", 'mainnet', 0)
+                     .where(where_clause, true, 'mainnet', 0)
                      .pluck(:data_center_host_id)
                      .compact
                      .uniq

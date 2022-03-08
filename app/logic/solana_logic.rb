@@ -392,6 +392,7 @@ module SolanaLogic
           version: 4,
           address: v['gossip_ip_port'].split(':')[0]
         )
+        val_ip.set_is_active
         val_ip.touch
       end
 

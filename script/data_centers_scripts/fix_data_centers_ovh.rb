@@ -97,7 +97,7 @@ OVH_HOSTS = {
 HOST_REGEX = /(be|bg|vl|fra1-lim1).+\.(lon1|rbx|bhs|waw|fra|gra|sbg|hil|vin|p19|gsw|dc1|de).+/
 
 ValidatorIp.joins(:data_center)
-           .where("is_overridden = ? AND data_centers.traits_autonomous_system_number = ?", false, 16_276)
+           .where("is_active = ? AND is_overridden = ? AND data_centers.traits_autonomous_system_number = ?", true, false, 16_276)
            .each do |vip|
 
   last_ovh_ip = get_matching_traceroute(ip: vip.address, reg: HOST_REGEX)
