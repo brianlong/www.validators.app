@@ -6,6 +6,7 @@
 #
 #  id                  :bigint           not null, primary key
 #  address             :string(191)
+#  is_active           :boolean          default(FALSE)
 #  is_overridden       :boolean          default(FALSE)
 #  traits_domain       :string(191)
 #  traits_ip_address   :string(191)
@@ -19,6 +20,7 @@
 # Indexes
 #
 #  index_validator_ips_on_data_center_host_id                   (data_center_host_id)
+#  index_validator_ips_on_is_active                             (is_active)
 #  index_validator_ips_on_validator_id                          (validator_id)
 #  index_validator_ips_on_validator_id_and_version_and_address  (validator_id,version,address) UNIQUE
 #
@@ -37,5 +39,12 @@ class ValidatorIp < ApplicationRecord
 
   def copy_data_to_score
     validator.copy_data_to_score
+  end
+
+  def set_is_active
+    vips = ValidatorIp.where(validator_id: validator_id, is_active: true)
+    vips.update_all(is_active: false)
+
+    update(is_active: true)
   end
 end
