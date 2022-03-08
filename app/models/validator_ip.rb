@@ -42,6 +42,8 @@ class ValidatorIp < ApplicationRecord
   end
 
   def set_is_active
+    return nil if is_active
+    
     vips = ValidatorIp.where(validator_id: validator_id, is_active: true)
     vips.update(is_active: false)
 
