@@ -9,7 +9,7 @@ module Api
       MAX_RECORDS = 1000
       
       def index
-        limit = [(index_params[:limit] || 240).to_i, 240].min
+        limit = [(index_params[:limit] || 240).to_i, 9999].min
         page = index_params[:page] || 1
 
         ping_things = PingThing.where(network: index_params[:network])
