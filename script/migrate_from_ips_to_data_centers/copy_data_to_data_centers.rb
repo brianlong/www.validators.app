@@ -78,7 +78,9 @@ def create_or_update_validator_ip(ip, data_center_host)
       @logger.info info.squish
     else
       validator_score_v1 = ip.validator_score_v1
-      validator = validator_score_v1.validator
+      validator = validator_score_v1&.validator
+      
+      next unless validator
 
       val_ip = ValidatorIp.create!(
         address: ip.address,
@@ -144,8 +146,9 @@ end
 
 val_ip_addresses_empty_host = ValidatorIp.where(data_center_host: nil).pluck(:address)
 
+puts "Ips migration started..."
+
 Ip.where(address: val_ip_addresses_empty_host).find_in_batches do |batch|
-  puts "Ips migration started..."
   batch.each do |ip|
     data_center_host = create_data_center_with_host_from_ip(ip)
     create_or_update_validator_ip(ip, data_center_host)
@@ -154,8 +157,9 @@ Ip.where(address: val_ip_addresses_empty_host).find_in_batches do |batch|
 end
 puts "Ips migration finished."
 
+puts "Ip overrides updates started..."
+
 IpOverride.find_in_batches do |batch|
-  puts "Ip overrides updates started..."
 
   batch.each do |ip_override|
     update_validator_ip_from_ip_override(ip_override)
