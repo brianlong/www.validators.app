@@ -5,7 +5,7 @@
     <div class="card mb-4">
       <div class="card-content">
         <h3 class="card-heading mb-4">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time</h3>
-        <scatter-chart :vector="ping_things" fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)"/>
+        <scatter-chart :vector="ping_things.slice().reverse()" fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)"/>
       </div>
     </div>
 
@@ -35,7 +35,7 @@
       var ctx = this
       axios.get("/api/v1/ping-thing/" + this.network)
            .then(function(response){
-             ctx.ping_things = response.data
+             ctx.ping_things = response.data;
            })
     },
     components: {
