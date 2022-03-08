@@ -16,6 +16,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
       time: "234",
       transaction_type: "transfer"
     }
+    @headers = { "Token" => @user.api_token }
   end
 
   test "POST api_v1_ping_thing without token returns error" do
@@ -29,7 +30,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
   test "POST api_v1_ping_thing with token returns 200 and saves the data" do
     post api_v1_ping_thing_path(
       network: "testnet"
-    ), headers: { "Token" => @user.api_token }, params: @params_sample
+    ), headers: @headers, params: @params_sample
     assert_response 201
     expected_response = { "status" => "created" }
 
@@ -40,7 +41,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
   test "POST api_v1_ping_thing with wrong data length returns 400 error" do
     post api_v1_ping_thing_path(
       network: "testnet"
-    ), headers: { "Token" => @user.api_token }, params: {}
+    ), headers: @headers, params: {}
     assert_response 400
     expected_response = {"base"=>["Provided data length is not valid"]}
 
@@ -64,7 +65,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
     post api_v1_ping_thing_batch_path(
       network: "testnet"
-    ), headers: { "Token" => @user.api_token }, params: params_batch
+    ), headers: @headers, params: params_batch
     assert_response 201
     expected_response = { "status" => "created" }
 
@@ -81,7 +82,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
     post api_v1_ping_thing_batch_path(
       network: "testnet"
-    ), headers: { "Token" => @user.api_token }, params: params_batch
+    ), headers: @headers, params: params_batch
     assert_response 400
     expected_response = "Number of records exceeds 1000"
 
@@ -92,7 +93,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     ping_thing_time = create(:ping_thing, :testnet, :processed)
     create(:ping_thing, :mainnet)
 
-    get api_v1_ping_things_path(network: "testnet"), headers: { "Token" => @user.api_token }
+    get api_v1_ping_things_path(network: "testnet"), headers: @headers
 
     assert_response 200
 
@@ -119,7 +120,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
       create(:ping_thing, :testnet)
     end
 
-    get api_v1_ping_things_path(network: "testnet", limit: 2), headers: { "Token" => @user.api_token }
+    get api_v1_ping_things_path(network: "testnet", limit: 2), headers: @headers
 
     assert_response 200
     assert_equal 2, response_to_json(@response.body).size
@@ -129,7 +130,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     create(:ping_thing, :testnet, reported_at: 2.day.ago, response_time: 123)
     create(:ping_thing, :testnet, reported_at: 1.day.ago, response_time: 321)
 
-    get api_v1_ping_things_path(network: "testnet", limit: 1), headers: { "Token" => @user.api_token }
+    get api_v1_ping_things_path(network: "testnet", limit: 1), headers: @headers
 
     json = response_to_json(@response.body)
     assert_equal 321, json.first["response_time"]
@@ -140,7 +141,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
       create(:ping_thing, :testnet)
     end
 
-    get api_v1_ping_things_path(network: "testnet", limit: 2), headers: { "Token" => @user.api_token }
+    get api_v1_ping_things_path(network: "testnet", limit: 2), headers: @headers
 
     assert_response 200
     assert_equal 2, response_to_json(@response.body).size
@@ -151,17 +152,18 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     create(:ping_thing, :testnet, reported_at: 2.day.ago, response_time: 456)
     create(:ping_thing, :testnet, reported_at: 1.day.ago, response_time: 789)
 
-    get api_v1_ping_things_path(network: "testnet", limit: 1, page: 1), headers: { "Token" => @user.api_token }
+    get api_v1_ping_things_path(network: "testnet", limit: 1, page: 1), headers: @headers
 
     json = response_to_json(@response.body)
     assert_equal 789, json.first["response_time"]
+    assert_equal 1, response_to_json(@response.body).size
 
-    get api_v1_ping_things_path(network: "testnet", limit: 1, page: 2), headers: { "Token" => @user.api_token }
+    get api_v1_ping_things_path(network: "testnet", limit: 1, page: 2), headers: @headers
 
     json = response_to_json(@response.body)
     assert_equal 456, json.first["response_time"]
 
-    get api_v1_ping_things_path(network: "testnet", limit: 1, page: 3), headers: { "Token" => @user.api_token }
+    get api_v1_ping_things_path(network: "testnet", limit: 1, page: 3), headers: @headers
 
     json = response_to_json(@response.body)
     assert_equal 123, json.first["response_time"]
