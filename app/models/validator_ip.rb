@@ -40,4 +40,11 @@ class ValidatorIp < ApplicationRecord
   def copy_data_to_score
     validator.copy_data_to_score
   end
+
+  def set_is_active
+    vips = ValidatorIp.where(validator_id: validator_id, is_active: true)
+    vips.update_all(is_active: false)
+
+    update(is_active: true)
+  end
 end

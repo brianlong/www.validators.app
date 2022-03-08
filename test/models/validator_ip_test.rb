@@ -31,4 +31,26 @@ class ValidatorIpTest < ActiveSupport::TestCase
   test "#relationships has_one data_center returns data_center" do
     assert_equal @data_center, @vip.data_center
   end
+
+  test "#set_is_active updates validator_ips of validator to false and set is_active on the modified one" do
+    vips = create_list(
+      :validator_ip,
+      5,
+      validator: @validator, 
+      data_center_host_id: @data_center_host.id
+    )
+
+    vip_first = vips.first
+    vip_last = vips.last
+
+    vip_first.update(is_active: true)
+
+    assert vip_first.reload.is_active
+    refute vip_last.reload.is_active
+
+    vip_last.set_is_active
+
+    refute vip_first.reload.is_active
+    assert vip_last.reload.is_active
+  end
 end
