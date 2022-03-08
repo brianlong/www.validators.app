@@ -15,7 +15,8 @@ class SortedDataCenterTest < ActiveSupport::TestCase
       validator = create(:validator)
       data_center_host = create(:data_center_host, data_center: data_center_china)
       validator_ip = create(
-        :validator_ip, 
+        :validator_ip,
+        :active,
         address: ip_address, 
         validator: validator,
         data_center_host: data_center_host
@@ -38,7 +39,8 @@ class SortedDataCenterTest < ActiveSupport::TestCase
       data_center_host = create(:data_center_host, data_center: data_center_berlin)
 
       validator_ip = create(
-        :validator_ip, 
+        :validator_ip,
+        :active,
         address: ip_address, 
         validator: validator,
         data_center_host: data_center_host
@@ -62,7 +64,8 @@ class SortedDataCenterTest < ActiveSupport::TestCase
       data_center_host = create(:data_center_host, data_center: data_center_frankfurt)
 
       validator_ip = create(
-        :validator_ip, 
+        :validator_ip,
+        :active,
         address: ip_address, 
         validator: validator,
         data_center_host: data_center_host

@@ -43,7 +43,10 @@ class SortedDataCenters
 
     select_statement << private_validators_count if @network == "mainnet"
 
-    @dc_sql = DataCenter.select(select_statement).joins(:validator_score_v1s).where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > 0", @network).group(group)
+    @dc_sql = DataCenter.select(select_statement)
+                        .joins(:validator_score_v1s)
+                        .where("validator_ips.is_active = ? AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > 0", true, @network)
+                        .group(group)
 
     @scores = ValidatorScoreV1.where("network = ? AND active_stake > ?", @network, 0)
 
