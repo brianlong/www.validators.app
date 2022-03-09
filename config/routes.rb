@@ -152,6 +152,8 @@ Rails.application.routes.draw do
       post 'ping-thing-batch/:network', to: 'ping_things#create_batch', as: 'ping_thing_batch'
       # GET /api/v1/ping-thing/
       get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
+
+      get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
     end
   end
 end

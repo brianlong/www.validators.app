@@ -21,6 +21,7 @@
   <li><a href="#ping-thing">Ping Thing Post</a></li>
   <li><a href="#ping-thing-batch">Ping Thing Batch</a></li>
   <li><a href="#ping-thing-list">Ping Thing List</a></li>
+  <li><a href="#sol-prices">Sol Prices</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#notes">Notes</a></li>
 </ul>
@@ -458,6 +459,43 @@
   },
   ...
 ]
+</pre>
+
+<hr />
+
+<h4 id="sol-prices">Sol Prices</h4>
+<p>The Sol Prices endpoind will return prices gathered from multiple exchanges.</p>
+<h6>Request:</h6>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/sol-prices?exchange=coin_gecko'</pre>
+<h6>Parameter Options:</h6>
+<p><strong class="text-muted">`from=%year-%month-%dayT%hour:%minute:%second`</strong> will return results starting from a given time, defaults to 30 days ago. </p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/sol-prices?from=2022-01-01T00:00:00'</pre>
+<p><strong class="text-muted">`to=%year-%month-%dayT%hour:%minute:%second`</strong> will return results until a given time, defaults to today. </p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/sol-prices?to=2022-01-01T00:00:00'</pre>
+<p><strong class="text-muted">`exchange=(ftx | coin_gecko)`</strong> will return results from a given exchange.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/sol-prices?exchange=ftx'</pre>
+<h6>Response:</h6>
+<pre>
+[
+  {
+    "id": 631,
+    "exchange": "coin_gecko",
+    "currency": "usd",
+    "epoch_mainnet": null,
+    "epoch_testnet": null,
+    "open": null,
+    "close": null,
+    "high": null,
+    "low": null,
+    "volume": "1380634374.482357",
+    "datetime_from_exchange": "2022-01-01T00:00:00.000Z",
+    "created_at": "2022-03-08T07:33:01.426Z",
+    "updated_at": "2022-03-08T07:33:01.426Z",
+    "average_price": "170.1966082645718"
+  },
+  ...
+]
+
 </pre>
 
 <hr />

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :sol_price do
-    currency { SolPrice.currency[:usd] }
+    currency { SolPrice.currency_usd }
     epoch_testnet { 2 }
     epoch_mainnet { 1 }
     
