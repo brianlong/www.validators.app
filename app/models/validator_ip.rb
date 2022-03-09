@@ -38,6 +38,8 @@ class ValidatorIp < ApplicationRecord
 
   after_touch :copy_data_to_score
 
+  scope :active, -> { where(is_active: true) }
+
   def copy_data_to_score
     validator.copy_data_to_score
   end

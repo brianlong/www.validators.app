@@ -64,4 +64,15 @@ class ValidatorIpTest < ActiveSupport::TestCase
     refute vip_first.reload.is_active
     assert vip_last.reload.is_active
   end
+
+  test "scope .is_active returns only active validator ips" do
+    create(:validator_ip, validator: @validator)
+
+    active = create(:validator_ip, :active, validator: @validator)
+
+    active_ips = ValidatorIp.active
+
+    assert_equal 1, active_ips.size
+    assert_equal active, active_ips.first
+  end
 end
