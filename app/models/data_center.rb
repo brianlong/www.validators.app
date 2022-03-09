@@ -58,6 +58,19 @@ class DataCenter < ApplicationRecord
     where(data_center_key: data_center_keys)
   end
 
+  def self.filtered_by(filter)
+    case filter
+    when :delinquent
+      joins(:validator_score_v1s).where(delinquent: true)
+    when :inactive
+      joins(:validators).where('validator.is_active = ?', false)
+    when :private
+      joins(:validator_score_v1s).where(commission: 100, network: "mainnet")
+    else
+      all
+    end
+  end
+
   def to_builder
     Jbuilder.new do |data_center|
       data_center.autonomous_system_number self.traits_autonomous_system_number

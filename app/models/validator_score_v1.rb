@@ -91,6 +91,8 @@ class ValidatorScoreV1 < ApplicationRecord
   
   belongs_to :validator
   has_many :validator_ips, through: :validator
+  has_one :validator_ip_active, through: :validator
+  has_one :data_center, through: :validator
 
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON

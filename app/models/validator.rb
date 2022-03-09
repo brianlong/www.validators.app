@@ -33,6 +33,7 @@ class Validator < ApplicationRecord
   has_many :commission_histories, dependent: :destroy
   has_many :validator_histories, primary_key: :account, foreign_key: :account
   has_one :validator_ip_active, ->(validator_ip) { where(is_active: true) }, class_name: "ValidatorIp"
+  has_one :data_center, through: :validator_ip_active
   has_one :validator_score_v1, dependent: :destroy
   has_one :most_recent_epoch_credits_by_account, -> {
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
@@ -41,6 +42,25 @@ class Validator < ApplicationRecord
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
 
+  def self.with_private(show: "true")
+    show == "true" ? all : where.not("validator_score_v1s.commission = 100")
+  end
+
+  def self.filtered_by(filter)
+    case filter
+    when :delinquent
+      joins(:validator_score_v1)
+        .where("validator_score_v1s.delinquent = ?", true)
+    when :inactive
+      where(is_active: false)
+    when :private
+      joins(:validator_score_v1)
+        .where("validator_score_v1s.commission = ? AND validator_score_v1s.network = ?", 100, "mainnet")
+    else
+      all
+    end
+  end
+  
   class << self
     # Returns an Array of account IDs for a given network
     #

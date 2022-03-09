@@ -18,47 +18,25 @@ class DataCentersController < ApplicationController
   # params[:key]
   def data_center
     key = show_params[:key].gsub('-slash-', '/')
-    # sql = "
-    #   SELECT *
-    #   FROM validators val
-    #   INNER JOIN validator_score_v1s score ON val.id = score.validator_id
-    #   WHERE score.network = '#{params[:network]}'
-    #   AND score.active_stake > 0
-    #   AND score.ip_address IN (
-    #     SELECT ip_address from ips
-    #     WHERE data_center_key = '#{key}'
-    #   )
-    #   ORDER BY val.account
-    # "
-    # @validators = Validator.connection.execute(sql)
 
     @per = 25
 
-    @scores = ValidatorScoreV1.by_network_with_active_stake(show_params[:network])
-                              .includes(:validator)
-                              .by_data_centers(key)
-                              .filtered_by(show_params[:filter_by]&.to_sym)
-                              .order('active_stake desc')
+    data_center = DataCenter.find_by(data_center_key: key)
+    @validators = Validator.joins(:validator_score_v1, :data_center)
+                           .where("data_center_id = ? AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_center.id, show_params[:network], 0)
+                           .filtered_by(show_params[:filter_by]&.to_sym)
+                           .order("validator_score_v1s.active_stake desc")
 
     if params[:show_private]
-      @scores = @scores.with_private(show: params[:show_private])
+      @validators = @validators.with_private(show: params[:show_private])
     end
-    
-    @dc_stake = @scores.where(data_center_key: key).sum(:active_stake)
-          
-    @scores = @scores.page(params[:page])
-                    .per(@per)
 
-    @validators = @scores.map(&:validator).compact
-
+    @dc_stake = @validators.sum(:active_stake)          
+    @validators = @validators.page(params[:page]).per(@per)
     @batch = Batch.last_scored(params[:network])
-
-    @population = @scores.total_count
-
-    @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network])
-                                   .sum(:active_stake)
-                                   
-    @dc_info = DataCenter.find_by(data_center_key: key) || DataCenter.new(data_center_key: key)
+    @population = @validators.total_count
+    @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network]).sum(:active_stake)                                   
+    @dc_info = data_center || DataCenter.new(data_center_key: key)
   end
 
   private
