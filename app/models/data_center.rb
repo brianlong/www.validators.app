@@ -52,7 +52,7 @@ class DataCenter < ApplicationRecord
   has_many :validator_ips, through: :data_center_hosts
   has_many :validator_ips_active, through: :data_center_hosts
   has_many :validators, through: :data_center_hosts
-  has_many :validator_score_v1s, through: :validator_ips
+  has_many :validator_score_v1s, through: :data_center_hosts
 
   def to_builder
     Jbuilder.new do |data_center|

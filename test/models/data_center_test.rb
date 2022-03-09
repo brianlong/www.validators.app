@@ -55,6 +55,28 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_includes @data_center.validators, validator
   end
 
+  test "relationships validator_score_v1s returns validator_score_v1s with active validator_ips through data_center_hosts" do
+    @data_center.save
+
+    validator = create(:validator, :with_score)
+    validator2 = create(:validator, :with_score)
+    validator3 = create(:validator, :with_score)
+    validator4_inactive_ip = create(:validator, :with_score) # this score shouldn/t be included
+
+    dch = create(:data_center_host, data_center: @data_center)
+    dch2 = create(:data_center_host, data_center: @data_center)
+
+    vip = create(:validator_ip, :active, data_center_host: dch, validator: validator, address: "0.0.0.1")
+    vip2 = create(:validator_ip, :active, data_center_host: dch2, validator: validator2, address: "0.0.0.2")
+    vip3 = create(:validator_ip, :active, data_center_host: dch2, validator: validator3, address: "0.0.0.3")
+    vip4 = create(:validator_ip, data_center_host: dch, validator: validator4_inactive_ip, address: "0.0.0.4")
+
+    assert_equal 3, @data_center.validator_score_v1s.size
+    assert_includes @data_center.validator_score_v1s, validator.validator_score_v1
+    assert_includes @data_center.validator_score_v1s, validator2.validator_score_v1
+    assert_includes @data_center.validator_score_v1s, validator3.validator_score_v1
+  end
+
   test "#to_builder returns correct data" do
     json = "{\"autonomous_system_number\":12345,\"latitude\":\"51.2993\",\"longitude\":\"9.491\"}"
     assert_equal json, @data_center.to_builder.target!

@@ -5,7 +5,7 @@ class AsnControllerTest < ActionDispatch::IntegrationTest
     @data_center = create(:data_center, :berlin)
     data_center_host = create(:data_center_host, data_center: @data_center)
     validator = create(:validator)
-    @validator_ip = create(:validator_ip, validator: validator, data_center_host: data_center_host)
+    @validator_ip = create(:validator_ip, :active, validator: validator, data_center_host: data_center_host)
     
     create(:validator_score_v1, validator: validator, ip_address: @validator_ip.address)
   end
