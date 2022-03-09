@@ -77,6 +77,16 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_includes @data_center.validator_score_v1s, validator3.validator_score_v1
   end
 
+  test "scope by_data_center_key returns data_centers by given data_center_key" do
+    @data_center.save
+    create(:data_center, :china)
+
+    data_centers = DataCenter.by_data_center_key(@data_center.data_center_key)
+
+    assert_equal 1, data_centers.size
+    assert_equal @data_center, data_centers.first
+  end
+
   test "#to_builder returns correct data" do
     json = "{\"autonomous_system_number\":12345,\"latitude\":\"51.2993\",\"longitude\":\"9.491\"}"
     assert_equal json, @data_center.to_builder.target!
