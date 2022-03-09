@@ -3,12 +3,12 @@
 module Api
   module V1
     class SolPricesController < BaseController
-      EXCHANGES = %w(coin_gecko ftx).freeze
       def index
         from = (index_params[:from] || 30.days.ago).to_datetime
         to = (index_params[:to] || from + 30.days).to_datetime
 
-        exchange_filter = EXCHANGES.include?(index_params[:exchange]) ? index_params[:exchange] : EXCHANGES
+        exchange_filter = \
+          SolPrice::EXCHANGES.include?(index_params[:exchange]) ? index_params[:exchange] : SolPrice::EXCHANGES
 
         sol_prices = SolPrice.order(datetime_from_exchange: :asc)
                               .where(
