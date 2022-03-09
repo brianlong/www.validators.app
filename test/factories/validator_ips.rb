@@ -1,6 +1,10 @@
 FactoryBot.define do
   factory :validator_ip do
     version { 1 }
-    address { "MyString" }
+    address { Faker::Internet.ip_v4_address  }
+
+    trait :active do 
+      is_active { true }
+    end
   end
 end

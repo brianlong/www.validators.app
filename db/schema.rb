@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_03_103235) do
+ActiveRecord::Schema.define(version: 2022_03_07_163003) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -524,7 +524,9 @@ ActiveRecord::Schema.define(version: 2022_03_03_103235) do
     t.string "traits_domain"
     t.string "traits_ip_address"
     t.string "traits_network"
+    t.boolean "is_active", default: false
     t.index ["data_center_host_id"], name: "index_validator_ips_on_data_center_host_id"
+    t.index ["is_active"], name: "index_validator_ips_on_is_active"
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
     t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
   end
