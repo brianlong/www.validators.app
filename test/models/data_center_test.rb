@@ -31,6 +31,30 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_includes @data_center.validator_ips, vip2
   end
 
+  test "relationships validator_ips_active returns only active validator_ips through data_center_hosts" do
+    @data_center.save
+
+    validator = create(:validator)
+    dch = create(:data_center_host, data_center: @data_center)
+    vip = create(:validator_ip, data_center_host: dch, validator: validator)
+    vip2 = create(:validator_ip, :active, data_center_host: dch, validator: validator, address: "0.0.0.0")
+
+    assert_equal 1, @data_center.validator_ips_active.size
+    assert_includes @data_center.validator_ips_active, vip2
+  end
+
+  test "relationships validators returns validators with active validator_ips through data_center_hosts" do
+    @data_center.save
+
+    validator = create(:validator)
+    dch = create(:data_center_host, data_center: @data_center)
+    vip = create(:validator_ip, data_center_host: dch, validator: validator)
+    vip2 = create(:validator_ip, :active, data_center_host: dch, validator: validator, address: "0.0.0.0")
+
+    assert_equal 1, @data_center.validators.size
+    assert_includes @data_center.validators, validator
+  end
+
   test "#to_builder returns correct data" do
     json = "{\"autonomous_system_number\":12345,\"latitude\":\"51.2993\",\"longitude\":\"9.491\"}"
     assert_equal json, @data_center.to_builder.target!
