@@ -38,4 +38,67 @@ class DataCenterHostTest < ActiveSupport::TestCase
     assert_includes @data_center_host.validator_ips, vip1
     assert_includes @data_center_host.validator_ips, vip2
   end
+
+  test "#relationships has_many validator_ips_active returns collection of active validator_ips" do
+    @data_center_host.save
+
+    vip1 = @validator_ip.dup
+    vip2 = @validator_ip.dup
+
+    vip1.assign_attributes(
+      address: "192.168.0.1",
+      data_center_host_id: @data_center_host.id,
+    )
+
+    vip2.assign_attributes(
+      address: "192.168.0.2",
+      data_center_host_id: @data_center_host.id,
+      is_active: true
+    )
+
+    vip1.save
+    vip2.save
+
+    assert_equal 1, @data_center_host.validator_ips_active.size
+    assert_includes @data_center_host.validator_ips_active, vip2
+  end
+
+  test "#relationships has_many validators returns collection of validators with active validator_ip" do
+    # Assigning validator_ips to data_center_host
+    @data_center_host.save
+
+    vip1 = @validator_ip.dup
+    vip2 = @validator_ip.dup
+    vip3 = @validator_ip.dup
+
+    validator2 = create(:validator)
+    validator_with_inactive_ip = create(:validator)
+
+    vip1.assign_attributes(
+      address: "192.168.0.1", 
+      data_center_host_id: @data_center_host.id,
+      validator_id: validator_with_inactive_ip.id
+    )
+
+    vip2.assign_attributes(
+      address: "192.168.0.2", 
+      data_center_host_id: @data_center_host.id,
+      is_active: true
+    )
+
+    vip3.assign_attributes(
+      address: "192.168.0.2", 
+      data_center_host_id: @data_center_host.id,
+      is_active: true,
+      validator_id: validator2.id
+    )
+
+    vip1.save 
+    vip2.save
+    vip3.save
+
+    assert_equal 2, @data_center_host.validators.size
+    assert_includes @data_center_host.validators, @validator
+    assert_includes @data_center_host.validators, validator2
+  end
 end

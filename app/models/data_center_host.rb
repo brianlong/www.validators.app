@@ -17,7 +17,8 @@
 class DataCenterHost < ApplicationRecord
   belongs_to :data_center
   has_many :validator_ips, dependent: :nullify
-  has_many :validators, through: :validator_ips
+  has_many :validator_ips_active, -> { active }, class_name: "ValidatorIp"
+  has_many :validators, through: :validator_ips_active
 
   delegate :data_center_key, to: :data_center
 end
