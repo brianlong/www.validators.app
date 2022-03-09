@@ -466,7 +466,7 @@
 <h4 id="sol-prices">Sol Prices</h4>
 <p>The Sol Prices endpoind will return prices gathered from multiple exchanges.</p>
 <p>Request:</p>
-<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/sol-prices'</pre>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/sol-prices?exchange=coin_gecko'</pre>
 <p>Parameter Options:</p>
 <p><strong class="text-muted">`from=%year-%month-%dayT%hour:%minute:%second`</strong> will return results starting from a given time, defaults to 30 days ago. </p>
 <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/sol-prices?from=2022-01-01T00:00:00'</pre>
