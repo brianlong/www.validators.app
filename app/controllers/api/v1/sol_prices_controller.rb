@@ -7,16 +7,25 @@ module Api
         from = (index_params[:from] || 30.days.ago).to_datetime
         to = (index_params[:to] || from + 30.days).to_datetime
 
-        exchange_filter = \
-          SolPrice::EXCHANGES.include?(index_params[:exchange]) ? index_params[:exchange] : SolPrice::EXCHANGES
+        if index_params[:exchange]
+          if SolPrice::EXCHANGES.include?(index_params[:exchange])
+            exchange_filter = index_params[:exchange]
+          else
+            response = { error: "invalid exchange" }
+            response_status = :unprocessable_entity
+          end
+        else
+          exchange_filter = SolPrice::EXCHANGES
+        end
 
-        sol_prices = SolPrice.order(datetime_from_exchange: :asc)
+        response ||= SolPrice.order(datetime_from_exchange: :asc)
                               .where(
                                 datetime_from_exchange: from..to,
                                 exchange: exchange_filter
                               )
+        response_status ||= :ok
 
-        render json: sol_prices
+        render json: response, status: response_status
       end
 
       private
