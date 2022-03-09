@@ -5,7 +5,7 @@ module Api
     class SolPricesController < BaseController
       def index
         from = (index_params[:from] || 30.days.ago).to_datetime
-        to = (index_params[:to] || from + 30.days).to_datetime
+        to = (index_params[:to] || DateTime.now).to_datetime
 
         if index_params[:exchange]
           if SolPrice::EXCHANGES.include?(index_params[:exchange])
