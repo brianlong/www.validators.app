@@ -1,17 +1,17 @@
 class AsnsController < ApplicationController
   def show
     @data_centers = DataCenter.where(traits_autonomous_system_number: asn_params[:asn])
-                              .joins(:validator_score_v1s)
-                              .pluck(:data_center_key)
-                              .uniq
+                              .pluck(:id, :data_center_key)
+
+    data_center_ids = @data_centers.map { |dc| dc[0] }
 
     render file: "#{Rails.root}/public/404.html", status: 404 if @data_centers.empty?
 
     @per = 25
 
-    @scores = ValidatorScoreV1.includes(:validator)
+    @scores = ValidatorScoreV1.joins(:data_center)
+                              .where("data_centers.id IN (?)", data_center_ids)
                               .by_network_with_active_stake(asn_params[:network])
-                              .by_data_centers(@data_centers)
                               .filtered_by(asn_params[:filter_by]&.to_sym)
 
     if params[:show_private]
@@ -28,8 +28,9 @@ class AsnsController < ApplicationController
 
     @population = @scores.total_count
 
-    @total_stake = ValidatorScoreV1.by_network_with_active_stake(asn_params[:network])
-                                   .by_data_centers(@data_centers)
+    @total_stake = ValidatorScoreV1.joins(:data_center)    
+                                   .by_network_with_active_stake(asn_params[:network])
+                                   .where("data_centers.id IN (?)", data_center_ids)
                                    .sum(:active_stake)
   end
 
