@@ -7,7 +7,7 @@ class AsnControllerTest < ActionDispatch::IntegrationTest
     validator = create(:validator)
     @validator_ip = create(:validator_ip, :active, validator: validator, data_center_host: data_center_host)
     
-    create(:validator_score_v1, validator: validator, ip_address: @validator_ip.address)
+    vs = create(:validator_score_v1, validator: validator, network: "testnet")
   end
 
   test 'should get show with autonomous_system_number that exists and has at least one score' do
