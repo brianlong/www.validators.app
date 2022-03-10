@@ -21,9 +21,9 @@ class DataCentersController < ApplicationController
 
     @per = 25
 
-    data_center = DataCenter.find_by(data_center_key: key)
+    data_centers = DataCenter.where(data_center_key: key)
     @validators = Validator.joins(:validator_score_v1, :data_center)
-                           .where("data_center_id = ? AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_center.id, show_params[:network], 0)
+                           .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_centers.ids, show_params[:network], 0)
                            .filtered_by(show_params[:filter_by]&.to_sym)
                            .order("validator_score_v1s.active_stake desc")
 
@@ -36,7 +36,7 @@ class DataCentersController < ApplicationController
     @batch = Batch.last_scored(params[:network])
     @population = @validators.total_count
     @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network]).sum(:active_stake)                                   
-    @dc_info = data_center || DataCenter.new(data_center_key: key)
+    @dc_info = data_centers.first || DataCenter.new(data_center_key: key)
   end
 
   private
