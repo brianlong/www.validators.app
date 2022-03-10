@@ -27,6 +27,8 @@ class SortedDataCenters
       "data_centers.country_iso_code",
       "SUM(IF(validator_score_v1s.delinquent = true, 1, 0)) as delinquent_count",
       "IF(ISNULL(city_name), location_time_zone, city_name) as location",
+      "SUM(validator_score_v1s.active_stake) as total_active_stake",
+      "COUNT(*) as total_validator_score_v1s",
     ]
 
     group = [
@@ -45,12 +47,10 @@ class SortedDataCenters
 
     @dc_sql = DataCenter.select(select_statement)
                         .joins(:validator_score_v1s)
-                        .where("validator_ips.is_active = ? AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > 0", true, @network)
+                        .where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", @network, 0)
                         .group(group)
 
-    @scores = ValidatorScoreV1.where("network = ? AND active_stake > ?", @network, 0)
-
-    @total_stake = @scores.sum(:active_stake)
+    @total_stake = @dc_sql.inject(0) { |sum, dc| sum + dc.total_active_stake }
     @total_population = 0
     @total_delinquent = 0
     @total_private = 0
@@ -64,8 +64,8 @@ class SortedDataCenters
       next if data_center_key.blank?
       dc_keys = data_centers.map { |dc| dc.data_center_key }
       aso = data_centers.map { |dc| dc.traits_autonomous_system_organization }.compact.uniq.join(', ')
-      population = @scores.by_data_centers(dc_keys).count || 0
-      active_stake = @scores.by_data_centers(dc_keys).sum(:active_stake)
+      population = data_centers.inject(0) { |sum, dc| sum + dc.total_validator_score_v1s } || 0
+      active_stake = data_centers.inject(0) { |sum, dc| sum + dc.total_active_stake }
       delinquent_validators = data_centers.inject(0) { |sum, dc| sum + dc.delinquent_count } || 0
 
       next if population.zero?
@@ -93,10 +93,9 @@ class SortedDataCenters
   def sort_by_data_centers
     @dc_sql.each do |dc|
       data_center_key = dc.data_center_key
-
-      population = @scores.by_data_centers(data_center_key).count || 0
+      population = dc.total_validator_score_v1s || 0
       delinquent_validators = dc.delinquent_count || 0
-      active_stake = @scores.by_data_centers(data_center_key).sum(:active_stake)
+      active_stake = dc.total_active_stake || 0
 
       next if population.zero?
 
