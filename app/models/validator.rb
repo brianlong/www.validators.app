@@ -34,6 +34,7 @@ class Validator < ApplicationRecord
   has_many :validator_histories, primary_key: :account, foreign_key: :account
   has_one :validator_ip_active, ->(validator_ip) { where(is_active: true) }, class_name: "ValidatorIp"
   has_one :data_center, through: :validator_ip_active
+  has_one :data_center_host, through: :validator_ip_active
   has_one :validator_score_v1, dependent: :destroy
   has_one :most_recent_epoch_credits_by_account, -> {
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
