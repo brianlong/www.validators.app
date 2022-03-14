@@ -29,11 +29,11 @@ Rails.application.routes.draw do
   get 'validators',
       to: 'validators#index',
       as: 'validators'
-  get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
-  get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
   get 'validators/:account',
       to: 'validators#show',
       as: 'validator'
+  get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
+  get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
 
   get 'tower',
       to: 'public#tower',
@@ -127,7 +127,7 @@ Rails.application.routes.draw do
 
       # GET /api/v1/validator_block_history/:network/:account
       get 'validator_block_history/:network/:account',
-          to: 'api#validator_block_history',
+          to: 'validator_block_histories#show',
           as: 'validator_block_history'
 
       # Epoch Wall Clock

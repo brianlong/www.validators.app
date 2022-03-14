@@ -20,7 +20,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token returns only validators from chosen network with scores" do
-    create_list(:validator, 3, :with_score,)
+    create_list(:validator, 3, :with_score)
     create_list(:validator, 3, :with_score, :mainnet)
 
     # Testnet

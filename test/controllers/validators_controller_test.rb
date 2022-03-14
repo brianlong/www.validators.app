@@ -13,8 +13,8 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should show validator' do
-    get validator_url(network: 'testnet', account: @validator.account)
+  test "should show validator" do
+    get validator_path(network: "testnet", account: @validator.account)
     assert_response :success
   end
 
