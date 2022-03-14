@@ -1,6 +1,38 @@
 class ValidatorQuery < ApplicationQuery
-  def initialize(network: "mainnet", sort_order: "score", limit: 9999, page: 1)
-    @sort_order = case sort_order
+  def initialize
+    @default_scope = Validator.select(validator_fields, validator_score_v1_fields)
+                              .includes(
+                                :vote_accounts,
+                                :most_recent_epoch_credits_by_account,
+                                validator_score_v1: [:ip_for_api]
+                              ).eager_load(:validator_score_v1)
+  end
+
+  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)
+    scope = @default_scope
+    scope = filter_by_network(scope, network)
+    scope = search_by(scope, query)
+    scope = set_ordering(scope, sort_order)
+    scope = set_pagination(scope, page, limit)
+  end
+
+  private
+
+  def filter_by_network(scope, network)
+    scope.where(network: network)
+  end
+
+  def set_ordering(scope, order)
+    sort_order = sort_order(order)
+    scope.order(sort_order)
+  end
+
+  def search_by(scope, query)
+    ValidatorSearchQuery.new(scope).search(query)
+  end
+
+  def sort_order(order)
+    case order
     when 'score'
       'validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc'
     when 'name'
@@ -10,28 +42,12 @@ class ValidatorQuery < ApplicationQuery
     else
       'RAND()'
     end
-
-    @limit = limit
-    @page = page
-    @network = network
-
   end
 
-  def call
-    Validator.select(validator_fields, validator_score_v1_fields)
-             .where(network: @network)
-             .includes(:vote_accounts, :most_recent_epoch_credits_by_account, validator_score_v1: [:ip_for_api])
-             .joins(:validator_score_v1)
-             .order(@sort_order)
-             .page(@page)
-             .per(@limit)
+  def set_pagination(scope, page, limit)
+    scope.page(page)
+         .per(limit)
   end
-
-  def for_batch
-    @for_batch ||= @relation
-  end
-
-  private
 
   def validator_fields
     [
