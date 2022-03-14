@@ -511,7 +511,7 @@ DEPENDENCIES
   pronto-rubocop
   pry (~> 0.12.2)
   rack-cors
-  rails (~> 6.0)
+  rails (~> 6.1)
   rails-controller-testing
   recaptcha
   redis (~> 4.0)
