@@ -41,10 +41,11 @@ module Api
         limit = params[:limit] || 9999
         page = params[:page]
 
-        @validators = Validator.select(validator_fields, validator_score_v1_fields)
+        @validators = Validator.select(validator_fields, validator_score_v1_fields, data_center_fields)
                                .where(network: params[:network])
-                               .includes(:vote_accounts, :most_recent_epoch_credits_by_account, :validator_score_v1)
-                               .joins(:validator_score_v1)
+                               .includes(:vote_accounts, :validator_score_v1)
+                               .joins(:validator_score_v1, :data_center)
+                               .preload(:most_recent_epoch_credits_by_account)
                                .order(@sort_order)
                                .page(page)
                                .per(limit)
@@ -69,8 +70,9 @@ module Api
       end
 
       def validators_show
-        @validator = Validator.select(validator_fields, validator_score_v1_fields)
-                              .eager_load(:validator_score_v1)
+        @validator = Validator.select(validator_fields, validator_score_v1_fields, data_center_fields)
+                              .eager_load(:vote_accounts, :validator_score_v1)
+                              .joins(:data_center)
                               .find_by(network: params[:network], account: params['account'])
 
         raise ValidatorNotFound if @validator.nil?
@@ -132,12 +134,17 @@ module Api
         hash.merge!(validator.to_builder.attributes!)
 
         score = validator.score
-        data_center = validator.validator_ip&.data_center
+        data_center = {
+          "data_center_key" => validator.data_center_key,
+          "longitude" => validator.location_longitude,
+          "latitude" => validator.location_latitude,
+          "autonomous_system_number" => validator.traits_autonomous_system_number
+        }
         vote_account = validator.vote_accounts.last
         validator_history = validator.most_recent_epoch_credits_by_account
-        
+
         hash.merge!(score.to_builder(with_history: with_history).attributes!)
-        hash.merge!(data_center.to_builder.attributes!) unless data_center.blank?
+        hash.merge!(data_center) unless data_center.blank?
         hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
         hash.merge!(validator_history.to_builder.attributes!) unless validator_history.blank?
 
@@ -182,7 +189,6 @@ module Api
           'commission',
           'delinquent',
           'data_center_concentration_score',
-          'data_center_key',
           'data_center_host',
           'published_information_score',
           'root_distance_score',
@@ -195,6 +201,16 @@ module Api
           'validator_id',
           'vote_distance_score'
         ].map { |e| "validator_score_v1s.#{e}" }
+      end
+
+      def data_center_fields
+        [
+          "data_center_key",
+          "id",
+          "location_latitude",
+          "location_longitude",
+          "traits_autonomous_system_number"
+        ].map { |e| "data_centers.#{e}" }
       end
     end
   end

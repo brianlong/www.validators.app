@@ -6,5 +6,9 @@ FactoryBot.define do
     trait :active do 
       is_active { true }
     end
+
+    trait :with_data_center do
+      data_center_host
+    end
   end
 end
