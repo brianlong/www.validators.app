@@ -117,17 +117,17 @@ Rails.application.routes.draw do
 
       # api_v1_validators GET /api/v1/validators/:network
       get 'validators/:network',
-          to: 'api#validators_list',
+          to: 'validators#index',
           as: 'validators'
 
       # api_v1_validators GET /api/v1/validators/:network/:account
       get 'validators/:network/:account',
-          to: 'api#validators_show',
+          to: 'validators#show',
           as: 'validator'
 
       # GET /api/v1/validator_block_history/:network/:account
       get 'validator_block_history/:network/:account',
-          to: 'api#validator_block_history',
+          to: 'validator_block_histories#show',
           as: 'validator_block_history'
 
       # Epoch Wall Clock
