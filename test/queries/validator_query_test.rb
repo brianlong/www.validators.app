@@ -3,15 +3,11 @@
 require 'test_helper'
 
 class ValidatorQueryTest < ActiveSupport::TestCase
-  setup do
-    Validator.destroy_all
-
+  test "ValidatorQuery returns only validators from correct network" do
     create_list(:validator, 5, :with_score, network: "mainnet")
     create_list(:validator, 5, :with_score, network: "testnet")
-  end
 
-  test "ValidatorQuery returns only validators from correct network" do
-    network = "testnet"
+    network = "mainnet"
     result = ValidatorQuery.new.call(network: network)
 
     assert_equal 5, result.count
@@ -23,6 +19,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     network = "testnet"
 
     create(:validator, :with_score, account: query, network: network)
+    create_list(:validator, 5, :with_score, network: network)
 
     result = ValidatorQuery.new.call(network: network, query: query)
 
@@ -32,10 +29,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
   end
 
   test "ValidatorQuery returns results in correct score order" do
-    Validator.destroy_all
-
-    network = "testnet"
-
+    network = "mainnet"
     5.times do |n|
       v = create(:validator, :with_score, network: network)
       v.score.update_column(:total_score,  n)
@@ -48,9 +42,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
   end
 
   test "ValidatorQuery returns results in correct stake order" do
-    Validator.destroy_all
-
-    network = "testnet"
+    network = "mainnet"
 
     5.times do |n|
       v = create(:validator, :with_score, network: network)
@@ -64,9 +56,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
   end
 
   test "ValidatorQuery returns results in correct name order" do
-    Validator.destroy_all
-
-    network = "testnet"
+    network = "mainnet"
 
     5.times do |n|
       create(:validator, :with_score, network: network, name: "#{n}-validator")

@@ -14,7 +14,8 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show validator" do
-    get validator_path(network: "testnet", account: @validator.account)
+    validator = create(:validator, :with_score, network: 'testnet')
+    get validator_path(network: "testnet", account: validator.account)
     assert_response :success
   end
 
