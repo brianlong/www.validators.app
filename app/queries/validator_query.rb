@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ValidatorQuery < ApplicationQuery
   include ValidatorsControllerHelper
   def initialize

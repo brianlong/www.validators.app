@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ValidatorQueryTest < ActiveSupport::TestCase
   test "ValidatorQuery returns only validators from correct network" do
@@ -35,7 +35,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       v.score.update_column(:total_score,  n)
     end
 
-    result = ValidatorQuery.new.call(network: network, sort_order: 'score')
+    result = ValidatorQuery.new.call(network: network, sort_order: "score")
 
     assert_equal 5, result.count
     assert_equal [4, 3, 2, 1, 0], result.pluck(:total_score)
@@ -49,7 +49,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       v.score.update_column(:active_stake,  n * 1000)
     end
 
-    result = ValidatorQuery.new.call(network: network, sort_order: 'score')
+    result = ValidatorQuery.new.call(network: network, sort_order: "score")
 
     assert_equal 5, result.count
     assert_equal (0..4).map{|n| n * 1000}.reverse, result.map{ |v| v.score.active_stake }
@@ -62,7 +62,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       create(:validator, :with_score, network: network, name: "#{n}-validator")
     end
 
-    result = ValidatorQuery.new.call(network: network, sort_order: 'name')
+    result = ValidatorQuery.new.call(network: network, sort_order: "name")
 
     assert_equal 5, result.count
     assert_equal (0..4).map{|n| "#{n}-validator"}, result.pluck(:name)
