@@ -35,7 +35,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       v.score.update_column(:total_score,  n)
     end
 
-    result = ValidatorQuery.new.call(network: network, sort_order: 'score')
+    result = ValidatorQuery.new.call(network: network, sort_order: "score")
 
     assert_equal 5, result.count
     assert_equal [4, 3, 2, 1, 0], result.pluck(:total_score)
