@@ -49,7 +49,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       v.score.update_column(:active_stake,  n * 1000)
     end
 
-    result = ValidatorQuery.new.call(network: network, sort_order: 'score')
+    result = ValidatorQuery.new.call(network: network, sort_order: "score")
 
     assert_equal 5, result.count
     assert_equal (0..4).map{|n| n * 1000}.reverse, result.map{ |v| v.score.active_stake }
