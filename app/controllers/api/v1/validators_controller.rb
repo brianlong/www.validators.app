@@ -27,13 +27,13 @@ module Api
       def show
         @validator = Validator.select(validator_fields, validator_score_v1_fields)
                               .eager_load(:validator_score_v1)
-                              .find_by(network: params[:network], account: validator_params["account"])
+                              .find_by(network: validator_params[:network], account: validator_params["account"])
 
         raise ValidatorNotFound if @validator.nil?
 
         current_epoch = EpochHistory.last
 
-        render json: create_json_result(@validator, params[:with_history] || false)
+        render json: create_json_result(@validator, validator_params[:with_history] || false)
       rescue ValidatorNotFound
         render json: { "status" => "Validator Not Found" }, status: 404
       rescue ActionController::ParameterMissing
@@ -46,7 +46,7 @@ module Api
       private
 
       def validator_params
-        params.permit(:network, :order, :page, :limit, :q, :account)
+        params.permit(:network, :order, :page, :limit, :q, :account, :with_history)
       end
 
       def set_skipped_slots_report
