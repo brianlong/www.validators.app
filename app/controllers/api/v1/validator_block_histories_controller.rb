@@ -16,7 +16,7 @@ module Api
                                    .order("id desc")
                                    .limit(@limit)
 
-        render 'api/v1/validators/block_history', formats: :json
+        render "api/v1/validators/block_history", formats: :json
       rescue ValidatorNotFound
         render json: { "status" => "Validator Not Found" }, status: 404
       rescue ActionController::ParameterMissing
