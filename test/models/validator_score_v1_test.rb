@@ -26,6 +26,14 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal @validator_score_v1.ip_for_api.address, address
   end
 
+  test 'relationship has_one data_center through validator' do
+    data_center = create(:data_center, :berlin)
+    data_center_host = create(:data_center_host, data_center: data_center)
+    validator_ip = create(:validator_ip, validator: @validator, data_center_host: data_center_host)
+
+    assert_equal @validator_score_v1.data_center, data_center
+  end
+
   test 'calculate_total_score assigns a score of 0 if commission is 100' do
     @validator_score_v1.update(
       commission: 100,

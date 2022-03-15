@@ -20,7 +20,7 @@
         <%= asn_stat.average_score.round(3) rescue '' %>
       </div>
     </td>
-    <td class="column-lg">
+    <td class="column-lg small">
       <% asn_data[:data_centers].each do |dc| %>
         <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
         <br />

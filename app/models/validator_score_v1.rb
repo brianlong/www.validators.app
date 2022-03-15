@@ -86,12 +86,14 @@ class ValidatorScoreV1 < ApplicationRecord
   ].freeze
 
   # Touch the related validator to increment the updated_at attribute
-  belongs_to :validator
-  before_save :calculate_total_score
-  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
-  has_many :validator_ips, through: :validator
-
   after_save :create_commission_history, :if => :saved_change_to_commission?
+  before_save :calculate_total_score
+  
+  belongs_to :validator
+  has_many :validator_ips, through: :validator
+  has_one :validator_ip_active, through: :validator
+  has_one :data_center, through: :validator
+  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
 
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON
@@ -100,6 +102,8 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_vote_history, JSON
   serialize :skipped_vote_percent_moving_average_history, JSON
   serialize :skipped_slot_moving_average_history, JSON
+
+  delegate :data_center, to: :validator
 
   scope :by_network_with_active_stake, ->(network) do
     where(network: network).where('active_stake > 0')
