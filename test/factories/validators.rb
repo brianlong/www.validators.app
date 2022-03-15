@@ -18,11 +18,5 @@ FactoryBot.define do
     trait :mainnet do
       network { 'mainnet' }
     end
-
-    trait :with_validator_ip do
-      after(:create) do |validator|
-        create :validator_ip, validator: validator
-      end
-    end
   end
 end
