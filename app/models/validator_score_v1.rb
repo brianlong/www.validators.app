@@ -93,6 +93,7 @@ class ValidatorScoreV1 < ApplicationRecord
   has_many :validator_ips, through: :validator
   has_one :validator_ip_active, through: :validator
   has_one :data_center, through: :validator
+  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
 
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON
