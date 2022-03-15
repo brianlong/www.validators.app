@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ValidatorQueryTest < ActiveSupport::TestCase
   test "ValidatorQuery returns only validators from correct network" do
