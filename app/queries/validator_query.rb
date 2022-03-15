@@ -38,7 +38,7 @@ class ValidatorQuery < ApplicationQuery
       "validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc"
     when "name"
       "validators.name asc"
-    when 'stake'
+    when "stake"
       "validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc"
     else
       "RAND()"
