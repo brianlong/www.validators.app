@@ -62,7 +62,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       create(:validator, :with_score, network: network, name: "#{n}-validator")
     end
 
-    result = ValidatorQuery.new.call(network: network, sort_order: 'name')
+    result = ValidatorQuery.new.call(network: network, sort_order: "name")
 
     assert_equal 5, result.count
     assert_equal (0..4).map{|n| "#{n}-validator"}, result.pluck(:name)
