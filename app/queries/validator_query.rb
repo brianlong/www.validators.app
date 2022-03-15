@@ -6,9 +6,13 @@ class ValidatorQuery < ApplicationQuery
     @default_scope = Validator.select(validator_fields, validator_score_v1_fields)
                               .includes(
                                 :vote_accounts,
-                                :most_recent_epoch_credits_by_account,
-                                validator_score_v1: [:ip_for_api]
-                              ).joins(:validator_score_v1)
+                                :validator_score_v1,
+                                :data_center_host,
+                                :data_center,
+                                :validator_ips
+                              )
+                              .joins(:validator_score_v1)
+                              .preload(:most_recent_epoch_credits_by_account)
   end
 
   def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)

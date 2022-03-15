@@ -43,6 +43,9 @@ class Validator < ApplicationRecord
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
 
+  delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
+  delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
+
   def self.with_private(show: "true")
     show == "true" ? all : where.not("validator_score_v1s.commission = 100")
   end
@@ -97,10 +100,6 @@ class Validator < ApplicationRecord
     end
   end
 
-  def data_center
-    validator_ip&.data_center
-  end
-
   def active?
     is_active
   end
@@ -138,20 +137,15 @@ class Validator < ApplicationRecord
     ary.sum / ary.length.to_f
   end
 
-  def validator_ip
-    validator_ips.order("updated_at desc").first
-  end
-
   def ip_address
-    validator_ip&.address
+    validator_ip_active&.address
   end
 
   def copy_data_to_score
     return unless validator_score_v1
 
     validator_score_v1.ip_address = ip_address
-    data_center_key = validator_ip&.data_center&.data_center_key
-    validator_score_v1.data_center_key = data_center_key if data_center_key
+    validator_score_v1.data_center_key = dch_data_center_key if data_center
     validator_score_v1.save
   end
 
@@ -230,10 +224,6 @@ class Validator < ApplicationRecord
 
   def total_score
     score&.total_score
-  end
-
-  def data_center_key
-    score&.data_center_key
   end
 
   def data_center_concentration

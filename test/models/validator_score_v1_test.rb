@@ -16,20 +16,10 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal @validator.id, @validator_score_v1.validator_id
   end
 
-  test 'relationship has_one :ip' do
-    address = '192.123.23.2'
-    @validator_score_v1.assign_attributes(ip_address: address)
-    create(:ip, address: address)
-
-    assert @validator_score_v1.ip_for_api
-    assert_equal @validator_score_v1.ip_for_api.traits_autonomous_system_number, 0
-    assert_equal @validator_score_v1.ip_for_api.address, address
-  end
-
   test 'relationship has_one data_center through validator' do
     data_center = create(:data_center, :berlin)
     data_center_host = create(:data_center_host, data_center: data_center)
-    validator_ip = create(:validator_ip, validator: @validator, data_center_host: data_center_host)
+    validator_ip = create(:validator_ip, :active, validator: @validator, data_center_host: data_center_host)
 
     assert_equal @validator_score_v1.data_center, data_center
   end

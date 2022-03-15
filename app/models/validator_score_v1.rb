@@ -59,12 +59,6 @@
 #
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
-  IP_FIELDS_FOR_API = [
-    "address",
-    "location_latitude",
-    "location_longitude",
-    "traits_autonomous_system_number"
-  ].map{ |e| "ips.#{e}" }.join(", ")
 
   ATTRIBUTES_FOR_BUILDER = %i[
     total_score
@@ -80,8 +74,6 @@ class ValidatorScoreV1 < ApplicationRecord
     active_stake
     commission
     delinquent
-    data_center_key
-    data_center_host
     authorized_withdrawer_score
   ].freeze
 
@@ -93,7 +85,6 @@ class ValidatorScoreV1 < ApplicationRecord
   has_many :validator_ips, through: :validator
   has_one :validator_ip_active, through: :validator
   has_one :data_center, through: :validator
-  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
 
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON
@@ -103,7 +94,7 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_vote_percent_moving_average_history, JSON
   serialize :skipped_slot_moving_average_history, JSON
 
-  delegate :data_center, to: :validator
+  delegate :data_center, to: :validator, prefix: true, allow_nil: true
 
   scope :by_network_with_active_stake, ->(network) do
     where(network: network).where('active_stake > 0')

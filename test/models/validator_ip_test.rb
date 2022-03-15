@@ -6,7 +6,7 @@ class ValidatorIpTest < ActiveSupport::TestCase
     @validator_score_v1 = create(:validator_score_v1, validator: @validator)
     @data_center = create(:data_center, :berlin)
     @data_center_host = create(:data_center_host, data_center_id: @data_center.id)
-    @vip = build(:validator_ip, validator: @validator, data_center_host_id: @data_center_host.id)
+    @vip = build(:validator_ip, :active, validator: @validator, data_center_host_id: @data_center_host.id)
   end
 
   test "#relationships belongs_to validator corectly asssigns validator" do

@@ -7,16 +7,18 @@ module ValidatorsControllerHelper
     hash.merge!(validator.to_builder.attributes!)
 
     score = validator.score
-    ip = score.ip_for_api if score
+
+    data_center = validator.data_center
+    data_center_host = validator.data_center_host
     vote_account = validator.vote_accounts.last
     validator_history = validator.most_recent_epoch_credits_by_account
 
-    
     hash.merge!(score.to_builder(with_history: with_history).attributes!)
-    hash.merge!(ip.to_builder.attributes!) unless ip.blank?
+    hash.merge!(data_center.to_builder.attributes!) unless data_center.blank?
+    hash.merge!(data_center_host.to_builder.attributes!) unless data_center_host.blank?
     hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
     hash.merge!(validator_history.to_builder.attributes!) unless validator_history.blank?
-
+    
     # Data from the skipped_slots_report
     unless @skipped_slots_report.nil?
       this_report = @skipped_slots_report.payload.select do |ssr|
@@ -58,8 +60,6 @@ module ValidatorsControllerHelper
       "commission",
       "delinquent",
       "data_center_concentration_score",
-      "data_center_key",
-      "data_center_host",
       "published_information_score",
       "root_distance_score",
       "security_report_score",

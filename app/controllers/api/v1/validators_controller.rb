@@ -17,7 +17,6 @@ module Api
         )
 
         json_result = @validators.map { |val| create_json_result(val) }
-
         render json: json_result
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
@@ -27,10 +26,13 @@ module Api
       end
 
       def show
-        @validator = Validator.select(validator_fields, validator_score_v1_fields)
-                              .eager_load(:validator_score_v1)
+        @validator = Validator.select(
+                                validator_fields, 
+                                validator_score_v1_fields
+                              ).eager_load(:validator_score_v1)
+                              .includes(data_center_host: [:data_center])
                               .find_by(network: validator_params[:network], account: validator_params["account"])
-
+                              
         raise ValidatorNotFound if @validator.nil?
 
         current_epoch = EpochHistory.last

@@ -5,7 +5,7 @@ require 'test_helper'
 class ValidatorTest < ActiveSupport::TestCase
   def setup
     @validator = create(:validator)
-    @validator_ip = create(:validator_ip, validator: @validator)
+    @validator_ip = create(:validator_ip, :active, validator: @validator)
   end
 
   test 'relationships has_one most_recent_epoch_credits_by_account' do
@@ -18,9 +18,9 @@ class ValidatorTest < ActiveSupport::TestCase
   test "relationships has_one data_center_host through validator_ips" do
     validator = create(:validator)
     data_center_host = create(:data_center_host)
-    validator_ip = create(:validator_ip, validator: validator, data_center_host: data_center_host)
+    validator_ip = create(:validator_ip, :active, validator: validator, data_center_host: data_center_host)
     
-    assert_equal data_center_host, validator.validator_ips.first.data_center_host
+    assert_equal data_center_host, validator.validator_ip_active.data_center_host
   end
 
   test "relationships has_one validator_ip_active" do
@@ -73,11 +73,7 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal special_chars_sentence, v.details
   end
 
-  test "#validator_ip returns last updated validator_ip" do
-    assert_equal @validator_ip, @validator.validator_ip
-  end
-
-  test "#ip_address returns validator ip address" do
-    assert_equal @validator_ip.address, @validator.ip_address
+  test "#vip_address returns validator ip address" do
+    assert_equal @validator_ip.address, @validator.vip_address
   end
 end

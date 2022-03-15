@@ -22,4 +22,10 @@ class DataCenterHost < ApplicationRecord
   has_many :validator_score_v1s, through: :validators
 
   delegate :data_center_key, to: :data_center
+
+  def to_builder
+    Jbuilder.new do |data_center_host|
+      data_center_host.data_center_host self.host
+    end
+  end
 end
