@@ -6,7 +6,7 @@ class ValidatorQuery < ApplicationQuery
                                 :vote_accounts,
                                 :most_recent_epoch_credits_by_account,
                                 validator_score_v1: [:ip_for_api]
-                              ).eager_load(:validator_score_v1)
+                              ).joins(:validator_score_v1)
   end
 
   def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)
