@@ -8,8 +8,8 @@ module ValidatorsControllerHelper
 
     score = validator.score
 
-    data_center = validator.data_center
-    data_center_host = validator.data_center_host
+    data_center = validator.validator_ip_active&.data_center_host&.data_center
+    data_center_host = validator.validator_ip_active&.data_center_host
     vote_account = validator.vote_accounts.last
     validator_history = validator.most_recent_epoch_credits_by_account
 

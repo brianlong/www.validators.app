@@ -7,9 +7,7 @@ class ValidatorQuery < ApplicationQuery
                               .includes(
                                 :vote_accounts,
                                 :validator_score_v1,
-                                :data_center_host,
-                                :data_center,
-                                :validator_ips
+                                validator_ip_active: [data_center_host: [:data_center]]
                               )
                               .joins(:validator_score_v1)
                               .preload(:most_recent_epoch_credits_by_account)
