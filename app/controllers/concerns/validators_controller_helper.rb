@@ -8,9 +8,9 @@ module ValidatorsControllerHelper
 
     score = validator.score
 
-    data_center = validator.validator_ip_active&.data_center_host&.data_center
-    data_center_host = validator.validator_ip_active&.data_center_host
-    vote_account = validator.vote_accounts.last
+    data_center = validator.validator_ip_active_for_api&.data_center_host_for_api&.data_center_for_api
+    data_center_host = validator.validator_ip_active_for_api&.data_center_host_for_api
+    vote_account = validator.vote_accounts_for_api.last
     validator_history = validator.most_recent_epoch_credits_by_account
 
     hash.merge!(score.to_builder(with_history: with_history).attributes!)

@@ -31,6 +31,40 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal validator_ip2, validator.validator_ip_active
   end
 
+  # API relationships
+  test "relationships for api has_many vote_accounts_for_api" do
+    validator = create(:validator)
+    vote_account = create(:vote_account, validator: validator)
+
+    assert_equal ["account", "validator_id", "id"], validator.vote_accounts_for_api.first.attributes.keys
+  end
+
+  test "relationships for api has_one validator_ip_active_for_api" do
+    validator = create(:validator)
+    validator_ip = create(:validator_ip, validator: validator)
+    validator_ip2 = create(:validator_ip, :active, :with_data_center, validator: validator)
+    
+    assert_equal ["id", "address", "data_center_host_id", "validator_id"], validator.validator_ip_active_for_api.attributes.keys
+  end
+
+  test "relationships for api has_one data_center_host_for_api through: :validator_ip_active_for_api" do
+    validator = create(:validator)
+    validator_ip = create(:validator_ip, :with_data_center, validator: validator)
+    validator_ip2 = create(:validator_ip, :active, :with_data_center, validator: validator)
+
+    assert_equal ["id", "host", "data_center_id"], validator.validator_ip_active_for_api.data_center_host_for_api.attributes.keys
+  end
+
+  test "relationships for api has_one data_center_for_api through: :data_center_host_for_api" do
+    validator = create(:validator)
+    validator_ip = create(:validator_ip, :with_data_center, validator: validator)
+    validator_ip2 = create(:validator_ip, :active, :with_data_center, validator: validator)
+
+    assert_equal ["data_center_key", "id", "location_latitude", "location_longitude", "traits_autonomous_system_number"], 
+                 validator.data_center_host_for_api.data_center_for_api.attributes.keys.sort
+  end
+
+
   test '#api_url creates correct link for test environment' do
     validator = build(:validator)
     expected_url = "http://localhost:3000/api/v1/validators/#{validator.network}/#{validator.account}"

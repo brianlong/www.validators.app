@@ -21,7 +21,14 @@ class DataCenterHost < ApplicationRecord
   has_many :validators, through: :validator_ips_active
   has_many :validator_score_v1s, through: :validators
 
+  # API
+  belongs_to :data_center_for_api, -> { for_api }, 
+    foreign_key: :data_center_id, 
+    class_name: "DataCenter"
+
   delegate :data_center_key, to: :data_center
+
+  scope :for_api, -> { select(:id, :host, :data_center_id) }
 
   def to_builder
     Jbuilder.new do |data_center_host|

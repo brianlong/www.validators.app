@@ -17,7 +17,9 @@ module Api
         )
 
         json_result = @validators.map { |val| create_json_result(val) }
-        render json: json_result
+
+        render json: json_result, status: :ok
+        # render json: JSON.dump(json_result), status: :ok
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
       rescue StandardError => e

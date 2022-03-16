@@ -33,6 +33,10 @@ class ValidatorIpTest < ActiveSupport::TestCase
     assert_equal @data_center, @vip.data_center
   end
 
+  test "#relationships belongs_to data_center_host_for_api returns specified fields" do
+    assert_equal ["id", "host", "data_center_id"], @vip.data_center_host_for_api.attributes.keys
+  end
+
   test "callbacks #copy_data_to_score after_touch copies data_center_key from data_center to score" do
     @validator_score_v1.update(data_center_key: nil)
     assert_nil @validator_score_v1.reload.data_center_key

@@ -36,9 +36,16 @@ class ValidatorIp < ApplicationRecord
   has_one :validator_score_v1, through: :validator
   has_one :data_center, through: :data_center_host
 
+  # API 
+  belongs_to :data_center_host_for_api, -> { for_api },
+    foreign_key: :data_center_host_id,
+    class_name: "DataCenterHost", 
+    optional: true
+
   after_touch :copy_data_to_score
 
   scope :active, -> { where(is_active: true) }
+  scope :active_for_api, -> { select(:id, :address, :data_center_host_id, :validator_id).active }
 
   def copy_data_to_score
     validator.copy_data_to_score

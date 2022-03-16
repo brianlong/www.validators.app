@@ -54,6 +54,16 @@ class DataCenter < ApplicationRecord
   has_many :validators, through: :data_center_hosts
   has_many :validator_score_v1s, through: :data_center_hosts
 
+  scope :for_api, -> { 
+    select(
+      :id,
+      :data_center_key, 
+      :traits_autonomous_system_number, 
+      :location_latitude, 
+      :location_longitude
+    )
+  }
+
   scope :by_data_center_key, ->(data_center_keys) do
     where(data_center_key: data_center_keys)
   end

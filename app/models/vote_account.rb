@@ -30,6 +30,8 @@ class VoteAccount < ApplicationRecord
   has_many :vote_account_histories
   before_save :set_network
 
+  scope :for_api, -> { select(:account, :validator_id) }
+
   def vote_account_history_last
     vote_account_histories.last
   end
