@@ -8,7 +8,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     @validator = create(
       :validator, 
       :with_score,
-      :with_validator_ip_active_and_data_center,
+      :with_data_center_through_validator_ip,
       network: "testnet"
     )
   end
@@ -22,7 +22,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator,
       :with_score,
-      :with_validator_ip_active_and_data_center,
+      :with_data_center_through_validator_ip,
       network: "testnet"
     )
     get validator_path(network: "testnet", account: validator.account)

@@ -13,14 +13,14 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       :validator, 
       5, 
       :with_score,
-      :with_validator_ip_active_and_data_center,
+      :with_data_center_through_validator_ip,
       :mainnet
     )
     create_list(
       :validator, 
       5, 
       :with_score, 
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
 
     result = ValidatorQuery.new.call(network: @mainnet_network)
@@ -35,14 +35,14 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     create(
       :validator, 
       :with_score,
-      :with_validator_ip_active_and_data_center,
+      :with_data_center_through_validator_ip,
       account: query
     )
     create_list(
       :validator, 
       5, 
       :with_score,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
 
     result = ValidatorQuery.new.call(network: @testnet_network, query: query)
@@ -58,7 +58,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
         :validator, 
         :with_score,
         :mainnet,
-        :with_validator_ip_active_and_data_center
+        :with_data_center_through_validator_ip
       )
       v.score.update_column(:total_score,  n)
     end
@@ -75,7 +75,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
         :validator, 
         :with_score,
         :mainnet,
-        :with_validator_ip_active_and_data_center
+        :with_data_center_through_validator_ip
       )
       v.score.update_column(:active_stake,  n * 1000)
     end
@@ -92,7 +92,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
         :validator, 
         :with_score,
         :mainnet,
-        :with_validator_ip_active_and_data_center,
+        :with_data_center_through_validator_ip,
         name: "#{n}-validator"
       )
     end

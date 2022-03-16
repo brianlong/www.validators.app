@@ -24,14 +24,14 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :validator,
       3,
       :with_score,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
     create_list(
       :validator,
       3,
       :with_score, 
       :mainnet,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
 
     # Testnet
@@ -59,7 +59,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator, 
       :with_score,
-      :with_validator_ip_active_and_data_center, 
+      :with_data_center_through_validator_ip, 
       account: "Test Account"
     )
     create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
@@ -128,7 +128,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator,
       :with_score,
-      :with_validator_ip_active_and_data_center,
+      :with_data_center_through_validator_ip,
       account: "Test Account",
       admin_warning: "test warning"
     )
@@ -148,7 +148,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator,
       :with_score,
-      :with_validator_ip_active_and_data_center,
+      :with_data_center_through_validator_ip,
       account: "Test Account"
     )
 
@@ -168,7 +168,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator, 
       :with_score,
-      :with_validator_ip_active_and_data_center, 
+      :with_data_center_through_validator_ip, 
       account: "Test Account"
     )
 
@@ -188,7 +188,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :validator, 
       10, 
       :with_score,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
 
     limit = 5
@@ -208,7 +208,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :validator,
       10,
       :with_score,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
     limit = 5
 
@@ -226,7 +226,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :validator,
       60, 
       :with_score,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
     page = 1
 
@@ -245,7 +245,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :validator, 
       10, 
       :with_score,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
     page = 2
 
@@ -264,7 +264,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :validator,
       10,
       :with_score,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
 
     get api_v1_validators_url(network: "testnet"),
@@ -282,14 +282,14 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     create(
       :validator, 
       :with_score,
-      :with_validator_ip_active_and_data_center,
+      :with_data_center_through_validator_ip,
       name: "search_query"
     )
     create_list(
       :validator, 
       5, 
       :with_score,
-      :with_validator_ip_active_and_data_center
+      :with_data_center_through_validator_ip
     )
 
     limit = 5
@@ -310,7 +310,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator, 
       :with_score,
-      :with_validator_ip_active_and_data_center, 
+      :with_data_center_through_validator_ip, 
       account: "Test Account"
     )
     create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
@@ -377,7 +377,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator, 
       :with_score,
-      :with_validator_ip_active_and_data_center,
+      :with_data_center_through_validator_ip,
       account: "Test Account"
     )
     create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
