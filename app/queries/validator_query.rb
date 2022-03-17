@@ -7,9 +7,10 @@ class ValidatorQuery < ApplicationQuery
                               .joins(:validator_score_v1)
                               .includes(
                                 :vote_accounts_for_api,
+                                :most_recent_epoch_credits_by_account,
                                 validator_ip_active_for_api: [data_center_host_for_api: [:data_center_for_api]]
                               )
-                              .preload(:validator_score_v1, :most_recent_epoch_credits_by_account)
+                              .preload(:validator_score_v1)
   end
 
   def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)
