@@ -4,13 +4,13 @@ class ValidatorQuery < ApplicationQuery
   include ValidatorsControllerHelper
   def initialize
     @default_scope = Validator.select(validator_fields, validator_score_v1_fields)
-                              .joins(:validator_score_v1)
+                              .joins(:validator_score_v1_for_api)
                               .includes(
                                 :vote_accounts_for_api,
                                 :most_recent_epoch_credits_by_account,
                                 validator_ip_active_for_api: [data_center_host_for_api: [:data_center_for_api]]
                               )
-                              .preload(:validator_score_v1)
+                              .preload(:validator_score_v1_for_api)
   end
 
   def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)

@@ -59,6 +59,8 @@ class Validator < ApplicationRecord
   has_one :validator_ip_active_for_api, -> { active_for_api }, class_name: "ValidatorIp"
   has_one :data_center_host_for_api, through: :validator_ip_active_for_api
   has_one :data_center_for_api, through: :data_center_host_for_api
+  has_one :validator_score_v1_for_api, -> { for_api }, class_name: "ValidatorScoreV1"
+
 
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }

@@ -116,6 +116,8 @@ class ValidatorScoreV1 < ApplicationRecord
     where(data_center_key: data_center_keys)
   end
 
+  scope :for_api, -> { select(FIELDS_FOR_API) }
+
   def create_commission_history
     CreateCommissionHistoryService.new(self).call
   end

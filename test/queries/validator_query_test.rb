@@ -66,7 +66,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     result = ValidatorQuery.new.call(network: @mainnet_network, sort_order: "score")
 
     assert_equal 5, result.count
-    assert_equal [4, 3, 2, 1, 0], result.pluck(:total_score)
+    assert_equal [4, 3, 2, 1, 0], result.pluck("validator_score_v1s.total_score")
   end
 
   test "ValidatorQuery returns results in correct stake order" do
