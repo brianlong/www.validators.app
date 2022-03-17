@@ -31,6 +31,13 @@
 #
 
 class ValidatorIp < ApplicationRecord
+  FIELDS_FOR_API = %i[
+    address 
+    data_center_host_id 
+    id 
+    validator_id
+  ].freeze
+
   belongs_to :validator
   belongs_to :data_center_host, optional: true
   has_one :validator_score_v1, through: :validator
@@ -45,7 +52,7 @@ class ValidatorIp < ApplicationRecord
   after_touch :copy_data_to_score
 
   scope :active, -> { where(is_active: true) }
-  scope :active_for_api, -> { select(:id, :address, :data_center_host_id, :validator_id).active }
+  scope :active_for_api, -> { select(FIELDS_FOR_API).active }
 
   def copy_data_to_score
     validator.copy_data_to_score

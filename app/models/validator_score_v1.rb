@@ -60,22 +60,25 @@
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 
-  ATTRIBUTES_FOR_BUILDER = %i[
-    total_score
+  FIELDS_FOR_API = %i[
+    active_stake
+    authorized_withdrawer_score
+    commission
+    data_center_concentration_score
+    delinquent
+    published_information_score
     root_distance_score
-    vote_distance_score
+    security_report_score
     skipped_slot_score
     software_version
     software_version_score
     stake_concentration_score
-    data_center_concentration_score
-    published_information_score
-    security_report_score
-    active_stake
-    commission
-    delinquent
-    authorized_withdrawer_score
+    total_score
+    validator_id
+    vote_distance_score
   ].freeze
+
+  ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
 
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?

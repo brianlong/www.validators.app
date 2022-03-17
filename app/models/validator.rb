@@ -26,6 +26,20 @@
 #  index_validators_on_network_and_account  (network,account) UNIQUE
 #
 class Validator < ApplicationRecord
+  FIELDS_FOR_API = %i[
+    account
+    admin_warning
+    avatar_url
+    created_at
+    details
+    id
+    keybase_id
+    name
+    network
+    updated_at
+    www_url
+  ].freeze
+
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
   has_many :validator_ips, dependent: :destroy

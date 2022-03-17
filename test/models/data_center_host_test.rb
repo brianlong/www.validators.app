@@ -17,8 +17,7 @@ class DataCenterHostTest < ActiveSupport::TestCase
 
   test "#relationships belongs_to data_center_for_api returns specified fields" do
     assert @data_center_host.valid?
-    assert_equal ["data_center_key", "id", "location_latitude", "location_longitude", "traits_autonomous_system_number"], 
-      @data_center_host.data_center_for_api.attributes.keys.sort
+    assert_equal DataCenter::FIELDS_FOR_API.map(&:to_s), @data_center_host.data_center_for_api.attributes.keys.sort
   end
 
   test "#relationships belongs_to data_center is not valid when data_center is empty" do

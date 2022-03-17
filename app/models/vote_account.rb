@@ -26,11 +26,17 @@
 #
 
 class VoteAccount < ApplicationRecord
+  FIELDS_FOR_API = %i[
+    account
+    id
+    validator_id
+  ].freeze
+
   belongs_to :validator
   has_many :vote_account_histories
   before_save :set_network
 
-  scope :for_api, -> { select(:account, :validator_id) }
+  scope :for_api, -> { select(FIELDS_FOR_API) }
 
   def vote_account_history_last
     vote_account_histories.last
@@ -45,8 +51,8 @@ class VoteAccount < ApplicationRecord
   end
 
   def to_builder
-    Jbuilder.new do |vs_v1|
-      vs_v1.vote_account self.account
+    Jbuilder.new do |va|
+      va.vote_account self.account
     end
   end
 end
