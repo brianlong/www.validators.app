@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class ValidatorTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @validator = create(:validator)
   end
 

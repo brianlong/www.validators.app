@@ -306,6 +306,24 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal search_query, json.first["name"]
   end
 
+  test "GET api_v1_validators includes validator without data_center assigned" do
+    v = create(
+      :validator, 
+      :with_score,
+      name: "I do not have data_center assigned"
+    )
+
+    get api_v1_validators_url(network: "testnet"),
+        headers: { "Token" => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_nil v.data_center
+    assert_equal v.name, json.first["name"]
+  end
+
   test "GET api_v1_validator with token returns all data" do
     validator = create(
       :validator, 

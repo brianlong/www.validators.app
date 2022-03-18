@@ -84,8 +84,14 @@ class DataCenterTest < ActiveSupport::TestCase
   end
 
   test "#to_builder returns correct data" do
-    json = "{\"data_center_key\":\"12345-DE-Berlin\",\"autonomous_system_number\":12345,\"latitude\":\"51.2993\",\"longitude\":\"9.491\"}"
-    assert_equal json, @data_center.to_builder.target!
+    expected_result = { 
+      data_center_key: "12345-DE-Berlin",
+      autonomous_system_number: 12345, 
+      latitude: "51.2993", 
+      longitude: "9.491" 
+    }.to_json
+
+    assert_equal expected_result, @data_center.to_builder.target!
   end
 
   test "before_save #assign_data_center_key assigns key correctly" do
