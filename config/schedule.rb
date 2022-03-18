@@ -44,11 +44,6 @@ job_type :ruby_script_data_centers,
 every 1.hour do
   ruby_script 'validators_get_info.rb'
   ruby_script 'validators_get_avatar_url.rb'
-  ruby_script 'append_ip_geo_data.rb'
-  # ruby_script 'assign_data_center_scores.rb'
-  ruby_script 'fix_ip_hetzner.rb'
-  ruby_script 'fix_ip_ovh.rb'
-  ruby_script 'fix_ip_webnx.rb'
   ruby_script 'gather_stake_accounts.rb'
 
   runner "AsnLogicWorker.perform_async(network: 'mainnet')"
