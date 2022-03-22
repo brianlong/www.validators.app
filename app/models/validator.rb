@@ -26,13 +26,27 @@
 #  index_validators_on_network_and_account  (network,account) UNIQUE
 #
 class Validator < ApplicationRecord
+  FIELDS_FOR_API = %i[
+    account
+    admin_warning
+    avatar_url
+    created_at
+    details
+    id
+    keybase_id
+    name
+    network
+    updated_at
+    www_url
+  ].freeze
+
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
   has_many :validator_ips, dependent: :destroy
   has_many :validator_block_histories, dependent: :destroy
   has_many :commission_histories, dependent: :destroy
   has_many :validator_histories, primary_key: :account, foreign_key: :account
-  has_one :validator_ip_active, ->(validator_ip) { where(is_active: true) }, class_name: "ValidatorIp"
+  has_one :validator_ip_active, -> { active }, class_name: "ValidatorIp"
   has_one :data_center, through: :validator_ip_active
   has_one :data_center_host, through: :validator_ip_active
   has_one :validator_score_v1, dependent: :destroy
@@ -40,8 +54,19 @@ class Validator < ApplicationRecord
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
 
+  # API
+  has_many :vote_accounts_for_api, -> { for_api }, class_name: "VoteAccount"
+  has_one :validator_ip_active_for_api, -> { active_for_api }, class_name: "ValidatorIp"
+  has_one :data_center_host_for_api, through: :validator_ip_active_for_api
+  has_one :data_center_for_api, through: :data_center_host_for_api
+  has_one :validator_score_v1_for_api, -> { for_api }, class_name: "ValidatorScoreV1"
+
+
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
+
+  delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
+  delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
 
   def self.with_private(show: "true")
     show == "true" ? all : where.not("validator_score_v1s.commission = 100")
@@ -97,10 +122,6 @@ class Validator < ApplicationRecord
     end
   end
 
-  def data_center
-    validator_ip&.data_center
-  end
-
   def active?
     is_active
   end
@@ -138,20 +159,15 @@ class Validator < ApplicationRecord
     ary.sum / ary.length.to_f
   end
 
-  def validator_ip
-    validator_ips.order("updated_at desc").first
-  end
-
   def ip_address
-    validator_ip&.address
+    validator_ip_active&.address
   end
 
   def copy_data_to_score
     return unless validator_score_v1
 
     validator_score_v1.ip_address = ip_address
-    data_center_key = validator_ip&.data_center&.data_center_key
-    validator_score_v1.data_center_key = data_center_key if data_center_key
+    validator_score_v1.data_center_key = dch_data_center_key if data_center
     validator_score_v1.save
   end
 
@@ -230,10 +246,6 @@ class Validator < ApplicationRecord
 
   def total_score
     score&.total_score
-  end
-
-  def data_center_key
-    score&.data_center_key
   end
 
   def data_center_concentration

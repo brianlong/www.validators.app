@@ -20,8 +20,19 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token returns only validators from chosen network with scores" do
-    create_list(:validator, 3, :with_score)
-    create_list(:validator, 3, :with_score, :mainnet)
+    create_list(
+      :validator,
+      3,
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
+    create_list(
+      :validator,
+      3,
+      :with_score, 
+      :mainnet,
+      :with_data_center_through_validator_ip
+    )
 
     # Testnet
     get api_v1_validators_url(network: "testnet"),
@@ -45,16 +56,15 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators returns all data" do
-    validator = create(:validator, :with_score, account: "Test Account")
+    validator = create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip, 
+      account: "Test Account"
+    )
     create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
-    create(
-      :ip,
-      address: validator.score.ip_address,
-      location_latitude: 48.8582,
-      location_longitude: 2.3387
-    )
 
     get api_v1_validators_url(network: "testnet"),
         headers: { "Token" => @user.api_token }
@@ -89,8 +99,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal validator_active_stake, validator_with_all_data["active_stake"]
     assert_equal 10, validator_with_all_data["commission"]
     assert_equal false, validator_with_all_data["delinquent"]
-    assert_equal "23470-US-America/Chicago", validator_with_all_data["data_center_key"]
-    assert_nil validator_with_all_data["data_center_host"]
+    assert_equal validator.data_center_host.host, validator_with_all_data["data_center_host"]
     assert_nil validator_with_all_data["admin_warning"]
 
     # Vote accounts
@@ -101,10 +110,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "skipped_slot_percent", validator_with_all_data["skipped_slot_percent"]
     assert_nil validator_with_all_data["ping_time"]
 
-    # IP
-    assert_equal 0, validator_with_all_data["autonomous_system_number"]
-    assert_equal "48.8582", validator_with_all_data["latitude"]
-    assert_equal "2.3387", validator_with_all_data["longitude"]
+    # Data Center
+    assert_equal 12345, validator_with_all_data["autonomous_system_number"]
+    assert_equal "51.2993", validator_with_all_data["latitude"]
+    assert_equal "9.491", validator_with_all_data["longitude"]
+    assert_equal "12345-DE-Berlin", validator_with_all_data["data_center_key"]
+
 
     # Validator history
     assert_equal 100, validator_with_all_data["epoch_credits"]
@@ -117,6 +128,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator,
       :with_score,
+      :with_data_center_through_validator_ip,
       account: "Test Account",
       admin_warning: "test warning"
     )
@@ -133,7 +145,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token and search query returns correct data" do
-    validator = create(:validator, :with_score, account: "Test Account")
+    validator = create(
+      :validator,
+      :with_score,
+      :with_data_center_through_validator_ip,
+      account: "Test Account"
+    )
 
     search_query = "john doe"
 
@@ -148,7 +165,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token and not existing search query returns no data" do
-    validator = create(:validator, :with_score, account: "Test Account")
+    validator = create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip, 
+      account: "Test Account"
+    )
 
     search_query = "1234"
 
@@ -162,7 +184,13 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token, limit and page passed in returns limited data" do
-    create_list(:validator, 10, :with_score)
+    create_list(
+      :validator, 
+      10, 
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
+
     limit = 5
     page = 2
 
@@ -176,7 +204,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token and limit passed in returns limited data" do
-    create_list(:validator, 10, :with_score)
+    create_list(
+      :validator,
+      10,
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
     limit = 5
 
     get api_v1_validators_url(network: "testnet", limit: limit),
@@ -189,7 +222,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token and page passed in returns limited data" do
-    create_list(:validator, 60, :with_score)
+    create_list(
+      :validator,
+      60, 
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
     page = 1
 
     get api_v1_validators_url(network: "testnet", page: page),
@@ -203,7 +241,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token and page passed returns no data when offset is above number of records" do
-    create_list(:validator, 10, :with_score)
+    create_list(
+      :validator, 
+      10, 
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
     page = 2
 
     get api_v1_validators_url(network: "testnet", page: page),
@@ -217,7 +260,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validators with token but without page and limit returns all data" do
-    create_list(:validator, 10, :with_score)
+    create_list(
+      :validator,
+      10,
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
 
     get api_v1_validators_url(network: "testnet"),
         headers: { "Token" => @user.api_token }
@@ -231,8 +279,18 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   # Pagination with search
   #
   test "GET api_v1_validators with token, search query, limit and page passed returns limited data" do
-    create(:validator, :with_score, name: "search_query")
-    create_list(:validator, 5, :with_score)
+    create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip,
+      name: "search_query"
+    )
+    create_list(
+      :validator, 
+      5, 
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
 
     limit = 5
     page = 1
@@ -248,12 +306,34 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal search_query, json.first["name"]
   end
 
+  test "GET api_v1_validators includes validator without data_center assigned" do
+    v = create(
+      :validator, 
+      :with_score,
+      name: "I do not have data_center assigned"
+    )
+
+    get api_v1_validators_url(network: "testnet"),
+        headers: { "Token" => @user.api_token }
+
+    assert_response 200
+    json = response_to_json(@response.body)
+
+    assert_equal 1, json.size
+    assert_nil v.data_center
+    assert_equal v.name, json.first["name"]
+  end
+
   test "GET api_v1_validator with token returns all data" do
-    validator = create(:validator, :with_score, account: "Test Account")
+    validator = create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip, 
+      account: "Test Account"
+    )
     create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
-    create(:ip, address: validator.score.ip_address)
 
     get api_v1_validator_url(
       network: "testnet",
@@ -288,8 +368,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal validator_active_stake, json_response["active_stake"]
     assert_equal 10, json_response["commission"]
     assert_equal false, json_response["delinquent"]
-    assert_equal "23470-US-America/Chicago", json_response["data_center_key"]
-    assert_nil json_response["data_center_host"]
+    assert_equal validator.data_center_host.host, json_response["data_center_host"]
 
     # Vote accounts
     assert_equal "Test Account", json_response["vote_account"]
@@ -299,8 +378,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "skipped_slot_percent", json_response["skipped_slot_percent"]
     assert_nil json_response["ping_time"]
 
-    # IP
-    assert_equal 0, json_response["autonomous_system_number"]
+    # Data Center
+    assert_equal 12345, json_response["autonomous_system_number"]
+    assert_equal "51.2993", json_response["latitude"]
+    assert_equal "9.491", json_response["longitude"]
+    assert_equal "12345-DE-Berlin", json_response["data_center_key"]
 
     # Validator history
     assert_equal 100, json_response["epoch_credits"]
@@ -310,11 +392,15 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET api_v1_validator with token and with_history=true returns all data with history fields" do
-    validator = create(:validator, :with_score, account: "Test Account")
+    validator = create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip,
+      account: "Test Account"
+    )
     create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
-    create(:ip, address: validator.score.ip_address)
 
     get api_v1_validator_url(
       network: "testnet",

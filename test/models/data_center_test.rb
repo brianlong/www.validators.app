@@ -4,12 +4,10 @@ require "test_helper"
 
 class DataCenterTest < ActiveSupport::TestCase
   def setup
-    @data_center = build(:data_center, :berlin)
+    @data_center = create(:data_center, :berlin)
   end
 
-  test "relationships data_center_hosts returns assigned data_center_hosts" do
-    @data_center.save
-
+  test "relationship data_center_hosts returns assigned data_center_hosts" do
     dch = create(:data_center_host, data_center: @data_center)
     dch2 = create(:data_center_host, data_center: @data_center)
 
@@ -18,9 +16,7 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_includes @data_center.data_center_hosts, dch2
   end
 
-  test "relationships validator_ips returns validator_ips through data_center_hosts" do
-    @data_center.save
-
+  test "relationship validator_ips returns validator_ips through data_center_hosts" do
     validator = create(:validator)
     dch = create(:data_center_host, data_center: @data_center)
     vip = create(:validator_ip, data_center_host: dch, validator: validator)
@@ -31,9 +27,8 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_includes @data_center.validator_ips, vip2
   end
 
-  test "relationships validator_ips_active returns only active validator_ips through data_center_hosts" do
-    @data_center.save
-
+  test "relationship validator_ips_active" \
+       "returns only active validator_ips through data_center_hosts" do
     validator = create(:validator)
     dch = create(:data_center_host, data_center: @data_center)
     vip = create(:validator_ip, data_center_host: dch, validator: validator)
@@ -43,9 +38,8 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_includes @data_center.validator_ips_active, vip2
   end
 
-  test "relationships validators returns validators with active validator_ips through data_center_hosts" do
-    @data_center.save
-
+  test "relationship validators returns validators with active validator_ips" \
+       "through data_center_hosts" do
     validator = create(:validator)
     dch = create(:data_center_host, data_center: @data_center)
     vip = create(:validator_ip, data_center_host: dch, validator: validator)
@@ -55,9 +49,8 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_includes @data_center.validators, validator
   end
 
-  test "relationships validator_score_v1s returns validator_score_v1s with active validator_ips through data_center_hosts" do
-    @data_center.save
-
+  test "relationship validator_score_v1s returns validator_score_v1s" \
+       "with active validator_ips through data_center_hosts" do
     validator = create(:validator, :with_score)
     validator2 = create(:validator, :with_score)
     validator3 = create(:validator, :with_score)
@@ -78,7 +71,6 @@ class DataCenterTest < ActiveSupport::TestCase
   end
 
   test "scope by_data_center_key returns data_centers by given data_center_key" do
-    @data_center.save
     create(:data_center, :china)
 
     data_centers = DataCenter.by_data_center_key(@data_center.data_center_key)
@@ -87,13 +79,22 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_equal @data_center, data_centers.first
   end
 
+  test "scope for_api returns data_centers with specified fields" do
+    assert_equal DataCenter::FIELDS_FOR_API.map(&:to_s), DataCenter.for_api.first.attributes.keys.sort
+  end
+
   test "#to_builder returns correct data" do
-    json = "{\"autonomous_system_number\":12345,\"latitude\":\"51.2993\",\"longitude\":\"9.491\"}"
-    assert_equal json, @data_center.to_builder.target!
+    expected_result = { 
+      data_center_key: "12345-DE-Berlin",
+      autonomous_system_number: 12345, 
+      latitude: "51.2993", 
+      longitude: "9.491" 
+    }.to_json
+
+    assert_equal expected_result, @data_center.to_builder.target!
   end
 
   test "before_save #assign_data_center_key assigns key correctly" do
-    @data_center.save
     assert_equal "12345-DE-Berlin", @data_center.data_center_key
   end
 end

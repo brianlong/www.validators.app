@@ -47,6 +47,14 @@
 #  index_data_centers_on_data_center_key  (data_center_key)
 #
 class DataCenter < ApplicationRecord
+  FIELDS_FOR_API = %i[
+    data_center_key 
+    id
+    location_latitude 
+    location_longitude
+    traits_autonomous_system_number 
+  ].freeze
+
   before_save :assign_data_center_key
   has_many :data_center_hosts
   has_many :validator_ips, through: :data_center_hosts
@@ -54,12 +62,15 @@ class DataCenter < ApplicationRecord
   has_many :validators, through: :data_center_hosts
   has_many :validator_score_v1s, through: :data_center_hosts
 
+  scope :for_api, -> { select(FIELDS_FOR_API) }
+
   scope :by_data_center_key, ->(data_center_keys) do
     where(data_center_key: data_center_keys)
   end
 
   def to_builder
     Jbuilder.new do |data_center|
+      data_center.data_center_key self.data_center_key
       data_center.autonomous_system_number self.traits_autonomous_system_number
       data_center.latitude self.location_latitude
       data_center.longitude self.location_longitude

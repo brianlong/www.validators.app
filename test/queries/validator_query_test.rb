@@ -9,21 +9,41 @@ class ValidatorQueryTest < ActiveSupport::TestCase
   end
 
   test "ValidatorQuery returns only validators from correct network" do
-    create_list(:validator, 5, :with_score, network: "mainnet")
-    create_list(:validator, 5, :with_score, network: "testnet")
+    create_list(
+      :validator, 
+      5, 
+      :with_score,
+      :with_data_center_through_validator_ip,
+      :mainnet
+    )
+    create_list(
+      :validator, 
+      5, 
+      :with_score, 
+      :with_data_center_through_validator_ip
+    )
 
-    network = "mainnet"
-    result = ValidatorQuery.new.call(network: network)
+    result = ValidatorQuery.new.call(network: @mainnet_network)
 
     assert_equal 5, result.count
-    assert_equal [network], result.pluck(:network).uniq
+    assert_equal [@mainnet_network], result.pluck(:network).uniq
   end
 
   test "ValidatorQuery when query is provided returns only matching results" do
     query = "test_account"
 
-    create(:validator, :with_score, account: query, network: @testnet_network)
-    create_list(:validator, 5, :with_score, network: @testnet_network)
+    create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip,
+      account: query
+    )
+    create_list(
+      :validator, 
+      5, 
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
 
     result = ValidatorQuery.new.call(network: @testnet_network, query: query)
 
@@ -34,19 +54,29 @@ class ValidatorQueryTest < ActiveSupport::TestCase
 
   test "ValidatorQuery returns results in correct score order" do
     5.times do |n|
-      v = create(:validator, :with_score, network: @mainnet_network)
+      v = create(
+        :validator, 
+        :with_score,
+        :mainnet,
+        :with_data_center_through_validator_ip
+      )
       v.score.update_column(:total_score,  n)
     end
 
     result = ValidatorQuery.new.call(network: @mainnet_network, sort_order: "score")
 
     assert_equal 5, result.count
-    assert_equal [4, 3, 2, 1, 0], result.pluck(:total_score)
+    assert_equal [4, 3, 2, 1, 0], result.pluck("validator_score_v1s.total_score")
   end
 
   test "ValidatorQuery returns results in correct stake order" do
     5.times do |n|
-      v = create(:validator, :with_score, network: @mainnet_network)
+      v = create(
+        :validator, 
+        :with_score,
+        :mainnet,
+        :with_data_center_through_validator_ip
+      )
       v.score.update_column(:active_stake,  n * 1000)
     end
 
@@ -58,13 +88,19 @@ class ValidatorQueryTest < ActiveSupport::TestCase
 
   test "ValidatorQuery returns results in correct name order" do
     5.times do |n|
-      create(:validator, :with_score, network: @mainnet_network, name: "#{n}-validator")
+      create(
+        :validator, 
+        :with_score,
+        :mainnet,
+        :with_data_center_through_validator_ip,
+        name: "#{n}-validator"
+      )
     end
 
     result = ValidatorQuery.new.call(network: @mainnet_network, sort_order: "name")
 
     assert_equal 5, result.count
-    assert_equal (0..4).map{|n| "#{n}-validator"}, result.pluck(:name)
+    assert_equal (0..4).map{ |n| "#{n}-validator" }, result.pluck(:name)
   end
 
 end
