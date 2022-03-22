@@ -8,6 +8,12 @@ server(
   roles: %w[web app db]
 )
 
+server(
+  '167.99.125.221',
+  user: 'deploy',
+  roles: %w[app db daemons]
+)
+
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
