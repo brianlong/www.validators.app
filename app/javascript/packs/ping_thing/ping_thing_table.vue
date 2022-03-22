@@ -50,6 +50,7 @@
 </template>
 
 <script>
+  var moment = require('moment');
 
   export default {
     props: {
@@ -76,9 +77,9 @@
       },
       formatted_date(date){
         var date = new Date(date)
-        var date_string = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2)
-        var time_string = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
-        return date_string + " " + time_string + " UTC"
+        var formatted_date = moment(date).utc().format('YYYY-MM-DD HH:mm:ss z')
+
+        return formatted_date
       }
     }
   }
