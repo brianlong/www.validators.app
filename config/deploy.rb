@@ -65,10 +65,6 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 set :sidekiq_role, :app
 set :sidekiq_config, File.join(current_path, 'config', 'sidekiq.yml').to_s
 
-# WHENEVER CONFIG
-set :whenever_load_file, defer { "#{release_path}/config/schedule_no_daemons.rb" }, :roles => %w{no_daemons}
-set :whenever_load_file, defer { "#{release_path}/config/schedule.rb" }, :roles => %w{daemons}
-
 namespace :sidekiq do
   desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
   task :stop do
@@ -93,28 +89,11 @@ namespace :sidekiq do
 end
 
 namespace :deploy do
-  # after 'deploy:symlink:release', 'crontab:update'
   after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'sidekiq:restart'
   after :restart, 'rake_task:add_stake_pool'
   after :restart, 'daemons:restart'
 end
-
-# namespace :crontab do
-#   task :update do
-#     on roles :no_daemons do
-#       within release_path do
-#         execute :bundle, :exec, :whenever, "--update-crontab", "config/schedule_no_daemons.rb"
-#       end
-#     end
-
-#     on roles :daemons do
-#       within release_path do
-#         execute :bundle, :exec, :whenever, "--update-crontab", "config/schedule.rb"
-#       end
-#     end
-#   end
-# end
 
 namespace :daemons do
   desc 'Start daemons'
