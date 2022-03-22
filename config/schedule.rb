@@ -41,7 +41,7 @@ job_type :ruby_script_sol_prices,
 job_type :ruby_script_data_centers,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/data_centers_scripts/:task >> :whenever_path/log/:task.log 2>&1'
 
-every 1.hour do
+every 1.hour, roles: [:daemons] do
   ruby_script 'validators_get_info.rb'
   ruby_script 'validators_get_avatar_url.rb'
   ruby_script 'append_ip_geo_data.rb'
@@ -61,29 +61,29 @@ every 1.hour do
   ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
-every 1.day do
+every 1.day, roles: [:daemons] do
   ruby_script 'validators_update_avatar_url.rb'
 end
 
-every 1.day, at: '0:10am' do
+every 1.day, at: '0:10am', roles: [:daemons] do
   ruby_script_sol_prices 'coin_gecko_gather_yesterday_prices.rb'
   ruby_script_sol_prices 'ftx_gather_yesterday_prices.rb'
 end
 
-every 10.minutes do
+every 10.minutes, roles: [:daemons] do
   runner "ValidatorCheckActiveWorker.perform_async"
 end
 
-every 1.minute do
+every 1.minute, roles: [:daemons] do
   ruby_script "add_current_epoch.rb"
 end
 
 if environment == 'production'
-  every 1.day, at: '1:00am' do
+  every 1.day, at: '1:00am', roles: [:daemons] do
     ruby_script 'prune_database_tables.rb'
   end
 elsif environment == 'stage'
-  every 1.day, at: '1:00pm' do
+  every 1.day, at: '1:00pm', roles: [:daemons] do
     ruby_script 'prune_database_tables.rb'
   end
 end
