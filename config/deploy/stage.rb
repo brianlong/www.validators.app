@@ -1,5 +1,5 @@
 server(
   'stage.validators.app',
   user: 'deploy',
-  roles: %w{web app db daemons}
+  roles: %w{web app db background}
 )
