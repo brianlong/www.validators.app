@@ -65,40 +65,61 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 set :sidekiq_role, :app
 set :sidekiq_config, File.join(current_path, 'config', 'sidekiq.yml').to_s
 
+# WHENEVER CONFIG
+set :whenever_load_file, defer { "#{release_path}/config/schedule_no_daemons.rb" }, :roles => %w{no_daemons}
+set :whenever_load_file, defer { "#{release_path}/config/schedule.rb" }, :roles => %w{daemons}
+
 namespace :sidekiq do
   desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
   task :stop do
-    on roles :all do |_role|
+    on roles :app do
       execute :systemctl, '--user', 'stop', :sidekiq
     end
   end
 
   desc 'Start sidekiq'
   task :start do
-    on roles :all do |_role|
+    on roles :app do
       execute :systemctl, '--user', 'start', :sidekiq
     end
   end
 
   desc 'Restart sidekiq'
   task :restart do
-    on roles(:all), in: :sequence, wait: 5 do
+    on roles :app, in: :sequence, wait: 5 do
       execute :systemctl, '--user', 'restart', :sidekiq
     end
   end
 end
 
 namespace :deploy do
+  # after 'deploy:symlink:release', 'crontab:update'
   after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'sidekiq:restart'
   after :restart, 'rake_task:add_stake_pool'
   after :restart, 'daemons:restart'
 end
 
+# namespace :crontab do
+#   task :update do
+#     on roles :no_daemons do
+#       within release_path do
+#         execute :bundle, :exec, :whenever, "--update-crontab", "config/schedule_no_daemons.rb"
+#       end
+#     end
+
+#     on roles :daemons do
+#       within release_path do
+#         execute :bundle, :exec, :whenever, "--update-crontab", "config/schedule.rb"
+#       end
+#     end
+#   end
+# end
+
 namespace :daemons do
   desc 'Start daemons'
   task :start do
-    on roles(:daemons) do
+    on roles :daemons do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :start, :validator_score_mainnet_v1
@@ -114,7 +135,7 @@ namespace :daemons do
 
   desc 'Stop daemons'
   task :stop do
-    on roles(:daemons) do
+    on roles :daemons do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :stop, :validator_score_mainnet_v1
@@ -130,7 +151,7 @@ namespace :daemons do
 
   desc 'Restart daemons'
   task :restart do
-    on roles(:daemons) do
+    on roles :daemons do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :validator_score_mainnet_v1
@@ -148,7 +169,7 @@ end
 namespace :rake_task do
   desc 'Update Stake Pools'
   task :add_stake_pool do
-    on release_roles([:all]) do
+    on release_roles([:daemons]) do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'add_stake_pool:mainnet'
@@ -159,7 +180,7 @@ namespace :rake_task do
   
   desc 'Update manager fees to Stake Pools'
   task :update_fee_in_stake_pools do
-    on release_roles([:all]) do
+    on release_roles([:daemons]) do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'update_fee_in_stake_pools:mainnet'

@@ -5,7 +5,7 @@
 server(
   '167.99.125.221',
   user: 'deploy',
-  roles: %w[web app db]
+  roles: %w[web app db no_daemons]
 )
 
 server(
