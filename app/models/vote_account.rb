@@ -36,7 +36,7 @@ class VoteAccount < ApplicationRecord
   has_many :vote_account_histories
   before_save :set_network
 
-  scope :for_api, -> { select(FIELDS_FOR_API) }
+  scope :for_api, -> { select(FIELDS_FOR_API).order(updated_at: :asc) }
 
   def vote_account_history_last
     vote_account_histories.last
