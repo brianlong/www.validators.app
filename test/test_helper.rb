@@ -19,6 +19,10 @@ VCR.configure do |config|
     # ignore only localhost requests to port 7500
     uri.host == '127.0.0.1' && uri.port == 8899
   end
+
+  config.filter_sensitive_data("<TOKEN>") do |interaction|
+    interaction.request.headers["Authorization"]&.first
+  end
 end
 
 class ActiveSupport::TestCase
