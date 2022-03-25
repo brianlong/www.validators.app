@@ -46,8 +46,8 @@ module DataCenters
       @vcr_namespace ||= File.join("services", "data_centers", "change_validators_data_center_test")
     end
 
-    test "when MaxMind returns different geo data for ip (Spectrum Staking) and existing data_center_host has exactly one validator assigned"\
-         "creates new data_center, assigns existing data_center_host to it"\
+    test "when MaxMind returns different geo data for ip (Spectrum Staking) and existing data_center_host has exactly one validator assigned "\
+         "creates new data_center, assigns existing data_center_host to it "\
          "and update validator_score_v1 data_center_key" do
       vcr_cassette(@vcr_namespace, "spectrum_staking") do
         assert_equal @spectrum_staking_ip_address, @validator_ip.address
@@ -75,8 +75,8 @@ module DataCenters
       end
     end
 
-    test "when MaxMind returns different geo data for ip (Spectrum Staking) and existing data_center_host has more than one validator_ip assigned"\
-         "creates new data_center, new data_center_host assigned to it"\
+    test "when MaxMind returns different geo data for ip (Spectrum Staking) and existing data_center_host has more than one validator_ip assigned "\
+         "creates new data_center, new data_center_host assigned to it "\
          "assigns validator_ip to the new data_center_host and update validator_score_v1 data_center_key"  do
       vcr_cassette(@vcr_namespace, "spectrum_staking") do
         # Second validator assigned to data_center_host
@@ -113,8 +113,8 @@ module DataCenters
       end
     end
 
-    test "when maxmind returns the same data as present in existing data_center"\
-         "and it's the same data center that is already assigned to validator"\
+    test "when maxmind returns the same data as present in existing data_center "\
+         "and it's the same data center that is already assigned to validator "\
          "data_center, data_center_host and validator_score_v1 data_center_key should not be changed" do
       vcr_cassette(@vcr_namespace, "spectrum_staking") do
         @data_center_netherlands.save
@@ -145,8 +145,8 @@ module DataCenters
       end
     end
 
-    test "when maxmind returns the same data as present in existing data_center"\
-         "and other data center that is already assigned to validator"\
+    test "when maxmind returns the same data as present in existing data_center "\
+         "and other data center that is already assigned to validator "\
          "assigns validator to data center from maxmind and updates data_center_key in validator_score_v1" do
       vcr_cassette(@vcr_namespace, "spectrum_staking") do
 
