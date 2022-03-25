@@ -1,29 +1,21 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require "test_helper"
 module DataCenters
   class ChangeValidatorDataCenterTest < ActiveSupport::TestCase
+    include VcrHelper
+
     # Validators from staging, data_center_key 206264-SC-Indian/Mahe
-    IPS = [
-      {
+    SPECTRUM_STAKING = {
         id: 6563, 
         name: "Spectrum Staking", 
         network: "mainnet", 
         www_url: "https://spectrumstaking.net", 
         ip_address: "185.191.127.144"
-      }, 
-      {
-        id: 6577, 
-        name: nil, 
-        network: "mainnet", 
-        www_url: nil, 
-        ip_address: "185.191.127.239"
-      }
-    ].freeze
-
-    include VcrHelper
+    }.freeze
 
     setup do
-      @spectrum_staking_ip_address = IPS.first[:ip_address]
-      @no_name_ip_address = IPS.last[:ip_address]
+      @spectrum_staking_ip_address = SPECTRUM_STAKING[:ip_address]
 
       # This is the first data center before update.
       @data_center_seychelles = create(
@@ -51,7 +43,7 @@ module DataCenters
         validator: @validator,
       )
 
-      @vcr_namespace ||= File.join('services', 'data_centers', 'change_validators_data_center_test')
+      @vcr_namespace ||= File.join("services", "data_centers", "change_validators_data_center_test")
     end
 
     test "when MaxMind returns different geo data for ip (Spectrum Staking) and existing data_center_host has exactly one validator assigned"\
@@ -126,7 +118,6 @@ module DataCenters
          "data_center, data_center_host and validator_score_v1 data_center_key should not be changed" do
       vcr_cassette(@vcr_namespace, "spectrum_staking") do
         @data_center_netherlands.save
-
         @data_center_host.update(data_center: @data_center_netherlands)
         @validator_score_v1.update(data_center_key: "206264-NL-Amsterdam")
 

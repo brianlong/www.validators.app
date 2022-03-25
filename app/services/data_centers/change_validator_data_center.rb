@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DataCenters
   class ChangeValidatorDataCenter
     LOG_PATH = Rails.root.join("log", "change_validator_data_center.log")
@@ -32,12 +34,9 @@ module DataCenters
       end
 
       find_data_center_host
-
       max_mind_results_for_ip
       data_center_from_maxmind_data
-
       create_or_update_data_center
-
       assign_validator_to_new_data_center
 
       # This step needs to be removed after removing data_center_key from validator_score_v1
@@ -131,24 +130,26 @@ module DataCenters
         location_time_zone: @maxmind_results.location.time_zone,
       )
 
-      @data_center.city_confidence = @maxmind_results.city.confidence
-      @data_center.city_geoname_id = @maxmind_results.city.geoname_id
-      @data_center.country_confidence = @maxmind_results.country.confidence
-      @data_center.location_accuracy_radius = @maxmind_results.location.accuracy_radius
-      @data_center.location_average_income = @maxmind_results.location.average_income
-      @data_center.location_latitude = @maxmind_results.location.latitude
-      @data_center.location_longitude = @maxmind_results.location.longitude
-      @data_center.location_population_density = @maxmind_results.location.population_density
-      @data_center.postal_code = @maxmind_results.postal.code
-      @data_center.postal_confidence = @maxmind_results.postal.confidence
-      @data_center.traits_isp = @maxmind_results.traits.isp
-      @data_center.traits_organization = @maxmind_results.traits.organization
-  
-      unless @maxmind_results.most_specific_subdivision.nil?
-        @data_center.subdivision_confidence = @maxmind_results.most_specific_subdivision.confidence
-        @data_center.subdivision_iso_code = @maxmind_results.most_specific_subdivision.iso_code
-        @data_center.subdivision_geoname_id = @maxmind_results.most_specific_subdivision.geoname_id
-        @data_center.subdivision_name = @maxmind_results.most_specific_subdivision.name
+      @data_center.tap do |dc|
+        dc.city_confidence = @maxmind_results.city.confidence
+        dc.city_geoname_id = @maxmind_results.city.geoname_id
+        dc.country_confidence = @maxmind_results.country.confidence
+        dc.location_accuracy_radius = @maxmind_results.location.accuracy_radius
+        dc.location_average_income = @maxmind_results.location.average_income
+        dc.location_latitude = @maxmind_results.location.latitude
+        dc.location_longitude = @maxmind_results.location.longitude
+        dc.location_population_density = @maxmind_results.location.population_density
+        dc.postal_code = @maxmind_results.postal.code
+        dc.postal_confidence = @maxmind_results.postal.confidence
+        dc.traits_isp = @maxmind_results.traits.isp
+        dc.traits_organization = @maxmind_results.traits.organization
+    
+        unless @maxmind_results.most_specific_subdivision.nil?
+          dc.subdivision_confidence = @maxmind_results.most_specific_subdivision.confidence
+          dc.subdivision_iso_code = @maxmind_results.most_specific_subdivision.iso_code
+          dc.subdivision_geoname_id = @maxmind_results.most_specific_subdivision.geoname_id
+          dc.subdivision_name = @maxmind_results.most_specific_subdivision.name
+        end
       end
     end
 
