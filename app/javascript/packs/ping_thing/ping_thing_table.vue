@@ -46,12 +46,7 @@
         </tr>
       </tbody>
     </table>
-    <b-pagination
-        v-model="page"
-        :total-rows="total_count"
-        :per-page="240"
-        first-text="« First"
-        last-text="Last »" />
+
   </div>
 </template>
 
@@ -62,14 +57,6 @@
     props: {
       ping_things: {
         type: Array,
-        required: true
-      },
-      page: {
-        type: Number,
-        required: true
-      },
-      total_count: {
-        type: Number,
         required: true
       },
     },
