@@ -101,7 +101,7 @@ module DataCenters
     end
 
     def max_mind_results_for_ip
-      @max_mind_results = @max_mind_client.new(ip: @validator_ip.address).insights
+      @max_mind_results = @max_mind_client.new.insights(@validator_ip.address)
     end
 
     def data_center_from_max_mind_data

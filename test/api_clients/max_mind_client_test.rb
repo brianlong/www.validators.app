@@ -8,13 +8,13 @@ module ApiClients
 
     setup do
       @ip = "185.191.127.144"
-      @service = MaxMindClient.new(ip: @ip)
+      @service = MaxMindClient.new
       @vcr_namespace ||= File.join("api_clients", "max_mind_client_test")
     end
 
     test "#insights when correct ip is passed returns all ip information from maxmind" do
       vcr_cassette(@vcr_namespace, "correct_ip") do
-        insights = @service.insights
+        insights = @service.insights(@ip)
 
         assert_equal "EU", insights.continent.code
         assert_equal 6255148, insights.continent.geoname_id

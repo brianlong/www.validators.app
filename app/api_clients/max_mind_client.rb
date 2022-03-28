@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 class MaxMindClient
-  def initialize(ip:)
+  def initialize
     @client = maxmind_client
-    @ip = ip
   end
 
-  def insights
-    @client.insights(@ip)
+  def insights(ip)
+    @client.insights(ip)
   end
 
   private
