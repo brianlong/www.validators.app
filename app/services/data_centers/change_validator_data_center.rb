@@ -203,7 +203,7 @@ module DataCenters
         message = <<-EOS
           Validator #{@validator.name} (##{@validator.id}) and ip address #{@validator_ip.address} 
           has been assigned to data center #{@data_center.data_center_key} 
-          (##{@data_center.id}) through data center host  (##{new_dch.id}).
+          (##{@data_center.id}) through new data center host (##{new_dch.id}).
         EOS
 
         log_message(message)
