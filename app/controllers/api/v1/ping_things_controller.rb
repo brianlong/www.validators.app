@@ -11,7 +11,7 @@ module Api
       def index
         limit = [(index_params[:limit] || 240).to_i, 9999].min
         page = index_params[:page] || 1
-        with_total_count = index_params[:with_total_count].to_s == 'true' ? true : false
+        with_total_count = index_params[:with_total_count].to_s == "true" ? true : false
 
         ping_things = PingThing.where(network: index_params[:network])
                                .includes(:user)
