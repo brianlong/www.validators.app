@@ -4,7 +4,15 @@
 
     <div class="card mb-4">
       <div class="card-content">
-        <h3 class="card-heading mb-4">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time</h3>
+        <h3 class="card-heading">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time</h3>
+        <div class="text-center pb-4">
+        <b-pagination
+            v-model="page"
+            :total-rows="total_count"
+            :per-page="240"
+            first-text="« First"
+            last-text="Last »" />
+        </div>
         <bubble-chart :vector="ping_things.slice().reverse()" fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)"/>
       </div>
     </div>
@@ -26,7 +34,6 @@
   import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
-  import Ping_thing_table from './ping_thing_table.vue'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
