@@ -5,7 +5,7 @@
     <div class="card mb-4">
       <div class="card-content">
         <h3 class="card-heading mb-4">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time</h3>
-        <scatter-chart :vector="ping_things.slice().reverse()" fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)"/>
+        <bubble-chart :vector="ping_things.slice().reverse()" fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)"/>
       </div>
     </div>
 
@@ -23,7 +23,7 @@
 
 <script>
   import axios from 'axios'
-  import scatterChart from './scatter_chart'
+  import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
   import Ping_thing_table from './ping_thing_table.vue'
@@ -68,7 +68,7 @@
       },
     },
     components: {
-      "scatter-chart": scatterChart,
+      "bubble-chart": bubbleChart,
       "ping-thing-header": pingThingHeader,
       "ping-thing-table": pingThingTable
     }
