@@ -33,6 +33,17 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "0.25", json_response["skipped_slot_percent"]
   end
 
+  test "should redirect correctly if old url is given" do
+    validator = create(:validator, :with_score, account: "TestAccount")
+    create(:vote_account, validator: validator)
+    create(:validator_block_history, validator: validator)
+
+    get "/api/v1/validator_block_history/testnet/#{validator.account}"
+
+    assert_response 301
+    assert_redirected_to api_v1_validator_block_history_path(account: validator.account, network: "testnet")
+  end
+
   test "GET api_v1_validator_block_history with token returns only validators from chosen network and validator" do
     testnet_validator = create(:validator, account: "Test Account")
     mainnet_validator = create(:validator, :mainnet, account: "Mainnet Account")

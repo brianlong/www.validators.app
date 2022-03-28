@@ -126,9 +126,12 @@ Rails.application.routes.draw do
           as: 'validator'
 
       # GET /api/v1/validator_block_history/:network/:account
-      get 'validator_block_history/:network/:account',
+      get 'validator-block-history/:network/:account',
           to: 'validator_block_histories#show',
           as: 'validator_block_history'
+
+      get 'validator_block_history/:network/:account',
+          to: redirect('/api/v1/validator-block-history/%{network}/%{account}')
 
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
