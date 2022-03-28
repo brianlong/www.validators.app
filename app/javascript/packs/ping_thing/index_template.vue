@@ -10,7 +10,7 @@
     </div>
 
     <div class="card">
-      <ping-thing-table :ping_things="ping_things"/>
+      <ping-thing-table :ping_things="ping_things" :page="page" :total_count="total_count" />
     </div>
   </div>
 </template>
@@ -27,22 +27,33 @@
   export default {
     props: ['network'],
     data () {
+      var api_url = '/api/v1/ping-thing/' + this.network + '?'
       return {
-        ping_things: []
+        ping_things: [],
+        page: 1,
+        total_count: 0,
+        api_url: api_url
       }
     },
     created () {
       var ctx = this
-      axios.get("/api/v1/ping-thing/" + this.network)
+      var url = ctx.api_url + 'with_total_count=true'
+
+      axios.get(url)
            .then(function(response){
-             ctx.ping_things = response.data;
+             ctx.ping_things = response.data.ping_things;
+             ctx.total_count = response.data.total_count;
            })
+    },
+    watch: {
+      page: function(){
+        this.paginate()
+      }
     },
     components: {
       "scatter-chart": scatterChart,
       "ping-thing-header": pingThingHeader,
-      "ping-thing-table": pingThingTable,
-        Ping_thing_table
+      "ping-thing-table": pingThingTable
     }
   }
 

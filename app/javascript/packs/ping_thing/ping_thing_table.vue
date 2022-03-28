@@ -1,6 +1,6 @@
 <template>
   <div class="table-responsive-lg">
-    <table class='table mb-0'>
+    <table class='table'>
       <thead>
       <tr>
         <th class="align-middle column-md-sm">Success / Time</th>
@@ -46,6 +46,12 @@
         </tr>
       </tbody>
     </table>
+    <b-pagination
+        v-model="page"
+        :total-rows="total_count"
+        :per-page="240"
+        first-text="« First"
+        last-text="Last »" />
   </div>
 </template>
 
@@ -54,7 +60,18 @@
 
   export default {
     props: {
-      ping_things: []
+      ping_things: {
+        type: Array,
+        required: true
+      },
+      page: {
+        type: Number,
+        required: true
+      },
+      total_count: {
+        type: Number,
+        required: true
+      },
     },
     methods: {
       success_icon(success) {
