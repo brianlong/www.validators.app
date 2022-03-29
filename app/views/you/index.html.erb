@@ -33,10 +33,10 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-6 mb-4 form-inline">
-    <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary mr-2' %>
+  <div class="col-sm-6 form-inline">
+    <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary mb-4 mr-2' %>
     <%= button_to 'Cancel My Account', registration_path(@user), data: { confirm: 'Are you sure?' }, method: :delete,
-                  class: 'btn btn-sm btn-secondary mt-0' %>
+                  class: 'btn btn-sm btn-secondary mb-4 mt-0' %>
   </div>
   <div class="col-sm-6 text-sm-right">
     <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-tertiary mt-0' %>
