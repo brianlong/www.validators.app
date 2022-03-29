@@ -35,7 +35,8 @@
 <div class="row">
   <div class="col-sm-6 form-inline">
     <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary mb-4 mr-2' %>
-    <%= button_to 'Cancel My Account', registration_path(@user), data: { confirm: 'Are you sure?' }, method: :delete,
+    <%= button_to 'Cancel My Account', registration_path(@user),
+                  data: { confirm: 'Are you sure? This operation is irreversible.' }, method: :delete,
                   class: 'btn btn-sm btn-secondary mb-4 mt-0' %>
   </div>
   <div class="col-sm-6 text-sm-right">
