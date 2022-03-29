@@ -358,7 +358,7 @@
 <p>
   There are several possible causes.<br />
   First, please double check and confirm that you're searching in the correct network.<br />
-  Then, please make sure your validator is active and running. Make sure your validator is visible
+  Then, please make sure your validator is active and voting. Make sure your validator is visible
   in the output of the following CLI command:
 </p>
 <pre>solana validators -u t | grep validator-pubkey</pre>
@@ -410,6 +410,6 @@
 
 <h3 class="h5" id="apy">Where can I find the APY?</h3>
 <p class="mb-5">
-  We do not show APY on validators.app. See <%= link_to "https://www.stakeview.app", "https://www.stakeview.app" %>
-  for a good look at APY.
+  We do not show nodes APY on validators.app. See <%= link_to "https://www.stakeview.app", "https://www.stakeview.app" %>
+  for a good look at APY. We do show APY for stake pools hovewer. You can find them <%= link_to "on this site", stake_pools_path, data: { turbolinks: false } %>.
 </p>
