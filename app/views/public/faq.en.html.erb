@@ -33,6 +33,8 @@
           <li><a href="#withdraw-authority-warning">Why do I see <i class="fas fa-exclamation-triangle text-warning mx-1"></i> warning next to my validator?</a></li>
           <li><a href="#admin-warning">Why do I see <i class="fas fa-exclamation-triangle text-danger mx-1"></i> warning next to my validator?</a></li>
           <li><a href="#avatar">How can I change my avatar (validator logo)?</a></li>
+          <li><a href="#validator-not-visible">Why can't I see my validator on main page?</a></li>
+          <li><a href="#old-software-version">Why do I see old software version of my node?</a></li>
         </ul>
       </div>
     </div>
@@ -352,6 +354,26 @@
   system automatically within 24 hours.
 </p>
 
+<h3 class="h5" id="validator-not-visible">Why can't I see my validator on main page?</h3>
+<p>
+  There are several possible causes.<br />
+  First, please double check and confirm that you're searching in the correct network.<br />
+  Then, please make sure your validator is active and running. Make sure your validator is visible
+  in the output of the following CLI command:
+</p>
+<pre>solana validators -u t | grep validator-pubkey</pre>
+<p class="mb-5">
+  Also confirm that there are some SOL delegated to your validator. We suppress all nodes with zero stake. You
+  should see the node appear on our site as soon as you have some stake. If you fixed all the above and still
+  cannot see your validator, please <%= link_to 'contact us', contact_us_path %>.
+</p>
+
+<h3 class="h5" id="old-software-version">Why do I see old software version of my node?</h3>
+<p class="mb-5">
+  Software versions are updated once every 24 hours. Please wait 24 hours before checking the validators.app website
+  after software version upgrade. If you still cannot see the new version after this time please
+  <%= link_to 'contact us', contact_us_path %>.
+</p>
 
 <h3 class="h5" id="investing">How do I start investing?</h3>
 <p class="mb-5">
