@@ -103,6 +103,7 @@ Rails.application.routes.draw do
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
+
   get "ping-thing", to: "ping_things#index", as: "ping_things"
 
   # Default root path
@@ -160,6 +161,7 @@ Rails.application.routes.draw do
       # GET /api/v1/ping-thing/
       get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
 
+      # GET /api/v1/sol-prices/
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
     end
   end
