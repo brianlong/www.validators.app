@@ -20,18 +20,15 @@ $card-background-color: darken($background-color, 3%);
 $card-border-color: #383351;
 $table-border-color: darken($card-border-color, 5%);
 
-// Score and chart colors:
+// Scores, charts, alerts:
 $blue: #0091f2;
+$blue-transparent: rgba(0, 145, 242, 0.25);
 $grey: #cacaca;
+$grey-transparent: rgba(202, 202, 202, 0.3);
 $green-transparent: rgba(0, 206, 153, 0.4);
 $orange-transparent: rgba(255, 193, 7, 0.4);
 $red-transparent: rgba(255, 82, 98, 0.4);
-$grey-transparent: rgba(202, 202, 202, 0.3);
 
-$score-purple-low: rgb(170, 46, 184);
-$score-purple-low-transparent: rgba(170, 46, 184, 0.4);
-$score-purple-high: rgb(239, 206, 243);
-$score-purple-high-transparent: rgba(239, 206, 243, 0.4);
 
 // Breakpoints
 

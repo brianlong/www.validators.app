@@ -2,30 +2,30 @@ module ValidatorsHelper
   def chart_line_color(score)
     case score
     when 4
-      SPARK_LINE_1
+      SCORE_4
     when 3
-      SPARK_LINE_3
+      SCORE_3
     when 2
-      GREEN
+      SCORE_2
     when 1
-      BLUE
+      SCORE_1
     else
-      LIGHT_GREY
+      SCORE_0
     end
   end
 
   def chart_fill_color(score)
     case score
     when 4
-      SPARK_LINE_1_TRANSPARENT
+      SCORE_4_TRANSPARENT
     when 3
-      SPARK_LINE_3_TRANSPARENT
+      SCORE_3_TRANSPARENT
     when 2
-      GREEN_TRANSPARENT
+      SCORE_2_TRANSPARENT
     when 1
-      BLUE_TRANSPARENT
+      SCORE_1_TRANSPARENT
     else
-      LIGHT_GREY_TRANSPARENT
+      SCORE_0_TRANSPARENT
     end
   end
 

@@ -1,21 +1,36 @@
 @import "variables";
 
+$score-4: $green;
+$score-3: $green;
+$score-2: $green;
+$score-1: $blue;
+$score-0: $grey;
+
+/*
+Uncomment for 5 score NUMBER_OF_GROUPS
+$score-4: $green;
+$score-3: rgb(0, 204, 219);
+$score-2: $blue;
+$score-1: rgb(152, 183, 205);
+$score-0: $grey;
+*/
+
 .score-4 {
-  color: $score-purple-high;
+  color: $score-4;
 }
 
 .score-3 {
-  color: $score-purple-low;
+  color: $score-3;
 }
 
 .score-2 {
-  color: $green;
+  color: $score-2;
 }
 
 .score-1 {
-  color: $blue;
+  color: $score-1;
 }
 
 .score-0 {
-  color: $grey;
+  color: $score-0;
 }
