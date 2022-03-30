@@ -4,11 +4,19 @@ module Api
   module V1
     class PingThingsController < BaseController
 
+      class InvalidRecordCount < StandardError; end
+
+      MAX_RECORDS = 1000
+      
       def index
-        limit = [(index_params[:limit] || 240).to_i, 11520].min
+        limit = [(index_params[:limit] || 240).to_i, 9999].min
+        page = index_params[:page] || 1
+
         ping_things = PingThing.where(network: index_params[:network])
                                .includes(:user)
-                               .last(limit)
+                               .order(reported_at: :desc)
+                               .page(page)
+                               .per(limit)
         json_result = ping_things.map { |pt| create_json_result(pt) }
         render json: json_result
       rescue ActionController::ParameterMissing
@@ -32,10 +40,32 @@ module Api
         end
       end
 
+      def create_batch
+        api_token = request.headers["Token"]
+
+        begin
+          raise InvalidRecordCount, "Number of records exceeds #{MAX_RECORDS}" \
+            if ping_thing_batch_params[:transactions].count > MAX_RECORDS
+
+          txs = ping_thing_batch_params[:transactions].map do |tx|
+            {
+              raw_data: tx.to_json,
+              api_token: api_token,
+              network: params[:network]
+            }
+          end
+
+          PingThingRaw.create! txs
+          render json: { status: "created" }, status: :created
+        rescue ActiveRecord::RecordInvalid, InvalidRecordCount => e
+          render json: e.to_json, status: :bad_request
+        end
+      end
+
       private
 
       def index_params
-        params.permit(:network, :limit)
+        params.permit(:network, :limit, :page)
       end
 
       def ping_thing_params
@@ -46,8 +76,25 @@ module Api
           :signature,
           :success,
           :time,
-          :transaction_type
+          :transaction_type,
+          :reported_at
         )
+      end
+
+      def ping_thing_batch_params
+        params.permit(
+          transactions: [
+            :amount,
+            :application,
+            :commitment_level,
+            :signature,
+            :success,
+            :time,
+            :transaction_type,
+            :reported_at
+            ]
+          )
+
       end
 
       def create_json_result(ping_thing)

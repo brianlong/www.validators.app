@@ -38,19 +38,22 @@ job_type :ruby_script,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
 job_type :ruby_script_sol_prices,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/sol_prices/:task >> :whenever_path/log/:task.log 2>&1'
+job_type :ruby_script_data_centers,
+         'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/data_centers_scripts/:task >> :whenever_path/log/:task.log 2>&1'
 
 every 1.hour do
   ruby_script 'validators_get_info.rb'
   ruby_script 'validators_get_avatar_url.rb'
-  ruby_script 'append_ip_geo_data.rb'
-  ruby_script 'assign_data_center_scores.rb'
-  ruby_script 'fix_ip_hetzner.rb'
-  ruby_script 'fix_ip_ovh.rb'
-  ruby_script 'fix_ip_webnx.rb'
   ruby_script 'gather_stake_accounts.rb'
 
   runner "AsnLogicWorker.perform_async(network: 'mainnet')"
   runner "AsnLogicWorker.perform_async(network: 'testnet')"
+
+  ruby_script_data_centers 'append_data_centers_geo_data.rb'
+  ruby_script_data_centers 'assign_data_center_scores.rb'
+  ruby_script_data_centers 'fix_data_centers_hetzner.rb'
+  ruby_script_data_centers 'fix_data_centers_ovh.rb'
+  ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
 every 1.day do
@@ -68,7 +71,6 @@ end
 
 every 1.minute do
   ruby_script "add_current_epoch.rb"
-  runner "PingThingWorker.perform_async"
 end
 
 if environment == 'production'

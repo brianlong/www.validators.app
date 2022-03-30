@@ -108,6 +108,7 @@ namespace :daemons do
           execute :systemctl, '--user', :start, :gather_rpc_mainnet
           execute :systemctl, '--user', :start, :gather_rpc_testnet
           execute :systemctl, '--user', :start, :gather_vote_account_details
+          execute :systemctl, '--user', :start, :process_ping_thing
         end
       end
     end
@@ -125,6 +126,7 @@ namespace :daemons do
           execute :systemctl, '--user', :stop, :gather_rpc_mainnet
           execute :systemctl, '--user', :stop, :gather_rpc_testnet
           execute :systemctl, '--user', :stop, :gather_vote_account_details
+          execute :systemctl, '--user', :stop, :process_ping_thing
         end
       end
     end
@@ -142,6 +144,7 @@ namespace :daemons do
           execute :systemctl, '--user', :restart, :gather_rpc_mainnet
           #execute :systemctl, '--user', :restart, :gather_rpc_testnet
           execute :systemctl, '--user', :restart, :gather_vote_account_details
+          execute :systemctl, '--user', :restart, :process_ping_thing
         end
       end
     end

@@ -61,6 +61,27 @@
 #
 class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
+
+  FIELDS_FOR_API = %i[
+    active_stake
+    authorized_withdrawer_score
+    commission
+    data_center_concentration_score
+    delinquent
+    published_information_score
+    root_distance_score
+    security_report_score
+    skipped_slot_score
+    software_version
+    software_version_score
+    stake_concentration_score
+    total_score
+    validator_id
+    vote_distance_score
+  ].freeze
+
+  ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
+
   IP_FIELDS_FOR_API = [
     "address",
     "location_latitude",
@@ -68,31 +89,15 @@ class ValidatorScoreV1 < ApplicationRecord
     "traits_autonomous_system_number"
   ].map{ |e| "ips.#{e}" }.join(", ")
 
-  ATTRIBUTES_FOR_BUILDER = %i[
-    total_score
-    root_distance_score
-    vote_distance_score
-    skipped_slot_score
-    software_version
-    software_version_score
-    stake_concentration_score
-    data_center_concentration_score
-    published_information_score
-    security_report_score
-    active_stake
-    commission
-    delinquent
-    data_center_key
-    data_center_host
-    authorized_withdrawer_score
-  ].freeze
-
   # Touch the related validator to increment the updated_at attribute
-  belongs_to :validator
-  before_save :calculate_total_score
-  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
-
   after_save :create_commission_history, if: :saved_change_to_commission?
+  before_save :calculate_total_score
+  
+  belongs_to :validator
+  has_many :validator_ips, through: :validator
+  has_one :validator_ip_active, through: :validator
+  has_one :data_center, through: :validator
+  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
 
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON
@@ -102,6 +107,8 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_vote_percent_moving_average_history, JSON
   serialize :skipped_slot_moving_average_history, JSON
 
+  delegate :data_center, to: :validator, prefix: true, allow_nil: true
+
   scope :by_network_with_active_stake, ->(network) do
     where(network: network).where('active_stake > 0')
   end
@@ -109,6 +116,8 @@ class ValidatorScoreV1 < ApplicationRecord
   scope :by_data_centers, ->(data_center_keys) do
     where(data_center_key: data_center_keys)
   end
+
+  scope :for_api, -> { select(FIELDS_FOR_API) }
 
   def create_commission_history
     CreateCommissionHistoryService.new(self).call

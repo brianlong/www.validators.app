@@ -10,8 +10,9 @@ class PingThingTest < ActiveSupport::TestCase
       response_time: "234",
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
       transaction_type: "transfer",
-      network: "testnet",
-      user_id: @user.id
+      network: 'testnet',
+      user_id: @user.id,
+      reported_at: DateTime.now
     }
     @ping_thing = build(:ping_thing, user_id: @user.id, success: nil)
   end

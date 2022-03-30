@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_14_123741) do
+ActiveRecord::Schema.define(version: 2022_03_07_163003) do
 
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "asn_stats", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "asn_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.float "average_score"
     t.integer "traits_autonomous_system_number"
     t.datetime "calculated_at"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "batches", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "batches", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "uuid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network"], name: "index_batches_on_network"
   end
 
-  create_table "collectors", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "collectors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "payload_type"
     t.integer "payload_version"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["user_id"], name: "index_collectors_on_user_id"
   end
 
-  create_table "commission_histories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "commission_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.float "commission_before"
     t.float "commission_after"
@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["validator_id"], name: "index_commission_histories_on_validator_id"
   end
 
-  create_table "contact_requests", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "contact_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name_encrypted"
     t.string "email_address_encrypted"
     t.string "telephone_encrypted"
@@ -107,7 +107,15 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "data_centers", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "data_center_hosts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "data_center_id"
+    t.string "host"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["data_center_id", "host"], name: "index_data_center_hosts_on_data_center_id_and_host", unique: true
+  end
+
+  create_table "data_centers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "continent_code"
     t.integer "continent_geoname_id"
     t.string "continent_name"
@@ -123,11 +131,8 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.string "traits_user_type"
     t.integer "traits_autonomous_system_number"
     t.string "traits_autonomous_system_organization"
-    t.string "traits_domain"
     t.string "traits_isp"
     t.string "traits_organization"
-    t.string "traits_ip_address"
-    t.string "traits_network"
     t.integer "city_confidence"
     t.integer "city_geoname_id"
     t.string "city_name"
@@ -145,13 +150,12 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.integer "subdivision_geoname_id"
     t.integer "subdivision_name"
     t.string "data_center_key"
-    t.string "data_center_host"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["data_center_key"], name: "index_data_centers_on_data_center_key"
   end
 
-  create_table "epoch_histories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "epoch_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "batch_uuid"
     t.integer "epoch"
     t.bigint "current_slot"
@@ -163,7 +167,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network", "batch_uuid"], name: "index_epoch_histories_on_network_and_batch_uuid"
   end
 
-  create_table "epoch_wall_clocks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "epoch_wall_clocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "epoch"
     t.string "network"
     t.bigint "starting_slot"
@@ -174,7 +178,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
   end
 
-  create_table "ip_overrides", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "ip_overrides", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "address"
     t.integer "traits_autonomous_system_number"
     t.string "country_iso_code"
@@ -188,7 +192,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["address"], name: "index_ip_overrides_on_address", unique: true
   end
 
-  create_table "ips", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "ips", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "address"
     t.string "continent_code"
     t.integer "continent_geoname_id"
@@ -234,7 +238,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["data_center_key"], name: "index_ips_on_data_center_key"
   end
 
-  create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "request_type"
     t.json "meta_data"
     t.string "name_encrypted"
@@ -251,7 +255,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "raw_data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -259,7 +263,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.string "network"
   end
 
-  create_table "ping_things", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "ping_things", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "amount"
     t.string "signature"
@@ -271,12 +275,14 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.integer "commitment_level"
     t.boolean "success", default: true
     t.string "application"
-    t.index ["network", "transaction_type"], name: "index_ping_things_on_network_and_transaction_type"
-    t.index ["network", "user_id"], name: "index_ping_things_on_network_and_user_id"
+    t.datetime "reported_at"
+    t.index ["created_at", "network", "transaction_type"], name: "index_ping_things_on_created_at_and_network_and_transaction_type"
+    t.index ["created_at", "network", "user_id"], name: "index_ping_things_on_created_at_and_network_and_user_id"
+    t.index ["reported_at", "network"], name: "index_ping_things_on_reported_at_and_network"
     t.index ["user_id"], name: "index_ping_things_on_user_id"
   end
 
-  create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "batch_uuid"
     t.decimal "overall_min_time", precision: 10, scale: 3
     t.decimal "overall_max_time", precision: 10, scale: 3
@@ -288,7 +294,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network", "batch_uuid"], name: "index_ping_time_stats_on_network_and_batch_uuid"
   end
 
-  create_table "ping_times", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "ping_times", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "batch_uuid"
     t.string "network"
     t.string "from_account"
@@ -313,7 +319,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network", "to_ip", "from_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_from_ip_and_created_at"
   end
 
-  create_table "reports", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "network"
     t.string "name"
     t.text "payload", size: :long
@@ -324,7 +330,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network", "name", "created_at"], name: "index_reports_on_network_and_name_and_created_at"
   end
 
-  create_table "sol_prices", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "sol_prices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "exchange"
     t.integer "currency"
     t.integer "epoch_mainnet"
@@ -340,7 +346,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.decimal "average_price", precision: 40, scale: 20
   end
 
-  create_table "stake_account_histories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "stake_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "account_balance"
     t.integer "activation_epoch"
     t.bigint "active_stake"
@@ -368,7 +374,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["withdrawer", "network"], name: "index_stake_account_histories_on_withdrawer_and_network"
   end
 
-  create_table "stake_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "account_balance"
     t.integer "activation_epoch"
     t.bigint "active_stake"
@@ -396,7 +402,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["withdrawer", "network"], name: "index_stake_accounts_on_withdrawer_and_network"
   end
 
-  create_table "stake_pools", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "stake_pools", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "authority"
     t.string "network"
@@ -415,7 +421,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.float "deposit_fee"
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username", null: false
     t.string "encrypted_password", null: false
     t.string "reset_password_token"
@@ -447,7 +453,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  create_table "validator_block_histories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "validator_block_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.integer "epoch"
     t.integer "leader_slots"
@@ -467,7 +473,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
   end
 
-  create_table "validator_block_history_stats", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "validator_block_history_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "batch_uuid"
     t.integer "epoch", unsigned: true
     t.bigint "start_slot", unsigned: true
@@ -482,7 +488,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network", "batch_uuid"], name: "index_validator_block_history_stats_on_network_and_batch_uuid"
   end
 
-  create_table "validator_histories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "validator_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "network"
     t.string "batch_uuid"
     t.string "account"
@@ -509,22 +515,25 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
   end
 
-  create_table "validator_ips", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "validator_ips", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.integer "version", default: 4
     t.string "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "data_center_id"
+    t.bigint "data_center_host_id"
     t.boolean "is_overridden", default: false
+    t.string "traits_domain"
     t.string "traits_ip_address"
     t.string "traits_network"
-    t.index ["data_center_id"], name: "index_validator_ips_on_data_center_id"
+    t.boolean "is_active", default: false
+    t.index ["data_center_host_id"], name: "index_validator_ips_on_data_center_host_id"
+    t.index ["is_active"], name: "index_validator_ips_on_is_active"
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
     t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
   end
 
-  create_table "validator_score_v1s", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "validator_score_v1s", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "validator_id"
     t.integer "total_score"
     t.text "root_distance_history"
@@ -599,7 +608,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["validator_id"], name: "index_validator_score_v2s_on_validator_id"
   end
 
-  create_table "validators", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "validators", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "network"
     t.string "account"
     t.string "name"
@@ -618,7 +627,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 
-  create_table "vote_account_histories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "vote_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "vote_account_id", null: false
     t.integer "commission"
     t.bigint "last_vote"
@@ -638,7 +647,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
     t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"
   end
 
-  create_table "vote_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "vote_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.string "account"
     t.datetime "created_at", precision: 6, null: false
@@ -657,7 +666,7 @@ ActiveRecord::Schema.define(version: 2022_02_14_123741) do
   add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"
   add_foreign_key "validator_block_histories", "validators"
-  add_foreign_key "validator_ips", "data_centers"
+  add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
   add_foreign_key "vote_accounts", "validators"

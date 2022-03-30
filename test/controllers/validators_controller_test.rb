@@ -5,7 +5,13 @@ require "test_helper"
 # ValidatorsControllerTest
 class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @validator = create(:validator, :with_score, :with_score_v2, network: "testnet")
+    @validator = create(
+      :validator, 
+      :with_score,
+      :with_score_v2,
+      :with_data_center_through_validator_ip,
+      network: "testnet"
+    )
     create(:batch, network: "testnet")
   end
 
@@ -46,7 +52,6 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET with incorrect account param redirects to home page" do
     get validator_url(network: "testnet", account: "notexistingaccount")
-
     assert_redirected_to root_url
   end
 end

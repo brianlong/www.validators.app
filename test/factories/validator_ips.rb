@@ -1,7 +1,15 @@
 FactoryBot.define do
   factory :validator_ip do
-    references { "" }
     version { 1 }
-    address { "MyString" }
+    address { Faker::Internet.ip_v4_address  }
+    # address { "MyString" }
+
+    trait :active do 
+      is_active { true }
+    end
+
+    trait :with_data_center do
+      data_center_host
+    end
   end
 end
