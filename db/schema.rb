@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_07_163003) do
+ActiveRecord::Schema.define(version: 2022_03_30_145352) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -598,12 +598,9 @@ ActiveRecord::Schema.define(version: 2022_03_07_163003) do
     t.boolean "delinquent"
     t.string "ip_address"
     t.string "network"
-    t.string "data_center_key"
-    t.string "data_center_host"
     t.decimal "ping_time_avg", precision: 10, scale: 3
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "data_center_key"], name: "index_validator_score_v2s_on_network_and_data_center_key"
     t.index ["total_score"], name: "index_validator_score_v2s_on_total_score"
     t.index ["validator_id"], name: "index_validator_score_v2s_on_validator_id"
   end
