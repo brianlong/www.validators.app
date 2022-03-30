@@ -41,14 +41,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET validator with account param returns validator details" do
-    validator = create(
-      :validator,
-      :with_score,
-      :with_score_v2,
-      :with_data_center_through_validator_ip,
-      network: "testnet"
-    )
-    get validator_url(network: 'testnet', account: validator.account)
+    get validator_path(network: "testnet", account: @validator.account)
     assert_response :success
   end
 
