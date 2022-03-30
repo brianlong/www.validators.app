@@ -41,7 +41,6 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET validator with account param returns validator details" do
-    #get validator_path(network: "testnet", account: @validator.account)
     v = create(
       :validator,
       :with_score,
