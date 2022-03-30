@@ -1,5 +1,13 @@
 @import "variables";
 
+.score-4 {
+  color: $score-purple-high;
+}
+
+.score-3 {
+  color: $score-purple-low;
+}
+
 .score-2 {
   color: $green;
 }

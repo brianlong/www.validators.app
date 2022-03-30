@@ -1,14 +1,32 @@
 module ValidatorsHelper
   def chart_line_color(score)
-    return GREEN if score == 2
-    return BLUE if score == 1
-    LIGHT_GREY
+    case score
+    when 4
+      SPARK_LINE_1
+    when 3
+      SPARK_LINE_3
+    when 2
+      GREEN
+    when 1
+      BLUE
+    else
+      LIGHT_GREY
+    end
   end
 
   def chart_fill_color(score)
-    return GREEN_TRANSPARENT if score == 2
-    return BLUE_TRANSPARENT if score == 1
-    LIGHT_GREY_TRANSPARENT
+    case score
+    when 4
+      SPARK_LINE_1_TRANSPARENT
+    when 3
+      SPARK_LINE_3_TRANSPARENT
+    when 2
+      GREEN_TRANSPARENT
+    when 1
+      BLUE_TRANSPARENT
+    else
+      LIGHT_GREY_TRANSPARENT
+    end
   end
 
   def score_class

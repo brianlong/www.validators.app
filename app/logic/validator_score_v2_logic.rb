@@ -6,7 +6,7 @@ module ValidatorScoreV2Logic
 
   # The constant below defines into how many groups we divide validators for scoring. The first group
   # will be assigned with score 0, the next one with +1, and so on, until we reach the limit of groups.
-  NUMBER_OF_GROUPS = 3
+  NUMBER_OF_GROUPS = 5
 
   # Payload starts with :network & :batch_uuid
   def set_this_batch
