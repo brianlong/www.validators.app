@@ -29,6 +29,9 @@ class PublicController < ApplicationController
 
   def faq
     @title = t('public.faq.title')
+    @groups_number =  ValidatorScoreV2Logic::NUMBER_OF_GROUPS
+    @max_score = ValidatorScoreV2Logic::NUMBER_OF_GROUPS - 1
+    @max_total_score = @max_score * 3 + 5
   end
 
   def terms_of_use

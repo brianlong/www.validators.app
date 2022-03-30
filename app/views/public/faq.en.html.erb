@@ -254,31 +254,47 @@
   <ol class="list-with-numbers">
     <li>
       <strong>Root Block Distance</strong> <br />
-      Validators are divided into 3 equal groups, depending on their performance in current epoch:<br />
-      <i class="fas fa-circle score-2 mr-1"></i> (2 points) means that the&nbsp;validator is in the group of 1/3
-      best validators in current epoch.<br />
-      <i class="fas fa-circle score-1 mr-1"></i> (1 point) means that the&nbsp;validator is in the middle group.<br />
-      <i class="fas fa-circle score-0 mr-1"></i> (0 points) means that the&nbsp;validator is in the last group.
+      Validators are divided into <%= @groups_number %> equal groups, depending on their
+      performance in&nbsp;current epoch:<br />
+      <% score = @max_score %>
+      <% @groups_number.times do |index| %>
+        <% if index == 0 %>
+          <i class="fas fa-circle score-<%= score %> mr-1"></i> (<%= score %> points) means that the&nbsp;validator is in
+          the group of 1/<%= @groups_number %> best validators in current epoch.<br />
+        <% elsif index == (@max_score) %>
+          <i class="fas fa-circle score-<%= score %> mr-1"></i> (<%= score %> points) means that the&nbsp;validator is in
+          the last group.
+        <% else %>
+          <i class="fas fa-circle score-<%= score %> mr-1"></i> (<%= score %> points) means that the&nbsp;validator is in
+          the middle group.<br />
+        <% end %>
+
+        <% score -= 1 %>
+      <% end %>
     </li>
     <li>
       <strong>Vote Distance</strong> <br />
-      The&nbsp;scoring rules are the&nbsp;same as Root Block Distance above. The validators are divided into 3 equal groups, that
-      depend on their performance.
+      The&nbsp;scoring rules are the&nbsp;same as Root Block Distance above. The validators are divided into <%= @groups_number %>
+      equal groups based on their performance.<br />
+      <i class="fas fa-circle score-<%= @max_score %> mr-1"></i> (<%= @max_score %> points) is the&nbsp;highest possible score in this category.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) is the&nbsp;lowest possible score in this category.
     </li>
     <li>
       <strong>Skipped Slot &percnt;</strong> <br />
       For this metric, we track a&nbsp;trailing 24-hour moving average of the&nbsp;skip rate. Validators are then divided into
-      3 equal groups based on their moving average and the&nbsp;scores are assigned in the&nbsp;same manner as for
-      Root Distance Score above.
+      <%= @groups_number %> equal groups based on their moving average and the&nbsp;scores are assigned in the&nbsp;same manner
+      as for Root Distance Score above.<br />
+      <i class="fas fa-circle score-<%= @max_score %> mr-1"></i> (<%= @max_score %> points) is the&nbsp;highest possible score in this category.<br />
+      <i class="fas fa-circle score-0 mr-1"></i> (0 points) is the&nbsp;lowest possible score in this category.
     </li>
   </ol>
   <p>Other metrics remain unchanged.</p>
   <p>
-    The maximum score is currently eleven (11) points:
+    The maximum score is currently <%= @max_total_score.humanize %> (<%= @max_total_score %>) points:
     <span class="text-nowrap">
-      <i class="fas fa-circle score-2" title="Root Distance Score"></i>
-      <i class="fas fa-circle score-2" title="Vote Distance Score"></i>
-      <i class="fas fa-circle score-2" title="Skipped Slot Score"></i>
+      <i class="fas fa-circle score-<%= @max_score %>" title="Root Distance Score"></i>
+      <i class="fas fa-circle score-<%= @max_score %>" title="Vote Distance Score"></i>
+      <i class="fas fa-circle score-<%= @max_score %>" title="Skipped Slot Score"></i>
       <i class="fas fa-circle score-2" title="Published Information Score"></i>
       <i class="fas fa-circle score-2" title="Software Version Score"></i>
       <i class="fas fa-circle score-1" title="Security Report Score"></i>

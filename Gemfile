@@ -153,3 +153,5 @@ gem 'browser'
 
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
+
+gem 'humanize'
