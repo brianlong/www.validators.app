@@ -40,10 +40,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # test "GET validator with account param returns validator details" do
-  #   get validator_path(network: "testnet", account: @validator.account)
-  #   assert_response :success
-  # end
+  test "GET validator with account param returns validator details" do
+    #get validator_path(network: "testnet", account: @validator.account)
+    get "/validators/#{@validator.account}?network=testnet"
+    assert_response :success
+  end
 
   test "GET with old validator format redirects to new URL format" do
     get "/validators/#{@validator.network}/#{@validator.account}"
