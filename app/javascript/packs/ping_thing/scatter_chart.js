@@ -15,8 +15,8 @@ export default {
   },
   data() {
     return {
-      dark_grey: "#979797",
-      chart_line: "#322f3d",
+      dark_grey: "rgb(151, 151, 151)",
+      chart_line: "rgb(50, 47, 61)",
       chart: null
     }
   },

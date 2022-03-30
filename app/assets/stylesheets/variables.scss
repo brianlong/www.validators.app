@@ -1,34 +1,39 @@
 // Colors
 
 // Brand colors:
-$green: #00ce99;
-$purple: #b832c8;
+$green: rgb(0, 206, 153);
+$purple: rgb(184, 50, 200);
+
 // Bootstrap overrides:
-$base-color: #e3e3e3;
+$base-color: rgb(227, 227, 227);
 $link-color: lighten($purple, 28%);
 $link-color-secondary: lighten($link-color, 18%);
-$background-color: #1c1732;
+$background-color: rgb(28, 23, 50);
 $background-color-secondary: lighten($background-color, 7%);
-$background-color-tertiary: #2f163c;
+$background-color-tertiary: rgb(47, 22, 60);
+
 // Other:
-$black: #000;
-$white: #fff;
-$red: #ff5262;
-$orange: #ffc107;
+$black: rgb(0, 0, 0);
+$white: rgb(255, 255, 255);
 $grey-light: darken($base-color, 30%);
 $card-background-color: darken($background-color, 3%);
-$card-border-color: #383351;
+$card-border-color: rgb(56, 51, 81);
 $table-border-color: darken($card-border-color, 5%);
 
-// Scores, charts, alerts:
-$blue: #0091f2;
-$blue-transparent: rgba(0, 145, 242, 0.25);
-$grey: #cacaca;
-$grey-transparent: rgba(202, 202, 202, 0.3);
+// Charts, alerts:
 $green-transparent: rgba(0, 206, 153, 0.4);
-$orange-transparent: rgba(255, 193, 7, 0.4);
-$red-transparent: rgba(255, 82, 98, 0.4);
 
+$blue: rgb(0, 145, 242);
+$blue-transparent: rgba(0, 145, 242, 0.25);
+
+$grey: rgb(202, 202, 202);
+$grey-transparent: rgba(202, 202, 202, 0.3);
+
+$orange: rgb(255, 193, 7);
+$orange-transparent: rgba(255, 193, 7, 0.4);
+
+$red: rgb(255, 82, 98);
+$red-transparent: rgba(255, 82, 98, 0.4);
 
 // Breakpoints
 

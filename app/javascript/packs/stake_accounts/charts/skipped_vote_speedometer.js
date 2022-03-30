@@ -57,7 +57,7 @@ export default {
                   'rgba(0, 145, 242, 0.4)',
                   'rgba(0, 206, 153, 0.55)'
                 ],
-                borderColor: ['#cacaca', '#0091f2', '#00ce99'],
+                borderColor: ['rgb(202, 202, 202)', 'rgb(0, 145, 242)', 'rgb(0, 206, 153)'],
                 borderWidth: 1
             }]
         },
