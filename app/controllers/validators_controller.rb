@@ -35,8 +35,8 @@ class ValidatorsController < ApplicationController
     # flash[:error] = 'Due to an issue with our RPC server pool, the Skipped Slot % data may be inaccurate. I am aware of the problem and working on a solution. Thanks! -- Brian Long'
   end
 
-  # GET /validators_v2
-  # GET /validators_v2.json
+  # GET /validators-v2
+  # GET /validators-v2.json
   def index_v2
     @per = 25
     validators = Validator.where(network: index_params[:network])
