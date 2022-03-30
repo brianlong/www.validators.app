@@ -137,10 +137,10 @@ namespace :daemons do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :validator_score_mainnet_v1
           execute :systemctl, '--user', :restart, :validator_score_mainnet_v2
-          execute :systemctl, '--user', :restart, :validator_score_testnet_v1
-          execute :systemctl, '--user', :restart, :validator_score_testnet_v2
+          #execute :systemctl, '--user', :restart, :validator_score_testnet_v1
+          #execute :systemctl, '--user', :restart, :validator_score_testnet_v2
           execute :systemctl, '--user', :restart, :gather_rpc_mainnet
-          execute :systemctl, '--user', :restart, :gather_rpc_testnet
+          #execute :systemctl, '--user', :restart, :gather_rpc_testnet
           execute :systemctl, '--user', :restart, :gather_vote_account_details
         end
       end
