@@ -169,7 +169,7 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
     assert_equal 123, json.first["response_time"]
   end
 
-  test "GET api_v1_ping_things with with_total_count param, returns pigns and records count" do
+  test "GET api_v1_ping_things with with_total_count param, returns pings and records count" do
     4.times do
       create(:ping_thing, :testnet)
     end

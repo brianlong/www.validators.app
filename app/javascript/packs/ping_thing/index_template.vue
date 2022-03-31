@@ -40,7 +40,7 @@
   export default {
     props: ['network'],
     data () {
-      var api_url = '/api/v1/ping-thing/' + this.network + '?with_total_count=true'
+      var api_url = '/api/v1/ping-thing/' + this.network
       return {
         ping_things: [],
         page: 1,
@@ -50,22 +50,21 @@
     },
     created () {
       var ctx = this
-      axios.get(ctx.api_url)
+      axios.get(ctx.api_url, { params: { with_total_count: true } })
            .then(function(response){
              ctx.ping_things = response.data.ping_things;
              ctx.total_count = response.data.total_count;
            })
     },
     watch: {
-      page: function(){
+      page: function() {
         this.paginate()
       }
     },
     methods: {
       paginate: function(){
         var ctx = this
-        var url = ctx.api_url + '&page=' + ctx.page
-        axios.get(url)
+        axios.get(ctx.api_url, { params: { with_total_count: true, page: ctx.page } })
              .then(response => (
                ctx.ping_things = response.data.ping_things
              ))
