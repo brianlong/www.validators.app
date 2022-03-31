@@ -14,7 +14,7 @@ ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 # set :deploy_to, "/var/www/my_app_name"
 set :deploy_to, "/home/deploy/#{fetch(:application)}"
 
-set :migration_role, :web
+set :migration_role, :db
 set :templated_config_files, []
 
 # Default value for :format is :airbrussh.

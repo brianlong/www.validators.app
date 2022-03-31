@@ -11,7 +11,7 @@ server(
 server(
   '167.99.125.221',
   user: 'deploy',
-  roles: %w[app db background]
+  roles: %w[app background]
 )
 
 # server-based syntax
