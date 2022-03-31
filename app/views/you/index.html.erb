@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="card mb-4">
       <div class="card-content pb-0">
-        <h1 class="card-heading">Your Dashboard</h1>
+        <h1 class="card-heading">My Dashboard</h1>
       </div>
 
       <table class="table table-block-sm mb-0">
@@ -33,17 +33,13 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-6 mb-4">
-    <%= link_to 'Edit Your Details', edit_user_registration_url, class: 'btn btn-md btn-primary' %>
+  <div class="col-sm-6 form-inline">
+    <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary mb-4 mr-2' %>
+    <%= button_to 'Cancel My Account', registration_path(@user),
+                  data: { confirm: 'Are you sure? This operation is irreversible.' }, method: :delete,
+                  class: 'btn btn-sm btn-secondary mb-4 mt-0' %>
   </div>
   <div class="col-sm-6 text-sm-right">
-    <%= button_to 'Cancel my account', registration_path(@user), data: { confirm: 'Are you sure?' }, method: :delete,
-                  class: 'btn btn-md btn-secondary mt-0' %>
+    <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-tertiary mt-0' %>
   </div>
 </div>
-
-<!--
-  <%= link_to :back, class: 'text-muted' do %>
-    <i class="fas fa-arrow-left mr-1 mt-4"></i> Back
-  <% end %>
--->
