@@ -5,7 +5,12 @@ require "test_helper"
 # ValidatorsControllerTest
 class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @validator = create(:validator, :with_score, network: "testnet")
+    @validator = create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip,
+      network: "testnet"
+    )
   end
 
   test "should get index" do
@@ -14,7 +19,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show validator" do
-    validator = create(:validator, :with_score, network: "testnet")
+    validator = create(
+      :validator,
+      :with_score,
+      :with_data_center_through_validator_ip,
+      network: "testnet"
+    )
     get validator_path(network: "testnet", account: validator.account)
     assert_response :success
   end

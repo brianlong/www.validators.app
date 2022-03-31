@@ -33,6 +33,19 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "0.25", json_response["skipped_slot_percent"]
   end
 
+  test "GET api_v1_validator_block_history returns correct data if old url is given" do
+    validator = create(:validator, :with_score, account: "TestAccount")
+    create(:vote_account, validator: validator)
+    create(:validator_block_history, validator: validator)
+
+    get "/api/v1/validator_block_history/testnet/#{validator.account}", headers: { "Token" => @user.api_token }
+
+    json_response = response_to_json(@response.body)
+    
+    assert_response 200
+    assert_equal validator.validator_block_histories.size, json_response.size
+  end
+
   test "GET api_v1_validator_block_history with token returns only validators from chosen network and validator" do
     testnet_validator = create(:validator, account: "Test Account")
     mainnet_validator = create(:validator, :mainnet, account: "Mainnet Account")
