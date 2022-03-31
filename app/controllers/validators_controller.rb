@@ -61,7 +61,7 @@ class ValidatorsController < ApplicationController
     @val_histories = ValidatorHistory.where(
       network: params[:network],
       account: @validator.account
-    ).order(created_at: :asc).last(@history_limit)
+    ).last(@history_limit)
 
     # Grab the distances to show on the chart
     @root_blocks = @val_histories.map(&:root_distance).compact
