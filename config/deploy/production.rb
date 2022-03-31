@@ -3,9 +3,15 @@
 # 'www.validators.app',
 # '104.131.169.171',
 server(
-  '167.99.125.221',
+  '104.131.169.171',
   user: 'deploy',
   roles: %w[web app db]
+)
+
+server(
+  '167.99.125.221',
+  user: 'deploy',
+  roles: %w[web app background]
 )
 
 # server-based syntax
