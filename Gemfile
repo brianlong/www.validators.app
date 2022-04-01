@@ -70,7 +70,7 @@ gem 'capistrano-sidekiq', require: false
 gem 'appsignal'
 
 gem "mechanize", ">= 2.7.7"
-gem 'nokogiri', '1.12.5'
+gem 'nokogiri', '1.13.2'
 
 gem 'kaminari'
 
