@@ -35,6 +35,9 @@ class ValidatorsController < ApplicationController
   # GET /validators/1
   # GET /validators/1.json
   def show
+    time_from = Time.now - 12.hours
+    time_to = Time.now
+
     # Sometimes @validator is nil
     @ping_times = []
     # @ping_times = if @validator.nil?
@@ -50,7 +53,7 @@ class ValidatorsController < ApplicationController
 
     @history_limit = 240
     @block_histories = @validator.validator_block_histories
-                                 .where("created_at BETWEEN ? AND ?", Time.now - 2.hour, Time.now)
+                                 .where("created_at BETWEEN ? AND ?", time_from, time_to)
                                  .order(id: :desc)
                                  .limit(25)
 
@@ -65,8 +68,8 @@ class ValidatorsController < ApplicationController
     @val_histories = ValidatorHistory.where(
       "account = ? AND created_at BETWEEN ? AND ?", 
       @validator.account,
-      Time.now - 12.hours,
-      Time.now
+      time_from,
+      time_to
     ).order(created_at: :asc)
     .limit(@history_limit)
 
@@ -82,7 +85,7 @@ class ValidatorsController < ApplicationController
 
     @validator.validator_block_histories
               .includes(:batch)
-              .where("created_at BETWEEN ? AND ?", Time.now - 12.hour, Time.now)
+              .where("created_at BETWEEN ? AND ?", time_from, time_to)
               .order(id: :desc)
               .limit(@history_limit)
               .reverse
