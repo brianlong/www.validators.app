@@ -35,7 +35,7 @@ class ValidatorsController < ApplicationController
   # GET /validators/1
   # GET /validators/1.json
   def show
-    time_from = Time.now - 12.hours
+    time_from = Time.now - 24.hours
     time_to = Time.now
 
     # Sometimes @validator is nil
