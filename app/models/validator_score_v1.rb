@@ -83,7 +83,7 @@ class ValidatorScoreV1 < ApplicationRecord
     skipped_vote_history
     skipped_slot_moving_average_history
     stake_concentration
-  ]
+  ].freeze
 
   MAX_HISTORY = 2_880
 
