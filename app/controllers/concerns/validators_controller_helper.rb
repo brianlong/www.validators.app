@@ -45,4 +45,11 @@ module ValidatorsControllerHelper
   def validator_score_v1_fields
     ValidatorScoreV1::FIELDS_FOR_API.map { |e| "validator_score_v1s.#{e}" }
   end
+
+  def set_boolean_field(value)
+    true_values = [true, "true", 1, "1"]
+
+    return true if true_values.include?(value) 
+    false 
+  end
 end
