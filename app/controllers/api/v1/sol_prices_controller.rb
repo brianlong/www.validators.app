@@ -4,8 +4,8 @@ module Api
   module V1
     class SolPricesController < BaseController
       def index
-        from = (index_params[:from] || 30.days.ago).to_datetime
-        to = (index_params[:to] || DateTime.now).to_datetime
+        from = (index_params[:from] || 30.days.ago).to_datetime.beginning_of_day
+        to = (index_params[:to] || DateTime.now).to_datetime.end_of_day
 
         if index_params[:exchange]
           if SolPrice::EXCHANGES.include?(index_params[:exchange])
@@ -18,11 +18,9 @@ module Api
           exchange_filter = SolPrice::EXCHANGES
         end
 
-        response ||= SolPrice.order(datetime_from_exchange: :asc)
-                              .where(
-                                datetime_from_exchange: from..to,
-                                exchange: exchange_filter
-                              )
+        response ||= SolPrice.where(datetime_from_exchange: from..to, exchange: exchange_filter)
+                             .order(datetime_from_exchange: :asc)
+
         response_status ||= :ok
 
         render json: response, status: response_status
