@@ -5,7 +5,6 @@ require_relative '../../config/environment'
 require 'json'
 require 'net/http'
 require 'uri'
-require 'maxmind/geoip2'
 
 begin
   interrupted = false
@@ -14,10 +13,7 @@ begin
   verbose = true # Rails.env == 'development'
 
   # Setup the MaxMind client
-  client = MaxMind::GeoIP2::Client.new(
-    account_id: Rails.application.credentials.max_mind[:account_id],
-    license_key: Rails.application.credentials.max_mind[:license_key]
-  )
+  client = MaxMindClient.new
 
   # SQL statement to find un-appended IPs
   sql = "SELECT DISTINCT address
