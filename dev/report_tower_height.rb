@@ -18,10 +18,12 @@ p = Pipeline.new(200, payload)
 
 puts p.inspect
 
-ReportTowerHeightWorker.perform_async(
+params = {
   epoch: p.payload[:epoch],
   batch_uuid: p.payload[:batch_uuid],
   network: p.payload[:network]
-)
+}.stringify_keys
+
+ReportTowerHeightWorker.perform_async(params)
 
 # Now go look in the validators_development DB

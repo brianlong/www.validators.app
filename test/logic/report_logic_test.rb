@@ -44,12 +44,14 @@ class ReportLogicTest < ActiveSupport::TestCase
         ).all
         assert validators.count.positive?
 
+        params = {
+          epoch: p.payload[:epoch],
+          batch_uuid: p.payload[:batch_uuid],
+          network: p.payload[:network]
+        }.stringify_keys
+
         Sidekiq::Testing.inline! do
-          ReportTowerHeightWorker.perform_async(
-            epoch: p.payload[:epoch],
-            batch_uuid: p.payload[:batch_uuid],
-            network: p.payload[:network]
-          )
+          ReportTowerHeightWorker.perform_async(params)
           # sleep(5) # wait for the report
           report = Report.where(
             network: 'testnet',

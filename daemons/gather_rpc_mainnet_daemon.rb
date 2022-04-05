@@ -47,19 +47,16 @@ begin
 
     raise SkipAndSleep, p.code unless p.code == 200
 
-    BuildSkippedSlotPercentWorker.set(queue: :high_priority).perform_async(
-      network: p.payload[:network],
+    common_params = {
       batch_uuid: p.payload[:batch_uuid]
-    )
+      network: p.payload[:network],
+    }.stringify_keys
+
+    BuildSkippedSlotPercentWorker.set(queue: :high_priority).perform_async(common_params)
     ReportTowerHeightWorker.set(queue: :high_priority).perform_async(
-      epoch: p.payload[:epoch],
-      batch_uuid: p.payload[:batch_uuid],
-      network: p.payload[:network]
+      common_params.merge({ epoch: p.payload[:epoch] }).stringify_keys
     )
-    ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(
-      batch_uuid: p.payload[:batch_uuid],
-      network: p.payload[:network]
-    )
+    ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(common_params)
 
     break if interrupted
   rescue SkipAndSleep => e
