@@ -47,7 +47,7 @@ Rails.application.routes.draw do
   end
 
   # SolPrices
-  get 'sol_prices', to:'sol_prices#index'
+  get 'sol-prices', to:'sol_prices#index'
 
   # Stake Pools
   get 'stake-pools', to: 'stake_accounts#index'
