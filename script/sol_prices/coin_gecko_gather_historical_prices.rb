@@ -16,7 +16,7 @@ include PipelineLogic
 # Create our initial payload with the input values
 initial_payload = {
   exchange: SolPrice.exchanges[:coin_gecko],
-  client: SolPrices::ApiWrappers::CoinGecko.new
+  client: ApiClients::CoinGeckoClient.new
 }
 
 p = Pipeline.new(200, initial_payload)

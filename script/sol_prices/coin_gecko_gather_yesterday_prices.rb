@@ -13,7 +13,7 @@ include PipelineLogic
 # Create our initial payload with the input values
 initial_payload = {
   exchange: SolPrice.exchanges[:coin_gecko],
-  client: SolPrices::ApiWrappers::CoinGecko.new,
+  client: ApiClients::CoinGeckoClient.new,
   datetime: DateTime.current.beginning_of_day - 1.day
 }
 
