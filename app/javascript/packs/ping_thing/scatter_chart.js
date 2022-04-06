@@ -1,9 +1,11 @@
+import axios from 'axios'
+import Chart from 'chart.js/auto';
+import { DateTime } from "luxon";
+import 'chartjs-adapter-luxon';
+import '../../lib/chart-financial';
+
 export default {
   props: {
-    vector: {
-      type: Array,
-      required: true
-    },
     fill_color: {
       type: String,
       required: true
@@ -11,20 +13,30 @@ export default {
     line_color: {
       type: String,
       required: true
+    },
+    network: {
+        type: String,
+        required: true
     }
   },
   data() {
     return {
+      ping_thing_stats: null,
       dark_grey: "#979797",
       chart_line: "#322f3d",
       chart: null
     }
   },
-  mounted: function(){
-    this.update_chart()
+  created: function(){
+    var ctx = this
+    axios.get("/api/v1/ping-thing-stats/" + this.network, { params: { interval: 6 } })
+        .then(function(response){
+            ctx.ping_thing_stats = response.data;
+            ctx.update_chart()
+        })
   },
   watch: {
-      'vector': {
+      'ping_thing_stats': {
         handler: function(){
             this.update_chart()
         }
@@ -32,78 +44,88 @@ export default {
   },
   methods: {
     update_chart: function(){
+        var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
+        var max_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['max']) )
+        var min_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['min']) )
+        var labels = this.ping_thing_stats.map( (vector_element, index) => (
+            new Date(vector_element['time_from']).getHours().toString() + ":" + new Date(vector_element['time_from']).getMinutes().toString()
+        ))
+
         if(this.chart){
             this.chart.destroy()
         }
         var ctx = document.getElementById("ping-thing-scatter-chart").getContext('2d');
         this.chart = new Chart(ctx, {
-            type: 'scatter',
-    
-            // The data for our dataset
             data: {
+                labels: labels,
                 datasets: [
                     {
-                        data: this.vector.map( (vector_element, index) => ({ x: index, y: vector_element['response_time'] }) ),
-                        backgroundColor: this.fill_color,
-                        borderColor: this.line_color
-                    }
-                ],
-            },
-    
-            // Configuration options
-            options: {
-                legend: {
-                    display: false,
-                    labels: {
-                        fontColor: this.dark_grey
+                        type: 'line',
+                        label: 'Median',
+                        data: line_data,
+                        backgroundColor: null,
+                        borderColor: '#00CE98',
+                        order: 1,
+                        xAxisID: "line-1"
                     },
-                },
+                    {
+                        type: 'bar',
+                        label: '',
+                        data: min_data,
+                        backgroundColor: "#161228", 
+                        borderColor: this.line_color,
+                        order: 1,
+                        xAxisID: "bar-1"
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Variation',
+                        data: max_data,
+                        backgroundColor: "#AA2EB8",
+                        borderColor: this.line_color,
+                        order: 1,
+                        xAxisID: "bar-2"
+                    }
+                ]
+            },
+            options: {
+                animation: { duration: 0 },
+                elements: { line: { tension: 0 } },
+                hover: { mode: null },
+                tooltips: { enabled: false },
+                responsiveAnimationDuration: 0,
+                legend: { display: false },
                 scales: {
                     xAxes: [{
-                        display: true,
+                        display: false,
                         ticks: { display: false },
                         gridLines: { display: false },
                         scaleLabel: {
-                            display: true,
-                            labelString: "Last " + this.vector.length + " Observations",
-                            fontColor: this.dark_grey
+                            display: false,
+                            labelString: ''
+                        }
+                    },{
+                        display: false,
+                        ticks: { display: false },
+                        gridLines: { display: false },
+                        scaleLabel: {
+                            display: false,
+                            labelString: ''
+                        }
+                    },{
+                        display: false,
+                        ticks: { display: false },
+                        gridLines: { display: false },
+                        scaleLabel: {
+                            display: false,
+                            labelString: ''
                         }
                     }],
-                    yAxes: [{
+                    y: {
                         display: true,
-                        ticks: {
-                            //min: 0,
-                            padding: 10,
-                            callback: function(value, index, values) {
-                                return value.toLocaleString('en-US')
-                            }
-                        },
-                        gridLines: {
-                            display: true,
-                            zeroLineColor: this.chart_line,
-                            color: this.chart_line
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Response Time (ms)',
-                            fontColor: this.dark_grey,
-                            padding: 5
-                        }
-                    }]
-                },
-                elements: {
-                    point: {
-                        radius: 3
+                        gridLines: { display: false },
                     }
-                },
-                tooltips: {
-                    displayColors: false,
-                    callbacks: {
-                        label: function(tooltipItem, data) {
-                            return tooltipItem.yLabel.toLocaleString('en-US').concat(' ms');
-                        },
-                    },
-                },
+                }
             }
         });
     }
