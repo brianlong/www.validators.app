@@ -35,15 +35,15 @@ export default {
         if(this.chart){
             this.chart.destroy()
         }
-        var ctx = document.getElementById("ping-thing-scatter-chart").getContext('2d');
+        var ctx = document.getElementById("ping-thing-bubble-chart").getContext('2d');
         this.chart = new Chart(ctx, {
-            type: 'scatter',
+            type: 'bubble',
     
             // The data for our dataset
             data: {
                 datasets: [
                     {
-                        data: this.vector.map( (vector_element, index) => ({ x: index, y: vector_element['response_time'] }) ),
+                        data: this.vector.map( (vector_element, index) => ({ x: index, y: vector_element['response_time'], z: 1 }) ),
                         backgroundColor: this.fill_color,
                         borderColor: this.line_color
                     }
@@ -109,6 +109,6 @@ export default {
     }
   },
   template: `
-    <canvas :id="'ping-thing-scatter-chart'"></canvas>
+    <canvas :id="'ping-thing-bubble-chart'"></canvas>
 `
 }

@@ -11,14 +11,26 @@ module Api
       def index
         limit = [(index_params[:limit] || 240).to_i, 9999].min
         page = index_params[:page] || 1
+        with_total_count = index_params[:with_total_count].to_s == "true" ? true : false
 
         ping_things = PingThing.where(network: index_params[:network])
                                .includes(:user)
                                .order(reported_at: :desc)
                                .page(page)
                                .per(limit)
+
+        total_count = PingThing.where(network: index_params[:network]).count if with_total_count
+
         json_result = ping_things.map { |pt| create_json_result(pt) }
-        render json: json_result
+
+        if with_total_count
+          render json: {
+            ping_things: json_result,
+            total_count: total_count
+          }, status: :ok
+        else
+          render json: json_result
+        end
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
       rescue StandardError => e
@@ -65,7 +77,7 @@ module Api
       private
 
       def index_params
-        params.permit(:network, :limit, :page)
+        params.permit(:network, :limit, :page, :with_total_count)
       end
 
       def ping_thing_params
