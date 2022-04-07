@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec ruby script/data_centers_scripts/fix_data_centers_hetzner.rb >> /tmp/fix_ip_hetzner.log 2>&1 &
+# RAILS_ENV=production bundle exec ruby script/data_centers_scripts/fix_data_centers_hetzner.rb >> /tmp/fix_data_center_hetzner.log 2>&1 &
 
 require_relative '../../config/environment'
-require_relative '../concerns/NEW_fix_ip_module'
+require_relative '../concerns/fix_data_center_module'
 
 include FixIpModule
 

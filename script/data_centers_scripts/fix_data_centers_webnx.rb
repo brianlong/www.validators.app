@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../config/environment'
-require_relative '../concerns/NEW_fix_ip_module'
+require_relative '../concerns/fix_data_center_module'
 
 include FixIpModule
 
