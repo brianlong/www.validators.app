@@ -40,8 +40,8 @@ begin
     raise SkipAndSleep, p.code unless p.code == 200
 
     common_params = {
-      batch_uuid: p.payload[:batch_uuid]
-      network: p.payload[:network],
+      batch_uuid: p.payload[:batch_uuid],
+      network: p.payload[:network]
     }.stringify_keys
 
     BuildSkippedSlotPercentWorker.perform_async(common_params)
