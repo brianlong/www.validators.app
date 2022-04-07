@@ -58,8 +58,6 @@
 #  index_validator_score_v1s_on_validator_id                 (validator_id)
 #
 class ValidatorScoreV1 < ApplicationRecord
-  MAX_HISTORY = 2_880
-
   FIELDS_FOR_API = %i[
     active_stake
     authorized_withdrawer_score
@@ -77,6 +75,17 @@ class ValidatorScoreV1 < ApplicationRecord
     validator_id
     vote_distance_score
   ].freeze
+
+  HISTORY_FIELDS = %i[
+    root_distance_history
+    vote_distance_history
+    skipped_slot_history
+    skipped_vote_history
+    skipped_slot_moving_average_history
+    stake_concentration
+  ].freeze
+
+  MAX_HISTORY = 2_880
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
 
@@ -285,21 +294,11 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   def to_builder(with_history: false)
-    history_fields = %i[
-      root_distance_history
-      vote_distance_history
-      skipped_slot_history
-      skipped_vote_history
-      skipped_slot_moving_average_history
-      stake_concentration
-      software_version
-    ]
-
     Jbuilder.new do |vs_v1|
       if with_history
         vs_v1.(
           self,
-          *(ATTRIBUTES_FOR_BUILDER + history_fields)
+          *(ATTRIBUTES_FOR_BUILDER + HISTORY_FIELDS)
         )
       else
         vs_v1.(
