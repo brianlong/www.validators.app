@@ -8,7 +8,7 @@ count.times do |n|
   p = PingThing.create(
     user_id: 1,
     amount: 1, signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
-    response_time: rand(10..(100 + n)),
+    response_time: rand((50 + (n % 200))..(100 + (n % 200))),
     transaction_type: "margaryna",
     network: "testnet",
     commitment_level: "finalized",

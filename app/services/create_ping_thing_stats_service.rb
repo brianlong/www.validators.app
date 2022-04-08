@@ -1,6 +1,6 @@
 class CreatePingThingStatsService
 
-  INTERVALS = [6, 12, 24].freeze
+  INTERVALS = [1, 3, 12, 24].freeze
 
   def initialize(time_to: DateTime.now, network: )
     @time_to = time_to
@@ -24,8 +24,6 @@ class CreatePingThingStatsService
           time_from: @time_to - interval.minutes,
           num_of_records: ping_things.count
         )
-
-        puts "#{@time_to} created stat with interval: #{p.interval}, records_count: #{p.num_of_records}, median: #{p.median}"
       end
     end
   end
