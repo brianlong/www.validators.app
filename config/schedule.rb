@@ -73,6 +73,7 @@ end
 
 every 1.minute, roles: [:background] do
   ruby_script "add_current_epoch.rb"
+  runner "PingThingStatsWorker.perform_async"
 end
 
 if environment == 'production'
