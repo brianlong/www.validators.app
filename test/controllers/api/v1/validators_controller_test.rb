@@ -426,6 +426,53 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "1.6.7", json_response["software_version"]
   end
 
+  test "GET api_v1_validator with token and with empty or other than true param with_history does NOT include history" do
+    validator = create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip,
+      account: "Test Account"
+    )
+    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
+    create(:vote_account, validator: validator)
+    create(:report, :build_skipped_slot_percent)
+    
+    required_params = { network: "testnet", account: validator.account }
+
+    ### with_history: nil
+    get api_v1_validator_url(required_params), 
+      headers: { "Token" => @user.api_token }, 
+      params: { with_history: nil }
+
+    json_response = response_to_json(@response.body)
+
+    ValidatorScoreV1::HISTORY_FIELDS.each do |field|
+      assert_nil json_response[field.to_s]
+    end
+
+    ### with_history: integer different than 1
+    get api_v1_validator_url(required_params), 
+      headers: { "Token" => @user.api_token }, 
+      params: { with_history: 2 }
+
+    json_response = response_to_json(@response.body)
+
+    ValidatorScoreV1::HISTORY_FIELDS.each do |field|
+      assert_nil json_response[field.to_s]
+    end
+
+    ### with_history: random string
+    get api_v1_validator_url(required_params), 
+      headers: { "Token" => @user.api_token },
+      params: { with_history: "string" }
+
+    json_response = response_to_json(@response.body)
+
+    ValidatorScoreV1::HISTORY_FIELDS.each do |field|
+      assert_nil json_response[field.to_s]
+    end
+  end
+
   test "GET api_v1_validator with token returns ValidatorNotFound when wrong account provided" do
     get api_v1_validator_url(
       network: "testnet",

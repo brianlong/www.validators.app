@@ -38,8 +38,9 @@ module Api
         raise ValidatorNotFound if @validator.nil?
 
         current_epoch = EpochHistory.last
+        with_history = set_boolean_field(validator_params[:with_history])
 
-        render json: create_json_result(@validator, validator_params[:with_history] || false)
+        render json: create_json_result(@validator, with_history)
       rescue ValidatorNotFound
         render json: { "status" => "Validator Not Found" }, status: 404
       rescue ActionController::ParameterMissing

@@ -35,6 +35,9 @@ class ValidatorsController < ApplicationController
   # GET /validators/1
   # GET /validators/1.json
   def show
+    time_from = Time.now - 24.hours
+    time_to = Time.now
+
     # Sometimes @validator is nil
     @ping_times = []
     # @ping_times = if @validator.nil?
@@ -49,7 +52,11 @@ class ValidatorsController < ApplicationController
     @data = {}
 
     @history_limit = 240
-    @block_histories = @validator.validator_block_histories.order('id desc').limit(25)
+    @block_histories = @validator.validator_block_histories
+                                 .where("created_at BETWEEN ? AND ?", time_from, time_to)
+                                 .order(id: :desc)
+                                 .limit(25)
+
     @block_history_stats = ValidatorBlockHistoryStat.where(
       network: params[:network],
       batch_uuid: @block_histories.pluck(:batch_uuid)
@@ -59,9 +66,12 @@ class ValidatorsController < ApplicationController
 
     @val_history = @validator.validator_history_last
     @val_histories = ValidatorHistory.where(
-      network: params[:network],
-      account: @validator.account
-    ).order(created_at: :asc).last(@history_limit)
+      "account = ? AND created_at BETWEEN ? AND ?", 
+      @validator.account,
+      time_from,
+      time_to
+    ).order(created_at: :asc)
+    .limit(@history_limit)
 
     # Grab the distances to show on the chart
     @root_blocks = @val_histories.map(&:root_distance).compact
@@ -75,7 +85,8 @@ class ValidatorsController < ApplicationController
 
     @validator.validator_block_histories
               .includes(:batch)
-              .order('id desc')
+              .where("created_at BETWEEN ? AND ?", time_from, time_to)
+              .order(id: :desc)
               .limit(@history_limit)
               .reverse
               .each do |vbh|
