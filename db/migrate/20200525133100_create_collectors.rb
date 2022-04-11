@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # CreateCollectors
-class CreateCollectors < ActiveRecord::Migration[6.0]
+class CreateCollectors < ActiveRecord::Migration[6.1]
   def change
     create_table :collectors do |t|
       t.references :user, null: false, foreign_key: true

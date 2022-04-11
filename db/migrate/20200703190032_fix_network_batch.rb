@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FixNetworkBatch < ActiveRecord::Migration[6.0]
+class FixNetworkBatch < ActiveRecord::Migration[6.1]
   def change
     # batches
     add_column :batches, 'network', :string, before: :uuid

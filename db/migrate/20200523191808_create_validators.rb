@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # CreateValidators
-class CreateValidators < ActiveRecord::Migration[6.0]
+class CreateValidators < ActiveRecord::Migration[6.1]
   def change
     create_table :validators do |t|
       t.string :network
