@@ -3,7 +3,15 @@
 class VoteAccountsController < ApplicationController
   before_action :set_vote_account, only: %i[show]
 
-  def show; end
+  def show
+    time_from = Time.now - 24.hours
+    time_to = Time.now
+
+    @vote_account_histories = @vote_account.vote_account_histories
+                                           .where("created_at BETWEEN ? AND ?", time_from, time_to)
+                                           .order(id: :desc)
+                                           .limit(60)
+  end
 
   private
 
