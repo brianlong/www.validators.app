@@ -4,10 +4,16 @@ require 'test_helper'
 
 # VoteAccountsControllerTest
 class VoteAccountsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @validator = create(:validator)
+    @vote_account = create(:vote_account, validator: @validator)
+  end
+
   test 'should get show' do
-    get vote_account_url(
+    get validator_vote_account_url(
       network: 'testnet',
-      account: vote_accounts(:one).account
+      account: @validator.account,
+      vote_account: @vote_account.account
     )
     assert_response :success
   end
