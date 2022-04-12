@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # CreateValidatorIps
-class CreateValidatorIps < ActiveRecord::Migration[6.0]
+class CreateValidatorIps < ActiveRecord::Migration[6.1]
   def change
     create_table :validator_ips do |t|
       t.references :validator, null: false, foreign_key: true

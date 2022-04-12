@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Change :batch_id to :batch_uuid throughout the app
-class ChangeBatchId < ActiveRecord::Migration[6.0]
+class ChangeBatchId < ActiveRecord::Migration[6.1]
   def change
     # ping_time_stats
     remove_index :ping_time_stats, :batch_id
