@@ -16,7 +16,7 @@
     </tr>
     </thead>
     <tbody>
-    <% @vote_account.vote_account_histories.order('id desc').limit(60).each do |vote| %>
+    <% @vote_account_histories.each do |vote| %>
       <tr>
         <td class='text-right'>
           <%= number_with_delimiter vote.credits %><br />
