@@ -45,11 +45,15 @@ export default {
             })
     },
     update_chart: function(){
+        var ctx = this
         var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
         var variation_data = this.ping_thing_stats.map( (vector_element, index) => ([vector_element['max'], vector_element['min']]) )
-        var labels = this.ping_thing_stats.map( (vector_element, index) => (
-            new Date(vector_element['time_from']).getHours().toString() + ":" + new Date(vector_element['time_from']).getMinutes().toString()
-        ))
+        var labels = this.ping_thing_stats.map( function(vector_element) {
+            var hours = new Date(vector_element['time_from']).getHours()
+            var minutes = new Date(vector_element['time_from']).getMinutes()
+            if (minutes < 10) { minutes = "0"+minutes; }
+            return hours + ":" + minutes
+        })
 
         if(this.chart){
             this.chart.destroy()
