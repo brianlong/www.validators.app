@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # CreateValidatorBlockHistories
-class CreateValidatorBlockHistories < ActiveRecord::Migration[6.0]
+class CreateValidatorBlockHistories < ActiveRecord::Migration[6.1]
   def change
     create_table :validator_block_histories do |t|
       t.references :validator, null: false, foreign_key: true

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateContactRequests < ActiveRecord::Migration[6.0]
+class CreateContactRequests < ActiveRecord::Migration[6.1]
   def change
     create_table :contact_requests do |t|
       t.string :name_encrypted

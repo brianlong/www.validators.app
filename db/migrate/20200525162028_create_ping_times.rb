@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # CreatePingTimes
-class CreatePingTimes < ActiveRecord::Migration[6.0]
+class CreatePingTimes < ActiveRecord::Migration[6.1]
   def change
     create_table :ping_times do |t|
       t.string :batch_id

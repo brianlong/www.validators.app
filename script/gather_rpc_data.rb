@@ -30,19 +30,14 @@ p = Pipeline.new(200, payload)
 # puts p.errors
 
 if p.code == 200
-  BuildSkippedSlotPercentWorker.perform_async(
-    network: p.payload[:network],
-    batch_uuid: p.payload[:batch_uuid]
-  )
-  ReportTowerHeightWorker.perform_async(
-    epoch: p.payload[:epoch],
+  common_params = {
     batch_uuid: p.payload[:batch_uuid],
     network: p.payload[:network]
-  )
-  ReportSoftwareVersionWorker.perform_async(
-    batch_uuid: p.payload[:batch_uuid],
-    network: p.payload[:network]
-  )
+  }.stringify_keys
+
+  BuildSkippedSlotPercentWorker.perform_async(common_params)
+  ReportTowerHeightWorker.perform_async(common_params.merge({ epoch: p.payload[:epoch] }).stringify_keys)
+  ReportSoftwareVersionWorker.perform_async(common_params)
 
   # ValidatorScoreV1Worker.perform_async(
   #   network: p.payload[:network],
