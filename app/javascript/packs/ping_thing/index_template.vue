@@ -13,7 +13,7 @@
             first-text="« First"
             last-text="Last »" />
         </div>
-        <scatter-chart fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)" :network="network"/>
+        <stats-chart fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)" :network="network"/>
       </div>
     </div>
 
@@ -31,7 +31,7 @@
 
 <script>
   import axios from 'axios'
-  import bubbleChart from './bubble_chart'
+  import statsChart from './stats_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
 
@@ -74,7 +74,7 @@
       },
     },
     components: {
-      "bubble-chart": bubbleChart,
+      "stats-chart": statsChart,
       "ping-thing-header": pingThingHeader,
       "ping-thing-table": pingThingTable
     }
