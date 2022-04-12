@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePingThingStatsService
 
   INTERVALS = [1, 3, 12, 24].freeze
