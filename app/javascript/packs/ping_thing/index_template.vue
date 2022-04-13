@@ -11,7 +11,7 @@
 
     <div class="card mb-4">
       <div class="card-content">
-        <h3 class="card-heading mb-4">TX Confirmation Time Last Obervations</h3>
+        <h3 class="card-heading mb-4">TX Time Last Obervations</h3>
         <div class="text-center pb-4">
           <b-pagination
               v-model="page"
