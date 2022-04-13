@@ -38,7 +38,7 @@
 
 <script>
   import axios from 'axios'
-  import statsChart from './stats_chart'
+  import statsChart from './stats_chart_2'
   import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
