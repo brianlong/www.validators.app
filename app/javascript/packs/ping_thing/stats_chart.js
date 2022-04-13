@@ -122,15 +122,19 @@ export default {
   },
   template: `
     <div>
-        <div class="row">
-            <div class="col">
-                <a class="btn btn-xs btn-secondary" :class="{active: interval == 1}" @click.prevent="set_interval(1)">1h</a>
-                <a class="btn btn-xs btn-secondary" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
-                <a class="btn btn-xs btn-secondary" :class="{active: interval == 12}" @click.prevent="set_interval(12)">12h</a>
-                <a class="btn btn-xs btn-secondary" :class="{active: interval == 24}" @click.prevent="set_interval(24)">24h</a>
-            </div>
+      <div class="d-inline-block mb-4">
+        <a class="btn btn-xs btn-secondary" href="#">Live</a>
+      </div>
+      <div class="d-inline-block mb-4 float-md-right">
+        <div class="btn-group">
+          <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 1}" @click.prevent="set_interval(1)">1h</a>
+          <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
+          <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 12}" @click.prevent="set_interval(12)">12h</a>
+          <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 24}" @click.prevent="set_interval(24)">24h</a>
         </div>
-        <canvas :id="'ping-thing-scatter-chart'"></canvas>
+      </div>
+      
+      <canvas :id="'ping-thing-scatter-chart'"></canvas>
     </div>
 `
 }
