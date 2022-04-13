@@ -122,10 +122,13 @@ export default {
   },
   template: `
     <div>
+      <!--
       <div class="d-inline-block mb-4">
         <a class="btn btn-xs btn-secondary" href="#">Live</a>
       </div>
-      <div class="d-inline-block mb-4 float-md-right">
+      -->
+      <!--<div class="d-inline-block mb-4 float-md-right">-->
+      <div class="text-center mb-4">
         <div class="btn-group">
           <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 1}" @click.prevent="set_interval(1)">1h</a>
           <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
