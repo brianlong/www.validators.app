@@ -11,7 +11,7 @@ class AsnsController < ApplicationController
     data_center_ids = @data_centers.map { |dc| dc[0] }
     @data_center_keys = @data_centers.map { |dc| dc[1] }.uniq
 
-    render file: "#{Rails.root}/public/404.html", status: 404 if @data_centers.empty?
+    render file: "#{Rails.root}/public/404.html", layout: nil, status: 404 if @data_centers.empty?
 
     @per = 25
 

@@ -406,17 +406,17 @@ ActiveRecord::Schema.define(version: 2022_03_07_163003) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "ticker"
     t.float "manager_fee"
+    t.string "ticker"
     t.float "average_validators_commission"
     t.float "average_delinquent"
     t.float "average_skipped_slots"
     t.float "average_uptime"
     t.integer "average_lifetime"
     t.float "average_score"
-    t.float "average_apy"
     t.float "withdrawal_fee"
     t.float "deposit_fee"
+    t.float "average_apy"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

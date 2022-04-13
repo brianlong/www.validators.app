@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Create the batches table
-class CreateBatches < ActiveRecord::Migration[6.0]
+class CreateBatches < ActiveRecord::Migration[6.1]
   def change
     create_table :batches do |t|
       t.string :uuid
