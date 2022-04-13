@@ -5,7 +5,7 @@
     <div class="card mb-4">
       <div class="card-content">
         <h3 class="card-heading mb-4">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time Stats</h3>
-        <stats-chart fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)" :network="network"/>
+        <stats-chart :network="network"/>
       </div>
     </div>
 
@@ -20,7 +20,7 @@
               first-text="« First"
               last-text="Last »" />
         </div>
-        <bubble-chart :vector="ping_things.slice().reverse()" fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)"/>
+        <bubble-chart :vector="ping_things.slice().reverse()" />
       </div>
     </div>
 

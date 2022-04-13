@@ -6,14 +6,6 @@ import '../../lib/chart-financial';
 
 export default {
   props: {
-    fill_color: {
-      type: String,
-      required: true
-    },
-    line_color: {
-      type: String,
-      required: true
-    },
     network: {
         type: String,
         required: true
@@ -68,10 +60,10 @@ export default {
                         type: 'bar',
                         label: 'Variation',
                         data: variation_data,
-                        backgroundColor: "rgba(170, 46, 184, 0.5)",
-                        borderColor: this.line_color,
+                        backgroundColor: "rgba(221, 154, 229, 0.35)",
+                        borderColor: "transparent",
                         order: 2,
-                        barPercentage: 1.0,
+                        barPercentage: 0.8,
                         categoryPercentage: 1.0,
                         xAxisID: "x1"
                     },
@@ -79,8 +71,9 @@ export default {
                         type: 'line',
                         label: 'Median',
                         data: line_data,
-                        backgroundColor: null,
-                        borderColor: '#00CE98',
+                        backgroundColor: "rgb(0, 206, 153)",
+                        borderColor: "rgb(0, 206, 153)",
+                        borderWidth: 1,
                         order: 1,
                         xAxisID: "x2"
                     }
@@ -103,6 +96,7 @@ export default {
                         display: true,
                         gridLines: { display: false },
                         ticks: {
+                            max: 60000,
                             padding: 10,
                             callback: function(value, index, values) {
                                 return value.toLocaleString('en-US')
