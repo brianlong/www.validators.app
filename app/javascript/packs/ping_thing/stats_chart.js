@@ -90,6 +90,12 @@ export default {
                     x: {
                         display: true,
                         gridLines: { display: false },
+                        ticks: {
+                            minRotation: 0,
+                            maxRotation: 0,
+                            autoSkip: true,
+                            autoSkipPadding: 45
+                        }
                     },
                     y: {
                         display: true,
