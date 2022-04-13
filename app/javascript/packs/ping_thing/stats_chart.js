@@ -60,12 +60,11 @@ export default {
                         type: 'bar',
                         label: 'Variation',
                         data: variation_data,
-                        backgroundColor: "rgba(221, 154, 229, 0.35)",
+                        backgroundColor: "rgba(221, 154, 229, 0.3)",
                         borderColor: "transparent",
                         order: 2,
-                        barPercentage: 0.8,
-                        categoryPercentage: 1.0,
-                        xAxisID: "x1"
+                        barPercentage: 1.0,
+                        categoryPercentage: 0.8,
                     },
                     {
                         type: 'line',
@@ -75,7 +74,7 @@ export default {
                         borderColor: "rgb(0, 206, 153)",
                         borderWidth: 1,
                         order: 1,
-                        xAxisID: "x2"
+                        pointRadius: 3
                     }
                 ]
             },
@@ -88,7 +87,7 @@ export default {
                 scaleShowLabels : false,
                 scaleFontSize: 0,
                 scales: {
-                    x1: {
+                    x: {
                         display: true,
                         gridLines: { display: false },
                     },
