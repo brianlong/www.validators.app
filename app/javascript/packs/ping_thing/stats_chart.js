@@ -53,6 +53,7 @@ export default {
         var ctx = document.getElementById("ping-thing-scatter-chart").getContext('2d');
         Chart.defaults.scale.display = false
         this.chart = new Chart(ctx, {
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [
@@ -64,7 +65,7 @@ export default {
                         borderColor: "transparent",
                         order: 2,
                         barPercentage: 1.0,
-                        categoryPercentage: 0.8,
+                        categoryPercentage: 0.8
                     },
                     {
                         type: 'line',
@@ -81,7 +82,6 @@ export default {
             options: {
                 animation: { duration: 0 },
                 hover: { mode: null },
-                tooltips: { enabled: false },
                 responsiveAnimationDuration: 0,
                 legend: { display: false },
                 scaleShowLabels : false,
@@ -106,6 +106,24 @@ export default {
                             text: 'Response Time (ms)',
                             color: this.dark_grey,
                             padding: 5
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        displayColors: false,
+                        padding: 8,
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                if (tooltipItem.datasetIndex == 0) {
+                                    return "Min: " + tooltipItem.raw[1].toLocaleString('en-US') + " ms,  Max: " + tooltipItem.raw[0].toLocaleString('en-US') + " ms";
+                                } else {
+                                    return "Average: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
+                                }
+                            },
+                            title: function(tooltipItem) {
+                                return null;
+                            },
                         }
                     }
                 }
