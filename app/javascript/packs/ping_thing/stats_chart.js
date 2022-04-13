@@ -80,12 +80,6 @@ export default {
                 ]
             },
             options: {
-                animation: { duration: 0 },
-                hover: { mode: null },
-                responsiveAnimationDuration: 0,
-                legend: { display: false },
-                scaleShowLabels : false,
-                scaleFontSize: 0,
                 scales: {
                     x: {
                         display: true,
