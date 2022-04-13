@@ -49,7 +49,7 @@
 #  vote_distance_score                         :integer
 #  created_at                                  :datetime         not null
 #  updated_at                                  :datetime         not null
-#  validator_id                                :bigint
+#  validator_id                                :integer
 #
 # Indexes
 #
