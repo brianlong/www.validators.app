@@ -108,6 +108,12 @@ export default {
                                 return value.toLocaleString('en-US')
                             }
                         },
+                        title: {
+                            display: true,
+                            text: 'Response Time (ms)',
+                            color: this.dark_grey,
+                            padding: 5
+                        }
                     }
                 }
             }
