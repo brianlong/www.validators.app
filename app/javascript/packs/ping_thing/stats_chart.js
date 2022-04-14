@@ -61,18 +61,18 @@ export default {
                         type: 'bar',
                         label: 'Variation',
                         data: variation_data,
-                        backgroundColor: "rgba(221, 154, 229, 0.25)",
+                        backgroundColor: "rgba(221, 154, 229, 0.4)",
                         borderColor: "transparent",
                         order: 2,
                         barPercentage: 1.0,
-                        categoryPercentage: 0.8
+                        categoryPercentage: 0.15
                     },
                     {
                         type: 'line',
                         label: 'Median',
                         data: line_data,
                         backgroundColor: "rgb(0, 206, 153)",
-                        borderColor: "rgb(0, 206, 153)",
+                        borderColor: "transparent",
                         borderWidth: 1,
                         order: 1,
                         pointRadius: 3
@@ -125,7 +125,7 @@ export default {
                                 return null;
                             },
                         }
-                    }
+                    },
                 }
             }
         });
