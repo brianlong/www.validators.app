@@ -39,6 +39,8 @@ class PingThing < ApplicationRecord
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
 
+  after_create :update_stats_if_present
+
   def to_builder
     Jbuilder.new do |ping_thing|
       ping_thing.(
@@ -54,5 +56,10 @@ class PingThing < ApplicationRecord
         :reported_at
       )
     end
+  end
+
+  def update_stats_if_present
+    stats = PingThingStat.by_network(network).including_date(reported_at)
+    stats.each(&:recalculate)
   end
 end
