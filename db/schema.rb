@@ -329,43 +329,6 @@ ActiveRecord::Schema.define(version: 2022_04_05_100027) do
     t.index ["network", "to_ip", "from_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_from_ip_and_created_at"
   end
 
-  create_table "ping_time_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "batch_uuid"
-    t.decimal "overall_min_time", precision: 10, scale: 3
-    t.decimal "overall_max_time", precision: 10, scale: 3
-    t.decimal "overall_average_time", precision: 10, scale: 3
-    t.datetime "observed_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "network"
-    t.index ["network", "batch_uuid"], name: "index_ping_time_stats_on_network_and_batch_uuid"
-  end
-
-  create_table "ping_times", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "batch_uuid"
-    t.string "network"
-    t.string "from_account"
-    t.string "from_ip"
-    t.string "to_account"
-    t.string "to_ip"
-    t.decimal "min_ms", precision: 10, scale: 3
-    t.decimal "avg_ms", precision: 10, scale: 3
-    t.decimal "max_ms", precision: 10, scale: 3
-    t.decimal "mdev", precision: 10, scale: 3
-    t.datetime "observed_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "batch_uuid"], name: "index_ping_times_on_network_and_batch_uuid"
-    t.index ["network", "from_account", "created_at"], name: "index_ping_times_on_network_and_from_account_and_created_at"
-    t.index ["network", "from_account", "to_account", "created_at"], name: "ndx_network_from_to_account"
-    t.index ["network", "from_ip", "created_at"], name: "index_ping_times_on_network_and_from_ip_and_created_at"
-    t.index ["network", "from_ip", "to_ip", "created_at"], name: "index_ping_times_on_network_and_from_ip_and_to_ip_and_created_at"
-    t.index ["network", "to_account", "created_at"], name: "index_ping_times_on_network_and_to_account_and_created_at"
-    t.index ["network", "to_account", "from_account", "created_at"], name: "ndx_network_to_from_account"
-    t.index ["network", "to_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_created_at"
-    t.index ["network", "to_ip", "from_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_from_ip_and_created_at"
-  end
-
   create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "network"
     t.string "name"
@@ -671,9 +634,6 @@ ActiveRecord::Schema.define(version: 2022_04_05_100027) do
     t.index ["validator_id"], name: "index_vote_accounts_on_validator_id"
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "collectors", "users"
-  add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
