@@ -22,7 +22,7 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
 
   test 'commission histories are added correctly' do
     refute CommissionHistory.exists?
-    load(Rails.root.join('script', 'back_fill_commission_history.rb'))
+    load(Rails.root.join('script', 'one_time_scripts', 'back_fill_commission_history.rb'))
     assert_equal 5, CommissionHistory.count
     assert_equal [10.0, 16.0, 10.0, 13.0, 10.0], CommissionHistory.pluck(:commission_after)
     assert_equal [19.0, 10.0, 16.0, 10.0, 13.0], CommissionHistory.pluck(:commission_before)
