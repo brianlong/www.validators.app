@@ -37,7 +37,6 @@ export default {
             })
     },
     update_chart: function(){
-        var ctx = this
         var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
         var variation_data = this.ping_thing_stats.map( (vector_element, index) => ([vector_element['max'], vector_element['min']]) )
         var labels = this.ping_thing_stats.map( function(vector_element) {
