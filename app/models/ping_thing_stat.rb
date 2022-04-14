@@ -19,7 +19,7 @@ class PingThingStat < ApplicationRecord
 
   scope :by_network, -> (network) { where(network: network) } 
 
-  def self.including_date(pt_time)
+  def self.between_time_range(pt_time)
     query = ":t BETWEEN ping_thing_stats.time_from 
                 AND DATE_ADD(ping_thing_stats.time_from, INTERVAL ping_thing_stats.interval MINUTE)"
     where(query, t: pt_time)

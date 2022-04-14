@@ -40,11 +40,11 @@ class PingThingStatTest < ActiveSupport::TestCase
     assert_equal [true], reported_ats.map{ |r_at| r_at <= stat.time_from + stat.interval.minutes }.uniq
   end
 
-  test "self.including_date returns correct ping thing stats" do
+  test "self.between_time_range returns correct ping thing stats" do
     stat = create(:ping_thing_stat, network: @network, interval: 3, time_from: 4.minutes.ago)
 
-    assert_equal stat.id, PingThingStat.including_date(3.minutes.ago).pluck(:id).first
-    refute PingThingStat.including_date(5.minutes.ago).exists?
-    refute PingThingStat.including_date(DateTime.now).exists?
+    assert_equal stat.id, PingThingStat.between_time_range(3.minutes.ago).pluck(:id).first
+    refute PingThingStat.between_time_range(5.minutes.ago).exists?
+    refute PingThingStat.between_time_range(DateTime.now).exists?
   end
 end

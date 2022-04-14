@@ -59,7 +59,7 @@ class PingThing < ApplicationRecord
   end
 
   def update_stats_if_present
-    stats = PingThingStat.by_network(network).including_date(reported_at)
+    stats = PingThingStat.by_network(network).between_time_range(reported_at)
     stats.each(&:recalculate)
   end
 end
