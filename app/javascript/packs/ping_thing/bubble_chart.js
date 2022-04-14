@@ -4,14 +4,6 @@ export default {
       type: Array,
       required: true
     },
-    fill_color: {
-      type: String,
-      required: true
-    },
-    line_color: {
-      type: String,
-      required: true
-    }
   },
   data() {
     return {
@@ -44,8 +36,8 @@ export default {
                 datasets: [
                     {
                         data: this.vector.map( (vector_element, index) => ({ x: index, y: vector_element['response_time'], z: 1 }) ),
-                        backgroundColor: this.fill_color,
-                        borderColor: this.line_color
+                        backgroundColor: "rgba(221, 154, 229, 0.4)",
+                        borderColor: "rgb(221, 154, 229)"
                     }
                 ],
             },
@@ -73,6 +65,7 @@ export default {
                         display: true,
                         ticks: {
                             //min: 0,
+                            max: 60000,
                             padding: 10,
                             callback: function(value, index, values) {
                                 return value.toLocaleString('en-US')

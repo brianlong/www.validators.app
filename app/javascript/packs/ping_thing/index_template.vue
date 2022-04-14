@@ -4,15 +4,23 @@
 
     <div class="card mb-4">
       <div class="card-content">
-        <h3 class="card-heading">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time (stats)</h3>
-        <stats-chart fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)" :network="network"/>
+        <h3 class="card-heading mb-4">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time Stats</h3>
+        <stats-chart :network="network"/>
       </div>
     </div>
 
     <div class="card mb-4">
       <div class="card-content">
-        <h3 class="card-heading">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time (last observed)</h3>
-        <bubble-chart :vector="ping_things.slice().reverse()" fill_color="rgba(221, 154, 229, 0.4)" line_color="rgb(221, 154, 229)"/>
+        <h3 class="card-heading mb-4">TX Time Last Obervations</h3>
+        <div class="text-center pb-4">
+          <b-pagination
+              v-model="page"
+              :total-rows="total_count"
+              :per-page="240"
+              first-text="« First"
+              last-text="Last »" />
+        </div>
+        <bubble-chart :vector="ping_things.slice().reverse()" />
       </div>
     </div>
 
