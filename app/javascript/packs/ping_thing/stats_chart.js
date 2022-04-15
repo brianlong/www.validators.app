@@ -4,6 +4,8 @@ import { DateTime } from "luxon";
 import 'chartjs-adapter-luxon';
 import '../../lib/chart-financial';
 
+var moment = require('moment');
+
 export default {
   props: {
     network: {
@@ -39,12 +41,9 @@ export default {
     update_chart: function(){
         var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
         var variation_data = this.ping_thing_stats.map( (vector_element, index) => ([vector_element['max'], vector_element['min']]) )
-        var labels = this.ping_thing_stats.map( function(vector_element) {
-            var hours = new Date(vector_element['time_from']).getUTCHours()
-            var minutes = new Date(vector_element['time_from']).getMinutes()
-            if (minutes < 10) { minutes = "0"+minutes; }
-            return hours + ":" + minutes
-        })
+        var labels = this.ping_thing_stats.map( (vector_element) => (
+            moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
+        ))
 
         if(this.chart){
             this.chart.destroy()
