@@ -67,7 +67,7 @@ set :sidekiq_config, File.join(current_path, 'config', 'sidekiq.yml').to_s
 
 # Whenver/crontab config
 # Must contain all roles used in config/schedule.rb
-set :whenever_roles, ["web", "background"]
+set :whenever_roles, ["background"] # ["web", "background"]
 
 namespace :sidekiq do
   desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
