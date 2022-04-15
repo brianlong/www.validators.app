@@ -117,7 +117,7 @@ export default {
                                 if (tooltipItem.datasetIndex == 0) {
                                     return "Min: " + tooltipItem.raw[1].toLocaleString('en-US') + " ms,  Max: " + tooltipItem.raw[0].toLocaleString('en-US') + " ms";
                                 } else {
-                                    return "Average: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
+                                    return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
                                 }
                             },
                             title: function(tooltipItem) {
