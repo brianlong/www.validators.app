@@ -107,6 +107,10 @@ export default {
                         }
                     }
                 },
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
                 plugins: {
                     tooltip: {
                         displayColors: false,
