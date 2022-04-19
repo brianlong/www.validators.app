@@ -66,7 +66,6 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 set :whenever_roles, ["background"] # ["web", "background"]
 
 namespace :deploy do
-  #after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'sidekiq:restart'
   after :restart, 'rake_task:add_stake_pool'
   after :restart, 'deamons:restart'
@@ -76,14 +75,22 @@ namespace :sidekiq do
   desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
   task :stop do
     on roles :app do
-      execute :systemctl, '--user', :stop, :sidekiq
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :sidekiq
+        end
+      end
     end
   end
 
   desc 'Start sidekiq'
   task :start do
     on roles :app do
-      execute :systemctl, '--user', :start, :sidekiq
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :sidekiq
+        end
+      end
     end
   end
 
@@ -143,7 +150,6 @@ namespace :deamons do
           execute :systemctl, '--user', :restart, :gather_rpc_testnet
           execute :systemctl, '--user', :restart, :gather_vote_account_details
           execute :systemctl, '--user', :restart, :process_ping_thing
-          execute :systemctl, '--user', :restart, :sidekiq
         end
       end
     end
