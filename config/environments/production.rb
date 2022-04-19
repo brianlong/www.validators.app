@@ -127,6 +127,8 @@ Rails.application.configure do
     password: Rails.application.credentials.email_password
   }
   config.action_mailer.default_url_options = { host: 'www.validators.app' }
+
+  config.action_cable.allowed_request_origins = ["https://stage.validators.app", "https://validators.app"]
 end
 
 Rails.application.routes.default_url_options = {
