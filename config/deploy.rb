@@ -61,10 +61,6 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-# SIDEKIQ CONFIG
-set :sidekiq_role, :app
-set :sidekiq_config, File.join(current_path, 'config', 'sidekiq.yml').to_s
-
 # Whenver/crontab config
 # Must contain all roles used in config/schedule.rb
 set :whenever_roles, ["background"] # ["web", "background"]
@@ -73,21 +69,21 @@ namespace :sidekiq do
   desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
   task :stop do
     on roles :app do
-      execute :systemctl, '--user', 'stop', :sidekiq
+      execute :systemctl, '--user', :stop, :sidekiq
     end
   end
 
   desc 'Start sidekiq'
   task :start do
     on roles :app do
-      execute :systemctl, '--user', 'start', :sidekiq
+      execute :systemctl, '--user', :start, :sidekiq
     end
   end
 
   desc 'Restart sidekiq'
   task :restart do
     on roles :app, in: :sequence, wait: 5 do
-      execute :systemctl, '--user', 'restart', :sidekiq
+      execute :systemctl, '--user', :restart, :sidekiq
     end
   end
 end
