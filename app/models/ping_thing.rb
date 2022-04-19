@@ -41,6 +41,8 @@ class PingThing < ApplicationRecord
  
   after_create :update_stats_if_present, :broadcast
 
+  after_create :update_stats_if_present
+
   def to_builder
     Jbuilder.new do |ping_thing|
       ping_thing.(
