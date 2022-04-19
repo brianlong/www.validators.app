@@ -66,10 +66,10 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 set :whenever_roles, ["background"] # ["web", "background"]
 
 namespace :deploy do
-  after :finishing, 'sidekiq:restart'
   #after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'rake_task:add_stake_pool'
   after :restart, 'deamons:restart'
+  after :restart, 'sidekiq:restart'
 end
 
 namespace :sidekiq do
