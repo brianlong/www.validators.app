@@ -109,6 +109,7 @@ group :development do
   gem 'annotate'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
+  gem 'puma'
 end
 
 group :test do

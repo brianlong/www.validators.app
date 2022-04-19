@@ -39,6 +39,8 @@ class PingThing < ApplicationRecord
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
 
+  after_create :broadcast_to_channel
+
   def to_builder
     Jbuilder.new do |ping_thing|
       ping_thing.(
@@ -54,5 +56,17 @@ class PingThing < ApplicationRecord
         :reported_at
       )
     end
+  end
+
+  def broadcast_to_channel
+    puts "broadcasting ... "
+    hash = {}
+    hash.merge!(self.to_builder.attributes!)
+    hash.merge!(self.user.to_builder.attributes!)
+
+    ActionCable.server.broadcast(
+      "ping_thing_channel",
+      hash
+    )
   end
 end
