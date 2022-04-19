@@ -14,6 +14,11 @@ export default {
   },
   mounted: function(){
     this.update_chart()
+
+    this.$cable.subscribe({
+        channel: "PingThingChannel",
+        room: "public",
+      });
   },
   watch: {
       'vector': {
@@ -21,6 +26,21 @@ export default {
             this.update_chart()
         }
       }
+  },
+  channels: {
+    PingThingChannel: {
+      connected() {
+          console.log("connected to PingThings")
+      },
+      rejected() {},
+      received(data) {
+        console.log(data)
+        this.vector.push(data)
+        this.vector.shift()
+        this.update_chart()
+      },
+      disconnected() {},
+    },
   },
   methods: {
     update_chart: function(){
@@ -44,6 +64,7 @@ export default {
     
             // Configuration options
             options: {
+                animation: false,
                 legend: {
                     display: false,
                     labels: {
