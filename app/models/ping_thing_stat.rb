@@ -17,7 +17,9 @@
 #
 class PingThingStat < ApplicationRecord
 
-  scope :by_network, -> (network) { where(network: network) } 
+  scope :by_network, -> (network) { where(network: network) }
+
+  after_create :broadcast
 
   def self.between_time_range(pt_time)
     query = ":t BETWEEN ping_thing_stats.time_from 
@@ -42,5 +44,9 @@ class PingThingStat < ApplicationRecord
       network: self.network,
       reported_at: (time_from..(time_from + interval.minutes))
     )
+  end
+
+  def broadcast
+    ActionCable.server.broadcast("ping_thing_stat_channel", self.to_json)
   end
 end
