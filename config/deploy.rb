@@ -69,7 +69,7 @@ namespace :deploy do
   #after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'rake_task:add_stake_pool'
   after :restart, 'deamons:restart'
-  after :restart, 'sidekiq:restart'
+  #after :restart, 'sidekiq:restart'
 end
 
 namespace :sidekiq do
@@ -139,6 +139,7 @@ namespace :deamons do
           execute :systemctl, '--user', :restart, :gather_rpc_testnet
           execute :systemctl, '--user', :restart, :gather_vote_account_details
           execute :systemctl, '--user', :restart, :process_ping_thing
+          execute :systemctl, '--user', :restart, :sidekiq
         end
       end
     end
