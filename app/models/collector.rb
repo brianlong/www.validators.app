@@ -22,10 +22,6 @@
 #
 #  index_collectors_on_user_id  (user_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users.id)
-#
 class Collector < ApplicationRecord
   validates :payload_type, presence: true
   validates :payload_version, presence: true

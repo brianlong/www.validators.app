@@ -38,8 +38,8 @@ class PingThing < ApplicationRecord
   validates_length_of :application, maximum: 80, allow_blank: true
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
-
-  after_create :broadcast_to_channel
+ 
+  after_create :update_stats_if_present, :broadcast_to_channel
 
   def to_builder
     Jbuilder.new do |ping_thing|
@@ -68,5 +68,10 @@ class PingThing < ApplicationRecord
       "ping_thing_channel",
       hash
     )
+  end
+  
+  def update_stats_if_present
+    stats = PingThingStat.by_network(network).between_time_range(reported_at)
+    stats.each(&:recalculate)
   end
 end

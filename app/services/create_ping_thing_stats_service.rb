@@ -4,7 +4,7 @@ class CreatePingThingStatsService
 
   INTERVALS = [1, 3, 12, 24].freeze
 
-  def initialize(time_to: DateTime.now, network: )
+  def initialize(time_to: DateTime.now, network: "mainnet")
     @time_to = time_to
     @network = network
   end

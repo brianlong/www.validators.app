@@ -4,16 +4,10 @@ import { DateTime } from "luxon";
 import 'chartjs-adapter-luxon';
 import '../../lib/chart-financial';
 
+var moment = require('moment');
+
 export default {
   props: {
-    fill_color: {
-      type: String,
-      required: true
-    },
-    line_color: {
-      type: String,
-      required: true
-    },
     network: {
         type: String,
         required: true
@@ -45,15 +39,11 @@ export default {
             })
     },
     update_chart: function(){
-        var ctx = this
         var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
         var variation_data = this.ping_thing_stats.map( (vector_element, index) => ([vector_element['max'], vector_element['min']]) )
-        var labels = this.ping_thing_stats.map( function(vector_element) {
-            var hours = new Date(vector_element['time_from']).getHours()
-            var minutes = new Date(vector_element['time_from']).getMinutes()
-            if (minutes < 10) { minutes = "0"+minutes; }
-            return hours + ":" + minutes
-        })
+        var labels = this.ping_thing_stats.map( (vector_element) => (
+            moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
+        ))
 
         if(this.chart){
             this.chart.destroy()
@@ -61,6 +51,7 @@ export default {
         var ctx = document.getElementById("ping-thing-scatter-chart").getContext('2d');
         Chart.defaults.scale.display = false
         this.chart = new Chart(ctx, {
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [
@@ -68,47 +59,71 @@ export default {
                         type: 'bar',
                         label: 'Variation',
                         data: variation_data,
-                        backgroundColor: "rgba(170, 46, 184, 0.5)",
-                        borderColor: this.line_color,
+                        backgroundColor: "rgba(221, 154, 229, 0.4)",
+                        borderColor: "transparent",
                         order: 2,
                         barPercentage: 1.0,
-                        categoryPercentage: 1.0,
-                        xAxisID: "x1"
+                        categoryPercentage: 0.15
                     },
                     {
                         type: 'line',
                         label: 'Median',
                         data: line_data,
-                        backgroundColor: null,
-                        borderColor: '#00CE98',
+                        backgroundColor: "rgb(0, 206, 153)",
+                        borderColor: "transparent",
+                        borderWidth: 1,
                         order: 1,
-                        xAxisID: "x2"
+                        pointRadius: 3
                     }
                 ]
             },
             options: {
-                animation: { duration: 0 },
-                hover: { mode: null },
-                tooltips: { enabled: false },
-                responsiveAnimationDuration: 0,
-                legend: { display: false },
-                scaleShowLabels : false,
-                scaleFontSize: 0,
                 scales: {
-                    x1: {
+                    x: {
                         display: true,
                         gridLines: { display: false },
+                        ticks: {
+                            minRotation: 0,
+                            maxRotation: 0,
+                            autoSkip: true,
+                            autoSkipPadding: 45
+                        }
                     },
                     y: {
                         display: true,
                         gridLines: { display: false },
                         ticks: {
+                            max: 60000,
                             padding: 10,
                             callback: function(value, index, values) {
                                 return value.toLocaleString('en-US')
                             }
                         },
+                        title: {
+                            display: true,
+                            text: 'Response Time (ms)',
+                            color: this.dark_grey,
+                            padding: 5
+                        }
                     }
+                },
+                plugins: {
+                    tooltip: {
+                        displayColors: false,
+                        padding: 8,
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                if (tooltipItem.datasetIndex == 0) {
+                                    return "Min: " + tooltipItem.raw[1].toLocaleString('en-US') + " ms,  Max: " + tooltipItem.raw[0].toLocaleString('en-US') + " ms";
+                                } else {
+                                    return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
+                                }
+                            },
+                            title: function(tooltipItem) {
+                                return null;
+                            },
+                        }
+                    },
                 }
             }
         });
@@ -116,15 +131,22 @@ export default {
   },
   template: `
     <div>
-        <div class="row">
-            <div class="col">
-                <a class="btn btn-xs btn-secondary" :class="{active: interval == 1}" @click.prevent="set_interval(1)">1h</a>
-                <a class="btn btn-xs btn-secondary" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
-                <a class="btn btn-xs btn-secondary" :class="{active: interval == 12}" @click.prevent="set_interval(12)">12h</a>
-                <a class="btn btn-xs btn-secondary" :class="{active: interval == 24}" @click.prevent="set_interval(24)">24h</a>
-            </div>
+      <!--
+      <div class="d-inline-block mb-4">
+        <a class="btn btn-xs btn-secondary" href="#">Live</a>
+      </div>
+      -->
+      <!--<div class="d-inline-block mb-4 float-md-right">-->
+      <div class="text-center mb-4">
+        <div class="btn-group">
+          <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 1}" @click.prevent="set_interval(1)">1h</a>
+          <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
+          <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 12}" @click.prevent="set_interval(12)">12h</a>
+          <a class="btn btn-xs btn-secondary nav-link" :class="{active: interval == 24}" @click.prevent="set_interval(24)">24h</a>
         </div>
-        <canvas :id="'ping-thing-scatter-chart'"></canvas>
+      </div>
+      
+      <canvas :id="'ping-thing-scatter-chart'"></canvas>
     </div>
 `
 }
