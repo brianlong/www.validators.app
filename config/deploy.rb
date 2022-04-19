@@ -65,6 +65,13 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 # Must contain all roles used in config/schedule.rb
 set :whenever_roles, ["background"] # ["web", "background"]
 
+namespace :deploy do
+  after :finishing, 'sidekiq:restart'
+  #after :finishing, 'deploy:restart', 'deploy:cleanup'
+  after :restart, 'rake_task:add_stake_pool'
+  after :restart, 'deamons:restart'
+end
+
 namespace :sidekiq do
   desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
   task :stop do
@@ -86,13 +93,6 @@ namespace :sidekiq do
       execute :systemctl, '--user', :restart, :sidekiq
     end
   end
-end
-
-namespace :deploy do
-  after :finishing, 'sidekiq:restart'
-  after :finishing, 'deploy:restart', 'deploy:cleanup'
-  after :restart, 'rake_task:add_stake_pool'
-  after :restart, 'deamons:restart'
 end
 
 namespace :deamons do
