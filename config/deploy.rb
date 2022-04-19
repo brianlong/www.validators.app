@@ -93,8 +93,8 @@ namespace :sidekiq do
 end
 
 namespace :deploy do
-  after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :finishing, 'sidekiq:restart'
+  after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :restart, 'rake_task:add_stake_pool'
   after :restart, 'deamons:restart'
 end
