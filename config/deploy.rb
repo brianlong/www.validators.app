@@ -96,10 +96,10 @@ namespace :deploy do
   after :finishing, 'deploy:restart', 'deploy:cleanup'
   after :finishing, 'sidekiq:restart'
   after :restart, 'rake_task:add_stake_pool'
-  after :restart, 'background:restart'
+  after :restart, 'deamons:restart'
 end
 
-namespace :background do
+namespace :deamons do
   desc 'Start background'
   task :start do
     on roles :background do
