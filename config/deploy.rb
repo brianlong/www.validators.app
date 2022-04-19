@@ -94,7 +94,7 @@ end
 
 namespace :deploy do
   after :finishing, 'deploy:restart', 'deploy:cleanup'
-  after :restart, 'sidekiq:restart'
+  after :finishing, 'sidekiq:restart'
   after :restart, 'rake_task:add_stake_pool'
   after :restart, 'background:restart'
 end
