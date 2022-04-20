@@ -56,7 +56,6 @@ export default {
                 labels: labels,
                 datasets: [
                     {
-                        type: 'bar',
                         label: 'Variation',
                         data: variation_data,
                         backgroundColor: "rgba(221, 154, 229, 0.4)",
@@ -79,7 +78,7 @@ export default {
             },
             options: {
                 scales: {
-                    x: {
+                    xAxes: {
                         display: true,
                         gridLines: { display: false },
                         ticks: {
@@ -89,10 +88,11 @@ export default {
                             autoSkipPadding: 45
                         }
                     },
-                    y: {
+                    yAxes: {
                         display: true,
                         gridLines: { display: false },
                         ticks: {
+                            min: 0,
                             max: 60000,
                             padding: 10,
                             callback: function(value, index, values) {
