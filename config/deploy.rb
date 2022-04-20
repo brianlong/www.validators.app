@@ -61,45 +61,52 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-# SIDEKIQ CONFIG
-set :sidekiq_role, :app
-set :sidekiq_config, File.join(current_path, 'config', 'sidekiq.yml').to_s
-
 # Whenver/crontab config
 # Must contain all roles used in config/schedule.rb
 set :whenever_roles, ["background"] # ["web", "background"]
+
+namespace :deploy do
+  after :restart, 'sidekiq:restart'
+  after :restart, 'rake_task:add_stake_pool'
+  after :restart, 'deamons:restart'
+end
 
 namespace :sidekiq do
   desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
   task :stop do
     on roles :app do
-      execute :systemctl, '--user', 'stop', :sidekiq
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :sidekiq
+        end
+      end
     end
   end
 
   desc 'Start sidekiq'
   task :start do
     on roles :app do
-      execute :systemctl, '--user', 'start', :sidekiq
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :sidekiq
+        end
+      end
     end
   end
 
   desc 'Restart sidekiq'
   task :restart do
-    on roles :app, in: :sequence, wait: 5 do
-      execute :systemctl, '--user', 'restart', :sidekiq
+    on roles :app do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :restart, :sidekiq
+        end
+      end
     end
   end
 end
 
-namespace :deploy do
-  after :finishing, 'deploy:restart', 'deploy:cleanup'
-  after :restart, 'sidekiq:restart'
-  after :restart, 'rake_task:add_stake_pool'
-  after :restart, 'background:restart'
-end
-
-namespace :background do
+namespace :deamons do
   desc 'Start background'
   task :start do
     on roles :background do

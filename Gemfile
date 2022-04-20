@@ -64,7 +64,6 @@ gem 'bootsnap', '>= 1.4.2', require: false
 # Capistrano
 gem 'capistrano-passenger', '>= 0.2.1'
 gem 'capistrano-rails', group: :development
-gem 'capistrano-sidekiq', require: false
 
 # AppSignal
 gem 'appsignal'
