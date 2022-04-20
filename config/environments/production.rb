@@ -129,6 +129,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'www.validators.app' }
 
   config.action_cable.url = 'wss://stage.validators.app/cable'
+  config.action_cable.disable_request_forgery_protection = true
   config.action_cable.allowed_request_origins = ["https://stage.validators.app", "https://validators.app"]
 end
 
