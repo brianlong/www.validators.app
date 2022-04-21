@@ -47,4 +47,11 @@ class PingThingStatTest < ActiveSupport::TestCase
     refute PingThingStat.between_time_range(5.minutes.ago).exists?
     refute PingThingStat.between_time_range(DateTime.now).exists?
   end
+
+  test "#to_builder returns required attributtes" do
+    ping_thing_stat = create(:ping_thing_stat)
+    required_keys = PingThingStat::FIELDS_FOR_API.map(&:to_s)
+
+    assert_equal required_keys, ping_thing_stat.to_builder.attributes!.keys
+  end
 end
