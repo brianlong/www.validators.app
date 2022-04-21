@@ -8,7 +8,7 @@ module SolPrices
 
       setup do
         @namespace = File.join('services', 'sol_prices', 'parsers', 'coin_gecko')
-        @wrapper = ApiWrappers::CoinGecko.new
+        @wrapper = CoinGeckoClient.new
       end
 
       test '#prices_from_ohlc_to_sol_price_hash' do

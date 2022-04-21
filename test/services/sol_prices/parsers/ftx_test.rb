@@ -8,7 +8,7 @@ module SolPrices
 
       setup do
         @namespace = File.join('services', 'sol_prices', 'parsers', 'coin_gecko')
-        @wrapper = ApiWrappers::Ftx.new
+        @wrapper = FtxClient.new
       end
 
       test '#prices_from_historical_prices' do
