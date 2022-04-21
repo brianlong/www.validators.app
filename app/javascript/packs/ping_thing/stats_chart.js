@@ -59,6 +59,7 @@ export default {
                         label: 'Variation',
                         data: variation_data,
                         backgroundColor: "rgba(221, 154, 229, 0.4)",
+                        hoverBackgroundColor: "rgba(221, 154, 229, 0.7)",
                         borderColor: "transparent",
                         order: 2,
                         barPercentage: 1.0,
