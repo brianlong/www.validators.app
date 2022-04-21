@@ -21,6 +21,7 @@
   <li><a href="#ping-thing">Ping Thing Post</a></li>
   <li><a href="#ping-thing-batch">Ping Thing Batch</a></li>
   <li><a href="#ping-thing-list">Ping Thing List</a></li>
+  <li><a href="#ping-thing-stats">Ping Thing Stats</a></li>
   <li><a href="#sol-prices">Sol Prices</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#notes">Notes</a></li>
@@ -456,6 +457,39 @@
     "transaction_type": "transfer",
     "reported_at": "2022-02-10T13:31:55.000Z"
     "username": "sample_user"
+  },
+  ...
+]
+</pre>
+
+<hr />
+
+<h4 id="ping-thing-stats">Ping Thing Stats</h4>
+<p>
+  This Ping Thing Stats endpoint will return a ping thing stats. In the example below,
+  replace `:network` with 'testnet' or 'mainnet' as desired.
+</p>
+
+<h6>Request:</h6>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/ping-thing-stats/:network?interval=1'</pre>
+
+<h6>Parameter Options:</h6>
+<p>
+  <strong class="text-muted">`interval=NN`</strong>
+  will return stats with passed interval.
+</p>
+
+<h6>Response:</h6>
+<pre>
+[
+  {
+    "interval"=>1,
+    "max"=>120.0,
+    "median"=>82.0,
+    "min"=>50.0,
+    "network"=>"testnet",
+    "num_of_records"=>10,
+    "time_from"=>"2022-04-21T13:41:00.000Z"
   },
   ...
 ]
