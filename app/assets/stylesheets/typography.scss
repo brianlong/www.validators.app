@@ -153,6 +153,7 @@ a {
     text-decoration: none;
     color: $link-color-secondary;
     transition: color .1s ease-in-out;
+    cursor: pointer;
   }
   &.base-color {
     color: $base-color;

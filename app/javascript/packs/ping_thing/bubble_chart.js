@@ -64,7 +64,7 @@ export default {
                     yAxes: [{
                         display: true,
                         ticks: {
-                            //min: 0,
+                            min: 0,
                             max: 60000,
                             padding: 10,
                             callback: function(value, index, values) {
