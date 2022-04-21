@@ -78,7 +78,7 @@ export default {
             },
             options: {
                 scales: {
-                    xAxes: {
+                    x: {
                         display: true,
                         gridLines: { display: false },
                         ticks: {
@@ -88,7 +88,7 @@ export default {
                             autoSkipPadding: 45
                         }
                     },
-                    yAxes: {
+                    y: {
                         display: true,
                         gridLines: { display: false },
                         ticks: {
