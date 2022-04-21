@@ -9,6 +9,7 @@ require_relative '../../config/environment'
 
 include SolPrices::CoinGeckoLogic
 include SolPrices::SharedLogic
+
 include PipelineLogic
 
 # First day when sol price appeared.
@@ -16,7 +17,7 @@ include PipelineLogic
 # Create our initial payload with the input values
 initial_payload = {
   exchange: SolPrice.exchanges[:coin_gecko],
-  client: ApiClients::CoinGeckoClient.new
+  client: CoinGeckoClient.new
 }
 
 p = Pipeline.new(200, initial_payload)
