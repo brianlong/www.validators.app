@@ -24,7 +24,7 @@ class PingThingStat < ApplicationRecord
     :network,
     :num_of_records,
     :time_from
-  ]
+  ].freeze
 
   scope :by_network, -> (network) { where(network: network) } 
 
