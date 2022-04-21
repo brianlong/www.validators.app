@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class PingThingControllerTest < ActionDispatch::IntegrationTest
+class PingThingsControllerTest < ActionDispatch::IntegrationTest
   include ResponseHelper
 
   def setup
