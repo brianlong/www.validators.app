@@ -26,6 +26,8 @@ class PingThingStat < ApplicationRecord
     :time_from
   ].freeze
 
+  INTERVALS = [1, 3, 12, 24].freeze
+
   scope :by_network, -> (network) { where(network: network) } 
 
   def self.between_time_range(pt_time)
