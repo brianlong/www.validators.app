@@ -18,9 +18,10 @@ class ValidatorCheckActiveService
         # Check validators that are currently not scorable in case they reactivate
         if acceptable_stake?(validator) && not_delinquent?(validator)
           validator.update(is_active: true, is_destroyed: false)
-
+        end
+        
         # Check if vote account has been created for rpc_node
-        elsif validator.vote_accounts.exists?
+        if validator.vote_accounts.exists?
           validator.update(is_rpc: false) if validator.is_rpc
         end
       end
