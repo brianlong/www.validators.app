@@ -112,4 +112,30 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     refute v.reload.is_destroyed
   end
 
+  test "validator with acceptable_stake, not_delinquent and with vote_account"\
+       "should have is_active: true, is_destroyed: false, is_rpc: false" do
+    v = create(
+      :validator, 
+      :with_score, 
+      account: "account7", 
+      is_active: false, 
+      is_destroyed: true, 
+      is_rpc: true
+    )
+    create(:vote_account, validator: v)
+    create(:validator_history, account: 'account7', active_stake: 1000)
+    create(:validator_block_history, validator: v, epoch: 122)
+
+    refute v.is_active
+    assert v.is_destroyed
+    assert v.is_rpc
+
+    ValidatorCheckActiveService.new.update_validator_activity
+    
+    v.reload
+
+    assert v.is_active
+    refute v.is_destroyed
+    refute v.is_rpc
+  end
 end
