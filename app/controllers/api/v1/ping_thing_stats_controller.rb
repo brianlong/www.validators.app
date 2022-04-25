@@ -12,13 +12,19 @@ module Api
           interval: stats_params[:interval].to_i
         ).last(INTERVALS_COUNT)
 
-        render json: stats, status: :ok
+        render json: create_json_result(stats), status: :ok
       end
 
       private
 
       def stats_params
         params.permit(:interval, :network)
+      end
+
+      def create_json_result(stats)
+        return {} if stats.blank?
+        
+        stats.map { |el| el.to_builder.attributes! }
       end
     end
   end
