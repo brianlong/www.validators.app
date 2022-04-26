@@ -260,6 +260,7 @@
   import lidoImage from 'lido.png'
   import jpoolImage from 'jpool.png'
   import daopoolImage from 'daopool.png'
+  import eversolImage from 'eversol.png'
 
   import debounce from 'lodash/debounce'
 
@@ -295,7 +296,8 @@
           socean: soceanImage,
           lido: lidoImage,
           jpool: jpoolImage,
-          daopool: daopoolImage
+          daopool: daopoolImage,
+          eversol: eversolImage
         }
       }
     },

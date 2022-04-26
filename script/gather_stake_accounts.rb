@@ -7,7 +7,7 @@ include StakeLogic
 
 %w[mainnet testnet].each do |network|
   config_urls = if network == 'mainnet'
-    Rails.application.credentials.solana[:mainnet_urls]
+    ["https://api.mainnet-beta.solana.com"]
   else
     Rails.application.credentials.solana[:testnet_urls]
   end
