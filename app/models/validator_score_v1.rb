@@ -155,6 +155,7 @@ class ValidatorScoreV1 < ApplicationRecord
     assign_published_information_score
     assign_software_version_score(best_sv)
     assign_security_report_score
+    assign_consensus_mods_score
 
     self.total_score =
       if validator.private_validator? || validator.admin_warning
@@ -221,8 +222,15 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   # Assign one point if the validator has provided a security_report_url
+  # Assign 0 if consensus_mods value is true
   def assign_security_report_score
+    return 0 if validator.consensus_mods
     self.security_report_score = validator.security_report_url.blank? ? 0 : 1
+  end
+
+  # Assign -2 if consensus_mods value is true
+  def assign_consensus_mods_score
+    self.consensus_mods_score = validator.consensus_mods ? -2 : 0
   end
 
   def avg_root_distance_history(period = nil)
