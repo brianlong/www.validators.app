@@ -72,6 +72,7 @@ class ValidatorScoreV1 < ApplicationRecord
     software_version
     software_version_score
     stake_concentration_score
+    consensus_mods_score
     total_score
     validator_id
     vote_distance_score
@@ -166,6 +167,7 @@ class ValidatorScoreV1 < ApplicationRecord
           skipped_slot_score.to_i +
           published_information_score.to_i +
           security_report_score.to_i +
+          consensus_mods_score.to_i +
           software_version_score.to_i +
           stake_concentration_score.to_i +
           data_center_concentration_score.to_i +
