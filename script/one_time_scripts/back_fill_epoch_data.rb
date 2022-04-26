@@ -39,7 +39,7 @@ end
 
 %w[mainnet].each do |network|
   url = if network == 'mainnet'
-    "https://api.mainnet-beta.solana.com"
+    Rails.application.credentials.solana[:mainnet_urls][0]
   else
     Rails.application.credentials.solana[:testnet_urls][0]
   end
