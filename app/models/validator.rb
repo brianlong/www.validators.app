@@ -261,6 +261,10 @@ class Validator < ApplicationRecord
     score&.authorized_withdrawer_score
   end
 
+  def consensus_mods_score
+    score&.consensus_mods_score.to_i
+  end
+
   def private_validator?
     score&.commission == 100 && network == 'mainnet'
   end
