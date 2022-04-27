@@ -21,10 +21,6 @@ Rails.application.routes.draw do
       to: 'data_centers#data_center',
       as: 'data_center'
 
-  get 'vote_accounts/:account',
-      to: 'vote_accounts#show',
-      as: 'vote_account'
-
   # Validators
   get 'validators',
       to: 'validators#index',
@@ -34,9 +30,11 @@ Rails.application.routes.draw do
       as: 'validators_v2'
   get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
   get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
-  get 'validators/:account',
-      to: 'validators#show',
-      as: 'validator'
+
+  get 'validators/:account', to: 'validators#show', as: 'validator'
+
+  get 'validators/:account/vote_accounts/:vote_account', to: 'vote_accounts#show', 
+                                                         as: 'validator_vote_account'
 
   get 'tower',
       to: 'public#tower',
@@ -50,7 +48,7 @@ Rails.application.routes.draw do
   end
 
   # SolPrices
-  get 'sol_prices', to:'sol_prices#index'
+  get 'sol-prices', to:'sol_prices#index'
 
   # Stake Pools
   get 'stake-pools', to: 'stake_accounts#index'
@@ -160,6 +158,7 @@ Rails.application.routes.draw do
       post 'ping-thing-batch/:network', to: 'ping_things#create_batch', as: 'ping_thing_batch'
       # GET /api/v1/ping-thing/
       get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
+      get 'ping-thing-stats/:network', to: 'ping_thing_stats#index', as: 'ping_thing_stats'
 
       # GET /api/v1/sol-prices/
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'

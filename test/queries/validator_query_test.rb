@@ -8,7 +8,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     @mainnet_network = "mainnet"
   end
 
-  test "ValidatorQuery returns only validators from correct network" do
+  test "#call returns only validators from correct network" do
     create_list(
       :validator, 
       5, 
@@ -29,7 +29,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [@mainnet_network], result.pluck(:network).uniq
   end
 
-  test "ValidatorQuery when query is provided returns only matching results" do
+  test "#call when query is provided returns only matching results" do
     query = "test_account"
 
     create(
@@ -52,7 +52,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [query], result.pluck(:account).uniq
   end
 
-  test "ValidatorQuery returns results in correct score order" do
+  test "#call returns results in correct score order" do
     5.times do |n|
       v = create(
         :validator, 
@@ -69,7 +69,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [4, 3, 2, 1, 0], result.pluck("validator_score_v1s.total_score")
   end
 
-  test "ValidatorQuery returns results in correct stake order" do
+  test "#call returns results in correct stake order" do
     5.times do |n|
       v = create(
         :validator, 
@@ -86,7 +86,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal (0..4).map{|n| n * 1000}.reverse, result.map{ |v| v.score.active_stake }
   end
 
-  test "ValidatorQuery returns results in correct name order" do
+  test "#call returns results in correct name order" do
     5.times do |n|
       create(
         :validator, 
@@ -103,4 +103,22 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal (0..4).map{ |n| "#{n}-validator" }, result.pluck(:name)
   end
 
+  test "#call_single_validator returns single validator" do
+    validators = create_list(
+      :validator,
+      5,
+      :with_score,
+      :mainnet,
+      :with_data_center_through_validator_ip,
+    )
+
+    validator = validators.first
+
+    result = ValidatorQuery.new.call_single_validator(
+      network: @mainnet_network, 
+      account: validator.account
+    )
+
+    assert_equal validator, result
+  end
 end

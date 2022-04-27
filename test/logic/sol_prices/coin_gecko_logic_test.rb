@@ -10,7 +10,7 @@ class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
   def setup
     # Create our initial payload with the input values
     @initial_payload = {
-      client: SolPrices::ApiWrappers::CoinGecko.new,
+      client: CoinGeckoClient.new,
       datetime: DateTime.new(2021,9,8),
       days: 1
     }

@@ -13,22 +13,25 @@
           <%= link_to 'API Docs', api_documentation_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Data Centers', data_centers_url(network: params[:network]), class: 'nav-link' %>
+          <%= link_to 'Cluster Stats', cluster_stats_path(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Log Deep Dives', log_deep_dives_index_path, class: 'nav-link' %>
+          <%= link_to 'Data Centers', data_centers_url(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item" data-turbolinks="false">
           <%= link_to 'Commission Changes', commission_histories_path(network: params[:network]), class: 'nav-link' %>
         </li>
-        <li class="nav-item">
-          <%= link_to 'Cluster Stats', cluster_stats_path(network: params[:network]), class: 'nav-link' %>
+        <li class="nav-item" data-turbolinks="false">
+          <%= link_to 'Stake Pools', stake_pools_path(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item" data-turbolinks="false">
           <%= link_to 'Ping Thing', ping_things_path(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item" data-turbolinks="false">
           <%= link_to 'Sol Prices', sol_prices_url(exchange: SolPrice::EXCHANGES[0], filtering: 7), class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Log Deep Dives', log_deep_dives_index_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>
@@ -45,6 +48,7 @@
         <li class="nav-item">
           <%= link_to t('footer.nav_links.contact_us'), contact_us_path, class: 'nav-link' %>
         </li>
+
         <% if user_signed_in? && current_user.is_admin? %>
           <li class="nav-item">
             <%= link_to t('footer.nav_links.contact_requests'), contact_requests_path, class: 'nav-link' %>
@@ -53,9 +57,13 @@
             <%= link_to t('footer.nav_links.opt_out_requests'), opt_out_requests_path, class: 'nav-link' %>
           </li>
         <% end %>
+
         <% if user_signed_in? %>
           <li class="nav-item">
-            <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "nav-link" %>
+            <%= link_to "My Dashboard", user_root_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "nav-link" %>
           </li>
         <% else %>
           <li class="nav-item">

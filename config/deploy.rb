@@ -14,7 +14,7 @@ ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 # set :deploy_to, "/var/www/my_app_name"
 set :deploy_to, "/home/deploy/#{fetch(:application)}"
 
-set :migration_role, :app
+set :migration_role, :db
 set :templated_config_files, []
 
 # Default value for :format is :airbrussh.
@@ -61,44 +61,55 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-# SIDEKIQ CONFIG
-set :sidekiq_role, :app
-set :sidekiq_config, File.join(current_path, 'config', 'sidekiq.yml').to_s
+# Whenver/crontab config
+# Must contain all roles used in config/schedule.rb
+set :whenever_roles, ["background"] # ["web", "background"]
+
+namespace :deploy do
+  after :restart, 'sidekiq:restart'
+  after :restart, 'rake_task:add_stake_pool'
+  after :restart, 'deamons:restart'
+end
 
 namespace :sidekiq do
   desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
   task :stop do
-    on roles :all do |_role|
-      execute :systemctl, '--user', 'stop', :sidekiq
+    on roles :app do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :sidekiq
+        end
+      end
     end
   end
 
   desc 'Start sidekiq'
   task :start do
-    on roles :all do |_role|
-      execute :systemctl, '--user', 'start', :sidekiq
+    on roles :app do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :sidekiq
+        end
+      end
     end
   end
 
   desc 'Restart sidekiq'
   task :restart do
-    on roles(:all), in: :sequence, wait: 5 do
-      execute :systemctl, '--user', 'restart', :sidekiq
+    on roles :app do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :restart, :sidekiq
+        end
+      end
     end
   end
 end
 
-namespace :deploy do
-  after :finishing, 'deploy:restart', 'deploy:cleanup'
-  after :restart, 'sidekiq:restart'
-  after :restart, 'rake_task:add_stake_pool'
-  after :restart, 'daemons:restart'
-end
-
-namespace :daemons do
-  desc 'Start daemons'
+namespace :deamons do
+  desc 'Start background'
   task :start do
-    on release_roles([:all]) do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :start, :validator_score_mainnet_v1
@@ -114,9 +125,9 @@ namespace :daemons do
     end
   end
 
-  desc 'Stop daemons'
+  desc 'Stop background'
   task :stop do
-    on release_roles([:all]) do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :stop, :validator_score_mainnet_v1
@@ -132,9 +143,9 @@ namespace :daemons do
     end
   end
 
-  desc 'Restart daemons'
+  desc 'Restart background'
   task :restart do
-    on release_roles([:all]) do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :validator_score_mainnet_v1
@@ -154,7 +165,7 @@ end
 namespace :rake_task do
   desc 'Update Stake Pools'
   task :add_stake_pool do
-    on release_roles([:all]) do
+    on release_roles([:background]) do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'add_stake_pool:mainnet'
@@ -165,7 +176,7 @@ namespace :rake_task do
   
   desc 'Update manager fees to Stake Pools'
   task :update_fee_in_stake_pools do
-    on release_roles([:all]) do
+    on release_roles([:background]) do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'update_fee_in_stake_pools:mainnet'

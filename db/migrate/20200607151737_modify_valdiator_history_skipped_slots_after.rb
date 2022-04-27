@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # ModifyValdiatorHistorySkippedSlotsAfter
-class ModifyValdiatorHistorySkippedSlotsAfter < ActiveRecord::Migration[6.0]
+class ModifyValdiatorHistorySkippedSlotsAfter < ActiveRecord::Migration[6.1]
   def change
     add_column :validator_block_histories,
                :skipped_slots_after,

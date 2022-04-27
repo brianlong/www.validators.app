@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_30_145352) do
+ActiveRecord::Schema.define(version: 2022_04_05_100027) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -263,6 +263,18 @@ ActiveRecord::Schema.define(version: 2022_03_30_145352) do
     t.string "network"
   end
 
+  create_table "ping_thing_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "interval"
+    t.float "min"
+    t.float "max"
+    t.float "median"
+    t.integer "num_of_records"
+    t.string "network"
+    t.datetime "time_from"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ping_things", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "amount"
@@ -408,17 +420,17 @@ ActiveRecord::Schema.define(version: 2022_03_30_145352) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "ticker"
     t.float "manager_fee"
+    t.string "ticker"
     t.float "average_validators_commission"
     t.float "average_delinquent"
     t.float "average_skipped_slots"
     t.float "average_uptime"
     t.integer "average_lifetime"
     t.float "average_score"
-    t.float "average_apy"
     t.float "withdrawal_fee"
     t.float "deposit_fee"
+    t.float "average_apy"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -658,9 +670,6 @@ ActiveRecord::Schema.define(version: 2022_03_30_145352) do
     t.index ["validator_id"], name: "index_vote_accounts_on_validator_id"
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "collectors", "users"
-  add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"

@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class PingThingControllerTest < ActionDispatch::IntegrationTest
+class PingThingsControllerTest < ActionDispatch::IntegrationTest
   include ResponseHelper
 
   def setup
@@ -167,5 +167,41 @@ class PingThingControllerTest < ActionDispatch::IntegrationTest
 
     json = response_to_json(@response.body)
     assert_equal 123, json.first["response_time"]
+  end
+
+  test "GET api_v1_ping_things with with_total_count param, returns pings and records count" do
+    4.times do
+      create(:ping_thing, :testnet)
+    end
+
+    get api_v1_ping_things_path(network: "testnet", with_total_count: "true"), headers: @headers
+
+    json = response_to_json(@response.body)
+    assert_equal 4, json["ping_things"].size
+    assert_equal 4, json["total_count"]
+
+    get api_v1_ping_things_path(network: "testnet", with_total_count: "true", limit: 2), headers: @headers
+
+    json = response_to_json(@response.body)
+    assert_equal 2, json["ping_things"].size
+    assert_equal 4, json["total_count"]
+  end
+
+  test "GET api_v1_ping_things does not return total_count for invalid of false param" do
+    4.times do
+      create(:ping_thing, :testnet)
+    end
+
+    get api_v1_ping_things_path(network: "testnet", with_total_count: "asd"), headers: @headers
+
+    assert_equal 4, response_to_json(@response.body).size
+
+    get api_v1_ping_things_path(network: "testnet", with_total_count: "false"), headers: @headers
+
+    assert_equal 4, response_to_json(@response.body).size
+
+    get api_v1_ping_things_path(network: "testnet", with_total_count: 1), headers: @headers
+
+    assert_equal 4, response_to_json(@response.body).size
   end
 end

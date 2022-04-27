@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # CreateVoteAccounts
-class CreateVoteAccounts < ActiveRecord::Migration[6.0]
+class CreateVoteAccounts < ActiveRecord::Migration[6.1]
   def change
     create_table :vote_accounts do |t|
       t.references :validator, null: false, foreign_key: true

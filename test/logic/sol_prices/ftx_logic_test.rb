@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'test_helper'
+require "test_helper"
 
 # CoinGeckoLogicTest
 class SolPrices::FtxLogicTest < ActiveSupport::TestCase
@@ -9,15 +9,15 @@ class SolPrices::FtxLogicTest < ActiveSupport::TestCase
   def setup
     # Create our initial payload with the input values
     @initial_payload = {
-      client: SolPrices::ApiWrappers::Ftx.new,
+      client: FtxClient.new,
       start_time: DateTime.new(2021,9,8),
       resolution: 86400,
     }
-    @namespace = File.join('logic', 'ftx_logic')
-    @vcr_name = 'ftx_logic'
+    @namespace = File.join("logic", "ftx_logic")
+    @vcr_name = "ftx_logic"
   end
 
-  test '#get_historical_prices' do
+  test "#get_historical_prices" do
     vcr_cassette(@namespace, @vcr_name) do
       p = Pipeline.new(200, @initial_payload)
                   .then(&get_historical_prices)

@@ -93,6 +93,8 @@ function drawChart() {
   const ctx2 = chartFtx.getContext('2d');
   const dataset = ctx.canvas.dataset
   const dataset2 = ctx2.canvas.dataset
+
+  console.log(JSON.parse(dataset2.data))
   const myChart = new Chart(ctx, {
     type: 'line',
     data: {

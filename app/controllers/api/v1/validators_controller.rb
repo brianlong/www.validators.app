@@ -28,18 +28,17 @@ module Api
       end
 
       def show
-        @validator = Validator.select(
-                                validator_fields, 
-                                validator_score_v1_fields
-                              ).eager_load(:validator_score_v1)
-                              .includes(data_center_host: [:data_center])
-                              .find_by(network: validator_params[:network], account: validator_params["account"])
-                              
+        @validator = ValidatorQuery.new.call_single_validator(
+          network: validator_params["network"],
+          account: validator_params["account"]
+        )
+
         raise ValidatorNotFound if @validator.nil?
 
         current_epoch = EpochHistory.last
+        with_history = set_boolean_field(validator_params[:with_history])
 
-        render json: create_json_result(@validator, validator_params[:with_history] || false)
+        render json: create_json_result(@validator, with_history)
       rescue ValidatorNotFound
         render json: { "status" => "Validator Not Found" }, status: 404
       rescue ActionController::ParameterMissing
