@@ -43,7 +43,7 @@ manager_fees = {
   jpool: 0,
   lido: 10,
   daopool: 2,
-  eversol: 1
+  eversol: 0
 }
 
 withdrawal_fees = {
