@@ -25,6 +25,7 @@ FactoryBot.define do
     delinquent { false }
     published_information_score { 0 }
     security_report_score { 0 }
+    consensus_mods_score { 0 }
     ip_address { '172.96.172.252' }
     network { 'mainnet' }
     data_center_key { '23470-US-America/Chicago' }
