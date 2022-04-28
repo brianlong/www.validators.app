@@ -12,10 +12,11 @@ module Gatherers
 
       file_path = File.join(Rails.root, "log", "vote_account_details_service.log")
       @logger = Logger.new(file_path)
+      @retries = 0
     end
 
     def call
-      @logger.info("------------------ Script started------------------------")
+      @logger.info("------------------ Script started (network: #{@network}) ------------------------")
 
       VoteAccount.where(network: @network).order(id: :asc).each do |vacc|
         vote_account_details = get_vote_account_details(vacc.account)
@@ -57,18 +58,17 @@ module Gatherers
       return unless vacc
 
       if vacc.validator_identity == vacc.authorized_withdrawer
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = -2
-        @logger.warn("-2 points for #{vacc.id}")
+        vacc.validator.validator_score_v1.update(authorized_withdrawer_score: -2)
+        @logger.warn("-2 points for #{vacc.id}, updated.")
       else
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = 0
-        @logger.info("0 points for #{vacc.id}")
+        vacc.validator.validator_score_v1.update(authorized_withdrawer_score: 0)
+        @logger.info("0 points for #{vacc.id}, updated.")
+      end
 
-      end
-      if vacc.validator.validator_score_v1.save
-        @logger.info("Score saved successfully")
-      else
-        @logger.warn("Score has not been saved successfully, errors: #{vacc.errors.messages}")
-      end
+    rescue Mysql2::Error::TimeoutError
+      sleep 3
+      @retries += 1
+      retry if @retries <= 3
     end
   end
 end
