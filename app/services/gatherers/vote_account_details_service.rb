@@ -67,6 +67,7 @@ module Gatherers
 
     rescue Mysql2::Error::TimeoutError
       sleep 3
+      @logger.info("Retry #{@retries}...")
       @retries += 1
       retry if @retries <= 3
     end
