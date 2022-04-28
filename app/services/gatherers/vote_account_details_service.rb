@@ -33,6 +33,7 @@ module Gatherers
 
           update_score(vacc)
         end
+        @logger.info("------------------------------------------")
       end
 
       @logger.info("------------------ Script is finished------------------------")
