@@ -19,8 +19,6 @@ module Gatherers
       @logger.info("------------------ Script started (network: #{@network}) ------------------------")
 
       VoteAccount.where(network: @network).order(id: :asc).each do |vacc|
-        retries = 0
-
         vote_account_details = get_vote_account_details(vacc.account)
         if vote_account_details.blank?
           @logger.warn("CLI response error for #{vacc.id}, errors: #{vote_account_details}")
@@ -43,9 +41,9 @@ module Gatherers
     rescue Mysql2::Error::TimeoutError => e
       sleep 3
       @logger.error("Error: #{e.message}")
-      @logger.info("Retry #{retries}...")
-      retries += 1
-      retry if retries <= 3
+      @logger.info("Retry #{@retries}...")
+      @retries += 1
+      retry if @retries <= 3
     end
 
     private
