@@ -38,7 +38,7 @@ module Gatherers
       end
 
       @logger.info("------------------ Script is finished------------------------")
-    rescue Mysql2::Error::TimeoutError => e
+    rescue ActiveRecord::LockWaitTimeout => e
       sleep 3
       @logger.error("Error: #{e.message}")
       @logger.info("Retry #{@retries}...")
