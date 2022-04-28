@@ -36,6 +36,9 @@ module Gatherers
       end
 
       @logger.info("------------------ Script is finished------------------------")
+    rescue StandardError => e
+      @logger.error(e.message)
+      @logger.error(e.backtrace)
     end
 
     private
