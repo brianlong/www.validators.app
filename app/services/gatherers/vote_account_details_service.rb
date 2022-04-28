@@ -9,20 +9,33 @@ module Gatherers
     def initialize(network:, config_urls:)
       @network = network
       @config_urls = config_urls
+
+      file_path = File.join(Rails.root, "log", "vote_account_details_service.log")
+      @logger = Logger.new(file_path)
     end
 
     def call
-      VoteAccount.where(network: @network).each do |vacc|
+      @logger.info("------------------ Script started------------------------")
+
+      VoteAccount.where(network: @network).order(id: :asc).each do |vacc|
         vote_account_details = get_vote_account_details(vacc.account)
-        unless vote_account_details.blank?
-          vacc.update(
-            validator_identity: vote_account_details["validatorIdentity"],
-            authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
-          )
+        if vote_account_details.blank?
+          @logger.warn("CLI response error for #{vacc.id}, errors: #{vote_account_details}")
+        else
+          if vacc.update(
+                validator_identity: vote_account_details["validatorIdentity"],
+                authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
+              )
+              @logger.info("VA #{vacc.id} updated successfully")
+            else
+              @logger.warn("VA #{vacc.id} has not been updated successfully, errors: #{vacc.errors.messages}")
+          end
 
           update_score(vacc)
         end
       end
+
+      @logger.info("------------------ Script is finished------------------------")
     end
 
     private
@@ -41,10 +54,17 @@ module Gatherers
 
       if vacc.validator_identity == vacc.authorized_withdrawer
         vacc.validator.validator_score_v1.authorized_withdrawer_score = -2
+        @logger.warn("-2 points for #{vacc.id}")
       else
         vacc.validator.validator_score_v1.authorized_withdrawer_score = 0
+        @logger.info("0 points for #{vacc.id}")
+
       end
-      vacc.validator.validator_score_v1.save
+      if vacc.validator.validator_score_v1.save
+        @logger.info("Score saved successfully")
+      else
+        @logger.warn("Score has not been saved successfully, errors: #{vacc.errors.messages}")
+      end
     end
   end
 end
