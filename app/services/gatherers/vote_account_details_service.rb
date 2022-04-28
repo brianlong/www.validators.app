@@ -19,6 +19,8 @@ module Gatherers
       @logger.info("------------------ Script started (network: #{@network}) ------------------------")
 
       VoteAccount.where(network: @network).order(id: :asc).each do |vacc|
+        retries = 0
+
         vote_account_details = get_vote_account_details(vacc.account)
         if vote_account_details.blank?
           @logger.warn("CLI response error for #{vacc.id}, errors: #{vote_account_details}")
@@ -38,9 +40,12 @@ module Gatherers
       end
 
       @logger.info("------------------ Script is finished------------------------")
-    rescue StandardError => e
-      @logger.error(e.message)
-      @logger.error(e.backtrace)
+    rescue Mysql2::Error::TimeoutError => e
+      sleep 3
+      @logger.error("Error: #{e.message}")
+      @logger.info("Retry #{retries}...")
+      retries += 1
+      retry if retries <= 3
     end
 
     private
@@ -64,12 +69,6 @@ module Gatherers
         vacc.validator.validator_score_v1.update(authorized_withdrawer_score: 0)
         @logger.info("0 points for #{vacc.id}, updated.")
       end
-
-    rescue Mysql2::Error::TimeoutError
-      sleep 3
-      @logger.info("Retry #{@retries}...")
-      @retries += 1
-      retry if @retries <= 3
     end
   end
 end
