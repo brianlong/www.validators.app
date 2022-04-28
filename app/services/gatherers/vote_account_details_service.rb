@@ -26,9 +26,9 @@ module Gatherers
                 validator_identity: vote_account_details["validatorIdentity"],
                 authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
               )
-              @logger.info("VA #{vacc.id} updated successfully")
+              @logger.info("VA #{vacc.id} updated successfully, v_identity: #{vote_account_details["validatorIdentity"]}, auth_withdrawer: #{vote_account_details["authorizedWithdrawer"]}")
             else
-              @logger.warn("VA #{vacc.id} has not been updated successfully, errors: #{vacc.errors.messages}")
+              @logger.warn("VA #{vacc.id} has not been updated successfully, v_identity: #{vote_account_details["validatorIdentity"]}, auth_withdrawer: #{vote_account_details["authorizedWithdrawer"]}, errors: #{vacc.errors.messages}")
           end
 
           update_score(vacc)
