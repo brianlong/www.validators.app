@@ -44,9 +44,11 @@ module Gatherers
 
       @logger.info("------------------ Script is finished------------------------")
     rescue ActiveRecord::LockWaitTimeout => e
-      sleep 5
       @logger.error("Error: #{e.message}")
+      @logger.info("Sleep 5 seconds...")
+      sleep 5
       @logger.info("Retry...")
+      retry
     end
 
     private
