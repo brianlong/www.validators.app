@@ -13,12 +13,18 @@ module Gatherers
       file_path = File.join(Rails.root, "log", "vote_account_details_service.log")
       @logger = Logger.new(file_path)
       @retries = 0
+      @range_start = VoteAccount.where(network: @network).order(id: :asc).first.id
+      @range_end = VoteAccount.where(network: @network).order(id: :asc).last.id
     end
 
     def call
       @logger.info("------------------ Script started (network: #{@network}) ------------------------")
 
-      VoteAccount.where(network: @network).order(id: :asc).each do |vacc|
+      VoteAccount.where(id: @range_start..@range_end, network: @network)
+                 .order(id: :asc)
+                 .each do |vacc|
+        @range_start = vacc.id
+
         vote_account_details = get_vote_account_details(vacc.account)
         if vote_account_details.blank?
           @logger.warn("CLI response error for #{vacc.id}, errors: #{vote_account_details}")
@@ -48,7 +54,7 @@ module Gatherers
 
     private
 
-    # solana vote-account <account>
+    # solana vote-account <account >
     def get_vote_account_details(account)
       cli_request(
         "vote-account #{account}",
