@@ -66,11 +66,17 @@ module Gatherers
       return unless vacc
 
       if vacc.validator_identity == vacc.authorized_withdrawer
-        vacc.validator.validator_score_v1.update(authorized_withdrawer_score: -2)
-        @logger.warn("-2 points for #{vacc.id}, updated.")
+        if vacc.validator.validator_score_v1.update(authorized_withdrawer_score: -2)
+          @logger.warn("-2 points for #{vacc.id}, updated.")
+        else
+          @logger.error("Update error, #{vacc.errors}.")
+        end
       else
-        vacc.validator.validator_score_v1.update(authorized_withdrawer_score: 0)
-        @logger.info("0 points for #{vacc.id}, updated.")
+        if vacc.validator.validator_score_v1.update(authorized_withdrawer_score: 0)
+          @logger.info("0 points for #{vacc.id}, updated.")
+        else
+          @logger.error("Update error, #{vacc.errors}.")
+        end
       end
     end
   end
