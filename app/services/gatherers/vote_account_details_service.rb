@@ -12,7 +12,6 @@ module Gatherers
 
       file_path = File.join(Rails.root, "log", "vote_account_details_service.log")
       @logger = Logger.new(file_path)
-      @retries = 0
       @range_start = VoteAccount.where(network: @network).order(id: :asc).first.id
       @range_end = VoteAccount.where(network: @network).order(id: :asc).last.id
     end
@@ -45,11 +44,9 @@ module Gatherers
 
       @logger.info("------------------ Script is finished------------------------")
     rescue ActiveRecord::LockWaitTimeout => e
-      sleep 3
+      sleep 5
       @logger.error("Error: #{e.message}")
-      @logger.info("Retry #{@retries}...")
-      @retries += 1
-      retry if @retries <= 3
+      @logger.info("Retry...")
     end
 
     private
