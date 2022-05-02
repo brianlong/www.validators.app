@@ -63,6 +63,7 @@ class ValidatorScoreV2 < ApplicationRecord
           skipped_slot_score.to_i +
           validator_score_v1.published_information_score.to_i +
           validator_score_v1.security_report_score.to_i +
+          validator_score_v1.consensus_mods_score.to_i +
           validator_score_v1.software_version_score.to_i +
           validator_score_v1.stake_concentration_score.to_i +
           validator_score_v1.data_center_concentration_score.to_i +
