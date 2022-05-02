@@ -8,7 +8,6 @@ class ObjectCopyService
   end
 
   def call
-    puts "start copy #{@original.id}"
     new_copy = @original.dup
     new_copy.skip_copy = true # prevent infinite loop on after_create
     use_custom_db do
@@ -31,7 +30,6 @@ class ObjectCopyService
         new_copy.user = new_user
       end
     end
-    puts new_copy
     new_copy
   end
 

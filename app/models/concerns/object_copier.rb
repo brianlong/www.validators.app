@@ -7,7 +7,9 @@ module ObjectCopier
     after_create :copy_to_stage_db, unless: :skip_copy
 
     def copy_to_stage_db
-      ObjectCopyService.new(original: self).call
+      if Rails.env.production?
+        ObjectCopyService.new(original: self).call
+      end
     end
   end
 end
