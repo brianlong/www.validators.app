@@ -37,7 +37,7 @@ FactoryBot.define do
     end
 
     trait :with_admin_warning do
-      admin_warning { 'test warning' }
+      admin_warning { "test warning" }
     end
   end
 end
