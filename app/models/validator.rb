@@ -29,7 +29,6 @@
 class Validator < ApplicationRecord
   FIELDS_FOR_API = %i[
     account
-    admin_warning
     avatar_url
     created_at
     details
