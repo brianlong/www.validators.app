@@ -39,6 +39,7 @@ class Validator < ApplicationRecord
     network
     updated_at
     www_url
+    admin_warning
   ].freeze
 
   has_many :vote_accounts, dependent: :destroy
