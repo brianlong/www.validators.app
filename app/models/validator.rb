@@ -8,6 +8,7 @@
 #  account             :string(191)
 #  admin_warning       :string(191)
 #  avatar_url          :string(191)
+#  consensus_mods      :boolean          default(FALSE)
 #  details             :string(191)
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
@@ -280,6 +281,10 @@ class Validator < ApplicationRecord
 
   def authorized_withdrawer_score
     score&.authorized_withdrawer_score
+  end
+
+  def consensus_mods_score
+    score&.consensus_mods_score.to_i
   end
 
   def private_validator?
