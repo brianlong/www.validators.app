@@ -18,7 +18,7 @@ begin
   loop do
     # Create our initial payload with the input values
     payload = {
-      config_urls: ["https://api.mainnet-beta.solana.com"],
+      config_urls: Rails.application.credentials.solana[:mainnet_urls],
       network: network
     }
 

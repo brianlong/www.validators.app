@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_26_111323) do
+ActiveRecord::Schema.define(version: 2022_04_05_100027) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -576,7 +576,6 @@ ActiveRecord::Schema.define(version: 2022_04_26_111323) do
     t.text "skipped_vote_history"
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
-    t.integer "consensus_mods_score", default: 0
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
@@ -598,7 +597,6 @@ ActiveRecord::Schema.define(version: 2022_04_26_111323) do
     t.boolean "is_active", default: true
     t.boolean "is_destroyed", default: false
     t.string "admin_warning"
-    t.boolean "consensus_mods", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
   end
 
@@ -636,6 +634,9 @@ ActiveRecord::Schema.define(version: 2022_04_26_111323) do
     t.index ["validator_id"], name: "index_vote_accounts_on_validator_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "collectors", "users"
+  add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
