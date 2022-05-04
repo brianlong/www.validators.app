@@ -71,15 +71,13 @@ class ValidatorsController < ApplicationController
       time_from,
       time_to
     ).order(created_at: :asc)
-    .limit(@history_limit)
+    .last(@history_limit)
 
     # Grab the distances to show on the chart
-    #@root_blocks = @val_histories.map(&:root_distance).compact
-    @root_blocks = @validator.validator_histories.last(@history_limit).pluck(:root_distance)
+    @root_blocks = @val_histories.map(&:root_distance).compact
 
     # Grab the distances to show on the chart
-    #@vote_blocks = @val_histories.map(&:vote_distance).compact
-    @vote_blocks = @validator.validator_histories.last(@history_limit).pluck(:vote_distance)
+    @vote_blocks = @val_histories.map(&:vote_distance).compact
 
     @commission_histories = CommissionHistoryQuery.new(
       network: params[:network]
