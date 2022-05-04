@@ -12,6 +12,9 @@ trap('INT') { interrupted = true }  unless Rails.env.test?
 network = 'mainnet'
 sleep_time = 15 # seconds
 
+log_path = Rails.root.join('log', 'validator_score_mainnet_v1_daemon.log')
+@logger ||= Logger.new(log_path)
+
 class SkipAndSleep < StandardError; end
 
 begin
@@ -41,6 +44,10 @@ begin
                  .then(&save_validators)
                  .then(&log_errors)
 
+    @logger.debug("script finished for #{batch.uuid} with status #{_p[:code]}")
+    if _p[:errors]
+      @logger.debug("errors: #{_p[:errors].inspect}")
+    end
     # Mark the batch as scored
     batch.scored_at = Time.now
     batch.save
