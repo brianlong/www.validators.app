@@ -13,7 +13,7 @@ module ValidatorScoreV1Logic
   def set_this_batch
     lambda do |p|
       start_time = Time.now
-      logger.debug "---------- start set_this_batch -----------"
+      logger.debug "---------- start set_this_batch -----------" if p.payload[:network] == 'mainnet' 
       return p unless p.code == 200
 
       this_batch = Batch.where(
@@ -25,7 +25,7 @@ module ValidatorScoreV1Logic
         raise "No batch: #{p.payload[:network]}, #{p.payload[:batch_uuid]}"
       end
 
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
       Pipeline.new(200, p.payload.merge(this_batch: this_batch))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
@@ -37,7 +37,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
       start_time = Time.now
-      logger.debug "start  validators_get"
+      logger.debug "start  validators_get" if p.payload[:network] == 'mainnet' 
 
       validators = Validator.where(network: p.payload[:network])
                             .active
@@ -54,7 +54,7 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
       Pipeline.new(200, p.payload.merge(validators: validators))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from validators_get', e)
@@ -66,7 +66,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
       start_time = Time.now
-      logger.debug "start  block_vote_history_get"
+      logger.debug "start  block_vote_history_get" if p.payload[:network] == 'mainnet' 
 
       # Grab the highest root block & vote for this batch so we can calculate
       # the distances
@@ -146,7 +146,7 @@ module ValidatorScoreV1Logic
         skipped_vote_all_median: skipped_vote_all_median,
       )
 
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
       Pipeline.new(200, p.payload.merge(total_active_stake: total_active_stake))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from block_vote_history_get', e)
@@ -157,7 +157,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
       start_time = Time.now
-      logger.debug "start  assign_block_and_vote_scores"
+      logger.debug "start  assign_block_and_vote_scores" if p.payload[:network] == 'mainnet' 
 
       # get the average & median from the cluster history
       root_distance_all = []
@@ -234,7 +234,7 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
       Pipeline.new(200, p.payload.merge(
                           root_distance_all: root_distance_all,
                           vote_distance_all: vote_distance_all,
@@ -254,7 +254,7 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       start_time = Time.now
-      logger.debug "start  assign_block_and_vote_scores"
+      logger.debug "start  assign_block_and_vote_scores" if p.payload[:network] == 'mainnet' 
 
       vbh_stats = Stats::ValidatorBlockHistory.new(p.payload[:network], p.payload[:batch_uuid])
       avg_skipped_slot_pct_all = vbh_stats.average_skipped_slot_percent
@@ -282,7 +282,7 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
       Pipeline.new(
         200,
         p.payload.merge(
@@ -300,7 +300,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
       start_time = Time.now
-      logger.debug "start  assign_block_history_score"
+      logger.debug "start  assign_block_history_score" if p.payload[:network] == 'mainnet' 
       p.payload[:validators].each do |validator|
         skipped_slot_percent = \
           validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
@@ -320,7 +320,7 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
@@ -331,7 +331,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
       start_time = Time.now
-      logger.debug "start  assign_software_version_score"
+      logger.debug "start  assign_software_version_score" if p.payload[:network] == 'mainnet' 
 
       # call #to_a at the end to guarantee the query is run now, instead of inside of the loop
       last_validator_histories = ValidatorHistory.where(
@@ -376,7 +376,7 @@ module ValidatorScoreV1Logic
         validator.validator_score_v1.assign_software_version_score(current_software_version)
       end
 
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_software_version_score', e)
@@ -387,7 +387,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
       start_time = Time.now
-      logger.debug "start  get_ping_times"
+      logger.debug "start  get_ping_times" if p.payload[:network] == 'mainnet' 
 
       p.payload[:validators].each do |validator|
         validator.validator_score_v1.ping_time_avg = \
@@ -396,7 +396,7 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_ping_times', e)
@@ -407,7 +407,7 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
       start_time = Time.now
-      logger.debug "start  save_validators"
+      logger.debug "start  save_validators" if p.payload[:network] == 'mainnet' 
       ActiveRecord::Base.transaction do
         p.payload[:validators].each do |validator|
           validator.save
@@ -416,7 +416,7 @@ module ValidatorScoreV1Logic
           Appsignal.send_error(e)
         end
       end
-      logger.debug (Time.now - start_time).to_i
+      logger.debug (Time.now - start_time).to_i if p.payload[:network] == 'mainnet' 
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
