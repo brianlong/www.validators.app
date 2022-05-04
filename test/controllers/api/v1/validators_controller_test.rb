@@ -129,9 +129,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator,
       :with_score,
+      :with_admin_warning,
       :with_data_center_through_validator_ip,
       account: "Test Account",
-      admin_warning: "test warning"
     )
 
     get api_v1_validators_url(network: "testnet"),

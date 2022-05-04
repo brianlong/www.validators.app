@@ -29,7 +29,6 @@
 class Validator < ApplicationRecord
   FIELDS_FOR_API = %i[
     account
-    admin_warning
     avatar_url
     created_at
     details
@@ -39,6 +38,7 @@ class Validator < ApplicationRecord
     network
     updated_at
     www_url
+    admin_warning
   ].freeze
 
   has_many :vote_accounts, dependent: :destroy

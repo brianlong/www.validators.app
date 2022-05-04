@@ -35,5 +35,9 @@ FactoryBot.define do
     trait :with_consensus_mods_true do
       consensus_mods { true }
     end
+
+    trait :with_admin_warning do
+      admin_warning { "test warning" }
+    end
   end
 end
