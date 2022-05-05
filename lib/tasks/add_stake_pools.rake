@@ -31,7 +31,7 @@ stake_pools = [
   },
   {
     name: "Eversol",
-    authority: "FJZ7YmFYXL8afU9oeXiij7kMsTn8EjMQeNR76iwL7Z1S",
+    authority: "C4NeuptywfXuyWB9A7H7g5jHVDE8L6Nj2hS53tA71KPn",
     network: "mainnet",
     ticker: "esol"  
   }
