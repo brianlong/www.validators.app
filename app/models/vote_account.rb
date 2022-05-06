@@ -7,6 +7,7 @@
 #  id                    :bigint           not null, primary key
 #  account               :string(191)
 #  authorized_withdrawer :string(191)
+#  is_active             :boolean
 #  network               :string(191)
 #  validator_identity    :string(191)
 #  created_at            :datetime         not null
@@ -37,6 +38,11 @@ class VoteAccount < ApplicationRecord
   before_save :set_network
 
   scope :for_api, -> { select(FIELDS_FOR_API).order(updated_at: :asc) }
+
+  def set_inactive
+    is_active = false
+    save(touch: false)
+  end
 
   def vote_account_history_last
     vote_account_histories.last
