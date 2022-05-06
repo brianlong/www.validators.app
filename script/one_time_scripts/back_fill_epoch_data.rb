@@ -24,7 +24,7 @@ def get_block_time(http, uri, block)
     "params" => [block]
   })
   resp, _ = http.post(uri, params.to_json, {'Content-Type' => 'application/json'})
-
+  puts "get_block_time: #{resp.body}"
   JSON.parse(resp.body)['result']
 end
 
@@ -37,7 +37,7 @@ def get_confirmed_block(http, uri, slot)
   JSON.parse(resp.body)['result'] ? slot : nil
 end
 
-%w[testnet mainnet].each do |network|
+%w[mainnet testnet].each do |network|
   url = if network == 'mainnet'
     Rails.application.credentials.solana[:mainnet_urls][0]
   else
@@ -51,6 +51,7 @@ end
   slots_in_epoch = 432000
 
   last_epoch = get_last_epoch(http, uri)
+  puts last_epoch
   last_epoch_start_slot = last_epoch['absoluteSlot'] - last_epoch['slotIndex']
 
   slot_set = last_epoch_start_slot.to_i
@@ -69,7 +70,7 @@ end
 
     break unless confirmed_start_block
 
-    last_epoch_start_datetime = DateTime.strptime(get_block_time(http, uri, last_epoch_start_slot).to_s, '%s')
+    last_epoch_start_datetime = DateTime.strptime(get_block_time(http, uri, confirmed_start_block).to_s, '%s')
 
     confirmed_end_block = nil
     100.times do |block_offset|
@@ -99,4 +100,5 @@ end
     puts ewc.inspect
     sleep(1)
   end
+  puts "#{network} is done"
 end
