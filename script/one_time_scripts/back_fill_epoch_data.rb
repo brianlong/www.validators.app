@@ -37,7 +37,7 @@ def get_confirmed_block(http, uri, slot)
   JSON.parse(resp.body)['result'] ? slot : nil
 end
 
-%w[mainnet].each do |network|
+%w[mainnet testnet].each do |network|
   url = if network == 'mainnet'
     Rails.application.credentials.solana[:mainnet_urls][0]
   else
