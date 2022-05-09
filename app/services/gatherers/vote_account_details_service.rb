@@ -9,10 +9,16 @@ module Gatherers
     def initialize(network:, config_urls:)
       @network = network
       @config_urls = config_urls
+      @range_start = VoteAccount.where(network: @network).order(id: :asc).first.id
+      @range_end = VoteAccount.where(network: @network).order(id: :asc).last.id
     end
 
     def call
-      VoteAccount.where(network: @network).each do |vacc|
+      VoteAccount.where(id: @range_start..@range_end, network: @network)
+                 .order(id: :asc)
+                 .each do |vacc|
+        @range_start = vacc.id
+
         vote_account_details = get_vote_account_details(vacc.account)
         if vote_account_details.blank?
           vacc.set_inactive
@@ -28,11 +34,14 @@ module Gatherers
           end
         end
       end
+    rescue ActiveRecord::LockWaitTimeout => e
+      sleep 5
+      retry
     end
 
     private
 
-    # solana vote-account <account>
+    # solana vote-account <account >
     def get_vote_account_details(account)
       cli_request(
         "vote-account #{account}",
@@ -45,9 +54,9 @@ module Gatherers
       return unless vacc
 
       if vacc.validator_identity == vacc.authorized_withdrawer
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = -2
+        vacc.validator.validator_score_v1.update(authorized_withdrawer_score: -2)
       else
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = 0
+        vacc.validator.validator_score_v1.update(authorized_withdrawer_score: 0)
       end
       vacc.validator.validator_score_v1.save if vacc.validator.validator_score_v1.authorized_withdrawer_score_changed?
     end
