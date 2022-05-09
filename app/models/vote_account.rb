@@ -40,8 +40,8 @@ class VoteAccount < ApplicationRecord
   scope :for_api, -> { select(FIELDS_FOR_API).order(updated_at: :asc) }
 
   def set_inactive
-    is_active = false
-    save(touch: false)
+    self.is_active = false
+    self.save(touch: false)
   end
 
   def vote_account_history_last
