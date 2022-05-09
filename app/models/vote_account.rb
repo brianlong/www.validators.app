@@ -38,6 +38,7 @@ class VoteAccount < ApplicationRecord
   before_save :set_network
 
   scope :for_api, -> { select(FIELDS_FOR_API).order(updated_at: :asc) }
+  scope :active, -> { where(is_active: true) }
 
   def set_inactive
     self.is_active = false
