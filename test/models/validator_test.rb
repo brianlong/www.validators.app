@@ -111,4 +111,28 @@ class ValidatorTest < ActiveSupport::TestCase
 
     assert_equal validator_ip.address, @validator.vip_address
   end
+
+  test "vote_account_last should return correct vote account" do
+    va1 = create(
+      :vote_account,
+      validator: @validator,
+      updated_at: 1.minute.ago,
+      is_active: true,
+      account: "test1"
+    )
+    va2 = create(
+      :vote_account,
+      validator: @validator,
+      is_active: true,
+      account: "test2"
+    )
+    va3 = create(
+      :vote_account,
+      validator: @validator,
+      is_active: false,
+      account: "test3"
+    )
+
+    assert_equal va2, @validator.vote_account_last
+  end
 end
