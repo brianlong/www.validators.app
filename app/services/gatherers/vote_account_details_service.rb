@@ -15,6 +15,7 @@ module Gatherers
       VoteAccount.where(network: @network).each do |vacc|
         vote_account_details = get_vote_account_details(vacc.account)
         if vote_account_details.blank?
+          puts "#{vacc.id} should be inactive (resp blank)"
           vacc.set_inactive
         else
           if vacc.update(
@@ -22,8 +23,10 @@ module Gatherers
             authorized_withdrawer: vote_account_details["authorizedWithdrawer"],
             is_active: true
           )
+            puts "#{vacc.id} updated! at #{@network}"
             update_score(vacc)
           else
+            puts "#{vacc.id} should be inactive (not saved)"
             vacc.set_inactive
           end
         end
