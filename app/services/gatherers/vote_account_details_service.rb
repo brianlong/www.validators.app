@@ -6,11 +6,6 @@ module Gatherers
   class VoteAccountDetailsService
     include SolanaLogic
 
-    SCORE_OPTIONS = {
-      negative: -2,
-      neutral: 0
-    }
-
     def initialize(network:, config_urls:)
       @network = network
       @config_urls = config_urls
@@ -70,9 +65,9 @@ module Gatherers
       score = vacc.validator.validator_score_v1
       
       if vacc.validator_identity == vacc.authorized_withdrawer
-        score.authorized_withdrawer_score = SCORE_OPTIONS[:negative]
+        score.authorized_withdrawer_score = ValidatorScoreV1::WITHDRAWER_SCORE_OPTIONS[:negative]
       else
-        score.authorized_withdrawer_score = SCORE_OPTIONS[:neutral]
+        score.authorized_withdrawer_score = ValidatorScoreV1::WITHDRAWER_SCORE_OPTIONS[:neutral]
       end
       score.save if score.authorized_withdrawer_score_changed?
     end
