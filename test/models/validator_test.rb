@@ -112,7 +112,7 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal validator_ip.address, @validator.vip_address
   end
 
-  test "vote_account_last should return correct vote account" do
+  test "vote_account_active should return correct vote account" do
     va1 = create(
       :vote_account,
       validator: @validator,
@@ -133,6 +133,6 @@ class ValidatorTest < ActiveSupport::TestCase
       account: "test3"
     )
 
-    assert_equal va2, @validator.vote_account_last
+    assert_equal va2, @validator.vote_account_active
   end
 end

@@ -6,6 +6,11 @@ module Gatherers
   class VoteAccountDetailsService
     include SolanaLogic
 
+    SCORE_OPTIONS = {
+      negative: -2,
+      neutral: 0
+    }
+
     def initialize(network:, config_urls:)
       @network = network
       @config_urls = config_urls
@@ -21,16 +26,16 @@ module Gatherers
 
         vote_account_details = get_vote_account_details(vacc.account)
         if vote_account_details.blank?
-          vacc.set_inactive
+          vacc.touch_inactive
         else
-          if vacc.update(
+          if should_omit_update?(vacc, vote_account_details) || vacc.update(
             validator_identity: vote_account_details["validatorIdentity"],
             authorized_withdrawer: vote_account_details["authorizedWithdrawer"],
             is_active: true
           )
             update_score(vacc)
           else
-            vacc.set_inactive
+            vacc.touch_inactive
           end
         end
       end
@@ -40,6 +45,11 @@ module Gatherers
     end
 
     private
+
+    def should_omit_update?(vacc, vote_account_details)
+      vacc.validator_identity == vote_account_details["validatorIdentity"] && \
+      vacc.authorized_withdrawer == vote_account_details["authorizedWithdrawer"]
+    end
 
     # solana vote-account <account >
     def get_vote_account_details(account)
@@ -54,9 +64,9 @@ module Gatherers
       return unless vacc
 
       if vacc.validator_identity == vacc.authorized_withdrawer
-        vacc.validator.validator_score_v1.update(authorized_withdrawer_score: -2)
+        vacc.validator.validator_score_v1.authorized_withdrawer_score = SCORE_OPTIONS[:negative]
       else
-        vacc.validator.validator_score_v1.update(authorized_withdrawer_score: 0)
+        vacc.validator.validator_score_v1.authorized_withdrawer_score = SCORE_OPTIONS[:neutral]
       end
       vacc.validator.validator_score_v1.save if vacc.validator.validator_score_v1.authorized_withdrawer_score_changed?
     end
