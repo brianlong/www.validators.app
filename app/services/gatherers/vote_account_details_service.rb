@@ -25,18 +25,22 @@ module Gatherers
         @range_start = vacc.id
 
         vote_account_details = get_vote_account_details(vacc.account)
+
         if vote_account_details.blank?
           vacc.touch_inactive
-        else
-          if should_omit_update?(vacc, vote_account_details) || vacc.update(
+          next
+        end
+
+        next if should_omit_update?(vacc, vote_account_details)
+
+        if vacc.update(
             validator_identity: vote_account_details["validatorIdentity"],
             authorized_withdrawer: vote_account_details["authorizedWithdrawer"],
             is_active: true
           )
             update_score(vacc)
-          else
-            vacc.touch_inactive
-          end
+        else
+          vacc.touch_inactive
         end
       end
     rescue ActiveRecord::LockWaitTimeout => e
@@ -62,13 +66,15 @@ module Gatherers
     # -2 points if withdrawer and id are the same
     def update_score(vacc)
       return unless vacc
-
+      
+      score = vacc.validator.validator_score_v1
+      
       if vacc.validator_identity == vacc.authorized_withdrawer
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = SCORE_OPTIONS[:negative]
+        score.authorized_withdrawer_score = SCORE_OPTIONS[:negative]
       else
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = SCORE_OPTIONS[:neutral]
+        score.authorized_withdrawer_score = SCORE_OPTIONS[:neutral]
       end
-      vacc.validator.validator_score_v1.save if vacc.validator.validator_score_v1.authorized_withdrawer_score_changed?
+      score.save if score.authorized_withdrawer_score_changed?
     end
   end
 end
