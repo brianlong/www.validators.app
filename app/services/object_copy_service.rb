@@ -26,7 +26,6 @@ class ObjectCopyService
           user.password = SecureRandom.hex(6)
           user.email ||= "#{SecureRandom.hex(3)}@example.com"
         end
-        puts new_user.errors.messages
         new_copy.user = new_user
       end
     end
