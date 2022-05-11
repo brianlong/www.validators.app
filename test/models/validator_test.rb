@@ -138,7 +138,7 @@ class ValidatorTest < ActiveSupport::TestCase
   end
 
   test "set_active_vote_account updates vote_accounts correctly" do
-    @validator.set_active_vote_account(@va1.account)
+    @validator.set_active_vote_account(@va1)
 
     assert @va1.reload.is_active
     refute @va2.reload.is_active
