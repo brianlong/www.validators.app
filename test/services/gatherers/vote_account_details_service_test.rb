@@ -25,7 +25,7 @@ class VoteAccountDetailsServiceTest < ActiveSupport::TestCase
     )
   end
 
-  test "VoteAccountDetailsService updates identity and withdrawer" do
+  test "call updates identity and withdrawer" do
     SolanaCliService.stub(:request, @json_response, ["vote-account", @testnet_url]) do
       Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
 
@@ -35,7 +35,7 @@ class VoteAccountDetailsServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test "VoteAccountDetailsService sets correct score" do
+  test "call sets negative score correctly" do
     @json_response = {
       validatorIdentity: "equal_token",
       authorizedWithdrawer: "equal_token"
@@ -45,6 +45,52 @@ class VoteAccountDetailsServiceTest < ActiveSupport::TestCase
       Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
 
       assert_equal -2, @score.reload.authorized_withdrawer_score
+    end
+  end
+
+  test "call sets neutral score correctly" do
+
+    SolanaCliService.stub(:request, @json_response, ["vote-account", @testnet_url]) do
+      Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
+
+      assert_equal 0, @score.reload.authorized_withdrawer_score
+    end
+  end
+
+  test "call with empty solana response marks vote account as inactive" do
+    @json_response = {}.to_json
+
+    SolanaCliService.stub(:request, @json_response, ["vote-account", @testnet_url]) do
+      Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
+
+      refute @va1.reload.is_active
+    end
+  end
+
+  test "call with wrong solana response marks vote account as inactive" do
+    @json_response = {
+      wrong_response: "abc"
+    }.to_json
+
+    SolanaCliService.stub(:request, @json_response, ["vote-account", @testnet_url]) do
+      Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
+
+      refute @va1.reload.is_active
+    end
+  end
+
+  test "call with equal solana response does not change vote account" do
+    @va1.update(
+      validator_identity: @validator_identity,
+      authorized_withdrawer: @authorized_withdrawer,
+      is_active: true
+    )
+    SolanaCliService.stub(:request, @json_response, ["vote-account", @testnet_url]) do
+      Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
+
+      assert @va1.reload.is_active
+      assert_equal @va1.reload.validator_identity, @validator_identity
+      assert_equal @va1.reload.authorized_withdrawer, @authorized_withdrawer
     end
   end
 end
