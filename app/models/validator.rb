@@ -140,7 +140,7 @@ class Validator < ApplicationRecord
 
   # Return the vote account that was most recently used
   def vote_account_active
-    vote_accounts.active.order('updated_at asc').last
+    vote_accounts.active.order('updated_at asc').last || vote_accounts.order('updated_at asc').last
   end
 
   def set_active_vote_account(vote_acc)
