@@ -36,12 +36,12 @@ class VoteAccountDetailsServiceTest < ActiveSupport::TestCase
   end
 
   test "call sets negative score correctly" do
-    @json_response = {
+    json_response = {
       validatorIdentity: "equal_token",
       authorizedWithdrawer: "equal_token"
     }.to_json
 
-    SolanaCliService.stub(:request, @json_response, ["vote-account", @testnet_url]) do
+    SolanaCliService.stub(:request, json_response, ["vote-account", @testnet_url]) do
       Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
 
       assert_equal -2, @score.reload.authorized_withdrawer_score
@@ -58,9 +58,9 @@ class VoteAccountDetailsServiceTest < ActiveSupport::TestCase
   end
 
   test "call with empty solana response marks vote account as inactive" do
-    @json_response = {}.to_json
+    json_response = {}.to_json
 
-    SolanaCliService.stub(:request, @json_response, ["vote-account", @testnet_url]) do
+    SolanaCliService.stub(:request, json_response, ["vote-account", @testnet_url]) do
       Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
 
       refute @va1.reload.is_active
@@ -68,11 +68,11 @@ class VoteAccountDetailsServiceTest < ActiveSupport::TestCase
   end
 
   test "call with wrong solana response marks vote account as inactive" do
-    @json_response = {
+    json_response = {
       wrong_response: "abc"
     }.to_json
 
-    SolanaCliService.stub(:request, @json_response, ["vote-account", @testnet_url]) do
+    SolanaCliService.stub(:request, json_response, ["vote-account", @testnet_url]) do
       Gatherers::VoteAccountDetailsService.new(network: @network, config_urls: [@testnet_url]).call
 
       refute @va1.reload.is_active

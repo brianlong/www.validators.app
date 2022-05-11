@@ -22,7 +22,7 @@ module Gatherers
         vote_account_details = get_vote_account_details(vacc.account)
 
         if vote_account_details.blank?
-          vacc.touch_inactive
+          vacc.set_inactive_without_touch
           next
         end
 
@@ -35,7 +35,7 @@ module Gatherers
           )
             update_score(vacc)
         else
-          vacc.touch_inactive
+          vacc.set_inactive_without_touch
         end
       end
     rescue ActiveRecord::LockWaitTimeout => e

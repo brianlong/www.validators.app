@@ -40,7 +40,7 @@ class VoteAccount < ApplicationRecord
   scope :for_api, -> { select(FIELDS_FOR_API).order(updated_at: :asc) }
   scope :active, -> { where(is_active: true) }
 
-  def touch_inactive
+  def set_inactive_without_touch
     self.is_active = false
     self.save(touch: false)
   end
