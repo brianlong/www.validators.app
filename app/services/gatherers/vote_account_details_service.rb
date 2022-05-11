@@ -30,12 +30,9 @@ module Gatherers
 
         if vacc.update(
             validator_identity: vote_account_details["validatorIdentity"],
-            authorized_withdrawer: vote_account_details["authorizedWithdrawer"],
-            is_active: true
+            authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
           )
             update_score(vacc)
-        else
-          vacc.set_inactive_without_touch
         end
       end
     rescue ActiveRecord::LockWaitTimeout => e
