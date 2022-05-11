@@ -143,6 +143,12 @@ class Validator < ApplicationRecord
     vote_accounts.active.order('updated_at asc').last
   end
 
+  def set_active_vote_account(account_key)
+    active_account = vote_accounts.find_by(account: account_key)
+    active_account.update(is_active: true, updated_at: Time.now)
+    vote_accounts.where.not(account: active_account.account).map(&:set_inactive_without_touch)
+  end
+
   def ping_times_to(limit = 100)
     PingTime.where(
       network: network,

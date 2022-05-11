@@ -5,6 +5,26 @@ require 'test_helper'
 class ValidatorTest < ActiveSupport::TestCase
   setup do
     @validator = create(:validator)
+
+    @va1 = create(
+      :vote_account,
+      validator: @validator,
+      updated_at: 1.minute.ago,
+      is_active: true,
+      account: "test1"
+    )
+    @va2 = create(
+      :vote_account,
+      validator: @validator,
+      is_active: true,
+      account: "test2"
+    )
+    @va3 = create(
+      :vote_account,
+      validator: @validator,
+      is_active: false,
+      account: "test3"
+    )
   end
 
   test 'relationship has_one most_recent_epoch_credits_by_account' do
@@ -113,26 +133,15 @@ class ValidatorTest < ActiveSupport::TestCase
   end
 
   test "vote_account_active should return correct vote account" do
-    va1 = create(
-      :vote_account,
-      validator: @validator,
-      updated_at: 1.minute.ago,
-      is_active: true,
-      account: "test1"
-    )
-    va2 = create(
-      :vote_account,
-      validator: @validator,
-      is_active: true,
-      account: "test2"
-    )
-    va3 = create(
-      :vote_account,
-      validator: @validator,
-      is_active: false,
-      account: "test3"
-    )
 
-    assert_equal va2, @validator.vote_account_active
+    assert_equal @va2, @validator.vote_account_active
+  end
+
+  test "set_active_vote_account updates vote_accounts correctly" do
+    @validator.set_active_vote_account(@va1.account)
+
+    assert @va1.reload.is_active
+    refute @va2.reload.is_active
+    refute @va3.reload.is_active
   end
 end

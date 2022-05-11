@@ -372,8 +372,7 @@ module SolanaLogic
         vote_account = validator.vote_accounts.find_or_create_by(
           account: v['vote_account']
         )
-        vote_account.update(is_active: true, updated_at: Time.now)
-        validator.vote_accounts.where.not(account: v['vote_account']).map(&:set_inactive_without_touch)
+        validator.set_active_vote_account(v['vote_account'])
 
         # Create Vote records to save a time series of vote & stake data
         vote_account.vote_account_histories.create(
