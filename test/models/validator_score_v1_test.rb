@@ -44,6 +44,24 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal "N/A", @validator_score_v1.displayed_total_score
   end
 
+  test 'calculate_total_score assigns a score of -2 if validator has consensus_mods' do
+    @validator.update(security_report_url: nil)
+    @validator_score_v1.calculate_total_score
+    total_score_before = @validator_score_v1.total_score
+    @validator.update(consensus_mods: true)
+    @validator_score_v1.calculate_total_score
+
+    assert_equal (total_score_before - 2), @validator_score_v1.total_score
+  end
+
+  test 'calculate_total_score assigns a score of -2 and security score 0 if validator has consensus_mods' do
+    total_score_before = @validator_score_v1.total_score
+    @validator.update(consensus_mods: true)
+    @validator_score_v1.calculate_total_score
+
+    assert_equal (total_score_before - 3), @validator_score_v1.total_score
+  end
+
   test 'calculate_total_score correctly calculate score' do
     @validator_score_v1.assign_attributes(
       root_distance_score: 2,
@@ -54,9 +72,10 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
       software_version_score: 2,
       stake_concentration_score: 2,
       data_center_concentration_score: 2,
-      authorized_withdrawer_score: 0
+      authorized_withdrawer_score: 0,
+      consensus_mods_score: 0
     )
-
+    
     assert_equal 14, @validator_score_v1.calculate_total_score
   end
 
@@ -75,8 +94,27 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal 2, @validator_score_v1.published_information_score
   end
 
-  test 'assign_security_report_score' do
+  test 'assign_security_report_score assigns 1 if validator has security report' do
     assert_equal 1, @validator_score_v1.security_report_score
+  end
+
+  test 'assign_security_report_score assigns 0 if validator has consensus_mods' do
+    @validator.update(consensus_mods: true)
+    @validator_score_v1.calculate_total_score
+
+    assert_equal 0, @validator_score_v1.assign_security_report_score
+    assert_equal 0, @validator_score_v1.security_report_score
+  end
+
+  test 'assign_consensus_mods_score assigns 0 by default' do
+    assert_equal 0, @validator_score_v1.consensus_mods_score
+  end
+
+  test 'assign_consensus_mods_score assigns -2 if validator has consensus_mods' do
+    @validator.update(consensus_mods: true)
+    @validator_score_v1.calculate_total_score
+
+    assert_equal -2, @validator_score_v1.consensus_mods_score
   end
 
   test 'assign_software_version_score persists a software_version_score' do

@@ -71,7 +71,7 @@ class ValidatorsController < ApplicationController
       time_from,
       time_to
     ).order(created_at: :asc)
-    .limit(@history_limit)
+    .last(@history_limit)
 
     # Grab the distances to show on the chart
     @root_blocks = @val_histories.map(&:root_distance).compact

@@ -5,7 +5,8 @@ const DELEGATION_STRATEGY_URLS = {
   "Jpool": "https://docs.jpool.one/technical-stuff/staking-strategy",
   "Marinade": "https://docs.marinade.finance/marinade-protocol/validators",
   "Lido": "https://solana.foundation/stake-pools",
-  "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds"
+  "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds",
+  "Eversol": "https://docs.eversol.one/litepaper/delegation-strategy"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {

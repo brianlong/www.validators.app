@@ -90,3 +90,12 @@ To decrypt the file: `gpg --output config/credentials/test.key --decrypt config/
 To encrypt the file: `gpg -c --output config/credentials/test_key.gpg config/credentials/test.key`
 
 To decrypt and encrypt the file you need a passphrase, please ask your team leader about it.
+
+## Validators Stack
+- ValidatorsApp https://github.com/brianlong/www.validators.app
+- BlockLogic https://github.com/firstmoversadvantage/www_blocklogic_net
+
+### Gems
+- Validators ruby client https://github.com/Block-Logic/validators-app-ruby
+- Solana RPC ruby gem https://github.com/Block-Logic/solana-rpc-ruby
+- Solscan API ruby gem https://github.com/Block-Logic/solscan-api-ruby

@@ -21,6 +21,7 @@
 #  active_stake                                :bigint           unsigned
 #  authorized_withdrawer_score                 :integer
 #  commission                                  :integer
+#  consensus_mods_score                        :integer          default(0)
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
 #  data_center_host                            :string(191)
@@ -71,6 +72,7 @@ class ValidatorScoreV1 < ApplicationRecord
     software_version
     software_version_score
     stake_concentration_score
+    consensus_mods_score
     total_score
     validator_id
     vote_distance_score
@@ -154,6 +156,7 @@ class ValidatorScoreV1 < ApplicationRecord
     assign_published_information_score
     assign_software_version_score(best_sv)
     assign_security_report_score
+    assign_consensus_mods_score
 
     self.total_score =
       if validator.private_validator? || validator.admin_warning
@@ -164,6 +167,7 @@ class ValidatorScoreV1 < ApplicationRecord
           skipped_slot_score.to_i +
           published_information_score.to_i +
           security_report_score.to_i +
+          consensus_mods_score.to_i +
           software_version_score.to_i +
           stake_concentration_score.to_i +
           data_center_concentration_score.to_i +
@@ -220,8 +224,15 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   # Assign one point if the validator has provided a security_report_url
+  # Assign 0 if consensus_mods value is true
   def assign_security_report_score
+    return self.security_report_score = 0 if validator.consensus_mods
     self.security_report_score = validator.security_report_url.blank? ? 0 : 1
+  end
+
+  # Assign -2 if consensus_mods value is true
+  def assign_consensus_mods_score
+    self.consensus_mods_score = validator.consensus_mods ? -2 : 0
   end
 
   def avg_root_distance_history(period = nil)

@@ -77,7 +77,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 36, validator_with_all_data.keys.size
+    assert_equal 37, validator_with_all_data.keys.size
 
     # Validator
     assert_equal "testnet", validator_with_all_data["network"]
@@ -96,6 +96,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_nil validator_with_all_data["data_center_concentration_score"]
     assert_equal 1, validator_with_all_data["published_information_score"]
     assert_equal 1, validator_with_all_data["security_report_score"]
+    assert_equal 0, validator_with_all_data["consensus_mods_score"]
     assert_equal validator_active_stake, validator_with_all_data["active_stake"]
     assert_equal 10, validator_with_all_data["commission"]
     assert_equal false, validator_with_all_data["delinquent"]
@@ -128,9 +129,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator,
       :with_score,
+      :with_admin_warning,
       :with_data_center_through_validator_ip,
       account: "Test Account",
-      admin_warning: "test warning"
     )
 
     get api_v1_validators_url(network: "testnet"),
@@ -346,7 +347,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 36, json_response.keys.size
+    assert_equal 37, json_response.keys.size
 
     # Validator
     assert_equal "testnet", json_response["network"]
@@ -365,6 +366,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_nil json_response["data_center_concentration_score"]
     assert_equal 1, json_response["published_information_score"]
     assert_equal 1, json_response["security_report_score"]
+    assert_equal 0, json_response["consensus_mods_score"]
     assert_equal validator_active_stake, json_response["active_stake"]
     assert_equal 10, json_response["commission"]
     assert_equal false, json_response["delinquent"]
@@ -414,7 +416,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 42, json_response.keys.size
+    assert_equal 43, json_response.keys.size
 
     # Score
     assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
