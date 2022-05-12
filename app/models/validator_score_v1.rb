@@ -87,6 +87,11 @@ class ValidatorScoreV1 < ApplicationRecord
     stake_concentration
   ].freeze
 
+  WITHDRAWER_SCORE_OPTIONS = {
+    negative: -2,
+    neutral: 0
+  }.freeze
+
   MAX_HISTORY = 2_880
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze

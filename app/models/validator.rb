@@ -139,8 +139,13 @@ class Validator < ApplicationRecord
   end
 
   # Return the vote account that was most recently used
-  def vote_account_last
-    vote_accounts.order('updated_at asc').last
+  def vote_account_active
+    vote_accounts.active.order('updated_at asc').last || vote_accounts.order('updated_at asc').last
+  end
+
+  def set_active_vote_account(vote_acc)
+    vote_acc.update(is_active: true, updated_at: Time.now)
+    vote_accounts.where.not(account: vote_acc.account).map(&:set_inactive_without_touch)
   end
 
   def ping_times_to(limit = 100)
