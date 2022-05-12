@@ -3,7 +3,7 @@ class SortedDataCenters
   def call
     @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
 
-    @results = @results.sort_by { |_k, v| -v[:active_stake] }
+    @results = @results.sort_by { |_k, v| -v[:active_stake_from_active_validators] }
     result_hash = {
       total_population: @total_population,
       total_stake: @total_stake,
@@ -27,7 +27,7 @@ class SortedDataCenters
       "data_centers.country_iso_code",
       "SUM(IF(validator_score_v1s.delinquent = true, 1, 0)) as delinquent_count",
       "IF(ISNULL(city_name), location_time_zone, city_name) as location",
-      "SUM(validator_score_v1s.active_stake) as total_active_stake",
+      "SUM(IF(validators.is_active = true, validator_score_v1s.active_stake, 0)) as active_stake_from_active_validators",
       "COUNT(*) as total_validator_score_v1s",
     ]
 
@@ -50,7 +50,7 @@ class SortedDataCenters
                         .where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", @network, 0)
                         .group(group)
 
-    @total_stake = @dc_sql.inject(0) { |sum, dc| sum + dc.total_active_stake }
+    @total_stake = @dc_sql.inject(0) { |sum, dc| sum + dc.active_stake_from_active_validators }
     @total_population = 0
     @total_delinquent = 0
     @total_private = 0
@@ -62,11 +62,12 @@ class SortedDataCenters
 
     @dc_sql.each do |data_center_key, data_centers|
       next if data_center_key.blank?
+
       dc_keys = data_centers.map { |dc| dc.data_center_key }
       aso = data_centers.map { |dc| dc.traits_autonomous_system_organization }.compact.uniq.join(', ')
       population = data_centers.inject(0) { |sum, dc| sum + dc.total_validator_score_v1s } || 0
-      active_stake = data_centers.inject(0) { |sum, dc| sum + dc.total_active_stake }
       delinquent_validators = data_centers.inject(0) { |sum, dc| sum + dc.delinquent_count } || 0
+      active_stake_from_active_validators = data_centers.inject(0) { |sum, dc| sum + dc.active_stake_from_active_validators } || 0
 
       next if population.zero?
 
@@ -77,8 +78,8 @@ class SortedDataCenters
         aso: aso,
         data_centers: dc_keys,
         count: population,
-        active_stake: active_stake,
-        delinquent_validators: delinquent_validators
+        delinquent_validators: delinquent_validators,
+        active_stake_from_active_validators: active_stake_from_active_validators
       }
 
       # We count private validators only for mainnet.
@@ -95,7 +96,7 @@ class SortedDataCenters
       data_center_key = dc.data_center_key
       population = dc.total_validator_score_v1s || 0
       delinquent_validators = dc.delinquent_count || 0
-      active_stake = dc.total_active_stake || 0
+      active_stake_from_active_validators = dc.active_stake_from_active_validators || 0
 
       next if population.zero?
 
@@ -107,8 +108,8 @@ class SortedDataCenters
         country: dc.traits_autonomous_system_organization,
         location: dc.country_iso_code,
         count: population,
-        active_stake: active_stake,
-        delinquent_validators: delinquent_validators
+        delinquent_validators: delinquent_validators,
+        active_stake_from_active_validators: active_stake_from_active_validators
       }
 
       # We count private validators only for mainnet.
