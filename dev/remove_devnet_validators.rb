@@ -2,11 +2,10 @@
 
 VALIDATORS_TO_REMOVE = %w[
   dv1ZAGvdsz5hHLwWXsVnM94hWf1pjbKVau1QVkaMJ92
+  dv2eQHeP4RFrJZ6UeiZWoc3XTtmtZCUKxxCApCDcRNV
+  dv3qDFk1DTF36Z62bNvrCXe9sKATA6xvVy6A798xxAS
+  dv4ACNkpYPcE3aKmYDqZm9G5EB3J4MRoeE7WNDRBVJB
 ].freeze
-
-# dv2eQHeP4RFrJZ6UeiZWoc3XTtmtZCUKxxCApCDcRNV
-# dv3qDFk1DTF36Z62bNvrCXe9sKATA6xvVy6A798xxAS
-# dv4ACNkpYPcE3aKmYDqZm9G5EB3J4MRoeE7WNDRBVJB
 
 VALIDATORS_TO_REMOVE.each do |account|
   puts "-----------------"
@@ -44,4 +43,7 @@ VALIDATORS_TO_REMOVE.each do |account|
 
   validator.validator_score_v1.delete
   puts "score deleted"
+
+  validator.delete
+  puts "validator deleted"
 end
