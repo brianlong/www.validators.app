@@ -20,7 +20,11 @@ VALIDATORS_TO_REMOVE.each do |account|
   puts "validator_block_histories deleted"
 
   vote_accounts = validator.vote_accounts
-  vote_accounts.each { |va| va.vote_account_histories.delete_all }
+  vote_accounts.each do |va| 
+    if va.vote_account_histories.any?
+      va.vote_account_histories.delete_all
+    end
+  end
   puts "vote_account_histories deleted"
 
   validator.vote_accounts.delete_all
