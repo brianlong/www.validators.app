@@ -24,7 +24,6 @@
 #  consensus_mods_score                        :integer          default(0)
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
-#  data_center_host                            :string(191)
 #  data_center_key                             :string(191)
 #  delinquent                                  :boolean
 #  ip_address                                  :string(191)
