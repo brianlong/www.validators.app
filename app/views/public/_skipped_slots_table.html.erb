@@ -28,7 +28,8 @@
               <% if validator && validator.avatar_url %>
                 <%= image_tag validator.avatar_url, class: 'img-circle-small' %>
               <% else %>
-                <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-small' %>
+                <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png',
+                              class: 'img-circle-small' %>
               <% end %>
             </span>
             <%= link_to link_text, validator_url(network: params[:network], account: val['account'])  %>
