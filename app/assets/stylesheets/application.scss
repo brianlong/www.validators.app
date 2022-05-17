@@ -95,25 +95,26 @@ body {
 }
 
 .page-header {
-  margin-bottom: 40px;
-  @media(max-width: $screen-xs-max) {
-    margin-bottom: $margin-standard*2;
-  }
+  margin-bottom: 30px;
 
-  &.with-image {
+  &-name {
+    margin-bottom: 25px;
+
     h1 {
       display: inline-block;
       margin-bottom: 0;
-    }
-    h5 {
-      margin: 5px 0 0 0;
+      padding-left: 60px;
     }
     img, .img-circle, .img-circle-private {
       display: inline-block;
       position: absolute;
-      margin-top: -6px;
+      margin-top: 1px;
+      @media(max-width: $screen-md-max) { margin-top: 0; }
+      @media(max-width: $screen-sm-max) { margin-top: -3px; }
     }
   }
+
+  &-tags {}
 }
 
 hr {

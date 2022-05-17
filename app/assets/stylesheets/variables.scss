@@ -105,6 +105,16 @@ $font-size-h6: $font-size-larger;
   }
 }
 
+@mixin font-size-very-small {
+  font-size: $font-size-smaller-mobile;
+  @media(max-width: $screen-md-max) {
+    font-size: $font-size-smaller-mobile;
+  }
+  @media(max-width: $screen-sm-max) {
+    font-size: $font-size-smaller-mobile;
+  }
+}
+
 $font-weight-bold-primary: 700;
 $font-weight-bold-secondary: 600;
 $font-weight-normal: 400;
