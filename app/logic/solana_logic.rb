@@ -372,7 +372,7 @@ module SolanaLogic
         vote_account = validator.vote_accounts.find_or_create_by(
           account: v['vote_account']
         )
-        vote_account.touch
+        validator.set_active_vote_account(vote_account)
 
         # Create Vote records to save a time series of vote & stake data
         vote_account.vote_account_histories.create(

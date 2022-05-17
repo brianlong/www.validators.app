@@ -28,7 +28,7 @@
       <h5 class="mt-2">
         Delegate SOL to this validator:
         <%= link_to 'SolStake.io',
-                    solstake_url(@validator.vote_account_last&.account),
+                    solstake_url(@validator.vote_account_active&.account),
                     target: :blank %>
       </h5>
     <% end %>
@@ -118,10 +118,10 @@
           <td>
             <small class="word-break">
               <%=
-                link_to @validator.vote_account_last&.account,
+                link_to @validator.vote_account_active&.account,
                   validator_vote_account_path(
                     account: @validator.account,
-                    vote_account: @validator.vote_account_last&.account,
+                    vote_account: @validator.vote_account_active&.account,
                     network: params[:network]
                   ) unless @validator.vote_accounts.empty? 
               %>
