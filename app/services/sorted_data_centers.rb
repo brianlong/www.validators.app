@@ -1,22 +1,4 @@
 class SortedDataCenters
-
-  def call
-    @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
-
-    @results = @results.sort_by { |_k, v| -v[:active_stake_from_active_validators] }
-    result_hash = {
-      total_population: @total_population,
-      total_delinquent: @total_delinquent,
-      total_stake: @total_stake,
-      total_active_stake_from_active_validators: @total_active_stake_from_active_validators,
-      results: @results
-    }
-
-    result_hash.merge!({total_private: @total_private}) if @network == "mainnet"
-
-    result_hash
-  end
-
   def initialize(sort_by:, network:)
     @sort_by = sort_by
     @network = network
@@ -58,6 +40,23 @@ class SortedDataCenters
     @total_delinquent = 0
     @total_private = 0
     @results = {}
+  end
+
+  def call
+    @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
+
+    @results = @results.sort_by { |_k, v| -v[:active_stake_from_active_validators] }
+    result_hash = {
+      total_population: @total_population,
+      total_delinquent: @total_delinquent,
+      total_stake: @total_stake,
+      total_active_stake_from_active_validators: @total_active_stake_from_active_validators,
+      results: @results
+    }
+
+    result_hash.merge!({total_private: @total_private}) if @network == "mainnet"
+
+    result_hash
   end
 
   def sort_by_asn
