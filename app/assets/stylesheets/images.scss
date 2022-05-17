@@ -1,7 +1,7 @@
 @import "variables";
 
 @mixin img-circle($height, $width) {
-  border-radius: 14%;
+  border-radius: 15%;
   height: $height;
   width: $width;
   background-color: #f0f0f0;
