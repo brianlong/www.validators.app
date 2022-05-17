@@ -13,7 +13,7 @@
                           data-placement="top"
                           title="<%= t('definitions.average_score') %>"></i>
   </th>
-  <th class="column-lg align-middle">Data Centers</th>
+  <th class="column-md align-middle">Data Centers</th>
   <th class="column-md align-middle">
     Population
     <i class="fas fa-info-circle small"
@@ -57,6 +57,15 @@
                          data-toggle="tooltip"
                          data-placement="top"
                          title="<%= t('definitions.active_stake') %>"></i>
+    <br />
+    <small class="text-muted">
+      <%= number_with_delimiter lamports_to_sol(@results[:total_active_stake_from_active_validators]).round(0) %>
+    </small>
+    <br />
+    Total Stake&nbsp;<i class="fas fa-info-circle small"
+                         data-toggle="tooltip"
+                         data-placement="top"
+                         title="<%= t('definitions.total_stake') %>"></i>
     <br />
     <small class="text-muted">
       <%= number_with_delimiter lamports_to_sol(@results[:total_stake]).round(0) %>

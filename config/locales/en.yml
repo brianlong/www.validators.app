@@ -107,4 +107,5 @@ en:
     scores: "Our score system."
     skipped_slot: "Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate."
     skipped_vote: "Skipped vote measures the percent of the time that a leader fails to vote."
+    total_stake: "Total stake from all validators."
     vote_distance: "Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group."
