@@ -74,7 +74,8 @@ class Validator < ApplicationRecord
   end
 
   def self.filtered_by(filter)
-    case filter
+    return all unless filter
+    case filter[0]
     when :delinquent
       joins(:validator_score_v1)
         .where("validator_score_v1s.delinquent = ?", true)

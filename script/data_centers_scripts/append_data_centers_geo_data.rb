@@ -21,7 +21,7 @@ begin
          WHERE v.is_active = true
          AND v.data_center_host_id IS NULL"
 
-  sql = "#{sql} LIMIT 10" if Rails.env == 'development'
+  # sql = "#{sql} LIMIT 10" if Rails.env == 'development'
 
   ValidatorIp.connection.execute(sql).each do |missing_ip|
     puts missing_ip[0].inspect if verbose

@@ -66,11 +66,25 @@
   </div>
 </div>
 
-<%= create_filter_link(view: 'data_center', params_list: params, filter_by: "delinquent") %>
-<%= create_filter_link(view: 'data_center', params_list: params, filter_by: "inactive") %>
-<%= create_filter_link(view: 'data_center', params_list: params, filter_by: "private") %>
+<%= @filters %>
+<br />
+<div class="btn-group btn-group-toggle mb-4">
+  <%= create_filter_link(view: 'data_center', params_list: params, filter_by: "delinquent", state: true) %>
+  <%= create_filter_link(view: 'data_center', params_list: params, filter_by: "delinquent", state: false) %>
+</div>
 
-<% if params[:filter_by].blank? && params[:network] == "mainnet" %>
+<div class="btn-group btn-group-toggle mb-4">
+  <%= create_filter_link(view: 'data_center', params_list: params, filter_by: "inactive", state: true) %>
+  <%= create_filter_link(view: 'data_center', params_list: params, filter_by: "inactive", state: false) %>
+</div>
+
+<div class="btn-group btn-group-toggle mb-4">
+  <%= create_filter_link(view: 'data_center', params_list: params, filter_by: "private", state: true) %> 
+  <%= create_filter_link(view: 'data_center', params_list: params, filter_by: "private", state: false) %> 
+</div>
+
+
+<% if false && params[:filter_by].blank? && params[:network] == "mainnet" %>
   <%= link_to_toggle_private(type: :data_center, url_params: params) %>
 <% end %>
 
