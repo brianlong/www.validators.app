@@ -1,5 +1,5 @@
 <div class="page-header with-image row">
-  <div class='col-lg-1 col-2'>
+  <div class='col-3 col-sm-2 col-lg-1'>
     <% if @validator.private_validator? %>
       <div class="img-circle-private">
         <span class='fas fa-users-slash' title="Private Validator"></span>
@@ -10,7 +10,7 @@
       <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
     <% end %>
   </div>
-  <div class='col-lg-11 col-10'>
+  <div class='col-9 col-sm-10 col-lg-11'>
     <h1 class="word-break">
       <%= @validator.name || @validator.account %>
       <% if @validator.score.authorized_withdrawer_score == -2 %>
