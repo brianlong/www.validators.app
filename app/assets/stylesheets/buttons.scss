@@ -89,7 +89,7 @@
     border-radius: 22px;
     padding: 6px 11px;
     min-width: 75px;
-    @include font-size-very-small;
+    @include font-size-xs;
     @media(max-width: $screen-xs-max) { min-width: 65px; }
   }
 }

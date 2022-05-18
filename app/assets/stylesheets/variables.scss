@@ -105,7 +105,7 @@ $font-size-h6: $font-size-larger;
   }
 }
 
-@mixin font-size-very-small {
+@mixin font-size-xs {
   font-size: $font-size-smaller-mobile;
   @media(max-width: $screen-md-max) {
     font-size: $font-size-smaller-mobile;

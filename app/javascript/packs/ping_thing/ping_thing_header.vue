@@ -14,7 +14,8 @@
     </p>
     <p>
       I would like to get feedback from Solana developers on how we can make this tool more useful for your
-      applications. Please contact me at @ValidatorsApp on Twitter. -- @brianlong
+      applications. Please contact me at <a href="https://twitter.com/ValidatorsApp" target="_blank">@ValidatorsApp</a>
+      on Twitter. -- @brianlong
     </p>
     <p>
       NOTES: We use a 60-second timeout threshold for the pings. On the chart and table below, a value of 60,000
