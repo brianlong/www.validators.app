@@ -24,11 +24,11 @@ p {
 
 
 .lead, big {
-  @include font-size-larger();
+  @include font-size-lg();
 }
 
 small, .small {
-  @include font-size-smaller();
+  @include font-size-sm();
 }
 
 mark, .mark {
@@ -41,7 +41,7 @@ pre {
   color: inherit;
   border-radius: $border-radius;
   padding: $padding-standard;
-  @include font-size-smaller();
+  @include font-size-sm();
 }
 
 code {
@@ -119,7 +119,7 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
   h3, .h3 { font-size: $font-size-h3*.85; }
   h4, .h4 { font-size: $font-size-h4*.85; }
   h5, .h5 { font-size: $font-size-h5*.85; }
-  h6, .h6 { font-size: $font-size-larger-tablet; }
+  h6, .h6 { font-size: $font-size-lg-tablet; }
 }
 @media(max-width: $screen-sm-max) {
   h1, .h1 { font-size: $font-size-h1*.8; }
@@ -127,7 +127,7 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
   h3, .h3 { font-size: $font-size-h3*.8; }
   h4, .h4 { font-size: $font-size-h4*.8; }
   h5, .h5 { font-size: $font-size-h5*.8; }
-  h6, .h6 { font-size: $font-size-larger-mobile; }
+  h6, .h6 { font-size: $font-size-lg-mobile; }
 }
 .heading-primary {
   color: $white;
@@ -139,7 +139,7 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
     font-size: 36px;
     line-height: 36px;
   }
-  @media(max-width: $screen-sm-max) { font-size: 30px }
+  @media(max-width: $screen-sm-max) { font-size: 32px }
 }
 .heading-secondary {
   text-transform: uppercase;
