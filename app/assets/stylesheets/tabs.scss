@@ -17,7 +17,7 @@
       border-radius: 24px;
       padding: 8px 14px;
       min-width: 75px;
-      @include font-size-smaller;
+      @include font-size-sm;
 
       &:hover, &.active {
         transition: .2s ease;
