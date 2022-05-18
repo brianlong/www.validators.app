@@ -16,19 +16,19 @@
   <div class="page-header-tags">
     <div class="d-inline-block">
       <% if @validator.private_validator? %>
-        <div class="btn btn-xs btn-danger mr-2">private</div>
+        <div class="btn btn-xs btn-danger mr-2" title="Validator has 100% commission.">private</div>
       <% end %>
       <% if @validator.delinquent? %>
-        <div class="btn btn-xs btn-danger mr-2">delinquent</div>
-      <% end %>
-      <% if @validator.score.authorized_withdrawer_score == -2 %>
-        <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
-          <i class="fas fa-exclamation-triangle text-warning lead mr-2 mt-2 mt-lg-1"></i>
-        <% end %>
+        <div class="btn btn-xs btn-danger mr-2" title="Validator is delinquent.">delinquent</div>
       <% end %>
       <% if @validator.admin_warning %>
         <%= link_to '/faq#admin-warning', title: "#{@validator.admin_warning}" do %>
-          <i class="fas fa-exclamation-triangle text-danger lead mr-2 mt-2 mt-lg-1"></i>
+          <div class="btn btn-xs btn-danger mr-2">admin warning</div>
+        <% end %>
+      <% end %>
+      <% if @validator.score.authorized_withdrawer_score == -2 %>
+        <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
+          <div class="btn btn-xs btn-warning mr-2">withdrawer authority</div>
         <% end %>
       <% end %>
     </div>
