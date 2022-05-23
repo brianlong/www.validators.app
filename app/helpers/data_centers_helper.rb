@@ -40,18 +40,36 @@ module DataCentersHelper
     end
   end
 
-  def create_filter_link(view:, params_list:, filter_by:, state:)
-    classes_list = "btn btn-sm btn-secondary "
-    classes_list << "active" if @filters[filter_by] == state.to_s
-    updated_params = @filters
-    updated_params[filter_by] = state
+  def create_filter_by_link(view:, params_list:, current_filters:, filter_by:)
+    classes_list = "btn btn-sm btn-secondary mb-4 "
+    new_filter_by = current_filters.dup || []
+
+    if current_filters.include? filter_by
+      classes_list << "active"
+      new_filter_by = new_filter_by - [filter_by]
+    else
+      new_filter_by << filter_by
+    end
     url = send("#{view}_url",
                 network:params_list[:network],
                 key: params[:key],
-                filter_by: updated_params
+                filter_by: new_filter_by,
+                display: display
               )
-    prefix = state ? "show" : "hide"
 
-    link_to "#{prefix} #{filter_by}", url, class: classes_list
+    link_to "Filter #{filter_by}", url, class: classes_list
+  end
+
+  def create_filter_display_link(view:, params_list:, display:)
+    classes_list = "btn btn-sm btn-secondary mb-4 "
+    classes_list << "active" if @display == display
+    url = send("#{view}_url",
+                network:params_list[:network],
+                key: params[:key],
+                filter_by: params[:filter_by],
+                display: display
+              )
+
+    link_to "show #{display}", url, class: classes_list
   end
 end

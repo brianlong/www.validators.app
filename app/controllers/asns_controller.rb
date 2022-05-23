@@ -2,6 +2,9 @@ class AsnsController < ApplicationController
   def show
     network = asn_params[:network]
 
+    @display = asn_params[:display].blank? ? "all" : asn_params[:display]
+    @filter_by = asn_params[:filter_by].blank? || @display != "all" ? [] : asn_params[:filter_by]
+
     @data_centers = DataCenter.joins(:validator_score_v1s)
                               .where(traits_autonomous_system_number: asn_params[:asn])
                               .where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", network, 0)
@@ -18,7 +21,8 @@ class AsnsController < ApplicationController
     @scores = ValidatorScoreV1.joins(:data_center)
                               .where("data_centers.id IN (?)", data_center_ids)
                               .by_network_with_active_stake(network)
-                              .filtered_by(asn_params[:filter_by]&.to_sym)
+                              .find_by_type(@display)
+                              .filtered_by(@filter_by)
     if params[:show_private]
       @scores = @scores.with_private(show: params[:show_private])
     end
@@ -43,6 +47,6 @@ class AsnsController < ApplicationController
   private
 
   def asn_params
-    params.permit :asn, :network, :filter_by, :page
+    params.permit :asn, :network, :page, :display, filter_by: []
   end
 end

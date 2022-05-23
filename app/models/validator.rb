@@ -68,28 +68,43 @@ class Validator < ApplicationRecord
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
-
-  def self.with_private(show: "true")
-    show == "true" ? all : where.not("validator_score_v1s.commission = 100")
-  end
-
-  def self.filtered_by(filter)
-    return all unless filter
-    case filter[0]
-    when :delinquent
-      joins(:validator_score_v1)
-        .where("validator_score_v1s.delinquent = ?", true)
-    when :inactive
-      where(is_active: false)
-    when :private
-      joins(:validator_score_v1)
-        .where("validator_score_v1s.commission = ? AND validator_score_v1s.network = ?", 100, "mainnet")
-    else
-      all
-    end
-  end
   
   class << self
+    def with_private(show: "true")
+      show == "true" ? all : where.not("validator_score_v1s.commission = 100")
+    end
+  
+    def find_by_type(display)
+      return all unless display
+      case display
+      when "delinquent"
+        joins(:validator_score_v1)
+          .where("validator_score_v1s.delinquent = ?", true)
+      when "inactive"
+        where(is_active: false)
+      else
+        all
+      end
+    end
+  
+    def filtered_by(filter)
+      return all if filter.blank?
+      vals = all
+      if filter.include? "delinquent"
+        vals = vals.where("validator_score_v1s.delinquent = ?", false)
+      end
+  
+      if filter.include? "inactive"
+        vals = vals.where(is_active: true)
+      end
+  
+      if filter.include? "private"
+        vals = vals.where("validator_score_v1s.commission = ? AND validator_score_v1s.network = ?", 100, "mainnet")
+      end
+      
+      vals
+    end
+
     # Returns an Array of account IDs for a given network
     #
     # Validator.accounts_for('testnet') => ['1234', '5678']

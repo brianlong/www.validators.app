@@ -1,6 +1,5 @@
 class DataCentersController < ApplicationController
 
-  # before_action :set_default_filters, only: :data_center
   # index_params[:network]
   # index_params[:sort_by]
   def index
@@ -22,19 +21,17 @@ class DataCentersController < ApplicationController
 
     @per = 25
 
-    default_filters = {
-      "delinquent": true,
-      "inactive": true,
-      "private": true
-    }
+    @display = show_params[:display].blank? ? "all" : show_params[:display]
+    @filter_by = show_params[:filter_by].blank? || @display != "all" ? [] : show_params[:filter_by]
 
-    @filters = show_params[:filter_by]&.to_h || default_filters
-    
+    # throw @display
+
     data_centers = DataCenter.where(data_center_key: key)
     @validators = Validator.joins(:validator_score_v1, :data_center)
                            .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_centers.ids, show_params[:network], 0)
-                           .filtered_by(@filters)
-                           .order("validator_score_v1s.active_stake desc")
+                           .find_by_type(@display)
+                           .filtered_by(@filter_by)
+                          #  .order("validator_score_v1s.active_stake desc")
 
     if params[:show_private]
       @validators = @validators.with_private(show: params[:show_private])
@@ -50,19 +47,11 @@ class DataCentersController < ApplicationController
 
   private
 
-  def set_default_filters
-
-  end
-
   def index_params
     params.permit(:network, :sort_by)
   end
 
   def show_params
-    if params[:filter_by]
-      params.permit(:network, :page, :key, params.require(:filter_by)&.permit!)
-    else
-      params.permit(:network, :page, :key)
-    end
+    params.permit(:network, :page, :key, :display, filter_by: [])
   end
 end

@@ -54,13 +54,7 @@
   </div>
 </div>
 
-<%= create_filter_link(view: 'asn', params_list: params, filter_by: "delinquent") %>
-<%= create_filter_link(view: 'asn', params_list: params, filter_by: "inactive") %>
-<%= create_filter_link(view: 'asn', params_list: params, filter_by: "private") %>
-
-<% if params[:filter_by].blank? && params[:network] == "mainnet" %>
-  <%= link_to_toggle_private(type: :asn, url_params: params) %>
-<% end %>
+<%= render "data_centers/filters", {view: "asn"} %>
 
 <% unless params[:filter_by].blank? %>
   <%= link_to 'Reset filters',
