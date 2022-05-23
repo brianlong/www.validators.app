@@ -31,11 +31,7 @@ class DataCentersController < ApplicationController
                            .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_centers.ids, show_params[:network], 0)
                            .find_by_type(@display)
                            .filtered_by(@filter_by)
-                          #  .order("validator_score_v1s.active_stake desc")
-
-    if params[:show_private]
-      @validators = @validators.with_private(show: params[:show_private])
-    end
+                           .order("validator_score_v1s.active_stake desc")
 
     @dc_stake = @validators.sum(:active_stake)          
     @validators = @validators.page(params[:page]).per(@per)

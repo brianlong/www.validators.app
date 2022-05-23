@@ -25,6 +25,8 @@ class ValidatorTest < ActiveSupport::TestCase
       is_active: false,
       account: "test3"
     )
+
+    @score = create(:validator_score_v1, validator: @validator)
   end
 
   test 'relationship has_one most_recent_epoch_credits_by_account' do
@@ -143,5 +145,43 @@ class ValidatorTest < ActiveSupport::TestCase
     assert @va1.reload.is_active
     refute @va2.reload.is_active
     refute @va3.reload.is_active
+  end
+
+  test "find_by_type when searching by delinquent returns correct results" do
+    refute Validator.find_by_type("delinquent").any?
+    
+    @score.update(delinquent: true)
+    @score.reload
+
+    result = Validator.find_by_type("delinquent")
+
+    assert_equal 1, result.count
+    assert_equal [true], result.map{ |v| v.score.delinquent }.compact.uniq
+  end
+
+  test "find_by_type when searching by inactive returns correct results" do
+    refute Validator.find_by_type("inactive").any?
+
+    @validator.update(is_active: false)
+    @validator.reload
+
+    result = Validator.find_by_type("inactive")
+
+    assert_equal 1, result.count
+    assert_equal [false], result.map{ |v| v.is_active }.compact.uniq
+  end
+
+  test "filtered_by excludes correct validators from collection" do
+    create(:validator, is_active: false)
+
+    v_delinquent = create(:validator, account: "v_delinquent")
+    create(:validator_score_v1, validator: v_delinquent, delinquent: true)
+
+    v_private = create(:validator, account: "v_private")
+    create(:validator_score_v1, validator: v_private, commission: 100)
+
+    result = Validator.filtered_by(["inactive", "delinquent", "private"])
+
+    assert_equal 1, result.count
   end
 end

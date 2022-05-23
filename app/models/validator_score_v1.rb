@@ -142,38 +142,6 @@ class ValidatorScoreV1 < ApplicationRecord
     def with_private(show: "true")
       show == "true" ? all : where.not(commission: 100)
     end
-
-    def find_by_type(display)
-      return all unless display
-      case display
-      when "delinquent"
-        where(delinquent: true)
-      when "inactive"
-        joins(:validator)
-          .where("validators.is_active = ?", false)
-      else
-        all
-      end
-    end
-  
-    def filtered_by(filter)
-      return all if filter.blank?
-      scores = all.includes(:validator)
-
-      if filter.include? "delinquent"
-        scores = scores.where(delinquent: false)
-      end
-  
-      if filter.include? "inactive"
-        scores = scores.where("validators.is_active = ?", true)
-      end
-  
-      if filter.include? "private"
-        scores = scores.where(commission: 100, network: "mainnet")
-      end
-      
-      scores
-    end
   end
 
   def calculate_total_score

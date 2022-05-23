@@ -89,7 +89,7 @@ class Validator < ApplicationRecord
   
     def filtered_by(filter)
       return all if filter.blank?
-      vals = all
+      vals = all.joins(:validator_score_v1)
       if filter.include? "delinquent"
         vals = vals.where("validator_score_v1s.delinquent = ?", false)
       end
@@ -99,7 +99,7 @@ class Validator < ApplicationRecord
       end
   
       if filter.include? "private"
-        vals = vals.where("validator_score_v1s.commission = ? AND validator_score_v1s.network = ?", 100, "mainnet")
+        vals = vals.where("validator_score_v1s.commission < ? AND validator_score_v1s.network = ?", 100, "mainnet")
       end
       
       vals
