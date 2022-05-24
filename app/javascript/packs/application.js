@@ -10,6 +10,7 @@ require("channels")
 var moment = require('moment');
 
 import '../src/sol_prices_charts'
+import '../src/watch_buttons'
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
 // or the `imagePath` JavaScript helper below.
@@ -43,7 +44,7 @@ document.addEventListener("turbolinks:load", function() {
         })
     })
 
-    $('.carousel').carousel({ interval: 4000 });
+    // $('.carousel').carousel({ interval: 4000 });
 
-    $('[data-toggle="tooltip"]').tooltip()
+    // $('[data-toggle="tooltip"]').tooltip()
 })

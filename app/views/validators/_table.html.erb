@@ -86,6 +86,11 @@
         <div class="avatar">
           <%= create_avatar_link(validator) %>
         </div>
+        <% if current_user %>
+          <small class="watch-button btn btn-xxs btn-secondary" 
+                 data-account="<%= validator.account%>"
+                 data-network="<%= validator.network%>">watch</small>
+        <% end %>
       </td>
 
       <td class="column-info align-middle">

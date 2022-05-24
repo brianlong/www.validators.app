@@ -99,6 +99,7 @@ Rails.application.routes.draw do
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
+  get "current-user", to: "users#current_user_info"
 
   # Default root path
   root to: 'public#index'
@@ -158,6 +159,8 @@ Rails.application.routes.draw do
       get 'ping-thing-stats/:network', to: 'ping_thing_stats#index', as: 'ping_thing_stats'
 
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
+
+      post 'add-to-watchlist/:network', to: 'watchlists#add_to_watchlist'
     end
   end
 end

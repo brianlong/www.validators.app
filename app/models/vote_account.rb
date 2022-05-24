@@ -7,7 +7,7 @@
 #  id                    :bigint           not null, primary key
 #  account               :string(191)
 #  authorized_withdrawer :string(191)
-#  is_active             :boolean
+#  is_active             :boolean          default(TRUE)
 #  network               :string(191)
 #  validator_identity    :string(191)
 #  created_at            :datetime         not null

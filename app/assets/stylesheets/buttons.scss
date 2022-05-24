@@ -92,4 +92,11 @@
     @include font-size-xs;
     @media(max-width: $screen-xs-max) { min-width: 65px; }
   }
+  &-xxs {
+    border-radius: 12px;
+    padding: 3px 5px;
+    min-width: 50px;
+    @include font-size-xxs;
+    @media(max-width: $screen-xs-max) { min-width: 40px; }
+  }
 }

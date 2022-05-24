@@ -68,6 +68,8 @@ $font-size-sm: 13px;
 $font-size-sm-tablet: 12.5px;
 $font-size-sm-mobile: 12px;
 
+$font-size-xs: 11px;
+
 $font-size-h1: 40px;
 $font-size-h2: 34px;
 $font-size-h3: 30px;
@@ -113,6 +115,10 @@ $font-size-h6: $font-size-lg;
   @media(max-width: $screen-sm-max) {
     font-size: $font-size-sm-mobile;
   }
+}
+
+@mixin font-size-xxs {
+  font-size: $font-size-xs;
 }
 
 $font-weight-bold-primary: 700;
