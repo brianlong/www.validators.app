@@ -51,4 +51,12 @@ module DataCentersHelper
 
     link_to "Filter by #{filter_by}", url, class: classes_list
   end
+
+  def set_column_width
+    if params[:network] == "mainnet"
+      "sm"
+    else
+      "md"
+    end
+  end
 end
