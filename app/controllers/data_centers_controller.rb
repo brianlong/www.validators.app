@@ -21,15 +21,13 @@ class DataCentersController < ApplicationController
 
     @per = 25
 
-    @display = show_params[:display].blank? ? "all" : show_params[:display]
-    @filter_by = show_params[:filter_by].blank? || @display != "all" ? [] : show_params[:filter_by]
+    @filter_by = show_params[:filter_by].blank? ? %w(inactive active delinquent private) : show_params[:filter_by]
 
     # throw @display
 
     data_centers = DataCenter.where(data_center_key: key)
     @validators = Validator.joins(:validator_score_v1, :data_center)
                            .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_centers.ids, show_params[:network], 0)
-                           .find_by_type(@display)
                            .filtered_by(@filter_by)
                            .order("validator_score_v1s.active_stake desc")
 

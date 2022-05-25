@@ -57,19 +57,19 @@ module DataCentersHelper
                 display: display
               )
 
-    link_to "Filter #{filter_by}", url, class: classes_list
+    link_to "#{filter_by}", url, class: classes_list
   end
 
-  def create_filter_display_link(view:, params_list:, display:)
-    classes_list = "btn btn-sm btn-secondary mb-4 "
-    classes_list << "active" if @display == display
-    url = send("#{view}_url",
-                network:params_list[:network],
-                key: params[:key],
-                filter_by: params[:filter_by],
-                display: display
-              )
+  # def create_filter_display_link(view:, params_list:, display:)
+  #   classes_list = "btn btn-sm btn-secondary mb-4 "
+  #   classes_list << "active" if @display == display
+  #   url = send("#{view}_url",
+  #               network:params_list[:network],
+  #               key: params[:key],
+  #               filter_by: params[:filter_by],
+  #               display: display
+  #             )
 
-    link_to "show #{display}", url, class: classes_list
-  end
+  #   link_to "show #{display}", url, class: classes_list
+  # end
 end

@@ -88,21 +88,31 @@ class Validator < ApplicationRecord
     end
   
     def filtered_by(filter)
-      return all if filter.blank?
+      return nil if filter.blank?
       vals = all.joins(:validator_score_v1)
-      if filter.include? "delinquent"
-        vals = vals.where("validator_score_v1s.delinquent = ?", false)
+      query = []
+
+      if filter.include?("delinquent")
+        query.push "validator_score_v1s.delinquent = true"
+      else
+        query.push "validator_score_v1s.delinquent = false"
       end
   
+      # if !(filter.include?("inactive") && filter.include?("active"))
       if filter.include? "inactive"
-        vals = vals.where(is_active: true)
+        query.push "validators.is_active = false"
       end
+
+      if filter.include? "active"
+        query.push "validators.is_active = true"
+      end
+      # end
   
-      if filter.include? "private"
-        vals = vals.where("validator_score_v1s.commission < ? AND validator_score_v1s.network = ?", 100, "mainnet")
+      if !filter.include?("private")
+        query.push "validator_score_v1s.commission < 100 AND validator_score_v1s.network = 'mainnet'"
       end
-      
-      vals
+
+      vals.where(query.join(" OR "))
     end
 
     # Returns an Array of account IDs for a given network

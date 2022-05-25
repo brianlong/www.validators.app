@@ -1,11 +1,6 @@
-<div class="btn-group btn-group-xs btn-group-toggle mb-2 mr-2">
-  <%= create_filter_display_link(view: view, params_list: params, display: "inactive") %>
-  <%= create_filter_display_link(view: view, params_list: params, display: "delinquent") %>
-  <%= create_filter_display_link(view: view, params_list: params, display: "all") %>
-</div>
-
 <div class="btn-group btn-group-xs btn-group-toggle mb-2">
   <%= create_filter_by_link(view: view, params_list: params, current_filters: @filter_by, filter_by: "inactive") %>
+  <%= create_filter_by_link(view: view, params_list: params, current_filters: @filter_by, filter_by: "active") %>
   <%= create_filter_by_link(view: view, params_list: params, current_filters: @filter_by, filter_by: "delinquent") %>
   <% if params[:network] == "mainnet" %>
     <%= create_filter_by_link(view: view, params_list: params, current_filters: @filter_by, filter_by: "private") %>
