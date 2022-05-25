@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_06_111500) do
+ActiveRecord::Schema.define(version: 2022_05_25_083707) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -431,6 +431,17 @@ ActiveRecord::Schema.define(version: 2022_05_06_111500) do
     t.float "average_apy"
   end
 
+  create_table "user_watchlist_elements", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "validator_id", null: false
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "validator_id"], name: "index_user_watchlist_elements_on_user_id_and_validator_id", unique: true
+    t.index ["user_id"], name: "index_user_watchlist_elements_on_user_id"
+    t.index ["validator_id"], name: "index_user_watchlist_elements_on_validator_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username", null: false
     t.string "encrypted_password", null: false
@@ -573,10 +584,10 @@ ActiveRecord::Schema.define(version: 2022_05_06_111500) do
     t.string "data_center_key"
     t.string "data_center_host"
     t.text "skipped_slot_moving_average_history"
+    t.text "skipped_vote_history"
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
-    t.text "skipped_vote_history"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
@@ -630,7 +641,7 @@ ActiveRecord::Schema.define(version: 2022_05_06_111500) do
     t.string "network"
     t.string "validator_identity"
     t.string "authorized_withdrawer"
-    t.boolean "is_active"
+    t.boolean "is_active", default: true
     t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
     t.index ["network", "account"], name: "index_vote_accounts_on_network_and_account"
     t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
@@ -641,6 +652,8 @@ ActiveRecord::Schema.define(version: 2022_05_06_111500) do
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"
+  add_foreign_key "user_watchlist_elements", "users"
+  add_foreign_key "user_watchlist_elements", "validators"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"
