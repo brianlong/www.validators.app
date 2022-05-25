@@ -11,8 +11,9 @@
 #
 # Indexes
 #
-#  index_user_watchlist_elements_on_user_id       (user_id)
-#  index_user_watchlist_elements_on_validator_id  (validator_id)
+#  index_user_watchlist_elements_on_user_id                   (user_id)
+#  index_user_watchlist_elements_on_user_id_and_validator_id  (user_id,validator_id) UNIQUE
+#  index_user_watchlist_elements_on_validator_id              (validator_id)
 #
 # Foreign Keys
 #
@@ -22,4 +23,6 @@
 class UserWatchlistElement < ApplicationRecord
   belongs_to :user
   belongs_to :validator
+
+  validates :validator_id, uniqueness: { scope: :user_id }
 end

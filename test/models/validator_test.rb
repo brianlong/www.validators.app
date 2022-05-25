@@ -144,4 +144,11 @@ class ValidatorTest < ActiveSupport::TestCase
     refute @va2.reload.is_active
     refute @va3.reload.is_active
   end
+
+  test "responds to watchers correctly" do
+    u = create(:user)
+    create(:user_watchlist_element, validator: @validator, user: u, network: 'testnet')
+
+    assert_equal u, @validator.watchers.first
+  end
 end

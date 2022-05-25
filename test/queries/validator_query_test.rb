@@ -121,4 +121,24 @@ class ValidatorQueryTest < ActiveSupport::TestCase
 
     assert_equal validator, result
   end
+
+  test "#call returns only users validators if user_id is provided" do
+    validators = create_list(
+      :validator,
+      5,
+      :with_score,
+      :mainnet,
+      :with_data_center_through_validator_ip,
+    )
+
+    user = create(:user)
+
+    create(:user_watchlist_element, validator: validators.last, user: user, network: @mainnet_network)
+
+    result = ValidatorQuery.new(user_id: user.id)
+                           .call(network: @mainnet_network, sort_order: "name")
+
+    assert_equal 1, result.count
+    assert_equal validators.last, result.last
+  end
 end
