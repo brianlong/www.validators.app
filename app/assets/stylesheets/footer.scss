@@ -39,12 +39,12 @@ footer {
 
     }
     &-disclaimer {
-      @include font-size-smaller;
+      @include font-size-sm;
       margin-bottom: 20px;
     }
     &-copyright {
       color: $grey-light;
-      @include font-size-smaller;
+      @include font-size-sm;
     }
   }
 }

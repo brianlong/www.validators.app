@@ -61,19 +61,19 @@ $font-family-alternative: 'Montserrat';
 $font-size-base: 16px;
 $font-size-base-tablet: 15.5px;
 $font-size-base-mobile: 15px;
-$font-size-larger: 18px;
-$font-size-larger-tablet: 17.5px;
-$font-size-larger-mobile: 17px;
-$font-size-smaller: 13px;
-$font-size-smaller-tablet: 12.5px;
-$font-size-smaller-mobile: 12px;
+$font-size-lg: 18px;
+$font-size-lg-tablet: 17.5px;
+$font-size-lg-mobile: 17px;
+$font-size-sm: 13px;
+$font-size-sm-tablet: 12.5px;
+$font-size-sm-mobile: 12px;
 
-$font-size-h1: 42px;
+$font-size-h1: 40px;
 $font-size-h2: 34px;
 $font-size-h3: 30px;
 $font-size-h4: 26px;
 $font-size-h5: 22px;
-$font-size-h6: $font-size-larger;
+$font-size-h6: $font-size-lg;
 
 @mixin font-size-base {
   font-size: $font-size-base;
@@ -85,23 +85,33 @@ $font-size-h6: $font-size-larger;
   }
 }
 
-@mixin font-size-larger {
-  font-size: $font-size-larger;
+@mixin font-size-lg {
+  font-size: $font-size-lg;
   @media(max-width: $screen-md-max) {
-    font-size: $font-size-larger-tablet;
+    font-size: $font-size-lg-tablet;
   }
   @media(max-width: $screen-sm-max) {
-    font-size: $font-size-larger-mobile;
+    font-size: $font-size-lg-mobile;
   }
 }
 
-@mixin font-size-smaller {
-  font-size: $font-size-smaller;
+@mixin font-size-sm {
+  font-size: $font-size-sm;
   @media(max-width: $screen-md-max) {
-    font-size: $font-size-smaller-tablet;
+    font-size: $font-size-sm-tablet;
   }
   @media(max-width: $screen-sm-max) {
-    font-size: $font-size-smaller-mobile;
+    font-size: $font-size-sm-mobile;
+  }
+}
+
+@mixin font-size-xs {
+  font-size: $font-size-sm-mobile;
+  @media(max-width: $screen-md-max) {
+    font-size: $font-size-sm-mobile;
+  }
+  @media(max-width: $screen-sm-max) {
+    font-size: $font-size-sm-mobile;
   }
 }
 

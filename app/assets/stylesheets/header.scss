@@ -7,7 +7,7 @@ header {
 
   .navbar {
     padding: 25px 0 45px 0;
-    @include font-size-larger();
+    @include font-size-lg();
   }
   .nav-link {
     color: $link-color;
@@ -17,7 +17,7 @@ header {
       cursor: pointer;
     }
     &.btn {
-      @include font-size-larger();
+      @include font-size-lg();
       font-weight: $font-weight-normal;
       margin-left: 10px;
       margin-top: -2px;
