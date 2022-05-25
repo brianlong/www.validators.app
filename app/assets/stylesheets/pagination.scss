@@ -7,7 +7,7 @@
   background-color: transparent;
   border: 2px solid $green;
   border-radius: 0;
-  @include font-size-smaller;
+  @include font-size-sm;
   font-weight: $font-weight-normal;
   padding: $padding-y 0;
   @media(max-width: $screen-xs-max) {

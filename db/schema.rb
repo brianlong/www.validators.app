@@ -527,10 +527,10 @@ ActiveRecord::Schema.define(version: 2022_05_16_143049) do
     t.string "data_center_key"
     t.string "data_center_host"
     t.text "skipped_slot_moving_average_history"
+    t.text "skipped_vote_history"
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
-    t.text "skipped_vote_history"
     t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
     t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
@@ -584,7 +584,7 @@ ActiveRecord::Schema.define(version: 2022_05_16_143049) do
     t.string "network"
     t.string "validator_identity"
     t.string "authorized_withdrawer"
-    t.boolean "is_active"
+    t.boolean "is_active", default: true
     t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
     t.index ["network", "account"], name: "index_vote_accounts_on_network_and_account"
     t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
