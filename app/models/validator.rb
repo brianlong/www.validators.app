@@ -74,19 +74,6 @@ class Validator < ApplicationRecord
       show == "true" ? all : where.not("validator_score_v1s.commission = 100")
     end
   
-    def find_by_type(display)
-      return all unless display
-      case display
-      when "delinquent"
-        joins(:validator_score_v1)
-          .where("validator_score_v1s.delinquent = ?", true)
-      when "inactive"
-        where(is_active: false)
-      else
-        all
-      end
-    end
-  
     def filtered_by(filter)
       return nil if filter.blank?
       vals = all.joins(:validator_score_v1)

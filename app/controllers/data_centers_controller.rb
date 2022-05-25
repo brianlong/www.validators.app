@@ -46,6 +46,6 @@ class DataCentersController < ApplicationController
   end
 
   def show_params
-    params.permit(:network, :page, :key, :display, filter_by: [])
+    params.permit(:network, :page, :key, filter_by: [])
   end
 end
