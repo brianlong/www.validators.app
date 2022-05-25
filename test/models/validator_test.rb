@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ValidatorTest < ActiveSupport::TestCase
   setup do
@@ -147,7 +147,7 @@ class ValidatorTest < ActiveSupport::TestCase
 
   test "responds to watchers correctly" do
     u = create(:user)
-    create(:user_watchlist_element, validator: @validator, user: u, network: 'testnet')
+    create(:user_watchlist_element, validator: @validator, user: u, network: "testnet")
 
     assert_equal u, @validator.watchers.first
   end
