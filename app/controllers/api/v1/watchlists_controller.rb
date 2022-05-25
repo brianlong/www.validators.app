@@ -9,8 +9,13 @@ module Api
           account: watchlist_params[:account]
         )
         if validator && current_user
-          current_user.user_watchlist_elements.create(validator: validator, network: watchlist_params[:network])
-          resp, status = { status: "ok" }, :ok
+          if current_user.watched_validators.include? validator
+            current_user.user_watchlist_elements.find_by(validator: validator).delete
+            resp, status = { status: "removed" }, :ok
+          else
+            current_user.user_watchlist_elements.create(validator: validator, network: watchlist_params[:network])
+            resp, status = { status: "created" }, :created
+          end
         else
           resp, status = { status: "data not saved" }, :unprocessable_entity
         end

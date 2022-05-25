@@ -43,6 +43,9 @@ en:
   flash:
     cookie: "This site uses cookies. See our <a href='/cookie-policy'>Cookie Policy</a> for details."
   public:
+    nav:
+      add_watchlist: "Add/Remove from your watchlist"
+      show_watchlist: "Display validators from your watchlist"
     index:
       title: "Welcome Solana Validators"
       paragraph: "This website is under construction. Be awesome today."

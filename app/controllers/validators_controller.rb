@@ -8,12 +8,14 @@ class ValidatorsController < ApplicationController
   # GET /validators.json
   def index
     @per = 25
-    validators = Validator.where(network: params[:network])
-                          .scorable
-                          .preload(:validator_score_v1)
-                          .index_order(validate_order)
-
-    @validators = validators.page(params[:page]).per(@per)
+    user_id = params[:watchlist] && current_user.watched_validators.exists? ? current_user.id : nil
+    @validators = ValidatorQuery.new(user_id: user_id).call(
+      network: params[:network],
+      sort_order: params[:order],
+      page: params[:page],
+      limit: @per,
+      query: params[:q]
+    )
 
     @batch = Batch.last_scored(params[:network])
 
@@ -27,7 +29,7 @@ class ValidatorsController < ApplicationController
     validator_history_stats = Stats::ValidatorHistory.new(params[:network], @batch.uuid)
 
     at_33_stake_validator = validator_history_stats.at_33_stake&.validator
-    @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
+    @at_33_stake_index = (@validators.index(at_33_stake_validator)&.+ 1).to_i
 
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end

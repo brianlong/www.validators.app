@@ -11,10 +11,10 @@ document.addEventListener('turbolinks:load', () => {
         headers: {
           Token: resp["api_token"]
         },
-        dataType: 'json',
-        success: function (data) {
-          console.info(data);
-        }
+        dataType: 'json'
+      }).done(function (data) {
+        console.log(data)
+        $(btn).toggleClass("text-success")
       })
     })
   })

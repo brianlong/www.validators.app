@@ -1,7 +1,25 @@
 <table id="validators-table" class='table table-block-sm'>
   <thead>
   <tr>
-    <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
+    <th class="column-avatar d-none d-xl-table-cell align-middle">
+      <% if current_user %>
+        <%= link_to url_for(
+          order: params[:order],
+          page: params[:page],
+          network: params[:network],
+          refresh: params[:refresh],
+          watchlist: params[:watchlist] ? nil : true),
+            class: "#{ 'text-success' if params[:watchlist] }" do %>
+          <i class="fas fa-eye"
+             data-toggle="tooltip"
+             data-placement="top"
+             title="<%= t('public.nav.show_watchlist') %>">
+          </i>
+        <% end %>
+      <% else %>
+        #
+      <% end %>
+    </th>
     <th class="column-info align-middle">
       Name <small class="text-muted">(Commission)</small>
       <i class="fas fa-info-circle small"
@@ -87,9 +105,15 @@
           <%= create_avatar_link(validator) %>
         </div>
         <% if current_user %>
-          <small class="watch-button btn btn-xxs btn-secondary" 
+          <small class="watch-button <%= "text-success" if validator.watchers.include?(current_user) %>" 
                  data-account="<%= validator.account%>"
-                 data-network="<%= validator.network%>">watch</small>
+                 data-network="<%= validator.network%>">
+            <i class="fas fa-eye"
+               data-toggle="tooltip"
+               data-placement="top"
+               title="<%= t('public.nav.add_watchlist') %>">
+            </i>       
+          </small>
         <% end %>
       </td>
 
