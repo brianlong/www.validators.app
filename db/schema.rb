@@ -176,20 +176,6 @@ ActiveRecord::Schema.define(version: 2022_05_16_143049) do
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
   end
 
-  create_table "ip_overrides", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "address"
-    t.integer "traits_autonomous_system_number"
-    t.string "country_iso_code"
-    t.string "country_name"
-    t.string "city_name"
-    t.string "data_center_key"
-    t.string "data_center_host"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "traits_autonomous_system_organization"
-    t.index ["address"], name: "index_ip_overrides_on_address", unique: true
-  end
-
   create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "request_type"
     t.json "meta_data"
