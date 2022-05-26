@@ -1,37 +1,23 @@
 @import "variables";
 
 .card {
-  background-color: darken($background-color, 3%);
-  border: 2px solid $card-border-color;
+  background-color: $card-background-color;
+  border: none;
   border-radius: $border-radius;
+  box-shadow: $card-shadow-color 0 0 10px 0;
   margin-bottom: 30px;
   overflow: hidden;
   &:last-of-type { margin-bottom: 0; }
 
   &-content {
-    padding: 50px $padding-standard $padding-standard $padding-standard;
-    &::before {
-      content: '';
-      position: absolute;
-      border: 1px solid $card-border-color;
-      border-radius: 2px;
-      background-color: $card-border-color;
-      margin: -35px auto 20px auto;
-      height: 5px;
-      width: 260px;
-      margin-left: calc(50% - 15px - 260px/2);
-      @media(max-width: $screen-md-max) {
-        width: 200px;
-        margin-left: calc(50% - 15px - 200px/2);
-      }
-    }
+    padding: $padding-standard*2;
   }
 
   &-heading {
     text-align: center;
-    margin-bottom: 35px;
+    margin-bottom: $margin-standard*2;
     @media(max-width: $screen-sm-max) {
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
   }
 
