@@ -23,7 +23,7 @@ module ValidatorsHelper
     max_value = vector.max
     max_value_index = vector.index(max_value) + 1
     position = max_value_index.to_f / vector.size * 100
-    position += 3
+    position += 2
     position = [position, 100].min # rejects values larger than 100
     if min_position
       position = [position, 11].max # rejects values smaller than 11
