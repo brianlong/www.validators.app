@@ -30,7 +30,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
         <h3 class="card-heading mb-2">
           {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} Statistics
         </h3>
-        <div class="text-center text-muted small mb-4">
+        <div class="text-center text-muted small mb-4 pb-2">
           <a v-bind:href="delegation_strategy_url()" target="_blank">See delegation strategy</a>
         </div>
 
