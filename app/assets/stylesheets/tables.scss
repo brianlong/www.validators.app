@@ -20,7 +20,7 @@ table, .table {
       background-color: $table-background-color;
     }
     tr:nth-of-type(odd) {
-      background-color: $table-background-color-darker;
+      background-color: $table-background-color-secondary;
     }
     td {
       padding: $padding-standard 20px;
