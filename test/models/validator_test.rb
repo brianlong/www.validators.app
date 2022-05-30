@@ -27,6 +27,14 @@ class ValidatorTest < ActiveSupport::TestCase
     )
 
     @score = create(:validator_score_v1, validator: @validator)
+
+    @v_inactive = create(:validator, :with_score, is_active: false)
+
+    @v_delinquent = create(:validator, account: "v_delinquent")
+    create(:validator_score_v1, validator: @v_delinquent, delinquent: true)
+
+    @v_private = create(:validator, account: "v_private")
+    create(:validator_score_v1, validator: @v_private, commission: 100)
   end
 
   test 'relationship has_one most_recent_epoch_credits_by_account' do
@@ -147,17 +155,24 @@ class ValidatorTest < ActiveSupport::TestCase
     refute @va3.reload.is_active
   end
 
-  test "filtered_by excludes correct validators from collection" do
-    create(:validator, is_active: false)
-
-    v_delinquent = create(:validator, account: "v_delinquent")
-    create(:validator_score_v1, validator: v_delinquent, delinquent: true)
-
-    v_private = create(:validator, account: "v_private")
-    create(:validator_score_v1, validator: v_private, commission: 100)
-
-    result = Validator.filtered_by(["inactive", "delinquent", "private"])
+  test "filtered_by delinquent excludes correct validators from collection" do
+    result = Validator.filtered_by(["delinquent"])
 
     assert_equal 1, result.count
+    assert result.last.delinquent?
+  end
+
+  test "filtered_by inactive excludes correct validators from collection" do
+    result = Validator.filtered_by(["inactive"])
+
+    assert_equal 1, result.count
+    refute result.last.is_active
+  end
+
+  test "filtered_by private excludes correct validators from collection" do
+    result = Validator.filtered_by(["private"])
+
+    assert_equal 1, result.count
+    assert_equal 100, result.last.score.commission
   end
 end
