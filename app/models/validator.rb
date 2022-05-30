@@ -77,7 +77,7 @@ class Validator < ApplicationRecord
     end
 
     def default_filters(network)
-      network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{|k, v| v == "private"}
+      network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{|v| v == "private"}
     end 
   
     def filtered_by(filter)
@@ -87,11 +87,8 @@ class Validator < ApplicationRecord
 
       if filter.include?("delinquent")
         query.push "validator_score_v1s.delinquent = true"
-      # else
-      #   query.push "validator_score_v1s.delinquent = false"
       end
   
-      # if !(filter.include?("inactive") && filter.include?("active"))
       if filter.include? "inactive"
         query.push "validators.is_active = false"
       end
@@ -99,12 +96,11 @@ class Validator < ApplicationRecord
       if filter.include? "active"
         query.push "validators.is_active = true"
       end
-      # end
   
       if filter.include?("private")
         query.push "validator_score_v1s.commission = 100"
       end
-      # throw query.join(" OR ")
+
       vals.where(query.join(" OR "))
     end
 
