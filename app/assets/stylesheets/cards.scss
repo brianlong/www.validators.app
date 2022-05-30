@@ -15,10 +15,7 @@
 
   &-heading {
     text-align: center;
-    margin-bottom: $margin-standard*2;
-    @media(max-width: $screen-sm-max) {
-      margin-bottom: 25px;
-    }
+    margin-bottom: 25px;
   }
 
   &-img {
