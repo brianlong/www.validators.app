@@ -21,7 +21,7 @@ class DataCentersController < ApplicationController
 
     @per = 25
 
-    @filter_by = show_params[:filter_by].blank? ? %w(inactive active delinquent private) : show_params[:filter_by]
+    @filter_by = show_params[:filter_by].blank? ? Validator.default_filters(params[:network]) : show_params[:filter_by]
 
     # throw @display
 

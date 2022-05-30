@@ -2,7 +2,7 @@ class AsnsController < ApplicationController
   def show
     network = asn_params[:network]
 
-    @filter_by = asn_params[:filter_by].blank? ? %w(inactive active delinquent private) : asn_params[:filter_by]
+    @filter_by = asn_params[:filter_by].blank? ? Validator.default_filters(params[:network]) : asn_params[:filter_by]
 
     @data_centers = DataCenter.joins(:validator_score_v1s)
                               .where(traits_autonomous_system_number: asn_params[:asn])
