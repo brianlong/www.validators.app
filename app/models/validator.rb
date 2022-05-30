@@ -87,8 +87,8 @@ class Validator < ApplicationRecord
 
       if filter.include?("delinquent")
         query.push "validator_score_v1s.delinquent = true"
-      else
-        query.push "validator_score_v1s.delinquent = false"
+      # else
+      #   query.push "validator_score_v1s.delinquent = false"
       end
   
       # if !(filter.include?("inactive") && filter.include?("active"))
