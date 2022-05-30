@@ -1,9 +1,9 @@
 <% @results[:results].each do |dc_key, dc_data| %>
   <tr>
     <td class="column-md"><%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %></td>
-    <td class="column-sm"><%= dc_data[:aso] %></td>
-    <td class="column-sm"><%= dc_data[:count] %></td>
-    <td class="column-sm">
+    <td class="column-<%= set_column_width(params[:network]) %>"><%= dc_data[:aso] %></td>
+    <td class="column-<%= set_column_width(params[:network]) %>"><%= dc_data[:count] %></td>
+    <td class="column-<%= set_column_width(params[:network]) %>">
       <% if dc_data[:delinquent_validators] > 0 %>
         <%= link_to dc_data[:delinquent_validators],
             data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :delinquent) %>
@@ -15,7 +15,7 @@
       <% end %>
     </td>
     <% if params[:network] == 'mainnet' %>
-      <td class="column-sm">
+      <td class="column-<%= set_column_width(params[:network]) %>">
         <% if dc_data[:private_validators] > 0 %>
          <%= link_to dc_data[:private_validators],
             data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :private) %>
