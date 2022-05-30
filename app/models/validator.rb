@@ -41,7 +41,7 @@ class Validator < ApplicationRecord
     admin_warning
   ].freeze
 
-  DEFAULT_FILTERS = %w(inactive active private delinquent)
+  DEFAULT_FILTERS = %w(inactive active private delinquent).freeze
 
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
@@ -77,7 +77,7 @@ class Validator < ApplicationRecord
     end
 
     def default_filters(network)
-      network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.except("private")
+      network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{|k, v| v == "private"}
     end 
   
     def filtered_by(filter)
@@ -101,10 +101,10 @@ class Validator < ApplicationRecord
       end
       # end
   
-      if !filter.include?("private")
-        query.push "validator_score_v1s.commission < 100 AND validator_score_v1s.network = 'mainnet'"
+      if filter.include?("private")
+        query.push "validator_score_v1s.commission = 100"
       end
-
+      # throw query.join(" OR ")
       vals.where(query.join(" OR "))
     end
 

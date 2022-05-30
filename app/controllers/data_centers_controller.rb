@@ -30,6 +30,7 @@ class DataCentersController < ApplicationController
                            .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_centers.ids, show_params[:network], 0)
                            .filtered_by(@filter_by)
                            .order("validator_score_v1s.active_stake desc")
+    # throw @validators.explain
 
     @dc_stake = @validators.sum(:active_stake)          
     @validators = @validators.page(params[:page]).per(@per)
