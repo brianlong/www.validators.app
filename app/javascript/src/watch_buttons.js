@@ -14,7 +14,8 @@ document.addEventListener('turbolinks:load', () => {
         dataType: 'json'
       }).done(function (data) {
         console.log(data)
-        $(btn).toggleClass("text-success")
+        $(btn).toggleClass("fas far text-success")
+        console.log( $(btn) )
       })
     })
   })

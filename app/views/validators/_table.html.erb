@@ -10,7 +10,7 @@
           refresh: params[:refresh],
           watchlist: params[:watchlist] ? nil : true),
             class: "#{ 'text-success' if params[:watchlist] }" do %>
-          <i class="fas fa-eye"
+          <i class="fas fa-star"
              data-toggle="tooltip"
              data-placement="top"
              title="<%= t('public.nav.show_watchlist') %>">
@@ -105,15 +105,13 @@
           <%= create_avatar_link(validator) %>
         </div>
         <% if current_user %>
-          <small class="watch-button <%= "text-success" if validator.watchers.include?(current_user) %>" 
-                 data-account="<%= validator.account%>"
-                 data-network="<%= validator.network%>">
-            <i class="fas fa-eye"
-               data-toggle="tooltip"
-               data-placement="top"
-               title="<%= t('public.nav.add_watchlist') %>">
-            </i>       
-          </small>
+          <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fas fa-star text-success' : 'far fa-star' %>"
+             data-toggle="tooltip"
+             data-placement="top"
+             data-network="<%= validator.network%>"
+             data-account="<%= validator.account%>"
+             title="<%= validator.watchers.include?(current_user) ? t('public.nav.remove_from_watchlist') : t('public.nav.add_to_watchlist') %>">
+          </i>
         <% end %>
       </td>
 

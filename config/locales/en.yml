@@ -44,7 +44,8 @@ en:
     cookie: "This site uses cookies. See our <a href='/cookie-policy'>Cookie Policy</a> for details."
   public:
     nav:
-      add_watchlist: "Add/Remove from your watchlist"
+      add_to_watchlist: "Add to favourites"
+      remove_from_watchlist: "Remove from favourites"
       show_watchlist: "Display validators from your watchlist"
     index:
       title: "Welcome Solana Validators"
