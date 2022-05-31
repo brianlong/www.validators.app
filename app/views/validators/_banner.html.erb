@@ -29,7 +29,7 @@
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
             <div class="row text-center px-lg-5 mt-4">
               <% group.each_with_index do |logo, index_col| %>
-                <div class="col-md-4 mb-4 mb-sm-0">
+                <div class="col-md-4 mb-4 mb-sm-0 <%= 'offset-md-4' if index_slide == 2 %>">
                   <%= link_to logo[0], target: "_blank" do %>
                     <%= image_tag logo[1], class: 'w-100 px-4 px-sm-1 px-lg-3 mb-4' %>
                   <% end %>
