@@ -34,6 +34,12 @@ stake_pools = [
     authority: "C4NeuptywfXuyWB9A7H7g5jHVDE8L6Nj2hS53tA71KPn",
     network: "mainnet",
     ticker: "esol"  
+  },
+  {
+    name: "Blazestake",
+    authority: "b1azeTfpBiKN6AhEGVd1iPBsX3vmZqnFmS7Kqau7a2w",
+    network: "mainnet",
+    ticker: "bsol"  
   }
 ]
 
@@ -43,7 +49,8 @@ manager_fees = {
   jpool: 0,
   lido: 10,
   daopool: 2,
-  eversol: 0
+  eversol: 0,
+  blazestake: 10
 }
 
 withdrawal_fees = {
@@ -52,7 +59,8 @@ withdrawal_fees = {
   jpool: 0,
   lido: 0,
   daopool: 0,
-  eversol: 0
+  eversol: 0,
+  blazestake: 0.3
 }
 
 deposit_fees = {
@@ -61,7 +69,8 @@ deposit_fees = {
   jpool: 0,
   lido: 0,
   daopool: 0,
-  eversol: 0.25
+  eversol: 0.25,
+  blazestake: 0.1
 }
 
 namespace :add_stake_pool do
