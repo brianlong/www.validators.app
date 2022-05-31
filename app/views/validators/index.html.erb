@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-md-9 col-lg-10">
           <p class="small muted">
-            Score updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
+            Score updated at <%= @batch&.scored_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
           </p>
         </div>
         <div class='col-md-3 col-lg-2 toggle-container'>
@@ -39,7 +39,7 @@
                    items_per_page: @per %>
 
           <p class="px-3 small muted">
-            Score updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
+            Score updated at <%= @batch&.scored_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
           </p>
           <%= paginate @validators %>
 
