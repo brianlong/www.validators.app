@@ -1,5 +1,5 @@
 <template>
-  <div class="page-header">
+  <section class="page-header">
     <h1>Ping Thing</h1>
     <p>
       We use this Ping Thing to show recent transaction confirmation times on the Solana blockchain.
@@ -21,5 +21,5 @@
       NOTES: We use a 60-second timeout threshold for the pings. On the chart and table below, a value of 60,000
       milliseconds means that the operation failed or took longer than 60 seconds to complete.
     </p>
-  </div>
+  </section>
 </template>

@@ -189,7 +189,7 @@ hr {
 .modal {
   &-content {
     background-color: $card-background-color;
-    border: 2px solid $card-border-color;
+    border: 2px solid $card-background-color;
     border-radius: $border-radius;
     color: $base-color;
     margin-top: 30vh;

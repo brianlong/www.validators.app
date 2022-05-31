@@ -2,8 +2,8 @@
 
 <% unless @validators.empty? %>
   <div class="card">
-    <div class="card-content pb-0">
-      <h1 class="h2 card-heading">Solana <%= params[:network].capitalize %> Validators</h1>
+    <div class="card-content pb-3">
+      <h2 class="card-heading">Solana <%= params[:network].capitalize %> Validators</h2>
 
       <%= render 'validators/sort_bar' %>
 
@@ -11,7 +11,6 @@
         <div class="col-md-9 col-lg-10">
           <p class="small muted">
             Score updated at <%= @batch&.created_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
-            <%= link_to 'See Data Centers', data_centers_url(network: params[:network]) %>
           </p>
         </div>
         <div class='col-md-3 col-lg-2 toggle-container'>
