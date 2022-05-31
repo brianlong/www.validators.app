@@ -37,7 +37,7 @@ stake_pools = [
   },
   {
     name: "Blazestake",
-    authority: "b1azeTfpBiKN6AhEGVd1iPBsX3vmZqnFmS7Kqau7a2w",
+    authority: "6WecYymEARvjG5ZyqkrVQ6YkhPfujNzWpSPwNKXHCbV2",
     network: "mainnet",
     ticker: "bsol"  
   }
