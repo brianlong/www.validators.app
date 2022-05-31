@@ -77,29 +77,20 @@ class Validator < ApplicationRecord
     end
 
     def default_filters(network)
-      network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{|v| v == "private"}
+      network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{ |v| v == "private" }
     end 
   
+    # accepts array or string
     def filtered_by(filter)
       return nil if filter.blank?
+
       vals = all.joins(:validator_score_v1)
       query = []
 
-      if filter.include?("delinquent")
-        query.push "validator_score_v1s.delinquent = true"
-      end
-  
-      if filter.include? "inactive"
-        query.push "validators.is_active = false"
-      end
-
-      if filter.include? "active"
-        query.push "validators.is_active = true"
-      end
-  
-      if filter.include?("private")
-        query.push "validator_score_v1s.commission = 100"
-      end
+      query.push "validator_score_v1s.delinquent = true" if filter.include? "delinquent"
+      query.push "validators.is_active = false" if filter.include? "inactive"
+      query.push "validators.is_active = true" if filter.include? "active"
+      query.push "validator_score_v1s.commission = 100" if filter.include? "private"
 
       vals.where(query.join(" OR "))
     end

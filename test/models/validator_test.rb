@@ -155,6 +155,13 @@ class ValidatorTest < ActiveSupport::TestCase
     refute @va3.reload.is_active
   end
 
+  test "filtered_by delinquent provided with a string returns correct values" do
+    result = Validator.filtered_by("delinquent")
+
+    assert_equal 1, result.count
+    assert result.last.delinquent?
+  end
+
   test "filtered_by delinquent excludes correct validators from collection" do
     result = Validator.filtered_by(["delinquent"])
 
@@ -174,5 +181,13 @@ class ValidatorTest < ActiveSupport::TestCase
 
     assert_equal 1, result.count
     assert_equal 100, result.last.score.commission
+  end
+
+  test "filtered_by multiple parameters excludes correct validators from collection" do
+    result = Validator.filtered_by(["delinquent", "inactive"])
+
+    assert_equal 2, result.count
+    assert result.include?(@v_inactive)
+    assert result.include?(@v_delinquent)
   end
 end
