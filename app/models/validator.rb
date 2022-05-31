@@ -80,7 +80,7 @@ class Validator < ApplicationRecord
       network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{ |v| v == "private" }
     end 
   
-    # accepts array or string
+    # accepts array of strings or string
     def filtered_by(filter)
       return nil if filter.blank?
 
