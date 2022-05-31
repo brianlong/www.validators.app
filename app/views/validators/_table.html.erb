@@ -8,12 +8,11 @@
           page: params[:page],
           network: params[:network],
           refresh: params[:refresh],
-          watchlist: params[:watchlist] ? nil : true),
-            class: "#{ 'text-success' if params[:watchlist] }" do %>
-          <i class="fas fa-star"
+          watchlist: params[:watchlist] ? nil : true) do %>
+          <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning"
              data-toggle="tooltip"
              data-placement="top"
-             title="<%= t('public.nav.show_watchlist') %>">
+             title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
           </i>
         <% end %>
       <% else %>
@@ -105,12 +104,12 @@
           <%= create_avatar_link(validator) %>
         </div>
         <% if current_user %>
-          <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fas fa-star text-success' : 'far fa-star' %>"
+          <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'far' %> fa-star"
              data-toggle="tooltip"
              data-placement="top"
              data-network="<%= validator.network%>"
              data-account="<%= validator.account%>"
-             title="<%= validator.watchers.include?(current_user) ? t('public.nav.remove_from_watchlist') : t('public.nav.add_to_watchlist') %>">
+             title="<%= validator.watchers.include?(current_user) ? 'Remove from favourites' : 'Add to favourites' %>">
           </i>
         <% end %>
       </td>
@@ -127,12 +126,12 @@
         <% end %>
         <% if validator.score.authorized_withdrawer_score == -2 %>
           <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
-            <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
+            <i class="fas fa-exclamation-triangle text-warning small ml-1"></i>
           <% end %>
         <% end %>
         <% if validator.admin_warning %>
           <%= link_to '/faq#admin-warning', title: "#{validator.admin_warning}" do %>
-            <i class="fas fa-exclamation-triangle text-danger ml-1"></i>
+            <i class="fas fa-exclamation-triangle text-danger small ml-1"></i>
           <% end %>
         <% end %>
         <br />
