@@ -29,7 +29,6 @@ FactoryBot.define do
     ip_address { '172.96.172.252' }
     network { 'mainnet' }
     data_center_key { '23470-US-America/Chicago' }
-    data_center_host { nil }
     skipped_slot_moving_average_history { [0.2051] }
     skipped_vote_percent_moving_average_history { nil }
   end
