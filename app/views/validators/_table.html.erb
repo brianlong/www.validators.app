@@ -1,7 +1,7 @@
 <table id="validators-table" class='table table-block-sm'>
   <thead>
   <tr>
-    <th class="column-avatar d-none d-xl-table-cell align-middle">
+    <th class="column-avatar d-none align-middle <%= current_user ? 'd-lg-table-cell' : 'd-xl-table-cell' %>">
       <% if current_user %>
         <%= link_to url_for(
           order: params[:order],
@@ -19,7 +19,7 @@
         #
       <% end %>
     </th>
-    <th class="column-info align-middle">
+    <th class="column-info align-middle <%= 'pl-3' unless current_user %>">
       Name <small class="text-muted">(Commission)</small>
       <i class="fas fa-info-circle small"
          data-toggle="tooltip"
@@ -99,8 +99,8 @@
   <% validators.each do |validator| %>
     <% i += 1 %>
     <tr id="row-<%= i %>">
-      <td class="column-avatar d-none d-xl-table-cell align-middle">
-        <div class="avatar">
+      <td class="column-avatar d-none align-middle <%= current_user ? 'd-lg-table-cell' : 'd-xl-table-cell' %>">
+        <div class="avatar <%= 'd-none d-xl-block ' if current_user %>">
           <%= create_avatar_link(validator) %>
         </div>
         <% if current_user %>
@@ -114,7 +114,16 @@
         <% end %>
       </td>
 
-      <td class="column-info align-middle">
+      <td class="column-info align-middle <%= 'pl-3' unless current_user %>">
+        <% if current_user %>
+          <i class="d-lg-none watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'far' %> fa-star"
+             data-toggle="tooltip"
+             data-placement="top"
+             data-network="<%= validator.network%>"
+             data-account="<%= validator.account%>"
+             title="<%= validator.watchers.include?(current_user) ? 'Remove from favourites' : 'Add to favourites' %>">
+          </i>
+        <% end %>
         <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                     class: 'font-weight-bold' do %>
           <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>

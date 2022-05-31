@@ -100,5 +100,16 @@
   margin-left: 12px;
   filter: drop-shadow(0px 0px 4px black);
   color: $orange;
-  &:hover { cursor: pointer; }
+  
+  &:hover {
+    cursor: pointer;
+  }
+  
+  @media(max-width: $screen-lg-max) {
+    margin: 0;
+    position: relative;
+  }
+  @media(max-width: $screen-md-max) {
+    margin-right: 5px;
+  }
 }
