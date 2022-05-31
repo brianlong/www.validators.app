@@ -162,7 +162,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           <i :class=" 'fas fa-circle mr-1 score-' + validator['software_version_score'] "
             :title=" 'Software Version Score = ' + validator['software_version_score'] "></i>
           <i :class=" 'fas fa-circle mr-1 score-' + validator['security_report_score'] "
-            :title=" 'Security Report Score = ' + validator['security_report_score'] "></i>
+            :title=" 'Bonus Point = ' + validator['security_report_score'] "></i>
           <i class="fas fa-minus-circle mr-1 text-warning"
              v-if="validator['consensus_mods_score'] < 0"
              :title=" 'Consensus Mods Score = ' + validator['consensus_mods_score'] + '. Validator appears to use software modifications with an unproven effect on consensus.' "></i>
