@@ -1,13 +1,14 @@
 @import "variables";
 
 @mixin img-circle($height, $width) {
-  border-radius: 50%;
+  border-radius: 15%;
   height: $height;
   width: $width;
+  background-color: #f0f0f0;
 }
 
 @mixin img-private($padding-y, $padding-x, $font-size) {
-  background-color: rgba($white, 0.7);
+  background-color: rgba($white, 0.6);
   padding: $padding-y $padding-x;
   span {
     color: $background-color;
@@ -20,6 +21,9 @@
   &-private {
     @include img-circle(60px, 60px);
     @include img-private(16px, 11px, 30px);
+    &.img-circle-medium {
+      @include img-private(13px, 10px, 22px);
+    }
   }
   &-medium {
     @include img-circle(45px, 45px);

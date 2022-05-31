@@ -21,7 +21,7 @@ module Gatherers
 
         vote_account_details = get_vote_account_details(vacc.account)
 
-        if vote_account_details.blank?
+        if vote_account_details.blank? || vote_account_details["validatorIdentity"].blank?
           vacc.set_inactive_without_touch
           next
         end
