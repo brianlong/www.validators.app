@@ -22,20 +22,28 @@
 
         options: {
             animation: { duration: 0 }, // general animation time
-            elements: { line: { tension: 0 } }, // disables bezier curves
+            elements: {
+                line: { tension: 0 } // disables bezier curves
+            },
             hover: { mode: null },
             tooltips: { enabled: false },
             responsiveAnimationDuration: 0, // animation duration after a resize
             legend: {
                 labels: {
-                    fontColor: '<%= DARK_GREY %>'
+                    fontColor: '<%= DARK_GREY %>',
+                    boxWidth: 8,
+                    boxHeight: 8,
+                    usePointStyle: true,
+                    padding: 10,
+                    fontSize: 14
+
                 },
             },
             scales: {
                 xAxes: [{
                     display: true,
-                    ticks: {display: false},
-                    gridLines: {display: false},
+                    ticks: { display: false },
+                    gridLines: { display: false },
                     scaleLabel: {
                         display: true,
                         labelString: "Previous <%= local_assigns[:vector].to_a.count %> Observations",
