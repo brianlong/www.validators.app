@@ -3,7 +3,7 @@
 module Api
   module V1
     class WatchlistsController < ApiController
-      before_action: :set_validator
+      before_action :set_validator
 
       def update_watchlist
 
@@ -12,7 +12,7 @@ module Api
             current_user.user_watchlist_elements.find_by(validator: @validator).delete
             resp, status = { status: "removed" }, :ok
           else
-            current_user.user_watchlist_elements.create(validator: @validator, network: watchlist_params[:network])
+            current_user.user_watchlist_elements.create(validator: @validator)
             resp, status = { status: "created" }, :created
           end
         else
