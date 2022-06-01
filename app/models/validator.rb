@@ -48,7 +48,7 @@ class Validator < ApplicationRecord
   has_many :commission_histories, dependent: :destroy
   has_many :validator_histories, primary_key: :account, foreign_key: :account
 
-  has_many :user_watchlist_elements
+  has_many :user_watchlist_elements, dependent: :destroy
   has_many :watchers, through: :user_watchlist_elements, source: :user
 
   has_one :validator_ip_active, -> { active }, class_name: "ValidatorIp"
