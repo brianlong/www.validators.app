@@ -24,7 +24,6 @@
 #  consensus_mods_score                        :integer          default(0)
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
-#  data_center_host                            :string(191)
 #  data_center_key                             :string(191)
 #  delinquent                                  :boolean
 #  ip_address                                  :string(191)
@@ -111,8 +110,6 @@ class ValidatorScoreV1 < ApplicationRecord
   has_many :validator_ips, through: :validator
   has_one :validator_ip_active, through: :validator
   has_one :data_center, through: :validator
-
-  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
 
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON

@@ -20,7 +20,7 @@
         <%= asn_stat.average_score.round(3) rescue '' %>
       </div>
     </td>
-    <td class="column-lg small">
+    <td class="column-md small">
       <% asn_data[:data_centers].each do |dc| %>
         <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
         <br />
@@ -51,9 +51,16 @@
         <% end %>
       </td>
     <% end %>
-    <td class="column-lg">
-      <%= number_with_delimiter lamports_to_sol(asn_data[:active_stake]).round(0) %>
-      (<%= percent_of_total_stake(asn_data[:active_stake], @results[:total_stake]) %>)
+    <td class="column-xl">
+      <small>
+        <%= number_with_delimiter lamports_to_sol(asn_data[:active_stake_from_active_validators]).round(0) %>
+        (<%= percent_of_total_stake(asn_data[:active_stake_from_active_validators], @results[:total_stake]) %>)
+      </small>
+      <br />
+      <small>
+        <%= number_with_delimiter lamports_to_sol(asn_data[:active_stake_from_all_validators]).round(0) %>
+        (<%= percent_of_total_stake(asn_data[:active_stake_from_all_validators], @results[:total_stake]) %>)
+      </small>
     </td>
   </tr>
 <% end %>

@@ -1,50 +1,53 @@
-<div class="page-header with-image row">
-  <div class='col-lg-1 col-2'>
+<section class="page-header">
+  <div class='page-header-name'>
     <% if @validator.private_validator? %>
-      <div class="img-circle-private">
+      <div class="img-circle-private img-circle-medium">
         <span class='fas fa-users-slash' title="Private Validator"></span>
       </div>
     <% elsif @validator.avatar_url %>
-      <%= image_tag @validator.avatar_url, class: 'img-circle' %>
+      <%= image_tag @validator.avatar_url, class: 'img-circle-medium' %>
     <% else %>
-      <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle' %>
+      <%= image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium' %>
     <% end %>
+
+    <h1 class="word-break"><%= @validator.name || @validator.account %></h1>
   </div>
-  <div class='col-lg-11 col-10'>
-    <h1 class="word-break">
-      <%= @validator.name || @validator.account %>
-      <% if @validator.score.authorized_withdrawer_score == -2 %>
-        <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
-          <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
-        <% end %>
+
+  <div class="page-header-tags">
+    <div class="d-inline-block">
+      <% if @validator.private_validator? %>
+        <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0" title="Validator has 100% commission.">private</div>
+      <% end %>
+      <% if @validator.delinquent? %>
+        <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0" title="Validator is delinquent.">delinquent</div>
       <% end %>
       <% if @validator.admin_warning %>
         <%= link_to '/faq#admin-warning', title: "#{@validator.admin_warning}" do %>
-          <i class="fas fa-exclamation-triangle text-danger ml-1"></i>
+          <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0">admin warning</div>
         <% end %>
       <% end %>
-    </h1>
+      <% if @validator.score.authorized_withdrawer_score == -2 %>
+        <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
+          <div class="btn btn-xs btn-warning mr-2 mb-3 mb-sm-0">withdrawer authority</div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% @tags_present = @validator.delinquent? || @validator.admin_warning || @validator.score.authorized_withdrawer_score == -2 %>
     <% unless @validator.private_validator? %>
-      <h5 class="mt-2">
-        Delegate SOL to this validator:
-        <%= link_to 'SolStake.io',
-                    solstake_url(@validator.vote_account_active&.account),
-                    target: :blank %>
-      </h5>
-    <% end %>
-    <% if @validator.private_validator? %>
-      <h5 class="text-danger mt-2">(Private Validator)</h5>
-    <% end %>
-    <% if @validator.delinquent? %>
-      <h5 class="text-danger mt-2">(delinquent)</h5>
+      <%= link_to 'Delegate SOL',
+                  solstake_url(@validator.vote_account_active&.account),
+                  title: 'Delegate SOL to this validator on SolStake.io',
+                  class: "btn btn-xs btn-secondary mb-3 mb-sm-0 #{ 'float-md-right' if @tags_present }",
+                  target: :blank %>
     <% end %>
   </div>
-</div>
+</section>
 
 
 <div class="row">
-  <div class="col-lg-6">
-    <div class="card mb-4">
+  <div class="col-lg-6 mb-4">
+    <div class="card h-100">
       <div class="card-content pb-0">
         <h2 class="card-heading">Validator Details</h2>
       </div>
@@ -94,8 +97,8 @@
     </div>
   </div>
 
-  <div class="col-lg-6">
-    <div class="card mb-4">
+  <div class="col-lg-6 mb-4">
+    <div class="card h-100">
       <div class="card-content pb-0">
         <h2 class="card-heading">Validator Details</h2>
       </div>

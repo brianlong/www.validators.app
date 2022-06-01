@@ -7,15 +7,14 @@
         <thead>
           <tr>
             <th colspan="2">
-              <strong> ASN: </strong>
-              <%= params[:asn] %>
+              <h2 class="h6 mb-0">ASN: <%= params[:asn] %></h2>
             </th>
           </tr>
         </thead>
         <tbody>
         <tr>
           <td class="column-sm"><strong>Data Centers</strong></td>
-          <td>
+          <td class="small">
             <% @data_center_keys.each do |dck| %>
               <%= link_to dck, data_center_url(network: params[:network], key: dck.gsub('/', '-slash-')) %>
               <br \>

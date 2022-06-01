@@ -20,7 +20,7 @@ dl {
 
 .list {
   &-large {
-    @include font-size-larger();
+    @include font-size-lg();
     li {
       margin-bottom: $margin-standard;
     }

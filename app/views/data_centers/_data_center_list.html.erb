@@ -1,9 +1,9 @@
 <% @results[:results].each do |dc_key, dc_data| %>
   <tr>
-    <td class="column-lg"><%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %></td>
-    <td class="column-sm"><%= dc_data[:aso] %></td>
-    <td class="column-md"><%= dc_data[:count] %></td>
-    <td class="column-md">
+    <td class="column-md"><%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %></td>
+    <td class="column-<%= set_column_width(params[:network]) %>"><%= dc_data[:aso] %></td>
+    <td class="column-<%= set_column_width(params[:network]) %>"><%= dc_data[:count] %></td>
+    <td class="column-<%= set_column_width(params[:network]) %>">
       <% if dc_data[:delinquent_validators] > 0 %>
         <%= link_to dc_data[:delinquent_validators],
             data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :delinquent) %>
@@ -15,7 +15,7 @@
       <% end %>
     </td>
     <% if params[:network] == 'mainnet' %>
-      <td class="column-md">
+      <td class="column-<%= set_column_width(params[:network]) %>">
         <% if dc_data[:private_validators] > 0 %>
          <%= link_to dc_data[:private_validators],
             data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :private) %>
@@ -27,9 +27,16 @@
         <% end %>
       </td>
     <% end %>
-    <td class="column-lg">
-      <%= number_with_delimiter lamports_to_sol(dc_data[:active_stake]).round(0) %>
-      (<%= percent_of_total_stake(dc_data[:active_stake], @results[:total_stake]) %>)
+    <td class="column-xl">
+      <small>
+        <%= number_with_delimiter lamports_to_sol(dc_data[:active_stake_from_active_validators]).round(0) %>
+        (<%= percent_of_total_stake(dc_data[:active_stake_from_active_validators], @results[:total_stake]) %>)
+      </small>
+      <br />
+      <small>
+        <%= number_with_delimiter lamports_to_sol(dc_data[:active_stake_from_all_validators]).round(0) %>
+        (<%= percent_of_total_stake(dc_data[:active_stake_from_all_validators], @results[:total_stake]) %>)
+      </small>
     </td>
   </tr>
 <% end %>

@@ -104,7 +104,7 @@ class Validator < ApplicationRecord
 
     # summarised active stake for all validators in the given network
     def total_active_stake_for(network)
-      where(network: network).joins(:validator_score_v1).sum(:active_stake)
+      active.where(network: network).joins(:validator_score_v1).sum(:active_stake)
     end
 
     def index_order(order_param)

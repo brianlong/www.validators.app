@@ -13,8 +13,8 @@ module FixIpModule
     last_ovh_ip
   end
 
-  # update or create new IpOverride with host data
-  def setup_ip_override(vip:, host_data:, host:)
+  # update or create new DataCenter and DataCenterHost with host data
+  def setup_data_center(vip:, host_data:, host:)
     traits_autonomous_system_number = vip.data_center.traits_autonomous_system_number
 
     data_center = DataCenter.find_or_create_by(
@@ -58,7 +58,6 @@ module FixIpModule
 
         vs1.update(
           data_center_key: data_center_host.data_center_key,
-          data_center_host: data_center_host.host,
           updated_at: Time.now
         )
       end

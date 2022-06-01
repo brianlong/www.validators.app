@@ -4,30 +4,31 @@ table, .table {
   color: inherit;
 
   thead {
-    background-color: $card-border-color;
+    background-color: $table-background-color;
     th {
       border: none;
+      border-bottom: 1px solid $table-border-color;
       padding: $padding-standard 20px;
     }
   }
 
   tbody {
     tr {
-      border-top: 1px solid $table-border-color;
+      border-top: 1px solid $table-border-color-secondary;
     }
     tr:nth-of-type(even) {
-      background-color: $card-background-color;
+      background-color: $table-background-color;
     }
     tr:nth-of-type(odd) {
-      background-color: darken($card-background-color, 3%);
+      background-color: $table-background-color-secondary;
     }
     td {
       padding: $padding-standard 20px;
-      border-top: 1px solid $table-border-color;
+      border-top: none;
     }
 
     &+tbody {
-      border-top: 2px solid $card-border-color;
+      border-top: 2px solid $table-border-color;
     }
   }
 
@@ -159,8 +160,9 @@ table, .table {
   margin-bottom: 0px;
 
   tbody, thead {
-    tr {
-      background-color: $card-background-color !important;
+    tr, th {
+      background-color: $table-background-color !important;
+      border-bottom: 1px solid $table-border-color-secondary;
     }
   }
 

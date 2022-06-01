@@ -8,19 +8,16 @@
     margin-bottom: 0;
 
     .nav-link {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       letter-spacing: 1px;
-      @include font-size-base;
       border: 2px solid $green;
-      border-radius: 24px;
-      padding: 12px 16px;
       font-weight: $font-weight-normal;
-      @include font-size-smaller;
       background-color: transparent;
       color: white;
-      @media(max-width: $screen-xs-max) {
-        padding: 9px 11px;
-      }
+      border-radius: 24px;
+      padding: 8px 14px;
+      min-width: 75px;
+      @include font-size-sm;
 
       &:hover, &.active {
         transition: .2s ease;

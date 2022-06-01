@@ -59,4 +59,8 @@ module DataCentersHelper
 
     link_to "#{filter_by}", url, class: classes_list
   end
+
+  def set_column_width(network)
+    network == "mainnet" ? "sm" : "md"
+  end
 end
