@@ -42,6 +42,7 @@ en:
           comments: 'Message'
   flash:
     cookie: "This site uses cookies. See our <a href='/cookie-policy'>Cookie Policy</a> for details."
+    empty_watchlist: "Looks like you don't have any favourite validators yet."
   public:
     nav:
       add_to_watchlist: "Add to favourites"

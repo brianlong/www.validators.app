@@ -5,7 +5,15 @@ class PublicController < ApplicationController
   def index
     @per = 25
 
-    user_id = params[:watchlist] && current_user.watched_validators.exists? ? current_user.id : nil
+    user_id = if params[:watchlist] && current_user.watched_validators.exists?
+                current_user.id
+              elsif params[:watchlist]
+                flash[:notice] = t('flash.empty_watchlist')
+                current_user.id
+              else
+                nil
+              end
+
     @validators = ValidatorQuery.new(user_id: user_id).call(
       network: params[:network],
       sort_order: params[:order],
