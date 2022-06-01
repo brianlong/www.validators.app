@@ -34,7 +34,7 @@
                     boxWidth: 8,
                     boxHeight: 8,
                     usePointStyle: true,
-                    padding: 10,
+                    padding: 5,
                     fontSize: 14
 
                 },
@@ -68,6 +68,15 @@
                     }
                 }]
             }
+        },
+        plugins: {
+            beforeInit(chart) {
+                const originalFit = chart.legend.fit;
+                chart.legend.fit = function fit() {
+                    originalFit.bind(chart.legend)();
+                    this.height += 10;
+                }
+            },
         }
     });
 </script>

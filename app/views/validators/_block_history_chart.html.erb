@@ -14,7 +14,7 @@
             // dynamicly calculated. Look for othe options to control the y-axis if desired.
             datasets: [
                 {
-                    label: ' Moving Avg ',
+                    label: ' Moving Avg  ',
                     fill: false,
                     backgroundColor: '<%= SPARK_LINE_1_TRANSPARENT %>',
                     borderColor: '<%= SPARK_LINE_1 %>',
@@ -23,7 +23,7 @@
                     data: <%= @data.map { |k,v| v[:skipped_slot_percent_moving_average].round(1) } %>
                 },
                 {
-                    label: ' Actual Skip Slots % ',
+                    label: ' Actual Skip Slots %  ',
                     fill: false,
                     backgroundColor: '<%= SPARK_LINE_2_TRANSPARENT %>',
                     borderColor: '<%= SPARK_LINE_2 %>',
@@ -59,7 +59,7 @@
                     boxWidth: 8,
                     boxHeight: 8,
                     usePointStyle: true,
-                    padding: 10,
+                    padding: 5,
                     fontSize: 14
                 },
             },
@@ -93,6 +93,15 @@
                     }
                 }]
             }
+        },
+        plugins: {
+            beforeInit(chart) {
+                const originalFit = chart.legend.fit;
+                chart.legend.fit = function fit() {
+                    originalFit.bind(chart.legend)();
+                    this.height += 10;
+                }
+            },
         }
     });
 </script>
