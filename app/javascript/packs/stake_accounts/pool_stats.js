@@ -7,7 +7,7 @@ const DELEGATION_STRATEGY_URLS = {
   "Lido": "https://solana.foundation/stake-pools",
   "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds",
   "Eversol": "https://docs.eversol.one/litepaper/delegation-strategy",
-  "Blazestake": "https://stake-docs.solblaze.org/protocol/delegation-strategy"
+  "BlazeStake": "https://stake-docs.solblaze.org/protocol/delegation-strategy"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {
@@ -28,10 +28,10 @@ var StakePoolStats = Vue.component('StakePoolStats', {
   template: `
     <div class="card h-100">
       <div class="card-content">
-        <h3 class="card-heading mb-2">
+        <h2 class="h3 card-heading mb-2">
           {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} Statistics
-        </h3>
-        <div class="text-center text-muted small mb-4">
+        </h2>
+        <div class="text-center text-muted small mb-4 pb-2">
           <a v-bind:href="delegation_strategy_url()" target="_blank">See delegation strategy</a>
         </div>
 

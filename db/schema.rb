@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_16_143049) do
+ActiveRecord::Schema.define(version: 2022_05_16_155149) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -511,7 +511,6 @@ ActiveRecord::Schema.define(version: 2022_05_16_143049) do
     t.string "ip_address"
     t.string "network"
     t.string "data_center_key"
-    t.string "data_center_host"
     t.text "skipped_slot_moving_average_history"
     t.text "skipped_vote_history"
     t.text "skipped_vote_percent_moving_average_history"
