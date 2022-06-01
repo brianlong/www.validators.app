@@ -7,7 +7,7 @@ const DELEGATION_STRATEGY_URLS = {
   "Lido": "https://solana.foundation/stake-pools",
   "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds",
   "Eversol": "https://docs.eversol.one/litepaper/delegation-strategy",
-  "Blazestake": "https://stake-docs.solblaze.org/protocol/delegation-strategy"
+  "BlazeStake": "https://stake-docs.solblaze.org/protocol/delegation-strategy"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {
