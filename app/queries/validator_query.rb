@@ -28,7 +28,7 @@ class ValidatorQuery < ApplicationQuery
     scope = search_by(scope, query)
     scope = set_ordering(scope, sort_order)
     scope = set_pagination(scope, page, limit)
-    query ? scope : scope.scorable
+    scope.scorable
   end
 
   def call_single_validator(network: "mainnet", account:)
