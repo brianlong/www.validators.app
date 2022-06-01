@@ -46,7 +46,7 @@ class UserTest < ActiveSupport::TestCase
   test "responds to watched_validators correctly" do
     u = User.create(@user_params)
     val = create(:validator)
-    create(:user_watchlist_element, validator: val, user: u, network: "testnet")
+    create(:user_watchlist_element, validator: val, user: u)
 
     assert_equal val, u.watched_validators.first
   end

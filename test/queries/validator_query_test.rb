@@ -133,7 +133,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
 
     user = create(:user)
 
-    create(:user_watchlist_element, validator: validators.last, user: user, network: @mainnet_network)
+    create(:user_watchlist_element, validator: validators.last, user: user)
 
     result = ValidatorQuery.new(user_id: user.id)
                            .call(network: @mainnet_network, sort_order: "name")

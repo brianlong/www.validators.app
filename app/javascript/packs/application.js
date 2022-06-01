@@ -43,8 +43,4 @@ document.addEventListener("turbolinks:load", function() {
             link.classList.add('active');
         })
     })
-
-    // $('.carousel').carousel({ interval: 4000 });
-
-    // $('[data-toggle="tooltip"]').tooltip()
 })
