@@ -1,24 +1,34 @@
 // Colors
 
-// Brand colors:
+// Brand colors
 $green: #00ce99;
 $purple: #b832c8;
-// Bootstrap overrides:
-$base-color: #e3e3e3;
+
+// Basic text and background colors
+$base-color: #dedede;
 $link-color: lighten($purple, 28%);
 $link-color-secondary: lighten($link-color, 18%);
-$background-color: #1c1732;
-$background-color-secondary: lighten($background-color, 7%);
+$background-color: #1d1834;
+$background-color-secondary: lighten($background-color, 6%);
 $background-color-tertiary: #2f163c;
-// Other:
+
+// Cards
+$card-background-color: #17132a;
+$card-background-color-secondary: darken($card-background-color, 3%);
+$card-shadow-color: lighten($background-color-secondary, 11%);
+
+// Tables
+$table-border-color: darken($card-shadow-color, 2%);
+$table-border-color-secondary: darken($card-shadow-color, 5%);
+$table-background-color: $card-background-color;
+$table-background-color-secondary: $card-background-color-secondary;
+
+// Other colors
 $black: #000;
 $white: #fff;
 $red: #ff5262;
 $orange: #ffc107;
 $grey-light: darken($base-color, 30%);
-$card-background-color: darken($background-color, 3%);
-$card-border-color: #383351;
-$table-border-color: darken($card-border-color, 5%);
 
 // Score and chart colors:
 $blue: #0091f2;

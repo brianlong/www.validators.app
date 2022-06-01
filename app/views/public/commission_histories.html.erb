@@ -1,7 +1,7 @@
 <!-- Vue templates -->
 <%= javascript_pack_tag 'commission_histories/index' %>
 
-<div class="page-header">
+<section class="page-header">
   <h1>Commission Changes</h1>
   <% if @validator %>
     <h4 class="word-break"><%= @validator.name || @validator.account %></h4>
@@ -11,7 +11,7 @@
     of the rewards), and then lowers it again just after the new epoch. See our
     <%= link_to 'FAQ page', faq_path(anchor: 'choosing-validator') %> to learn more.
   </p>
-</div>
+</section>
 
 <% if @validator %>
   <div
