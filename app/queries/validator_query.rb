@@ -4,8 +4,8 @@ class ValidatorQuery < ApplicationQuery
   include ValidatorsControllerHelper
   def initialize(user_id: nil)
     if user_id
-      @usr = User.find(user_id)
-      @default_scope = @usr.watched_validators.select(validator_fields, validator_score_v1_fields)
+      user = User.find(user_id)
+      @default_scope = user.watched_validators.select(validator_fields, validator_score_v1_fields)
                                 .joins(:validator_score_v1_for_api)
                                 .includes(
                                   :vote_accounts_for_api,

@@ -3,7 +3,7 @@ document.addEventListener('turbolinks:load', () => {
     var btn = this
     $.get("/current-user", function(resp){
       $.ajax({
-        url: "/api/v1/add-to-watchlist/" + $(btn).data()['network'],
+        url: "/api/v1/update-watchlist/" + $(btn).data()['network'],
         type: "post",
         data: {
           account: $(btn).data()['account']

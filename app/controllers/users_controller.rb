@@ -2,14 +2,10 @@
 
 class UsersController < ApplicationController
   def current_user_info
-    if current_user
-      response = {
-        api_token: current_user.api_token
-      }
+    response = if current_user
+      { api_token: current_user.api_token }
     else
-      response = {
-        error: "user not signed in"
-      }
+      { error: "user not signed in" }
     end
 
     render json: response.to_json

@@ -5,7 +5,6 @@
 # Table name: user_watchlist_elements
 #
 #  id           :bigint           not null, primary key
-#  network      :string(191)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  user_id      :bigint           not null
@@ -13,9 +12,8 @@
 #
 # Indexes
 #
-#  index_user_watchlist_elements_on_user_id                   (user_id)
-#  index_user_watchlist_elements_on_user_id_and_validator_id  (user_id,validator_id) UNIQUE
-#  index_user_watchlist_elements_on_validator_id              (validator_id)
+#  index_user_watchlist_elements_on_user_id       (user_id)
+#  index_user_watchlist_elements_on_validator_id  (validator_id)
 #
 # Foreign Keys
 #

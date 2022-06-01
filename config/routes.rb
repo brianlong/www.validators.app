@@ -160,7 +160,7 @@ Rails.application.routes.draw do
 
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
 
-      post 'add-to-watchlist/:network', to: 'watchlists#add_to_watchlist'
+      post 'update-watchlist/:network', to: 'watchlists#update_watchlist'
     end
   end
 end
