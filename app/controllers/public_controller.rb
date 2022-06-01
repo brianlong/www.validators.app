@@ -6,7 +6,7 @@ class PublicController < ApplicationController
     @per = 25
 
     if params[:watchlist]
-      user_id = params[:watchlist] ? current_user&.id : nil
+      user_id = current_user&.id
       validators = User.find(user_id).watched_validators.where(network: index_params[:network])
     else
       validators = Validator.where(network: index_params[:network])
