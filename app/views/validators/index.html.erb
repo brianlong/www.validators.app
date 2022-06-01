@@ -24,6 +24,21 @@
                         url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
             <p class="small muted toggle-label">REFRESH OFF</p>
           <% end %>
+
+          <% if current_user %>
+            <%= link_to url_for(
+                          order: params[:order],
+                          page: params[:page],
+                          network: params[:network],
+                          refresh: params[:refresh],
+                          watchlist: params[:watchlist] ? nil : true) do %>
+              <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning lead ml-2 ml-md-0 d-lg-none"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
+              </i>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>

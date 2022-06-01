@@ -63,6 +63,9 @@ table, .table {
       width: 85px;
       text-align: center;
       padding: 0;
+      @media(max-width: $screen-lg-max) {
+        width: 55px;
+      }
       .avatar {
         padding-bottom: 5px;
         .img-circle-medium-private {
@@ -83,7 +86,7 @@ table, .table {
       width: 195px;
       padding-left: 0;
       padding-right: 0;
-      @media(max-width: $screen-lg-max) {
+      @media(max-width: $screen-md-max) {
         padding-left: 20px;
       }
     }
@@ -156,7 +159,7 @@ table, .table {
 }
 
 .stake-accounts-table {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 
   tbody, thead {
     tr {

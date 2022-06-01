@@ -1,5 +1,5 @@
 document.addEventListener('turbolinks:load', () => {
-  $(".watch-button").on('click', function(){
+  $(".watch-button").on('click', function() {
     var btn = this
     $.get("/current-user", function(resp){
       $.ajax({
@@ -13,7 +13,12 @@ document.addEventListener('turbolinks:load', () => {
         },
         dataType: 'json'
       }).done(function (data) {
-        $(btn).toggleClass("text-success")
+        $(btn).toggleClass("fas far")
+        if(data["status"] == "created") {
+          $(btn).prop("title", "Remove from favourites")
+        } else {
+          $(btn).prop("title", "Add to favourites")
+        }
       })
     })
   })
