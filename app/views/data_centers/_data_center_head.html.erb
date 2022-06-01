@@ -1,6 +1,6 @@
 <tr>
   <th class="column-md align-middle">Key</th>
-  <th class="column-sm align-middle">
+  <th class="column-<%= set_column_width(params[:network]) %> align-middle">
     ISP
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
@@ -8,7 +8,7 @@
        title="<%= t('definitions.isp_full_name') %>">
     </i>
   </th>
-  <th class="column-sm align-middle">
+  <th class="column-<%= set_column_width(params[:network]) %> align-middle">
     Population
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
@@ -18,7 +18,7 @@
     <br />
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
-  <th class="column-sm align-middle">
+  <th class="column-<%= set_column_width(params[:network]) %> align-middle">
     Delinquent
     <i class="fas fa-info-circle small"
        data-toggle="tooltip"
@@ -32,7 +32,7 @@
     </small>
   </th>
   <% if params[:network] == 'mainnet' %>
-    <th class="column-sm align-middle">
+    <th class="column-<%= set_column_width(params[:network]) %> align-middle">
       Private
       <i class="fas fa-info-circle small"
         data-toggle="tooltip"

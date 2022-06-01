@@ -26,8 +26,8 @@
         <br />
       <% end %>
     </td>
-    <td class="column-sm"><%= asn_data[:count] %></td>
-    <td class="column-sm">
+    <td class="column-md"><%= asn_data[:count] %></td>
+    <td class="column-md">
       <% if asn_data[:delinquent_validators] > 0 %>
         <%= link_to asn_data[:delinquent_validators],
             asn_url(network: params[:network], asn: asn_data[:asn], filter_by: :delinquent) %>
@@ -39,7 +39,7 @@
       <% end %>
     </td>
     <% if params[:network] == 'mainnet' %>
-      <td class="column-sm">
+      <td class="column-md">
         <% if asn_data[:private_validators] > 0 %>
           <%= link_to asn_data[:private_validators],
             asn_url(network: params[:network], asn: asn_data[:asn], filter_by: :private) %>
