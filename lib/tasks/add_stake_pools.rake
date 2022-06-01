@@ -36,7 +36,7 @@ stake_pools = [
     ticker: "esol"  
   },
   {
-    name: "Blazestake",
+    name: "BlazeStake",
     authority: "6WecYymEARvjG5ZyqkrVQ6YkhPfujNzWpSPwNKXHCbV2",
     network: "mainnet",
     ticker: "bsol"  
