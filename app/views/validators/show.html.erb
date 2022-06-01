@@ -208,8 +208,10 @@
 <div class="row">
   <div class="col-lg-6">
     <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="text-center">Block History</h2>
+      <div class="card-content pb-0">
+        <h2 class="h3 card-heading">Block History</h2>
+      </div>
+      <div class="pb-3 px-3">
         <%= render 'validators/spark_line_chart',
                    chart_name: "spark_line_block_distance_#{@validator.account}",
                    vector: @root_blocks,
@@ -223,8 +225,10 @@
 
   <div class="col-lg-6">
     <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="text-center">Vote History</h2>
+      <div class="card-content pb-0">
+        <h2 class="h3 card-heading">Vote History</h2>
+      </div>
+      <div class="pb-3 px-3">
         <%= render 'validators/spark_line_chart',
                    chart_name: "spark_line_vote_distance_#{@validator.account}",
                    vector: @vote_blocks,
@@ -240,8 +244,10 @@
 <div class="row">
   <div class="col-lg-6">
     <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="text-center">Skipped Slot History</h2>
+      <div class="card-content pb-0">
+        <h2 class="h3 card-heading">Skipped Slot History</h2>
+      </div>
+      <div class="pb-3 px-3">
         <%= render partial: 'block_history_chart' %>
       </div>
     </div>
