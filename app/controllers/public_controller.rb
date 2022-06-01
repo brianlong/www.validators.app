@@ -5,14 +5,20 @@ class PublicController < ApplicationController
   def index
     @per = 25
 
-    user_id = params[:watchlist] ? current_user&.id : nil
-    @validators = ValidatorQuery.new(user_id: user_id).call(
-      network: params[:network],
-      sort_order: params[:order],
-      page: params[:page],
-      limit: @per,
-      query: params[:q]
-    )
+    if params[:watchlist]
+      user_id = params[:watchlist] ? current_user&.id : nil
+      validators = User.find(user_id).watched_validators.where(network: index_params[:network])
+    else
+      validators = Validator.where(network: index_params[:network])
+    end
+
+    validators = validators.scorable.index_order(validate_order)
+
+    unless params[:q].blank?
+      validators = ValidatorSearchQuery.new(validators).search(index_params[:q])
+    end
+
+    @validators = validators.page(index_params[:page]).per(@per)
 
     @batch = Batch.last_scored(params[:network])
 
@@ -24,7 +30,7 @@ class PublicController < ApplicationController
 
       validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], @batch.uuid)
       at_33_stake_validator = validator_history_stats.at_33_stake&.validator
-      @at_33_stake_index = (@validators.index(at_33_stake_validator)&.+ 1).to_i
+      @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
     end
 
     # flash[:error] = 'Due to an issue with our RPC server pool, the Skipped Slot % data may be inaccurate. I am aware of the problem and working on a solution. Thanks! -- Brian Long'
