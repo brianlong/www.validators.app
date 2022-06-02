@@ -72,7 +72,7 @@
           <thead>
             <tr>
               <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
-              <th class="column-info align-middle">
+              <th class="column-info align-middle pl-3">
                 Name <small class="text-muted">(Commission)</small>
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
