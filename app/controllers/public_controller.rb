@@ -4,9 +4,15 @@
 class PublicController < ApplicationController
   def index
     @per = 25
-    validators = Validator.where(network: index_params[:network])
-                          .scorable
-                          .index_order(validate_order)
+
+    if params[:watchlist]
+      user_id = current_user&.id
+      validators = User.find(user_id).watched_validators.where(network: index_params[:network])
+    else
+      validators = Validator.where(network: index_params[:network])
+    end
+
+    validators = validators.scorable.index_order(validate_order)
 
     unless params[:q].blank?
       validators = ValidatorSearchQuery.new(validators).search(index_params[:q])

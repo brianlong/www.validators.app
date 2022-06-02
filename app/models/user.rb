@@ -52,6 +52,9 @@ class User < ApplicationRecord
          :confirmable, :lockable, :timeoutable, :trackable,
          authentication_keys: [:username]
 
+  has_many :user_watchlist_elements, dependent: :destroy
+  has_many :watched_validators, through: :user_watchlist_elements, source: :validator
+
   # For attr_encrypted:
   attr_encrypted_options.merge!(
     key: Rails.application.credentials.attribute_key,

@@ -42,7 +42,12 @@ en:
           comments: 'Message'
   flash:
     cookie: "This site uses cookies. See our <a href='/cookie-policy'>Cookie Policy</a> for details."
+    empty_watchlist: "Looks like you don't have any favourite validators yet."
   public:
+    nav:
+      add_to_watchlist: "Add to favourites"
+      remove_from_watchlist: "Remove from favourites"
+      show_watchlist: "Display validators from your watchlist"
     index:
       title: "Welcome Solana Validators"
       paragraph: "This website is under construction. Be awesome today."

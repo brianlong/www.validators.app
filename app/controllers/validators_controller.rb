@@ -8,11 +8,15 @@ class ValidatorsController < ApplicationController
   # GET /validators.json
   def index
     @per = 25
-    validators = Validator.where(network: params[:network])
-                          .scorable
-                          .preload(:validator_score_v1)
-                          .index_order(validate_order)
 
+    if params[:watchlist]
+      user_id = current_user&.id
+      validators = User.find(user_id).watched_validators.where(network: params[:network])
+    else
+      validators = Validator.where(network: params[:network])
+    end
+
+    validators = validators.scorable.preload(:validator_score_v1).index_order(validate_order)
     @validators = validators.page(params[:page]).per(@per)
 
     @batch = Batch.last_scored(params[:network])

@@ -72,6 +72,7 @@
           <li><a href="#change-validator">How often can I change the&nbsp;validator?</a></li>
           <li><a href="#staking-rewards">How often are the&nbsp;staking rewards paid out?</a></li>
           <li><a href="#apy">Where can I find the&nbsp;APY?</a></li>
+          <li><a href="#fav">Can I add a validator to my favourites?</a></li>
         </ul>
       </div>
     </div>
@@ -440,4 +441,10 @@
   We do not show nodes APY on validators.app. See <%= link_to "https://www.stakeview.app", "https://www.stakeview.app" %>
   for a&nbsp;good look at APY. We do show APY for stake pools hovewer. You can find them
   <%= link_to "on this site", stake_pools_path, data: { turbolinks: false } %>.
+</p>
+
+<h3 class="h5" id="fav">Can I add a validator to my favourites?</h3>
+<p class="mb-5">
+  You need to <%= link_to 'create user account', new_user_registration_path %> or <%= link_to 'log in to your user account', new_user_session_path %>
+  first. Then you can create your own watchlist by clicking on star icon next to each validator on the list.
 </p>

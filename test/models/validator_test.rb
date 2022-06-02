@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ValidatorTest < ActiveSupport::TestCase
   setup do
@@ -189,5 +189,12 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal 2, result.count
     assert result.include?(@v_inactive)
     assert result.include?(@v_delinquent)
+  end
+
+  test "responds to watchers correctly" do
+    u = create(:user)
+    create(:user_watchlist_element, validator: @validator, user: u)
+
+    assert_equal u, @validator.watchers.first
   end
 end

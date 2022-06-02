@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_16_155149) do
+ActiveRecord::Schema.define(version: 2022_05_23_110715) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -371,6 +371,16 @@ ActiveRecord::Schema.define(version: 2022_05_16_155149) do
     t.float "average_apy"
   end
 
+  create_table "user_watchlist_elements", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "validator_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "validator_id"], name: "index_user_watchlist_elements_on_user_id_and_validator_id", unique: true
+    t.index ["user_id"], name: "index_user_watchlist_elements_on_user_id"
+    t.index ["validator_id"], name: "index_user_watchlist_elements_on_validator_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username", null: false
     t.string "encrypted_password", null: false
@@ -580,6 +590,8 @@ ActiveRecord::Schema.define(version: 2022_05_16_155149) do
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"
+  add_foreign_key "user_watchlist_elements", "users"
+  add_foreign_key "user_watchlist_elements", "validators"
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"
