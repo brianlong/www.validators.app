@@ -41,6 +41,8 @@ class Validator < ApplicationRecord
     admin_warning
   ].freeze
 
+  DEFAULT_FILTERS = %w(inactive active private delinquent).freeze
+
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
   has_many :validator_ips, dependent: :destroy
@@ -72,27 +74,31 @@ class Validator < ApplicationRecord
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
-
-  def self.with_private(show: "true")
-    show == "true" ? all : where.not("validator_score_v1s.commission = 100")
-  end
-
-  def self.filtered_by(filter)
-    case filter
-    when :delinquent
-      joins(:validator_score_v1)
-        .where("validator_score_v1s.delinquent = ?", true)
-    when :inactive
-      where(is_active: false)
-    when :private
-      joins(:validator_score_v1)
-        .where("validator_score_v1s.commission = ? AND validator_score_v1s.network = ?", 100, "mainnet")
-    else
-      all
-    end
-  end
   
   class << self
+    def with_private(show: "true")
+      show == "true" ? all : where.not("validator_score_v1s.commission = 100")
+    end
+
+    def default_filters(network)
+      network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{ |v| v == "private" }
+    end 
+  
+    # accepts array of strings or string
+    def filtered_by(filter)
+      return nil if filter.blank?
+
+      vals = all.joins(:validator_score_v1)
+      query = []
+
+      query.push "validator_score_v1s.delinquent = true" if filter.include? "delinquent"
+      query.push "validators.is_active = false" if filter.include? "inactive"
+      query.push "validators.is_active = true" if filter.include? "active"
+      query.push "validator_score_v1s.commission = 100" if filter.include? "private"
+
+      vals.where(query.join(" OR "))
+    end
+
     # Returns an Array of account IDs for a given network
     #
     # Validator.accounts_for('testnet') => ['1234', '5678']

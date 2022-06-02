@@ -2,6 +2,8 @@ class AsnsController < ApplicationController
   def show
     network = asn_params[:network]
 
+    @filter_by = asn_params[:filter_by].blank? ? Validator.default_filters(params[:network]) : asn_params[:filter_by]
+
     @data_centers = DataCenter.joins(:validator_score_v1s)
                               .where(traits_autonomous_system_number: asn_params[:asn])
                               .where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", network, 0)
@@ -15,25 +17,15 @@ class AsnsController < ApplicationController
 
     @per = 25
 
-    @scores = ValidatorScoreV1.joins(:data_center)
-                              .where("data_centers.id IN (?)", data_center_ids)
-                              .by_network_with_active_stake(network)
-                              .filtered_by(asn_params[:filter_by]&.to_sym)
-    if params[:show_private]
-      @scores = @scores.with_private(show: params[:show_private])
-    end
+    @validators = Validator.joins(:validator_score_v1, :data_center)
+                           .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_center_ids, asn_params[:network], 0)
+                           .filtered_by(@filter_by)
+                           .order("validator_score_v1s.active_stake desc")
     
-    @asn_stake = @scores.sum(:active_stake)
-
-    @scores = @scores.page(asn_params[:page])
-                     .per(@per)
-
-    @validators = @scores.includes(:validator).map(&:validator).compact
-
+    @asn_stake = @validators.sum(:active_stake)
+    @validators = @validators.page(params[:page]).per(@per)
     @batch = Batch.last_scored(network)
-
-    @population = @scores.total_count
-
+    @population = @validators.total_count
     @total_stake = ValidatorScoreV1.joins(:data_center)    
                                    .by_network_with_active_stake(network)
                                    .where("data_centers.id IN (?)", data_center_ids)
@@ -43,6 +35,6 @@ class AsnsController < ApplicationController
   private
 
   def asn_params
-    params.permit :asn, :network, :filter_by, :page
+    params.permit :asn, :network, :page, filter_by: []
   end
 end

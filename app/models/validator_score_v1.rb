@@ -135,21 +135,10 @@ class ValidatorScoreV1 < ApplicationRecord
     CreateCommissionHistoryService.new(self).call
   end
 
-  def self.filtered_by(filter)
-    case filter
-    when :delinquent
-      where(delinquent: true)
-    when :inactive
-      includes(:validator).where('validator.is_active': false)
-    when :private
-      where(commission: 100, network: "mainnet")
-    else
-      all
+  class << self
+    def with_private(show: "true")
+      show == "true" ? all : where.not(commission: 100)
     end
-  end
-
-  def self.with_private(show: "true")
-    show == "true" ? all : where.not(commission: 100)
   end
 
   def calculate_total_score

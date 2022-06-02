@@ -68,13 +68,7 @@
   </div>
 </div>
 
-<%= create_filter_link(view: 'data_center', params_list: params, filter_by: "delinquent") %>
-<%= create_filter_link(view: 'data_center', params_list: params, filter_by: "inactive") %>
-<%= create_filter_link(view: 'data_center', params_list: params, filter_by: "private") %>
-
-<% if params[:filter_by].blank? && params[:network] == "mainnet" %>
-  <%= link_to_toggle_private(type: :data_center, url_params: params) %>
-<% end %>
+<%= render "filters", { view: "data_center" } %>
 
 <% unless params[:filter_by].blank? %>
   <%= link_to 'Reset filters',
@@ -88,7 +82,8 @@
              validators: @validators,
              show_ip_and_gateway: true,
              show_version: false,
-             items_per_page: @per %>
+             items_per_page: @per,
+             show_watchlist_btn: false %>
   <%= paginate @validators %>
 </div>
 

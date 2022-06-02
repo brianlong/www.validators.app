@@ -6,7 +6,7 @@
     <td class="column-<%= set_column_width(params[:network]) %>">
       <% if dc_data[:delinquent_validators] > 0 %>
         <%= link_to dc_data[:delinquent_validators],
-            data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :delinquent) %>
+            data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: ["delinquent"]) %>
         <small class="text-muted">
           (<%= (count_percentage(dc_data[:delinquent_validators], dc_data[:count])) %>%)
         </small>
@@ -18,7 +18,7 @@
       <td class="column-<%= set_column_width(params[:network]) %>">
         <% if dc_data[:private_validators] > 0 %>
          <%= link_to dc_data[:private_validators],
-            data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: :private) %>
+            data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: ["private"]) %>
           <small class="text-muted">
             (<%= (count_percentage(dc_data[:private_validators], dc_data[:count])) %>%)
           </small>

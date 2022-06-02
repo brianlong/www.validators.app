@@ -2,7 +2,7 @@
   <thead>
   <tr>
     <th class="column-avatar d-none align-middle <%= current_user ? 'd-lg-table-cell' : 'd-xl-table-cell' %>">
-      <% if current_user %>
+      <% if current_user  && show_watchlist_btn %>
         <%= link_to url_for(
           order: params[:order],
           page: params[:page],
