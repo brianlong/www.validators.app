@@ -39,6 +39,8 @@
 #  index_users_on_username              (username) UNIQUE
 #
 class User < ApplicationRecord
+  USERNAME_REGEXP = /\A[a-zA-Z0-9.]+\z/
+
   before_save :create_email_hash
 
   # has_secure_token will initialize a new token when the record is created.
@@ -71,7 +73,8 @@ class User < ApplicationRecord
   validates :username,
             presence: true,
             uniqueness: { case_sensitive: false },
-            length: { minimum: 3 }
+            length: { minimum: 3, maximum: 50 },
+            format: { with: USERNAME_REGEXP }
 
   def self.search_by_email_hash(email)
     where(email_hash: Digest::SHA256.hexdigest(email)).first

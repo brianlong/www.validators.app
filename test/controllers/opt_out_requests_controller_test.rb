@@ -4,8 +4,8 @@ class OptOutRequestsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @user = create(:user)
-    @admin = create(:user, :admin)
+    @user = create(:user, :confirmed)
+    @admin = create(:user, :admin, :confirmed)
     @opt_out_params = {
       opt_out_request: {
         name: 'John Doe',
