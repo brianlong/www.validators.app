@@ -187,13 +187,24 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
   end
 
   test 'by_data_centers scope should return correct results' do
-    create(:validator_score_v1, data_center_key: 'datacenter1')
-    create(:validator_score_v1, data_center_key: 'datacenter2')
+    data_center = create(:data_center, :china)
+    data_center2 = create(:data_center, :berlin)
+    data_center_host1 = create(:data_center_host, data_center: data_center)
+    data_center_host2 = create(:data_center_host, data_center: data_center2)
+    validator = create(:validator)
+    validator2 = create(:validator)
 
-    res = ValidatorScoreV1.by_data_centers('datacenter1')
+    validator_ip = create(:validator_ip, :active, validator: validator, data_center_host: data_center_host1)
+    validator_ip2 = create(:validator_ip, :active, validator: validator2, data_center_host: data_center_host2)
 
-    assert_equal 1, res.count
-    assert_equal 'datacenter1', res.first.data_center_key
+
+    validator_score = create(:validator_score_v1, validator: validator)
+    validator_score2 = create(:validator_score_v1, validator: validator2)
+
+    res = ValidatorScoreV1.by_data_centers(data_center.data_center_key)
+
+    assert_equal 1, res.size
+    assert_equal data_center.data_center_key, res.first.data_center_key
   end
 
   test 'should add new commission history when commission changed' do

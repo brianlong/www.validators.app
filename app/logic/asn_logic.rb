@@ -18,7 +18,11 @@ module AsnLogic
 
   def gather_scores
     lambda do |p|
-      scores = ValidatorScoreV1.where(network: p.payload[:network]).to_a
+      select_statement = "data_centers.data_center_key, validator_score_v1s.*"
+      scores = ValidatorScoreV1.select(select_statement)
+                               .joins(:data_center)
+                               .includes(:validator)
+                               .where(network: p.payload[:network])
 
       Pipeline.new(200, p.payload.merge(scores: scores))
     rescue StandardError => e
@@ -58,7 +62,8 @@ module AsnLogic
                     .find { |stat| stat.traits_autonomous_system_number == asn }
 
         scores = p.payload[:scores].select do |score|
-          score.data_center_key.in?(asn_stat.data_centers) && \
+
+          score.validator.dch_data_center_key.in?(asn_stat.data_centers) && \
             score.validator.scorable? && \
             !score.validator.private_validator? && \
             score.total_score.present? && \
@@ -73,7 +78,7 @@ module AsnLogic
           active_stake += sc.active_stake
         end
 
-        asn_stat.population = scores.count
+        asn_stat.population = scores.size
         if asn_stat.population&.positive?
           asn_stat.average_score = \
             (score_sum.to_f / asn_stat.population)

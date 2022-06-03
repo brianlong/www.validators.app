@@ -40,14 +40,13 @@ data_center_hosts.each do |dch|
 end
 
 @data_centers = @data_centers.sort_by { |_k, v| -v[:count] }
-@data_centers.each do |k,v|
+@data_centers.each do |k, v|
   if ((v[:active_stake] / @total_stake.to_f)*100.0) >= MAX_DATA_CENTER_STAKE
     score = -2
   else
     score = 0
   end
 
-  score_sql = "UPDATE validator_score_v1s SET data_center_concentration_score = #{score} WHERE network = 'mainnet' AND data_center_key = '#{k}';"
-
-  ValidatorScoreV1.connection.execute(score_sql)
+  validator_score_v1s = ValidatorScoreV1.by_data_centers(k).where(network: 'mainnet')
+  validator_score_v1s.update(data_center_concentration_score: score)
 end
