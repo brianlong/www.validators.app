@@ -189,12 +189,12 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
   test 'by_data_centers scope should return correct results' do
     data_center = create(:data_center, :china)
     data_center2 = create(:data_center, :berlin)
-    data_center_host1 = create(:data_center_host, data_center: data_center)
+    data_center_host = create(:data_center_host, data_center: data_center)
     data_center_host2 = create(:data_center_host, data_center: data_center2)
     validator = create(:validator)
     validator2 = create(:validator)
 
-    validator_ip = create(:validator_ip, :active, validator: validator, data_center_host: data_center_host1)
+    validator_ip = create(:validator_ip, :active, validator: validator, data_center_host: data_center_host)
     validator_ip2 = create(:validator_ip, :active, validator: validator2, data_center_host: data_center_host2)
 
 
