@@ -6,11 +6,11 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
   def setup
     super
     # Setup data centers with data center hosts
-    data_center_name1 = create(:data_center, :china)
-    data_center_name1.update_column(:data_center_key, "Name1") # Update to match query
+    data_center = create(:data_center, :china)
+    data_center.update_column(:data_center_key, "Name1") # Update to match query
     data_center2 = create(:data_center, :berlin)
 
-    data_center_host = create(:data_center_host, data_center: data_center_name1)
+    data_center_host = create(:data_center_host, data_center: data_center)
     data_center_host2 = create(:data_center_host, data_center: data_center2)
 
     # Setup validators
