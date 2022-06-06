@@ -515,7 +515,7 @@ ActiveRecord::Schema.define(version: 2022_06_03_131420) do
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
-    t.index ["network"], name: "index_validator_score_v1s_on_network_and_data_center_key"
+    t.index ["network"], name: "index_validator_score_v1s_on_network"
     t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
