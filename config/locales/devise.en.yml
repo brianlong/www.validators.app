@@ -19,6 +19,7 @@ en:
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"
+        instruction: "You can confirm your account email within 7 days from now using the link below:"
       reset_password_instructions:
         subject: "Reset password instructions"
       unlock_instructions:
