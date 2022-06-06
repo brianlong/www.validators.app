@@ -53,6 +53,23 @@ class UserTest < ActiveSupport::TestCase
     assert @user.valid?
   end
 
+  test "validates email format, allows only correct email addresses" do
+    @user.email = "not valid email due to spaces"
+    refute @user.valid?
+
+    @user.email = "invalid_USER"
+    refute @user.valid?
+
+    @user.email = "invalid!"
+    refute @user.valid?
+
+    @user.email = "invalid#@@"
+    refute @user.valid?
+
+    @user.email = "vALID.USER.1@gmail.com"
+    assert @user.valid?
+  end
+
   test "api_token is created with a new user" do
     assert_not_nil @user.reload.api_token
   end

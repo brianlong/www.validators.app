@@ -39,7 +39,8 @@
 #  index_users_on_username              (username) UNIQUE
 #
 class User < ApplicationRecord
-  USERNAME_REGEXP = /\A[a-zA-Z0-9.]+\z/
+  USERNAME_REGEXP = /\A[a-zA-Z0-9.]+\z/.freeze
+  EMAIL_REGEXP = /\A(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})\z/i.freeze
 
   before_save :create_email_hash
 
@@ -75,6 +76,10 @@ class User < ApplicationRecord
             uniqueness: { case_sensitive: false },
             length: { minimum: 3, maximum: 50 },
             format: { with: USERNAME_REGEXP }
+
+  validates :email,
+            presence: true,
+            format: { with: EMAIL_REGEXP }
 
   def self.search_by_email_hash(email)
     where(email_hash: Digest::SHA256.hexdigest(email)).first
