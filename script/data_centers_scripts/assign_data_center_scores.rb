@@ -15,7 +15,8 @@ dch_ids = ValidatorIp.select('validator_ips.data_center_host_id')
                      
 data_center_hosts = DataCenterHost.includes(:data_center).where(id: dch_ids)
 
-@scores = ValidatorScoreV1.where(network: 'mainnet')
+@scores = ValidatorScoreV1.joins(:data_center)
+                          .where(network: 'mainnet')
                           .where('active_stake > 0')
 @data_centers = {}
 @total_stake = @scores.sum(:active_stake)
@@ -24,8 +25,8 @@ data_center_hosts = DataCenterHost.includes(:data_center).where(id: dch_ids)
 data_center_hosts.each do |dch|
   dc = dch.data_center
 
-  population = @scores.where(data_center_key: dch.data_center_key).count || 0
-  active_stake = @scores.where(data_center_key: dch.data_center_key).sum(:active_stake)
+  population = @scores.where("data_centers.data_center_key = ?", dch.data_center_key).count || 0
+  active_stake = @scores.where("data_centers.data_center_key = ?", dch.data_center_key).sum(:active_stake)
   next if population.zero?
 
   @total_population += population
