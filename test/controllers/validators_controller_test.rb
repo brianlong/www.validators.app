@@ -39,4 +39,10 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_url
   end
+
+  test "root_url should lead to validators#index" do
+    get root_url(network: "testnet")
+
+    assert_equal ValidatorsController, @controller.class
+  end
 end
