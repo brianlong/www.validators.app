@@ -9,27 +9,31 @@ class ValidatorsController < ApplicationController
   def index
     @per = 25
 
-    if params[:watchlist]
+    if index_params[:watchlist]
       user_id = current_user&.id
-      validators = User.find(user_id).watched_validators.where(network: params[:network])
+      validators = User.find(user_id).watched_validators.where(network: index_params[:network])
     else
-      validators = Validator.where(network: params[:network])
+      validators = Validator.where(network: index_params[:network])
     end
 
     validators = validators.scorable.preload(:validator_score_v1).index_order(validate_order)
-    @validators = validators.page(params[:page]).per(@per)
 
-    @batch = Batch.last_scored(params[:network])
+    unless index_params[:q].blank?
+      validators = ValidatorSearchQuery.new(validators).search(index_params[:q])
+    end
+    
+    @validators = validators.page(index_params[:page]).per(@per)
+
+    @batch = Batch.last_scored(index_params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(
-        network: params[:network],
+        network: index_params[:network],
         batch_uuid: @batch.uuid
       ).first
     end
 
-    validator_history_stats = Stats::ValidatorHistory.new(params[:network], @batch.uuid)
-
+    validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], @batch.uuid)
     at_33_stake_validator = validator_history_stats.at_33_stake&.validator
     @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
 
@@ -125,5 +129,9 @@ class ValidatorsController < ApplicationController
     return 'score' unless params[:order].in? valid_orders
 
     params[:order]
+  end
+
+  def index_params
+    params.permit(:watchlist, :network, :q, :page)
   end
 end
