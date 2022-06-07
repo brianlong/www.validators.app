@@ -126,7 +126,7 @@ class ValidatorsController < ApplicationController
 
   def validate_order
     valid_orders = %w[score name stake random]
-    return 'score' unless index_params[:order].in? valid_orders
+    return "score" unless index_params[:order].in? valid_orders
 
     index_params[:order]
   end
