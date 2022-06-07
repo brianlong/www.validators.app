@@ -81,6 +81,8 @@ class User < ApplicationRecord
             presence: true,
             format: { with: EMAIL_REGEXP }
 
+  validate :email_unique?, on: :create
+
   def self.search_by_email_hash(email)
     where(email_hash: Digest::SHA256.hexdigest(email)).first
   end
@@ -99,6 +101,18 @@ class User < ApplicationRecord
   def to_builder
     Jbuilder.new do |user|
       user.(self, :username)
+    end
+  end
+
+  private 
+  def email_unique?
+    existing_email = User.search_by_email_hash(email)
+
+    if existing_email.blank? 
+      true 
+    else
+      errors.add(:email, "User with this email is already registered.")
+      false
     end
   end
 end

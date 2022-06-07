@@ -10,7 +10,7 @@ FactoryBot.define do
     success { true }
     transaction_type { "transfer" }
     reported_at { Time.now }
-    user
+    user { create(:user, :ping_thing_user, :confirmed) }
 
     trait :processed do
       commitment_level { 0 }

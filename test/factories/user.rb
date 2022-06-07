@@ -17,6 +17,10 @@ FactoryBot.define do
       is_admin { true }
     end
 
+    trait :ping_thing_user do
+      email { Faker::Internet.email }
+    end
+
     trait :confirmed do
       confirmed_at { Time.now }
     end
