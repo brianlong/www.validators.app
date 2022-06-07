@@ -110,7 +110,7 @@ class User < ApplicationRecord
 
     return true if existing_email.blank? 
 
-    errors.add(:email, "User with this email is already registered.")
+    errors.add(:email, :taken)
     false
   end
 end

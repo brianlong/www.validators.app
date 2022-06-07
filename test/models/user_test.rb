@@ -96,10 +96,11 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "validates email uniqueness" do
+    message = "Email has already been taken"
     user2 = build(:user, username: "newuser", email: @user.email)
 
     refute user2.valid?
-    assert_equal "Email User with this email is already registered.", user2.errors.full_messages.first
+    assert_equal message, user2.errors.full_messages.first
   end
 
   test "api_token is created with a new user" do
