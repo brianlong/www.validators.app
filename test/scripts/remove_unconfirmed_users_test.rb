@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class RemoveUnconfirmedUsersTest < ActiveSupport::TestCase
   setup do
@@ -10,7 +10,7 @@ class RemoveUnconfirmedUsersTest < ActiveSupport::TestCase
   end
 
   test "script deletes unconfirmed users after 7 days" do
-    load(Rails.root.join('script', 'remove_unconfirmed_users.rb'))
+    load(Rails.root.join("script", "remove_unconfirmed_users.rb"))
 
     assert_equal 2, User.count
     assert User.all.include? @user1
