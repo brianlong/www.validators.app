@@ -145,5 +145,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "test2", user.username
     refute_equal user_params[:email], @user.email_encrypted
     assert_equal user.email_hash, Digest::SHA256.hexdigest(user_params[:email])
+    assert user.email_encrypted_iv
   end
 end
