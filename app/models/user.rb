@@ -108,11 +108,9 @@ class User < ApplicationRecord
   def email_unique?
     existing_email = User.search_by_email_hash(email)
 
-    if existing_email.blank? 
-      true 
-    else
-      errors.add(:email, "User with this email is already registered.")
-      false
-    end
+    return true if existing_email.blank? 
+
+    errors.add(:email, "User with this email is already registered.")
+    false
   end
 end
