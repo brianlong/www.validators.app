@@ -39,6 +39,9 @@
 #  index_users_on_username              (username) UNIQUE
 #
 class User < ApplicationRecord
+
+  CONFIRMATION_TIME = 7.days
+
   before_save :create_email_hash
 
   # has_secure_token will initialize a new token when the record is created.
