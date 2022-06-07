@@ -26,4 +26,14 @@ class UserWatchlistElementTest < ActiveSupport::TestCase
     @user_watchlist_element.validator = nil
     refute @user_watchlist_element.valid?
   end
+
+  test "watchlist element is deleted with user" do
+    @user_watchlist_element.save
+
+    user_id = @user.id
+
+    @user.destroy
+
+    refute UserWatchlistElement.where(user_id: user_id).exists?
+  end
 end
