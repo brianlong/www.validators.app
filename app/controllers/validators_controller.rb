@@ -125,13 +125,13 @@ class ValidatorsController < ApplicationController
   end
 
   def validate_order
-    valid_orders = %w[score name]
-    return 'score' unless params[:order].in? valid_orders
+    valid_orders = %w[score name stake random]
+    return 'score' unless index_params[:order].in? valid_orders
 
-    params[:order]
+    index_params[:order]
   end
 
   def index_params
-    params.permit(:watchlist, :network, :q, :page)
+    params.permit(:watchlist, :network, :q, :page, :order)
   end
 end
