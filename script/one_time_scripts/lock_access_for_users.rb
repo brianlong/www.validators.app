@@ -12,7 +12,7 @@ User.all.in_batches.each do |batch|
       EOS
       
       @logger.warn(warn_message)
-      user.lock_access!
+      user.lock_access!(send_instructions: false)
     end
   end
 end
