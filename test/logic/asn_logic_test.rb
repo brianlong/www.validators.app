@@ -6,20 +6,17 @@ class AsnLogicTest < ActiveSupport::TestCase
   include AsnLogic
 
   setup do
-    ValidatorScoreV1.delete_all
-
     @data_center = create(:data_center, :berlin)
     @data_center_host = create(:data_center_host, data_center: @data_center)
     @validator = create(:validator, network: 'testnet')
-    @validator_ip = create(:validator_ip, validator: @validator, data_center_host: @data_center_host)
+    @validator_ip = create(:validator_ip, :active, validator: @validator, data_center_host: @data_center_host)
 
     create(
       :validator_score_v1,
       validator: @validator,
       network: 'testnet',
       vote_distance_history: [1, 2, 3],
-      ip_address: @validator_ip.address,
-      data_center_key: @data_center.data_center_key
+      ip_address: @validator_ip.address
     )
 
     @payload = {
@@ -47,7 +44,7 @@ class AsnLogicTest < ActiveSupport::TestCase
                 .then(&gather_scores)
 
     assert_nil p.errors
-    assert_equal 1, p.payload[:scores].count
+    assert_equal 1, p.payload[:scores].size
     assert_equal @validator_ip.address, p.payload[:scores].last.ip_address
   end
 

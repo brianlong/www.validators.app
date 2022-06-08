@@ -40,6 +40,4 @@ ValidatorIp.joins(:data_center)
   end
 end
 
-update_validator_score_with_overrides
-
 puts "end of script"

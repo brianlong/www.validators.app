@@ -39,16 +39,7 @@ class ValidatorIpTest < ActiveSupport::TestCase
     assert_equal DataCenterHost::FIELDS_FOR_API.map(&:to_s), 
                  @vip.data_center_host_for_api.attributes.keys
   end
-
-  test "callbacks #copy_data_to_score after_touch copies data_center_key from data_center to score" do
-    @validator_score_v1.update(data_center_key: nil)
-    assert_nil @validator_score_v1.reload.data_center_key
-
-    @vip.touch
-
-    assert_equal @data_center.data_center_key, @validator_score_v1.reload.data_center_key
-  end
-  
+ 
   test "#set_is_active updates validator_ips of validator to false"\
        "and set is_active on the modified one" do
     vips = create_list(
