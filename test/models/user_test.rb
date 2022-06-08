@@ -50,7 +50,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "validates username format, allows only letters, digits and dots" do
-    message = "Username is invalid"
+    message = "Username invalid (letters, numbers and dots allowed)"
 
     @user.username = "not valid user due to spaces"
     refute @user.valid?
