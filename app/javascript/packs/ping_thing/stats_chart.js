@@ -94,7 +94,6 @@ export default {
                         gridLines: { display: false },
                         ticks: {
                             min: 0,
-                            max: 60000,
                             padding: 10,
                             callback: function(value, index, values) {
                                 return value.toLocaleString('en-US')
