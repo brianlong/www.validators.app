@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_23_110715) do
+ActiveRecord::Schema.define(version: 2022_06_07_073603) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -590,8 +590,8 @@ ActiveRecord::Schema.define(version: 2022_05_23_110715) do
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"
-  add_foreign_key "user_watchlist_elements", "users"
-  add_foreign_key "user_watchlist_elements", "validators"
+  add_foreign_key "user_watchlist_elements", "users", on_delete: :cascade
+  add_foreign_key "user_watchlist_elements", "validators", on_delete: :cascade
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"

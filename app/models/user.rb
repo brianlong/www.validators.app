@@ -57,7 +57,7 @@ class User < ApplicationRecord
          :confirmable, :lockable, :timeoutable, :trackable,
          authentication_keys: [:username]
 
-  has_many :user_watchlist_elements, dependent: :destroy
+  has_many :user_watchlist_elements, dependent: :delete_all 
   has_many :watched_validators, through: :user_watchlist_elements, source: :validator
 
   # For attr_encrypted:
