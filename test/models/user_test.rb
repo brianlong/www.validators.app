@@ -73,6 +73,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "validates email format, allows only correct email addresses" do
+    valid_emails = [
+      "vALID.USER.1@gmail.com", "xxx@atlantis.capital", "xxx@hypersphere.ventures", 
+      "xxx@solana.foundation", "xxx.xxx@rbf.capital", "robert@solstreet.finance"
+    ]
     message = "Email is invalid"
 
     @user.email = "not valid email due to spaces"
@@ -91,8 +95,10 @@ class UserTest < ActiveSupport::TestCase
     refute @user.valid?
     assert_equal message, @user.errors.full_messages.first
 
-    @user.email = "vALID.USER.1@gmail.com"
-    assert @user.valid?
+    valid_emails.each do |email|
+      @user.email = email
+      assert @user.valid?
+    end
   end
 
   test "validates email uniqueness" do
