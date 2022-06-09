@@ -2,14 +2,26 @@
 
 class ValidatorQuery < ApplicationQuery
   include ValidatorsControllerHelper
-  def initialize
-    @default_scope = Validator.select(validator_fields, validator_score_v1_fields)
-                              .joins(:validator_score_v1_for_api)
-                              .includes(
-                                :vote_accounts_for_api,
-                                :most_recent_epoch_credits_by_account,
-                                validator_ip_active_for_api: [data_center_host_for_api: [:data_center_for_api]]
-                              )
+  def initialize(watchlist_user: nil, api: false)
+    @api = api
+    @default_scope = if watchlist_user
+                       User.find(watchlist_user).watched_validators
+                                         .select(validator_fields, validator_score_v1_fields)
+                                         .joins(:validator_score_v1_for_api)
+                                         .includes(
+                                           :vote_accounts_for_api,
+                                           :most_recent_epoch_credits_by_account,
+                                           validator_ip_active_for_api: [data_center_host_for_api: [:data_center_for_api]]
+                                         )
+                     else
+                       Validator.select(validator_fields, validator_score_v1_fields)
+                                .joins(:validator_score_v1_for_api)
+                                .includes(
+                                  :vote_accounts_for_api,
+                                  :most_recent_epoch_credits_by_account,
+                                  validator_ip_active_for_api: [data_center_host_for_api: [:data_center_for_api]]
+                                )
+                     end
                               
   end
 
@@ -19,6 +31,8 @@ class ValidatorQuery < ApplicationQuery
     scope = search_by(scope, query)
     scope = set_ordering(scope, sort_order)
     scope = set_pagination(scope, page, limit)
+
+    @api ? scope : scope.scorable
   end
 
   def call_single_validator(network: "mainnet", account:)
