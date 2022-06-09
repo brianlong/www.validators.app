@@ -64,7 +64,7 @@ class ValidatorQuery < ApplicationQuery
     when "stake"
       "validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc"
     else
-      "RAND()"
+      "score"
     end
   end
 

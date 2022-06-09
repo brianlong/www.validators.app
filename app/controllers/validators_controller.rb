@@ -14,8 +14,8 @@ class ValidatorsController < ApplicationController
       network: index_params[:network],
       sort_order: index_params[:order],
       limit: @per,
-      page: params[:page],
-      query: params[:q]
+      page: index_params[:page],
+      query: index_params[:q]
     )
     
     @batch = Batch.last_scored(index_params[:network])
@@ -27,9 +27,7 @@ class ValidatorsController < ApplicationController
       ).first
     end
 
-    validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], @batch.uuid)
-    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
-    @at_33_stake_index = (@validators.index(at_33_stake_validator)&.+ 1).to_i
+    @at_33_stake_index = at_33_stake_index(@validators, @batch)
 
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
@@ -118,11 +116,10 @@ class ValidatorsController < ApplicationController
     ).first or redirect_to(root_url(network: params[:network]))
   end
 
-  def validate_order
-    valid_orders = %w[score name stake random]
-    return "score" unless index_params[:order].in? valid_orders
-
-    index_params[:order]
+  def at_33_stake_index validators, batch
+    validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], batch.uuid)
+    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
+    (validators.index(at_33_stake_validator)&.+ 1).to_i
   end
 
   def index_params
