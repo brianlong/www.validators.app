@@ -173,14 +173,13 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       account: "Test Account"
     )
 
-    search_query = "1234"
+    search_query = "4321"
 
     get api_v1_validators_url(network: "testnet", q: search_query),
         headers: { "Token" => @user.api_token }
     assert_response 200
 
     json = response_to_json(@response.body)
-
     assert_equal 0, json.size
   end
 

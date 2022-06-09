@@ -5,17 +5,24 @@
 # Instead we use virtual email attribute, check the model.
 FactoryBot.define do
   factory :user do
-    username { Faker::Internet.username(specifier: 8) }
-    email { 'adminone@fmatemplate.com' }
-    password { 'Password123' }
+    username { Faker::Internet.username(specifier: 8, separators: ["."]) }
+    email { "user@fmatemplate.com" }
+    password { "Password123" }
     api_token { SecureRandom.uuid }
     is_admin { false }
-    confirmed_at { Time.now }
+    
 
     trait :admin do
-      username { Faker::Internet.username(specifier: 8) }
-      email { 'adminone@fmatemplate.com' }
+      email { "adminone@fmatemplate.com" }
       is_admin { true }
+    end
+
+    trait :ping_thing_user do
+      email { Faker::Internet.email }
+    end
+
+    trait :confirmed do
+      confirmed_at { Time.now }
     end
   end
 end

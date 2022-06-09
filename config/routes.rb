@@ -102,7 +102,7 @@ Rails.application.routes.draw do
   get "current-user", to: "users#current_user_info"
 
   # Default root path
-  root to: 'public#index'
+  root to: 'validators#index'
 
   ### API
   namespace :api do

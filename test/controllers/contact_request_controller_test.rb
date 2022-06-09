@@ -6,8 +6,8 @@ class ContactRequestControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @user = create(:user)
-    @admin = create(:user, :admin)
+    @user = create(:user, :confirmed)
+    @admin = create(:user, :admin, :confirmed)
   end
 
   test 'should redirect when non admin is logged in' do

@@ -17,9 +17,5 @@
       applications. Please contact me at <a href="https://twitter.com/ValidatorsApp" target="_blank">@ValidatorsApp</a>
       on Twitter. -- @brianlong
     </p>
-    <p>
-      NOTES: We use a 60-second timeout threshold for the pings. On the chart and table below, a value of 60,000
-      milliseconds means that the operation failed or took longer than 60 seconds to complete.
-    </p>
   </section>
 </template>

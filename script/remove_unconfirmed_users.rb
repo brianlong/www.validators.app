@@ -1,5 +1,2 @@
 # frozen_string_literal: true
-
-delay_time = 7.days
-
-User.where("created_at < ?", delay_time.ago).where(confirmed_at: nil).each(&:destroy)
+User.where("created_at < ?", User::CONFIRMATION_TIME.ago).where(confirmed_at: nil).each(&:destroy)
