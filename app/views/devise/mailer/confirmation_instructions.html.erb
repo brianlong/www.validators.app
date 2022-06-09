@@ -1,5 +1,5 @@
 <p><%= t('.greeting', recipient: @email) %></p>
 
-<p><%= t('.instruction') %></p>
+<p><%= t('.instruction', confirmation_time: User::CONFIRMATION_TIME.in_days.to_i ) %></p>
 
 <p><%= link_to t('.action'), confirmation_url(@resource, confirmation_token: @token) %></p>

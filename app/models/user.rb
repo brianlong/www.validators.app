@@ -39,6 +39,8 @@
 #  index_users_on_username              (username) UNIQUE
 #
 class User < ApplicationRecord
+
+  CONFIRMATION_TIME = 7.days
   USERNAME_REGEXP = /\A[a-zA-Z0-9.]+\z/.freeze
   EMAIL_REGEXP = /\A(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,15})\z/i.freeze
 
