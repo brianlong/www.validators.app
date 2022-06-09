@@ -3,6 +3,9 @@ require 'test_helper'
 class StakeAccountQueryTest < ActiveSupport::TestCase
 
   setup do
+    data_center = create(:data_center, :china)
+    data_center_host = create(:data_center_host, data_center: data_center)
+
     @stake_pool = create(
       :stake_pool,
       authority: 'stake_pool_authority',
@@ -17,6 +20,8 @@ class StakeAccountQueryTest < ActiveSupport::TestCase
       name: 'test_val',
       account: 'val_account'
     )
+
+    create(:validator_ip, :active, validator: @validator, data_center_host: data_center_host)
 
     create(
       :stake_account,

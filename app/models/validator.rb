@@ -183,7 +183,6 @@ class Validator < ApplicationRecord
     return unless validator_score_v1
 
     validator_score_v1.ip_address = ip_address
-    validator_score_v1.data_center_key = dch_data_center_key if data_center
     validator_score_v1.save
   end
 

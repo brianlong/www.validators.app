@@ -2,8 +2,16 @@ require 'test_helper'
 
 class CommissionHistoryQueryTest < ActiveSupport::TestCase
   setup do
+    # Setup data centers with data center hosts
+    data_center = create(:data_center, :china)
+    data_center_host = create(:data_center_host, data_center: data_center)
+
     val1 = create(:validator, :with_score, account: 'acc1', network: 'testnet')
     val2 = create(:validator, :with_score, account: 'acc2', network: 'testnet')
+
+    [val1, val2].each do |val|
+      create(:validator_ip, :active, validator: val, data_center_host: data_center_host)
+    end
 
     create(:commission_history, validator: val1)
     create(:commission_history, validator: val2, created_at: 32.days.ago)

@@ -35,32 +35,4 @@ module FixIpModule
 
     vip.update(data_center_host: data_center_host, is_overridden: true)
   end
-
-  # I think that data_center_key and host should be removed later 
-  # because this information is in the data_center and data_center_host table
-  def update_validator_score_with_overrides
-    ValidatorScoreV1.in_batches(of: 50).each do |scores|
-      ids = scores.pluck(:id)
-
-      ValidatorScoreV1.includes(validator_ips: [data_center_host: [:data_center]])
-                      .where(id: ids)
-                      .each do |vs1|
-        
-        vip = ValidatorIp.find_by(address: vs1.ip_address, is_active: true)
-
-        # Check that again
-        next if vip.blank?
-
-        data_center_host = vip.data_center_host
-
-        # Check that again
-        next if data_center_host.blank?
-
-        vs1.update(
-          data_center_key: data_center_host.data_center_key,
-          updated_at: Time.now
-        )
-      end
-    end
-  end
 end

@@ -38,9 +38,6 @@ module DataCenters
       data_center_from_max_mind_data
       create_or_update_data_center
       assign_validator_to_new_data_center
-
-      # This step needs to be removed after removing data_center_key from validator_score_v1
-      update_data_center_host_in_score if @update_score
     end
 
     private
@@ -210,27 +207,6 @@ module DataCenters
       end
 
       @update_score = true
-    end
-
-    def update_data_center_host_in_score
-      validator_score = @validator.validator_score_v1
-      old_data_center_key = validator_score.data_center_key
-
-      # There is no need to update data_center_key if it remained the same
-      if old_data_center_key == @data_center.data_center_key
-        log_message(SEPARATOR)
-        return nil
-      end
-        
-      validator_score.update!(data_center_key: @data_center.data_center_key)
-
-      message = <<-EOS
-        Validator Score V1 of validator #{@validator.name} 
-        has been updated from #{old_data_center_key} to #{validator_score.data_center_key}.
-      EOS
-
-      log_message(message)
-      log_message(SEPARATOR)
     end
 
     def log_message(message, type: :info)

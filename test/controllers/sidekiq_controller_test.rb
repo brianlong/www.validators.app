@@ -4,8 +4,8 @@ class SidekiqControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @user_one  = create(:user)
-    @admin_one = create(:user, :admin)
+    @user_one  = create(:user, :confirmed)
+    @admin_one = create(:user, :admin, :confirmed)
   end
 
   # Anonymous will be redirected before seeing a routing error.
