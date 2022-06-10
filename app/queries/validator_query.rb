@@ -57,14 +57,12 @@ class ValidatorQuery < ApplicationQuery
 
   def sort_order(order)
     case order
-    when "score"
-      "validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc"
     when "name"
       "validators.name asc"
     when "stake"
       "validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc"
     else
-      "score"
+      "validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc"
     end
   end
 

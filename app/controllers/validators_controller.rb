@@ -25,9 +25,11 @@ class ValidatorsController < ApplicationController
         network: index_params[:network],
         batch_uuid: @batch.uuid
       ).first
+
+      @at_33_stake_index = at_33_stake_index(@validators, @batch)
     end
 
-    @at_33_stake_index = at_33_stake_index(@validators, @batch)
+    @at_33_stake_index ||= nil
 
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end

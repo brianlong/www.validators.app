@@ -121,4 +121,31 @@ class ValidatorQueryTest < ActiveSupport::TestCase
 
     assert_equal validator, result
   end
+
+  test "#call returns correct user watchlist validators" do
+    user = create(:user)
+    validator = create(
+      :validator,
+      :with_score,
+      :mainnet,
+      :with_data_center_through_validator_ip
+    )
+
+    create(:user_watchlist_element, validator: validator, user: user)
+
+    validators = create_list(
+      :validator,
+      5,
+      :with_score,
+      :mainnet,
+      :with_data_center_through_validator_ip,
+    )
+
+    result = ValidatorQuery.new(watchlist_user: user.id).call(
+      network: @mainnet_network
+    )
+
+    assert_equal 1, result.count
+    assert_equal validator, result.first
+  end
 end
