@@ -97,40 +97,35 @@ module ReportLogic
 
   def report_software_versions
     lambda do |p|
+      batch_uuid = p.payload[:batch_uuid]
+      network = p.payload[:network]
+
       return p unless p[:code] == 200
       raise StandardError, 'Missing p.payload[:network]' \
-        unless p.payload[:network]
+        unless network
       raise StandardError, 'Missing p.payload[:batch_uuid]' \
-        unless p.payload[:batch_uuid]
+        unless batch_uuid
       
-      batch_created_at = Batch.find_by(uuid: p.payload[:batch_uuid])&.created_at
+      batch_created_at = Batch.find_by(uuid: batch_uuid, network: network)&.created_at
 
-      # Get validator ids for current batch.
-      validator_ids_for_batch_sql = %Q{
-        SELECT v.id
-        FROM vote_account_histories as vah
-        INNER JOIN vote_accounts as va
-        ON vah.vote_account_id = va.id
-        INNER JOIN validators as v
-        ON va.validator_id = v.id
-        WHERE vah.network = ?
-        AND vah.batch_uuid = ?
-        AND v.is_rpc = false
-        AND v.is_active = true;
+      previous_batches_ids = Batch.where(
+        "created_at BETWEEN ? AND ? AND scored_at IS NOT NULL", 
+        batch_created_at - 7.days, 
+        batch_created_at
+      ).pluck(:uuid)
+
+      where_clause = %Q{
+        vote_account_histories.network = ?
+        AND vote_account_histories.batch_uuid IN (?)
+        AND validators.is_rpc = ?
+        AND validators.is_active = ?
       }.gsub(/\s+/, " ").strip
-      
-      sanitized_validator_ids_sql = VoteAccountHistory.sanitize_sql(
-        [validator_ids_for_batch_sql,
-        p.payload[:network],
-        p.payload[:batch_uuid]]
-      )
 
-      validator_ids_for_batch_result = VoteAccountHistory.connection.execute(
-                                        sanitized_validator_ids_sql
-                                      )
+      validator_ids = Validator.left_outer_joins(:vote_accounts, :vote_account_histories)
+                               .where(where_clause, network, previous_batches_ids, false, true)
+                               .ids
+                               .uniq
       
-      validator_ids = validator_ids_for_batch_result.map { |e| e[0] }
-
       # Get software versions with count and active stake for current batch.
       software_version_score_sql = %Q{
         SELECT vsv1.software_version, count(*) as count, SUM(vsv1.active_stake) as as_sum
@@ -142,13 +137,13 @@ module ReportLogic
 
       sanitized_sw_sql = ValidatorScoreV1.sanitize_sql(
         [software_version_score_sql,
-        p.payload[:network],
+        network,
         validator_ids]
       )
 
       software_versions_with_active_stake = ValidatorScoreV1.connection.execute(sanitized_sw_sql)
 
-      total_active_stake = Validator.total_active_stake_for(p.payload[:network])
+      total_active_stake = Validator.total_active_stake_for(network)
 
       # Create a results array and insert the data
       result = []
@@ -174,8 +169,8 @@ module ReportLogic
 
       # Create the report
       Report.create(
-        network: p.payload[:network],
-        batch_uuid: p.payload[:batch_uuid],
+        network: network,
+        batch_uuid: batch_uuid,
         name: 'report_software_versions',
         payload: result
       )
