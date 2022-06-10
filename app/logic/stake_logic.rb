@@ -87,10 +87,10 @@ module StakeLogic
                                     .epoch
 
       p.payload[:stake_accounts].each do |acc|
-        vote_account = VoteAccount.find_by(
+        vote_account = VoteAccount.where(
           network: p.payload[:network],
           account: acc['delegatedVoteAccountAddress']
-        )
+        ).order(is_active: :desc).first
 
         validator_id = vote_account ? vote_account.validator.id : nil
 
