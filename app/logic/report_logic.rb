@@ -101,28 +101,32 @@ module ReportLogic
       network = p.payload[:network]
 
       return p unless p[:code] == 200
-      raise StandardError, 'Missing p.payload[:network]' \
-        unless network
-      raise StandardError, 'Missing p.payload[:batch_uuid]' \
-        unless batch_uuid
+      raise StandardError, "Missing p.payload[:network]"    unless network
+      raise StandardError, "Missing p.payload[:batch_uuid]" unless batch_uuid
       
       batch_created_at = Batch.find_by(uuid: batch_uuid, network: network)&.created_at
 
       previous_batches_ids = Batch.where(
-        "created_at BETWEEN ? AND ? AND scored_at IS NOT NULL", 
-        batch_created_at - 7.days, 
-        batch_created_at
+        "created_at BETWEEN :start_data AND :end_date AND scored_at IS NOT NULL", 
+        { start_data: batch_created_at - 7.days, end_date: batch_created_at }
       ).pluck(:uuid)
 
       where_clause = %Q{
-        vote_account_histories.network = ?
-        AND vote_account_histories.batch_uuid IN (?)
-        AND validators.is_rpc = ?
-        AND validators.is_active = ?
+        vote_account_histories.network = :network
+        AND vote_account_histories.batch_uuid IN (:previous_batches_ids)
+        AND validators.is_rpc = :is_rpc
+        AND validators.is_active = :is_active
       }.gsub(/\s+/, " ").strip
+      
+      where_cond = { 
+        network: network, 
+        previous_batches_ids: previous_batches_ids, 
+        is_rpc: false, 
+        is_active: true 
+      }
 
       validator_ids = Validator.left_outer_joins(:vote_accounts, :vote_account_histories)
-                               .where(where_clause, network, previous_batches_ids, false, true)
+                               .where(where_clause, where_cond)
                                .ids
                                .uniq
       
