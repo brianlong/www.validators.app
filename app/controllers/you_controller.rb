@@ -10,7 +10,7 @@ class YouController < ApplicationController
                          .where(network: index_params[:network])
                          .preload(:validator_score_v1)
                          .joins(:validator_score_v1)
-                         .order('validator_score_v1s.total_score desc, RAND()')
+                         .order("validator_score_v1s.total_score desc, RAND()")
       if @validators.present?
         @batch = Batch.last_scored(index_params[:network])
         @per = 25

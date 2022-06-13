@@ -11,7 +11,7 @@ class ValidatorsController < ApplicationController
 
     if index_params[:watchlist]
       unless current_user
-        flash[:warning] = 'You need to create an account first.'
+        flash[:warning] = "You need to create an account first."
         redirect_to new_user_registration_path and return
       end
 
