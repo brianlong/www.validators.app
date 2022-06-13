@@ -77,7 +77,7 @@ class StakeLogicTest < ActiveSupport::TestCase
       )
     end
 
-    VoteAccount.first.update(is_active: true)
+    VoteAccount.last.update(is_active: true)
 
     SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
       p = Pipeline.new(200, @initial_payload)
@@ -87,7 +87,7 @@ class StakeLogicTest < ActiveSupport::TestCase
 
       sa_with_val = StakeAccount.where.not(validator_id: nil).first
 
-      assert sa_with_val.validator.vote_accounts.last.is_active
+      assert_equal [true], sa_with_val.validator.vote_accounts.pluck(:is_active).uniq
       assert_equal p[:payload][:stake_accounts].count, StakeAccount.count
       assert StakeAccount.where.not(batch_uuid: @batch.uuid).empty?
 
