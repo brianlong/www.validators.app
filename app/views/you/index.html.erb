@@ -1,5 +1,16 @@
 <section class="page-header">
   <h1>My Dashboard</h1>
+  <div class="page-header-tags row">
+    <div class="col-sm-8 form-inline">
+      <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary mb-3 mb-sm-0 mr-3' %>
+      <%= button_to 'Cancel My Account', registration_path(@user),
+                    data: { confirm: 'Are you sure? This operation is irreversible.' }, method: :delete,
+                    class: 'btn btn-sm btn-secondary mb-3 mb-sm-0 mt-0' %>
+    </div>
+    <div class="col-sm-4 text-sm-right">
+      <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-tertiary mb-3 mb-sm-0 mt-0' %>
+    </div>
+  </div>
 </section>
 
 <div class="row">
@@ -49,14 +60,22 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-6 form-inline">
-    <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary mb-4 mr-3' %>
-    <%= button_to 'Cancel My Account', registration_path(@user),
-                  data: { confirm: 'Are you sure? This operation is irreversible.' }, method: :delete,
-                  class: 'btn btn-sm btn-secondary mb-4 mt-0' %>
+<% if @validators.present? %>
+  <div class="card mb-4">
+    <div class="card-content pb-0">
+      <h2 class="card-heading">Fav Validators (<%= params[:network] %>)</h2>
+    </div>
+
+    <%= render 'validators/table',
+               batch: @batch,
+               validators: @validators,
+               show_ip_and_gateway: true,
+               show_version: false,
+               items_per_page: @per,
+               show_watchlist_btn: false %>
   </div>
-  <div class="col-sm-6 text-sm-right">
-    <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-tertiary mt-0' %>
-  </div>
-</div>
+  <%= link_to 'List of all Validators',
+              validators_path(network: params[:network]),
+              class: 'btn btn-sm btn-secondary' %>
+<% end %>
+
