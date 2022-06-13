@@ -10,6 +10,11 @@ class ValidatorsController < ApplicationController
     @per = 25
 
     if index_params[:watchlist]
+      unless current_user
+        flash[:warning] = 'You need to create an account first.'
+        redirect_to new_user_registration_path and return
+      end
+
       user_id = current_user&.id
       validators = User.find(user_id).watched_validators.where(network: index_params[:network])
     else
@@ -21,7 +26,7 @@ class ValidatorsController < ApplicationController
     unless index_params[:q].blank?
       validators = ValidatorSearchQuery.new(validators).search(index_params[:q])
     end
-    
+
     @validators = validators.page(index_params[:page]).per(@per)
 
     @batch = Batch.last_scored(index_params[:network])
