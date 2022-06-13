@@ -33,7 +33,7 @@ module StakeLogic
       )
 
       raise NoResultsFromSolana.new('No results from `solana stakes`') if stake_accounts.blank?
-
+      
       reduced_stake_accounts = []
 
       StakePool.where(network: p.payload[:network]).each do |pool|
@@ -85,7 +85,6 @@ module StakeLogic
                                     .order(created_at: :desc)
                                     .first
                                     .epoch
-
       p.payload[:stake_accounts].each do |acc|
         vote_account = VoteAccount.where(
           network: p.payload[:network],
