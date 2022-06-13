@@ -30,7 +30,7 @@
     <td class="column-md">
       <% if asn_data[:delinquent_validators] > 0 %>
         <%= link_to asn_data[:delinquent_validators],
-            asn_url(network: params[:network], asn: asn_data[:asn], filter_by: :delinquent) %>
+            asn_url(network: params[:network], asn: asn_data[:asn], filter_by: ["delinquent"]) %>
         <small class="text-muted">
           (<%= (count_percentage(asn_data[:delinquent_validators], asn_data[:count])) %>%)
         </small>
@@ -42,7 +42,7 @@
       <td class="column-md">
         <% if asn_data[:private_validators] > 0 %>
           <%= link_to asn_data[:private_validators],
-            asn_url(network: params[:network], asn: asn_data[:asn], filter_by: :private) %>
+            asn_url(network: params[:network], asn: asn_data[:asn], filter_by: ["private"]) %>
           <small class="text-muted">
             (<%= (count_percentage(asn_data[:private_validators], asn_data[:count])) %>%)
           </small>

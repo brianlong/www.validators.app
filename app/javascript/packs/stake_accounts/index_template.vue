@@ -72,7 +72,7 @@
           <thead>
             <tr>
               <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
-              <th class="column-info align-middle">
+              <th class="column-info align-middle pl-3">
                 Name <small class="text-muted">(Commission)</small>
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
@@ -262,6 +262,7 @@
   import jpoolImage from 'jpool.png'
   import daopoolImage from 'daopool.png'
   import eversolImage from 'eversol.png'
+  import blazestakeImage from 'blazestake.png'
 
   import debounce from 'lodash/debounce'
 
@@ -298,7 +299,8 @@
           lido: lidoImage,
           jpool: jpoolImage,
           daopool: daopoolImage,
-          eversol: eversolImage
+          eversol: eversolImage,
+          blazestake: blazestakeImage
         }
       }
     },

@@ -172,8 +172,12 @@ hr {
   }
   &-label {
     display: inline-block;
+    @media(max-width: $screen-md-max) {
+      display: none;
+    }
     @media(max-width: $screen-sm-max) {
       padding-left: 40px;
+      display: inline-block;
     }
   }
 }

@@ -5,7 +5,7 @@ class ClusterStatsControllerTest < ActionDispatch::IntegrationTest
   include ReportLogic
 
   setup do
-    @user = create(:user)
+    @user = create(:user, :confirmed)
   end
 
   test 'Cluster Stats Index shows proper data for testnet' do
