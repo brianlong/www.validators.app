@@ -60,23 +60,24 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'update_stake_accounts' do
-    authority = 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'
-    create(:stake_pool, authority: authority, network: "testnet")
+  test "update_stake_accounts" do
+    authority = "H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b"
+    network = "testnet"
+    create(:stake_pool, authority: authority, network: network)
 
     3.times do |n|
-      val = create(:validator, account: "validator#{n}", network: "testnet")
+      val = create(:validator, account: "validator#{n}", network: network)
 
       create(
         :vote_account,
-        network: "testnet",
+        network: network,
         account: "4tFDvWiZgF5yM4UAtnQ6TZcPwFQeLNc2tA4iEjQPZGGL",
         validator: val,
         is_active: false
       )
     end
 
-    VoteAccount.last.update(is_active: true)
+    VoteAccount.first.update(is_active: true)
 
     SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
       p = Pipeline.new(200, @initial_payload)
@@ -85,6 +86,7 @@ class StakeLogicTest < ActiveSupport::TestCase
                   .then(&update_stake_accounts)
 
       sa_with_val = StakeAccount.where.not(validator_id: nil).first
+
       assert sa_with_val.validator.vote_accounts.last.is_active
       assert_equal p[:payload][:stake_accounts].count, StakeAccount.count
       assert StakeAccount.where.not(batch_uuid: @batch.uuid).empty?
