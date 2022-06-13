@@ -1,7 +1,7 @@
 <h1 class="mb-4"><%= t('.sign_in') %></h1>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 mb-4 mb-md-0">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="form-group">
         <%= f.label :username %><br />
@@ -29,8 +29,13 @@
       </div>
     <% end %>
   </div>
-</div>
 
-<div class="lead mt-4">
-  <%= render "devise/shared/links" %>
+  <div class="col-md-6 pl-md-4 pl-lg-5">
+    <h2 class="h4">
+      Don't have an account yet?<br />
+      <%= link_to 'Click to sign up.', new_user_registration_path %>
+    </h2>
+    <hr class="short" />
+    <%= render "devise/shared/links" %>
+  </div>
 </div>

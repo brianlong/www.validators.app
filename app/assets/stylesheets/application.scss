@@ -139,6 +139,12 @@ hr {
     margin-top: 20px;
     margin-bottom: 20px;
   }
+
+  &.short {
+    width: 50px;
+    margin: 25px auto 25px 0;
+    border-color: $purple;
+  }
 }
 
 .p {
