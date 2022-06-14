@@ -54,6 +54,7 @@ end
 
 every 1.day, roles: [:background] do
   ruby_script 'validators_update_avatar_url.rb'
+  ruby_script 'remove_unconfirmed_users.rb'
 end
 
 every 1.day, at: '0:10am', roles: [:background] do
