@@ -69,6 +69,6 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     get root_url(network: "testnet", watchlist: true)
 
     assert_redirected_to new_user_registration_path
-    assert_match 'You need to create an account first.', flash[:warning]
+    assert_match "You need to create an account first.", flash[:warning]
   end
 end
