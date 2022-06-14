@@ -24,7 +24,6 @@
 #  consensus_mods_score                        :integer          default(0)
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
-#  data_center_key                             :string(191)
 #  delinquent                                  :boolean
 #  ip_address                                  :string(191)
 #  network                                     :string(191)
@@ -53,9 +52,9 @@
 #
 # Indexes
 #
-#  index_validator_score_v1s_on_network_and_data_center_key  (network, data_center_key)
-#  index_validator_score_v1s_on_total_score                  (total_score)
-#  index_validator_score_v1s_on_validator_id                 (validator_id)
+#  index_validator_score_v1s_on_network       (network)
+#  index_validator_score_v1s_on_total_score   (total_score)
+#  index_validator_score_v1s_on_validator_id  (validator_id)
 #
 class ValidatorScoreV1 < ApplicationRecord
   FIELDS_FOR_API = %i[

@@ -5,7 +5,7 @@
       <% if show_watchlist_btn %>
         <%= link_to url_for(
           order: params[:order],
-          page: params[:page],
+          page: 1,
           network: params[:network],
           refresh: params[:refresh],
           watchlist: params[:watchlist] ? nil : true) do %>
