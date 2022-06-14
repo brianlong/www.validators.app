@@ -73,6 +73,7 @@
                show_version: false,
                items_per_page: @per,
                show_watchlist_btn: false %>
+    <%= paginate @validators %>
   </div>
   <%= link_to 'Find more Validators',
               validators_path(network: params[:network]),

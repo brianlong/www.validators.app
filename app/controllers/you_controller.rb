@@ -4,21 +4,19 @@ class YouController < ApplicationController
   before_action :authenticate_user!, only: [:index]
 
   def index
-    if current_user
-      @user = current_user
-      @validators = @user.watched_validators
-                         .where(network: index_params[:network])
-                         .preload(:validator_score_v1)
-                         .joins(:validator_score_v1)
-                         .order("validator_score_v1s.total_score desc, RAND()")
-      if @validators.present?
-        @batch = Batch.last_scored(index_params[:network])
-        @per = 25
-      end
-    else
+    unless current_user
       flash[:warning] = t('you.only_users_allowed')
-      redirect_to :root
+      redirect_to :root and return
     end
+
+    @user = current_user
+    @batch = Batch.last_scored(index_params[:network])
+    @per = 25
+    @validators = ValidatorQuery.new(watchlist_user: @user.id).call(
+      network: index_params[:network],
+      limit: @per,
+      page: index_params[:page]
+    )
   end
 
   # POST you/regenerate_token
@@ -35,6 +33,6 @@ class YouController < ApplicationController
   private
 
   def index_params
-    params.permit(:network)
+    params.permit(:network, :page)
   end
 end
