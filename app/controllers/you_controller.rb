@@ -4,11 +4,6 @@ class YouController < ApplicationController
   before_action :authenticate_user!, only: [:index]
 
   def index
-    unless current_user
-      flash[:warning] = t('you.only_users_allowed')
-      redirect_to :root and return
-    end
-
     @user = current_user
     @batch = Batch.last_scored(index_params[:network])
     @per = 25
