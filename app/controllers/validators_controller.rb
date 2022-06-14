@@ -9,11 +9,13 @@ class ValidatorsController < ApplicationController
   def index
     @per = 25
 
-    watchlist_user = index_params[:watchlist] ? current_user&.id : nil
-    unless watchlist_user
+    if index_params[:watchlist] && !current_user
       flash[:warning] = "You need to create an account first."
       redirect_to new_user_registration_path and return
     end
+
+    watchlist_user = index_params[:watchlist] ? current_user&.id : nil
+
     @validators = ValidatorQuery.new(watchlist_user: watchlist_user).call(
       network: index_params[:network],
       sort_order: index_params[:order],
