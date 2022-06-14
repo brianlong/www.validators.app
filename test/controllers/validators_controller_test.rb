@@ -69,4 +69,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test "index redirects to sign up page for watchlist param and no signed in user" do
+    get root_url(network: "testnet", watchlist: true)
+    
+    assert_redirected_to new_user_registration_path
+    assert_match 'You need to create an account first.', flash[:warning]
+  end
 end
