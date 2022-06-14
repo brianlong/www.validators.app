@@ -30,6 +30,8 @@
 /config/master.key
 /config/credentials/production.key
 /config/credentials/stage.key
+/config/credentials/test.key
+/config/credentials/*.key
 /config/sidekiq.yml
 /config/appsignal.yml
 
@@ -41,4 +43,3 @@ yarn-debug.log*
 .yarn-integrity
 
 /config/cluster.yml
-/config/credentials/test.key
