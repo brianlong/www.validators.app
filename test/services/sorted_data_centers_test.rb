@@ -27,7 +27,6 @@ class SortedDataCenterTest < ActiveSupport::TestCase
         ip_address: ip_address,
         active_stake: 100,
         network: "testnet",
-        data_center_key: data_center_china.data_center_key,
         validator: validator
       )
       scores_china << score
@@ -51,7 +50,6 @@ class SortedDataCenterTest < ActiveSupport::TestCase
         ip_address: ip_address,
         active_stake: 100,
         network: "testnet",
-        data_center_key: data_center_berlin.data_center_key,
         validator: validator
       )
 
@@ -76,7 +74,6 @@ class SortedDataCenterTest < ActiveSupport::TestCase
         ip_address: ip_address,
         active_stake: 100,
         network: "testnet",
-        data_center_key: data_center_frankfurt.data_center_key,
         validator: validator
       )
 

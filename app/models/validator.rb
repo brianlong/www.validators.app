@@ -8,6 +8,7 @@
 #  account             :string(191)
 #  admin_warning       :string(191)
 #  avatar_url          :string(191)
+#  consensus_mods      :boolean          default(FALSE)
 #  details             :string(191)
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
@@ -28,7 +29,6 @@
 class Validator < ApplicationRecord
   FIELDS_FOR_API = %i[
     account
-    admin_warning
     avatar_url
     created_at
     details
@@ -38,7 +38,10 @@ class Validator < ApplicationRecord
     network
     updated_at
     www_url
+    admin_warning
   ].freeze
+
+  DEFAULT_FILTERS = %w(inactive active private delinquent).freeze
 
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
@@ -46,6 +49,10 @@ class Validator < ApplicationRecord
   has_many :validator_block_histories, dependent: :destroy
   has_many :commission_histories, dependent: :destroy
   has_many :validator_histories, primary_key: :account, foreign_key: :account
+
+  has_many :user_watchlist_elements, dependent: :destroy
+  has_many :watchers, through: :user_watchlist_elements, source: :user
+
   has_one :validator_ip_active, -> { active }, class_name: "ValidatorIp"
   has_one :data_center, through: :validator_ip_active
   has_one :data_center_host, through: :validator_ip_active
@@ -67,27 +74,31 @@ class Validator < ApplicationRecord
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
-
-  def self.with_private(show: "true")
-    show == "true" ? all : where.not("validator_score_v1s.commission = 100")
-  end
-
-  def self.filtered_by(filter)
-    case filter
-    when :delinquent
-      joins(:validator_score_v1)
-        .where("validator_score_v1s.delinquent = ?", true)
-    when :inactive
-      where(is_active: false)
-    when :private
-      joins(:validator_score_v1)
-        .where("validator_score_v1s.commission = ? AND validator_score_v1s.network = ?", 100, "mainnet")
-    else
-      all
-    end
-  end
   
   class << self
+    def with_private(show: "true")
+      show == "true" ? all : where.not("validator_score_v1s.commission = 100")
+    end
+
+    def default_filters(network)
+      network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{ |v| v == "private" }
+    end 
+  
+    # accepts array of strings or string
+    def filtered_by(filter)
+      return nil if filter.blank?
+
+      vals = all.joins(:validator_score_v1)
+      query = []
+
+      query.push "validator_score_v1s.delinquent = true" if filter.include? "delinquent"
+      query.push "validators.is_active = false" if filter.include? "inactive"
+      query.push "validators.is_active = true" if filter.include? "active"
+      query.push "validator_score_v1s.commission = 100" if filter.include? "private"
+
+      vals.where(query.join(" OR "))
+    end
+
     # Returns an Array of account IDs for a given network
     #
     # Validator.accounts_for('testnet') => ['1234', '5678']
@@ -97,7 +108,7 @@ class Validator < ApplicationRecord
 
     # summarised active stake for all validators in the given network
     def total_active_stake_for(network)
-      where(network: network).joins(:validator_score_v1).sum(:active_stake)
+      active.where(network: network).joins(:validator_score_v1).sum(:active_stake)
     end
 
     def index_order(order_param)
@@ -138,8 +149,13 @@ class Validator < ApplicationRecord
   end
 
   # Return the vote account that was most recently used
-  def vote_account_last
-    vote_accounts.order('updated_at asc').last
+  def vote_account_active
+    vote_accounts.active.order('updated_at asc').last || vote_accounts.order('updated_at asc').last
+  end
+
+  def set_active_vote_account(vote_acc)
+    vote_acc.update(is_active: true, updated_at: Time.now)
+    vote_accounts.where.not(account: vote_acc.account).map(&:set_inactive_without_touch)
   end
 
   def ping_times_to(limit = 100)
@@ -167,7 +183,6 @@ class Validator < ApplicationRecord
     return unless validator_score_v1
 
     validator_score_v1.ip_address = ip_address
-    validator_score_v1.data_center_key = dch_data_center_key if data_center
     validator_score_v1.save
   end
 
@@ -258,6 +273,10 @@ class Validator < ApplicationRecord
 
   def authorized_withdrawer_score
     score&.authorized_withdrawer_score
+  end
+
+  def consensus_mods_score
+    score&.consensus_mods_score.to_i
   end
 
   def private_validator?

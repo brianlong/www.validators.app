@@ -23,7 +23,7 @@ module ValidatorsHelper
     max_value = vector.max
     max_value_index = vector.index(max_value) + 1
     position = max_value_index.to_f / vector.size * 100
-    position += 3
+    position += 2
     position = [position, 100].min # rejects values larger than 100
     if min_position
       position = [position, 11].max # rejects values smaller than 11
@@ -83,7 +83,9 @@ module ValidatorsHelper
       ["https://marinade.finance", "marinade.png"],
       ["https://www.socean.fi", "socean.png"],
       ["https://jpool.one", "jpool.png"],
-      ["https://daopool.monkedao.io", "daopool.png"]
+      ["https://daopool.monkedao.io", "daopool.png"],
+      ["https://eversol.one/", "eversol.png"],
+      ["https://stake.solblaze.org/", "blazestake.png"]
       # add more stake pools here
     ].shuffle
   end

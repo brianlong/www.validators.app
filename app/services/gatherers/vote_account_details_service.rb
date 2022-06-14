@@ -9,25 +9,45 @@ module Gatherers
     def initialize(network:, config_urls:)
       @network = network
       @config_urls = config_urls
+      @range_start = VoteAccount.where(network: @network).order(id: :asc).first.id
+      @range_end = VoteAccount.where(network: @network).order(id: :asc).last.id
     end
 
     def call
-      VoteAccount.where(network: @network).each do |vacc|
+      VoteAccount.where(id: @range_start..@range_end, network: @network)
+                 .order(id: :asc)
+                 .each do |vacc|
+        @range_start = vacc.id
+
         vote_account_details = get_vote_account_details(vacc.account)
-        unless vote_account_details.blank?
-          vacc.update(
+
+        if vote_account_details.blank? || vote_account_details["validatorIdentity"].blank?
+          vacc.set_inactive_without_touch
+          next
+        end
+
+        next if should_omit_update?(vacc, vote_account_details)
+
+        if vacc.update(
             validator_identity: vote_account_details["validatorIdentity"],
             authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
           )
-
-          update_score(vacc)
+            update_score(vacc)
         end
       end
+    rescue ActiveRecord::LockWaitTimeout => e
+      sleep 5
+      retry
     end
 
     private
 
-    # solana vote-account <account>
+    def should_omit_update?(vacc, vote_account_details)
+      vacc.validator_identity == vote_account_details["validatorIdentity"] && \
+      vacc.authorized_withdrawer == vote_account_details["authorizedWithdrawer"]
+    end
+
+    # solana vote-account <account >
     def get_vote_account_details(account)
       cli_request(
         "vote-account #{account}",
@@ -38,13 +58,15 @@ module Gatherers
     # -2 points if withdrawer and id are the same
     def update_score(vacc)
       return unless vacc
-
+      
+      score = vacc.validator.validator_score_v1
+      
       if vacc.validator_identity == vacc.authorized_withdrawer
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = -2
+        score.authorized_withdrawer_score = ValidatorScoreV1::WITHDRAWER_SCORE_OPTIONS[:negative]
       else
-        vacc.validator.validator_score_v1.authorized_withdrawer_score = 0
+        score.authorized_withdrawer_score = ValidatorScoreV1::WITHDRAWER_SCORE_OPTIONS[:neutral]
       end
-      vacc.validator.validator_score_v1.save
+      score.save if score.authorized_withdrawer_score_changed?
     end
   end
 end

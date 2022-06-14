@@ -3,7 +3,7 @@
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <h3 class="card-heading mb-2">Filter by Stake Pool</h3>
+          <h2 class="h3 card-heading mb-2">Filter by Stake Pool</h2>
           <div class="text-center text-muted small mb-3">Click on stake pool logo to see pool stats</div>
 
           <div class="row" v-if="!is_loading_stake_pools">
@@ -72,7 +72,7 @@
           <thead>
             <tr>
               <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
-              <th class="column-info align-middle">
+              <th class="column-info align-middle pl-3">
                 Name <small class="text-muted">(Commission)</small>
                 <i class="fas fa-info-circle small"
                   data-toggle="tooltip"
@@ -159,51 +159,52 @@
     <div v-if="is_loading_stake_accounts && is_loading_stake_pools" class="col-12 text-center my-5">
       <img v-bind:src="loading_image" width="100">
     </div>
+
     <div class="container mt-5" id="metrics">
-      <h2> Metrics Explanation </h2>
+      <h2>Metrics Explanation</h2>
       <hr />
-      <h4 class="h5">Nodes total</h4>
+      <h3 class="h5">Nodes total</h3>
       <p class="mb-5">
         Number of validators used by the stake pool. Bigger validator diversity helps to maintain good network health.
       </p>
 
-      <h4 class="h5">Nodes Delinquent</h4>
+      <h3 class="h5">Nodes Delinquent</h3>
       <p class="mb-5">
         Number of delinquent validators used by the stake pool.
       </p>
 
-      <h4 class="h5">Nodes Stake</h4>
+      <h3 class="h5">Nodes Stake</h3>
       <p class="mb-5">
         Total stake of the stake pool divided among the validators.
       </p>
 
-      <h4 class="h5">Avg Stake</h4>
+      <h3 class="h5">Avg Stake</h3>
       <p class="mb-5">
         Average stake that the pool delegates to a single validator.
       </p>
 
-      <h4 class="h5">Manager Fee</h4>
+      <h3 class="h5">Manager Fee</h3>
       <p class="mb-5">
         Commission that stake pool substracts from the total profit to maintain their operation.
       </p>
 
-      <h4 class="h5">Deposit Fee</h4>
+      <h3 class="h5">Deposit Fee</h3>
       <p class="mb-5">
         Fee paid while depositing new stake to the stake pool.
       </p>
 
-      <h4 class="h5">Withdrawal Fee</h4>
+      <h3 class="h5">Withdrawal Fee</h3>
       <p class="mb-5">
         Fee paid while withdrawing any amount of stake from the stake pool.
       </p>
 
-      <h4 class="h5">Avg Validators Fee</h4>
+      <h3 class="h5">Avg Validators Fee</h3>
       <p class="mb-5">
         Average commission of all the validators used by the stake pool. See
         <a href="/faq#commission" target="_blank">what is validator commission?</a>
       </p>
 
-      <h4 class="h5">APY</h4>
+      <h3 class="h5">APY</h3>
       <p>
         <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the weighted average of the APY's 
         from all the validators reduced by the <strong>manager fee</strong>. Validators weight is proportional to the active_stake of the accounts.<br />
@@ -221,29 +222,29 @@
         And <strong>rewards_percent</strong> is the interest rate of validator, based on the reward from the last epoch.
       </p>
 
-      <h4 class="h5">Avg Skipped Slot</h4>
+      <h3 class="h5">Avg Skipped Slot</h3>
       <p class="mb-5">
         Average skipped slot of all the validators used by the stake pool. See
         <a href="/faq#skipped-vote" target="_blank">what is validator skipped slot?</a>
       </p>
 
-      <h4 class="h5">Avg Lifetime</h4>
+      <h3 class="h5">Avg Lifetime</h3>
       <p class="mb-5">
         Average number of days since each validator from the stake pool was created.
       </p>
 
-      <h4 class="h5">Avg Uptime</h4>
+      <h3 class="h5">Avg Uptime</h3>
       <p class="mb-5">
         Average number of days each validator operates continuously without shutting down.
       </p>
 
-      <h4 class="h5">Avg Score</h4>
+      <h3 class="h5">Avg Score</h3>
       <p class="mb-5">
         Average score of the validators from the stake pool. See
         <a href="/faq#score" target="_blank">how are scores calculated?</a>
       </p>
 
-      <h4 class="h5">Stake Account Activation Epoch</h4>
+      <h3 class="h5">Stake Account Activation Epoch</h3>
       <p>
         Number of epoch in which the account was first activated.
       </p>
@@ -260,6 +261,8 @@
   import lidoImage from 'lido.png'
   import jpoolImage from 'jpool.png'
   import daopoolImage from 'daopool.png'
+  import eversolImage from 'eversol.png'
+  import blazestakeImage from 'blazestake.png'
 
   import debounce from 'lodash/debounce'
 
@@ -295,7 +298,9 @@
           socean: soceanImage,
           lido: lidoImage,
           jpool: jpoolImage,
-          daopool: daopoolImage
+          daopool: daopoolImage,
+          eversol: eversolImage,
+          blazestake: blazestakeImage
         }
       }
     },

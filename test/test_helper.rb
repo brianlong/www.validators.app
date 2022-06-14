@@ -22,6 +22,7 @@ VCR.configure do |config|
 
   config.filter_sensitive_data("<TOKEN>") do |interaction|
     interaction.request.headers["Authorization"]&.first
+    interaction.request.headers["Ftx-Key"]&.first
   end
 end
 

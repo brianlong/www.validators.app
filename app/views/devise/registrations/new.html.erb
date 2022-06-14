@@ -7,7 +7,7 @@
 
       <div class="form-group">
         <%= f.label :username, class: 'required' do %>
-          Username <small>(not your email address!)</small>
+          Username <small>(letters, numbers and dots allowed)</small>
         <% end %>
         <%= f.text_field :username, autofocus: true, autocomplete: "username", class: 'form-control' %>
       </div>

@@ -47,7 +47,7 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
     payload = @initial_payload.merge(
       {
         exchange: SolPrice.exchanges[:coin_gecko],
-        client: SolPrices::ApiWrappers::CoinGecko.new,
+        client: CoinGeckoClient.new,
         datetime: DateTime.new(2021,9,8),
         days: 'max'
       }
@@ -66,7 +66,7 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
     payload = @initial_payload.merge(
       {
         exchange: SolPrice.exchanges[:ftx],
-        client: SolPrices::ApiWrappers::Ftx.new,
+        client: FtxClient.new,
         start_time: DateTime.new(2021,9,8),
         resolution: 86400,
       }

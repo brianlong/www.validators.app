@@ -16,6 +16,17 @@
 #  updated_at     :datetime         not null
 #
 class PingThingStat < ApplicationRecord
+  FIELDS_FOR_API = [
+    :interval,
+    :max,
+    :median,
+    :min,
+    :network,
+    :num_of_records,
+    :time_from
+  ].freeze
+
+  INTERVALS = [1, 3, 12, 24].freeze
 
   scope :by_network, -> (network) { where(network: network) }
 
@@ -48,5 +59,14 @@ class PingThingStat < ApplicationRecord
 
   def broadcast
     ActionCable.server.broadcast("ping_thing_stat_channel", self.to_json)
+  end
+  
+  def to_builder
+    Jbuilder.new do |ping_thing_stat|
+      ping_thing_stat.(
+        self,
+        *FIELDS_FOR_API
+      )
+    end
   end
 end

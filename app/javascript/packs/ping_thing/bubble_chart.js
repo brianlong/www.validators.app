@@ -85,8 +85,7 @@ export default {
                     yAxes: [{
                         display: true,
                         ticks: {
-                            //min: 0,
-                            max: 60000,
+                            min: 0,
                             padding: 10,
                             callback: function(value, index, values) {
                                 return value.toLocaleString('en-US')

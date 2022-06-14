@@ -106,10 +106,8 @@ ValidatorIp.joins(:data_center)
     next unless last_ovh_ip&.include?(host_reg)
 
     host = ('H' + last_ovh_ip).strip.split(' ')[1].strip
-    setup_ip_override(vip: vip, host_data: host_data, host: host)
+    setup_data_center(vip: vip, host_data: host_data, host: host)
   end
 end
-
-update_validator_score_with_overrides
 
 puts 'end of script'

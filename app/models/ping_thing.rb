@@ -31,6 +31,7 @@
 #
 class PingThing < ApplicationRecord
   belongs_to :user
+  include ObjectCopier
 
   enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
 

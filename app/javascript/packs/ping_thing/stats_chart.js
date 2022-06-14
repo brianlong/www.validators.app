@@ -80,10 +80,10 @@ export default {
                 labels: labels,
                 datasets: [
                     {
-                        type: 'bar',
                         label: 'Variation',
                         data: variation_data,
                         backgroundColor: "rgba(221, 154, 229, 0.4)",
+                        hoverBackgroundColor: "rgba(221, 154, 229, 0.7)",
                         borderColor: "transparent",
                         order: 2,
                         barPercentage: 1.0,
@@ -117,7 +117,7 @@ export default {
                         display: true,
                         gridLines: { display: false },
                         ticks: {
-                            max: 60000,
+                            min: 0,
                             padding: 10,
                             callback: function(value, index, values) {
                                 return value.toLocaleString('en-US')
@@ -130,6 +130,10 @@ export default {
                             padding: 5
                         }
                     }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
                 },
                 plugins: {
                     tooltip: {

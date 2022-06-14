@@ -8,6 +8,7 @@ FactoryBot.define do
     keybase_id { 'johndoe' }
     security_report_url { 'http://www.example.com' }
     avatar_url { 'http://www.avatar_url.com' }
+    consensus_mods { false }
 
     trait :with_score do
       after(:create) do |validator|
@@ -29,6 +30,14 @@ FactoryBot.define do
       after(:create) do |validator|
         create :validator_ip, :active, :with_data_center, validator: validator
       end
+    end
+
+    trait :with_consensus_mods_true do
+      consensus_mods { true }
+    end
+
+    trait :with_admin_warning do
+      admin_warning { "test warning" }
     end
   end
 end

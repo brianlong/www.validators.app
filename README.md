@@ -50,6 +50,9 @@ and configure your config/database.yml to your machine's MySQL configuration. Mi
 ## Database initialization
 Run rake db:setup to create and migrate the database from schema (db/schema.rb).
 
+## Copying data to staging
+To enable copying records to staging database set copy_records_to_stage in credentials file to true
+
 ## Attribute Encryption
 Attribute encryption on models is required for any attribute that contains personal information or other sensitive data. The default solution is the attr_encrypted gem. A more secure alternative is Vault.
 
@@ -90,3 +93,12 @@ To decrypt the file: `gpg --output config/credentials/test.key --decrypt config/
 To encrypt the file: `gpg -c --output config/credentials/test_key.gpg config/credentials/test.key`
 
 To decrypt and encrypt the file you need a passphrase, please ask your team leader about it.
+
+## Validators Stack
+- ValidatorsApp https://github.com/brianlong/www.validators.app
+- BlockLogic https://github.com/firstmoversadvantage/www_blocklogic_net
+
+### Gems
+- Validators ruby client https://github.com/Block-Logic/validators-app-ruby
+- Solana RPC ruby gem https://github.com/Block-Logic/solana-rpc-ruby
+- Solscan API ruby gem https://github.com/Block-Logic/solscan-api-ruby

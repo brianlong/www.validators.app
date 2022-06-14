@@ -2,7 +2,7 @@
 
 class CreatePingThingStatsService
 
-  INTERVALS = [1, 3, 12, 24].freeze
+  
 
   def initialize(time_to: DateTime.now, network: "mainnet")
     @time_to = time_to
@@ -10,7 +10,7 @@ class CreatePingThingStatsService
   end
 
   def call
-    INTERVALS.each do |interval|
+    PingThingStat::INTERVALS.each do |interval|
       if should_add_new_stats?(interval)
         ping_things = gather_ping_things(interval)
         next unless ping_things.any?

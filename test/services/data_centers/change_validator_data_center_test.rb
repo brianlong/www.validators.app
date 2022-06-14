@@ -32,8 +32,7 @@ module DataCenters
       @validator = create(:validator)
       @validator_score_v1 = create(
         :validator_score_v1, 
-        validator: @validator, 
-        data_center_key: @data_center_seychelles.data_center_key 
+        validator: @validator
       )
       @validator_ip = create(
         :validator_ip,
@@ -56,8 +55,6 @@ module DataCenters
         assert_equal "Seychelles", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
 
-        assert_equal "206264-SC-Indian/Mahe", @validator_score_v1.data_center_key
-
         service = ChangeValidatorDataCenter.new(@validator.id)
         service.call
 
@@ -70,8 +67,6 @@ module DataCenters
         assert_equal @validator.data_center_host, @data_center_host
         assert_equal "Netherlands", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
-
-        assert_equal "206264-NL-Amsterdam", @validator_score_v1.data_center_key
       end
     end
 
@@ -94,8 +89,6 @@ module DataCenters
         assert_equal "Seychelles", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
 
-        assert_equal "206264-SC-Indian/Mahe", @validator_score_v1.data_center_key
-
         service = ChangeValidatorDataCenter.new(@validator.id)
         service.call
 
@@ -108,8 +101,6 @@ module DataCenters
         refute_equal @validator.data_center_host, @data_center_host
         assert_equal "Netherlands", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
-
-        assert_equal "206264-NL-Amsterdam", @validator_score_v1.data_center_key
       end
     end
 
@@ -119,14 +110,11 @@ module DataCenters
       vcr_cassette(@vcr_namespace, "spectrum_staking") do
         @data_center_netherlands.save
         @data_center_host.update(data_center: @data_center_netherlands)
-        @validator_score_v1.update(data_center_key: "206264-NL-Amsterdam")
 
         assert_equal @spectrum_staking_ip_address, @validator_ip.address
         assert_equal @validator.data_center_host, @data_center_host
         assert_equal "Netherlands", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
-
-        assert_equal "206264-NL-Amsterdam", @validator_score_v1.data_center_key
 
         service = ChangeValidatorDataCenter.new(@validator.id)
         service.call
@@ -140,8 +128,6 @@ module DataCenters
         assert_equal @validator.data_center_host, @data_center_host
         assert_equal "Netherlands", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
-
-        assert_equal "206264-NL-Amsterdam", @validator_score_v1.data_center_key
       end
     end
 
@@ -158,23 +144,18 @@ module DataCenters
         assert_equal "Seychelles", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
 
-        assert_equal "206264-SC-Indian/Mahe", @validator.validator_score_v1.data_center_key
-
         service = ChangeValidatorDataCenter.new(@validator.id)
         service.call
 
         @validator.reload
-        @validator_score_v1.reload
 
         # new data_center
         refute_equal @validator.data_center, @data_center_seychelles
         # the same data center host with new data_center 
         assert_equal @validator.data_center_host, @data_center_host
         assert_equal "Netherlands", @validator.data_center.country_name
-        assert_equal "206264-NL-Amsterdam", @validator.validator_score_v1.data_center_key
+        assert_equal "206264-NL-Amsterdam", @validator.dch_data_center_key
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
-
-        assert_equal "206264-NL-Amsterdam", @validator_score_v1.data_center_key
       end
     end
   end

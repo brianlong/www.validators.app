@@ -4,14 +4,14 @@
 
     <div class="card mb-4">
       <div class="card-content">
-        <h3 class="card-heading mb-4">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time Stats</h3>
+        <h2 class="h3 card-heading">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time Stats</h2>
         <stats-chart :network="network"/>
       </div>
     </div>
 
     <div class="card mb-4">
       <div class="card-content">
-        <h3 class="card-heading mb-4">TX Time Last Obervations</h3>
+        <h2 class="h3 card-heading">TX Time Last Obervations</h2>
         <div class="text-center pb-4">
           <b-pagination
               v-model="page"

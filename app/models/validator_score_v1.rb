@@ -21,9 +21,9 @@
 #  active_stake                                :bigint           unsigned
 #  authorized_withdrawer_score                 :integer
 #  commission                                  :integer
+#  consensus_mods_score                        :integer          default(0)
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
-#  data_center_host                            :string(191)
 #  data_center_key                             :string(191)
 #  delinquent                                  :boolean
 #  ip_address                                  :string(191)
@@ -53,7 +53,7 @@
 #
 # Indexes
 #
-#  index_validator_score_v1s_on_network_and_data_center_key  (network,data_center_key)
+#  index_validator_score_v1s_on_network_and_data_center_key  (network, data_center_key)
 #  index_validator_score_v1s_on_total_score                  (total_score)
 #  index_validator_score_v1s_on_validator_id                 (validator_id)
 #
@@ -71,6 +71,7 @@ class ValidatorScoreV1 < ApplicationRecord
     software_version
     software_version_score
     stake_concentration_score
+    consensus_mods_score
     total_score
     validator_id
     vote_distance_score
@@ -84,6 +85,11 @@ class ValidatorScoreV1 < ApplicationRecord
     skipped_slot_moving_average_history
     stake_concentration
   ].freeze
+
+  WITHDRAWER_SCORE_OPTIONS = {
+    negative: -2,
+    neutral: 0
+  }.freeze
 
   MAX_HISTORY = 2_880
 
@@ -105,8 +111,6 @@ class ValidatorScoreV1 < ApplicationRecord
   has_one :validator_ip_active, through: :validator
   has_one :data_center, through: :validator
 
-  has_one :ip_for_api, -> { select(IP_FIELDS_FOR_API) }, class_name: 'Ip', primary_key: :ip_address, foreign_key: :address
-
   serialize :root_distance_history, JSON
   serialize :vote_distance_history, JSON
   serialize :skipped_slot_history, JSON
@@ -122,7 +126,10 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   scope :by_data_centers, ->(data_center_keys) do
-    where(data_center_key: data_center_keys)
+    select_statement = "validator_score_v1s.*, data_centers.data_center_key"
+    
+    select(select_statement).joins(:data_center)
+                            .where("data_centers.data_center_key = ?", data_center_keys)
   end
 
   scope :for_api, -> { select(FIELDS_FOR_API) }
@@ -131,21 +138,10 @@ class ValidatorScoreV1 < ApplicationRecord
     CreateCommissionHistoryService.new(self).call
   end
 
-  def self.filtered_by(filter)
-    case filter
-    when :delinquent
-      where(delinquent: true)
-    when :inactive
-      includes(:validator).where('validator.is_active': false)
-    when :private
-      where(commission: 100, network: "mainnet")
-    else
-      all
+  class << self
+    def with_private(show: "true")
+      show == "true" ? all : where.not(commission: 100)
     end
-  end
-
-  def self.with_private(show: "true")
-    show == "true" ? all : where.not(commission: 100)
   end
 
   def calculate_total_score
@@ -154,6 +150,7 @@ class ValidatorScoreV1 < ApplicationRecord
     assign_published_information_score
     assign_software_version_score(best_sv)
     assign_security_report_score
+    assign_consensus_mods_score
 
     self.total_score =
       if validator.private_validator? || validator.admin_warning
@@ -164,6 +161,7 @@ class ValidatorScoreV1 < ApplicationRecord
           skipped_slot_score.to_i +
           published_information_score.to_i +
           security_report_score.to_i +
+          consensus_mods_score.to_i +
           software_version_score.to_i +
           stake_concentration_score.to_i +
           data_center_concentration_score.to_i +
@@ -220,8 +218,15 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   # Assign one point if the validator has provided a security_report_url
+  # Assign 0 if consensus_mods value is true
   def assign_security_report_score
+    return self.security_report_score = 0 if validator.consensus_mods
     self.security_report_score = validator.security_report_url.blank? ? 0 : 1
+  end
+
+  # Assign -2 if consensus_mods value is true
+  def assign_consensus_mods_score
+    self.consensus_mods_score = validator.consensus_mods ? -2 : 0
   end
 
   def avg_root_distance_history(period = nil)
