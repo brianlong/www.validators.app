@@ -63,7 +63,8 @@
 <% if @validators.present? %>
   <div class="card mb-4">
     <div class="card-content pb-0">
-      <h2 class="card-heading">Fav Validators (<%= params[:network] %>)</h2>
+      <h2 class="card-heading d-none d-md-block">Favourite Validators (<%= params[:network] %>)</h2>
+      <h2 class="card-heading d-md-none">Fav Validators (<%= params[:network] %>)</h2>
     </div>
 
     <%= render 'validators/table',
