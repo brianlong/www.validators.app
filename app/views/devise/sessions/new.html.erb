@@ -31,10 +31,7 @@
   </div>
 
   <div class="col-md-6 pl-md-4 pl-lg-5">
-    <h2 class="h4">
-      Don't have an account yet?<br />
-      <%= link_to 'Click to sign up.', new_user_registration_path %>
-    </h2>
+    <%= render "devise/shared/sign_up_link" %>
     <hr class="short" />
     <%= render "devise/shared/links" %>
   </div>
