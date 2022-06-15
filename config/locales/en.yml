@@ -102,7 +102,7 @@ en:
       opt_out_requests: 'Opt Out requests'
     copyright_text: 'provides tools for the Solana validator community.'
   you:
-    only_users_allowed: 'Only authenticated User are allowed'
+    only_users_allowed: 'Only authenticated users are allowed.'
   definitions:
     active_stake: "Total stake from active validator(s)."
     asn_full_name: "Autonomous System Number"

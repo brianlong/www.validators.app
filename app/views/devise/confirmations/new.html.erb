@@ -1,7 +1,7 @@
 <h1 class="mb-4"><%= t('.resend_confirmation_instructions') %></h1>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 mb-4 mb-md-0">
     <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
@@ -18,8 +18,10 @@
       </div>
     <% end %>
   </div>
-</div>
 
-<div class="lead mt-4">
-  <%= render "devise/shared/links" %>
+  <div class="col-md-6 pl-md-4 pl-lg-5">
+    <%= render "devise/shared/sign_up_link" %>
+    <hr class="short" />
+    <%= render "devise/shared/links" %>
+  </div>
 </div>
