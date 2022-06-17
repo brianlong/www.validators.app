@@ -218,7 +218,7 @@
         </canvas>
         <%= render 'validators/validator_large_chart',
                    chart_name: "root_distance_history",
-                   records_number: "#{@root_blocks.count}",
+                   records_count: "#{@root_blocks.count}",
                    label: 'Block Diff'
         %>
 
@@ -238,7 +238,7 @@
         </canvas>
         <%= render 'validators/validator_large_chart',
                    chart_name: "vote_distance_history",
-                   records_number: "#{@vote_blocks.count}",
+                   records_count: "#{@vote_blocks.count}",
                    label: 'Vote Diff'
         %>
       </div>
