@@ -101,11 +101,13 @@ class ValidatorsController < ApplicationController
       next unless skipped_slot_all_average
 
       @data[i] = {
-        skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
-        skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-        cluster_skipped_slot_percent_moving_average: skipped_slot_all_average * 100
+        skipped_slot_percent: (vbh.skipped_slot_percent.to_f * 100.0).round(1),
+        skipped_slot_percent_moving_average: (vbh.skipped_slot_percent_moving_average.to_f * 100.0).round(1),
+        cluster_skipped_slot_percent_moving_average: (skipped_slot_all_average * 100).round(1),
+        label: vbh.created_at.strftime("%H:%M")
       }
     end
+
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
 

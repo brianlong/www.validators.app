@@ -1,4 +1,3 @@
-<!--<canvas id="<%#= local_assigns[:chart_name] %>"></canvas>-->
 <script type="text/javascript">
     var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
 
@@ -14,8 +13,8 @@
                 {
                     label: ' <%= local_assigns[:label] %> ',
                     fill: true,
-                    borderColor: "<%= local_assigns[:line_color] %>",
-                    backgroundColor: "<%= local_assigns[:fill_color] %>",
+                    borderColor: "<%= SPARK_LINE_2 %>",
+                    backgroundColor: "<%= SPARK_LINE_2_TRANSPARENT %>",
                     borderWidth: 1,
                     radius: 0,
                     data: data,
@@ -36,10 +35,10 @@
                 yPadding: 8,
                 callbacks: {
                     label: function(tooltipItem) {
-                        return "Dist: " + tooltipItem.yLabel + ",  " + tooltipItem.xLabel + " UTC";
+                        return "Distance: " + tooltipItem.yLabel;
                     },
                     title: function(tooltipItem) {
-                        return null;
+                        return tooltipItem[0].xLabel + " UTC";
                     },
                 }
             },
@@ -96,7 +95,7 @@
                 const originalFit = chart.legend.fit;
                 chart.legend.fit = function fit() {
                     originalFit.bind(chart.legend)();
-                    this.height += 10;
+                    this.height += 12;
                 }
             },
         }
