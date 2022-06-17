@@ -189,7 +189,7 @@
 
 <div class="row mb-3">
   <div class="col-md-9 col-lg-10">
-    <%= link_to 'Back to List of Validators',
+    <%= link_to 'Back to All Validators',
                 root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
                 class: 'btn btn-sm btn-secondary mb-3' %>
   </div>
@@ -216,7 +216,7 @@
                 data-data="<%= @root_blocks.to_json %>"
                 data-labels="<%= @root_blocks.map{ |block| block[:x] } %>">
         </canvas>
-        <%= render 'validators/spark_line_chart',
+        <%= render 'validators/validator_large_chart',
                    chart_name: "root_distance_history",
                    records_number: "#{@root_blocks.count}",
                    label: 'Block Diff'
@@ -236,7 +236,7 @@
                 data-data="<%= @vote_blocks.to_json %>"
                 data-labels="<%= @vote_blocks.map{ |block| block[:x] } %>">
         </canvas>
-        <%= render 'validators/spark_line_chart',
+        <%= render 'validators/validator_large_chart',
                    chart_name: "vote_distance_history",
                    records_number: "#{@vote_blocks.count}",
                    label: 'Vote Diff'
@@ -253,16 +253,16 @@
         <h2 class="h3 card-heading mb-3">Skipped Slots History</h2>
       </div>
       <div class="pb-3 px-3">
-        <canvas id="skipped_slot_history"
+        <canvas id="skipped_slots_large_chart"
                 data-labels="<%= @data.map { |k, v| v[:label] } %>">
         </canvas>
-        <%= render partial: 'block_history_chart' %>
+        <%= render partial: 'skipped_slots_large_chart' %>
       </div>
     </div>
   </div>
 </div>
 
-<%= link_to 'Back to List of Validators',
+<%= link_to 'Back to All Validators',
             root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
             class: 'btn btn-sm btn-secondary mb-4' %>
 
@@ -271,6 +271,6 @@
 </div>
 
 
-<%= link_to 'Back to List of Validators',
+<%= link_to 'Back to All Validators',
             root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
             class: 'btn btn-sm btn-secondary' %>
