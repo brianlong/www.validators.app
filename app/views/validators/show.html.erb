@@ -212,13 +212,18 @@
         <h2 class="h3 card-heading mb-3">Block History</h2>
       </div>
       <div class="pb-3 px-3">
+        <canvas id="root_distance_<%=@validator.account%>"
+                data-data="<%= @root_blocks.to_json %>"
+                data-labels="<%= @root_blocks.map{ |block| block[:x] } %>">
+        </canvas>
         <%= render 'validators/spark_line_chart',
-                   chart_name: "spark_line_block_distance_#{@validator.account}",
-                   vector: @root_blocks,
+                   chart_name: "root_distance_#{@validator.account}",
+                   records_number: "#{@root_blocks.count}",
                    line_color: SPARK_LINE_2,
                    fill_color: SPARK_LINE_2_TRANSPARENT,
                    label: 'Block Diff'
         %>
+
       </div>
     </div>
   </div>
@@ -229,9 +234,13 @@
         <h2 class="h3 card-heading mb-3">Vote History</h2>
       </div>
       <div class="pb-3 px-3">
+        <canvas id="vote_distance_<%=@validator.account%>"
+                data-data="<%= @vote_blocks.to_json %>"
+                data-labels="<%= @vote_blocks.map{ |block| block[:x] } %>">
+        </canvas>
         <%= render 'validators/spark_line_chart',
-                   chart_name: "spark_line_vote_distance_#{@validator.account}",
-                   vector: @vote_blocks,
+                   chart_name: "vote_distance_#{@validator.account}",
+                   records_number: "#{@vote_blocks.count}",
                    line_color: SPARK_LINE_2,
                    fill_color: SPARK_LINE_2_TRANSPARENT,
                    label: 'Vote Diff'

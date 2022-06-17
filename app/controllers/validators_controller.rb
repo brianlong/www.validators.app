@@ -40,17 +40,6 @@ class ValidatorsController < ApplicationController
     time_from = Time.now - 24.hours
     time_to = Time.now
 
-    # Sometimes @validator is nil
-    @ping_times = []
-    # @ping_times = if @validator.nil?
-    #                 []
-    #               else
-    #                   PingTime.where(
-    #                   network: params[:network],
-    #                   to_account: @validator.account
-    #                 ).order('created_at desc').limit(30)
-    #               end
-
     @data = {}
 
     @history_limit = 240
@@ -75,11 +64,23 @@ class ValidatorsController < ApplicationController
     ).order(created_at: :asc)
     .last(@history_limit)
 
-    # Grab the distances to show on the chart
-    @root_blocks = @val_histories.map(&:root_distance).compact
+    # Grab the root distances to show on the chart
+    @root_blocks = @val_histories.map do |val_history|
+      next unless val_history.root_distance
+      {
+        x: val_history.created_at.strftime("%H:%M"),
+        y: val_history.root_distance
+      }
+    end
 
-    # Grab the distances to show on the chart
-    @vote_blocks = @val_histories.map(&:vote_distance).compact
+    # Grab the vote distances to show on the chart
+    @vote_blocks = @val_histories.map do |val_history|
+      next unless val_history.vote_distance
+      {
+        x: val_history.created_at.strftime("%H:%M"),
+        y: val_history.vote_distance
+      }
+    end
 
     @commission_histories = CommissionHistoryQuery.new(
       network: params[:network]

@@ -3,17 +3,16 @@
     var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
 
     var dataset = ctx.canvas.dataset;
-    var data = JSON.parse(dataset.data);
-    //console.log(dataset.data);
-    //console.log(data);
-    console.log(dataset.labels);
-    console.log(JSON.parse(dataset.labels));
+    var data = dataset.data;
+    var parsed_data = JSON.parse(dataset.data)
+    console.log(data);
+    console.log(parsed_data);
 
     var chart = new Chart(ctx, {
         type: 'line',
 
         data: {
-            labels: JSON.parse(dataset.labels),
+            //labels: <%#= local_assigns[:vector].to_a.count.downto(1).to_a %>,
             datasets: [
                 {
                     label: ' <%= local_assigns[:label] %> ',
@@ -22,7 +21,7 @@
                     backgroundColor: "<%= local_assigns[:fill_color] %>",
                     borderWidth: 1,
                     radius: 0,
-                    data: data,
+                    data: JSON.parse(dataset.data)
                 }
             ]
         },
@@ -51,17 +50,11 @@
             scales: {
                 xAxes: [{
                     display: true,
-                    ticks: {
-                        display: true,
-                        minRotation: 0,
-                        maxRotation: 0,
-                        autoSkip: true,
-                        autoSkipPadding: 30
-                    },
+                    ticks: { display: false },
                     gridLines: { display: false },
                     scaleLabel: {
                         display: true,
-                        labelString: "Previous <%= local_assigns[:records_number] %> Observations",
+                        labelString: "Previous <%#= local_assigns[:vector].to_a.count %> Observations",
                         fontColor: '<%= DARK_GREY %>'
                     }
                 }],
