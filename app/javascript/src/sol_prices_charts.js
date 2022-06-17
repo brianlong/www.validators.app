@@ -94,8 +94,6 @@ function drawChart() {
   const dataset = ctx.canvas.dataset
   const dataset2 = ctx2.canvas.dataset
 
-  console.log(JSON.parse(dataset.data))
-  console.log(JSON.parse(dataset2.data))
   const myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -110,18 +108,34 @@ function drawChart() {
       }]
     },
     options: {
+      scales: {
+        x: {
+          ticks: {
+            minRotation: 0,
+            maxRotation: 0,
+            autoSkip: true,
+            autoSkipPadding: 50
+          }
+        }
+      },
       plugins: {
         legend: {
           display: false,
           onClick: null
-        }
-      },
-      scales: {
-        x: {
-          
+        },
+        tooltip: {
+          intersect: false,
+          mode: 'index',
+          displayColors: false,
+          padding: 8,
+          callbacks: {
+            label(tooltipItem) {
+              return `SOL Price: ` + tooltipItem.formattedValue;
+            },
+          }
         }
       }
-    }
+    },
   });
 
   const myChart2 = new Chart(ctx2, {
@@ -150,5 +164,5 @@ function drawChart() {
       }
     }
   });
-};
+}
 
