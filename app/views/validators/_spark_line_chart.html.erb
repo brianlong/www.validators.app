@@ -4,10 +4,6 @@
 
     var dataset = ctx.canvas.dataset;
     var data = JSON.parse(dataset.data);
-    //console.log(dataset.data);
-    //console.log(data);
-    console.log(dataset.labels);
-    console.log(JSON.parse(dataset.labels));
 
     var chart = new Chart(ctx, {
         type: 'line',
@@ -23,18 +19,29 @@
                     borderWidth: 1,
                     radius: 0,
                     data: data,
+                    tension: 0
                 }
             ]
         },
 
         options: {
-            animation: { duration: 0 }, // general animation time
-            elements: {
-                line: { tension: 0 } // disables bezier curves
+            hover: {
+                intersect: false,
             },
-            hover: { mode: null },
             tooltips: {
                 enabled: true,
+                intersect: false,
+                displayColors: false,
+                xPadding: 8,
+                yPadding: 8,
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return "Dist: " + tooltipItem.yLabel + ",  " + tooltipItem.xLabel + " UTC";
+                    },
+                    title: function(tooltipItem) {
+                        return null;
+                    },
+                }
             },
             responsiveAnimationDuration: 0, // animation duration after a resize
             legend: {
