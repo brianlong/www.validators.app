@@ -9,7 +9,7 @@ Vue.use(PaginationPlugin);
 Vue.use(ActionCableVue, {
   debug: true,
   debugLevel: "error",
-  connectionUrl: "/cable", // or function which returns a string with your JWT appended to your server URL as a query parameter
+  connectionUrl: "/cable",
   connectImmediately: true,
 });
 
