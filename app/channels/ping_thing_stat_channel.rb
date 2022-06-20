@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PingThingStatChannel < ApplicationCable::Channel
   def subscribed
     stream_from "ping_thing_stat_channel"

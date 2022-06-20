@@ -1,8 +1,19 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class PingThingStatChannelTest < ActionCable::Channel::TestCase
-  # test "subscribes" do
-  #   subscribe
-  #   assert subscription.confirmed?
-  # end
+  setup do
+    @text = "sample message"
+    @channel = "ping_thing_stat_channel"
+  end
+
+  test "broadcast to ping_thing_stat_channel returns new messages" do
+    assert_broadcasts @channel, 0
+
+    ActionCable.server.broadcast @channel, { text: @text }
+
+    assert_broadcasts @channel, 1
+    assert_broadcast_on(@channel, text: @text)
+  end
 end
