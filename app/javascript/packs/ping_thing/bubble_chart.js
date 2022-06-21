@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     update_chart: function(){
+        console.log("update chart")
         if(this.chart){
             this.chart.destroy()
         }

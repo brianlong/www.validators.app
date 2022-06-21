@@ -25,11 +25,11 @@ export default {
   channels: {
     PingThingStatChannel: {
       connected() {
-          console.log("connected to PingThingStats")
+        //   console.log("connected to PingThingStats")
       },
       rejected() {},
       received(data) {
-        console.log(data)
+        // console.log(data)
         var new_stat = JSON.parse(data)
         if(new_stat["interval"] == this.interval){
             this.ping_thing_stats.push(new_stat)
