@@ -28,12 +28,11 @@ export default {
     },
   },
   mounted: function(){
-    this.update_chart()
-
     this.$cable.subscribe({
         channel: "PingThingChannel",
         room: "public",
       });
+    this.update_chart()
   },
   watch: {
       'vector': {

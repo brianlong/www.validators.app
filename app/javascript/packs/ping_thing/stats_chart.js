@@ -44,10 +44,10 @@ export default {
     this.load_chart_data()
   },
   mounted: function(){
-    // this.$cable.subscribe({
-    //     channel: "PingThingStatChannel",
-    //     room: "public",
-    //   });
+    this.$cable.subscribe({
+        channel: "PingThingStatChannel",
+        room: "public",
+      });
   },
   methods: {
     set_interval: function(interval){
