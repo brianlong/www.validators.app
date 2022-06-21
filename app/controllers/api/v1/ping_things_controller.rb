@@ -25,6 +25,7 @@ module Api
           total_count = PingThing.where(network: index_params[:network]).count
           p90 = PingThing.where(network: index_params[:network], reported_at: (DateTime.now - 5.minutes)..DateTime.now)
                          .pluck(:response_time).sort
+                         
           count_last_5_minutes = p90.count
           avg_last_5_minutes = p90.average&.round(2)
           p90 = p90.first((p90.count * 0.9).to_i).last

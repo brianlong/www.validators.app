@@ -169,18 +169,21 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 123, json.first["response_time"]
   end
 
-  test "GET api_v1_ping_things with with_total_count param, returns pings and records count" do
-    4.times do
-      create(:ping_thing, :testnet)
+  test "GET api_v1_ping_things with with_stats param, returns pings and 5 min stats" do
+    4.times do |n|
+      create(:ping_thing, :testnet, response_time: n)
     end
 
-    get api_v1_ping_things_path(network: "testnet", with_total_count: "true"), headers: @headers
+    get api_v1_ping_things_path(network: "testnet", with_stats: "true"), headers: @headers
 
     json = response_to_json(@response.body)
     assert_equal 4, json["ping_things"].size
     assert_equal 4, json["total_count"]
+    assert_equal 4, json["count_last_5_minutes"]
+    assert_equal 1.5, json["avg_last_5_minutes"]
+    assert_equal 2, json["p90"]
 
-    get api_v1_ping_things_path(network: "testnet", with_total_count: "true", limit: 2), headers: @headers
+    get api_v1_ping_things_path(network: "testnet", with_stats: "true", limit: 2), headers: @headers
 
     json = response_to_json(@response.body)
     assert_equal 2, json["ping_things"].size
@@ -192,15 +195,15 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
       create(:ping_thing, :testnet)
     end
 
-    get api_v1_ping_things_path(network: "testnet", with_total_count: "asd"), headers: @headers
+    get api_v1_ping_things_path(network: "testnet", with_stats: "asd"), headers: @headers
 
     assert_equal 4, response_to_json(@response.body).size
 
-    get api_v1_ping_things_path(network: "testnet", with_total_count: "false"), headers: @headers
+    get api_v1_ping_things_path(network: "testnet", with_stats: "false"), headers: @headers
 
     assert_equal 4, response_to_json(@response.body).size
 
-    get api_v1_ping_things_path(network: "testnet", with_total_count: 1), headers: @headers
+    get api_v1_ping_things_path(network: "testnet", with_stats: 1), headers: @headers
 
     assert_equal 4, response_to_json(@response.body).size
   end
