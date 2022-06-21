@@ -46,20 +46,9 @@ class ValidatorsController < ApplicationController
     time_from = Time.now - 24.hours
     time_to = Time.now
 
-    # Sometimes @validator is nil
-    @ping_times = []
-    # @ping_times = if @validator.nil?
-    #                 []
-    #               else
-    #                   PingTime.where(
-    #                   network: params[:network],
-    #                   to_account: @validator.account
-    #                 ).order('created_at desc').limit(30)
-    #               end
-
     @data = {}
 
-    @history_limit = 240
+    @history_limit = 200
     @block_histories = @validator.validator_block_histories
                                  .where("created_at BETWEEN ? AND ?", time_from, time_to)
                                  .order(id: :desc)
@@ -81,11 +70,23 @@ class ValidatorsController < ApplicationController
     ).order(created_at: :asc)
     .last(@history_limit)
 
-    # Grab the distances to show on the chart
-    @root_blocks = @val_histories.map(&:root_distance).compact
+    # Grab the root distances to show on the chart
+    @root_blocks = @val_histories.map do |val_history|
+      next unless val_history.root_distance
+      {
+        x: val_history.created_at.strftime("%H:%M"),
+        y: val_history.root_distance
+      }
+    end
 
-    # Grab the distances to show on the chart
-    @vote_blocks = @val_histories.map(&:vote_distance).compact
+    # Grab the vote distances to show on the chart
+    @vote_blocks = @val_histories.map do |val_history|
+      next unless val_history.vote_distance
+      {
+        x: val_history.created_at.strftime("%H:%M"),
+        y: val_history.vote_distance
+      }
+    end
 
     @commission_histories = CommissionHistoryQuery.new(
       network: params[:network]
@@ -106,11 +107,13 @@ class ValidatorsController < ApplicationController
       next unless skipped_slot_all_average
 
       @data[i] = {
-        skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
-        skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-        cluster_skipped_slot_percent_moving_average: skipped_slot_all_average * 100
+        skipped_slot_percent: (vbh.skipped_slot_percent.to_f * 100.0).round(1),
+        skipped_slot_percent_moving_average: (vbh.skipped_slot_percent_moving_average.to_f * 100.0).round(1),
+        cluster_skipped_slot_percent_moving_average: (skipped_slot_all_average * 100).round(1),
+        label: vbh.created_at.strftime("%H:%M")
       }
     end
+
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
 
