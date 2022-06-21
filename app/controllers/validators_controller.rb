@@ -48,7 +48,7 @@ class ValidatorsController < ApplicationController
 
     @data = {}
 
-    @history_limit = 240
+    @history_limit = 200
     @block_histories = @validator.validator_block_histories
                                  .where("created_at BETWEEN ? AND ?", time_from, time_to)
                                  .order(id: :desc)
