@@ -27,9 +27,9 @@
           <div class="col-md-4 col-lg px-md-0 text-md-center">
             <span class="stat-title-4">
               <i class="fas fa-clock text-success mr-1"></i>
-              Avg time:&nbsp;
+              Median:&nbsp;
             </span>
-            <strong class="text-success">{{ avg_last_5_minutes ? avg_last_5_minutes.toLocaleString() + ' ms' : 'N / A' }}</strong>
+            <strong class="text-success">{{ median_last_5_minutes ? median_last_5_minutes.toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@
         api_url: api_url,
         p90: 0,
         count_last_5_minutes: 0,
-        avg_last_5_minutes: 0
+        median_last_5_minutes: 0
       }
     },
     created () {
@@ -100,7 +100,7 @@
              ctx.total_count = response.data.total_count;
              ctx.p90 = response.data.p90;
              ctx.count_last_5_minutes = response.data.count_last_5_minutes;
-             ctx.avg_last_5_minutes = response.data.avg_last_5_minutes
+             ctx.median_last_5_minutes = response.data.median_last_5_minutes
            })
     },
     watch: {

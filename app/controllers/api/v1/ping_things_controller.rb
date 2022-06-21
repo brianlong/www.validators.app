@@ -27,14 +27,14 @@ module Api
                          .pluck(:response_time).sort
                          
           count_last_5_minutes = p90.count
-          avg_last_5_minutes = p90.average&.round(0)
+          median_last_5_minutes = p90.median&.round(0)
           p90 = p90.first((p90.count * 0.9).to_i).last
           render json: {
             ping_things: json_result,
             total_count: total_count,
             p90: p90,
             count_last_5_minutes: count_last_5_minutes,
-            avg_last_5_minutes: avg_last_5_minutes
+            median_last_5_minutes: median_last_5_minutes
           }, status: :ok
         else
           render json: json_result
