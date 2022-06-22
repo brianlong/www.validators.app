@@ -4,6 +4,10 @@ export default {
       type: Array,
       required: true
     },
+    network: {
+        type: String,
+        required: true
+    }
   },
   data() {
     return {
@@ -19,10 +23,11 @@ export default {
       },
       rejected() {},
       received(data) {
-        console.log(data)
-        this.vector.push(data)
-        this.vector.shift()
-        this.update_chart()
+        if(data["network"] == this.network){
+            this.vector.push(data)
+            this.vector.shift()
+            this.update_chart()
+        }
       },
       disconnected() {},
     },

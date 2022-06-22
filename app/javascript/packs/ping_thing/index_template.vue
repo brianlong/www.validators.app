@@ -20,7 +20,7 @@
               first-text="« First"
               last-text="Last »" />
         </div>
-        <bubble-chart :vector="ping_things.slice().reverse()" />
+        <bubble-chart :vector="ping_things.slice().reverse()" :network="network"/>
       </div>
     </div>
 

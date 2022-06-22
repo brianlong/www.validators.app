@@ -31,7 +31,7 @@ export default {
       received(data) {
         // console.log(data)
         var new_stat = JSON.parse(data)
-        if(new_stat["interval"] == this.interval){
+        if(new_stat["interval"] == this.interval && new_stat["network"] == this.network){
             this.ping_thing_stats.push(new_stat)
             this.ping_thing_stats.shift()
             this.update_chart()
