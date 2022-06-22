@@ -22,7 +22,7 @@
               <i class="fas fa-trophy text-success mr-2" aria-hidden="true"></i>
               P90:&nbsp;
             </span>
-            <strong class="text-success">{{ p90 ? p90.toLocaleString() + ' ms' : 'N / A' }}</strong>
+            <strong class="text-success">{{ p90_last_5_minutes ? p90_last_5_minutes.toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
           <div class="col-md-4 col-lg px-md-0 text-md-center">
             <span class="stat-title-4">
@@ -87,7 +87,7 @@
         page: 1,
         total_count: 0,
         api_url: api_url,
-        p90: 0,
+        p90_last_5_minutes: 0,
         count_last_5_minutes: 0,
         median_last_5_minutes: 0
       }
@@ -98,7 +98,7 @@
            .then(function(response){
              ctx.ping_things = response.data.ping_things;
              ctx.total_count = response.data.total_count;
-             ctx.p90 = response.data.p90;
+             ctx.p90_last_5_minutes = response.data.p90_last_5_minutes;
              ctx.count_last_5_minutes = response.data.count_last_5_minutes;
              ctx.median_last_5_minutes = response.data.median_last_5_minutes
            })

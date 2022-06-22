@@ -23,16 +23,16 @@ module Api
 
         if with_stats
           total_count = PingThing.where(network: index_params[:network]).count
-          p90 = PingThing.where(network: index_params[:network], reported_at: (DateTime.now - 5.minutes)..DateTime.now)
+          response_times = PingThing.where(network: index_params[:network], reported_at: (DateTime.now - 5.minutes)..DateTime.now)
                          .pluck(:response_time).sort
                          
-          count_last_5_minutes = p90.count
-          median_last_5_minutes = p90.median&.round(0)
-          p90 = p90.first((p90.count * 0.9).to_i).last
+          count_last_5_minutes = response_times.count
+          median_last_5_minutes = response_times.median&.round(0)
+          p90_last_5_minutes = response_times.first((p90.count * 0.9).to_i).last
           render json: {
             ping_things: json_result,
             total_count: total_count,
-            p90: p90,
+            p90_last_5_minutes: p90_last_5_minutes,
             count_last_5_minutes: count_last_5_minutes,
             median_last_5_minutes: median_last_5_minutes
           }, status: :ok
