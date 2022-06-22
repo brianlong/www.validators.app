@@ -108,7 +108,6 @@ export default {
                             }
                         }
                     },
-<<<<<<< HEAD
                     interaction: {
                         intersect: false,
                         mode: 'index',
@@ -134,32 +133,6 @@ export default {
                 }
             });
         }
-=======
-                    legend: {
-                        labels: {
-                            boxWidth: 8,
-                            boxHeight: 8,
-                            usePointStyle: true,
-                            padding: 10,
-                            color: this.dark_grey,
-                            font: {
-                                size: 14
-                            }
-                        },
-                    },
-                }
-            },
-            plugins: [{
-                beforeInit(chart) {
-                    const originalFit = chart.legend.fit;
-                    chart.legend.fit = function fit() {
-                        originalFit.bind(chart.legend)();
-                        this.height += 15;
-                    }
-                }
-            }]
-        });
->>>>>>> master
     }
   },
   template: `

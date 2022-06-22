@@ -28,7 +28,7 @@ module Api
                          
           count_last_5_minutes = response_times.count
           median_last_5_minutes = response_times.median&.round(0)
-          p90_last_5_minutes = response_times.first((p90.count * 0.9).to_i).last
+          p90_last_5_minutes = response_times.first((response_times.count * 0.9).to_i).last
           render json: {
             ping_things: json_result,
             total_count: total_count,
