@@ -85,6 +85,12 @@ strong, .font-weight-bold {
     @media(max-width: $screen-md-max) { font-size: $font-size-h4*.85; }
     @media(max-width: $screen-sm-max) { font-size: $font-size-h4*.8; }
   }
+  &-title-4 {
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+    font-size: $font-size-h6;
+    @media(max-width: $screen-sm-max) { font-size: $font-size-h6*.9; }
+  }
   small .fas {
     font-size: 11px;
   }

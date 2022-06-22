@@ -16,17 +16,17 @@ class SolPricesController < ApplicationController
     @coin_gecko_data = coin_gecko_prices.map do |coin_gecko_price|
       {
         x: coin_gecko_price.datetime_from_exchange.strftime("%b %d"),
-        y: coin_gecko_price.average_price
+        y: coin_gecko_price.average_price.round(2)
       }
     end
 
     @ftx_data = ftx_prices.map do |ftx_price|
       {
         x: ftx_price.datetime_from_exchange.to_datetime.strftime('%Q').to_i,
-        o: ftx_price.open,
-        h: ftx_price.high,
-        l: ftx_price.low,
-        c: ftx_price.close
+        o: ftx_price.open.round(2),
+        h: ftx_price.high.round(2),
+        l: ftx_price.low.round(2),
+        c: ftx_price.close.round(2)
       }
     end  # This is number of records that is displayed fine on the chart.
   end

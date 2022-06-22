@@ -2,10 +2,10 @@
   <thead>
   <tr>
     <th class="column-avatar d-none align-middle <%= current_user ? 'd-lg-table-cell' : 'd-xl-table-cell' %>">
-      <% if current_user  && show_watchlist_btn %>
+      <% if show_watchlist_btn %>
         <%= link_to url_for(
           order: params[:order],
-          page: params[:page],
+          page: 1,
           network: params[:network],
           refresh: params[:refresh],
           watchlist: params[:watchlist] ? nil : true) do %>
@@ -154,7 +154,7 @@
           <span class="d-inline-block d-lg-none">IP:&nbsp;</span>
           <small><%= validator.score.ip_address %></small>
           <br />
-          <% data_center_host = validator.data_center_host.host %>
+          <% data_center_host = validator&.data_center_host&.host %>
           <% if data_center_host %>
             <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
             <small><%= data_center_host %></small>

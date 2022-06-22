@@ -63,98 +63,121 @@ export default {
             })
     },
     update_chart: function(){
-        var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
-        var variation_data = this.ping_thing_stats.map( (vector_element, index) => ([vector_element['max'], vector_element['min']]) )
-        var labels = this.ping_thing_stats.map( (vector_element) => (
-            moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
-        ))
+        if( !this.ping_thing_stats.length == 0 ){
+            var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
+            var variation_data = this.ping_thing_stats.map( (vector_element, index) => ([vector_element['max'], vector_element['min']]) )
+            var labels = this.ping_thing_stats.map( (vector_element) => (
+                moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
+            ))
 
-        if(this.chart){
-            this.chart.destroy()
-        }
-        var ctx = document.getElementById("ping-thing-scatter-chart").getContext('2d');
-        Chart.defaults.scale.display = false
-        this.chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Variation',
-                        data: variation_data,
-                        backgroundColor: "rgba(221, 154, 229, 0.4)",
-                        hoverBackgroundColor: "rgba(221, 154, 229, 0.7)",
-                        borderColor: "transparent",
-                        order: 2,
-                        barPercentage: 1.0,
-                        categoryPercentage: 0.15
-                    },
-                    {
-                        type: 'line',
-                        label: 'Median',
-                        data: line_data,
-                        backgroundColor: "rgb(0, 206, 153)",
-                        borderColor: "transparent",
-                        borderWidth: 1,
-                        order: 1,
-                        pointRadius: 3
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    x: {
-                        display: true,
-                        gridLines: { display: false },
-                        ticks: {
-                            minRotation: 0,
-                            maxRotation: 0,
-                            autoSkip: true,
-                            autoSkipPadding: 45
+            if(this.chart){
+                this.chart.destroy()
+            }
+            var ctx = document.getElementById("ping-thing-scatter-chart").getContext('2d');
+            Chart.defaults.scale.display = false
+            this.chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: ' Variation',
+                            data: variation_data,
+                            backgroundColor: "rgba(221, 154, 229, 0.4)",
+                            hoverBackgroundColor: "rgba(221, 154, 229, 0.7)",
+                            borderColor: "transparent",
+                            order: 2,
+                            barPercentage: 1.0,
+                            categoryPercentage: 0.15
+                        },
+                        {
+                            type: 'line',
+                            label: ' Median  ',
+                            data: line_data,
+                            backgroundColor: "rgb(0, 206, 153)",
+                            borderColor: "transparent",
+                            borderWidth: 1,
+                            order: 1,
+                            pointRadius: 3
                         }
-                    },
-                    y: {
-                        display: true,
-                        gridLines: { display: false },
-                        ticks: {
-                            min: 0,
-                            padding: 10,
-                            callback: function(value, index, values) {
-                                return value.toLocaleString('en-US')
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            display: true,
+                            gridLines: { display: false },
+                            ticks: {
+                                minRotation: 0,
+                                maxRotation: 0,
+                                autoSkip: true,
+                                autoSkipPadding: 45
                             }
                         },
-                        title: {
+                        y: {
                             display: true,
-                            text: 'Response Time (ms)',
-                            color: this.dark_grey,
-                            padding: 5
-                        }
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                plugins: {
-                    tooltip: {
-                        displayColors: false,
-                        padding: 8,
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                if (tooltipItem.datasetIndex == 0) {
-                                    return "Min: " + tooltipItem.raw[1].toLocaleString('en-US') + " ms,  Max: " + tooltipItem.raw[0].toLocaleString('en-US') + " ms";
-                                } else {
-                                    return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
+                            gridLines: { display: false },
+                            ticks: {
+                                min: 0,
+                                padding: 10,
+                                callback: function(value, index, values) {
+                                    return value.toLocaleString('en-US')
                                 }
                             },
-                            title: function(tooltipItem) {
-                                return null;
-                            },
+                            title: {
+                                display: true,
+                                text: 'Response Time (ms)',
+                                color: this.dark_grey,
+                                padding: 5
+                            }
                         }
                     },
-                }
-            }
-        });
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    plugins: {
+                        tooltip: {
+                            displayColors: false,
+                            padding: 8,
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    if (tooltipItem.datasetIndex == 0) {
+                                        return "Min: " + tooltipItem.raw[1].toLocaleString('en-US') + " ms,  Max: " + tooltipItem.raw[0].toLocaleString('en-US') + " ms";
+                                    } else {
+                                        return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
+                                    }
+                                },
+                                title: function(tooltipItem) {
+                                    return null;
+                                },
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                boxWidth: 8,
+                                boxHeight: 8,
+                                usePointStyle: true,
+                                padding: 10,
+                                color: this.dark_grey,
+                                font: {
+                                    size: 14
+                                }
+                            },
+                        },
+                    },
+                },
+                plugins: [{
+                    beforeInit(chart) {
+                        const originalFit = chart.legend.fit;
+                        chart.legend.fit = function fit() {
+                            originalFit.bind(chart.legend)();
+                            this.height += 15;
+                        }
+                    }
+                }]
+            });
+        }
     }
   },
   template: `

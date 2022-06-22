@@ -17,7 +17,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="(pt, index) in ping_things" :key="pt.id">
+        <tr v-for="(pt) in ping_things" :key="pt.id">
           <td class="align-middle">
             <span v-html="success_icon(pt.success)"></span>
             <strong class="text-success h6">{{ pt.response_time.toLocaleString() }}</strong>&nbsp;ms
