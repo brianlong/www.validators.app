@@ -23,8 +23,10 @@ module Api
 
         if with_stats
           total_count = PingThing.where(network: index_params[:network]).count
-          response_times = PingThing.where(network: index_params[:network], reported_at: (DateTime.now - 5.minutes)..DateTime.now)
-                         .pluck(:response_time).sort
+          response_times = PingThing.where(
+            network: index_params[:network],
+            reported_at: (DateTime.now - 5.minutes)..DateTime.now
+          ).pluck(:response_time).sort
                          
           count_last_5_minutes = response_times.count
           median_last_5_minutes = response_times.median&.round(0)
