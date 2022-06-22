@@ -57,7 +57,7 @@ export default {
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Variation',
+                            label: ' Variation',
                             data: variation_data,
                             backgroundColor: "rgba(221, 154, 229, 0.4)",
                             hoverBackgroundColor: "rgba(221, 154, 229, 0.7)",
@@ -68,7 +68,7 @@ export default {
                         },
                         {
                             type: 'line',
-                            label: 'Median',
+                            label: ' Median  ',
                             data: line_data,
                             backgroundColor: "rgb(0, 206, 153)",
                             borderColor: "transparent",
@@ -129,8 +129,29 @@ export default {
                                 },
                             }
                         },
+                        legend: {
+                            labels: {
+                                boxWidth: 8,
+                                boxHeight: 8,
+                                usePointStyle: true,
+                                padding: 10,
+                                color: this.dark_grey,
+                                font: {
+                                    size: 14
+                                }
+                            },
+                        },
+                    },
+                },
+                plugins: [{
+                    beforeInit(chart) {
+                        const originalFit = chart.legend.fit;
+                        chart.legend.fit = function fit() {
+                            originalFit.bind(chart.legend)();
+                            this.height += 15;
+                        }
                     }
-                }
+                }]
             });
         }
     }
