@@ -4,19 +4,32 @@
 
     <div class="card mb-4">
       <div class="card-content">
-        <h2 class="h3 card-heading">{{ network[0].toUpperCase() + network.substring(1) }} stats for last 5 minutes</h2>
-        <div class="row pl-lg-4 pl-xl-5">
-          <div class="col-md-4 pl-lg-4 pl-xl-5">
-            <span class="text-muted">Number of entries:&nbsp;</span>
+        <div class="row pl-xl-3 pr-xl-5">
+          <div class="col-lg-2 col-xl-3 px-md-0 mb-3 mb-lg-0 text-md-center">
+            <span class="stat-title-4">
+              Last 5 min:&nbsp;
+            </span>
+          </div>
+          <div class="col-md-4 col-lg px-md-0 mb-3 mb-md-0 text-md-center">
+            <span class="stat-title-4">
+              <i class="fas fa-calculator text-success mr-2"></i>
+              Entries:&nbsp;
+            </span>
             <strong class="text-success">{{ count_last_5_minutes }}</strong>
           </div>
-          <div class="col-md-4 pl-lg-4 pl-xl-5">
-            <span class="text-muted">Transactions P90:&nbsp;</span>
-            <strong class="text-success">{{ p90 }}</strong>
+          <div class="col-md-4 col-lg px-md-0 mb-3 mb-md-0 text-md-center">
+            <span class="stat-title-4">
+              <i class="fas fa-trophy text-success mr-2" aria-hidden="true"></i>
+              P90:&nbsp;
+            </span>
+            <strong class="text-success">{{ p90 ? p90.toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-          <div class="col-md-4 pl-lg-4 pl-xl-5">
-            <span class="text-muted">Transactions average:&nbsp;</span>
-            <strong class="text-success">{{ avg_last_5_minutes }}</strong>
+          <div class="col-md-4 col-lg px-md-0 text-md-center">
+            <span class="stat-title-4">
+              <i class="fas fa-clock text-success mr-1"></i>
+              Median:&nbsp;
+            </span>
+            <strong class="text-success">{{ median_last_5_minutes ? median_last_5_minutes.toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
         </div>
       </div>
@@ -76,7 +89,7 @@
         api_url: api_url,
         p90: 0,
         count_last_5_minutes: 0,
-        avg_last_5_minutes: 0
+        median_last_5_minutes: 0
       }
     },
     created () {
@@ -87,7 +100,7 @@
              ctx.total_count = response.data.total_count;
              ctx.p90 = response.data.p90;
              ctx.count_last_5_minutes = response.data.count_last_5_minutes;
-             ctx.avg_last_5_minutes = response.data.avg_last_5_minutes
+             ctx.median_last_5_minutes = response.data.median_last_5_minutes
            })
     },
     watch: {
