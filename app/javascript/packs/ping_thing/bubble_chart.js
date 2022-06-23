@@ -19,7 +19,7 @@ export default {
   channels: {
     PingThingChannel: {
       connected() {
-          console.log("connected to PingThings")
+        //   console.log("connected to PingThings")
       },
       rejected() {},
       received(data) {
@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     update_chart: function(){
-        console.log("update chart")
         if(this.chart){
             this.chart.destroy()
         }
