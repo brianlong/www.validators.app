@@ -181,7 +181,9 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4, json["total_count"]
     assert_equal 4, json["count_last_5_minutes"]
     assert_equal 2, json["median_last_5_minutes"]
+    assert_equal 0, json["minimum_last_5_minutes"]
     assert_equal 2, json["p90_last_5_minutes"]
+    assert_equal 6, json.keys.size
 
     get api_v1_ping_things_path(network: "testnet", with_stats: "true", limit: 2), headers: @headers
 
