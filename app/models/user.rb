@@ -39,8 +39,10 @@
 #  index_users_on_username              (username) UNIQUE
 #
 class User < ApplicationRecord
+
+  CONFIRMATION_TIME = 7.days
   USERNAME_REGEXP = /\A[a-zA-Z0-9.]+\z/.freeze
-  EMAIL_REGEXP = /\A(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})\z/i.freeze
+  EMAIL_REGEXP = /\A(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,15})\z/i.freeze
 
   before_save :create_email_hash
 
@@ -55,7 +57,7 @@ class User < ApplicationRecord
          :confirmable, :lockable, :timeoutable, :trackable,
          authentication_keys: [:username]
 
-  has_many :user_watchlist_elements, dependent: :destroy
+  has_many :user_watchlist_elements, dependent: :delete_all 
   has_many :watched_validators, through: :user_watchlist_elements, source: :validator
 
   # For attr_encrypted:

@@ -47,10 +47,10 @@ table, .table {
       }
     }
     &-top-value {
-      font-size: 11px;
+      font-size: 9px;
       line-height: 9px;
       color: #979797;
-      margin-top: -13px;
+      margin-top: -11px;
       text-align: right;
     }
     &-link.active {
@@ -77,7 +77,7 @@ table, .table {
 
     &-chart {
       width: 22%;
-      padding: 25px $padding-standard 10px $padding-standard;
+      padding: 22px $padding-standard 10px $padding-standard;
       @media(max-width: $screen-lg-max) {
         width: 25%;
       }

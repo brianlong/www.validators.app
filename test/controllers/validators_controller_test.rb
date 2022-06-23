@@ -4,6 +4,8 @@ require "test_helper"
 
 # ValidatorsControllerTest
 class ValidatorsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
     @validator = create(
       :validator, 
@@ -13,12 +15,13 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "should get index" do
+  test "index returns 200" do
     get validators_url(network: "testnet")
+
     assert_response :success
   end
 
-  test "should show validator" do
+  test "show returns 200" do
     validator = create(
       :validator,
       :with_score,
@@ -29,20 +32,43 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should redirect to new URL format if old format given" do
+  test "redirects to new URL format if old format given" do
     get "/validators/#{@validator.network}/#{@validator.account}"
     assert_redirected_to validator_path(account: @validator.account, network: @validator.network)
   end
 
-  test "should redirect_to home page if validator not found" do
+  test "redirects to home page if validator not found" do
     get validator_url(network: "testnet", account: "notexistingaccount")
 
     assert_redirected_to root_url
   end
 
-  test "root_url should lead to validators#index" do
+  test "root_url leads to validators#index" do
     get root_url(network: "testnet")
 
     assert_equal ValidatorsController, @controller.class
+  end
+
+  test "index returns 200 if there are no validators" do
+    Validator.delete_all
+
+    get root_url(network: "testnet")
+    assert_response :success
+  end
+
+  test "index returns 200 with watchlist param and signed in user" do
+    user = create(:user, :confirmed)
+    sign_in user
+
+    get root_url(network: "testnet", watchlist: true)
+
+    assert_response :success
+  end
+
+  test "index redirects to sign up page for watchlist param and no signed in user" do
+    get root_url(network: "testnet", watchlist: true)
+
+    assert_redirected_to new_user_registration_path
+    assert_match "You need to create an account first.", flash[:warning]
   end
 end

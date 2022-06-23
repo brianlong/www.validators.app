@@ -18,8 +18,8 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (user_id => users.id)
-#  fk_rails_...  (validator_id => validators.id)
+#  fk_rails_...  (user_id => users.id) ON DELETE => cascade
+#  fk_rails_...  (validator_id => validators.id) ON DELETE => cascade
 #
 class UserWatchlistElement < ApplicationRecord
   belongs_to :user

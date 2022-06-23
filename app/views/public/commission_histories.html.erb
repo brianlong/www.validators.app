@@ -20,7 +20,7 @@
     network=<%= params[:network] %>
   >
   </div>
-  <%= link_to 'Back to Validator page',
+  <%= link_to 'Back to Validator Details',
               validator_url(network: params[:network], account: @validator.account),
               class: 'btn btn-sm btn-secondary' %>
 <% else %>
@@ -29,7 +29,7 @@
     network=<%= params[:network] %>
   >
   </div>
-  <%= link_to 'Back to List of Validators',
+  <%= link_to 'Back to All Validators',
               validators_path(network: params[:network]),
               class: 'btn btn-sm btn-secondary' %>
 <% end %>

@@ -11,7 +11,7 @@ module Api
       def index
         limit = [(index_params[:limit] || 240).to_i, 9999].min
         page = index_params[:page] || 1
-        with_total_count = index_params[:with_total_count].to_s == "true" ? true : false
+        with_stats = index_params[:with_stats].to_s == "true" ? true : false
 
         ping_things = PingThing.where(network: index_params[:network])
                                .includes(:user)
@@ -19,14 +19,24 @@ module Api
                                .page(page)
                                .per(limit)
 
-        total_count = PingThing.where(network: index_params[:network]).count if with_total_count
-
         json_result = ping_things.map { |pt| create_json_result(pt) }
 
-        if with_total_count
+        if with_stats
+          total_count = PingThing.where(network: index_params[:network]).count
+          response_times = PingThing.where(
+            network: index_params[:network],
+            reported_at: (DateTime.now - 5.minutes)..DateTime.now
+          ).pluck(:response_time).sort
+                         
+          count_last_5_minutes = response_times.count
+          median_last_5_minutes = response_times.median&.round(0)
+          p90_last_5_minutes = response_times.first((response_times.count * 0.9).to_i).last
           render json: {
             ping_things: json_result,
-            total_count: total_count
+            total_count: total_count,
+            p90_last_5_minutes: p90_last_5_minutes,
+            count_last_5_minutes: count_last_5_minutes,
+            median_last_5_minutes: median_last_5_minutes
           }, status: :ok
         else
           render json: json_result
@@ -77,7 +87,7 @@ module Api
       private
 
       def index_params
-        params.permit(:network, :limit, :page, :with_total_count)
+        params.permit(:network, :limit, :page, :with_stats)
       end
 
       def ping_thing_params

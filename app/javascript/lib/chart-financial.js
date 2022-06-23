@@ -184,9 +184,10 @@
           },
           fontStyle: context => context.tick.major ? 'bold' : undefined,
           source: 'data',
+          minRotation: 0,
           maxRotation: 0,
           autoSkip: true,
-          autoSkipPadding: 75,
+          autoSkipPadding: 50,
           sampleSize: 100
         },
         afterBuildTicks: scale => {
@@ -217,11 +218,16 @@
         type: 'linear'
       }
     },
-
+    interaction: {
+      intersect: false,
+      mode: 'index',
+    },
     plugins: {
       tooltip: {
         intersect: false,
         mode: 'index',
+        displayColors: false,
+        padding: 8,
         callbacks: {
           label(ctx) {
             const point = ctx.parsed;
@@ -233,6 +239,9 @@
             const {o, h, l, c} = point;
 
             return `O: ${o}  H: ${h}  L: ${l}  C: ${c}`;
+          },
+          title(tooltipItem) {
+            return tooltipItem[0].label.substring(0, tooltipItem[0].label.indexOf(','))
           }
         }
       }
