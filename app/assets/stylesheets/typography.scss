@@ -148,7 +148,12 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
   @media(max-width: $screen-sm-max) { font-size: 32px }
 }
 .heading-secondary {
+  color: $orange;
+  @include font-family-alternative();
+  @include font-size-sm();
   text-transform: uppercase;
+  font-weight: $font-weight-bold-primary;
+  letter-spacing: 1px;
 }
 
 
