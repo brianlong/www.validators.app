@@ -30,13 +30,15 @@ module Api
                          
           count_last_5_minutes = response_times.count
           median_last_5_minutes = response_times.median&.round(0)
+          minimum_last_5_minutes = response_times.min
           p90_last_5_minutes = response_times.first((response_times.count * 0.9).to_i).last
           render json: {
             ping_things: json_result,
             total_count: total_count,
             p90_last_5_minutes: p90_last_5_minutes,
             count_last_5_minutes: count_last_5_minutes,
-            median_last_5_minutes: median_last_5_minutes
+            median_last_5_minutes: median_last_5_minutes,
+            minimum_last_5_minutes: minimum_last_5_minutes
           }, status: :ok
         else
           render json: json_result

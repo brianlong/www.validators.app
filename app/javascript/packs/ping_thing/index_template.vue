@@ -4,32 +4,38 @@
 
     <div class="card mb-4">
       <div class="card-content">
-        <div class="row pl-xl-3 pr-xl-5">
-          <div class="col-lg-2 col-xl-3 px-md-0 mb-3 mb-lg-0 text-md-center">
-            <span class="stat-title-4">
-              Last 5 min:&nbsp;
-            </span>
+        <div class="row px-xl-4">
+          <div class="col-lg-2 px-md-0 mb-3 mb-lg-0 text-md-center">
+            <span class="stat-title-3 d-lg-none">5 min Stats&nbsp;</span>
+            <span class="stat-title-4 text-success d-none d-lg-inline-block">5 min stats&nbsp;</span>
           </div>
-          <div class="col-md-4 col-lg px-md-0 mb-3 mb-md-0 text-md-center">
+          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4">
               <i class="fas fa-calculator text-success mr-2"></i>
               Entries:&nbsp;
             </span>
             <strong class="text-success">{{ count_last_5_minutes }}</strong>
           </div>
-          <div class="col-md-4 col-lg px-md-0 mb-3 mb-md-0 text-md-center">
+          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4">
-              <i class="fas fa-trophy text-success mr-2" aria-hidden="true"></i>
-              P90:&nbsp;
+              <i class="fas fa-long-arrow-alt-down text-success mr-1"></i>
+              Min:&nbsp;
             </span>
-            <strong class="text-success">{{ p90_last_5_minutes ? p90_last_5_minutes.toLocaleString() + ' ms' : 'N / A' }}</strong>
+            <strong class="text-success">{{ minimum_last_5_minutes? minimum_last_5_minutes.toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-          <div class="col-md-4 col-lg px-md-0 text-md-center">
+          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4">
-              <i class="fas fa-clock text-success mr-1"></i>
+              <i class="fas fa-divide text-success mr-1"></i>
               Median:&nbsp;
             </span>
             <strong class="text-success">{{ median_last_5_minutes ? median_last_5_minutes.toLocaleString() + ' ms' : 'N / A' }}</strong>
+          </div>
+          <div class="col-md-6 col-lg px-md-0 text-md-center">
+            <span class="stat-title-4">
+              <i class="fas fa-long-arrow-alt-up text-success mr-1" aria-hidden="true"></i>
+              P90:&nbsp;
+            </span>
+            <strong class="text-success">{{ p90_last_5_minutes ? p90_last_5_minutes.toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
         </div>
       </div>
@@ -89,7 +95,8 @@
         api_url: api_url,
         p90_last_5_minutes: 0,
         count_last_5_minutes: 0,
-        median_last_5_minutes: 0
+        median_last_5_minutes: 0,
+        minimum_last_5_minutes: 0
       }
     },
     created () {
@@ -100,7 +107,8 @@
              ctx.total_count = response.data.total_count;
              ctx.p90_last_5_minutes = response.data.p90_last_5_minutes;
              ctx.count_last_5_minutes = response.data.count_last_5_minutes;
-             ctx.median_last_5_minutes = response.data.median_last_5_minutes
+             ctx.median_last_5_minutes = response.data.median_last_5_minutes;
+             ctx.minimum_last_5_minutes = response.data.minimum_last_5_minutes
            })
     },
     watch: {
