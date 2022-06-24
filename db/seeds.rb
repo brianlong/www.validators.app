@@ -56,4 +56,6 @@ if Rails.env.development?
 
   create_users
   create_ping_things(240)
+
+  load(Rails.root.join('script', 'add_current_epoch.rb') )
 end
