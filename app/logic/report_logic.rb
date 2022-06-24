@@ -107,26 +107,29 @@ module ReportLogic
       batch_created_at = Batch.find_by(uuid: batch_uuid, network: network)&.created_at
 
       previous_batches_ids = Batch.where(
-        "network = :network AND scored_at IS NOT NULL", 
-        { network: network }
+        "network = :network AND created_at BETWEEN :start_date AND :end_date AND scored_at IS NOT NULL", 
+        { network: network, start_date: batch_created_at - 30.days, end_date:  batch_created_at }
       ).pluck(:uuid)
 
+      vote_account_histories = VoteAccountHistory.where(network: network, batch_uuid: previous_batches_ids).pluck(:batch_uuid)
+      vote_accounts = VoteAccount.joins(:vote_account_histories).where("vote_account_histories.ids IN (:vote_account_histories_ids)", vote_account_histories_ids: vote_account_histories.ids)
+
+
       where_clause = %Q{
-        vote_account_histories.network = :network
-        AND vote_account_histories.batch_uuid IN (:previous_batches_ids)
+        vote_accounts.ids IN (:vote_account_ids)
+        AND validators.network = :network
         AND validators.is_rpc = :is_rpc
         AND validators.is_active = :is_active
       }.gsub(/\s+/, " ").strip
       
       where_cond = { 
         network: network, 
-        previous_batches_ids: previous_batches_ids, 
+        vote_account_ids: vote_accounts.ids, 
         is_rpc: false, 
         is_active: true 
       }
 
-      validator_ids = Validator.left_outer_joins(:vote_accounts, :vote_account_histories)
-                               .where(where_clause, where_cond)
+      validator_ids = Validator.left_outer_joins(:vote_accounts).where(where_clause, where_cond)
                                .ids
                                .uniq
       
