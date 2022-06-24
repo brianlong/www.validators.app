@@ -107,8 +107,8 @@ module ReportLogic
       batch_created_at = Batch.find_by(uuid: batch_uuid, network: network)&.created_at
 
       previous_batches_ids = Batch.where(
-        "created_at BETWEEN :start_data AND :end_date AND scored_at IS NOT NULL", 
-        { start_data: batch_created_at - 7.days, end_date: batch_created_at }
+        "network = :network AND scored_at IS NOT NULL", 
+        { network: network }
       ).pluck(:uuid)
 
       where_clause = %Q{
