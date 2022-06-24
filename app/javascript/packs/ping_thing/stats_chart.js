@@ -103,6 +103,7 @@ export default {
                     ]
                 },
                 options: {
+                    animation: false,
                     scales: {
                         x: {
                             display: true,
