@@ -63,7 +63,7 @@ set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH'
 
 # Whenver/crontab config
 # Must contain all roles used in config/schedule.rb
-set :whenever_roles, ["background"] # ["web", "background"]
+set :whenever_roles, ["cron"]
 
 namespace :deploy do
   after :restart, 'sidekiq:restart'
