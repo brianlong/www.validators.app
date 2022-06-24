@@ -5,13 +5,13 @@
 server(
   '104.131.169.171',
   user: 'deploy',
-  roles: %w[web app db]
+  roles: %w[web app db cron]
 )
 
 server(
   '167.99.125.221',
   user: 'deploy',
-  roles: %w[web app background]
+  roles: %w[web app background cron]
 )
 
 # server-based syntax
