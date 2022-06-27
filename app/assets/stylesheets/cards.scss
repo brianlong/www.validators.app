@@ -24,12 +24,13 @@
   }
 
   &.card-scroll {
-    @media(min-width: $screen-md-min) {
+    height: 515.6px;
+    overflow-y: scroll;
+    @media(max-width: $screen-md-max) {
       height: 510.3px;
-      overflow-y: scroll;
     }
-    @media(min-width: ) {
-      height: 515.6px;
+    @media(max-width: $screen-sm-max) {
+      height: 400px;
     }
   }
 }
