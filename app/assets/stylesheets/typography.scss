@@ -31,6 +31,10 @@ small, .small {
   @include font-size-sm();
 }
 
+.font-size-xs {
+  @include font-size-xs();
+}
+
 mark, .mark {
   background-color: transparent;
   color: $link-color;

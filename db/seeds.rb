@@ -10,10 +10,10 @@
 
 def create_users
   @admin = User.find_or_initialize_by(
-    username: 'brianlong',
+    username: 'adminuser',
     is_admin: true
   ) do |admin|
-    admin.email = 'brian.long@fmaprivacy.com'
+    admin.email = 'adminuser@example.com'
     admin.password = 'Password1'
     admin.password_confirmation = 'Password1'
   end
@@ -25,35 +25,26 @@ def create_users
     username: 'testuser',
     is_admin: false
   ) do |user|
-    user.email = 'test.user@fmaprivacy.com'
+    user.email = 'test.user@example.com'
     user.password = 'Password1'
     user.password_confirmation = 'Password1'
   end
 
   @user.save
-end
-
-def create_ping_things(number)
-  apps = ['application1', 'application2', 'application3']
-
-  number.times do 
-    PingThing.create(
-      amount: 1, 
-      application: apps.sample,
-      network: @networks.sample, 
-      response_time: rand(200..400),
-      signature: SecureRandom.hex(32), 
-      success: true,
-      transaction_type: 'transfer', 
-      user_id: @admin.id
-    ) 
-  end
+  @user.confirm
 end
 
 if Rails.env.development?
-  PingThing.destroy_all
   # User.destroy_all # uncomment to destroy users, regenerate api_tokens etc.
 
   create_users
-  create_ping_things(240)
+  puts "user and admin created"
+
+  load(Rails.root.join('script', 'add_current_epoch.rb') )
+  puts "added current epochs"
+
+  puts %{
+    For further population of the database check scripts located in /daemons and /script.
+    Note that more specific instructions are held in /dev/instruction.md file.
+  }
 end

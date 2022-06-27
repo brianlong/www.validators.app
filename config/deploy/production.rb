@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 # 'www.validators.app',
-# '104.131.169.171',
+# Role explanation:
+# web - enables front end on the server, compiles assets etc.
+# db - runs migrations
+# cron - updates crontab. Specific jobs can be assigned to both servers (see schedule.rb file).
+#        This role is designed to update the crontab only.
+# background - used for actions that are meant to run on background server,
+#              such as daemons and workers. Use for 167.99.125.221 server only.
+#
 server(
   '104.131.169.171',
   user: 'deploy',
