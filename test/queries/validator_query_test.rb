@@ -69,7 +69,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [4, 3, 2, 1, 0], result.pluck("validator_score_v1s.total_score")
   end
 
-  test "#call returns results in correct stake order" do
+  test "#call  with api returns results in correct stake order" do
     5.times do |n|
       v = create(
         :validator, 
@@ -80,7 +80,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       v.score.update_column(:active_stake,  n * 1000)
     end
 
-    result = ValidatorQuery.new.call(network: @mainnet_network, sort_order: "score")
+    result = ValidatorQuery.new(api: true).call(network: @mainnet_network, sort_order: "score")
 
     assert_equal 5, result.count
     assert_equal (0..4).map{|n| n * 1000}.reverse, result.map{ |v| v.score.active_stake }

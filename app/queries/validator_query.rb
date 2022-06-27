@@ -65,9 +65,15 @@ class ValidatorQuery < ApplicationQuery
     when "name"
       "validators.name asc"
     when "stake"
-      "validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc"
+      main_sort = "validator_score_v1s.active_stake desc"
+      secondary_sort = @api ? "validator_score_v1s.total_score desc" : "RAND()"
+
+      [main_sort, secondary_sort].join(", ")
     else # Order by score by default
-      "validator_score_v1s.total_score desc,  validator_score_v1s.active_stake desc"
+      main_sort = "validator_score_v1s.total_score desc"
+      secondary_sort = @api ? "validator_score_v1s.active_stake desc" : "RAND()"
+      
+      [main_sort, secondary_sort].join(", ")
     end
   end
 
