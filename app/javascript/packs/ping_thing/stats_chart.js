@@ -25,11 +25,10 @@ export default {
   channels: {
     PingThingStatChannel: {
       connected() {
-          console.log("connected to PingThingStats")
+        //   console.log("connected to PingThingStats")
       },
       rejected() {},
       received(data) {
-        console.log(data)
         var new_stat = JSON.parse(data)
         if(new_stat["interval"] == this.interval && new_stat["network"] == this.network){
             this.ping_thing_stats.push(new_stat)
@@ -64,7 +63,6 @@ export default {
     },
     update_chart: function(){
         if( !this.ping_thing_stats.length == 0 ){
-            console.log('update chart')
             var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
             var variation_data = this.ping_thing_stats.map( (vector_element, index) => ([vector_element['max'], vector_element['min']]) )
             var labels = this.ping_thing_stats.map( (vector_element) => (
