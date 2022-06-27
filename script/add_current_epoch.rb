@@ -43,10 +43,8 @@ end
   else
     url = if network == 'mainnet'
       Rails.application.credentials.solana[:mainnet_urls][0]
-      # "https://api.mainnet-beta.solana.com"
     else
       Rails.application.credentials.solana[:testnet_urls][0]
-      # "https://api.testnet.solana.com"
     end
   end
 
