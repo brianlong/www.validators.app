@@ -11,6 +11,7 @@
 #  min            :float(24)
 #  network        :string(191)
 #  num_of_records :integer
+#  p90            :float(24)
 #  time_from      :datetime
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
