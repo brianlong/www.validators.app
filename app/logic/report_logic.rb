@@ -104,49 +104,24 @@ module ReportLogic
       raise StandardError, "Missing p.payload[:network]"    unless network
       raise StandardError, "Missing p.payload[:batch_uuid]" unless batch_uuid
       
-      batch_created_at = Batch.find_by(uuid: batch_uuid, network: network)&.created_at
-
-      previous_batches_ids = Batch.where(
-        "network = :network AND created_at BETWEEN :start_date AND :end_date AND scored_at IS NOT NULL", 
-        { network: network, start_date: batch_created_at - 30.days, end_date:  batch_created_at }
-      ).pluck(:uuid)
-
-      vote_account_histories = VoteAccountHistory.where(network: network, batch_uuid: previous_batches_ids).pluck(:batch_uuid)
-      vote_accounts = VoteAccount.joins(:vote_account_histories).where("vote_account_histories.ids IN (:vote_account_histories_ids)", vote_account_histories_ids: vote_account_histories.ids)
-
-
-      where_clause = %Q{
-        vote_accounts.ids IN (:vote_account_ids)
-        AND validators.network = :network
-        AND validators.is_rpc = :is_rpc
-        AND validators.is_active = :is_active
-      }.gsub(/\s+/, " ").strip
-      
-      where_cond = { 
-        network: network, 
-        vote_account_ids: vote_accounts.ids, 
-        is_rpc: false, 
-        is_active: true 
-      }
-
-      validator_ids = Validator.left_outer_joins(:vote_accounts).where(where_clause, where_cond)
-                               .ids
-                               .uniq
-      
-      # Get software versions with count and active stake for current batch.
       software_version_score_sql = %Q{
         SELECT vsv1.software_version, count(*) as count, SUM(vsv1.active_stake) as as_sum
         FROM validator_score_v1s AS vsv1
-        WHERE vsv1.network = ?
-        AND vsv1.validator_id IN (?)
+        JOIN validators as vals
+        ON vsv1.validator_id = vals.id
+        WHERE vsv1.network = :network
+        AND vals.is_active = :is_active
+        AND vals.is_rpc = :is_rpc
         GROUP BY vsv1.software_version;
       }.gsub(/\s+/, " ").strip
 
-      sanitized_sw_sql = ValidatorScoreV1.sanitize_sql(
-        [software_version_score_sql,
-        network,
-        validator_ids]
-      )
+      conditions = {
+        network: network,
+        is_active: true,
+        is_rpc: false
+      }
+
+      sanitized_sw_sql = ValidatorScoreV1.sanitize_sql([software_version_score_sql, conditions])
 
       software_versions_with_active_stake = ValidatorScoreV1.connection.execute(sanitized_sw_sql)
 
