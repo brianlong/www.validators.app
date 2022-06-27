@@ -50,6 +50,9 @@ and configure your config/database.yml to your machine's MySQL configuration. Mi
 ## Database initialization
 Run rake db:setup to create and migrate the database from schema (db/schema.rb).
 
+## Database population
+Run rake db:seed for basic data generation and check /dev/instruction.md file for more details.
+
 ## Copying data to staging
 To enable copying records to staging database set copy_records_to_stage in credentials file to true
 
