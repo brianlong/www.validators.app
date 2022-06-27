@@ -22,4 +22,14 @@
     position: absolute;
     margin-top: -20px;
   }
+
+  &.card-scroll {
+    @media(min-width: $screen-md-min) {
+      height: 510.3px;
+      overflow-y: scroll;
+    }
+    @media(min-width: ) {
+      height: 515.6px;
+    }
+  }
 }
