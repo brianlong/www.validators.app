@@ -68,9 +68,6 @@ end
 
 every 1.minute, roles: [:background] do
   ruby_script "add_current_epoch.rb"
-end
-
-every 1.minute, roles: [:db] do
   runner "PingThingStatsWorker.perform_async"
 end
 
