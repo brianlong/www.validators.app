@@ -77,6 +77,7 @@
       return {
         ping_things: [],
         page: 1,
+        records_in_table: 120,
         total_count: 0,
         api_url: api_url,
         p90_last_5_minutes: 0,
@@ -99,9 +100,7 @@
     },
     channels: {
         PingThingChannel: {
-          connected() {
-            //   console.log("connected to PingThings")
-          },
+          connected() {},
           rejected() {},
           received(data) {
             if(data["network"] == this.network){
@@ -119,14 +118,11 @@
           });
       },
     methods: {
-      reset_filters: function() {
-        // TODO
-      },
       ping_things_for_table: function(){
-        if(this.ping_things.length <= 120){
+        if(this.ping_things.length <= this.records_in_table){
           return this.ping_things
         } else {
-          return this.ping_things.slice(0, 120)
+          return this.ping_things.slice(0, this.records_in_table)
         }
       }
     },
