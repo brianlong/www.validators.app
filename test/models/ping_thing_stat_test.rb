@@ -3,6 +3,7 @@
 require "test_helper"
 
 class PingThingStatTest < ActiveSupport::TestCase
+  include ActionCable::TestHelper
 
   setup do
     @network = "testnet"
@@ -53,5 +54,16 @@ class PingThingStatTest < ActiveSupport::TestCase
     required_keys = PingThingStat::FIELDS_FOR_API.map(&:to_s)
 
     assert_equal required_keys, ping_thing_stat.to_builder.attributes!.keys
+  end
+
+  test "creating new record brodcasts message" do
+    channel = "ping_thing_stat_channel"
+
+    assert_broadcasts channel, 0
+
+    ping_thing_stat = create(:ping_thing_stat)
+
+    assert_broadcasts channel, 1
+    assert_broadcast_on(channel, ping_thing_stat.to_json)
   end
 end

@@ -4,6 +4,10 @@ export default {
       type: Array,
       required: true
     },
+    network: {
+        type: String,
+        required: true
+    }
   },
   data() {
     return {
@@ -12,7 +16,27 @@ export default {
       chart: null
     }
   },
+  channels: {
+    PingThingChannel: {
+      connected() {
+        //   console.log("connected to PingThings")
+      },
+      rejected() {},
+      received(data) {
+        if(data["network"] == this.network){
+            this.vector.push(data)
+            this.vector.shift()
+            this.update_chart()
+        }
+      },
+      disconnected() {},
+    },
+  },
   mounted: function(){
+    this.$cable.subscribe({
+        channel: "PingThingChannel",
+        room: "public",
+      });
     this.update_chart()
   },
   watch: {
@@ -44,6 +68,7 @@ export default {
     
             // Configuration options
             options: {
+                animation: false,
                 legend: {
                     display: false,
                     labels: {

@@ -1,5 +1,6 @@
 development:
-  adapter: async
+  adapter: redis
+  url: <%= Rails.application.credentials.dig(:redis, :url) %>
 
 test:
   adapter: test

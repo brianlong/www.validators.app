@@ -52,25 +52,25 @@
       <div class="card-content">
         <h2 class="h3 card-heading">TX Time Last Obervations</h2>
         <div class="text-center pb-4">
-          <b-pagination
+          <!-- <b-pagination
               v-model="page"
               :total-rows="total_count"
               :per-page="240"
               first-text="« First"
-              last-text="Last »" />
+              last-text="Last »" /> -->
         </div>
-        <bubble-chart :vector="ping_things.slice().reverse()" />
+        <bubble-chart :vector="ping_things.slice().reverse()" :network="network"/>
       </div>
     </div>
 
     <div class="card">
       <ping-thing-table :ping_things="ping_things" />
-      <b-pagination
+      <!-- <b-pagination
           v-model="page"
           :total-rows="total_count"
           :per-page="240"
           first-text="« First"
-          last-text="Last »" />
+          last-text="Last »" /> -->
     </div>
   </div>
 </template>

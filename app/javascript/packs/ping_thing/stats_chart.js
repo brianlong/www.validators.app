@@ -22,8 +22,31 @@ export default {
       interval: 1
     }
   },
+  channels: {
+    PingThingStatChannel: {
+      connected() {
+        //   console.log("connected to PingThingStats")
+      },
+      rejected() {},
+      received(data) {
+        var new_stat = JSON.parse(data)
+        if(new_stat["interval"] == this.interval && new_stat["network"] == this.network){
+            this.ping_thing_stats.push(new_stat)
+            this.ping_thing_stats.shift()
+            this.update_chart()
+        }
+      },
+      disconnected() {},
+    },
+  },
   created: function(){
     this.load_chart_data()
+  },
+  mounted: function(){
+    this.$cable.subscribe({
+        channel: "PingThingStatChannel",
+        room: "public",
+      });
   },
   methods: {
     set_interval: function(interval){
@@ -79,6 +102,10 @@ export default {
                     ]
                 },
                 options: {
+                    animation: {
+                        duration: 500,
+                        easing: 'easeInOutQuart'
+                    },
                     scales: {
                         x: {
                             display: true,
