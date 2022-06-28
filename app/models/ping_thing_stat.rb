@@ -49,6 +49,11 @@ class PingThingStat < ApplicationRecord
       max: resp_times.max,
       num_of_records: pings.count
     )
+
+    if interval.in? [5, 60]
+      response_times = resp_times.sort
+      self.update(p90: response_times.first((response_times.count * 0.9).to_i).last)
+    end
   end
 
   def get_included_ping_things

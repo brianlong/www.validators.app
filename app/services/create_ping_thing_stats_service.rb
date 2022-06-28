@@ -25,7 +25,8 @@ class CreatePingThingStatsService
         )
 
         if interval.in? [5, 60]
-          p.update(p90: count_p90(ping_things.pluck(:response_time).sort))
+          response_times = ping_things.pluck(:response_time).sort
+          p.update(p90: response_times.first((response_times.count * 0.9).to_i).last)
         end
       end
     end
