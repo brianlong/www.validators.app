@@ -12,22 +12,18 @@ class CreatePingThingStatsService
         ping_things = gather_ping_things(interval)
         next unless ping_things.any?
 
-        resp_times = ping_things.pluck(:response_time).compact
+        resp_times = ping_things.pluck(:response_time).compact.sort
 
-        p = PingThingStat.create(
+        PingThingStat.create(
           network: @network,
           interval: interval,
           median: resp_times.median,
           min: resp_times.min,
           max: resp_times.max,
           time_from: @time_to - interval.minutes,
-          num_of_records: ping_things.count
+          num_of_records: ping_things.count,
+          p90: resp_times.first((resp_times.count * 0.9).to_i).last
         )
-
-        if interval.in? [5, 60]
-          response_times = ping_things.pluck(:response_time).sort
-          p.update(p90: response_times.first((response_times.count * 0.9).to_i).last)
-        end
       end
     end
   end

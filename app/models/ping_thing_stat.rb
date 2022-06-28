@@ -41,19 +41,15 @@ class PingThingStat < ApplicationRecord
 
   def recalculate
     pings = get_included_ping_things
-    resp_times = pings.pluck(:response_time).compact
+    resp_times = pings.pluck(:response_time).compact.sort
 
     self.update(
       median: resp_times.median,
       min: resp_times.min,
       max: resp_times.max,
-      num_of_records: pings.count
+      num_of_records: pings.count,
+      p90: resp_times.first((resp_times.count * 0.9).to_i).last
     )
-
-    if interval.in? [5, 60]
-      response_times = resp_times.sort
-      self.update(p90: response_times.first((response_times.count * 0.9).to_i).last)
-    end
   end
 
   def get_included_ping_things
