@@ -31,13 +31,12 @@ class ValidatorsController < ApplicationController
         network: index_params[:network],
         batch_uuid: @batch.uuid
       ).first
-
-      @at_33_stake_index = at_33_stake_index(@validators, @batch)
     end
 
+    if index_params[:order] == "stake" && !index_params[:q] && !index_params[:watchlist]
+      @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
+    end
     @at_33_stake_index ||= nil
-
-    # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
 
   # GET /validators/1
@@ -127,10 +126,14 @@ class ValidatorsController < ApplicationController
     ).first or redirect_to(root_url(network: params[:network]))
   end
 
-  def at_33_stake_index validators, batch
+  def at_33_stake_index(validators, batch, per_page)
     validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], batch.uuid)
     at_33_stake_validator = validator_history_stats.at_33_stake&.validator
-    (validators.index(at_33_stake_validator)&.+ 1).to_i
+
+    return nil unless validators.map(&:account).compact.include? at_33_stake_validator&.account
+
+    first_index_of_current_page = [index_params[:page].to_i - 1, 0].max * per_page
+    first_index_of_current_page + validators.index(at_33_stake_validator).to_i + 1
   end
 
   def index_params
