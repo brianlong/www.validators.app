@@ -169,27 +169,32 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 123, json.first["response_time"]
   end
 
-  test "GET api_v1_ping_things with with_stats param, returns pings and 5 min stats" do
+  test "GET api_v1_ping_things with with_stats param, returns pings and 5 and 60 min stats" do
     4.times do |n|
       create(:ping_thing, :testnet, response_time: n)
     end
+    create(:ping_thing_stat, interval: 5, num_of_records: 10, min: 100, max: 2500, median: 2300, p90: 2400)
+    create(:ping_thing_stat, interval: 60, num_of_records: 100, min: 90, max: 3500, median: 3300, p90: 3400)
 
     get api_v1_ping_things_path(network: "testnet", with_stats: "true"), headers: @headers
-
     json = response_to_json(@response.body)
+
     assert_equal 4, json["ping_things"].size
-    assert_equal 4, json["total_count"]
-    assert_equal 4, json["count_last_5_minutes"]
-    assert_equal 2, json["median_last_5_minutes"]
-    assert_equal 0, json["minimum_last_5_minutes"]
-    assert_equal 2, json["p90_last_5_minutes"]
-    assert_equal 6, json.keys.size
+    assert_equal 10, json["last_5_minutes"]["num_of_records"]
+    assert_equal 2400, json["last_5_minutes"]["p90"]
+    assert_equal 2300, json["last_5_minutes"]["median"]
+    assert_equal 100, json["last_5_minutes"]["min"]
+    assert_equal 100, json["last_60_minutes"]["num_of_records"]
+    assert_equal 3400, json["last_60_minutes"]["p90"]
+    assert_equal 3300, json["last_60_minutes"]["median"]
+    assert_equal 90, json["last_60_minutes"]["min"]
+    assert_equal 3, json.keys.size
 
     get api_v1_ping_things_path(network: "testnet", with_stats: "true", limit: 2), headers: @headers
 
     json = response_to_json(@response.body)
     assert_equal 2, json["ping_things"].size
-    assert_equal 4, json["total_count"]
+    assert_equal 3, json.keys.size
   end
 
   test "GET api_v1_ping_things does not return total_count for invalid of false param" do

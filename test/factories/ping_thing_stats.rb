@@ -6,7 +6,7 @@ FactoryBot.define do
     min { 50 }
     max { 120 }
     median { 82 }
-    num_of_records { "" }
+    num_of_records { 1 }
     network { "testnet" }
     time_from { DateTime.now }
   end
