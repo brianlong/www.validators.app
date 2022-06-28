@@ -53,4 +53,29 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
     assert_equal 3, PingThingStat.where(interval: 24).count
     assert_equal 1, PingThingStat.where(interval: 60).count
   end
+
+  test "CreatePingThingStatsService calculates correct stats" do
+    PingThing.delete_all
+    [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000].each do |time|
+      create(:ping_thing, :testnet, reported_at: rand(10.seconds.ago..Time.now), response_time: time)
+    end
+
+    [500, 14000, 15000].each do |time|
+      create(:ping_thing, :testnet, reported_at: rand(4.minutes.ago..3.minutes.ago), response_time: time)
+    end
+
+    CreatePingThingStatsService.new(time_to: Time.now, network: @network).call
+
+    pt1 = PingThingStat.where(interval: 1).last
+    assert_equal 10, pt1.num_of_records
+    assert_equal 1000, pt1.min
+    assert_equal 10000, pt1.max
+    assert_equal 9000, pt1.p90
+
+    pt5 = PingThingStat.where(interval: 5).last
+    assert_equal (10+3), pt5.num_of_records
+    assert_equal 500, pt5.min
+    assert_equal 15000, pt5.max
+    assert_equal 10000, pt5.p90
+  end
 end
