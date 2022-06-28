@@ -43,6 +43,45 @@
 
     <div class="card mb-4">
       <div class="card-content">
+        <div class="row px-xl-4">
+          <div class="col-lg-2 px-md-0 mb-3 mb-lg-0 text-md-center">
+            <span class="stat-title-3 d-lg-none">1 hour Stats&nbsp;</span>
+            <span class="stat-title-4 text-success d-none d-lg-inline-block">1 hour stats&nbsp;</span>
+          </div>
+          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+            <span class="stat-title-4">
+              <i class="fas fa-calculator text-success mr-2"></i>
+              Entries:&nbsp;
+            </span>
+            <strong class="text-success">{{ last_60_minutes["num_of_records"] ? last_60_minutes["num_of_records"].toLocaleString() : '0'  }}</strong>
+          </div>
+          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+            <span class="stat-title-4">
+              <i class="fas fa-long-arrow-alt-down text-success mr-1"></i>
+              Min:&nbsp;
+            </span>
+            <strong class="text-success">{{ last_60_minutes["min"] ? last_60_minutes["min"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+          </div>
+          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+            <span class="stat-title-4">
+              <i class="fas fa-divide text-success mr-1"></i>
+              Median:&nbsp;
+            </span>
+            <strong class="text-success">{{ last_60_minutes["median"] ? last_60_minutes["median"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+          </div>
+          <div class="col-md-6 col-lg px-md-0 text-md-center">
+            <span class="stat-title-4">
+              <i class="fas fa-long-arrow-alt-up text-success mr-1" aria-hidden="true"></i>
+              P90:&nbsp;
+            </span>
+            <strong class="text-success">{{ last_60_minutes["p90"] ? last_60_minutes["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-content">
         <h2 class="h3 card-heading">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time Stats</h2>
         <stats-chart :network="network"/>
       </div>
