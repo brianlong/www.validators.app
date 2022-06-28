@@ -209,9 +209,9 @@ ActiveRecord::Schema.define(version: 2022_06_27_111909) do
     t.integer "num_of_records"
     t.string "network"
     t.datetime "time_from"
-    t.float "p90"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "p90"
   end
 
   create_table "ping_things", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
