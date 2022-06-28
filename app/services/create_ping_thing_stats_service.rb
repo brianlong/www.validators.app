@@ -40,8 +40,4 @@ class CreatePingThingStatsService
       reported_at: ((@time_to - interval.minutes)..@time_to)
     )
   end
-
-  def count_p90(response_times)
-    response_times.first((response_times.count * 0.9).to_i).last
-  end
 end
