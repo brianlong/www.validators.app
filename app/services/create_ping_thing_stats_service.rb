@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class CreatePingThingStatsService
-
-  
-
   def initialize(time_to: DateTime.now, network: "mainnet")
     @time_to = time_to
     @network = network
@@ -26,6 +23,10 @@ class CreatePingThingStatsService
           time_from: @time_to - interval.minutes,
           num_of_records: ping_things.count
         )
+
+        if interval == 60
+          p.update(p90: count_p90(ping_things.pluck(:response_time).sort))
+        end
       end
     end
   end
@@ -41,5 +42,9 @@ class CreatePingThingStatsService
       network: @network,
       reported_at: ((@time_to - interval.minutes)..@time_to)
     )
+  end
+
+  def count_p90(response_times)
+    response_times.first((response_times.count * 0.9).to_i).last
   end
 end

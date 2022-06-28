@@ -27,7 +27,7 @@ class PingThingStat < ApplicationRecord
     :time_from
   ].freeze
 
-  INTERVALS = [1, 3, 12, 24].freeze
+  INTERVALS = [1, 3, 12, 24, 60].freeze #minutes
 
   scope :by_network, -> (network) { where(network: network) }
 
