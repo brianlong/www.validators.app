@@ -57,11 +57,11 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
   test "CreatePingThingStatsService calculates correct stats" do
     PingThing.delete_all
     [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000].each do |time|
-      create(:ping_thing, :testnet, reported_at: rand(10.seconds.ago..Time.now), response_time: time)
+      create(:ping_thing, :testnet, reported_at: 10.seconds.ago, response_time: time)
     end
 
     [500, 14000, 15000].each do |time|
-      create(:ping_thing, :testnet, reported_at: rand(4.minutes.ago..3.minutes.ago), response_time: time)
+      create(:ping_thing, :testnet, reported_at: 3.minutes.ago, response_time: time)
     end
 
     CreatePingThingStatsService.new(time_to: Time.now, network: @network).call
