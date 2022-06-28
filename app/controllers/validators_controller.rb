@@ -130,7 +130,7 @@ class ValidatorsController < ApplicationController
     validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], batch.uuid)
     at_33_stake_validator = validator_history_stats.at_33_stake&.validator
 
-    return nil unless validators.pluck(:account).compact.include? at_33_stake_validator&.account
+    return nil unless validators.map(&:account).compact.include? at_33_stake_validator&.account
 
     first_index_of_current_page = [index_params[:page].to_i - 1, 0].max * per_page
     first_index_of_current_page + validators.index(at_33_stake_validator).to_i + 1
