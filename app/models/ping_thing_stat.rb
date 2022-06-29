@@ -43,14 +43,17 @@ class PingThingStat < ApplicationRecord
   end
 
   def recalculate
-    pings = PingThing.for_date_range_and_network(network, time_from, (time_from + interval.minutes))
-    resp_times = pings.pluck(:response_time).compact
+    resp_times = PingThing.for_date_range_and_network(
+      network,
+      time_from,
+      (time_from + interval.minutes)
+    ).pluck(:response_time).compact
 
     self.update(
       median: resp_times.median,
       min: resp_times.min,
       max: resp_times.max,
-      num_of_records: pings.count
+      num_of_records: resp_times.count
     )
   end
 
