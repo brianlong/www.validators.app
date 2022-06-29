@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
+
   get 'asns/:asn',
       to: 'asns#show',
       as: 'asn'
@@ -102,7 +104,7 @@ Rails.application.routes.draw do
   get "current-user", to: "users#current_user_info"
 
   # Default root path
-  root to: 'public#index'
+  root to: 'validators#index'
 
   ### API
   namespace :api do

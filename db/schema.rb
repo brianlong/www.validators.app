@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_23_110715) do
+ActiveRecord::Schema.define(version: 2022_06_07_073603) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -520,13 +520,12 @@ ActiveRecord::Schema.define(version: 2022_05_23_110715) do
     t.integer "security_report_score"
     t.string "ip_address"
     t.string "network"
-    t.string "data_center_key"
     t.text "skipped_slot_moving_average_history"
     t.text "skipped_vote_history"
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
-    t.index ["network", "data_center_key"], name: "index_validator_score_v1s_on_network_and_data_center_key"
+    t.index ["network"], name: "index_validator_score_v1s_on_network"
     t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
@@ -590,8 +589,8 @@ ActiveRecord::Schema.define(version: 2022_05_23_110715) do
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"
-  add_foreign_key "user_watchlist_elements", "users"
-  add_foreign_key "user_watchlist_elements", "validators"
+  add_foreign_key "user_watchlist_elements", "users", on_delete: :cascade
+  add_foreign_key "user_watchlist_elements", "validators", on_delete: :cascade
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"

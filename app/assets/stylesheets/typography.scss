@@ -31,6 +31,10 @@ small, .small {
   @include font-size-sm();
 }
 
+.font-size-xs {
+  @include font-size-xs();
+}
+
 mark, .mark {
   background-color: transparent;
   color: $link-color;
@@ -84,6 +88,12 @@ strong, .font-weight-bold {
     font-size: $font-size-h4;
     @media(max-width: $screen-md-max) { font-size: $font-size-h4*.85; }
     @media(max-width: $screen-sm-max) { font-size: $font-size-h4*.8; }
+  }
+  &-title-4 {
+    font-weight: $font-weight-bold-secondary;
+    @include font-family-alternative();
+    font-size: $font-size-h6;
+    @media(max-width: $screen-sm-max) { font-size: $font-size-h6*.9; }
   }
   small .fas {
     font-size: 11px;
@@ -142,7 +152,12 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
   @media(max-width: $screen-sm-max) { font-size: 32px }
 }
 .heading-secondary {
+  color: $orange;
+  @include font-family-alternative();
+  @include font-size-sm();
   text-transform: uppercase;
+  font-weight: $font-weight-bold-primary;
+  letter-spacing: 1px;
 }
 
 

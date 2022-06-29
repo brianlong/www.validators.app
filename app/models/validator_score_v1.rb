@@ -24,7 +24,6 @@
 #  consensus_mods_score                        :integer          default(0)
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
-#  data_center_key                             :string(191)
 #  delinquent                                  :boolean
 #  ip_address                                  :string(191)
 #  network                                     :string(191)
@@ -53,9 +52,9 @@
 #
 # Indexes
 #
-#  index_validator_score_v1s_on_network_and_data_center_key  (network,data_center_key)
-#  index_validator_score_v1s_on_total_score                  (total_score)
-#  index_validator_score_v1s_on_validator_id                 (validator_id)
+#  index_validator_score_v1s_on_network       (network)
+#  index_validator_score_v1s_on_total_score   (total_score)
+#  index_validator_score_v1s_on_validator_id  (validator_id)
 #
 class ValidatorScoreV1 < ApplicationRecord
   FIELDS_FOR_API = %i[
@@ -126,7 +125,10 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   scope :by_data_centers, ->(data_center_keys) do
-    where(data_center_key: data_center_keys)
+    select_statement = "validator_score_v1s.*, data_centers.data_center_key"
+    
+    select(select_statement).joins(:data_center)
+                            .where("data_centers.data_center_key = ?", data_center_keys)
   end
 
   scope :for_api, -> { select(FIELDS_FOR_API) }

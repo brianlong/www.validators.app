@@ -189,8 +189,8 @@
 
 <div class="row mb-3">
   <div class="col-md-9 col-lg-10">
-    <%= link_to 'Back to List of Validators',
-                url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+    <%= link_to 'Back to All Validators',
+                root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
                 class: 'btn btn-sm btn-secondary mb-3' %>
   </div>
 
@@ -208,28 +208,37 @@
 <div class="row">
   <div class="col-lg-6">
     <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="text-center">Block History</h2>
-        <%= render 'validators/spark_line_chart',
-                   chart_name: "spark_line_block_distance_#{@validator.account}",
-                   vector: @root_blocks,
-                   line_color: SPARK_LINE_2,
-                   fill_color: SPARK_LINE_2_TRANSPARENT,
+      <div class="card-content pb-0">
+        <h2 class="h3 card-heading mb-3">Block History</h2>
+      </div>
+      <div class="pb-3 px-3">
+        <canvas id="root_distance_history"
+                data-data="<%= @root_blocks.to_json %>"
+                data-labels="<%= @root_blocks.map{ |block| block[:x] } %>">
+        </canvas>
+        <%= render 'validators/validator_large_chart',
+                   chart_name: "root_distance_history",
+                   records_count: "#{@root_blocks.count}",
                    label: 'Block Diff'
         %>
+
       </div>
     </div>
   </div>
 
   <div class="col-lg-6">
     <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="text-center">Vote History</h2>
-        <%= render 'validators/spark_line_chart',
-                   chart_name: "spark_line_vote_distance_#{@validator.account}",
-                   vector: @vote_blocks,
-                   line_color: SPARK_LINE_2,
-                   fill_color: SPARK_LINE_2_TRANSPARENT,
+      <div class="card-content pb-0">
+        <h2 class="h3 card-heading mb-3">Vote History</h2>
+      </div>
+      <div class="pb-3 px-3">
+        <canvas id="vote_distance_history"
+                data-data="<%= @vote_blocks.to_json %>"
+                data-labels="<%= @vote_blocks.map{ |block| block[:x] } %>">
+        </canvas>
+        <%= render 'validators/validator_large_chart',
+                   chart_name: "vote_distance_history",
+                   records_count: "#{@vote_blocks.count}",
                    label: 'Vote Diff'
         %>
       </div>
@@ -240,16 +249,21 @@
 <div class="row">
   <div class="col-lg-6">
     <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="text-center">Skipped Slot History</h2>
-        <%= render partial: 'block_history_chart' %>
+      <div class="card-content pb-0">
+        <h2 class="h3 card-heading mb-3">Skipped Slots History</h2>
+      </div>
+      <div class="pb-3 px-3">
+        <canvas id="skipped_slots_large_chart"
+                data-labels="<%= @data.map { |k, v| v[:label] } %>">
+        </canvas>
+        <%= render partial: 'skipped_slots_large_chart' %>
       </div>
     </div>
   </div>
 </div>
 
-<%= link_to 'Back to List of Validators',
-            url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+<%= link_to 'Back to All Validators',
+            root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
             class: 'btn btn-sm btn-secondary mb-4' %>
 
 <div class="card mb-4">
@@ -257,6 +271,6 @@
 </div>
 
 
-<%= link_to 'Back to List of Validators',
-            url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+<%= link_to 'Back to All Validators',
+            root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
             class: 'btn btn-sm btn-secondary' %>

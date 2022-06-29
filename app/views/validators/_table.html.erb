@@ -2,10 +2,10 @@
   <thead>
   <tr>
     <th class="column-avatar d-none align-middle <%= current_user ? 'd-lg-table-cell' : 'd-xl-table-cell' %>">
-      <% if current_user  && show_watchlist_btn %>
+      <% if show_watchlist_btn %>
         <%= link_to url_for(
           order: params[:order],
-          page: params[:page],
+          page: 1,
           network: params[:network],
           refresh: params[:refresh],
           watchlist: params[:watchlist] ? nil : true) do %>
@@ -21,7 +21,7 @@
     </th>
     <th class="column-info align-middle <%= 'pl-3' unless current_user %>">
       Name <small class="text-muted">(Commission)</small>
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.commission') %>">
@@ -29,7 +29,7 @@
       <br />
       Active Stake
       <small class="text-muted">(% of total)</small>
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.active_stake') %>">
@@ -39,7 +39,7 @@
         IP & Gateway <br />
       <% end %>
       Scores <small class="text-muted">(total)</small>
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.scores') %>">
@@ -47,7 +47,7 @@
     </th>
     <th class='column-sm align-middle pr-0'>
       Skipped Vote&nbsp;&percnt;
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
@@ -57,7 +57,7 @@
     </th>
     <th class='column-chart py-3 align-middle'>
       Root Distance
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.root_distance') %>">
@@ -67,7 +67,7 @@
     </th>
     <th class='column-chart py-3 align-middle'>
       Vote Distance
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.vote_distance') %>">
@@ -77,7 +77,7 @@
     </th>
     <th class='column-chart py-3 align-middle'>
       Skipped Slot&nbsp;&percnt;
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.skipped_slot') %>">
@@ -89,13 +89,7 @@
   </thead>
 
   <tbody>
-  <%
-    i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
-          0
-        else
-          (params[:page].to_i - 1) * items_per_page
-        end
-  %>
+  <% i = [params[:page].to_i - 1, 0].max * items_per_page %>
   <% validators.each do |validator| %>
     <% i += 1 %>
     <tr id="row-<%= i %>">
@@ -154,7 +148,7 @@
           <span class="d-inline-block d-lg-none">IP:&nbsp;</span>
           <small><%= validator.score.ip_address %></small>
           <br />
-          <% data_center_host = validator.data_center_host.host %>
+          <% data_center_host = validator&.data_center_host&.host %>
           <% if data_center_host %>
             <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
             <small><%= data_center_host %></small>
@@ -298,13 +292,17 @@
         %>
       </td>
     </tr>
-    <% if params[:order] == 'stake' && i == at_33_stake_index %>
-      <tr class="heading-secondary text-warning text-center">
-        <td colspan=6>
-          CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
+
+    <% at_33_stake_index ||= nil %>
+    <% if at_33_stake_index && i == at_33_stake_index %>
+      <tr class="heading-secondary text-center">
+        <td colspan="6" class="p-3">
+          Cumulative stake above can halt the network&nbsp;&#8212;&nbsp;improve decentralization
+          and delegate to validators below
         </td>
       </tr>
     <% end %>
+
   <% end %>
   </tbody>
 </table>

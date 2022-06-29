@@ -3,6 +3,8 @@ require "test_helper"
 # frozen_string_literal: true
 
 class PingThingTest < ActiveSupport::TestCase
+  include ActionCable::TestHelper
+
   setup do
     @user = create(:user)
     @params = {
@@ -161,5 +163,20 @@ class PingThingTest < ActiveSupport::TestCase
     assert_equal 2, stat.min
     assert_equal 2, stat.median
     assert_equal 1, stat.num_of_records
+  end
+
+  test "creating new record brodcasts message" do
+    pt = build(:ping_thing, user_id: @user.id, commitment_level: nil)
+    channel = "ping_thing_channel"
+
+    assert_broadcasts channel, 0
+
+    pt.save
+    hash = {}
+    hash.merge!(pt.to_builder.attributes!)
+    hash.merge!(pt.user.to_builder.attributes!)
+
+    assert_broadcasts channel, 1
+    assert_broadcast_on(channel, hash)
   end
 end

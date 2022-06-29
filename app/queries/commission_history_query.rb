@@ -80,9 +80,7 @@ class CommissionHistoryQuery
     validators = Validator.where(network: @network)
                           .scorable
                           .joins(:validator_score_v1)
-
-    ValidatorSearchQuery.new(validators)
-                        .search(query)
+    ValidatorSearchQuery.new(validators).search(query)
   end
 
   def query_fields
