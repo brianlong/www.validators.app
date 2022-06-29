@@ -40,11 +40,13 @@ class PingThingRecentStat < ApplicationRecord
       Time.now
     ).pluck(:response_time).compact.sort
 
-    self.median = ping_times.median
-    self.min = ping_times.min
-    self.max = ping_times.max
-    self.p90 = ping_times.first((ping_times.count * 0.9).to_i).last
-    self.num_of_records = ping_times.count
+    self.update(
+      median: ping_times.median,
+      min: ping_times.min,
+      max: ping_times.max,
+      p90: ping_times.first((ping_times.count * 0.9).to_i).last,
+      num_of_records: ping_times.count
+    )
   end
   
   def to_builder
