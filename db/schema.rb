@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_07_073603) do
+ActiveRecord::Schema.define(version: 2022_06_29_114700) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -199,6 +199,18 @@ ActiveRecord::Schema.define(version: 2022_06_07_073603) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "api_token"
     t.string "network"
+  end
+
+  create_table "ping_thing_recent_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "interval"
+    t.float "min"
+    t.float "max"
+    t.float "median"
+    t.float "p90"
+    t.integer "num_of_records"
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "ping_thing_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
