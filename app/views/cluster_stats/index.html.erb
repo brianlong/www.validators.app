@@ -1,7 +1,9 @@
-<h1><%= params[:network].capitalize %> Stats</h1>
-<%= link_to 'Back to Homepage',
-            url_for(controller: 'public', action: 'index', order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
-            class: 'btn btn-sm btn-secondary mb-4' %>
+<section class="page-header">
+  <h1><%= params[:network].capitalize %> Stats</h1>
+  <%= link_to 'Back to Homepage',
+              root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+              class: 'btn btn-sm btn-secondary' %>
+</section>
 
 <div class="row">
   <div class="col-12 col-md-6 mb-4">
@@ -21,14 +23,14 @@
 </div>
 
 <div class="card">
-  <div class="card-content">
-    <h3 class="card-heading mb-2">Top Validators by:</h3>
+  <div class="card-content pb-0">
+    <h2 class="h3 card-heading">Top Validators by:</h2>
   </div>
 
   <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
-      <a class="nav-link active" 
-         data-toggle="tab" 
+      <a class="nav-link active"
+         data-toggle="tab"
          href="#menu1"
          data-toggle="tooltip"
          data-placement="top"
@@ -37,41 +39,41 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" 
-         data-toggle="tab" 
+      <a class="nav-link"
+         data-toggle="tab"
          href="#menu2"
-         data-toggle="tooltip" 
-         data-placement="top" 
+         data-toggle="tooltip"
+         data-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
         Skipped Vote&nbsp;&percnt;
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" 
-         data-toggle="tab" 
+      <a class="nav-link"
+         data-toggle="tab"
          href="#menu3"
-         data-toggle="tooltip" 
-         data-placement="top" 
+         data-toggle="tooltip"
+         data-placement="top"
          title="<%= t('definitions.root_distance') %>">
          Root Distance
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" 
-         data-toggle="tab" 
+      <a class="nav-link"
+         data-toggle="tab"
          href="#menu4"
-         data-toggle="tooltip" 
-         data-placement="top" 
+         data-toggle="tooltip"
+         data-placement="top"
          title="<%= t('definitions.vote_distance') %>">
          Vote Distance
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" 
-         data-toggle="tab" 
+      <a class="nav-link"
+         data-toggle="tab"
          href="#menu5"
-         data-toggle="tooltip" 
-         data-placement="top" 
+         data-toggle="tooltip"
+         data-placement="top"
          title="<%= t('definitions.skipped_slot') %>">
          Skipped Slot&nbsp;&percnt;
       </a>

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
+
   get 'asns/:asn',
       to: 'asns#show',
       as: 'asn'
@@ -99,9 +101,10 @@ Rails.application.routes.draw do
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
+  get "current-user", to: "users#current_user_info"
 
   # Default root path
-  root to: 'public#index'
+  root to: 'validators#index'
 
   ### API
   namespace :api do
@@ -158,6 +161,8 @@ Rails.application.routes.draw do
       get 'ping-thing-stats/:network', to: 'ping_thing_stats#index', as: 'ping_thing_stats'
 
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
+
+      post 'update-watchlist/:network', to: 'watchlists#update_watchlist'
     end
   end
 end

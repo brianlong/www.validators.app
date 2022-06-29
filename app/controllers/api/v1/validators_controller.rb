@@ -8,7 +8,7 @@ module Api
       before_action :set_skipped_slots_report
 
       def index
-        @validators = ValidatorQuery.new.call(
+        @validators = ValidatorQuery.new(api: true).call(
           network: params[:network],
           sort_order: params[:order],
           page: params[:page],

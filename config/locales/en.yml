@@ -40,9 +40,20 @@ en:
           email_address: 'Email address'
           telephone: 'Telephone'
           comments: 'Message'
+    errors:
+      models:
+        user:
+          attributes:
+            username:
+              invalid: "invalid (letters, numbers and dots allowed)"
   flash:
     cookie: "This site uses cookies. See our <a href='/cookie-policy'>Cookie Policy</a> for details."
+    empty_watchlist: "Looks like you don't have any favourite validators yet."
   public:
+    nav:
+      add_to_watchlist: "Add to favourites"
+      remove_from_watchlist: "Remove from favourites"
+      show_watchlist: "Display validators from your watchlist"
     index:
       title: "Welcome Solana Validators"
       paragraph: "This website is under construction. Be awesome today."
@@ -91,7 +102,7 @@ en:
       opt_out_requests: 'Opt Out requests'
     copyright_text: 'provides tools for the Solana validator community.'
   you:
-    only_users_allowed: 'Only authenticated User are allowed'
+    only_users_allowed: 'Only authenticated users are allowed.'
   definitions:
     active_stake: "Total stake from active validator(s)."
     asn_full_name: "Autonomous System Number"

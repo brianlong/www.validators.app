@@ -21,21 +21,19 @@ class DataCentersController < ApplicationController
 
     @per = 25
 
+    @filter_by = show_params[:filter_by].blank? ? Validator.default_filters(params[:network]) : show_params[:filter_by]
+
     data_centers = DataCenter.where(data_center_key: key)
     @validators = Validator.joins(:validator_score_v1, :data_center)
                            .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_centers.ids, show_params[:network], 0)
-                           .filtered_by(show_params[:filter_by]&.to_sym)
+                           .filtered_by(@filter_by)
                            .order("validator_score_v1s.active_stake desc")
-
-    if params[:show_private]
-      @validators = @validators.with_private(show: params[:show_private])
-    end
 
     @dc_stake = @validators.sum(:active_stake)          
     @validators = @validators.page(params[:page]).per(@per)
     @batch = Batch.last_scored(params[:network])
     @population = @validators.total_count
-    @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network]).sum(:active_stake)                                   
+    @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network]).sum(:active_stake)
     @dc_info = data_centers.first || DataCenter.new(data_center_key: key)
   end
 
@@ -46,6 +44,6 @@ class DataCentersController < ApplicationController
   end
 
   def show_params
-    params.permit(:network, :page, :key, :filter_by)
+    params.permit(:network, :page, :key, filter_by: [])
   end
 end

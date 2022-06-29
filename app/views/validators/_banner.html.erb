@@ -1,20 +1,21 @@
 <section class="banner">
-  <div class="heading-primary">Meet the <span>validators</span> who power Solana</div>
+  <h1 class="heading-primary">Meet the <span>validators</span> who power Solana</h1>
   <% unless @validators.blank? %>
     <p class="lead mb-4">
-      The tables below show each validator by name and include some recent statistics for each. Special thanks
-      to <%= link_to 'Staking Facilities', 'https://stakingfacilities.com/', target: '_blank' %>
-      for their support! See the links below to learn more about our website.
+      The&nbsp;tables below show each validator by&nbsp;name and include some recent statistics for&nbsp;each. If you appreciate
+      this website, please delegate to <%= link_to "Block Logic", "https://www.blocklogic.net/", target: "_blank" %>.
+      Your delegations keep this&nbsp;website running!
     </p>
-    <%= link_to 'Getting Started', faq_path(anchor: ''), class: 'btn btn-md btn-secondary mr-1 mb-3' %>
-    <%= link_to 'Choosing the right validator', faq_path(anchor: 'choosing-validator'), class: 'btn btn-md btn-secondary mr-1 mb-3' %>
-    <%= link_to 'Our Scoring System', faq_path(anchor: 'score'), class: 'btn btn-md btn-secondary mr-1 mb-3' %>
-    <%= link_to 'FAQ', faq_path(anchor: 'questions'), class: 'btn btn-md btn-secondary mr-1 mb-3' %>
+    <%= link_to 'Getting Started', faq_path(anchor: ''), class: 'btn btn-md btn-secondary mr-2 mb-3' %>
+    <%= link_to 'Choosing the right validator', faq_path(anchor: 'choosing-validator'), class: 'btn btn-md btn-secondary mr-2 mb-3 d-none d-md-inline-block' %>
+    <%= link_to 'Choosing validator', faq_path(anchor: 'choosing-validator'), class: 'btn btn-md btn-secondary mr-2 mb-3 d-md-none' %>
+    <%= link_to 'Our Scoring System', faq_path(anchor: 'score'), class: 'btn btn-md btn-secondary mr-2 mb-3' %>
+    <%= link_to 'FAQ', faq_path(anchor: 'questions'), class: 'btn btn-md btn-secondary mb-3' %>
   <% end %>
 </section>
 <div class="card">
   <div class="card-content">
-    <h2 class="card-heading mb-4">NEW! Stake Pools</h2>
+    <h2 class="card-heading">NEW! Stake Pools</h2>
     <p class="lead">
       You can now improve the security of the&nbsp;Solana blockchain by participating in
       <%= link_to 'stake pools', stake_pools_path, target: '_blank' %>.
@@ -23,15 +24,15 @@
       about liquid staking.
     </p>
 
-    <div id="carouselLogos" class="carousel slide d-none d-md-block" data-ride="carousel" data-interval="4000">
+    <div id="carouselLogos" class="carousel slide d-none d-md-block px-lg-5" data-ride="carousel" data-interval="4000">
       <div class="carousel-inner">
         <% shuffle_logos.each_slice(3).to_a.each_with_index do |group, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
             <div class="row text-center px-lg-5 mt-4">
               <% group.each_with_index do |logo, index_col| %>
-                <div class="col-md-4 mb-4 mb-sm-0">
+                <div class="col-md-4 mb-4 mb-sm-0 <%= 'offset-md-4' if index_slide == 2 %>">
                   <%= link_to logo[0], target: "_blank" do %>
-                    <%= image_tag logo[1], class: 'w-100 px-4 px-sm-1 px-lg-3 mb-4' %>
+                    <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-1 px-lg-3 mb-4' %>
                   <% end %>
                 </div>
               <% end %>
@@ -45,7 +46,7 @@
         <% shuffle_logos.each_with_index do |logo, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
             <%= link_to logo[0], target: "_blank" do %>
-              <%= image_tag logo[1], class: 'w-100 px-4 px-sm-1' %>
+              <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-1' %>
             <% end %>
           </div>
         <% end %>

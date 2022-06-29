@@ -7,15 +7,14 @@
         <thead>
           <tr>
             <th colspan="2">
-              <strong> ASN: </strong>
-              <%= params[:asn] %>
+              <h2 class="h6 mb-0">ASN: <%= params[:asn] %></h2>
             </th>
           </tr>
         </thead>
         <tbody>
         <tr>
           <td class="column-sm"><strong>Data Centers</strong></td>
-          <td>
+          <td class="small">
             <% @data_center_keys.each do |dck| %>
               <%= link_to dck, data_center_url(network: params[:network], key: dck.gsub('/', '-slash-')) %>
               <br \>
@@ -54,13 +53,7 @@
   </div>
 </div>
 
-<%= create_filter_link(view: 'asn', params_list: params, filter_by: "delinquent") %>
-<%= create_filter_link(view: 'asn', params_list: params, filter_by: "inactive") %>
-<%= create_filter_link(view: 'asn', params_list: params, filter_by: "private") %>
-
-<% if params[:filter_by].blank? && params[:network] == "mainnet" %>
-  <%= link_to_toggle_private(type: :asn, url_params: params) %>
-<% end %>
+<%= render "data_centers/filters", {view: "asn"} %>
 
 <% unless params[:filter_by].blank? %>
   <%= link_to 'Reset filters',
@@ -74,8 +67,9 @@
              validators: @validators,
              show_ip_and_gateway: true,
              show_version: false,
-             items_per_page: @per %>
-  <%= paginate @scores %>
+             items_per_page: @per,
+             show_watchlist_btn: false %>
+  <%= paginate @validators %>
 </div>
 
 <%= link_to 'Back to ASN list',

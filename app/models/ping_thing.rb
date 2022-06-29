@@ -39,6 +39,8 @@ class PingThing < ApplicationRecord
   validates_length_of :application, maximum: 80, allow_blank: true
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
+ 
+  after_create :update_stats_if_present, :broadcast
 
   after_create :update_stats_if_present
 
@@ -57,6 +59,14 @@ class PingThing < ApplicationRecord
         :reported_at
       )
     end
+  end
+
+  def broadcast
+    hash = {}
+    hash.merge!(self.to_builder.attributes!)
+    hash.merge!(self.user.to_builder.attributes!)
+
+    ActionCable.server.broadcast("ping_thing_channel", hash)
   end
 
   def update_stats_if_present

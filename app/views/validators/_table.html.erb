@@ -1,10 +1,27 @@
 <table id="validators-table" class='table table-block-sm'>
   <thead>
   <tr>
-    <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
-    <th class="column-info align-middle">
+    <th class="column-avatar d-none align-middle <%= current_user ? 'd-lg-table-cell' : 'd-xl-table-cell' %>">
+      <% if show_watchlist_btn %>
+        <%= link_to url_for(
+          order: params[:order],
+          page: 1,
+          network: params[:network],
+          refresh: params[:refresh],
+          watchlist: params[:watchlist] ? nil : true) do %>
+          <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning"
+             data-toggle="tooltip"
+             data-placement="top"
+             title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
+          </i>
+        <% end %>
+      <% else %>
+        #
+      <% end %>
+    </th>
+    <th class="column-info align-middle <%= 'pl-3' unless current_user %>">
       Name <small class="text-muted">(Commission)</small>
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.commission') %>">
@@ -12,7 +29,7 @@
       <br />
       Active Stake
       <small class="text-muted">(% of total)</small>
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.active_stake') %>">
@@ -22,7 +39,7 @@
         IP & Gateway <br />
       <% end %>
       Scores <small class="text-muted">(total)</small>
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.scores') %>">
@@ -30,7 +47,7 @@
     </th>
     <th class='column-sm align-middle pr-0'>
       Skipped Vote&nbsp;&percnt;
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
@@ -40,7 +57,7 @@
     </th>
     <th class='column-chart py-3 align-middle'>
       Root Distance
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.root_distance') %>">
@@ -50,7 +67,7 @@
     </th>
     <th class='column-chart py-3 align-middle'>
       Vote Distance
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.vote_distance') %>">
@@ -60,7 +77,7 @@
     </th>
     <th class='column-chart py-3 align-middle'>
       Skipped Slot&nbsp;&percnt;
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
          data-placement="top"
          title="<%= t('definitions.skipped_slot') %>">
@@ -72,23 +89,35 @@
   </thead>
 
   <tbody>
-  <%
-    i = if params[:page].nil? || params[:page].empty? || params[:page].to_i.zero?
-          0
-        else
-          (params[:page].to_i - 1) * items_per_page
-        end
-  %>
+  <% i = [params[:page].to_i - 1, 0].max * items_per_page %>
   <% validators.each do |validator| %>
     <% i += 1 %>
     <tr id="row-<%= i %>">
-      <td class="column-avatar d-none d-xl-table-cell align-middle">
-        <div class="avatar">
+      <td class="column-avatar d-none align-middle <%= current_user ? 'd-lg-table-cell' : 'd-xl-table-cell' %>">
+        <div class="avatar <%= 'd-none d-xl-block ' if current_user %>">
           <%= create_avatar_link(validator) %>
         </div>
+        <% if current_user %>
+          <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'far' %> fa-star"
+             data-toggle="tooltip"
+             data-placement="top"
+             data-network="<%= validator.network%>"
+             data-account="<%= validator.account%>"
+             title="<%= validator.watchers.include?(current_user) ? 'Remove from favourites' : 'Add to favourites' %>">
+          </i>
+        <% end %>
       </td>
 
-      <td class="column-info align-middle">
+      <td class="column-info align-middle <%= 'pl-3' unless current_user %>">
+        <% if current_user %>
+          <i class="d-lg-none watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'far' %> fa-star"
+             data-toggle="tooltip"
+             data-placement="top"
+             data-network="<%= validator.network%>"
+             data-account="<%= validator.account%>"
+             title="<%= validator.watchers.include?(current_user) ? 'Remove from favourites' : 'Add to favourites' %>">
+          </i>
+        <% end %>
         <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                     class: 'font-weight-bold' do %>
           <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
@@ -100,12 +129,12 @@
         <% end %>
         <% if validator.score.authorized_withdrawer_score == -2 %>
           <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
-            <i class="fas fa-exclamation-triangle text-warning ml-1"></i>
+            <i class="fas fa-exclamation-triangle text-warning small ml-1"></i>
           <% end %>
         <% end %>
         <% if validator.admin_warning %>
           <%= link_to '/faq#admin-warning', title: "#{validator.admin_warning}" do %>
-            <i class="fas fa-exclamation-triangle text-danger ml-1"></i>
+            <i class="fas fa-exclamation-triangle text-danger small ml-1"></i>
           <% end %>
         <% end %>
         <br />
@@ -119,7 +148,7 @@
           <span class="d-inline-block d-lg-none">IP:&nbsp;</span>
           <small><%= validator.score.ip_address %></small>
           <br />
-          <% data_center_host = validator.data_center_host.host %>
+          <% data_center_host = validator&.data_center_host&.host %>
           <% if data_center_host %>
             <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
             <small><%= data_center_host %></small>
@@ -263,13 +292,17 @@
         %>
       </td>
     </tr>
-    <% if params[:order] == 'stake' && i == at_33_stake_index %>
-      <tr class="heading-secondary text-warning text-center">
-        <td colspan=6>
-          CUMULATIVE STAKE ABOVE CAN HALT THE NETWORK -- IMPROVE DECENTRALIZATION AND DELEGATE TO VALIDATORS BELOW
+
+    <% at_33_stake_index ||= nil %>
+    <% if at_33_stake_index && i == at_33_stake_index %>
+      <tr class="heading-secondary text-center">
+        <td colspan="6" class="p-3">
+          Cumulative stake above can halt the network&nbsp;&#8212;&nbsp;improve decentralization
+          and delegate to validators below
         </td>
       </tr>
     <% end %>
+
   <% end %>
   </tbody>
 </table>

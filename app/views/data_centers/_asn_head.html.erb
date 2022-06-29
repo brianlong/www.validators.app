@@ -1,14 +1,14 @@
 <tr>
   <th class="column-md align-middle">
     ASN
-    <i class="fas fa-info-circle small"
+    <i class="fas fa-info-circle font-size-xs text-muted"
       data-toggle="tooltip"
       data-placement="top"
       title="<%= t('definitions.asn_full_name')%>">
     </i>
   </th>
   <th class="column-sm align-middle">
-    Average score&nbsp;<i class="fas fa-info-circle small ml-1"
+    Average score&nbsp;<i class="fas fa-info-circle font-size-xs text-muted ml-1"
                           data-toggle="tooltip"
                           data-placement="top"
                           title="<%= t('definitions.average_score') %>"></i>
@@ -16,7 +16,7 @@
   <th class="column-md align-middle">Data Centers</th>
   <th class="column-md align-middle">
     Population
-    <i class="fas fa-info-circle small"
+    <i class="fas fa-info-circle font-size-xs text-muted"
       data-toggle="tooltip"
       data-placement="top"
       title="<%= t('definitions.population_asn') %>">
@@ -26,7 +26,7 @@
   </th>
   <th class="column-md align-middle">
     Delinquent
-    <i class="fas fa-info-circle small"
+    <i class="fas fa-info-circle font-size-xs text-muted"
        data-toggle="tooltip"
        data-placement="top"
        title="<%= t('definitions.delinquent_asn') %>">
@@ -40,7 +40,7 @@
   <% if params[:network] == 'mainnet' %>
     <th class="column-md align-middle">
       Private
-      <i class="fas fa-info-circle small"
+      <i class="fas fa-info-circle font-size-xs text-muted"
         data-toggle="tooltip"
         data-placement="top"
         title="<%= t('definitions.private') %>">
@@ -52,8 +52,8 @@
       </small>
     </th>
   <% end %>
-  <th class="column-lg align-middle">
-    Active Stake&nbsp;<i class="fas fa-info-circle small"
+  <th class="column-xl align-middle">
+    Active Stake&nbsp;<i class="fas fa-info-circle font-size-xs text-muted"
                          data-toggle="tooltip"
                          data-placement="top"
                          title="<%= t('definitions.active_stake') %>"></i>
@@ -62,7 +62,7 @@
       <%= number_with_delimiter lamports_to_sol(@results[:total_active_stake_from_active_validators]).round(0) %>
     </small>
     <br />
-    Total Stake&nbsp;<i class="fas fa-info-circle small"
+    Total Stake&nbsp;<i class="fas fa-info-circle font-size-xs text-muted"
                          data-toggle="tooltip"
                          data-placement="top"
                          title="<%= t('definitions.total_stake') %>"></i>

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ValidatorTest < ActiveSupport::TestCase
   setup do
@@ -25,6 +25,16 @@ class ValidatorTest < ActiveSupport::TestCase
       is_active: false,
       account: "test3"
     )
+
+    @score = create(:validator_score_v1, validator: @validator)
+
+    @v_inactive = create(:validator, :with_score, is_active: false)
+
+    @v_delinquent = create(:validator, account: "v_delinquent")
+    create(:validator_score_v1, validator: @v_delinquent, delinquent: true)
+
+    @v_private = create(:validator, account: "v_private")
+    create(:validator_score_v1, validator: @v_private, commission: 100)
   end
 
   test 'relationship has_one most_recent_epoch_credits_by_account' do
@@ -143,5 +153,48 @@ class ValidatorTest < ActiveSupport::TestCase
     assert @va1.reload.is_active
     refute @va2.reload.is_active
     refute @va3.reload.is_active
+  end
+
+  test "filtered_by delinquent provided with a string returns correct values" do
+    result = Validator.filtered_by("delinquent")
+
+    assert_equal 1, result.count
+    assert result.last.delinquent?
+  end
+
+  test "filtered_by delinquent excludes correct validators from collection" do
+    result = Validator.filtered_by(["delinquent"])
+
+    assert_equal 1, result.count
+    assert result.last.delinquent?
+  end
+
+  test "filtered_by inactive excludes correct validators from collection" do
+    result = Validator.filtered_by(["inactive"])
+
+    assert_equal 1, result.count
+    refute result.last.is_active
+  end
+
+  test "filtered_by private excludes correct validators from collection" do
+    result = Validator.filtered_by(["private"])
+
+    assert_equal 1, result.count
+    assert_equal 100, result.last.score.commission
+  end
+
+  test "filtered_by multiple parameters excludes correct validators from collection" do
+    result = Validator.filtered_by(["delinquent", "inactive"])
+
+    assert_equal 2, result.count
+    assert result.include?(@v_inactive)
+    assert result.include?(@v_delinquent)
+  end
+
+  test "responds to watchers correctly" do
+    u = create(:user)
+    create(:user_watchlist_element, validator: @validator, user: u)
+
+    assert_equal u, @validator.watchers.first
   end
 end

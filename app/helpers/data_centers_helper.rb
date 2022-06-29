@@ -40,15 +40,27 @@ module DataCentersHelper
     end
   end
 
-  def create_filter_link(view:, params_list:, filter_by:)
-    classes_list = "btn btn-sm btn-secondary mr-1 mb-4 "
-    classes_list << "active" if params_list[:filter_by] == filter_by
+  def create_filter_by_link(view:, params_list:, current_filters:, filter_by:)
+    classes_list = "btn btn-sm btn-secondary mb-4 "
+    new_filter_by = current_filters.dup || []
+
+    if current_filters.include? filter_by
+      classes_list << "active"
+      new_filter_by = new_filter_by - [filter_by]
+    else
+      new_filter_by << filter_by
+    end
     url = send("#{view}_url",
                 network:params_list[:network],
                 key: params[:key],
-                filter_by: filter_by
+                filter_by: new_filter_by,
+                display: display
               )
 
-    link_to "Filter by #{filter_by}", url, class: classes_list
+    link_to "#{filter_by}", url, class: classes_list
+  end
+
+  def set_column_width(network)
+    network == "mainnet" ? "sm" : "md"
   end
 end

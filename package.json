@@ -1,13 +1,16 @@
 {
   "dependencies": {
+    "@rails/actioncable": "^6.1.5",
     "@rails/activestorage": "^6.1.4",
     "@rails/ujs": "^6.1.4",
     "@rails/webpacker": "5.4.0",
+    "actioncable-vue": "^2.5.1",
     "axios": "^0.21.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bootstrap-vue": "^2.21.2",
     "chart.js": "^3.5.1",
     "chartjs-adapter-luxon": "1.0.0",
+    "jquery": "^3.6.0",
     "loadash": "^1.0.0",
     "luxon": "^2.0.2",
     "moment": "^2.29.2",

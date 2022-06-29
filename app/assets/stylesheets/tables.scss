@@ -4,30 +4,31 @@ table, .table {
   color: inherit;
 
   thead {
-    background-color: $card-border-color;
+    background-color: $table-background-color;
     th {
       border: none;
+      border-bottom: 1px solid $table-border-color;
       padding: $padding-standard 20px;
     }
   }
 
   tbody {
     tr {
-      border-top: 1px solid $table-border-color;
+      border-top: 1px solid $table-border-color-secondary;
     }
     tr:nth-of-type(even) {
-      background-color: $card-background-color;
+      background-color: $table-background-color;
     }
     tr:nth-of-type(odd) {
-      background-color: darken($card-background-color, 3%);
+      background-color: $table-background-color-secondary;
     }
     td {
       padding: $padding-standard 20px;
-      border-top: 1px solid $table-border-color;
+      border-top: none;
     }
 
     &+tbody {
-      border-top: 2px solid $card-border-color;
+      border-top: 2px solid $table-border-color;
     }
   }
 
@@ -46,10 +47,10 @@ table, .table {
       }
     }
     &-top-value {
-      font-size: 11px;
+      font-size: 9px;
       line-height: 9px;
       color: #979797;
-      margin-top: -13px;
+      margin-top: -11px;
       text-align: right;
     }
     &-link.active {
@@ -63,6 +64,9 @@ table, .table {
       width: 85px;
       text-align: center;
       padding: 0;
+      @media(max-width: $screen-lg-max) {
+        width: 55px;
+      }
       .avatar {
         padding-bottom: 5px;
         .img-circle-medium-private {
@@ -73,7 +77,7 @@ table, .table {
 
     &-chart {
       width: 22%;
-      padding: 25px $padding-standard 10px $padding-standard;
+      padding: 22px $padding-standard 10px $padding-standard;
       @media(max-width: $screen-lg-max) {
         width: 25%;
       }
@@ -83,7 +87,7 @@ table, .table {
       width: 195px;
       padding-left: 0;
       padding-right: 0;
-      @media(max-width: $screen-lg-max) {
+      @media(max-width: $screen-md-max) {
         padding-left: 20px;
       }
     }
@@ -156,11 +160,12 @@ table, .table {
 }
 
 .stake-accounts-table {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 
   tbody, thead {
-    tr {
-      background-color: $card-background-color !important;
+    tr, th {
+      background-color: $table-background-color !important;
+      border-bottom: 1px solid $table-border-color-secondary;
     }
   }
 

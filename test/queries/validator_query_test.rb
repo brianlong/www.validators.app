@@ -69,7 +69,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [4, 3, 2, 1, 0], result.pluck("validator_score_v1s.total_score")
   end
 
-  test "#call returns results in correct stake order" do
+  test "#call  with api returns results in correct stake order" do
     5.times do |n|
       v = create(
         :validator, 
@@ -80,7 +80,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       v.score.update_column(:active_stake,  n * 1000)
     end
 
-    result = ValidatorQuery.new.call(network: @mainnet_network, sort_order: "score")
+    result = ValidatorQuery.new(api: true).call(network: @mainnet_network, sort_order: "score")
 
     assert_equal 5, result.count
     assert_equal (0..4).map{|n| n * 1000}.reverse, result.map{ |v| v.score.active_stake }
@@ -120,5 +120,32 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     )
 
     assert_equal validator, result
+  end
+
+  test "#call returns correct user watchlist validators" do
+    user = create(:user)
+    validator = create(
+      :validator,
+      :with_score,
+      :mainnet,
+      :with_data_center_through_validator_ip
+    )
+
+    create(:user_watchlist_element, validator: validator, user: user)
+
+    validators = create_list(
+      :validator,
+      5,
+      :with_score,
+      :mainnet,
+      :with_data_center_through_validator_ip,
+    )
+
+    result = ValidatorQuery.new(watchlist_user: user.id).call(
+      network: @mainnet_network
+    )
+
+    assert_equal 1, result.count
+    assert_equal validator, result.first
   end
 end

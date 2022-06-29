@@ -8,28 +8,35 @@ class ValidatorsController < ApplicationController
   # GET /validators.json
   def index
     @per = 25
-    validators = Validator.where(network: params[:network])
-                          .scorable
-                          .preload(:validator_score_v1)
-                          .index_order(validate_order)
 
-    @validators = validators.page(params[:page]).per(@per)
+    if index_params[:watchlist] && !current_user
+      flash[:warning] = "You need to create an account first."
+      redirect_to new_user_registration_path and return
+    end
 
-    @batch = Batch.last_scored(params[:network])
+    watchlist_user = index_params[:watchlist] ? current_user&.id : nil
+
+    @validators = ValidatorQuery.new(watchlist_user: watchlist_user).call(
+      network: index_params[:network],
+      sort_order: index_params[:order],
+      limit: @per,
+      page: index_params[:page],
+      query: index_params[:q]
+    )
+    
+    @batch = Batch.last_scored(index_params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(
-        network: params[:network],
+        network: index_params[:network],
         batch_uuid: @batch.uuid
       ).first
     end
 
-    validator_history_stats = Stats::ValidatorHistory.new(params[:network], @batch.uuid)
-
-    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
-    @at_33_stake_index = (validators.index(at_33_stake_validator)&.+ 1).to_i
-
-    # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
+    if index_params[:order] == "stake" && !index_params[:q] && !index_params[:watchlist]
+      @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
+    end
+    @at_33_stake_index ||= nil
   end
 
   # GET /validators/1
@@ -38,20 +45,9 @@ class ValidatorsController < ApplicationController
     time_from = Time.now - 24.hours
     time_to = Time.now
 
-    # Sometimes @validator is nil
-    @ping_times = []
-    # @ping_times = if @validator.nil?
-    #                 []
-    #               else
-    #                   PingTime.where(
-    #                   network: params[:network],
-    #                   to_account: @validator.account
-    #                 ).order('created_at desc').limit(30)
-    #               end
-
     @data = {}
 
-    @history_limit = 240
+    @history_limit = 200
     @block_histories = @validator.validator_block_histories
                                  .where("created_at BETWEEN ? AND ?", time_from, time_to)
                                  .order(id: :desc)
@@ -73,11 +69,23 @@ class ValidatorsController < ApplicationController
     ).order(created_at: :asc)
     .last(@history_limit)
 
-    # Grab the distances to show on the chart
-    @root_blocks = @val_histories.map(&:root_distance).compact
+    # Grab the root distances to show on the chart
+    @root_blocks = @val_histories.map do |val_history|
+      next unless val_history.root_distance
+      {
+        x: val_history.created_at.strftime("%H:%M"),
+        y: val_history.root_distance
+      }
+    end
 
-    # Grab the distances to show on the chart
-    @vote_blocks = @val_histories.map(&:vote_distance).compact
+    # Grab the vote distances to show on the chart
+    @vote_blocks = @val_histories.map do |val_history|
+      next unless val_history.vote_distance
+      {
+        x: val_history.created_at.strftime("%H:%M"),
+        y: val_history.vote_distance
+      }
+    end
 
     @commission_histories = CommissionHistoryQuery.new(
       network: params[:network]
@@ -98,11 +106,13 @@ class ValidatorsController < ApplicationController
       next unless skipped_slot_all_average
 
       @data[i] = {
-        skipped_slot_percent: vbh.skipped_slot_percent.to_f * 100.0,
-        skipped_slot_percent_moving_average: vbh.skipped_slot_percent_moving_average.to_f * 100.0,
-        cluster_skipped_slot_percent_moving_average: skipped_slot_all_average * 100
+        skipped_slot_percent: (vbh.skipped_slot_percent.to_f * 100.0).round(1),
+        skipped_slot_percent_moving_average: (vbh.skipped_slot_percent_moving_average.to_f * 100.0).round(1),
+        cluster_skipped_slot_percent_moving_average: (skipped_slot_all_average * 100).round(1),
+        label: vbh.created_at.strftime("%H:%M")
       }
     end
+
     # flash[:error] = 'Due to a problem with our RPC server pool, the Skipped Slot % data is inaccurate. I am aware of the problem and working on a better solution. Thanks, Brian Long'
   end
 
@@ -116,10 +126,17 @@ class ValidatorsController < ApplicationController
     ).first or redirect_to(root_url(network: params[:network]))
   end
 
-  def validate_order
-    valid_orders = %w[score name]
-    return 'score' unless params[:order].in? valid_orders
+  def at_33_stake_index(validators, batch, per_page)
+    validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], batch.uuid)
+    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
 
-    params[:order]
+    return nil unless validators.map(&:account).compact.include? at_33_stake_validator&.account
+
+    first_index_of_current_page = [index_params[:page].to_i - 1, 0].max * per_page
+    first_index_of_current_page + validators.index(at_33_stake_validator).to_i + 1
+  end
+
+  def index_params
+    params.permit(:watchlist, :network, :q, :page, :order)
   end
 end

@@ -139,6 +139,12 @@ hr {
     margin-top: 20px;
     margin-bottom: 20px;
   }
+
+  &.short {
+    width: 50px;
+    margin: 25px auto 25px 0;
+    border-color: $purple;
+  }
 }
 
 .p {
@@ -172,8 +178,12 @@ hr {
   }
   &-label {
     display: inline-block;
+    @media(max-width: $screen-md-max) {
+      display: none;
+    }
     @media(max-width: $screen-sm-max) {
       padding-left: 40px;
+      display: inline-block;
     }
   }
 }
@@ -189,7 +199,7 @@ hr {
 .modal {
   &-content {
     background-color: $card-background-color;
-    border: 2px solid $card-border-color;
+    border: 2px solid $card-background-color;
     border-radius: $border-radius;
     color: $base-color;
     margin-top: 30vh;

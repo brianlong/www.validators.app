@@ -4,6 +4,10 @@ export default {
       type: Array,
       required: true
     },
+    network: {
+        type: String,
+        required: true
+    }
   },
   data() {
     return {
@@ -11,9 +15,6 @@ export default {
       chart_line: "#322f3d",
       chart: null
     }
-  },
-  mounted: function(){
-    this.update_chart()
   },
   watch: {
       'vector': {
@@ -44,6 +45,7 @@ export default {
     
             // Configuration options
             options: {
+                animation: false,
                 legend: {
                     display: false,
                     labels: {
@@ -65,7 +67,6 @@ export default {
                         display: true,
                         ticks: {
                             min: 0,
-                            max: 60000,
                             padding: 10,
                             callback: function(value, index, values) {
                                 return value.toLocaleString('en-US')
