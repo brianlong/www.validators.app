@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class CreatePingThingStatsService
-
-  
-
   def initialize(time_to: DateTime.now, network: "mainnet")
     @time_to = time_to
     @network = network
