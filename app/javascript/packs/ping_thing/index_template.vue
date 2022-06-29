@@ -51,26 +51,12 @@
     <div class="card mb-4">
       <div class="card-content">
         <h2 class="h3 card-heading">TX Time Last Obervations</h2>
-        <div class="text-center pb-4">
-          <!-- <b-pagination
-              v-model="page"
-              :total-rows="total_count"
-              :per-page="240"
-              first-text="« First"
-              last-text="Last »" /> -->
-        </div>
         <bubble-chart :vector="ping_things.slice().reverse()" :network="network"/>
       </div>
     </div>
 
     <div class="card">
-      <ping-thing-table :ping_things="ping_things" />
-      <!-- <b-pagination
-          v-model="page"
-          :total-rows="total_count"
-          :per-page="240"
-          first-text="« First"
-          last-text="Last »" /> -->
+      <ping-thing-table :ping_things="ping_things_for_table()" />
     </div>
   </div>
 </template>
@@ -91,6 +77,7 @@
       return {
         ping_things: [],
         page: 1,
+        records_in_table: 120,
         total_count: 0,
         api_url: api_url,
         p90_last_5_minutes: 0,
@@ -111,22 +98,33 @@
              ctx.minimum_last_5_minutes = response.data.minimum_last_5_minutes
            })
     },
-    watch: {
-      page: function() {
-        this.paginate()
-      }
-    },
+    channels: {
+        PingThingChannel: {
+          connected() {},
+          rejected() {},
+          received(data) {
+            if(data["network"] == this.network){
+                this.ping_things.unshift(data)
+                this.ping_things.pop()
+            }
+          },
+          disconnected() {},
+        },
+      },
+      mounted: function(){
+        this.$cable.subscribe({
+            channel: "PingThingChannel",
+            room: "public",
+          });
+      },
     methods: {
-      paginate: function(){
-        var ctx = this
-        axios.get(ctx.api_url, { params: { with_stats: true, page: ctx.page } })
-             .then(function(response) {
-               ctx.ping_things = response.data.ping_things
-             })
-      },
-      reset_filters: function() {
-        // TODO
-      },
+      ping_things_for_table: function(){
+        if(this.ping_things.length <= this.records_in_table){
+          return this.ping_things
+        } else {
+          return this.ping_things.slice(0, this.records_in_table)
+        }
+      }
     },
     components: {
       "stats-chart": statsChart,
