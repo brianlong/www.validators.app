@@ -43,7 +43,7 @@ class PingThingRecentStat < ApplicationRecord
     self.median = ping_times.median
     self.min = ping_times.min
     self.max = ping_times.max
-    self.p90 = ping_times.first((resp_times.count * 0.9).to_i).last
+    self.p90 = ping_times.first((ping_times.count * 0.9).to_i).last
     self.num_of_records = ping_times.count
   end
   
