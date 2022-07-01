@@ -44,6 +44,8 @@ body {
 
   &.modal-open {
     padding-right: 0 !important;
+    height: 100vh;
+    overflow-y: hidden;
   }
 }
 
@@ -204,6 +206,21 @@ hr {
     color: $base-color;
     margin-top: 30vh;
   }
-  &-header {}
+  &-header {
+    .close { color: $white }
+  }
   &-body {}
+}
+.modal-large {
+  .modal-dialog {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    max-width: 600px;
+    @media(max-width: $screen-sm-max) {
+      max-width: 100vw;
+    }
+  }
+  .modal-content {
+    margin-top: 0;
+  }
 }

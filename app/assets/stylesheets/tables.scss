@@ -32,6 +32,15 @@ table, .table {
     }
   }
 
+  &.table-condensed {
+    thead th {
+      padding: 10px $padding-standard;
+    }
+    tbody td {
+      padding: 10px $padding-standard;
+    }
+  }
+
   .chart {
     &-top-container {
       position: absolute;
