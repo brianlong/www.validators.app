@@ -1,4 +1,4 @@
-<small class="text-nowrap">
+<a class="small text-nowrap" data-toggle="modal" data-target="#scoresModal<%=validator.account%>">
   <i class="fas fa-circle mr-1 score-<%= validator.root_distance_score %>"
      title="Root Distance Score = <%= validator.root_distance_score %>"></i>
 
@@ -38,4 +38,79 @@
   <% end %>
 
   (<span class="d-inline-block d-lg-none">Total:&nbsp;</span><%= validator.score.displayed_total_score %>)
-</small>
+</a>
+
+<div class="modal modal-large fade" id="scoresModal<%=validator.account%>" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title">Scores</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body p-0">
+        <table class="table table-scores mb-0">
+          <tbody>
+          <tr>
+            <td class="column-md font-weight-bold">Root Distance Score</td>
+            <td class="column-xs">sda</td>
+            <td class="column-md small">sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Vote Distance Score</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Skipped Slot Score</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Published Information Score</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Software Version Score</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Software Version Score</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Bonus Point</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda sda sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Stake Concentration Score</td>
+            <td class="column-xs">ad</td>
+            <td class="column-md small">sda sda sdasda sda sdasdasda sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Data Center Concentration Score</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Authorized Withdrawer Score</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda sdasda sdasdasdasda sdasda sda sda</td>
+          </tr>
+          <tr>
+            <td class="column-md font-weight-bold">Consensus Mods Score</td>
+            <td class="column-xs">asd</td>
+            <td class="column-md small">sda</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
