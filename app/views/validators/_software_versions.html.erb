@@ -5,7 +5,7 @@
         <h2 class="h3 card-heading">Software Versions</h2>
       </div>
 
-      <table class="table mb-0">
+      <table class="table">
         <thead>
         <tr>
           <th>Software Version</th>
@@ -33,7 +33,7 @@
       </table>
 
       <% if software_versions.length > 6 %>
-        <div class="px-3 py-3 text-center">
+        <div class="px-3 pb-3 text-center">
           <a data-toggle="modal" data-target="#versionsModal" class="text-muted" href="">Show older versions</a>
         </div>
         <%= render "validators/software_versions_modal", {
