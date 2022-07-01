@@ -1,39 +1,39 @@
 <a class="small text-nowrap" data-toggle="modal" data-target="#scoresModal<%=validator.account%>">
-  <i class="fas fa-circle mr-1 score-<%= validator.root_distance_score %>"
+  <i class="fas fa-circle mr-1 score-<%= validator.root_distance_score.to_i %>"
      title="Root Distance Score = <%= validator.root_distance_score %>"></i>
 
-  <i class="fas fa-circle mr-1 score-<%= validator.vote_distance_score %>"
+  <i class="fas fa-circle mr-1 score-<%= validator.vote_distance_score.to_i %>"
      title="Vote Distance Score = <%= validator.vote_distance_score %>"></i>
 
-  <i class="fas fa-circle mr-1 score-<%= validator.skipped_slot_score %>"
+  <i class="fas fa-circle mr-1 score-<%= validator.skipped_slot_score.to_i %>"
      title="Skipped Slot Score = <%= validator.skipped_slot_score %>"></i>
 
   <i class="fas fa-circle mr-1 score-<%= validator.published_information_score.to_i %>"
      title="Published Information Score = <%= validator.published_information_score.to_i %>"></i>
 
-  <i class="fas fa-circle mr-1 score-<%= validator.software_version_score %>"
+  <i class="fas fa-circle mr-1 score-<%= validator.software_version_score.to_i %>"
      title="Software Version Score = <%= validator.software_version_score %>"></i>
 
   <i class="fas fa-circle mr-1 score-<%= validator.security_report_score.to_i %>"
      title="Bonus Point = <%= validator.security_report_score.to_i %>"></i>
 
-  <% if validator.consensus_mods_score < 0 %>
-    <i class="fas fa-minus-circle mr-1 <%= score_class %>"
+  <% if validator.consensus_mods_score.to_i < 0 %>
+    <i class="fas fa-minus-circle mr-1 text-warning"
        title="Consensus Mods Score = <%= validator.consensus_mods_score %>. Validator appears to use software modifications with an unproven effect on consensus."></i>
   <% end %>
 
   <% if validator.authorized_withdrawer_score.to_i < 0 %>
-    <i class="fas fa-minus-circle mr-1 <%= score_class %>"
+    <i class="fas fa-minus-circle mr-1 text-warning"
        title="Authorized Withdrawer Score = <%= validator.authorized_withdrawer_score.to_i %>"></i>
   <% end %>
 
-  <% if above_33percent_concentration?(validator) %>
-    <i class="fas fa-minus-circle mr-1 <%= score_class %>"
+  <% if validator.stake_concentration_score.to_i < 0 %>
+    <i class="fas fa-minus-circle mr-1 text-warning"
        title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>
   <% end %>
 
-  <% if validator.data_center_concentration_score < 0 %>
-    <i class="fas fa-minus-circle mr-1 <%= score_class %>"
+  <% if validator.data_center_concentration_score.to_i < 0 %>
+    <i class="fas fa-minus-circle mr-1 text-warning"
        title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>
   <% end %>
 
@@ -55,57 +55,90 @@
           <tbody>
           <tr>
             <td class="column-md font-weight-bold">Root Distance Score</td>
-            <td class="column-xs">sda</td>
+            <td class="column-xs">
+              <i class="fas fa-circle mr-1 score-<%= validator.root_distance_score %>"></i>
+              <%= validator.root_distance_score %>/2
+            </td>
             <td class="column-md small">sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Vote Distance Score</td>
-            <td class="column-xs">asd</td>
+            <td class="column-xs">
+              <i class="fas fa-circle mr-1 score-<%= validator.vote_distance_score.to_i %>"></i>
+              <%= validator.vote_distance_score %>/2
+            </td>
             <td class="column-md small">sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Skipped Slot Score</td>
-            <td class="column-xs">asd</td>
+            <td class="column-xs">
+              <i class="fas fa-circle mr-1 score-<%= validator.skipped_slot_score.to_i %>"></i>
+              <%= validator.skipped_slot_score %>/2
+            </td>
             <td class="column-md small">sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Published Information Score</td>
-            <td class="column-xs">asd</td>
+            <td class="column-xs">
+              <i class="fas fa-circle mr-1 score-<%= validator.published_information_score.to_i %>"></i>
+              <%= validator.published_information_score %>/2
+            </td>
             <td class="column-md small">sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Software Version Score</td>
-            <td class="column-xs">asd</td>
-            <td class="column-md small">sda</td>
-          </tr>
-          <tr>
-            <td class="column-md font-weight-bold">Software Version Score</td>
-            <td class="column-xs">asd</td>
+            <td class="column-xs">
+              <i class="fas fa-circle mr-1 score-<%= validator.software_version_score.to_i %>"></i>
+              <%= validator.software_version_score %>/2
+            </td>
             <td class="column-md small">sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Bonus Point</td>
-            <td class="column-xs">asd</td>
+            <td class="column-xs">
+              <i class="fas fa-circle mr-1 score-<%= validator.security_report_score.to_i %>"></i>
+              <%= validator.security_report_score %>/1
+            </td>
             <td class="column-md small">sda sda sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Stake Concentration Score</td>
-            <td class="column-xs">ad</td>
+            <td class="column-xs">
+              <% if validator.stake_concentration_score.to_i < 0 %>
+                <i class="fas fa-minus-circle mr-1 text-warning"></i>
+              <% end %>
+              <%= validator.stake_concentration_score %>
+            </td>
             <td class="column-md small">sda sda sdasda sda sdasdasda sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Data Center Concentration Score</td>
-            <td class="column-xs">asd</td>
+            <td class="column-xs">
+              <% if validator.data_center_concentration_score.to_i < 0 %>
+                <i class="fas fa-minus-circle mr-1 text-warning"></i>
+              <% end %>
+              <%= validator.data_center_concentration_score %>
+            </td>
             <td class="column-md small">sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Authorized Withdrawer Score</td>
-            <td class="column-xs">asd</td>
+            <td class="column-xs">
+              <% if validator.authorized_withdrawer_score.to_i < 0 %>
+                <i class="fas fa-minus-circle mr-1 text-warning"></i>
+              <% end %>
+              <%= validator.authorized_withdrawer_score.to_i %>
+            </td>
             <td class="column-md small">sda sdasda sdasdasdasda sdasda sda sda</td>
           </tr>
           <tr>
             <td class="column-md font-weight-bold">Consensus Mods Score</td>
-            <td class="column-xs">asd</td>
+            <td class="column-xs">
+              <% if validator.consensus_mods_score.to_i < 0 %>
+                <i class="fas fa-minus-circle mr-1 text-warning"></i>
+              <% end %>
+              <%= validator.consensus_mods_score.to_i %>
+            </td>
             <td class="column-md small">sda</td>
           </tr>
           </tbody>
