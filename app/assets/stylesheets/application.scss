@@ -227,12 +227,12 @@ hr {
       transform: none !important;
     }
   }
+}
 
-  &.modal-top {
-    .modal-dialog {
-      top: initial !important;
-      transform: none !important;
-      padding: 15px;
-    }
+.modal-top {
+  .modal-dialog {
+    top: initial !important;
+    transform: none !important;
+    padding: 15px;
   }
 }
