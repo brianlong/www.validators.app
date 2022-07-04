@@ -10,7 +10,7 @@
     <p>
       All data is available for download from our <a href="/api-documentation">REST&nbsp;API</a>. App developers, you can
       also upload your own TX&nbsp;confirmation times. Any Solana application or transaction type is allowed. Use this
-      tool to&nbsp;show recent confirmation times to&nbsp;your users.
+      tool to&nbsp;show recent confirmation times to&nbsp;your users. See GitHub for our reference <a href='https://github.com/Block-Logic/ping-thing-client' target='_blank'>Ping Thing Client</a>.
     </p>
     <p>
       If you appreciate this website, please delegate to&nbsp;<a href="https://www.blocklogic.net/" target="_blank">Block Logic</a>.
