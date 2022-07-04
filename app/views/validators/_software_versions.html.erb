@@ -4,41 +4,44 @@
       <div class="card-content pb-0">
         <h2 class="h3 card-heading">Software Versions</h2>
       </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <table class="table mb-0">
-            <thead>
+
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Software Version</th>
+          <th>Stake %</th>
+          <th>No. of validators</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% sort_software_versions(software_versions).first(6).each do |group| %>
+          <% if group.first[1].is_a?(Hash) %>
             <tr>
-              <th>Software Version</th>
-              <th>Stake %</th>
-              <th>No. of validators</th>
+              <td class="<%= group.first[0].to_s == current_software_version(batch, params[:network]).to_s ? 'h4 text-success' : '' %>">
+                <%= link_to group.first[0], root_path(q: group.first[0]), title: 'Click to show validators with this version' %>
+              </td>
+              <td class="<%= group.first[0].to_s == current_software_version(batch, params[:network]).to_s ? 'h4 text-success' : '' %>">
+                <%= group.first[1][:stake_percent].to_f %>%
+              </td>
+              <td class="<%= group.first[0].to_s == current_software_version(batch, params[:network]).to_s ? 'h4 text-success' : '' %>">
+                <%= group.first[1][:count] %>
+              </td>
             </tr>
-            </thead>
-            <tbody>
-              <% sort_software_versions(software_versions).each do |group| %>
-                <% if group.first[1].is_a?(Hash) %>
-                  <tr>
-                    <td class="<%= group.first[0].to_s == current_software_version(batch, params[:network]).to_s ? 'h4 text-success' : '' %>">
-                      <%= link_to group.first[0], root_path(q: group.first[0]), title: 'Click to show validators with this version' %>
-                    </td>
-                    <td class="<%= group.first[0].to_s == current_software_version(batch, params[:network]).to_s ? 'h4 text-success' : '' %>">
-                      <%= group.first[1][:stake_percent].to_f %>%
-                    </td>
-                    <td class="<%= group.first[0].to_s == current_software_version(batch, params[:network]).to_s ? 'h4 text-success' : '' %>">
-                      <%= group.first[1][:count] %>
-                    </td>
-                  </tr>
-                <% end %>
-              <% end %>
-            </tbody>
-          </table>
+          <% end %>
+        <% end %>
+        </tbody>
+      </table>
+
+      <% if software_versions.length > 6 %>
+        <div class="px-3 pb-3 text-center">
+          <a data-toggle="modal" data-target="#versionsModal" class="text-muted" href="">Show older versions</a>
         </div>
-      </div>
-      <div class="px-3">
-        <p class="small muted mt-2">
-          Please note that only active validators are included in the table above.
-        </p>
-      </div>
+        <%= render "validators/software_versions_modal", {
+          software_versions: software_versions,
+          batch: batch,
+          network: params[:network]
+        } %>
+      <% end %>
     </div>
 
   <% end %>

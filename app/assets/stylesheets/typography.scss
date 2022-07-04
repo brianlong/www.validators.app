@@ -30,6 +30,11 @@ p {
 small, .small {
   @include font-size-sm();
 }
+.small-md {
+  @media(max-width: $screen-md-max) {
+    @include font-size-sm();
+  }
+}
 
 .font-size-xs {
   @include font-size-xs();

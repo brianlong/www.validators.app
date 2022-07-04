@@ -6,4 +6,8 @@ FactoryBot.define do
     scored_at { Time.now }
     network { 'testnet' }
   end
+
+  trait :mainnet do
+    network { "mainnet"}
+  end
 end

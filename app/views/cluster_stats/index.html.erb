@@ -97,7 +97,7 @@
           <% @stats[:top_staked_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
-              <td>
+              <td class="small-md">
                 <%= link_to record.last,
                             validator_path(network: params[:network], account: record.last),
                             class: 'word-break' %>
@@ -130,7 +130,7 @@
           <% @stats[:top_skipped_vote_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
-              <td>
+              <td class="small-md">
                 <%= link_to record.last,
                             validator_path(network: params[:network], account: record.last),
                             class: 'word-break' %>
@@ -163,7 +163,7 @@
           <% @stats[:top_root_distance_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
-              <td>
+              <td class="small-md">
                 <%= link_to record.last,
                             validator_path(network: params[:network], account: record.last),
                             class: 'word-break'%>
@@ -196,7 +196,7 @@
           <% @stats[:top_vote_distance_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %>.</td>
-              <td>
+              <td class="small-md">
                 <%= link_to record.last,
                             validator_path(network: params[:network], account: record.last),
                             class: 'word-break' %>
@@ -229,7 +229,7 @@
           <% @stats[:top_skipped_slot_validators].each.with_index do |record, index| %>
             <tr>
               <td><%= index + 1 %></td>
-              <td>
+              <td class="small-md">
                 <%= link_to record.last,
                             validator_path(network: params[:network], account: record.last),
                             class: 'word-break' %>
