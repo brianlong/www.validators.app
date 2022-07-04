@@ -220,7 +220,13 @@ hr {
 
 .modal-large {
   .modal-dialog {
-    max-width: 700px;
+    max-width: 950px;
+    @media(max-width: $screen-lg-max) {
+      max-width: 900px;
+    }
+    @media(max-width: $screen-md-max) {
+      max-width: 660px;
+    }
     @media(max-width: $screen-sm-max) {
       max-width: 100vw;
       top: initial !important;

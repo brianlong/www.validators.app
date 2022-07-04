@@ -32,6 +32,34 @@ table, .table {
     }
   }
 
+  &.table-scores {
+    thead th {
+      padding: 10px $padding-standard;
+      vertical-align: middle;
+    }
+    tbody td {
+      padding: 10px $padding-standard;
+      vertical-align: middle;
+    }
+    @media(max-width: $screen-md-max) {
+      tr {
+        display: table-row;
+        td {
+          display: table-cell;
+          width: initial !important;
+          &:first-of-type {
+            padding-bottom: 10px;
+          }
+          @media(max-width: $screen-sm-max) {
+            &:last-of-type {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
   &.table-condensed {
     thead th {
       padding: 10px $padding-standard;

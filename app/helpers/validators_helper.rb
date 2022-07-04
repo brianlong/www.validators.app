@@ -11,10 +11,6 @@ module ValidatorsHelper
     LIGHT_GREY_TRANSPARENT
   end
 
-  def score_class
-    'text-warning'
-  end
-
   def chart_x_scale(count)
     [X_SCALE_MAX, count].min
   end
@@ -63,10 +59,6 @@ module ValidatorsHelper
     else
       nil
     end
-  end
-
-  def above_33percent_concentration?(validator)
-    validator.stake_concentration_score.negative?
   end
 
   def sort_software_versions(versions)
