@@ -180,18 +180,18 @@ class PingThingTest < ActiveSupport::TestCase
     assert_broadcast_on(channel, hash)
   end
 
-  test "for_date_range_and_network scope returns correct ping things" do
+  test ".for_reported_at_range_and_network scope returns correct ping things" do
     pt = create(:ping_thing, :testnet, reported_at: 10.minutes.ago)
     3.times do
       create(:ping_thing, :testnet, reported_at: rand(4.minutes.ago..Time.now))
     end
 
-    pings = PingThing.for_date_range_and_network("testnet", 5.minutes.ago, Time.now)
+    pings = PingThing.for_reported_at_range_and_network("testnet", 5.minutes.ago, Time.now)
 
     assert_equal 3, pings.count
     assert_not pings.include? pt
 
-    pings = PingThing.for_date_range_and_network("testnet", 12.minutes.ago, Time.now)
+    pings = PingThing.for_reported_at_range_and_network("testnet", 12.minutes.ago, Time.now)
     assert_equal 4, pings.count
     assert pings.include? pt
   end

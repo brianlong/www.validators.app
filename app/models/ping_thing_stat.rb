@@ -44,7 +44,7 @@ class PingThingStat < ApplicationRecord
   end
 
   def recalculate
-    resp_times = PingThing.for_date_range_and_network(
+    resp_times = PingThing.for_reported_at_range_and_network(
       network,
       time_from,
       (time_from + interval.minutes)

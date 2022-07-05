@@ -35,7 +35,7 @@ class PingThingRecentStat < ApplicationRecord
   validates :interval, inclusion: { in: INTERVALS }
 
   def recalculate_stats
-    ping_times = PingThing.for_date_range_and_network(
+    ping_times = PingThing.for_reported_at_range_and_network(
       network,
       interval.minutes.ago,
       Time.now

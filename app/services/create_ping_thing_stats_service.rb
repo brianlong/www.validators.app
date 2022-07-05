@@ -34,7 +34,7 @@ class CreatePingThingStatsService
   end
 
   def gather_ping_things(interval)
-    PingThing.for_date_range_and_network(
+    PingThing.for_reported_at_range_and_network(
       @network,
       (@time_to - interval.minutes),
       @time_to

@@ -40,7 +40,7 @@ class PingThing < ApplicationRecord
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
 
-  scope :for_date_range_and_network, -> (network, from, to) {
+  scope :for_reported_at_range_and_network, -> (network, from, to) {
     where(network: network, reported_at: (from..to))
   }
 

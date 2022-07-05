@@ -5,10 +5,6 @@ require "test_helper"
 class PingThingRecentStatTest < ActiveSupport::TestCase
   include ActionCable::TestHelper
 
-  setup do
-
-  end
-
   test "doesn't create record with invalid interval" do
     stat = build(:ping_thing_recent_stat, interval: 12)
 
