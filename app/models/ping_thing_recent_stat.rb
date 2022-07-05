@@ -32,6 +32,7 @@ class PingThingRecentStat < ApplicationRecord
   validates :network, presence: true
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :interval, presence: true
+  validates :interval, inclusion: { in: INTERVALS }
 
   def recalculate_stats
     ping_times = PingThing.for_date_range_and_network(

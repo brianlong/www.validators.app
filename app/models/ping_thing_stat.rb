@@ -31,6 +31,7 @@ class PingThingStat < ApplicationRecord
   validates :network, presence: true
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :interval, presence: true
+  validates :interval, inclusion: { in: INTERVALS }
 
   scope :by_network, -> (network) { where(network: network) }
 
