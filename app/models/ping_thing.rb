@@ -39,7 +39,11 @@ class PingThing < ApplicationRecord
   validates_length_of :application, maximum: 80, allow_blank: true
   validates :network, inclusion: { in: %w(mainnet testnet) }
   validates :signature, length: { in: 64..128 }
- 
+
+  scope :for_reported_at_range_and_network, -> (network, from, to) {
+    where(network: network, reported_at: (from..to))
+  }
+
   after_create :update_stats_if_present, :broadcast
 
   after_create :update_stats_if_present

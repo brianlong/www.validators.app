@@ -26,7 +26,12 @@ class PingThingStat < ApplicationRecord
     :time_from
   ].freeze
 
-  INTERVALS = [1, 3, 12, 24].freeze
+  INTERVALS = [1, 3, 12, 24].freeze #minutes
+
+  validates :network, presence: true
+  validates :network, inclusion: { in: %w(mainnet testnet) }
+  validates :interval, presence: true
+  validates :interval, inclusion: { in: INTERVALS }
 
   scope :by_network, -> (network) { where(network: network) }
 
@@ -39,21 +44,17 @@ class PingThingStat < ApplicationRecord
   end
 
   def recalculate
-    pings = get_included_ping_things
-    resp_times = pings.pluck(:response_time).compact
+    resp_times = PingThing.for_reported_at_range_and_network(
+      network,
+      time_from,
+      (time_from + interval.minutes)
+    ).pluck(:response_time).compact
 
     self.update(
       median: resp_times.median,
       min: resp_times.min,
       max: resp_times.max,
-      num_of_records: pings.count
-    )
-  end
-
-  def get_included_ping_things
-    PingThing.where(
-      network: self.network,
-      reported_at: (time_from..(time_from + interval.minutes))
+      num_of_records: resp_times.count
     )
   end
 

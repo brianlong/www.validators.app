@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class CreatePingThingStatsService
-
-  
-
   def initialize(time_to: DateTime.now, network: "mainnet")
     @time_to = time_to
     @network = network
@@ -17,7 +14,7 @@ class CreatePingThingStatsService
 
         resp_times = ping_things.pluck(:response_time).compact
 
-        p = PingThingStat.create(
+        PingThingStat.create(
           network: @network,
           interval: interval,
           median: resp_times.median,
@@ -37,9 +34,10 @@ class CreatePingThingStatsService
   end
 
   def gather_ping_things(interval)
-    PingThing.where(
-      network: @network,
-      reported_at: ((@time_to - interval.minutes)..@time_to)
+    PingThing.for_reported_at_range_and_network(
+      @network,
+      (@time_to - interval.minutes),
+      @time_to
     )
   end
 end

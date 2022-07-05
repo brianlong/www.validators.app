@@ -22,23 +22,31 @@ module Api
         json_result = ping_things.map { |pt| create_json_result(pt) }
 
         if with_stats
-          total_count = PingThing.where(network: index_params[:network]).count
-          response_times = PingThing.where(
+          last_5_mins = PingThingRecentStat.where(
             network: index_params[:network],
-            reported_at: (DateTime.now - 5.minutes)..DateTime.now
-          ).pluck(:response_time).sort
-                         
-          count_last_5_minutes = response_times.count
-          median_last_5_minutes = response_times.median&.round(0)
-          minimum_last_5_minutes = response_times.min
-          p90_last_5_minutes = response_times.first((response_times.count * 0.9).to_i).last
+            interval: 5
+          ).last
+          last_60_mins = PingThingRecentStat.where(
+            network: index_params[:network],
+            interval: 60
+          ).last
+
           render json: {
             ping_things: json_result,
-            total_count: total_count,
-            p90_last_5_minutes: p90_last_5_minutes,
-            count_last_5_minutes: count_last_5_minutes,
-            median_last_5_minutes: median_last_5_minutes,
-            minimum_last_5_minutes: minimum_last_5_minutes
+            last_5_mins: {
+              min: last_5_mins&.min,
+              max: last_5_mins&.max,
+              p90: last_5_mins&.p90,
+              median: last_5_mins&.median,
+              num_of_records: last_5_mins&.num_of_records
+            },
+            last_60_mins: {
+              min: last_60_mins&.min,
+              max: last_60_mins&.max,
+              p90: last_60_mins&.p90,
+              median: last_60_mins&.median,
+              num_of_records: last_60_mins&.num_of_records
+            },
           }, status: :ok
         else
           render json: json_result

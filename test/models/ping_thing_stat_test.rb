@@ -32,15 +32,6 @@ class PingThingStatTest < ActiveSupport::TestCase
     assert_equal 3, stat.num_of_records
   end
 
-  test "get_included_ping_things returns correct ping things" do
-    stat = create(:ping_thing_stat, network: @network, interval: 3, time_from: 4.minutes.ago)
-    reported_ats = stat.get_included_ping_things.pluck(:reported_at)
-
-    assert_equal 3, stat.get_included_ping_things.count
-    assert_equal [true], reported_ats.map{ |r_at| r_at >= stat.time_from }.uniq
-    assert_equal [true], reported_ats.map{ |r_at| r_at <= stat.time_from + stat.interval.minutes }.uniq
-  end
-
   test "self.between_time_range returns correct ping thing stats" do
     stat = create(:ping_thing_stat, network: @network, interval: 3, time_from: 4.minutes.ago)
 
