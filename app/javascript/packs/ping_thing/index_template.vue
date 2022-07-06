@@ -38,12 +38,8 @@
             <strong class="text-success">{{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="card mb-4">
-      <div class="card-content">
-        <div class="row px-xl-4">
+        <div class="row px-xl-4 mt-2">
           <div class="col-lg-2 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-3 d-lg-none">1 hour Stats&nbsp;</span>
             <span class="stat-title-4 text-success d-none d-lg-inline-block">1 hour stats&nbsp;</span>
