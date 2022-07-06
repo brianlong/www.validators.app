@@ -120,7 +120,7 @@
         <% end %>
         <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                     class: 'font-weight-bold' do %>
-          <span><%= i %>.&nbsp;</span><%= validator_display_name(validator) %>
+        <%= validator_display_name(validator) %>
         <% end %>
         <% unless validator.private_validator? && !validator.lido? %>
           <small>
