@@ -242,3 +242,9 @@ hr {
     padding: 15px;
   }
 }
+
+.ping-thing-stats-header {
+  @media(max-width: $screen-md-max) {
+    display:none;
+  }
+}
