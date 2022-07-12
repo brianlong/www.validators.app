@@ -52,9 +52,12 @@
 #
 # Indexes
 #
-#  index_validator_score_v1s_on_network       (network)
-#  index_validator_score_v1s_on_total_score   (total_score)
-#  index_validator_score_v1s_on_validator_id  (validator_id)
+#  index_validator_score_v1s_on_network                   (network)
+#  index_validator_score_v1s_on_network_and_active_stake  (network,active_stake)
+#  index_validator_score_v1s_on_network_and_total_score   (network,total_score)
+#  index_validator_score_v1s_on_network_and_validator_id  (network,validator_id)
+#  index_validator_score_v1s_on_total_score               (total_score)
+#  index_validator_score_v1s_on_validator_id              (validator_id)
 #
 class ValidatorScoreV1 < ApplicationRecord
   FIELDS_FOR_API = %i[

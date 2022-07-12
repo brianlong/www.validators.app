@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_29_114700) do
+ActiveRecord::Schema.define(version: 2022_07_12_063024) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -537,6 +537,9 @@ ActiveRecord::Schema.define(version: 2022_06_29_114700) do
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
+    t.index ["network", "active_stake"], name: "index_validator_score_v1s_on_network_and_active_stake"
+    t.index ["network", "total_score"], name: "index_validator_score_v1s_on_network_and_total_score"
+    t.index ["network", "validator_id"], name: "index_validator_score_v1s_on_network_and_validator_id"
     t.index ["network"], name: "index_validator_score_v1s_on_network"
     t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
     t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
