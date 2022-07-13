@@ -56,6 +56,14 @@ Run rake db:seed for basic data generation and check /dev/instruction.md file fo
 ## Copying data to staging
 To enable copying records to staging database set copy_records_to_stage in credentials file to true
 
+## Solana configuration
+Installation
+`sh -c "$(curl -sSfL https://release.solana.com/v<version>/install)"`
+Upgrade
+`solana-install init <version>`
+Check current version
+`solana -V`
+
 ## Attribute Encryption
 Attribute encryption on models is required for any attribute that contains personal information or other sensitive data. The default solution is the attr_encrypted gem. A more secure alternative is Vault.
 
