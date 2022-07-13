@@ -43,8 +43,9 @@
       _gs('set', 'anonymizeIP', true);
     </script>
 
-    <!-- Ensures 3rd party js loads correctly after going back in browser -->
-    <meta name="turbolinks-visit-control" content="reload">
+    <% if content_for? :for_head %>
+      <%= yield :for_head %>
+    <% end %>
   </head>
 
   <body>

@@ -1,3 +1,8 @@
+<!-- Ensures 3rd party js loads correctly after going back in browser -->
+<% content_for :for_head do %>
+  <meta name="turbolinks-visit-control" content="reload">
+<% end %>
+
 <%= render 'validators/banner' %>
 
 <% unless @validators.empty? %>
