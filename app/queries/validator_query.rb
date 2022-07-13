@@ -33,7 +33,7 @@ class ValidatorQuery < ApplicationQuery
   def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)
     scope = @default_scope.preload(:validator_score_v1_for_api)
     scope = filter_by_network(scope, network)
-    scope = search_by(scope, query)
+    scope = search_by(scope, query) if query
     scope = set_ordering(scope, sort_order)
     scope = set_pagination(scope, page, limit)
 
