@@ -57,6 +57,7 @@ class Validator < ApplicationRecord
   has_one :data_center, through: :validator_ip_active
   has_one :data_center_host, through: :validator_ip_active
   has_one :validator_score_v1, dependent: :destroy
+  has_one :validator_score_v1_for_web, -> { for_web }, class_name: "ValidatorScoreV1"
   has_one :most_recent_epoch_credits_by_account, -> {
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
@@ -67,7 +68,6 @@ class Validator < ApplicationRecord
   has_one :data_center_host_for_api, through: :validator_ip_active_for_api
   has_one :data_center_for_api, through: :data_center_host_for_api
   has_one :validator_score_v1_for_api, -> { for_api }, class_name: "ValidatorScoreV1"
-
 
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
