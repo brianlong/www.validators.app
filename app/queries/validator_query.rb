@@ -11,6 +11,23 @@ class ValidatorQuery < ApplicationQuery
                      end
   end
 
+  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)
+    scope = @default_scope.preload(:validator_score_v1_for_api)
+    scope = filter_by_network(scope, network)
+    scope = search_by(scope, query) if query
+    scope = set_ordering(scope, sort_order)
+    scope = set_pagination(scope, page, limit)
+
+    @api ? scope : scope.scorable
+  end
+
+  def call_single_validator(network: "mainnet", account:)
+    scope = @default_scope
+    scope = find_by_account(scope, network, account)
+  end
+
+  private
+    
   def default_api_scope
     Validator.select(validator_fields, validator_score_v1_fields)
               .joins(:validator_score_v1_for_api)
@@ -35,23 +52,6 @@ class ValidatorQuery < ApplicationQuery
 
     scope
   end
-
-  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)
-    scope = @default_scope.preload(:validator_score_v1_for_api)
-    scope = filter_by_network(scope, network)
-    scope = search_by(scope, query) if query
-    scope = set_ordering(scope, sort_order)
-    scope = set_pagination(scope, page, limit)
-
-    @api ? scope : scope.scorable
-  end
-
-  def call_single_validator(network: "mainnet", account:)
-    scope = @default_scope
-    scope = find_by_account(scope, network, account)
-  end
-
-  private
 
   def filter_by_network(scope, network)
     scope.where(network: network)
