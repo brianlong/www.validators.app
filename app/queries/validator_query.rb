@@ -4,30 +4,36 @@ class ValidatorQuery < ApplicationQuery
   include ValidatorsControllerHelper
   def initialize(watchlist_user: nil, api: false)
     @api = api
-    @default_scope = if watchlist_user
-                       User.find(watchlist_user)
-                           .watched_validators
-                           .select(validator_fields, validator_score_v1_fields)
-                           .joins(:validator_score_v1_for_api)
-                           .includes(
-                             :vote_accounts_for_api,
-                             :most_recent_epoch_credits_by_account,
-                             validator_ip_active_for_api: [
-                               data_center_host_for_api: [ :data_center_for_api ]
-                             ]
-                           )
+    @default_scope = if @api
+                       default_api_scope
                      else
-                       Validator.select(validator_fields, validator_score_v1_fields)
-                                .joins(:validator_score_v1_for_api)
-                                .includes(
-                                  :vote_accounts_for_api,
-                                  :most_recent_epoch_credits_by_account,
-                                  validator_ip_active_for_api: [
-                                    data_center_host_for_api: [ :data_center_for_api ]
-                                  ]
-                                )
+                       default_web_scope(watchlist_user)
                      end
-                              
+  end
+
+  def default_api_scope
+    Validator.select(validator_fields, validator_score_v1_fields)
+              .joins(:validator_score_v1_for_api)
+              .includes(
+                :vote_accounts_for_api,
+                :most_recent_epoch_credits_by_account,
+                validator_ip_active_for_api: [
+                  data_center_host_for_api: [ :data_center_for_api ]
+                ]
+              )
+  end
+
+  def default_web_scope(watchlist_user)
+    scope = Validator.select(validator_fields, validator_score_v1_fields)
+                     .joins(:validator_score_v1_for_api)
+                     .includes(:validator_score_v1)
+                     
+    if watchlist_user
+      watched_validators_ids = User.find(watchlist_user).watched_validators.pluck(:validator_id)
+      scope = scope.where(id: watched_validators_ids)
+    end
+
+    scope
   end
 
   def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)
