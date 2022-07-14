@@ -29,7 +29,7 @@ class ValidatorQuery < ApplicationQuery
   private
     
   def default_api_scope
-    Validator.select(validator_fields, validator_score_v1_fields)
+    Validator.select(validator_fields, validator_score_v1_fields_for_api)
               .joins(:validator_score_v1_for_api)
               .includes(
                 :vote_accounts_for_api,
@@ -41,8 +41,8 @@ class ValidatorQuery < ApplicationQuery
   end
 
   def default_web_scope(watchlist_user)
-    scope = Validator.select(validator_fields, validator_score_v1_fields)
-                     .joins(:validator_score_v1_for_api)
+    scope = Validator.select(validator_fields, validator_score_v1_fields_for_validators_index_web)
+                     .joins(:validator_score_v1_for_web)
                      .includes(:validator_score_v1)
                      
     if watchlist_user

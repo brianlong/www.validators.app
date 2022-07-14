@@ -79,6 +79,12 @@ class ValidatorScoreV1 < ApplicationRecord
     vote_distance_score
   ].freeze
 
+  FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
+    active_stake
+    total_score
+    validator_id
+  ].freeze
+
   HISTORY_FIELDS = %i[
     root_distance_history
     vote_distance_history
@@ -135,6 +141,7 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   scope :for_api, -> { select(FIELDS_FOR_API) }
+  scope :for_web, -> { select(FIELDS_FOR_VALIDATORS_INDEX_WEB) }
 
   def create_commission_history
     CreateCommissionHistoryService.new(self).call

@@ -42,8 +42,12 @@ module ValidatorsControllerHelper
     Validator::FIELDS_FOR_API.map { |e| "validators.#{e}" }
   end
 
-  def validator_score_v1_fields
+  def validator_score_v1_fields_for_api
     ValidatorScoreV1::FIELDS_FOR_API.map { |e| "validator_score_v1s.#{e}" }
+  end
+
+  def validator_score_v1_fields_for_validators_index_web
+    ValidatorScoreV1::FIELDS_FOR_VALIDATORS_INDEX_WEB.map { |e| "validator_score_v1s.#{e}" }
   end
 
   def set_boolean_field(value)
