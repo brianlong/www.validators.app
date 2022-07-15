@@ -16,6 +16,12 @@ server(
 )
 
 server(
+  '167.172.17.244',
+  user: 'deploy',
+  roles: %w[web app db cron]
+)
+
+server(
   '167.99.125.221',
   user: 'deploy',
   roles: %w[web app background cron]
