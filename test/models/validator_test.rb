@@ -4,7 +4,15 @@ require "test_helper"
 
 class ValidatorTest < ActiveSupport::TestCase
   setup do
-    @validator = create(:validator)
+    @network = "testnet"
+    @account = "test_account_123"
+
+    @validator = create(
+      :validator,
+      :with_score,
+      network: @network,
+      account: @account
+    )
 
     @va1 = create(
       :vote_account,
@@ -210,5 +218,50 @@ class ValidatorTest < ActiveSupport::TestCase
     create(:user_watchlist_element, validator: @validator, user: u)
 
     assert_equal u, @validator.watchers.first
+  end
+
+  test "validator_histories_from_period \
+        returns correct number of records" do
+    210.times do |n|
+      create(
+        :validator_history,
+        network: @network,
+        account: @account,
+        created_at: n.minutes.ago
+      )
+    end
+
+    assert_equal 200, @validator.validator_histories_from_period.count
+    assert_equal 13, @validator.validator_histories_from_period(limit: 13).count
+  end
+
+  test "validator_histories_from_period \
+        returns correct histories" do
+    create(
+      :validator_history,
+      network: @network,
+      account: @account,
+      created_at: 20.hours.ago
+    )
+
+    create(
+      :validator_history,
+      network: @network,
+      account: @account,
+      created_at: 25.hours.ago
+    )
+
+    create(
+      :validator_history,
+      network: "mainnet",
+      account: @account,
+      created_at: 2.hours.ago
+    )
+
+    result = @validator.validator_histories_from_period
+
+    assert_equal 1, result.count
+    assert_equal @validator.network, result.last.network
+    assert result.last.created_at > 24.hours.ago
   end
 end
