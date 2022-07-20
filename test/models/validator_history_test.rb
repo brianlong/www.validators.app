@@ -5,8 +5,10 @@ require 'test_helper'
 class ValidatorHistoryTest < ActiveSupport::TestCase
   def setup
     super
-
+    @account = "account123"
     @network = 'testnet'
+
+    @validator = create(:validator, account: @account, network: @network)
     @batch_uuid = create(:batch).uuid
   end
 
@@ -41,14 +43,13 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
   end
 
   test 'scope #most_recent_epoch_credits_by_account' do
-    validator = create(:validator)
     time = Date.today
     dates_with_epoch_credits = [[time - 2.day, 100],[time - 1.day, 200], [time, 300]]
 
     dates_with_epoch_credits.each do |arr|
       create(
-        :validator_history, 
-        account: validator.account, 
+        :validator_history,
+        account: @validator.account,
         created_at: arr[0], 
         epoch_credits: arr[1],
         epoch: 222
@@ -58,9 +59,66 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     most_recent_epoch_credits = ValidatorHistory.most_recent_epoch_credits_by_account
 
     assert_equal Validator.all.size, most_recent_epoch_credits.size
-    assert_equal validator.account, most_recent_epoch_credits[1].account
+    assert_equal @validator.account, most_recent_epoch_credits[1].account
     assert_equal 300, most_recent_epoch_credits[1].epoch_credits
     assert_equal 222, most_recent_epoch_credits[1].epoch
     assert_equal time, most_recent_epoch_credits[1].created_at
+  end
+
+  test "validator_histories_from_period returns correct number of records" do
+    history_limit = 200
+
+    210.times do |n|
+      create(
+        :validator_history,
+        network: @network,
+        account: @account,
+        created_at: n.minutes.ago
+      )
+    end
+
+    result = ValidatorHistory.validator_histories_from_period(
+      account: @validator.account,
+      network: @network,
+      from: 24.hours.ago,
+      to: DateTime.now,
+      limit: history_limit
+    )
+    assert_equal 200, result.count
+  end
+
+  test "validator_histories_from_period returns correct histories" do
+    create(
+      :validator_history,
+      network: @network,
+      account: @account,
+      created_at: 20.hours.ago
+    )
+
+    create(
+      :validator_history,
+      network: @network,
+      account: @account,
+      created_at: 25.hours.ago
+    )
+
+    create(
+      :validator_history,
+      network: "mainnet",
+      account: @account,
+      created_at: 2.hours.ago
+    )
+
+    result = ValidatorHistory.validator_histories_from_period(
+      account: @validator.account,
+      network: @network,
+      from: 24.hours.ago,
+      to: DateTime.now,
+      limit: 100
+    )
+
+    assert_equal 1, result.count
+    assert_equal @validator.network, result.last.network
+    assert result.last.created_at > 24.hours.ago
   end
 end

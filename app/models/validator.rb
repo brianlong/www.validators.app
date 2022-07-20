@@ -148,17 +148,6 @@ class Validator < ApplicationRecord
     ).last
   end
 
-  def validator_histories_from_period(from: Time.now - 24.hours, to: Time.now, limit: 200)
-    ValidatorHistory.where(
-      "network = ? AND account = ? AND created_at BETWEEN ? AND ?",
-      network,
-      account,
-      from,
-      to
-    ).order(created_at: :asc)
-    .last(limit)
-  end
-
   # Return the vote account that was most recently used
   def vote_account_active
     vote_accounts.active.order('updated_at asc').last || vote_accounts.order('updated_at asc').last

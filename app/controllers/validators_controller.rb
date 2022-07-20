@@ -61,7 +61,9 @@ class ValidatorsController < ApplicationController
     i = 0
 
     @val_history = @validator.validator_history_last
-    @val_histories = @validator.validator_histories_from_period(
+    @val_histories = ValidatorHistory.validator_histories_from_period(
+      account: @validator.account,
+      network: params[:network],
       from: time_from,
       to: time_to,
       limit: @history_limit

@@ -55,6 +55,17 @@ class ValidatorHistory < ApplicationRecord
     )
   end
 
+  scope :validator_histories_from_period, ->(network:, account:, from:, to:, limit:) do
+    where(
+      "network = ? AND account = ? AND created_at BETWEEN ? AND ?",
+      network,
+      account,
+      from,
+      to
+    ).order(created_at: :asc)
+    .last(limit)
+  end
+
   class << self
     
     def for_batch(network, batch_uuid)
