@@ -113,26 +113,33 @@
       var api_url = '/api/v1/ping-thing-recent-stats/' + this.network
       return {
         api_url: api_url,
-        last_5_mins: [],
-        last_60_mins: []
+        last_5_mins: {},
+        last_60_mins: {}
       }
     },
     created () {
       var ctx = this
       axios.get(ctx.api_url)
            .then(function(response) {
-             ctx.last_5_mins = response.data.last_5_mins;
-             ctx.last_60_mins = response.data.last_60_mins;
+             ctx.last_5_mins = response.data.last_5_mins ? response.data.last_5_mins : {};
+             ctx.last_60_mins = response.data.last_60_mins ? response.data.last_60_mins : {};
            })
     },
     channels: {
-      PingThingChannel: {
+      PingThingRecentStatChannel: {
         connected() {},
         rejected() {},
         received(data) {
+          data = JSON.parse(data)
           if(data["network"] == this.network){
-              this.ping_things.unshift(data)
-              this.ping_things.pop()
+              switch(data["interval"]){
+                case 5:
+                  this.last_5_mins = data
+                  break
+                case 60:
+                  this.last_60_mins = data
+                  break
+              }
           }
         },
         disconnected() {},
@@ -140,7 +147,7 @@
     },
     mounted: function(){
       this.$cable.subscribe({
-          channel: "PingThingChannel",
+          channel: "PingThingRecentStatChannel",
           room: "public",
         });
     },
