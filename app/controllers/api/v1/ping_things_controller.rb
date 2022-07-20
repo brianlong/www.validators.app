@@ -21,7 +21,7 @@ module Api
 
         json_result = ping_things.map { |pt| create_json_result(pt) }
 
-        render json: json_result
+        render json: json_result, status: :ok
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
       rescue StandardError => e
