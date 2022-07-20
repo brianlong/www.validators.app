@@ -4,15 +4,7 @@ require "test_helper"
 
 class ValidatorTest < ActiveSupport::TestCase
   setup do
-    @network = "testnet"
-    @account = "test_account_123"
-
-    @validator = create(
-      :validator,
-      :with_score,
-      network: @network,
-      account: @account
-    )
+    @validator = create(:validator)
 
     @va1 = create(
       :vote_account,
