@@ -110,10 +110,20 @@
   export default {
     props: ['network'],
     data () {
+      var api_url = '/api/v1/ping-thing-recent-stats/' + this.network
       return {
+        api_url: api_url,
         last_5_mins: [],
         last_60_mins: []
       }
+    },
+    created () {
+      var ctx = this
+      axios.get(ctx.api_url)
+           .then(function(response) {
+             ctx.last_5_mins = response.data.last_5_mins;
+             ctx.last_60_mins = response.data.last_60_mins;
+           })
     },
     channels: {
       PingThingChannel: {

@@ -2,7 +2,7 @@
   <div>
     <ping-thing-header />
 
-    <stats-bar>
+    <stats-bar :network="network"/>
 
     <div class="card mb-4">
       <div class="card-content">
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   import statsChart from './stats_chart'
   import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
@@ -41,18 +42,14 @@
         ping_things: [],
         page: 1,
         records_in_table: 120,
-        api_url: api_url,
-        last_5_mins: [],
-        last_60_mins: []
+        api_url: api_url
       }
     },
     created () {
       var ctx = this
-      axios.get(ctx.api_url, { params: { with_stats: true } })
+      axios.get(ctx.api_url)
            .then(function(response) {
-             ctx.ping_things = response.data.ping_things;
-             ctx.last_5_mins = response.data.last_5_mins;
-             ctx.last_60_mins = response.data.last_60_mins;
+             ctx.ping_things = response.data;
            })
     },
     channels: {

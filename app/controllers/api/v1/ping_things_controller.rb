@@ -21,36 +21,7 @@ module Api
 
         json_result = ping_things.map { |pt| create_json_result(pt) }
 
-        if with_stats
-          last_5_mins = PingThingRecentStat.where(
-            network: index_params[:network],
-            interval: 5
-          ).last
-          last_60_mins = PingThingRecentStat.where(
-            network: index_params[:network],
-            interval: 60
-          ).last
-
-          render json: {
-            ping_things: json_result,
-            last_5_mins: {
-              min: last_5_mins&.min,
-              max: last_5_mins&.max,
-              p90: last_5_mins&.p90,
-              median: last_5_mins&.median,
-              num_of_records: last_5_mins&.num_of_records
-            },
-            last_60_mins: {
-              min: last_60_mins&.min,
-              max: last_60_mins&.max,
-              p90: last_60_mins&.p90,
-              median: last_60_mins&.median,
-              num_of_records: last_60_mins&.num_of_records
-            },
-          }, status: :ok
-        else
-          render json: json_result
-        end
+        render json: json_result
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
       rescue StandardError => e
