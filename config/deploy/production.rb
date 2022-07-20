@@ -2,7 +2,8 @@
 
 # 'www.validators.app',
 # Role explanation:
-# web - enables front end on the server, compiles assets, restarts passenger etc.
+# app - role used by any task that runs on app server; used by capistrano-passenger by default
+# web - enables front end on the server, compiles assets
 # db - runs migrations
 # cron - updates crontab. Specific jobs can be assigned to both servers (see schedule.rb file).
 #        This role is designed to update the crontab only.
