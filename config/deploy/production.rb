@@ -20,7 +20,7 @@ server(
 server(
   '167.172.17.244',
   user: 'deploy',
-  roles: %w[web app db cron]
+  roles: %w[web app cron]
 )
 
 # Background server
