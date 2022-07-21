@@ -72,7 +72,7 @@ every 1.hour, at: 50, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
-every 1.day, at: '0:10am', roles: [:background] do
+every 1.day, at: '0:15am', roles: [:background] do
   ruby_script_sol_prices 'coin_gecko_gather_yesterday_prices.rb'
   ruby_script_sol_prices 'ftx_gather_yesterday_prices.rb'
 end
