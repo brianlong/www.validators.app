@@ -1,56 +1,27 @@
 # frozen_string_literal: true
 
-require 'uri'
-require 'net/http'
-
 EpochWallClock.delete_all
 
-@common_params = {
-  "jsonrpc" => "2.0", 
-  "id" => 1
-}
+def solana_rpc_client(network)
+  solana_client = SolanaRpcClient.new
 
-def get_last_epoch(http, uri)
-  params = @common_params.merge( {
-    "method" => "getEpochInfo"
-  })
-  resp, _ = http.post(uri, params.to_json, { 'Content-Type' => 'application/json' } )
-  JSON.parse(resp.body)['result']
-end
-
-def get_block_time(http, uri, block)
-  params = @common_params.merge( {
-    "method" => "getBlockTime",
-    "params" => [block]
-  })
-  resp, _ = http.post(uri, params.to_json, {'Content-Type' => 'application/json'})
-  puts "get_block_time: #{resp.body}"
-  JSON.parse(resp.body)['result']
-end
-
-def get_confirmed_block(http, uri, slot)
-  params = @common_params.merge( {
-    "method" => "getConfirmedBlock", #TODO: This method is deprecated from solana 1.7
-    "params" => [slot]
-  })
-  resp, _ = http.post(uri, params.to_json, {'Content-Type' => 'application/json'})
-  JSON.parse(resp.body)['result'] ? slot : nil
-end
-
-%w[mainnet testnet].each do |network|
-  url = if network == 'mainnet'
-    Rails.application.credentials.solana[:mainnet_urls][0]
-  else
-    Rails.application.credentials.solana[:testnet_urls][0]
+  if Rails.env.test?
+    return solana_client.testnet_client
   end
 
-  uri = URI(url)
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
+  case network
+  when "mainnet"
+    solana_client.mainnet_client
+  when "testnet"
+    solana_client.testnet_client
+  end
+end
 
+%w[testnet].each do |network|
   slots_in_epoch = 432000
 
-  last_epoch = get_last_epoch(http, uri)
+  last_epoch = solana_rpc_client(network).get_epoch_info.result
+
   puts last_epoch
   last_epoch_start_slot = last_epoch['absoluteSlot'] - last_epoch['slotIndex']
 
@@ -61,33 +32,48 @@ end
     slot_set -= slots_in_epoch
     current_epoch -= 1
     confirmed_start_block = nil
+
     100.times do |block_offset|
       puts block_offset
-      confirmed_start_block = get_confirmed_block(http, uri, slot_set + block_offset)
+
+      slot = slot_set + block_offset
+      get_block_result = solana_rpc_client(network).get_block(slot).result
+
+      confirmed_start_block = slot unless get_block_result&.blank?
+
       break if confirmed_start_block
       sleep(0.1)
+    rescue SolanaRpcRuby::ApiError
+      next
     end
 
     break unless confirmed_start_block
 
-    last_epoch_start_datetime = DateTime.strptime(get_block_time(http, uri, confirmed_start_block).to_s, '%s')
+    block_time = solana_rpc_client(network).get_block_time(confirmed_start_block).result.to_s
+
+    last_epoch_start_datetime = DateTime.strptime(block_time, '%s')
 
     confirmed_end_block = nil
     100.times do |block_offset|
-      confirmed_end_block = get_confirmed_block(http, uri, slot_set + slots_in_epoch - block_offset)
+      slot = slot_set + slots_in_epoch - block_offset
+      get_block_result = solana_rpc_client(network).get_block(slot).result
+      
+      confirmed_end_block = slot unless get_block_result&.blank?
 
       break if confirmed_end_block
+    rescue SolanaRpcRuby::ApiError
+      next
     end
 
     break unless confirmed_end_block
 
     puts "confirmed block: #{confirmed_start_block}"
 
-    current_epoch_start_unix = get_block_time(http, uri, confirmed_start_block).to_s
+    current_epoch_start_unix = solana_rpc_client(network).get_block_time(confirmed_start_block).result
 
     next unless current_epoch_start_unix
-
-    current_epoch_created_at = DateTime.strptime(current_epoch_start_unix, '%s')
+    puts current_epoch_start_unix
+    current_epoch_created_at = DateTime.strptime(current_epoch_start_unix.to_s, '%s')
 
     ewc = EpochWallClock.create(
       epoch: current_epoch,
