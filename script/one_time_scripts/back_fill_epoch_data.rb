@@ -5,9 +5,7 @@ EpochWallClock.delete_all
 def solana_rpc_client(network)
   solana_client = SolanaRpcClient.new
 
-  if Rails.env.test?
-    return solana_client.testnet_client
-  end
+  return solana_client.testnet_client if Rails.env.test?
 
   case network
   when "mainnet"
