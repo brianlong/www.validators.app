@@ -65,7 +65,7 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     assert_equal time, most_recent_epoch_credits[1].created_at
   end
 
-  test "validator_histories_from_period returns correct number of records" do
+  test "validator_histories_from_period returns number of records equal to given limit" do
     history_limit = 200
 
     210.times do |n|
@@ -87,7 +87,7 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     assert_equal 200, result.count
   end
 
-  test "validator_histories_from_period returns correct histories" do
+  test "validator_histories_from_period returns histories compliant with given criteria" do
     create(
       :validator_history,
       network: @network,
