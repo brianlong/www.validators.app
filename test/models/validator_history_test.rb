@@ -29,7 +29,7 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
 
     results = ValidatorHistory.for_batch(@network, @batch_uuid)
 
-    assert_equal results, validator_histories.values_at(0, 1, 2, 3, 4, 5)
+    assert_equal results.order(created_at: :asc), validator_histories.values_at(0, 1, 2, 3, 4, 5)
     assert_not_includes results, validator_histories.last
   end
 
