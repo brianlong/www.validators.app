@@ -3,6 +3,10 @@
 require 'test_helper'
 
 class AddCurrentEpochScriptTest < ActiveSupport::TestCase
+  teardown do 
+    EpochWallClock.delete_all
+  end
+
   test 'script when no current epoch should add epoch to db' do
     VCR.use_cassette(
       'add_current_epoch_script/no_previous_epochs',
@@ -18,8 +22,6 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
   end
 
   test 'script when there are some epochs should also update previous epoch' do
-    EpochWallClock.delete_all
-
     create(:epoch_wall_clock, epoch: 340, network: "testnet")
     create(:epoch_wall_clock, epoch: 329, network: "mainnet")
 
