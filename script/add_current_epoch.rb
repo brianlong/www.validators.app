@@ -3,15 +3,15 @@
 require File.expand_path('../config/environment', __dir__)
 
 def solana_rpc_client(network)
-  solana_client = SolanaRpcClient.new
+  @solana_rpc_client ||= SolanaRpcClient.new
    
-  return solana_client.testnet_client if Rails.env.test?
+  return @solana_rpc_client.testnet_client if Rails.env.test?
 
   case network
   when "mainnet"
-    solana_client.mainnet_client
+    @solana_rpc_client.mainnet_client
   when "testnet"
-    solana_client.testnet_client
+    @solana_rpc_client.testnet_client
   end
 end
 

@@ -3,19 +3,19 @@
 EpochWallClock.delete_all
 
 def solana_rpc_client(network)
-  solana_client = SolanaRpcClient.new
-
-  return solana_client.testnet_client if Rails.env.test?
+  @solana_rpc_client ||= SolanaRpcClient.new
+   
+  return @solana_rpc_client.testnet_client if Rails.env.test?
 
   case network
   when "mainnet"
-    solana_client.mainnet_client
+    @solana_rpc_client.mainnet_client
   when "testnet"
-    solana_client.testnet_client
+    @solana_rpc_client.testnet_client
   end
 end
 
-%w[testnet].each do |network|
+%w[mainnet testnet].each do |network|
   slots_in_epoch = 432000
 
   last_epoch = solana_rpc_client(network).get_epoch_info.result
