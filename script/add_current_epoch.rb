@@ -28,25 +28,29 @@ end
   next if EpochWallClock.where(network: network).find_by(epoch: last_epoch['epoch'])
 
   confirmed_start_block = nil
+  block_time = nil
   block_search_count.times do |b_diff|
     slot = last_epoch_start_slot + b_diff
 
     get_block_result = solana_rpc_client(network).get_block(slot).result
 
     confirmed_start_block = slot unless get_block_result&.blank?
+    next unless confirmed_start_block
 
-    break if confirmed_start_block
+    # We need to check block time since it may happen that timestamp is not available for this block
+    block_time = solana_rpc_client(network).get_block_time(confirmed_start_block).result.to_s
+    if block_time.present?
+      break
+    else
+      confirmed_start_block = nil
+    end
 
   # when block is not confirmed, rpc returns error
   # we want to skip this slot and try with another one
   rescue SolanaRpcRuby::ApiError
     next
   end
-
-  break unless confirmed_start_block
-
-  block_time = solana_rpc_client(network).get_block_time(confirmed_start_block).result.to_s
-
+  
   last_epoch_start_datetime = DateTime.strptime(block_time, "%s")
 
   created_epoch = EpochWallClock.create(
