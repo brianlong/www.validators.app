@@ -192,6 +192,36 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
+  test "validators_cli returns no validator form blacklist" do
+    # Empty the ValidatorHistory table
+    ValidatorHistory.delete_all
+    assert_equal 0, ValidatorHistory.count
+
+    # We need to stub both the cli call (using minitest stub)
+    # plus the POST https://api.testnet.solana.com call (using VCR)
+    json_data = File.read("#{Rails.root}/test/json/validators_from_blacklist.json")
+    SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
+      VCR.use_cassette("validators_cli_blacklist") do
+
+        # Show that the pipeline runs & the expected values are not empty.
+        p = Pipeline.new(200, @testnet_initial_payload)
+                    .then(&batch_set)
+                    .then(&epoch_get)
+                    .then(&validators_cli)
+
+        assert_equal 200, p.code
+        assert_not_nil p.payload[:epoch]
+        assert_not_nil p.payload[:batch_uuid]
+
+        # Find the EpochHistory record and show that the values match
+        validators = ValidatorHistory.where(
+          batch_uuid: p.payload[:batch_uuid]
+        ).all
+        refute validators.count.positive?
+      end
+    end
+  end
+
   # This test assumes that there is no validator RPC running locally.
   # 159.89.252.85 is my testnet server.
   test 'cli_request with fail over' do
