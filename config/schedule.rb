@@ -55,12 +55,12 @@ end
 every 1.day, roles: [:background] do
   ruby_script 'validators_update_avatar_url.rb'
   ruby_script 'remove_unconfirmed_users.rb'
-  ruby_script_data_centers 'append_to_unknown_data_center.rb'
 end
 
 every 1.day, at: '0:10am', roles: [:background] do
   ruby_script_sol_prices 'coin_gecko_gather_yesterday_prices.rb'
   ruby_script_sol_prices 'ftx_gather_yesterday_prices.rb'
+  ruby_script_data_centers 'append_to_unknown_data_center.rb'
 end
 
 every 10.minutes, roles: [:background] do
