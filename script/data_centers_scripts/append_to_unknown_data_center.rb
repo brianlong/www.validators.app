@@ -36,4 +36,7 @@ begin
   end
 
   @logger.info "Script has finished at #{Time.now}"
+
+rescue StandardError => e
+  @logger.error(e)
 end
