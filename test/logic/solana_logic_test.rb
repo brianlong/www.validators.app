@@ -178,6 +178,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
                     .then(&batch_set)
                     .then(&epoch_get)
                     .then(&validators_cli)
+
         assert_equal 200, p.code
         assert_not_nil p.payload[:epoch]
         assert_not_nil p.payload[:batch_uuid]

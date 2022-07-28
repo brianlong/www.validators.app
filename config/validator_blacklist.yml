@@ -1,4 +1,4 @@
-development:
+default: &default
   mainnet: [
 
   ]
@@ -9,3 +9,15 @@ development:
     "dv3qDFk1DTF36Z62bNvrCXe9sKATA6xvVy6A798xxAS",
     "dv4ACNkpYPcE3aKmYDqZm9G5EB3J4MRoeE7WNDRBVJB"
   ]
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+
+staging:
+  <<: *default
