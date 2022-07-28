@@ -169,38 +169,6 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 123, json.first["response_time"]
   end
 
-  test "GET api_v1_ping_things with with_stats param, returns pings with 5 and 60 min stats" do
-    4.times do |n|
-      create(:ping_thing, :testnet, response_time: n)
-    end
-    create(:ping_thing_recent_stat)
-    create(:ping_thing_recent_stat, :interval_60)
-
-    get api_v1_ping_things_path(network: "testnet", with_stats: "true"), headers: @headers
-
-    json = response_to_json(@response.body)
-    assert_equal 4, json["ping_things"].size
-    assert_equal 3, json.keys.size
-
-    assert_equal 550, json["last_5_mins"]["min"]
-    assert_equal 7000, json["last_5_mins"]["max"]
-    assert_equal 5000, json["last_5_mins"]["median"]
-    assert_equal 600, json["last_5_mins"]["p90"]
-    assert_equal 10, json["last_5_mins"]["num_of_records"]
-
-    assert_equal 500, json["last_60_mins"]["min"]
-    assert_equal 15000, json["last_60_mins"]["max"]
-    assert_equal 5000, json["last_60_mins"]["median"]
-    assert_equal 14000, json["last_60_mins"]["p90"]
-    assert_equal 100, json["last_60_mins"]["num_of_records"]
-
-    get api_v1_ping_things_path(network: "testnet", with_stats: "true", limit: 2), headers: @headers
-
-    json = response_to_json(@response.body)
-    assert_equal 2, json["ping_things"].size
-    assert_equal 3, json.keys.size
-  end
-
   test "GET api_v1_ping_things does not return total_count for invalid of false param" do
     4.times do
       create(:ping_thing, :testnet)
