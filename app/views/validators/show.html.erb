@@ -21,6 +21,9 @@
       <% if @validator.delinquent? %>
         <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0" title="Validator is delinquent.">delinquent</div>
       <% end %>
+      <% unless @validator.active? %>
+        <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0" title="Validator is inactive.">inactive</div>
+      <% end %>
       <% if @validator.admin_warning %>
         <%= link_to '/faq#admin-warning', title: "#{@validator.admin_warning}" do %>
           <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0">admin warning</div>
@@ -34,7 +37,7 @@
     </div>
 
     <% @tags_present = @validator.delinquent? || @validator.admin_warning || @validator.score.authorized_withdrawer_score == -2 %>
-    <% unless @validator.private_validator? %>
+    <% unless @validator.private_validator? || !@validator.active? %>
       <%= link_to 'Delegate SOL',
                   solstake_url(@validator.vote_account_active&.account),
                   title: 'Delegate SOL to this validator on SolStake.io',

@@ -159,6 +159,7 @@ Rails.application.routes.draw do
       get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
 
       get 'ping-thing-stats/:network', to: 'ping_thing_stats#index', as: 'ping_thing_stats'
+      get 'ping-thing-recent-stats/:network', to: 'ping_thing_recent_stats#last', as: 'ping_thing_recent_stats'
 
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
 
