@@ -14,6 +14,7 @@ module DataCenters
     end
 
     private
+
     def set_host(data_center_host)
       if data_center_host && data_center_host.is_a?(DataCenterHost)
         data_center_host
