@@ -27,7 +27,8 @@ begin
     puts missing_ip[0].inspect if verbose
 
     # Skip private IPs
-    next if missing_ip[0].match(/^(10|192|127)\..+/).present?
+    regexp_for_private_ips = /(^127\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.168\.)/
+    next if missing_ip[0].match?(regexp_for_private_ips)
 
     record = client.insights(missing_ip[0])
 
