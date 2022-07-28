@@ -8,7 +8,7 @@ log_path = Rails.root.join('log', 'append_to_unknown_data_center.log')
 @logger.info "Script has started at #{Time.now}"
 
 begin
-  data_center_key = ARGV[0] || "0--Unknown"
+  data_center_key = ARGV[0] || DataCenter::UNKNOWN_DATA_CENTER_KEY
   unknown_data_center = DataCenter.find_by(data_center_key: data_center_key)
   service = DataCenters::AppendToDataCenter.new(unknown_data_center)
 
