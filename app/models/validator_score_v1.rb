@@ -100,13 +100,6 @@ class ValidatorScoreV1 < ApplicationRecord
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
 
-  IP_FIELDS_FOR_API = [
-    "address",
-    "location_latitude",
-    "location_longitude",
-    "traits_autonomous_system_number"
-  ].map{ |e| "ips.#{e}" }.join(", ")
-
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?
   before_save :calculate_total_score

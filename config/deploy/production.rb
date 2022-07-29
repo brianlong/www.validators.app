@@ -2,23 +2,33 @@
 
 # 'www.validators.app',
 # Role explanation:
-# web - enables front end on the server, compiles assets etc.
+# app - role used by any task that runs on app server
+# web - enables front end on the server, compiles assets; used by capistrano-passenger to eg. restart server
 # db - runs migrations
 # cron - updates crontab. Specific jobs can be assigned to both servers (see schedule.rb file).
 #        This role is designed to update the crontab only.
 # background - used for actions that are meant to run on background server,
 #              such as daemons and workers. Use for 167.99.125.221 server only.
-#
+
+# Web server
 server(
   '104.131.169.171',
   user: 'deploy',
   roles: %w[web app db cron]
 )
 
+# Second web server
+server(
+  '167.172.17.244',
+  user: 'deploy',
+  roles: %w[web app cron]
+)
+
+# Background server
 server(
   '167.99.125.221',
   user: 'deploy',
-  roles: %w[web app background cron]
+  roles: %w[app background cron]
 )
 
 # server-based syntax
