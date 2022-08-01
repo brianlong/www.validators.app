@@ -179,7 +179,7 @@ module SolanaLogic
 
       validators = {}
       validators_json.each do |hash|
-        next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash['pubkey']
+        next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
         validators[hash['pubkey']] = {
           'gossip_ip_port' => hash['gossip'],
           'rpc_ip_port' => hash['rpc'],

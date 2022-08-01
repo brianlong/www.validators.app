@@ -216,8 +216,8 @@ class SolanaLogicTest < ActiveSupport::TestCase
         # Find the EpochHistory record and show that the values match
         validators = ValidatorHistory.where(
           batch_uuid: p.payload[:batch_uuid]
-        ).all
-        refute validators.count.positive?
+        )
+        assert_empty validators
       end
     end
   end
