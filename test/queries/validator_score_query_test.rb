@@ -4,14 +4,16 @@ require 'test_helper'
 class ValidatorScoreQueryTest < ActiveSupport::TestCase
   def setup
     batch_uuid = create(:batch).uuid
-    
+    validator_ids = []
+
     6.times do |n|
-      create(:validator, :with_score, account: "validator_#{n}")
+      v = create(:validator, :with_score, account: "validator_#{n}")
+      validator_ids << v.id
     end
 
-    @validators = Validator.all
+    @validators = Validator.where(id: validator_ids)
 
-    @validator_histories = @validators.map do |validator|
+    @validators.map do |validator|
       create(
         :validator_history, 
         batch_uuid: batch_uuid,
