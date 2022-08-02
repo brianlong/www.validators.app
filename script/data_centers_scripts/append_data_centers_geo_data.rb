@@ -109,9 +109,7 @@ begin
 
     vs1.network = validator.network
     vs1.ip_address = ip
-    unless validator_ip.data_center_host.nil?
-      vs1.data_center_key = validator_ip.data_center_host.data_center_key
-    end
+    
     vs1.save
   end
 
