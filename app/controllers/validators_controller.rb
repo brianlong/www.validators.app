@@ -61,13 +61,13 @@ class ValidatorsController < ApplicationController
     i = 0
 
     @val_history = @validator.validator_history_last
-    @val_histories = ValidatorHistory.where(
-      "account = ? AND created_at BETWEEN ? AND ?", 
-      @validator.account,
-      time_from,
-      time_to
-    ).order(created_at: :asc)
-    .last(@history_limit)
+    @val_histories = ValidatorHistory.validator_histories_from_period(
+      account: @validator.account,
+      network: params[:network],
+      from: time_from,
+      to: time_to,
+      limit: @history_limit
+    )
 
     # Grab the root distances to show on the chart
     @root_blocks = @val_histories.map do |val_history|

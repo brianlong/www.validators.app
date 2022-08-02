@@ -547,9 +547,6 @@ ActiveRecord::Schema.define(version: 2022_07_15_132253) do
     t.index ["network", "active_stake"], name: "index_validator_score_v1s_on_network_and_active_stake"
     t.index ["network", "total_score"], name: "index_validator_score_v1s_on_network_and_total_score"
     t.index ["network", "validator_id"], name: "index_validator_score_v1s_on_network_and_validator_id"
-    t.index ["network"], name: "index_validator_score_v1s_on_network"
-    t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
-    t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
 
   create_table "validators", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
