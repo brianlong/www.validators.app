@@ -48,6 +48,7 @@ set :default_env, {
 
 set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH' }
 # set :passenger_restart_with_touch, true
+set :passenger_roles, :web
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

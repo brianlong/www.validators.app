@@ -21,10 +21,17 @@ WEBNX_HOSTS = {
     city_name: "Los Angeles",
     data_center_key: "18450-US-Los Angeles",
     aso: ASO
+  },
+  "static.nyinternet.net" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "New York",
+    data_center_key: "18450-US-New York",
+    aso: ASO
   }
 }
 
-HOST_REGEX = /(tier-four|ip4)\.(demarc|gtt).+/
+HOST_REGEX = /(tier-four|ip4|static)\.(demarc|gtt|nyinternet).+/
 
 ValidatorIp.joins(:data_center)
            .where("is_active = ? AND is_overridden = ? AND data_centers.traits_autonomous_system_number = ?", true, false, 18_450)

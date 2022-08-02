@@ -52,12 +52,9 @@
 #
 # Indexes
 #
-#  index_validator_score_v1s_on_network                   (network)
 #  index_validator_score_v1s_on_network_and_active_stake  (network,active_stake)
 #  index_validator_score_v1s_on_network_and_total_score   (network,total_score)
 #  index_validator_score_v1s_on_network_and_validator_id  (network,validator_id)
-#  index_validator_score_v1s_on_total_score               (total_score)
-#  index_validator_score_v1s_on_validator_id              (validator_id)
 #
 class ValidatorScoreV1 < ApplicationRecord
   FIELDS_FOR_API = %i[
@@ -102,13 +99,6 @@ class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
-
-  IP_FIELDS_FOR_API = [
-    "address",
-    "location_latitude",
-    "location_longitude",
-    "traits_autonomous_system_number"
-  ].map{ |e| "ips.#{e}" }.join(", ")
 
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?

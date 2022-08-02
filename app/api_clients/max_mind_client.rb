@@ -7,6 +7,8 @@ class MaxMindClient
 
   def insights(ip)
     @client.insights(ip)
+  rescue MaxMind::GeoIP2::InsufficientFundsError => e
+    Appsignal.send_error(e)
   end
 
   private
