@@ -141,6 +141,10 @@ class ValidatorScoreV1 < ApplicationRecord
     def with_private(show: "true")
       show == "true" ? all : where.not(commission: 100)
     end
+
+    def total_active_stake(network)
+      joins(:data_center).by_network_with_active_stake(network).sum(:active_stake)
+    end
   end
 
   def calculate_total_score
