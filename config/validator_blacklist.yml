@@ -19,5 +19,5 @@ test:
 production:
   <<: *default
 
-staging:
+stage:
   <<: *default
