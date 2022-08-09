@@ -42,6 +42,9 @@ end
 
 @data_centers = @data_centers.sort_by { |_k, v| -v[:count] }
 @data_centers.each do |k, v|
+  # We don't want to update score for validators from unknown data_center
+  next if k == DataCenter::UNKNOWN_DATA_CENTER_KEY
+
   if ((v[:active_stake] / @total_stake.to_f)*100.0) >= MAX_DATA_CENTER_STAKE
     score = -2
   else
