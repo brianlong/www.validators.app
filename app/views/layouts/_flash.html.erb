@@ -3,7 +3,7 @@
     <% next if flash_message_is_cookie_info(msg) %>
     <div class="alert <%= bootstrap_class_for_flash(type) %> alert-dismissable fade show">
       <%= msg %>
-      <button class="close" data-dismiss="alert">x</button>
+      <button class="btn-close" data-dismiss="alert">x</button>
     </div>
   <% end %>
 </div>
