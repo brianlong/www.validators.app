@@ -34,11 +34,6 @@ Rails.application.routes.draw do
 
   get 'validators/:account/vote_accounts/:vote_account', to: 'vote_accounts#show', 
                                                          as: 'validator_vote_account'
-
-  get 'tower',
-      to: 'public#tower',
-      as: 'tower'
-
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
 
