@@ -2,11 +2,11 @@
   <div class="col-md-4 col-lg-3 col-xl-2 pr-0 mb-2">
     <%= link_to 'Score',
                 url_for(order: 'score', page: params[:page], network: params[:network], refresh: params[:refresh]),
-                class: "btn btn-sm mr-1 mb-3 btn-secondary #{ 'active' unless %w[random name stake].include?(params[:order]) }" %>
+                class: "btn btn-sm me-1 mb-3 btn-secondary #{ 'active' unless %w[random name stake].include?(params[:order]) }" %>
 
     <%= link_to 'Stake',
                 url_for(order: 'stake', page: params[:page], network: params[:network], refresh: params[:refresh]),
-                class: "btn btn-sm mr-1 mb-3 btn-secondary #{ 'active' if params[:order] == 'stake' }" %>
+                class: "btn btn-sm me-1 mb-3 btn-secondary #{ 'active' if params[:order] == 'stake' }" %>
   </div>
 
   <div class="col-md-8 col-lg-9 col-xl-10">

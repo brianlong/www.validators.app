@@ -24,11 +24,11 @@ module DataCentersHelper
     when :data_center
       link_to show_private?(url_params) ? "Hide private" : "Show private",
         data_center_url(network: url_params[:network], key: url_params[:key], show_private: !show_private?(url_params)),
-        class: "btn btn-sm btn-secondary mr-1 mb-4"
+        class: "btn btn-sm btn-secondary me-1 mb-4"
     when :asn
       link_to show_private?(url_params) ? "Hide private" : "Show private",
         asn_url(network: url_params[:network], asn: url_params[:asn], show_private: !show_private?(url_params)),
-        class: "btn btn-sm btn-secondary mr-1 mb-4"
+        class: "btn btn-sm btn-secondary me-1 mb-4"
     end
   end
 

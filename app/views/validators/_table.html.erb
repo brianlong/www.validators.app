@@ -129,12 +129,12 @@
         <% end %>
         <% if validator.score.authorized_withdrawer_score == -2 %>
           <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
-            <i class="fas fa-exclamation-triangle text-warning small ml-1"></i>
+            <i class="fas fa-exclamation-triangle text-warning small ms-1"></i>
           <% end %>
         <% end %>
         <% if validator.admin_warning %>
           <%= link_to '/faq#admin-warning', title: "#{validator.admin_warning}" do %>
-            <i class="fas fa-exclamation-triangle text-danger small ml-1"></i>
+            <i class="fas fa-exclamation-triangle text-danger small ms-1"></i>
           <% end %>
         <% end %>
         <br />
