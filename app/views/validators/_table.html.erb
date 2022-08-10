@@ -119,7 +119,7 @@
           </i>
         <% end %>
         <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
-                    class: 'font-weight-bold' do %>
+                    class: 'fw-bold' do %>
           <%= validator_display_name(validator) %>
         <% end %>
         <% unless validator.private_validator? && !validator.lido? %>
