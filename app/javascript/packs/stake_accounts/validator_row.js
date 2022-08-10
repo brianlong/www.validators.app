@@ -129,7 +129,7 @@ var ValidatorRow = Vue.component('validatorRow', {
         </div>
       </td>
 
-      <td class="column-info align-middle pl-3">
+      <td class="column-info align-middle ps-3">
         <a :href="validator_url()" class="font-weight-bold">
           <span>{{idx+1}}.&nbsp;</span> {{ validator_name() }}
         </a>
@@ -184,12 +184,12 @@ var ValidatorRow = Vue.component('validatorRow', {
 
       <td class="d-lg-none pt-0">
         <div class="row mb-3">
-          <div class="col pr-0">
+          <div class="col pe-0">
             <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('root-distance', $event)" href="">
               Root <br class="d-xxs-inline-block" />Distance
             </a>
           </div>
-          <div class="col pr-0">
+          <div class="col pe-0">
             <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('vote-distance', $event)" href="">
               Vote <br class="d-xxs-inline-block" />Distance
             </a>

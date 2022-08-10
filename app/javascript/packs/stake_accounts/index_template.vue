@@ -72,7 +72,7 @@
           <thead>
             <tr>
               <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
-              <th class="column-info align-middle pl-3">
+              <th class="column-info align-middle ps-3">
                 Name <small class="text-muted">(Commission)</small>
                 <i class="fas fa-info-circle font-size-xs text-muted"
                   data-toggle="tooltip"
@@ -95,7 +95,7 @@
                   title="Our score system.">
                 </i>
               </th>
-              <th class='column-sm align-middle pr-0'>
+              <th class='column-sm align-middle pe-0'>
                 Skipped Vote&nbsp;&percnt;
                 <i class="fas fa-info-circle font-size-xs text-muted"
                   data-toggle="tooltip"

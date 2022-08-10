@@ -19,7 +19,7 @@
         #
       <% end %>
     </th>
-    <th class="column-info align-middle <%= 'pl-3' unless current_user %>">
+    <th class="column-info align-middle <%= 'ps-3' unless current_user %>">
       Name <small class="text-muted">(Commission)</small>
       <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
@@ -45,7 +45,7 @@
          title="<%= t('definitions.scores') %>">
       </i>
     </th>
-    <th class='column-sm align-middle pr-0'>
+    <th class='column-sm align-middle pe-0'>
       Skipped Vote&nbsp;&percnt;
       <i class="fas fa-info-circle font-size-xs text-muted"
          data-toggle="tooltip"
@@ -108,7 +108,7 @@
         <% end %>
       </td>
 
-      <td class="column-info align-middle <%= 'pl-3' unless current_user %>">
+      <td class="column-info align-middle <%= 'ps-3' unless current_user %>">
         <% if current_user %>
           <i class="d-lg-none watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'far' %> fa-star"
              data-toggle="tooltip"
@@ -196,12 +196,12 @@
 
       <td class="d-lg-none pt-0">
         <div class="row mb-3">
-          <div class="col pr-0">
+          <div class="col pe-0">
             <a class="chart-link" data-iterator="<%=i%>" data-target="root-distance" href="">
               Root <br class="d-xxs-inline-block" />Distance
             </a>
           </div>
-          <div class="col pr-0">
+          <div class="col pe-0">
             <a class="chart-link" data-iterator="<%=i%>" data-target="vote-distance" href="">
               Vote <br class="d-xxs-inline-block" />Distance
             </a>
