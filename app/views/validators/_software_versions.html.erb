@@ -34,7 +34,7 @@
 
       <% if software_versions.length > 6 %>
         <div class="px-3 pb-3 text-center">
-          <a data-toggle="modal" data-target="#versionsModal" class="text-muted" href="">Show older versions</a>
+          <a data-bs-toggle="modal" data--bs-target="#versionsModal" class="text-muted" href="">Show older versions</a>
         </div>
         <%= render "validators/software_versions_modal", {
           software_versions: software_versions,

@@ -23,7 +23,7 @@
       about liquid staking.
     </p>
 
-    <div id="carouselLogos" class="carousel slide d-none d-md-block px-lg-5 mb-3" data-ride="carousel" data-interval="4000">
+    <div id="carouselLogos" class="carousel slide d-none d-md-block px-lg-5 mb-3" data-bs-ride="carousel" data-bs-interval="4000">
       <div class="carousel-inner">
         <% shuffle_logos.each_slice(3).to_a.each_with_index do |group, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
@@ -40,7 +40,7 @@
         <% end %>
       </div>
     </div>
-    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-ride="carousel" data-interval="4000">
+    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="4000">
       <div class="carousel-inner">
         <% shuffle_logos.each_with_index do |logo, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
@@ -52,7 +52,7 @@
       </div>
       <ol class="carousel-indicators">
         <% shuffle_logos.count.times do |index| %>
-          <li data-target="#carouselLogosMobile" data-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></li>
+          <li data--bs-target="#carouselLogosMobile" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></li>
         <% end %>
       </ol>
     </div>

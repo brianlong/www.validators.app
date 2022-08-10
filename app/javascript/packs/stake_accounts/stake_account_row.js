@@ -52,8 +52,8 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 <th class="column-sm align-middle">Stake</th>
                 <th class="column-xs align-middle text-lg-right ps-lg-0">
                   Act Epoch&nbsp;<i class="fas fa-info-circle font-size-xs text-muted"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
                                     title="Stake Account Activation Epoch">
                                  </i><br />
                   <small class="text-muted">Current: {{ current_epoch }}</small>

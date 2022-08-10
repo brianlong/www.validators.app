@@ -35,8 +35,8 @@
                               refresh: params[:refresh],
                               watchlist: params[:watchlist] ? nil : true) do %>
             <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
-               data-toggle="tooltip"
-               data-placement="top"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
                title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
             </i>
           <% end %>
