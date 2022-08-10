@@ -5,10 +5,6 @@
 
 <%= render 'validators/banner' %>
 
-<div id="ping-thing-stats">
-  <stats-bar network=<%= params[:network]%>/>
-</div>
-
 <% unless @validators.empty? %>
   <div class="card">
     <div class="card-content pb-3">
@@ -77,5 +73,3 @@
 <% if @validators.blank? && !params[:watchlist].blank? %>
   <%= render 'validators/empty_watchlist' %>
 <% end %>
-
-<%= javascript_pack_tag 'ping_thing/stats_bar.js' %>

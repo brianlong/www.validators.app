@@ -1,6 +1,9 @@
 <template>
   <div class="card mb-4">
       <div class="card-content">
+        <h2 class="h3 card-heading" v-if="titleVisible">
+          Recent TX Confirmation Time Stats
+        </h2>
         <div class="row px-xl-4 ping-thing-stats-header">
           <div class="col-lg-2 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-none d-lg-block">Stats from&nbsp;</span>
@@ -108,7 +111,14 @@
   import axios from 'axios'
 
   export default {
-    props: ['network'],
+    props: {
+      network: {
+        default: "mainnet"
+      },
+      titleVisible: {
+        default: false
+      }
+    },
     data () {
       var api_url = '/api/v1/ping-thing-recent-stats/' + this.network
       return {
