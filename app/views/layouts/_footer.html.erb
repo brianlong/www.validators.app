@@ -2,7 +2,7 @@
   <% if flash[:cookie_notice] %>
     <div class="alert alert-info" role="alert">
       <%= flash[:cookie_notice] %>
-      <%= link_to(t('ok'), saw_cookie_notice_path, method: :post, class: 'float-right') unless cookies[:saw_cookie_notice] %>
+      <%= link_to(t('ok'), saw_cookie_notice_path, method: :post, class: 'float-end') unless cookies[:saw_cookie_notice] %>
     </div>
   <% end %>
 
