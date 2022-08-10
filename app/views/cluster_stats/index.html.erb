@@ -103,7 +103,7 @@
                             class: 'word-break' %>
               </td>
               <td><%= number_with_delimiter( lamports_to_sol(record.first).round(0), delimiter: ',')  %></td>
-              <td class="text-right">
+              <td class="text-end">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
@@ -136,7 +136,7 @@
                             class: 'word-break' %>
               </td>
               <td><%= (record.first.to_f * 100).round(2).to_s + "%" %></td>
-              <td class="text-right">
+              <td class="text-end">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
@@ -169,7 +169,7 @@
                             class: 'word-break'%>
               </td>
               <td><%= record.first.to_f.round(3) %></td>
-              <td class="text-right">
+              <td class="text-end">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
@@ -202,7 +202,7 @@
                             class: 'word-break' %>
               </td>
               <td><%= record.first.to_f.round(3) %></td>
-              <td class="text-right">
+              <td class="text-end">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>
@@ -235,7 +235,7 @@
                             class: 'word-break' %>
               </td>
               <td><%= (record.first.to_f * 100).round(3).to_s + "%" %></td>
-              <td class="text-right">
+              <td class="text-end">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
                   <i class="fas fa-search text-purple"></i>
                 <% end %>

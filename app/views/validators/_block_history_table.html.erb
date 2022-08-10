@@ -6,14 +6,14 @@
 <table class='table mb-0'>
   <thead>
   <tr>
-    <th class='column-xs text-right'>Epoch</th>
-    <th class='column-md text-right'>Leader Slots<br />Total Slots</th>
-    <th class='column-md text-right'>Leader Blocks<br />Total Blocks</th>
-    <th class='column-md text-right'>
+    <th class='column-xs text-end'>Epoch</th>
+    <th class='column-md text-end'>Leader Slots<br />Total Slots</th>
+    <th class='column-md text-end'>Leader Blocks<br />Total Blocks</th>
+    <th class='column-md text-end'>
       Skipped Slots<br />
       Skipped Total
     </th>
-    <th class='column-md text-right'>
+    <th class='column-md text-end'>
       &percnt; Skipped<br />
       &percnt; Total
     </th>
@@ -25,22 +25,22 @@
       <!-- TODO: Add `network` to this query -->
       <% block_stats = @block_history_stats.find{ |stat| stat.batch_uuid == history.batch_uuid } %>
       <tr>
-        <td class='text-right'>
+        <td class='text-end'>
           <%= number_with_delimiter history.epoch %>
         </td>
-        <td class='text-right'>
+        <td class='text-end'>
           <%= number_with_delimiter history.leader_slots %><br />
           <%= number_with_delimiter block_stats.total_slots unless block_stats.nil? %>
         </td>
-        <td class='text-right'>
+        <td class='text-end'>
           <%= number_with_delimiter history.blocks_produced %><br />
           <%= number_with_delimiter block_stats.total_blocks_produced unless block_stats.nil? %>
         </td>
-        <td class='text-right'>
+        <td class='text-end'>
           <%= number_with_delimiter history.skipped_slots %><br />
           <%= number_with_delimiter block_stats.total_slots_skipped unless block_stats.nil? %>
         </td>
-        <td class='text-right'>
+        <td class='text-end'>
           <%= number_to_percentage (history.skipped_slot_percent.to_f*100.0) %><br />
           <%= number_to_percentage (
                                      block_stats.total_slots_skipped/block_stats.total_slots.to_f
