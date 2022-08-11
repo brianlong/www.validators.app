@@ -47,6 +47,9 @@
 #  index_data_centers_on_data_center_key  (data_center_key)
 #
 class DataCenter < ApplicationRecord
+  # Data Center for validators not assigned anywhere (mostly due to lack of validator_ip) 
+  UNKNOWN_DATA_CENTER_KEY = "0--Unknown"
+
   FIELDS_FOR_API = %i[
     data_center_key 
     id

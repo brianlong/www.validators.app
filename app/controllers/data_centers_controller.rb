@@ -33,7 +33,7 @@ class DataCentersController < ApplicationController
     @validators = @validators.page(params[:page]).per(@per)
     @batch = Batch.last_scored(params[:network])
     @population = @validators.total_count
-    @total_stake = ValidatorScoreV1.by_network_with_active_stake(params[:network]).sum(:active_stake)
+    @total_stake = ValidatorScoreV1.total_active_stake(params[:network])
     @dc_info = data_centers.first || DataCenter.new(data_center_key: key)
   end
 

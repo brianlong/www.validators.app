@@ -34,6 +34,8 @@ class PingThingRecentStat < ApplicationRecord
   validates :interval, presence: true
   validates :interval, inclusion: { in: INTERVALS }
 
+  after_update :broadcast
+
   def recalculate_stats
     ping_times = PingThing.for_reported_at_range_and_network(
       network,
@@ -57,5 +59,9 @@ class PingThingRecentStat < ApplicationRecord
         *FIELDS_FOR_API
       )
     end
+  end
+
+  def broadcast
+    ActionCable.server.broadcast("ping_thing_recent_stat_channel", self.to_json)
   end
 end
