@@ -34,6 +34,13 @@ def create_users
   @user.confirm
 end
 
+def create_data_centers
+  DataCenter.find_or_create_by(
+    traits_autonomous_system_number: 0,
+    city_name: "Unknown"
+  )
+end
+
 if Rails.env.development?
   # User.destroy_all # uncomment to destroy users, regenerate api_tokens etc.
 
@@ -47,4 +54,6 @@ if Rails.env.development?
     For further population of the database check scripts located in /daemons and /script.
     Note that more specific instructions are held in /dev/instruction.md file.
   }
+
+  create_data_centers
 end
