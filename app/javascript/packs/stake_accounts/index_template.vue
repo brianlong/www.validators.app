@@ -29,20 +29,20 @@
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <div class="form-group pt-xl-3">
-            <label>Withdrawer</label>
-            <input v-model="filter_withdrawer" type="text" class="form-control mb-3">
+          <div class="mb-3">
+            <label class="form-label">Withdrawer</label>
+            <input v-model="filter_withdrawer" type="text" class="form-control">
           </div>
-          <div class="form-group">
-            <label>Validator</label>
+          <div class="mb-3">
+            <label class="form-label">Validator</label>
             <input v-model="filter_validator" type="text" class="form-control">
           </div>
-          <div class="form-group">
-            <label>Stake account</label>
+          <div class="mb-3">
+            <label class="form-label">Stake account</label>
             <input v-model="filter_account" type="text" class="form-control">
           </div>
-          <div class="form-group">
-            <label>Staker</label>
+          <div class="mb-3">
+            <label class="form-label">Staker</label>
             <input v-model="filter_staker" type="text" class="form-control">
           </div>
           <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-tertiary mb-2">
