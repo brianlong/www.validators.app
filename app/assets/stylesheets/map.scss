@@ -1,0 +1,30 @@
+@import "variables";
+
+.map {
+  &-background {
+    background: url(asset_path("map/shutterstock_cropped.svg")) no-repeat top right;
+    background-size: cover;
+    height: 620px;
+  }
+
+  &-legend {
+    position: absolute;
+    text-align: left;
+    bottom: 0;
+    padding: $padding-standard*2;
+  }
+
+  &-points {
+    width: 100%;
+    height: 100%;
+  }
+
+  &-point {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    border: 1px solid $link-color;
+    background-color: rgba(224, 161, 232, .4);
+    position: absolute;
+  }
+}

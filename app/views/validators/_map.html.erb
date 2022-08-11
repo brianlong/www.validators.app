@@ -1,0 +1,73 @@
+<div class="card map">
+    <div class="map-legend">
+      <div class="small fw-bold">
+        <strong class="text-success">2100</strong> Validators
+      </div>
+      <div class="small mb-5">
+        <strong class="text-success">200</strong> RPC Nodes
+      </div>
+
+      <strong id="dataCenterName" class="text-purple">24940-DE-Falkenstein</strong>
+      <div id="dataCenterValidatorsCount" class="small text-muted">302 validators</div>
+    </div>
+
+    <div class="map-background">
+      <div class="map-points">
+        <%
+          # fake validators data
+          # TODO group by data center - the same dc = the same geo coord
+          @points = {
+            network: 'mainnet',
+            validators: [
+              # { validator_name: 'Valhall Validator', account: '9XBZbtW61oRypcCyKko9Q9k41yFHAoCGwqs7XrNTfTf3', latitude: '59.9452', longitude: '10.7559', country: 'Norway', country_iso_code: 'NO'},
+              # { validator_name: 'Block Logic', account: 'DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp', latitude: '52.3716', longitude: '4.8883', country: 'Netherlands', country_iso_code: 'NL'},
+              # { validator_name: 'Aquanode', account: 'J2jV3gQsvX2htBXHeNStAVvMJaPe3RgNotwfav9pyS6y', latitude: '39.0481', longitude: '-77.4728', country: 'United States', country_iso_code: 'US'},
+              # { validator_name: 'NodesGuru', account: '8n9KRHDRDuZErZwdwzhtsTFJxmHqgCQ4ddZcdk6GMzvQ', latitude: '48.8582', longitude: '2.3387', country: 'France', country_iso_code: 'FR'},
+              # { validator_name: 'StakeCraft', account: 'WUNoB9YQXmXXRcJsjY1G8PfVag5aAfnyGmFd6YwJVwp', latitude: '48.8582', longitude: '2.3387', country: 'France', country_iso_code: 'FR'},
+              # { validator_name: 'LunaNova', account: 'LunaowJnt875WWoqDkhHhE93SNYHa6tfFNVn1rqc57c', latitude: '51.4964', longitude: '-0.1224', country: 'United Kingdom', country_iso_code: 'UK'},
+              # { validator_name: 'StakeArmy', account: 'AAHSdsnRREfdQNzDGRxai8CLXh9EPCoRdwULPqBYd9fb', latitude: '60.1719', longitude: '24.9347', country: 'Finland', country_iso_code: 'FI'},
+              # { validator_name: 'DimAn', account: 'Diman2GphWLwECE3swjrAEAJniezpYLxK1edUydiDZau', latitude: '37.751', longitude: '-97.822', country: 'United States', country_iso_code: 'US'},
+              # { validator_name: 'blxpro', account: 'Gb1JYQqwcWvrEp8rxmjiUJtnGVSJGeWFrzifxeZUC5w5', latitude: '51.5164', longitude: '-0.093', country: 'Germany', country_iso_code: 'DE'},
+              # { validator_name: 'Andisol', account: '89Pze9jFewDXbFwAjqgwbCGKbkxGza7KomodAmK5YmBh', latitude: '60.1719', longitude: '24.9347', country: 'Finland', country_iso_code: 'FI'},
+              # { validator_name: 'POSTHUMAN', account: '9PViHDmiezXQfeYDveJrcfkXCQVCcsfhpo32cjHUeZVj', latitude: '45.3161', longitude: '-73.8736', country: 'Canada', country_iso_code: 'CA'},
+              # { validator_name: 'Solana State', account: '8n4pc4sCJtBeLfJdGyJn6EcZuhtfTiepRa9ExdJFdmEN', latitude: '37.751', longitude: '-97.822', country: 'United States', country_iso_code: 'US'},
+              # { validator_name: 'Kudesnik', account: '2xKfuXN8HqaEi5L6Dwy2qZ3a5AJPM2hmZ88ZhgZgscom', latitude: '45.3161', longitude: '-73.8736', country: 'Canada', country_iso_code: 'CA'},
+              # { validator_name: 'ramuchi.tech', account: '8dv4modWJNvb1r94nzknoS8H34iY4PkKgrYhbGXVX833', latitude: '60.1719', longitude: '24.9347', country: 'Finland', country_iso_code: 'FI'},
+              # { validator_name: 'Solbase.info', account: 'Bkucd9XTD2geqNsgcbMcqsSnLhqfHUuDvAUSGCXsJBdK', latitude: '60.1719', longitude: '24.9347', country: 'Finland', country_iso_code: 'FI'},
+              # { validator_name: 'FSVdqB...zTJ2', account: 'FSVdqBzx5D4UsqBLnvmH5dFx2dCm1pTPAbQWJ1PYzTJ2', latitude: '35.6289', longitude: '139.7915', country: 'Japan', country_iso_code: 'JPN'},
+              # { validator_name: 'Chainflow', account: '2mMGsb5uy1Q4Dvezr8HK2E8SJoChcb2X7b61tJPaVHHd', latitude: '40.4163', longitude: '-3.6934', country: 'Spain', country_iso_code: 'ESP'},
+              # { validator_name: 'a16z', account: 'BpyjeG4SY9r3TNnc3rP22DP3wpsStFA1FaZWywNPy6dr', latitude: '53.3331', longitude: '-6.2489', country: 'Ireland', country_iso_code: 'IRL'},
+              # { validator_name: 'Nava', account: '6RmSMaZbyb7SGKLp34MXY2qkFePZh41Frs79xJgEg5R6', latitude: '55.7483', longitude: '37.6171', country: 'Russia', country_iso_code: 'RU'},
+              # { validator_name: 'Feline', account: '3m5QHq24vbPVhtbcHbaDjvij58WExvfy16UgcCPLfDXP', latitude: '1.3446', longitude: '103.7373', country: 'Singapore', country_iso_code: 'SGP'},
+              # { validator_name: 'Sanatio Validator | 0% -> Forever | Green energy', account: 'FeSpAdWa9NSvnD8oqDqHysy631R1adNKSLnVmWSc9XDw', latitude: '52.9909', longitude: '16.9198', country: 'Poland', country_iso_code: 'PL'},
+              # { validator_name: 'Jump Crypto', account: 'Certusm1sa411sMpV9FPqU5dXAYhmmhygvxJ23S6hJ24', latitude: '49.0099', longitude: '8.3592', country: 'Germany', country_iso_code: 'DE'},
+              # { validator_name: 'OptimusPr', account: '6M6aAEdhcWZGUeaRdc7cd81YFZ9UahgZP5D1x3MzXxmJ', latitude: '52.2488', longitude: '21.0024', country: 'Poland', country_iso_code: 'PL'},
+              # { validator_name: 'Heisenberg', account: 'AqGAaaACTDNGrVNVoiyCGiMZe8pcM1YjGUcUdVwgUtud', latitude: '52.2488', longitude: '21.0024', country: 'Poland', country_iso_code: 'PL'},
+              { validator_name: 'Greenwitch', account: 'ASD', latitude: '51.4780', longitude: '0', country: 'United Kingdom', country_iso_code: 'UK'},
+              { validator_name: 'Null Island (0,0)', account: '(0,0)', latitude: '0', longitude: '0', country: 'International Waters', country_iso_code: 'INT'},
+              { validator_name: 'Sydney', account: 'xx', latitude: '-32.8436458', longitude: '143.6351186', country: 'Australia', country_iso_code: 'AU'},
+              { validator_name: 'Aappilattoq, Greenland', account: 'xx', latitude: '60.150508', longitude: '-44.2937399', country: 'Greenland', country_iso_code: 'GR'},
+              { validator_name: 'Warsaw', account: 'xx', latitude: '52.232855', longitude: '20.9211131', country: 'Poland', country_iso_code: 'PL'},
+              { validator_name: 'Florida', account: 'xx', latitude: '28.0624178', longitude: '-82.0173992', country: 'US', country_iso_code: 'US'},
+              { validator_name: 'Chile', account: 'xx', latitude: '-54.9362301', longitude: '-67.6176433', country: 'Chile', country_iso_code: 'XX'},
+              { validator_name: 'Norway', account: 'xx', latitude: '70.3158078', longitude: '25.0291581', country: 'Norway', country_iso_code: 'XX'},
+            ]
+          }
+        %>
+        <% @points[:validators].each do |point| %>
+          <%
+            # position translator here
+            # latitude - north south - top bottom
+            # longitude - east west - right left
+            position_horizontal = 50 + (point[:longitude].to_f / 145 * 50)
+            position_vertical = 50 + ((point[:latitude].to_f / 72) * 50)
+          %>
+          <div class="map-point"
+               style="left: <%=position_horizontal%>%; bottom: <%=position_vertical%>%;"
+               title="<%= point[:validator_name] %> (<%= point[:longitude].to_f %>, <%= point[:latitude].to_f %>), <%= point[:country_iso_code] %>, (<%= position_horizontal %>, <%= position_vertical %>)">
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+</div>
