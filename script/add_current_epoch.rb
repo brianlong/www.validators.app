@@ -31,7 +31,7 @@ end
   block_time = nil
   block_search_count.times do |b_diff|
     slot = last_epoch_start_slot + b_diff
-
+    puts network
     get_block_result = solana_rpc_client(network).get_block(slot).result
 
     confirmed_start_block = slot unless get_block_result&.blank?
@@ -47,7 +47,7 @@ end
 
   # when block is not confirmed, rpc returns error
   # we want to skip this slot and try with another one
-  rescue SolanaRpcRuby::ApiError
+  rescue SolanaRpcRuby::ApiError, JSON::ParserError
     next
   end
   
