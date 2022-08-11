@@ -103,6 +103,9 @@
             <strong class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
         </div>
+        <div class="mt-4 text-center text-muted" data-turbolinks="false" v-if="titleVisible">
+          See details on the <a :href="pt_url">Ping Thing</a> page.
+        </div>
       </div>
     </div>
 </template>
@@ -121,10 +124,12 @@
     },
     data () {
       var api_url = '/api/v1/ping-thing-recent-stats/' + this.network
+      var pt_url = '/ping-thing?locale=en&network=' + this.network
       return {
         api_url: api_url,
         last_5_mins: {},
-        last_60_mins: {}
+        last_60_mins: {},
+        pt_url: pt_url
       }
     },
     created () {
