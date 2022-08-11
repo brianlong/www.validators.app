@@ -17,16 +17,16 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= label(:opt_out_request, :request_type, class: 'required') %>
+  <div class="mb-3">
+    <%= label(:opt_out_request, :request_type, class: 'required form-label') %>
     <%= f.select :request_type, OptOutRequest.request_types.keys.map { |w| [w.humanize, w] }, {}, { class: 'form-control' } %>
   </div>
-  <div class="form-group">
-    <%= label :opt_out_request, 'Name', class: 'required' %>
+  <div class="mb-3">
+    <%= label :opt_out_request, 'Name', class: 'required form-label' %>
     <%= f.text_field :name, class: 'form-control', required: true %>
   </div>
-  <div class="form-group">
-    <%= label(:opt_out_request, 'Address', nil, class: 'required') %>
+  <div class="mb-3">
+    <%= label(:opt_out_request, 'Address', nil, class: 'required form-label') %>
     <%= f.text_field :street_address, class: 'form-control', required: true, placeholder: 'Street Address' %>
   </div>
   <div class="row mb-3">
@@ -40,7 +40,7 @@
       <%= f.text_field :postal_code, class: 'form-control', required: true, placeholder: 'Postal Code' %>
     </div>
   </div>
-  <div class="form-group recaptcha">
+  <div class="mb-3 recaptcha">
     <%= recaptcha_tags %>
   </div>
   <%= submit_tag 'Submit', class: 'btn btn-primary' %>
