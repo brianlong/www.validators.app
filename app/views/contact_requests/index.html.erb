@@ -27,7 +27,7 @@
           <td class="column-xl small">
             <%= cr.comments.truncate(100) %>
             <% if cr.comments.length > 100 %>
-              <a data-bs-toggle="modal" data--bs-target="#messageModal<%=index%>" class="text-muted" href="">Show full text</a>
+              <a data-bs-toggle="modal" data-bs-target="#messageModal<%=index%>" class="text-muted" href="">Show full text</a>
               <div class="modal fade" id="messageModal<%=index%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
