@@ -103,9 +103,9 @@
             <strong class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
         </div>
-        <p class="mt-5 mb-0" data-turbolinks="false" v-if="titleVisible">
+        <div class="mt-4 text-center text-muted" data-turbolinks="false" v-if="titleVisible">
           See details on the <a :href="pt_url">Ping Thing</a> page.
-        </p>
+        </div>
       </div>
     </div>
 </template>
