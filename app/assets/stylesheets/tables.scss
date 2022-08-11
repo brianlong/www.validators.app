@@ -1,7 +1,14 @@
 @import "variables";
-
 table, .table {
   color: inherit;
+
+  tbody, td, tfoot, th, thead, tr {
+    border-style: none;
+  }
+  // Highlight border color between thead, tbody and tfoot.
+  > :not(:last-child) > :last-child > * {
+    border-style: none;
+  }
 
   thead {
     background-color: $table-background-color;
@@ -13,6 +20,7 @@ table, .table {
   }
 
   tbody {
+
     tr {
       border-top: 1px solid $table-border-color-secondary;
     }
