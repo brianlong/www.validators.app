@@ -18,8 +18,12 @@ footer {
         padding: 0;
         margin: 0;
         .nav-link {
+          color: $link-color;
           padding-left: 0;
           padding-right: 24px;
+          &:hover {
+            color: $white;
+          }
           @media(max-width: $screen-sm-max) {
             padding: 5px 15px 15px 0;
           }
