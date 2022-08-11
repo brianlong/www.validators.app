@@ -168,6 +168,7 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
 
 a {
   color: $link-color;
+  text-decoration: none;
   transition: color .1s ease-in-out;
   &:hover {
     text-decoration: none;
