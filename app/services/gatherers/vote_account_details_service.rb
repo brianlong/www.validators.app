@@ -6,7 +6,8 @@ module Gatherers
   class VoteAccountDetailsService
     include SolanaLogic
 
-    def initialize(network:, config_urls:)
+    def initialize(network:, config_urls:, always_update: false)
+      @always_update = always_update
       @network = network
       @config_urls = config_urls
       @range_start = VoteAccount.where(network: @network).order(id: :asc).first.id
@@ -26,7 +27,7 @@ module Gatherers
           next
         end
 
-        next if should_omit_update?(vacc, vote_account_details)
+        next if !@always_update && should_omit_update?(vacc, vote_account_details)
 
         if vacc.update(
             validator_identity: vote_account_details["validatorIdentity"],
