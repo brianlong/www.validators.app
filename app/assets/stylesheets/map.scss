@@ -2,16 +2,9 @@
 
 .map {
   &-background {
-    background: url(asset_path("map/shutterstock_cropped.svg")) no-repeat top right;
+    background: url(asset_path("map/map.svg")) no-repeat top right;
     background-size: cover;
-    height: 620px;
-  }
-
-  &-legend {
-    position: absolute;
-    text-align: left;
-    bottom: 0;
-    padding: $padding-standard*2;
+    height: 670px;
   }
 
   &-points {
@@ -20,11 +13,23 @@
   }
 
   &-point {
-    height: 8px;
-    width: 8px;
     border-radius: 50%;
-    border: 1px solid $link-color;
+    border: 1px solid $link-color-secondary;
+    //border-color: none;
     background-color: rgba(224, 161, 232, .4);
+    //background-color: lighten($green, 12%);
     position: absolute;
+    font-weight: 600;
+    color: $black;
+    letter-spacing: .5px;
+    padding: 0;
+    text-align: center;
+  }
+
+  &-legend {
+    position: absolute;
+    text-align: left;
+    bottom: 0;
+    padding: $padding-standard*2;
   }
 }
