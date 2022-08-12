@@ -2,28 +2,28 @@
   <div class="card mb-4">
       <div class="card-content">
         <div class="row px-xl-4 ping-thing-stats-header">
-          <div class="col-lg-2 px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-2 offset-lg-1 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-none d-lg-block">Stats from&nbsp;</span>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center d-none d-lg-block">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center d-none d-lg-block">
             <span class="stat-title-4">
               <i class="fas fa-calculator text-success me-2"></i>
               Entries&nbsp;
             </span>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center d-none d-lg-block">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center d-none d-lg-block">
             <span class="stat-title-4">
               <i class="fas fa-long-arrow-alt-down text-success me-1"></i>
               Min&nbsp;
             </span>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center d-none d-lg-block">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center d-none d-lg-block">
             <span class="stat-title-4">
               <i class="fas fa-divide text-success me-1"></i>
               Median&nbsp;
             </span>
           </div>
-          <div class="col-md-6 col-lg px-md-0 text-md-center d-none d-lg-block">
+          <div class="col-lg-2 col-md-6 px-md-0 text-md-center d-none d-lg-block">
             <span class="stat-title-4">
               <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
               P90&nbsp;
@@ -31,33 +31,33 @@
           </div>
         </div>
 
-        <div class="row px-xl-4 mt-2 text-lg-left text-center">
-          <div class="col-lg-2 px-md-0 mb-3 mb-lg-0 text-md-center">
+        <div class="row px-xl-4 mt-2 text-center">
+          <div class="col-lg-2 offset-lg-1 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-3 d-lg-none">5 min stats&nbsp;</span>
             <span class="stat-title-4 d-none d-lg-block">5 min&nbsp;</span>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-calculator text-success me-2"></i>
               Entries:&nbsp;
             </span>
             <strong class="text-success">{{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString() : '0' }}</strong>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-long-arrow-alt-down text-success me-1"></i>
               Min:&nbsp;
             </span>
             <strong class="text-success">{{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-divide text-success me-1"></i>
               Median:&nbsp;
             </span>
             <strong class="text-success">{{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-          <div class="col-md-6 col-lg px-md-0 text-md-center">
+          <div class="col-lg-2 col-md-6 px-md-0 text-md-center">
              <span class="stat-title-4 d-lg-none">
               <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
               P90:&nbsp;
@@ -66,33 +66,33 @@
           </div>
         </div>
 
-        <div class="row px-xl-4 mt-2 text-lg-left text-center">
-          <div class="col-lg-2 px-md-0 mb-3 mb-lg-0 text-md-center">
+        <div class="row px-xl-4 mt-2 text-center">
+          <div class="col-lg-2 offset-lg-1 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-3 d-lg-none">1 hour stats&nbsp;</span>
             <span class="stat-title-4 d-none d-lg-block">1 hour&nbsp;</span>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-calculator text-success me-2"></i>
               Entries:&nbsp;
             </span>
             <strong class="text-success">{{ last_60_mins["num_of_records"] ? last_60_mins["num_of_records"].toLocaleString() : '0' }}</strong>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-long-arrow-alt-down text-success me-1"></i>
               Min:&nbsp;
             </span>
             <strong class="text-success">{{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-          <div class="col-md-6 col-lg px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-divide text-success me-1"></i>
               Median:&nbsp;
             </span>
             <strong class="text-success">{{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-          <div class="col-md-6 col-lg px-md-0 text-md-center">
+          <div class="col-lg-2 col-md-6 px-md-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
               P90:&nbsp;
