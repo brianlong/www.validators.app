@@ -57,11 +57,11 @@
           </div>
         <% end %>
       </div>
-      <ol class="carousel-indicators">
+      <div class="carousel-indicators">
         <% shuffle_logos.count.times do |index| %>
-          <li data-bs-target="#carouselLogosMobile" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></li>
+          <button type="button" data-bs-target="#carouselLogosMobile" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></button>
         <% end %>
-      </ol>
+      </div>
     </div>
 
     <div class="mt-4 mt-md-0 text-center text-muted">
