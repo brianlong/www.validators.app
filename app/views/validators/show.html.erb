@@ -41,7 +41,7 @@
       <%= link_to 'Delegate SOL',
                   solstake_url(@validator.vote_account_active&.account),
                   title: 'Delegate SOL to this validator on SolStake.io',
-                  class: "btn btn-xs btn-secondary mb-3 mb-sm-0 #{ 'float-md-right' if @tags_present }",
+                  class: "btn btn-xs btn-secondary mb-3 mb-sm-0 #{ 'float-md-end' if @tags_present }",
                   target: :blank %>
     <% end %>
   </div>
