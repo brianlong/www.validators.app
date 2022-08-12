@@ -123,7 +123,7 @@
         %>
         <div class="map-point <%= set_map_point_class(validators_in_group_count) %>"
              style="left: <%=position_horizontal%>%; bottom: <%=position_vertical%>%;"
-             title="<%= point[:data_center_key] %> (<%= point[:country] %>, <%= point[:country_iso_code] %>">
+             title="<%= point[:data_center_key] %> (<%= point[:country] %>, <%= point[:country_iso_code] %>)">
           <%= validators_in_group_count %>
         </div>
       <% end %>

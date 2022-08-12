@@ -1,10 +1,10 @@
 @import "variables";
 
-@mixin map-point-style($background, $padding, $height, $width) {
+@mixin map-point-style($background, $height, $width, $padding) {
   background-color: $background;
-  padding-top: $padding;
   height: $height;
   width: $width;
+  padding-top: $padding;
 }
 
 .map {
@@ -27,21 +27,20 @@
     border-color: none;
     //background-color: rgba(224, 161, 232, .4);
     position: absolute;
-    font-weight: 600;
     color: $black;
-    letter-spacing: .5px;
+    letter-spacing: 0;
     padding: 0;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
 
     &-sm {
-      @include map-point-style(darken($green, 5%), 1px, 15px, 15px)
+      @include map-point-style(darken($green, 5%), 17px, 17px, 0px)
     }
     &-md {
-      @include map-point-style(lighten($green, 5%), 2px, 18px, 18px)
+      @include map-point-style(lighten($green, 5%), 20px, 20px, 2px)
     }
     &-lg {
-      @include map-point-style(lighten($green, 15%), 4px, 22px, 22px)
+      @include map-point-style(lighten($green, 15%), 24px, 24px, 3px)
     }
   }
 
