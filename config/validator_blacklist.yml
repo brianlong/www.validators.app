@@ -1,0 +1,23 @@
+default: &default
+  mainnet: [
+
+  ]
+
+  testnet: [
+    "dv1ZAGvdsz5hHLwWXsVnM94hWf1pjbKVau1QVkaMJ92",
+    "dv2eQHeP4RFrJZ6UeiZWoc3XTtmtZCUKxxCApCDcRNV",
+    "dv3qDFk1DTF36Z62bNvrCXe9sKATA6xvVy6A798xxAS",
+    "dv4ACNkpYPcE3aKmYDqZm9G5EB3J4MRoeE7WNDRBVJB"
+  ]
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+
+stage:
+  <<: *default
