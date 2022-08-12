@@ -15,6 +15,9 @@
     <%= link_to 'FAQ', faq_path(anchor: 'questions'), class: 'btn btn-md btn-secondary mb-3' %>
   <% end %>
 </section>
+
+<%= render 'validators/map' %>
+
 <% if params[:network] == "mainnet"%>
   <div id="ping-thing-stats">
     <stats-bar network=<%= params[:network]%> title-visible="true"/>

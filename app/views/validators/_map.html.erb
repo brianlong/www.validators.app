@@ -8,7 +8,7 @@
         #      sort from the lowest to the highest sum of validators in DC
         # TODO another option: group by country (except large countries like US, CA, RU?)
         #
-        @points = {
+        @api_response = {
           network: 'mainnet',
           validators: [
             { validator_name: 'Valhall Validator', account: '9XBZbtW61oRypcCyKko9Q9k41yFHAoCGwqs7XrNTfTf3', latitude: '59.9452', longitude: '10.7559', country: 'Norway', country_iso_code: 'NO', data_center_key: '34989-NO-Europe/Oslo', },
@@ -72,21 +72,25 @@
           ]
         }
       %>
-      <% @points[:validators].each do |point| %>
+      <% #@api_response[:validators].each do |point|
+         @api_response[:validators].group_by{ |key, value| key[:data_center_key]}.sort_by{ |group_key, group_values| group_values.count }.each do |group| %>
         <%
           # TODO position translator here
           # latitude - north south - top bottom
           # longitude - east west - right left
+          point = group[-1][0]
           position_horizontal = 50 + (point[:longitude].to_f / 160 * 50)
           position_vertical = if point[:latitude].to_f < 0
                                 50 + ((point[:latitude].to_f / 85) * 50)
                               else
                                 50 + ((point[:latitude].to_f / 75) * 50)
                               end
+          validators_in_group_count = group[-1].count
         %>
         <div class="map-point"
              style="left: <%=position_horizontal%>%; bottom: <%=position_vertical%>%;"
-             title="<%= point[:validator_name] %> (<%= point[:longitude].to_f %>, <%= point[:latitude].to_f %>), <%= point[:country_iso_code] %>, <%= point[:data_center_key] %>">
+             title="<%= point[:data_center_key] %> (<%= point[:country] %>, <%= point[:country_iso_code] %>">
+          <%= validators_in_group_count %>
         </div>
       <% end %>
 

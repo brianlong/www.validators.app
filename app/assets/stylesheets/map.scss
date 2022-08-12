@@ -14,10 +14,10 @@
 
   &-point {
     border-radius: 50%;
-    border: 1px solid $link-color-secondary;
-    //border-color: none;
-    background-color: rgba(224, 161, 232, .4);
-    //background-color: lighten($green, 12%);
+    //border: 1px solid $link-color-secondary;
+    border-color: none;
+    //background-color: rgba(224, 161, 232, .4);
+    background-color: lighten($green, 12%);
     position: absolute;
     font-weight: 600;
     color: $black;
@@ -25,10 +25,11 @@
     padding: 0;
     text-align: center;
 
+    // TODO classes for point size
     padding-top: 1px;
     font-size: 10px;
-    height: 10px;
-    width: 10px;
+    height: 15px;
+    width: 15px;
   }
 
   &-legend {
