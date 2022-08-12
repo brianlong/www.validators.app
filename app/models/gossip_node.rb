@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: gossip_nodes
+#
+#  id          :bigint           not null, primary key
+#  gossip_port :integer
+#  identity    :string(191)
+#  ip          :string(191)
+#  network     :string(191)
+#  tpu_port    :integer
+#  version     :string(191)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+# Indexes
+#
+#  index_gossip_nodes_on_network_and_identity  (network,identity)
+#
+class GossipNode < ApplicationRecord
+end

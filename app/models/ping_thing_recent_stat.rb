@@ -15,7 +15,6 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
-#
 class PingThingRecentStat < ApplicationRecord
   FIELDS_FOR_API = [
     :interval,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_15_085454) do
+ActiveRecord::Schema.define(version: 2022_08_12_082116) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -174,6 +174,18 @@ ActiveRecord::Schema.define(version: 2022_07_15_085454) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ending_slot"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
+  end
+
+  create_table "gossip_nodes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "identity"
+    t.string "network"
+    t.string "ip"
+    t.integer "tpu_port"
+    t.integer "gossip_port"
+    t.string "version"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "identity"], name: "index_gossip_nodes_on_network_and_identity"
   end
 
   create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
