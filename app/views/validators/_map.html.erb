@@ -10,6 +10,8 @@
         #
         @api_response = {
           network: 'mainnet',
+          validators_count: '2037',
+          nodes_count: '1542',
           validators: [
             { validator_name: 'Valhall Validator', account: '9XBZbtW61oRypcCyKko9Q9k41yFHAoCGwqs7XrNTfTf3', latitude: '59.9452', longitude: '10.7559', country: 'Norway', country_iso_code: 'NO', data_center_key: '34989-NO-Europe/Oslo', },
             { validator_name: 'Block Logic', account: 'DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp', latitude: '52.3716', longitude: '4.8883', country: 'Netherlands', country_iso_code: 'NL', data_center_key: '20326-NL-Amsterdam',},
@@ -98,12 +100,16 @@
   </div>
 
   <div class="map-legend">
-    <small class="text-muted">Total in network</small>
+    <small class="text-muted">Total in <%= @api_response[:network] %></small>
     <div class="small fw-bold">
-      <strong class="text-success">2100</strong> Validators
+      <strong class="text-success">
+        <%= @api_response[:validators_count] %>
+      </strong> Validators
     </div>
     <div class="small mb-5">
-      <strong class="text-success">200</strong> RPC Nodes
+      <strong class="text-success">
+        <%= @api_response[:nodes_count] %>
+      </strong> RPC Nodes
     </div>
 
     <strong id="dataCenterName" class="text-purple">24940-DE-Falkenstein</strong>
