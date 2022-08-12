@@ -103,4 +103,17 @@ module ValidatorsHelper
       end
     end
   end
+
+  def set_map_point_class(validators_count)
+    return "map-point-sm" unless validators_count.is_a? Numeric
+
+    case validators_count
+    when 0..9
+      "map-point-sm"
+    when 10..99
+      "map-point-md"
+    else
+      "map-point-lg"
+    end
+  end
 end

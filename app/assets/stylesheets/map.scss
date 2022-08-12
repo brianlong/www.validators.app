@@ -1,6 +1,15 @@
 @import "variables";
 
+@mixin map-point-style($background, $padding, $height, $width) {
+  background-color: $background;
+  padding-top: $padding;
+  height: $height;
+  width: $width;
+}
+
 .map {
+  // TODO styling for smaller viewports
+
   &-background {
     background: url(asset_path("map/map.svg")) no-repeat top right;
     background-size: cover;
@@ -17,19 +26,23 @@
     //border: 1px solid $link-color-secondary;
     border-color: none;
     //background-color: rgba(224, 161, 232, .4);
-    background-color: lighten($green, 12%);
     position: absolute;
     font-weight: 600;
     color: $black;
     letter-spacing: .5px;
     padding: 0;
     text-align: center;
-
-    // TODO classes for point size
-    padding-top: 1px;
     font-size: 10px;
-    height: 15px;
-    width: 15px;
+
+    &-sm {
+      @include map-point-style(darken($green, 5%), 1px, 15px, 15px)
+    }
+    &-md {
+      @include map-point-style(lighten($green, 5%), 2px, 18px, 18px)
+    }
+    &-lg {
+      @include map-point-style(lighten($green, 15%), 4px, 22px, 22px)
+    }
   }
 
   &-legend {

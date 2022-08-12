@@ -73,23 +73,55 @@
             # { validator_name: 'Greece', account: 'xx', latitude: '36.47', longitude: '22.52', country: 'Norway', country_iso_code: 'XX'},
           ]
         }
+        @validators_groups = [
+          { latitude: '59.9452', longitude: '10.7559', country: 'Norway', country_iso_code: 'NO', data_center_key: '34989-NO-Europe/Oslo', validators_count: '2'},
+          { latitude: '52.3716', longitude: '4.8883', country: 'Netherlands', country_iso_code: 'NL', data_center_key: '20326-NL-Amsterdam', validators_count: '12'},
+          { latitude: '39.0481', longitude: '-77.4728', country: 'United States', country_iso_code: 'US', data_center_key: '14618-US-Ashburn', validators_count: '5'},
+          { latitude: '48.8582', longitude: '2.3387', country: 'France', country_iso_code: 'FR', data_center_key: '16276-FR-Roubaix', validators_count: '101'},
+          { latitude: '51.4964', longitude: '-0.1224', country: 'United Kingdom', country_iso_code: 'UK', data_center_key: '60945-GB-Europe/London', validators_count: '2'},
+          { latitude: '60.1719', longitude: '24.9347', country: 'Finland', country_iso_code: 'FI', data_center_key: '24940-FI-Helsinki', validators_count: '362'},
+          { latitude: '37.751', longitude: '-97.822', country: 'United States', country_iso_code: 'US', data_center_key: '23470-US-America/Chicago', validators_count: '31'},
+          { latitude: '51.5164', longitude: '-0.093', country: 'Germany', country_iso_code: 'DE', data_center_key: '16276-DE-Frankfurt', validators_count: '57'},
+          { latitude: '45.3161', longitude: '-73.8736', country: 'Canada', country_iso_code: 'CA', data_center_key: '16276-CA-Beauharnois', validators_count: '87'},
+          { latitude: '37.751', longitude: '-97.822', country: 'United States', country_iso_code: 'US', data_center_key: '3356-US-America/Chicago', validators_count: '3'},
+          { latitude: '35.6289', longitude: '139.7915', country: 'Japan', country_iso_code: 'JPN', data_center_key: '54825-JP-Tokyo', validators_count: '3'},
+          { latitude: '40.4163', longitude: '-3.6934', country: 'Spain', country_iso_code: 'ESP', data_center_key: '54825-ES-Madrid', validators_count: '3'},
+          { latitude: '53.3331', longitude: '-6.2489', country: 'Ireland', country_iso_code: 'IRL', data_center_key: '16509-IE-Dublin', validators_count: '24'},
+          { latitude: '55.7483', longitude: '37.6171', country: 'Russia', country_iso_code: 'RU', data_center_key: '16143-RU-Moscow', validators_count: '13'},
+          { latitude: '1.3446', longitude: '103.7373', country: 'Singapore', country_iso_code: 'SGP', data_center_key: '54825-SG-Jurong West', validators_count: '2'},
+          { latitude: '49.0099', longitude: '8.3592', country: 'Germany', country_iso_code: 'DE', data_center_key: '199610-DE-Karlsruhe', validators_count: '1'},
+          { latitude: '52.2488', longitude: '21.0024', country: 'Poland', country_iso_code: 'PL', data_center_key: '16276-PL-Warsaw', validators_count: '56'},
+          { latitude: '51.2993', longitude: '9.491', country: 'Germany', country_iso_code: 'DE', data_center_key: '24940-DE-Falkenstein', validators_count: '301'},
+          { latitude: '43.3736', longitude: '5.3547', country: 'France', country_iso_code: 'FR', data_center_key: '54825-FR-Marseille', validators_count: '2'},
+          { latitude: '39.9653', longitude: '-83.0235', country: 'United States', country_iso_code: 'US', data_center_key: '16509-US-Columbus', validators_count: '8'},
+          { latitude: '19.0748', longitude: '72.8856', country: 'India', country_iso_code: 'IND', data_center_key: '24560-IN-Mumbai', validators_count: '1'},
+          { latitude: '37.5794', longitude: '126.9754', country: 'South Korea', country_iso_code: 'KOR', data_center_key: '3786-KR-Seoul', validators_count: '1'},
+          { latitude: '35.685', longitude: '139.7514', country: 'Japan', country_iso_code: 'JPN', data_center_key: '16509-JP-Tokyo', validators_count: '3'},
+          { latitude: '51.5095', longitude: '-0.0955', country: 'United Kingdom', country_iso_code: 'UK', data_center_key: '54825-GB-London', validators_count: '11'},
+          { latitude: '51.2993', longitude: '9.491', country: 'Germany', country_iso_code: 'DE', data_center_key: '24940-DE-Nuremburg', validators_count: '129'},
+          { latitude: '22.3539', longitude: '114.1342', country: 'Hong Kong', country_iso_code: 'HKG', data_center_key: '54825-HK-Kwai Chung', validators_count: '4'},
+          { latitude: '48.8582', longitude: '2.3387', country: 'France', country_iso_code: 'FR', data_center_key: '16276-FR-Gravelines', validators_count: '76'},
+          { latitude: '51.5164', longitude: '-0.093', country: 'United Kingdom', country_iso_code: 'UK', data_center_key: '16276-EN-London', validators_count: '60'},
+        ]
       %>
-      <% #@api_response[:validators].each do |point|
-         @api_response[:validators].group_by{ |key, value| key[:data_center_key]}.sort_by{ |group_key, group_values| group_values.count }.each do |group| %>
+      <%# @api_response[:validators].group_by{ |key, value| key[:data_center_key]}.sort_by{ |group_key, group_values| group_values.count }.each do |group| %>
+      <% @validators_groups.sort_by{ |group| group[:validators_count].to_i}.each do |group| %>
         <%
           # TODO position translator here
           # latitude - north south - top bottom
           # longitude - east west - right left
-          point = group[-1][0]
+          # point = group[-1][0]
+          point = group
           position_horizontal = 50 + (point[:longitude].to_f / 160 * 50)
           position_vertical = if point[:latitude].to_f < 0
                                 50 + ((point[:latitude].to_f / 85) * 50)
                               else
                                 50 + ((point[:latitude].to_f / 75) * 50)
                               end
-          validators_in_group_count = group[-1].count
+          # validators_in_group_count = group[-1].count
+          validators_in_group_count = group[:validators_count].to_i
         %>
-        <div class="map-point"
+        <div class="map-point <%= set_map_point_class(validators_in_group_count) %>"
              style="left: <%=position_horizontal%>%; bottom: <%=position_vertical%>%;"
              title="<%= point[:data_center_key] %> (<%= point[:country] %>, <%= point[:country_iso_code] %>">
           <%= validators_in_group_count %>
