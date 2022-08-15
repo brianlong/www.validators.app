@@ -3,7 +3,13 @@
   <meta name="turbolinks-visit-control" content="reload">
 <% end %>
 
-<%= render 'validators/banner' %>
+<%= render 'validators/welcome_banner' %>
+
+<%= render 'validators/validators_map' %>
+
+<%= render 'validators/ping_stats_banner' %>
+
+<%= render 'validators/stake_pools_banner' %>
 
 <% unless @validators.empty? %>
   <div class="card">
