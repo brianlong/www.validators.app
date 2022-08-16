@@ -15,7 +15,7 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  data_center_host_id :bigint
-#  validator_id        :bigint           not null
+#  validator_id        :bigint
 #
 # Indexes
 #
@@ -56,7 +56,7 @@ class ValidatorIp < ApplicationRecord
   scope :active_for_api, -> { select(FIELDS_FOR_API).active }
 
   def copy_data_to_score
-    validator.copy_data_to_score
+    validator&.copy_data_to_score
   end
 
   def set_is_active

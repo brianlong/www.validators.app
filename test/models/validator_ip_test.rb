@@ -14,11 +14,6 @@ class ValidatorIpTest < ActiveSupport::TestCase
     assert_equal @validator, @vip.validator
   end
 
-  test "#relationship belongs_to validator without validator is invalid" do
-    @vip.validator = nil
-    refute @vip.valid?
-  end
-
   test "#relationship belongs_to data_center_host corectly asssigns data_center_host" do
     assert @vip.valid?
     assert_equal @data_center_host, @vip.data_center_host

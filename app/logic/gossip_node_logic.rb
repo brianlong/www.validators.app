@@ -11,6 +11,8 @@ module GossipNodeLogic
         p.payload[:config_urls]
       )
 
+      raise "No nodes returned by cli" unless current_nodes.any?
+
       Pipeline.new(200, p.payload.merge(current_nodes: current_nodes))
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from get_nodes", e)
@@ -31,11 +33,13 @@ module GossipNodeLogic
         db_node.version = node["version"]
 
         db_node.save if db_node.changed?
+
+        db_node.add_validator_ip
       end
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from connect_nodes_to_validators", e)
+      Pipeline.new(500, p.payload, "Error from update_nodes", e)
     end
   end
 end
