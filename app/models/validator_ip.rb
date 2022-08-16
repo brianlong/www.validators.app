@@ -38,7 +38,8 @@ class ValidatorIp < ApplicationRecord
     validator_id
   ].freeze
 
-  belongs_to :validator
+  belongs_to :validator, optional: true
+  belongs_to :gossip_node, primary_key: :ip, foreign_key: :address, optional: true
   belongs_to :data_center_host, optional: true
   has_one :validator_score_v1, through: :validator
   has_one :data_center, through: :data_center_host

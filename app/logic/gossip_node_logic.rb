@@ -7,7 +7,7 @@ module GossipNodeLogic
   def get_nodes
     lambda do |p|
       current_nodes = cli_request(
-        'gossip',
+        "gossip",
         p.payload[:config_urls]
       )
 
@@ -29,6 +29,7 @@ module GossipNodeLogic
         db_node.tpu_port = node["tpuPort"]
         db_node.gossip_port = node["gossipPort"]
         db_node.version = node["version"]
+
         db_node.save if db_node.changed?
       end
 

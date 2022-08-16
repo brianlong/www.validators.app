@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: gossip_nodes
@@ -17,4 +19,5 @@
 #  index_gossip_nodes_on_network_and_identity  (network,identity)
 #
 class GossipNode < ApplicationRecord
+  has_one :validator_ip, primary_key: :ip, foreign_key: :address
 end
