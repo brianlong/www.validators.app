@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GossipNodeLogicTest < ActiveSupport::TestCase
   include GossipNodeLogic
 
   setup do
-    @mainnet_url = 'https://api.mainnet-beta.solana.com'
+    @mainnet_url = "https://api.mainnet-beta.solana.com"
 
     @payload = {
       network: "mainnet",
