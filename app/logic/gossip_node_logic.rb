@@ -42,4 +42,23 @@ module GossipNodeLogic
       Pipeline.new(500, p.payload, "Error from update_nodes", e)
     end
   end
+
+  def set_staked_flag
+    lambda do |p|
+      staked_validators = Validator.joins(:validator_score_v1)
+                                   .joins(:validator_ips)
+                                   .where("validator_score_v1s.active_stake > 0")
+
+      staked_ips = staked_validators.pluck(:ip_address)
+
+      staked_nodes = GossipNode.where(ip: staked_ips)
+      staked_nodes.update_all(staked: true)
+
+      GossipNode.where.not(ip: staked_nodes.pluck(:ip)).update_all(staked: false)
+
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from set_staked_flag", e)
+    end
+  end
 end

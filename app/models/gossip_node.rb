@@ -9,6 +9,7 @@
 #  identity    :string(191)
 #  ip          :string(191)
 #  network     :string(191)
+#  staked      :boolean          default(FALSE)
 #  tpu_port    :integer
 #  version     :string(191)
 #  created_at  :datetime         not null
