@@ -26,10 +26,7 @@ class AsnsController < ApplicationController
     @validators = @validators.page(params[:page]).per(@per)
     @batch = Batch.last_scored(network)
     @population = @validators.total_count
-    @total_stake = ValidatorScoreV1.joins(:data_center)    
-                                   .by_network_with_active_stake(network)
-                                   .where("data_centers.id IN (?)", data_center_ids)
-                                   .sum(:active_stake)
+    @total_stake = ValidatorScoreV1.total_active_stake(network)
   end
 
   private

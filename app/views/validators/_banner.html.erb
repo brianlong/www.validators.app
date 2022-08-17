@@ -1,3 +1,5 @@
+<%= javascript_pack_tag 'ping_thing/stats_bar.js' %>
+
 <section class="banner">
   <h1 class="heading-primary">Meet the <span>validators</span> who power Solana</h1>
   <% unless @validators.blank? %>
@@ -13,6 +15,11 @@
     <%= link_to 'FAQ', faq_path(anchor: 'questions'), class: 'btn btn-md btn-secondary mb-3' %>
   <% end %>
 </section>
+<% if params[:network] == "mainnet"%>
+  <div id="ping-thing-stats">
+    <stats-bar network=<%= params[:network]%> title-visible="true"/>
+  </div>
+<% end %>
 <div class="card">
   <div class="card-content">
     <p class="lead">
@@ -57,7 +64,9 @@
       </ol>
     </div>
 
-    Need to unstake SOL in a&nbsp;hurry? Try the new <%= link_to 'Unstake It', 'https://www.unstake.it/en/', target: '_blank' %>
-    tool and get paid immediately for your active stake account.
+    <div class="mt-4 mt-md-0 text-center text-muted">
+      Need to unstake SOL in a&nbsp;hurry? Try the new <%= link_to 'Unstake It', 'https://www.unstake.it/en/', target: '_blank' %>
+      tool and get paid immediately for your active stake account.
+    </div>
   </div>
 </div>

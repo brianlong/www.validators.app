@@ -30,7 +30,14 @@ ActiveRecord::Schema.define(version: 2022_08_01_064455) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "asn_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -540,9 +547,6 @@ ActiveRecord::Schema.define(version: 2022_08_01_064455) do
     t.index ["network", "active_stake"], name: "index_validator_score_v1s_on_network_and_active_stake"
     t.index ["network", "total_score"], name: "index_validator_score_v1s_on_network_and_total_score"
     t.index ["network", "validator_id"], name: "index_validator_score_v1s_on_network_and_validator_id"
-    t.index ["network"], name: "index_validator_score_v1s_on_network"
-    t.index ["total_score"], name: "index_validator_score_v1s_on_total_score"
-    t.index ["validator_id"], name: "index_validator_score_v1s_on_validator_id"
   end
 
   create_table "validators", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -602,6 +606,7 @@ ActiveRecord::Schema.define(version: 2022_08_01_064455) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
   add_foreign_key "ping_things", "users"

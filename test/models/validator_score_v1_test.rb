@@ -24,6 +24,27 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal @validator_score_v1.data_center, data_center
   end
 
+  test "total_active_stake returns active stake for validators with data center assigned" do
+    data_center = create(:data_center, :berlin)
+    data_center_host = create(:data_center_host, data_center: data_center)
+    create(:validator_ip, :active, validator: @validator, data_center_host: data_center_host)
+
+    validator2 = create(:validator, network: "mainnet")
+    create(:validator_ip, :active, validator: validator2, data_center_host: data_center_host)
+    create(:validator_score_v1, validator: validator2)
+
+    validator_wo_data_center = create(:validator, network: "mainnet")
+    create(
+      :validator_score_v1,
+      validator: validator_wo_data_center,
+      active_stake: 200
+    )
+
+    expected_active_stake = @validator.score.active_stake + validator2.score.active_stake
+
+    assert_equal ValidatorScoreV1.total_active_stake("mainnet"), expected_active_stake
+  end
+
   test 'calculate_total_score assigns a score of 0 if commission is 100' do
     @validator_score_v1.update(
       commission: 100,

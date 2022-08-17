@@ -34,11 +34,6 @@ Rails.application.routes.draw do
 
   get 'validators/:account/vote_accounts/:vote_account', to: 'vote_accounts#show', 
                                                          as: 'validator_vote_account'
-
-  get 'tower',
-      to: 'public#tower',
-      as: 'tower'
-
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
 
@@ -159,6 +154,7 @@ Rails.application.routes.draw do
       get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
 
       get 'ping-thing-stats/:network', to: 'ping_thing_stats#index', as: 'ping_thing_stats'
+      get 'ping-thing-recent-stats/:network', to: 'ping_thing_recent_stats#last', as: 'ping_thing_recent_stats'
 
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
 
