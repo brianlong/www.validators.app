@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_083448) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "staked", default: false
     t.index ["network", "identity"], name: "index_gossip_nodes_on_network_and_identity"
+    t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
   end
 
   create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
