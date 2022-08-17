@@ -200,10 +200,10 @@
   <div class='col-md-3 col-lg-2 toggle-container pt-2'>
     <% if params[:refresh] == 'true' %>
       <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: false) %>
-      <p class="small muted toggle-label">REFRESH ON</p>
+      <p class="small text-muted toggle-label">REFRESH ON</p>
     <% else %>
       <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: true) %>
-      <p class="small muted toggle-label">REFRESH OFF</p>
+      <p class="small text-muted toggle-label">REFRESH OFF</p>
     <% end %>
   </div>
 </div>
