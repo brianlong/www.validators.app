@@ -49,8 +49,7 @@ module GossipNodeLogic
                                    .joins(:validator_ips)
                                    .where("validator_score_v1s.active_stake > 0")
 
-      staked_ips = staked_validators.pluck(:ip_address)
-
+      staked_ips = staked_validators.pluck("validator_ips.address")
       staked_nodes = GossipNode.where(ip: staked_ips)
       staked_nodes.update_all(staked: true)
 

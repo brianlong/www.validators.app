@@ -7,9 +7,10 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
 
   setup do
     @mainnet_url = "https://api.mainnet-beta.solana.com"
+    @network = "mainnet"
 
     @payload = {
-      network: "mainnet",
+      network: @network,
       config_urls: [@mainnet_url]
     }
 
@@ -47,9 +48,39 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
       assert_equal 200, p.code
       refute p.payload[:current_nodes].blank?
       assert GossipNode.exists?
-      assert_equal "mainnet", GossipNode.last.network
+      assert_equal @network, GossipNode.last.network
       refute GossipNode.where(identity: nil).exists?
       refute GossipNode.where(ip: nil).exists?
+    end
+  end
+
+  test "set_staked_flag correctly updates staked" do
+    ip = "204.16.244.218"
+    
+    val = create(
+      :validator,
+      network: @network
+    )
+    create(
+      :validator_score_v1,
+      validator: val,
+      active_stake: 123,
+      network: @network
+    )
+
+    create(:validator_ip, validator: val, address: ip)
+
+    SolanaCliService.stub(:request, @json_data, ["gossip", @mainnet_url]) do
+      p = Pipeline.new(200, @payload)
+                  .then(&get_nodes)
+                  .then(&update_nodes)
+                  .then(&set_staked_flag)
+
+      staked_nodes = GossipNode.where(staked: true)
+
+      assert_equal 200, p.code
+      assert_equal 1, staked_nodes.count
+      assert_equal ip, staked_nodes.last.ip
     end
   end
 end
