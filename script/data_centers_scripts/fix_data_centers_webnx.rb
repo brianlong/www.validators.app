@@ -3,7 +3,7 @@
 require_relative '../../config/environment'
 require_relative '../concerns/fix_data_center_module'
 
-include FixIpModule
+include FixDataCenterModule
 
 ASO = "WEBNX"
 
