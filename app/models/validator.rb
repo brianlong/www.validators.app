@@ -62,6 +62,8 @@ class Validator < ApplicationRecord
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
 
+  belongs_to :gossip_node, primary_key: :identity, foreign_key: :account
+
   # API
   has_many :vote_accounts_for_api, -> { for_api }, class_name: "VoteAccount"
   has_one :validator_ip_active_for_api, -> { active_for_api }, class_name: "ValidatorIp"
@@ -71,6 +73,7 @@ class Validator < ApplicationRecord
 
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
+  scope :for_api, -> { select(FIELDS_FOR_API) }
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
