@@ -74,7 +74,7 @@
               <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
               <th class="column-info align-middle ps-3">
                 Name <small class="text-muted">(Commission)</small>
-                <i class="fas fa-info-circle font-size-xs text-muted"
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account.">
@@ -82,14 +82,14 @@
                 <br />
                 Active Stake
                 <small class="text-muted">(% of total)</small>
-                <i class="fas fa-info-circle font-size-xs text-muted"
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Sum of active stake from validator(s).">
                 </i>
                 <br />
                 Scores <small class="text-muted">(total)</small>
-                <i class="fas fa-info-circle font-size-xs text-muted"
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Our score system.">
@@ -97,7 +97,7 @@
               </th>
               <th class='column-sm align-middle pe-0'>
                 Skipped Vote&nbsp;&percnt;
-                <i class="fas fa-info-circle font-size-xs text-muted"
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Skipped vote measures the percent of the time that a leader fails to vote.">
@@ -107,7 +107,7 @@
               </th>
               <th class='column-chart py-3 align-middle'>
                 Root Distance
-                <i class="fas fa-info-circle font-size-xs text-muted"
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower.">
@@ -117,7 +117,7 @@
               </th>
               <th class='column-chart py-3 align-middle'>
                 Vote Distance
-                <i class="fas fa-info-circle font-size-xs text-muted"
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group.">
@@ -127,7 +127,7 @@
               </th>
               <th class='column-chart py-3 align-middle'>
                 Skipped Slot&nbsp;&percnt;
-                <i class="fas fa-info-circle font-size-xs text-muted"
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
