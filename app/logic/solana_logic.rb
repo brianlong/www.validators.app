@@ -27,8 +27,7 @@ module SolanaLogic
   # We can also set some attributes ie. skipped_slot_all_average.
   def batch_touch
     lambda do |p|
-      # byebug
-      batch = Batch.where(uuid: p.payload[:batch_uuid]).first
+      batch = Batch.where(uuid: p.payload[:batch_uuid], network: p.payload[:network]).first
 
       # IMPORTANT: Do not use this values on index page, it's only for show.
       average_skipped_slot_percent = Stats::ValidatorBlockHistory.new(
