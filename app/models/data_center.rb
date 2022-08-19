@@ -53,6 +53,7 @@ class DataCenter < ApplicationRecord
   FIELDS_FOR_API = %i[
     data_center_key 
     id
+    country_name
     location_latitude 
     location_longitude
     traits_autonomous_system_number 
