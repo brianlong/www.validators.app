@@ -45,7 +45,7 @@
             <label class="form-label">Staker</label>
             <input v-model="filter_staker" type="text" class="form-control">
           </div>
-          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-tertiary mb-2">
+          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-sm btn-tertiary mb-2">
             Reset filters
           </a>
         </div>

@@ -5,7 +5,7 @@ module SolPricesHelper
     content_tag(:div, nil, class: div_css_classes) do
       
       @filter_days.map do |filter|
-        button_css_classes = 'btn btn-xs btn-secondary nav-link chartFilterButton'
+        button_css_classes = 'btn btn-sm btn-secondary nav-link chartFilterButton'
 
         if filter.to_s == params[:filtering]
           button_css_classes += ' active'

@@ -5,6 +5,7 @@ const webpack = require('webpack')
 
 environment.loaders.get('nodeModules').exclude = /(?:@?babel(?:\/|\\{1,2}|-).+)|regenerator-runtime|core-js|webpack/;
 environment.plugins.prepend('VueLoaderPlugin', new VueLoaderPlugin())
+// TODO to remove
 environment.plugins.prepend('Provide',
   new webpack.ProvidePlugin({
     $: 'jquery/src/jquery',

@@ -52,6 +52,7 @@
     border-color: $red;
     color: $red;
     @include btn-hover($red, $red, $background-color);
+    @include btn-hover($red, $red, $background-color);
   }
   &-warning {
     background-color: transparent;
@@ -67,7 +68,7 @@
   }
   &-lg {
     border-radius: 30px;
-    padding: 14px 22px;
+    padding: 12px 18px;
     @include font-size-base;
     @media(max-width: $screen-xs-max) {
       padding: 12px 18px;
@@ -75,21 +76,14 @@
   }
   &-md {
     border-radius: 24px;
-    padding: 12px 18px;
+    padding: 10px 16px;
     @include font-size-sm;
   }
   &-sm {
     border-radius: 24px;
-    padding: 8px 14px;
+    padding: 6px 12px;
     min-width: 75px;
     @include font-size-sm;
-    @media(max-width: $screen-xs-max) { min-width: 65px; }
-  }
-  &-xs {
-    border-radius: 22px;
-    padding: 6px 11px;
-    min-width: 75px;
-    @include font-size-xs;
     @media(max-width: $screen-xs-max) { min-width: 65px; }
   }
 }

@@ -33,7 +33,7 @@
          @click.prevent="reset_filters"
          :style="{display: resetFilterVisibility() ? 'inline-block' : 'none'}"
          id='reset-filters'
-         class='btn btn-xs btn-primary'>Reset filters</a>
+         class='btn btn-sm btn-primary'>Reset filters</a>
     </div>
   </div>
 </template>
