@@ -25,7 +25,7 @@ document.addEventListener("turbolinks:load", function() {
         link.addEventListener('click', event => {
             event.preventDefault();
             var i = link.dataset.iterator
-            var target = link.dataset.target+'-'+i;
+            var target = link.dataset.bsTarget+'-'+i;
             var row = document.getElementById('row-'+i);
 
             // Show selected chart, hide the rest
