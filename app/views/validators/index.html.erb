@@ -9,39 +9,8 @@
   <div class="card">
     <div class="card-content pb-3">
       <%= render 'validators/sort_bar' %>
-
-      <div class="row">
-        <div class="col-md-9 col-lg-10">
-          <p class="small text-muted">
-            Score updated at <%= @batch&.scored_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
-          </p>
-        </div>
-        <div class='col-md-3 col-lg-2 toggle-container'>
-          <% if params[:refresh] == 'true' %>
-            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
-                        url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
-            <p class="small text-muted toggle-label">REFRESH ON</p>
-          <% else %>
-            <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'),
-                        url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
-            <p class="small text-muted toggle-label">REFRESH OFF</p>
-          <% end %>
-
-          <%= link_to url_for(order: params[:order],
-                              page: params[:page],
-                              network: params[:network],
-                              refresh: params[:refresh],
-                              watchlist: params[:watchlist] ? nil : true) do %>
-            <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
-               data-bs-toggle="tooltip"
-               data-bs-placement="top"
-               title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
-            </i>
-          <% end %>
-        </div>
-      </div>
+      <%= render 'validators/toggle_bar' %>
     </div>
-
 
     <div class="row">
       <div class="col-sm-12">
@@ -54,7 +23,8 @@
                    show_watchlist_btn: true %>
 
           <p class="px-3 small text-muted">
-            Score updated at <%= @batch&.scored_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
+            Score updated at <%= @batch&.scored_at || 'N/A' %> <br class="d-md-none"/>
+            in batch <%= @batch&.uuid || 'N/A' %>
           </p>
           <%= paginate @validators %>
 
