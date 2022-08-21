@@ -62,8 +62,6 @@ class Validator < ApplicationRecord
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
 
-  belongs_to :gossip_node, primary_key: :identity, foreign_key: :account
-
   # API
   has_many :vote_accounts_for_api, -> { for_api }, class_name: "VoteAccount"
   has_one :validator_ip_active_for_api, -> { active_for_api }, class_name: "ValidatorIp"

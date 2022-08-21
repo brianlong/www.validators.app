@@ -51,9 +51,9 @@ class DataCenter < ApplicationRecord
   UNKNOWN_DATA_CENTER_KEY = "0--Unknown"
 
   FIELDS_FOR_API = %i[
+    country_name
     data_center_key 
     id
-    country_name
     location_latitude 
     location_longitude
     traits_autonomous_system_number 
