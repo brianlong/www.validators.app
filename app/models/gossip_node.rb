@@ -17,11 +17,13 @@
 #
 # Indexes
 #
+#  index_gossip_nodes_on_ip                    (ip)
 #  index_gossip_nodes_on_network_and_identity  (network,identity)
 #  index_gossip_nodes_on_network_and_staked    (network,staked)
 #
 class GossipNode < ApplicationRecord
   has_one :validator_ip, primary_key: :ip, foreign_key: :address
+  has_one :data_center, through: :validator_ip
 
   def add_validator_ip
     ValidatorIp.find_or_create_by(

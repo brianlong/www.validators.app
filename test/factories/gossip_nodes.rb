@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :gossip_node do
-    ip { "0.0.1.1" }
+    ip { Faker::Internet.ip_v4_address }
     tpu_port { 8000 }
     gossip_port { 8001 }
-    version { "1.2.3" }
+    version { Faker::App.semantic_version }
   end
 end
