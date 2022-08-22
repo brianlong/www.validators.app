@@ -52,10 +52,10 @@ class GossipNodeQueryTest < ActiveSupport::TestCase
   end
 
   test "GossipNodeQuery returns nodes within a given limit" do
-    results = GossipNodeQuery.new(network: @network).call(limit: 1)
+    results = GossipNodeQuery.new(network: @network).call(per: 1)
     assert_equal 1, results.count
 
-    results = GossipNodeQuery.new(network: @network).call(limit: 2)
+    results = GossipNodeQuery.new(network: @network).call(per: 2)
     assert_equal 2, results.count
   end
 

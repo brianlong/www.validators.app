@@ -15,13 +15,13 @@ class GossipNodeQuery
     SQL
   end
 
-  def call(staked: nil, limit: 500, page: 1)
+  def call(staked: nil, per: 500, page: 1)
     filter_query = staked ? "AND gossip_nodes.staked = :staked" : nil
     pagination_query = "LIMIT :limit OFFSET :offset"
     query_params = {
       network: @network,
-      limit: limit,
-      offset: (page - 1) * limit,
+      limit: per,
+      offset: (page - 1) * per,
       staked: staked
     }
     sanitized_query = ApplicationRecord.sanitize_sql([[@query, filter_query, pagination_query].join(" "), query_params])
