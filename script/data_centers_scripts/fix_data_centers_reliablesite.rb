@@ -10,7 +10,6 @@ include FixDataCenterModule
 ASO = 'RELIABLESITE'
 ASN = 23470
 REGISTERED_COUNTRY_NAME = "United States" 
-
 RELIABLESITE_HOSTS_COMMON = {
   country_iso_code: "US",
   country_name: "United States",
@@ -27,7 +26,7 @@ RELIABLESITE_HOSTS = {
     city_name: 'Miami',
     data_center_key: '23470-US-Miami',
   }.merge(RELIABLESITE_HOSTS_COMMON),
-  "newark|newyork||UnAssigned24.nyiix.net" => {
+  "newark|newyork|UnAssigned24.nyiix.net" => {
     city_name: 'New York',
     data_center_key: "23470-US-New York",
   }.merge(RELIABLESITE_HOSTS_COMMON),
