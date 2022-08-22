@@ -38,9 +38,9 @@ class GossipNodeQuery
       "gossip_nodes.#{field}"
     end.join(", ")
 
-    validator_fields_reduced = Validator::FIELDS_FOR_API.reject{ |f| %i[account updated_at created_at network].include? f }
+    val_fields_reduced = Validator::FIELDS_FOR_API.reject{ |f| %i[account updated_at created_at network].include? f }
 
-    validator_fields = validator_fields_reduced.map do |field|
+    validator_fields = val_fields_reduced.map do |field|
       "validators.#{field}"
     end.join(", ")
 
