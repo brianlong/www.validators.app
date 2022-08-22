@@ -10,7 +10,7 @@ include GossipNodeLogic
     network: network
   }
 
-  p = Pipeline.new(200, @payload)
+  p = Pipeline.new(200, payload)
               .then(&get_nodes)
               .then(&update_nodes)
               .then(&set_staked_flag)

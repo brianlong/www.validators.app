@@ -24,7 +24,8 @@
 #
 # Indexes
 #
-#  index_validators_on_network_and_account  (network,account) UNIQUE
+#  index_validators_on_network_and_account                     (network,account) UNIQUE
+#  index_validators_on_network_and_is_active_and_is_destroyed  (network,is_active,is_destroyed)
 #
 class Validator < ApplicationRecord
   FIELDS_FOR_API = %i[

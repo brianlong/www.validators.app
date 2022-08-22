@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2022_08_17_083448) do
-
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -193,6 +192,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_083448) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "staked", default: false
+    t.index ["ip"], name: "index_gossip_nodes_on_ip"
     t.index ["network", "identity"], name: "index_gossip_nodes_on_network_and_identity"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
   end
@@ -505,7 +505,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_083448) do
     t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
     t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
-    t.index ["network", "batch_uuid"], name: "index_validator_histories_on_network_and_batch_uuid"
+    t.index ["network", "batch_uuid", "account"], name: "index_validator_histories_on_network_and_batch_uuid_and_account"
   end
 
   create_table "validator_ips", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -581,6 +581,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_083448) do
     t.string "admin_warning"
     t.boolean "consensus_mods", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
+    t.index ["network", "is_active", "is_destroyed"], name: "index_validators_on_network_and_is_active_and_is_destroyed"
   end
 
   create_table "vote_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
