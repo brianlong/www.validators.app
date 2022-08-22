@@ -27,13 +27,13 @@ RELIABLESITE_HOSTS = {
     city_name: 'Miami',
     data_center_key: '23470-US-Miami',
   }.merge(RELIABLESITE_HOSTS_COMMON),
-  "newark|newyork" => {
+  "newark|newyork||UnAssigned24.nyiix.net" => {
     city_name: 'New York',
     data_center_key: "23470-US-New York",
   }.merge(RELIABLESITE_HOSTS_COMMON),
 }
 
-RELIABLESITE_REGEXP = /miami|nota|newark|newyork|losangeles/
+RELIABLESITE_REGEXP = /miami|nota|newark|newyork|losangeles|UnAssigned24.nyiix.net/
 
 ValidatorIp.joins(:data_center)
            .where(
