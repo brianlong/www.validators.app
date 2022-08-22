@@ -48,6 +48,10 @@ ValidatorIp.joins(:data_center)
     next unless last_reliablesite_ip&.match?(regexp)
 
     host = last_reliablesite_ip.strip.split(' ').select { |ip| ip.match?(regexp) }.last
+    
+    if host == "UnAssigned24.nyiix.net"
+      host = nil
+    end
 
     setup_data_center(vip: vip, host_data: host_data, host: host)
     # break if result
