@@ -6,5 +6,6 @@ FactoryBot.define do
     tpu_port { 8000 }
     gossip_port { 8001 }
     version { Faker::App.semantic_version }
+    network { "testnet" }
   end
 end
