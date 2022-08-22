@@ -4,7 +4,6 @@ class GossipNodeQuery
   def initialize(network: "mainnet")
     @network = network
     @query = <<~SQL
-    (
       SELECT #{query_fields} FROM gossip_nodes
       LEFT OUTER JOIN validators
       ON validators.account = gossip_nodes.identity 
@@ -13,12 +12,11 @@ class GossipNodeQuery
       LEFT OUTER JOIN data_center_hosts ON data_center_hosts.id = validator_ips.data_center_host_id
       LEFT OUTER JOIN data_centers ON data_centers.id = data_center_hosts.data_center_id
       WHERE gossip_nodes.network = :network
-    )
     SQL
   end
 
   def call(staked: nil, limit: 500, page: 1)
-    filter_query = staked ? "WHERE gossip_nodes.staked = :staked" : nil
+    filter_query = staked ? "AND gossip_nodes.staked = :staked" : nil
     pagination_query = "LIMIT :limit OFFSET :offset"
     query_params = {
       network: @network,
@@ -26,7 +24,7 @@ class GossipNodeQuery
       offset: (page - 1) * limit,
       staked: staked
     }
-    sanitized_query = ApplicationRecord.sanitize_sql([[@query, pagination_query, filter_query].join(" "), query_params])
+    sanitized_query = ApplicationRecord.sanitize_sql([[@query, filter_query, pagination_query].join(" "), query_params])
 
     ActiveRecord::Base.connection.exec_query(sanitized_query)
   end
