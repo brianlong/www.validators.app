@@ -53,9 +53,6 @@ begin
     }.stringify_keys
 
     BuildSkippedSlotPercentWorker.set(queue: :high_priority).perform_async(common_params)
-    ReportTowerHeightWorker.set(queue: :high_priority).perform_async(
-      common_params.merge({ epoch: p.payload[:epoch] }).stringify_keys
-    )
     ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(common_params)
 
     break if interrupted

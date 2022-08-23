@@ -83,7 +83,7 @@ class User < ApplicationRecord
             presence: true,
             format: { with: EMAIL_REGEXP }
 
-  validate :email_unique?, on: :create
+  # validate :email_unique?, on: :create
 
   def self.search_by_email_hash(email)
     where(email_hash: Digest::SHA256.hexdigest(email)).first

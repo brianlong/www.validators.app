@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.testnet.solana.com/
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":94744,"method":"getEpochInfo"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.testnet.solana.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 28 Jul 2022 08:33:09 GMT
+      X-Ratelimit-Method-Limit:
+      - '30'
+      X-Ratelimit-Method-Remaining:
+      - '29'
+      X-Ratelimit-Rps-Limit:
+      - '50'
+      X-Ratelimit-Rps-Remaining:
+      - '49'
+      X-Ratelimit-Conn-Limit:
+      - '30'
+      X-Ratelimit-Conn-Remaining:
+      - '29'
+      X-Ratelimit-Connrate-Limit:
+      - '40'
+      X-Ratelimit-Connrate-Remaining:
+      - '29'
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: ASCII-8BIT
+      string: '{"jsonrpc":"2.0","result":{"absoluteSlot":143032982,"blockHeight":116241679,"epoch":343,"slotIndex":380726,"slotsInEpoch":432000,"transactionCount":124948198885},"id":94744}
+
+        '
+  recorded_at: Thu, 28 Jul 2022 08:33:09 GMT
+recorded_with: VCR 6.0.0

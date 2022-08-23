@@ -175,6 +175,12 @@ module ValidatorScoreV1Logic
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_average: #{vote_distance_all_average}"
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_median: #{vote_distance_all_median}"
 
+      at_33_active_stake =
+        Stats::ValidatorHistory.new(p.payload[:network], p.payload[:batch_uuid])
+                              .at_33_stake
+                              .validator
+                              .active_stake
+                              
       p.payload[:validators].each do |v|
         # Assign the root_distance_score
         avg_root_distance = v.validator_score_v1.avg_root_distance_history(960)
@@ -205,12 +211,6 @@ module ValidatorScoreV1Logic
           end
 
         # Assign the stake concentration & score
-        at_33_active_stake =
-          Stats::ValidatorHistory.new(p.payload[:network], p.payload[:batch_uuid])
-                                 .at_33_stake
-                                 .validator
-                                 .active_stake
-
         v.validator_score_v1.stake_concentration_score = \
           v.validator_score_v1.active_stake.to_i >= at_33_active_stake ? -2 : 0
 
