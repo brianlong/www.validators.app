@@ -1,4 +1,4 @@
-module FixIpModule
+module FixDataCenterModule
   # look for the data center host record
   # returns line from traceroute or nil
   def get_matching_traceroute(ip:, reg:)
