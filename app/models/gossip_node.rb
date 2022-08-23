@@ -26,8 +26,6 @@ class GossipNode < ApplicationRecord
   has_one :data_center, through: :validator_ip
 
   def add_validator_ip
-    ValidatorIp.find_or_create_by(
-      address: self.ip
-    )
+    ValidatorIp.find_or_create_by(address: self.ip)
   end
 end

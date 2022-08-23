@@ -6,10 +6,7 @@ module GossipNodeLogic
 
   def get_nodes
     lambda do |p|
-      current_nodes = cli_request(
-        "gossip",
-        p.payload[:config_urls]
-      )
+      current_nodes = cli_request("gossip", p.payload[:config_urls])
 
       raise "No nodes returned by cli" unless current_nodes.any?
 

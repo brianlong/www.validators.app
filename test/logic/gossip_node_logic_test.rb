@@ -9,10 +9,7 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
     @mainnet_url = "https://api.mainnet-beta.solana.com"
     @network = "mainnet"
 
-    @payload = {
-      network: @network,
-      config_urls: [@mainnet_url]
-    }
+    @payload = { network: @network, config_urls: [@mainnet_url] }
 
     @json_data = File.read("#{Rails.root}/test/json/gossip_nodes.json")
   end
@@ -57,10 +54,8 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
   test "set_staked_flag correctly updates staked" do
     ip = "204.16.244.218"
     
-    val = create(
-      :validator,
-      network: @network
-    )
+    val = create(:validator, network: @network)
+    
     create(
       :validator_score_v1,
       validator: val,
