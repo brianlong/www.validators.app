@@ -3,16 +3,20 @@
 module Api
   module V1
     class GossipNodesController < BaseController
+      NODES_DEFAULT_LIMIT = 100
+      NODES_DEFAULT_PAGE = 1
+
       def index
-        if nodes_params.has_key? "staked"
-          staked = ["true", true].include? nodes_params[:staked] ? true : false
+        staked = if nodes_params.has_key? "staked"
+          ["true", true].include? nodes_params[:staked] ? true : false
         else
-          staked = nil 
+          nil 
         end
+        
         nodes = GossipNodeQuery.new(network: nodes_params[:network]).call(
           staked: nodes_params[:staked] == "true",
-          per: nodes_params[:per] || 100,
-          page: nodes_params[:page] || 1,
+          per: nodes_params[:per] || NODES_DEFAULT_LIMIT,
+          page: nodes_params[:page] || NODES_DEFAULT_PAGE,
         )
 
         render json: nodes.to_json

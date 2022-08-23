@@ -5,7 +5,7 @@ require "test_helper"
 class GossipNodeTest < ActiveSupport::TestCase
   setup do
     @ip = "10.20.30.40"
-    @node = create(:gossip_node, ip: @ip)
+    @node = create(:gossip_node, ip: @ip, identity: "test_identity")
   end
 
   test "add_validator_ip creates validator_ip with correct ip" do
@@ -29,6 +29,12 @@ class GossipNodeTest < ActiveSupport::TestCase
     val_ip = create(:validator_ip, address: @ip)
 
     assert_equal @node.validator_ip, val_ip
+  end
+
+  test "has_one validator should return correct validator" do
+    val = create(:validator, account: @node.identity)
+
+    assert_equal val, @node.validator
   end
 
   test "has_one data_center should return correct data_center" do

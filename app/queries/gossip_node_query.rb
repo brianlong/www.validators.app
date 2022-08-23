@@ -3,30 +3,30 @@
 class GossipNodeQuery
   def initialize(network: "mainnet")
     @network = network
-    @query = <<~SQL
-      SELECT #{query_fields} FROM gossip_nodes
-      LEFT OUTER JOIN validators
-      ON validators.account = gossip_nodes.identity 
-      AND validators.network = gossip_nodes.network
-      LEFT OUTER JOIN validator_ips ON validator_ips.address = gossip_nodes.ip
-      LEFT OUTER JOIN data_center_hosts ON data_center_hosts.id = validator_ips.data_center_host_id
-      LEFT OUTER JOIN data_centers ON data_centers.id = data_center_hosts.data_center_id
-      WHERE gossip_nodes.network = :network
-    SQL
+    @query = GossipNode.select(query_fields)
+                       .joins(
+                         "LEFT OUTER JOIN validators 
+                          ON validators.account = gossip_nodes.identity 
+                          AND validators.network = gossip_nodes.network"
+                       ).left_outer_joins(:data_center)
+                       .where(network: @network)
+    # @query = <<~SQL
+    #   SELECT #{query_fields} FROM gossip_nodes
+    #   LEFT OUTER JOIN validators
+    #   ON validators.account = gossip_nodes.identity 
+    #   AND validators.network = gossip_nodes.network
+    #   LEFT OUTER JOIN validator_ips ON validator_ips.address = gossip_nodes.ip
+    #   LEFT OUTER JOIN data_center_hosts ON data_center_hosts.id = validator_ips.data_center_host_id
+    #   LEFT OUTER JOIN data_centers ON data_centers.id = data_center_hosts.data_center_id
+    #   WHERE gossip_nodes.network = :network
+    # SQL
   end
 
-  def call(staked: nil, per: 500, page: 1)
-    filter_query = staked ? "AND gossip_nodes.staked = :staked" : nil
-    pagination_query = "LIMIT :limit OFFSET :offset"
-    query_params = {
-      network: @network,
-      limit: per,
-      offset: (page - 1) * per,
-      staked: staked
-    }
-    sanitized_query = ApplicationRecord.sanitize_sql([[@query, filter_query, pagination_query].join(" "), query_params])
-
-    ActiveRecord::Base.connection.exec_query(sanitized_query)
+  def call(staked: nil, per: 100, page: 1)
+    if staked
+      @query = @query.where(staked: staked)
+    end
+    @query.page(page).per(per)
   end
 
   private
