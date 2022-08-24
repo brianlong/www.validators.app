@@ -14,7 +14,7 @@ module Api
         end
         
         nodes = GossipNodeQuery.new(network: nodes_params[:network]).call(
-          staked: nodes_params[:staked] == "true",
+          staked: staked,
           per: nodes_params[:per] || NODES_DEFAULT_LIMIT,
           page: nodes_params[:page] || NODES_DEFAULT_PAGE,
         )

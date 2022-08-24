@@ -2,7 +2,7 @@
 
 class GossipNodeQuery
   attr_reader :query_fields
-  
+
   def initialize(network: "mainnet")
     @network = network
     @query_fields = query_fields
@@ -19,6 +19,7 @@ class GossipNodeQuery
     if staked
       @query = @query.where(staked: staked)
     end
+
     @query.page(page).per(per)
   end
 
