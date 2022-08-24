@@ -5,6 +5,8 @@ require "test_helper"
 class GossipNodeLogicTest < ActiveSupport::TestCase
   include GossipNodeLogic
 
+  GOSSIP_KEYS = ["ipAddress", "identityPubkey", "gossipPort", "tpuPort", "version"]
+
   setup do
     @mainnet_url = "https://api.mainnet-beta.solana.com"
     @network = "mainnet"
@@ -21,6 +23,8 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
 
       assert_equal 200, p.code
       refute p.payload[:current_nodes].blank?
+      assert_equal GOSSIP_KEYS, p.payload[:current_nodes].first.keys
+      assert_equal 3481, p.payload[:current_nodes].count
     end
   end
 

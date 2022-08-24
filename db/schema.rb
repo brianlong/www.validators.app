@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.string "ip"
     t.integer "tpu_port"
     t.integer "gossip_port"
-    t.string "version"
+    t.string "software_version"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "staked", default: false

@@ -4,16 +4,16 @@
 #
 # Table name: gossip_nodes
 #
-#  id          :bigint           not null, primary key
-#  account     :string(191)
-#  gossip_port :integer
-#  ip          :string(191)
-#  network     :string(191)
-#  staked      :boolean          default(FALSE)
-#  tpu_port    :integer
-#  version     :string(191)
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id               :bigint           not null, primary key
+#  account          :string(191)
+#  gossip_port      :integer
+#  ip               :string(191)
+#  network          :string(191)
+#  software_version :string(191)
+#  staked           :boolean          default(FALSE)
+#  tpu_port         :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 # Indexes
 #

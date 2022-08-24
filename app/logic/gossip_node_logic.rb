@@ -2,7 +2,7 @@
 
 module GossipNodeLogic
   include PipelineLogic
-  include SolanaLogic #for solana_client_request
+  include SolanaLogic
 
   def get_nodes
     lambda do |p|
@@ -27,7 +27,7 @@ module GossipNodeLogic
         db_node.ip = node["ipAddress"]
         db_node.tpu_port = node["tpuPort"]
         db_node.gossip_port = node["gossipPort"]
-        db_node.version = node["version"]
+        db_node.software_version = node["version"]
 
         db_node.save if db_node.changed?
 
