@@ -47,7 +47,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
-          # Ruby version is taken from .ruby-version
 
       - name: Set up Node version
         uses: actions/setup-node@v3
