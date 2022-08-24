@@ -193,7 +193,6 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "staked", default: false
-    t.index ["ip"], name: "index_gossip_nodes_on_ip"
     t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
   end
