@@ -39,8 +39,10 @@ class GossipNodeQueryTest < ActiveSupport::TestCase
   end
 
   test "GossipNodeQuery returns correct fields" do
-    results = GossipNodeQuery.new(network: @network).call
+    query = GossipNodeQuery.new(network: @network)
+    results = query.call
 
-    assert_equal GossipNodeQuery.query_fields_compact, results.first.attributes.keys
+    expected_fields = query.query_fields.split(", ").map{ |q| q.split(".")[1]}.uniq
+    assert_equal expected_fields, results.first.attributes.keys
   end
 end

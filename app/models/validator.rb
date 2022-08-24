@@ -42,6 +42,8 @@ class Validator < ApplicationRecord
     admin_warning
   ].freeze
 
+  FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account updated_at created_at network].include? f }.freeze
+
   DEFAULT_FILTERS = %w(inactive active private delinquent).freeze
 
   has_many :vote_accounts, dependent: :destroy

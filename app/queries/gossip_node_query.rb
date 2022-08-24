@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class GossipNodeQuery
-
+  attr_reader :query_fields
+  
   def initialize(network: "mainnet")
     @network = network
+    @query_fields = query_fields
     @query = GossipNode.select(query_fields)
                        .joins(
                          "LEFT OUTER JOIN validators 
@@ -20,20 +22,12 @@ class GossipNodeQuery
     @query.page(page).per(per)
   end
 
-  def self.query_fields_compact
-    query_fields.split(", ").map{ |q| q.split(".")[1]}.uniq
-  end
-
-  private
-
-  def self.query_fields
+  def query_fields
     gossip_node_fields = GossipNode::FIELDS_FOR_API.map do |field|
       "gossip_nodes.#{field}"
     end.join(", ")
 
-    val_fields_reduced = Validator::FIELDS_FOR_API.reject{ |f| %i[account updated_at created_at network].include? f }
-
-    validator_fields = val_fields_reduced.map do |field|
+    validator_fields = Validator::FIELDS_FOR_GOSSIP_NODES.map do |field|
       "validators.#{field}"
     end.join(", ")
 
@@ -42,9 +36,5 @@ class GossipNodeQuery
     end.join(", ")
 
     [gossip_node_fields, validator_fields, data_center_fields].join(", ")
-  end
-
-  def query_fields
-    self.class.query_fields
   end
 end
