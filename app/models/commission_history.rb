@@ -15,9 +15,10 @@
 #
 # Indexes
 #
-#  index_commission_histories_on_network                   (network)
+#  index_commission_histories_on_epoch                     (epoch)
 #  index_commission_histories_on_network_and_validator_id  (network,validator_id)
 #  index_commission_histories_on_validator_id              (validator_id)
+#  index_commission_histories_on_validators                (network,created_at,validator_id)
 #
 # Foreign Keys
 #

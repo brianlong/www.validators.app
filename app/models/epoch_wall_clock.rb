@@ -15,6 +15,7 @@
 #
 # Indexes
 #
+#  index_epoch_wall_clocks_on_epoch              (epoch)
 #  index_epoch_wall_clocks_on_network_and_epoch  (network,epoch) UNIQUE
 #
 class EpochWallClock < ApplicationRecord
