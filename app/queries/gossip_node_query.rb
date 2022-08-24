@@ -9,7 +9,7 @@ class GossipNodeQuery
     @query = GossipNode.select(query_fields)
                        .joins(
                          "LEFT OUTER JOIN validators 
-                          ON validators.account = gossip_nodes.identity 
+                          ON validators.account = gossip_nodes.account 
                           AND validators.network = gossip_nodes.network"
                        ).left_outer_joins(:data_center)
                        .where(network: @network)

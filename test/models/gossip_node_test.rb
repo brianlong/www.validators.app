@@ -5,7 +5,7 @@ require "test_helper"
 class GossipNodeTest < ActiveSupport::TestCase
   setup do
     @ip = "10.20.30.40"
-    @node = create(:gossip_node, ip: @ip, identity: "test_identity")
+    @node = create(:gossip_node, ip: @ip, account: "test_account")
   end
 
   test "add_validator_ip creates validator_ip with correct ip" do
@@ -32,7 +32,7 @@ class GossipNodeTest < ActiveSupport::TestCase
   end
 
   test "has_one validator should return correct validator" do
-    val = create(:validator, account: @node.identity)
+    val = create(:validator, account: @node.account)
 
     assert_equal val, @node.validator
   end

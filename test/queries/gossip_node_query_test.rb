@@ -10,7 +10,7 @@ class GossipNodeQueryTest < ActiveSupport::TestCase
       :gossip_node,
       network: @network,
       staked: true,
-      identity: "exampleIdentity"
+      account: "exampleAccount"
     )
     create(:gossip_node, network: "testnet")
     create(:gossip_node, network: "mainnet", staked: false)
