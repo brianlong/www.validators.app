@@ -71,6 +71,7 @@ gem 'appsignal'
 gem "mechanize", ">= 2.7.7"
 gem 'nokogiri', '1.13.6'
 
+# Pagination
 gem 'kaminari'
 
 # MaxMind
