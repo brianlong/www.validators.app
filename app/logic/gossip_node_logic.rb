@@ -6,10 +6,7 @@ module GossipNodeLogic
 
   def get_nodes
     lambda do |p|
-      current_nodes = cli_request(
-        "gossip",
-        p.payload[:config_urls]
-      )
+      current_nodes = cli_request("gossip", p.payload[:config_urls])
 
       raise "No nodes returned by cli" unless current_nodes.any?
 
@@ -24,7 +21,7 @@ module GossipNodeLogic
       p.payload[:current_nodes].each do |node|
         db_node = GossipNode.find_or_create_by(
           network: p.payload[:network],
-          identity: node["identityPubkey"]
+          account: node["identityPubkey"]
         )
 
         db_node.ip = node["ipAddress"]
@@ -45,15 +42,18 @@ module GossipNodeLogic
 
   def set_staked_flag
     lambda do |p|
-      staked_validators = Validator.includes(:validator_score_v1)
+      staked_validators = Validator.joins(:validator_score_v1)
                                    .includes(:validator_ips)
                                    .where("validator_score_v1s.active_stake > 0")
+                                   .where(network: p.payload[:network])
 
-      staked_ips = staked_validators.pluck("validator_ips.address")
-      staked_nodes = GossipNode.where(ip: staked_ips)
+      staked_accounts = staked_validators.pluck("account")
+      staked_nodes = GossipNode.where(account: staked_accounts, network: p.payload[:network])
       staked_nodes.update_all(staked: true)
 
-      GossipNode.where.not(ip: staked_nodes.pluck(:ip)).update_all(staked: false)
+      GossipNode.where(network: p.payload[:network])
+                .where.not(account: staked_nodes.pluck(:account))
+                .update_all(staked: false)
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e

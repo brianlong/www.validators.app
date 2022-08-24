@@ -5,8 +5,8 @@
 # Table name: gossip_nodes
 #
 #  id          :bigint           not null, primary key
+#  account     :string(191)
 #  gossip_port :integer
-#  identity    :string(191)
 #  ip          :string(191)
 #  network     :string(191)
 #  staked      :boolean          default(FALSE)
@@ -17,9 +17,8 @@
 #
 # Indexes
 #
-#  index_gossip_nodes_on_ip                    (ip)
-#  index_gossip_nodes_on_network_and_identity  (network,identity)
-#  index_gossip_nodes_on_network_and_staked    (network,staked)
+#  index_gossip_nodes_on_network_and_account  (network,account)
+#  index_gossip_nodes_on_network_and_staked   (network,staked)
 #
 
 class GossipNode < ApplicationRecord
@@ -37,8 +36,6 @@ class GossipNode < ApplicationRecord
   has_one :validator, -> { for_api }, primary_key: :identity, foreign_key: :account
 
   def add_validator_ip
-    ValidatorIp.find_or_create_by(
-      address: self.ip
-    )
+    ValidatorIp.find_or_create_by(address: self.ip)
   end
 end

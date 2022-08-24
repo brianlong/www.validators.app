@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require File.expand_path('../config/environment', __dir__)
+
 include GossipNodeLogic
 
 %w[mainnet testnet].each do |network|

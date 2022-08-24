@@ -9,10 +9,7 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
     @mainnet_url = "https://api.mainnet-beta.solana.com"
     @network = "mainnet"
 
-    @payload = {
-      network: @network,
-      config_urls: [@mainnet_url]
-    }
+    @payload = { network: @network, config_urls: [@mainnet_url] }
 
     @json_data = File.read("#{Rails.root}/test/json/gossip_nodes.json")
   end
@@ -49,18 +46,17 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
       refute p.payload[:current_nodes].blank?
       assert GossipNode.exists?
       assert_equal @network, GossipNode.last.network
-      refute GossipNode.where(identity: nil).exists?
+      refute GossipNode.where(account: nil).exists?
       refute GossipNode.where(ip: nil).exists?
     end
   end
 
   test "set_staked_flag correctly updates staked" do
     ip = "204.16.244.218"
+    account = "HZF34Kzkn8fh88TJV6KfgZGmBRBiFX9bXdmsnoQBVTMk"
     
-    val = create(
-      :validator,
-      network: @network
-    )
+    val = create(:validator, network: @network, account: account)
+    
     create(
       :validator_score_v1,
       validator: val,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_17_083448) do
+ActiveRecord::Schema.define(version: 2022_08_24_102422) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_083448) do
   end
 
   create_table "gossip_nodes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "identity"
+    t.string "account"
     t.string "network"
     t.string "ip"
     t.integer "tpu_port"
@@ -193,8 +193,7 @@ ActiveRecord::Schema.define(version: 2022_08_17_083448) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "staked", default: false
-    t.index ["ip"], name: "index_gossip_nodes_on_ip"
-    t.index ["network", "identity"], name: "index_gossip_nodes_on_network_and_identity"
+    t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
   end
 
