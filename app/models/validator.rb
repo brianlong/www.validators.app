@@ -46,7 +46,7 @@ class Validator < ApplicationRecord
 
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
-  has_many :validator_ips
+  has_many :validator_ips, dependent: :nullify
   has_many :validator_block_histories, dependent: :destroy
   has_many :commission_histories, dependent: :destroy
   has_many :validator_histories, primary_key: :account, foreign_key: :account
