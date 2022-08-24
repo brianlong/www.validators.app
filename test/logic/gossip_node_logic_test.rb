@@ -53,8 +53,9 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
 
   test "set_staked_flag correctly updates staked" do
     ip = "204.16.244.218"
+    account = "HZF34Kzkn8fh88TJV6KfgZGmBRBiFX9bXdmsnoQBVTMk"
     
-    val = create(:validator, network: @network)
+    val = create(:validator, network: @network, account: account)
     
     create(
       :validator_score_v1,
