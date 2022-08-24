@@ -61,18 +61,10 @@
     @include btn-hover($orange, $orange, $background-color);
   }
 
-  &-xl {
-    border-radius: 34px;
-    padding: 18px 26px;
-    @include font-size-lg;
-  }
   &-lg {
     border-radius: 30px;
     padding: 12px 18px;
     @include font-size-base;
-    @media(max-width: $screen-xs-max) {
-      padding: 12px 18px;
-    }
   }
   &-md {
     border-radius: 24px;
