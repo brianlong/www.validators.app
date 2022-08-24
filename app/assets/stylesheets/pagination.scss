@@ -1,28 +1,26 @@
 @import "variables";
 
-@mixin item($padding-y) {
-  display: inline-block;
-  margin: 0 $margin-standard 0 0;
+@mixin item() {
+  padding: 0;
+  margin: 0;
   white-space: nowrap;
   background-color: transparent;
   border: 2px solid $green;
   border-radius: 0;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
   @include font-size-sm;
   font-weight: $font-weight-normal;
-  padding: $padding-y 0;
-  @media(max-width: $screen-xs-max) {
-    padding: 9px 0;
-  }
 }
 
-@mixin item-active($padding-y, $padding-x) {
+@mixin item-active() {
+  padding: 0;
+  margin: 0;
   background-color: $green;
   border: 2px solid $green;
   color: $background-color;
-  padding: $padding-y $padding-x;
-  @media(max-width: $screen-xs-max) {
-    padding: 9px 11px;
-  }
 }
 
 @mixin item-hover() {
@@ -37,35 +35,43 @@
 @mixin item-first() {
   border-top-left-radius: $border-radius-larger;
   border-bottom-left-radius: $border-radius-larger;
+  width: 60px;
 }
 
 @mixin item-last() {
   border-top-right-radius: $border-radius-larger;
   border-bottom-right-radius: $border-radius-larger;
+  width: 60px;
 }
 
 @mixin link() {
+  padding: 0;
+  margin: 0;
   color: $base-color;
-  padding: 8px 12px;
   background-color: transparent;
   border: none;
+  display: block;
+  width: 100%;
+  height: 100%;
   &:focus, &.focus {
     box-shadow: none;
   }
 }
 
-
 .pagination {
-  display: inline-block;
-  margin-bottom: 20px;
-  padding: 0 $padding-standard;
-  @media(max-width: $screen-md-max) {
-    overflow-x: scroll;
-    display: flex;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $margin-standard;
+  @media(max-width: $screen-sm-max) {
+    gap: 8px;
   }
 
+  .prev, .next { display: none; }
+
   .page, .first, .last {
-    @include item(8px);
+    @include item();
     a {
       @include link();
     }
@@ -80,42 +86,32 @@
     @include item-last;
   }
 
-  .prev, .next { display: none; }
-
-
   .page {
     &.current {
-      @include item-active(8px, 12px);
+      @include item-active();
     }
     &.gap {
       background-color: transparent;
       border: 2px solid $green;
       color: $base-color;
       font-weight: $font-weight-bold-secondary;
-      padding: 8px 12px;
+      padding: 0;
     }
   }
 
-
   .page-item {
-    @include item(2px);
+    @include item();
     .page-link {
       @include link;
-      @media(max-width: $screen-xs-max) {
-        padding: 2px 13px;
-      }
     }
     &:not(.disabled):hover, &:not(.disabled):focus, &:not(.disabled).focus {
       @include item-hover;
     }
 
     &.active {
-      @include item-active(2px, 0);
+      @include item-active();
       .page-link {
         color: $background-color;
-        @media(max-width: $screen-xs-max) {
-          padding: 2px;
-        }
       }
     }
 

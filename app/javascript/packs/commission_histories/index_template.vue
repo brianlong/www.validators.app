@@ -23,6 +23,9 @@
           </commission-history-row>
         </tbody>
       </table>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
       <b-pagination
           v-model="page"
           :total-rows="total_count"
@@ -31,9 +34,9 @@
           last-text="Last »" />
       <a href='#'
          @click.prevent="reset_filters"
-         :style="{display: resetFilterVisibility() ? 'inline-block' : 'none'}"
+         :style="{display: resetFilterVisibility() ? '' : 'none'}"
          id='reset-filters'
-         class='btn btn-sm btn-primary'>Reset filters</a>
+         class='btn btn-sm btn-tertiary'>Reset filters</a>
     </div>
   </div>
 </template>

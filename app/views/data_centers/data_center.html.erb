@@ -83,7 +83,9 @@
              show_ip_and_gateway: true,
              items_per_page: @per,
              show_watchlist_btn: false %>
-  <%= paginate @validators %>
+  <div class="card-footer">
+    <%= paginate @validators %>
+  </div>
 </div>
 
 <%= link_to 'Back to Data Centers',

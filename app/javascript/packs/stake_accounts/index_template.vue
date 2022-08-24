@@ -148,12 +148,14 @@
           </stake-account-row>
         </table>
 
-        <b-pagination
-         v-model="page"
-         :total-rows="total_count"
-         :per-page="20"
-         first-text="« First"
-         last-text="Last »" />
+        <div class="card-footer">
+          <b-pagination
+              v-model="page"
+              :total-rows="total_count"
+              :per-page="20"
+              first-text="« First"
+              last-text="Last »" />
+        </div>
       </div>
     </div>
     <div v-if="is_loading_stake_accounts && is_loading_stake_pools" class="col-12 text-center my-5">
