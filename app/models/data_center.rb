@@ -59,6 +59,13 @@ class DataCenter < ApplicationRecord
     traits_autonomous_system_number 
   ].freeze
 
+  FIELDS_FOR_GOSSIP_NODES = [
+    "country_name",
+    "data_center_key" ,
+    "location_latitude as latitude" ,
+    "location_longitude as longitude"
+  ].freeze
+
   before_save :assign_data_center_key
   has_many :data_center_hosts
   has_many :validator_ips, through: :data_center_hosts
