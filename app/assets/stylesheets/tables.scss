@@ -1,6 +1,7 @@
 @import "variables";
 table, .table {
   color: inherit;
+  margin-bottom: 0;
 
   tbody, td, tfoot, th, thead, tr {
     border-style: none;
@@ -189,9 +190,6 @@ table, .table {
         width: 20%;
         padding-top: 20px;
         padding-bottom: 10px;
-        //@media(max-width: $screen-xl-max) {
-        //  width: 22%;
-        //}
         @media(max-width: $screen-lg-max) {
           width: 25%;
           padding-right: 10px;
@@ -212,7 +210,9 @@ table, .table {
           padding-right: 15px;
           @media(max-width: $screen-lg-max) {
             width: 35px;
-            .img-circle-medium { display: none; }
+            .img-circle-medium, .img-circle-medium-private {
+              display: none;
+            }
             &.no-watchlist {
               width: 0;
               padding-right: 0;
