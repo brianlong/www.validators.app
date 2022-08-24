@@ -49,10 +49,10 @@ jobs:
           ruby-version: .ruby-version
           # Ruby version is taken from .ruby-version
 
-      - name: Set up Node version used on production server
+      - name: Set up Node version
         uses: actions/setup-node@v3
         with:
-          node-version: '16.14.2'
+          node-version-file: '.nvmrc'
 
       - name: Setup cache key and directory for gems cache
         uses: actions/cache@v3
