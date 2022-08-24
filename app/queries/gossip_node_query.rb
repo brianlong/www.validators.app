@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GossipNodeQuery
+
   def initialize(network: "mainnet")
     @network = network
     @query = GossipNode.select(query_fields)
@@ -10,16 +11,6 @@ class GossipNodeQuery
                           AND validators.network = gossip_nodes.network"
                        ).left_outer_joins(:data_center)
                        .where(network: @network)
-    # @query = <<~SQL
-    #   SELECT #{query_fields} FROM gossip_nodes
-    #   LEFT OUTER JOIN validators
-    #   ON validators.account = gossip_nodes.identity 
-    #   AND validators.network = gossip_nodes.network
-    #   LEFT OUTER JOIN validator_ips ON validator_ips.address = gossip_nodes.ip
-    #   LEFT OUTER JOIN data_center_hosts ON data_center_hosts.id = validator_ips.data_center_host_id
-    #   LEFT OUTER JOIN data_centers ON data_centers.id = data_center_hosts.data_center_id
-    #   WHERE gossip_nodes.network = :network
-    # SQL
   end
 
   def call(staked: nil, per: 100, page: 1)
@@ -29,9 +20,13 @@ class GossipNodeQuery
     @query.page(page).per(per)
   end
 
+  def self.query_fields_compact
+    query_fields.split(", ").map{ |q| q.split(".")[1]}.uniq
+  end
+
   private
 
-  def query_fields
+  def self.query_fields
     gossip_node_fields = GossipNode::FIELDS_FOR_API.map do |field|
       "gossip_nodes.#{field}"
     end.join(", ")
@@ -47,5 +42,9 @@ class GossipNodeQuery
     end.join(", ")
 
     [gossip_node_fields, validator_fields, data_center_fields].join(", ")
+  end
+
+  def query_fields
+    self.class.query_fields
   end
 end

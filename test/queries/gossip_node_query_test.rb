@@ -14,27 +14,6 @@ class GossipNodeQueryTest < ActiveSupport::TestCase
     )
     create(:gossip_node, network: "testnet")
     create(:gossip_node, network: "mainnet", staked: false)
-
-    @query_keys = [
-      "identity",
-      "ip",
-      "network",
-      "staked",
-      "version",
-      "created_at",
-      "avatar_url",
-      "details",
-      "id",
-      "keybase_id",
-      "name",
-      "www_url",
-      "admin_warning",
-      "country_name",
-      "data_center_key",
-      "location_latitude",
-      "location_longitude",
-      "traits_autonomous_system_number"
-    ]
   end
 
   test "GossipNodeQuery returns results by network" do
@@ -62,6 +41,6 @@ class GossipNodeQueryTest < ActiveSupport::TestCase
   test "GossipNodeQuery returns correct fields" do
     results = GossipNodeQuery.new(network: @network).call
 
-    assert_equal @query_keys, results.first.attributes.keys
+    assert_equal GossipNodeQuery.query_fields_compact, results.first.attributes.keys
   end
 end
