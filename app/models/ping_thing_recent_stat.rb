@@ -15,6 +15,9 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
+# Indexes
+#
+#  index_ping_thing_recent_stats_on_network_and_interval  (network,interval)
 #
 class PingThingRecentStat < ApplicationRecord
   FIELDS_FOR_API = [

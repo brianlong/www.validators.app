@@ -20,6 +20,10 @@
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
 #
+# Indexes
+#
+#  index_stake_pools_on_network  (network)
+#
 
 class StakePool < ApplicationRecord
   has_many :stake_accounts
