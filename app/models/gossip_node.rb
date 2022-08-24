@@ -5,8 +5,8 @@
 # Table name: gossip_nodes
 #
 #  id          :bigint           not null, primary key
+#  account     :string(191)
 #  gossip_port :integer
-#  identity    :string(191)
 #  ip          :string(191)
 #  network     :string(191)
 #  staked      :boolean          default(FALSE)
@@ -17,9 +17,9 @@
 #
 # Indexes
 #
-#  index_gossip_nodes_on_ip                    (ip)
-#  index_gossip_nodes_on_network_and_identity  (network,identity)
-#  index_gossip_nodes_on_network_and_staked    (network,staked)
+#  index_gossip_nodes_on_ip                   (ip)
+#  index_gossip_nodes_on_network_and_account  (network,account)
+#  index_gossip_nodes_on_network_and_staked   (network,staked)
 #
 class GossipNode < ApplicationRecord
   has_one :validator_ip, primary_key: :ip, foreign_key: :address

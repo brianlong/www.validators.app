@@ -21,7 +21,7 @@ module GossipNodeLogic
       p.payload[:current_nodes].each do |node|
         db_node = GossipNode.find_or_create_by(
           network: p.payload[:network],
-          identity: node["identityPubkey"]
+          account: node["identityPubkey"]
         )
 
         db_node.ip = node["ipAddress"]

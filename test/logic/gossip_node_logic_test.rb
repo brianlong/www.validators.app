@@ -46,7 +46,7 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
       refute p.payload[:current_nodes].blank?
       assert GossipNode.exists?
       assert_equal @network, GossipNode.last.network
-      refute GossipNode.where(identity: nil).exists?
+      refute GossipNode.where(account: nil).exists?
       refute GossipNode.where(ip: nil).exists?
     end
   end
