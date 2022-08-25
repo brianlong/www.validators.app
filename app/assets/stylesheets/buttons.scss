@@ -52,7 +52,6 @@
     border-color: $red;
     color: $red;
     @include btn-hover($red, $red, $background-color);
-    @include btn-hover($red, $red, $background-color);
   }
   &-warning {
     background-color: transparent;
