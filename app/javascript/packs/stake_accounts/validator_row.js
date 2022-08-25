@@ -162,7 +162,7 @@ var ValidatorRow = Vue.component('validatorRow', {
               <i class="fas fa-minus-circle me-1 text-warning"
                  v-if="validator['data_center_concentration_score'] < 0"
                  :title=" 'Data Center Concentration Score = ' + validator['data_center_concentration_score'] "></i>
-              (<span class="d-inline-block d-lg-none">Total:&nbsp;</span>{{ displayed_total_score() }})
+              ({{ displayed_total_score() }})
             </small>
             <br />
             <div class="small">
