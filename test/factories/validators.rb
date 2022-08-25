@@ -12,7 +12,7 @@ FactoryBot.define do
 
     trait :with_score do
       after(:create) do |validator|
-        create :validator_score_v1, validator: validator
+        create :validator_score_v1, validator: validator, network: validator.network
       end
     end
 

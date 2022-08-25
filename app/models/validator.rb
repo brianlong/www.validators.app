@@ -24,7 +24,8 @@
 #
 # Indexes
 #
-#  index_validators_on_network_and_account  (network,account) UNIQUE
+#  index_validators_on_network_and_account                     (network,account) UNIQUE
+#  index_validators_on_network_and_is_active_and_is_destroyed  (network,is_active,is_destroyed)
 #
 class Validator < ApplicationRecord
   FIELDS_FOR_API = %i[
@@ -45,7 +46,7 @@ class Validator < ApplicationRecord
 
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
-  has_many :validator_ips, dependent: :destroy
+  has_many :validator_ips, dependent: :nullify
   has_many :validator_block_histories, dependent: :destroy
   has_many :commission_histories, dependent: :destroy
   has_many :validator_histories, primary_key: :account, foreign_key: :account
