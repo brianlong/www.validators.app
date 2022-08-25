@@ -1,7 +1,7 @@
-<table id="validators-table" class='table table-block-sm'>
+<table class='table table-block-sm validators-table'>
   <thead>
   <tr>
-    <th class="column-info align-middle">
+    <th class="column-info">
       <div class="column-info-row">
         <% if show_watchlist_btn %>
           <div class="column-info-avatar">
@@ -35,20 +35,21 @@
           </i>
           <br/>
           <% if show_ip_and_gateway %>
-            IP & Gateway <br />
+            IP & Gateway
+          <% else %>
+            Active Stake <small class="text-muted">(% of total)</small>
+            <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="<%= t('definitions.active_stake') %>">
+            </i>
           <% end %>
-          Active Stake <small class="text-muted">(% of total)</small>
-          <i class="fas fa-info-circle font-size-xs text-muted ms-1"
-             data-bs-toggle="tooltip"
-             data-bs-placement="top"
-             title="<%= t('definitions.active_stake') %>">
-          </i>
         </div>
       </div>
     </th>
 
-    <th class='column-speedometer align-middle pe-0'>
-      Skipped Vote&nbsp;&percnt;
+    <th class='column-speedometer pe-0'>
+      Skipped Vote
       <i class="fas fa-info-circle font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
@@ -58,7 +59,7 @@
       <small class="text-muted">Dist from leader</small>
     </th>
 
-    <th class='column-chart py-3 align-middle'>
+    <th class='column-chart py-3'>
       Root Distance
       <i class="fas fa-info-circle font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
@@ -69,7 +70,7 @@
       <small class="text-muted">60-Min Chart</small>
     </th>
 
-    <th class='column-chart py-3 align-middle'>
+    <th class='column-chart py-3'>
       Vote Distance
       <i class="fas fa-info-circle font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
@@ -80,7 +81,7 @@
       <small class="text-muted">60-Min Chart</small>
     </th>
 
-    <th class='column-chart py-3 align-middle'>
+    <th class='column-chart py-3'>
       Skipped Slot&nbsp;&percnt;
       <i class="fas fa-info-circle font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
@@ -98,7 +99,7 @@
   <% validators.each do |validator| %>
     <% i += 1 %>
     <tr id="row-<%= i %>">
-      <td class="column-info align-middle">
+      <td class="column-info">
         <div class="column-info-row">
           <div class="column-info-avatar <%= 'no-watchlist' unless (current_user && show_watchlist_btn) %>">
             <%= create_avatar_link(validator) %>
@@ -123,58 +124,60 @@
               </small>
             <% end %>
             <br/>
+
             <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
             <%= render 'validators/scores', validator: validator %>
+            <br/>
+
+            <% if show_ip_and_gateway %>
+              <div class="small text-muted">
+                <span class="d-inline-block d-lg-none">IP:&nbsp;</span>
+                <%= validator.score.ip_address %>
+              </div>
+              <div class="small text-muted">
+                <% data_center_host = validator&.data_center_host&.host %>
+                <% if data_center_host %>
+                  <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
+                  <%= data_center_host %>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="d-sm-inline-block small mt-2 mt-sm-0">
+                <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+                <span class="me-3">
+                  <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
+                  <span class="text-muted">(<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)</span>
+                </span>
+              </div>
+              <div class="d-sm-inline-block small">
+                <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+                <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+                <%= validator.score&.software_version %>
+              </div>
+            <% end %>
           </div>
         </div>
 
-        <div class="mt-3">
-          <% if show_ip_and_gateway %>
-            <div class="small text-muted">
-              <span class="d-inline-block d-lg-none">IP:&nbsp;</span>
-              <%= validator.score.ip_address %>
-            </div>
-            <div class="small text-muted">
-              <% data_center_host = validator&.data_center_host&.host %>
-              <% if data_center_host %>
-                <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
-                <%= data_center_host %>
+        <% if validator.delinquent? || validator.score.authorized_withdrawer_score == -2 || validator.admin_warning %>
+          <div class="mt-2">
+            <% if validator.delinquent? %>
+              <small class="text-danger me-2">delinquent</small>
+            <% end %>
+            <% if validator.score.authorized_withdrawer_score == -2 %>
+              <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
+                <small class="text-warning me-2">withdrawer</small>
               <% end %>
-            </div>
-          <% end %>
-
-          <div class="d-sm-inline-block">
-            <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-            <span class="me-4">
-            <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
-              <small class="text-muted">
-              (<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)
-            </small>
-          </span>
+            <% end %>
+            <% if validator.admin_warning %>
+              <%= link_to '/faq#admin-warning', title: "#{validator.admin_warning}" do %>
+                <small class="text-danger">warning</small>
+              <% end %>
+            <% end %>
           </div>
-          V:&nbsp;<%= validator.score&.software_version %>
-
-          <% if validator.delinquent? || validator.score.authorized_withdrawer_score == -2 || validator.admin_warning %>
-            <div class="mt-2">
-              <% if validator.delinquent? %>
-                <small class="text-danger me-2">delinquent</small>
-              <% end %>
-              <% if validator.score.authorized_withdrawer_score == -2 %>
-                <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
-                  <small class="text-warning me-2">withdrawer</small>
-                <% end %>
-              <% end %>
-              <% if validator.admin_warning %>
-                <%= link_to '/faq#admin-warning', title: "#{validator.admin_warning}" do %>
-                  <small class="text-danger">warning</small>
-                <% end %>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
+        <% end %>
       </td>
 
-      <td class="column-speedometer align-middle">
+      <td class="column-speedometer">
         <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
         <% if skipped_vote_percent %>
           <div class="d-none d-lg-block">
@@ -198,6 +201,7 @@
         </span>
       </td>
 
+      <!-- Charts menu -->
       <td class="d-lg-none pt-0">
         <div class="row mb-3">
           <div class="col pe-0">
@@ -217,8 +221,9 @@
           </div>
         </div>
       </td>
+
       <!-- ROOT DISTANCE -->
-      <td class="column-chart d-none d-lg-table-cell align-middle" id="root-distance-<%=i%>">
+      <td class="column-chart d-none d-lg-table-cell" id="root-distance-<%=i%>">
         <%
           vl = chart_x_scale(validator.score&.root_distance_history.to_a.count)
           line_color = chart_line_color(validator.root_distance_score)
@@ -247,7 +252,7 @@
       </td>
 
       <!-- VOTE DISTANCE -->
-      <td class="column-chart d-none d-lg-table-cell align-middle" id=vote-distance-<%=i%>>
+      <td class="column-chart d-none d-lg-table-cell" id=vote-distance-<%=i%>>
         <%
           vl = chart_x_scale(validator.score&.vote_distance_history.to_a.count)
           line_color = chart_line_color(validator.vote_distance_score)
@@ -276,7 +281,7 @@
       </td>
 
       <!-- SKIPPED SLOTS  -->
-      <td class="column-chart d-none d-lg-table-cell align-middle" id="skipped-slots-<%=i%>">
+      <td class="column-chart d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
         <%
           vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
           ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
