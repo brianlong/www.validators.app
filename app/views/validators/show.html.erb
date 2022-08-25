@@ -14,6 +14,13 @@
   </div>
 
   <div class="d-flex justify-content-between flex-wrap gap-3">
+    <% unless @validator.private_validator? || !@validator.active? %>
+      <%= link_to 'Delegate SOL',
+                  solstake_url(@validator.vote_account_active&.account),
+                  title: 'Delegate SOL to this validator on SolStake.io',
+                  class: "btn btn-sm btn-secondary",
+                  target: :blank %>
+    <% end %>
     <div>
       <% if @validator.private_validator? %>
         <div class="btn btn-sm btn-danger me-2" title="Validator has 100% commission.">private</div>
@@ -41,14 +48,6 @@
         <% end %>
       <% end %>
     </div>
-
-    <% unless @validator.private_validator? || !@validator.active? %>
-      <%= link_to 'Delegate SOL',
-                  solstake_url(@validator.vote_account_active&.account),
-                  title: 'Delegate SOL to this validator on SolStake.io',
-                  class: "btn btn-sm btn-secondary",
-                  target: :blank %>
-    <% end %>
   </div>
 </section>
 
