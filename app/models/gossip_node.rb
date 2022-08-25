@@ -27,7 +27,7 @@ class GossipNode < ApplicationRecord
     "ip",
     "network",
     "staked",
-    "version as software_version",
+    "software_version",
     "created_at"
   ].freeze
 

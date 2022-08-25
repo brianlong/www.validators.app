@@ -43,6 +43,7 @@ class GossipNodeQueryTest < ActiveSupport::TestCase
     results = query.call
 
     expected_fields = query.query_fields.split(", ").map{ |q| q.split(".")[1]}.uniq
+    expected_fields.map{|f| f.gsub!(/.*\sas\s/, "")}
     assert_equal expected_fields, results.first.attributes.keys
   end
 end
