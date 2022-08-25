@@ -3,7 +3,6 @@
 @mixin item() {
   padding: 0;
   margin: 0;
-  white-space: nowrap;
   background-color: transparent;
   border: 2px solid $green;
   border-radius: 0;
@@ -11,13 +10,11 @@
   height: 35.5px;
   line-height: 35.5px;
   text-align: center;
-  @include font-size-sm;
   font-weight: $font-weight-normal;
+  @include font-size-sm;
 }
 
 @mixin item-active() {
-  padding: 0;
-  margin: 0;
   background-color: $green;
   border: 2px solid $green;
   color: $background-color;
@@ -59,7 +56,6 @@
 }
 
 .pagination {
-  padding: 0;
   margin: 0;
   display: flex;
   flex-wrap: wrap;
@@ -82,7 +78,7 @@
   .first {
     @include item-first;
   }
-  .last, .page-item:last-of-type {
+  .last {
     @include item-last;
   }
 
