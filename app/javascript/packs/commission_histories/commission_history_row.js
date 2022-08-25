@@ -45,12 +45,12 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       </td>
       <td>
         {{ comm_history.epoch }}
-        <small>({{ comm_history.epoch_completion }}%)</small>
+        <small class="text-muted">({{ comm_history.epoch_completion }}%)</small>
       </td>
       <td class="small">
         {{ comm_history.batch_uuid }}
       </td>
-      <td class="text-center">
+      <td class="text-center text-nowrap">
         {{ comm_history.commission_before }}%
         <i class="fas fa-long-arrow-alt-right px-2"></i>
         {{ comm_history.commission_after }}%

@@ -41,7 +41,7 @@ module DataCentersHelper
   end
 
   def create_filter_by_link(view:, params_list:, current_filters:, filter_by:)
-    classes_list = "btn btn-sm btn-secondary mb-4 "
+    classes_list = "btn btn-sm btn-secondary "
     new_filter_by = current_filters.dup || []
 
     if current_filters.include? filter_by
@@ -58,9 +58,5 @@ module DataCentersHelper
               )
 
     link_to "#{filter_by}", url, class: classes_list
-  end
-
-  def set_column_width(network)
-    network == "mainnet" ? "sm" : "md"
   end
 end

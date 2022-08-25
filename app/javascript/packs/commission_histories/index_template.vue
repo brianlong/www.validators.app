@@ -9,10 +9,12 @@
             </th>
             <th class="column-md">
               <a href="#" @click.prevent="sort_by_epoch">Epoch</a><br />
-              <small>(completion %)</small>
+              <small class="text-muted">(completion %)</small>
             </th>
             <th class="column-md">Batch</th>
-            <th class="column-lg text-center">Before<i class="fas fa-long-arrow-alt-right px-2"></i>After</th>
+            <th class="column-lg text-center px-2">
+              Before<i class="fas fa-long-arrow-alt-right px-2"></i>After
+            </th>
             <th class="column-md">
               <a href="#" @click.prevent="sort_by_timestamp">Timestamp</a>
             </th>

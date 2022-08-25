@@ -43,8 +43,9 @@
             <td><strong>Total Stake</strong></td>
             <td>
               <%= number_with_delimiter(lamports_to_sol(@asn_stake).round(0)) %>
-              (<%= number_to_percentage((@asn_stake/@total_stake.to_f)*100.0,
-                                        precision: 2) %>)
+              <span class="text-muted">
+                (<%= number_to_percentage((@asn_stake/@total_stake.to_f)*100.0, precision: 2) %>)
+              </span>
             </td>
           </tr>
         </tbody>
@@ -53,13 +54,15 @@
   </div>
 </div>
 
+<div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
 <%= render "data_centers/filters", {view: "asn"} %>
 
 <% unless params[:filter_by].blank? %>
   <%= link_to 'Reset filters',
       asn_url(network: params[:network], asn: params[:asn]),
-      class: 'btn btn-sm btn-tertiary me-1 mb-4 float-md-end' %>
+      class: 'btn btn-sm btn-tertiary' %>
 <% end %>
+</div>
 
 <div class="card mb-4">
   <%= render 'validators/table',

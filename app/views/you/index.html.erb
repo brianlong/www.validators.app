@@ -1,19 +1,19 @@
 <section class="page-header">
   <h1>My Dashboard</h1>
-  <div class="page-header-tags row">
-    <div class="col-sm-8">
-      <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary mb-3 mb-sm-0 me-3' %>
+  <div class="d-flex justify-content-between flex-wrap gap-3">
+    <div>
+      <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary me-2' %>
       <%= button_to 'Cancel My Account', registration_path(@user),
                     data: { confirm: 'Are you sure? This operation is irreversible.' }, 
                     method: :delete,
                     form_class: "d-inline-block",
-                    class: 'btn btn-sm btn-secondary mb-3 mb-sm-0 mt-0 inline-block' %>
+                    class: 'btn btn-sm btn-secondary m-0' %>
     </div>
-    <div class="col-sm-4 text-sm-end">
+    <div>
       <%= button_to 'Sign Out', destroy_user_session_path, 
           method: :delete, 
           form_class: "d-inline-block", 
-          class: 'btn btn-sm btn-tertiary mb-3 mb-sm-0 mt-0' %>
+          class: 'btn btn-sm btn-tertiary m-0' %>
     </div>
   </div>
 </section>

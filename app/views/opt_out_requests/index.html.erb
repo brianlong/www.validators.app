@@ -3,16 +3,16 @@
     <h1 class="card-heading">Privacy Requests</h1>
   </div>
 
-  <div class="table-responsive-md">
+  <div class="table-responsive-lg">
     <table class='table'>
       <thead>
       <tr>
-        <th>ID</th>
-        <th style="width: 15%">Name</th>
-        <th style="width: 20%">Address</th>
-        <th>Meta</th>
-        <th style="width: 20%">Timestamp</th>
-        <th></th>
+        <th class="column-xs">ID</th>
+        <th class="column-sm">Name</th>
+        <th class="column-md">Address</th>
+        <th class="column-lg">Meta</th>
+        <th class="column-sm">Timestamp</th>
+        <th class="column-xs"></th>
       </tr>
       </thead>
       <tbody>
@@ -20,12 +20,12 @@
         <tr>
           <td><%= r.id %></td>
           <td><%= r.name %></td>
-          <td>
+          <td class="small">
             <%= r.street_address %><br />
             <%= r.city %>, <%= r.state %> <%= r.postal_code %>
           </td>
-          <td><%= r.meta_data %></td>
-          <td><%= r.created_at %></td>
+          <td class="small"><%= r.meta_data %></td>
+          <td class="small"><%= r.created_at %></td>
           <td>
             <%= link_to 'Destroy', r, method: :delete, data: { confirm: 'Are you sure?' } %>
           </td>

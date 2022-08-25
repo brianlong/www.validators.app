@@ -1,33 +1,43 @@
 <% @results[:results].each do |dc_key, dc_data| %>
   <tr>
-    <td class="column-md"><%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %></td>
-    <td class="column-<%= set_column_width(params[:network]) %>"><%= dc_data[:aso] %></td>
-    <td class="column-<%= set_column_width(params[:network]) %>"><%= dc_data[:count] %></td>
-    <td class="column-<%= set_column_width(params[:network]) %>">
+    <td>
+      <%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %>
+    </td>
+
+    <td>
+      <%= dc_data[:aso] %>
+    </td>
+
+    <td>
+      <%= dc_data[:count] %>
+    </td>
+
+    <td>
       <% if dc_data[:delinquent_validators] > 0 %>
         <%= link_to dc_data[:delinquent_validators],
             data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: ["delinquent"]) %>
-        <small class="text-muted">
+        <small class="text-muted ps-1">
           (<%= (count_percentage(dc_data[:delinquent_validators], dc_data[:count])) %>%)
         </small>
       <% else %>
         <%= dc_data[:delinquent_validators] %>
       <% end %>
-    </td>
-    <% if params[:network] == 'mainnet' %>
-      <td class="column-<%= set_column_width(params[:network]) %>">
+
+      <% if params[:network] == 'mainnet' %>
+        <br />
         <% if dc_data[:private_validators] > 0 %>
-         <%= link_to dc_data[:private_validators],
-            data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: ["private"]) %>
-          <small class="text-muted">
+          <%= link_to dc_data[:private_validators],
+                      data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: ["private"]) %>
+          <small class="text-muted ps-1">
             (<%= (count_percentage(dc_data[:private_validators], dc_data[:count])) %>%)
           </small>
         <% else %>
           <%= dc_data[:private_validators] %>
         <% end %>
-      </td>
-    <% end %>
-    <td class="column-xl">
+      <% end %>
+    </td>
+
+    <td>
       <small>
         <%= number_with_delimiter lamports_to_sol(dc_data[:active_stake_from_active_validators]).round(0) %>
         (<%= percent_of_total_stake(dc_data[:active_stake_from_active_validators], @results[:total_stake]) %>)
