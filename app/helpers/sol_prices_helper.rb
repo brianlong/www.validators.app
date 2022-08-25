@@ -5,10 +5,10 @@ module SolPricesHelper
     content_tag(:div, nil, class: div_css_classes) do
       
       @filter_days.map do |filter|
-        button_css_classes = 'btn btn-sm btn-secondary nav-link chartFilterButton'
+        button_css_classes = "btn btn-sm btn-secondary nav-link chartFilterButton"
 
         if filter.to_s == params[:filtering]
-          button_css_classes += ' active'
+          button_css_classes += " active"
         end
 
         link_text = "#{filter} days"
@@ -28,12 +28,12 @@ module SolPricesHelper
   def active_tab?(exchange)
     return nil unless params[:exchange]
     
-    params[:exchange].to_sym == exchange ? 'active' : 'fade'
+    params[:exchange].to_sym == exchange ? "active" : "fade"
   end
 
   def active_button?(exchange)
     return nil unless params[:exchange]
 
-    'active' if params[:exchange]&.to_sym == exchange
+    "active" if params[:exchange]&.to_sym == exchange
   end
 end
