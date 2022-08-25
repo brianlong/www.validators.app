@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_07_175737) do
+ActiveRecord::Schema.define(version: 2022_08_25_095627) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -183,6 +183,20 @@ ActiveRecord::Schema.define(version: 2022_08_07_175737) do
     t.bigint "ending_slot"
     t.index ["epoch"], name: "index_epoch_wall_clocks_on_epoch"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
+  end
+
+  create_table "gossip_nodes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "account"
+    t.string "network"
+    t.string "ip"
+    t.integer "tpu_port"
+    t.integer "gossip_port"
+    t.string "software_version"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "staked", default: false
+    t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
+    t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
   end
 
   create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -502,7 +516,7 @@ ActiveRecord::Schema.define(version: 2022_08_07_175737) do
   end
 
   create_table "validator_ips", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "validator_id", null: false
+    t.bigint "validator_id"
     t.integer "version", default: 4
     t.string "address"
     t.datetime "created_at", precision: 6, null: false

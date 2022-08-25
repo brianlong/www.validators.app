@@ -86,6 +86,10 @@ every 1.day, at: '2:00am', roles: [:background] do
   ruby_script 'remove_unconfirmed_users.rb'
 end
 
+every 1.day, at: '2:20am', roles: [:background] do
+  ruby_script 'update_gossip_nodes.rb'
+end
+
 every 10.minutes, roles: [:background] do
   runner "ValidatorCheckActiveWorker.perform_async"
 end
