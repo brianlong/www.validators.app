@@ -19,7 +19,7 @@ module Api
           page: nodes_params[:page] || NODES_DEFAULT_PAGE,
         )
 
-        render json: nodes.as_json(:except => [:id])
+        render json: nodes.as_json(except: [:id])
       end
 
       private
