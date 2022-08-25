@@ -94,8 +94,9 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.string "network"
     t.integer "epoch"
     t.float "epoch_completion"
+    t.index ["epoch"], name: "index_commission_histories_on_epoch"
+    t.index ["network", "created_at", "validator_id"], name: "index_commission_histories_on_validators"
     t.index ["network", "validator_id"], name: "index_commission_histories_on_network_and_validator_id"
-    t.index ["network"], name: "index_commission_histories_on_network"
     t.index ["validator_id"], name: "index_commission_histories_on_validator_id"
   end
 
@@ -180,6 +181,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ending_slot"
+    t.index ["epoch"], name: "index_epoch_wall_clocks_on_epoch"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
   end
 
@@ -189,7 +191,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.string "ip"
     t.integer "tpu_port"
     t.integer "gossip_port"
-    t.string "version"
+    t.string "software_version"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "staked", default: false
@@ -232,6 +234,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "interval"], name: "index_ping_thing_recent_stats_on_network_and_interval"
   end
 
   create_table "ping_thing_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -244,6 +247,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.datetime "time_from"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "interval"], name: "index_ping_thing_stats_on_network_and_interval"
   end
 
   create_table "ping_things", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -261,6 +265,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.datetime "reported_at"
     t.index ["created_at", "network", "transaction_type"], name: "index_ping_things_on_created_at_and_network_and_transaction_type"
     t.index ["created_at", "network", "user_id"], name: "index_ping_things_on_created_at_and_network_and_user_id"
+    t.index ["network"], name: "index_ping_things_on_network"
     t.index ["reported_at", "network"], name: "index_ping_things_on_reported_at_and_network"
     t.index ["user_id"], name: "index_ping_things_on_user_id"
   end
@@ -327,6 +332,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "average_price", precision: 40, scale: 20
+    t.index ["datetime_from_exchange", "exchange"], name: "index_sol_prices_on_datetime_from_exchange_and_exchange"
   end
 
   create_table "stake_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -402,6 +408,7 @@ ActiveRecord::Schema.define(version: 2022_08_24_102422) do
     t.float "withdrawal_fee"
     t.float "deposit_fee"
     t.float "average_apy"
+    t.index ["network"], name: "index_stake_pools_on_network"
   end
 
   create_table "user_watchlist_elements", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
