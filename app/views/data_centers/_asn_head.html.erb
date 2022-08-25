@@ -1,5 +1,5 @@
 <tr>
-  <th class="column-md align-middle">
+  <th class="column-md">
     ASN
     <i class="fas fa-info-circle font-size-xs text-muted ms-1"
       data-bs-toggle="tooltip"
@@ -7,14 +7,14 @@
       title="<%= t('definitions.asn_full_name')%>">
     </i>
   </th>
-  <th class="column-sm align-middle">
+  <th class="column-sm">
     Average score&nbsp;<i class="fas fa-info-circle font-size-xs text-muted ms-1"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
                           title="<%= t('definitions.average_score') %>"></i>
   </th>
-  <th class="column-md align-middle">Data Centers</th>
-  <th class="column-md align-middle">
+  <th class="column-md">Data Centers</th>
+  <th class="column-md">
     Population
     <i class="fas fa-info-circle font-size-xs text-muted ms-1"
       data-bs-toggle="tooltip"
@@ -24,7 +24,7 @@
     <br />
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
-  <th class="column-md align-middle">
+  <th class="column-md">
     Delinquent
     <i class="fas fa-info-circle font-size-xs text-muted ms-1"
        data-bs-toggle="tooltip"
@@ -38,7 +38,7 @@
     </small>
   </th>
   <% if params[:network] == 'mainnet' %>
-    <th class="column-md align-middle">
+    <th class="column-md">
       Private
       <i class="fas fa-info-circle font-size-xs text-muted ms-1"
         data-bs-toggle="tooltip"
@@ -52,7 +52,7 @@
       </small>
     </th>
   <% end %>
-  <th class="column-xl align-middle">
+  <th class="column-xl">
     Active Stake&nbsp;<i class="fas fa-info-circle font-size-xs text-muted ms-1"
                          data-bs-toggle="tooltip"
                          data-bs-placement="top"

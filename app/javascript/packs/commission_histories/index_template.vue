@@ -4,16 +4,16 @@
       <table class='table'>
         <thead>
           <tr>
-            <th class="column-xl align-middle">
+            <th class="column-xl">
               <a href="#" @click.prevent="sort_by_validator">Validator</a>
             </th>
-            <th class="column-md align-middle">
+            <th class="column-md">
               <a href="#" @click.prevent="sort_by_epoch">Epoch</a><br />
               <small>(completion %)</small>
             </th>
-            <th class="column-md align-middle">Batch</th>
-            <th class="column-lg text-center align-middle">Before<i class="fas fa-long-arrow-alt-right px-2"></i>After</th>
-            <th class="column-md align-middle">
+            <th class="column-md">Batch</th>
+            <th class="column-lg text-center">Before<i class="fas fa-long-arrow-alt-right px-2"></i>After</th>
+            <th class="column-md">
               <a href="#" @click.prevent="sort_by_timestamp">Timestamp</a>
             </th>
           </tr>
