@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_26_144138) do
-
+ActiveRecord::Schema.define(version: 2022_08_26_145420) do
+  
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -472,7 +472,6 @@ ActiveRecord::Schema.define(version: 2022_08_26_144138) do
     t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
-    t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
   end
 
   create_table "validator_block_history_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
