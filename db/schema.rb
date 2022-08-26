@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_26_113209) do
+ActiveRecord::Schema.define(version: 2022_08_26_133743) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -589,7 +589,7 @@ ActiveRecord::Schema.define(version: 2022_08_26_113209) do
     t.string "admin_warning"
     t.boolean "consensus_mods", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
-    t.index ["network", "is_active", "is_destroyed"], name: "index_validators_on_network_and_is_active_and_is_destroyed"
+    t.index ["network", "is_active", "is_rpc", "is_destroyed"], name: "index_validators_on_network_is_active_is_rpc_is_destroyed"
   end
 
   create_table "vote_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
