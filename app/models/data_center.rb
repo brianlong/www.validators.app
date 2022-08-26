@@ -44,7 +44,7 @@
 #
 # Indexes
 #
-#  index_data_centers_on_data_center_key                  (data_center_key)
+#  index_data_centers_for_grouping                        (data_center_key,traits_autonomous_system_number,traits_autonomous_system_organization,country_iso_code)
 #  index_data_centers_on_traits_autonomous_system_number  (traits_autonomous_system_number)
 #
 class DataCenter < ApplicationRecord
