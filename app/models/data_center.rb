@@ -44,7 +44,8 @@
 #
 # Indexes
 #
-#  index_data_centers_on_data_center_key  (data_center_key)
+#  index_data_centers_on_data_center_key                  (data_center_key)
+#  index_data_centers_on_traits_autonomous_system_number  (traits_autonomous_system_number)
 #
 class DataCenter < ApplicationRecord
   # Data Center for validators not assigned anywhere (mostly due to lack of validator_ip) 

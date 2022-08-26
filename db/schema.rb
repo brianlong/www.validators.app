@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_25_095627) do
+ActiveRecord::Schema.define(version: 2022_08_26_104458) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 2022_08_25_095627) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["data_center_key"], name: "index_data_centers_on_data_center_key"
+    t.index ["traits_autonomous_system_number"], name: "index_data_centers_on_traits_autonomous_system_number"
   end
 
   create_table "epoch_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
