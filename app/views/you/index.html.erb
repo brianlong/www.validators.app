@@ -1,19 +1,19 @@
 <section class="page-header">
   <h1>My Dashboard</h1>
-  <div class="page-header-tags row">
-    <div class="col-sm-8">
-      <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary mb-3 mb-sm-0 me-3' %>
+  <div class="d-flex justify-content-between flex-wrap gap-3">
+    <div>
+      <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary me-2' %>
       <%= button_to 'Cancel My Account', registration_path(@user),
                     data: { confirm: 'Are you sure? This operation is irreversible.' }, 
                     method: :delete,
                     form_class: "d-inline-block",
-                    class: 'btn btn-sm btn-secondary mb-3 mb-sm-0 mt-0 inline-block' %>
+                    class: 'btn btn-sm btn-secondary m-0' %>
     </div>
-    <div class="col-sm-4 text-sm-end">
+    <div>
       <%= button_to 'Sign Out', destroy_user_session_path, 
           method: :delete, 
           form_class: "d-inline-block", 
-          class: 'btn btn-sm btn-tertiary mb-3 mb-sm-0 mt-0' %>
+          class: 'btn btn-sm btn-tertiary m-0' %>
     </div>
   </div>
 </section>
@@ -49,10 +49,10 @@
       <table class="table table-block-sm mb-0">
         <tbody>
         <tr>
-          <td><strong>API Token:</strong></td>
+          <td class="align-top"><strong>API Token:</strong></td>
           <td>
             <%= @user.api_token %><br />
-            <%= button_to 'Regenerate Token', you_regenerate_token_url, class: 'btn btn-xs btn-secondary my-3' %>
+            <%= button_to 'Regenerate Token', you_regenerate_token_url, class: 'btn btn-sm btn-secondary my-3' %>
             <p class="small text-muted">
               Regenerate only if your current API token was compromised.<br />
               Change takes effect immediately.
@@ -76,10 +76,11 @@
                batch: @batch,
                validators: @validators,
                show_ip_and_gateway: true,
-               show_version: false,
                items_per_page: @per,
                show_watchlist_btn: false %>
-    <%= paginate @validators %>
+    <div class="card-footer">
+      <%= paginate @validators %>
+    </div>
   </div>
   <%= link_to 'Find more Validators',
               validators_path(network: params[:network]),

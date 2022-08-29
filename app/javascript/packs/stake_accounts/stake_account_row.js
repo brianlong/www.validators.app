@@ -42,16 +42,17 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
   template: `
     <tbody>
       <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
+      
       <tr>
         <td colspan="6" class="p-0">
           <table class="table table-block-sm stake-accounts-table">
-            <thead class="small">
+            <thead>
               <tr>
-                <th class="column-xl align-middle">Stake Account & Staker</th>
-                <th class="column-xl align-middle">Withdrawer</th>
-                <th class="column-sm align-middle">Stake</th>
-                <th class="column-xs align-middle text-lg-end ps-lg-0">
-                  Act Epoch&nbsp;<i class="fas fa-info-circle font-size-xs text-muted"
+                <th class="column-xl small">Stake Account & Staker</th>
+                <th class="column-xl small">Withdrawer</th>
+                <th class="column-sm">Stake</th>
+                <th class="column-xs text-lg-end ps-lg-0">
+                  Act Epoch&nbsp;<i class="fas fa-info-circle font-size-xs text-muted ms-1"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
                                     title="Stake Account Activation Epoch">
@@ -73,7 +74,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 {{ stake_account.withdrawer }}
               </td>
               <td>
-                <strong class="d-inline-block d-lg-none">Stake:&nbsp;&nbsp;</strong>
+                <strong class="d-inline-block d-lg-none">Stake:&nbsp;</strong>
                 <span v-if="stake_account.active_stake < 500000000">
                   <0.5 SOL<br />
                   <span class="text-muted">
@@ -88,7 +89,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                   </span>
                 </span>
               </td>
-              <td class="align-middle text-end">
+              <td class="text-lg-end">
                 <strong class="d-inline-block d-lg-none">Stake Account Activation Epoch:&nbsp;&nbsp;</strong>{{ stake_account.activation_epoch }}
                 <div class="d-block d-lg-none">
                   <small class="text-muted">Current Epoch: {{ current_epoch }}&nbsp;&nbsp;</small>

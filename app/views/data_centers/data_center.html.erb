@@ -58,8 +58,9 @@
             <td><strong>Total Stake</strong></td>
             <td>
               <%= number_with_delimiter(lamports_to_sol(@dc_stake).round(0)) %>
-              (<%= number_to_percentage((@dc_stake / @total_stake.to_f)*100.0,
-                                        precision: 2) %>)
+              <span class="text-muted">
+                (<%= number_to_percentage((@dc_stake / @total_stake.to_f)*100.0, precision: 2) %>)
+              </span>
             </td>
           </tr>
         </tbody>
@@ -68,23 +69,26 @@
   </div>
 </div>
 
-<%= render "filters", { view: "data_center" } %>
+<div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
+  <%= render "filters", { view: "data_center" } %>
 
-<% unless params[:filter_by].blank? %>
-  <%= link_to 'Reset filters',
-      data_center_url(network: params[:network], key: params[:key]),
-      class: 'btn btn-sm btn-tertiary me-1 mb-4 float-md-end' %>
-<% end %>
+  <% unless params[:filter_by].blank? %>
+    <%= link_to 'Reset filters',
+                data_center_url(network: params[:network], key: params[:key]),
+                class: 'btn btn-sm btn-tertiary' %>
+  <% end %>
+</div>
 
 <div class="card mb-4">
   <%= render 'validators/table',
              batch: @batch,
              validators: @validators,
              show_ip_and_gateway: true,
-             show_version: false,
              items_per_page: @per,
              show_watchlist_btn: false %>
-  <%= paginate @validators %>
+  <div class="card-footer">
+    <%= paginate @validators %>
+  </div>
 </div>
 
 <%= link_to 'Back to Data Centers',

@@ -1,8 +1,8 @@
-<%= form_with(method: :get, local: true) do %>
+<%= form_with(method: :get, local: true, class: "flex-fill") do %>
   <div class="form-group-row">
-    <div class="input-group mb-4">
+    <div class="input-group">
       <%= text_field_tag(
-            :q, '', 
+            :q, '',
             placeholder: 'Starts with... (validator name, validator account or data center key)',
             class: 'form-control',
             value: params[:q],

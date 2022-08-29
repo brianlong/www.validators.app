@@ -30,15 +30,15 @@
       about liquid staking.
     </p>
 
-    <div id="carouselLogos" class="carousel slide d-none d-md-block px-lg-5 mb-3" data-bs-ride="carousel" data-bs-interval="4000">
+    <div id="carouselLogos" class="carousel slide d-none d-md-block px-lg-4 mb-3" data-bs-ride="carousel" data-bs-interval="4000">
       <div class="carousel-inner">
-        <% shuffle_logos.each_slice(3).to_a.each_with_index do |group, index_slide| %>
+        <% shuffle_logos.each_slice(4).to_a.each_with_index do |group, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
-            <div class="row text-center px-lg-5 mt-4">
+            <div class="row text-center px-lg-4 px-xl-5 mt-4">
               <% group.each_with_index do |logo, index_col| %>
-                <div class="col-md-4 mb-4 mb-sm-0 <%= 'offset-md-4' if index_slide == 2 %>">
+                <div class="col-md mb-4 mb-sm-0 <%= 'px-md-4 px-xl-5' if index_slide == 1 %>">
                   <%= link_to logo[0], target: "_blank" do %>
-                    <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-1 px-lg-3 mb-4' %>
+                    <%= image_tag logo[1], class: 'img-link w-100 mb-4 px-1 px-lg-3' %>
                   <% end %>
                 </div>
               <% end %>
@@ -52,7 +52,7 @@
         <% shuffle_logos.each_with_index do |logo, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
             <%= link_to logo[0], target: "_blank" do %>
-              <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-1' %>
+              <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-5 mt-3' %>
             <% end %>
           </div>
         <% end %>

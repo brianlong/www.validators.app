@@ -8,60 +8,24 @@
 <% unless @validators.empty? %>
   <div class="card">
     <div class="card-content pb-3">
-      <h2 class="card-heading">Solana <%= params[:network].capitalize %> Validators</h2>
-
       <%= render 'validators/sort_bar' %>
-
-      <div class="row">
-        <div class="col-md-9 col-lg-10">
-          <p class="small muted">
-            Score updated at <%= @batch&.scored_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>.
-          </p>
-        </div>
-        <div class='col-md-3 col-lg-2 toggle-container'>
-          <% if params[:refresh] == 'true' %>
-            <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
-                        url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
-            <p class="small muted toggle-label">REFRESH ON</p>
-          <% else %>
-            <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'),
-                        url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
-            <p class="small muted toggle-label">REFRESH OFF</p>
-          <% end %>
-
-          <%= link_to url_for(order: params[:order],
-                              page: params[:page],
-                              network: params[:network],
-                              refresh: params[:refresh],
-                              watchlist: params[:watchlist] ? nil : true) do %>
-            <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
-               data-bs-toggle="tooltip"
-               data-bs-placement="top"
-               title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
-            </i>
-          <% end %>
-        </div>
-      </div>
+      <%= render 'validators/toggle_bar' %>
     </div>
 
+    <%= render 'validators/table',
+               batch: @batch,
+               validators: @validators,
+               at_33_stake_index: @at_33_stake_index,
+               show_ip_and_gateway: false,
+               items_per_page: @per,
+               show_watchlist_btn: true %>
 
-    <div class="row">
-      <div class="col-sm-12">
-        <%= render 'validators/table',
-                   batch: @batch,
-                   validators: @validators,
-                   at_33_stake_index: @at_33_stake_index,
-                   show_ip_and_gateway: false,
-                   show_version: true,
-                   items_per_page: @per,
-                   show_watchlist_btn: true %>
-
-          <p class="px-3 small muted">
-            Score updated at <%= @batch&.scored_at || 'N/A' %> in batch <%= @batch&.uuid || 'N/A' %>
-          </p>
-          <%= paginate @validators %>
-
-      </div>
+    <div class="card-footer">
+      <p class="small text-muted">
+        Score updated at <%= @batch&.scored_at || 'N/A' %> <br class="d-md-none"/>
+        in batch <%= @batch&.uuid || 'N/A' %>
+      </p>
+      <%= paginate @validators %>
     </div>
   </div>
 <% end %>

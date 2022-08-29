@@ -105,7 +105,7 @@
               <td><%= number_with_delimiter( lamports_to_sol(record.first).round(0), delimiter: ',')  %></td>
               <td class="text-end">
                 <%= link_to validator_path(network: params[:network], account: record.last) do %>
-                  <i class="fas fa-search text-purple"></i>
+                  <i class="fas fa-external-link-alt"></i>
                 <% end %>
               </td>
             </tr>

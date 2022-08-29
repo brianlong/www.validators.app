@@ -126,8 +126,6 @@ body {
       }
     }
   }
-
-  &-tags {}
 }
 
 hr {
@@ -135,6 +133,7 @@ hr {
   background-color: $grey-light;
   margin-top: $margin-standard*2;
   margin-bottom: $margin-standard*2;
+  opacity: 0.5;
   @media(max-width: $screen-xs-max) {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -245,12 +244,6 @@ hr {
 
 .ping-thing-stats-header {
   @media(max-width: $screen-md-max) {
-    display:none;
-  }
-}
-
-@media (min-width: 1400px) {
-  .container {
-      max-width: 1140px;
+    display: none;
   }
 }

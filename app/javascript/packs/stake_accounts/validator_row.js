@@ -123,65 +123,70 @@ var ValidatorRow = Vue.component('validatorRow', {
   },
   template: `
     <tr :id="row_index()">
-      <td class="column-avatar d-none d-xl-table-cell align-middle">
-        <div class="avatar">
-          <img :src="create_avatar_link()" class='img-circle-medium'/>
+      <td class="column-info">
+        <div class="column-info-row">
+          <div class="column-info-avatar no-watchlist">
+            <img :src="create_avatar_link()" class='img-circle-medium'/>
+          </div>
+          <div class="column-info-name">
+            <a :href="validator_url()" class="fw-bold">
+              {{ validator_name() }}
+            </a>
+            <small class="ms-1 text-muted">
+              (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)
+            </small>
+            <br />
+            <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
+            <small class="text-nowrap">
+              <i :class=" 'fas fa-circle me-1 score-' + validator['root_distance_score'] "
+                 :title=" 'Root Distance Score = ' + validator['root_distance_score'] "></i>
+              <i :class=" 'fas fa-circle me-1 score-' + validator['vote_distance_score'] "
+                 :title=" 'Vote Distance Score = ' + validator['vote_distance_score'] "></i>
+              <i :class=" 'fas fa-circle me-1 score-' + validator['skipped_slot_score'] "
+                 :title=" 'Skipped Slot Score = ' + validator['skipped_slot_score'] "></i>
+              <i :class=" 'fas fa-circle me-1 score-' + validator['published_information_score'] "
+                 :title=" 'Published Information Score = ' + validator['published_information_score'] "></i>
+              <i :class=" 'fas fa-circle me-1 score-' + validator['software_version_score'] "
+                 :title=" 'Software Version Score = ' + validator['software_version_score'] "></i>
+              <i :class=" 'fas fa-circle me-1 score-' + validator['security_report_score'] "
+                 :title=" 'Bonus Point = ' + validator['security_report_score'] "></i>
+              <i class="fas fa-minus-circle me-1 text-warning"
+                 v-if="validator['consensus_mods_score'] < 0"
+                 :title=" 'Consensus Mods Score = ' + validator['consensus_mods_score'] + '. Validator appears to use software modifications with an unproven effect on consensus.' "></i>
+              <i class="fas fa-minus-circle me-1 text-warning"
+                 v-if="validator['authorized_withdrawer_score'] < 0"
+                 :title=" 'Authorized Withdrawer Score = ' + validator['authorized_withdrawer_score'] "></i>
+              <i class="fas fa-minus-circle me-1 text-warning"
+                 v-if="validator['stake_concentration_score'] < 0"
+                 :title=" 'Stake Concentration Score = ' + validator['stake_concentration_score'] "></i>
+              <i class="fas fa-minus-circle me-1 text-warning"
+                 v-if="validator['data_center_concentration_score'] < 0"
+                 :title=" 'Data Center Concentration Score = ' + validator['data_center_concentration_score'] "></i>
+              ({{ displayed_total_score() }})
+            </small>
+            <br />
+            <div class="small">
+              <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+              <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+              {{ validator['software_version'] }}
+            </div>
+          </div>
         </div>
-      </td>
 
-      <td class="column-info align-middle ps-3">
-        <a :href="validator_url()" class="fw-bold">
-          <span>{{idx+1}}.&nbsp;</span> {{ validator_name() }}
-        </a>
-        <small>
-          (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)
-        </small>
-        <a v-if="validator['authorized_withdrawer_score']== -2" href="/faq#withdraw-authority-warning" title="Withdrawer matches validator identity.">
-          <i class="fas fa-exclamation-triangle text-warning ms-1"></i>
-        </a>
-        <a href="/faq#admin-warning" v-if="validator['admin_warning']" :title="validator['admin_warning']" >
-          <i class="fas fa-exclamation-triangle text-danger ms-1"></i>
-        </a>
-        <br />
-        <span class="d-inline-block d-lg-none">Version:&nbsp;</span>
-        <small>
-          <span class="d-none d-lg-inline-block">Version:&nbsp;</span>
-          {{ validator['software_version'] }}
-        </small>
-        <br />
-        <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
-        <small class="text-nowrap">
-          <i :class=" 'fas fa-circle me-1 score-' + validator['root_distance_score'] "
-            :title=" 'Root Distance Score = ' + validator['root_distance_score'] "></i>
-          <i :class=" 'fas fa-circle me-1 score-' + validator['vote_distance_score'] "
-            :title=" 'Vote Distance Score = ' + validator['vote_distance_score'] "></i>
-          <i :class=" 'fas fa-circle me-1 score-' + validator['skipped_slot_score'] "
-            :title=" 'Skipped Slot Score = ' + validator['skipped_slot_score'] "></i>
-          <i :class=" 'fas fa-circle me-1 score-' + validator['published_information_score'] "
-            :title=" 'Published Information Score = ' + validator['published_information_score'] "></i>
-          <i :class=" 'fas fa-circle me-1 score-' + validator['software_version_score'] "
-            :title=" 'Software Version Score = ' + validator['software_version_score'] "></i>
-          <i :class=" 'fas fa-circle me-1 score-' + validator['security_report_score'] "
-            :title=" 'Bonus Point = ' + validator['security_report_score'] "></i>
-          <i class="fas fa-minus-circle me-1 text-warning"
-             v-if="validator['consensus_mods_score'] < 0"
-             :title=" 'Consensus Mods Score = ' + validator['consensus_mods_score'] + '. Validator appears to use software modifications with an unproven effect on consensus.' "></i>
-          <i class="fas fa-minus-circle me-1 text-warning"
-            v-if="validator['authorized_withdrawer_score'] < 0"
-            :title=" 'Authorized Withdrawer Score = ' + validator['authorized_withdrawer_score'] "></i>
-          <i class="fas fa-minus-circle me-1 text-warning"
-            v-if="validator['stake_concentration_score'] < 0"
-            :title=" 'Stake Concentration Score = ' + validator['stake_concentration_score'] "></i>
-          <i class="fas fa-minus-circle me-1 text-warning"
-            v-if="validator['data_center_concentration_score'] < 0"
-            :title=" 'Data Center Concentration Score = ' + validator['data_center_concentration_score'] "></i>
-          (<span class="d-inline-block d-lg-none">Total:&nbsp;</span>{{ displayed_total_score() }})
-        </small>
-        <br /><small v-if="validator['delinquent']" class="text-danger">delinquent</small>
+        <div class="mt-2" v-if="validator['authorized_withdrawer_score']== -2 || validator['admin_warning'] || validator['delinquent']">
+          <small v-if="validator['delinquent']" class="text-danger me-2">delinquent</small>
+          <a v-if="validator['authorized_withdrawer_score']== -2" href="/faq#withdraw-authority-warning" title="Withdrawer matches validator identity.">
+            <small class="text-warning me-2">withdrawer</small>
+          </a>
+          <a href="/faq#admin-warning" v-if="validator['admin_warning']" :title="validator['admin_warning']" >
+            <small class="text-danger">warning</small>
+          </a>
+        </div>
       </td>
 
       <skipped-vote-speedometer :validator="validator" :idx="idx" :batch="batch" />
 
+      <!-- Charts menu -->
       <td class="d-lg-none pt-0">
         <div class="row mb-3">
           <div class="col pe-0">

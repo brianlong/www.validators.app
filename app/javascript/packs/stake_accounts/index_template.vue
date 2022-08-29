@@ -3,18 +3,20 @@
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <h2 class="h3 card-heading mb-2">Filter by Stake Pool</h2>
-          <div class="text-center text-muted small mb-3">Click on stake pool logo to see pool stats</div>
+          <div class="card-heading">
+            <h2 class="h3 mb-2">Filter by Stake Pool</h2>
+            <small class="text-muted">Click on stake pool logo to see pool stats</small>
+          </div>
 
-          <div class="row" v-if="!is_loading_stake_pools">
-            <a class="col-sm-6 text-center"
+          <div class="row text-center" v-if="!is_loading_stake_pools">
+            <a class="col-6 col-xl-4"
                v-for="pool in stake_pools"
                :key="pool.id"
                href="#"
                title="Filter by Stake Pool"
                @click.prevent="filter_by_withdrawer(pool)"
             >
-              <img class="img-link w-100 px-5 px-sm-3 px-md-1 px-lg-3 px-xl-4 py-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
+              <img class="img-link w-100 px-2 px-lg-3 px-lx-2 py-4 py-md-3 py-xl-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
             </a>
           </div>
         </div>
@@ -41,11 +43,11 @@
             <label class="form-label">Stake account</label>
             <input v-model="filter_account" type="text" class="form-control">
           </div>
-          <div class="mb-3">
+          <div class="mb-4">
             <label class="form-label">Staker</label>
             <input v-model="filter_staker" type="text" class="form-control">
           </div>
-          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-xs btn-tertiary mb-2">
+          <a href="#" v-if="filters_present()" @click.prevent="reset_filters" class="btn btn-sm btn-tertiary">
             Reset filters
           </a>
         </div>
@@ -68,75 +70,75 @@
     <!-- Validators and accounts table -->
     <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
-        <table class="table table-block-sm" id="validators-table">
+        <table class="table table-block-sm validators-table">
           <thead>
             <tr>
-              <th class="column-avatar d-none d-xl-table-cell align-middle">#</th>
-              <th class="column-info align-middle ps-3">
-                Name <small class="text-muted">(Commission)</small>
-                <i class="fas fa-info-circle font-size-xs text-muted"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account.">
-                </i>
-                <br />
-                Active Stake
-                <small class="text-muted">(% of total)</small>
-                <i class="fas fa-info-circle font-size-xs text-muted"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Sum of active stake from validator(s).">
-                </i>
-                <br />
-                Scores <small class="text-muted">(total)</small>
-                <i class="fas fa-info-circle font-size-xs text-muted"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Our score system.">
-                </i>
+              <th class="column-info">
+                <div class="column-info-row">
+                  <div class="column-info-name">
+                    Name <small class="text-muted">(Commission)</small>
+                    <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="top"
+                       title="Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account.">
+                    </i>
+                    <br />
+                    Scores <small class="text-muted">(total)</small>
+                    <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="top"
+                       title="Our score system.">
+                    </i>
+                  </div>
+                </div>
               </th>
-              <th class='column-sm align-middle pe-0'>
-                Skipped Vote&nbsp;&percnt;
-                <i class="fas fa-info-circle font-size-xs text-muted"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Skipped vote measures the percent of the time that a leader fails to vote.">
+
+              <th class='column-speedometer pe-0'>
+                Skipped Vote
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Skipped vote measures the percent of the time that a leader fails to vote.">
                 </i>
                 <br />
                 <small class="text-muted">Dist from leader</small>
               </th>
-              <th class='column-chart py-3 align-middle'>
+
+              <th class='column-chart py-3'>
                 Root Distance
-                <i class="fas fa-info-circle font-size-xs text-muted"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower.">
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
               </th>
-              <th class='column-chart py-3 align-middle'>
+
+              <th class='column-chart py-3'>
                 Vote Distance
-                <i class="fas fa-info-circle font-size-xs text-muted"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group.">
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
               </th>
-              <th class='column-chart py-3 align-middle'>
+
+              <th class='column-chart py-3'>
                 Skipped Slot&nbsp;&percnt;
-                <i class="fas fa-info-circle font-size-xs text-muted"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
+                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
               </th>
             </tr>
           </thead>
+
           <stake-account-row
             v-for="(sa, index) in stake_accounts"
             :key="sa.id"
@@ -148,19 +150,22 @@
           </stake-account-row>
         </table>
 
-        <b-pagination
-         v-model="page"
-         :total-rows="total_count"
-         :per-page="20"
-         first-text="« First"
-         last-text="Last »" />
+        <div class="card-footer">
+          <b-pagination
+              v-model="page"
+              :total-rows="total_count"
+              :per-page="20"
+              first-text="« First"
+              last-text="Last »" />
+        </div>
       </div>
     </div>
+
     <div v-if="is_loading_stake_accounts && is_loading_stake_pools" class="col-12 text-center my-5">
       <img v-bind:src="loading_image" width="100">
     </div>
 
-    <div class="container mt-5" id="metrics">
+    <section class="mt-5" id="metrics">
       <h2>Metrics Explanation</h2>
       <hr />
       <h3 class="h5">Nodes total</h3>
@@ -248,7 +253,7 @@
       <p>
         Number of epoch in which the account was first activated.
       </p>
-    </div>
+    </section>
   </div>
 </template>
 
