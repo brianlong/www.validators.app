@@ -16,7 +16,7 @@ class GossipNodeQuery
   end
 
   def call(staked: nil, per: 100, page: 1)
-    if staked
+    unless staked.nil?
       @query = @query.where(staked: staked)
     end
 

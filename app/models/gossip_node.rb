@@ -28,7 +28,8 @@ class GossipNode < ApplicationRecord
     "network",
     "staked",
     "software_version",
-    "created_at"
+    "created_at",
+    "updated_at"
   ].freeze
 
   has_one :validator_ip, primary_key: :ip, foreign_key: :address

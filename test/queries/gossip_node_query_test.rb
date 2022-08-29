@@ -30,6 +30,13 @@ class GossipNodeQueryTest < ActiveSupport::TestCase
     assert results.first["staked"]
   end
 
+  test "GossipNodeQuery returns only non-staked nodes with staked set to false" do
+    results = GossipNodeQuery.new(network: @network).call(staked: false)
+
+    assert_equal 1, results.size
+    refute results.first["staked"]
+  end
+
   test "GossipNodeQuery returns nodes within a given limit" do
     results = GossipNodeQuery.new(network: @network).call(per: 1)
     assert_equal 1, results.size
