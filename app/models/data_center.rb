@@ -51,11 +51,19 @@ class DataCenter < ApplicationRecord
   UNKNOWN_DATA_CENTER_KEY = "0--Unknown"
 
   FIELDS_FOR_API = %i[
+    country_name
     data_center_key 
     id
     location_latitude 
     location_longitude
     traits_autonomous_system_number 
+  ].freeze
+
+  FIELDS_FOR_GOSSIP_NODES = [
+    "country_name",
+    "data_center_key" ,
+    "location_latitude as latitude" ,
+    "location_longitude as longitude"
   ].freeze
 
   before_save :assign_data_center_key

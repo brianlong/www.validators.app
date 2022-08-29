@@ -42,6 +42,8 @@ class Validator < ApplicationRecord
     admin_warning
   ].freeze
 
+  FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
+
   DEFAULT_FILTERS = %w(inactive active private delinquent).freeze
 
   has_many :vote_accounts, dependent: :destroy
@@ -72,6 +74,7 @@ class Validator < ApplicationRecord
 
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
+  scope :for_api, -> { select(FIELDS_FOR_API) }
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true

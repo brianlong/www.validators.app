@@ -20,9 +20,21 @@
 #  index_gossip_nodes_on_network_and_account  (network,account)
 #  index_gossip_nodes_on_network_and_staked   (network,staked)
 #
+
 class GossipNode < ApplicationRecord
+  FIELDS_FOR_API = [
+    "account",
+    "ip",
+    "network",
+    "staked",
+    "software_version",
+    "created_at",
+    "updated_at"
+  ].freeze
+
   has_one :validator_ip, primary_key: :ip, foreign_key: :address
-  has_one :data_center, through: :validator_ip
+  has_one :data_center, -> { for_api }, through: :validator_ip
+  has_one :validator, -> { for_api }, primary_key: :account, foreign_key: :account
 
   def add_validator_ip
     ValidatorIp.find_or_create_by(address: self.ip)
