@@ -159,6 +159,8 @@ Rails.application.routes.draw do
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
 
       post 'update-watchlist/:network', to: 'watchlists#update_watchlist'
+
+      get "gossip-nodes/:network", to: "gossip_nodes#index", as: "gossip_nodes"
     end
   end
 end

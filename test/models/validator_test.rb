@@ -211,4 +211,10 @@ class ValidatorTest < ActiveSupport::TestCase
 
     assert_equal u, @validator.watchers.first
   end
+
+  test "#scope for_api returns correct fields" do
+    val = Validator.for_api.first
+
+    assert_equal Validator::FIELDS_FOR_API, val.attributes.keys.map(&:to_sym)
+  end
 end
