@@ -546,18 +546,18 @@
 <hr />
 
 <h2 class="h4" id="gossip-nodes">Gossip Nodes</h2>
-<p>Gossip Nodes endpoint will return Solana rpc nodes.</p>
+<p>Gossip Nodes endpoint will return all nodes visible in Gossip, including RPC nodes, with basic information & geo coordinates for mapping.</p>
 
 <h3 class="h6">Request:</h3>
 <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
-<p><strong class="text-muted">`staked=(true | false)`</strong> will limit the results only to staked / unstaked nodes. </p>
-<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes?staked=true'</pre>
+<p><strong class="text-muted">`staked=(true | false)`</strong> will limit the results only to staked / unstaked nodes. Omit this parameter for all nodes.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network?staked=true'</pre>
 <p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 100.</p>
 <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network?per=50'</pre>
-<p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1.</p>
-<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network?page=1'</pre>
+<p><strong class="text-muted">`page=NN`</strong> will return the results from provided page, defaults to 1.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network?per=50&page=1'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
