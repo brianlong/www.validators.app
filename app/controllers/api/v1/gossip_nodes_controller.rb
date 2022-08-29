@@ -8,7 +8,7 @@ module Api
 
       def index
         staked = if nodes_params.has_key? "staked"
-          ["true", true].include? nodes_params[:staked] ? true : false
+          ["true", true].include? nodes_params[:staked]
         else
           nil 
         end

@@ -19,7 +19,7 @@ class GossipNodeQuery
     unless staked.nil?
       @query = @query.where(staked: staked)
     end
-
+    
     @query.page(page).per(per)
   end
 
