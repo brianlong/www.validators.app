@@ -1,9 +1,10 @@
 <template>
   <div class="card mb-4">
       <div class="card-content">
-        <h2 class="h3 card-heading" v-if="titleVisible">
-          Recent TX Confirmation Time Stats
-        </h2>
+        <div class="card-heading" v-if="titleVisible">
+          <h2 class="h3 mb-2">Recent TX Confirmation Time Stats</h2>
+          <a class="small" :href="pt_url">See details on the Ping Thing page</a>
+        </div>
         <div class="row px-xl-4 ping-thing-stats-header">
           <div class="col-lg-2 offset-lg-1 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-none d-lg-block">Stats from&nbsp;</span>
@@ -102,9 +103,6 @@
             </span>
             <strong class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-        </div>
-        <div class="mt-4 text-center text-muted" data-turbolinks="false" v-if="titleVisible">
-          See details on the <a :href="pt_url">Ping Thing</a> page.
         </div>
       </div>
     </div>
