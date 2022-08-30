@@ -13,11 +13,12 @@
         </thead>
         <tbody>
         <tr>
-          <td class="column-sm"><strong>Data Centers</strong></td>
-          <td class="small">
+          <td class="column-md"><strong>Data Centers</strong></td>
+          <td class="small row">
             <% @data_center_keys.each do |dck| %>
-              <%= link_to dck, data_center_url(network: params[:network], key: dck.gsub('/', '-slash-')) %>
-              <br \>
+              <div class="col-xl-6">
+                <%= link_to dck, data_center_url(network: params[:network], key: dck.gsub('/', '-slash-')) %>
+              </div>
             <% end %>
           </td>
         </tr>
