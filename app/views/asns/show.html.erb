@@ -1,7 +1,7 @@
 <h1 class="page-header"><%= params[:network].capitalize %> Autonomous System Number</h1>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-xl-6">
     <div class="card mb-4">
       <table class='table mb-0'>
         <thead>
@@ -16,7 +16,7 @@
           <td class="column-md"><strong>Data Centers</strong></td>
           <td class="small row">
             <% @data_center_keys.each do |dck| %>
-              <div class="col-xl-6">
+              <div class="col-md-6">
                 <%= link_to dck, data_center_url(network: params[:network], key: dck.gsub('/', '-slash-')) %>
               </div>
             <% end %>
@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <div class="col-md-6">
+  <div class="col-xl-6">
     <div class="card mb-4">
       <table class='table mb-0'>
         <thead>
