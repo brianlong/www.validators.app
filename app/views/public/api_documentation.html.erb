@@ -14,10 +14,10 @@
   <li><a href="#auhentication">Authentication</a></li>
   <li><a href="#ping">Server Ping</a></li>
   <li><a href="#validators-list">Validators List</a></li>
-  <li><a href="#validator-detail">Validator Detail</a></li>
+  <li><a href="#validator-detail">Validator Details</a></li>
   <li><a href="#validator-block">Validator Block Production History</a></li>
-  <li><a href="#epoch-index">Epoch Index</a></li>
-  <li><a href="#commission-change-index">Commission Change Index</a></li>
+  <li><a href="#epoch-index">Epochs</a></li>
+  <li><a href="#commission-change-index">Commission Changes</a></li>
   <li><a href="#stake-pools">Stake Pools</a></li>
   <li><a href="#stake-accounts">Stake Accounts</a></li>
   <li><a href="#ping-thing">Ping Thing Post</a></li>
@@ -54,7 +54,7 @@
 
 <h2 class="h4" id="validators-list">Validators List</h2>
 <p>
-  The Validators endpoint will return a list of validators for the requested network. In the example below,
+  The Validators List endpoint will return a list of validators for the requested network. In the example below,
   replace `:network` with 'testnet' or 'mainnet' as desired.
 </p>
 
@@ -121,9 +121,9 @@
 
 <hr />
 
-<h2 class="h4" id="validator-detail">Validator Detail</h2>
+<h2 class="h4" id="validator-detail">Validator Details</h2>
 <p>
-  The Validators endpoint will return a single validator for the requested network and account. In the example
+  The Validator Details endpoint will return a single validator for the requested network and account. In the example
   below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.
 </p>
 
@@ -209,8 +209,8 @@
 
 <hr />
 
-<h2 class="h4" id="epoch-index">Epoch Index</h2>
-<p>The Epoch endpoint will return all epoch data. Replace `:network` with 'testnet' or 'mainnet' as desired. </p>
+<h2 class="h4" id="epoch-index">Epochs</h2>
+<p>The Epochs endpoint will return all epoch data. Replace `:network` with 'testnet' or 'mainnet' as desired. </p>
 
 <h3 class="h6">Request:</h3>
 <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network'</pre>
@@ -240,9 +240,9 @@
 
 <hr />
 
-<h2 class="h4" id="commission-change-index">Commission Change Index</h2>
+<h2 class="h4" id="commission-change-index">Commission Changes</h2>
 <p>
-  The Commission Change endpoint will return all the changes in commission for a given period of time.
+  The Commission Changes endpoint will return all the changes in commission for a given period of time.
   Replace `:network` with 'testnet' or 'mainnet' as desired.
 </p>
 

@@ -10,22 +10,22 @@
     </div>
   <% end %>
 
-  <div class='form-group'>
-    <%= form.label :network %>
+  <div class='mb-3'>
+    <%= form.label :network, class: 'form-label' %>
     <%= form.text_field :network, class: 'form-control' %>
   </div>
 
-  <div class='form-group'>
-    <%= form.label :account_identity %>
+  <div class='mb-3'>
+    <%= form.label :account_identity, class: 'form-label' %>
     <%= form.text_field :account_identity, class: 'form-control' %>
   </div>
 
-  <div class='form-group'>
-    <%= form.label :account_vote %>
+  <div class='mb-3'>
+    <%= form.label :account_vote, class: 'form-label' %>
     <%= form.text_field :account_vote, class: 'form-control' %>
   </div>
 
-  <div class='form-group'>
+  <div class='mb-3'>
     <%= form.submit 'Save', class: 'btn btn-md btn-primary' %>
   </div>
 <% end %>

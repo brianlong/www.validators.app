@@ -1,14 +1,24 @@
 @import "variables";
-
 table, .table {
   color: inherit;
+  margin-bottom: 0;
+
+  tbody, td, tfoot, th, thead, tr {
+    border-style: none;
+  }
 
   thead {
+    @include font-size-md();
     background-color: $table-background-color;
     th {
       border: none;
-      border-bottom: 1px solid $table-border-color;
+      border-bottom: 2px solid $table-border-color !important;
       padding: $padding-standard 20px;
+      vertical-align: middle;
+      @media(max-width: $screen-md-max) {
+        padding: $padding-standard $padding-standard*2;
+        padding-right: 10px;
+      }
     }
   }
 
@@ -23,8 +33,12 @@ table, .table {
       background-color: $table-background-color-secondary;
     }
     td {
-      padding: $padding-standard 20px;
       border-top: none;
+      padding: $padding-standard 20px;
+      vertical-align: middle;
+      @media(max-width: $screen-md-max) {
+        padding: $padding-standard $padding-standard*2;
+      }
     }
 
     &+tbody {
@@ -70,25 +84,19 @@ table, .table {
   }
 
   .chart {
-    &-top-container {
-      position: absolute;
-      padding-left: 28px;
-      width: 19%;
-      @media(max-width: $screen-md-max) {
-        padding-left: 23px;
-        width: 89%;
-      }
-      @media(max-width: $screen-xs-max) {
-        padding-left: 25px;
-        width: 84%;
-      }
-    }
     &-top-value {
-      font-size: 9px;
-      line-height: 9px;
+      width: 100%;
+      padding-left: 5px;
+      font-size: 11px;
       color: #979797;
-      margin-top: -11px;
-      text-align: right;
+      margin-top: -15px;
+      margin-bottom: 5px;
+      @media(max-width: $screen-md-max) {
+        margin-bottom: 15px;
+      }
+      @media(max-width: $screen-sm-max) {
+        margin-bottom: 10px;
+      }
     }
     &-link.active {
       color: $link-color-secondary;
@@ -97,48 +105,17 @@ table, .table {
   }
 
   .column {
-    &-avatar {
-      width: 85px;
-      text-align: center;
-      padding: 0;
-      @media(max-width: $screen-lg-max) {
-        width: 55px;
-      }
-      .avatar {
-        padding-bottom: 5px;
-        .img-circle-medium-private {
-          display: inline-block;
-        }
-      }
-    }
-
-    &-chart {
-      width: 22%;
-      padding: 22px $padding-standard 10px $padding-standard;
-      @media(max-width: $screen-lg-max) {
-        width: 25%;
-      }
-    }
-
-    &-info {
-      width: 195px;
-      padding-left: 0;
-      padding-right: 0;
-      @media(max-width: $screen-md-max) {
-        padding-left: 20px;
-      }
-    }
-
     &-xs {
       width: 10%;
+      min-width: 100px;
     }
     &-sm {
       width: 15%;
-      min-width: 90px;
+      min-width: 100px;
     }
     &-md {
       width: 20%;
-      min-width: 140px;
+      min-width: 145px;
     }
     &-md-sm {
       width: 13%;
@@ -154,7 +131,7 @@ table, .table {
     }
     &-lg {
       width: 25%;
-      min-width: 150px;
+      min-width: 160px;
     }
     &-xl {
       width: 30%;
@@ -187,18 +164,89 @@ table, .table {
 }
 
 
-#validators-table {
+.validators-table {
+  @include font-size-md();
   max-width: 100%;
   width: 100%;
   table-layout: fixed;
   thead {
     @media(max-width: $screen-md-max) { display: none; }
   }
+  thead, tbody {
+    td, th {
+      padding: $padding-standard 30px;
+      @media(max-width: $screen-xl-max) {
+        padding: $padding-standard 20px;
+      }
+      @media(max-width: $screen-md-max) {
+        padding: $padding-standard $padding-standard*2;
+      }
+    }
+
+    .column {
+      &-chart {
+        width: 21%;
+        padding-top: 20px;
+        padding-bottom: 8px;
+        @media(max-width: $screen-lg-max) {
+          width: 25%;
+          padding-right: 10px;
+          padding-left: 10px;
+        }
+        @media(max-width: $screen-md-max) {
+          padding-right: 25px;
+          padding-left: 25px;
+          padding-top: 0;
+        }
+      }
+
+      &-info {
+        width: 24%;
+        padding-right: 0;
+        @media(max-width: $screen-xl-max) {
+          width: 26%;
+        }
+        @media(max-width: $screen-lg-max) {
+          width: 250px;
+        }
+        &-row {
+          display: flex;
+          align-items: center;
+        }
+        &-avatar {
+          width: 70px;
+          text-align: center;
+          padding-right: 20px;
+          @media(max-width: $screen-lg-max) {
+            width: 35px;
+            .img-circle-medium, .img-circle-medium-private {
+              display: none;
+            }
+            &.no-watchlist {
+              width: 0;
+              padding-right: 0;
+            }
+          }
+        }
+        &-name {}
+      }
+
+      &-speedometer {
+        width: 16%;
+        @media(max-width: $screen-lg-max) {
+          width: 16%;
+          padding-right: 10px;
+          padding-left: 10px;
+        }
+        @media(max-width: $screen-md-max) {
+          padding-left: $padding-standard*2;
+        }
+      }
+    }
+  }
 }
 
 .stake-accounts-table {
-  margin-bottom: 0;
-
   tbody, thead {
     tr, th {
       background-color: $table-background-color !important;

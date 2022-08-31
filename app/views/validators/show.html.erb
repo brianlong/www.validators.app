@@ -13,37 +13,41 @@
     <h1 class="word-break"><%= @validator.name || @validator.account %></h1>
   </div>
 
-  <div class="page-header-tags">
-    <div class="d-inline-block">
-      <% if @validator.private_validator? %>
-        <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0" title="Validator has 100% commission.">private</div>
-      <% end %>
-      <% if @validator.delinquent? %>
-        <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0" title="Validator is delinquent.">delinquent</div>
-      <% end %>
-      <% unless @validator.active? %>
-        <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0" title="Validator is inactive.">inactive</div>
-      <% end %>
-      <% if @validator.admin_warning %>
-        <%= link_to '/faq#admin-warning', title: "#{@validator.admin_warning}" do %>
-          <div class="btn btn-xs btn-danger mr-2 mb-3 mb-sm-0">admin warning</div>
-        <% end %>
-      <% end %>
-      <% if @validator.score.authorized_withdrawer_score == -2 %>
-        <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
-          <div class="btn btn-xs btn-warning mr-2 mb-3 mb-sm-0">withdrawer authority</div>
-        <% end %>
-      <% end %>
-    </div>
-
-    <% @tags_present = @validator.delinquent? || @validator.admin_warning || @validator.score.authorized_withdrawer_score == -2 %>
+  <div class="d-flex justify-content-between flex-wrap gap-3">
     <% unless @validator.private_validator? || !@validator.active? %>
       <%= link_to 'Delegate SOL',
                   solstake_url(@validator.vote_account_active&.account),
                   title: 'Delegate SOL to this validator on SolStake.io',
-                  class: "btn btn-xs btn-secondary mb-3 mb-sm-0 #{ 'float-md-right' if @tags_present }",
+                  class: "btn btn-sm btn-secondary",
                   target: :blank %>
     <% end %>
+    <div>
+      <% if @validator.private_validator? %>
+        <div class="btn btn-sm btn-danger me-2" title="Validator has 100% commission.">private</div>
+      <% end %>
+      <% if @validator.delinquent? %>
+        <div class="btn btn-sm btn-danger me-2" title="Validator is delinquent.">delinquent</div>
+      <% end %>
+      <% unless @validator.active? %>
+        <div class="btn btn-sm btn-danger me-2" title="Validator is inactive.">inactive</div>
+      <% end %>
+
+      <% if @validator.admin_warning %>
+        <%= link_to '/faq#admin-warning', title: "#{@validator.admin_warning}" do %>
+          <div class="btn btn-sm btn-danger me-2">admin warning</div>
+        <% end %>
+      <% end %>
+      <% if @validator.score.authorized_withdrawer_score == -2 %>
+        <%= link_to '/faq#withdraw-authority-warning', title: "Withdrawer matches validator identity." do %>
+          <div class="btn btn-sm btn-warning me-2">withdrawer authority</div>
+        <% end %>
+      <% end %>
+      <% if @validator.score.consensus_mods_score == -2 %>
+        <%= link_to '/faq#score', title: "Validator appears to use unproven software modifications." do %>
+          <div class="btn btn-sm btn-warning me-2">mods</div>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </section>
 
@@ -200,10 +204,10 @@
   <div class='col-md-3 col-lg-2 toggle-container pt-2'>
     <% if params[:refresh] == 'true' %>
       <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: false) %>
-      <p class="small muted toggle-label">REFRESH ON</p>
+      <p class="small text-muted toggle-label">REFRESH ON</p>
     <% else %>
       <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: true) %>
-      <p class="small muted toggle-label">REFRESH OFF</p>
+      <p class="small text-muted toggle-label">REFRESH OFF</p>
     <% end %>
   </div>
 </div>

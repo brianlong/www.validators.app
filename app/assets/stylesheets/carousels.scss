@@ -6,15 +6,15 @@
     margin: 10px 0 0 0;
     display: block;
     text-align: center;
-    li {
-      display: inline-block;
-      margin: 0 2px;
-      padding: 0;
-      height: 12px;
-      width: 12px;
-      border-radius: 50%;
-      opacity: 1;
+    & [data-bs-target] {
       background-color: $green-transparent;
+      border-radius: 100%;
+      display: inline-block;
+      height: 12px;
+      margin: 0 2px;
+      opacity: 1;
+      padding: 0;
+      width: 12px;
       &.active { background-color: $green; }
     }
   }

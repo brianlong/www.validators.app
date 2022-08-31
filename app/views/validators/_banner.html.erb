@@ -8,10 +8,10 @@
       this website, please delegate to <%= link_to "Block Logic", "https://www.blocklogic.net/", target: "_blank" %>.
       Your delegations keep this&nbsp;website running!
     </p>
-    <%= link_to 'Getting Started', faq_path(anchor: ''), class: 'btn btn-md btn-secondary mr-2 mb-3' %>
-    <%= link_to 'Choosing the right validator', faq_path(anchor: 'choosing-validator'), class: 'btn btn-md btn-secondary mr-2 mb-3 d-none d-md-inline-block' %>
-    <%= link_to 'Choosing validator', faq_path(anchor: 'choosing-validator'), class: 'btn btn-md btn-secondary mr-2 mb-3 d-md-none' %>
-    <%= link_to 'Our Scoring System', faq_path(anchor: 'score'), class: 'btn btn-md btn-secondary mr-2 mb-3' %>
+    <%= link_to 'Getting Started', faq_path(anchor: ''), class: 'btn btn-md btn-secondary me-2 mb-3' %>
+    <%= link_to 'Choosing the right validator', faq_path(anchor: 'choosing-validator'), class: 'btn btn-md btn-secondary me-2 mb-3 d-none d-md-inline-block' %>
+    <%= link_to 'Choosing validator', faq_path(anchor: 'choosing-validator'), class: 'btn btn-md btn-secondary me-2 mb-3 d-md-none' %>
+    <%= link_to 'Our Scoring System', faq_path(anchor: 'score'), class: 'btn btn-md btn-secondary me-2 mb-3' %>
     <%= link_to 'FAQ', faq_path(anchor: 'questions'), class: 'btn btn-md btn-secondary mb-3' %>
   <% end %>
 </section>
@@ -30,15 +30,15 @@
       about liquid staking.
     </p>
 
-    <div id="carouselLogos" class="carousel slide d-none d-md-block px-lg-5 mb-3" data-ride="carousel" data-interval="4000">
+    <div id="carouselLogos" class="carousel slide d-none d-md-block px-lg-4 mb-3" data-bs-ride="carousel" data-bs-interval="4000">
       <div class="carousel-inner">
-        <% shuffle_logos.each_slice(3).to_a.each_with_index do |group, index_slide| %>
+        <% shuffle_logos.each_slice(4).to_a.each_with_index do |group, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
-            <div class="row text-center px-lg-5 mt-4">
+            <div class="row text-center px-lg-4 px-xl-5 mt-4">
               <% group.each_with_index do |logo, index_col| %>
-                <div class="col-md-4 mb-4 mb-sm-0 <%= 'offset-md-4' if index_slide == 2 %>">
+                <div class="col-md mb-4 mb-sm-0 <%= 'px-md-4 px-xl-5' if index_slide == 1 %>">
                   <%= link_to logo[0], target: "_blank" do %>
-                    <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-1 px-lg-3 mb-4' %>
+                    <%= image_tag logo[1], class: 'img-link w-100 mb-4 px-1 px-lg-3' %>
                   <% end %>
                 </div>
               <% end %>
@@ -47,21 +47,21 @@
         <% end %>
       </div>
     </div>
-    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-ride="carousel" data-interval="4000">
+    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="4000">
       <div class="carousel-inner">
         <% shuffle_logos.each_with_index do |logo, index_slide| %>
           <div class="carousel-item <%= 'active' if index_slide == 0 %>">
             <%= link_to logo[0], target: "_blank" do %>
-              <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-1' %>
+              <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-5 mt-3' %>
             <% end %>
           </div>
         <% end %>
       </div>
-      <ol class="carousel-indicators">
+      <div class="carousel-indicators">
         <% shuffle_logos.count.times do |index| %>
-          <li data-target="#carouselLogosMobile" data-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></li>
+          <button type="button" data-bs-target="#carouselLogosMobile" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></button>
         <% end %>
-      </ol>
+      </div>
     </div>
 
     <div class="mt-4 mt-md-0 text-center text-muted">

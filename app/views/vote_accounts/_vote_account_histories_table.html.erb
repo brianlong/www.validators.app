@@ -2,35 +2,35 @@
   <table class='table mb-0'>
     <thead>
     <tr>
-      <th class='column-md text-right'>
+      <th class='column-md text-end'>
         Credits Total<br />
         Last Vote
       </th>
-      <th class='column-lg text-right'>
+      <th class='column-lg text-end'>
         Credits Current<br />
         Slots Current
       </th>
-      <th class='column-sm text-right'>Skipped Votes</th>
-      <th class='column-sm text-right'>Skipped Vote&nbsp;&percnt;</th>
+      <th class='column-sm text-end'>Skipped Votes</th>
+      <th class='column-sm text-end'>Skipped Vote&nbsp;&percnt;</th>
       <th class="column-md">Timestamp</th>
     </tr>
     </thead>
     <tbody>
     <% @vote_account_histories.each do |vote| %>
       <tr>
-        <td class='text-right'>
+        <td class='text-end'>
           <%= number_with_delimiter vote.credits %><br />
           <%= number_with_delimiter vote.last_vote %>
         </td>
 
-        <td class='text-right'>
+        <td class='text-end'>
           <%= number_with_delimiter vote.credits_current %><br />
           <%= number_with_delimiter vote.slot_index_current %>
         </td>
-        <td class='text-right'>
+        <td class='text-end'>
           <%= number_with_delimiter(vote.slot_index_current.to_i - vote.credits_current.to_i) %>
         </td>
-        <td class='text-right'>
+        <td class='text-end'>
           <%=
             number_to_percentage(
               ((vote.slot_index_current.to_i - vote.credits_current.to_i)/vote.slot_index_current.to_f)*100.0,
