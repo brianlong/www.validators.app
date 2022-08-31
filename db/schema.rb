@@ -587,7 +587,7 @@ ActiveRecord::Schema.define(version: 2022_08_31_134326) do
     t.string "admin_warning"
     t.boolean "consensus_mods", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
-    t.index ["network", "is_active", "is_rpc", "is_destroyed"], name: "index_validators_on_network_is_active_is_rpc_is_destroyed"
+    t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end
 
   create_table "vote_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
