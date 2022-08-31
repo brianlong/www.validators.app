@@ -139,6 +139,12 @@ class DataCenterHostTest < ActiveSupport::TestCase
     assert_includes @data_center_host.validator_score_v1s, validator2.validator_score_v1
   end
 
+  test "relationship has_many gossip_nodes returns correct nodes" do
+    node = create(:gossip_node, ip: @validator_ip.address)
+
+    assert_equal node, @validator_ip.gossip_node
+  end
+
   test "scope for_api returs data_center_host specified fields" do
     assert_equal DataCenterHost::FIELDS_FOR_API.map(&:to_s), 
                  DataCenterHost.for_api.first.attributes.keys.sort

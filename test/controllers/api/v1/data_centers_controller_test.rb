@@ -1,0 +1,44 @@
+# frozen_string_literal: true
+
+require 'test_helper'
+
+# ApiControllerTest
+class DataCentersControllerTest < ActionDispatch::IntegrationTest
+  include ResponseHelper
+
+  setup do
+    @data_center = create(:data_center, :berlin)
+    @dch = create(:data_center_host, data_center: @data_center)
+    @node = create(:gossip_node, network: "testnet")
+    @vip = create(:validator_ip, :active, data_center_host: @dch, address: @node.ip)
+
+    @user = create(:user)
+  end
+
+  test 'request without token should get error' do
+    get api_v1_data_centers_with_nodes_url(network: 'testnet')
+    assert_response 401
+    expected_response = { 'error' => 'Unauthorized' }
+
+    assert_equal expected_response, response_to_json(@response.body)
+  end
+
+  test 'request with token should succeed' do
+    get api_v1_data_centers_with_nodes_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
+    assert_response 200
+  end
+
+  test 'request has correct fields' do
+    get api_v1_data_centers_with_nodes_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
+    resp = response_to_json(@response.body)
+
+    assert_response 200
+    assert_equal %w[
+      data_center_key
+      location_latitude
+      location_longitude
+      city_name
+      nodes_count
+    ].sort, resp[0].keys.sort
+  end
+end

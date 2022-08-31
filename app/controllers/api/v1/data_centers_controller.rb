@@ -14,7 +14,7 @@ module Api
           .where("gossip_nodes.network = :network", network: dc_params[:network])
           .group("data_centers.id")
           
-        render json: results.to_json()
+        render json: results.to_json(except: [:id])
       end
 
       private

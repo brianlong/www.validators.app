@@ -70,6 +70,15 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_includes @data_center.validator_score_v1s, validator3.validator_score_v1
   end
 
+  test "relationship has_many gossip_nodes returns gossip_nodes through data_center_hosts" do
+    node = create(:gossip_node)
+    dch = create(:data_center_host, data_center: @data_center)
+    vip = create(:validator_ip, data_center_host: dch, address: node.ip)
+
+    assert_equal 1, @data_center.gossip_nodes.count
+    assert_equal node, @data_center.gossip_nodes.first
+  end
+
   test "scope by_data_center_key returns data_centers by given data_center_key" do
     create(:data_center, :china)
 
