@@ -105,7 +105,8 @@ export default {
                     ticks: {
                         beginAtZero: false,
                         padding: 3,
-                        fontColor: chart_vars.chart_lightgrey
+                        fontColor: chart_vars.chart_darkgrey,
+                        fontSize: chart_vars.chart_font_size,
                     },
                     gridLines: {
                         display: true,

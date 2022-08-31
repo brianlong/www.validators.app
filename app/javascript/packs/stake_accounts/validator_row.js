@@ -59,7 +59,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     skipped_vote_percent() {
       if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
         var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
-        
+
         return skipped_votes_percent ? ((batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).round(2) : null
       } else {
         return null
@@ -80,17 +80,6 @@ var ValidatorRow = Vue.component('validatorRow', {
         return chart_blue_t
       }
       return chart_lightgrey_t
-    },
-    max_value_position(vector, min_position = true) {
-      var max_value = Math.max.apply(Math, vector)
-      var max_value_index = vector.indexOf(max_value) + 1
-      var position = max_value_index.to_f / vector.size * 100
-      position += 3
-      position = Math.min.apply(Math, [position, 100])
-      if (min_position){
-        position = Math.max.apply(Math, [position, 100])
-      }
-      return position
     },
     display_chart(target, event){
       var i = this.idx;

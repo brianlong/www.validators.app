@@ -86,8 +86,9 @@ export default {
                     ticks: {
                         min: 0,
                         padding: 3,
-                        fontColor: chart_vars.chart_lightgrey,
-                        max: this.y_root_distance_max
+                        fontColor: chart_vars.chart_darkgrey,
+                        max: this.y_root_distance_max,
+                        fontSize: chart_vars.chart_font_size,
                     },
                     gridLines: {
                         display: false,

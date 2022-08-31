@@ -232,15 +232,8 @@
         %>
         <% max_value = vector&.max %>
         <% if max_value && max_value > Y_ROOT_DISTANCE_MAX %>
-          <% max_value_position = max_value_position(vector) %>
-          <% max_value_position_mobile = max_value_position(vector, min_position: false) %>
-          <div class="chart-top-container">
-            <div class="chart-top-value d-lg-none" style="width: <%=max_value_position_mobile%>">
-              <%= max_value %>
-            </div>
-            <div class="chart-top-value d-none d-lg-block" style="width: <%=max_value_position%>">
-              <%= max_value %>
-            </div>
+          <div class="chart-top-value">
+            <%= max_value %>
           </div>
         <% end %>
         <%= render 'validators/spark_line_block_distance',
@@ -261,15 +254,8 @@
         %>
         <% max_value = vote_vector&.max %>
         <% if max_value && max_value > Y_VOTE_DISTANCE_MAX %>
-          <% max_value_position = max_value_position(vote_vector) %>
-          <% max_value_position_mobile = max_value_position(vote_vector, min_position: false) %>
-          <div class="chart-top-container">
-            <div class="chart-top-value d-lg-none" style="width: <%=max_value_position_mobile%>">
-              <%= max_value %>
-            </div>
-            <div class="chart-top-value d-none d-lg-block" style="width: <%=max_value_position%>">
-              <%= max_value %>
-            </div>
+          <div class="chart-top-value">
+            <%= max_value %>
           </div>
         <% end %>
         <%= render 'validators/spark_line_vote_distance',

@@ -84,25 +84,19 @@ table, .table {
   }
 
   .chart {
-    &-top-container {
-      position: absolute;
-      padding-left: 28px;
-      width: 19%;
-      @media(max-width: $screen-md-max) {
-        padding-left: 23px;
-        width: 89%;
-      }
-      @media(max-width: $screen-xs-max) {
-        padding-left: 25px;
-        width: 84%;
-      }
-    }
     &-top-value {
-      font-size: 9px;
-      line-height: 9px;
+      width: 100%;
+      padding-left: 5px;
+      font-size: 11px;
       color: #979797;
-      margin-top: -9px;
-      text-align: right;
+      margin-top: -15px;
+      margin-bottom: 5px;
+      @media(max-width: $screen-md-max) {
+        margin-bottom: 15px;
+      }
+      @media(max-width: $screen-sm-max) {
+        margin-bottom: 10px;
+      }
     }
     &-link.active {
       color: $link-color-secondary;
@@ -193,11 +187,16 @@ table, .table {
       &-chart {
         width: 21%;
         padding-top: 20px;
-        padding-bottom: 10px;
+        padding-bottom: 8px;
         @media(max-width: $screen-lg-max) {
           width: 25%;
           padding-right: 10px;
           padding-left: 10px;
+        }
+        @media(max-width: $screen-md-max) {
+          padding-right: 25px;
+          padding-left: 25px;
+          padding-top: 0;
         }
       }
 
