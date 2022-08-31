@@ -29,7 +29,7 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "request has correct fields" do
-    get api_v1_data_centers_with_nodes_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
+    get api_v1_data_centers_with_nodes_url(network: "testnet"), headers: { "Token" => @user.api_token }
     resp = response_to_json(@response.body)
 
     assert_response 200
