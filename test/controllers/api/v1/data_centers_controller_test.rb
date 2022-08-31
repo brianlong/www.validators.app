@@ -18,7 +18,7 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
   test "request without token should get error" do
     get api_v1_data_centers_with_nodes_url(network: "testnet")
     assert_response 401
-    expected_response = { 'error' => 'Unauthorized' }
+    expected_response = { "error" => "Unauthorized" }
 
     assert_equal expected_response, response_to_json(@response.body)
   end
