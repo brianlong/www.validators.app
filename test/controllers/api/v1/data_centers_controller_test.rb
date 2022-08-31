@@ -24,7 +24,7 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "request with token should succeed" do
-    get api_v1_data_centers_with_nodes_url(network: 'testnet'), headers: { 'Token' => @user.api_token }
+    get api_v1_data_centers_with_nodes_url(network: "testnet"), headers: { "Token" => @user.api_token }
     assert_response 200
   end
 
