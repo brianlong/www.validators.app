@@ -25,6 +25,7 @@ class DataCenterHost < ApplicationRecord
   has_many :validator_ips, dependent: :nullify
   has_many :validator_ips_active, -> { active }, class_name: "ValidatorIp"
   has_many :validators, through: :validator_ips_active
+  has_many :gossip_nodes, through: :validator_ips
   has_many :validator_score_v1s, through: :validators
 
   # API
