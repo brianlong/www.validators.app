@@ -13,20 +13,20 @@
       </ul>
     </div>
   <% end %>
-  <div class='form-group'>
-    <%= label(:contact_request, :name, class: 'required') %>
+  <div class='mb-3'>
+    <%= label(:contact_request, :name, class: 'required form-label') %>
     <%= f.text_field :name, class: 'form-control', required: true %>
   </div>
-  <div class='form-group'>
-    <%= label(:contact_request, :email_address, nil, class: 'required') %>
+  <div class='mb-3'>
+    <%= label(:contact_request, :email_address, nil, class: 'required form-label') %>
     <%= f.text_field :email_address, class: 'form-control', required: true %>
   </div>
-  <div class='form-group'>
-    <%= label(:contact_request, :telephone) %>
+  <div class='mb-3'>
+    <%= label(:contact_request, :telephone), class: 'form-label' %>
     <%= f.text_field :telephone, class: 'form-control' %>
   </div>
-  <div class='form-group'>
-    <%= label(:contact_request, :comments, class: 'required') %>
+  <div class='mb-3'>
+    <%= label(:contact_request, :comments, class: 'required form-label') %>
     <%= f.text_area :comments, class: 'form-control', placeholder: t('public.contact_us.form.comments.placeholder') %>
   </div>
   <%= submit_tag t('public.contact_us.form.submit'), class: 'btn btn-md btn-primary' %>

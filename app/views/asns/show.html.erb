@@ -1,7 +1,7 @@
 <h1 class="page-header"><%= params[:network].capitalize %> Autonomous System Number</h1>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-xl-6">
     <div class="card mb-4">
       <table class='table mb-0'>
         <thead>
@@ -13,11 +13,12 @@
         </thead>
         <tbody>
         <tr>
-          <td class="column-sm"><strong>Data Centers</strong></td>
-          <td class="small">
+          <td class="column-md"><strong>Data Centers</strong></td>
+          <td class="small row">
             <% @data_center_keys.each do |dck| %>
-              <%= link_to dck, data_center_url(network: params[:network], key: dck.gsub('/', '-slash-')) %>
-              <br \>
+              <div class="col-md-6">
+                <%= link_to dck, data_center_url(network: params[:network], key: dck.gsub('/', '-slash-')) %>
+              </div>
             <% end %>
           </td>
         </tr>
@@ -26,7 +27,7 @@
     </div>
   </div>
 
-  <div class="col-md-6">
+  <div class="col-xl-6">
     <div class="card mb-4">
       <table class='table mb-0'>
         <thead>
@@ -43,8 +44,9 @@
             <td><strong>Total Stake</strong></td>
             <td>
               <%= number_with_delimiter(lamports_to_sol(@asn_stake).round(0)) %>
-              (<%= number_to_percentage((@asn_stake/@total_stake.to_f)*100.0,
-                                        precision: 2) %>)
+              <span class="text-muted">
+                (<%= number_to_percentage((@asn_stake/@total_stake.to_f)*100.0, precision: 2) %>)
+              </span>
             </td>
           </tr>
         </tbody>
@@ -53,25 +55,28 @@
   </div>
 </div>
 
+<div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
 <%= render "data_centers/filters", {view: "asn"} %>
 
 <% unless params[:filter_by].blank? %>
   <%= link_to 'Reset filters',
       asn_url(network: params[:network], asn: params[:asn]),
-      class: 'btn btn-sm btn-tertiary mr-1 mb-4 float-md-right' %>
+      class: 'btn btn-sm btn-tertiary' %>
 <% end %>
+</div>
 
 <div class="card mb-4">
   <%= render 'validators/table',
              batch: @batch,
              validators: @validators,
              show_ip_and_gateway: true,
-             show_version: false,
              items_per_page: @per,
              show_watchlist_btn: false %>
-  <%= paginate @validators %>
+  <div class="card-footer">
+    <%= paginate @validators %>
+  </div>
 </div>
 
 <%= link_to 'Back to ASN list',
     data_centers_url(network: params[:network], sort_by: 'asn'),
-    class: 'btn btn-sm btn-secondary mr-1 mb-4' %>
+    class: 'btn btn-sm btn-secondary me-1 mb-4' %>

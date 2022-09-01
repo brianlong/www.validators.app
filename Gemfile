@@ -10,7 +10,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # See https://github.com/net-ssh/net-ssh/issues/565 for more information
 # Gem::LoadError : "ed25519 is not part of the bundle. Add it to your Gemfile."
 
-# ruby '2.7.0'
 gem 'bundler', '>= 2.1'
 gem 'json', '>= 2.3.0'
 
@@ -50,6 +49,7 @@ gem 'sidekiq'
 #   gem 'sidekiq-pro'
 # end
 
+# Crontab manager
 gem 'whenever', require: false
 
 # Use Active Model has_secure_password
@@ -71,6 +71,7 @@ gem 'appsignal'
 gem "mechanize", ">= 2.7.7"
 gem 'nokogiri', '1.13.6'
 
+# Pagination
 gem 'kaminari'
 
 # MaxMind
@@ -80,7 +81,10 @@ gem 'maxmind-geoip2'
 # use rack-cors for cross-origin api queries
 gem 'rack-cors'
 
+# Ruby client for Solana
 gem 'solana_rpc_ruby'
+
+# Ruby client for CoinGecko
 gem 'coingecko_ruby'
 
 group :development, :test do
@@ -131,7 +135,7 @@ end
 # `attr_encrypted` gem or Vault. Vault is more secure but is harder to
 # configure in production.
 #
-# Use this gem for attr_encrypted:
+# User data encryption
 gem 'attr_encrypted', '>= 3.1.0'
 
 # Or use this for Vault. NOTE: Use this version of the gem until
@@ -140,16 +144,19 @@ gem 'attr_encrypted', '>= 3.1.0'
 #     git: 'https://github.com/madding/vault-rails.git',
 #     branch: 'fix-dirty-changed-attributes'
 
-# For asset storage
+# Assets storage
 gem 'aws-sdk-s3', require: false
 
+# Authentication
 gem 'devise'
 gem 'devise-i18n'
 
 # https://github.com/ambethia/recaptcha
 gem 'recaptcha'
 
+# User browser detection
 gem 'browser'
 
+# PDFs creator
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'

@@ -15,18 +15,6 @@ module ValidatorsHelper
     [X_SCALE_MAX, count].min
   end
 
-  def max_value_position(vector, min_position: true)
-    max_value = vector.max
-    max_value_index = vector.index(max_value) + 1
-    position = max_value_index.to_f / vector.size * 100
-    position += 2
-    position = [position, 100].min # rejects values larger than 100
-    if min_position
-      position = [position, 11].max # rejects values smaller than 11
-    end
-    number_to_percentage(position, precision: 0)
-  end
-
   def display_avatar(validator)
     if validator&.avatar_url
       image_tag validator.avatar_url, class: 'img-circle mb-1'
@@ -53,7 +41,7 @@ module ValidatorsHelper
       # Get the last skipped_vote data from history
       skipped_votes_percent = validator.score.skipped_vote_history[-1]
       return unless skipped_votes_percent
-      
+
       # Calculate the distance from the best skipped vote and round
       ((batch.best_skipped_vote - skipped_votes_percent.to_f) * 100.0).round(2)
     else
@@ -84,7 +72,7 @@ module ValidatorsHelper
 
   def link_to_validator_website(url)
     return '' unless url.present?
-    
+
     if url.start_with?('https', 'http')
       link_to url, url, target: 'blank'
     else

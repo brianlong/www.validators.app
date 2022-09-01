@@ -105,7 +105,8 @@ export default {
                     ticks: {
                         beginAtZero: false,
                         padding: 3,
-                        fontColor: chart_vars.chart_lightgrey
+                        fontColor: chart_vars.chart_darkgrey,
+                        fontSize: chart_vars.chart_font_size,
                     },
                     gridLines: {
                         display: true,
@@ -121,7 +122,7 @@ export default {
     });
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell align-middle pt-lg-3" :id="'skipped-slots-' + idx ">
+    <td class="column-chart d-none d-lg-table-cell" :id="'skipped-slots-' + idx ">
       <canvas :id=" 'spark_line_skipped_slots_' + validator['account'] " width="5%"></canvas>
     </td>
   `

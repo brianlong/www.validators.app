@@ -31,21 +31,21 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
         <table class="table mb-0">
           <thead>
           <tr>
-            <th class="column-sm align-middle">Stake Pool</th>
-            <th class="column-sm align-middle">
+            <th class="column-sm">Stake Pool</th>
+            <th class="column-sm">
               Nodes<br />
               <small class="text-muted">(Delinquent)</small>
             </th>
-            <th class="column-md align-middle">
+            <th class="column-md">
               Total Stake<br />
               <small class="text-muted">Average</small>
             </th>
-            <th class="column-md align-middle">
+            <th class="column-md">
               Manager Fee<br />
               <small class="text-muted">Avg Validators Fee</small>
             </th>
-            <th class="column-xs align-middle">APY</th>
-            <th class="column-md align-middle">
+            <th class="column-sm">APY</th>
+            <th class="column-md">
               Avg Score<br />
               <small class="text-muted">Maximum: 11</small>
             </th>
@@ -54,15 +54,14 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
 
           <tbody>
           <tr v-for="pool in stake_pools">
-            <td class="align-middle">
+            <td>
               <a href="#"
                  title="Show more details about stake pool"
-                 @click.prevent="filterByWithdrawer(pool)"
-              >
+                 @click.prevent="filterByWithdrawer(pool)">
                 {{ pool.name }}
               </a>
             </td>
-            <td class="align-middle">
+            <td>
               {{ pool.validators_count }}&nbsp;<span class="text-muted">({{ pool.average_delinquent }})</span>
             </td>
             <td>
@@ -73,10 +72,10 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
               {{ pool.manager_fee ? pool.manager_fee + '%' : '0%' }}<br />
               <small class="text-muted">{{ pool.average_validators_commission ? pool.average_validators_commission.toFixed(2) : 0 }}%</small>
             </td>
-            <td class="align-middle">
+            <td>
               {{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}
             </td>
-            <td class="align-middle">
+            <td>
               {{ pool.average_score || 'N / A' }}
             </td>
           </tr>

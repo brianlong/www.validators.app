@@ -4,16 +4,18 @@
       <table class='table'>
         <thead>
           <tr>
-            <th class="column-xl align-middle">
+            <th class="column-xl">
               <a href="#" @click.prevent="sort_by_validator">Validator</a>
             </th>
-            <th class="column-md align-middle">
+            <th class="column-md">
               <a href="#" @click.prevent="sort_by_epoch">Epoch</a><br />
-              <small>(completion %)</small>
+              <small class="text-muted">(completion %)</small>
             </th>
-            <th class="column-md align-middle">Batch</th>
-            <th class="column-lg text-center align-middle">Before<i class="fas fa-long-arrow-alt-right px-2"></i>After</th>
-            <th class="column-md align-middle">
+            <th class="column-md">Batch</th>
+            <th class="column-lg text-center px-2">
+              Before<i class="fas fa-long-arrow-alt-right px-2"></i>After
+            </th>
+            <th class="column-md">
               <a href="#" @click.prevent="sort_by_timestamp">Timestamp</a>
             </th>
           </tr>
@@ -23,6 +25,9 @@
           </commission-history-row>
         </tbody>
       </table>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
       <b-pagination
           v-model="page"
           :total-rows="total_count"
@@ -31,9 +36,9 @@
           last-text="Last »" />
       <a href='#'
          @click.prevent="reset_filters"
-         :style="{display: resetFilterVisibility() ? 'inline-block' : 'none'}"
+         :style="{display: resetFilterVisibility() ? '' : 'none'}"
          id='reset-filters'
-         class='btn btn-xs btn-primary'>Reset filters</a>
+         class='btn btn-sm btn-tertiary'>Reset filters</a>
     </div>
   </div>
 </template>

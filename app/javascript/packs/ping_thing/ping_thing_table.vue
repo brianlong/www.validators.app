@@ -3,26 +3,26 @@
     <table class='table'>
       <thead>
       <tr>
-        <th class="align-middle column-md-sm">Success / Time</th>
-        <th class="align-middle column-lg">
+        <th class="column-md-sm">Success / Time</th>
+        <th class="column-lg">
           Reported&nbsp;At<br />
           <span class="small text-muted">Signature</span>
         </th>
-        <th class="align-middle column-lg">
+        <th class="column-lg">
           Application<br />
           <span class="small text-muted">Type (Commitment Level)</span>
         </th>
-        <th class="align-middle column-xs">Posted&nbsp;By</th>
+        <th class="column-xs">Posted&nbsp;By</th>
       </tr>
       </thead>
 
       <tbody>
         <tr v-for="(pt) in ping_things" :key="pt.id">
-          <td class="align-middle">
+          <td class="text-nowrap">
             <span v-html="success_icon(pt.success)"></span>
             <strong class="text-success h6">{{ pt.response_time.toLocaleString() }}</strong>&nbsp;ms
           </td>
-          <td class="align-middle small">
+          <td class="small">
             {{ formatted_date(pt.reported_at) }}<br />
             <span class="word-break">
               <a :href="link_from_signature(pt.signature)" target="_blank" class="small">
@@ -30,7 +30,7 @@
               </a>
             </span>
           </td>
-          <td class="align-middle small">
+          <td class="small">
             <div v-if="pt.application">
               {{ pt.application }}<br />
             </div>
@@ -42,7 +42,7 @@
               </span>
             </span>
           </td>
-          <td class="align-middle text-muted">{{ pt.username }}</td>
+          <td class="text-muted">{{ pt.username }}</td>
         </tr>
       </tbody>
     </table>
@@ -63,9 +63,9 @@
     methods: {
       success_icon(success) {
         if(success){
-          return '<i class="fas fa-check-circle text-success mr-1"></i>'
+          return '<i class="fas fa-check-circle text-success me-1"></i>'
         } else {
-          return '<i class="fas fa-times-circle text-danger mr-1"></i>'
+          return '<i class="fas fa-times-circle text-danger me-1"></i>'
         }
       },
       link_from_signature(signature){
@@ -74,9 +74,9 @@
       transaction_type_icon(tx){
         switch(tx){
           case 'transfer':
-            return '<i class="fas fa-exchange-alt text-success mr-1"></i>'
+            return '<i class="fas fa-exchange-alt text-success me-1"></i>'
           default:
-            return '<i class="fas fa-random text-success mr-1"></i>'
+            return '<i class="fas fa-random text-success me-1"></i>'
         }
       },
       formatted_date(date){

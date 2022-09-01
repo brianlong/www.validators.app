@@ -1,16 +1,18 @@
-<footer class="container">
+<footer>
   <% if flash[:cookie_notice] %>
-    <div class="alert alert-info" role="alert">
-      <%= flash[:cookie_notice] %>
-      <%= link_to(t('ok'), saw_cookie_notice_path, method: :post, class: 'float-right') unless cookies[:saw_cookie_notice] %>
+    <div class="container">
+      <div class="alert alert-info" role="alert">
+        <%= flash[:cookie_notice] %>
+        <%= link_to(t('ok'), saw_cookie_notice_path, method: :post, class: 'float-end') unless cookies[:saw_cookie_notice] %>
+      </div>
     </div>
   <% end %>
 
   <nav class="navbar navbar-expand-lg">
-    <div class="">
+    <div class="container">
       <ul class="navbar-nav flex-wrap">
-        <li class="nav-item active">
-          <%= link_to 'API Docs', api_documentation_path, class: 'nav-link' %>
+        <li class="nav-item">
+          <%= link_to 'API Docs', api_documentation_path, class: 'nav-link active' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Cluster Stats', cluster_stats_path(network: params[:network]), class: 'nav-link' %>
@@ -77,8 +79,8 @@
     </div>
   </nav>
 
-  <div class="row footer-disclaimer">
-    <div class="col-12">
+  <div class="container">
+    <div class="footer-disclaimer">
       <hr class="footer-separator"/>
       Block Logic, LLC ("BLOCK LOGIC") is the operator of this website. BLOCK LOGIC PROVIDES THE DATA HEREIN ON AN “AS IS”
       BASIS WITH NO WARRANTIES, AND HEREBY DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING
@@ -87,22 +89,18 @@
       DOES NOT WARRANT THAT THE DATA WILL BE ERROR-FREE OR THAT ANY ERRORS WILL BE CORRECTED. ALL INFORMATION SHOULD
       BE INDEPENDENTLY VERIFIED BEFORE MAKING AN INVESTMENT OR DELEGATION DECISION.
     </div>
-  </div>
 
-  <p>
-    RPC Services powered by
-    <%= link_to "https://triton.one/", target: "_blank" do %>
-      <%= image_tag 'triton-logo.svg', height: '18', class: '' %>
-    <% end %>
-  </p>
+    <p>
+      RPC Services powered by
+      <%= link_to "https://triton.one/", target: "_blank" do %>
+        <%= image_tag 'triton-logo.svg', height: '18', class: '' %>
+      <% end %>
+    </p>
 
-  <div class="row footer-copyright">
-    <div class="col-12">
+    <div class="footer-copyright">
       &copy; 2019<%= "-#{Date.today.year}" if Date.today.year > 2019 %>
-      <%= FMA_LLC.capitalize %> <%= t('footer.copyright_text') %> 
+      <%= FMA_LLC.capitalize %> <%= t('footer.copyright_text') %>
       (<%= request.env['SERVER_NAME'] %>)
     </div>
-
   </div>
-
 </footer>
