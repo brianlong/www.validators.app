@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_25_095627) do
-
+ActiveRecord::Schema.define(version: 2022_08_31_134326) do
+  
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2022_08_25_095627) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["network"], name: "index_asn_stats_on_network"
   end
 
   create_table "batches", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -70,7 +71,6 @@ ActiveRecord::Schema.define(version: 2022_08_25_095627) do
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
-    t.index ["network"], name: "index_batches_on_network"
   end
 
   create_table "collectors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -158,7 +158,8 @@ ActiveRecord::Schema.define(version: 2022_08_25_095627) do
     t.string "data_center_key"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["data_center_key"], name: "index_data_centers_on_data_center_key"
+    t.index ["data_center_key", "traits_autonomous_system_number", "traits_autonomous_system_organization", "country_iso_code"], name: "index_data_centers_for_grouping"
+    t.index ["traits_autonomous_system_number"], name: "index_data_centers_on_traits_autonomous_system_number"
   end
 
   create_table "epoch_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -470,7 +471,6 @@ ActiveRecord::Schema.define(version: 2022_08_25_095627) do
     t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
-    t.index ["validator_id"], name: "index_validator_block_histories_on_validator_id"
   end
 
   create_table "validator_block_history_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -530,7 +530,6 @@ ActiveRecord::Schema.define(version: 2022_08_25_095627) do
     t.index ["data_center_host_id"], name: "index_validator_ips_on_data_center_host_id"
     t.index ["is_active"], name: "index_validator_ips_on_is_active"
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
-    t.index ["validator_id"], name: "index_validator_ips_on_validator_id"
   end
 
   create_table "validator_score_v1s", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -565,7 +564,7 @@ ActiveRecord::Schema.define(version: 2022_08_25_095627) do
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
-    t.index ["network", "active_stake"], name: "index_validator_score_v1s_on_network_and_active_stake"
+    t.index ["network", "active_stake", "commission", "delinquent"], name: "index_for_asns"
     t.index ["network", "total_score"], name: "index_validator_score_v1s_on_network_and_total_score"
     t.index ["network", "validator_id"], name: "index_validator_score_v1s_on_network_and_validator_id"
   end
@@ -588,7 +587,7 @@ ActiveRecord::Schema.define(version: 2022_08_25_095627) do
     t.string "admin_warning"
     t.boolean "consensus_mods", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
-    t.index ["network", "is_active", "is_destroyed"], name: "index_validators_on_network_and_is_active_and_is_destroyed"
+    t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end
 
   create_table "vote_account_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
