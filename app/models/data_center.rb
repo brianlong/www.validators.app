@@ -80,12 +80,17 @@ class DataCenter < ApplicationRecord
     where(data_center_key: data_center_keys)
   end
 
-  def to_builder
+  def to_builder(map_data: false, network: "mainnet")
     Jbuilder.new do |data_center|
       data_center.data_center_key self.data_center_key
       data_center.autonomous_system_number self.traits_autonomous_system_number
       data_center.latitude self.location_latitude
       data_center.longitude self.location_longitude
+      if map_data
+        data_center.country_name self.country_name
+        data_center.nodes_count self.gossip_nodes.where(network: network).count
+        data_center.validators_count self.validators.where(network: network).count
+      end
     end
   end
 
