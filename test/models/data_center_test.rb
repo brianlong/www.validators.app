@@ -79,6 +79,24 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_equal node, @data_center.gossip_nodes.first
   end
 
+  test "relationship has_many data_center_stats returns data_center_stats" do
+    stats = create(:data_center_stat, network: "mainnet", data_center: @data_center)
+
+    assert_equal 1, @data_center.data_center_stats.count
+    assert_equal stats, @data_center.data_center_stats.first
+  end
+
+  test "relationship has_many data_center_stats by_network returns stats from given network" do
+    create(:data_center_stat, network: "mainnet", data_center: @data_center)
+    create(:data_center_stat, network: "testnet", data_center: @data_center)
+
+    assert_equal 1, @data_center.data_center_stats.by_network("mainnet").count
+    assert_equal "mainnet", @data_center.data_center_stats.by_network("mainnet").first.network
+
+    assert_equal 1, @data_center.data_center_stats.by_network("testnet").count
+    assert_equal "testnet", @data_center.data_center_stats.by_network("testnet").first.network
+  end
+
   test "scope by_data_center_key returns data_centers by given data_center_key" do
     create(:data_center, :china)
 
