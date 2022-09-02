@@ -19,5 +19,5 @@
 #  fk_rails_...  (data_center_id => data_centers.id)
 #
 class DataCenterStat < ApplicationRecord
-  belongs_to :data_ceters
+  belongs_to :data_center
 end
