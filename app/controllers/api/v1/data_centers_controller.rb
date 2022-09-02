@@ -4,13 +4,19 @@ module Api
   module V1
     class DataCentersController < BaseController
       def index_with_nodes
-        data_centers = DataCenter.includes(:data_center_stats)
-                                
-        data_centers_formatted = data_centers.map do |dc|
-          dc.to_builder(map_data: true, network: dc_params[:network]).attributes! 
+        fields_dc = DataCenter::FIELDS_FOR_GOSSIP_NODES.map do |field|
+          "data_centers.#{field}"
         end
+
+        fields_stats = DataCenterStat::FIELDS_FOR_API.map do |field|
+          "data_center_stats.#{field}"
+        end
+
+        data_centers = DataCenter.select((fields_dc + fields_stats).join(", "))
+                                 .joins(:data_center_stats)
+                                 .where("data_center_stats.network = ?", dc_params[:network])
         
-        render json: data_centers_formatted.to_json
+        render json: data_centers.to_json( except: [:id])
       end
 
       private

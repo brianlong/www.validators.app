@@ -110,7 +110,7 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_equal DataCenter::FIELDS_FOR_API.map(&:to_s), DataCenter.for_api.first.attributes.keys.sort
   end
 
-  test "#to_builder returns correct data with default options" do
+  test "#to_builder returns correct data" do
     expected_result = { 
       data_center_key: "12345-DE-Berlin",
       autonomous_system_number: 12345, 
@@ -119,37 +119,6 @@ class DataCenterTest < ActiveSupport::TestCase
     }.to_json
 
     assert_equal expected_result, @data_center.to_builder.target!
-  end
-
-  test "#to_builder returns correct data with map_data option" do
-    expected_result = { 
-      data_center_key: "12345-DE-Berlin",
-      autonomous_system_number: 12345, 
-      latitude: "51.2993", 
-      longitude: "9.491",
-      country_name: "Germany",
-      nodes_count: 0,
-      validators_count: 0,
-    }.to_json
-
-    assert_equal expected_result, @data_center.to_builder(map_data: true).target!
-  end
-
-  test "#to_builder returns correct number of nodes and validators" do
-    network = "mainnet"
-    dch = create(:data_center_host, data_center: @data_center)
-    val = create(:validator, network: network)
-    node1 = create(:gossip_node, network: network)
-    node2 = create(:gossip_node, network: network)
-    create(:validator_ip, :active, data_center_host: dch, address: node1.ip)
-    create(:validator_ip, :active, data_center_host: dch, address: node2.ip, validator: val)
-
-    DataCenters::FillDataCenterStats.new(network: network).call
-
-    dc_builder = @data_center.to_builder(map_data: true).attributes!
-
-    assert_equal 1, dc_builder["validators_count"]
-    assert_equal 2, dc_builder["nodes_count"]
   end
 
   test "before_save #assign_data_center_key assigns key correctly" do
