@@ -144,6 +144,7 @@ class DataCenterTest < ActiveSupport::TestCase
     create(:validator_ip, :active, data_center_host: dch, address: node1.ip)
     create(:validator_ip, :active, data_center_host: dch, address: node2.ip, validator: val)
 
+    DataCenters::FillDataCenterStats.new(network: network).call
 
     dc_builder = @data_center.to_builder(map_data: true).attributes!
 

@@ -94,8 +94,8 @@ class DataCenter < ApplicationRecord
       data_center.longitude self.location_longitude
       if map_data
         data_center.country_name self.country_name
-        data_center.nodes_count self.gossip_nodes.where(network: network).count
-        data_center.validators_count self.validators.where(network: network).count
+        data_center.nodes_count data_center_stats.by_network(network).first&.gossip_nodes_count || 0
+        data_center.validators_count data_center_stats.by_network(network).first&.validators_count || 0
       end
     end
   end

@@ -4,8 +4,8 @@ module Api
   module V1
     class DataCentersController < BaseController
       def index_with_nodes
-        data_centers = DataCenter.all
-
+        data_centers = DataCenter.includes(:data_center_stats)
+                                
         data_centers_formatted = data_centers.map do |dc|
           dc.to_builder(map_data: true, network: dc_params[:network]).attributes! 
         end
