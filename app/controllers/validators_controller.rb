@@ -23,7 +23,7 @@ class ValidatorsController < ApplicationController
       page: index_params[:page],
       query: index_params[:q]
     )
-    
+
     @batch = Batch.last_scored(index_params[:network])
 
     if @batch
@@ -38,6 +38,9 @@ class ValidatorsController < ApplicationController
     end
     @at_33_stake_index ||= nil
   end
+
+  # GET /validators-map
+  def map; end
 
   # GET /validators/1
   # GET /validators/1.json
