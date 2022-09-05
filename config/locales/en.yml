@@ -104,7 +104,7 @@ en:
   you:
     only_users_allowed: 'Only authenticated users are allowed.'
   definitions:
-    active_stake: "Total stake from active validator(s)."
+    active_stake: "Stake from active validator(s)."
     asn_full_name: "Autonomous System Number"
     average_score: "Average score for validators from ASN."
     commission: "Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account."
@@ -118,5 +118,5 @@ en:
     scores: "Our score system."
     skipped_slot: "Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate."
     skipped_vote: "Skipped vote measures the percent of the time that a leader fails to vote."
-    total_stake: "Total stake from all validators."
+    total_stake: "Total stake from all validator(s)."
     vote_distance: "Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group."

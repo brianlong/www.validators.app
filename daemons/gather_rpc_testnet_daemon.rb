@@ -45,7 +45,6 @@ begin
     }.stringify_keys
 
     BuildSkippedSlotPercentWorker.perform_async(common_params)
-    ReportTowerHeightWorker.perform_async(common_params.merge({ epoch: p.payload[:epoch] }).stringify_keys)
     ReportSoftwareVersionWorker.perform_async(common_params)
 
     break if interrupted

@@ -5,22 +5,22 @@
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="form-group">
-        <%= f.label :username, class: 'required' do %>
+      <div class="mb-3">
+        <%= f.label :username, class: 'required form-label' do %>
           Username <small>(letters, numbers and dots allowed)</small>
         <% end %>
         <%= f.text_field :username, autofocus: true, autocomplete: "username", class: 'form-control' %>
       </div>
 
-      <div class="form-group">
-        <%= f.label :email, class: 'required' do %>
+      <div class="mb-3">
+        <%= f.label :email, class: 'required form-label' do %>
           Email <small>(encrypted on disc)</small>
         <% end %>
         <%= f.text_field :email, autofocus: true, autocomplete: "email", class: 'form-control' %>
       </div>
 
-      <div class="form-group">
-        <%= f.label :password, class: 'required' do %>
+      <div class="mb-3">
+        <%= f.label :password, class: 'required form-label' do %>
           Password
           <% if @minimum_password_length %>
             <small><%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %></small>
@@ -29,18 +29,18 @@
         <%= f.password_field :password, autocomplete: "new-password", class: 'form-control' %>
       </div>
 
-      <div class="form-group">
-        <%= f.label :password_confirmation, class: 'required' %>
+      <div class="mb-3">
+        <%= f.label :password_confirmation, class: 'required form-label' %>
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control' %>
       </div>
 
-      <div class="form-group actions">
+      <div class="actions">
         <%= f.submit t('.sign_up'), class: 'btn btn-md btn-primary' %>
       </div>
     <% end %>
   </div>
 
-  <div class="col-md-6 pl-md-4 pl-lg-5">
+  <div class="col-md-6 ps-md-4 ps-lg-5">
     <%= render "devise/shared/side_banner" %>
 
     <h2 class="h4">

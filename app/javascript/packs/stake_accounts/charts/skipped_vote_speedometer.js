@@ -85,7 +85,7 @@ export default {
     });
   },
   template: `
-    <td class="column-sm align-middle pb-lg-0 pt-lg-1">
+    <td class="column-speedometer">
       <div v-if="skipped_vote_percent">
         <div class="d-none d-lg-block">
           <canvas :id="'spark_line_skipped_vote_' + validator['account'] " width="5%"></canvas>

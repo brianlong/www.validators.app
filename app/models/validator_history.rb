@@ -28,10 +28,10 @@
 #
 # Indexes
 #
-#  acceptable_stake_by_account_index                        (account,created_at,active_stake)
-#  delinquent_by_account_index                              (account,delinquent,created_at)
-#  index_validator_histories_on_network_and_account_and_id  (network,account,id)
-#  index_validator_histories_on_network_and_batch_uuid      (network,batch_uuid)
+#  acceptable_stake_by_account_index                                (account,created_at,active_stake)
+#  delinquent_by_account_index                                      (account,delinquent,created_at)
+#  index_validator_histories_on_network_and_account_and_id          (network,account,id)
+#  index_validator_histories_on_network_and_batch_uuid_and_account  (network,batch_uuid,account)
 #
 class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
@@ -53,6 +53,12 @@ class ValidatorHistory < ApplicationRecord
         ) validator_histories
       SQL
     )
+  end
+
+  scope :validator_histories_from_period, ->(network:, account:, from:, to:, limit:) do
+    where(network: network, account: account, created_at: from...to)
+      .order(created_at: :asc)
+      .last(limit)
   end
 
   class << self

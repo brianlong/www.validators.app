@@ -1,0 +1,18 @@
+{
+  "validators":
+    [
+      {
+        "activatedStake":49401096648689,
+        "commission":100,
+        "credits":5167007,
+        "delinquent":false,
+        "epochCredits":237353,
+        "identityPubkey":"dv1ZAGvdsz5hHLwWXsVnM94hWf1pjbKVau1QVkaMJ92",
+        "lastVote":77317326,
+        "rootSlot":77317283,
+        "skipRate":5.555555555555555,
+        "version":"1.6.9",
+        "voteAccountPubkey":"7zkEKYGvYquSNuuxcd22mAeCzfh8B866pnwBsTNAgJKw"
+      }
+    ]
+  }

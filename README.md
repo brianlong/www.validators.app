@@ -21,13 +21,14 @@ This repo is a template to be used for creating new projects. After creating you
 NOTE: If you find other files that need to be touched after creating a new project please come back here and update the documentation!
 
 ## Ruby version
-This project requires Ruby 2.7+ as denoted in the `.ruby-version` file. This project also requires Rails 6.0+. Run the `bundle` command to install Rails and all other Gem dependencies. See the Gemfile for additional notes.
+This project requires Ruby 2.6.5 as denoted in the `.ruby-version` file. This project also requires Rails 6.1+.  
+Run the `bundle` command to install Rails and all other Gem dependencies. See the Gemfile for additional notes.
 
 ## System dependencies
   - MySQL 5.7+
   - Redis
   - Yarn
-  - Node 16.13.2
+  - Node 16.14.2
   - shared-mime-info
 
 ## Configuration
@@ -114,3 +115,7 @@ To decrypt and encrypt the file you need a passphrase, please ask your team lead
 - Solana RPC ruby gem https://github.com/Block-Logic/solana-rpc-ruby
 - Solscan API ruby gem https://github.com/Block-Logic/solscan-api-ruby
 - Ping Thing client https://github.com/Block-Logic/ping-thing-client
+
+## DataCenters
+- To append validator to Data Center of your choice use `append_to_data_center.rb` .
+- To change validator's Data Center with usage of MaxMind service use `change_validator_data_center.rb` service.

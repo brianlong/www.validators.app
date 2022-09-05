@@ -52,12 +52,9 @@
 #
 # Indexes
 #
-#  index_validator_score_v1s_on_network                   (network)
-#  index_validator_score_v1s_on_network_and_active_stake  (network,active_stake)
+#  index_for_asns                                         (network,active_stake,commission,delinquent)
 #  index_validator_score_v1s_on_network_and_total_score   (network,total_score)
 #  index_validator_score_v1s_on_network_and_validator_id  (network,validator_id)
-#  index_validator_score_v1s_on_total_score               (total_score)
-#  index_validator_score_v1s_on_validator_id              (validator_id)
 #
 class ValidatorScoreV1 < ApplicationRecord
   FIELDS_FOR_API = %i[
@@ -143,6 +140,10 @@ class ValidatorScoreV1 < ApplicationRecord
   class << self
     def with_private(show: "true")
       show == "true" ? all : where.not(commission: 100)
+    end
+
+    def total_active_stake(network)
+      joins(:data_center).by_network_with_active_stake(network).sum(:active_stake)
     end
   end
 

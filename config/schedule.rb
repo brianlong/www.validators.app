@@ -37,29 +37,57 @@ job_type :ruby_script_data_centers,
 
 # since only one server should be responsible for background scripts and daemons
 # role background should be set on every schedule to limit it to a correct server
-every 1.hour, roles: [:background] do
-  ruby_script 'validators_get_info.rb'
-  ruby_script 'validators_get_avatar_url.rb'
-  ruby_script 'gather_stake_accounts.rb'
 
+every 1.hour, at: 0, roles: [:background] do
   runner "AsnLogicWorker.perform_async(network: 'mainnet')"
   runner "AsnLogicWorker.perform_async(network: 'testnet')"
+end
 
+every 1.hour, at: 5, roles: [:background] do
+  ruby_script 'validators_get_info.rb'
+  ruby_script 'validators_get_avatar_url.rb'
+end
+
+every 1.hour, at: 10, roles: [:background] do
+  ruby_script 'gather_stake_accounts.rb'
+end
+
+every 1.hour, at: 20, roles: [:background] do
   ruby_script_data_centers 'append_data_centers_geo_data.rb'
+end
+
+every 1.hour, at: 25, roles: [:background] do
   ruby_script_data_centers 'assign_data_center_scores.rb'
+end
+
+every 1.hour, at: 30, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_hetzner.rb'
+end
+
+every 1.hour, at: 40, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_ovh.rb'
+end
+
+every 1.hour, at: 50, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
-every 1.day, roles: [:background] do
+every 1.day, at: '0:15am', roles: [:background] do
+  ruby_script_sol_prices 'coin_gecko_gather_yesterday_prices.rb'
+  ruby_script_sol_prices 'ftx_gather_yesterday_prices.rb'
+  ruby_script_data_centers 'append_to_unknown_data_center.rb'
+end
+
+every 1.day, at: '1:00am', roles: [:background] do
   ruby_script 'validators_update_avatar_url.rb'
+end
+
+every 1.day, at: '2:00am', roles: [:background] do
   ruby_script 'remove_unconfirmed_users.rb'
 end
 
-every 1.day, at: '0:10am', roles: [:background] do
-  ruby_script_sol_prices 'coin_gecko_gather_yesterday_prices.rb'
-  ruby_script_sol_prices 'ftx_gather_yesterday_prices.rb'
+every 1.day, at: '2:20am', roles: [:background] do
+  ruby_script 'update_gossip_nodes.rb'
 end
 
 every 10.minutes, roles: [:background] do

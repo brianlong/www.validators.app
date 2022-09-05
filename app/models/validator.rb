@@ -24,7 +24,8 @@
 #
 # Indexes
 #
-#  index_validators_on_network_and_account  (network,account) UNIQUE
+#  index_validators_on_network_and_account                    (network,account) UNIQUE
+#  index_validators_on_network_is_active_is_destroyed_is_rpc  (network,is_active,is_destroyed,is_rpc)
 #
 class Validator < ApplicationRecord
   FIELDS_FOR_API = %i[
@@ -41,11 +42,13 @@ class Validator < ApplicationRecord
     admin_warning
   ].freeze
 
+  FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
+
   DEFAULT_FILTERS = %w(inactive active private delinquent).freeze
 
   has_many :vote_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
-  has_many :validator_ips, dependent: :destroy
+  has_many :validator_ips, dependent: :nullify
   has_many :validator_block_histories, dependent: :destroy
   has_many :commission_histories, dependent: :destroy
   has_many :validator_histories, primary_key: :account, foreign_key: :account
@@ -71,6 +74,7 @@ class Validator < ApplicationRecord
 
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
+  scope :for_api, -> { select(FIELDS_FOR_API) }
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true

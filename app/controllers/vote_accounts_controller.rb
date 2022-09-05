@@ -28,6 +28,6 @@ class VoteAccountsController < ApplicationController
   end
 
   def set_validator
-    @validator = Validator.find_by(account: params[:account])
+    @validator = Validator.find_by(network: params[:network], account: params[:account])
   end
 end

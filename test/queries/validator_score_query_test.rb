@@ -3,40 +3,35 @@ require 'test_helper'
 # Query Objects for searching for ValidatorHistory relations and objects
 class ValidatorScoreQueryTest < ActiveSupport::TestCase
   def setup
-    super
-
     batch_uuid = create(:batch).uuid
-    srand(123_456)
-    @validators = [
-      create(:validator, :with_score),
-      create(:validator, :with_score),
-      create(:validator, :with_score),
-      create(:validator, :with_score),
-      create(:validator, :with_score),
-      create(:validator, :with_score)
-    ]
+    validator_ids = []
 
-    @validator_histories = @validators.map do |validator|
-      create(:validator_history, batch_uuid: batch_uuid,
-                                 account: validator.account, root_block: 2,
-                                 last_vote: 21, active_stake: 10)
+    6.times do |n|
+      v = create(:validator, :with_score, account: "validator_#{n}")
+      validator_ids << v.id
     end
-    @validator_scores = @validators.map(&:score)
-    @validator_scores.last.update(active_stake: nil)
 
-    @vsq = ValidatorScoreQuery.new('testnet', batch_uuid)
-  end
+    @validators = Validator.where(id: validator_ids)
 
-  def teardown
-    super
+    @validators.map do |validator|
+      create(
+        :validator_history, 
+        batch_uuid: batch_uuid,
+        account: validator.account,
+        root_block: 2,
+        last_vote: 21,
+        active_stake: 10,
+        network: "testnet"
+      )
+    end
 
-    @validator_histories.each(&:destroy)
+    @vsq = ValidatorScoreQuery.new("testnet", batch_uuid)
   end
 
   test 'for_batch' do
-    expected = ValidatorScoreV1.where(validator_id: @validators.map(&:id))
+    expected = ValidatorScoreV1.where(validator_id: @validators.pluck(:id), network: "testnet")
 
-    assert_equal expected, @vsq.for_batch
+    assert_equal expected.order(created_at: :asc).to_json, @vsq.for_batch.order(created_at: :asc).to_json
   end
 end
 

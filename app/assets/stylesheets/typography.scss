@@ -64,7 +64,7 @@ code {
   }
 }
 
-strong, .font-weight-bold {
+strong, .fw-bold {
   font-weight: $font-weight-bold-primary;
 }
 
@@ -168,17 +168,19 @@ h6, .h6 { font-size: $font-size-h6; line-height: $font-size-h6*1.5; }
 
 a {
   color: $link-color;
+  text-decoration: none;
   transition: color .1s ease-in-out;
   &:hover {
-    text-decoration: none;
     color: $link-color-secondary;
     transition: color .1s ease-in-out;
-    cursor: pointer;
   }
   &.base-color {
     color: $base-color;
     cursor: pointer;
-    &:hover { color: $link-color-secondary; }
+    &:hover { color: $base-color; }
+  }
+  &.text-muted, .text-muted {
+    color: $grey-light;
   }
 }
 

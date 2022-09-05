@@ -1,11 +1,12 @@
 <% @results[:results].each do |_, asn_data| %>
   <tr>
-    <td class="column-md">
+    <td>
       <%= link_to asn_data[:asn], asn_url(network: params[:network], asn: asn_data[:asn]) %>
       <br />
       <%= asn_data[:aso] %>
     </td>
-    <td class="column-sm" style="max-width: 180px;">
+
+    <td style="max-width: 180px;">
       <%
         asn_stat = @asn_stat.find { |stat| stat.traits_autonomous_system_number == asn_data[:asn] }
       %>
@@ -20,38 +21,42 @@
         <%= asn_stat.average_score.round(3) rescue '' %>
       </div>
     </td>
-    <td class="column-md small">
+
+    <td class="small pe-0">
       <% asn_data[:data_centers].each do |dc| %>
         <%= link_to dc, data_center_url(network: params[:network], key: dc.gsub('/', '-slash-')) %>
         <br />
       <% end %>
     </td>
-    <td class="column-md"><%= asn_data[:count] %></td>
-    <td class="column-md">
+
+    <td><%= asn_data[:count] %></td>
+
+    <td>
       <% if asn_data[:delinquent_validators] > 0 %>
         <%= link_to asn_data[:delinquent_validators],
             asn_url(network: params[:network], asn: asn_data[:asn], filter_by: ["delinquent"]) %>
-        <small class="text-muted">
+        <small class="text-muted ps-1">
           (<%= (count_percentage(asn_data[:delinquent_validators], asn_data[:count])) %>%)
         </small>
       <% else %>
         <%= asn_data[:delinquent_validators] %>
       <% end %>
-    </td>
-    <% if params[:network] == 'mainnet' %>
-      <td class="column-md">
+
+      <% if params[:network] == 'mainnet' %>
+        <br />
         <% if asn_data[:private_validators] > 0 %>
           <%= link_to asn_data[:private_validators],
-            asn_url(network: params[:network], asn: asn_data[:asn], filter_by: ["private"]) %>
-          <small class="text-muted">
+                      asn_url(network: params[:network], asn: asn_data[:asn], filter_by: ["private"]) %>
+          <small class="text-muted ps-1">
             (<%= (count_percentage(asn_data[:private_validators], asn_data[:count])) %>%)
           </small>
         <% else %>
           <%= asn_data[:private_validators] %>
         <% end %>
-      </td>
-    <% end %>
-    <td class="column-xl">
+      <% end %>
+    </td>
+
+    <td>
       <small>
         <%= number_with_delimiter lamports_to_sol(asn_data[:active_stake_from_active_validators]).round(0) %>
         (<%= percent_of_total_stake(asn_data[:active_stake_from_active_validators], @results[:total_stake]) %>)

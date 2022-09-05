@@ -27,8 +27,7 @@ module SolanaLogic
   # We can also set some attributes ie. skipped_slot_all_average.
   def batch_touch
     lambda do |p|
-      # byebug
-      batch = Batch.where(uuid: p.payload[:batch_uuid]).first
+      batch = Batch.where(uuid: p.payload[:batch_uuid], network: p.payload[:network]).first
 
       # IMPORTANT: Do not use this values on index page, it's only for show.
       average_skipped_slot_percent = Stats::ValidatorBlockHistory.new(
@@ -110,52 +109,54 @@ module SolanaLogic
 
       validator_histories = {}
       # Create current validators
-      validators['validators'].each do |validator|
-        if existing_history = validator_histories[validator['identityPubkey']]
-          if existing_history.last_vote < validator['lastVote']
+      validators["validators"].each do |validator|
+        next if Rails.application.config.validator_blacklist[p.payload[:network]].include? validator["identityPubkey"]
+        
+        if existing_history = validator_histories[validator["identityPubkey"]]
+          if existing_history.last_vote < validator["lastVote"]
             existing_history.update(
-              account: validator['identityPubkey'],
-              vote_account: validator['voteAccountPubkey'],
-              commission: validator['commission'],
-              last_vote: validator['lastVote'],
-              root_block: validator['rootSlot'],
-              credits: validator['credits'],
-              epoch_credits: validator['epochCredits'],
+              account: validator["identityPubkey"],
+              vote_account: validator["voteAccountPubkey"],
+              commission: validator["commission"],
+              last_vote: validator["lastVote"],
+              root_block: validator["rootSlot"],
+              credits: validator["credits"],
+              epoch_credits: validator["epochCredits"],
               epoch: p.payload[:epoch],
-              active_stake: validator['activatedStake'],
-              software_version: validator['version'],
-              delinquent: validator['delinquent'],
-              slot_skip_rate: validator['skipRate'],
-              root_distance: max_root_height - validator['rootSlot'].to_i,
-              vote_distance: max_vote_height - validator['lastVote'].to_i,
+              active_stake: validator["activatedStake"],
+              software_version: validator["version"],
+              delinquent: validator["delinquent"],
+              slot_skip_rate: validator["skipRate"],
+              root_distance: max_root_height - validator["rootSlot"].to_i,
+              vote_distance: max_vote_height - validator["lastVote"].to_i,
               max_root_height: max_root_height,
               max_vote_height: max_vote_height
             )
 
-            validator_histories[validator['identityPubkey']] = existing_history
+            validator_histories[validator["identityPubkey"]] = existing_history
           end
         else
           vh = ValidatorHistory.create(
             network: p.payload[:network],
             batch_uuid: p.payload[:batch_uuid],
-            account: validator['identityPubkey'],
-            vote_account: validator['voteAccountPubkey'],
-            commission: validator['commission'],
-            last_vote: validator['lastVote'],
-            root_block: validator['rootSlot'],
-            credits: validator['credits'],
-            epoch_credits: validator['epochCredits'],
+            account: validator["identityPubkey"],
+            vote_account: validator["voteAccountPubkey"],
+            commission: validator["commission"],
+            last_vote: validator["lastVote"],
+            root_block: validator["rootSlot"],
+            credits: validator["credits"],
+            epoch_credits: validator["epochCredits"],
             epoch: p.payload[:epoch],
-            active_stake: validator['activatedStake'],
-            software_version: validator['version'],
-            delinquent: validator['delinquent'],
-            slot_skip_rate: validator['skipRate'],
-            root_distance: max_root_height - validator['rootSlot'].to_i,
-            vote_distance: max_vote_height - validator['lastVote'].to_i,
+            active_stake: validator["activatedStake"],
+            software_version: validator["version"],
+            delinquent: validator["delinquent"],
+            slot_skip_rate: validator["skipRate"],
+            root_distance: max_root_height - validator["rootSlot"].to_i,
+            vote_distance: max_vote_height - validator["lastVote"].to_i,
             max_root_height: max_root_height,
             max_vote_height: max_vote_height
           )
-          validator_histories[validator['identityPubkey']] = vh
+          validator_histories[validator["identityPubkey"]] = vh
         end
       end
 
@@ -177,6 +178,7 @@ module SolanaLogic
 
       validators = {}
       validators_json.each do |hash|
+        next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
         validators[hash['pubkey']] = {
           'gossip_ip_port' => hash['gossip'],
           'rpc_ip_port' => hash['rpc'],
