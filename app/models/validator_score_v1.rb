@@ -52,7 +52,7 @@
 #
 # Indexes
 #
-#  index_validator_score_v1s_on_network_and_active_stake  (network,active_stake)
+#  index_for_asns                                         (network,active_stake,commission,delinquent)
 #  index_validator_score_v1s_on_network_and_total_score   (network,total_score)
 #  index_validator_score_v1s_on_network_and_validator_id  (network,validator_id)
 #
