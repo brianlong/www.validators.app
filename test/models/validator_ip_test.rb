@@ -14,9 +14,15 @@ class ValidatorIpTest < ActiveSupport::TestCase
     assert_equal @validator, @vip.validator
   end
 
-  test "#relationship belongs_to validator without validator is invalid" do
+  test "#relationship belongs_to validator without validator is valid" do
     @vip.validator = nil
-    refute @vip.valid?
+    assert @vip.valid?
+  end
+
+  test "#relationship belongs_to gossip_node correctly assigns gossip_node" do
+    node = create(:gossip_node, ip: @vip.address)
+
+    assert_equal node, @vip.gossip_node
   end
 
   test "#relationship belongs_to data_center_host corectly asssigns data_center_host" do

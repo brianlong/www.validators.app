@@ -13,6 +13,10 @@
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
 #
+# Indexes
+#
+#  index_asn_stats_on_network  (network)
+#
 class AsnStat < ApplicationRecord
   serialize :data_centers, JSON
 end

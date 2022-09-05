@@ -86,8 +86,9 @@ export default {
                     ticks: {
                         min: 0,
                         padding: 3,
-                        fontColor: chart_vars.chart_lightgrey,
-                        max: this.y_root_distance_max
+                        fontColor: chart_vars.chart_darkgrey,
+                        max: this.y_root_distance_max,
+                        fontSize: chart_vars.chart_font_size,
                     },
                     gridLines: {
                         display: false,
@@ -103,7 +104,7 @@ export default {
     });
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell align-middle pt-lg-3" :id="'root-distance-' + idx ">
+    <td class="column-chart d-none d-lg-table-cell" :id="'root-distance-' + idx ">
       <canvas :id=" 'spark_line_block_distance_' + validator['account'] " width="5%"></canvas>
     </td>
   `

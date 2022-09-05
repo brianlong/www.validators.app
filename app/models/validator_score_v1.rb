@@ -52,9 +52,9 @@
 #
 # Indexes
 #
-#  index_validator_score_v1s_on_network       (network)
-#  index_validator_score_v1s_on_total_score   (total_score)
-#  index_validator_score_v1s_on_validator_id  (validator_id)
+#  index_for_asns                                         (network,active_stake,commission,delinquent)
+#  index_validator_score_v1s_on_network_and_total_score   (network,total_score)
+#  index_validator_score_v1s_on_network_and_validator_id  (network,validator_id)
 #
 class ValidatorScoreV1 < ApplicationRecord
   FIELDS_FOR_API = %i[
@@ -76,6 +76,12 @@ class ValidatorScoreV1 < ApplicationRecord
     vote_distance_score
   ].freeze
 
+  FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
+    active_stake
+    total_score
+    validator_id
+  ].freeze
+
   HISTORY_FIELDS = %i[
     root_distance_history
     vote_distance_history
@@ -93,13 +99,6 @@ class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
-
-  IP_FIELDS_FOR_API = [
-    "address",
-    "location_latitude",
-    "location_longitude",
-    "traits_autonomous_system_number"
-  ].map{ |e| "ips.#{e}" }.join(", ")
 
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?
@@ -132,6 +131,7 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   scope :for_api, -> { select(FIELDS_FOR_API) }
+  scope :for_web, -> { select(FIELDS_FOR_VALIDATORS_INDEX_WEB) }
 
   def create_commission_history
     CreateCommissionHistoryService.new(self).call
@@ -140,6 +140,10 @@ class ValidatorScoreV1 < ApplicationRecord
   class << self
     def with_private(show: "true")
       show == "true" ? all : where.not(commission: 100)
+    end
+
+    def total_active_stake(network)
+      joins(:data_center).by_network_with_active_stake(network).sum(:active_stake)
     end
   end
 

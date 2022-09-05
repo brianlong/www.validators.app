@@ -19,21 +19,21 @@
       <tbody>
       <% @contact_requests.each.with_index do |cr, index|%>
         <tr>
-          <td class="column-md"><%= cr.name %></td>
-          <td class="column-md">
+          <td><%= cr.name %></td>
+          <td>
             <%= cr.email_address %><br />
             <%= cr.telephone %>
           </td>
-          <td class="column-xl small">
+          <td class="small">
             <%= cr.comments.truncate(100) %>
             <% if cr.comments.length > 100 %>
-              <a data-toggle="modal" data-target="#messageModal<%=index%>" class="text-muted" href="">Show full text</a>
+              <a data-bs-toggle="modal" data-bs-target="#messageModal<%=index%>" class="text-muted" href="">Show full text</a>
               <div class="modal fade" id="messageModal<%=index%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h6 class="modal-title">Message from <%= cr.name %></h6>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
@@ -43,7 +43,7 @@
               </div>
             <% end %>
           </td>
-          <td class="column-md"><%= cr.created_at %></td>
+          <td class="small"><%= cr.created_at %></td>
         </tr>
       <% end %>
       </tbody>

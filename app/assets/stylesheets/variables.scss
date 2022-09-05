@@ -71,9 +71,15 @@ $font-family-alternative: 'Montserrat';
 $font-size-base: 16px;
 $font-size-base-tablet: 15.5px;
 $font-size-base-mobile: 15px;
+
 $font-size-lg: 18px;
 $font-size-lg-tablet: 17.5px;
 $font-size-lg-mobile: 17px;
+
+$font-size-md: 15px;
+$font-size-md-tablet: 15px;
+$font-size-md-mobile: 14.5px;
+
 $font-size-sm: 13px;
 $font-size-sm-tablet: 12.5px;
 $font-size-sm-mobile: 12px;
@@ -105,6 +111,16 @@ $font-size-h6: $font-size-lg;
   }
 }
 
+@mixin font-size-md {
+  font-size: $font-size-md;
+  @media(max-width: $screen-md-max) {
+    font-size: $font-size-md-tablet;
+  }
+  @media(max-width: $screen-sm-max) {
+    font-size: $font-size-md-mobile;
+  }
+}
+
 @mixin font-size-sm {
   font-size: $font-size-sm;
   @media(max-width: $screen-md-max) {
@@ -132,7 +148,7 @@ $font-weight-normal: 400;
 
 // Other
 
-$border-radius: 20px;
+$border-radius: 25px;
 $border-radius-larger: 30px;
 
 @mixin box-shadow() {

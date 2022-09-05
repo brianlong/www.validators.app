@@ -15,13 +15,12 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  data_center_host_id :bigint
-#  validator_id        :bigint           not null
+#  validator_id        :bigint
 #
 # Indexes
 #
 #  index_validator_ips_on_data_center_host_id                   (data_center_host_id)
 #  index_validator_ips_on_is_active                             (is_active)
-#  index_validator_ips_on_validator_id                          (validator_id)
 #  index_validator_ips_on_validator_id_and_version_and_address  (validator_id,version,address) UNIQUE
 #
 # Foreign Keys
@@ -38,7 +37,8 @@ class ValidatorIp < ApplicationRecord
     validator_id
   ].freeze
 
-  belongs_to :validator
+  belongs_to :validator, optional: true
+  belongs_to :gossip_node, primary_key: :ip, foreign_key: :address, optional: true
   belongs_to :data_center_host, optional: true
   has_one :validator_score_v1, through: :validator
   has_one :data_center, through: :data_center_host
@@ -55,7 +55,7 @@ class ValidatorIp < ApplicationRecord
   scope :active_for_api, -> { select(FIELDS_FOR_API).active }
 
   def copy_data_to_score
-    validator.copy_data_to_score
+    validator&.copy_data_to_score
   end
 
   def set_is_active

@@ -8,6 +8,18 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     @mainnet_network = "mainnet"
   end
 
+  test "#initialize returns scope for web when api flag is false (default, less fields)" do
+    query = ValidatorQuery.new
+    sql = query.instance_variable_get("@default_scope").to_sql
+    refute sql.include?("`validator_score_v1s`.`data_center_concentration_score`")
+  end
+
+  test "#initialize returns scope for api when api flag is true (more fields)" do
+    query = ValidatorQuery.new(api: true)
+    sql = query.instance_variable_get("@default_scope").to_sql
+    assert sql.include?("`validator_score_v1s`.`data_center_concentration_score`")
+  end
+
   test "#call returns only validators from correct network" do
     create_list(
       :validator, 

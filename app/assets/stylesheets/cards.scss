@@ -15,7 +15,11 @@
 
   &-heading {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
+  }
+
+  &-footer {
+    padding: $padding-standard $padding-standard*2 $padding-standard*2 $padding-standard*2;
   }
 
   &-img {

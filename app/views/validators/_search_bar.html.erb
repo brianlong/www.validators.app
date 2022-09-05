@@ -1,8 +1,8 @@
-<%= form_with(method: :get, local: true) do %>
+<%= form_with(method: :get, local: true, class: "flex-fill") do %>
   <div class="form-group-row">
-    <div class="input-group mb-4">
+    <div class="input-group">
       <%= text_field_tag(
-            :q, '', 
+            :q, '',
             placeholder: 'Starts with... (validator name, validator account or data center key)',
             class: 'form-control',
             value: params[:q],
@@ -11,9 +11,7 @@
       <%= hidden_field_tag(:network, params[:network]) %>
       <%= hidden_field_tag(:order, params[:order]) %>
       <%= hidden_field_tag(:refresh, params[:refresh]) %>
-      <div class="input-group-append">
-        <%= submit_tag("Search", class: 'btn btn-sm btn-primary') %>
-      </div>
+      <%= submit_tag("Search", class: 'btn btn-sm btn-primary') %>
     </div>
   </div>
 <% end %>

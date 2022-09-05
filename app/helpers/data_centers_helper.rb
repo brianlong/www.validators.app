@@ -24,11 +24,11 @@ module DataCentersHelper
     when :data_center
       link_to show_private?(url_params) ? "Hide private" : "Show private",
         data_center_url(network: url_params[:network], key: url_params[:key], show_private: !show_private?(url_params)),
-        class: "btn btn-sm btn-secondary mr-1 mb-4"
+        class: "btn btn-sm btn-secondary me-1 mb-4"
     when :asn
       link_to show_private?(url_params) ? "Hide private" : "Show private",
         asn_url(network: url_params[:network], asn: url_params[:asn], show_private: !show_private?(url_params)),
-        class: "btn btn-sm btn-secondary mr-1 mb-4"
+        class: "btn btn-sm btn-secondary me-1 mb-4"
     end
   end
 
@@ -41,7 +41,7 @@ module DataCentersHelper
   end
 
   def create_filter_by_link(view:, params_list:, current_filters:, filter_by:)
-    classes_list = "btn btn-sm btn-secondary mb-4 "
+    classes_list = "btn btn-sm btn-secondary "
     new_filter_by = current_filters.dup || []
 
     if current_filters.include? filter_by
@@ -58,9 +58,5 @@ module DataCentersHelper
               )
 
     link_to "#{filter_by}", url, class: classes_list
-  end
-
-  def set_column_width(network)
-    network == "mainnet" ? "sm" : "md"
   end
 end

@@ -18,6 +18,7 @@ class AsnsController < ApplicationController
     @per = 25
 
     @validators = Validator.joins(:validator_score_v1, :data_center)
+                           .preload(:validator_score_v1, :data_center_host)
                            .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_center_ids, asn_params[:network], 0)
                            .filtered_by(@filter_by)
                            .order("validator_score_v1s.active_stake desc")
@@ -26,10 +27,7 @@ class AsnsController < ApplicationController
     @validators = @validators.page(params[:page]).per(@per)
     @batch = Batch.last_scored(network)
     @population = @validators.total_count
-    @total_stake = ValidatorScoreV1.joins(:data_center)    
-                                   .by_network_with_active_stake(network)
-                                   .where("data_centers.id IN (?)", data_center_ids)
-                                   .sum(:active_stake)
+    @total_stake = ValidatorScoreV1.total_active_stake(network)
   end
 
   private

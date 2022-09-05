@@ -14,10 +14,10 @@
   <li><a href="#auhentication">Authentication</a></li>
   <li><a href="#ping">Server Ping</a></li>
   <li><a href="#validators-list">Validators List</a></li>
-  <li><a href="#validator-detail">Validator Detail</a></li>
+  <li><a href="#validator-detail">Validator Details</a></li>
   <li><a href="#validator-block">Validator Block Production History</a></li>
-  <li><a href="#epoch-index">Epoch Index</a></li>
-  <li><a href="#commission-change-index">Commission Change Index</a></li>
+  <li><a href="#epoch-index">Epochs</a></li>
+  <li><a href="#commission-change-index">Commission Changes</a></li>
   <li><a href="#stake-pools">Stake Pools</a></li>
   <li><a href="#stake-accounts">Stake Accounts</a></li>
   <li><a href="#ping-thing">Ping Thing Post</a></li>
@@ -25,6 +25,7 @@
   <li><a href="#ping-thing-list">Ping Thing List</a></li>
   <li><a href="#ping-thing-stats">Ping Thing Stats</a></li>
   <li><a href="#sol-prices">Sol Prices</a></li>
+  <li><a href="#gossip-nodes">Gossip Nodes</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#notes">Notes</a></li>
 </ul>
@@ -53,7 +54,7 @@
 
 <h2 class="h4" id="validators-list">Validators List</h2>
 <p>
-  The Validators endpoint will return a list of validators for the requested network. In the example below,
+  The Validators List endpoint will return a list of validators for the requested network. In the example below,
   replace `:network` with 'testnet' or 'mainnet' as desired.
 </p>
 
@@ -120,9 +121,9 @@
 
 <hr />
 
-<h2 class="h4" id="validator-detail">Validator Detail</h2>
+<h2 class="h4" id="validator-detail">Validator Details</h2>
 <p>
-  The Validators endpoint will return a single validator for the requested network and account. In the example
+  The Validator Details endpoint will return a single validator for the requested network and account. In the example
   below, replace `:network` with 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.
 </p>
 
@@ -208,8 +209,8 @@
 
 <hr />
 
-<h2 class="h4" id="epoch-index">Epoch Index</h2>
-<p>The Epoch endpoint will return all epoch data. Replace `:network` with 'testnet' or 'mainnet' as desired. </p>
+<h2 class="h4" id="epoch-index">Epochs</h2>
+<p>The Epochs endpoint will return all epoch data. Replace `:network` with 'testnet' or 'mainnet' as desired. </p>
 
 <h3 class="h6">Request:</h3>
 <pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/epochs/:network'</pre>
@@ -239,9 +240,9 @@
 
 <hr />
 
-<h2 class="h4" id="commission-change-index">Commission Change Index</h2>
+<h2 class="h4" id="commission-change-index">Commission Changes</h2>
 <p>
-  The Commission Change endpoint will return all the changes in commission for a given period of time.
+  The Commission Changes endpoint will return all the changes in commission for a given period of time.
   Replace `:network` with 'testnet' or 'mainnet' as desired.
 </p>
 
@@ -536,6 +537,49 @@
     "created_at": "2022-03-08T07:33:01.426Z",
     "updated_at": "2022-03-08T07:33:01.426Z",
     "average_price": "170.1966082645718"
+  },
+  ...
+]
+
+</pre>
+
+<hr />
+
+<h2 class="h4" id="gossip-nodes">Gossip Nodes</h2>
+<p>Gossip Nodes endpoint will return all nodes visible in Gossip, including RPC nodes, with basic information & geo coordinates for mapping.</p>
+
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network'</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`staked=(true | false)`</strong> will limit the results only to staked / unstaked nodes. Omit this parameter for all nodes.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network?staked=true'</pre>
+<p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 100.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network?per=50'</pre>
+<p><strong class="text-muted">`page=NN`</strong> will return the results from provided page, defaults to 1.</p>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/gossip-nodes/:network?per=50&page=1'</pre>
+
+<h3 class="h6">Response:</h3>
+<pre>
+[
+  {
+    "account": "DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp",
+    "ip": "74.118.139.6",
+    "network": "mainnet",
+    "staked": true,
+    "software_version": "1.10.35",
+    "created_at": "2022-08-22T06:47:57.008Z",
+    "updated_at": "2022-08-24T12:04:21.546Z",
+    "avatar_url": "https://s3.amazonaws.com/keybase_processed_uploads/3af995d21a8fe4cec4d6e83104f87205_360_360.jpg",
+    "details": "Experienced validator located in Boulder, CO. Creator/Maintainer of www.validators.app",
+    "keybase_id": "brianlong",
+    "name": "Block Logic | BL",
+    "www_url": "https://www.blocklogic.net",
+    "admin_warning": null,
+    "country_name": "Netherlands",
+    "data_center_key": "20326-NL-Amsterdam",
+    "latitude": "52.3716",
+    "longitude": "4.8883"
   },
   ...
 ]

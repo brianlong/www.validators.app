@@ -5,21 +5,21 @@
     <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="form-group">
-        <%= f.label :username %>
+      <div class="mb-4">
+        <%= f.label :username, class: 'form-label' %>
         <%= f.text_field :username, autofocus: true,
                          autocomplete: "username",
                          class: 'form-control',
                          value: resource.username %>
       </div>
 
-      <div class="form-group actions">
+      <div class="mb-4 actions">
         <%= f.submit t('.resend_confirmation_instructions'), class: 'btn btn-md btn-primary' %>
       </div>
     <% end %>
   </div>
 
-  <div class="col-md-6 pl-md-4 pl-lg-5">
+  <div class="col-md-6 ps-md-4 ps-lg-5">
     <%= render "devise/shared/sign_up_link" %>
     <hr class="short" />
     <%= render "devise/shared/links" %>

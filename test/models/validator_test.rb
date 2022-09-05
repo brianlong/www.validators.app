@@ -57,6 +57,20 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal validator_ip2, @validator.validator_ip_active
   end
 
+  test "relationship has_one validator_score_v1_for_web returns only fields required for validators index page" do
+    fields = ValidatorScoreV1::FIELDS_FOR_VALIDATORS_INDEX_WEB
+    validator_score_v1 = @validator.validator_score_v1_for_web
+
+    assert_equal fields, validator_score_v1.attributes.keys.map(&:to_sym) - [:id]
+  end
+
+  test "relationship has_one validator_score_v1_for_api returns only fields required for validators index api" do
+    fields = ValidatorScoreV1::FIELDS_FOR_API
+    validator_score_v1 = @validator.validator_score_v1_for_api
+
+    assert_equal fields, validator_score_v1.attributes.keys.map(&:to_sym) - [:id]
+  end
+
   # API relationships
   test "relationship for api has_many vote_accounts_for_api" \
        "returns vote_account with specified fields" do
@@ -196,5 +210,11 @@ class ValidatorTest < ActiveSupport::TestCase
     create(:user_watchlist_element, validator: @validator, user: u)
 
     assert_equal u, @validator.watchers.first
+  end
+
+  test "#scope for_api returns correct fields" do
+    val = Validator.for_api.first
+
+    assert_equal Validator::FIELDS_FOR_API, val.attributes.keys.map(&:to_sym)
   end
 end
