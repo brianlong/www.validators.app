@@ -4,10 +4,10 @@ require "test_helper"
 
 class DataCenterHostTest < ActiveSupport::TestCase
   def setup
-    @validator = create(:validator, :with_score)
-    @validator_ip = create(:validator_ip, validator: @validator)
     @data_center = create(:data_center)
     @data_center_host = create(:data_center_host, data_center_id: @data_center.id)
+    @validator = create(:validator, :with_score)
+    @validator_ip = create(:validator_ip, validator: @validator, data_center_host: @data_center_host)
   end
 
   test "relationship belongs_to data_center returns correct data center" do
@@ -38,7 +38,7 @@ class DataCenterHostTest < ActiveSupport::TestCase
     vip1.save
     vip2.save
 
-    assert_equal 2, @data_center_host.validator_ips.size
+    assert_equal 3, @data_center_host.validator_ips.size
     assert_includes @data_center_host.validator_ips, vip1
     assert_includes @data_center_host.validator_ips, vip2
   end
@@ -142,7 +142,7 @@ class DataCenterHostTest < ActiveSupport::TestCase
   test "relationship has_many gossip_nodes returns correct nodes" do
     node = create(:gossip_node, ip: @validator_ip.address)
 
-    assert_equal node, @validator_ip.gossip_node
+    assert_equal node, @data_center_host.gossip_nodes.first
   end
 
   test "scope for_api returs data_center_host specified fields" do

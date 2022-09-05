@@ -12,7 +12,8 @@
 #
 # Indexes
 #
-#  index_data_center_stats_on_data_center_id  (data_center_id)
+#  index_data_center_stats_on_data_center_id              (data_center_id)
+#  index_data_center_stats_on_network_and_data_center_id  (network,data_center_id)
 #
 # Foreign Keys
 #
