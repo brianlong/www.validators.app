@@ -13,7 +13,7 @@
     "jquery": "^3.6.0",
     "loadash": "^1.0.0",
     "luxon": "^2.0.2",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "turbolinks": "^5.2.0",
     "vue": "^2.6.14",
     "vue-loader": "^15.9.8",
