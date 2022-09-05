@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :data_center_stat do
     gossip_nodes_count { 1 }
