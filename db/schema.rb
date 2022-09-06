@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(version: 2022_09_05_064408) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["data_center_id"], name: "index_data_center_stats_on_data_center_id"
-    t.index ["network", "data_center_id"], name: "index_data_center_stats_on_network_and_data_center_id"
+    t.index ["network", "data_center_id"], name: "index_data_center_stats_on_network_and_data_center_id", unique: true
   end
 
   create_table "data_centers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

@@ -15,7 +15,7 @@
 # Indexes
 #
 #  index_data_center_stats_on_data_center_id              (data_center_id)
-#  index_data_center_stats_on_network_and_data_center_id  (network,data_center_id)
+#  index_data_center_stats_on_network_and_data_center_id  (network,data_center_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -25,4 +25,6 @@ class DataCenterStat < ApplicationRecord
   FIELDS_FOR_API = %w[gossip_nodes_count validators_count].freeze
 
   belongs_to :data_center
+
+  validates_uniqueness_of :data_center, scope: [:network, :data_center_id]
 end

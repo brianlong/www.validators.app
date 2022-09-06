@@ -6,7 +6,7 @@ class DataCenters::FillDataCenterStats
   end
 
   def call
-    DataCenter.all.each do |dc|
+    DataCenter.includes(:validators, :gossip_nodes).all.each do |dc|
       validators_count = dc.validators.where(network: @network).size
       nodes_count = dc.gossip_nodes.where(network: @network).size
 
