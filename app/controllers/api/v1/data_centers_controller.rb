@@ -16,7 +16,7 @@ module Api
                                  .joins(:data_center_stats)
                                  .where("data_center_stats.network = ?", dc_params[:network])
         
-        render json: data_centers.to_json( except: [:id])
+        render json: data_centers.to_json(except: [:id])
       end
 
       private
