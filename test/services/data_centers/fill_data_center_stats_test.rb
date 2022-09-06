@@ -38,8 +38,8 @@ module DataCenters
     test "#call sets up validator_count and gossip_node_count correctly" do
       DataCenters::FillDataCenterStats.new(network: @network).call
 
-      assert_equal 1, @data_center.data_center_stats.first.validators_count
-      assert_equal 2, @data_center.data_center_stats.first.gossip_nodes_count
+      assert_equal 1, @data_center.data_center_stats.by_network(@network).validators_count
+      assert_equal 2, @data_center.data_center_stats.by_network(@network).gossip_nodes_count
     end
   end
 end
