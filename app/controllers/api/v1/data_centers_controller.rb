@@ -12,7 +12,9 @@ module Api
           "data_center_stats.#{field}"
         end
 
-        data_centers = DataCenter.select((fields_dc + fields_stats).join(", "))
+        merged_fields = (fields_dc + fields_stats).join(", ")
+        
+        data_centers = DataCenter.select(merged_fields)
                                  .joins(:data_center_stats)
                                  .where("data_center_stats.network = ?", dc_params[:network])
         

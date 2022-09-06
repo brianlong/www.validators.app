@@ -87,14 +87,11 @@ class DataCenterTest < ActiveSupport::TestCase
   end
 
   test "relationship has_many data_center_stats by_network returns stats from given network" do
-    create(:data_center_stat, network: "mainnet", data_center: @data_center)
-    create(:data_center_stat, network: "testnet", data_center: @data_center)
+    mainnet_stat = create(:data_center_stat, network: "mainnet", data_center: @data_center)
+    testnet_stat = create(:data_center_stat, network: "testnet", data_center: @data_center)
 
-    assert_equal 1, @data_center.data_center_stats.by_network("mainnet").count
-    assert_equal "mainnet", @data_center.data_center_stats.by_network("mainnet").first.network
-
-    assert_equal 1, @data_center.data_center_stats.by_network("testnet").count
-    assert_equal "testnet", @data_center.data_center_stats.by_network("testnet").first.network
+    assert_equal mainnet_stat, @data_center.data_center_stats.by_network("mainnet")
+    assert_equal testnet_stat, @data_center.data_center_stats.by_network("testnet")
   end
 
   test "scope by_data_center_key returns data_centers by given data_center_key" do

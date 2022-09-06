@@ -76,7 +76,7 @@ class DataCenter < ApplicationRecord
   has_many :gossip_nodes, through: :data_center_hosts
   has_many :data_center_stats do
     def by_network(network)
-      where(network: network)
+      find_by(network: network)
     end      
   end
 
