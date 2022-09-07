@@ -12,7 +12,7 @@ header {
   .nav-link {
     color: $link-color;
     padding: 12px 18px !important;
-    &:hover {
+    &:hover, &:focus {
       color: $link-color-secondary;
       cursor: pointer;
     }
