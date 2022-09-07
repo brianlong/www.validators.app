@@ -16,7 +16,14 @@ module Api
         
         data_centers = DataCenter.select(merged_fields)
                                  .joins(:data_center_stats)
-                                 .where("data_center_stats.network = ?", dc_params[:network])
+                                 .where(
+                                  "data_center_stats.network = ? 
+                                  AND (
+                                    data_center_stats.gossip_nodes_count > 0
+                                    OR data_center_stats.validators_count > 0
+                                  )",
+                                  dc_params[:network]
+                                )
         
         render json: data_centers.to_json(except: [:id])
       end
