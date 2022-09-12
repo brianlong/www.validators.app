@@ -73,6 +73,7 @@ class DataCenter < ApplicationRecord
   has_many :validator_ips_active, through: :data_center_hosts
   has_many :validators, through: :data_center_hosts
   has_many :validator_score_v1s, through: :data_center_hosts
+  has_many :gossip_nodes, through: :data_center_hosts
 
   scope :for_api, -> { select(FIELDS_FOR_API) }
 
