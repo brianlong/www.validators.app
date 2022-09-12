@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_31_134326) do
-  
+ActiveRecord::Schema.define(version: 2022_09_05_064408) do
+
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -119,6 +119,17 @@ ActiveRecord::Schema.define(version: 2022_08_31_134326) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["data_center_id", "host"], name: "index_data_center_hosts_on_data_center_id_and_host", unique: true
+  end
+
+  create_table "data_center_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "data_center_id", null: false
+    t.integer "gossip_nodes_count"
+    t.integer "validators_count"
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["data_center_id"], name: "index_data_center_stats_on_data_center_id"
+    t.index ["network", "data_center_id"], name: "index_data_center_stats_on_network_and_data_center_id", unique: true
   end
 
   create_table "data_centers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -622,13 +633,13 @@ ActiveRecord::Schema.define(version: 2022_08_31_134326) do
     t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
     t.index ["network", "account"], name: "index_vote_accounts_on_network_and_account"
     t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
-    t.index ["validator_id"], name: "index_vote_accounts_on_validator_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
+  add_foreign_key "data_center_stats", "data_centers"
   add_foreign_key "ping_things", "users"
   add_foreign_key "user_watchlist_elements", "users", on_delete: :cascade
   add_foreign_key "user_watchlist_elements", "validators", on_delete: :cascade
