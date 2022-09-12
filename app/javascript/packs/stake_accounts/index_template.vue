@@ -63,12 +63,12 @@
     </div>
 
     <!-- Stake pool stats -->
-    <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_accounts && !is_loading_stake_pools">
+    <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_pools">
       <stake-pool-stats :pool="selected_pool"/>
     </div>
 
     <!-- Validators and accounts table -->
-    <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
+    <div class="col-12" v-if="!is_loading_stake_pools">
       <div class="card">
         <table class="table table-block-sm validators-table">
           <thead>
@@ -363,7 +363,7 @@
       refresh_results: debounce(function() {
         var ctx = this
 
-        // ctx.is_loading_stake_accounts = true
+        ctx.is_loading_stake_accounts = true
 
         var query_params = {
           params: {
