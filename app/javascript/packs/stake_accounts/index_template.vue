@@ -68,7 +68,7 @@
     </div>
 
     <!-- Validators and accounts table -->
-    <div class="col-12" v-if="!is_loading_stake_pools">
+    <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
         <table class="table table-block-sm validators-table">
           <thead>
