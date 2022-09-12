@@ -363,7 +363,7 @@
       refresh_results: debounce(function() {
         var ctx = this
 
-        ctx.is_loading_stake_accounts = true
+        // ctx.is_loading_stake_accounts = true
 
         var query_params = {
           params: {
