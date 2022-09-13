@@ -19,7 +19,7 @@ class CreateCommissionHistoryService
   private
 
   def create_commission
-    @score.validator.commission_histories.create(
+    new_ch = @score.validator.commission_histories.create(
       commission_before: @score.commission_before_last_save,
       commission_after: @score.commission,
       batch_uuid: last_batch.uuid,
@@ -27,6 +27,7 @@ class CreateCommissionHistoryService
       epoch_completion: recent_epoch_completion,
       network: recent_epoch.network
     )
+    CommissionHistoryMailer.commission_change_info(validator: @score.validator, commission: new_ch).deliver_now
   end
 
   def last_batch
