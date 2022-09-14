@@ -36,7 +36,7 @@ class CreateCommissionHistoryServiceTest < ActiveSupport::TestCase
     assert_equal @batch.uuid, result.payload.batch_uuid
   end
 
-  test 'emails are sent when new commission_history is created' do
+  test "emails are sent when new commission_history is created" do
     score = create(
       :validator_score_v1,
       validator: @validator,
