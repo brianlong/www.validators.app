@@ -41,7 +41,7 @@ class CreateCommissionHistoryServiceTest < ActiveSupport::TestCase
       :validator_score_v1,
       validator: @validator,
       commission: 10,
-      network: 'testnet'
+      network: "testnet"
     )
 
     puts "before email"
