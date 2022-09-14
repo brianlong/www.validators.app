@@ -7,14 +7,15 @@ module DataCenters
     end
 
     def call
-      DataCenter.all.includes(:validators).each do |dc|
+      DataCenter.all.includes(:validators, :data_center_hosts).each do |dc|
         validators_number = dc.validators.size
         gossip_nodes_number = dc.gossip_nodes.size
-        # duplicates = DataCenter.where(data_center_key: dc.data_center_key)
 
-        next if validators_number > 0 || gossip_nodes_number > 0 # || duplicates.size < 2
+        next if validators_number > 0 || gossip_nodes_number > 0
 
-        log_message("Data center #{dc.data_center_key} (##{dc.id}) will be removed, validators number: #{validators_number}, gossip nodes number #{gossip_nodes_number}.")
+        # dc.destroy
+
+        log_message("Data center #{dc.data_center_key} (##{dc.id}) has been removed with its data_data_center_hosts (#{dc.data_center_hosts.size}), validators number: #{validators_number}, gossip nodes number #{gossip_nodes_number}.")
       end
 
       log_message("---------------", type: :info)
