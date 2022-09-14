@@ -17,7 +17,7 @@ module DataCenters
         data_centers.each do |dc| 
           os = OpenStruct.new(
             data_center: dc,
-            validators_number: dc.validators.size
+            validators_number: dc.data_center_hosts.map { |dch| dch.validators.size }.sum
           )
           data_centers_with_validators_size << os
         end
@@ -25,22 +25,24 @@ module DataCenters
         sorted_data_centers = data_centers_with_validators_size.sort { |os| os.validators_number }
 
         main_dc = sorted_data_centers.shift
-        log_message("Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) with #{main_dc.validators_number} validators.")
+        log_message("Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) with #{main_dc.data_center.data_center_hosts.map { |dch| dch.validators.size }.sum } validators.")
         main_dc = main_dc.data_center
 
         sorted_data_centers.each do |entry|
           dc = entry.data_center
           duplicated_data_center_hosts = dc.data_center_hosts
 
+          log_message("Processing data_center: #{dc.data_center_key}, (##{dc.id}) with #{duplicated_data_center_hosts.size} data center hosts and #{duplicated_data_center_hosts.map { |dch| dch.validators.size }.sum } validators.")
+
           duplicated_data_center_hosts.each do |dch|
-            log_message("Assign #{dch.validators.size} validators from host #{dch.host} (#{dch.id}), (data_center_key: #{dc.data_center_key}, (##{dc.id}) to main dc (##{main_dc.id}).")
+            log_message("Processing data_center_host: #{dch.host}, (##{dch.id}) with #{dch.validators.size} validators.")
             existing_main_dc_dch = main_dc.data_center_hosts.find_or_initialize_by(host: dch.host)
             dch.validator_ips.each do |vip|
               val = vip.validator
               
               next unless val
 
-              log_message("Assign validator #{val.name} (##{val.id}) with ip ##{vip.address} to data center host #{existing_main_dc_dch.host} (##{existing_main_dc_dch.id}).")
+              log_message("Assign validator #{val.name} (##{val.id}) with ip #{vip.address} (##{vip.id}) to data center host #{existing_main_dc_dch.host} (##{existing_main_dc_dch.id}).")
               # vip.update(data_center_host_id: existing_main_dc_dch.id)
             end
           end
