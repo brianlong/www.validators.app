@@ -10,6 +10,7 @@ class CreateCommissionHistoryService
   # otherwise it returns false
   def call
     c_history = create_commission
+    notify_users(c_history)
   rescue StandardError => e
     OpenStruct.new({ success?: false, error: e })
   else
@@ -27,9 +28,6 @@ class CreateCommissionHistoryService
       epoch_completion: recent_epoch_completion,
       network: recent_epoch.network
     )
-
-    notify_users(new_ch)    
-    new_ch
   end
 
   def last_batch
@@ -49,15 +47,13 @@ class CreateCommissionHistoryService
     ((recent_epoch.slot_index / recent_epoch.slots_in_epoch.to_f) * 100).round(2)
   end
 
-  private
-
   def notify_users(commission)
     @score.validator.watchers.each do |watcher|
       CommissionHistoryMailer.commission_change_info(
         user: watcher,
         validator: @score.validator,
         commission: commission
-      ).deliver_now
+      ).deliver_later
     end
   end
 end

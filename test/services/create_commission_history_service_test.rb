@@ -7,12 +7,15 @@ class CreateCommissionHistoryServiceTest < ActiveSupport::TestCase
 
   setup do
     @batch = create(:batch, network: 'testnet')
+    @user = create(:user)
     @validator = create(
       :validator,
       account: 'commission-account',
       network: 'testnet'
     )
     @epoch = create(:epoch_history, network: 'testnet', batch_uuid: @batch.uuid)
+    create(:user_watchlist_element, user: @user, validator: @validator)
+
   end
 
   test 'when commission is different \
@@ -41,12 +44,10 @@ class CreateCommissionHistoryServiceTest < ActiveSupport::TestCase
       network: 'testnet'
     )
 
-    user = create(:user)
-    create(:user_watchlist_element, user: user, validator: @validator)
-
-    score.update(commission: 20)
-
-    CreateCommissionHistoryService.new(score).call
-    assert_emails 1
+    puts "before email"
+    assert_enqueued_emails 1 do
+      result = CreateCommissionHistoryService.new(score).call
+      assert result.success?
+    end
   end
 end
