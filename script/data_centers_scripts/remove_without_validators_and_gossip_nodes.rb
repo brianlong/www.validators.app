@@ -5,4 +5,4 @@
 require_relative '../../config/environment'
 
 
-DataCenters::RemoveDuplicatesWithoutValidators.new.call
+DataCenters::RemoveWithoutValidatorsAndGossipNodes.new.call
