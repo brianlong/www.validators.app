@@ -9,11 +9,12 @@ class CreateCommissionHistoryService
   # payload returns CommissionHistory object if it has been created
   # otherwise it returns false
   def call
-    c_history = create_commission
+    commission_change = create_commission
+    notify_users(commission_change)
   rescue StandardError => e
     OpenStruct.new({ success?: false, error: e })
   else
-    OpenStruct.new({ success?: true, payload: c_history })
+    OpenStruct.new({ success?: true, payload: commission_change })
   end
 
   private
@@ -44,5 +45,15 @@ class CreateCommissionHistoryService
 
   def recent_epoch_completion
     ((recent_epoch.slot_index / recent_epoch.slots_in_epoch.to_f) * 100).round(2)
+  end
+
+  def notify_users(commission_change)
+    @score.validator.watchers.each do |watcher|
+      CommissionHistoryMailer.commission_change_info(
+        user: watcher,
+        validator: @score.validator,
+        commission: commission_change
+      ).deliver_later
+    end
   end
 end
