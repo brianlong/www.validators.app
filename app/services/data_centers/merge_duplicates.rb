@@ -22,7 +22,7 @@ module DataCenters
           data_centers_with_validators_size << os
         end
 
-        sorted_data_centers = data_centers_with_validators_size.sort { |os| os.validators_number }
+        sorted_data_centers = data_centers_with_validators_size.sort { |os| -os.validators_number }
 
         main_dc = sorted_data_centers.shift
         log_message("Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) with #{main_dc.data_center.data_center_hosts.map { |dch| dch.validators.size }.sum } validators.")
