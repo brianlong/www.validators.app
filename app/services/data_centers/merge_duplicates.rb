@@ -30,11 +30,10 @@ module DataCenters
 
         sorted_data_centers.each do |entry|
           dc = entry.data_center
-          log_message("Assign #{dc.validators.size} validators from #{dc.data_center_key} (##{dc.id}) to main dc (##{main_dc.id}).")
-
           duplicated_data_center_hosts = dc.data_center_hosts
 
           duplicated_data_center_hosts.each do |dch|
+            log_message("Assign #{dch.validators.size} validators from host #{dch.host} (#{dch.id}), (data_center_key: #{dc.data_center_key}, (##{dc.id}) to main dc (##{main_dc.id}).")
             existing_main_dc_dch = main_dc.data_center_hosts.find_or_initialize_by(host: dch.host)
             dch.validator_ips.each do |vip|
               val = vip.validator
