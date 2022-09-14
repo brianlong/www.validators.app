@@ -74,7 +74,7 @@ class DataCenter < ApplicationRecord
   has_many :validators, through: :data_center_hosts
   has_many :validator_score_v1s, through: :data_center_hosts
   has_many :gossip_nodes, through: :data_center_hosts
-  has_many :data_center_stats do
+  has_many :data_center_stats, dependent: :destroy do
     def by_network(network)
       find_by(network: network)
     end      
