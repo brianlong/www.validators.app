@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class CreateCommissionHistoryServiceTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   setup do
     @batch = create(:batch, network: 'testnet')
     @validator = create(
@@ -29,5 +31,22 @@ class CreateCommissionHistoryServiceTest < ActiveSupport::TestCase
     assert_equal 10, result.payload.commission_before
     assert_equal 20, result.payload.commission_after
     assert_equal @batch.uuid, result.payload.batch_uuid
+  end
+
+  test 'emails are sent when new commission_history is created' do
+    score = create(
+      :validator_score_v1,
+      validator: @validator,
+      commission: 10,
+      network: 'testnet'
+    )
+
+    user = create(:user)
+    create(:user_watchlist_element, user: user, validator: @validator)
+
+    score.update(commission: 20)
+
+    CreateCommissionHistoryService.new(score).call
+    assert_emails 1
   end
 end

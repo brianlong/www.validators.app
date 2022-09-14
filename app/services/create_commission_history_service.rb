@@ -28,8 +28,7 @@ class CreateCommissionHistoryService
       network: recent_epoch.network
     )
 
-    CommissionHistoryMailer.commission_change_info(validator: @score.validator, commission: new_ch).deliver_now
-    
+    notify_users(new_ch)    
     new_ch
   end
 
@@ -48,5 +47,17 @@ class CreateCommissionHistoryService
 
   def recent_epoch_completion
     ((recent_epoch.slot_index / recent_epoch.slots_in_epoch.to_f) * 100).round(2)
+  end
+
+  private
+
+  def notify_users(commission)
+    @score.validator.watchers.each do |watcher|
+      CommissionHistoryMailer.commission_change_info(
+        user: watcher,
+        validator: @score.validator,
+        commission: commission
+      ).deliver_now
+    end
   end
 end

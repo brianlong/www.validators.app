@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
 class CommissionHistoryMailer < ApplicationMailer
-  def commission_change_info(validator:, commission: )
+  def commission_change_info(user:, validator:, commission: )
     @validator = validator
     @validator_title = validator_title(@validator)
     @commission = commission
 
-    watchers = @validator.watchers
-
-    return nil unless watchers.any?
-
-    watchers.each do |watcher|
-      mail(to: watcher.email, subject: "Validator commission changed")
-    end
+    raise "invalid user" unless @validator.watchers.include? user
+    
+    mail(to: user.email, subject: "Validator commission changed")
   end
 
   private
