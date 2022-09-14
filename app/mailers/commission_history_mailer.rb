@@ -7,11 +7,11 @@ class CommissionHistoryMailer < ApplicationMailer
     @commission = commission
 
     watchers = @validator.watchers
-    
+
     return nil unless watchers.any?
 
     watchers.each do |watcher|
-      mail(to: watcher.email, subject: "#{@validator_title} commission changed")
+      mail(to: watcher.email, subject: "Validator commission changed")
     end
   end
 

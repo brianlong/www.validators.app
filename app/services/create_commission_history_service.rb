@@ -27,7 +27,10 @@ class CreateCommissionHistoryService
       epoch_completion: recent_epoch_completion,
       network: recent_epoch.network
     )
+
     CommissionHistoryMailer.commission_change_info(validator: @score.validator, commission: new_ch).deliver_now
+    
+    new_ch
   end
 
   def last_batch
