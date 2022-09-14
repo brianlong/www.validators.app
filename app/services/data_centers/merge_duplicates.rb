@@ -1,6 +1,6 @@
 module DataCenters
   class MergeDuplicates
-    LOG_PATH = Rails.root.join("log", "merge_duplicates.log")
+    LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
 
     def initialize
       @logger ||= Logger.new(LOG_PATH)
