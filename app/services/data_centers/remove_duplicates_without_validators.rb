@@ -10,9 +10,9 @@ module DataCenters
       DataCenter.all.includes(:validators).each do |dc|
         validators_number = dc.validators.size
         gossip_nodes_number = dc.gossip_nodes.size
-        duplicates = DataCenter.where(data_center_key: dc.data_center_key)
+        # duplicates = DataCenter.where(data_center_key: dc.data_center_key)
 
-        next if validators_number > 0 || gossip_nodes_number > 0 || duplicates.size < 2
+        next if validators_number > 0 || gossip_nodes_number > 0 # || duplicates.size < 2
 
         log_message("Data center #{dc.data_center_key} (##{dc.id}) will be removed, validators number: #{validators_number}, gossip nodes number #{gossip_nodes_number}.")
       end
