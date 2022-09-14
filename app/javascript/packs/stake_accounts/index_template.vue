@@ -63,7 +63,7 @@
     </div>
 
     <!-- Stake pool stats -->
-    <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_accounts && !is_loading_stake_pools">
+    <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_pools">
       <stake-pool-stats :pool="selected_pool"/>
     </div>
 
