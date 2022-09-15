@@ -49,5 +49,15 @@
     text-align: left;
     bottom: 0;
     padding: $padding-standard*2;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    @media(max-width: $screen-xs-max) {
+      flex-direction: column;
+      gap: 30px;
+      align-items: flex-start;
+    }
   }
 }

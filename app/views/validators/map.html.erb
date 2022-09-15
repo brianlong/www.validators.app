@@ -1,1 +1,6 @@
-<%= render 'validators/validators_map' %>
+<%= javascript_pack_tag "validators/validators_map.js" %>
+
+<div id="validators-map">
+  <validators-map network="<%= @network %>"/>
+</div>
+
