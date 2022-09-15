@@ -8,7 +8,7 @@ module DataCenters
 
 
     def call
-      duplicated_data_center_keys = select_duplicates
+      duplicated_data_center_keys = select_duplicated_keys
 
       duplicated_data_center_keys.each do |dc|
         data_centers_with_validators_number = count_validators_in_data_center(dc)
@@ -41,7 +41,7 @@ module DataCenters
 
     private
 
-    def select_duplicates
+    def select_duplicated_keys
       all_data_centers = DataCenter.all.group(:data_center_key).count
       all_data_centers.select { |k,v| k if v > 1 }.keys
     end
