@@ -1,5 +1,5 @@
 module DataCenters
-  class RemoveWithoutValidatorsAndGossipNodes
+  class RemoveDuplicatesWithoutValidators
     LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
 
     def initialize
