@@ -11,7 +11,7 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
     @data_center = create(:data_center, :berlin)
     data_center_stats = create(
       :data_center_stat,
-      data_center:@data_center,
+      data_center: @data_center,
       network: @network,
       gossip_nodes_count: 1,
       validators_count: 1
@@ -38,14 +38,14 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
     get api_v1_data_centers_with_nodes_url(network: @network), headers: @headers
     resp = response_to_json(@response.body)
 
-    fields = (DataCenter::FIELDS_FOR_GOSSIP_NODES + DataCenterStat::FIELDS_FOR_API).map{ |f| f.split(" ")[-1] }
     assert_response 200
-    assert_equal fields.sort, resp[0].keys.sort
+    assert_equal 3, resp.keys.count
+    assert_equal 7, resp["data_centers"].first.keys.count
   end
 
-  test "#data_centers_with_nodes response has no data_centers with 0 nodes" do
+  test "#data_centers_with_nodes response does not include data_centers with 0 validators and 0 nodes" do
     empty_dc = create(:data_center)
-    data_center_stats = create(
+    create(
       :data_center_stat,
       data_center: empty_dc,
       network: @network,
@@ -57,8 +57,27 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
     resp = JSON.parse(@response.body)
 
     assert_response 200
-    assert_equal 1, resp.size
-    assert_equal 1, resp.first["gossip_nodes_count"]
-    assert_equal 1, resp.first["validators_count"]
+    assert_equal 3, resp.keys.count
+    assert_equal 1, resp["data_centers"].first["gossip_nodes_count"]
+    assert_equal 1, resp["data_centers"].first["validators_count"]
+  end
+
+  test "#data_centers_with_nodes response returns correct validators and nodes sums" do
+    data_center_frankfurt = create(:data_center, :frankfurt)
+    create(
+      :data_center_stat,
+      data_center: data_center_frankfurt,
+      network: @network,
+      gossip_nodes_count: 6,
+      validators_count: 4
+    )
+
+    get api_v1_data_centers_with_nodes_url(network: @network), headers: @headers
+    resp = JSON.parse(@response.body)
+
+    assert_response 200
+    assert_equal 3, resp.keys.count
+    assert_equal 5, resp["total_validators_count"]
+    assert_equal 7, resp["total_nodes_count"]
   end
 end
