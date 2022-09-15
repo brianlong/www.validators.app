@@ -16,17 +16,17 @@ module DataCenters
         sorted_data_centers = sort_data_centers_by_validators_number(data_centers_with_validators_number)
 
         main_dc = sorted_data_centers.shift
-        log_message("Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) with #{main_dc.validators_number} validators.")
+        log_message("Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) with #{main_dc.validators_number} validator ips (validators as well).")
         main_dc = main_dc.data_center
 
         sorted_data_centers.each do |entry|
           dc = entry.data_center
           data_center_hosts = dc.data_center_hosts
 
-          log_message("Processing data_center: #{dc.data_center_key}, (##{dc.id}) with #{data_center_hosts.size} data center hosts and #{data_center_hosts.map { |dch| dch.validators.size }.sum } validators.")
+          log_message("Processing data_center: #{dc.data_center_key}, (##{dc.id}) with #{data_center_hosts.size} data center hosts and #{data_center_hosts.map { |dch| dch.validator_ips.size }.sum } validator ips (validators as well).")
 
           data_center_hosts.each do |dch|
-            log_message("Processing data_center_host: #{dch.host}, (##{dch.id}) with #{dch.validators.size} validators.")
+            log_message("Processing data_center_host: #{dch.host}, (##{dch.id}) with #{dch.validator_ips.size} validators.")
             main_dc_host = main_dc.data_center_hosts.find_or_initialize_by(host: dch.host)
 
             dch.validator_ips.each do |vip|
@@ -53,7 +53,7 @@ module DataCenters
       data_centers.each do |dc| 
         os = OpenStruct.new(
           data_center: dc,
-          validators_number: dc.data_center_hosts.map { |dch| dch.validators.size }.sum
+          validators_number: dc.data_center_hosts.map { |dch| dch.validator_ips.size }.sum
         )
         data_centers_with_validators_number << os
       end
