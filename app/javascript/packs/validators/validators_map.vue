@@ -59,7 +59,7 @@
       }
     },
     data () {
-      var api_url = "/api/v1/data-centers-with-nodes/" + this.network + "?group_by_country=true"
+      var api_url = "/api/v1/data-centers-with-nodes/" + this.network
       return {
         api_url: api_url,
         data_centers: [],
