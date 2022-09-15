@@ -62,7 +62,7 @@ module DataCenters
     end
 
     def sort_data_centers_by_validators_number(data_centers)
-      data_centers.sort { |os| -os.validators_number }
+      data_centers.sort! { |os| -os.validators_number }
     end
 
     def update_validator_ip(validator_ip, main_dc_dch)
