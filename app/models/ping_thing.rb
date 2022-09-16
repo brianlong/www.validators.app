@@ -12,6 +12,8 @@
 #  reported_at      :datetime
 #  response_time    :integer
 #  signature        :string(191)
+#  slot_landed      :bigint
+#  slot_sent        :bigint
 #  success          :boolean          default(TRUE)
 #  transaction_type :string(191)
 #  created_at       :datetime         not null
