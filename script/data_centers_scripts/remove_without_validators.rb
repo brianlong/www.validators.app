@@ -8,4 +8,4 @@
 require_relative '../../config/environment'
 
 run_destroy = ARGV[0]
-DataCenters::RemoveDuplicatesWithoutValidators.new(run_destroy: run_destroy).call
+DataCenters::RemoveWithoutValidators.new(run_destroy: run_destroy).call
