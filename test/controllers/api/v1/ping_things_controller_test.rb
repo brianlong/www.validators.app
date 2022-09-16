@@ -102,7 +102,7 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     signature = "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s"
     
     assert_equal 1, json.size
-    assert_equal 10, json_record.size
+    assert_equal 12, json_record.size
 
     assert_equal "Mango",                         json_record["application"]
     assert_equal "processed",                     json_record["commitment_level"]
@@ -113,6 +113,8 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true,                            json_record["success"]
     assert_equal "transfer",                      json_record["transaction_type"]
     assert_equal ping_thing_time.user.username,   json_record["username"]
+    assert_equal 123,                             json_record["slot_sent"]
+    assert_equal 125,                             json_record["slot_landed"]
   end
 
   test "GET api_v1_ping_things with limit present returns pings for chosen limit" do

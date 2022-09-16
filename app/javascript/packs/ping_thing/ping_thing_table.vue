@@ -12,6 +12,10 @@
           Application<br />
           <span class="small text-muted">Type (Commitment Level)</span>
         </th>
+        <th class="column-lg">
+          Slot sent<br />
+          Slot landed
+        </th>
         <th class="column-xs">Posted&nbsp;By</th>
       </tr>
       </thead>
@@ -41,6 +45,10 @@
                 ({{ pt.commitment_level }})
               </span>
             </span>
+          </td>
+          <td class="small">
+            {{ pt.slot_sent }} <br />
+            {{ pt.slot_landed }}
           </td>
           <td class="text-muted">{{ pt.username }}</td>
         </tr>
