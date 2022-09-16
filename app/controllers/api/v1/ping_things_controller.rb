@@ -80,7 +80,9 @@ module Api
           :success,
           :time,
           :transaction_type,
-          :reported_at
+          :reported_at,
+          :slot_sent,
+          :slot_landed
         )
       end
 
@@ -94,7 +96,9 @@ module Api
             :success,
             :time,
             :transaction_type,
-            :reported_at
+            :reported_at,
+            :slot_sent,
+            :slot_landed
             ]
           )
 

@@ -11,6 +11,8 @@ FactoryBot.define do
     transaction_type { "transfer" }
     reported_at { Time.now }
     user { create(:user, :ping_thing_user, :confirmed) }
+    slot_sent { 123 }
+    slot_landed { 125 }
 
     trait :processed do
       commitment_level { 0 }

@@ -63,6 +63,8 @@ class PingThing < ApplicationRecord
         :signature,
         :success,
         :transaction_type,
+        :slot_sent,
+        :slot_landed,
         :reported_at
       )
     end
