@@ -113,8 +113,8 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true,                            json_record["success"]
     assert_equal "transfer",                      json_record["transaction_type"]
     assert_equal ping_thing_time.user.username,   json_record["username"]
-    assert_equal 123,                           json_record["slot_sent"]
-    assert_equal 125,                           json_record["slot_landed"]
+    assert_equal 123,                             json_record["slot_sent"]
+    assert_equal 125,                             json_record["slot_landed"]
   end
 
   test "GET api_v1_ping_things with limit present returns pings for chosen limit" do
