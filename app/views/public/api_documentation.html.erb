@@ -382,7 +382,7 @@
 <p>The Ping Thing Post endpoint allows you to push information about transaction times.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer", "reported_at": "2021-07-01T11:02:12"}' https://www.validators.app/api/v1/ping-thing/:network</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}' https://www.validators.app/api/v1/ping-thing/:network</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
@@ -398,6 +398,8 @@
   <strong class="text-muted">`transaction_type: string`</strong> A string to describe the type of transaction,
   e.g. 'transfer', 'defi-swap', 'nft-mint', or anything meaningful to the sender.
 </p>
+<p><strong class="text-muted">`slot_sent: NN`</strong> Number of slot in which transaction has been started.</p>
+<p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"ok"}</pre>
@@ -408,7 +410,7 @@
 <p>The Ping Thing Batch endpoint allows you to push multiple transaction informations at once.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "reported_at": "2021-07-01T11:02:12"}, { ... }, ...]}' https://www.validators.app/api/v1/ping-thing-batch/:network</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}, { ... }, ...]}' https://www.validators.app/api/v1/ping-thing-batch/:network</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
@@ -424,6 +426,8 @@
   <strong class="text-muted">`transaction_type: string`</strong> A string to describe the type of transaction,
   e.g. 'transfer', 'defi-swap', 'nft-mint', or anything meaningful to the sender.
 </p>
+<p><strong class="text-muted">`slot_sent: NN`</strong> Number of slot in which transaction has been started.</p>
+<p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>
@@ -463,6 +467,8 @@
     "signature": "0d7f418e4d1a3f80dc8a266cd867f766b73d9c80feea36524dfd074068bdef9221e356c192ac6ac71b71404d",
     "success": true,
     "transaction_type": "transfer",
+    "slot_sent": 120,
+		"slot_landed": 123,
     "reported_at": "2022-02-10T13:31:55.000Z"
     "username": "sample_user"
   },
