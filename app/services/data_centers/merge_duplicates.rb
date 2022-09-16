@@ -29,7 +29,7 @@ module DataCenters
 
           data_center_hosts.each do |dch|
             log_message("Processing data_center_host: #{dch.host}, (##{dch.id}) with #{dch.validator_ips.size} validators.")
-            main_dc_host = main_dc.data_center_hosts.find_or_initialize_by(host: dch.host)
+            main_dc_host = main_dc.data_center_hosts.find_or_create_by(host: dch.host)
 
             dch.validator_ips.each do |vip|
               update_validator_ip(vip, main_dc_host)
