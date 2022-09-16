@@ -1,11 +1,13 @@
 module DataCenters
+  # WARNING: Run service with "run_update: yes" argument and you'll update, 
+  # without you'll get only logs and see what will be updated.
   class MergeDuplicates
     LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
 
-    def initialize
+    def initialize(run_update: nil)
       @logger ||= Logger.new(LOG_PATH)
+      @run_update = run_update
     end
-
 
     def call
       duplicated_data_center_keys = select_duplicated_keys
@@ -71,7 +73,8 @@ module DataCenters
       return unless val
 
       log_message("Assign validator #{val.name} (##{val.id}) with ip #{validator_ip.address} (##{validator_ip.id}) to data center host #{main_dc_dch.host} (##{main_dc_dch.id}).")
-      # vip.update(data_center_host_id: existing_main_dc_dch.id)
+
+      validator_ip.update(data_center_host_id: main_dc_dch.id) if @run_update == "yes"
     end
 
     def log_message(message, type: :info)
