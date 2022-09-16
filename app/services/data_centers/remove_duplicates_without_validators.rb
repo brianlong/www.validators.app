@@ -1,9 +1,12 @@
 module DataCenters
+  # WARNING: Run service with "run_destroy: yes" argument and you'll destroy data centers, 
+  # without you'll get only logs and see what will be updated.
   class RemoveDuplicatesWithoutValidators
     LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
 
-    def initialize
+    def initialize(run_destroy: nil)
       @logger ||= Logger.new(LOG_PATH)
+      @run_destroy = run_destroy
     end
 
     def call
@@ -13,7 +16,7 @@ module DataCenters
 
         next if validators_number > 0 || gossip_nodes_number > 0
 
-        dc.destroy
+        dc.destroy if @run_destroy
 
         log_message("Data center #{dc.data_center_key} (##{dc.id}) has been removed with its data_data_center_hosts (#{dc.data_center_hosts.size}), validators number: #{validators_number}, gossip nodes number #{gossip_nodes_number}.")
       end
