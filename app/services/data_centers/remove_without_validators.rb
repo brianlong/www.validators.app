@@ -11,7 +11,7 @@ module DataCenters
 
     def call
       DataCenter.all.includes(:validators, :data_center_hosts).each do |dc|
-        validators_number = dc.validators.size
+        validators_number = dc.data_center_hosts.map { |dch| dch.validator_ips.size }.sum
         gossip_nodes_number = dc.gossip_nodes.size
 
         next if validators_number > 0 || gossip_nodes_number > 0
