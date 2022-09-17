@@ -48,7 +48,7 @@
           </td>
           <td class="small">
             {{ pt.slot_sent }} <br />
-            {{ pt.slot_landed }} ({{ pt.slot_landed.to_i - pt.slot_sent.to_i }})
+            {{ pt.slot_landed }}
           </td>
           <td class="text-muted">{{ pt.username }}</td>
         </tr>
