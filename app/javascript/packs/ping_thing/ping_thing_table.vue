@@ -13,8 +13,8 @@
           <span class="small text-muted">Type (Commitment Level)</span>
         </th>
         <th class="column-lg">
-          Slot sent<br />
-          Slot landed
+          Slot Sent<br />
+          Slot Landed (Latency)
         </th>
         <th class="column-xs">Posted&nbsp;By</th>
       </tr>
@@ -48,7 +48,7 @@
           </td>
           <td class="small">
             {{ pt.slot_sent }} <br />
-            {{ pt.slot_landed }}
+            {{ pt.slot_landed }} ({{ pt.slot_landed.to_i - pt.slot_sent.to_i }})
           </td>
           <td class="text-muted">{{ pt.username }}</td>
         </tr>
