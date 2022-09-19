@@ -10,15 +10,22 @@ module DataCenters
     end
 
     def call
+      log_message("Run destroy: #{@run_destroy}")
+
       DataCenter.all.includes(:validators, :data_center_hosts).each do |dc|
-        validators_number = dc.data_center_hosts.map { |dch| dch.validator_ips.size }.sum
+        validators_number = dc.data_center_hosts.map do |dch| 
+          dch.validator_ips.map do |vip|
+            vip.validator.id
+          end
+        end.flatten.uniq.size
+
         gossip_nodes_number = dc.gossip_nodes.size
 
         next if validators_number > 0 || gossip_nodes_number > 0
 
         dc.destroy if @run_destroy
 
-        log_message("Data center #{dc.data_center_key} (##{dc.id}) has been removed with its data_data_center_hosts (#{dc.data_center_hosts.size}), validators number: #{validators_number}, gossip nodes number #{gossip_nodes_number}.")
+        log_message("Data center #{dc.data_center_key} (##{dc.id}) has been removed with its data_data_center_hosts (#{dc.data_center_hosts.size}). Validators number: #{validators_number}, gossip nodes number #{gossip_nodes_number}.")
       end
 
       log_message("---------------", type: :info)
