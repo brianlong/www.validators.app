@@ -9,12 +9,6 @@ module DataCenters
       @run_update = run_update
     end
 
-    def set_main_data_center(sorted_data_centers)
-      main_dc = sorted_data_centers.shift
-      log_message("Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) with #{main_dc.validators_number} validator ips (validators as well).")
-      main_dc.data_center
-    end
-
     def call
       duplicated_data_center_keys = select_duplicated_keys
 
@@ -22,7 +16,7 @@ module DataCenters
         data_centers_with_validators_number = count_validators_in_data_center(dc)
         sorted_data_centers = sort_data_centers_by_validators_number(data_centers_with_validators_number)
 
-        main_dc = set_main_data_center
+        main_dc = set_main_data_center(sorted_data_centers)
 
         sorted_data_centers.each do |entry|
           dc = entry.data_center
@@ -67,6 +61,12 @@ module DataCenters
 
     def sort_data_centers_by_validators_number(data_centers)
       data_centers.sort_by! { |os| -os.validators_number }
+    end
+
+    def set_main_data_center(sorted_data_centers)
+      main_dc = sorted_data_centers.shift
+      log_message("Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) with #{main_dc.validators_number} validator ips (validators as well).")
+      main_dc.data_center
     end
 
     def update_validator_ip(validator_ip, main_dc_dch)
