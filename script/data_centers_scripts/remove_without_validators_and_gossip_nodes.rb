@@ -9,4 +9,4 @@ require_relative '../../config/environment'
 
 run_update = ARGV[0] == "yes" ? true : false
 
-DataCenters::RemoveWithoutValidators.new(run_destroy: run_destroy).call
+DataCenters::RemoveWithoutValidatorsAndGossipNodes.new(run_destroy: run_destroy).call
