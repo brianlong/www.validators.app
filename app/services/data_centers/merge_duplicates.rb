@@ -93,8 +93,14 @@ module DataCenters
 
     def update_validator_ip(validator_ip, main_dc_dch)
       val = validator_ip.validator
-              
+      
       return unless val
+      # This checks if validator is currently asssigned to data center pointed by validator_ip_active of validator
+      unless val.data_center.id == validator_ip.data_center.id
+        log_message("Validator #{val.name} (##{val.id}) current data center is different than it is assigned to validator ip #{validator_ip.address} (##{validator_ip.id}), skipping")
+
+        return
+      end
 
       log_message("Assign validator #{val.name} (##{val.id}) with ip #{validator_ip.address} (##{validator_ip.id}) to data center host #{main_dc_dch.host} (##{main_dc_dch.id}).")
 
