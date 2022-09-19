@@ -24,7 +24,7 @@ module DataCenters
           dc = entry.data_center
           data_center_hosts = dc.data_center_hosts
 
-          log_message("Processing data_center: #{dc.data_center_key}, (##{dc.id}) with #{data_center_hosts.size} data center hosts and #{data_center_hosts.map { |dch| dch.validator_ips.size }.sum } validator ips (validators as well).")
+          log_message("Processing data_center: #{dc.data_center_key}, (##{dc.id}) with #{data_center_hosts.size} data center hosts and #{entry.validators_number} validator ips (validators as well).")
           data_center_hosts.each do |dch|
             log_message("Processing data_center_host: #{dch.host}, (##{dch.id}) with #{dch.validator_ips.size} validators.")
             main_dc_host = main_dc.data_center_hosts.find_or_create_by(host: dch.host)
