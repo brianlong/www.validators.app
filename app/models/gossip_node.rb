@@ -33,6 +33,7 @@ class GossipNode < ApplicationRecord
   ].freeze
 
   has_one :validator_ip, primary_key: :ip, foreign_key: :address
+  has_one :data_center_host, through: :validator_ip
   has_one :data_center, -> { for_api }, through: :validator_ip
   has_one :validator, -> { for_api }, primary_key: :account, foreign_key: :account
 
