@@ -1,10 +1,10 @@
 module DataCenters
-  # WARNING: Run service with "run_destroy: yes" argument and you'll destroy data centers, 
+  # WARNING: Run service with "run_destroy: true" argument and you'll destroy data centers, 
   # without you'll get only logs and see what will be updated.
   class RemoveWithoutValidators
     LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
 
-    def initialize(run_destroy: nil)
+    def initialize(run_destroy: false)
       @logger ||= Logger.new(LOG_PATH)
       @run_destroy = run_destroy
     end

@@ -1,10 +1,10 @@
 module DataCenters
-  # WARNING: Run service with "run_update: yes" argument and you'll update, 
+  # WARNING: Run service with "run_update: true" argument and you'll update, 
   # without you'll get only logs and see what will be updated.
   class MergeDuplicates
     LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
 
-    def initialize(run_update: nil)
+    def initialize(run_update: false)
       @logger ||= Logger.new(LOG_PATH)
       @run_update = run_update
     end
@@ -14,7 +14,6 @@ module DataCenters
 
       duplicated_data_center_keys.each do |dc|
         data_centers_with_validators_number = count_validators_in_data_center(dc)
-        
         sorted_data_centers = sort_data_centers_by_validators_number(data_centers_with_validators_number)
 
         main_dc = sorted_data_centers.shift
@@ -26,7 +25,6 @@ module DataCenters
           data_center_hosts = dc.data_center_hosts
 
           log_message("Processing data_center: #{dc.data_center_key}, (##{dc.id}) with #{data_center_hosts.size} data center hosts and #{data_center_hosts.map { |dch| dch.validator_ips.size }.sum } validator ips (validators as well).")
-
           data_center_hosts.each do |dch|
             log_message("Processing data_center_host: #{dch.host}, (##{dch.id}) with #{dch.validator_ips.size} validators.")
             main_dc_host = main_dc.data_center_hosts.find_or_create_by(host: dch.host)
@@ -74,7 +72,7 @@ module DataCenters
 
       log_message("Assign validator #{val.name} (##{val.id}) with ip #{validator_ip.address} (##{validator_ip.id}) to data center host #{main_dc_dch.host} (##{main_dc_dch.id}).")
 
-      validator_ip.update(data_center_host_id: main_dc_dch.id) if @run_update == "yes"
+      validator_ip.update(data_center_host_id: main_dc_dch.id) if @run_update == true
     end
 
     def log_message(message, type: :info)
