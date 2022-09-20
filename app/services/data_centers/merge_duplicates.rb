@@ -137,13 +137,12 @@ module DataCenters
         return unless vip_assigned_to_same_dc_as_validator?(val, validator_ip)
       end
 
-      message = <<-EOS
-        Assign validator #{val.name} (##{val.id}) 
-        with ip #{validator_ip.address} (##{validator_ip.id}) 
-        to data center host #{main_dc_dch.host} (##{main_dc_dch.id}).
-      EOS
-
-      log_message(message)
+      log_updated_validator_or_gossip_node_info(
+        val,
+        gossip_node,
+        validator_ip,
+        main_dc_dch
+      )
 
       validator_ip.update(data_center_host_id: main_dc_dch.id) if @run_update == true
     end
@@ -165,6 +164,21 @@ module DataCenters
       end
 
       true
+    end
+
+    def log_updated_validator_or_gossip_node_info(val, gossip_node, validator_ip, main_dc_dch)
+      first_line = if val
+                     "Assign validator #{val.name} (##{val.id})"
+                   else
+                     "Assign gossip_node #{gossip_node.account} (##{gossip_node.id})"
+                   end
+      message = <<-EOS
+        #{first_line}
+        with ip #{validator_ip.address} (##{validator_ip.id}) 
+        to data center host #{main_dc_dch.host} (##{main_dc_dch.id}).
+      EOS
+
+      log_message(message)
     end
 
     def log_message(message, type: :info)
