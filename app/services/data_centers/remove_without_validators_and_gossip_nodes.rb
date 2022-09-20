@@ -15,9 +15,9 @@ module DataCenters
       DataCenter.all.includes(:validators, :data_center_hosts).each do |dc|
         validators_number = dc.data_center_hosts.map do |dch| 
           dch.validator_ips.map do |vip|
-            vip.validator.id
+            vip.validator&.id
           end
-        end.flatten.uniq.size
+        end.flatten.compact.uniq.size
 
         gossip_nodes_number = dc.gossip_nodes.size
 
