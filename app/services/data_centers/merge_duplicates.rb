@@ -133,19 +133,8 @@ module DataCenters
 
       return unless (val.present? || gossip_node.present?)
 
-      # This checks if validator is currently asssigned to data center 
-      # pointed by validator_ip_active of validator.
-      # 
-      # Gossip node can have only one ip so it's not checked.
-      unless val.data_center.id == validator_ip.data_center.id
-        message = <<-EOS
-          Validator #{val.name} (##{val.id}) current data center 
-          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id}), skipping.
-        EOS
-
-        log_message(message)
-
-        return
+      if val.present?
+        return unless vip_assigned_to_same_dc_as_validator?(val, validator_ip)
       end
 
       message = <<-EOS
@@ -157,6 +146,25 @@ module DataCenters
       log_message(message)
 
       validator_ip.update(data_center_host_id: main_dc_dch.id) if @run_update == true
+    end
+
+    def vip_assigned_to_same_dc_as_validator?(val, validator_ip)
+      # This checks if validator is currently assigned to data center 
+      # pointed by validator_ip_active of validator.
+      # 
+      # Gossip node can have only one ip so it's not checked.
+      unless val.data_center.id == validator_ip.data_center.id
+        message = <<-EOS
+          Validator #{val.name} (##{val.id}) current data center 
+          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id}), skipping.
+        EOS
+
+        log_message(message)
+
+        return false
+      end
+
+      true
     end
 
     def log_message(message, type: :info)
