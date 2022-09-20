@@ -24,7 +24,7 @@ module DataCenters
         sorted_data_centers.each do |entry|
           log_processed_data_center(entry)
 
-          data_center_hosts.each do |dch|
+          entry.data_center.data_center_hosts.each do |dch|
             log_processed_data_center_host(dch)
 
             main_dc_host = find_or_create_host(main_dc, dch)
