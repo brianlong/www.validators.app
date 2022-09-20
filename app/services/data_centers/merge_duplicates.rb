@@ -85,9 +85,9 @@ module DataCenters
 
     def find_or_create_host(data_center, data_center_host)
       if @run_update
-        data_center.data_center_hosts.find_or_create_by(host: dch.host)
+        data_center.data_center_hosts.find_or_create_by(host: data_center_host.host)
       else
-        data_center.data_center_hosts.find_or_initialize_by(host: dch.host)
+        data_center.data_center_hosts.find_or_initialize_by(host: data_center_host.host)
       end
     end
 
