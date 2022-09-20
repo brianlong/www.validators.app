@@ -10,15 +10,22 @@ module DataCenters
     end
 
     def call
+      log_message("Run destroy: #{@run_destroy}")
+
       DataCenter.all.includes(:validators, :data_center_hosts).each do |dc|
-        validators_number = dc.data_center_hosts.map { |dch| dch.validator_ips.size }.sum
-        gossip_nodes_number = dc.gossip_nodes.size
+        validators_number, gossip_nodes_number = count_validators_and_gossip_nodes(dc)
 
         next if validators_number > 0 || gossip_nodes_number > 0
 
         dc.destroy if @run_destroy
 
-        log_message("Data center #{dc.data_center_key} (##{dc.id}) has been removed with its data_data_center_hosts (#{dc.data_center_hosts.size}), validators number: #{validators_number}, gossip nodes number #{gossip_nodes_number}.")
+        message = <<-EOS
+          Data center #{dc.data_center_key} (##{dc.id}) has been removed with its 
+          data_data_center_hosts (#{dc.data_center_hosts.size}). 
+          Validators number: #{validators_number}, gossip nodes number #{gossip_nodes_number}.
+        EOS
+
+        log_message(message)
       end
 
       log_message("---------------", type: :info)
@@ -27,6 +34,20 @@ module DataCenters
     def log_message(message, type: :info)
       # Remove unless clause to see log file from tests.
       @logger.send(type, message.squish) unless Rails.env.test?
+    end
+
+    private
+
+    def count_validators_and_gossip_nodes(data_center)
+      validators_number = data_center.data_center_hosts.map do |dch| 
+        dch.validator_ips.map do |vip|
+          vip.validator&.id
+        end
+      end.flatten.compact.uniq.size
+
+      gossip_nodes_number = data_center.gossip_nodes.size
+
+      [validators_number, gossip_nodes_number]
     end
   end
 end

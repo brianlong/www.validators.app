@@ -10,22 +10,24 @@ module DataCenters
     end
 
     def call
+      log_message("Run update: #{@run_update}")
+
       duplicated_data_center_keys = select_duplicated_keys
 
       duplicated_data_center_keys.each do |dc|
-        data_centers_with_validators_number = count_validators_in_data_center(dc)
+        data_centers_with_validators_number = count_validators_and_gossip_nodes_in_data_center(dc)
         sorted_data_centers = sort_data_centers_by_validators_number(data_centers_with_validators_number)
 
+        # Data center with most validators number
         main_dc = set_main_data_center(sorted_data_centers)
 
         sorted_data_centers.each do |entry|
-          dc = entry.data_center
-          data_center_hosts = dc.data_center_hosts
+          log_processed_data_center(entry)
 
-          log_message("Processing data_center: #{dc.data_center_key}, (##{dc.id}) with #{data_center_hosts.size} data center hosts and #{entry.validators_number} validator ips (validators as well).")
-          data_center_hosts.each do |dch|
-            log_message("Processing data_center_host: #{dch.host}, (##{dch.id}) with #{dch.validator_ips.size} validators.")
-            main_dc_host = main_dc.data_center_hosts.find_or_create_by(host: dch.host)
+          entry.data_center.data_center_hosts.each do |dch|
+            log_processed_data_center_host(dch)
+
+            main_dc_host = find_or_create_host(main_dc, dch)
 
             dch.validator_ips.each do |vip|
               update_validator_ip(vip, main_dc_host)
@@ -37,6 +39,7 @@ module DataCenters
       end
     end
 
+
     private
 
     def select_duplicated_keys
@@ -44,15 +47,28 @@ module DataCenters
       all_data_centers.select { |k,v| k if v > 1 }.keys
     end
 
-    def count_validators_in_data_center(dc)
+    def count_validators_and_gossip_nodes_in_data_center(dc)
       data_centers = DataCenter.where(data_center_key: dc)
       data_centers_with_validators_number = []
+      
+      data_centers.each do |dc|
+        validator_ips_number = 0
 
-      data_centers.each do |dc| 
+        validator_ids = dc.data_center_hosts.map do |dch|
+          validator_ips_number = dch.validator_ips.size
+
+          dch.validator_ips.map do |vip|
+            vip.validator&.id
+          end
+        end
+
         os = OpenStruct.new(
           data_center: dc,
-          validators_number: dc.data_center_hosts.map { |dch| dch.validator_ips.size }.sum
+          validators_number: validator_ids.flatten.compact.uniq.size,
+          gossip_nodes_number: dc.gossip_nodes.size,
+          validator_ips_number: validator_ips_number
         )
+
         data_centers_with_validators_number << os
       end
 
@@ -65,16 +81,75 @@ module DataCenters
 
     def set_main_data_center(sorted_data_centers)
       main_dc = sorted_data_centers.shift
-      log_message("Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) with #{main_dc.validators_number} validator ips (validators as well).")
+      message = <<-EOS
+        Main dc is: #{main_dc.data_center.data_center_key}, (##{main_dc.data_center.id}) 
+        with #{main_dc.validator_ips_number} validator ips 
+        (#{main_dc.validators_number} validators, #{main_dc.gossip_nodes_number} gossip nodes).
+      EOS
+
+      log_message(message)
+      
       main_dc.data_center
+    end
+
+    def log_processed_data_center(entry)
+      dc = entry.data_center
+      data_center_hosts = dc.data_center_hosts
+
+      message = <<-EOS
+        Processing data_center: #{dc.data_center_key}, (##{dc.id}) 
+        with #{data_center_hosts.size} data center hosts 
+        and #{entry.validator_ips_number} validator ips 
+        (#{entry.validators_number} validators, #{entry.gossip_nodes_number} gossip nodes)."
+      EOS
+
+      log_message(message)
+    end
+
+    def log_processed_data_center_host(dch)
+      validators_number = dch.validator_ips.map { |vip| vip.validator&.id }.compact.size
+      gossip_nodes_number = dch.gossip_nodes.size 
+      
+      message = <<-EOS
+        Processing data_center_host: #{dch.host}, (##{dch.id}) 
+        with #{validators_number} validators 
+        and #{gossip_nodes_number} gossip nodes.
+      EOS
+
+      log_message(message)
+    end
+
+    def find_or_create_host(data_center, data_center_host)
+      if @run_update
+        data_center.data_center_hosts.find_or_create_by(host: data_center_host.host)
+      else
+        data_center.data_center_hosts.find_or_initialize_by(host: data_center_host.host)
+      end
     end
 
     def update_validator_ip(validator_ip, main_dc_dch)
       val = validator_ip.validator
-              
+      
       return unless val
+      # This checks if validator is currently asssigned to data center pointed by validator_ip_active of validator
+      unless val.data_center.id == validator_ip.data_center.id
+        message = <<-EOS
+          Validator #{val.name} (##{val.id}) current data center 
+          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id}), skipping.
+        EOS
 
-      log_message("Assign validator #{val.name} (##{val.id}) with ip #{validator_ip.address} (##{validator_ip.id}) to data center host #{main_dc_dch.host} (##{main_dc_dch.id}).")
+        log_message(message)
+
+        return
+      end
+
+      message = <<-EOS
+        Assign validator #{val.name} (##{val.id}) 
+        with ip #{validator_ip.address} (##{validator_ip.id}) 
+        to data center host #{main_dc_dch.host} (##{main_dc_dch.id}).
+      EOS
+
+      log_message(message)
 
       validator_ip.update(data_center_host_id: main_dc_dch.id) if @run_update == true
     end
