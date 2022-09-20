@@ -129,9 +129,14 @@ module DataCenters
 
     def update_validator_ip(validator_ip, main_dc_dch)
       val = validator_ip.validator
-      
-      return unless val
-      # This checks if validator is currently asssigned to data center pointed by validator_ip_active of validator
+      gossip_node = validator_ip.gossip_node
+
+      return unless (val.present? || gossip_node.present?)
+
+      # This checks if validator is currently asssigned to data center 
+      # pointed by validator_ip_active of validator.
+      # 
+      # Gossip node can have only one ip so it's not checked.
       unless val.data_center.id == validator_ip.data_center.id
         message = <<-EOS
           Validator #{val.name} (##{val.id}) current data center 
