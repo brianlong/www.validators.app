@@ -57,13 +57,13 @@ module DataCenters
           validator_ips_number = dch.validator_ips.size
 
           dch.validator_ips.map do |vip|
-            vip.validator.id
+            vip.validator&.id
           end
         end
 
         os = OpenStruct.new(
           data_center: dc,
-          validators_number: validator_ids.flatten.uniq.size,
+          validators_number: validator_ids.flatten.compact.uniq.size,
           validator_ips_number: validator_ips_number
         )
 
