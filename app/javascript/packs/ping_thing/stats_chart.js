@@ -148,9 +148,9 @@ export default {
                             callbacks: {
                                 label: function(tooltipItem) {
                                     if (tooltipItem.datasetIndex == 0) {
-                                        var min = tooltipItem.raw[1] ? tooltipItem.raw[1].toLocaleString('en-US') : null;
-                                        var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : null;
-                                        var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : null;
+                                        var min = tooltipItem.raw[1] ? tooltipItem.raw[1].toLocaleString('en-US') : "-";
+                                        var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : "-";
+                                        var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : "-";
 
                                         return "Min: " + min + " ms, Max: " + max + " ms, Average_slot_latency: " + slot_lat + " slots";
                                     } else {
