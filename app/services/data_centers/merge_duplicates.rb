@@ -132,10 +132,29 @@ module DataCenters
       val = validator_ip.validator
       gossip_node = validator_ip.gossip_node
 
-      return unless (val.present? || gossip_node.present?)
+      if gossip_node.present?
+        message = <<-EOS
+          Gossip Node ##{gossip_node.id} assigned to validator ip #{validator_ip.address} (#{validator_ip.id}), skipping.
+        EOS
+
+        log_message(message)
+
+        return
+      end
 
       if val.present?
         return unless vip_assigned_to_same_dc_as_validator?(val, validator_ip)
+      end
+
+      if validator_ip.is_active == false && @run_update
+        address = validator_ip.address
+        id = validator_ip.id
+
+        validator_ip.destroy 
+
+        message = <<-EOS
+          Validator IP #{address} (##{id}) destroyed.
+        EOS
       end
 
       log_updated_validator_or_gossip_node_info(
@@ -163,17 +182,6 @@ module DataCenters
         EOS
 
         log_message(message)
-
-        if validator_ip.gossip_node.nil? && validator_ip.is_active == false && @run_update
-          address = validator_ip.address
-          id = validator_ip.id
-
-          validator_ip.destroy 
-
-          message = <<-EOS
-            Validator IP #{address} (##{id}) destroyed.
-          EOS
-        end
 
         return false
       end
