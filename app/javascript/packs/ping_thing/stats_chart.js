@@ -67,7 +67,6 @@ export default {
             var variation_data = this.ping_thing_stats.map( (vector_element, index) => (
                 [vector_element['max'], vector_element['min'], vector_element['average_slot_latency']]
             ))
-            console.log(this.ping_thing_stats)
             var labels = this.ping_thing_stats.map( (vector_element) => (
                 moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
             ))
@@ -149,9 +148,11 @@ export default {
                             callbacks: {
                                 label: function(tooltipItem) {
                                     if (tooltipItem.datasetIndex == 0) {
-                                        return "Min: " + tooltipItem.raw[1].toLocaleString('en-US') + " ms,  \
-                                                Max: " + tooltipItem.raw[0].toLocaleString('en-US') + " ms, \
-                                                Average_slot_latency: " + tooltipItem.raw[2].toLocaleString('en-US') + " slots";
+                                        var min = tooltipItem.raw[1] ? tooltipItem.raw[1].toLocaleString('en-US') : null;
+                                        var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : null;
+                                        var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : null;
+
+                                        return "Min: " + min + " ms, Max: " + max + " ms, Average_slot_latency: " + slot_lat + " slots";
                                     } else {
                                         return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
                                     }
