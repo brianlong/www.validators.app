@@ -53,6 +53,14 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
     assert_equal 1, PingThingStat.where(interval: PingThingStat::INTERVALS[3]).count
   end
 
+  test "CreatePingThingStatsService does not return error when slot fields are empty" do
+    PingThing.update_all(slot_sent: nil, slot_landed: nil)
+    
+    assert_nothing_raised do
+      CreatePingThingStatsService.new(time_to: 1.minutes.ago, network: @network).call
+    end
+  end
+
   test "CreatePingThingStatsService creates records with correct fields" do
     begin_minutes_ago = 1
     begin_minutes_ago.times.each do |n|
