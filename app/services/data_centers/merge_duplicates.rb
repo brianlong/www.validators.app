@@ -154,13 +154,15 @@ module DataCenters
       # Gossip node can have only one ip so it's not checked.
       return false unless val&.data_center.present? && validator_ip&.data_center.present?
 
-      unless val.data_center.id == validator_ip.data_center.id
+      unless val.data_center.id == validator_ip.data_center.id        
         message = <<-EOS
           Validator #{val.name} (##{val.id}) current data center 
-          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id}), skipping.
+          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id}), validator IP removed.
         EOS
 
         log_message(message)
+
+        validator_ip.destroy
 
         return false
       end
