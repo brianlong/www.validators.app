@@ -37,6 +37,7 @@ module DataCenters
 
         log_message("---------------", type: :info)
       end
+      log_message("---------------SCRIPT HAS FINISHED----------------", type: :info)
     end
 
 
