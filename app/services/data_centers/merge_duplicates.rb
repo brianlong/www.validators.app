@@ -152,6 +152,8 @@ module DataCenters
       # pointed by validator_ip_active of validator.
       # 
       # Gossip node can have only one ip so it's not checked.
+      return false unless val&.data_center.present? && validator_ip&.data_center.present?
+
       unless val.data_center.id == validator_ip.data_center.id
         message = <<-EOS
           Validator #{val.name} (##{val.id}) current data center 
