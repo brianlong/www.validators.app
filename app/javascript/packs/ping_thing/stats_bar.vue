@@ -15,7 +15,7 @@
               Entries&nbsp;
             </span>
           </div>
-          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center d-none d-lg-block">
+          <div class="col-lg-1 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center d-none d-lg-block">
             <span class="stat-title-4">
               <i class="fas fa-long-arrow-alt-down text-success me-1"></i>
               Min&nbsp;
@@ -27,10 +27,16 @@
               Median&nbsp;
             </span>
           </div>
-          <div class="col-lg-2 col-md-6 px-md-0 text-md-center d-none d-lg-block">
+          <div class="col-lg-1 col-md-6 px-md-0 text-md-center d-none d-lg-block">
             <span class="stat-title-4">
               <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
               P90&nbsp;
+            </span>
+          </div>
+          <div class="col-lg-2 col-md-6 px-md-0 text-md-center d-none d-lg-block">
+            <span class="stat-title-4">
+              <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
+              Avg Slot Latency&nbsp;
             </span>
           </div>
         </div>
@@ -47,7 +53,7 @@
             </span>
             <strong class="text-success">{{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString() : '0' }}</strong>
           </div>
-          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-1 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-long-arrow-alt-down text-success me-1"></i>
               Min:&nbsp;
@@ -61,12 +67,19 @@
             </span>
             <strong class="text-success">{{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-          <div class="col-lg-2 col-md-6 px-md-0 text-md-center">
+          <div class="col-lg-1 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
              <span class="stat-title-4 d-lg-none">
               <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
               P90:&nbsp;
             </span>
             <strong class="text-success">{{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+          </div>
+          <div class="col-lg-2 col-md-6 offset-md-3 offset-lg-0 px-md-0 text-md-center">
+            <span class="stat-title-4 d-lg-none">
+              <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
+              Average slot latency:&nbsp;
+            </span>
+            <strong class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString() + ' slots' : 'N / A' }}</strong>
           </div>
         </div>
 
@@ -82,7 +95,7 @@
             </span>
             <strong class="text-success">{{ last_60_mins["num_of_records"] ? last_60_mins["num_of_records"].toLocaleString() : '0' }}</strong>
           </div>
-          <div class="col-lg-2 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
+          <div class="col-lg-1 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-long-arrow-alt-down text-success me-1"></i>
               Min:&nbsp;
@@ -96,12 +109,19 @@
             </span>
             <strong class="text-success">{{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</strong>
           </div>
-          <div class="col-lg-2 col-md-6 px-md-0 text-md-center">
+          <div class="col-lg-1 col-md-6 px-md-0 mb-3 mb-lg-0 text-md-center">
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
               P90:&nbsp;
             </span>
             <strong class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+          </div>
+          <div class="col-lg-2 col-md-6 offset-md-3 offset-lg-0 px-md-0 text-md-center">
+            <span class="stat-title-4 d-lg-none">
+              <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i>
+              Average slot latency:&nbsp;
+            </span>
+            <strong class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString() + ' slots' : 'N / A' }}</strong>
           </div>
         </div>
       </div>

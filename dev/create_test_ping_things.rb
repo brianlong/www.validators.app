@@ -16,7 +16,7 @@ counts.each do |loop|
       amount: 1, signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
       response_time: rand(loop[:min_time]..loop[:max_time]),
       transaction_type: "transfer",
-      network: "testnet",
+      network: "mainnet",
       commitment_level: "confirmed",
       success: true,
       application: "web3",
