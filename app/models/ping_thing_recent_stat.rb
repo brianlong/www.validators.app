@@ -28,7 +28,8 @@ class PingThingRecentStat < ApplicationRecord
     :min,
     :network,
     :num_of_records,
-    :p90
+    :p90,
+    :average_slot_latency
   ].freeze
 
   INTERVALS = [5, 60].freeze #minutes
@@ -41,18 +42,21 @@ class PingThingRecentStat < ApplicationRecord
   after_update :broadcast
 
   def recalculate_stats
-    ping_times = PingThing.for_reported_at_range_and_network(
+    ping_things = PingThing.for_reported_at_range_and_network(
       network,
       interval.minutes.ago,
       Time.now
-    ).pluck(:response_time).compact.sort
+    )
+
+    ping_times = ping_things.pluck(:response_time).compact.sort
 
     self.update(
       median: ping_times.median,
       min: ping_times.min,
       max: ping_times.max,
       p90: ping_times.first((ping_times.count * 0.9).to_i).last,
-      num_of_records: ping_times.count
+      num_of_records: ping_times.count,
+      average_slot_latency: ping_things.average_slot_latency
     )
   end
   
