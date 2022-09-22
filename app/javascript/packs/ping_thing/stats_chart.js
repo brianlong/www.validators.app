@@ -152,7 +152,7 @@ export default {
                                         var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : "-";
                                         var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : "-";
 
-                                        return ["Min: " + min + " ms, Max: " + max + " ms", "Average_slot_latency: " + slot_lat + " slots"];
+                                        return ["Min: " + min + " ms, Max: " + max + " ms", "Average slot latency: " + slot_lat + " slots"];
                                     } else {
                                         return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
                                     }
