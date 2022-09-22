@@ -3,6 +3,7 @@
     <div class="map-background">
       <div class="map-points">
         <!-- orientation points -->
+        <!--
         <div class="map-point map-point-sm" title="Map Center" style="left: 50%; bottom: 50%">X</div>
         <div class="map-point map-point-md" title="Point 0,0"
              :style="{ left: position_horizontal(0),
@@ -13,7 +14,7 @@
         <div class="map-point map-point-lg" title="Sth America End"
              :style="{ left: position_horizontal(22.674129),
                        bottom: position_vertical(-34.166060) }">SAF</div>
-
+        -->
 
         <div v-for="(data_center) in data_centers"
              :class="set_map_point_class(data_center.validators_count)"
