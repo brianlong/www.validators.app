@@ -75,4 +75,24 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     skip
     # TODO
   end
+
+  test "#recalculate_stats counts average of slot latency" do
+    slot_latency = 5
+    5.times do |time|
+      create(
+        :ping_thing,
+        :testnet,
+        reported_at: rand(50.minutes.ago..Time.now),
+        slot_sent: time,
+        slot_landed: time + slot_latency
+      )
+    end
+
+    ping_stat = create(:ping_thing_recent_stat, interval: 60)
+
+    ping_stat.recalculate_stats
+    ping_stat.reload
+
+    assert_equal slot_latency, ping_stat.average_slot_latency
+  end
 end
