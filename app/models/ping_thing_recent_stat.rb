@@ -4,16 +4,17 @@
 #
 # Table name: ping_thing_recent_stats
 #
-#  id             :bigint           not null, primary key
-#  interval       :integer
-#  max            :float(24)
-#  median         :float(24)
-#  min            :float(24)
-#  network        :string(191)
-#  num_of_records :integer
-#  p90            :float(24)
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  id                   :bigint           not null, primary key
+#  average_slot_latency :float(24)
+#  interval             :integer
+#  max                  :float(24)
+#  median               :float(24)
+#  min                  :float(24)
+#  network              :string(191)
+#  num_of_records       :integer
+#  p90                  :float(24)
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
 #
 # Indexes
 #
