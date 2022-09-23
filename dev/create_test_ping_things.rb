@@ -13,7 +13,9 @@ counts.each do |loop|
     slot_sent = rand(10_000_000..100_000_000)
     p = PingThing.create(
       user_id: 1,
-      amount: 1, signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
+      user_id: User.first.id,
+      amount: 1, 
+      signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
       response_time: rand(loop[:min_time]..loop[:max_time]),
       transaction_type: "transfer",
       network: "mainnet",
