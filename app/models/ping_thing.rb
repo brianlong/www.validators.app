@@ -82,4 +82,8 @@ class PingThing < ApplicationRecord
     stats = PingThingStat.by_network(network).between_time_range(reported_at)
     stats.each(&:recalculate)
   end
+
+  def self.average_slot_latency
+    all.map{ |pt| pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil }.compact.average
+  end
 end
