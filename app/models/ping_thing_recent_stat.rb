@@ -56,7 +56,7 @@ class PingThingRecentStat < ApplicationRecord
       max: ping_times.max,
       p90: ping_times.first((ping_times.count * 0.9).to_i).last,
       num_of_records: ping_times.count,
-      average_slot_latency: ping_things.average_slot_latency.round(1)
+      average_slot_latency: ping_things.average_slot_latency&.round(1)
     )
   end
   
