@@ -48,7 +48,7 @@
           </td>
           <td class="small">
             {{ pt.slot_sent }} <br />
-            {{ pt.slot_landed }} ({{ (pt.slot_landed || 0) - (pt.slot_sent || 0) }})
+            {{ pt.slot_landed }} ({{ slot_latency(pt.slot_sent, pt.slot_landed) }})
           </td>
           <td class="text-muted">{{ pt.username }}</td>
         </tr>
@@ -92,6 +92,13 @@
         var formatted_date = moment(date).utc().format('YYYY-MM-DD HH:mm:ss z')
 
         return formatted_date
+      },
+      slot_latency(sent, landed){
+        if(sent && landed){
+          return landed - sent
+        } else {
+          return " - "
+        }
       }
     }
   }
