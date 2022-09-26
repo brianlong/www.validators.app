@@ -13,8 +13,8 @@
           <span class="small text-muted">Type (Commitment Level)</span>
         </th>
         <th class="column-lg">
-          Slot Sent<br />
-          Slot Landed (Latency)
+          <span class="text-muted">Slot Sent</span><br />
+          <span class="text-muted">Slot Landed</span> (Latency)
         </th>
         <th class="column-xs">Posted&nbsp;By</th>
       </tr>
@@ -47,8 +47,8 @@
             </span>
           </td>
           <td class="small">
-            {{ pt.slot_sent }} <br />
-            {{ pt.slot_landed }} ({{ slot_latency(pt.slot_sent, pt.slot_landed) }})
+            <span class="text-muted">{{ pt.slot_sent }}</span> <br />
+            <span class="text-muted">{{ pt.slot_landed }}</span> ({{ slot_latency(pt.slot_sent, pt.slot_landed) }})
           </td>
           <td class="text-muted">{{ pt.username }}</td>
         </tr>
