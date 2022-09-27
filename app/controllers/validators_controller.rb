@@ -9,31 +9,31 @@ class ValidatorsController < ApplicationController
   def index
     @per = 25
 
-    if index_params[:watchlist] && !current_user
+    if validators_params[:watchlist] && !current_user
       flash[:warning] = "You need to create an account first."
       redirect_to new_user_registration_path and return
     end
 
-    watchlist_user = index_params[:watchlist] ? current_user&.id : nil
+    watchlist_user = validators_params[:watchlist] ? current_user&.id : nil
 
     @validators = ValidatorQuery.new(watchlist_user: watchlist_user).call(
-      network: index_params[:network],
-      sort_order: index_params[:order],
+      network: validators_params[:network],
+      sort_order: validators_params[:order],
       limit: @per,
-      page: index_params[:page],
-      query: index_params[:q]
+      page: validators_params[:page],
+      query: validators_params[:q]
     )
 
-    @batch = Batch.last_scored(index_params[:network])
+    @batch = Batch.last_scored(validators_params[:network])
 
     if @batch
       @this_epoch = EpochHistory.where(
-        network: index_params[:network],
+        network: validators_params[:network],
         batch_uuid: @batch.uuid
       ).first
     end
 
-    if index_params[:order] == "stake" && !index_params[:q] && !index_params[:watchlist]
+    if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
       @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
     end
     @at_33_stake_index ||= nil
@@ -41,7 +41,7 @@ class ValidatorsController < ApplicationController
 
   # GET /validators-map
   def map
-    @network = index_params[:network]
+    @network = validators_params[:network]
   end
 
   # GET /validators/1
@@ -132,16 +132,16 @@ class ValidatorsController < ApplicationController
   end
 
   def at_33_stake_index(validators, batch, per_page)
-    validator_history_stats = Stats::ValidatorHistory.new(index_params[:network], batch.uuid)
+    validator_history_stats = Stats::ValidatorHistory.new(validators_params[:network], batch.uuid)
     at_33_stake_validator = validator_history_stats.at_33_stake&.validator
 
     return nil unless validators.map(&:account).compact.include? at_33_stake_validator&.account
 
-    first_index_of_current_page = [index_params[:page].to_i - 1, 0].max * per_page
+    first_index_of_current_page = [validators_params[:page].to_i - 1, 0].max * per_page
     first_index_of_current_page + validators.index(at_33_stake_validator).to_i + 1
   end
 
-  def index_params
+  def validators_params
     params.permit(:watchlist, :network, :q, :page, :order)
   end
 end
