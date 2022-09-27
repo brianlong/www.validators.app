@@ -1,6 +1,6 @@
 <template>
   <div class="card map">
-    <div class="map-background">
+    <section class="map-background">
       <div class="map-points">
         <!-- orientation points - TODO to remove after all map-related tasks are done -->
         <!--
@@ -25,9 +25,9 @@
           {{ data_center.validators_count }}
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="map-legend">
+    <section class="map-legend">
       <div class="map-legend-col">
         <small class="text-muted">Total in {{ network }}</small>
         <div class="small fw-bold">
@@ -37,16 +37,11 @@
           <strong class="text-success">{{ total_nodes_count }}</strong> RPC Nodes
         </div>
       </div>
-      <div ref="dataCenterDetails" class="map-legend-col invisible">
-        <strong ref="dataCenterName" class="text-purple">Data Center Name</strong>
-        <div class="small text-muted">
-          <span ref="dataCenterValidatorsCount">0</span> validator(s)
-        </div>
-        <div class="small text-muted">
-          <span ref="dataCenterNodesCount">0</span> node(s)
-        </div>
+
+      <div class="map-legend-col" v-if="selected_data_center">
+        <validators-map-data-center-details :data_center="selected_data_center"/>
       </div>
-    </div>
+    </section>
   </div>
 
 </template>
@@ -68,6 +63,7 @@
         data_centers: [],
         total_validators_count: 0,
         total_nodes_count: 0,
+        selected_data_center: null,
       }
     },
     created () {
@@ -109,10 +105,7 @@
       },
 
       show_data_center_details: function(data_center) {
-        this.$refs.dataCenterName.innerText = data_center.data_center_key;
-        this.$refs.dataCenterValidatorsCount.innerText = data_center.validators_count;
-        this.$refs.dataCenterNodesCount.innerText = data_center.gossip_nodes_count;
-        this.$refs.dataCenterDetails.classList.remove("invisible");
+        this.selected_data_center = data_center;
       }
     }
   }
