@@ -4,7 +4,7 @@ import TurbolinksAdapter from 'vue-turbolinks';
 Vue.use(TurbolinksAdapter);
 
 document.addEventListener('turbolinks:load', () => {
-  const pt_stats = new Vue({
+  new Vue({
     el: '#validators-map',
     components: {
       "validators-map": ValidatorsMap
