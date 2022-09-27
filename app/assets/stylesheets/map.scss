@@ -22,7 +22,7 @@
   }
 
   &-background {
-    background: url(asset_path("map/map.svg")) no-repeat top right;
+    background: url(asset_path("map.svg")) no-repeat top right;
     background-size: cover;
     height: 670px;
     @media(max-width: $screen-xl-max) {
