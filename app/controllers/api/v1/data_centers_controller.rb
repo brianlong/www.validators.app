@@ -16,6 +16,7 @@ module Api
 
         data_centers = DataCenter.select(merged_fields)
                                  .joins(:data_center_stats)
+                                 .where.not(data_center_key: "0--Unknown")
                                  .where(
                                    "data_center_stats.network = ?
                                    AND (

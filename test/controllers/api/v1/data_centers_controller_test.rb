@@ -62,6 +62,25 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, resp["data_centers"].first["validators_count"]
   end
 
+  test "#data_centers_with_nodes response does not include unknown data center" do
+    unknown_dc = create(:data_center, city_name: "Unknown",
+                        traits_autonomous_system_number: 0)
+    create(
+      :data_center_stat,
+      data_center: unknown_dc,
+      network: @network,
+      gossip_nodes_count: 0,
+      validators_count: 1
+    )
+
+    get api_v1_data_centers_with_nodes_url(network: @network), headers: @headers
+    resp = JSON.parse(@response.body)
+
+    assert_response 200
+    assert_equal 3, resp.keys.count
+    refute resp["data_centers"].map{|dc| dc["data_center_key"]}.include? "0--Unknown"
+  end
+
   test "#data_centers_with_nodes response returns correct validators and nodes sums" do
     data_center_frankfurt = create(:data_center, :frankfurt)
     create(
