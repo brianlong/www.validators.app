@@ -30,11 +30,11 @@
     <section class="map-legend">
       <div class="map-legend-col">
         <small class="text-muted">Total in {{ network }}</small>
-        <div class="small fw-bold">
+        <div class="small">
           <strong class="text-success">{{ total_validators_count }}</strong> Validators
         </div>
         <div class="small">
-          <strong class="text-success">{{ total_nodes_count }}</strong> RPC Nodes
+          <strong class="text-success">{{ total_nodes_count }}</strong> Nodes
         </div>
       </div>
 
