@@ -68,13 +68,13 @@ class DataCenter < ApplicationRecord
   ].freeze
 
   before_save :assign_data_center_key
-  has_many :data_center_hosts
+  has_many :data_center_hosts, dependent: :destroy
   has_many :validator_ips, through: :data_center_hosts
   has_many :validator_ips_active, through: :data_center_hosts
   has_many :validators, through: :data_center_hosts
   has_many :validator_score_v1s, through: :data_center_hosts
   has_many :gossip_nodes, through: :data_center_hosts
-  has_many :data_center_stats do
+  has_many :data_center_stats, dependent: :destroy do
     def by_network(network)
       find_by(network: network)
     end      

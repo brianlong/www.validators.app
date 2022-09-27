@@ -34,6 +34,10 @@ class PingThingRaw < ApplicationRecord
     optional_params[:commitment_level] = params[:commitment_level] if params[:commitment_level].present?
     optional_params[:success] = params[:success] if params[:success].present? || params[:success] == false
     optional_params[:transaction_type] = params[:transaction_type] if params[:transaction_type].present?
+    optional_params[:slot_sent] = params[:slot_sent].to_i \
+      if params[:slot_sent].present? && slot_valid?(params[:slot_sent])
+    optional_params[:slot_landed] = params[:slot_landed].to_i \
+      if params[:slot_landed].present? && slot_valid?(params[:slot_landed])
 
     required_params.merge(optional_params)
   end
@@ -42,6 +46,10 @@ class PingThingRaw < ApplicationRecord
 
   def raw_data_size
     errors.add :base, "Provided data length is not valid" \
-      unless raw_data.size.between? 20, 300
+      unless raw_data.size.between? 20, 350
+  end
+
+  def slot_valid?(slot)
+    slot&.to_i > 0
   end
 end

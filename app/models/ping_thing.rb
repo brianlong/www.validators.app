@@ -12,6 +12,8 @@
 #  reported_at      :datetime
 #  response_time    :integer
 #  signature        :string(191)
+#  slot_landed      :bigint
+#  slot_sent        :bigint
 #  success          :boolean          default(TRUE)
 #  transaction_type :string(191)
 #  created_at       :datetime         not null
@@ -61,6 +63,8 @@ class PingThing < ApplicationRecord
         :signature,
         :success,
         :transaction_type,
+        :slot_sent,
+        :slot_landed,
         :reported_at
       )
     end
@@ -77,5 +81,9 @@ class PingThing < ApplicationRecord
   def update_stats_if_present
     stats = PingThingStat.by_network(network).between_time_range(reported_at)
     stats.each(&:recalculate)
+  end
+
+  def self.average_slot_latency
+    all.map{ |pt| pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil }.compact.average
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_05_064408) do
+ActiveRecord::Schema.define(version: 2022_09_22_145718) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -246,6 +246,7 @@ ActiveRecord::Schema.define(version: 2022_09_05_064408) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "average_slot_latency"
     t.index ["network", "interval"], name: "index_ping_thing_recent_stats_on_network_and_interval"
   end
 
@@ -259,6 +260,7 @@ ActiveRecord::Schema.define(version: 2022_09_05_064408) do
     t.datetime "time_from"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "average_slot_latency"
     t.index ["network", "interval"], name: "index_ping_thing_stats_on_network_and_interval"
   end
 
@@ -275,6 +277,8 @@ ActiveRecord::Schema.define(version: 2022_09_05_064408) do
     t.boolean "success", default: true
     t.string "application"
     t.datetime "reported_at"
+    t.bigint "slot_sent"
+    t.bigint "slot_landed"
     t.index ["created_at", "network", "transaction_type"], name: "index_ping_things_on_created_at_and_network_and_transaction_type"
     t.index ["created_at", "network", "user_id"], name: "index_ping_things_on_created_at_and_network_and_user_id"
     t.index ["network"], name: "index_ping_things_on_network"

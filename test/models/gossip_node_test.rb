@@ -44,4 +44,11 @@ class GossipNodeTest < ActiveSupport::TestCase
 
     assert_equal data_center, @node.data_center
   end
+
+  test "relationship has_one validator_ip_active returns correct validator_ip" do
+    validator_ip = create(:validator_ip, validator: @validator, address: @ip)
+    validator_ip2 = create(:validator_ip, :active, validator: @validator, address: @ip)
+    
+    assert_equal validator_ip2, @node.validator_ip_active
+  end
 end

@@ -95,6 +95,10 @@ every 1.day, at: '3:00am', roles: [:background] do
   runner "DataCenterStatsWorker.perform_async('testnet')"
 end
 
+every 1.day, at: '3:10am', roles: [:background] do
+  ruby_script 'check_unknown_data_centers_for_updates.rb'
+end
+
 every 10.minutes, roles: [:background] do
   runner "ValidatorCheckActiveWorker.perform_async"
 end

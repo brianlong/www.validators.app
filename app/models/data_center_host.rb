@@ -27,6 +27,7 @@ class DataCenterHost < ApplicationRecord
   has_many :validators, through: :validator_ips_active
   has_many :gossip_nodes, through: :validator_ips
   has_many :validator_score_v1s, through: :validators
+  has_many :gossip_nodes, through: :validator_ips
 
   # API
   belongs_to :data_center_for_api, -> { for_api }, 

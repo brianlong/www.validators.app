@@ -1,0 +1,14 @@
+<h1>Notification about commission change</h1>
+
+<p>
+  Validator 
+  <%= link_to @validator_title, validator_url(network: @validator.network, account: @validator.account) %> 
+  changed it's commission.
+  <br /><br />
+  Current value: <%= @commission.commission_after.to_i %>%
+  <br />
+  Previous value: <%= @commission.commission_before.to_i %>%
+</p>
+
+Best regards,<br />
+<strong><%= link_to "Validators.app", root_url %></strong> team

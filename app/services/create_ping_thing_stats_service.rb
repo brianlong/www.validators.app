@@ -21,7 +21,8 @@ class CreatePingThingStatsService
           min: resp_times.min,
           max: resp_times.max,
           time_from: @time_to - interval.minutes,
-          num_of_records: ping_things.count
+          num_of_records: ping_things.count,
+          average_slot_latency: ping_things.average_slot_latency
         )
       end
     end

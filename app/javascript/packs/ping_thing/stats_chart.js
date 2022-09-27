@@ -64,7 +64,9 @@ export default {
     update_chart: function(){
         if( !this.ping_thing_stats.length == 0 ){
             var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
-            var variation_data = this.ping_thing_stats.map( (vector_element, index) => ([vector_element['max'], vector_element['min']]) )
+            var variation_data = this.ping_thing_stats.map( (vector_element, index) => (
+                [vector_element['max'], vector_element['min'], vector_element['average_slot_latency']]
+            ))
             var labels = this.ping_thing_stats.map( (vector_element) => (
                 moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
             ))
@@ -146,7 +148,11 @@ export default {
                             callbacks: {
                                 label: function(tooltipItem) {
                                     if (tooltipItem.datasetIndex == 0) {
-                                        return "Min: " + tooltipItem.raw[1].toLocaleString('en-US') + " ms,  Max: " + tooltipItem.raw[0].toLocaleString('en-US') + " ms";
+                                        var min = tooltipItem.raw[1] ? tooltipItem.raw[1].toLocaleString('en-US') : "-";
+                                        var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : "-";
+                                        var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : "-";
+
+                                        return ["Min: " + min + " ms, Max: " + max + " ms", "Average slot latency: " + slot_lat + " slots"];
                                     } else {
                                         return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
                                     }
