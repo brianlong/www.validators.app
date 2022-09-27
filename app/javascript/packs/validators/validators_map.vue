@@ -21,7 +21,7 @@
              :style="{ left: position_horizontal(data_center.longitude),
                        bottom: position_vertical(data_center.latitude) }"
              :title="data_center.data_center_key"
-             v-on:click="show_data_center_details(data_center)">
+             v-on:click="select_data_center(data_center)">
           {{ data_center.validators_count }}
         </div>
       </div>
@@ -104,7 +104,7 @@
         }
       },
 
-      show_data_center_details: function(data_center) {
+      select_data_center: function(data_center) {
         this.selected_data_center = data_center;
       }
     }
