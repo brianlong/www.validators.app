@@ -2,7 +2,7 @@
   <div class="card map">
     <div class="map-background">
       <div class="map-points">
-        <!-- orientation points -->
+        <!-- orientation points - TODO to remove after all map-related tasks are done -->
         <!--
         <div class="map-point map-point-sm" title="Map Center" style="left: 50%; bottom: 50%">X</div>
         <div class="map-point map-point-md" title="Point 0,0"
@@ -16,7 +16,7 @@
                        bottom: position_vertical(-34.166060) }">SAF</div>
         -->
 
-        <div v-for="(data_center) in data_centers"
+        <div v-for="data_center in data_centers"
              :class="set_map_point_class(data_center.validators_count)"
              :style="{ left: position_horizontal(data_center.longitude),
                        bottom: position_vertical(data_center.latitude) }"
@@ -81,6 +81,7 @@
       })
     },
     watch: {
+      // TODO
     },
     methods: {
       position_horizontal: function(longitude) {
