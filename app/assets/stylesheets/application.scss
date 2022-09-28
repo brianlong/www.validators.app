@@ -27,6 +27,7 @@
 @import "pagination";
 @import "alerts";
 @import "carousels";
+@import "map";
 
 html {
   overflow-x: hidden;
@@ -193,7 +194,6 @@ hr {
     display: inline-block;
   }
 }
-
 
 .modal {
   padding-right: 0 !important;
