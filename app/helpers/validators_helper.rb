@@ -15,6 +15,20 @@ module ValidatorsHelper
     [X_SCALE_MAX, count].min
   end
 
+  def max_value_position(vector)
+    max_value = vector.max
+    max_value_index = vector.index(max_value)
+    position = max_value_index.to_f / vector.size * 100
+    position = [position, 2].max
+    # set max position for large numbers
+    if max_value > 100_000
+      position = [position, 70].min
+    elsif max_value > 10_000
+      position = [position, 80].min
+    end
+    number_to_percentage(position, precision: 0)
+  end
+
   def display_avatar(validator)
     if validator&.avatar_url
       image_tag validator.avatar_url, class: 'img-circle mb-1'
