@@ -13,19 +13,27 @@ module Api
         end
 
         merged_fields = (fields_dc + fields_stats).join(", ")
-        
+
         data_centers = DataCenter.select(merged_fields)
                                  .joins(:data_center_stats)
+                                 .where.not(data_center_key: "0--Unknown")
                                  .where(
-                                   "data_center_stats.network = ? 
+                                   "data_center_stats.network = ?
                                    AND (
                                      data_center_stats.gossip_nodes_count > 0
                                      OR data_center_stats.validators_count > 0
                                    )",
                                    dc_params[:network]
-                                 )
-        
-        render json: data_centers.to_json(except: [:id])
+                                 ).order(:validators_count)
+
+        total_validators_count = data_centers.sum{ |dc| dc[:validators_count] }
+        total_nodes_count = data_centers.sum{ |dc| dc[:gossip_nodes_count] }
+
+        render json: {
+          data_centers: data_centers,
+          total_validators_count: total_validators_count,
+          total_nodes_count: total_nodes_count
+        }, status: :ok
       end
 
       private

@@ -9,14 +9,14 @@ class GossipNodeTest < ActiveSupport::TestCase
   end
 
   test "add_validator_ip creates validator_ip with correct ip" do
-    refute ValidatorIp.where(address: @ip).exists?
+    refute ValidatorIp.where(address: @ip, is_active: true).exists?
     @node.add_validator_ip
 
-    assert ValidatorIp.where(address: @ip).exists?
+    assert ValidatorIp.where(address: @ip, is_active: true).exists?
   end
 
   test "add_validator_ip creates validator_ip only if necessery" do
-    create(:validator_ip, address: @ip)
+    create(:validator_ip, address: @ip, is_active: true)
 
     5.times do
       @node.add_validator_ip
