@@ -123,7 +123,7 @@ export default {
   },
   template: `
     <td class="column-chart d-none d-lg-table-cell" :id="'skipped-slots-' + idx ">
-      <canvas :id=" 'spark_line_skipped_slots_' + validator['account'] " width="5%"></canvas>
+      <canvas :id=" 'spark_line_skipped_slots_' + validator['account'] "></canvas>
     </td>
   `
 }

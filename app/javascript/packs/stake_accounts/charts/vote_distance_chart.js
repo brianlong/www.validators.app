@@ -116,7 +116,7 @@ export default {
         </div>
       </div>
       
-      <canvas :id=" 'spark_line_vote_distance_' + validator['account'] " width="5%"></canvas>
+      <canvas :id=" 'spark_line_vote_distance_' + validator['account'] "></canvas>
     </td>
   `
 }
