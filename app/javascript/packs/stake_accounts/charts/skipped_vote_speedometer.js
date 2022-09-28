@@ -90,12 +90,12 @@ export default {
         <div class="d-none d-lg-block">
           <canvas :id="'spark_line_skipped_vote_' + validator['account'] " width="5%"></canvas>
           <div class="text-center text-muted small mt-2">
-            {{ skipped_vote_percent() }}
+            {{ skipped_vote_percent() ? skipped_vote_percent() + "%" : "N / A" }}
           </div>
         </div>
         <span class="d-inline-block d-lg-none">
           Skipped Vote&nbsp;%:
-          {{ skipped_vote_percent() || 'N/A' }}
+          {{ skipped_vote_percent() ? skipped_vote_percent() + "%" : "N / A" }}
         </span>
       </div>
     </td>
