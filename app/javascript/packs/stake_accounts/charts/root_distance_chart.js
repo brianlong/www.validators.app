@@ -24,6 +24,7 @@ export default {
       }
       return chart_vars.chart_lightgrey
     },
+
     chart_fill_color(val) {
       if (val == 2) {
         return chart_vars.chart_green_t
@@ -34,9 +35,13 @@ export default {
     },
   },
   data() {
-    var root_distance_vl = Math.min.apply(Math, [60, this.validator['root_distance_history'].length])
-    var root_distance_vector = this.validator['root_distance_history'].slice(Math.max(this.validator['root_distance_history'].length - root_distance_vl, 0))
+    var root_distance_vl = Math.min.apply(Math, [60, this.validator['root_distance_history'].length]);
+    var root_distance_vector = this.validator['root_distance_history'].slice(Math.max(this.validator['root_distance_history'].length - root_distance_vl, 0));
+    var max_value = Math.max.apply(Math, root_distance_vector);
+    var max_value_position = this.$parent.max_value_position(root_distance_vector);
     return {
+      max_value: max_value,
+      max_value_position: max_value_position,
       y_root_distance_max: 20,
       root_distance_chart: {
         vl: root_distance_vl,
@@ -105,6 +110,13 @@ export default {
   },
   template: `
     <td class="column-chart d-none d-lg-table-cell" :id="'root-distance-' + idx ">
+      <div class="chart-top-container" v-if="max_value > 20">
+        <div class="chart-top-value"
+             :style="{ left: max_value_position }">
+          {{ max_value }}
+        </div>
+      </div>
+    
       <canvas :id=" 'spark_line_block_distance_' + validator['account'] " width="5%"></canvas>
     </td>
   `
