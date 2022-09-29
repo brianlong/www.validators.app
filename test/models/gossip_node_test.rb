@@ -31,6 +31,19 @@ class GossipNodeTest < ActiveSupport::TestCase
     assert_equal @node.validator_ip, val_ip
   end
 
+  test "has_one validator_ip through ipable should return correct validator_ip" do
+    val_ip = create(:validator_ip, address: @ip)
+
+    assert_equal @node.validator_ip, val_ip
+  end
+
+  test "relationship has_one validator_ip through ipable" do
+    validator_ip = create(:validator_ip, validator: @validator)
+    Ipable.create(ip_id: validator_ip.id, ipable_id: @node.id, ipable_type: "GossipNode")    
+
+    assert_equal validator_ip, @node.validator_ip
+  end
+
   test "has_one validator should return correct validator" do
     val = create(:validator, account: @node.account)
 

@@ -28,6 +28,8 @@
 #  index_validators_on_network_is_active_is_destroyed_is_rpc  (network,is_active,is_destroyed,is_rpc)
 #
 class Validator < ApplicationRecord
+  include IpableConcern
+
   FIELDS_FOR_API = %i[
     account
     avatar_url

@@ -57,6 +57,13 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal validator_ip2, @validator.validator_ip_active
   end
 
+  test "relationship has_one validator_ip through ipable" do
+    validator_ip = create(:validator_ip, validator: @validator)
+    Ipable.create(ip_id: validator_ip.id, ipable_id: @validator.id, ipable_type: "Validator")    
+
+    assert_equal validator_ip, @validator.validator_ip
+  end
+
   test "relationship has_one validator_score_v1_for_web returns only fields required for validators index page" do
     fields = ValidatorScoreV1::FIELDS_FOR_VALIDATORS_INDEX_WEB
     validator_score_v1 = @validator.validator_score_v1_for_web

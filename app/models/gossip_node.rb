@@ -22,6 +22,8 @@
 #
 
 class GossipNode < ApplicationRecord
+  include IpableConcern
+
   FIELDS_FOR_API = [
     "account",
     "ip",

@@ -43,6 +43,8 @@ class ValidatorIp < ApplicationRecord
   has_one :validator_score_v1, through: :validator
   has_one :data_center, through: :data_center_host
 
+  has_one :ipable, as: :ip
+
   # API 
   belongs_to :data_center_host_for_api, -> { for_api },
     foreign_key: :data_center_host_id,

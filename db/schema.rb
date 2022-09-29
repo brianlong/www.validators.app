@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_22_145718) do
+ActiveRecord::Schema.define(version: 2022_09_30_074153) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -209,6 +209,14 @@ ActiveRecord::Schema.define(version: 2022_09_22_145718) do
     t.boolean "staked", default: false
     t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
+  end
+
+  create_table "ipables", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "ip_id"
+    t.bigint "ipable_id"
+    t.string "ipable_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
