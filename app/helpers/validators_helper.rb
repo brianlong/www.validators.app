@@ -58,7 +58,7 @@ module ValidatorsHelper
   end
 
   def staking_kiwi_url(vote_account)
-    "https://staking.kiwi/app#{vote_account}"
+    "https://staking.kiwi/app/#{vote_account}"
   end
 
   def shuffle_logos
