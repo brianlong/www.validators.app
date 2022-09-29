@@ -1,19 +1,25 @@
 {
   "dependencies": {
+    "@babel/runtime": "^7.19.0",
     "@rails/actioncable": "^6.1.5",
     "@rails/activestorage": "^6.1.4",
     "@rails/ujs": "^6.1.4",
     "@rails/webpacker": "5.4.0",
+    "@solana/wallet-adapter-base": "0.9.9",
+    "@solana/wallet-adapter-wallets": "0.16.8",
+    "@solana/web3.js": "^1.63.1",
     "actioncable-vue": "^2.5.1",
     "axios": "^0.21.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bootstrap-vue": "^2.21.2",
+    "bs58": "^4.0.1",
     "chart.js": "^3.5.1",
     "chartjs-adapter-luxon": "1.0.0",
     "jquery": "^3.6.0",
     "loadash": "^1.0.0",
     "luxon": "^2.0.2",
     "moment": "^2.29.4",
+    "solana-wallets-vue-2": "^0.1.6",
     "turbolinks": "^5.2.0",
     "vue": "^2.6.14",
     "vue-loader": "^15.9.8",
@@ -35,7 +41,7 @@
     "babel-preset-vue": "^2.0.2",
     "jest": "^27.2.0",
     "vue-jest": "^3.0.7",
-    "webpack-dev-server": "^4.3.0"
+    "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
     "type": "module",

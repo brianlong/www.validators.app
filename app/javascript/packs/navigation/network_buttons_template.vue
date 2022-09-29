@@ -16,11 +16,17 @@
 </template>
 
 <script>
+  
+  import PhantomWalletAdapter from '@solana/wallet-adapter-wallets'
+
   export default {
     data(){
       return {
         network: '',
-        url: ''
+        url: '',
+        wallets: [
+          new PhantomWalletAdapter()
+        ]
       }
     },
     created() {
