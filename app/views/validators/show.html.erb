@@ -15,11 +15,18 @@
 
   <div class="d-flex justify-content-between flex-wrap gap-3">
     <% unless @validator.private_validator? || !@validator.active? %>
-      <%= link_to 'Delegate SOL',
-                  solstake_url(@validator.vote_account_active&.account),
-                  title: 'Delegate SOL to this validator on SolStake.io',
-                  class: "btn btn-sm btn-secondary",
-                  target: :blank %>
+      <div class="d-flex flex-wrap gap-3">
+        <%= link_to 'Delegate on Solstake.io',
+                    solstake_url(@validator.vote_account_active&.account),
+                    title: 'Delegate SOL to this validator on SolStake.io',
+                    class: "btn btn-sm btn-secondary",
+                    target: :blank %>
+        <%= link_to 'Delegate on Staking.kiwi',
+                    staking_kiwi_url(@validator.vote_account_active&.account),
+                    title: 'Delegate SOL to this validator on Staking.kiwi',
+                    class: "btn btn-sm btn-secondary",
+                    target: :blank %>
+      </div>
     <% end %>
     <div>
       <% if @validator.private_validator? %>
@@ -133,7 +140,7 @@
                     account: @validator.account,
                     vote_account: @validator.vote_account_active&.account,
                     network: params[:network]
-                  ) unless @validator.vote_accounts.empty? 
+                  ) unless @validator.vote_accounts.empty?
               %>
             </small>
           </td>
