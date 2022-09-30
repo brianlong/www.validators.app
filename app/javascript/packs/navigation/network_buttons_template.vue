@@ -1,5 +1,6 @@
 <template>
   <div class="btn-group btn-group-xs btn-group-toggle">
+    <wallet-multi-button :wallets="wallets" auto-connect />
     <label 
       class="btn btn-secondary nav-link" 
       :class="{ active: is_mainnet() }"
@@ -16,8 +17,9 @@
 </template>
 
 <script>
-  
-  import PhantomWalletAdapter from '@solana/wallet-adapter-wallets'
+  import { WalletMultiButton } from 'solana-wallets-vue-2';
+  import 'solana-wallets-vue-2/styles.css'
+  import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
 
   export default {
     data(){
@@ -54,6 +56,7 @@
         window.location.href = this.url
         return true
       }
-    }
+    },
+    components: { 'wallet-multi-button': WalletMultiButton }
   }
 </script>
