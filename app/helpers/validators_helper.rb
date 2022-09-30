@@ -53,8 +53,12 @@ module ValidatorsHelper
     versions.sort_by { |ver| Gem::Version.new(ver.keys.first)}.reverse
   end
 
-  def solstake_url(vote_key)
-    "https://solstake.io/#/app/validator/#{vote_key}"
+  def solstake_url(vote_account)
+    "https://solstake.io/#/app/validator/#{vote_account}"
+  end
+
+  def staking_kiwi_url(vote_account)
+    "https://staking.kiwi/app/#{vote_account}"
   end
 
   def shuffle_logos
