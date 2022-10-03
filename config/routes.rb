@@ -68,6 +68,8 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
   # Public Controller
   get 'contact-us', to: 'public#contact_us'
   get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
