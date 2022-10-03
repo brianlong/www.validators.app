@@ -65,13 +65,14 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
             <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
-                <br />
-                <strong class="d-inline-block d-lg-none">Staker:&nbsp;&nbsp;</strong>{{ stake_account.staker }}
+                <div class="text-muted">
+                  <strong class="d-inline-block d-lg-none">Staker:&nbsp;&nbsp;</strong>
+                  {{ stake_account.staker }}
+                </div>
               </td>
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Withdrawer:&nbsp;&nbsp;</strong>{{ stake_account.pool_name }}
-                <br />
-                {{ stake_account.withdrawer }}
+                <div class="text-muted">{{ stake_account.withdrawer }}</div>
               </td>
               <td>
                 <strong class="d-inline-block d-lg-none">Stake:&nbsp;</strong>

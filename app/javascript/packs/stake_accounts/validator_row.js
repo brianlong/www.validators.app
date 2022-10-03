@@ -73,6 +73,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       }
       return chart_lightgrey
     },
+
     chart_fill_color(val) {
       if (val == 2) {
         return chart_green_t
@@ -81,6 +82,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       }
       return chart_lightgrey_t
     },
+
     display_chart(target, event){
       var i = this.idx;
       var target = target+'-'+i;
@@ -100,6 +102,23 @@ var ValidatorRow = Vue.component('validatorRow', {
       });
       event.target.classList.add('active');
     },
+
+    // Set max_value position for root & vote distance charts
+    max_value_position(vector) {
+      var max_value = Math.max.apply(Math, vector);
+      var max_value_index = vector.indexOf(max_value).toFixed(2);
+      var vector_length = vector.length.toFixed(2);
+      var position = (max_value_index / vector_length * 100).toFixed(0);
+      position = Math.max.apply(Math, [position, 2])
+      // set max position for large numbers
+      if (max_value > 100000) {
+        position = Math.min.apply(Math, [position, 70])
+      } else if(max_value > 10000) {
+        position = Math.min.apply(Math, [position, 80])
+      }
+      return position + "%";
+    },
+
     displayed_total_score() {
       if(this.validator["commission"] == 100 && this.validator["network"] == 'mainnet'){
         return 'N/A'

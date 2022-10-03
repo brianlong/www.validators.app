@@ -16,9 +16,13 @@ export default {
     }
   },
   data() {
-    var vote_distance_vl = Math.min.apply(Math, [60, this.validator['vote_distance_history'].length])
-    var vote_distance_vector = this.validator['vote_distance_history'].slice(Math.max(this.validator['vote_distance_history'].length - vote_distance_vl, 0))
+    var vote_distance_vl = Math.min.apply(Math, [60, this.validator['vote_distance_history'].length]);
+    var vote_distance_vector = this.validator['vote_distance_history'].slice(Math.max(this.validator['vote_distance_history'].length - vote_distance_vl, 0));
+    var max_value = Math.max.apply(Math, vote_distance_vector);
+    var max_value_position = this.$parent.max_value_position(vote_distance_vector);
     return {
+      max_value: max_value,
+      max_value_position: max_value_position,
       y_root_distance_max: 20,
       vote_distance_chart: {
         vl: vote_distance_vl,
@@ -105,7 +109,14 @@ export default {
   },
   template: `
     <td class="column-chart d-none d-lg-table-cell" :id="'vote-distance-' + idx ">
-      <canvas :id=" 'spark_line_vote_distance_' + validator['account'] " width="5%"></canvas>
+      <div class="chart-top-container" v-if="max_value > 20">
+        <div class="chart-top-value"
+             :style="{ left: max_value_position }">
+          {{ max_value }}
+        </div>
+      </div>
+      
+      <canvas :id=" 'spark_line_vote_distance_' + validator['account'] "></canvas>
     </td>
   `
 }
