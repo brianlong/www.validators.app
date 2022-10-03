@@ -2,19 +2,19 @@
 
 class CommissionHistoryMailerPreview < ActionMailer::Preview
   def commission_change_info
+    validator = Validator.first
+    user = validator.watchers.first
+
     watchlist_el = UserWatchlistElement.first_or_create(
-      validator: Validator.first,
-      user: User.last
+      validator: validator,
+      user: user
     )
-    commission_history = FactoryBot.create(:commission_history, validator: Validator.first)
+    commission_history = FactoryBot.create(:commission_history, validator: validator)
 
-
-    val = watchlist_el.validator
-    usr = watchlist_el.user
     CommissionHistoryMailer.commission_change_info(
-      user: usr,
-      validator: val,
-      commission: val.commission_histories.first
+      user: user,
+      validator: validator,
+      commission: commission_history
     )
   end
 end
