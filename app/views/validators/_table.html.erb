@@ -257,7 +257,7 @@
         <% max_value = vote_vector&.max %>
         <% if max_value && max_value > Y_VOTE_DISTANCE_MAX %>
           <div class="chart-top-container">
-            <div class="chart-top-value" style="left: <%= max_value_position(vector) %>">
+            <div class="chart-top-value" style="left: <%= max_value_position(vote_vector) %>">
               <%= max_value %>
             </div>
           </div>
