@@ -209,6 +209,7 @@ ActiveRecord::Schema.define(version: 2022_10_05_162534) do
     t.boolean "staked", default: false
     t.boolean "is_active", default: true
     t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
+    t.index ["network", "is_active"], name: "index_gossip_nodes_on_network_and_is_active"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
   end
 

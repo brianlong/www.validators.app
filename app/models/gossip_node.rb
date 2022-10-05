@@ -18,8 +18,9 @@
 #
 # Indexes
 #
-#  index_gossip_nodes_on_network_and_account  (network,account)
-#  index_gossip_nodes_on_network_and_staked   (network,staked)
+#  index_gossip_nodes_on_network_and_account    (network,account)
+#  index_gossip_nodes_on_network_and_is_active  (network,is_active)
+#  index_gossip_nodes_on_network_and_staked     (network,staked)
 #
 
 class GossipNode < ApplicationRecord
