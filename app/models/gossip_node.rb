@@ -8,6 +8,7 @@
 #  account          :string(191)
 #  gossip_port      :integer
 #  ip               :string(191)
+#  is_active        :boolean          default(TRUE)
 #  network          :string(191)
 #  software_version :string(191)
 #  staked           :boolean          default(FALSE)
