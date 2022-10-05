@@ -40,7 +40,7 @@ class GossipNodeTest < ActiveSupport::TestCase
   test "has_one data_center should return correct data_center" do
     data_center = create(:data_center, :berlin)
     data_center_host = create(:data_center_host, data_center: data_center)
-    val_ip = create(:validator_ip, address: @ip, data_center_host: data_center_host)
+    val_ip = create(:validator_ip, address: @ip, data_center_host: data_center_host, is_active: true)
 
     assert_equal data_center, @node.data_center
   end

@@ -73,7 +73,7 @@ class DataCenterTest < ActiveSupport::TestCase
   test "relationship has_many gossip_nodes returns gossip_nodes through data_center_hosts" do
     node = create(:gossip_node)
     dch = create(:data_center_host, data_center: @data_center)
-    vip = create(:validator_ip, data_center_host: dch, address: node.ip)
+    vip = create(:validator_ip, data_center_host: dch, address: node.ip, is_active: true)
 
     assert_equal 1, @data_center.gossip_nodes.count
     assert_equal node, @data_center.gossip_nodes.first
