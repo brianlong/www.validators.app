@@ -39,6 +39,8 @@ class GossipNode < ApplicationRecord
   has_one :data_center, -> { for_api }, through: :validator_ip_active
   has_one :validator, -> { for_api }, primary_key: :account, foreign_key: :account
 
+  scope :active, ->() { where(is_active: true) }
+
   def add_validator_ip
     ValidatorIp.find_or_create_by(address: self.ip, is_active: true)
   end
