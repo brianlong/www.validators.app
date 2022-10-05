@@ -57,7 +57,7 @@ module GossipNodeLogic
   end
 
   def set_staked_flag
-    lambgda do |p|
+    lambda do |p|
       staked_validators = Validator.joins(:validator_score_v1)
                                    .includes(:validator_ip_active)
                                    .where("validator_score_v1s.active_stake > 0")
