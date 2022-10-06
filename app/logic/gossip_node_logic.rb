@@ -52,7 +52,6 @@ module GossipNodeLogic
       end
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      puts e
       Pipeline.new(500, p.payload, "Error from set_inactive_nodes_status", e)
     end
   end
