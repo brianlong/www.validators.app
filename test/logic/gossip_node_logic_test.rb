@@ -63,7 +63,8 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
                 .then(&get_nodes)
                 .then(&update_nodes)
                 .then(&set_inactive_nodes_status)
-    
+
+    assert_equal 200, p.code
     assert_equal false, not_existing_node.reload.is_active
   end
 
