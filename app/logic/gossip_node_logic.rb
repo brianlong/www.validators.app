@@ -43,15 +43,16 @@ module GossipNodeLogic
 
   def set_inactive_nodes_status
     lambda do |p|
-      active_nodes_identities = p.payload[:current_nodes].map { |cn| cn["identityPubkey"] }
+      active_nodes_identities = p.payload[:current_nodes]&.map { |cn| cn["identityPubkey"] }
       GossipNode.where(network: p.payload[:network]).each do |gn|
-        unless active_nodes_identities.include? gn.account
+        unless active_nodes_identities&.include? gn.account
           gn.is_active = false
-          gn.save if gn.changed?
+          gn.save if gn.will_save_change_to_attribute?(:is_active)
         end
       end
       Pipeline.new(200, p.payload)
     rescue StandardError => e
+      puts e
       Pipeline.new(500, p.payload, "Error from set_inactive_nodes_status", e)
     end
   end
