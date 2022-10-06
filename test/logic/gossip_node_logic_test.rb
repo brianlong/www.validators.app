@@ -55,12 +55,25 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
     end
   end
 
+  test "set_inactive_nodes_status correctly updates status for inactive nodes" do
+    not_existing_node = create(:gossip_node, account: "AAAAAAAAAA", network: @network)
+    assert_equal true, not_existing_node.is_active
+
+    p = Pipeline.new(200, @payload)
+                .then(&get_nodes)
+                .then(&update_nodes)
+                .then(&set_inactive_nodes_status)
+
+    assert_equal 200, p.code
+    assert_equal false, not_existing_node.reload.is_active
+  end
+
   test "set_staked_flag correctly updates staked" do
     ip = "204.16.244.218"
     account = "HZF34Kzkn8fh88TJV6KfgZGmBRBiFX9bXdmsnoQBVTMk"
-    
+
     val = create(:validator, network: @network, account: account)
-    
+
     create(
       :validator_score_v1,
       validator: val,
@@ -74,6 +87,7 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, @payload)
                   .then(&get_nodes)
                   .then(&update_nodes)
+                  .then(&set_inactive_nodes_status)
                   .then(&set_staked_flag)
 
       staked_nodes = GossipNode.where(staked: true)
