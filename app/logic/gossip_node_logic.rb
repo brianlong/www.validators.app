@@ -47,7 +47,7 @@ module GossipNodeLogic
       GossipNode.where(network: p.payload[:network]).each do |gn|
         unless active_nodes_identities.include? gn.account
           gn.is_active = false
-          gn.save if gn.will_save_change_to_attribute?(:is_active)
+          gn.save if gn.changed?
         end
       end
       Pipeline.new(200, p.payload)
