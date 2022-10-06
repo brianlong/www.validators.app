@@ -27,6 +27,10 @@
             return this.$refs.walletConnector.walletStore?.publicKey
         },
         (val) => {
+          console.log(val.toBuffer())
+          console.log(val.toJSON())
+          console.log(val.toString())
+          console.log(val.toBase58())
           this.public_key = val
         }
       )
@@ -39,10 +43,21 @@
 
         await this.$refs.walletConnector.walletStore.signAllTransactions(message)
         .then(function(resp){
+          console.log("response: " + bs58.encode(resp))
+          console.log("response: " + ctx.strToUtf16Bytes(resp))
           if(sign.detached.verify(message, resp, ctx.public_key.toBytes())){
             //create user
           }
         })
+      },
+      strToUtf16Bytes(str) {
+        const bytes = [];
+        console.log("parsing string: " + str)
+        for (var ii = 0; ii < str.length; ii++) {
+          const code = str.charCodeAt(ii); // x00-xFFFF
+          bytes.push(code & 255, code >> 8); // low, high
+        }
+        return bytes;
       }
     },
     components: { 'wallet-multi-button': WalletMultiButton }

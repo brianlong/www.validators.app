@@ -87,6 +87,9 @@ gem 'solana_rpc_ruby'
 # Ruby client for CoinGecko
 gem 'coingecko_ruby'
 
+# cryptographic library for checking signatures
+gem 'tweetnacl'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'bullet', '~> 6.1'
