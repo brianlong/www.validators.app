@@ -12,6 +12,6 @@ class ActiveStakeWorker
     # }
 
     _p = Pipeline.new(200, payload)
-                 .then(&report_cluster_stats)
+                 .then(&update_total_active_stake)
   end
 end
