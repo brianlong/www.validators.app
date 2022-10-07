@@ -9,58 +9,30 @@
 </template>
 
 <script>
-  import Vue from 'vue/dist/vue.esm'
-  import VueWebsocket from "vue-websocket";
-  Vue.use(VueWebsocket, "wss://ftx.com/ws");
+  import axios from 'axios'
 
   export default {
     data() {
       return {
         connection: null,
-        ftx_url: "wss://ftx.com/ws?op=subscribe&channel=trades&market=BTC-PERP"
+        ftx_url: "https://ftx.com/markets/sol_usd"
       }
     },
     methods: {
-      get() {
-        this.$socket.emit("get", {'op': 'subscribe', 'channel': 'trades', 'market': 'BTC-PERP'}, (response) => {
-          console.log(response)
-        });
+      get_ftx_price() {
+        axios.get(this.ftx_url, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          }
+        })
+        .then(function (response){
+          parsed_response = JSON.parse(response)
+          console.log(parsed_response)
+        })
       }
     },
     mounted(){
-      this.get()
-    },
-    socket: {
-            // Prefix for event names
-            // prefix: "/counter/",
-
-            // If you set `namespace`, it will create a new socket connection to the namespace instead of `/`
-            // namespace: "/counter",
-
-            events: {
-
-                // Similar as this.$socket.on("changed", (msg) => { ... });
-                // If you set `prefix` to `/counter/`, the event name will be `/counter/changed`
-                //
-                changed(msg) {
-                    console.log("Something changed: " + msg);
-                }
-
-                /* common socket.io events
-                connect() {
-                    console.log("Websocket connected to " + this.$socket.nsp);
-                },
-
-                disconnect() {
-                    console.log("Websocket disconnected from " + this.$socket.nsp);
-                },
-
-                error(err) {
-                    console.error("Websocket error!", err);
-                }
-                */
-
-            }
-        }
+      this.get_ftx_price()
+    }
   }
 </script>
