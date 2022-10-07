@@ -1,6 +1,8 @@
 <template>
-  Circulating Supply:
-  of(%):
+  <div>
+    Circulating Supply:
+    of(%):
+  </div>
 </template>
 
 <script>
@@ -12,6 +14,6 @@
         // TODO: default: "mainnet-beta"
         default: "devnet"
       },
-    }
+    },
   }
 </script>

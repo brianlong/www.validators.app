@@ -12,6 +12,8 @@
 #
 class ClusterStat < ApplicationRecord
 
+  after_create :broadcast
+
   def broadcast
     ActionCable.server.broadcast("cluster_stat_channel", self.to_json)
   end
