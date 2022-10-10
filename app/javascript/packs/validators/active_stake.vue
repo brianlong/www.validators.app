@@ -1,43 +1,43 @@
 <template>
   <div>
-    Total Active Stake:
+    Total Active Stake: {{ total_active_stake }}
     of(%):
   </div>
 </template>
 
 <script>
-export default {
-  props: {
-    network: {
-      // TODO: default: "mainnet-beta"
-      default: "devnet"
-    },
-  },
-  data () {
-    return {total_active_stake: 0};
-  },
-  channels: {
-    ClusterStatChannel: {
-      connected() {
-        console.log("connected to ClusterStatChannel");
-        console.log("this", this);
-      },
-      rejected() { },
-      received(data) {
-        var new_stat = JSON.parse(data)
+  import axios from 'axios';
 
+  axios.defaults.headers.get["Authorization"] = window.api_authorization;
+
+  export default {
+    props: {
+      network: {
+        // TODO: default: "mainnet-beta"
+        default: "devnet"
       },
-      disconnected() { },
     },
-  },
-  created: function () {
-    
-  },
-  mounted: function () {
-    this.$cable.subscribe({
-      channel: "ClusterStatChannel",
-      room: "public",
-    });
-  },
-}
+    data () {
+      return {
+        total_active_stake: 0
+      };
+    },
+    methods: {
+    },
+    created() {
+      const ctx = this;
+      const api_url = "/cluster-stats";
+
+      axios.get(api_url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+      }).then(function (response) {
+        ctx.total_active_stake = response.data.total_active_stake;
+      })
+    },
+    mounted: function () {
+    },
+  }
 </script>
