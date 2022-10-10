@@ -1,0 +1,1 @@
+json.total_active_stake @total_active_stake
