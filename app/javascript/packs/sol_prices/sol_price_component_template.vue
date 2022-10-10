@@ -5,7 +5,7 @@
         <div class="col-12 stat-title-4 mb-2">
           sol price: 
           <strong class="text-success" v-if="price">
-            <i class="fas fa-dollar-sign px-2"></i>{{ price }}
+            <i class="fas fa-dollar-sign px-1"></i>{{ price }}
           </strong>
           <strong class="text-muted" v-if="!price">
             loading ...
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-
   export default {
     data() {
       return {
@@ -46,7 +45,6 @@
         connected() {},
         rejected() {},
         received(data) {
-          console.log(data.result)
           this.price = data.result.last.toFixed(2)
           this.change_24h = data.result.change24h.toFixed(4)
           this.volume_24h = data.result.volumeUsd24h.toFixed(0)
