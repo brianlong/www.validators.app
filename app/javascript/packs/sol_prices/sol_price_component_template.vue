@@ -4,7 +4,7 @@
       <div class="card-content">
         <h2 class="h5 card-heading-left">SOL Price</h2>
 
-        <div class="mb-2">
+        <div class="mb-1">
           <span class="text-muted me-1">Current:</span>
           <strong class="text-success me-2" v-if="price">
             <i class="fas fa-dollar-sign me-1"></i>{{ price }}31.66
