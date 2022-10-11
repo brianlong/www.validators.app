@@ -4,13 +4,15 @@
 #
 # Table name: data_center_stats
 #
-#  id                 :bigint           not null, primary key
-#  gossip_nodes_count :integer
-#  network            :string(191)
-#  validators_count   :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  data_center_id     :bigint           not null
+#  id                        :bigint           not null, primary key
+#  active_gossip_nodes_count :integer
+#  active_validators_count   :integer
+#  gossip_nodes_count        :integer
+#  network                   :string(191)
+#  validators_count          :integer
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  data_center_id            :bigint           not null
 #
 # Indexes
 #
