@@ -34,6 +34,6 @@ class GossipNodesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     api_nodes = response_to_json(@response.body)
-    assert_equal false, api_nodes.include?(inactive_node)
+    refute api_nodes.include?(inactive_node)
   end
 end

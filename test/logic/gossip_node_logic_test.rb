@@ -58,7 +58,7 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
 
   test "set_inactive_nodes_status correctly updates status for inactive nodes" do
     not_existing_node = create(:gossip_node, account: "AAAAAAAAAA", network: @network)
-    assert_equal true, not_existing_node.is_active
+    assert not_existing_node.is_active
 
     p = Pipeline.new(200, @payload)
                 .then(&get_nodes)
@@ -66,7 +66,7 @@ class GossipNodeLogicTest < ActiveSupport::TestCase
                 .then(&set_inactive_nodes_status)
 
     assert_equal 200, p.code
-    assert_equal false, not_existing_node.reload.is_active
+    refute not_existing_node.reload.is_active
   end
 
   test "set_staked_flag correctly updates staked" do
