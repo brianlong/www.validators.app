@@ -1,7 +1,6 @@
 <template>
   <div>
     Circulating Supply:
-    of(%):
   </div>
 </template>
 
@@ -15,5 +14,12 @@
         default: "devnet"
       },
     },
+    created() {
+      const connection = new web3.Connection(web3.clusterApiUrl(this.network));
+
+      connection.getSupply().then(response => {
+        console.log('response', response.value);
+      });
+    }
   }
 </script>

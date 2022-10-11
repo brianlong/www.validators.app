@@ -1,7 +1,7 @@
 <template>
   <div>
-    Total Active Stake: {{ total_active_stake }}
-    of(%):
+    Active Stake:
+    <strong class="text-success">{{ total_active_stake }}</strong>
   </div>
 </template>
 
@@ -11,18 +11,10 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
-    props: {
-      network: {
-        // TODO: default: "mainnet-beta"
-        default: "devnet"
-      },
-    },
     data () {
       return {
         total_active_stake: 0
       };
-    },
-    methods: {
     },
     created() {
       const ctx = this;
@@ -34,10 +26,14 @@
           Accept: 'application/json'
         },
       }).then(function (response) {
-        ctx.total_active_stake = response.data.total_active_stake;
+        const stake = response.data.total_active_stake;
+        ctx.total_active_stake = ctx.lamports_to_sol(stake).toLocaleString('en-US');
       })
     },
-    mounted: function () {
+    methods: {
+      lamports_to_sol(lamports) {
+        return lamports / 1000000000;
+      },
     },
   }
 </script>
