@@ -49,13 +49,6 @@
           ctx.total_transactions_count = resp
         })
       },
-      get_last_block_info: function() {
-        var ctx = this
-        ctx.connection.getBlockProduction()
-        .then(function (resp) {
-          console.log(resp)
-        })
-      },
       get_1_sec_data: function() {
         var ctx = this
         setTimeout(function(){
