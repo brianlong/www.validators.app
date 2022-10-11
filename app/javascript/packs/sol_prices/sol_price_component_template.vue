@@ -54,7 +54,7 @@
         rejected() {},
         received(data) {
           this.price = data.result.last.toFixed(2)
-          this.change_24h = (data.result.change24h * 100).toFixed(4)
+          this.change_24h = (data.result.change24h * 100).toFixed(2)
           this.volume_24h = data.result.volumeUsd24h.toFixed(0)
         },
         disconnected() {},
