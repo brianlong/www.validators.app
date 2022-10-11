@@ -8,6 +8,7 @@
 #  account          :string(191)
 #  gossip_port      :integer
 #  ip               :string(191)
+#  is_active        :boolean          default(TRUE)
 #  network          :string(191)
 #  software_version :string(191)
 #  staked           :boolean          default(FALSE)
@@ -17,8 +18,9 @@
 #
 # Indexes
 #
-#  index_gossip_nodes_on_network_and_account  (network,account)
-#  index_gossip_nodes_on_network_and_staked   (network,staked)
+#  index_gossip_nodes_on_network_and_account    (network,account)
+#  index_gossip_nodes_on_network_and_is_active  (network,is_active)
+#  index_gossip_nodes_on_network_and_staked     (network,staked)
 #
 
 class GossipNode < ApplicationRecord
@@ -37,6 +39,8 @@ class GossipNode < ApplicationRecord
   has_one :data_center_host, through: :validator_ip_active
   has_one :data_center, -> { for_api }, through: :validator_ip_active
   has_one :validator, -> { for_api }, primary_key: :account, foreign_key: :account
+
+  scope :active, ->() { where(is_active: true) }
 
   def add_validator_ip
     ValidatorIp.find_or_create_by(address: self.ip, is_active: true)
