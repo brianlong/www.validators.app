@@ -2,6 +2,7 @@
   <div class="col-md-4 col-sm-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
+        <h2 class="h4">SOL Price</h2>
         <div class="row">
           <div class="col-12 stat-title-4 mb-2">
             sol price:

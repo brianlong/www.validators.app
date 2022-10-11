@@ -4,7 +4,7 @@
       <div class="card h-100">
         <div class="card-content">
           <div class="card-heading">
-            <h2 class="h3 mb-2">Filter by Stake Pool</h2>
+            <h2 class="h4 mb-2">Filter by Stake Pool</h2>
             <small class="text-muted">Click on stake pool logo to see pool stats</small>
           </div>
 
@@ -211,7 +211,7 @@
 
       <h3 class="h5">APY</h3>
       <p>
-        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the weighted average of the APY's 
+        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the weighted average of the APY's
         from all the validators reduced by the <strong>manager fee</strong>. Validators weight is proportional to the active_stake of the accounts.<br />
         APY of the validator is calculated as follows:
       </p>

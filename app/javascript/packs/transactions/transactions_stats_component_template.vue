@@ -2,7 +2,7 @@
   <div class="col-md-4 col-sm-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
-        <h2 class="h3">Transactions</h2>
+        <h2 class="h4">Transaction Stats</h2>
         <span class="stat-title-4" v-if="total_transactions_count">
         total count:
         <span class="text-success">
