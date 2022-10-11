@@ -6,7 +6,7 @@
 #
 #  id                 :bigint           not null, primary key
 #  network            :string(191)
-#  total_active_stake :integer
+#  total_active_stake :bigint
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #

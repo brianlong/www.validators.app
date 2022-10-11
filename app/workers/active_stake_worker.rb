@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ActiveStakeWorker
+  include Sidekiq::Worker
   include StakeStatsLogic
 
   def perform(args = {})
