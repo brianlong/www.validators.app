@@ -8,18 +8,19 @@ class GossipNodeQuery
     @query_fields = query_fields
     @query = GossipNode.select(query_fields)
                        .joins(
-                         "LEFT OUTER JOIN validators 
-                          ON validators.account = gossip_nodes.account 
+                         "LEFT OUTER JOIN validators
+                          ON validators.account = gossip_nodes.account
                           AND validators.network = gossip_nodes.network"
                        ).left_outer_joins(:data_center)
                        .where(network: @network)
+                       .active
   end
 
   def call(staked: nil, per: 100, page: 1)
     unless staked.nil?
       @query = @query.where(staked: staked)
     end
-    
+
     @query.page(page).per(per)
   end
 
