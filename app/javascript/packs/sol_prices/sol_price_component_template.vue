@@ -7,17 +7,17 @@
         <div class="mb-1">
           <span class="text-muted me-1">Current:</span>
           <strong class="text-success me-2" v-if="price">
-            <i class="fas fa-dollar-sign me-1"></i>{{ price.toFixed(2) }}
+            <i class="fas fa-dollar-sign me-1"></i>{{ price }}
           </strong>
           <span class="text-muted" v-if="!price">loading...</span>
 
           <small class="text-success" v-if="change_24h > 0">
             <i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i>
-            {{ (change_24h * 100).toFixed(2) }}%
+            {{ change_24h }}%
           </small>
           <small class="text-danger" v-if="change_24h < 0">
             <i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i>
-            {{ (change_24h * 100).toFixed(2) }}%
+            {{ change_24h }}%
           </small>
         </div>
 
@@ -54,7 +54,7 @@
         rejected() {},
         received(data) {
           this.price = data.result.last.toFixed(2)
-          this.change_24h = data.result.change24h.toFixed(4)
+          this.change_24h = (data.result.change24h * 100).toFixed(4)
           this.volume_24h = data.result.volumeUsd24h.toFixed(0)
         },
         disconnected() {},
