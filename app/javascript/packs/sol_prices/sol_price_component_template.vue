@@ -13,11 +13,11 @@
 
           <small class="text-success" v-if="change_24h > 0">
             <i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i>
-            {{ change_24h * 100 }}%
+            {{ (change_24h * 100).toFixed(2) }}%
           </small>
           <small class="text-danger" v-if="change_24h < 0">
             <i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i>
-            {{ change_24h * 100 }}%
+            {{ (change_24h * 100).toFixed(2) }}%
           </small>
         </div>
 
