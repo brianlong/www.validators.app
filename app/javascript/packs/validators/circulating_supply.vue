@@ -1,6 +1,13 @@
 <template>
   <div>
-    Circulating Supply:
+    <div>
+      Circulating Supply:
+      <strong class="text-success">{{ circulating_supply }}</strong>
+    </div>
+    <div>
+      of total:
+      <strong class="text-success">{{ total_circulating_supply }}</strong>
+    </div>
   </div>
 </template>
 
@@ -12,14 +19,34 @@
       network: {
         // TODO: default: "mainnet-beta"
         default: "devnet"
-      },
+      }
+    },
+    data() {
+      return {
+        circulating_supply: null,
+        total_circulating_supply: null,
+        connection: new web3.Connection(web3.clusterApiUrl(this.network))
+      }
     },
     created() {
-      const connection = new web3.Connection(web3.clusterApiUrl(this.network));
+      this.update_circulating_supply();
 
-      connection.getSupply().then(response => {
-        console.log('response', response.value);
-      });
+      setInterval(() => {
+        this.update_circulating_supply();
+      }, 5000);
+    },
+    methods: {
+      lamports_to_sol(lamports) {
+        return lamports / 1000000000;
+      },
+      update_circulating_supply() {
+        this.connection.getSupply()
+          .then(response => {
+            const val = response.value;
+            this.circulating_supply = this.lamports_to_sol(val.circulating).toLocaleString('en-US');
+            this.total_circulating_supply = this.lamports_to_sol(val.total).toLocaleString('en-US');
+          });
+      }
     }
   }
 </script>
