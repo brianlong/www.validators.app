@@ -37,6 +37,10 @@ class ValidatorsController < ApplicationController
       @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
     end
     @at_33_stake_index ||= nil
+
+    if params[:view] == "home_new"
+      render "validators/home_new"
+    end
   end
 
   # GET /validators-map

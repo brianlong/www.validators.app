@@ -1,9 +1,10 @@
-<!-- Ensures 3rd party js loads correctly after going back in browser -->
-<% content_for :for_head do %>
-  <meta name="turbolinks-visit-control" content="reload">
-<% end %>
-
 <%= render 'validators/welcome_banner' %>
+
+<%= javascript_pack_tag 'transactions/transactions_stats_component' %>
+<div id="transactions-stats-component"></div>
+
+<%= javascript_pack_tag 'sol_prices/sol_price_component' %>
+<div id="sol-price-component"></div>
 
 <%= render 'validators/ping_stats_banner' %>
 
