@@ -7,7 +7,7 @@
         <div class="mb-1">
           <span class="text-muted me-1">Current:</span>
           <strong class="text-success me-2" v-if="price">
-            <i class="fas fa-dollar-sign me-1"></i>{{ price }}31.66
+            <i class="fas fa-dollar-sign me-1"></i>{{ price.toFixed(2) }}
           </strong>
           <span class="text-muted" v-if="!price">loading...</span>
 
