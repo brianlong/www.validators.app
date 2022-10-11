@@ -2,30 +2,35 @@
   <div class="col-md-4 col-sm-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
-        <h2 class="h4">SOL Price</h2>
-        <div class="row">
-          <div class="col-12 stat-title-4 mb-2">
-            sol price:
-            <strong class="text-success" v-if="price">
-              <i class="fas fa-dollar-sign px-1"></i>{{ price }}
-            </strong>
-            <strong class="text-muted" v-if="!price">
-              loading ...
-            </strong>
-          </div>
-          <div class="col-6 small">
-            24h change:<br />
-            <span :class="change_24h > 0 ? 'text-success' : 'text-danger' ">
-            {{ change_24h }}
-          </span>
-          </div>
-          <div class="col-6 small">
-            24h volume:<br />
-            <span class="text-success">
+        <h2 class="h5 card-heading-left">SOL Price</h2>
+
+        <div class="mb-2">
+          <span class="text-muted me-1">Current:</span>
+          <strong class="text-success me-2" v-if="price">
+            <i class="fas fa-dollar-sign me-1"></i>{{ price }}31.66
+          </strong>
+          <span class="text-muted" v-if="!price">loading...</span>
+
+          <small class="text-success" v-if="change_24h > 0">
+            <i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i>
+            {{ change_24h * 100 }}%
+          </small>
+          <small class="text-danger" v-if="change_24h < 0">
+            <i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i>
+            {{ change_24h * 100 }}%
+          </small>
+        </div>
+
+        <div class=" small">
+          <span class="text-muted me-1">24h volume:</span>
+          <span class="text-success" v-if="volume_24h">
             {{ volume_24h }}
           </span>
-          </div>
+          <span class="text-muted" v-if="!volume_24h">
+            loading...
+          </span>
         </div>
+
       </div>
     </div>
   </div>
