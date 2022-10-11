@@ -1,21 +1,23 @@
 <template>
-  <div class="card col-md-3 col-sm-6">
-    <div class="card-content">
-      <h2 class="h3">Transactions</h2>
-      <span class="stat-title-4" v-if="total_transactions_count">
-        total count: 
+  <div class="col-md-4 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <h2 class="h3">Transactions</h2>
+        <span class="stat-title-4" v-if="total_transactions_count">
+        total count:
         <span class="text-success">
           {{ total_transactions_count.toLocaleString() }}
         </span>
       </span>
-      <br />
-      <span class="stat-title-4" v-if="total_transactions_count">
-        per second: 
+        <br />
+        <span class="stat-title-4" v-if="total_transactions_count">
+        per second:
         <span class="text-success">
           {{ transactions_per_second ? transactions_per_second.toFixed(0) : null }}
         </span>
       </span>
-    </div>  
+      </div>
+    </div>
   </div>
 </template>
 

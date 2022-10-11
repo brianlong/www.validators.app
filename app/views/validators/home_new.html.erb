@@ -1,10 +1,12 @@
 <%= render 'validators/welcome_banner' %>
 
 <%= javascript_pack_tag 'transactions/transactions_stats_component' %>
-<div id="transactions-stats-component"></div>
-
 <%= javascript_pack_tag 'sol_prices/sol_price_component' %>
-<div id="sol-price-component"></div>
+
+<section class="row">
+  <div id="transactions-stats-component"></div>
+  <div id="sol-price-component"></div>
+</section>
 
 <%= render 'validators/ping_stats_banner' %>
 

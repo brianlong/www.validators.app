@@ -1,27 +1,29 @@
 <template>
-  <div class="card col-md-3 col-sm-6">
-    <div class="card-content">
-      <div class="row">
-        <div class="col-12 stat-title-4 mb-2">
-          sol price: 
-          <strong class="text-success" v-if="price">
-            <i class="fas fa-dollar-sign px-1"></i>{{ price }}
-          </strong>
-          <strong class="text-muted" v-if="!price">
-            loading ...
-          </strong>
-        </div>
-        <div class="col-6 small">
-          24h change:<br />
-          <span :class="change_24h > 0 ? 'text-success' : 'text-danger' ">
+  <div class="col-md-4 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <div class="row">
+          <div class="col-12 stat-title-4 mb-2">
+            sol price:
+            <strong class="text-success" v-if="price">
+              <i class="fas fa-dollar-sign px-1"></i>{{ price }}
+            </strong>
+            <strong class="text-muted" v-if="!price">
+              loading ...
+            </strong>
+          </div>
+          <div class="col-6 small">
+            24h change:<br />
+            <span :class="change_24h > 0 ? 'text-success' : 'text-danger' ">
             {{ change_24h }}
           </span>
-        </div>
-        <div class="col-6 small">
-          24h volume:<br />
-          <span class="text-success">
+          </div>
+          <div class="col-6 small">
+            24h volume:<br />
+            <span class="text-success">
             {{ volume_24h }}
           </span>
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +40,7 @@
       }
     },
     methods: {
-      
+
     },
     channels: {
       SolPriceChannel: {
