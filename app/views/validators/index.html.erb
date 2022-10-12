@@ -4,10 +4,17 @@
 <% end %>
 
 <%= javascript_pack_tag 'sol_prices/sol_price_component' %>
+<%= javascript_pack_tag 'epoch/epoch_stats_component' %>
+
 
 <%= render 'validators/welcome_banner' %>
 
-<div id="sol-price-component"></div>
+<div class="row">
+  <div class="col-12">
+    <div id="sol-price-component"></div>
+    <div id="epoch-stats-component"></div>
+  </div>
+</div>
 
 <%= render 'validators/ping_stats_banner' %>
 
