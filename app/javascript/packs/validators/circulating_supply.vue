@@ -4,13 +4,15 @@
       <div class="card-content">
         <h2 class="h5 card-heading-left">Stake</h2>
         <div>
-          <span class="text-muted me-1">Circulating:</span>
+          <span class="text-muted me-1">Circulating Supply:</span>
 
           <span class="text-muted" v-if="!circulating_supply">loading...</span>
-          <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }}</strong>
-
-          <small class="small" v-if="total_circulating_supply">({{ percent_of_total_stake() }}% of {{ total_circulating_supply }})</small>
+          <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }} SOL</strong>
         </div>
+
+        <small class="small" v-if="total_circulating_supply">
+          ({{ percent_of_total_stake() }}% of total {{ total_circulating_supply }} SOL)
+        </small>
       </div>
     </div>
   </div>
@@ -45,8 +47,8 @@
         this.connection.getSupply()
           .then(response => {
             const val = response.value;
-            this.circulating_supply = this.lamports_to_sol(val.circulating).toLocaleString('en-US');
-            this.total_circulating_supply = this.lamports_to_sol(val.total).toLocaleString('en-US');
+            this.circulating_supply = this.lamports_to_sol(val.circulating).toFixed(0).toLocaleString('en-US');
+            this.total_circulating_supply = this.lamports_to_sol(val.total).toFixed(0).toLocaleString('en-US');
           });
       },
       percent_of_total_stake() {
