@@ -1,29 +1,30 @@
 <template>
-  <div class="card col-md-3 col-sm-6">
-    <div class="card-content">
-      <strong class="stat-title-4">
-        epoch: 
-        <span class="text-muted">
-          {{ epoch_number }} 
+  <div class="col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <strong class="stat-title-4">
+          epoch:
+          <span class="text-muted">
+          {{ epoch_number }}
         </span>
-        <span class="text-success">
+          <span class="text-success">
           ({{complete_percent}}%)
         </span>
-      </strong><br />
-      <strong class="stat-title-4">
-        block height: 
-        <span class="text-success">
+        </strong><br />
+        <strong class="stat-title-4">
+          block height:
+          <span class="text-success">
           {{ block_height ? block_height.toLocaleString() : null }}
         </span>
-      </strong>
-      <strong class="stat-title-4">
-        slot height: 
-        <span class="text-success">
+        </strong>
+        <strong class="stat-title-4">
+          slot height:
+          <span class="text-success">
           {{ slot_height ? slot_height.toLocaleString() : null }}
         </span>
-      </strong>
+        </strong>
+      </div>
     </div>
-    
   </div>
 </template>
 
