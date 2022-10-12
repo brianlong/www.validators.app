@@ -10,7 +10,7 @@
           <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }} SOL</strong>
         </div>
 
-        <small class="small" v-if="total_circulating_supply">
+        <small class="text-muted" v-if="total_circulating_supply">
           ({{ percent_of_total_stake() }}% of total {{ total_circulating_supply }} SOL)
         </small>
       </div>
