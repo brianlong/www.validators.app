@@ -1,11 +1,18 @@
 <template>
-  <div>
-    <span class="text-muted me-1">Circulating:</span>
+  <div class="col-md-4 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <h2 class="h5 card-heading-left">Stake</h2>
+        <div>
+          <span class="text-muted me-1">Circulating:</span>
 
-    <span class="text-muted" v-if="!circulating_supply">loading...</span>
-    <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }}</strong>
+          <span class="text-muted" v-if="!circulating_supply">loading...</span>
+          <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }}</strong>
 
-    <small class="small" v-if="total_circulating_supply">({{ percent_of_total_stake() }}% of {{ total_circulating_supply }})</small>
+          <small class="small" v-if="total_circulating_supply">({{ percent_of_total_stake() }}% of {{ total_circulating_supply }})</small>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -6,9 +6,9 @@ Vue.use(TurbolinksAdapter);
 
 document.addEventListener('turbolinks:load', () => {
   new Vue({
-    el: '#circulating-supply-stats',
-    components: {
-      "circulating-supply": CirculatingSupply,
+    el: '#circulating-supply-component',
+    render(createElement) {
+      return createElement(CirculatingSupply)
     }
   })
 })
