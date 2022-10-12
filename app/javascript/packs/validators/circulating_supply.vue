@@ -1,8 +1,11 @@
 <template>
   <div>
     <span class="text-muted me-1">Circulating:</span>
-    <strong class="text-success">{{ circulating_supply }}</strong>
-    <small class="small">(X% of {{ total_circulating_supply }})</small>
+
+    <span class="text-muted" v-if="!circulating_supply">loading...</span>
+    <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }}</strong>
+
+    <small class="small" v-if="total_circulating_supply">({{ percent_of_total_stake() }}% of {{ total_circulating_supply }})</small>
   </div>
 </template>
 
@@ -40,6 +43,9 @@
             this.circulating_supply = this.lamports_to_sol(val.circulating).toLocaleString('en-US');
             this.total_circulating_supply = this.lamports_to_sol(val.total).toLocaleString('en-US');
           });
+      },
+      percent_of_total_stake() {
+        return (parseInt(this.circulating_supply) * 100 / parseInt(this.total_circulating_supply)).toFixed(0);
       }
     }
   }

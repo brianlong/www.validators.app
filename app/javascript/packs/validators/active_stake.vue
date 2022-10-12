@@ -1,7 +1,9 @@
 <template>
   <div>
     <span class="text-muted me-1">Active Stake:</span>
+
     <strong class="text-success">{{ total_active_stake }}</strong>
+    <span class="text-muted" v-if="!total_active_stake">loading...</span>
   </div>
 </template>
 
