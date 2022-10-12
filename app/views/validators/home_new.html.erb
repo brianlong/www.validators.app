@@ -2,6 +2,7 @@
 
 <%= javascript_pack_tag 'transactions/transactions_stats_component' %>
 <%= javascript_pack_tag 'sol_prices/sol_price_component' %>
+<%= javascript_pack_tag 'epoch/epoch_stats_component' %>
 
 <section class="row">
   <%= render 'validators/stake_stats_banner' %>
@@ -13,29 +14,7 @@
 <%= render 'validators/ping_stats_banner' %>
 
 <div class="row">
-  <!-- placeholder for visualization -->
-  <div class="col-md-6 mb-4">
-    <div class="card h-100">
-      <div class="card-content">
-        <h2 class="h5 card-heading-left">Epoch</h2>
-        <div v-if="total_transactions_count">
-          <span class="text-muted me-1">Current:</span>
-          <strong class="text-success">TBA</strong>
-          <small>(XX%)</small>
-        </div>
-        <div v-if="total_transactions_count">
-          <span class="text-muted me-1">Slot:</span>
-          <strong class="text-success">TBA</strong>
-        </div>
-        <div v-if="total_transactions_count">
-          <span class="text-muted me-1">Block height:</span>
-          <strong class="text-success">TBA</strong>
-          <small>(XX ms)</small>
-        </div>
-        <span class="text-muted me-1">More TBA...</span>
-      </div>
-    </div>
-  </div><!-- end of placeholder -->
+  <div id="epoch-stats-component"></div>
 
   <div class="col-md-6 mb-4">
     <%= render 'validators/watchlist_info_banner' %>
