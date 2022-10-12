@@ -22,9 +22,8 @@ class StakeStatsLogicTest < ActiveSupport::TestCase
                 .then(&update_total_active_stake)
 
     cluster_stat = ClusterStat.where(network: network).last
-    total_active_stake = 100
 
     assert_equal network, cluster_stat.network
-    assert_equal total_active_stake, cluster_stat.total_active_stake
+    assert_equal 100, cluster_stat.total_active_stake
   end
 end
