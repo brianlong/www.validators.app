@@ -47,8 +47,8 @@
         this.connection.getSupply()
           .then(response => {
             const val = response.value;
-            this.circulating_supply = this.lamports_to_sol(val.circulating).toFixed(0).toLocaleString('en-US');
-            this.total_circulating_supply = this.lamports_to_sol(val.total).toFixed(0).toLocaleString('en-US');
+            this.circulating_supply = this.lamports_to_sol(val.circulating).toLocaleString('en-US', { maximumFractionDigits: 0 });
+            this.total_circulating_supply = this.lamports_to_sol(val.total).toLocaleString('en-US', { maximumFractionDigits: 0 });
           });
       },
       percent_of_total_stake() {

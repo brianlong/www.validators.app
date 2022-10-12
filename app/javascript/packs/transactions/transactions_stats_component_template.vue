@@ -7,7 +7,7 @@
         <div v-if="total_transactions_count">
           <span class="text-muted me-1">Total:</span>
           <strong class="text-success">
-            {{ total_transactions_count.toLocaleString() }}
+            {{ total_transactions_count.toLocaleString('en-US', { maximumFractionDigits: 0 }) }}
           </strong>
         </div>
 
