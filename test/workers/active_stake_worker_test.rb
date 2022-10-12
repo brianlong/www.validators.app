@@ -1,9 +1,11 @@
-require 'test_helper'
-require 'sidekiq/testing'
+# frozen_string_literal: true
+
+require "test_helper"
+require "sidekiq/testing"
 
 class ActiveStakeWorkerTest < ActiveSupport::TestCase
 
-  test 'worker should be performed as expected' do
+  test "worker should be performed as expected" do
     network = "mainnet"
     batch = create(:batch, :mainnet)
     batch_uuid = batch.uuid
