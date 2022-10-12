@@ -25,7 +25,7 @@
           <span class="text-muted me-1">24h volume:</span>
           <span class="text-success" v-if="volume_24h">
             <i class="fas fa-dollar-sign me-1"></i>
-            {{ volume_24h }}
+            {{ volume_24h.toLocaleString() }}
           </span>
           <span class="text-muted" v-if="!volume_24h">
             loading...
@@ -56,7 +56,8 @@
         received(data) {
           this.price = data.result.last.toFixed(2)
           this.change_24h = (data.result.change24h * 100).toFixed(2)
-          this.volume_24h = data.result.volumeUsd24h.toFixed(0).toLocaleString()
+          console.log(data.result.volumeUsd24h)
+          this.volume_24h = data.result.volumeUsd24h.toFixed(0)
         },
         disconnected() {},
       },

@@ -2,27 +2,26 @@
   <div class="col-sm-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
-        <strong class="stat-title-4">
-          epoch:
-          <span class="text-muted">
-          {{ epoch_number }}
-        </span>
-          <span class="text-success">
-          ({{complete_percent}}%)
-        </span>
-        </strong><br />
-        <strong class="stat-title-4">
-          block height:
-          <span class="text-success">
-          {{ block_height ? block_height.toLocaleString() : null }}
-        </span>
-        </strong>
-        <strong class="stat-title-4">
-          slot height:
-          <span class="text-success">
-          {{ slot_height ? slot_height.toLocaleString() : null }}
-        </span>
-        </strong>
+        <h2 class="h5 card-heading-left">Epoch</h2>
+
+        <div>
+          <span class="text-muted me-1">Slot Height:</span>
+          <strong class="text-success">
+            {{ slot_height ? slot_height.toLocaleString() : null }}
+          </strong>
+        </div>
+        <div class="mb-3">
+          <span class="text-muted me-1">Block Height:</span>
+          <strong class="text-success">
+            {{ block_height ? block_height.toLocaleString() : null }}
+          </strong>
+        </div>
+
+        <div>
+          <span class="text-muted me-1">Current Epoch:</span>
+          <strong class="text-success">{{ epoch_number }}</strong>
+          <small>({{complete_percent}}%)</small>
+        </div>
       </div>
     </div>
   </div>
@@ -54,7 +53,6 @@
         var ctx = this
         ctx.connection.getEpochInfo()
         .then(function (resp) {
-          console.log(resp)
           ctx.block_height = resp.blockHeight
           ctx.slot_height = resp.absoluteSlot
           ctx.epoch_number = resp.epoch
