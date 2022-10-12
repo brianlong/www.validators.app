@@ -48,3 +48,15 @@
     transition: filter 200ms linear;
   }
 }
+
+.img-line-graph {
+  height: 15px;
+  width: 100%;
+  background-color: $background-color-secondary;
+  border-radius: 5px;
+  &-fill {
+    height: 15px;
+    background-color: $purple;
+    border-radius: 5px;
+  }
+}

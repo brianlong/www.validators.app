@@ -1,5 +1,5 @@
 <template>
-  <div class="col-sm-6 mb-4">
+  <div class="col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
         <h2 class="h5 card-heading-left">Epoch</h2>
@@ -10,17 +10,24 @@
             {{ slot_height ? slot_height.toLocaleString() : null }}
           </strong>
         </div>
-        <div class="mb-3">
+
+        <div class="mb-4">
           <span class="text-muted me-1">Block Height:</span>
           <strong class="text-success">
             {{ block_height ? block_height.toLocaleString() : null }}
           </strong>
         </div>
 
-        <div>
-          <span class="text-muted me-1">Current Epoch:</span>
-          <strong class="text-success">{{ epoch_number }}</strong>
-          <small>({{complete_percent}}%)</small>
+        <div class="d-flex justify-content-between gap-3">
+          <div>
+            <span class="text-muted me-1">Current Epoch:</span>
+            <strong class="text-success">{{ epoch_number }}</strong>
+          </div>
+          <div>{{complete_percent}}%</div>
+        </div>
+
+        <div class="img-line-graph mt-3">
+          <div class="img-line-graph-fill" :style="{ width: epoch_graph_position }"></div>
         </div>
       </div>
     </div>
@@ -38,7 +45,8 @@
         block_height: null,
         slot_height: null,
         epoch_number: null,
-        complete_percent: null
+        complete_percent: null,
+        epoch_graph_position: null
       }
     },
     created() {
@@ -57,6 +65,7 @@
           ctx.slot_height = resp.absoluteSlot
           ctx.epoch_number = resp.epoch
           ctx.complete_percent = ((resp.slotIndex / resp.slotsInEpoch) * 100).toFixed(2)
+          ctx.epoch_graph_position = ctx.complete_percent + '%'
         })
       },
       get_1_sec_data: function() {
