@@ -11,6 +11,8 @@ class StakeStatsLogicTest < ActiveSupport::TestCase
     batch = create(:batch, :mainnet)
     batch_uuid = batch.uuid
 
+    create(:validator_history, batch_uuid: batch_uuid, network: network)
+
     payload = {
       network: network,
       batch_uuid: batch_uuid
@@ -19,9 +21,10 @@ class StakeStatsLogicTest < ActiveSupport::TestCase
     p = Pipeline.new(200, payload)
                 .then(&update_total_active_stake)
 
-    assert_equal network, report.network
-    assert_equal batch_uuid, report.batch_uuid
+    cluster_stat = ClusterStat.where(network: network).last
+    total_active_stake = 100
 
-    binding.pry
+    assert_equal network, cluster_stat.network
+    assert_equal total_active_stake, cluster_stat.total_active_stake
   end
 end
