@@ -2,15 +2,14 @@
 <%= javascript_pack_tag 'validators/active_stake.js' %>
 
 <% if params[:network] == "mainnet"%>
-  <div class="card col-md-6 col-sm-12">
-    <div class="card-content">
-      <div class="row">
-        <div id="circulating-supply-stats" class="col-12">
+  <div class="col-md-4 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <h2 class="h5 card-heading-left">Stake</h2>
+        <div id="circulating-supply-stats">
           <circulating-supply/>
         </div>
-      </div>
-      <div class="row mt-4">
-        <div id="active-stake-stats" class="col-12">
+        <div id="active-stake-stats" class="mt-2">
           <active-stake/>
         </div>
       </div>

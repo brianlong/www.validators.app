@@ -1,13 +1,8 @@
 <template>
   <div>
-    <div>
-      Circulating Supply:
-      <strong class="text-success">{{ circulating_supply }}</strong>
-    </div>
-    <div>
-      of total:
-      <strong class="text-success">{{ total_circulating_supply }}</strong>
-    </div>
+    <span class="text-muted me-1">Circulating:</span>
+    <strong class="text-success">{{ circulating_supply }}</strong>
+    <small class="small">(X% of {{ total_circulating_supply }})</small>
   </div>
 </template>
 

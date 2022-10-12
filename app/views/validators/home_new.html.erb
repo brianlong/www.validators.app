@@ -4,29 +4,11 @@
 <%= javascript_pack_tag 'sol_prices/sol_price_component' %>
 
 <section class="row">
-  <!-- placeholder for visualization -->
-  <div class="col-md-4 col-sm-6 mb-4">
-    <div class="card h-100">
-      <div class="card-content">
-        <h2 class="h5 card-heading-left">Stake</h2>
-        <div>
-          <span class="text-muted me-1">Active Stake:</span>
-          <strong class="text-success">TBA</strong>
-        </div>
-        <div>
-          <span class="text-muted me-1">Circulating:</span>
-          <strong class="text-success">TBA</strong>
-          <small class="small">(X% of XXXM)</small>
-        </div>
-      </div>
-    </div>
-  </div><!-- end of placeholder -->
+  <%= render 'validators/stake_stats_banner' %>
 
   <div id="transactions-stats-component"></div>
   <div id="sol-price-component"></div>
 </section>
-
-<%= render 'validators/supply_stats_banner' %>
 
 <%= render 'validators/ping_stats_banner' %>
 

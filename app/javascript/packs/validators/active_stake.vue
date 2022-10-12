@@ -1,6 +1,6 @@
 <template>
   <div>
-    Active Stake:
+    <span class="text-muted me-1">Active Stake:</span>
     <strong class="text-success">{{ total_active_stake }}</strong>
   </div>
 </template>
