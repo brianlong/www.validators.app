@@ -12,8 +12,7 @@
   export default {
     props: {
       network: {
-        // TODO: default: "mainnet-beta"
-        default: "devnet"
+        default: "mainnet-beta"
       }
     },
     data() {
