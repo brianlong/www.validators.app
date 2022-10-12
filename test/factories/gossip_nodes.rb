@@ -7,5 +7,10 @@ FactoryBot.define do
     gossip_port { 8001 }
     software_version { Faker::App.semantic_version }
     network { "testnet" }
+    is_active { true }
+  end
+
+  trait :inactive do
+    is_active { false }
   end
 end

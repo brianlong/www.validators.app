@@ -36,6 +36,8 @@ Rails.application.routes.draw do
                                                          as: 'validator_vote_account'
   get 'validators-map', to: 'validators#map', as: 'validators_map'
 
+  get 'home-new', to: 'validators#home_new', as: 'validators_home_new'
+
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
 

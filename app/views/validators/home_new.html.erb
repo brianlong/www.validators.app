@@ -1,0 +1,69 @@
+<%= render 'validators/welcome_banner' %>
+
+<%= javascript_pack_tag 'transactions/transactions_stats_component' %>
+<%= javascript_pack_tag 'sol_prices/sol_price_component' %>
+
+<section class="row">
+  <!-- placeholder for visualization -->
+  <div class="col-md-4 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <h2 class="h5 card-heading-left">Stake</h2>
+        <div>
+          <span class="text-muted me-1">Active Stake:</span>
+          <strong class="text-success">TBA</strong>
+        </div>
+        <div>
+          <span class="text-muted me-1">Circulating:</span>
+          <strong class="text-success">TBA</strong>
+          <small class="small">(X% of XXXM)</small>
+        </div>
+      </div>
+    </div>
+  </div><!-- end of placeholder -->
+
+  <div id="transactions-stats-component"></div>
+  <div id="sol-price-component"></div>
+</section>
+
+<%= render 'validators/ping_stats_banner' %>
+
+<div class="row">
+  <!-- placeholder for visualization -->
+  <div class="col-md-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <h2 class="h5 card-heading-left">Epoch</h2>
+        <div v-if="total_transactions_count">
+          <span class="text-muted me-1">Current:</span>
+          <strong class="text-success">TBA</strong>
+          <small>(XX%)</small>
+        </div>
+        <div v-if="total_transactions_count">
+          <span class="text-muted me-1">Slot:</span>
+          <strong class="text-success">TBA</strong>
+        </div>
+        <div v-if="total_transactions_count">
+          <span class="text-muted me-1">Block height:</span>
+          <strong class="text-success">TBA</strong>
+          <small>(XX ms)</small>
+        </div>
+        <span class="text-muted me-1">More TBA...</span>
+      </div>
+    </div>
+  </div><!-- end of placeholder -->
+
+  <div class="col-md-6 mb-4">
+    <%= render 'validators/watchlist_info_banner' %>
+  </div>
+</div>
+
+<%= render 'validators/stake_pools_banner' %>
+
+
+<div class="card">
+  <div class="card-content pb-3">
+    <%= render 'validators/sort_bar' %>
+    <%= render 'validators/toggle_bar' %>
+  </div>
+</div>

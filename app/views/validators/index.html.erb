@@ -3,18 +3,10 @@
   <meta name="turbolinks-visit-control" content="reload">
 <% end %>
 
-<%= javascript_pack_tag 'sol_prices/sol_price_component' %>
-<%= javascript_pack_tag 'epoch/epoch_stats_component' %>
-
-
 <%= render 'validators/welcome_banner' %>
 
-<div class="row">
-  <div class="col-12">
-    <div id="sol-price-component"></div>
-    <div id="epoch-stats-component"></div>
-  </div>
-</div>
+<%= javascript_pack_tag 'epoch/epoch_stats_component' %>
+<div id="epoch-stats-component"></div>
 
 <%= render 'validators/ping_stats_banner' %>
 

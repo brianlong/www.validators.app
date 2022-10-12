@@ -15,6 +15,7 @@ include GossipNodeLogic
   p = Pipeline.new(200, payload)
               .then(&get_nodes)
               .then(&update_nodes)
+              .then(&set_inactive_nodes_status)
               .then(&set_staked_flag)
 
   logger.info "Finished at #{DateTime.now} with status #{p.code}"
