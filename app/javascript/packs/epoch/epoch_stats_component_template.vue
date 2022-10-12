@@ -7,14 +7,14 @@
         <div>
           <span class="text-muted me-1">Slot Height:</span>
           <strong class="text-success">
-            {{ slot_height ? slot_height.toLocaleString() : null }}
+            {{ slot_height ? slot_height.toLocaleString('en-US', {maximumFractionDigits: 0}) : null }}
           </strong>
         </div>
 
         <div class="mb-4">
           <span class="text-muted me-1">Block Height:</span>
           <strong class="text-success">
-            {{ block_height ? block_height.toLocaleString() : null }}
+            {{ block_height ? block_height.toLocaleString('en-US', {maximumFractionDigits: 0}) : null }}
           </strong>
         </div>
 
@@ -23,7 +23,7 @@
             <span class="text-muted me-1">Current Epoch:</span>
             <strong class="text-success">{{ epoch_number }}</strong>
           </div>
-          <div>{{complete_percent}}%</div>
+          <div>{{ complete_percent }}%</div>
         </div>
 
         <div class="img-line-graph mt-3">

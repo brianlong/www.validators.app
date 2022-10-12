@@ -72,7 +72,7 @@
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-clock text-success me-1" aria-hidden="true"></i> Latency:&nbsp;
             </span>
-              <strong class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString() + ' slots' : 'N / A' }}</strong>
+              <strong class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</strong>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
                 <span class="stat-title-4 d-lg-none">
                   <i class="fas fa-clock text-success me-1" aria-hidden="true"></i> Latency:&nbsp;
                 </span>
-              <strong class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString() + ' slots' : 'N / A' }}</strong>
+              <strong class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</strong>
             </div>
           </div>
         </div>
