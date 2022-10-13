@@ -13,8 +13,8 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
       :data_center_stat,
       data_center: @data_center,
       network: @network,
-      gossip_nodes_count: 1,
-      validators_count: 1
+      active_gossip_nodes_count: 1,
+      active_validators_count: 1
     )
 
     @user = create(:user)
@@ -49,8 +49,8 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
       :data_center_stat,
       data_center: empty_dc,
       network: @network,
-      gossip_nodes_count: 0,
-      validators_count: 0
+      active_gossip_nodes_count: 0,
+      active_validators_count: 0
     )
 
     get api_v1_data_centers_with_nodes_url(network: @network), headers: @headers
@@ -58,8 +58,8 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 3, resp.keys.count
-    assert_equal 1, resp["data_centers"].first["gossip_nodes_count"]
-    assert_equal 1, resp["data_centers"].first["validators_count"]
+    assert_equal 1, resp["data_centers"].first["active_gossip_nodes_count"]
+    assert_equal 1, resp["data_centers"].first["active_validators_count"]
   end
 
   test "#data_centers_with_nodes response does not include unknown data center" do
@@ -87,8 +87,8 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
       :data_center_stat,
       data_center: data_center_frankfurt,
       network: @network,
-      gossip_nodes_count: 6,
-      validators_count: 4
+      active_gossip_nodes_count: 6,
+      active_validators_count: 4
     )
 
     get api_v1_data_centers_with_nodes_url(network: @network), headers: @headers
@@ -96,7 +96,7 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 3, resp.keys.count
-    assert_equal 5, resp["total_validators_count"]
-    assert_equal 7, resp["total_nodes_count"]
+    assert_equal 5, resp["total_active_validators_count"]
+    assert_equal 7, resp["total_active_nodes_count"]
   end
 end
