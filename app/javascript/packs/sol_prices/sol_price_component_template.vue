@@ -11,11 +11,11 @@
           </strong>
           <span class="text-muted" v-if="!price">loading...</span>
 
-          <small class="text-success" v-if="change_24h > 0">
+          <small class="text-success text-nowrap" v-if="change_24h > 0">
             <i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i>
             {{ change_24h }}%
           </small>
-          <small class="text-danger" v-if="change_24h < 0">
+          <small class="text-danger text-nowrap" v-if="change_24h < 0">
             <i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i>
             {{ change_24h }}%
           </small>
