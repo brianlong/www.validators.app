@@ -2,7 +2,7 @@
   <div class="card mb-4">
     <div class="card-content">
       <div class="card-heading" v-if="titleVisible" data-turbolinks="false">
-        <h2 class="h3 mb-2">Recent TX Confirmation Time Stats</h2>
+        <h2 class="h4 mb-2">Recent TX Confirmation Time Stats</h2>
         <a class="small" :href="pt_url">See details on the Ping Thing page</a>
       </div>
 
@@ -72,7 +72,7 @@
             <span class="stat-title-4 d-lg-none">
               <i class="fas fa-clock text-success me-1" aria-hidden="true"></i> Latency:&nbsp;
             </span>
-              <strong class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString() + ' slots' : 'N / A' }}</strong>
+              <strong class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</strong>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
                 <span class="stat-title-4 d-lg-none">
                   <i class="fas fa-clock text-success me-1" aria-hidden="true"></i> Latency:&nbsp;
                 </span>
-              <strong class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString() + ' slots' : 'N / A' }}</strong>
+              <strong class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</strong>
             </div>
           </div>
         </div>

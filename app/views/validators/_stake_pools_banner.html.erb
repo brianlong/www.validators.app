@@ -1,51 +1,49 @@
 <div class="card">
   <div class="card-content">
-    <h2 class="h3 card-heading">Stake Pools</h2>
-    <p class="lead">
-      You can now improve the&nbsp;security of the&nbsp;Solana blockchain by participating in
-      <%= link_to 'Stake Pools', stake_pools_path, target: '_blank' %>.
-      A&nbsp;stake pool spreads your delegation across hundreds of&nbsp;validators. Liquid stake pools allow you
-      to&nbsp;move in and out of the&nbsp;pool without warm-up or cool-down periods. See the&nbsp;links below to&nbsp;learn more
-      about liquid staking.
-    </p>
+    <h2 class="h5 card-heading-left">Stake Pools</h2>
 
-    <div id="carouselLogos" class="carousel slide d-none d-md-block px-lg-4 mb-3" data-bs-ride="carousel" data-bs-interval="4000">
-      <div class="carousel-inner">
-        <% shuffle_logos.each_slice(4).to_a.each_with_index do |group, index_slide| %>
-          <div class="carousel-item <%= 'active' if index_slide == 0 %>">
-            <div class="row text-center px-lg-4 px-xl-5 mt-4">
-              <% group.each_with_index do |logo, index_col| %>
-                <div class="col-md mb-4 mb-sm-0 <%= 'px-md-4 px-xl-5' if index_slide == 1 %>">
-                  <%= link_to logo[0], target: "_blank" do %>
-                    <%= image_tag logo[1], class: 'img-link w-100 mb-4 px-1 px-lg-3' %>
-                  <% end %>
-                </div>
+    <div class="row">
+      <div class="col-md-6 mb-3 mb-md-0 pe-lg-4">
+        <p class="lead">
+          You can now improve the&nbsp;security of the&nbsp;Solana blockchain by participating in
+          <%= link_to 'Stake Pools', stake_pools_path, target: '_blank' %>.
+          A&nbsp;stake pool spreads your delegation across hundreds of&nbsp;validators. Liquid stake pools allow you
+          to&nbsp;move in and out of the&nbsp;pool without warm-up or cool-down periods. See the&nbsp;links below to&nbsp;learn
+          more about liquid staking.
+        </p>
+        <div class="text-muted">
+          Need to unstake SOL in a&nbsp;hurry? Try the new <%= link_to 'Unstake It', 'https://www.unstake.it/en/', target: '_blank' %>
+          tool and get paid immediately for your active stake account.
+        </div>
+      </div>
+
+      <div class="col-md-6 d-none d-md-block">
+        <div class="row">
+          <% shuffle_logos.each_with_index do |logo| %>
+            <%= link_to logo[0], target: "_blank", class: "col-6 col-xl-4" do %>
+              <%= image_tag logo[1], class: "img-link w-100 mb-4 px-2 px-lg-3" %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <div id="carouselLogosMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="4000">
+        <div class="carousel-inner">
+          <% shuffle_logos.each_with_index do |logo, index_slide| %>
+            <div class="carousel-item <%= 'active' if index_slide == 0 %>">
+              <%= link_to logo[0], target: "_blank" do %>
+                <%= image_tag logo[1], class: "img-link w-100 px-5" %>
               <% end %>
             </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
+        <div class="carousel-indicators">
+          <% shuffle_logos.count.times do |index| %>
+            <button type="button" data-bs-target="#carouselLogosMobile" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></button>
+          <% end %>
+        </div>
       </div>
-    </div>
-    <div id="carouselLogosMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="4000">
-      <div class="carousel-inner">
-        <% shuffle_logos.each_with_index do |logo, index_slide| %>
-          <div class="carousel-item <%= 'active' if index_slide == 0 %>">
-            <%= link_to logo[0], target: "_blank" do %>
-              <%= image_tag logo[1], class: 'img-link w-100 px-4 px-sm-5 mt-3' %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-      <div class="carousel-indicators">
-        <% shuffle_logos.count.times do |index| %>
-          <button type="button" data-bs-target="#carouselLogosMobile" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></button>
-        <% end %>
-      </div>
-    </div>
 
-    <div class="mt-4 mt-md-0 text-center text-muted">
-      Need to unstake SOL in a&nbsp;hurry? Try the new <%= link_to 'Unstake It', 'https://www.unstake.it/en/', target: '_blank' %>
-      tool and get paid immediately for your active stake account.
     </div>
   </div>
 </div>

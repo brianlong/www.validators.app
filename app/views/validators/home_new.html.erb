@@ -1,0 +1,22 @@
+<%= javascript_pack_tag 'transactions/transactions_stats_component' %>
+<%= javascript_pack_tag 'sol_prices/sol_price_component' %>
+<%= javascript_pack_tag 'epoch/epoch_stats_component' %>
+<%= javascript_pack_tag 'validators/circulating_supply.js' %>
+
+<%= render 'validators/ping_stats_banner' %>
+
+<section class="row">
+  <div id="circulating-supply-component"></div>
+  <div id="transactions-stats-component"></div>
+  <div id="sol-price-component"></div>
+</section>
+
+<div class="row">
+  <div id="epoch-stats-component"></div>
+
+  <div class="col-md-6 mb-4">
+    <%= render 'validators/watchlist_info_banner' %>
+  </div>
+</div>
+
+<%= render 'validators/stake_pools_banner' %>

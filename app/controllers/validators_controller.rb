@@ -40,6 +40,11 @@ class ValidatorsController < ApplicationController
   end
 
   # GET /validators-map
+  def home_new
+    @network = validators_params[:network]
+  end
+
+  # GET /validators-map
   def map
     @network = validators_params[:network]
   end
