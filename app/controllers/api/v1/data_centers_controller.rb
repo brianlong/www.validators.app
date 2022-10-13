@@ -26,13 +26,8 @@ module Api
                                    dc_params[:network]
                                  ).order(:validators_count)
 
-        total_active_validators_count = data_centers.sum{ |dc| dc[:active_validators_count] }
-        total_active_nodes_count = data_centers.sum{ |dc| dc[:active_gossip_nodes_count] }
-
         render json: {
-          data_centers: data_centers,
-          total_active_validators_count: total_active_validators_count,
-          total_active_nodes_count: total_active_nodes_count
+          data_centers: data_centers
         }, status: :ok
       end
 

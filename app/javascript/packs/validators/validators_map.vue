@@ -29,13 +29,8 @@
 
     <section class="map-legend">
       <div class="map-legend-col">
-        <small class="text-muted">Total in {{ network }}</small>
-        <div class="small">
-          <strong class="text-success">{{ total_active_validators_count }}</strong> Validators
-        </div>
-        <div class="small">
-          <strong class="text-success">{{ total_active_nodes_count }}</strong> Nodes
-        </div>
+        <div class="small text-muted">Current Leader placeholder</div>
+        <small class="text-muted">{{ network }}</small>
       </div>
 
       <div class="map-legend-col" v-if="selected_data_center">
@@ -61,8 +56,6 @@
       return {
         api_url: api_url,
         data_centers: [],
-        total_active_validators_count: 0,
-        total_active_nodes_count: 0,
         selected_data_center: null,
       }
     },
@@ -72,8 +65,6 @@
 
       axios.get(url).then(function (response) {
         ctx.data_centers = response.data.data_centers;
-        ctx.total_active_validators_count = response.data.total_active_validators_count;
-        ctx.total_active_nodes_count = response.data.total_active_nodes_count;
       })
     },
     watch: {
