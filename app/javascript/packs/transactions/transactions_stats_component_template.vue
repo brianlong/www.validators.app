@@ -27,6 +27,7 @@
 
 <script>
   import * as web3 from "@solana/web3.js"
+  import { mapGetters } from 'vuex'
 
   export default {
     data() {
@@ -38,12 +39,15 @@
       }
     },
     created() {
-      this.connection = new web3.Connection(web3.clusterApiUrl('mainnet-beta'))
+      this.connection = new web3.Connection(this.web3_url)
     },
     mounted() {
       this.get_total_transactions_count()
       this.get_1_sec_data()
     },
+    computed: mapGetters([
+      'web3_url'
+    ]),
     methods: {
       get_total_transactions_count: function() {
         var ctx = this

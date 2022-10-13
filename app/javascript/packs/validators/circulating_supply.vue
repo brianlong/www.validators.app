@@ -20,6 +20,7 @@
 
 <script>
   import * as web3 from "@solana/web3.js";
+  import { mapGetters } from 'vuex'
 
   export default {
     props: {
@@ -31,14 +32,18 @@
       return {
         circulating_supply: null,
         total_circulating_supply: null,
-        connection: new web3.Connection(web3.clusterApiUrl(this.network))
+        connection: null
       }
     },
     created() {
+      this.connection = new web3.Connection(this.web3_url)
       setInterval(() => {
         this.update_circulating_supply();
       }, 5000);
     },
+    computed: mapGetters([
+      'web3_url'
+    ]),
     methods: {
       lamports_to_sol(lamports) {
         return lamports / 1000000000;
