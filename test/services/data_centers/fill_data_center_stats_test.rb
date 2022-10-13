@@ -42,7 +42,7 @@ module DataCenters
       assert_equal 2, @data_center.data_center_stats.by_network(@network).gossip_nodes_count
     end
 
-    test "#call sets up active_validator_count and active_gossip_node_count correctly" do
+    test "#call sets up active_validators_count and active_gossip_nodes_count correctly" do
       DataCenters::FillDataCenterStats.new(network: @network).call
 
       assert_equal 0, @data_center.data_center_stats.by_network(@network).active_validators_count
