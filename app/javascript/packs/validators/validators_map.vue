@@ -22,7 +22,7 @@
                        bottom: position_vertical(data_center.latitude) }"
              :title="data_center.data_center_key"
              v-on:click="select_data_center(data_center)">
-          {{ data_center.validators_count }}
+          {{ data_center.active_validators_count + data_center.active_gossip_nodes_count }}
         </div>
       </div>
     </section>
@@ -31,10 +31,10 @@
       <div class="map-legend-col">
         <small class="text-muted">Total in {{ network }}</small>
         <div class="small">
-          <strong class="text-success">{{ total_validators_count }}</strong> Validators
+          <strong class="text-success">{{ total_active_validators_count }}</strong> Validators
         </div>
         <div class="small">
-          <strong class="text-success">{{ total_nodes_count }}</strong> Nodes
+          <strong class="text-success">{{ total_active_nodes_count }}</strong> Nodes
         </div>
       </div>
 
@@ -61,8 +61,8 @@
       return {
         api_url: api_url,
         data_centers: [],
-        total_validators_count: 0,
-        total_nodes_count: 0,
+        total_active_validators_count: 0,
+        total_active_nodes_count: 0,
         selected_data_center: null,
       }
     },
@@ -72,8 +72,8 @@
 
       axios.get(url).then(function (response) {
         ctx.data_centers = response.data.data_centers;
-        ctx.total_validators_count = response.data.total_validators_count;
-        ctx.total_nodes_count = response.data.total_nodes_count;
+        ctx.total_active_validators_count = response.data.total_active_validators_count;
+        ctx.total_active_nodes_count = response.data.total_active_nodes_count;
       })
     },
     watch: {

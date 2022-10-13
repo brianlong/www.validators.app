@@ -24,7 +24,7 @@
 #  fk_rails_...  (data_center_id => data_centers.id)
 #
 class DataCenterStat < ApplicationRecord
-  FIELDS_FOR_API = %w[gossip_nodes_count validators_count].freeze
+  FIELDS_FOR_API = %w[active_gossip_nodes_count active_validators_count].freeze
 
   belongs_to :data_center
 

@@ -20,19 +20,19 @@ module Api
                                  .where(
                                    "data_center_stats.network = ?
                                    AND (
-                                     data_center_stats.gossip_nodes_count > 0
-                                     OR data_center_stats.validators_count > 0
+                                     data_center_stats.active_gossip_nodes_count > 0
+                                     OR data_center_stats.active_validators_count > 0
                                    )",
                                    dc_params[:network]
                                  ).order(:validators_count)
 
-        total_validators_count = data_centers.sum{ |dc| dc[:validators_count] }
-        total_nodes_count = data_centers.sum{ |dc| dc[:gossip_nodes_count] }
+        total_active_validators_count = data_centers.sum{ |dc| dc[:active_validators_count] }
+        total_active_nodes_count = data_centers.sum{ |dc| dc[:active_gossip_nodes_count] }
 
         render json: {
           data_centers: data_centers,
-          total_validators_count: total_validators_count,
-          total_nodes_count: total_nodes_count
+          total_active_validators_count: total_active_validators_count,
+          total_active_nodes_count: total_active_nodes_count
         }, status: :ok
       end
 
