@@ -3,10 +3,11 @@
 require_relative "../config/environment"
 
 LEADERS_LIMIT = 6
+FETCHED_LEADERS_LIMIT = 20
 
 def broadcast_leaders
     current_slot = solana_client.get_slot.result
-    leader_accounts = solana_client.get_slot_leaders(current_slot, 20).result
+    leader_accounts = solana_client.get_slot_leaders(current_slot, FETCHED_LEADERS_LIMIT).result
     leaders = Validator.where(account: leader_accounts)
     leaders_mapped = leaders.map do |leader|
       { name: leader.name, avatar_url: leader.avatar_url }
