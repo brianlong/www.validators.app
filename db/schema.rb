@@ -214,7 +214,9 @@ ActiveRecord::Schema.define(version: 2022_10_07_070911) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "staked", default: false
+    t.boolean "is_active", default: true
     t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
+    t.index ["network", "is_active"], name: "index_gossip_nodes_on_network_and_is_active"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
   end
 

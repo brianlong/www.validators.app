@@ -3,13 +3,7 @@
 class ActiveStakeWorker
   include StakeStatsLogic
 
-  def perform(args = {})
-    payload = {
-      network: args["network"],
-      batch_uuid: args["batch_uuid"]
-    }
-
-    _p = Pipeline.new(200, payload)
-                 .then(&update_total_active_stake)
+  def perform(network:, batch_uuid: )
+    CreateClusterStatsService.new(network: network, batch_uuid: batch_uuid).call
   end
 end

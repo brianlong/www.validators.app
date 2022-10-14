@@ -9,7 +9,7 @@ class ClusterStatsController < ApplicationController
     @batch = Batch.find_by(network: network, uuid: @stats[:batch_uuid])
     @this_epoch = EpochHistory.where(network: network, batch_uuid: @batch.uuid).first&.epoch
     @validators_count = Validator.where(network: network).scorable.count
-    @total_active_stake = ClusterStat.by_network(network).last.total_active_stake
+    @total_active_stake = ClusterStat.by_network(network).last&.total_active_stake || 0
   end
 
   private
