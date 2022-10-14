@@ -1,20 +1,66 @@
 <template>
-  <div>
+  <div class="col-md-4 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <h2 class="h5 card-heading-left">Leader</h2>
 
+        <span class="text-muted" v-if="!current_leader">loading...</span>
+
+        <div class="leaders-info" v-if="current_leader"></div>
+          <div class="current-leader-info center-block text-center mb-3">
+            <div class="info-avatar">
+              <img :src="create_avatar_link(current_leader)" class='img-circle-medium' />
+            </div>
+            <div class="text-muted mt-1">{{ current_leader.name }}</div>
+          </div>
+
+          <div class="lead">Next Leaders</div>
+          <div class="next-leaders-info d-flex justify-content-center mt-3 gap-3">
+            <div class="info-avatar">
+              <span v-for="leader in next_leaders">
+                <img :src="create_avatar_link(leader)" class='img-circle-medium'>
+              </span>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 
 <script>
-  import * as web3 from "@solana/web3.js";
-
-  export default {
-    data() {
-      return {
+export default {
+  data() {
+    return {
+      current_leader: null,
+      next_leaders: []
+    }
+  },
+  channels: {
+    LeadersChannel: {
+      connected() { },
+      rejected() { },
+      received(data) {
+        this.current_leader = data.shift();
+        this.next_leaders = data;
+      },
+      disconnected() { }
+    }
+  },
+  mounted() {
+    this.$cable.subscribe({
+      channel: "LeadersChannel",
+      room: "public"
+    });
+  },
+  methods: {
+    create_avatar_link(leader) {
+      if (leader['avatar_url']) {
+        return leader['avatar_url']
+      } else {
+        return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
       }
     },
-    created() {
-    },
-    methods: {
-    }
   }
+}
 </script>
