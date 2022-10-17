@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"

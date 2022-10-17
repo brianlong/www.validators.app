@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateClusterStatsService
   
   def initialize(network:, batch_uuid: )
