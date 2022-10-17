@@ -119,6 +119,7 @@ namespace :deamons do
           execute :systemctl, '--user', :start, :gather_rpc_testnet
           execute :systemctl, '--user', :start, :gather_vote_account_details
           execute :systemctl, '--user', :start, :process_ping_thing
+          execute :systemctl, '--user', :start, :front_stats_update
         end
       end
     end
@@ -135,6 +136,7 @@ namespace :deamons do
           execute :systemctl, '--user', :stop, :gather_rpc_testnet
           execute :systemctl, '--user', :stop, :gather_vote_account_details
           execute :systemctl, '--user', :stop, :process_ping_thing
+          execute :systemctl, '--user', :stop, :front_stats_update
         end
       end
     end
@@ -151,6 +153,7 @@ namespace :deamons do
           execute :systemctl, '--user', :restart, :gather_rpc_testnet
           execute :systemctl, '--user', :restart, :gather_vote_account_details
           execute :systemctl, '--user', :restart, :process_ping_thing
+          execute :systemctl, '--user', :restart, :front_stats_update
         end
       end
     end
