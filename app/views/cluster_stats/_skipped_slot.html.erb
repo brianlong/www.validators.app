@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-content">
-    <h2 class="h3 card-heading">Skipped Slot&nbsp;&percnt;</h2>
+    <h2 class="h4 card-heading">Skipped Slot&nbsp;&percnt;</h2>
     <div class="row px-3 px-xl-5 mb-md-2">
       <div class="stat col-5 my-auto">
         <small class="text-muted">Median:</small>
@@ -20,7 +20,7 @@
         <h2 class="stat-title-2 text-success mt-2">
           <% skipped_slots_min = @stats[:skipped_slots][:min].to_f * 100%>
           <%= skipped_slots_min > 0 ? skipped_slots_min : 0 %>
-          &ndash; 
+          &ndash;
           <%= @stats[:skipped_slots][:max].to_f * 100 %>
         </h2>
       </div>

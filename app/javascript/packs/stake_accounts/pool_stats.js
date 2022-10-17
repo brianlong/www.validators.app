@@ -28,7 +28,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
   template: `
     <div class="card h-100">
       <div class="card-content">
-        <h2 class="h3 card-heading mb-2">
+        <h2 class="h4 card-heading mb-2">
           {{ pool.name }} {{ pool.ticker ? '(' + pool.ticker + ')' : '' }} Statistics
         </h2>
         <div class="text-center text-muted small mb-4 pb-2">
