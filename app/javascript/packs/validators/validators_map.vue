@@ -17,7 +17,7 @@
         -->
 
         <div v-for="data_center in data_centers"
-             :class="set_map_point_class(data_center.validators_count)"
+             :class="set_map_point_class(data_center.active_validators_count, data_center.active_gossip_nodes_count)"
              :style="{ left: position_horizontal(data_center.longitude),
                        bottom: position_vertical(data_center.latitude) }"
              :title="data_center.data_center_key"
@@ -83,16 +83,38 @@
         }
       },
 
-      set_map_point_class: function(validators_count) {
-        if(typeof(validators_count) != 'number') {
+      set_map_point_size: function(validators_and_nodes_count) {
+        if(typeof(validators_and_nodes_count) != 'number') {
           return "map-point map-point-sm";
-        } else if(validators_count < 10) {
+        } else if(validators_and_nodes_count < 10) {
           return "map-point map-point-sm";
-        } else if(validators_count < 100) {
+        } else if(validators_and_nodes_count < 100) {
           return "map-point map-point-md";
         } else {
           return "map-point map-point-lg";
         }
+      },
+
+      set_map_point_color: function(validators_count, nodes_count) {
+        if(typeof(validators_count) != 'number') {
+          return "map-point-mixed";
+        } else if(typeof(nodes_count) != 'number') {
+          return "map-point-mixed";
+        } else if(validators_count > 0 && nodes_count > 0) {
+          return "map-point-mixed";
+        } else if(validators_count > 0) {
+          return "map-point-green";
+        } else if(nodes_count > 0) {
+          return "map-point-purple";
+        } else {
+          return "map-point-mixed";
+        }
+      },
+
+      set_map_point_class: function(validators_count, nodes_count) {
+        var point_size = this.set_map_point_size(validators_count + nodes_count);
+        var point_color = this.set_map_point_color(validators_count, nodes_count);
+        return point_size + " " + point_color;
       },
 
       select_data_center: function(data_center) {

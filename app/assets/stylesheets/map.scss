@@ -1,8 +1,9 @@
 @import "variables";
+$green-point: rgba(0, 143, 107, .95);
+$purple-point: rgba(141, 99, 153, .95);
+$green-purple-point: rgba(70, 121, 130, .95);
 
-@mixin map-point-style($background, $height, $width, $padding) {
-  background-color: $background;
-  border: 1px solid darken($background, 2%);
+@mixin map-point-style($height, $width, $padding) {
   height: $height;
   width: $width;
   padding-top: $padding;
@@ -10,7 +11,6 @@
   &:hover {
     cursor: pointer;
     transform: scale(1.1);
-    background-color: lighten($background, 10%);
     z-index: 2;
     transition: all .2s;
   }
@@ -61,13 +61,38 @@
     line-height: 11px;
 
     &-sm {
-      @include map-point-style(darken($green, 5%), 16px, 16px, 2px)
+      @include map-point-style(16px, 16px, 2px)
     }
     &-md {
-      @include map-point-style(lighten($green, 5%), 20px, 20px, 4px)
+      @include map-point-style(20px, 20px, 4px)
     }
     &-lg {
-      @include map-point-style(lighten($green, 15%), 24px, 24px, 6px)
+      @include map-point-style(24px, 24px, 6px)
+    }
+
+    &-green {
+      background-color: $green-point;
+      border: 1px solid lighten($green-point, 6%);
+      &:hover {
+        background-color: lighten($green-point, 10%);
+        border: 1px solid lighten($green-point, 10%);
+      }
+    }
+    &-purple {
+      background-color: $purple-point;
+      border: 1px solid lighten($purple-point, 6%);
+      &:hover {
+        background-color: lighten($purple-point, 10%);
+        border: 1px solid lighten($purple-point, 10%);
+      }
+    }
+    &-mixed {
+      background-color: $green-purple-point;
+      border: 1px solid lighten($green-purple-point, 6%);
+      &:hover {
+        background-color: lighten($green-purple-point, 10%);
+        border: 1px solid lighten($green-purple-point, 10%);
+      }
     }
   }
 
