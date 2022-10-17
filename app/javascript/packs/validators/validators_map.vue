@@ -22,15 +22,28 @@
                        bottom: position_vertical(data_center.latitude) }"
              :title="data_center.data_center_key"
              v-on:click="select_data_center(data_center)">
-          {{ data_center.active_validators_count + data_center.active_gossip_nodes_count }}
+          <span v-if="data_center.active_gossip_nodes_count">
+            {{ data_center.active_validators_count + data_center.active_gossip_nodes_count }}
+          </span>
+          <span v-else>{{ data_center.active_validators_count }}</span>
         </div>
       </div>
     </section>
 
     <section class="map-legend">
       <div class="map-legend-col">
-        <div class="small text-muted">Current Leader placeholder</div>
-        <small class="text-muted">{{ network }}</small>
+        <div class="small text-muted">Leader placeholder {{ network }}</div>
+        <div class="btn-group">
+          <span class="btn btn-sm btn-secondary nav-link active"
+                v-on:click="toggle_nodes(false)"
+                v-if="hide_gossip_nodes">
+            Show nodes
+          </span>
+          <span class="btn btn-sm btn-secondary nav-link"
+                v-on:click="toggle_nodes(true)" v-else>
+            Hide nodes
+          </span>
+        </div>
       </div>
 
       <div class="map-legend-col" v-if="selected_data_center">
@@ -42,6 +55,7 @@
 </template>
 
 <script>
+  import debounce from 'lodash/debounce';
   import axios from 'axios';
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -57,6 +71,7 @@
         api_url: api_url,
         data_centers: [],
         selected_data_center: null,
+        hide_gossip_nodes: false,
       }
     },
     created () {
@@ -68,7 +83,6 @@
       })
     },
     watch: {
-      // TODO
     },
     methods: {
       position_horizontal: function(longitude) {
@@ -85,13 +99,13 @@
 
       set_map_point_size: function(validators_and_nodes_count) {
         if(typeof(validators_and_nodes_count) != 'number') {
-          return "map-point map-point-sm";
+          return "map-point-sm";
         } else if(validators_and_nodes_count < 10) {
-          return "map-point map-point-sm";
+          return "map-point-sm";
         } else if(validators_and_nodes_count < 100) {
-          return "map-point map-point-md";
+          return "map-point-md";
         } else {
-          return "map-point map-point-lg";
+          return "map-point-lg";
         }
       },
 
@@ -112,14 +126,40 @@
       },
 
       set_map_point_class: function(validators_count, nodes_count) {
+        nodes_count = nodes_count == undefined ? 0 : nodes_count;
+        validators_count = validators_count == undefined ? 0 : validators_count;
+
         var point_size = this.set_map_point_size(validators_count + nodes_count);
         var point_color = this.set_map_point_color(validators_count, nodes_count);
-        return point_size + " " + point_color;
+
+        return "map-point " + point_size + " " + point_color;
+      },
+
+      set_button_class: function(value) {
+        return "btn btn-sm btn-secondary nav-link active";
       },
 
       select_data_center: function(data_center) {
         this.selected_data_center = data_center;
-      }
+      },
+
+      toggle_nodes: function(value) {
+        this.hide_gossip_nodes = value;
+        this.refresh_results();
+      },
+
+      refresh_results: debounce(function() {
+        var ctx = this;
+        var query_params = {
+          params: {
+            hide_gossip_nodes: this.hide_gossip_nodes
+          }
+        }
+        axios.get(ctx.api_url, query_params).then(function (response) {
+          ctx.data_centers = response.data.data_centers;
+        })
+      }, 2000),
+
     }
   }
 </script>
