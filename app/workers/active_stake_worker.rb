@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class ActiveStakeWorker
-  include StakeStatsLogic
+  include Sidekiq::Worker
 
-  def perform(network:, batch_uuid: )
-    CreateClusterStatsService.new(network: network, batch_uuid: batch_uuid).call
+  def perform(args = {})
+    CreateClusterStatsService.new(network: args["network"], batch_uuid: args["batch_uuid"]).call
   end
 end
