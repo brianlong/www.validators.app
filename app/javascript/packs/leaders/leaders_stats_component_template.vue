@@ -34,11 +34,12 @@
     data() {
       return {
         current_leader: null,
-        next_leaders: []
+        next_leaders: [],
+        network: 'mainnet'
       }
     },
     channels: {
-      LeadersChannel: {
+      LeadersMainnetChannel: {
         connected() { },
         rejected() { },
         received(data) {
@@ -46,11 +47,20 @@
           this.next_leaders = data;
         },
         disconnected() { }
-      }
+      },
+      LeadersTestnetChannel: {
+        connected() { },
+        rejected() { },
+        received(data) {
+          this.current_leader = data.shift();
+          this.next_leaders = data;
+        },
+        disconnected() { }
+      },
     },
     mounted() {
       this.$cable.subscribe({
-        channel: "LeadersChannel",
+        channel: this.channel_name(this.network),
         room: "public"
       });
     },
@@ -62,6 +72,9 @@
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
         }
       },
-    }
+      channel_name(network) {
+        return network === 'mainnet' ? 'LeadersMainnetChannel' : 'LeadersTestnetChannel';
+      }
+    },
   }
 </script>
