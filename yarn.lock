@@ -10833,6 +10833,11 @@ vue@>=2.0.0, vue@^2.6.14:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
+vuejs-storage@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/vuejs-storage/-/vuejs-storage-3.1.1.tgz#d7c1a0e5b6a145759512eac5ae92db812c229c70"
+  integrity sha512-dLvpl9PMthtnxi+yABfwBNBOjXHJuBONclLwr6ZNuALP/p0/L64h4ZkUwgKfwyAUrvG5C2V8ifetaVo6OXNtxg==
+
 vuex@2.5.0, vuex@^2.0.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-2.5.0.tgz#20f0265ade6c9a5ac6724a405d3ffdb4726c9741"
