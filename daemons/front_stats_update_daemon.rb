@@ -7,26 +7,29 @@ FETCHED_LEADERS_LIMIT = 20
 MAINNET = "mainnet"
 NETWORKS = [MAINNET, "testnet"].freeze
 
-def broadcast_leaders_by_network(network)
+def all_leaders
+  NETWORKS.map do |network|
+    [network, leaders_for_network(network)]
+  end.to_h
+end
+
+def leaders_for_network(network)
   client = solana_client(network)
   current_slot = client.get_slot.result
   leader_accounts = client.get_slot_leaders(current_slot, FETCHED_LEADERS_LIMIT).result
   leaders = Validator.where(account: leader_accounts)
-  leaders_mapped = leaders.map do |leader|
+
+  leaders_data(leaders).take(LEADERS_LIMIT)
+end
+
+def leaders_data(leaders)
+  leaders.map do |leader|
     { name: leader.name, avatar_url: leader.avatar_url }
   end
-  channel = leaders_channel(network)
-
-  print leaders_mapped
-  ActionCable.server.broadcast(channel, leaders_mapped.take(LEADERS_LIMIT))
 end
 
 def solana_client(network)
   network == MAINNET ? mainnet_client : testnet_client
-end
-
-def leaders_channel(network)
-  network == MAINNET ? "leaders_mainnet_channel" : "leaders_testnet_channel"
 end
 
 def mainnet_client
@@ -44,9 +47,9 @@ loop do
     print parsed_response
     ActionCable.server.broadcast("sol_price_channel", parsed_response)
 
-    NETWORKS.each do |network|
-      broadcast_leaders_by_network(network)
-    end
+    leaders = all_leaders
+    print leaders
+    ActionCable.server.broadcast("leaders_channel", leaders)
     sleep(5)
   rescue
     sleep(5)

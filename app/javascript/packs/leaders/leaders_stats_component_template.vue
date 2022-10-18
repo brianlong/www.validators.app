@@ -39,28 +39,20 @@
       }
     },
     channels: {
-      LeadersMainnetChannel: {
+      LeadersChannel: {
         connected() { },
         rejected() { },
         received(data) {
+          data = data[this.network];
           this.current_leader = data.shift();
           this.next_leaders = data;
         },
         disconnected() { }
-      },
-      LeadersTestnetChannel: {
-        connected() { },
-        rejected() { },
-        received(data) {
-          this.current_leader = data.shift();
-          this.next_leaders = data;
-        },
-        disconnected() { }
-      },
+      }
     },
     mounted() {
       this.$cable.subscribe({
-        channel: this.channel_name(this.network),
+        channel: 'LeadersChannel',
         room: "public"
       });
     },
@@ -71,9 +63,6 @@
         } else {
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
         }
-      },
-      channel_name(network) {
-        return network === 'mainnet' ? 'LeadersMainnetChannel' : 'LeadersTestnetChannel';
       }
     },
   }

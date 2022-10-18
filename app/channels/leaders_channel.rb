@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class LeadersMainnetChannel < ApplicationCable::Channel
+class LeadersChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "leaders_mainnet_channel"
+    stream_from "leaders_channel"
   end
 
   def unsubscribed
