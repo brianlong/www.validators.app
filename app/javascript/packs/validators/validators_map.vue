@@ -15,17 +15,27 @@
              :style="{ left: position_horizontal(22.674129),
                        bottom: position_vertical(-34.166060) }">SAF</div>
         -->
+        <!--
+        <div v-for="data_center_group in groupped_data_centers"
+             :class="set_map_point_class(data_center_group.active_validators_count, data_center_group.active_gossip_nodes_count)"
+             :style="{ left: position_horizontal(data_center_group.longitude),
+                       bottom: position_vertical(data_center_group.latitude) }"
+             :title="data_center_group.data_center_key"
+             v-on:click="select_data_center(data_center_group)">
+        -->
 
-        <div v-for="data_center in data_centers"
-             :class="set_map_point_class(data_center.active_validators_count, data_center.active_gossip_nodes_count)"
-             :style="{ left: position_horizontal(data_center.longitude),
-                       bottom: position_vertical(data_center.latitude) }"
-             :title="data_center.data_center_key"
-             v-on:click="select_data_center(data_center)">
-          <span v-if="data_center.active_gossip_nodes_count">
-            {{ data_center.active_validators_count + data_center.active_gossip_nodes_count }}
+        <div v-for="data_center_group in groupped_data_centers"
+             :title="data_center_group.key"
+             :class="set_map_point_class(sum_validators(data_center_group, 'active_validators_count'), sum_validators(data_center_group, 'active_gossip_nodes_count'))"
+             :style="{ left: position_horizontal(data_center_group.values[0].longitude),
+                       bottom: position_vertical(data_center_group.values[0].latitude) }"
+             v-on:click="select_data_center_group(data_center_group)">
+          <span v-if="show_gossip_nodes">
+            {{ sum_validators(data_center_group, "active_validators_count") + sum_validators(data_center_group, "active_gossip_nodes_count") }}
           </span>
-          <span v-else>{{ data_center.active_validators_count }}</span>
+          <span v-else>
+            {{ sum_validators(data_center_group, "active_validators_count") }}
+          </span>
         </div>
       </div>
     </section>
@@ -60,8 +70,8 @@
         </div>
       </div>
 
-      <div class="map-legend-col" v-if="selected_data_center">
-        <validators-map-data-center-details :data_center="selected_data_center"/>
+      <div class="map-legend-col" v-if="selected_data_center_group">
+        <validators-map-data-center-details :data_center_group="selected_data_center_group"/>
       </div>
     </section>
   </div>
@@ -84,7 +94,8 @@
       return {
         api_url: api_url,
         data_centers: [],
-        selected_data_center: null,
+        groupped_data_centers: [],
+        selected_data_center_group: null,
         show_gossip_nodes: true,
       }
     },
@@ -94,6 +105,11 @@
 
       axios.get(url).then(function (response) {
         ctx.data_centers = response.data.data_centers;
+
+        console.log(ctx.data_centers);
+        var groupped_data_centers = ctx.group_by_country(response.data.data_centers, "country_name");
+        ctx.groupped_data_centers = groupped_data_centers;
+        console.log(groupped_data_centers);
       })
     },
     watch: {
@@ -149,8 +165,37 @@
         return "map-point " + point_size + " " + point_color;
       },
 
-      select_data_center: function(data_center) {
-        this.selected_data_center = data_center;
+      select_data_center_group: function(dc_group) {
+        this.selected_data_center_group = dc_group;
+      },
+
+      group_by_country: function(xs, key) {
+        console.log('group by called');
+        return xs.reduce(function (rv, x) {
+          let v = key instanceof Function ? key(x) : x[key];
+          let el = rv.find((r) => r && r.key === v);
+          if (el) {
+            el.values.push(x);
+          }
+          else {
+            rv.push({
+              key: v,
+              values: [x]
+            });
+          }
+          return rv;
+        }, []);
+      },
+
+      sum_validators: function(array, key) {
+        console.log(array.key);
+        var sum = 0;
+
+        array.values.forEach((item) => {
+          sum += item[key];
+        })
+        console.log(sum);
+        return sum;
       },
 
       set_nodes_visibility: function(value) {
