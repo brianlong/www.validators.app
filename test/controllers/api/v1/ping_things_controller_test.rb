@@ -188,4 +188,17 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal 4, response_to_json(@response.body).size
   end
+
+  test "GET api_v1_ping_things with time_filter returns only records greater than filter" do
+    filter = 5
+    10.times do |n|
+      create(:ping_thing, :testnet, response_time: n)
+    end
+
+    get api_v1_ping_things_path(network: "testnet", with_stats: "asd", time_filter: filter), headers: @headers
+
+    json_response = response_to_json(@response.body)
+    assert_equal 5, json_response.size
+    assert_equal [], json_response.select{ |pt| pt["response_time"].to_i < filter }
+  end
 end
