@@ -111,6 +111,7 @@ $green-purple-point: rgba(70, 121, 130, .95);
       flex-direction: column;
       gap: 30px;
       align-items: flex-start;
+      z-index: 3;
     }
   }
 }

@@ -32,17 +32,31 @@
 
     <section class="map-legend">
       <div class="map-legend-col">
-        <div class="small text-muted">Leader placeholder {{ network }}</div>
-        <div class="btn-group">
-          <span class="btn btn-sm btn-secondary nav-link active"
-                v-on:click="toggle_nodes(false)"
-                v-if="hide_gossip_nodes">
-            Show nodes
+        <div class="btn-group btn-group-toggle switch-button mb-3" v-if="show_gossip_nodes">
+          <span class="btn btn-xs btn-secondary active">
+            <i class="fas fa-eye"></i>
           </span>
-          <span class="btn btn-sm btn-secondary nav-link"
-                v-on:click="toggle_nodes(true)" v-else>
-            Hide nodes
+          <span class="btn btn-xs btn-secondary"
+                v-on:click="set_nodes_visibility(false)">
+            <i class="fas fa-eye-slash me-2"></i>nodes
           </span>
+        </div>
+        <div class="btn-group btn-group-toggle switch-button mb-3" v-else>
+          <span class="btn btn-xs btn-secondary"
+                v-on:click="set_nodes_visibility(true)">
+            <i class="fas fa-eye me-2"></i>nodes
+          </span>
+          <span class="btn btn-xs btn-secondary active">
+            <i class="fas fa-eye-slash"></i>
+          </span>
+        </div>
+
+        <div class="">
+          <div class="small text-muted">Current Leader:</div>
+          <div>
+            <strong class="text-success">Block Logic | BL</strong>
+            <span class="text-muted">(DDnA...oshdp)</span>
+          </div>
         </div>
       </div>
 
@@ -71,7 +85,7 @@
         api_url: api_url,
         data_centers: [],
         selected_data_center: null,
-        hide_gossip_nodes: false,
+        show_gossip_nodes: true,
       }
     },
     created () {
@@ -135,16 +149,12 @@
         return "map-point " + point_size + " " + point_color;
       },
 
-      set_button_class: function(value) {
-        return "btn btn-sm btn-secondary nav-link active";
-      },
-
       select_data_center: function(data_center) {
         this.selected_data_center = data_center;
       },
 
-      toggle_nodes: function(value) {
-        this.hide_gossip_nodes = value;
+      set_nodes_visibility: function(value) {
+        this.show_gossip_nodes = value;
         this.refresh_results();
       },
 
@@ -152,7 +162,7 @@
         var ctx = this;
         var query_params = {
           params: {
-            hide_gossip_nodes: this.hide_gossip_nodes
+            show_gossip_nodes: this.show_gossip_nodes
           }
         }
         axios.get(ctx.api_url, query_params).then(function (response) {
