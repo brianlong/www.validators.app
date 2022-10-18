@@ -4,13 +4,15 @@
 #
 # Table name: data_center_stats
 #
-#  id                 :bigint           not null, primary key
-#  gossip_nodes_count :integer
-#  network            :string(191)
-#  validators_count   :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  data_center_id     :bigint           not null
+#  id                        :bigint           not null, primary key
+#  active_gossip_nodes_count :integer
+#  active_validators_count   :integer
+#  gossip_nodes_count        :integer
+#  network                   :string(191)
+#  validators_count          :integer
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  data_center_id            :bigint           not null
 #
 # Indexes
 #
@@ -22,7 +24,7 @@
 #  fk_rails_...  (data_center_id => data_centers.id)
 #
 class DataCenterStat < ApplicationRecord
-  FIELDS_FOR_API = %w[gossip_nodes_count validators_count].freeze
+  FIELDS_FOR_API = %w[active_gossip_nodes_count active_validators_count].freeze
 
   belongs_to :data_center
 
