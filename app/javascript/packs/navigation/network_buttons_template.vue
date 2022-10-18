@@ -16,6 +16,9 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
+  import types from '../mutations/main_mutations_types.js'
+
   export default {
     data(){
       return {
@@ -45,9 +48,12 @@
         } else {
           this.url = this.url + '?network=' + target_network
         }
+
+        this.set_network(target_network)
         window.location.href = this.url
         return true
-      }
-    }
+      },
+      ...mapActions([types.SET_NETWORK])
+    },
   }
 </script>

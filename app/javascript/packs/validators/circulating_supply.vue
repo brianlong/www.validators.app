@@ -23,11 +23,6 @@
   import { mapGetters } from 'vuex'
 
   export default {
-    props: {
-      network: {
-        default: "mainnet-beta"
-      }
-    },
     data() {
       return {
         connection: null,
