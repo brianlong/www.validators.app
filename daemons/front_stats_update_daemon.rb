@@ -4,8 +4,8 @@ require_relative "../config/environment"
 
 LEADERS_LIMIT = 6
 FETCHED_LEADERS_LIMIT = 20
-MAINNET = 'mainnet'
-NETWORKS = [MAINNET, 'testnet']
+MAINNET = "mainnet"
+NETWORKS = [MAINNET, "testnet"].freeze
 
 def broadcast_leaders_by_network(network)
   client = solana_client(network)
