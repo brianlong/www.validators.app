@@ -15,6 +15,15 @@ const getters = {
     } else {
       return state.default_url
     }
+  },
+  network(state) {
+    if (location.href.match(/network=mainnet/)) {
+      return 'mainnet'
+    } else if (location.href.match(/network=testnet/)) {
+      return 'testnet'
+    }
+
+    return state.network ? state.network : 'mainnet'
   }
 }
 const mutations = {
