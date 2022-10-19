@@ -10,7 +10,6 @@ $green-purple-point: rgba(70, 121, 130, .95);
   transition: all .2s;
   &:hover {
     cursor: pointer;
-    transform: scale(1.1);
     z-index: 2;
     transition: all .2s;
   }
@@ -61,37 +60,40 @@ $green-purple-point: rgba(70, 121, 130, .95);
     line-height: 11px;
 
     &-sm {
-      @include map-point-style(16px, 16px, 2px)
+      @include map-point-style(15px, 15px, 1.5px)
     }
     &-md {
-      @include map-point-style(20px, 20px, 4px)
+      @include map-point-style(18px, 18px, 3px)
     }
     &-lg {
-      @include map-point-style(24px, 24px, 6px)
+      @include map-point-style(23px, 23px, 5px)
     }
 
     &-green {
       background-color: $green-point;
       border: 1px solid lighten($green-point, 6%);
       &:hover {
-        background-color: lighten($green-point, 10%);
-        border: 1px solid lighten($green-point, 10%);
+        background-color: lighten($green-point, 12%);
+        border: 1px solid lighten($green-point, 12%);
+        outline: $green-point solid 2px;
       }
     }
     &-purple {
       background-color: $purple-point;
       border: 1px solid lighten($purple-point, 6%);
       &:hover {
-        background-color: lighten($purple-point, 10%);
-        border: 1px solid lighten($purple-point, 10%);
+        background-color: lighten($purple-point, 12%);
+        border: 1px solid lighten($purple-point, 12%);
+        outline: $purple-point solid 2px;
       }
     }
     &-mixed {
       background-color: $green-purple-point;
       border: 1px solid lighten($green-purple-point, 6%);
       &:hover {
-        background-color: lighten($green-purple-point, 10%);
-        border: 1px solid lighten($green-purple-point, 10%);
+        background-color: lighten($green-purple-point, 12%);
+        border: 1px solid lighten($green-purple-point, 12%);
+        outline: $green-purple-point solid 2px;
       }
     }
   }
