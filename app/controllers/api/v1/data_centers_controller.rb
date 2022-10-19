@@ -28,10 +28,22 @@ module Api
                                  .where.not(data_center_key: "0--Unknown")
                                  .where("data_center_stats.network = ?", dc_params[:network])
                                  .where(query)
-                                 .order(:validators_count)
+                                 .order(:active_validators_count)
+
+        grouped_data_centers = {}
+        data_centers.group_by(&:country_name).each do |group|
+          grouped_data_centers[group.first] = {
+            identifier: group.first,
+            active_validators_count: group.last.pluck(:active_validators_count).compact.sum,
+            active_gossip_nodes_count: group.last.pluck(:active_gossip_nodes_count).compact.sum,
+            longitude: group.last.first.longitude,
+            latitude: group.last.first.latitude,
+            data_centers: group.last.pluck(:data_center_key),
+          }
+        end
 
         render json: {
-          data_centers: data_centers
+          data_centers: grouped_data_centers
         }, status: :ok
       end
 

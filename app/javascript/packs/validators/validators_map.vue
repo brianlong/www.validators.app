@@ -16,17 +16,16 @@
                        bottom: position_vertical(-34.166060) }">SAF</div>
         -->
 
-        <div v-for="data_center_group in groupped_data_centers"
-             :title="data_center_group.key"
-             :class="set_map_point_class(sum_validators(data_center_group, 'active_validators_count'), sum_validators(data_center_group, 'active_gossip_nodes_count'))"
-             :style="{ left: position_horizontal(data_center_group.values[0].longitude),
-                       bottom: position_vertical(data_center_group.values[0].latitude) }"
-             v-on:click="select_data_center_group(data_center_group)">
+        <div v-for="dc_group in data_centers"
+             :class="set_map_point_class(dc_group.active_validators_count, dc_group.active_gossip_nodes_count)"
+             :style="{ left: position_horizontal(dc_group.longitude),
+                       bottom: position_vertical(dc_group.latitude) }"
+             v-on:click="select_data_centers_group(dc_group)">
           <span v-if="show_gossip_nodes">
-            {{ sum_validators(data_center_group, "active_validators_count") + sum_validators(data_center_group, "active_gossip_nodes_count") }}
+            {{ dc_group.active_validators_count + dc_group.active_gossip_nodes_count }}
           </span>
           <span v-else>
-            {{ sum_validators(data_center_group, "active_validators_count") }}
+            {{ dc_group.active_validators_count }}
           </span>
         </div>
       </div>
@@ -62,8 +61,8 @@
         </div>
       </div>
 
-      <div class="map-legend-col" v-if="selected_data_center_group">
-        <validators-map-data-center-details :data_center_group="selected_data_center_group"/>
+      <div class="map-legend-col" v-if="selected_data_centers_group">
+        <validators-map-data-center-details :data_centers_group="selected_data_centers_group"/>
       </div>
     </section>
   </div>
@@ -86,8 +85,7 @@
       return {
         api_url: api_url,
         data_centers: [],
-        groupped_data_centers: [],
-        selected_data_center_group: null,
+        selected_data_centers_group: null,
         show_gossip_nodes: true,
       }
     },
@@ -97,8 +95,6 @@
 
       axios.get(url).then(function (response) {
         ctx.data_centers = response.data.data_centers;
-        ctx.groupped_data_centers = ctx.group_by_country(response.data.data_centers, "country_name");
-        console.log(ctx.groupped_data_centers);
       })
     },
     watch: {
@@ -145,44 +141,14 @@
       },
 
       set_map_point_class: function(validators_count, nodes_count) {
-        nodes_count = isNaN(nodes_count) ? 0 : nodes_count;
-        validators_count = isNaN(validators_count) ? 0 : validators_count;
-        // to do check if can be removed after updating group method
-
         let point_size = this.set_map_point_size(validators_count + nodes_count);
         let point_color = this.set_map_point_color(validators_count, nodes_count);
 
         return "map-point " + point_size + " " + point_color;
       },
 
-      select_data_center_group: function(dc_group) {
-        this.selected_data_center_group = dc_group;
-      },
-
-      group_by_country: function(xs, key) {
-        return xs.reduce(function (rv, x) {
-          let v = key instanceof Function ? key(x) : x[key];
-          let el = rv.find((r) => r && r.key === v);
-          if (el) {
-            el.values.push(x);
-          }
-          else {
-            rv.push({
-              key: v,
-              values: [x]
-            });
-          }
-          return rv;
-        }, []);
-      },
-
-      sum_validators: function(array, key) {
-        let sum = 0;
-
-        array.values.forEach((item) => {
-          sum += item[key];
-        })
-        return sum;
+      select_data_centers_group: function(dc_group) {
+        this.selected_data_centers_group = dc_group;
       },
 
       set_nodes_visibility: function(value) {
@@ -199,7 +165,6 @@
         }
         axios.get(ctx.api_url, query_params).then(function (response) {
           ctx.data_centers = response.data.data_centers;
-          ctx.groupped_data_centers = ctx.group_by_country(response.data.data_centers, "country_name");;
         })
       }, 2000),
 
