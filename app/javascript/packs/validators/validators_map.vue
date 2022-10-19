@@ -15,14 +15,6 @@
              :style="{ left: position_horizontal(22.674129),
                        bottom: position_vertical(-34.166060) }">SAF</div>
         -->
-        <!--
-        <div v-for="data_center_group in groupped_data_centers"
-             :class="set_map_point_class(data_center_group.active_validators_count, data_center_group.active_gossip_nodes_count)"
-             :style="{ left: position_horizontal(data_center_group.longitude),
-                       bottom: position_vertical(data_center_group.latitude) }"
-             :title="data_center_group.data_center_key"
-             v-on:click="select_data_center(data_center_group)">
-        -->
 
         <div v-for="data_center_group in groupped_data_centers"
              :title="data_center_group.key"
@@ -90,7 +82,7 @@
       },
     },
     data () {
-      var api_url = "/api/v1/data-centers-with-nodes/" + this.network
+      let api_url = "/api/v1/data-centers-with-nodes/" + this.network
       return {
         api_url: api_url,
         data_centers: [],
@@ -100,16 +92,13 @@
       }
     },
     created () {
-      var ctx = this;
-      var url = ctx.api_url;
+      let ctx = this;
+      let url = ctx.api_url;
 
       axios.get(url).then(function (response) {
         ctx.data_centers = response.data.data_centers;
-
-        console.log(ctx.data_centers);
-        var groupped_data_centers = ctx.group_by_country(response.data.data_centers, "country_name");
-        ctx.groupped_data_centers = groupped_data_centers;
-        console.log(groupped_data_centers);
+        ctx.groupped_data_centers = ctx.group_by_country(response.data.data_centers, "country_name");;
+        console.log(ctx.groupped_data_centers);
       })
     },
     watch: {
@@ -159,8 +148,8 @@
         nodes_count = nodes_count == undefined ? 0 : nodes_count;
         validators_count = validators_count == undefined ? 0 : validators_count;
 
-        var point_size = this.set_map_point_size(validators_count + nodes_count);
-        var point_color = this.set_map_point_color(validators_count, nodes_count);
+        let point_size = this.set_map_point_size(validators_count + nodes_count);
+        let point_color = this.set_map_point_color(validators_count, nodes_count);
 
         return "map-point " + point_size + " " + point_color;
       },
@@ -170,7 +159,6 @@
       },
 
       group_by_country: function(xs, key) {
-        console.log('group by called');
         return xs.reduce(function (rv, x) {
           let v = key instanceof Function ? key(x) : x[key];
           let el = rv.find((r) => r && r.key === v);
@@ -189,7 +177,7 @@
 
       sum_validators: function(array, key) {
         console.log(array.key);
-        var sum = 0;
+        let sum = 0;
 
         array.values.forEach((item) => {
           sum += item[key];
@@ -204,8 +192,8 @@
       },
 
       refresh_results: debounce(function() {
-        var ctx = this;
-        var query_params = {
+        let ctx = this;
+        let query_params = {
           params: {
             show_gossip_nodes: this.show_gossip_nodes
           }
