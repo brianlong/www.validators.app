@@ -2,6 +2,7 @@
 <%= javascript_pack_tag 'sol_prices/sol_price_component' %>
 <%= javascript_pack_tag 'epoch/epoch_stats_component' %>
 <%= javascript_pack_tag 'validators/circulating_supply.js' %>
+<%= javascript_pack_tag 'leaders/leaders_stats_component.js' %>
 
 <%= render 'validators/ping_stats_banner' %>
 
@@ -11,12 +12,24 @@
   <div id="sol-price-component"></div>
 </section>
 
-<div class="row">
+<section class="row">
+  <div id="leader-stats-component"></div>
+
+  <div class="col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content">
+        <h2 class="h5 card-heading-left">Placeholder</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row">
   <div id="epoch-stats-component"></div>
 
   <div class="col-md-6 mb-4">
     <%= render 'validators/watchlist_info_banner' %>
   </div>
-</div>
+</section>
 
 <%= render 'validators/stake_pools_banner' %>
