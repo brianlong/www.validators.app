@@ -73,8 +73,8 @@ $green-purple-point: rgba(70, 121, 130, .95);
       background-color: $green-point;
       border: 1px solid lighten($green-point, 6%);
       &:hover {
-        background-color: lighten($green-point, 12%);
-        border: 1px solid lighten($green-point, 12%);
+        background-color: lighten($green-point, 15%);
+        border: 1px solid lighten($green-point, 15%);
         outline: $green-point solid 2px;
       }
     }
@@ -82,8 +82,8 @@ $green-purple-point: rgba(70, 121, 130, .95);
       background-color: $purple-point;
       border: 1px solid lighten($purple-point, 6%);
       &:hover {
-        background-color: lighten($purple-point, 12%);
-        border: 1px solid lighten($purple-point, 12%);
+        background-color: lighten($purple-point, 15%);
+        border: 1px solid lighten($purple-point, 15%);
         outline: $purple-point solid 2px;
       }
     }
@@ -91,8 +91,8 @@ $green-purple-point: rgba(70, 121, 130, .95);
       background-color: $green-purple-point;
       border: 1px solid lighten($green-purple-point, 6%);
       &:hover {
-        background-color: lighten($green-purple-point, 12%);
-        border: 1px solid lighten($green-purple-point, 12%);
+        background-color: lighten($green-purple-point, 15%);
+        border: 1px solid lighten($green-purple-point, 15%);
         outline: $green-purple-point solid 2px;
       }
     }
