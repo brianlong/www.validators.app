@@ -10838,10 +10838,15 @@ vuejs-storage@^3.1.1:
   resolved "https://registry.yarnpkg.com/vuejs-storage/-/vuejs-storage-3.1.1.tgz#d7c1a0e5b6a145759512eac5ae92db812c229c70"
   integrity sha512-dLvpl9PMthtnxi+yABfwBNBOjXHJuBONclLwr6ZNuALP/p0/L64h4ZkUwgKfwyAUrvG5C2V8ifetaVo6OXNtxg==
 
-vuex@2.5.0, vuex@^2.0.0:
+vuex@^2.0.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-2.5.0.tgz#20f0265ade6c9a5ac6724a405d3ffdb4726c9741"
   integrity sha512-5oJPOJySBgSgSzoeO+gZB/BbN/XsapgIF6tz34UwJqnGZMQurzIO3B4KIBf862gfc9ya+oduY5sSkq+5/oOilQ==
+
+vuex@^3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.6.2.tgz#236bc086a870c3ae79946f107f16de59d5895e71"
+  integrity sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw==
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"
