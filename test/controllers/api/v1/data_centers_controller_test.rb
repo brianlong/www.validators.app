@@ -40,11 +40,11 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 1, resp.keys.count
-    assert_equal 6, resp["data_centers"].values.first.keys.count
+    assert_equal 6, resp["data_centers_groups"].values.first.keys.count
   end
 
   test "#data_centers_with_nodes response returns correct sums for data center groups" do
-    dc = create(:data_center, country_name: @data_center.country_name)
+    dc = create(:data_center, :frankfurt, country_name: @data_center.country_name)
     create(
       :data_center_stat,
       data_center: dc,
@@ -58,8 +58,8 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 1, resp.keys.count
-    assert_equal 3, resp["data_centers"].values.last["active_gossip_nodes_count"]
-    assert_equal 3, resp["data_centers"].values.last["active_validators_count"]
+    assert_equal 3, resp["data_centers_groups"].values.last["active_gossip_nodes_count"]
+    assert_equal 3, resp["data_centers_groups"].values.last["active_validators_count"]
   end
 
   test "#data_centers_with_nodes response does not include data_centers with 0 validators and 0 nodes" do
@@ -77,8 +77,8 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 1, resp.keys.count
-    assert_equal 1, resp["data_centers"].values.last["active_gossip_nodes_count"]
-    assert_equal 1, resp["data_centers"].values.last["active_validators_count"]
+    assert_equal 1, resp["data_centers_groups"].values.last["active_gossip_nodes_count"]
+    assert_equal 1, resp["data_centers_groups"].values.last["active_validators_count"]
   end
 
   test "#data_centers_with_nodes response does not include unknown data center" do
@@ -95,6 +95,6 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 1, resp.keys.count
-    refute resp["data_centers"].values.flat_map{|dc| dc["data_centers"]}.include? "0--Unknown"
+    refute resp["data_centers_groups"].values.flat_map{|dc| dc["data_centers"]}.include? "0--Unknown"
   end
 end
