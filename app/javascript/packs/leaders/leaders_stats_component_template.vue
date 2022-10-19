@@ -17,7 +17,7 @@
           <h2 class="h5 card-heading-left">Next Leaders</h2>
           <div class="d-flex flex-wrap gap-3">
             <span v-for="leader in next_leaders">
-              <img :src="create_avatar_link(leader)" class='img-circle-medium' />
+              <img :src="create_avatar_link(leader)" class='img-circle-small' />
             </span>
           </div>
         </div>
