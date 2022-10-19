@@ -24,7 +24,7 @@ end
 
 def leaders_data(leaders)
   leaders.map do |leader|
-    { name: leader.name, avatar_url: leader.avatar_url }
+    { name: leader.name, avatar_url: leader.avatar_url, account: leader.account }
   end
 end
 

@@ -7,11 +7,11 @@
         <span class="text-muted" v-if="!current_leader">loading...</span>
 
         <div class="leaders-info" v-if="current_leader">
-          <div class="current-leader-info center-block text-center mb-3">
+          <div class="current-leader-info center-block text-center mb-2">
             <div class="info-avatar">
               <img :src="create_avatar_link(current_leader)" class='img-circle-medium' />
             </div>
-            <div class="text-muted mt-1">{{ current_leader.name }}</div>
+            <div class="text-muted mt-1">{{ leader_name(current_leader) }}</div>
           </div>
 
           <div class="lead">Next Leaders</div>
@@ -62,6 +62,15 @@
           return leader.avatar_url
         } else {
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
+        }
+      },
+      leader_name(leader) {
+        if (leader.name) {
+          return leader.name
+        } else {
+          const account = leader.account
+
+          return account.substring(0, 5) + "..." + account.substring(account.length - 5)
         }
       }
     },
