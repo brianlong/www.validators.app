@@ -16,7 +16,7 @@
                        bottom: position_vertical(-34.166060) }">SAF</div>
         -->
 
-        <div v-for="dc_group in data_centers"
+        <div v-for="dc_group in data_centers_groups"
              :class="set_map_point_class(dc_group.active_validators_count, dc_group.active_gossip_nodes_count)"
              :style="{ left: position_horizontal(dc_group.longitude),
                        bottom: position_vertical(dc_group.latitude) }"
@@ -84,7 +84,7 @@
       let api_url = "/api/v1/data-centers-with-nodes/" + this.network
       return {
         api_url: api_url,
-        data_centers: [],
+        data_centers_groups: [],
         selected_data_centers_group: null,
         show_gossip_nodes: true,
       }
@@ -94,7 +94,7 @@
       let url = ctx.api_url;
 
       axios.get(url).then(function (response) {
-        ctx.data_centers = response.data.data_centers;
+        ctx.data_centers_groups = response.data.data_centers_groups;
       })
     },
     watch: {
@@ -164,7 +164,7 @@
           }
         }
         axios.get(ctx.api_url, query_params).then(function (response) {
-          ctx.data_centers = response.data.data_centers;
+          ctx.data_centers_groups = response.data.data_centers_groups;
         })
       }, 2000),
 

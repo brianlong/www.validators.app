@@ -30,20 +30,36 @@ module Api
                                  .where(query)
                                  .order(:active_validators_count)
 
-        grouped_data_centers = {}
-        data_centers.group_by(&:country_name).each do |group|
-          grouped_data_centers[group.first] = {
-            identifier: group.first,
-            active_validators_count: group.last.pluck(:active_validators_count).compact.sum,
-            active_gossip_nodes_count: group.last.pluck(:active_gossip_nodes_count).compact.sum,
-            longitude: group.last.first.longitude,
-            latitude: group.last.first.latitude,
-            data_centers: group.last.pluck(:data_center_key),
-          }
+        data_centers_groups = {}
+        data_centers.group_by(&:country_iso_code).each do |country_group|
+          # group large countries by regions (subdivisions)
+          # United States, Canada, Russia, China, Australia, India
+          if country_group.first.in? ["US", "CA", "RU", "CN", "AU", "IN"]
+            country_group.last.group_by(&:subdivision_iso_code).each do |subdivision_group|
+              data_centers_groups[subdivision_group.first] = {
+                identifier: "#{country_group.first}/#{subdivision_group.first}",
+                active_validators_count: subdivision_group.last.pluck(:active_validators_count).compact.sum,
+                active_gossip_nodes_count: subdivision_group.last.pluck(:active_gossip_nodes_count).compact.sum,
+                longitude: subdivision_group.last.first.longitude,
+                latitude: subdivision_group.last.first.latitude,
+                data_centers: subdivision_group.last.pluck(:data_center_key),
+              }
+            end
+          else
+            # group the rest by country
+            data_centers_groups[country_group.first] = {
+              identifier: country_group.first,
+              active_validators_count: country_group.last.pluck(:active_validators_count).compact.sum,
+              active_gossip_nodes_count: country_group.last.pluck(:active_gossip_nodes_count).compact.sum,
+              longitude: country_group.last.first.longitude,
+              latitude: country_group.last.first.latitude,
+              data_centers: country_group.last.pluck(:data_center_key),
+            }
+          end
         end
 
         render json: {
-          data_centers: grouped_data_centers
+          data_centers_groups: data_centers_groups
         }, status: :ok
       end
 
