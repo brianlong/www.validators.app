@@ -97,7 +97,7 @@
 
       axios.get(url).then(function (response) {
         ctx.data_centers = response.data.data_centers;
-        ctx.groupped_data_centers = ctx.group_by_country(response.data.data_centers, "country_name");;
+        ctx.groupped_data_centers = ctx.group_by_country(response.data.data_centers, "country_name");
         console.log(ctx.groupped_data_centers);
       })
     },
@@ -145,8 +145,9 @@
       },
 
       set_map_point_class: function(validators_count, nodes_count) {
-        nodes_count = nodes_count == undefined ? 0 : nodes_count;
-        validators_count = validators_count == undefined ? 0 : validators_count;
+        nodes_count = isNaN(nodes_count) ? 0 : nodes_count;
+        validators_count = isNaN(validators_count) ? 0 : validators_count;
+        // to do check if can be removed after updating group method
 
         let point_size = this.set_map_point_size(validators_count + nodes_count);
         let point_color = this.set_map_point_color(validators_count, nodes_count);
@@ -176,13 +177,11 @@
       },
 
       sum_validators: function(array, key) {
-        console.log(array.key);
         let sum = 0;
 
         array.values.forEach((item) => {
           sum += item[key];
         })
-        console.log(sum);
         return sum;
       },
 
@@ -200,6 +199,7 @@
         }
         axios.get(ctx.api_url, query_params).then(function (response) {
           ctx.data_centers = response.data.data_centers;
+          ctx.groupped_data_centers = ctx.group_by_country(response.data.data_centers, "country_name");;
         })
       }, 2000),
 

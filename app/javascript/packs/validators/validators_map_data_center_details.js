@@ -17,12 +17,22 @@ var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetai
   },
   template: `
     <div>
-      <strong class="text-purple">{{ data_center_group.key }}</strong>
-      <div class="small text-muted" v-if="sum_validators(data_center_group, 'active_validators_count') > 0">
-        {{ this.$parent.sum_validators(data_center_group, "active_validators_count") }} validator(s)
+      <strong class="text-purple">
+        {{ data_center_group.key }}, {{ data_center_group.values.length }} Data Center(s)
+      </strong>
+      
+      <div class="small" v-if="sum_validators(data_center_group, 'active_validators_count') > 0">
+        <strong class="text-purple">
+          {{ this.$parent.sum_validators(data_center_group, "active_validators_count") }}
+        </strong>
+        <span class="text-muted">validator(s)</span>
       </div>
-      <div class="small text-muted" v-if="sum_validators(data_center_group, 'active_gossip_nodes_count') > 0">
-        {{ this.$parent.sum_validators(data_center_group, "active_gossip_nodes_count") }} node(s)
+      
+      <div class="small" v-if="sum_validators(data_center_group, 'active_gossip_nodes_count') > 0">
+        <strong class="text-purple">
+          {{ this.$parent.sum_validators(data_center_group, "active_gossip_nodes_count") }}
+        </strong>
+        <span class="text-muted">node(s)</span>
       </div>
     </div>
   `
