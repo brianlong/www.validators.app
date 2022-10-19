@@ -28,7 +28,7 @@ loop do
     parsed_response = JSON.parse(ftx_response.body)
     parsed_response["cluster_stats"] = @last_cluster_stats
     print parsed_response
-    ActionCable.server.broadcast("sol_price_channel", parsed_response)
+    ActionCable.server.broadcast("front_stats_channel", parsed_response)
     sleep(sleep_time)
   rescue => e
     puts e

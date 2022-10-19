@@ -8,6 +8,9 @@
 
           <span class="text-muted" v-if="!circulating_supply">loading...</span>
           <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }}&nbsp;SOL</strong>
+          <div class="small mb-2" v-if="total_circulating_supply">
+            ({{ percent_of_total_stake() }}% of total {{ total_circulating_supply }}&nbsp;SOL)
+          </div>
         </div>
 
         <div>
@@ -49,7 +52,7 @@
     },
     mounted: function(){
       this.$cable.subscribe({
-          channel: "SolPriceChannel",
+          channel: "FrontStatsChannel",
           room: "public",
         });
     },
@@ -57,7 +60,7 @@
       'web3_url'
     ]),
     channels: {
-      SolPriceChannel: {
+      FrontStatsChannel: {
         connected() {},
         rejected() {},
         received(data) {
