@@ -20,9 +20,11 @@ VCR.configure do |config|
     uri.host == '127.0.0.1' && uri.port == 8899
   end
 
-  config.filter_sensitive_data("<TOKEN>") do |interaction|
-    interaction.request.headers["Authorization"]&.first
-    interaction.request.headers["Ftx-Key"]&.first
+  # Request's header filtering
+  ["Authorization", "Ftx-Key"].each do |header|
+    config.filter_sensitive_data("<TOKEN>") do |interaction|
+      interaction.request.headers[header]&.first
+    end
   end
 end
 
