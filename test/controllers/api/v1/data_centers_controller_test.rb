@@ -40,7 +40,26 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 1, resp.keys.count
-    assert_equal 7, resp["data_centers"].first.keys.count
+    assert_equal 6, resp["data_centers"].values.first.keys.count
+  end
+
+  test "#data_centers_with_nodes response returns correct sums for data center groups" do
+    dc = create(:data_center, country_name: @data_center.country_name)
+    create(
+      :data_center_stat,
+      data_center: dc,
+      network: @network,
+      active_gossip_nodes_count: 2,
+      active_validators_count: 2
+    )
+
+    get api_v1_data_centers_with_nodes_url(network: @network), headers: @headers
+    resp = JSON.parse(@response.body)
+
+    assert_response 200
+    assert_equal 1, resp.keys.count
+    assert_equal 3, resp["data_centers"].values.last["active_gossip_nodes_count"]
+    assert_equal 3, resp["data_centers"].values.last["active_validators_count"]
   end
 
   test "#data_centers_with_nodes response does not include data_centers with 0 validators and 0 nodes" do
@@ -58,8 +77,8 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 1, resp.keys.count
-    assert_equal 1, resp["data_centers"].first["active_gossip_nodes_count"]
-    assert_equal 1, resp["data_centers"].first["active_validators_count"]
+    assert_equal 1, resp["data_centers"].values.last["active_gossip_nodes_count"]
+    assert_equal 1, resp["data_centers"].values.last["active_validators_count"]
   end
 
   test "#data_centers_with_nodes response does not include unknown data center" do
@@ -76,6 +95,6 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 1, resp.keys.count
-    refute resp["data_centers"].map{|dc| dc["data_center_key"]}.include? "0--Unknown"
+    refute resp["data_centers"].values.flat_map{|dc| dc["data_centers"]}.include? "0--Unknown"
   end
 end
