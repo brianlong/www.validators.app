@@ -1,0 +1,44 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://geoip.maxmind.com/geoip/v2.1/insights/743.123.46.21
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Authorization:
+      - "<TOKEN>"
+      Accept:
+      - application/json
+      User-Agent:
+      - MaxMind-GeoIP2-ruby
+      Connection:
+      - Keep-Alive
+      Host:
+      - geoip.maxmind.com
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Wed, 19 Oct 2022 11:40:36 GMT
+      Content-Type:
+      - application/vnd.maxmind.com-error+json; charset=UTF-8; version=2.1
+      Content-Length:
+      - '92'
+      Connection:
+      - keep-alive
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 75c93d690f0f5012-WAW
+    body:
+      encoding: UTF-8
+      string: '{"code":"IP_ADDRESS_INVALID","error":"The value ''743.123.46.21'' is
+        not a valid IP address."}'
+  recorded_at: Wed, 19 Oct 2022 11:40:36 GMT
+recorded_with: VCR 6.0.0
