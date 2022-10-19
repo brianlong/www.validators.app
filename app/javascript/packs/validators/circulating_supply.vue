@@ -3,23 +3,22 @@
     <div class="card h-100">
       <div class="card-content">
         <h2 class="h5 card-heading-left">Stake</h2>
-        <div>
-          <span class="text-muted me-1">Circulating Supply:</span>
-
-          <span class="text-muted" v-if="!circulating_supply">loading...</span>
-          <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }}&nbsp;SOL</strong>
-          <div class="small mb-2" v-if="total_circulating_supply">
-            ({{ percent_of_total_stake() }}% of total {{ total_circulating_supply }}&nbsp;SOL)
-          </div>
-        </div>
-
-        <div>
-          <span class="text-muted me-1">Total Active Stake:</span>
+        <div class="mb-2">
+          <span class="text-muted me-1">Active Stake:</span>
 
           <span class="text-muted" v-if="!total_active_stake">loading...</span>
           <strong class="text-success" v-if="total_active_stake">{{ total_active_stake }}&nbsp;SOL</strong>
         </div>
 
+        <div>
+          <span class="text-muted me-1">Circulating Supply:</span>
+
+          <span class="text-muted" v-if="!circulating_supply">loading...</span>
+          <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }}&nbsp;SOL</strong>
+          <div class="small" v-if="total_circulating_supply">
+            ({{ percent_of_total_stake() }}% of total {{ total_circulating_supply }}&nbsp;SOL)
+          </div>
+        </div>
       </div>
     </div>
   </div>
