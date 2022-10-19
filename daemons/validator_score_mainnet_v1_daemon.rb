@@ -50,6 +50,11 @@ begin
       network: _p.payload[:network]
     )
 
+    ActiveStakeWorker.set(queue: :high_priority).perform_async(
+      batch_uuid: batch.uuid,
+      network: _p.payload[:network]
+    )
+
     break if interrupted
   rescue SkipAndSleep
     break if interrupted

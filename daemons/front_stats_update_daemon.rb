@@ -2,13 +2,25 @@
 
 require_relative "../config/environment"
 
-LEADERS_LIMIT = 6
-FETCHED_LEADERS_LIMIT = 20
-MAINNET = "mainnet"
-NETWORKS = [MAINNET, "testnet"].freeze
+@leaders_limit = 6
+@fetched_leaders_limit = 20
+@mainnet = "mainnet"
+@networks = [@mainnet, "testnet"].freeze
+sleep_time = 5 # seconds
+update_stats_time = 60 # seconds
+@counter = 0
+
+def get_latest_cluster_stats
+  {
+    mainnet: ClusterStat.by_network("mainnet").last&.attributes,
+    testnet: ClusterStat.by_network("testnet").last&.attributes
+  }
+end
+
+@last_cluster_stats = get_latest_cluster_stats
 
 def all_leaders
-  NETWORKS.map do |network|
+  @networks.map do |network|
     [network, leaders_for_network(network)]
   end.to_h
 end
@@ -16,10 +28,10 @@ end
 def leaders_for_network(network)
   client = solana_client(network)
   current_slot = client.get_slot.result
-  leader_accounts = client.get_slot_leaders(current_slot, FETCHED_LEADERS_LIMIT).result
+  leader_accounts = client.get_slot_leaders(current_slot, @fetched_leaders_limit).result
   leaders = Validator.where(account: leader_accounts)
 
-  leaders_data(leaders).take(LEADERS_LIMIT)
+  leaders_data(leaders).take(@leaders_limit)
 end
 
 def leaders_data(leaders)
@@ -29,30 +41,34 @@ def leaders_data(leaders)
 end
 
 def solana_client(network)
-  network == MAINNET ? mainnet_client : testnet_client
+  network == @mainnet ? @mainnet_client : @testnet_client
 end
 
-def mainnet_client
-  @mainnet_client ||= SolanaRpcClient.new.mainnet_client
-end
-
-def testnet_client
-  @testnet_client ||= SolanaRpcClient.new.testnet_client
-end
+@mainnet_client = SolanaRpcClient.new.mainnet_client
+@testnet_client = SolanaRpcClient.new.testnet_client
 
 loop do
   begin
+    @counter += 1
+    if @counter == update_stats_time / sleep_time
+      @counter = 0
+      @last_cluster_stats = get_latest_cluster_stats
+    end
+
     ftx_response = FtxClient.new.get_market
     parsed_response = JSON.parse(ftx_response.body)
+    parsed_response["cluster_stats"] = @last_cluster_stats
     print parsed_response
-    ActionCable.server.broadcast("sol_price_channel", parsed_response)
+    ActionCable.server.broadcast("front_stats_channel", parsed_response)
 
     leaders = all_leaders
     print leaders
     ActionCable.server.broadcast("leaders_channel", leaders)
-    sleep(5)
-  rescue
-    sleep(5)
+    sleep(sleep_time)
+  rescue => e
+    puts e
+    puts e.backtrace
+    sleep(sleep_time)
     next
   end
 end
