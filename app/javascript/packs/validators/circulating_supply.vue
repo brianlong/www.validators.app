@@ -3,16 +3,22 @@
     <div class="card h-100">
       <div class="card-content">
         <h2 class="h5 card-heading-left">Stake</h2>
+        <div class="mb-2">
+          <span class="text-muted me-1">Active Stake:</span>
+
+          <span class="text-muted" v-if="!total_active_stake">loading...</span>
+          <strong class="text-success" v-if="total_active_stake">{{ total_active_stake }}&nbsp;SOL</strong>
+        </div>
+
         <div>
           <span class="text-muted me-1">Circulating Supply:</span>
 
           <span class="text-muted" v-if="!circulating_supply">loading...</span>
           <strong class="text-success" v-if="circulating_supply">{{ circulating_supply }}&nbsp;SOL</strong>
+          <div class="small" v-if="total_circulating_supply">
+            ({{ percent_of_total_stake() }}% of total {{ total_circulating_supply }}&nbsp;SOL)
+          </div>
         </div>
-
-        <small class="text-muted" v-if="total_circulating_supply">
-          ({{ percent_of_total_stake() }}% of total {{ total_circulating_supply }}&nbsp;SOL)
-        </small>
       </div>
     </div>
   </div>
@@ -33,6 +39,7 @@
         connection: null,
         circulating_supply: null,
         total_circulating_supply: null,
+        total_active_stake: null,
         api_params: { excludeNonCirculatingAccountsList: true }
       }
     },
@@ -42,9 +49,26 @@
       this.update_circulating_supply();
       this.set_continuous_supply_update();
     },
+    mounted: function(){
+      this.$cable.subscribe({
+          channel: "FrontStatsChannel",
+          room: "public",
+        });
+    },
     computed: mapGetters([
       'web3_url'
     ]),
+    channels: {
+      FrontStatsChannel: {
+        connected() {},
+        rejected() {},
+        received(data) {
+          var stake = data.cluster_stats["mainnet"]["total_active_stake"] // TODO alternate mainnet/testnet
+          this.total_active_stake = this.lamports_to_sol(stake).toLocaleString('en-US', { maximumFractionDigits: 0 });
+        },
+        disconnected() {},
+      },
+    },
     methods: {
       lamports_to_sol(lamports) {
         return lamports / 1000000000;

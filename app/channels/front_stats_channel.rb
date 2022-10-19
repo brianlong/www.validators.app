@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class SolPriceChannel < ApplicationCable::Channel
+class FrontStatsChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "sol_price_channel"
+    stream_from "front_stats_channel"
   end
 
   def unsubscribed
