@@ -5,21 +5,21 @@ import vuejsStorage from 'vuejs-storage'
 Vue.use(Vuex)
 
 const state = {
-  default_url: "https://validato-va-34e2.mainnet.rpcpool.com",
-  localhost_url: "https://api.testnet.solana.com"
+  mainnet_url: "https://validato-va-34e2.mainnet.rpcpool.com",
+  testnet_url: "https://api.testnet.solana.com"
 }
 const getters = {
-  web3_url: function(state) {
-    if(location.hostname === "localhost"){
-      return state.localhost_url
+  web3_url: function(state, getters) {
+    if(location.hostname === "localhost" || getters.network === 'testnet'){
+      return state.testnet_url
     } else {
-      return state.default_url
+      return state.mainnet_url
     }
   },
   network(state) {
-    if (location.href.match(/network=mainnet/)) {
+    if(location.href.match(/network=mainnet/)) {
       return 'mainnet'
-    } else if (location.href.match(/network=testnet/)) {
+    } else if(location.href.match(/network=testnet/)) {
       return 'testnet'
     }
 
