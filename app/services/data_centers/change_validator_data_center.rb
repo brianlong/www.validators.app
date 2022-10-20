@@ -6,6 +6,9 @@ module DataCenters
     SEPARATOR = "-" * 50
 
     def initialize(validator_id, max_mind_client: MaxMindClient)
+      # Service responsible for appending geo data
+      @ip_service = DataCenters::CheckIpInfoService.new
+
       @validator_id = validator_id
 
       @validator = nil
@@ -98,51 +101,12 @@ module DataCenters
     end
 
     def max_mind_results_for_ip
-      @max_mind_results = @max_mind_client.new.insights(@validator_ip.address)
+      @max_mind_results = @ip_service.get_max_mind_info(@validator_ip.address)
     end
 
     def data_center_from_max_mind_data
-      @data_center = DataCenter.find_or_initialize_by(
-        continent_code: @max_mind_results.continent.code,
-        continent_geoname_id: @max_mind_results.continent.geoname_id,
-        continent_name: @max_mind_results.continent.name,
-        country_iso_code: @max_mind_results.country.iso_code,
-        country_geoname_id: @max_mind_results.country.geoname_id,
-        country_name: @max_mind_results.country.name,
-        registered_country_iso_code: @max_mind_results.registered_country.iso_code,
-        registered_country_geoname_id: @max_mind_results.registered_country.geoname_id,
-        registered_country_name: @max_mind_results.registered_country.name,
-        traits_anonymous: @max_mind_results.traits.anonymous?,
-        traits_hosting_provider: @max_mind_results.traits.hosting_provider?,
-        traits_user_type: @max_mind_results.traits.user_type,
-        traits_autonomous_system_number: @max_mind_results.traits.autonomous_system_number,
-        traits_autonomous_system_organization: @max_mind_results.traits.autonomous_system_organization,
-        city_name: @max_mind_results.city.name,
-        location_metro_code: @max_mind_results.location.metro_code,
-        location_time_zone: @max_mind_results.location.time_zone,
-      )
-
-      @data_center.tap do |dc|
-        dc.city_confidence = @max_mind_results.city.confidence
-        dc.city_geoname_id = @max_mind_results.city.geoname_id
-        dc.country_confidence = @max_mind_results.country.confidence
-        dc.location_accuracy_radius = @max_mind_results.location.accuracy_radius
-        dc.location_average_income = @max_mind_results.location.average_income
-        dc.location_latitude = @max_mind_results.location.latitude
-        dc.location_longitude = @max_mind_results.location.longitude
-        dc.location_population_density = @max_mind_results.location.population_density
-        dc.postal_code = @max_mind_results.postal.code
-        dc.postal_confidence = @max_mind_results.postal.confidence
-        dc.traits_isp = @max_mind_results.traits.isp
-        dc.traits_organization = @max_mind_results.traits.organization
-    
-        unless @max_mind_results.most_specific_subdivision.nil?
-          dc.subdivision_confidence = @max_mind_results.most_specific_subdivision.confidence
-          dc.subdivision_iso_code = @max_mind_results.most_specific_subdivision.iso_code
-          dc.subdivision_geoname_id = @max_mind_results.most_specific_subdivision.geoname_id
-          dc.subdivision_name = @max_mind_results.most_specific_subdivision.name
-        end
-      end
+      @data_center = @ip_service.set_data_center(@max_mind_results)
+      @ip_service.fill_blank_values(@data_center, @max_mind_results)
     end
 
     def create_or_update_data_center
@@ -182,7 +146,7 @@ module DataCenters
 
       # If data_center_host is assigned only to one validator 
       # then we can change data center with no impact on other validators.
-      if @data_center_host.validators.size == 1 
+      if @data_center_host.present? && @data_center_host.validators.size == 1
         @data_center_host.update!(data_center: @data_center)
 
         message = <<-EOS
