@@ -2,7 +2,7 @@
   <div>
     <div class="row mb-4">
       <div class="col-2">
-        <input name="filter_time" v-model="filter_time" type="number" class="form-control" step="10">
+        <input name="filter_time" @keyup.enter="get_filtered_records()" v-model="filter_time" type="number" class="form-control" step="10">
       </div>
       <div class="col-3">
         <button
@@ -20,7 +20,7 @@
     </div>
     <div class="card">
       <div class="table-responsive-lg">
-        <table class='table'>
+        <table class='table' v-if="all_or_filtered.length > 0">
           <thead>
           <tr>
             <th class="column-md-sm">Success / Time</th>
@@ -74,6 +74,9 @@
             </tr>
           </tbody>
         </table>
+        <div class="card-content text-center" v-if="all_or_filtered.length == 0 || all_or_filtered == null">
+          No records found.
+        </div>
       </div>
     </div>
   </div>
