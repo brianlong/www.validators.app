@@ -50,7 +50,7 @@
 
     },
     channels: {
-      SolPriceChannel: {
+      FrontStatsChannel: {
         connected() {},
         rejected() {},
         received(data) {
@@ -63,7 +63,7 @@
     },
     mounted: function(){
       this.$cable.subscribe({
-          channel: "SolPriceChannel",
+          channel: "FrontStatsChannel",
           room: "public",
         });
     },

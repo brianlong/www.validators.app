@@ -1,7 +1,6 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from 'vue/dist/vue.esm';
+import LeadersStatsComponentTemplate from './leaders_stats_component_template';
 import TurbolinksAdapter from 'vue-turbolinks';
-import CirculatingSupply from './circulating_supply.vue';
-import store from "../stores/main_store.js";
 import ActionCableVue from "actioncable-vue";
 
 Vue.use(TurbolinksAdapter);
@@ -14,10 +13,9 @@ Vue.use(ActionCableVue, {
 
 document.addEventListener('turbolinks:load', () => {
   new Vue({
-    el: '#circulating-supply-component',
-    store,
+    el: '#leader-stats-component',
     render(createElement) {
-      return createElement(CirculatingSupply)
+      return createElement(LeadersStatsComponentTemplate);
     }
   })
 })
