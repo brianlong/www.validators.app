@@ -4,7 +4,7 @@ module Api
   module V1
     class DataCentersController < BaseController
       def index_with_nodes
-        show_gossip_nodes = dc_params[:show_gossip_nodes] == "false" ? false : true
+        show_gossip_nodes = dc_params[:show_gossip_nodes].in?(["true", nil])
 
         fields_dc = DataCenter::FIELDS_FOR_GOSSIP_NODES.map do |field|
           "data_centers.#{field}"

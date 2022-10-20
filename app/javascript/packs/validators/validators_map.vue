@@ -144,7 +144,7 @@
         let point_size = this.set_map_point_size(validators_count + nodes_count);
         let point_color = this.set_map_point_color(validators_count, nodes_count);
 
-        return "map-point " + point_size + " " + point_color;
+        return `map-point ${point_size} ${point_color}`;
       },
 
       select_data_centers_group: function(dc_group) {
