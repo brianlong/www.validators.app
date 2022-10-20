@@ -1,5 +1,5 @@
 <%= javascript_pack_tag 'ping_thing/stats_bar.js' %>
 
 <div id="ping-thing-stats">
-  <stats-bar network=<%= @network %> title-visible="true"/>
+  <stats-bar network=<%= params[:network] %> title-visible="true"/>
 </div>
