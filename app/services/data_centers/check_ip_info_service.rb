@@ -12,7 +12,7 @@ class DataCenters::CheckIpInfoService
     # Skip private IPs
     return nil if !ip || ip.match?(PRIVATE_IP_REGEX)
 
-    max_mind_info = @client.insights(ip)
+    max_mind_info = get_max_mind_info(ip)
 
     data_center = set_data_center(max_mind_info)
     fill_blank_values(data_center, max_mind_info)
@@ -21,7 +21,9 @@ class DataCenters::CheckIpInfoService
     update_validator_ips(ip, data_center, max_mind_info)
   end
 
-  private
+  def get_max_mind_info(ip)
+    @client.insights(ip)
+  end
 
   def update_validator_ips(ip, data_center, max_mind_info)
     data_center_host = DataCenterHost.find_or_create_by!(
