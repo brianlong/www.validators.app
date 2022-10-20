@@ -87,8 +87,6 @@ module DataCenters
         data_host = data_center.data_center_hosts.last
         data_host.reload
 
-        assert data_host.validator_ips.find_by_address "141.94.248.167"
-
         # Check ValidatorIp
         validator_ip = ValidatorIp.find_by_address "141.94.248.167"
 
