@@ -13,7 +13,7 @@
         <button
           @click.prevent="reset_filter()"
           class="btn btn-sm btn-block btn-secondary"
-          v-if="ping_things_filtered.length > 0">
+          v-if="show_filtered_records">
             reset
         </button>
       </div>
@@ -50,7 +50,7 @@
                 {{ formatted_date(pt.reported_at) }}<br />
                 <span class="word-break">
                   <a :href="link_from_signature(pt.signature)" target="_blank" class="small">
-                    {{ pt.signature.substring(0,6) + "..." + pt.signature.substring(pt.signature.length - 4, pt.signature.length) }}
+                    {{ signature_shortened(pt.signature) }}
                   </a>
                 </span>
               </td>
@@ -99,13 +99,14 @@
     data() {
       return {
         filter_time: null,
+        show_filtered_records: false,
         api_url: '/api/v1/ping-thing/' + this.network,
         ping_things_filtered: []
       }
     },
     computed: {
       all_or_filtered() {
-        if(this.ping_things_filtered.length > 0){
+        if(this.show_filtered_records){
           return this.ping_things_filtered
         } else {
           return this.ping_things
@@ -131,6 +132,9 @@
             return '<i class="fas fa-random text-success me-1"></i>'
         }
       },
+      signature_shortened(signature) {
+        return signature.substring(0,6) + "..." + signature.substring(signature.length - 4, signature.length)
+      },
       formatted_date(date){
         var date = new Date(date)
         var formatted_date = moment(date).utc().format('YYYY-MM-DD HH:mm:ss z')
@@ -147,14 +151,15 @@
       get_filtered_records() {
         var ctx = this
 
-        axios.get(ctx.api_url + "?time_filter=" + this.filter_time)
-           .then(function(response) {
-             ctx.ping_things_filtered = response.data;
-             console.log(ctx.ping_things_filtered)
-           })
+        axios.get(ctx.api_url, { params: { time_filter: ctx.filter_time }})
+             .then(function(response) {
+               ctx.ping_things_filtered = response.data;
+               ctx.show_filtered_records = true
+             })
       },
       reset_filter() {
         this.filter_time = null
+        this.show_filtered_records = false
         this.ping_things_filtered = []
       }
     }
