@@ -70,14 +70,11 @@
 <script>
   import debounce from 'lodash/debounce';
   import axios from 'axios';
+  import { mapGetters } from 'vuex';
+
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
-    props: {
-      network: {
-        default: "mainnet"
-      },
-    },
     data () {
       let api_url = "/api/v1/data-centers-with-nodes/" + this.network
       return {
@@ -97,6 +94,9 @@
     },
     watch: {
     },
+    computed: mapGetters([
+      'network'
+    ]),
     methods: {
       position_horizontal: function(longitude) {
         return 50 + (longitude / 160 * 50) + '%';
