@@ -111,7 +111,7 @@ $green-purple-point: rgba(70, 121, 130, .95);
     align-items: flex-end;
     @media(max-width: $screen-xs-max) {
       flex-direction: column;
-      gap: 30px;
+      gap: 20px;
       align-items: flex-start;
       z-index: 3;
     }

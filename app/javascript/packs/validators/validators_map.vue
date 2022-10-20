@@ -33,7 +33,7 @@
 
     <section class="map-legend">
       <div class="map-legend-col">
-        <div class="btn-group btn-group-toggle switch-button mb-3" v-if="show_gossip_nodes">
+        <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
           <span class="btn btn-xs btn-secondary active">
             <i class="fas fa-eye"></i>
           </span>
@@ -41,7 +41,7 @@
             <i class="fas fa-eye-slash me-2"></i>nodes
           </span>
         </div>
-        <div class="btn-group btn-group-toggle switch-button mb-3" v-else>
+        <div class="btn-group btn-group-toggle switch-button" v-else>
           <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(true)">
             <i class="fas fa-eye me-2"></i>nodes
           </span>
@@ -50,7 +50,7 @@
           </span>
         </div>
 
-        <div class="">
+        <div class="d-none mt-3">
           <div class="small text-muted">Current Leader:</div>
           <div>
             <strong class="text-success">Block Logic | BL</strong>
