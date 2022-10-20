@@ -45,10 +45,9 @@
         } else {
           this.url = this.url + '?network=' + target_network
         }
-
         window.location.href = this.url
         return true
       }
-    },
+    }
   }
 </script>
