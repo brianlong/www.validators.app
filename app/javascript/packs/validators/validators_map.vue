@@ -38,12 +38,12 @@
             <i class="fas fa-eye"></i>
           </span>
           <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(false)">
-            <i class="fas fa-eye-slash me-2"></i>nodes
+            <i class="fas fa-eye-slash me-2"></i>RPC nodes
           </span>
         </div>
         <div class="btn-group btn-group-toggle switch-button" v-else>
           <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(true)">
-            <i class="fas fa-eye me-2"></i>nodes
+            <i class="fas fa-eye me-2"></i>RPC nodes
           </span>
           <span class="btn btn-xs btn-secondary active">
             <i class="fas fa-eye-slash"></i>

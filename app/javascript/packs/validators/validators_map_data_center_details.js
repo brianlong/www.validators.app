@@ -29,7 +29,7 @@ var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetai
         <strong class="text-purple">
           {{ data_centers_group.active_gossip_nodes_count }}
         </strong>
-        <span class="text-muted">node(s)</span>
+        <span class="text-muted">RPC node(s)</span>
       </div>
     </div>
   `
