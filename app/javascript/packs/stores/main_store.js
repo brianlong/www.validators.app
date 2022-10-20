@@ -18,7 +18,7 @@ const getters = {
     }
   },
   network() {
-    location.href.match(/network=testnet/) ? 'testnet' : 'mainnet'
+    return location.href.match(/network=testnet/) ? 'testnet' : 'mainnet'
   }
 }
 export default new Vuex.Store({
