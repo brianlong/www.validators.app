@@ -68,6 +68,9 @@ $green-purple-point: rgba(70, 121, 130, .95);
     &-lg {
       @include map-point-style(23px, 23px, 5px)
     }
+    &-xl {
+      @include map-point-style(27px, 27px, 8px)
+    }
 
     &-green {
       background-color: $green-point;

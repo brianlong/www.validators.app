@@ -117,8 +117,10 @@
           return "map-point-sm";
         } else if(validators_and_nodes_count < 100) {
           return "map-point-md";
-        } else {
+        } else if(validators_and_nodes_count < 1000) {
           return "map-point-lg";
+        } else {
+          return "map-point-xl";
         }
       },
 
