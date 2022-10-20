@@ -51,14 +51,15 @@
         });
     },
     computed: mapGetters([
-      'web3_url'
+      'web3_url',
+      'network'
     ]),
     channels: {
       FrontStatsChannel: {
         connected() {},
         rejected() {},
         received(data) {
-          var stake = data.cluster_stats["mainnet"]["total_active_stake"] // TODO alternate mainnet/testnet
+          const stake = data.cluster_stats[this.network].total_active_stake;
           this.total_active_stake = this.lamports_to_sol(stake).toLocaleString('en-US', { maximumFractionDigits: 0 });
         },
         disconnected() {},
