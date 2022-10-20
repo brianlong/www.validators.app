@@ -1,5 +1,5 @@
 <template>
-  <div class="card map">
+  <div class="card map mb-4">
     <section class="map-background">
       <div class="map-points">
         <!-- orientation points - TODO to remove after all map-related tasks are done -->
@@ -37,14 +37,12 @@
           <span class="btn btn-xs btn-secondary active">
             <i class="fas fa-eye"></i>
           </span>
-          <span class="btn btn-xs btn-secondary"
-                v-on:click="set_nodes_visibility(false)">
+          <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(false)">
             <i class="fas fa-eye-slash me-2"></i>nodes
           </span>
         </div>
         <div class="btn-group btn-group-toggle switch-button mb-3" v-else>
-          <span class="btn btn-xs btn-secondary"
-                v-on:click="set_nodes_visibility(true)">
+          <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(true)">
             <i class="fas fa-eye me-2"></i>nodes
           </span>
           <span class="btn btn-xs btn-secondary active">

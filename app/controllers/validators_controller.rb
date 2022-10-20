@@ -44,11 +44,6 @@ class ValidatorsController < ApplicationController
     @network = validators_params[:network]
   end
 
-  # GET /validators-map
-  def map
-    @network = validators_params[:network]
-  end
-
   # GET /validators/1
   # GET /validators/1.json
   def show
