@@ -12,7 +12,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
     ]
   end
 
-  test "#call creates new ClusterStat with correct data if there's no cluster statas for given network" do
+  test "#call creates new ClusterStat with correct data if there's no cluster stats for given network" do
     CreateClusterStatsService.new(network: @network, batch_uuid: @batch_uuid).call
 
     assert ClusterStat.exists?
