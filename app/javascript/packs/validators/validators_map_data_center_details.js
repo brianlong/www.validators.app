@@ -2,22 +2,34 @@ import Vue from 'vue/dist/vue.esm'
 
 var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetails', {
   props: {
-    data_center: {
+    data_centers_group: {
       type: Object,
       required: true
-    }
+    },
   },
   data() {
     return {}
   },
+  methods: {},
   template: `
     <div>
-      <strong class="text-purple">{{ data_center.data_center_key }}</strong>
-      <div class="small text-muted">
-        {{ data_center.active_validators_count }} validator(s)
+      <strong class="text-purple">
+        {{ data_centers_group.identifier }}, 
+        {{ data_centers_group.data_centers.length }} Data Center(s)
+      </strong>
+      
+      <div class="small" v-if="data_centers_group.active_validators_count > 0">
+        <strong class="text-purple">
+          {{ data_centers_group.active_validators_count }}
+        </strong>
+        <span class="text-muted">validator(s)</span>
       </div>
-      <div class="small text-muted">
-        {{ data_center.active_gossip_nodes_count }} node(s)
+      
+      <div class="small" v-if="data_centers_group.active_gossip_nodes_count > 0">
+        <strong class="text-purple">
+          {{ data_centers_group.active_gossip_nodes_count }}
+        </strong>
+        <span class="text-muted">node(s)</span>
       </div>
     </div>
   `
