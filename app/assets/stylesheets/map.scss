@@ -119,4 +119,8 @@ $green-purple-point: rgba(70, 121, 130, .95);
       z-index: 3;
     }
   }
+
+  .text-green-purple {
+    color: lighten($green-purple-point, 15%);
+  }
 }
