@@ -5,7 +5,9 @@
 
 <%= render 'validators/welcome_banner' %>
 
-<%= render 'validators/ping_stats_banner' %>
+<% if params[:network] == "mainnet" %>
+  <%= render 'validators/ping_stats_banner' %>
+<% end %>
 
 <%= render 'validators/stake_pools_banner' %>
 
