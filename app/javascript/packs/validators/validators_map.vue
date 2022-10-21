@@ -76,15 +76,15 @@
 
   export default {
     data () {
-      let api_url = "/api/v1/data-centers-with-nodes/" + this.network
       return {
-        api_url: api_url,
+        api_url: null,
         data_centers_groups: [],
         selected_data_centers_group: null,
         show_gossip_nodes: true,
       }
     },
     created () {
+      this.api_url = "/api/v1/data-centers-with-nodes/" + this.network;
       let ctx = this;
       let url = ctx.api_url;
 
