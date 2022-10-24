@@ -5,6 +5,8 @@
 <%= javascript_pack_tag 'validators/circulating_supply.js' %>
 <%= javascript_pack_tag 'leaders/leaders_stats_component.js' %>
 <%= javascript_pack_tag 'cluster_numbers/cluster_numbers_component.js' %>
+<%= javascript_pack_tag 'distance_stats/distance_stats_component.js' %>
+<%= javascript_pack_tag 'skipped_stats/skipped_stats_component.js' %>
 
 <% if @network == "mainnet" %>
   <%= render "validators/ping_stats_banner" %>

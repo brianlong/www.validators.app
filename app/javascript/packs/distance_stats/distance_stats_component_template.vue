@@ -75,6 +75,7 @@
         connected() { },
         rejected() { },
         received(data) {
+          console.log('data', data);
         },
         disconnected() { }
       }
