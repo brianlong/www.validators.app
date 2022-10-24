@@ -27,12 +27,13 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     data() {
       return {
         current_leader: null,
-        next_leaders: [],
-        network: 'mainnet'
+        next_leaders: []
       }
     },
     channels: {
@@ -53,6 +54,9 @@
         room: "public"
       });
     },
+    computed: mapGetters([
+      'network'
+    ]),
     methods: {
       create_avatar_link(leader) {
         if (leader.avatar_url) {
