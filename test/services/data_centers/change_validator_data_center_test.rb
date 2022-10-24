@@ -45,7 +45,7 @@ module DataCenters
       @vcr_namespace ||= File.join("services", "data_centers", "change_validators_data_center_test")
     end
 
-    test "creates data_center amd data_center_host when they didn't exsit before" do
+    test "creates data_center and data_center_host when they didn't exist before" do
       validator2 = create(:validator)
       validator_ip2 = create(
         :validator_ip,
@@ -68,10 +68,8 @@ module DataCenters
         # new data_center_host
         assert validator2.data_center_host
         assert_equal validator_data_center, validator2.data_center_host.data_center
-
       end
     end
-
 
     test "when MaxMind returns different geo data for ip (Spectrum Staking) and existing data_center_host has exactly one validator assigned "\
          "creates new data_center, assigns existing data_center_host to it "\
