@@ -50,7 +50,7 @@ begin
       network: _p.payload[:network]
     )
 
-    ActiveStakeWorker.set(queue: :high_priority).perform_async(
+    ClusterStatsWorker.set(queue: :high_priority).perform_async(
       batch_uuid: batch.uuid,
       network: _p.payload[:network]
     )

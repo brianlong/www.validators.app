@@ -20,7 +20,17 @@ class CreateClusterStatsService
       total_active_stake: total_active_stake,
       software_version: dominant_software_version,
       validator_count: validators_total,
-      nodes_count: nodes_total
+      nodes_count: nodes_total,
+      root_distance: report[:root_distance],
+      vote_distance: report[:vote_distance],
+      skipped_slots: report[:skipped_slots],
+      skipped_votes: report[:skipped_votes]
     )
+  end
+
+  private
+
+  def report
+    @report ||= Report.where(name: "report_cluster_stats", network: network).last.payload.deep_symbolize_keys
   end
 end
