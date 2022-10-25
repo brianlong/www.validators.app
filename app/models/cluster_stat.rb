@@ -19,10 +19,5 @@
 #  updated_at         :datetime         not null
 #
 class ClusterStat < ApplicationRecord
-  serialize :root_distance, JSON
-  serialize :vote_distance, JSON
-  serialize :skipped_slots, JSON
-  serialize :skipped_votes, JSON
-
   scope :by_network, -> (network) { where(network: network) }
 end

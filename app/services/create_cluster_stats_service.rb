@@ -24,13 +24,13 @@ class CreateClusterStatsService
       root_distance: report[:root_distance],
       vote_distance: report[:vote_distance],
       skipped_slots: report[:skipped_slots],
-      skipped_votes: report[:skipped_votes]
+      skipped_votes: report[:skipped_votes_percent]
     )
   end
 
   private
 
   def report
-    @report ||= Report.where(name: "report_cluster_stats", network: network).last.payload.deep_symbolize_keys
+    @report ||= Report.where(name: "report_cluster_stats", network: @network).last.payload.deep_symbolize_keys
   end
 end
