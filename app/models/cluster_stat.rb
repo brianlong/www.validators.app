@@ -17,6 +17,10 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #
+# Indexes
+#
+#  index_cluster_stat_on_network  (network)
+#
 class ClusterStat < ApplicationRecord
   scope :by_network, -> (network) { where(network: network) }
 end
