@@ -1,5 +1,5 @@
 <template>
-  <div class="col-sm-6 mb-4">
+  <div class="col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
         <div class="mb-4">
@@ -27,12 +27,13 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     data() {
       return {
         current_leader: null,
-        next_leaders: [],
-        network: 'mainnet'
+        next_leaders: []
       }
     },
     channels: {
@@ -53,6 +54,9 @@
         room: "public"
       });
     },
+    computed: mapGetters([
+      'network'
+    ]),
     methods: {
       create_avatar_link(leader) {
         if (leader.avatar_url) {

@@ -36,6 +36,7 @@ module AgentLogic
           # end
           # proxy ||= {}
           # proxy_for_log = proxy.reject { |k, _v| k == :password }.inspect
+          proxy_for_log = proxy
           # TODO: Include logic to detect when the proxy network is down.
           # Mechanize.log&.info "Proxy: #{proxy_for_log}"
 
