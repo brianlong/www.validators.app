@@ -35,6 +35,8 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
       create(:validator, network: @network)
     end
 
+    create(:gossip_node, network: @network, staked: true)
+    
     CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
     stat = ClusterStat.where(network: @network).last
 
