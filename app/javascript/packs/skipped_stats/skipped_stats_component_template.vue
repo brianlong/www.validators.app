@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="row">
     <div class="col-md-6 mb-4">
       <div class="card">
         <div class="card-content">
@@ -79,6 +79,7 @@
           const cluster_stat = data.cluster_stats[this.network];
           this.skipped_votes = cluster_stat.skipped_votes;
           this.skipped_slots = cluster_stat.skipped_slots;
+
         },
         disconnected() { }
       }
@@ -94,27 +95,27 @@
     ]),
     methods: {
       skipped_votes_median() {
-        return (parseInt(this.skipped_votes.median) * 100).toFixed(1);
+        return (parseFloat(this.skipped_votes.median) * 100).toFixed(1);
       },
       skipped_votes_average() {
-        return (parseInt(this.skipped_votes.average) * 100).toFixed(1);
+        return (parseFloat(this.skipped_votes.average) * 100).toFixed(1);
       },
       skipped_votes_best() {
-        return (parseInt(this.skipped_votes.best) * 100).toFixed(2);
+        return (parseFloat(this.skipped_votes.best) * 100).toFixed(2);
       },
       skipped_slots_median() {
-        return (parseInt(this.skipped_slots.median) * 100).toFixed(1);
+        return (parseFloat(this.skipped_slots.median) * 100).toFixed(1);
       },
       skipped_slots_average() {
-        return (parseInt(this.skipped_slots.average) * 100).toFixed(1);
+        return (parseFloat(this.skipped_slots.average) * 100).toFixed(1);
       },
       skipped_slots_min() {
-        const min = parseInt(this.skipped_slots.min) * 100;
+        const min = parseFloat(this.skipped_slots.min) * 100;
 
         return min > 0 ? min : 0;
       },
       skipped_slots_max() {
-        return parseInt(this.skipped_slots.max) * 100;
+        return parseFloat(this.skipped_slots.max) * 100;
       }
     }
   }
