@@ -15,10 +15,6 @@ class CreateClusterStatsService
     nodes_total = GossipNode.where(network: @network).active.count
     dominant_software_version = Batch.last_scored(@network).software_version
 
-    puts validators_total
-    puts nodes_total
-    puts dominant_software_version
-
     network_stat = ClusterStat.find_or_create_by(network: @network)
     network_stat.update(
       total_active_stake: total_active_stake,

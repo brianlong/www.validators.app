@@ -4,6 +4,7 @@
 <%= javascript_pack_tag 'epoch/epoch_stats_component' %>
 <%= javascript_pack_tag 'validators/circulating_supply.js' %>
 <%= javascript_pack_tag 'leaders/leaders_stats_component.js' %>
+<%= javascript_pack_tag 'cluster_numbers/cluster_numbers_component.js' %>
 
 <% if @network == "mainnet" %>
   <%= render "validators/ping_stats_banner" %>
@@ -19,25 +20,7 @@
 </section>
 
 <section class="row">
-  <div class="col-sm-4 mb-4">
-    <div class="card h-100">
-      <div class="card-content">
-        <h2 class="h5 card-heading-left">Cluster</h2>
-        <div class="mb-2">
-          <span class="text-muted me-1">Software Version:</span>
-          <strong class="text-success">XXX</strong>
-        </div>
-        <div>
-          <span class="text-muted me-1">Validators:</span>
-          <strong class="text-success">XXX</strong>
-        </div>
-        <div>
-          <span class="text-muted me-1">RPC nodes:</span>
-          <strong class="text-success">XXX</strong>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div id="cluster-numbers-component"></div>
   <div id="circulating-supply-component"></div>
   <div id="transactions-stats-component"></div>
 </section>
