@@ -78,14 +78,14 @@ ActiveRecord::Schema.define(version: 2022_10_24_131325) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "validator_count"
-    t.integer "nodes_count"
-    t.string "software_version"
-    t.index ["network"], name: "index_cluster_stat_on_network"
     t.json "root_distance"
     t.json "vote_distance"
     t.json "skipped_slots"
     t.json "skipped_votes"
+    t.integer "validator_count"
+    t.integer "nodes_count"
+    t.string "software_version"
+    t.index ["network"], name: "index_cluster_stat_on_network"
   end
 
   create_table "collectors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
