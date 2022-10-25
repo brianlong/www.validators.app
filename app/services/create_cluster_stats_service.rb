@@ -12,7 +12,7 @@ class CreateClusterStatsService
     total_active_stake = validator_history_stats.total_active_stake
 
     validators_total = Validator.where(network: @network).active.count
-    nodes_total = GossipNode.where(network: @network).active.count
+    nodes_total = GossipNode.where(network: @network).active.not_staked.count
     dominant_software_version = Batch.last_scored(@network).software_version
 
     network_stat = ClusterStat.find_or_create_by(network: @network)
