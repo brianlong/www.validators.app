@@ -4,8 +4,8 @@
 <%= javascript_pack_tag 'epoch/epoch_stats_component' %>
 <%= javascript_pack_tag 'validators/circulating_supply.js' %>
 <%= javascript_pack_tag 'leaders/leaders_stats_component.js' %>
-<%= javascript_pack_tag 'cluster_numbers/cluster_numbers_component.js' %>
-<%= javascript_pack_tag 'cluster_performance/distance_stats_component.js' %>
+<%= javascript_pack_tag 'clusters/cluster_numbers_component.js' %>
+<%= javascript_pack_tag 'clusters/distance_stats_component.js' %>
 
 <% if @network == "mainnet" %>
   <%= render "validators/ping_stats_banner" %>
