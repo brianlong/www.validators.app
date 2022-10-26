@@ -1,6 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
+import ClusterNumbersTemplate from './cluster_numbers_component'
 import TurbolinksAdapter from 'vue-turbolinks';
-import CirculatingSupply from './circulating_supply.vue';
 import store from "../stores/main_store.js";
 import ActionCableVue from "actioncable-vue";
 
@@ -13,11 +13,11 @@ Vue.use(ActionCableVue, {
 });
 
 document.addEventListener('turbolinks:load', () => {
-  new Vue({
-    el: '#circulating-supply-component',
+  const chindex = new Vue({
+    el: '#cluster-numbers-component',
     store,
     render(createElement) {
-      return createElement(CirculatingSupply)
+      return createElement(ClusterNumbersTemplate)
     }
   })
 })
