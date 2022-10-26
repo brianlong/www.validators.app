@@ -1,23 +1,29 @@
 <template>
-  <div>
-    <div class="row mb-4">
-      <div class="col-2">
-        <input name="filter_time" @keyup.enter="get_filtered_records()" v-model="filter_time" type="number" class="form-control" step="10">
+  <section>
+    <div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
+      <div class="form-group-row">
+        <div class="input-group">
+          <input name="filter_time"
+                 @keyup.enter="get_filtered_records()"
+                 v-model="filter_time"
+                 type="number"
+                 class="form-control"
+                 step="10"
+                 placeholder="Minimum time (ms)">
+          <button @click.prevent="get_filtered_records()"
+                  class="btn btn-sm btn-primary">
+            Search
+          </button>
+        </div>
       </div>
-      <div class="col-3">
-        <button
-          @click.prevent="get_filtered_records()"
-          class="btn btn-block btn-sm btn-success">
-            set minimum time
-        </button>
-        <button
-          @click.prevent="reset_filter()"
-          class="btn btn-sm btn-block btn-secondary"
-          v-if="show_filtered_records">
-            reset
-        </button>
-      </div>
+
+      <button @click.prevent="reset_filter()"
+              class="btn btn-sm btn-tertiary"
+              v-if="show_filtered_records">
+        Reset filters
+      </button>
     </div>
+
     <div class="card">
       <div class="table-responsive-lg">
         <table class='table' v-if="all_or_filtered.length > 0">
@@ -79,7 +85,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
