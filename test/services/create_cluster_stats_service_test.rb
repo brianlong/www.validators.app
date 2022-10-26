@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "test_helper"
+
 class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"
@@ -12,6 +14,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
       create(:validator_history, batch_uuid: @batch_uuid, active_stake: 31),
     ]
 
+    @report = create(:report, :report_cluster_stats, network: @network)
   end
 
   test "#call creates new ClusterStat with correct data if there's no cluster stats for given network" do
@@ -43,5 +46,9 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
     assert_equal @software_version, stat.software_version
     assert_equal 5, stat.validator_count
     assert_equal 5, stat.nodes_count
+    assert_equal @report.payload["root_distance"], stat.root_distance
+    assert_equal @report.payload["vote_distance"], stat.vote_distance
+    assert_equal @report.payload["skipped_slots"], stat.skipped_slots
+    assert_equal @report.payload["skipped_votes_percent"], stat.skipped_votes
   end
 end
