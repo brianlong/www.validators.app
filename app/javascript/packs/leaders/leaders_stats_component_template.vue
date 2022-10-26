@@ -6,7 +6,10 @@
           <h2 class="h5 card-heading-left">Leader</h2>
           <span class="text-muted" v-if="!current_leader">loading...</span>
           <div class="d-flex flex-wrap gap-3" v-if="current_leader">
-            <img :src="avatar_link(current_leader)" class="img-circle-medium" />
+            <a :href="validator_details_link(current_leader.account)"
+               title="Go to validator details." target="_blank">
+              <img :src="avatar_link(current_leader)" class="img-circle-medium" />
+            </a>
             <div class="d-flex flex-column justify-content-center">
               <a :href="validator_details_link(current_leader.account)"
                  title="Go to validator details."
@@ -20,9 +23,11 @@
         <div v-if="current_leader">
           <h2 class="h5 card-heading-left">Next Leaders</h2>
           <div class="d-flex flex-wrap gap-3">
-            <span v-for="leader in next_leaders">
+            <a v-for="leader in next_leaders"
+               :href="validator_details_link(leader.account)"
+               title="Go to validator details." target="_blank">
               <img :src="avatar_link(leader)" class='img-circle-small' />
-            </span>
+            </a>
           </div>
         </div>
       </div>
