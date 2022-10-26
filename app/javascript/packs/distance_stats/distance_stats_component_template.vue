@@ -78,7 +78,6 @@
         connected() { },
         rejected() { },
         received(data) {
-          console.log('data', data);
           const cluster_stat = data.cluster_stats[this.network];
           this.root_distance = cluster_stat.root_distance;
           this.vote_distance = cluster_stat.vote_distance;
