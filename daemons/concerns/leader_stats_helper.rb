@@ -11,7 +11,7 @@ module LeaderStatsHelper
       [network, leaders_for_network(network)]
     end.to_h
   end
-q
+
   private
 
   def leaders_for_network(network)
