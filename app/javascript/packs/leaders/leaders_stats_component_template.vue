@@ -21,7 +21,7 @@
         </div>
 
         <div v-if="current_leader">
-          <h2 class="h5 card-heading-left">Next Leaders</h2>
+          <h2 class="h6 card-heading-left">Next Leaders</h2>
           <div class="d-flex flex-wrap gap-3">
             <a v-for="leader in next_leaders"
                :href="validator_details_link(leader.account)"
