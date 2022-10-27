@@ -3,6 +3,9 @@
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
+  # Default root path
+  root to: 'public#home'
+  
   get 'asns/:asn',
       to: 'asns#show',
       as: 'asn'
@@ -71,8 +74,6 @@ Rails.application.routes.draw do
 
   # Public Controller
   get 'home-new', to: 'public#home_new'
-  get 'home', to: 'public#home_new'
-
   get 'contact-us', to: 'public#contact_us'
   get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
   get 'api-documentation',
@@ -103,9 +104,6 @@ Rails.application.routes.draw do
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
   get "current-user", to: "users#current_user_info"
-
-  # Default root path
-  root to: 'validators#index'
 
   ### API
   namespace :api do
