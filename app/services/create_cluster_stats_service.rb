@@ -18,10 +18,10 @@ class CreateClusterStatsService
       software_version: dominant_software_version,
       validator_count: validators_total,
       nodes_count: nodes_total,
-      root_distance: validator_score.root_distance_stats,
-      vote_distance: validator_score.vote_distance_stats,
-      skipped_slots: validator_block_history.skipped_slot_stats,
-      skipped_votes: vote_account_history.skipped_votes_stats
+      root_distance: validator_score_stats.root_distance_stats,
+      vote_distance: validator_score_stats.vote_distance_stats,
+      skipped_slots: validator_block_history_stats.skipped_slot_stats,
+      skipped_votes: vote_account_history_stats.skipped_votes_stats
     )
   end
 
@@ -31,15 +31,15 @@ class CreateClusterStatsService
     Stats::ValidatorHistory.new(@network, @batch_uuid)
   end
 
-  def vote_account_history
+  def vote_account_history_stats
     Stats::VoteAccountHistory.new(@network, @batch_uuid)
   end
 
-  def validator_block_history
+  def validator_block_history_stats
     Stats::ValidatorBlockHistory.new(@network, @batch_uuid)
   end
 
-  def validator_score
-    @validator_score ||= Stats::ValidatorScore.new(@network, @batch_uuid)
+  def validator_score_stats
+    @validator_score_stats ||= Stats::ValidatorScore.new(@network, @batch_uuid)
   end
 end
