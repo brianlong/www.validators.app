@@ -12,7 +12,7 @@ include FrontSoftwareVersionsModule
 sleep_time = 5 # seconds
 update_stats_time = 60 # seconds
 @counter = 0
-@software_versions = {}
+@software_versions = get_versions_for_networks
 
 def get_latest_cluster_stats
   {

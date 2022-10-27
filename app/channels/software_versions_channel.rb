@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SoftwareVersionsChannel
+class SoftwareVersionsChannel < ApplicationCable::Channel
   def subscribed
     stream_from "software_versions_channel"
   end

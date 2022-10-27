@@ -4,6 +4,7 @@ require_relative './front_stats_constants.rb'
 
 module FrontSoftwareVersionsModule
   include FrontStatsConstants
+  include ValidatorsHelper
 
   def get_latest_versions_report(network)
     @report ||= Report.where(
@@ -16,7 +17,7 @@ module FrontSoftwareVersionsModule
   def get_versions_for_networks(networks = FrontStatsConstants::NETWORKS)
     res = {}
     networks.each do |network|
-      res[network] = get_latest_versions_report(network)
+      res[network] = sort_software_versions(get_latest_versions_report(network))
     end
     res
   end
