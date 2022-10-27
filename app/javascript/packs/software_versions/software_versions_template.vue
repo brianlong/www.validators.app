@@ -3,9 +3,12 @@
     <div class="card">
       <div class="card-content pb-0">
         <h2 class="h4 card-heading">Software Versions</h2>
+        <div v-if="this.is_loading" class="text-center text-muted pb-4">
+          loading ...
+        </div>
       </div>
 
-      <table class="table" v-if="this.software_versions">
+      <table class="table" v-if="!this.is_loading">
         <thead>
         <tr>
           <th>Software Version</th>
@@ -38,7 +41,8 @@
   export default {
     data() {
       return {
-        software_versions: {}
+        software_versions: {},
+        is_loading: true
       }
     },
     methods: {
@@ -54,6 +58,7 @@
             sw_formatted[Object.keys(v)[0]] = v[Object.keys(v)[0]]
           })
           this.software_versions = sw_formatted
+          this.is_loading = false
         },
         disconnected() {},
       },
