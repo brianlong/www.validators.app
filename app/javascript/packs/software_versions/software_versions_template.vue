@@ -19,7 +19,7 @@
         <tbody>
           <tr v-for="version in Object.keys(this.software_versions)" :key="version">
             <td :class="version == current_software_version ? 'h4 text-success' : '' " >
-              <a href="" title = "Click to show validators with this version"> {{ version }}</a>
+              <a :href="'/validators?q=' + version + '&network=' + network" title = "Click to show validators with this version"> {{ version }}</a>
             </td>
             <td :class="version == current_software_version ? 'h4 text-success' : '' ">
               {{ software_versions[version].stake_percent }}
