@@ -1,8 +1,8 @@
 <section class="page-header">
   <h1><%= params[:network].capitalize %> Stats</h1>
-  <%= link_to 'Back to Homepage',
-              root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
-              class: 'btn btn-sm btn-secondary' %>
+  <%= link_to 'Back to Homepage', root_path(network: params[:network]),
+              class: 'btn btn-sm btn-secondary',
+              "data-turbolinks": "false" %>
 </section>
 
 <div class="card">
