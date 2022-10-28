@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="version in Object.keys(this.software_versions)" :key="version">
+          <tr v-for="version in Object.keys(software_versions).slice(0, 6)" :key="version">
             <td :class="version == current_software_version ? 'h4 text-success' : '' " >
               <a :href="'/validators?q=' + version + '&network=' + network" title = "Click to show validators with this version"> {{ version }}</a>
             </td>
@@ -30,6 +30,49 @@
           </tr>
         </tbody>
       </table>
+      <div class="px-3 pb-3 text-center" v-if="Object.keys(software_versions).length > 6">
+        <a data-bs-toggle="modal" data-bs-target="#versionsModal" class="text-muted" href="">Show older versions</a>
+      </div>
+
+      <div class="modal modal-large modal-top fade" id="versionsModal" tabindex="-1" role="dialog" aria-labelledby="versionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h6 class="modal-title">All active validators</h6>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body p-0">
+              <div class="card">
+                <table class="table table-condensed mb-0">
+                  <thead>
+                  <tr>
+                    <th>Software Version</th>
+                    <th>Stake %</th>
+                    <th>No. of validators</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="version in Object.keys(software_versions)" :key="version">
+                      <td :class="version == current_software_version ? 'h4 text-success' : '' " >
+                        <a :href="'/validators?q=' + version + '&network=' + network" title = "Click to show validators with this version"> {{ version }}</a>
+                      </td>
+                      <td :class="version == current_software_version ? 'h4 text-success' : '' ">
+                        {{ software_versions[version].stake_percent }}
+                      </td>
+                      <td :class="version == current_software_version ? 'h4 text-success' : '' ">
+                        {{ software_versions[version].count }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
