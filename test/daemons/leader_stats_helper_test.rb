@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 require Rails.root.join("daemons", "concerns", "leader_stats_helper")
 
@@ -7,7 +9,8 @@ class LeaderStatsHelperTest < ActiveSupport::TestCase
 
   setup do
     @validator = create(:validator, network: "testnet")
-    ["9MRUTN19MtA1matBH4ddgpS14mPAdeCoFnsLkaLxFeBQ", "ACPgwKgncgFAm8goFj4dJ5e5mcH3tRy646f7zYPaWEzc", "FbWq9mwUQRNVCAUdcECF5yhdwABmcnsZ6a6zpixeKuQE"].each do |account|
+    ["9MRUTN19MtA1matBH4ddgpS14mPAdeCoFnsLkaLxFeBQ", "ACPgwKgncgFAm8goFj4dJ5e5mcH3tRy646f7zYPaWEzc",
+     "FbWq9mwUQRNVCAUdcECF5yhdwABmcnsZ6a6zpixeKuQE"].each do |account|
       create(:validator, network: "testnet", account: account)
     end
     @vcr_namespace ||= File.join("daemons", "leader_stats_helper_test")
