@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <div v-if="current_leader">
+        <div v-if="next_leaders.length > 0">
           <h2 class="h6 card-heading-left">Next Leaders</h2>
           <div class="d-flex flex-wrap gap-3">
             <a v-for="leader in next_leaders"
