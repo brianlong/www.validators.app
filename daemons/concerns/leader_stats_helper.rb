@@ -15,14 +15,24 @@ module LeaderStatsHelper
 
   def leaders_for_network(network)
     client = solana_client(network)
-    current_slot = client.get_slot.result
+    query_fields = "gossip_nodes.account", "validators.name", "validators.avatar_url"
 
     current_leader_account = client.get_slot_leader.result
-    current_leader = Validator.where(account: current_leader_account, network: network).select(:name, :account, :avatar_url)
+    current_leader = GossipNode.select(query_fields)
+                               .joins("LEFT OUTER JOIN validators
+                                       ON validators.account = gossip_nodes.account
+                                       AND validators.network = gossip_nodes.network"
+                               ).where(account: current_leader_account, network: network)
 
-    leader_accounts = client.get_slot_leaders(current_slot, LEADERS_LIMIT).result
-    next_leaders = Validator.where(account: leader_accounts, network: network)
-                            .select(:name, :account, :avatar_url)
+
+    current_slot = client.get_slot.result
+    next_leader_accounts = client.get_slot_leaders(current_slot, LEADERS_LIMIT).result
+    next_leaders = GossipNode.select(query_fields)
+                               .joins("LEFT OUTER JOIN validators
+                                       ON validators.account = gossip_nodes.account
+                                       AND validators.network = gossip_nodes.network"
+                               ).where(account: next_leader_accounts, network: network)
+
 
     {
       current_leader: leaders_data(current_leader).first,
