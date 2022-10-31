@@ -5,6 +5,7 @@
         <div class="mb-4">
           <h2 class="h5 card-heading-left">Leader</h2>
           <span class="text-muted" v-if="!current_leader">loading...</span>
+
           <div class="d-flex flex-wrap gap-3" v-if="current_leader">
             <a :href="validator_details_link(current_leader.account)"
                title="Go to validator details." target="_blank">
