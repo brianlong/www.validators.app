@@ -23,7 +23,8 @@ module LeaderStatsHelper
     leader_accounts = client.get_slot_leaders(current_slot, LEADERS_LIMIT).result
     next_leaders = Validator.where(account: leader_accounts, network: network)
                             .select(:name, :account, :avatar_url)
-
+                            .sort_by{ |v| leader_accounts.index(v.account) }
+    
     {
       current_leader: leaders_data(current_leader).first,
       next_leaders: leaders_data(next_leaders)
