@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-module LeaderStatsHelper  
-  LEADERS_LIMIT = 6
-  FETCHED_LEADERS_LIMIT = 20
+module LeaderStatsHelper
+  LEADERS_LIMIT = 12
   MAINNET = "mainnet"
   NETWORKS = [MAINNET, "testnet"].freeze
 
@@ -17,10 +16,14 @@ module LeaderStatsHelper
   def leaders_for_network(network)
     client = solana_client(network)
     current_slot = client.get_slot.result
-    leader_accounts = client.get_slot_leaders(current_slot, FETCHED_LEADERS_LIMIT).result
-    leaders = Validator.where(account: leader_accounts)
-
-    leaders_data(leaders).take(LEADERS_LIMIT)
+    leader_accounts = client.get_slot_leaders(current_slot, LEADERS_LIMIT).result
+    leaders = Validator.where(account: leader_accounts, network: network)
+                       .select(:name, :account, :avatar_url)
+    leaders = leaders_data(leaders)
+    {
+      current_leader: leaders.shift,
+      next_leaders: leaders
+    }
   end
 
   def leaders_data(leaders)
