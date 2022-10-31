@@ -15,19 +15,20 @@ module LeaderStatsHelper
 
   def leaders_for_network(network)
     client = solana_client(network)
+
     current_slot = client.get_slot.result
+    leaders_accounts = client.get_slot_leaders(current_slot, LEADERS_LIMIT).result
 
-    current_leader_account = client.get_slot_leader.result
-    current_leader = Validator.where(account: current_leader_account, network: network).select(:name, :account, :avatar_url)
-
-    leader_accounts = client.get_slot_leaders(current_slot, LEADERS_LIMIT).result
-    next_leaders = Validator.where(account: leader_accounts, network: network)
+    leaders_data = Validator.where(account: leaders_accounts, network: network)
                             .select(:name, :account, :avatar_url)
-                            .sort_by{ |v| leader_accounts.index(v.account) }
-    
+                            .limit(3)
+                            .sort_by{ |v| leaders_accounts.index(v.account) }
+    leaders = leaders_data(leaders_data)
+    current_leader = leaders.shift
+
     {
-      current_leader: leaders_data(current_leader).first,
-      next_leaders: leaders_data(next_leaders)
+      current_leader: current_leader,
+      next_leaders: leaders
     }
   end
 
