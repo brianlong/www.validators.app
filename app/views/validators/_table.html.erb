@@ -141,6 +141,11 @@
                   <%= data_center_host %>
                 <% end %>
               </div>
+              <div class="small text-muted">
+                <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+                <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+                <%= validator.score&.software_version %>
+              </div>
             <% else %>
               <div class="d-sm-inline-block small mt-2 mt-sm-0">
                 <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
