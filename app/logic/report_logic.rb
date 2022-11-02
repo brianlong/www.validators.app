@@ -112,40 +112,6 @@ module ReportLogic
     end
   end
 
-  def report_cluster_stats
-    lambda do |p|
-      batch = Batch.find_by(uuid: p.payload[:batch_uuid])
-
-      vah_stats = Stats::VoteAccountHistory.new(p.payload[:network], batch.uuid)
-      vbh_stats = Stats::ValidatorBlockHistory.new(p.payload[:network], batch.uuid)
-      vs_stats  = Stats::ValidatorScore.new(p.payload[:network], batch.uuid)
-
-      software_report = Report.where(
-        network: p.payload[:network],
-        name: "report_software_versions"
-      ).last&.payload
-
-      payload = prepare_cluster_stats_payload(
-        vs_stats,
-        vah_stats,
-        vbh_stats,
-        software_report,
-        batch
-      )
-
-      Report.create(
-        network: p.payload[:network],
-        batch_uuid: p.payload[:batch_uuid],
-        name: "report_cluster_stats",
-        payload: payload
-      )
-
-      Pipeline.new(200, p.payload.merge(result: payload))
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, "report_cluster_stats", e)
-    end
-  end
-
   private
 
   def prepare_cluster_stats_payload(vs_stats, vah_stats, vbh_stats, software_report, batch)
