@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module LeaderStatsHelper
-  LEADERS_LIMIT = 12
+  LEADERS_LIMIT = 9
   MAINNET = "mainnet"
   NETWORKS = [MAINNET, "testnet"].freeze
 
