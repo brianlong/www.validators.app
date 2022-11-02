@@ -5,6 +5,7 @@
         <div class="mb-4">
           <h2 class="h5 card-heading-left">Leader</h2>
           <span class="text-muted" v-if="!current_leader">loading...</span>
+
           <div class="d-flex flex-wrap gap-3" v-if="current_leader">
             <a :href="validator_details_link(current_leader.account)"
                title="Go to validator details." target="_blank">
@@ -20,7 +21,7 @@
           </div>
         </div>
 
-        <div v-if="current_leader">
+        <div v-if="next_leaders.length > 0">
           <h2 class="h6 card-heading-left">Next Leaders</h2>
           <div class="d-flex flex-wrap gap-3">
             <a v-for="leader in next_leaders"
@@ -42,7 +43,7 @@
     data() {
       return {
         current_leader: null,
-        next_leaders: []
+        next_leaders: [],
       }
     },
     channels: {
@@ -51,8 +52,8 @@
         rejected() { },
         received(data) {
           data = data[this.network];
-          this.current_leader = data.shift();
-          this.next_leaders = data;
+          this.current_leader = data.current_leader;
+          this.next_leaders = data.next_leaders;
         },
         disconnected() { }
       }
