@@ -5,7 +5,7 @@ require_relative "concerns/leader_stats_helper"
 
 include LeaderStatsHelper
 
-sleep_time = 1 # seconds
+sleep_time = 0.6 # seconds
 
 loop do
   begin
