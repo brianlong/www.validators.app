@@ -18,13 +18,13 @@
         </thead>
         <tbody>
           <tr v-for="version in Object.keys(software_versions).slice(0, 6)" :key="version">
-            <td :class="version == current_software_version ? 'h4 text-success' : '' " >
-              <a :href="'/validators?q=' + version + '&network=' + network" title = "Click to show validators with this version"> {{ version }}</a>
+            <td :class="software_version_class(version)" >
+              <a :href="software_version_link(version)" title = "Click to show validators with this version"> {{ version }}</a>
             </td>
-            <td :class="version == current_software_version ? 'h4 text-success' : '' ">
+            <td :class="software_version_class(version)">
               {{ software_versions[version].stake_percent }}
             </td>
-            <td :class="version == current_software_version ? 'h4 text-success' : '' ">
+            <td :class="software_version_class(version)">
               {{ software_versions[version].count }}
             </td>
           </tr>
@@ -56,13 +56,13 @@
                   </thead>
                   <tbody>
                     <tr v-for="version in Object.keys(software_versions)" :key="version">
-                      <td :class="version == current_software_version ? 'h4 text-success' : '' " >
-                        <a :href="'/validators?q=' + version + '&network=' + network" title = "Click to show validators with this version"> {{ version }}</a>
+                      <td :class="software_version_class(version)" >
+                        <a :href="software_version_link(version)" title = "Click to show validators with this version"> {{ version }}</a>
                       </td>
-                      <td :class="version == current_software_version ? 'h4 text-success' : '' ">
+                      <td :class="software_version_class(version)">
                         {{ software_versions[version].stake_percent }}
                       </td>
-                      <td :class="version == current_software_version ? 'h4 text-success' : '' ">
+                      <td :class="software_version_class(version)">
                         {{ software_versions[version].count }}
                       </td>
                     </tr>
@@ -89,7 +89,16 @@
       }
     },
     methods: {
-
+        software_version_class(version){
+          if(version == this.current_software_version) {
+            return "h4 text-success"
+          } else {
+            return ""
+          }
+        },
+        software_version_link(version){
+          return '/validators?q=' + version + '&network=' + this.network
+        }
     },
     channels: {
       SoftwareVersionsChannel: {
@@ -114,7 +123,6 @@
     },
     computed: {
       software_versions_keys: function() {
-        console.log(Object.keys(this.software_versions))
         return Object.keys(this.software_versions)
       },
       current_software_version: function() {
@@ -129,7 +137,6 @@
       ...mapGetters([
         'network'
       ])
-
     }
   }
 </script>

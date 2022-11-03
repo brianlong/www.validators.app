@@ -4,7 +4,6 @@ import TurbolinksAdapter from 'vue-turbolinks';
 import ActionCableVue from "actioncable-vue";
 import store from "../stores/main_store.js";
 
-
 Vue.use(TurbolinksAdapter);
 Vue.use(ActionCableVue, {
   debug: true,
