@@ -111,20 +111,4 @@ module ReportLogic
       Pipeline.new(500, p.payload, 'report_software_versions', e)
     end
   end
-
-  private
-
-  def prepare_cluster_stats_payload(vs_stats, vah_stats, vbh_stats, software_report, batch)
-    {
-      top_staked_validators: vs_stats.top_staked_validators || [],
-      total_stake: vs_stats.total_stake,
-      top_skipped_vote_validators: vah_stats.top_skipped_vote_percent || [],
-      top_root_distance_validators: vs_stats.top_root_distance_averages_validators || [],
-      top_vote_distance_validators: vs_stats.top_vote_distance_averages_validators || [],
-      top_skipped_slot_validators: vbh_stats.top_skipped_slot_percent || [],
-      skipped_votes_percent_moving_average: vah_stats.skipped_vote_moving_average_stats,
-      software_version: software_report,
-      batch_uuid: batch.uuid
-    }
-  end
 end
