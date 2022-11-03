@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_24_124535) do
+ActiveRecord::Schema.define(version: 2022_10_24_131325) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -82,6 +82,9 @@ ActiveRecord::Schema.define(version: 2022_10_24_124535) do
     t.json "vote_distance"
     t.json "skipped_slots"
     t.json "skipped_votes"
+    t.integer "validator_count"
+    t.integer "nodes_count"
+    t.string "software_version"
     t.index ["network"], name: "index_cluster_stat_on_network"
   end
 
