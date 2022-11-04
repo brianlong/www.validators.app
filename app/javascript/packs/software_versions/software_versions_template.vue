@@ -94,16 +94,16 @@
       }
     },
     methods: {
-        software_version_class(version){
-          if(version == this.current_software_version) {
-            return "h4 text-success"
-          } else {
-            return ""
-          }
-        },
-        software_version_link(version){
-          return '/validators?q=' + version + '&network=' + this.network
+      software_version_class(version){
+        if(version == this.current_software_version) {
+          return "h4 text-success"
+        } else {
+          return ""
         }
+      },
+      software_version_link(version){
+        return '/validators?q=' + version + '&network=' + this.network
+      }
     },
     channels: {
       SoftwareVersionsChannel: {
@@ -122,9 +122,9 @@
     },
     mounted: function(){
       this.$cable.subscribe({
-          channel: "SoftwareVersionsChannel",
-          room: "public",
-        });
+        channel: "SoftwareVersionsChannel",
+        room: "public",
+      });
     },
     computed: {
       software_versions_keys: function() {
