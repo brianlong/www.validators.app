@@ -14,7 +14,7 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
     end
 
     create(:commission_history, validator: val1)
-    create(:commission_history, validator: val2, created_at: 32.days.ago)
+    create(:commission_history, validator: val2, created_at: 62.days.ago)
   end
 
   test 'commission_history_query \
@@ -32,7 +32,7 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
         should include results from correct validators' do
     result = CommissionHistoryQuery.new(
       network: 'testnet',
-      time_from: 33.day.ago,
+      time_from: 63.day.ago,
       time_to: DateTime.now
     ).by_query('acc2')
 
