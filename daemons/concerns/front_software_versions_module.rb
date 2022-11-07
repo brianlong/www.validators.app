@@ -21,11 +21,12 @@ module FrontSoftwareVersionsModule
   private
 
   def get_latest_versions_report(network)
-    @report ||= Report.where(
+    @report ||= {}
+    @report[network] ||= Report.where(
       name: FrontStatsConstants::SOFTWARE_VERSION_REPORT_NAME,
       network: network
     ).order(created_at: :desc).first
 
-    @report&.payload
+    @report[network]&.payload
   end
 end
