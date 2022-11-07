@@ -110,6 +110,7 @@
         connected() {},
         rejected() {},
         received(data) {
+          console.log(data)
           var sw_formatted = {}
           data[this.network].forEach(v => {
             sw_formatted[Object.keys(v)[0]] = v[Object.keys(v)[0]]
