@@ -18,9 +18,7 @@
       </div>
     </div>
 
-    <div class="card">
-      <ping-thing-table :ping_things="ping_things_for_table()" />
-    </div>
+    <ping-thing-table :ping_things="ping_things_for_table()" :network="network" />
   </div>
 </template>
 

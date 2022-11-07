@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ActiveStakeWorker
+class ClusterStatsWorker
   include Sidekiq::Worker
 
   def perform(args = {})

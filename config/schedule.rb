@@ -41,6 +41,7 @@ job_type :ruby_script_data_centers,
 every 1.hour, at: 0, roles: [:background] do
   runner "AsnLogicWorker.perform_async(network: 'mainnet')"
   runner "AsnLogicWorker.perform_async(network: 'testnet')"
+  ruby_script_data_centers "check_hetzner_admin_warning.rb"
 end
 
 every 1.hour, at: 5, roles: [:background] do

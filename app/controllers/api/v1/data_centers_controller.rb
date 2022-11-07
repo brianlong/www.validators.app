@@ -36,8 +36,9 @@ module Api
           # United States, Canada, Russia, China, Australia, India
           if country_group.first.in? ["US", "CA", "RU", "CN", "AU", "IN"]
             country_group.last.group_by(&:subdivision_iso_code).each do |subdivision_group|
-              data_centers_groups[subdivision_group.first] = {
-                identifier: "#{country_group.first}/#{subdivision_group.first}",
+              identifier = "#{country_group.first}/#{subdivision_group.first}"
+              data_centers_groups[identifier] = {
+                identifier: identifier,
                 active_validators_count: subdivision_group.last.pluck(:active_validators_count).compact.sum,
                 active_gossip_nodes_count: subdivision_group.last.pluck(:active_gossip_nodes_count).compact.sum,
                 longitude: subdivision_group.last.first.longitude,

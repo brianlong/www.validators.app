@@ -1,0 +1,179 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.rpcpool.com/
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":58461,"method":"getSlot"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.rpcpool.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      - origin
+      Access-Control-Allow-Methods:
+      - OPTIONS, POST
+      Access-Control-Allow-Origin:
+      - http://user:brian
+      Access-Control-Max-Age:
+      - '86400'
+      Date:
+      - Mon, 31 Oct 2022 21:39:29 GMT
+      X-Rpc-Node:
+      - lb-ams2
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"jsonrpc":"2.0","result":158539028,"id":58461}
+
+        '
+  recorded_at: Mon, 31 Oct 2022 21:39:29 GMT
+- request:
+    method: post
+    uri: https://api.rpcpool.com/
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":58461,"method":"getSlotLeaders","params":[158539028,12]}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.rpcpool.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      - origin
+      Access-Control-Allow-Methods:
+      - OPTIONS, POST
+      Access-Control-Allow-Origin:
+      - http://user:brian
+      Access-Control-Max-Age:
+      - '86400'
+      Date:
+      - Mon, 31 Oct 2022 21:39:29 GMT
+      X-Rpc-Node:
+      - lb-ams2
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"jsonrpc":"2.0","result":["5JQLBUVAH597sUrcYiggqbmS4NyxfafCsw1nFJw4vxYD","5JQLBUVAH597sUrcYiggqbmS4NyxfafCsw1nFJw4vxYD","5JQLBUVAH597sUrcYiggqbmS4NyxfafCsw1nFJw4vxYD","5JQLBUVAH597sUrcYiggqbmS4NyxfafCsw1nFJw4vxYD","Fxsn579uS4xAWHWNR9v4A3m2upUnACYcDuhKmL2fbRmu","Fxsn579uS4xAWHWNR9v4A3m2upUnACYcDuhKmL2fbRmu","Fxsn579uS4xAWHWNR9v4A3m2upUnACYcDuhKmL2fbRmu","Fxsn579uS4xAWHWNR9v4A3m2upUnACYcDuhKmL2fbRmu","Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk"],"id":58461}
+
+        '
+  recorded_at: Mon, 31 Oct 2022 21:39:29 GMT
+- request:
+    method: post
+    uri: https://api.testnet.solana.com/
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":56165,"method":"getSlot"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.testnet.solana.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      - origin
+      Access-Control-Allow-Methods:
+      - OPTIONS, POST
+      Access-Control-Allow-Origin:
+      - http://authenticated-user
+      Access-Control-Max-Age:
+      - '86400'
+      Date:
+      - Mon, 31 Oct 2022 21:39:29 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"jsonrpc":"2.0","result":160625120,"id":56165}
+
+        '
+  recorded_at: Mon, 31 Oct 2022 21:39:29 GMT
+- request:
+    method: post
+    uri: https://api.testnet.solana.com/
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":56165,"method":"getSlotLeaders","params":[160625120,12]}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.testnet.solana.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      - origin
+      Access-Control-Allow-Methods:
+      - OPTIONS, POST
+      Access-Control-Allow-Origin:
+      - http://authenticated-user
+      Access-Control-Max-Age:
+      - '86400'
+      Date:
+      - Mon, 31 Oct 2022 21:39:30 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"jsonrpc":"2.0","result":["J7v9ndmcoBuo9to2MnHegLnBkC9x3SAVbQBJo5MMJrN1","J7v9ndmcoBuo9to2MnHegLnBkC9x3SAVbQBJo5MMJrN1","J7v9ndmcoBuo9to2MnHegLnBkC9x3SAVbQBJo5MMJrN1","J7v9ndmcoBuo9to2MnHegLnBkC9x3SAVbQBJo5MMJrN1","8bn2BhTzfNEQoMyEPJ2q58hFzQY8GxPkLRFWHMWksLet","8bn2BhTzfNEQoMyEPJ2q58hFzQY8GxPkLRFWHMWksLet","8bn2BhTzfNEQoMyEPJ2q58hFzQY8GxPkLRFWHMWksLet","8bn2BhTzfNEQoMyEPJ2q58hFzQY8GxPkLRFWHMWksLet","HSKW3uvKvd6spwFSdxzbxH87os134SFGJrLj4uWCy4qM"],"id":56165}
+
+        '
+  recorded_at: Mon, 31 Oct 2022 21:39:30 GMT
+recorded_with: VCR 6.0.0

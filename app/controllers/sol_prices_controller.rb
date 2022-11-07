@@ -7,8 +7,9 @@ class SolPricesController < ApplicationController
     sol_price_count ||= SolPrice.count
 
     coin_gecko_prices = SolPrice.where(exchange: SolPrice.exchanges[:coin_gecko])
-                                 .order(datetime_from_exchange: :asc)
-                                 .last(filter)
+                                .where.not(average_price: nil)
+                                .order(datetime_from_exchange: :asc)
+                                .last(filter)
     ftx_prices = SolPrice.where(exchange: SolPrice.exchanges[:ftx])
                           .order(datetime_from_exchange: :asc)
                           .last(filter)
