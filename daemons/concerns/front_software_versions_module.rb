@@ -7,11 +7,11 @@ module FrontSoftwareVersionsModule
   include ValidatorsHelper
 
   def get_versions_for_networks(networks = FrontStatsConstants::NETWORKS)
-    res = {}
+    versions_for_networks = {}
     networks.each do |network|
-      res[network] = sort_software_versions(get_latest_versions_report(network))
+      versions_for_networks[network] = sort_software_versions(get_latest_versions_report(network))
     end
-    res
+    versions_for_networks
   end
 
   def broadcast_software_versions(software_versions)

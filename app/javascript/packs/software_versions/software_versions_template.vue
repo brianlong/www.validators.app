@@ -122,9 +122,6 @@
         });
     },
     computed: {
-      software_versions_keys: function() {
-        return Object.keys(this.software_versions)
-      },
       current_software_version: function() {
         var current = null
         Object.keys(this.software_versions).forEach(sv => {
