@@ -1,10 +1,10 @@
 <template>
-  <div class="col-md-7 col-lg-8 mb-4 pb-2 mt-4">
+  <section>
     <div class="card">
       <div class="card-content pb-0">
         <h2 class="h4 card-heading">Software Versions</h2>
         <div v-if="this.is_loading" class="text-center text-muted pb-4">
-          loading ...
+          loading...
         </div>
       </div>
 
@@ -18,11 +18,13 @@
         </thead>
         <tbody>
           <tr v-for="version in Object.keys(software_versions).slice(0, 6)" :key="version">
-            <td :class="software_version_class(version)" >
-              <a :href="software_version_link(version)" title = "Click to show validators with this version"> {{ version }}</a>
+            <td :class="software_version_class(version)">
+              <a :href="software_version_link(version)" title="Click to show validators with this version">
+                {{ version }}
+              </a>
             </td>
             <td :class="software_version_class(version)">
-              {{ software_versions[version].stake_percent }}
+              {{ software_versions[version].stake_percent }}%
             </td>
             <td :class="software_version_class(version)">
               {{ software_versions[version].count }}
@@ -30,11 +32,15 @@
           </tr>
         </tbody>
       </table>
+
       <div class="px-3 pb-3 text-center" v-if="Object.keys(software_versions).length > 6">
-        <a data-bs-toggle="modal" data-bs-target="#versionsModal" class="text-muted" href="">Show older versions</a>
+        <a data-bs-toggle="modal" data-bs-target="#versionsModal" class="text-muted" href="">
+          Show older versions
+        </a>
       </div>
 
-      <div class="modal modal-large modal-top fade" id="versionsModal" tabindex="-1" role="dialog" aria-labelledby="versionsModalLabel" aria-hidden="true">
+      <div class="modal modal-large modal-top fade" id="versionsModal" tabindex="-1" role="dialog"
+           aria-labelledby="versionsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -45,37 +51,36 @@
             </div>
 
             <div class="modal-body p-0">
-              <div class="card">
-                <table class="table table-condensed mb-0">
-                  <thead>
-                  <tr>
-                    <th>Software Version</th>
-                    <th>Stake %</th>
-                    <th>No. of validators</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="version in Object.keys(software_versions)" :key="version">
-                      <td :class="software_version_class(version)" >
-                        <a :href="software_version_link(version)" title = "Click to show validators with this version"> {{ version }}</a>
-                      </td>
-                      <td :class="software_version_class(version)">
-                        {{ software_versions[version].stake_percent }}
-                      </td>
-                      <td :class="software_version_class(version)">
-                        {{ software_versions[version].count }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <table class="table table-condensed mb-0">
+                <thead>
+                <tr>
+                  <th>Software Version</th>
+                  <th>Stake %</th>
+                  <th>No. of validators</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="version in Object.keys(software_versions)" :key="version">
+                  <td :class="software_version_class(version)">
+                    <a :href="software_version_link(version)" title="Click to show validators with this version">
+                      {{ version }}
+                    </a>
+                  </td>
+                  <td :class="software_version_class(version)">
+                    {{ software_versions[version].stake_percent }}%
+                  </td>
+                  <td :class="software_version_class(version)">
+                    {{ software_versions[version].count }}
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
+  </section>
 </template>
 
 <script>
@@ -89,16 +94,16 @@
       }
     },
     methods: {
-        software_version_class(version){
-          if(version == this.current_software_version) {
-            return "h4 text-success"
-          } else {
-            return ""
-          }
-        },
-        software_version_link(version){
-          return '/validators?q=' + version + '&network=' + this.network
+      software_version_class(version){
+        if(version == this.current_software_version) {
+          return "h4 text-success"
+        } else {
+          return ""
         }
+      },
+      software_version_link(version){
+        return '/validators?q=' + version + '&network=' + this.network
+      }
     },
     channels: {
       SoftwareVersionsChannel: {
@@ -117,9 +122,9 @@
     },
     mounted: function(){
       this.$cable.subscribe({
-          channel: "SoftwareVersionsChannel",
-          room: "public",
-        });
+        channel: "SoftwareVersionsChannel",
+        room: "public",
+      });
     },
     computed: {
       current_software_version: function() {
