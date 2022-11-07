@@ -86,16 +86,7 @@ class ValidatorCheckActiveService
 
   # returns true if validator was not delinquent for any period of time since DELINQUENT_TIME
   def not_delinquent?(validator)
-    nondelinquent_history = ValidatorHistory.where(
-                                              account: validator.account,
-                                              delinquent: false
-                                            )
-                                            .where(
-                                              'created_at > ?',
-                                              DateTime.now - @delinquent_time
-                                            )
-
-    nondelinquent_history.exists?
+    !validator.delinquent?
   end
 
   # returns true if if validator had stake gt STAKE_EXCLUDE_HEIGHT since DELINQUENT_TIME
