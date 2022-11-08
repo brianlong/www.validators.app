@@ -3,19 +3,26 @@
     <section class="map-background">
       <div class="map-points">
         <!-- orientation points - TODO to remove after all map-related tasks are done -->
-        <!--
-        <div class="map-point map-point-sm" title="Map Center" style="left: 50%; bottom: 50%">X</div>
-        <div class="map-point map-point-md" title="Point 0,0"
+
+        <div class="map-point map-point-sm map-point-green" title="Map Center" style="left: 50%; bottom: 50%">X</div>
+        <div class="map-point map-point-md map-point-green" title="Point 0,0"
              :style="{ left: position_horizontal(0),
                        bottom: position_vertical(-0) }">00</div>
-        <div class="map-point map-point-sm" title="Sydney"
+        <div class="map-point map-point-sm map-point-purple" title="Sydney"
              :style="{ left: position_horizontal(147.1201174),
                        bottom: position_vertical(-33.0996337) }">S</div>
-        <div class="map-point map-point-lg" title="Sth America End"
+        <div class="map-point map-point-lg map-point-purple" title="Sth America End"
              :style="{ left: position_horizontal(22.674129),
                        bottom: position_vertical(-34.166060) }">SAF</div>
-        -->
+        <div class="map-point map-point-lg map-point-purple" title="Mexico City"
+             :style="{ left: position_horizontal(-99.201635),
+                       bottom: position_vertical(19.4962828) }">MX</div>
+        <div class="map-point map-point-lg map-point-purple" title="Madagascar"
+             :style="{ left: position_horizontal(46.2817152),
+                       bottom: position_vertical(-19.5849402) }">MD</div>
 
+
+        <!--
         <div v-for="dc_group in data_centers_groups"
              :class="set_map_point_class(dc_group.active_validators_count, dc_group.active_gossip_nodes_count)"
              :style="{ left: position_horizontal(dc_group.longitude),
@@ -29,6 +36,7 @@
             {{ dc_group.active_validators_count }}
           </span>
         </div>
+        -->
 
         <div v-if="current_leader"
              :style="{ left: position_horizontal(current_leader.location_longitude),
@@ -56,14 +64,6 @@
           <span class="btn btn-xs btn-secondary active">
             <i class="fas fa-eye-slash"></i>
           </span>
-        </div>
-
-        <div class="d-none mt-3">
-          <div class="small text-muted">Current Leader:</div>
-          <div>
-            <strong class="text-success">Block Logic | BL</strong>
-            <span class="text-muted">(DDnA...oshdp)</span>
-          </div>
         </div>
       </div>
 
