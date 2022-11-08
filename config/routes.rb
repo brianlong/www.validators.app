@@ -96,10 +96,6 @@ Rails.application.routes.draw do
       to: 'public#commission_histories',
       as: 'commission_histories'
 
-  get 'cluster-stats',
-      to: 'cluster_stats#index',
-      as: 'cluster_stats'
-
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
