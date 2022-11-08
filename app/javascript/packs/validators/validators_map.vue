@@ -20,7 +20,8 @@
              :class="set_map_point_class(dc_group.active_validators_count, dc_group.active_gossip_nodes_count)"
              :style="{ left: position_horizontal(dc_group.longitude),
                        bottom: position_vertical(dc_group.latitude) }"
-             v-on:click="select_data_centers_group(dc_group)" :key="dc_group.identifier">
+             v-on:click="select_data_centers_group(dc_group)"
+             :key="dc_group.identifier">
           <span v-if="show_gossip_nodes">
             {{ dc_group.active_validators_count + dc_group.active_gossip_nodes_count }}
           </span>
@@ -33,7 +34,7 @@
              :style="{ left: position_horizontal(current_leader.location_longitude),
                        bottom: position_vertical(current_leader.location_latitude) }"
              class="map-point map-point-leader">
-          <img :src="avatar_link()" alt="L">
+          <img :src="avatar_link()" alt="avatar">
         </div>
       </div>
     </section>
@@ -89,7 +90,6 @@
         selected_data_centers_group: null,
         show_gossip_nodes: true,
         current_leader: null,
-        next_leaders: null
       }
     },
     created () {
@@ -99,7 +99,6 @@
 
       axios.get(url).then(function (response) {
         ctx.data_centers_groups = response.data.data_centers_groups;
-        console.log(ctx.data_centers_groups)
       })
     },
     mounted() {
@@ -120,7 +119,6 @@
         received(data) {
           data = data[this.network];
           this.current_leader = data.current_leader;
-          this.next_leaders = data.next_leaders;
         },
         disconnected() { }
       }

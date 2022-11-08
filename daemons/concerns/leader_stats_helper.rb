@@ -5,9 +5,6 @@ require_relative './front_stats_constants.rb'
 module LeaderStatsHelper
   include FrontStatsConstants
 
-  VALIDATOR_FIELDS_FOR_LEADER = %w[name account avatar_url].freeze
-  DC_FIELDS_FOR_LEADER = %w[location_latitude location_longitude country_iso_code].freeze
-
   def all_leaders
     FrontStatsConstants::NETWORKS.map do |network|
       [network, leaders_for_network(network)]
@@ -24,10 +21,11 @@ module LeaderStatsHelper
 
     leaders_data = Validator.where(account: leaders_accounts, network: network)
                             .left_outer_joins(:data_center)
-                            .select(full_fields_for_leader)
+                            .select(fields_for_leader)
                             .limit(3)
                             .sort_by{ |v| leaders_accounts.index(v.account) }
-    leaders = leaders_data(leaders_data)
+
+    leaders = leaders_data.map(&:attributes)
     current_leader = leaders.shift
 
     {
@@ -36,17 +34,11 @@ module LeaderStatsHelper
     }
   end
 
-  def full_fields_for_leader
-    validator_fields = VALIDATOR_FIELDS_FOR_LEADER.map{ |field| "validators." + field }
-    dc_fields = DC_FIELDS_FOR_LEADER.map{ |field| "data_centers." + field }
+  def fields_for_leader
+    validator_fields = FrontStatsConstants::VALIDATOR_FIELDS_FOR_LEADER.map{ |field| "validators." + field }
+    dc_fields = FrontStatsConstants::DC_FIELDS_FOR_LEADER.map{ |field| "data_centers." + field }
 
     (validator_fields + dc_fields).join(", ")
-  end
-
-  def leaders_data(leaders)
-    leaders.map do |leader|
-      leader.attributes
-    end
   end
 
   def solana_client(network)
