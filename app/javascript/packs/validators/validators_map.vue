@@ -2,59 +2,6 @@
   <div class="card map mb-4">
     <section class="map-background">
       <div class="map-points">
-        <!-- orientation points - TODO to remove after all map-related tasks are done -->
-        <!--
-                <div class="map-point map-point-sm map-point-green" title="Map Center" style="left: 50%; bottom: 50%">X</div>
-                <div class="map-point map-point-md map-point-green" title="Point 0,0"
-                     :style="{ left: position_horizontal(0),
-                               bottom: position_vertical(-0) }">00</div>
-                <div class="map-point map-point-sm map-point-purple" title="Sydney"
-                     :style="{ left: position_horizontal(147.1201174),
-                               bottom: position_vertical(-33.0996337) }">S</div>
-                <div class="map-point map-point-lg map-point-purple" title="Sth America End"
-                     :style="{ left: position_horizontal(22.674129),
-                               bottom: position_vertical(-34.166060) }">SAF</div>
-                <div class="map-point map-point-md map-point-purple" title="Mexico City"
-                     :style="{ left: position_horizontal(-99.201635),
-                               bottom: position_vertical(19.4962828) }">Mex</div>
-                <div class="map-point map-point-md map-point-purple" title="Madagascar"
-                     :style="{ left: position_horizontal(46.2817152),
-                               bottom: position_vertical(-19.5849402) }">Ma</div>
-                <div class="map-point map-point-md map-point-purple" title="Tokyo"
-                     :style="{ left: position_horizontal(139.7025779),
-                               bottom: position_vertical(35.7050326) }">To</div>
-                <div class="map-point map-point-md map-point-purple" title="London"
-                     :style="{ left: position_horizontal(-0.4963255),
-                               bottom: position_vertical(51.52103) }">Lon</div>
-                <div class="map-point map-point-md map-point-purple" title="Florida"
-                     :style="{ left: position_horizontal(-81.769220),
-                               bottom: position_vertical(28.0079028) }">Fl</div>
-                <div class="map-point map-point-md map-point-purple" title="Papua"
-                     :style="{ left: position_horizontal(141.1372805),
-                               bottom: position_vertical(-5.6746548) }">Pap</div>
-                <div class="map-point map-point-md map-point-purple" title="Madrid"
-                     :style="{ left: position_horizontal(-3.8651348),
-                               bottom: position_vertical(40.522122) }">Md</div>
-                <div class="map-point map-point-md map-point-purple" title="Ireland"
-                     :style="{ left: position_horizontal(-7.8912691),
-                               bottom: position_vertical(53.2252519) }">Ir</div>
-                <div class="map-point map-point-md map-point-purple" title="Trondheim Norway"
-                     :style="{ left: position_horizontal(10.327793),
-                               bottom: position_vertical(63.4340453) }">Tro</div>
-                <div class="map-point map-point-md map-point-purple" title="Oslo Norway"
-                     :style="{ left: position_horizontal(10.701824),
-                               bottom: position_vertical(59.924618) }">No</div>
-                <div class="map-point map-point-md map-point-purple" title="Rome"
-                     :style="{ left: position_horizontal(11.9616935),
-                               bottom: position_vertical(41.9091516) }">Rom</div>
-                <div class="map-point map-point-md map-point-purple" title="Rio"
-                     :style="{ left: position_horizontal(-43.242874),
-                               bottom: position_vertical(-22.7893) }">Rio</div>
-                <div class="map-point map-point-md map-point-purple" title="Singapore"
-                     :style="{ left: position_horizontal(103.832760),
-                               bottom: position_vertical(1.351746) }">Sig</div>
-        -->
-
         <div v-for="dc_group in data_centers_groups"
              :class="set_map_point_class(dc_group.active_validators_count, dc_group.active_gossip_nodes_count)"
              :style="{ left: position_horizontal(dc_group.longitude),
