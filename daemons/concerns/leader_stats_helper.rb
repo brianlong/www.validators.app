@@ -6,7 +6,7 @@ module LeaderStatsHelper
   include FrontStatsConstants
 
   VALIDATOR_FIELDS_FOR_LEADER = %w[name account avatar_url].freeze
-  DC_FIELDS_FOR_LEADER = %w[location_latitude location_longitude country_iso_code]
+  DC_FIELDS_FOR_LEADER = %w[location_latitude location_longitude country_iso_code].freeze
 
   def all_leaders
     FrontStatsConstants::NETWORKS.map do |network|
@@ -23,7 +23,7 @@ module LeaderStatsHelper
     leaders_accounts = client.get_slot_leaders(current_slot, FrontStatsConstants::LEADERS_LIMIT).result
 
     leaders_data = Validator.where(account: leaders_accounts, network: network)
-                            .joins(:data_center)
+                            .left_outer_joins(:data_center)
                             .select(full_fields_for_leader)
                             .limit(3)
                             .sort_by{ |v| leaders_accounts.index(v.account) }
