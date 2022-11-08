@@ -1,8 +1,8 @@
-import Vue from 'vue/dist/vue.esm';
-import SkippedStatsComponentTemplate from './skipped_stats_component_template';
+import Vue from 'vue/dist/vue.esm'
+import SoftwareVersionsTemplate from './software_versions_template'
 import TurbolinksAdapter from 'vue-turbolinks';
-import store from "../stores/main_store.js";
 import ActionCableVue from "actioncable-vue";
+import store from "../stores/main_store.js";
 
 Vue.use(TurbolinksAdapter);
 Vue.use(ActionCableVue, {
@@ -14,10 +14,10 @@ Vue.use(ActionCableVue, {
 
 document.addEventListener('turbolinks:load', () => {
   new Vue({
-    el: '#skipped-stats-component',
+    el: '#software-versions-component',
     store,
     render(createElement) {
-      return createElement(SkippedStatsComponentTemplate);
+      return createElement(SoftwareVersionsTemplate)
     }
   })
 })

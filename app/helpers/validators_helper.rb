@@ -64,7 +64,7 @@ module ValidatorsHelper
   end
 
   def sort_software_versions(versions)
-    versions.sort_by { |ver| Gem::Version.new(ver.keys.first)}.reverse
+    versions&.sort_by { |ver| Gem::Version.new(ver.keys.first)}&.reverse
   end
 
   def solstake_url(vote_account)

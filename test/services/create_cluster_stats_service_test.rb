@@ -7,14 +7,6 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
     @network = "mainnet"
     @software_version =  "1.1.1"
     @batch = create(:batch, network: @network, software_version: @software_version)
-
-    @validator_histories = [
-      create(:validator_history, batch_uuid: @batch_uuid, active_stake: 10),
-      create(:validator_history, batch_uuid: @batch_uuid, active_stake: 20),
-      create(:validator_history, batch_uuid: @batch_uuid, active_stake: 31),
-    ]
-
-    @report = create(:report, :report_cluster_stats, network: @network)
   end
 
   test "#call creates new ClusterStat with correct data if there's no cluster stats for given network" do
@@ -46,9 +38,55 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
     assert_equal @software_version, stat.software_version
     assert_equal 5, stat.validator_count
     assert_equal 5, stat.nodes_count
-    assert_equal @report.payload["root_distance"], stat.root_distance
-    assert_equal @report.payload["vote_distance"], stat.vote_distance
-    assert_equal @report.payload["skipped_slots"], stat.skipped_slots
-    assert_equal @report.payload["skipped_votes_percent"], stat.skipped_votes
+  end
+
+  test "#call updates ClusterStat with correct total_active_stake" do
+    mock = Minitest::Mock.new
+    mock.expect :total_active_stake, 123
+
+    Stats::ValidatorHistory.stub :new, mock do
+      CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
+      stat = ClusterStat.where(network: @network).last
+
+      assert_equal 123, stat.total_active_stake
+    end
+  end
+
+  test "#call updates ClusterStat with correct root_distance and vote_distance" do
+    mock = Minitest::Mock.new
+    mock.expect :root_distance_stats, 456
+    mock.expect :vote_distance_stats, 789
+
+    Stats::ValidatorScore.stub :new, mock do
+      CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
+      stat = ClusterStat.where(network: @network).last
+
+      assert_equal 456, stat.root_distance
+      assert_equal 789, stat.vote_distance
+    end
+  end
+
+  test "#call updates ClusterStat with correct skipped_slots" do
+    mock = Minitest::Mock.new
+    mock.expect :skipped_slot_stats, 111
+
+    Stats::ValidatorBlockHistory.stub :new, mock do
+      CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
+      stat = ClusterStat.where(network: @network).last
+
+      assert_equal 111, stat.skipped_slots
+    end
+  end
+
+  test "#call updates ClusterStat with correct skipped_votes" do
+    mock = Minitest::Mock.new
+    mock.expect :skipped_votes_stats, 222
+
+    Stats::VoteAccountHistory.stub :new, mock do
+      CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
+      stat = ClusterStat.where(network: @network).last
+
+      assert_equal 222, stat.skipped_votes
+    end
   end
 end

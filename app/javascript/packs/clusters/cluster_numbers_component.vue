@@ -3,15 +3,17 @@
     <div class="card h-100">
       <div class="card-content">
         <h2 class="h5 card-heading-left">Cluster</h2>
-        <div class="mb-2">
+        <div class="text-muted" v-if="!software_version">loading...</div>
+
+        <div class="mb-2" v-if="software_version">
           <span class="text-muted me-1">Software Version:</span>
           <strong class="text-success">{{ software_version }}</strong>
         </div>
-        <div>
+        <div v-if="validators_count">
           <span class="text-muted me-1">Validators:</span>
           <strong class="text-success">{{ validators_count }}</strong>
         </div>
-        <div>
+        <div v-if="nodes_count">
           <span class="text-muted me-1">RPC nodes:</span>
           <strong class="text-success">{{ nodes_count }}</strong>
         </div>
@@ -24,7 +26,7 @@
   import { mapGetters } from 'vuex'
 
   export default {
-    data(){
+    data() {
       return {
         connection: null,
         validators_count: null,
