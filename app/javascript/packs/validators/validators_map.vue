@@ -118,6 +118,7 @@
           return 32 + ((latitude / 59) * 50) + '%';
         }
       },
+
       avatar_link() {
         if (this.current_leader.avatar_url) {
           return this.current_leader.avatar_url
@@ -125,6 +126,7 @@
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
         }
       },
+      
       set_map_point_size: function(validators_and_nodes_count) {
         if(typeof(validators_and_nodes_count) != 'number') {
           return "map-point-sm";
