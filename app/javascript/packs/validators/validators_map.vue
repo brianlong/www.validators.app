@@ -32,7 +32,7 @@
         <div v-if="current_leader"
              :style="{ left: position_horizontal(current_leader.location_longitude),
                        bottom: position_vertical(current_leader.location_latitude) }"
-             class="map-point map-point-leader map-point-purple">
+             class="map-point map-point-leader">
           <img :src="avatar_link()" alt="L">
         </div>
       </div>

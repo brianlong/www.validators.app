@@ -72,8 +72,9 @@ $green-purple-point: rgba(70, 121, 130, .95);
     }
 
     &-leader {
-      @include map-point-style(30px, 30px, 0);
+      @include map-point-style(34px, 34px, 0);
       z-index: 2;
+      border: 2px solid lighten($green-point, 20%);
       img {
         width: 30px;
         height: 30px;
