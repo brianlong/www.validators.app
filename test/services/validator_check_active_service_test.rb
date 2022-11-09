@@ -79,8 +79,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     refute v.reload.is_active
   end
 
-  test 'validator with active stake but with delinquent state should be inactive' do
-    validator = create(:validator, :delinquent, account: 'account5', is_active: false)
+  test "validator with active stake but with delinquent state should be inactive" do
+    validator = create(:validator, :delinquent, account: "account5", is_active: false)
 
     ValidatorCheckActiveService.new.update_validator_activity
 

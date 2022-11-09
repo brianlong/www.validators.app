@@ -104,6 +104,6 @@ class ValidatorCheckActiveService
 
   def delinquent_history(validator)
     ValidatorHistory.where(account: validator.account, delinquent: true)
-                    .where('created_at > ?', DateTime.now - @delinquent_time)
+                    .where("created_at > ?", DateTime.now - @delinquent_time)
   end
 end

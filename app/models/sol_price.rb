@@ -8,6 +8,7 @@
 #  currency               :integer
 #  datetime_from_exchange :datetime
 #  epoch_mainnet          :integer
+#  epoch_pythnet          :integer
 #  epoch_testnet          :integer
 #  exchange               :integer
 #  high                   :decimal(40, 20)
