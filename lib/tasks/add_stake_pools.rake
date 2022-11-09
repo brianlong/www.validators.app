@@ -43,7 +43,7 @@ stake_pools = [
   },
   {
     name: "Jito",
-    authority: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
+    authority: "6iQKfEyhr3bZMotVkW6beNZz5CPAkiwvgV2CTje9pVSS",
     network: "mainnet",
     ticker: "jitosol"
   }
