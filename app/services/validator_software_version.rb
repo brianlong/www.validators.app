@@ -4,7 +4,12 @@ class ValidatorSoftwareVersion < ::Gem::Version
     if best_version
       @current_version_number = best_version
     else
-      @current_version_number = network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
+      @current_version_number =
+        case network
+        when "mainnet" then MAINNET_CLUSTER_VERSION
+        when "testnet" then TESTNET_CLUSTER_VERSION
+        when "pythnet" then PYTHNET_CLUSTER_VERSION
+        end
     end
   end
 

@@ -34,4 +34,10 @@ class SolanaRpcClient
     end
     client
   end
+
+  def pythnet_client
+    @pythnet_client ||= SolanaRpcRuby::MethodsWrapper.new(
+      cluster: Rails.application.credentials.solana[:pythnet_urls].first
+    )
+  end
 end
