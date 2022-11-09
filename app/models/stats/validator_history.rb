@@ -5,7 +5,7 @@ module Stats
   # ValidatorHistory set of stats scoped to certain batch.
   #
   # Usage: stats = Stats::ValidatorHistory.new(network, batch_uuid)
-  #            # network    - 'testnet' or 'mainnet' atm
+  #            # network    - 'testnet', 'mainnet' or 'pythnet' atm
   #            # batch_uuid - batch in which look for
   #        stats.average_root_block
   #        stats.highest_root_block
