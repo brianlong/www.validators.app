@@ -30,7 +30,7 @@
           </span>
         </div>
 
-        <div v-if="current_leader"
+        <div v-if="leader_valid"
              :style="{ left: position_horizontal(current_leader.location_longitude),
                        bottom: position_vertical(current_leader.location_latitude) }"
              class="map-point map-point-leader">
@@ -109,9 +109,14 @@
     },
     watch: {
     },
-    computed: mapGetters([
-      'network'
-    ]),
+    computed: {
+      leader_valid(){
+        return this.current_leader && this.current_leader.location_latitude && this.current_leader.location_longitude
+      },
+      ...mapGetters([
+        'network'
+      ])
+    },
     channels: {
       LeadersChannel: {
         connected() { },
