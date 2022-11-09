@@ -43,10 +43,13 @@ class ValidatorCheckActiveService
   # number of previous by network
   def previous_epoch(network)
     @current_epoch ||= EpochWallClock.where(network: network).order(created_at: :desc).last
-    if network == 'testnet'
-      @previous_epoch_testnet ||= @current_epoch.epoch - 1
-    else
+    case network
+    when "mainnet"
       @previous_epoch_mainnet ||= @current_epoch.epoch - 1
+    when "testnet"
+      @previous_epoch_testnet ||= @current_epoch.epoch - 1
+    when "pythnet"
+      @previous_epoch_pythnet ||= @current_epoch.epoch - 1
     end
   end
 
