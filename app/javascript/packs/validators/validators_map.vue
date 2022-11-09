@@ -30,7 +30,7 @@
           </span>
         </div>
 
-        <div v-if="leader_valid"
+        <div v-if="is_leader_valid"
              :style="{ left: position_horizontal(current_leader.location_longitude),
                        bottom: position_vertical(current_leader.location_latitude) }"
              class="map-point map-point-leader">
@@ -110,7 +110,7 @@
     watch: {
     },
     computed: {
-      leader_valid(){
+      is_leader_valid(){
         return this.current_leader && this.current_leader.location_latitude && this.current_leader.location_longitude
       },
       ...mapGetters([
