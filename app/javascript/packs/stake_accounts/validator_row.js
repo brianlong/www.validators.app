@@ -178,7 +178,7 @@ var ValidatorRow = Vue.component('validatorRow', {
             <br />
             <div class="small">
               <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-              {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}
+              {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
             </div>
           </div>
         </div>
