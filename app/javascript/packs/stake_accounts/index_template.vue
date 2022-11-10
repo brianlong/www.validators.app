@@ -268,6 +268,7 @@
   import daopoolImage from 'daopool.png'
   import eversolImage from 'eversol.png'
   import blazestakeImage from 'blazestake.png'
+  import jitoImage from 'jito.png'
 
   import debounce from 'lodash/debounce'
 
@@ -305,7 +306,8 @@
           jpool: jpoolImage,
           daopool: daopoolImage,
           eversol: eversolImage,
-          blazestake: blazestakeImage
+          blazestake: blazestakeImage,
+          jito: jitoImage
         }
       }
     },
