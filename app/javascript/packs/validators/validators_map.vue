@@ -20,13 +20,21 @@
              :class="set_map_point_class(dc_group.active_validators_count, dc_group.active_gossip_nodes_count)"
              :style="{ left: position_horizontal(dc_group.longitude),
                        bottom: position_vertical(dc_group.latitude) }"
-             v-on:click="select_data_centers_group(dc_group)">
+             v-on:click="select_data_centers_group(dc_group)"
+             :key="dc_group.identifier">
           <span v-if="show_gossip_nodes">
             {{ dc_group.active_validators_count + dc_group.active_gossip_nodes_count }}
           </span>
           <span v-else>
             {{ dc_group.active_validators_count }}
           </span>
+        </div>
+
+        <div v-if="is_leader_valid"
+             :style="{ left: position_horizontal(current_leader.location_longitude),
+                       bottom: position_vertical(current_leader.location_latitude) }"
+             class="map-point map-point-leader">
+          <img :src="avatar_link()" alt="avatar">
         </div>
       </div>
     </section>
@@ -81,6 +89,7 @@
         data_centers_groups: [],
         selected_data_centers_group: null,
         show_gossip_nodes: true,
+        current_leader: null,
       }
     },
     created () {
@@ -92,11 +101,33 @@
         ctx.data_centers_groups = response.data.data_centers_groups;
       })
     },
+    mounted() {
+      this.$cable.subscribe({
+        channel: 'LeadersChannel',
+        room: "public"
+      });
+    },
     watch: {
     },
-    computed: mapGetters([
-      'network'
-    ]),
+    computed: {
+      is_leader_valid(){
+        return this.current_leader && this.current_leader.location_latitude && this.current_leader.location_longitude
+      },
+      ...mapGetters([
+        'network'
+      ])
+    },
+    channels: {
+      LeadersChannel: {
+        connected() { },
+        rejected() { },
+        received(data) {
+          data = data[this.network];
+          this.current_leader = data.current_leader;
+        },
+        disconnected() { }
+      }
+    },
     methods: {
       position_horizontal: function(longitude) {
         return 50 + (longitude / 160 * 50) + '%';
@@ -109,7 +140,13 @@
           return 42 + ((latitude / 70) * 50) + '%';
         }
       },
-
+      avatar_link() {
+        if (this.current_leader.avatar_url) {
+          return this.current_leader.avatar_url
+        } else {
+          return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
+        }
+      },
       set_map_point_size: function(validators_and_nodes_count) {
         if(typeof(validators_and_nodes_count) != 'number') {
           return "map-point-sm";
