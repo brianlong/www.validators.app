@@ -9,7 +9,7 @@ include PipelineLogic
 interrupted = false
 trap("INT") { interrupted = true }  unless Rails.env.test?
 
-network = 'pythnet'
+network = "pythnet"
 sleep_time = 15 # seconds
 
 class SkipAndSleep < StandardError; end
