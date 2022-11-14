@@ -7,7 +7,7 @@ include PipelineLogic
 # Send an interrupt with `ctrl-c` or `kill` to stop the script. Results will
 # not be posted to the validators.app server.
 interrupted = false
-trap('INT') { interrupted = true }  unless Rails.env.test?
+trap("INT") { interrupted = true }  unless Rails.env.test?
 
 network = 'pythnet'
 sleep_time = 15 # seconds
