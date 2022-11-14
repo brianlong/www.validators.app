@@ -67,11 +67,11 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     assert v.reload.is_rpc
   end
 
-  test 'validator delinquent for too long should be inactive' do
+  test "validator delinquent for too long should be inactive" do
     v = create(:validator, :with_score, account: 'account5')
-    create(:validator_history, account: 'account5', delinquent: true)
+    create(:validator_history, account: "account5", delinquent: true)
     create(:validator_block_history, validator: v, epoch: 122)
-    create(:validator_history, account: 'account5', delinquent: false, created_at: 25.hours.ago)
+    create(:validator_history, account: "account5", delinquent: false, created_at: 25.hours.ago)
     create(:validator_block_history, validator: v, epoch: 122)
 
     assert v.is_active
