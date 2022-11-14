@@ -27,7 +27,7 @@ class CoinGeckoClient
 
   # Fetches the current price for a coin in the given coin or currency.
   def price(ids = @coin)
-    @api_client.price(ids)
+    @api_client.price(ids, include_24hr_vol: true, include_24hr_change: true)
   end
 
   # ohlc - open, high, low, close
