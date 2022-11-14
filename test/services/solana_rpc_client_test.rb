@@ -37,4 +37,12 @@ class SolanaRpcClientTest < ActiveSupport::TestCase
       refute rpc_client.network_client("pythnet") == mainnet
     end
   end
+
+  test "#network_client raises error when invalid network passed" do
+    rpc_client = SolanaRpcClient.new
+
+    assert_raise SolanaRpcClient::InvalidNetwork do
+      rpc_client.network_client("invalid_network")
+    end
+  end
 end

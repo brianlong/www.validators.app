@@ -4,8 +4,7 @@ EpochWallClock.delete_all
 
 def solana_rpc_client(network)
   @solana_rpc_client ||= SolanaRpcClient.new
-   
-  return @solana_rpc_client.testnet_client if Rails.env.test?
+  network = 'testnet' if Rails.env.test?
 
   @solana_rpc_client.network_client(network)
 end
