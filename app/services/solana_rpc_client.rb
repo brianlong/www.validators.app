@@ -39,4 +39,14 @@ class SolanaRpcClient
       cluster: Rails.application.credentials.solana[:testnet_urls].first
     )
   end
+
+  def network_client(network)
+    network_cluster = Rails.application.credentials.solana["#{network}_urls".to_sym].first
+    # Reset the client when the network is different from the one already initialized
+    if @cluster != network_cluster
+      @cluster = network_cluster
+      @client = nil
+    end
+    client
+  end
 end
