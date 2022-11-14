@@ -8,7 +8,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     @validator = create(
-      :validator, 
+      :validator,
       :with_score,
       :with_data_center_through_validator_ip,
       network: "testnet"
@@ -16,7 +16,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index returns 200" do
-    get validators_url(network: "testnet")
+    get validators_path(network: "testnet")
 
     assert_response :success
   end
@@ -43,16 +43,10 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
 
-  test "root_url leads to validators#index" do
-    get root_url(network: "testnet")
-
-    assert_equal ValidatorsController, @controller.class
-  end
-
   test "index returns 200 if there are no validators" do
     Validator.delete_all
 
-    get root_url(network: "testnet")
+    get validators_path(network: "testnet")
     assert_response :success
   end
 
@@ -60,13 +54,13 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     user = create(:user, :confirmed)
     sign_in user
 
-    get root_url(network: "testnet", watchlist: true)
+    get validators_path(network: "testnet", watchlist: true)
 
     assert_response :success
   end
 
   test "index redirects to sign up page for watchlist param and no signed in user" do
-    get root_url(network: "testnet", watchlist: true)
+    get validators_path(network: "testnet", watchlist: true)
 
     assert_redirected_to new_user_registration_path
     assert_match "You need to create an account first.", flash[:warning]

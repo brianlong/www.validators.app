@@ -6,7 +6,9 @@
       </h1>
       <div class="row">
         <div class="col-md text-center">
-          <%= link_to "Show all validators", root_url, class: "btn btn-sm btn-secondary"%>
+          <%= link_to "Show all validators",
+                      validators_path(network: params[:network]),
+                      class: "btn btn-sm btn-secondary" %>
         </div>
       </div>
     </div>

@@ -39,11 +39,6 @@ class ValidatorsController < ApplicationController
     @at_33_stake_index ||= nil
   end
 
-  # GET /validators-map
-  def home_new
-    @network = validators_params[:network]
-  end
-
   # GET /validators/1
   # GET /validators/1.json
   def show

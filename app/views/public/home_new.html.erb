@@ -1,0 +1,44 @@
+<%= javascript_pack_tag "validators/validators_map.js" %>
+<%= javascript_pack_tag 'transactions/transactions_stats_component' %>
+<%= javascript_pack_tag 'sol_prices/sol_price_component' %>
+<%= javascript_pack_tag 'epochs/epoch_stats_component' %>
+<%= javascript_pack_tag 'validators/circulating_supply.js' %>
+<%= javascript_pack_tag 'leaders/leaders_stats_component.js' %>
+<%= javascript_pack_tag 'software_versions/software_versions_component.js' %>
+<%= javascript_pack_tag 'clusters/cluster_numbers_component.js' %>
+<%= javascript_pack_tag 'clusters/cluster_performance_stats_component.js' %>
+
+<% if @network == "mainnet" %>
+  <%= render "validators/ping_stats_banner" %>
+<% end %>
+
+<div id="validators-map">
+  <validators-map network="<%= @network %>"/>
+</div>
+
+<section class="row">
+  <div id="leader-stats-component"></div>
+
+  <div id="epoch-stats-component"></div>
+</section>
+
+<section class="row">
+  <div id="cluster-numbers-component"></div>
+
+  <div id="circulating-supply-component"></div>
+
+  <div id="transactions-stats-component"></div>
+
+  <div id="sol-price-component"></div>
+
+  <div class="col-md-8 mb-4">
+    <%= render 'validators/watchlist_info_banner' %>
+  </div>
+</section>
+
+<div id="distance-stats-component"></div>
+
+<section class="row">
+  <%= render 'validators/stake_pools_banner' %>
+  <div id="software-versions-component"></div>
+</section>

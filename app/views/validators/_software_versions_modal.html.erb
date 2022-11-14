@@ -22,7 +22,7 @@
             <% if group.first[1].is_a?(Hash) %>
               <tr>
                 <td class="<%= group.first[0].to_s == current_software_version(batch, network).to_s ? 'h4 text-success' : '' %>">
-                  <%= link_to group.first[0], root_path(q: group.first[0]), title: 'Click to show validators with this version' %>
+                  <%= link_to group.first[0], validators_path(q: group.first[0]), title: 'Click to show validators with this version' %>
                 </td>
                 <td class="<%= group.first[0].to_s == current_software_version(batch, network).to_s ? 'h4 text-success' : '' %>">
                   <%= group.first[1][:stake_percent].to_f %>%

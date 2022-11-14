@@ -3,18 +3,23 @@
 <header>
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand" href="<%= root_url(network: params[:network]) %>">
-        <%= image_tag 'VA-White-min.png', alt: t('home_page_link'), title: t('home_page') %>
-      </a>
+      <%= link_to root_url(network: params[:network]), title: "Go to Home Page", class: "navbar-brand", "data-turbolinks": "false" do %>
+        <%= image_tag 'VA-White-min.png', alt: "Link to Home Page" %>
+      <% end %>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         <span class="navbar-toggler-icon"></span>
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <%= link_to t('footer.nav_links.getting_started'), faq_path, class: 'nav-link' %>
+            <%= link_to "Validators", validators_path(network: params[:network]), class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Getting Started", faq_path, class: 'nav-link' %>
           </li>
           <div id="network-buttons"></div>
         </ul>
