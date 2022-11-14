@@ -54,9 +54,9 @@
         connected() {},
         rejected() {},
         received(data) {
-          this.price = data.result.last.toFixed(2)
-          this.change_24h = (data.result.change24h * 100).toFixed(2)
-          this.volume_24h = data.result.volumeUsd24h.toLocaleString('en-US', { maximumFractionDigits: 0 })
+          this.price = data.solana.usd.toFixed(2)
+          this.change_24h = data.solana.usd_24h_change.toFixed(2)
+          this.volume_24h = data.solana.usd_24h_vol.toLocaleString('en-US', { maximumFractionDigits: 0 })
         },
         disconnected() {},
       },

@@ -21,7 +21,7 @@ module ApiClients
 
     test "#price" do
       vcr_cassette(@namespace, __method__) do
-        expected_response = { "solana"=>{ "usd"=>144.23 } }
+        expected_response = {"solana"=>{"usd"=>14.53, "usd_24h_vol"=>1160562245.3673658, "usd_24h_change"=>6.3289427662734985}}
         response = @subject.price
 
         assert_equal expected_response, response
