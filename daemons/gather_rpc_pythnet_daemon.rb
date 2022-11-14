@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../config/environment"
-require 'solana_logic'
+require "solana_logic"
 include SolanaLogic
 
 # Send an interrupt with `ctrl-c` or `kill` to stop the script. Results will
