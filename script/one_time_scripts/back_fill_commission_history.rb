@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-%w[mainnet testnet].each do |network|
+NETWORKS.each do |network|
   Validator.where(network: network).each do |validator|
     first_history = ValidatorHistory.where(account: validator.account)
                                    .order(created_at: :desc)
