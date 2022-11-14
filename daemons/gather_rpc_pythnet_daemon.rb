@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require_relative '../config/environment'
-require 'solana_logic'
+require_relative "../config/environment"
+require "solana_logic"
 include SolanaLogic
 
 # Send an interrupt with `ctrl-c` or `kill` to stop the script. Results will
 # not be posted to the validators.app server.
 interrupted = false
-trap('INT') { interrupted = true }  unless Rails.env.test?
+trap("INT") { interrupted = true }  unless Rails.env.test?
 
 class SkipAndSleep < StandardError; end
 
-network = 'pythnet'
+network = "pythnet"
 sleep_time = 15 # seconds
 
 begin

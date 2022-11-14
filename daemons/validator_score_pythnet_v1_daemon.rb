@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative '../config/environment'
+require_relative "../config/environment"
 include ValidatorScoreV1Logic
 include PipelineLogic
 
 # Send an interrupt with `ctrl-c` or `kill` to stop the script. Results will
 # not be posted to the validators.app server.
 interrupted = false
-trap('INT') { interrupted = true }  unless Rails.env.test?
+trap("INT") { interrupted = true }  unless Rails.env.test?
 
-network = 'pythnet'
+network = "pythnet"
 sleep_time = 15 # seconds
 
 class SkipAndSleep < StandardError; end
