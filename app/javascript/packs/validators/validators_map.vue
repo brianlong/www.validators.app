@@ -88,7 +88,7 @@
         api_url: null,
         data_centers_groups: [],
         selected_data_centers_group: null,
-        show_gossip_nodes: true,
+        show_gossip_nodes: false,
         current_leader: null,
       }
     },
