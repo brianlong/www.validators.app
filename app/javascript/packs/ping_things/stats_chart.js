@@ -197,6 +197,7 @@ export default {
           <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
           <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 12}" @click.prevent="set_interval(12)">12h</a>
           <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 24}" @click.prevent="set_interval(24)">24h</a>
+          <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 168}" @click.prevent="set_interval(168)">7d</a>
         </div>
       </div>
       
