@@ -12,7 +12,7 @@ trap("INT") { interrupted = true }  unless Rails.env.test?
 class SkipAndSleep < StandardError; end
 
 network = "pythnet"
-sleep_time = 15 # seconds
+sleep_time = 60 # seconds
 
 begin
   loop do
