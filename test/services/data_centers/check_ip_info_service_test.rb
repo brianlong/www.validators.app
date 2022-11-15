@@ -99,10 +99,10 @@ module DataCenters
 
     test ".call doesn't do anything when ip is private" do
       assert_no_difference ["DataCenter.count", "DataCenterHost.count"] do
-        assert_nil @service.call(ip: "10.255.20.255")
-        assert_nil @service.call(ip: "10.10.20.255")
-        assert_nil @service.call(ip: "172.16.1.0")
-        assert_nil @service.call(ip: "192.168.1.12")
+        assert_equal :skip, @service.call(ip: "10.255.20.255")
+        assert_equal :skip, @service.call(ip: "10.10.20.255")
+        assert_equal :skip, @service.call(ip: "172.16.1.0")
+        assert_equal :skip, @service.call(ip: "192.168.1.12")
       end
     end
 
