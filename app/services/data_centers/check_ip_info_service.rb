@@ -10,7 +10,7 @@ class DataCenters::CheckIpInfoService
 
   def call(ip:)
     # Skip private IPs
-    return nil if !ip || ip.match?(PRIVATE_IP_REGEX)
+    return :skip if !ip || ip.match?(PRIVATE_IP_REGEX)
 
     max_mind_info = get_max_mind_info(ip)
 

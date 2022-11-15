@@ -25,8 +25,16 @@ begin
 
   ValidatorIp.connection.execute(sql).each do |missing_ip|
     puts missing_ip[0].inspect if verbose
-
-    ip_service.call(ip: missing_ip[0])
+    begin
+      result = ip_service.call(ip: missing_ip[0])
+      puts "Private IP - skipping" if result == :skip
+    rescue MaxMind::GeoIP2::Error => e
+      puts "\nMaxMindError:"
+      puts e.message
+      puts e.backtrace
+      puts 'Going for next ip'
+      next
+    end
   end
 
   puts '' if verbose
