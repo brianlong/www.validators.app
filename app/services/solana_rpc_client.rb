@@ -7,7 +7,6 @@ class SolanaRpcClient
 
   # Usage:
   # client  = SolanaRpcClient.new(cluster: 'custom_cluster') # your custom cluster
-  # default = SolanaRpcClient.new.default_client # uses cluster from initializers/solana_rpc_ruby
   # mainnet = SolanaRpcClient.new.network_client('mainnet') # uses cluster specific for a passed network.
   #           network_client method can receive 'mainnet','testnet' or 'pythnet' network name
   #
@@ -21,12 +20,6 @@ class SolanaRpcClient
   def client
     @client ||= SolanaRpcRuby::MethodsWrapper.new(
       cluster: @cluster
-    )
-  end
-
-  def default_client
-    @client ||= SolanaRpcRuby::MethodsWrapper.new(
-      cluster: SolanaRpcRuby.cluster
     )
   end
 
