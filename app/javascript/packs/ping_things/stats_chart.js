@@ -67,9 +67,13 @@ export default {
             var variation_data = this.ping_thing_stats.map( (vector_element, index) => (
                 [vector_element['max'], vector_element['min'], vector_element['average_slot_latency']]
             ))
-            var labels = this.ping_thing_stats.map( (vector_element) => (
-                moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
-            ))
+            var labels = this.ping_thing_stats.map( (vector_element) => {
+                if(this.interval > 24){
+                    return moment(new Date(vector_element["time_from"])).utc().format('HH:mm (ddd)')
+                } else {
+                    return moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
+                }
+            })
 
             if(this.chart){
                 this.chart.destroy()
@@ -197,6 +201,7 @@ export default {
           <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
           <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 12}" @click.prevent="set_interval(12)">12h</a>
           <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 24}" @click.prevent="set_interval(24)">24h</a>
+          <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 168}" @click.prevent="set_interval(168)">7d</a>
         </div>
       </div>
       

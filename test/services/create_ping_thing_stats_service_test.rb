@@ -8,7 +8,7 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
     @pts_Service = CreatePingThingStatsService.new(network: @network)
     @usr = create(:user)
 
-    25.times do |n|
+    170.times do |n|
       create(
         :ping_thing,
         network: @network,
