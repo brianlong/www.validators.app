@@ -67,9 +67,13 @@ export default {
             var variation_data = this.ping_thing_stats.map( (vector_element, index) => (
                 [vector_element['max'], vector_element['min'], vector_element['average_slot_latency']]
             ))
-            var labels = this.ping_thing_stats.map( (vector_element) => (
-                moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
-            ))
+            var labels = this.ping_thing_stats.map( (vector_element) => {
+                if(this.interval > 24){
+                    return moment(new Date(vector_element["time_from"])).utc().format('HH:mm (ddd)')
+                } else {
+                    return moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
+                }
+            })
 
             if(this.chart){
                 this.chart.destroy()
