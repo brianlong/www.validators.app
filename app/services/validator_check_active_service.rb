@@ -85,7 +85,7 @@ class ValidatorCheckActiveService
   end
 
   def delinquent?(validator)
-    return true if validator.delinquent?
+    return false if !validator.delinquent?
 
     non_delinquent_history(validator).empty?
   end
