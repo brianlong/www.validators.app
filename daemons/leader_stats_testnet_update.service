@@ -6,7 +6,7 @@ After=syslog.target network.target
 Type=simple
 WorkingDirectory=/home/deploy/validators.app/current/
 
-ExecStart=/usr/bin/bundle exec /usr/bin/ruby daemons/leader_stats_update_daemon.rb
+ExecStart=/usr/bin/bundle exec /usr/bin/ruby daemons/leader_stats_testnet_update_daemon.rb
 
 UMask=0002
 
@@ -30,7 +30,7 @@ LimitNOFILE=infinity
 LimitMEMLOCK=infinity
 
 # This will default to "bundler" if we don't specify it
-SyslogIdentifier=leader_stats_update_daemon
+SyslogIdentifier=leader_stats_testnet_update_daemon
 
 [Install]
 WantedBy=default.target
