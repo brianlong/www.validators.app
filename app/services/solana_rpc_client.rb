@@ -24,7 +24,7 @@ class SolanaRpcClient
   end
 
   def network_client(network)
-    raise InvalidNetwork unless NETWORKS.include?(network)
+    raise InvalidNetwork unless ::NETWORKS.include?(network)
 
     network_cluster = Rails.application.credentials.solana["#{network}_urls".to_sym].first
     # Reset the client when the network is different from the one already initialized
