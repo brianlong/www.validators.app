@@ -4,16 +4,9 @@ require File.expand_path('../config/environment', __dir__)
 require 'stake_logic'
 
 include StakeLogic
-
-%w[mainnet testnet].each do |network|
-  config_urls = if network == 'mainnet'
-    Rails.application.credentials.solana[:mainnet_urls]
-  else
-    Rails.application.credentials.solana[:testnet_urls]
-  end
-
+NETWORKS.each do |network|
   payload = {
-    config_urls: config_urls,
+    config_urls: Rails.application.credentials.solana["#{network}_urls".to_sym],
     network: network
   }
 

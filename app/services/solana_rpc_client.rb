@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class SolanaRpcClient
+  class InvalidNetwork < StandardError; end
+
   attr_reader :cluster
 
   # Usage:
   # client  = SolanaRpcClient.new(cluster: 'custom_cluster') # your custom cluster
-  # default = SolanaRpcClient.new.default_client # uses cluster from initializers/solana_rpc_ruby
-  # testnet = SolanaRpcClient.new.testnet_client # uses testnet client
-  # mainnet = SolanaRpcClient.new.mainnet_client # uses mainnet client
+  # mainnet = SolanaRpcClient.new.network_client('mainnet') # uses cluster specific for a passed network.
+  #           network_client method can receive 'mainnet','testnet' or 'pythnet' network name
   #
   # mainnet.cluster # returns currently used cluster
   # mainnet.id # returns request id
@@ -22,21 +23,15 @@ class SolanaRpcClient
     )
   end
 
-  def default_client
-    @client ||= SolanaRpcRuby::MethodsWrapper.new(
-      cluster: SolanaRpcRuby.cluster
-    )
-  end
+  def network_client(network)
+    raise InvalidNetwork unless ::NETWORKS.include?(network)
 
-  def mainnet_client
-    @mainnet_client ||= SolanaRpcRuby::MethodsWrapper.new(
-      cluster: Rails.application.credentials.solana[:mainnet_urls].first
-    )
-  end
-
-  def testnet_client
-    @testnet_client ||= SolanaRpcRuby::MethodsWrapper.new(
-      cluster: Rails.application.credentials.solana[:testnet_urls].first
-    )
+    network_cluster = Rails.application.credentials.solana["#{network}_urls".to_sym].first
+    # Reset the client when the network is different from the one already initialized
+    if @cluster != network_cluster
+      @cluster = network_cluster
+      @client = nil
+    end
+    client
   end
 end
