@@ -69,7 +69,7 @@ gem 'capistrano-rails', group: :development
 gem 'appsignal'
 
 gem "mechanize", ">= 2.7.7"
-gem 'nokogiri', '1.13.6'
+gem 'nokogiri', '1.13.9'
 
 # Pagination
 gem 'kaminari'
