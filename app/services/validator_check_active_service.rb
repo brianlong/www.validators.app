@@ -42,15 +42,11 @@ class ValidatorCheckActiveService
 
   # number of previous by network
   def previous_epoch(network)
-    @current_epoch ||= EpochWallClock.where(network: network).order(created_at: :desc).last
-    case network
-    when "mainnet"
-      @previous_epoch_mainnet ||= @current_epoch.epoch - 1
-    when "testnet"
-      @previous_epoch_testnet ||= @current_epoch.epoch - 1
-    when "pythnet"
-      @previous_epoch_pythnet ||= @current_epoch.epoch - 1
-    end
+    @previous_epochs ||= {}
+    return @previous_epochs[network] if @previous_epochs[network].present?
+
+    current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).last
+    @previous_epochs[network] = current_epoch.epoch - 1
   end
 
   # returns true if validator has no history from previous epoch
