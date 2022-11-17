@@ -127,7 +127,9 @@
         rejected() { },
         received(data) {
           data = data[this.network];
-          this.current_leader = data.current_leader;
+          if (data) {
+            this.current_leader = data.current_leader;
+          }
         },
         disconnected() { }
       }
