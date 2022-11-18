@@ -259,6 +259,7 @@
 
 <script>
   import axios from 'axios'
+  import { mapGetters } from 'vuex';
   import loadingImage from 'loading.gif'
 
   import marinadeImage from 'marinade.png'
@@ -275,7 +276,6 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
-    props: ['query', 'network'],
     data () {
       var stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network
       var stake_pools_api_url = '/api/v1/stake-pools/' + this.network
@@ -338,6 +338,9 @@
              ctx.is_loading_stake_pools = false
            })
     },
+    computed: mapGetters([
+      'network'
+    ]),
     watch: {
       sort_by: function(){
         this.refresh_results()

@@ -24,13 +24,12 @@ const getters = {
     }
   },
   network() {
-    switch (true) {
-      case location.href.match(/network=pythnet/):
-        return 'pythnet'
-      case location.href.match(/network=testnet/):
-        return 'testnet'
-      default:
-        return 'mainnet'
+    if (location.href.match(/network=pythnet/)) {
+      return 'pythnet'
+    } else if (location.href.match(/network=testnet/)) {
+      return 'testnet'
+    } else {
+      return 'mainnet'
     }
   }
 }
