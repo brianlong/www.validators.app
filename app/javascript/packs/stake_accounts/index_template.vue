@@ -277,16 +277,13 @@
 
   export default {
     data () {
-      var stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network
-      var stake_pools_api_url = '/api/v1/stake-pools/' + this.network
-
       return {
         stake_accounts: [],
         page: 1,
         total_count: 0,
         sort_by: 'epoch_desc',
-        stake_accounts_api_url: stake_accounts_api_url,
-        stake_pools_api_url: stake_pools_api_url,
+        stake_accounts_api_url: null,
+        stake_pools_api_url: null,
         filter_withdrawer: null,
         filter_staker: null,
         filter_account: null,
@@ -312,6 +309,8 @@
       }
     },
     created () {
+      this.stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network;
+      this.stake_pools_api_url = '/api/v1/stake-pools/' + this.network;
       var ctx = this
       var stake_accounts_query_params = {
         params: {
