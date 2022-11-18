@@ -3,6 +3,9 @@
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
+  # Default root path
+  root to: 'public#home'
+  
   get 'asns/:asn',
       to: 'asns#show',
       as: 'asn'
@@ -35,7 +38,6 @@ Rails.application.routes.draw do
 
   get 'validators/:account/vote_accounts/:vote_account', to: 'vote_accounts#show',
                                                          as: 'validator_vote_account'
-  get 'home-new', to: 'validators#home_new', as: 'validators_home_new'
 
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
@@ -72,6 +74,7 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   # Public Controller
+  get 'home-new', to: 'public#home_new'
   get 'contact-us', to: 'public#contact_us'
   get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
   get 'api-documentation',
@@ -101,9 +104,6 @@ Rails.application.routes.draw do
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
   get "current-user", to: "users#current_user_info"
-
-  # Default root path
-  root to: 'validators#index'
 
   ### API
   namespace :api do

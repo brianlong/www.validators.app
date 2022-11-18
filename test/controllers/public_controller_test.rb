@@ -14,6 +14,13 @@ class PublicControllerTest < ActionDispatch::IntegrationTest
     @admin_one = create(:user, :admin)
   end
 
+  test "root_url leads to public#home" do
+    get root_url(network: "testnet")
+
+    assert_equal PublicController, @controller.class
+    assert_response :success
+  end
+
   test 'should get index' do
     create(:batch, network: 'mainnet')
     get root_url

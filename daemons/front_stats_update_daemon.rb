@@ -32,8 +32,8 @@ loop do
     end
 
     # Data updates | each time
-    ftx_response = FtxClient.new.get_market
-    parsed_response = JSON.parse(ftx_response.body)
+    coin_gecko_response = CoinGeckoClient.new.price
+    parsed_response = coin_gecko_response
     parsed_response["cluster_stats"] = @last_cluster_stats
     
     broadcast_software_versions(@software_versions)

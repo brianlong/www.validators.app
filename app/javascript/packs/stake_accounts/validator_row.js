@@ -128,6 +128,9 @@ var ValidatorRow = Vue.component('validatorRow', {
         return this.validator["total_score"]
       }
     },
+    lamports_to_sol(lamports) {
+      return lamports / 1000000000;
+    }
   },
   template: `
     <tr :id="row_index()">
@@ -174,9 +177,8 @@ var ValidatorRow = Vue.component('validatorRow', {
             </small>
             <br />
             <div class="small">
-              <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
-              <span class="d-none d-lg-inline-block">V:&nbsp;</span>
-              {{ validator['software_version'] }}
+              <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+              {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
             </div>
           </div>
         </div>
