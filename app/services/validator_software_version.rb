@@ -1,16 +1,8 @@
 class ValidatorSoftwareVersion < ::Gem::Version
   def initialize(number:, network: 'mainnet', best_version: nil)
     super(number)
-    if best_version
-      @current_version_number = best_version
-    else
-      @current_version_number =
-        case network
-        when "mainnet" then MAINNET_CLUSTER_VERSION
-        when "testnet" then TESTNET_CLUSTER_VERSION
-        when "pythnet" then PYTHNET_CLUSTER_VERSION
-        end
-    end
+
+    @current_version_number = best_version ? best_version : CLUSTER_VERSION[network]
   end
 
   def running_latest_or_newer?
