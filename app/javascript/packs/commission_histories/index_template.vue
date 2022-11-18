@@ -45,27 +45,26 @@
 
 <script>
   import axios from 'axios'
+  import { mapGetters } from 'vuex';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
-    props: ['query', 'network'],
+    props: ['query'],
     data () {
-      if(this.query && !this.query == ''){
-        var api_url = '/api/v1/commission-changes/' + this.network + '?query=' + this.query + '&'
-      } else {
-        var api_url = '/api/v1/commission-changes/' + this.network + '?'
-      }
       return {
         commission_histories: [],
         page: 1,
         total_count: 0,
         sort_by: 'created_at_desc',
-        api_url: api_url,
+        api_url: null,
         account_name: this.query
       }
     },
     created () {
+      this.api_url = this.query && !this.query == ''
+        ? this.api_url = '/api/v1/commission-changes/' + this.network + '?query=' + this.query + '&'
+        : this.api_url = '/api/v1/commission-changes/' + this.network + '?'
       var ctx = this
       var url = ctx.api_url + 'sort_by=' + ctx.sort_by
 
@@ -104,6 +103,9 @@
               })
       }
     },
+    computed: mapGetters([
+      'network'
+    ]),
     methods: {
       paginate: function(){
         var ctx = this
