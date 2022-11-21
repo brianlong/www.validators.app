@@ -127,3 +127,23 @@
     }
   }
 }
+
+.dropdown-toggle {
+  min-width: 10rem;
+  width: 100%;
+}
+.dropdown-toggle.show{
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.dropdown-menu {
+  background-color: $card-background-color;
+  border: 2px solid $green;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  text-align: center;
+  a {
+    color: white;
+  }
+}
