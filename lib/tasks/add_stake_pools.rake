@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 mainnet_stake_pools = [
   {
     name: "Socean",
