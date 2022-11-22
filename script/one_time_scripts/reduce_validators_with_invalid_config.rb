@@ -6,7 +6,7 @@ include SolanaLogic
 
 NETWORKS.each do |network|
   payload = {
-    config_urls: Rails.application.credentials.solana["#{network}_urls".to_sym],
+    config_urls: NETWORK_URLS[network],
     network: network
   }
 
