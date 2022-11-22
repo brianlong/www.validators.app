@@ -45,6 +45,8 @@ NETWORKS.each do |network|
     next
   end
 
+  next unless block_time
+  
   last_epoch_start_datetime = DateTime.strptime(block_time, "%s")
 
   created_epoch = EpochWallClock.create(
