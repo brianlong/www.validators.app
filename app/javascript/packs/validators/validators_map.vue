@@ -88,16 +88,20 @@
         api_url: null,
         data_centers_groups: [],
         selected_data_centers_group: null,
-        show_gossip_nodes: true,
+        show_gossip_nodes: false,
         current_leader: null,
       }
     },
     created () {
       this.api_url = "/api/v1/data-centers-with-nodes/" + this.network;
       let ctx = this;
-      let url = ctx.api_url;
+      let query_params = {
+          params: {
+            show_gossip_nodes: this.show_gossip_nodes
+          }
+        }
 
-      axios.get(url).then(function (response) {
+      axios.get(this.api_url, query_params).then(function (response) {
         ctx.data_centers_groups = response.data.data_centers_groups;
       })
     },

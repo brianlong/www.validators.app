@@ -44,7 +44,7 @@ NETWORKS.each do |network|
   rescue SolanaRpcRuby::ApiError, JSON::ParserError
     next
   end
-  
+
   last_epoch_start_datetime = DateTime.strptime(block_time, "%s")
 
   created_epoch = EpochWallClock.create(

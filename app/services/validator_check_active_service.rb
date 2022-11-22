@@ -16,7 +16,7 @@ class ValidatorCheckActiveService
         update_scorable(validator)
       else
         # Check validators that are currently not scorable in case they reactivate
-        if acceptable_stake?(validator) && not_delinquent?(validator)
+        if acceptable_stake?(validator) && !delinquent?(validator)
           validator.update(is_active: true, is_destroyed: false)
         end
         
@@ -58,7 +58,7 @@ class ValidatorCheckActiveService
 
   def became_inactive?(validator)
     if ValidatorHistory.where(account: validator.account).exists?
-      unless acceptable_stake?(validator) && not_delinquent?(validator)
+      unless acceptable_stake?(validator) && !delinquent?(validator)
         return true
       end
     end
@@ -83,18 +83,10 @@ class ValidatorCheckActiveService
     validator.update(is_rpc: true) if is_rpc?(validator)
   end
 
-  # returns true if validator was not delinquent for any period of time since DELINQUENT_TIME
-  def not_delinquent?(validator)
-    nondelinquent_history = ValidatorHistory.where(
-                                              account: validator.account,
-                                              delinquent: false
-                                            )
-                                            .where(
-                                              'created_at > ?',
-                                              DateTime.now - @delinquent_time
-                                            )
+  def delinquent?(validator)
+    return false if !validator.delinquent?
 
-    nondelinquent_history.exists?
+    non_delinquent_history(validator).empty?
   end
 
   # returns true if if validator had stake gt STAKE_EXCLUDE_HEIGHT since DELINQUENT_TIME
@@ -109,4 +101,8 @@ class ValidatorCheckActiveService
     with_acceptable_stake.exists?
   end
 
+  def non_delinquent_history(validator)
+    ValidatorHistory.where(account: validator.account, delinquent: false)
+                    .where("created_at > ?", DateTime.now - @delinquent_time)
+  end
 end

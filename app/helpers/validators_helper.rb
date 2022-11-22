@@ -43,9 +43,15 @@ module ValidatorsHelper
   end
 
   def current_software_version(batch, network)
-    return CLUSTER_VERSION[network] if batch&.software_version.blank?
-
-    batch.software_version
+    if batch&.software_version.blank?
+      case network
+      when "mainnet" then MAINNET_CLUSTER_VERSION
+      when "testnet" then TESTNET_CLUSTER_VERSION
+      when "pythnet" then PYTHNET_CLUSTER_VERSION
+      end
+    else
+      batch.software_version
+    end
   end
 
   def skipped_vote_percent(validator, batch)

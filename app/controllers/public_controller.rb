@@ -2,6 +2,16 @@
 
 # PublicController
 class PublicController < ApplicationController
+  # GET /
+  def home
+    @network = home_params[:network]
+  end
+
+  # GET /home-new
+  def home_new
+    @network = home_params[:network]
+  end
+
   def api_documentation
     @title = 'API Documentation'
   end
@@ -47,6 +57,10 @@ class PublicController < ApplicationController
   end
 
   private
+
+  def home_params
+    params.permit(:network)
+  end
 
   def validate_order
     valid_orders = %w[score name stake random]

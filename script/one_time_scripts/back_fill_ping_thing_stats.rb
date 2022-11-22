@@ -2,7 +2,7 @@
 
 require File.expand_path('../../config/environment', __dir__)
 
-begin_minutes_ago = 1440 # 24 hours
+begin_minutes_ago = 10080 # 7 days 
 # begin_minutes_ago = 60 # 1 hour
 
 NETWORKS.each do |network|

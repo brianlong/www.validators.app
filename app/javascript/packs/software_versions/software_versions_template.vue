@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <div class="card">
+  <section class="col-lg-6 mb-4">
+    <div class="card h-100">
       <div class="card-content pb-0">
         <h2 class="h4 card-heading">Software Versions</h2>
         <div v-if="this.is_loading" class="text-center text-muted pb-4">
