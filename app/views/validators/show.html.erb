@@ -204,7 +204,7 @@
 <div class="row mb-3">
   <div class="col-md-9 col-lg-10">
     <%= link_to 'Back to All Validators',
-                root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+                validators_path(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
                 class: 'btn btn-sm btn-secondary mb-3' %>
   </div>
 
@@ -277,7 +277,7 @@
 </div>
 
 <%= link_to 'Back to All Validators',
-            root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+            validators_path(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
             class: 'btn btn-sm btn-secondary mb-4' %>
 
 <div class="card mb-4">
@@ -286,5 +286,5 @@
 
 
 <%= link_to 'Back to All Validators',
-            root_url(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
+            validators_path(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
             class: 'btn btn-sm btn-secondary' %>

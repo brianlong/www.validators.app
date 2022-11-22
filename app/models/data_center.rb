@@ -96,6 +96,13 @@ class DataCenter < ApplicationRecord
     end
   end
 
+  def normalize_empty_strings
+    self.attributes.each do |column, value|
+      # to_s to cover 'false' boolean case
+      self[column].to_s.present? || self[column] = nil
+    end
+  end
+
   private
 
   def assign_data_center_key

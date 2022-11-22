@@ -32,7 +32,7 @@ class PingThingStat < ApplicationRecord
     :average_slot_latency
   ].freeze
 
-  INTERVALS = [1, 3, 12, 24].freeze #minutes
+  INTERVALS = [1, 3, 12, 24, 168].freeze #minutes
 
   validates :network, presence: true
   validates :network, inclusion: { in: %w(mainnet testnet) }

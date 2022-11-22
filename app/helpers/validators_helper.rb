@@ -83,7 +83,8 @@ module ValidatorsHelper
       ["https://jpool.one", "jpool.png"],
       ["https://daopool.monkedao.io", "daopool.png"],
       ["https://eversol.one/", "eversol.png"],
-      ["https://stake.solblaze.org/", "blazestake.png"]
+      ["https://stake.solblaze.org/", "blazestake.png"],
+      ["https://www.jito.network/", "jito.png"]
       # add more stake pools here
     ].shuffle
   end

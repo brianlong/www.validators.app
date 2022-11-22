@@ -22,7 +22,7 @@ counts.each do |loop|
       commitment_level: "confirmed",
       success: true,
       application: "web3",
-      reported_at: rand(24.hours.ago..Time.now),
+      reported_at: rand(7.days.ago..Time.now),
       slot_sent: slot_sent,
       slot_landed: slot_sent + rand(100..10_000)
     )
