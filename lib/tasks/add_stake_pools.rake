@@ -79,7 +79,7 @@ deposit_fees = {
   daopool: 0,
   eversol: 0.0,
   blazestake: 0.1,
-  jito: 0.3
+  jito: 0
 }
 
 namespace :add_stake_pool do
