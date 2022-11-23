@@ -62,7 +62,7 @@
 
   &-lg {
     border-radius: 30px;
-    padding: 12px 18px;
+    padding: 11px 18px;
     @include font-size-base;
   }
   &-md {
@@ -128,41 +128,3 @@
   }
 }
 
-#network-select {
-  position: relative;
-  display: block;
-}
-.dropdown-options {
-  background: $background-color;
-  list-style-type: none;
-  position: absolute;
-  inset: 0 auto auto 0;
-  margin: 0;
-  padding: 0;
-  transform: translate3d(0px, 58px, 0px);
-  border: 2px solid $green;
-  text-align: center;
-  width: 100%;
-  @media(max-width: $screen-md-max) {
-    position: relative;
-    transform: none;
-    border: none;
-    text-align: left;
-    background-color: transparent;
-  }
-
-  li {
-    padding: 0;
-    margin: 0;
-  }
-  a {
-    color: $link-color;
-    padding: 15px 0 5px 18px;
-    @media(max-width: $screen-md-max) {
-      &:hover {
-        background-color: transparent;
-        color: $link-color-secondary;
-      }
-    }
-  }
-}
