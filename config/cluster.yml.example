@@ -12,3 +12,4 @@ rpc_port: 8899
 # Both of these need to be x.y.z
 software_patch_mainnet: "1.6.7"
 software_patch_testnet: "1.6.7"
+software_patch_pythnet: "1.6.7"
