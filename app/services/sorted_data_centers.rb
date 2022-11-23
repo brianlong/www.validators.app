@@ -96,7 +96,7 @@ class SortedDataCenters
   end
 
   def sort_by_data_centers
-    @dc_sql.find_each do |dc|
+    @dc_sql.each do |dc|
       data_center_key = dc.data_center_key
       population = dc.total_validator_score_v1s || 0
       delinquent_validators = dc.delinquent_count || 0
