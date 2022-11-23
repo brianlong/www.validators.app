@@ -128,27 +128,25 @@
   }
 }
 
-.dropdown-toggle {
-  min-width: 10rem;
-  width: 100%;
+#network-select {
+  position: relative;
+  display: block;
 }
-.dropdown-toggle.show{
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-
-.dropdown-menu {
-  background-color: $card-background-color;
+.dropdown-options {
+  background: $background-color;
+  list-style-type: none;
+  position: absolute;
+  inset: 0px auto auto 0px;
+  margin: 0px;
+  transform: translate3d(0px, 58px, 0px);
   border: 2px solid $green;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
   text-align: center;
+  padding: 5px;
+  width: 100%;
+  li {
+    padding: 0px;
+  }
   a {
     color: white;
-    &:hover {
-      text-decoration: none;
-      background-color: $card-background-color;
-      color: $green;
-    }
   }
 }

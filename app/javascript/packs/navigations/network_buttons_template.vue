@@ -1,9 +1,9 @@
 <template>
-  <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle btn-block" type="button" id="network-select" data-bs-toggle="dropdown" aria-expanded="false">
+  <div id="network-select">
+    <button class="btn btn-secondary" type="button" @click="toggle_dropdown" >
       {{ network }}
     </button>
-    <ul class="dropdown-menu" aria-labelledby="network-select" data-turbolinks="false">
+    <ul :class="'dropdown-options ' + dropdown_visible" v-click-outside="hide_dropdown" aria-labelledby="network-select" data-turbolinks="false">
       <li v-for="network_entry in $store.state.networks" :key="network_entry">
         <a class="dropdown-item" href="#" @click.prevent="change_network(network_entry)">{{ network_entry }}</a>
       </li>
@@ -17,15 +17,22 @@
   export default {
     data(){
       return {
-        url: ''
+        url: '',
+        dropdown_active: false,
+        click_outside_active: false
       }
     },
     created() {
-      $('.dropdown-toggle').dropdown()
+
     },
-    computed: mapGetters([
-      'network'
-    ]),
+    computed: {
+      dropdown_visible() {
+        return this.dropdown_active ? '' : 'd-none'
+      },
+      ...mapGetters([
+        'network'
+      ]),
+    },
     methods: {
       change_network: function(target_network){
         let splitted_url = this.url.split("/")
@@ -37,6 +44,27 @@
         }
         window.location.href = this.url
         return true
+      },
+      toggle_dropdown: function(){
+        if(this.dropdown_active){
+          this.dropdown_active = false
+          this.toggle_click_outside(false)
+        } else {
+          this.dropdown_active = true
+          var ctx = this
+          setTimeout(function(){
+            ctx.toggle_click_outside(true)
+          }, 200)
+        }
+      },
+      toggle_click_outside(active){
+        this.click_outside_active = active
+      },
+      hide_dropdown(){
+        if(this.dropdown_active && this.click_outside_active) {
+          this.dropdown_active = false
+          this.toggle_click_outside(false)
+        }
       }
     }
   }
