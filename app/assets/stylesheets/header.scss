@@ -57,6 +57,11 @@ header {
 
     .btn {
       color: $link-color;
+      &:after {
+        content: '\2193';
+        font-size: 12px;
+        font-weight: bold;
+      }
       &:hover {
         color: $background-color;
       }
@@ -66,6 +71,9 @@ header {
         @media(min-width: $screen-lg-min) {
           border-bottom-left-radius: 0;
           border-bottom-right-radius: 0;
+        }
+        &:after {
+          content: '\2191';
         }
       }
     }
