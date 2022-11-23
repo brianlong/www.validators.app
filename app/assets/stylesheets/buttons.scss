@@ -136,17 +136,33 @@
   background: $background-color;
   list-style-type: none;
   position: absolute;
-  inset: 0px auto auto 0px;
-  margin: 0px;
+  inset: 0 auto auto 0;
+  margin: 0;
+  padding: 0;
   transform: translate3d(0px, 58px, 0px);
   border: 2px solid $green;
   text-align: center;
-  padding: 5px;
   width: 100%;
+  @media(max-width: $screen-md-max) {
+    position: relative;
+    transform: none;
+    border: none;
+    text-align: left;
+    background-color: transparent;
+  }
+
   li {
-    padding: 0px;
+    padding: 0;
+    margin: 0;
   }
   a {
-    color: white;
+    color: $link-color;
+    padding: 15px 0 5px 18px;
+    @media(max-width: $screen-md-max) {
+      &:hover {
+        background-color: transparent;
+        color: $link-color-secondary;
+      }
+    }
   }
 }
