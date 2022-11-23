@@ -145,5 +145,10 @@
   text-align: center;
   a {
     color: white;
+    &:hover {
+      text-decoration: none;
+      background-color: $card-background-color;
+      color: $green;
+    }
   }
 }

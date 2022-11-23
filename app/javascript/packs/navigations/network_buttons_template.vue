@@ -1,9 +1,9 @@
 <template>
-  <div class="dropdown" data-turbolinks="false">
-    <button class="btn btn-secondary dropdown-toggle btn-block" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle btn-block" type="button" id="network-select" data-bs-toggle="dropdown" aria-expanded="false">
       {{ network }}
     </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <ul class="dropdown-menu" aria-labelledby="network-select" data-turbolinks="false">
       <li v-for="network_entry in $store.state.networks" :key="network_entry">
         <a class="dropdown-item" href="#" @click.prevent="change_network(network_entry)">{{ network_entry }}</a>
       </li>
@@ -17,28 +17,16 @@
   export default {
     data(){
       return {
-        current_network: '',
         url: ''
       }
     },
     created() {
-      this.url = window.location.href
-      if(this.url.includes('testnet')){
-        this.current_network = 'testnet'
-      } else {
-        this.current_network = 'mainnet'
-      }
+      $('.dropdown-toggle').dropdown()
     },
     computed: mapGetters([
       'network'
     ]),
     methods: {
-      is_testnet: function(){
-        return this.current_network == 'testnet'
-      },
-      is_mainnet: function(){
-        return this.current_network == 'mainnet'
-      },
       change_network: function(target_network){
         let splitted_url = this.url.split("/")
         this.url = window.location.href
