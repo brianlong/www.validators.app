@@ -158,8 +158,8 @@ namespace :deamons do
           execute :systemctl, '--user', :restart, :gather_vote_account_details
           execute :systemctl, '--user', :restart, :process_ping_thing
           execute :systemctl, '--user', :restart, :front_stats_update
-          # execute :systemctl, '--user', :restart, :leader_stats_mainnet_update
-          # execute :systemctl, '--user', :restart, :leader_stats_testnet_update
+          execute :systemctl, '--user', :restart, :leader_stats_mainnet_update
+          execute :systemctl, '--user', :restart, :leader_stats_testnet_update
         end
       end
     end
