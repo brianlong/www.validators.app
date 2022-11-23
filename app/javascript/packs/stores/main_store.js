@@ -5,7 +5,8 @@ Vue.use(Vuex)
 const state = {
   mainnet_url: "https://validato-va-34e2.mainnet.rpcpool.com",
   mainnet_beta_url: "https://api.mainnet-beta.solana.com",
-  testnet_url: "https://api.testnet.solana.com"
+  testnet_url: "https://api.testnet.solana.com",
+  networks: ["mainnet", "testnet", "pythnet"]
 }
 const getters = {
   web3_url: function(state, getters) {
@@ -18,7 +19,13 @@ const getters = {
     }
   },
   network() {
-    return location.href.match(/network=testnet/) ? 'testnet' : 'mainnet'
+    if(location.href.match(/network=testnet/)) {
+      return 'testnet'
+    } else if(location.href.match(/network=pythnet/)) {
+      return 'pythnet'
+    } else {
+      return 'mainnet'
+    }
   }
 }
 export default new Vuex.Store({
