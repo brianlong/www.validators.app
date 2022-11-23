@@ -112,19 +112,15 @@
     },
     methods: {
       position_horizontal: function(longitude) {
-        if(longitude < 0) {
-          return 46 + ((longitude / 142) * 50) + '%';
-        } else {
-          return 46 + ((longitude / 145) * 50) + '%';
-        }
+        let division_factor = longitude < 0 ? 142 : 145
+        let start_position = 46
+        return start_position + ((longitude / division_factor) * 50) + '%';
       },
 
       position_vertical: function(latitude) {
-        if(latitude < 0){
-          return 32 + ((latitude / 65) * 50) + '%';
-        } else {
-          return 32 + ((latitude / 59) * 50) + '%';
-        }
+        let division_factor = latitude < 0 ? 65 : 59
+        let start_position = 32
+        return start_position + ((latitude / division_factor) * 50) + '%';
       },
 
       avatar_link() {
@@ -134,7 +130,7 @@
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
         }
       },
-      
+
       set_map_point_size: function(validators_and_nodes_count) {
         if(typeof(validators_and_nodes_count) != 'number') {
           return "map-point-sm";
