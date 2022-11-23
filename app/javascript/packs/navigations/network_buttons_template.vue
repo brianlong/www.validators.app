@@ -1,9 +1,9 @@
 <template>
-  <div class="dropdown">
+  <div class="dropdown" data-turbolinks="false">
     <button class="btn btn-secondary dropdown-toggle btn-block" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
       {{ network }}
     </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" data-turbolinks="false">
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
       <li v-for="network_entry in $store.state.networks" :key="network_entry">
         <a class="dropdown-item" href="#" @click.prevent="change_network(network_entry)">{{ network_entry }}</a>
       </li>
