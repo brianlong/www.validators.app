@@ -8,7 +8,7 @@ NETWORKS.each do |network|
   logger = Logger.new("#{Rails.root}/log/gossip_nodes_#{network}.log")
 
   payload = {
-    config_urls: Rails.application.credentials.solana["#{network}_urls".to_sym],
+    config_urls: NETWORK_URLS[network],
     network: network
   }
 
