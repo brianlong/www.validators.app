@@ -19,7 +19,7 @@ module ReportLogic
 
       # Create a results array and insert the data
       result = []
-      block_history.each do |history|
+      block_history.find_each do |history|
         result << {
           'validator_id' => history.validator.id,
           'account' => history.validator.account,

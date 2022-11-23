@@ -10,14 +10,14 @@ module Gatherers
       @always_update = always_update
       @network = network
       @config_urls = config_urls
-      @range_start = VoteAccount.where(network: @network).order(id: :asc).first.id
-      @range_end = VoteAccount.where(network: @network).order(id: :asc).last.id
+      @range_start = VoteAccount.where(network: 'mainnet').order(id: :asc).first.id
+      @range_end = VoteAccount.where(network: 'mainnet').order(id: :asc).last.id
     end
 
     def call
       VoteAccount.where(id: @range_start..@range_end, network: @network)
                  .order(id: :asc)
-                 .each do |vacc|
+                 .find_each do |vacc|
         @range_start = vacc.id
 
         vote_account_details = get_vote_account_details(vacc.account)
