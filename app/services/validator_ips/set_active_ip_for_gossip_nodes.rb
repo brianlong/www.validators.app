@@ -38,7 +38,8 @@ module ValidatorIps
     end
 
     def set_is_active_in_inactive_vips_with_validator_id
-      ValidatorIp.joins(:gossip_node).where("validator_ips.is_active = false AND validator_ips.validator_id IS NOT NULL")
+      ValidatorIp.joins(:gossip_node)
+                 .where("validator_ips.is_active = false AND validator_ips.validator_id IS NOT NULL")
                  .find_each do |validator_ip|
 
         message = <<-EOS
