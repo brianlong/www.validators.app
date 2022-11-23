@@ -1,6 +1,6 @@
 <template>
   <div id="network-select">
-    <button class="btn btn-secondary" type="button" @click="toggle_dropdown" >
+    <button class="btn btn-lg btn-secondary" type="button" @click="toggle_dropdown" >
       {{ network }}
     </button>
     <ul :class="'dropdown-options ' + dropdown_visible" v-click-outside="hide_dropdown" aria-labelledby="network-select" data-turbolinks="false">
