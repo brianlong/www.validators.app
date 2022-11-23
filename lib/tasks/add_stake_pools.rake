@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-mainnet_stake_pools = [
+@mainnet_stake_pools = [
   {
     name: "Socean",
     authority: "AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck",
@@ -51,7 +51,7 @@ mainnet_stake_pools = [
   }
 ]
 
-testnet_stake_pools = [
+@testnet_stake_pools = [
   {
     name: "Jpool",
     authority: "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
@@ -60,9 +60,9 @@ testnet_stake_pools = [
   }
 ]
 
-pythnet_stake_pools = []
+@pythnet_stake_pools = []
 
-manager_fees = {
+@manager_fees = {
   socean: 2, #https://www.socean.fi/en/ , https://soceanfi.notion.site/FAQ-e0e2b353a44a4c11b53f614f3dc7b730
   marinade: 6, #https://docs.marinade.finance/faq/faq
   jpool: 0, #https://jpool.one/pool-info
@@ -73,7 +73,7 @@ manager_fees = {
   jito: 4 #https://jito-foundation.gitbook.io/jitosol/faqs/general-faqs#fees
 }
 
-withdrawal_fees = {
+@withdrawal_fees = {
   socean: 0.03,
   marinade: 0,
   jpool: 0.05,
@@ -84,7 +84,7 @@ withdrawal_fees = {
   jito: 0.1
 }
 
-deposit_fees = {
+@deposit_fees = {
   socean: 0.0,
   marinade: 0,
   jpool: 0,
@@ -113,40 +113,40 @@ def update_stake_pools_fee(stake_pools)
 
     key = sp[:name].downcase.to_sym
     stake_pool.update!(
-      manager_fee: manager_fees[key],
-      withdrawal_fee: withdrawal_fees[key],
-      deposit_fee: deposit_fees[key]
+      manager_fee: @manager_fees[key],
+      withdrawal_fee: @withdrawal_fees[key],
+      deposit_fee: @deposit_fees[key]
     )
   end
 end
 
 namespace :add_stake_pool do
   task mainnet: :environment do
-    update_stake_pools(mainnet_stake_pools)
+    update_stake_pools(@mainnet_stake_pools)
   end
 
   task testnet: :environment do
-    update_stake_pools(testnet_stake_pools)
+    update_stake_pools(@testnet_stake_pools)
   end
 
   task pythnet: :environment do
-    update_stake_pools(pythnet_stake_pools)
+    update_stake_pools(@pythnet_stake_pools)
   end
 end
 
-# Run the following task if manager_fees changes
+# Run the following task if @manager_fees changes
 # RAILS_ENV=stage bundle exec rake update_fee_in_stake_pools:mainnet
 # RAILS_ENV=production bundle exec rake update_fee_in_stake_pools:mainnet
 namespace :update_fee_in_stake_pools do
   task mainnet: :environment do
-    update_stake_pools_fee(mainnet_stake_pools)
+    update_stake_pools_fee(@mainnet_stake_pools)
   end
 
   task testnet: :environment do
-    update_stake_pools_fee(testnet_stake_pools)
+    update_stake_pools_fee(@testnet_stake_pools)
   end
 
   task pythnet: :environment do
-    update_stake_pools_fee(pythnet_stake_pools)
+    update_stake_pools_fee(@pythnet_stake_pools)
   end
 end
