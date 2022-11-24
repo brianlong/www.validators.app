@@ -52,8 +52,10 @@
         rejected() { },
         received(data) {
           data = data[this.network];
-          this.current_leader = data.current_leader;
-          this.next_leaders = data.next_leaders;
+          if (data) {
+            this.current_leader = data.current_leader;
+            this.next_leaders = data.next_leaders;
+          }
         },
         disconnected() { }
       }
