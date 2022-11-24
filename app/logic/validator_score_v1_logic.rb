@@ -32,7 +32,6 @@ module ValidatorScoreV1Logic
       validators = Validator.where(network: p.payload[:network])
                             .active
                             .includes(:validator_score_v1)
-                            .order(:id)
 
       validators.find_each do |validator|
         # Make sure that we have a validator_score_v1 record for each validator
