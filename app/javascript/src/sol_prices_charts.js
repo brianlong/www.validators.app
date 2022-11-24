@@ -1,23 +1,21 @@
 
 import Chart from 'chart.js/auto';
-import { DateTime } from "luxon";
 import 'chartjs-adapter-luxon';
 import '../lib/chart-financial';
 
 const coinGeckoString = 'exchange=coin_gecko'
-const ftxString = 'exchange=ftx'
 
 document.addEventListener('turbolinks:load', () => {
   window.drawChart = drawChart;
 
   drawChart();
-  
+
   // Add event listeners to tab buttons.
   const chartTabButtons = document.getElementsByClassName('solPricesChartTabButton');
-  
+
   for (const chartTabButton of chartTabButtons) {
     chartTabButton.addEventListener('click', function() {
-      changeUrlBasedOnActiveTab(chartTabButton);
+      changeUrlBasedOnActiveTab();
     })
   }
 
@@ -49,52 +47,32 @@ function changeUrlBasedOnActiveFilter(chartFilterButton) {
   window.history.replaceState(null, '', href);
 }
 
-function changeUrlBasedOnActiveTab(button) {
+function changeUrlBasedOnActiveTab() {
   const url = window.location.href
-  const textContent = button.textContent.trim();
-  const exchangeToReplace = findExchangeInUrl(url)
+  const exchangeToReplace = coinGeckoString
   let exchange = '';
 
-  exchange = findExchange(textContent)
+  exchange = coinGeckoString
   const replacedUrl = replaceExchangeInUrl(url, exchangeToReplace, exchange)
 
   window.history.replaceState(exchange, exchange, replacedUrl);
-}
-
-function findExchange(string) {
-  if (string === 'CoinGecko') {
-    return coinGeckoString
-  } else if (string === 'FTX') {
-    return ftxString
-  }
 }
 
 function replaceExchangeInUrl(url, exchangeToReplace, exchange) {
   return url.replace(exchangeToReplace, exchange)
 }
 
-function findExchangeInUrl(url) {
-  if (url.indexOf(coinGeckoString) != -1) {
-    return coinGeckoString
-  } else if (url.indexOf(ftxString) != -1) {
-    return ftxString
-  }
-}
-
 function drawChart() {
   const chartCoinGecko = document.getElementById('coinGeckoChart')
-  const chartFtx = document.getElementById('ftxChart')
 
-  if (chartCoinGecko == null && chartFtx == null) {
+  if (chartCoinGecko == null) {
     return null;
   }
 
   const ctx = chartCoinGecko.getContext('2d');
-  const ctx2 = chartFtx.getContext('2d');
   const dataset = ctx.canvas.dataset
-  const dataset2 = ctx2.canvas.dataset
 
-  const myChart = new Chart(ctx, {
+  new Chart(ctx, {
     type: 'line',
     data: {
       datasets: [{
@@ -136,33 +114,6 @@ function drawChart() {
         }
       }
     },
-  });
-
-  const myChart2 = new Chart(ctx2, {
-    type: 'candlestick',
-    data: {
-      datasets: [{
-        label: 'SOL Token Price',
-        data: JSON.parse(dataset2.data),
-        fill: false,
-        tension: 0.1,
-      }]
-    },
-    options: {
-      plugins: {
-        legend: {
-          display: false,
-          onClick: null
-        }
-      },
-      scales: {
-        x: {
-          time: {
-            unit: 'day'
-          },
-        }
-      }
-    }
   });
 }
 

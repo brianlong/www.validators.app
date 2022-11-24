@@ -8,9 +8,6 @@
       <a class="btn btn-sm btn-secondary me-1 solPricesChartTabButton <%= active_button?(:coin_gecko) %>" href="#coinGeckoChartTab">
         CoinGecko
       </a>
-      <a class="btn btn-sm btn-secondary solPricesChartTabButton <%= active_button?(:ftx) %>" href="#ftxChartTab">
-        FTX
-      </a>
     </div>
 
     <div class="d-inline-block mb-4 float-md-end">
@@ -21,10 +18,6 @@
     <div class="tab-content" id='sol-prices-tab-content'>
       <div class="tab-pane solPriceChartTab <%= active_tab?(:coin_gecko) %>" id="coinGeckoChartTab">
         <%= render 'coin_gecko_chart' %>
-      </div>
-
-      <div class="tab-pane solPriceChartTab <%= active_tab?(:ftx) %>" id="ftxChartTab">
-        <%= render 'ftx_chart' %>
       </div>
     </div>
   </div>
