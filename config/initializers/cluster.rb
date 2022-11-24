@@ -3,9 +3,9 @@
 cluster_yml = YAML.load(File.read("config/cluster.yml"))
 
 CLUSTER_VERSION = {
-  mainnet: cluster_yml["software_patch_mainnet"],
-  testnet: cluster_yml["software_patch_testnet"],
-  pythnet: cluster_yml["software_patch_pythnet"]
+  mainnet: cluster_yml["software_patch_mainnet"] || "1.0.0",
+  testnet: cluster_yml["software_patch_testnet"] || "1.0.0",
+  pythnet: cluster_yml["software_patch_pythnet"] || "1.0.0"
 }.stringify_keys.freeze
 
 CLUSTER_VERSION.each do |network, version|

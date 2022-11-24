@@ -14,7 +14,8 @@ update_stats_time = 60 # seconds
 def get_latest_cluster_stats
   {
     mainnet: ClusterStat.by_network("mainnet").last&.attributes,
-    testnet: ClusterStat.by_network("testnet").last&.attributes
+    testnet: ClusterStat.by_network("testnet").last&.attributes,
+    pythnet: ClusterStat.by_network("pythnet").last&.attributes
   }
 end
 
