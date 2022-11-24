@@ -21,21 +21,13 @@ class LeaderStatsHelperTest < ActiveSupport::TestCase
     @vcr_namespace ||= File.join("daemons", "leader_stats_helper_test")
   end
 
-  test "#all_leaders returns data for both networks" do
-    vcr_cassette(@vcr_namespace, __method__) do
-      result = all_leaders
-      assert result.keys.include? "mainnet"
-      assert result.keys.include? "testnet"
-    end
-  end
-
   test "#leaders_for_network returns correct leaders" do
     vcr_cassette(@vcr_namespace, __method__) do
-      result = all_leaders
+      result = leaders_for_network("testnet")
 
-      assert_equal @test_accounts[0], result["testnet"][:current_leader]["account"]
-      assert_equal @test_accounts[1], result["testnet"][:next_leaders].first["account"]
-      assert_equal @test_accounts[2], result["testnet"][:next_leaders].second["account"]
+      assert_equal @test_accounts[0], result[:current_leader]["account"]
+      assert_equal @test_accounts[1], result[:next_leaders].first["account"]
+      assert_equal @test_accounts[2], result[:next_leaders].second["account"]
     end
   end
 end
