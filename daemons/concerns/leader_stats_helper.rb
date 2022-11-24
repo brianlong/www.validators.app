@@ -5,14 +5,6 @@ require_relative './front_stats_constants.rb'
 module LeaderStatsHelper
   include FrontStatsConstants
 
-  def all_leaders
-    FrontStatsConstants::NETWORKS.map do |network|
-      [network, leaders_for_network(network)]
-    end.to_h
-  end
-
-  private
-
   def leaders_for_network(network)
     client = SolanaRpcClient.new.network_client(network)
 
@@ -33,6 +25,8 @@ module LeaderStatsHelper
       next_leaders: leaders
     }
   end
+
+  private
 
   def fields_for_leader
     validator_fields = FrontStatsConstants::VALIDATOR_FIELDS_FOR_LEADER.map{ |field| "validators." + field }
