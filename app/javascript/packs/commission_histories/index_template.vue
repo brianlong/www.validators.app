@@ -62,9 +62,11 @@
       }
     },
     created () {
-      this.api_url = this.query && !this.query == ''
-        ? this.api_url = '/api/v1/commission-changes/' + this.network + '?query=' + this.query + '&'
-        : this.api_url = '/api/v1/commission-changes/' + this.network + '?'
+      if (this.query) {
+        this.api_url = '/api/v1/commission-changes/' + this.network + '?query=' + this.query + '&'
+      } else {
+        this.api_url = '/api/v1/commission-changes/' + this.network + '?'
+      }
       var ctx = this
       var url = ctx.api_url + 'sort_by=' + ctx.sort_by
 
