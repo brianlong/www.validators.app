@@ -1,9 +1,9 @@
 import Vue from 'vue/dist/vue.esm'
 import { shallowMount } from '@vue/test-utils'
 import IndexTemplate from '../../../app/javascript/packs/commission_histories/index_template'
-import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";
-import axios from 'axios'
+import axios from 'axios';
+import store from "../../../app/javascript/packs/stores/main_store.js";
 
 jest.mock('axios');
 
@@ -21,15 +21,13 @@ var mock_commission_changes = function(){
   });
 }
 
-
 describe('index_template', ()=> {
   it('has correct params without query', ()=>{
     Vue.component('BPagination', BPagination)
     mock_commission_changes()
+    store.getters = { web3_url: "https://api.testnet.solana.com", network: 'testnet' }
     const wrapper = shallowMount(IndexTemplate, {
-      propsData: {
-        network: 'testnet'
-      },
+      store,
       stubs: {BPagination: BPagination}
     })
 
@@ -43,9 +41,9 @@ describe('index_template', ()=> {
     Vue.component('BPagination', BPagination)
     mock_commission_changes()
     const wrapper = shallowMount(IndexTemplate, {
+      store,
       propsData: {
-        query: 'abc',
-        network: 'testnet'
+        query: 'abc'
       },
       stubs: {BPagination: BPagination}
     })
