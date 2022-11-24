@@ -3,21 +3,10 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-luxon';
 import '../lib/chart-financial';
 
-const coinGeckoString = 'exchange=coin_gecko'
-
 document.addEventListener('turbolinks:load', () => {
   window.drawChart = drawChart;
 
   drawChart();
-
-  // Add event listeners to tab buttons.
-  const chartTabButtons = document.getElementsByClassName('solPricesChartTabButton');
-
-  for (const chartTabButton of chartTabButtons) {
-    chartTabButton.addEventListener('click', function() {
-      changeUrlBasedOnActiveTab();
-    })
-  }
 
   // Add event listeners to filter buttons.
   const chartFilterButtons = document.getElementsByClassName('chartFilterButton');
@@ -45,21 +34,6 @@ function addActiveClass(button) {
 function changeUrlBasedOnActiveFilter(chartFilterButton) {
   const href = chartFilterButton.href
   window.history.replaceState(null, '', href);
-}
-
-function changeUrlBasedOnActiveTab() {
-  const url = window.location.href
-  const exchangeToReplace = coinGeckoString
-  let exchange = '';
-
-  exchange = coinGeckoString
-  const replacedUrl = replaceExchangeInUrl(url, exchangeToReplace, exchange)
-
-  window.history.replaceState(exchange, exchange, replacedUrl);
-}
-
-function replaceExchangeInUrl(url, exchangeToReplace, exchange) {
-  return url.replace(exchangeToReplace, exchange)
 }
 
 function drawChart() {
