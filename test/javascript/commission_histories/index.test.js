@@ -25,12 +25,13 @@ describe('index_template', ()=> {
   it('has correct params without query', ()=>{
     Vue.component('BPagination', BPagination)
     mock_commission_changes()
+    store.getters = { web3_url: "https://api.testnet.solana.com", network: 'testnet' }
     const wrapper = shallowMount(IndexTemplate, {
       store,
       stubs: {BPagination: BPagination}
     })
 
-    expect(wrapper.vm.api_url).toMatch("/api/v1/commission-changes/mainnet?")
+    expect(wrapper.vm.api_url).toMatch("/api/v1/commission-changes/testnet?")
     expect(wrapper.vm.page).toBe(1)
     expect(wrapper.vm.sort_by).toMatch('created_at_desc')
     expect(wrapper.vm.account_name).toBe(undefined)
@@ -47,7 +48,7 @@ describe('index_template', ()=> {
       stubs: {BPagination: BPagination}
     })
 
-    expect(wrapper.vm.api_url).toMatch("/api/v1/commission-changes/mainnet?query=abc&")
+    expect(wrapper.vm.api_url).toMatch("/api/v1/commission-changes/testnet?query=abc&")
     expect(wrapper.vm.page).toBe(1)
     expect(wrapper.vm.sort_by).toMatch('created_at_desc')
     expect(wrapper.vm.account_name).toBe('abc')
