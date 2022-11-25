@@ -26,6 +26,11 @@
                     title: 'Delegate SOL to this validator on Staking.kiwi',
                     class: "btn btn-sm btn-secondary",
                     target: :blank %>
+        <%= link_to 'Delegate on BlazeStake',
+                    blazestake_url(@validator.vote_account_active&.account),
+                    title: 'Delegate SOL to this validator on BlazeStake',
+                    class: "btn btn-sm btn-secondary",
+                    target: :blank %>
       </div>
     <% end %>
     <div>
