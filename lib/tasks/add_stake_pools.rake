@@ -92,7 +92,7 @@
   daopool: 0,
   eversol: 0.0,
   blazestake: 0.1,
-  jito: 0.3
+  jito: 0
 }
 
 def update_stake_pools(stake_pools)

@@ -2,20 +2,6 @@
   <div class="card map mb-4">
     <section class="map-background">
       <div class="map-points">
-        <!-- orientation points - TODO to remove after all map-related tasks are done -->
-        <!--
-        <div class="map-point map-point-sm" title="Map Center" style="left: 50%; bottom: 50%">X</div>
-        <div class="map-point map-point-md" title="Point 0,0"
-             :style="{ left: position_horizontal(0),
-                       bottom: position_vertical(-0) }">00</div>
-        <div class="map-point map-point-sm" title="Sydney"
-             :style="{ left: position_horizontal(147.1201174),
-                       bottom: position_vertical(-33.0996337) }">S</div>
-        <div class="map-point map-point-lg" title="Sth America End"
-             :style="{ left: position_horizontal(22.674129),
-                       bottom: position_vertical(-34.166060) }">SAF</div>
-        -->
-
         <div v-for="dc_group in data_centers_groups"
              :class="set_map_point_class(dc_group.active_validators_count, dc_group.active_gossip_nodes_count)"
              :style="{ left: position_horizontal(dc_group.longitude),
@@ -56,14 +42,6 @@
           <span class="btn btn-xs btn-secondary active">
             <i class="fas fa-eye-slash"></i>
           </span>
-        </div>
-
-        <div class="d-none mt-3">
-          <div class="small text-muted">Current Leader:</div>
-          <div>
-            <strong class="text-success">Block Logic | BL</strong>
-            <span class="text-muted">(DDnA...oshdp)</span>
-          </div>
         </div>
       </div>
 
@@ -127,23 +105,26 @@
         rejected() { },
         received(data) {
           data = data[this.network];
-          this.current_leader = data.current_leader;
+          if (data) {
+            this.current_leader = data.current_leader;
+          }
         },
         disconnected() { }
       }
     },
     methods: {
       position_horizontal: function(longitude) {
-        return 50 + (longitude / 160 * 50) + '%';
+        let division_factor = longitude < 0 ? 142 : 145
+        let start_position = 46
+        return start_position + ((longitude / division_factor) * 50) + '%';
       },
 
       position_vertical: function(latitude) {
-        if(latitude < 0){
-          return 42 + ((latitude / 78) * 50) + '%';
-        } else {
-          return 42 + ((latitude / 70) * 50) + '%';
-        }
+        let division_factor = latitude < 0 ? 65 : 59
+        let start_position = 32
+        return start_position + ((latitude / division_factor) * 50) + '%';
       },
+
       avatar_link() {
         if (this.current_leader.avatar_url) {
           return this.current_leader.avatar_url
@@ -151,6 +132,7 @@
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
         }
       },
+
       set_map_point_size: function(validators_and_nodes_count) {
         if(typeof(validators_and_nodes_count) != 'number') {
           return "map-point-sm";

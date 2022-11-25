@@ -20,12 +20,21 @@ const getters = {
     } else {
       return state.mainnet_beta_url
     }
+
+    switch (getters.network) {
+      case 'mainnet':
+        return state.mainnet_url
+      case 'pythnet':
+        return state.pythnet_url
+      case 'testnet':
+        return state.testnet_url
+    }
   },
   network() {
-    if(location.href.match(/network=testnet/)) {
-      return 'testnet'
-    } else if(location.href.match(/network=pythnet/)) {
+    if (location.href.match(/network=pythnet/)) {
       return 'pythnet'
+    } else if (location.href.match(/network=testnet/)) {
+      return 'testnet'
     } else {
       return 'mainnet'
     }
