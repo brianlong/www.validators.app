@@ -5,7 +5,6 @@ require_relative './concerns/front_software_versions_module.rb'
 
 include FrontSoftwareVersionsModule
 
-@networks = %w[mainnet testnet].freeze
 sleep_time = 5 # seconds
 update_stats_time = 60 # seconds
 @counter = 0
