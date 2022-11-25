@@ -26,7 +26,7 @@ class SolanaRpcClient
   def network_client(network)
     raise InvalidNetwork unless ::NETWORKS.include?(network)
 
-    network_cluster = NETWORK_URLS[network].first
+    network_cluster = ::NETWORK_URLS[network].first
     # Reset the client when the network is different from the one already initialized
     if @cluster != network_cluster
       @cluster = network_cluster
