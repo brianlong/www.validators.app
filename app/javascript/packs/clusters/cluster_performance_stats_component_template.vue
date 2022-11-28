@@ -156,7 +156,7 @@
         return this.root_distance.min.toFixed(0);
       },
       root_distance_max() {
-        return millify(parseFloat(this.root_distance.max) / 1000, { units: ["", "K", "M", "B"], precision: 1 });
+        return millify(parseFloat(this.root_distance.max) / 1000, { units: ["", "K", "M", "B"], precision: 2 });
       },
       vote_distance_median() {
         return this.vote_distance.median.toFixed(2);
@@ -168,7 +168,7 @@
         return this.vote_distance.min.toFixed(0);
       },
       vote_distance_max() {
-        return millify(parseFloat(this.vote_distance.max) / 1000, { units: ["", "K", "M", "B"], precision: 1 });
+        return millify(parseFloat(this.vote_distance.max) / 1000, { units: ["", "K", "M", "B"], precision: 2 });
       },
       skipped_votes_median() {
         return (parseFloat(this.skipped_votes.median) * 100).toFixed(1);
