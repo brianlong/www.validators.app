@@ -10,15 +10,10 @@ module Gatherers
       @always_update = always_update
       @network = network
       @config_urls = config_urls
-      @range_start = VoteAccount.where(network: @network).first.id
-      @range_end = VoteAccount.where(network: @network).last.id
     end
 
     def call
-      VoteAccount.where(id: @range_start..@range_end, network: @network)
-                 .find_each do |vacc|
-        @range_start = vacc.id
-
+      VoteAccount.where(network: @network).find_each do |vacc|
         vote_account_details = get_vote_account_details(vacc.account)
 
         if vote_account_details.blank? || vote_account_details["validatorIdentity"].blank?
