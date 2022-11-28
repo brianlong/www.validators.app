@@ -151,7 +151,7 @@
       },
       root_distance_average() {
         let root_average = parseFloat(this.root_distance.average) / 1000
-        let precision = root_average > 0.1 ? 1 : 3
+        let precision = root_average > 0.01 ? 2 : 4
         return millify(root_average, { units: ["", "K", "M", "B"], precision: precision } );
       },
       root_distance_min() {
@@ -159,7 +159,7 @@
       },
       root_distance_max() {
         let max_distance = parseFloat(this.root_distance.max) / 1000
-        let precision = max_distance > 0.1 ? 1 : 3
+        let precision = max_distance > 0.01 ? 2 : 4
         return millify(max_distance, { units: ["", "K", "M", "B"], precision: precision });
       },
       vote_distance_median() {
@@ -167,7 +167,7 @@
       },
       vote_distance_average() {
         let vote_average = parseFloat(this.vote_distance.average) / 1000
-        let precision = vote_average > 0.1 ? 1 : 3
+        let precision = vote_average > 0.01 ? 2 : 4
         return millify(vote_average, { units: ["", "K", "M", "B"], precision: precision });
       },
       vote_distance_min() {
@@ -175,7 +175,7 @@
       },
       vote_distance_max() {
         let max_distance = parseFloat(this.vote_distance.max) / 1000
-        let precision = max_distance > 0.1 ? 1 : 3
+        let precision = max_distance > 0.01 ? 2 : 4
         return millify(max_distance, { units: ["", "K", "M", "B"], precision: precision });
       },
       skipped_votes_median() {
