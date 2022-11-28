@@ -56,7 +56,7 @@ manager_fees = {
   lido: 10, #https://solana.lido.fi/
   daopool: 2,
   eversol: 7, #https://docs.eversol.one/extras/faq
-  blazestake: 10, #https://stake-docs.solblaze.org/features/fees
+  blazestake: 5, #https://stake-docs.solblaze.org/features/fees
   jito: 4 #https://jito-foundation.gitbook.io/jitosol/faqs/general-faqs#fees
 }
 
@@ -67,7 +67,7 @@ withdrawal_fees = {
   lido: 0,
   daopool: 0,
   eversol: 0,
-  blazestake: 0.3,
+  blazestake: 0.1,
   jito: 0.1
 }
 
@@ -78,7 +78,7 @@ deposit_fees = {
   lido: 0,
   daopool: 0,
   eversol: 0.0,
-  blazestake: 0.1,
+  blazestake: 0,
   jito: 0
 }
 
