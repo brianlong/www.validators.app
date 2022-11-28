@@ -124,6 +124,7 @@ namespace :deamons do
           execute :systemctl, '--user', :start, :front_stats_update
           execute :systemctl, '--user', :start, :leader_stats_mainnet_update
           execute :systemctl, '--user', :start, :leader_stats_testnet_update
+          # execute :systemctl, '--user', :start, :leader_stats_pythnet_update
         end
       end
     end
@@ -145,6 +146,7 @@ namespace :deamons do
           execute :systemctl, '--user', :stop, :front_stats_update
           execute :systemctl, '--user', :stop, :leader_stats_mainnet_update
           execute :systemctl, '--user', :stop, :leader_stats_testnet_update
+          # execute :systemctl, '--user', :stop, :leader_stats_pythnet_update
         end
       end
     end
@@ -166,6 +168,7 @@ namespace :deamons do
           execute :systemctl, '--user', :restart, :front_stats_update
           execute :systemctl, '--user', :restart, :leader_stats_mainnet_update
           execute :systemctl, '--user', :restart, :leader_stats_testnet_update
+          # execute :systemctl, '--user', :restart, :leader_stats_pythnet_update
         end
       end
     end

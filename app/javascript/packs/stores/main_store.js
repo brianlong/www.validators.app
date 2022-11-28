@@ -9,28 +9,33 @@ const state = {
   pythnet_url: "https://pythnet.rpcpool.com",
   networks: ["mainnet", "testnet", "pythnet"]
 }
+
 const getters = {
   web3_url: function(state, getters) {
-    if(getters.network === 'testnet') {
-      return state.testnet_url
-    } else if(getters.network === 'pythnet'){
-      return state.pythnet_url
-    } else if(location.hostname !== "localhost") {
-      return state.mainnet_url
-    } else {
+    if (getters.network === 'mainnet' && location.hostname === "localhost") {
       return state.mainnet_beta_url
+    }
+
+    switch (getters.network) {
+      case 'mainnet':
+        return state.mainnet_url
+      case 'pythnet':
+        return state.pythnet_url
+      case 'testnet':
+        return state.testnet_url
     }
   },
   network() {
-    if(location.href.match(/network=testnet/)) {
-      return 'testnet'
-    } else if(location.href.match(/network=pythnet/)) {
+    if (location.href.match(/network=pythnet/)) {
       return 'pythnet'
+    } else if (location.href.match(/network=testnet/)) {
+      return 'testnet'
     } else {
       return 'mainnet'
     }
   }
 }
+
 export default new Vuex.Store({
   state,
   getters
