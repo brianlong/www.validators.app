@@ -146,13 +146,19 @@
       'network'
     ]),
     methods: {
-      root_distance_median() {
-        return this.root_distance.median.toFixed(2);
-      },
       root_distance_average() {
-        let root_average = parseFloat(this.root_distance.average) / 1000
-        let precision = root_average > 0.01 ? 2 : 5
-        return millify(root_average, { units: ["", "K", "M", "B"], precision: precision } );
+        let average = parseFloat(this.root_distance.average) / 1000;
+        if(average < 0.01) {
+          return "<0.01";
+        }
+        return millify(average, { units: ["", "K", "M", "B"], precision: 2 } );
+      },
+      root_distance_median() {
+        let median = this.root_distance.median;
+        if(median < 0.01) {
+          return "<0.01";
+        }
+        return millify(median, { units: ["", "K", "M", "B"], precision: 2 } );
       },
       root_distance_min() {
         return this.root_distance.min.toFixed(0);
@@ -162,13 +168,20 @@
         let precision = max_distance > 0.01 ? 2 : 4
         return millify(max_distance, { units: ["", "K", "M", "B"], precision: precision });
       },
-      vote_distance_median() {
-        return this.vote_distance.median.toFixed(2);
-      },
+
       vote_distance_average() {
-        let vote_average = parseFloat(this.vote_distance.average) / 1000
-        let precision = vote_average > 0.01 ? 2 : 5
-        return millify(vote_average, { units: ["", "K", "M", "B"], precision: precision });
+        let average = parseFloat(this.vote_distance.average) / 1000;
+        if(average < 0.01) {
+          return "<0.01";
+        }
+        return millify(average, { units: ["", "K", "M", "B"], precision: 2 } );
+      },
+      vote_distance_median() {
+        let median = this.vote_distance.median;
+        if(median < 0.01) {
+          return "<0.01";
+        }
+        return millify(median, { units: ["", "K", "M", "B"], precision: 2 } );
       },
       vote_distance_min() {
         return this.vote_distance.min.toFixed(0);
@@ -178,6 +191,7 @@
         let precision = max_distance > 0.01 ? 2 : 4
         return millify(max_distance, { units: ["", "K", "M", "B"], precision: precision });
       },
+
       skipped_votes_median() {
         return (parseFloat(this.skipped_votes.median) * 100).toFixed(1);
       },
@@ -187,6 +201,7 @@
       skipped_votes_best() {
         return (parseFloat(this.skipped_votes.best) * 100).toFixed(2);
       },
+
       skipped_slots_median() {
         return (parseFloat(this.skipped_slots.median) * 100).toFixed(1);
       },
