@@ -127,6 +127,7 @@
         rejected() { },
         received(data) {
           const cluster_stat = data.cluster_stats[this.network];
+          console.log(cluster_stat)
           this.root_distance = cluster_stat.root_distance;
           this.vote_distance = cluster_stat.vote_distance;
           this.skipped_votes = cluster_stat.skipped_votes;
@@ -146,7 +147,7 @@
     ]),
     methods: {
       root_distance_median() {
-        return this.root_distance.median.toFixed(0);
+        return this.root_distance.median.toFixed(2);
       },
       root_distance_average() {
         return millify(parseFloat(this.root_distance.average) / 1000, { units: ["K", "M", "B"], precision: 2 } );
@@ -155,10 +156,10 @@
         return this.root_distance.min.toFixed(0);
       },
       root_distance_max() {
-        return millify(parseFloat(this.root_distance.max) / 1000, { units: ["K", "M", "B"], precision: 0 });
+        return millify(parseFloat(this.root_distance.max) / 1000, { units: ["K", "M", "B"], precision: 1 });
       },
       vote_distance_median() {
-        return this.vote_distance.median.toFixed(0);
+        return this.vote_distance.median.toFixed(2);
       },
       vote_distance_average() {
         return millify(parseFloat(this.vote_distance.average) / 1000, { units: ["K", "M", "B"], precision: 2 });
@@ -167,7 +168,7 @@
         return this.vote_distance.min.toFixed(0);
       },
       vote_distance_max() {
-        return millify(parseFloat(this.vote_distance.max) / 1000, { units: ["K", "M", "B"], precision: 0 });
+        return millify(parseFloat(this.vote_distance.max) / 1000, { units: ["K", "M", "B"], precision: 1 });
       },
       skipped_votes_median() {
         return (parseFloat(this.skipped_votes.median) * 100).toFixed(1);
