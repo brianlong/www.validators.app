@@ -151,7 +151,7 @@
       },
       root_distance_average() {
         let root_average = parseFloat(this.root_distance.average) / 1000
-        let precision = root_average > 0.01 ? 2 : 4
+        let precision = root_average > 0.01 ? 2 : 5
         return millify(root_average, { units: ["", "K", "M", "B"], precision: precision } );
       },
       root_distance_min() {
@@ -167,7 +167,7 @@
       },
       vote_distance_average() {
         let vote_average = parseFloat(this.vote_distance.average) / 1000
-        let precision = vote_average > 0.01 ? 2 : 4
+        let precision = vote_average > 0.01 ? 2 : 5
         return millify(vote_average, { units: ["", "K", "M", "B"], precision: precision });
       },
       vote_distance_min() {
