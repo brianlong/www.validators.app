@@ -75,6 +75,10 @@ module ValidatorsHelper
     "https://staking.kiwi/app/#{vote_account}"
   end
 
+  def blazestake_url(vote_account)
+    "https://stake.solblaze.org/app/?validator=#{vote_account}"
+  end
+
   def shuffle_logos
     [
       ["https://lido.fi/solana", "lido.png"],

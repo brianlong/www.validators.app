@@ -26,17 +26,22 @@
                     title: 'Delegate SOL to this validator on Staking.kiwi',
                     class: "btn btn-sm btn-secondary",
                     target: :blank %>
+        <%= link_to 'Liquid Stake through BlazeStake',
+                    blazestake_url(@validator.vote_account_active&.account),
+                    title: 'Delegate SOL to this validator on BlazeStake',
+                    class: "btn btn-sm btn-secondary",
+                    target: :blank %>
       </div>
     <% end %>
-    <div>
+    <div class="d-flex flex-wrap gap-3">
       <% if @validator.private_validator? %>
-        <div class="btn btn-sm btn-danger me-2" title="Validator has 100% commission.">private</div>
+        <div class="btn btn-sm btn-danger" title="Validator has 100% commission.">private</div>
       <% end %>
       <% if @validator.delinquent? %>
-        <div class="btn btn-sm btn-danger me-2" title="Validator is delinquent.">delinquent</div>
+        <div class="btn btn-sm btn-danger" title="Validator is delinquent.">delinquent</div>
       <% end %>
       <% unless @validator.active? %>
-        <div class="btn btn-sm btn-danger me-2" title="Validator is inactive.">inactive</div>
+        <div class="btn btn-sm btn-danger" title="Validator is inactive.">inactive</div>
       <% end %>
 
       <% if @validator.admin_warning %>
