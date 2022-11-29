@@ -1,6 +1,5 @@
 <%= javascript_pack_tag "validators/validators_map.js" %>
 <%= javascript_pack_tag 'transactions/transactions_stats_component' %>
-<%= javascript_pack_tag 'sol_prices/sol_price_component' %>
 <%= javascript_pack_tag 'epochs/epoch_stats_component' %>
 <%= javascript_pack_tag 'validators/circulating_supply.js' %>
 <%= javascript_pack_tag 'leaders/leaders_stats_component.js' %>
@@ -30,6 +29,7 @@
   <div id="transactions-stats-component"></div>
 
   <% unless @network == "pythnet" %>
+    <%= javascript_pack_tag 'sol_prices/sol_price_component' %>
     <div id="sol-price-component"></div>
     <div class="col-md-8 mb-4">
       <%= render 'validators/watchlist_info_banner' %>
