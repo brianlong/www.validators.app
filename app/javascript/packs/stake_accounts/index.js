@@ -6,19 +6,17 @@ import StakePoolStats from './pool_stats'
 import StakePoolsOverview from './pools_overview'
 import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";
+import store from "../stores/main_store.js";
 
 Vue.component('BPagination', BPagination)
 Vue.use(PaginationPlugin);
 
 document.addEventListener('DOMContentLoaded', () => {
   const stake_account_index = new Vue({
-    el: '#stake-accounts-index-vue',    
+    el: '#stake-accounts-index-vue',
+    store,
     render(createElement) {
-      return createElement(IndexTemplate, {
-        props: {
-          network: this.$el.attributes.network ? this.$el.attributes.network.value : 'mainnet'
-        }
-      })
+      return createElement(IndexTemplate);
     },
     component: {
       'StakeAccountRow': StakeAccountRow,
