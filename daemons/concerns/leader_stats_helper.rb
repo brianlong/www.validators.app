@@ -6,7 +6,7 @@ module LeaderStatsHelper
   include FrontStatsConstants
 
   def leaders_for_network(network)
-    client = solana_client(network)
+    client = SolanaRpcClient.new.network_client(network)
 
     current_slot = client.get_slot.result
     leaders_accounts = client.get_slot_leaders(current_slot, FrontStatsConstants::LEADERS_LIMIT).result
@@ -33,17 +33,5 @@ module LeaderStatsHelper
     dc_fields = FrontStatsConstants::DC_FIELDS_FOR_LEADER.map{ |field| "data_centers." + field }
 
     (validator_fields + dc_fields).join(", ")
-  end
-
-  def solana_client(network)
-    network == "mainnet" ? mainnet_client : testnet_client
-  end
-
-  def mainnet_client
-    SolanaRpcClient.new.mainnet_client
-  end
-
-  def testnet_client
-    SolanaRpcClient.new.testnet_client
   end
 end

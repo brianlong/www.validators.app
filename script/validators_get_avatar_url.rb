@@ -13,7 +13,7 @@ trap('INT') { interrupted = true }  unless Rails.env.test?
 # .picture > img:nth-child(1)
 image_css = '.picture > .img-circle'
 
-%w[testnet mainnet].each do |network|
+NETWORKS.each do |network|
   Validator.where(
     ["network = ? and keybase_id != '' AND avatar_url IS NULL", network]
   ).each do |validator|

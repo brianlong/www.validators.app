@@ -24,6 +24,7 @@
 
 <script>
   import axios from 'axios'
+  import { mapGetters } from 'vuex'
   import statsChart from './stats_chart'
   import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
@@ -33,17 +34,16 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
-    props: ['network'],
     data () {
-      var api_url = '/api/v1/ping-thing/' + this.network
       return {
         ping_things: [],
         page: 1,
         records_in_table: 120,
-        api_url: api_url
+        api_url: null
       }
     },
     created () {
+      this.api_url = '/api/v1/ping-thing/' + this.network
       var ctx = this
       axios.get(ctx.api_url)
            .then(function(response) {
@@ -69,6 +69,9 @@
           room: "public",
         });
     },
+    computed: mapGetters([
+      'network'
+    ]),
     methods: {
       ping_things_for_table: function(){
         if(this.ping_things.length <= this.records_in_table){
