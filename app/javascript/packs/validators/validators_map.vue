@@ -20,13 +20,47 @@
              :style="{ left: position_horizontal(current_leader.location_longitude),
                        bottom: position_vertical(current_leader.location_latitude) }"
              class="map-point map-point-leader">
-          <img :src="avatar_link()" alt="avatar">
+          <img :src="avatar_link(current_leader)" alt="avatar">
         </div>
       </div>
     </section>
 
     <section class="map-legend">
       <div class="map-legend-col">
+        <div class="mb-3">
+          <div class="small text-muted mb-2">Current Leader</div>
+
+          <div class="d-flex flex-wrap gap-3" v-if="current_leader">
+            <a :href="validator_details_link(current_leader.account)"
+               title="Go to validator details." target="_blank">
+              <img :src="avatar_link(current_leader)" class="img-circle-small" />
+            </a>
+            <div class="d-flex flex-column justify-content-center">
+              <a :href="validator_details_link(current_leader.account)"
+                 title="Go to validator details."
+                 class="fw-bold" target="_blank">
+                {{ leader_name(current_leader) }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="" v-if="next_leaders.length > 0">
+          <div class="small text-muted mb-2">Next Leaders</div>
+          <div class="d-flex flex-wrap gap-3">
+            <a v-for="leader in next_leaders"
+               :href="validator_details_link(leader.account)"
+               title="Go to validator details." target="_blank">
+              <img :src="avatar_link(leader)" class='img-circle-small' />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-legend-col">
+        <validators-map-data-center-details :data_centers_group="selected_data_centers_group"
+                                            v-if="selected_data_centers_group" />
+
         <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
           <span class="btn btn-xs btn-secondary active">
             <i class="fas fa-eye"></i>
@@ -44,10 +78,6 @@
           </span>
         </div>
       </div>
-
-      <div class="map-legend-col" v-if="selected_data_centers_group">
-        <validators-map-data-center-details :data_centers_group="selected_data_centers_group"/>
-      </div>
     </section>
   </div>
 
@@ -61,13 +91,14 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
-    data () {
+    data() {
       return {
         api_url: null,
         data_centers_groups: [],
         selected_data_centers_group: null,
         show_gossip_nodes: false,
         current_leader: null,
+        next_leaders: [],
       }
     },
     created () {
@@ -89,10 +120,8 @@
         room: "public"
       });
     },
-    watch: {
-    },
     computed: {
-      is_leader_valid(){
+      is_leader_valid() {
         return this.current_leader && this.current_leader.location_latitude && this.current_leader.location_longitude
       },
       ...mapGetters([
@@ -105,9 +134,11 @@
         rejected() { },
         received(data) {
           data = data[this.network];
-          if (data) {
+          if(data) {
             this.current_leader = data.current_leader;
+            this.next_leaders = data.next_leaders;
           }
+          console.log(data);
         },
         disconnected() { }
       }
@@ -125,12 +156,26 @@
         return start_position + ((latitude / division_factor) * 50) + '%';
       },
 
-      avatar_link() {
-        if (this.current_leader.avatar_url) {
-          return this.current_leader.avatar_url
+      avatar_link(leader) {
+        if (leader.avatar_url) {
+          return leader.avatar_url
         } else {
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
         }
+      },
+
+      leader_name(leader) {
+        if (leader.name) {
+          return leader.name
+        } else {
+          const account = leader.account
+
+          return account.substring(0, 5) + "..." + account.substring(account.length - 5)
+        }
+      },
+
+      validator_details_link(account) {
+        return `/validators/${account}?network=${this.network}`;
       },
 
       set_map_point_size: function(validators_and_nodes_count) {
@@ -176,6 +221,7 @@
 
       set_nodes_visibility: function(value) {
         this.show_gossip_nodes = value;
+        this.selected_data_centers_group = null;
         this.refresh_results();
       },
 
