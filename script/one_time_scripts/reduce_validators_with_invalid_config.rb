@@ -4,11 +4,9 @@ require File.expand_path('../config/environment', __dir__)
 
 include SolanaLogic
 
-networks = ['mainnet', 'testnet']
-
-networks.each do |network|
+NETWORKS.each do |network|
   payload = {
-    config_urls: Rails.application.credentials.solana["#{network}_urls".to_sym],
+    config_urls: NETWORK_URLS[network],
     network: network
   }
 

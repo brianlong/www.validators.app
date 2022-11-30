@@ -6,8 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-@networks = %w(mainnet testnet)
-
 def create_users
   @admin = User.find_or_initialize_by(
     username: 'adminuser',

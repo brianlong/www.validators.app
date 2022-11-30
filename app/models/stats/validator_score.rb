@@ -5,7 +5,7 @@ module Stats
   # ValidatorScore set of stats scoped to certain batch.
   #
   # Usage: stats = Stats::ValidatorScore.new(network, batch_uuid)
-  #            # network    - 'testnet' or 'mainnet' atm
+  #            # network    - 'testnet', 'mainnet' or 'pythnet' atm
   #            # batch_uuid - batch in which look for
   #        stats.root_distance_all_history
   #        stats.root_distance_all_averages

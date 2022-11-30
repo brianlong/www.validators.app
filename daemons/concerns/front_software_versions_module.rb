@@ -6,9 +6,9 @@ module FrontSoftwareVersionsModule
   include FrontStatsConstants
   include ValidatorsHelper
 
-  def get_versions_for_networks(networks = FrontStatsConstants::NETWORKS)
+  def get_versions_for_networks
     versions_for_networks = {}
-    networks.each do |network|
+    ::NETWORKS.each do |network|
       versions_for_networks[network] = sort_software_versions(get_latest_versions_report(network))
     end
     versions_for_networks
