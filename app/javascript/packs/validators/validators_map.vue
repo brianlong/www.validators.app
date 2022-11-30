@@ -7,7 +7,8 @@
              :style="{ left: position_horizontal(dc_group.longitude),
                        bottom: position_vertical(dc_group.latitude) }"
              v-on:click="select_data_centers_group(dc_group)"
-             :key="dc_group.identifier">
+             :key="dc_group.identifier"
+             title="See details">
           <span v-if="show_gossip_nodes">
             {{ dc_group.active_validators_count + dc_group.active_gossip_nodes_count }}
           </span>
@@ -16,12 +17,14 @@
           </span>
         </div>
 
-        <div v-if="is_leader_valid"
-             :style="{ left: position_horizontal(current_leader.location_longitude),
-                       bottom: position_vertical(current_leader.location_latitude) }"
-             class="map-point map-point-leader">
-          <img :src="avatar_link(current_leader)" alt="avatar">
-        </div>
+        <a :href="validator_details_link(current_leader.account)"
+           title="Go to validator details" target="_blank"
+           v-if="is_leader_valid"
+           :style="{ left: position_horizontal(current_leader.location_longitude),
+                     bottom: position_vertical(current_leader.location_latitude) }"
+           class="map-point map-point-leader">
+          <img :src="avatar_link(current_leader)" alt="avatar" />
+        </a>
       </div>
     </section>
 
@@ -32,12 +35,12 @@
 
           <div class="d-flex flex-wrap gap-3" v-if="current_leader">
             <a :href="validator_details_link(current_leader.account)"
-               title="Go to validator details." target="_blank">
+               title="Go to validator details" target="_blank">
               <img :src="avatar_link(current_leader)" class="img-circle-small" />
             </a>
             <div class="d-flex flex-column justify-content-center">
               <a :href="validator_details_link(current_leader.account)"
-                 title="Go to validator details."
+                 title="Go to validator details"
                  class="fw-bold" target="_blank">
                 {{ leader_name(current_leader) }}
               </a>
@@ -50,7 +53,7 @@
           <div class="d-flex flex-wrap gap-3">
             <a v-for="leader in next_leaders"
                :href="validator_details_link(leader.account)"
-               title="Go to validator details." target="_blank">
+               title="Go to validator details" target="_blank">
               <img :src="avatar_link(leader)" class='img-circle-small' />
             </a>
           </div>
