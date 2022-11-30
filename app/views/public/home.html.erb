@@ -2,7 +2,6 @@
 <%= javascript_pack_tag 'transactions/transactions_stats_component' %>
 <%= javascript_pack_tag 'epochs/epoch_stats_component' %>
 <%= javascript_pack_tag 'validators/circulating_supply.js' %>
-<%= javascript_pack_tag 'leaders/leaders_stats_component.js' %>
 <%= javascript_pack_tag 'software_versions/software_versions_component.js' %>
 <%= javascript_pack_tag 'clusters/cluster_numbers_component.js' %>
 <%= javascript_pack_tag 'clusters/cluster_performance_stats_component.js' %>
@@ -15,11 +14,14 @@
   <validators-map network="<%= @network %>"/>
 </div>
 
+<!--
 <section class="row">
-  <div id="leader-stats-component"></div>
-
-  <div id="epoch-stats-component"></div>
+    <%#= javascript_pack_tag 'leaders/leaders_stats_component.js' %>
+    <div id="leader-stats-component"></div>
 </section>
+-->
+
+<div id="epoch-stats-component"></div>
 
 <section class="row">
   <div id="cluster-numbers-component"></div>
