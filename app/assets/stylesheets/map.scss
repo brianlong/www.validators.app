@@ -23,12 +23,12 @@ $green-purple-point: rgba(70, 121, 130, .95);
   &-background {
     background: url(asset_path("map.svg")) no-repeat top right;
     background-size: cover;
-    height: 620px;
+    height: 605px;
     @media(max-width: $screen-xl-max) {
-      height: 530px;
+      height: 525px;
     }
     @media(max-width: $screen-lg-max) {
-      height: 450px;
+      height: 440px;
       width: 936px;
     }
   }

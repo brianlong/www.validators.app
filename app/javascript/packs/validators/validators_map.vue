@@ -154,7 +154,7 @@
       },
 
       position_vertical: function(latitude) {
-        let division_factor = latitude < 0 ? 65 : 59
+        let division_factor = latitude < 0 ? 64 : 58
         let start_position = 32
         return start_position + ((latitude / division_factor) * 50) + '%';
       },
