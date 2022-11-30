@@ -29,41 +29,12 @@
     </section>
 
     <section class="map-legend">
-      <div class="map-legend-col">
-        <div class="mb-3">
-          <div class="small text-muted mb-2">Current Leader</div>
+      <validators-map-leaders :current_leader="current_leader"
+                              :next_leaders="next_leaders" />
 
-          <div class="d-flex flex-wrap gap-3" v-if="current_leader">
-            <a :href="validator_details_link(current_leader.account)"
-               title="Go to validator details" target="_blank">
-              <img :src="avatar_link(current_leader)" class="img-circle-small" />
-            </a>
-            <div class="d-flex flex-column justify-content-center">
-              <a :href="validator_details_link(current_leader.account)"
-                 title="Go to validator details"
-                 class="fw-bold" target="_blank">
-                {{ leader_name(current_leader) }}
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="" v-if="next_leaders.length > 0">
-          <div class="small text-muted mb-2">Next Leaders</div>
-          <div class="d-flex flex-wrap gap-3">
-            <a v-for="leader in next_leaders"
-               :href="validator_details_link(leader.account)"
-               title="Go to validator details" target="_blank">
-              <img :src="avatar_link(leader)" class='img-circle-small' />
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="map-legend-col">
+      <div class="map-legend-col text-sm-end">
         <validators-map-data-center-details :data_centers_group="selected_data_centers_group"
                                             v-if="selected_data_centers_group" />
-
         <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
           <span class="btn btn-xs btn-secondary active">
             <i class="fas fa-eye"></i>
@@ -141,7 +112,6 @@
             this.current_leader = data.current_leader;
             this.next_leaders = data.next_leaders;
           }
-          console.log(data);
         },
         disconnected() { }
       }
@@ -164,16 +134,6 @@
           return leader.avatar_url
         } else {
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
-        }
-      },
-
-      leader_name(leader) {
-        if (leader.name) {
-          return leader.name
-        } else {
-          const account = leader.account
-
-          return account.substring(0, 5) + "..." + account.substring(account.length - 5)
         }
       },
 

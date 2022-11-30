@@ -31,6 +31,9 @@ $green-purple-point: rgba(70, 121, 130, .95);
       height: 440px;
       width: 936px;
     }
+    @media(max-width: $screen-sm-max) {
+      height: 480px;
+    }
   }
 
   &-points {
