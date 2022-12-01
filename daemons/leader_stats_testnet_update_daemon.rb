@@ -5,7 +5,7 @@ require_relative "concerns/leader_stats_helper"
 
 include LeaderStatsHelper
 
-sleep_time = 0.5 # seconds
+sleep_time = 0.4 # seconds
 network = "testnet"
 
 loop do

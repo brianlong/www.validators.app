@@ -11,6 +11,7 @@ class CommissionHistoryMailerTest < ActiveSupport::TestCase
     @user = create(:user)
 
     create(:user_watchlist_element, user: @user, validator: @validator)
+    @validator.reload
   end
 
   test "#commission_change_info sends email to a watcher" do
