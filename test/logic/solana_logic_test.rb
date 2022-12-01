@@ -162,62 +162,61 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validators_cli' do
-    # Empty the ValidatorHistory table
+  test "validators_cli with stubbed validators" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
-    # We need to stub both the cli call (using minitest stub)
-    # plus the POST https://api.testnet.solana.com call (using VCR)
     json_data = File.read("#{Rails.root}/test/json/validators.json")
     SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
       VCR.use_cassette('validators_cli') do
-
-        # Show that the pipeline runs & the expected values are not empty.
-        p = Pipeline.new(200, @testnet_initial_payload)
-                    .then(&batch_set)
-                    .then(&epoch_get)
-                    .then(&validators_cli)
-
-        assert_equal 200, p.code
-        assert_not_nil p.payload[:epoch]
-        assert_not_nil p.payload[:batch_uuid]
-
-        # Find the EpochHistory record and show that the values match
-        validators = ValidatorHistory.where(
-          batch_uuid: p.payload[:batch_uuid]
-        ).all
-        assert validators.count.positive?
+        Validator.stub :find_by, true do
+          p = Pipeline.new(200, @testnet_initial_payload)
+                      .then(&batch_set)
+                      .then(&validators_cli)
+                      
+          validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
+                      
+          assert_equal 200, p.code
+          assert validator_histories.count.positive?
+        end
       end
     end
   end
 
-  test "validators_cli returns no validator form blacklist" do
-    # Empty the ValidatorHistory table
+  test "validators_cli returns no validator from blacklist" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
-    # We need to stub both the cli call (using minitest stub)
-    # plus the POST https://api.testnet.solana.com call (using VCR)
     json_data = File.read("#{Rails.root}/test/json/validators_from_blacklist.json")
     SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
       VCR.use_cassette("validators_cli_blacklist") do
-
-        # Show that the pipeline runs & the expected values are not empty.
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
-                    .then(&epoch_get)
                     .then(&validators_cli)
+        
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 
         assert_equal 200, p.code
-        assert_not_nil p.payload[:epoch]
-        assert_not_nil p.payload[:batch_uuid]
+        assert_empty validator_histories
+      end
+    end
+  end
 
-        # Find the EpochHistory record and show that the values match
-        validators = ValidatorHistory.where(
-          batch_uuid: p.payload[:batch_uuid]
-        )
-        assert_empty validators
+  test "validators_cli with validator_histories without validator relations" do
+    ValidatorHistory.delete_all
+    assert_equal 0, ValidatorHistory.count
+
+    json_data = File.read("#{Rails.root}/test/json/validators.json")
+    SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
+      VCR.use_cassette("validators_cli") do
+        p = Pipeline.new(200, @testnet_initial_payload)
+                    .then(&batch_set)
+                    .then(&validators_cli)
+
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
+                    
+        assert_equal 200, p.code
+        assert validator_histories.count.zero?
       end
     end
   end
