@@ -35,7 +35,7 @@ class PingThingRecentStat < ApplicationRecord
   INTERVALS = [5, 60].freeze #minutes
 
   validates :network, presence: true
-  validates :network, inclusion: { in: %w(mainnet testnet) }
+  validates :network, inclusion: { in: NETWORKS }
   validates :interval, presence: true
   validates :interval, inclusion: { in: INTERVALS }
 

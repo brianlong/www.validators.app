@@ -41,6 +41,7 @@ job_type :ruby_script_data_centers,
 every 1.hour, at: 0, roles: [:background] do
   runner "AsnLogicWorker.perform_async(network: 'mainnet')"
   runner "AsnLogicWorker.perform_async(network: 'testnet')"
+  runner "AsnLogicWorker.perform_async(network: 'pythnet')"
   ruby_script_data_centers "check_hetzner_admin_warning.rb"
 end
 
@@ -93,6 +94,7 @@ end
 every 1.day, at: '3:00am', roles: [:background] do
   runner "DataCenterStatsWorker.perform_async('mainnet')"
   runner "DataCenterStatsWorker.perform_async('testnet')"
+  runner "DataCenterStatsWorker.perform_async('pythnet')"
 end
 
 every 1.day, at: '3:10am', roles: [:background] do
@@ -108,6 +110,7 @@ every 1.minute, roles: [:background] do
   runner "PingThingStatsWorker.perform_async"
   runner "PingThingRecentStatsWorker.perform_async('mainnet')"
   runner "PingThingRecentStatsWorker.perform_async('testnet')"
+  runner "PingThingRecentStatsWorker.perform_async('pythnet')"
 end
 
 if environment == 'production'

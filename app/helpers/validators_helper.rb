@@ -43,11 +43,9 @@ module ValidatorsHelper
   end
 
   def current_software_version(batch, network)
-    if batch&.software_version.blank?
-      network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
-    else
-      batch.software_version
-    end
+    return CLUSTER_VERSION[network] if batch&.software_version.blank?
+
+    batch&.software_version
   end
 
   def skipped_vote_percent(validator, batch)
@@ -73,6 +71,10 @@ module ValidatorsHelper
 
   def staking_kiwi_url(vote_account)
     "https://staking.kiwi/app/#{vote_account}"
+  end
+
+  def blazestake_url(vote_account)
+    "https://stake.solblaze.org/app/?validator=#{vote_account}"
   end
 
   def shuffle_logos
