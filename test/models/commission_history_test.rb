@@ -3,6 +3,8 @@
 require "test_helper"
 
 class CommissionHistoryTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   test 'rising? \
         when commission before is smaller than after\
         should return true' do
@@ -17,5 +19,14 @@ class CommissionHistoryTest < ActiveSupport::TestCase
     c = create(:commission_history, commission_before: 20, commission_after: 10)
 
     refute c.rising?
+  end
+
+  test "execute CommissionHistoryMailer after commit" do
+    user = create(:user)
+    validator = create(:validator)
+    create(:user_watchlist_element, user: user, validator: validator)
+    commission_history = create(:commission_history, validator: validator)
+
+    assert_equal ActiveJob::Base.queue_adapter.enqueued_jobs[0][:args][0], "CommissionHistoryMailer"
   end
 end
