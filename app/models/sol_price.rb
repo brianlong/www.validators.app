@@ -22,7 +22,7 @@
 #  index_sol_prices_on_datetime_from_exchange_and_exchange  (datetime_from_exchange,exchange)
 #
 class SolPrice < ApplicationRecord
-  EXCHANGES = ['coin_gecko', 'ftx']
+  EXCHANGES = ['coin_gecko']
   CURRENCIES = ['usd']
   
   enum exchange: EXCHANGES.to_h { |el| [el, EXCHANGES.find_index(el)] }, _prefix: true

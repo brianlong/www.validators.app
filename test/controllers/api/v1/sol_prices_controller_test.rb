@@ -9,7 +9,7 @@ class SolPricesControllerTest < ActionDispatch::IntegrationTest
     @user = create(:user)
     @headers = { "Token" => @user.api_token }
     35.times do |n|
-      create(:sol_price, :ftx, datetime_from_exchange: n.days.ago)
+      create(:sol_price, :coin_gecko, datetime_from_exchange: n.days.ago)
     end
   end
 
@@ -28,9 +28,11 @@ class SolPricesControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_sol_prices without params returns results for default params" do
     get api_v1_sol_prices_path, headers: @headers
+    parsed_response = JSON.parse(@response.body)
 
     assert_response 200
     assert_equal 31, JSON.parse(@response.body).size
+    assert_equal "coin_gecko", parsed_response.last["exchange"]
   end
 
   test "GET api_v1_sol_prices with from and to params returns correct results" do
@@ -38,17 +40,6 @@ class SolPricesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 3, JSON.parse(@response.body).size
-  end
-
-  test "GET api_v1_sol_prices with exchange params returns correct results" do
-    create(:sol_price, :coin_gecko)
-
-    get api_v1_sol_prices_path(exchange: "coin_gecko"), headers: @headers
-    parsed_response = JSON.parse(@response.body)
-
-    assert_response 200
-    assert_equal 1, parsed_response.size
-    assert_equal "coin_gecko", parsed_response.last["exchange"]
   end
 
   test "GET api_v1_sol_prices with incorrect exchange returns error" do
