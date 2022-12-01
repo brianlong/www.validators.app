@@ -136,6 +136,8 @@ module SolanaLogic
             validator_histories[validator["identityPubkey"]] = existing_history
           end
         else
+          next unless Validator.find_by(network: p.payload[:network], account: validator["identityPubkey"])
+
           vh = ValidatorHistory.create(
             network: p.payload[:network],
             batch_uuid: p.payload[:batch_uuid],
