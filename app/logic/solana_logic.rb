@@ -108,8 +108,8 @@ module SolanaLogic
       }.max.to_i
 
       validator_histories = {}
-      # Create current validators
-      validators["validators"].each do |validator|
+
+      existing_validators(validators["validators"], p.payload[:network]).each do |validator|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? validator["identityPubkey"]
         
         if existing_history = validator_histories[validator["identityPubkey"]]
@@ -136,8 +136,6 @@ module SolanaLogic
             validator_histories[validator["identityPubkey"]] = existing_history
           end
         else
-          next unless Validator.find_by(network: p.payload[:network], account: validator["identityPubkey"])
-
           vh = ValidatorHistory.create(
             network: p.payload[:network],
             batch_uuid: p.payload[:batch_uuid],
@@ -181,6 +179,7 @@ module SolanaLogic
       validators = {}
       validators_json.each do |hash|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
+
         validators[hash['pubkey']] = {
           'gossip_ip_port' => hash['gossip'],
           'rpc_ip_port' => hash['rpc'],
@@ -672,6 +671,16 @@ module SolanaLogic
       message = "Request to solana RPC failed:\n Method: #{method}\nCluster: #{cluster_url}\nCLASS: #{e.class}\n#{e.message}"
       Rails.logger.error(message)
       nil
+    end
+  end
+
+  private
+
+  def existing_validators(validator_attrs, network)
+    accounts = validator_attrs.map { |validator| validator["identityPubkey"] }
+    db_validator_accounts = Validator.where(network: network, account: accounts).pluck(:account)
+    validator_attrs.select do |validator|
+      db_validator_accounts.include?(validator["identityPubkey"])
     end
   end
 end

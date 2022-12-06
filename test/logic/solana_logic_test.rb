@@ -166,19 +166,29 @@ class SolanaLogicTest < ActiveSupport::TestCase
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
-    json_data = File.read("#{Rails.root}/test/json/validators.json")
+    json_data = {
+      "validators": [
+        {
+          "identityPubkey": "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr"
+        },
+        {
+          "identityPubkey": "6X8sHQkmxRVh7oR94VjsfffmQYPoGZ62Fp8gt4QivszH"
+        }
+      ]
+    }.to_json
+
+    create(:validator, account: "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr")
+
     SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
       VCR.use_cassette('validators_cli') do
-        Validator.stub :find_by, true do
-          p = Pipeline.new(200, @testnet_initial_payload)
-                      .then(&batch_set)
-                      .then(&validators_cli)
-                      
-          validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
-                      
-          assert_equal 200, p.code
-          assert validator_histories.count.positive?
-        end
+        p = Pipeline.new(200, @testnet_initial_payload)
+                    .then(&batch_set)
+                    .then(&validators_cli)
+
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
+
+        assert_equal 200, p.code
+        assert validator_histories.size == 1
       end
     end
   end
@@ -193,7 +203,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
                     .then(&validators_cli)
-        
+
         validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 
         assert_equal 200, p.code
@@ -214,7 +224,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
                     .then(&validators_cli)
 
         validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
-                    
+
         assert_equal 200, p.code
         assert validator_histories.count.zero?
       end
