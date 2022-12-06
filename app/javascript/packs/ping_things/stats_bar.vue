@@ -2,7 +2,7 @@
   <div class="card mb-4">
     <div class="card-content">
       <div class="card-heading" v-if="titleVisible" data-turbolinks="false">
-        <h2 class="h5 mb-2">Recent TX Confirmation Time Stats</h2>
+        <h2 class="h5 mb-2">Recent TX Confirmation Time&nbsp;Stats</h2>
         <a class="small" :href="pt_url">See details on the Ping Thing page</a>
       </div>
 
