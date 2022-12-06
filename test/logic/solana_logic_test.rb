@@ -162,7 +162,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "validators_cli with stubbed validators" do
+  test "validator_history_update with stubbed validators" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
@@ -180,10 +180,10 @@ class SolanaLogicTest < ActiveSupport::TestCase
     create(:validator, account: "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr")
 
     SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
-      VCR.use_cassette('validators_cli') do
+      VCR.use_cassette('validator_history_update') do
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
-                    .then(&validators_cli)
+                    .then(&validator_history_update)
 
         validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 
@@ -193,16 +193,16 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "validators_cli returns no validator from blacklist" do
+  test "validator_history_update returns no validator from blacklist" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
     json_data = File.read("#{Rails.root}/test/json/validators_from_blacklist.json")
     SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
-      VCR.use_cassette("validators_cli_blacklist") do
+      VCR.use_cassette("validator_history_update_blacklist") do
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
-                    .then(&validators_cli)
+                    .then(&validator_history_update)
 
         validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 
@@ -212,16 +212,16 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "validators_cli with validator_histories without validator relations" do
+  test "validator_history_update with validator_histories without validator relations" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
     json_data = File.read("#{Rails.root}/test/json/validators.json")
     SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
-      VCR.use_cassette("validators_cli") do
+      VCR.use_cassette("validator_history_update") do
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
-                    .then(&validators_cli)
+                    .then(&validator_history_update)
 
         validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 

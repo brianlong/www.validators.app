@@ -70,8 +70,8 @@ module SolanaLogic
     end
   end
 
-  # Use the Solana CLI tool to get Validator information
-  def validators_cli
+  # Use the Solana CLI tool to update ValidatorHistory information
+  def validator_history_update
     lambda do |p|
       return p unless p[:code] == 200
 
@@ -162,7 +162,7 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from validators_cli', e)
+      Pipeline.new(500, p.payload, 'Error from validator_history_update', e)
     end
   end
 

@@ -30,7 +30,7 @@ begin
                 .then(&vote_accounts_get)
                 .then(&reduce_validator_vote_accounts)
                 .then(&validators_save)
-                .then(&validators_cli)
+                .then(&validator_history_update)
                 .then(&validator_block_history_get)
                 .then(&validator_block_history_save)
                 .then(&log_errors)
