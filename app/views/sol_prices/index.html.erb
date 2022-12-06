@@ -1,18 +1,3 @@
-<section class="page-header">
-  <h1>Sol Token Prices</h1>
-</section>
+<%= javascript_pack_tag 'sol_prices/historical_sol_prices_component.js' %>
 
-<div class="card">
-  <div class="card-content">
-    <div class="text-center mb-4">
-      <%= create_filter_links %>
-    </div>
-
-    <!-- Tab panes -->
-    <div class="tab-content" id='sol-prices-tab-content'>
-      <div class="tab-pane solPriceChartTab <%= active_tab?(:coin_gecko) %>" id="coinGeckoChartTab">
-        <%= render 'coin_gecko_chart' %>
-      </div>
-    </div>
-  </div>
-</div>
+<div id="historical-sol-prices-component"></div>
