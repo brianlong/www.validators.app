@@ -2,7 +2,6 @@ class SolPricesController < ApplicationController
   respond_to :html, :js
 
   def index
-    @filter_days = [7, 30, 60, 90]
     filter = params[:filtering].to_i
     sol_price_count ||= SolPrice.count
 
