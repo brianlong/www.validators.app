@@ -162,7 +162,7 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from validator_history_update', e)
+      Pipeline.new(500, p.payload, "Error from validator_history_update", e)
     end
   end
 

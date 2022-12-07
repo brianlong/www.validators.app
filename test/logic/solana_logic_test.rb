@@ -179,8 +179,8 @@ class SolanaLogicTest < ActiveSupport::TestCase
 
     create(:validator, account: "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr")
 
-    SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
-      VCR.use_cassette('validator_history_update') do
+    SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
+      VCR.use_cassette("validator_history_update") do
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
                     .then(&validator_history_update)
