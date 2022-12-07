@@ -7,7 +7,8 @@
              :style="{ left: position_horizontal(dc_group.longitude),
                        bottom: position_vertical(dc_group.latitude) }"
              v-on:click="select_data_centers_group(dc_group)"
-             :key="dc_group.identifier">
+             :key="dc_group.identifier"
+             title="See details">
           <span v-if="show_gossip_nodes">
             {{ dc_group.active_validators_count + dc_group.active_gossip_nodes_count }}
           </span>
@@ -16,17 +17,24 @@
           </span>
         </div>
 
-        <div v-if="is_leader_valid"
-             :style="{ left: position_horizontal(current_leader.location_longitude),
-                       bottom: position_vertical(current_leader.location_latitude) }"
-             class="map-point map-point-leader">
-          <img :src="avatar_link()" alt="avatar">
-        </div>
+        <a :href="validator_details_link(current_leader.account)"
+           title="Go to validator details" target="_blank"
+           v-if="is_leader_valid"
+           :style="{ left: position_horizontal(current_leader.location_longitude),
+                     bottom: position_vertical(current_leader.location_latitude) }"
+           class="map-point map-point-leader">
+          <img :src="avatar_link(current_leader)" alt="avatar" />
+        </a>
       </div>
     </section>
 
     <section class="map-legend">
-      <div class="map-legend-col">
+      <validators-map-leaders :current_leader="current_leader"
+                              :next_leaders="next_leaders" />
+
+      <div class="map-legend-col text-sm-end">
+        <validators-map-data-center-details :data_centers_group="selected_data_centers_group"
+                                            v-if="selected_data_centers_group" />
         <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
           <span class="btn btn-xs btn-secondary active">
             <i class="fas fa-eye"></i>
@@ -44,10 +52,6 @@
           </span>
         </div>
       </div>
-
-      <div class="map-legend-col" v-if="selected_data_centers_group">
-        <validators-map-data-center-details :data_centers_group="selected_data_centers_group"/>
-      </div>
     </section>
   </div>
 
@@ -61,13 +65,14 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
-    data () {
+    data() {
       return {
         api_url: null,
         data_centers_groups: [],
         selected_data_centers_group: null,
         show_gossip_nodes: false,
         current_leader: null,
+        next_leaders: [],
       }
     },
     created () {
@@ -89,10 +94,8 @@
         room: "public"
       });
     },
-    watch: {
-    },
     computed: {
-      is_leader_valid(){
+      is_leader_valid() {
         return this.current_leader && this.current_leader.location_latitude && this.current_leader.location_longitude
       },
       ...mapGetters([
@@ -105,8 +108,9 @@
         rejected() { },
         received(data) {
           data = data[this.network];
-          if (data) {
+          if(data) {
             this.current_leader = data.current_leader;
+            this.next_leaders = data.next_leaders;
           }
         },
         disconnected() { }
@@ -120,17 +124,21 @@
       },
 
       position_vertical: function(latitude) {
-        let division_factor = latitude < 0 ? 65 : 59
+        let division_factor = latitude < 0 ? 64 : 58
         let start_position = 32
         return start_position + ((latitude / division_factor) * 50) + '%';
       },
 
-      avatar_link() {
-        if (this.current_leader.avatar_url) {
-          return this.current_leader.avatar_url
+      avatar_link(leader) {
+        if (leader.avatar_url) {
+          return leader.avatar_url
         } else {
           return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
         }
+      },
+
+      validator_details_link(account) {
+        return `/validators/${account}?network=${this.network}`;
       },
 
       set_map_point_size: function(validators_and_nodes_count) {
@@ -176,6 +184,7 @@
 
       set_nodes_visibility: function(value) {
         this.show_gossip_nodes = value;
+        this.selected_data_centers_group = null;
         this.refresh_results();
       },
 
