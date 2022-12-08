@@ -17,7 +17,7 @@ module Api
           }
         end
 
-        render json: coin_gecko_data.to_json
+        render json: coin_gecko_data
       end
 
       private

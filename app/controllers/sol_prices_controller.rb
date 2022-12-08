@@ -3,4 +3,3 @@ class SolPricesController < ApplicationController
 
   def index; end
 end
-app/views/layouts/_footer.html.erb
