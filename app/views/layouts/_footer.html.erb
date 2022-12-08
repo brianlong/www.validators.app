@@ -29,8 +29,8 @@
         <li class="nav-item" data-turbolinks="false">
           <%= link_to 'Ping Thing', ping_things_path(network: params[:network]), class: 'nav-link' %>
         </li>
-        <li class="nav-item">
-          <%= link_to 'Sol Prices', sol_prices_url(exchange: SolPrice::EXCHANGES[0], filtering: 7), class: 'nav-link' %>
+        <li class="nav-item" data-turbolinks="false">
+          <%= link_to 'Sol Prices', sol_prices_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Log Deep Dives', log_deep_dives_index_path, class: 'nav-link' %>
