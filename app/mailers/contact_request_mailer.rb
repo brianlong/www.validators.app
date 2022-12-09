@@ -11,6 +11,6 @@ class ContactRequestMailer < ApplicationMailer
     @opt_out_request = OptOutRequest.find(request_id)
     mail(to: ADMIN_EMAIL,
          cc: BRIAN_EMAIL,
-         subject: 'New opt-out request on www.validators.app')
+         subject: "New opt-out request on www.validators.app")
   end
 end
