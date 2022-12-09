@@ -6,7 +6,7 @@
 
     <div class="card">
       <div class="card-content">
-        <div class="d-inline-block mb-4 float-md-end">
+        <div class="text-center mb-4">
           <div class="btn-group">
             <button v-for="filter_by_days in filter_by_days_options"
                v-on:click="select_filter_by_days(filter_by_days)"
@@ -68,8 +68,8 @@
         chartCoinGecko.innerHTML = "<canvas id='coinGeckoChartContent'</canvas>";
       },
       draw_chart() {
-        var ctx = this;
-        var url = "api/v1/historical_sol_prices";
+        const ctx = this;
+        const url = "/api/v1/sol-prices";
 
         axios.get(url, { params: { filtering: this.days } })
           .then(response => {
