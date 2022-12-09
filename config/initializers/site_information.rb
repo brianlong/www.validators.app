@@ -2,6 +2,7 @@
 
 ADMIN_EMAIL = 'customer.service@fmadata.com'
 ADMIN_SITE = ''
+BRIAN_EMAIL = 'brian.long@fmadata.com'
 COMPANY_AKA = 'validators.app'
 FMA = 'validators.app'
 FMA_LLC = 'validators.app'
