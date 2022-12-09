@@ -1,4 +1,6 @@
-<section class="page-header">
+<%
+=begin%>
+ <section class="page-header">
   <div class='page-header-name'>
     <% if @validator.private_validator? %>
       <div class="img-circle-private img-circle-medium">
@@ -292,4 +294,16 @@
 
 <%= link_to 'Back to All Validators',
             validators_path(order: params[:order], page: params[:page], network: params[:network], refresh: params[:refresh]),
-            class: 'btn btn-sm btn-secondary' %>
+            class: 'btn btn-sm btn-secondary' %> 
+<%
+=end%>
+
+<%= javascript_pack_tag "validators/validator_details.js" %>
+
+<div id="validator-details" 
+     validator=<%= @validator.to_json(methods: [:dch_data_center_key, :vote_account_active]) %> 
+     score=<%= @score.to_json(methods: [:displayed_total_score]) %>
+     root_blocks=<%= @root_blocks.to_json %>
+     vote_blocks=<%= @vote_blocks.to_json %>
+     skipped_slots=<%=@data.to_json %>>
+</div>

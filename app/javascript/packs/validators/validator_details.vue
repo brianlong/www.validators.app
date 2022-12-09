@@ -1,0 +1,299 @@
+<template>
+  <div>
+    <section class="page-header">
+      <div class='page-header-name'>
+          <div class="img-circle-private img-circle-medium" v-if="is_private(validator)">
+            <span class='fas fa-users-slash' title="Private Validator"></span>
+          </div>
+          <img :src="validator.avatar_url" class="img-circle-medium" v-else-if="validator.avatar_url" >
+          <img src="https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png" class="img-circle-medium" v-else >
+        <h1 class="word-break">{{ name_or_account(validator) }}</h1>
+      </div>
+
+      <div class="d-flex justify-content-between flex-wrap gap-3">
+        <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
+          <a href="solstake_url(validator)" 
+            title="Delegate SOL to this validator on SolStake.io"
+            class="btn btn-sm btn-secondary"
+            target="_blank">Delegate on Solstake.io</a>
+          <a href="kiwi_url(validator)"
+            title="Delegate SOL to this validator on Staking.kiwi"
+            class="btn btn-sm btn-secondary"
+            target="_blank">Delegate on Staking.kiwi</a>
+          <a href="blazestake_url(validator)"
+            title="Delegate SOL to this validator on BlazeStake"
+            class="btn btn-sm btn-secondary"
+            target="_blank">Delegate on Staking.kiwi</a>
+        </div>
+
+        <div>
+          <div class="btn btn-sm btn-danger me-2" title="Validator has 100% commission." v-if="is_private(validator)">private</div>
+          <div class="btn btn-sm btn-danger me-2" title="Validator is delinquent." v-if="is_delinquent(validator)">delinquent</div>
+          <div class="btn btn-sm btn-danger me-2" title="Validator is inactive." v-if="is_inactive(validator)">inactive</div>
+
+          <a href="/faq#admin-warning" :title="validator.admin_warning">
+            <div class="btn btn-sm btn-danger me-2">admin warning</div>
+          </a>
+          <a href="/faq#withdraw-authority-warning"
+            v-if="score.authorized_withdrawer_score == -2"
+            title="Withdrawer matches validator identity.">
+            <div class="btn btn-sm btn-warning me-2">withdrawer authority</div>
+          </a>
+          <a href="/faq#score"
+            v-if="score.consensus_mods_score == -2"
+            title="Validator appears to use unproven software modifications.">
+            <div class="btn btn-sm btn-warning me-2">mods</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="row">
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-content pb-0">
+            <h2 class="h4 card-heading">Validator Details</h2>
+          </div>
+
+          <table class='table table-block-sm mb-0'>
+            <tbody>
+              <tr>
+                <td class="column-lg"><strong>Name:</strong></td>
+                <td>
+                  {{ val_name }}
+                </td>
+              </tr>
+
+              <tr>
+                <td><strong>Details:</strong></td>
+                <td class="text-break">{{ val_details }}</td>
+              </tr>
+
+              <tr>
+                <td><strong>Identity:</strong></td>
+                <td><small class="word-break">{{ validator.account }}</small></td>
+              </tr>
+
+              <tr>
+                <td><strong>Software:</strong></td>
+                <td>
+                  {{ score.software_version }}
+                </td>
+              </tr>
+
+              <tr>
+                <td><strong>IP:</strong></td>
+                <td>{{ score.ip_address }}</td>
+              </tr>
+
+              <tr>
+                <td><strong>Data Center:</strong></td>
+                <td>
+                  <a href="data_center_link(validator)" v-if="validator.dch_data_center_key">
+                    {{ validator.dch_data_center_key}}
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-content pb-0">
+            <h2 class="h4 card-heading">Validator Details</h2>
+          </div>
+          <table class='table table-block-sm mb-0'>
+            <tbody>
+            <tr>
+              <td class="column-lg"><strong>Keybase:</strong></td>
+              <td>{{ validator.keybase_id }}</td>
+            </tr>
+
+            <tr>
+              <td><strong>Website:</strong></td>
+              <td><a :href="validator.www_url">{{ validator.www_url }}</a></td>
+            </tr>
+
+            <tr>
+              <td>
+                <strong>Vote Account:</strong>
+              </td>
+              <td>
+                <small class="word-break">
+                  <a href="vote_account_path(validator)" v-if="validator.vote_account_active">
+                    {{ validator.vote_account_active.account }}
+                  </a>
+                </small>
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>Active Stake:</strong></td>
+              <td>
+                {{ validator.active_stake }} SOL
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>Commission:</strong></td>
+              <td :class="commission_class" data-turbolinks="false">
+                {{ score.commission }}&percnt;
+                <a :href="commission_histories_path(validator)" class="small">
+                  (See commission changes)
+                </a>
+              </td>
+            </tr>
+
+            <tr v-if="validator.security_report_url">
+              <td>
+                <strong>Security Info:</strong>
+              </td>
+              <td>
+                <a href="validator.security_report_url" target="_blank">
+                  validator.security_report_url
+                </a>
+              </td>
+            </tr>
+              <tr>
+                <td>
+                  <strong>Scores:</strong>
+                </td>
+                <td>
+                  <validator-scores :score="score"></validator-scores>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-9 col-lg-10">
+        <a :href="'/validators?network=' + validator.network + '&order=' + order + '&refresh=' + refresh + '&page=' + page"
+           class="btn btn-sm btn-secondary mb-3">
+           Back to All Validators
+        </a>
+      </div>
+
+      <div class='col-md-3 col-lg-2 toggle-container pt-2' data-turbolinks="false">
+          <a :href="'/validators/' + validator.account + '?network=' + validator.network + '&order=' + order + '&refresh=' + !refresh + '&page=' + page">
+            <i class="fas fa-toggle-on toggle" v-if="refresh"></i>
+            <i class="fas fa-toggle-off toggle" v-if="!refresh"></i>
+          </a>
+          <p class="small text-muted toggle-label" v-if="refresh">REFRESH ON</p>
+          <p class="small text-muted toggle-label" v-if="!refresh">REFRESH OFF</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <block-history-chart :root_blocks="root_blocks"></block-history-chart>
+      <vote-history-chart :vote_blocks="vote_blocks"></vote-history-chart>
+      <skipped-slots-chart :skipped_slots="skipped_slots"></skipped-slots-chart>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { mapGetters } from 'vuex'
+  import scores from './components/scores'
+  import blockHistoryChart from './components/block_history_chart'
+  import voteHistoryChart from './components/vote_history_chart'
+  import skippedSlotsChart from './components/skipped_slots_chart'
+
+  export default {
+    props: {
+      validator: {
+        type: Object,
+        required: true
+      },
+      score: {
+        type: Object,
+        required: true
+      },
+      root_blocks: {
+        type: Array,
+        required: true
+      },
+      vote_blocks: {
+        type: Array,
+        required: true
+      },
+      skipped_slots: {
+        type: Object,
+        required: true
+      },
+    },
+    data() {
+      return {
+        refresh: null,
+        order: null,
+        page: null
+      }
+    },
+    created() {
+      let uri = window.location.search.substring(1); 
+      let params = new URLSearchParams(uri);
+      this.refresh = params.get("refresh") == 'true'
+      this.order = params.get("order")
+      this.page = params.get("page")
+    },
+    mounted: function(){
+
+    },
+    computed: {
+      val_name() {
+        return this.validator.name.replaceAll("-space-", ' ')
+      },
+      val_details() {
+        return this.validator.details.replaceAll("-space-", ' ')
+      },
+      ...mapGetters([
+        'network'
+      ])
+    },
+    methods: {
+      lamports_to_sol(lamports) {
+        return lamports / 1000000000;
+      },
+      is_private(validator){
+        return false
+      },
+      is_delinquent(validator){
+        return this.score.delinquent
+      },
+      is_inactive(validator){
+        return false
+      },
+      name_or_account(validator){
+        return validator.name ? this.val_name : validator.account
+      },
+      display_staking_info(validator) {
+        return !this.is_private(validator) && validator.is_active
+      },
+      commission_class() {
+        if(this.validator.network == 'mainnet' && this.validator.commission == 100) {
+          return 'text-danger'
+        }
+      },
+      commission_histories_path(validator) {
+        return '/commission-changes/' + validator.id + '?network=' + validator.network
+      },
+      data_center_link(validator) {
+        return '/data-centers/' + validator.dch_data_center_key + '?network=' + validator.network
+      },
+      vote_account_path(validator) {
+        return "/validators/" + validator.account + "/vote_accounts/" + validator.vote_account_active.account + "?network="
+      }
+    },
+    components: {
+      "validator-scores": scores,
+      "block-history-chart": blockHistoryChart,
+      "vote-history-chart": voteHistoryChart,
+      "skipped-slots-chart": skippedSlotsChart
+    }
+  }
+</script>

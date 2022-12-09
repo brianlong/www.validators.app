@@ -45,8 +45,11 @@ class ValidatorsController < ApplicationController
     time_from = Time.now - 24.hours
     time_to = Time.now
 
+    @validator.name = @validator.name.gsub(" ", "-space-")
+    @validator.details = @validator.details.gsub(" ", "-space-")
+    @score = @validator.score
     @data = {}
-
+    
     @history_limit = 200
     @block_histories = @validator.validator_block_histories
                                  .where("created_at BETWEEN ? AND ?", time_from, time_to)
