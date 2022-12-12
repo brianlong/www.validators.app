@@ -4,7 +4,7 @@ module Api
   module V1
     class SolPricesController < BaseController
       def index
-        days_size = index_params[:filtering].to_i
+        days_size = index_params[:filtering]
         from = (index_params[:from] || 30.days.ago).to_datetime.beginning_of_day
         to = (index_params[:to] || DateTime.now).to_datetime.end_of_day
 
@@ -12,8 +12,8 @@ module Api
                              .order(datetime_from_exchange: :asc)
 
         response =
-          if days_size
-            sol_prices.last(days_size).map do |coin_gecko_price|
+          if index_params[:filtering].presence
+            sol_prices.last(days_size.to_i).map do |coin_gecko_price|
               {
                 x: coin_gecko_price.datetime_from_exchange.strftime("%b %d"),
                 y: coin_gecko_price.average_price.round(2)
