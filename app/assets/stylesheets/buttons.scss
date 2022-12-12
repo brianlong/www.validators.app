@@ -82,6 +82,9 @@
     padding: 5px 11px;
     @include font-size-sm;
   }
+  &-radius-right {
+    border-radius: 0 24px 24px 0;
+  }
 }
 
 .watch-button {
