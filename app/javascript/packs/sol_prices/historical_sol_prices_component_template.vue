@@ -35,7 +35,6 @@
 
 <script>
   import axios from 'axios';
-  import { mapGetters } from 'vuex';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -77,9 +76,6 @@
             drawChart(response.data);
           })
       }
-    },
-    computed: mapGetters([
-      'network'
-    ])
+    }
   }
 </script>
