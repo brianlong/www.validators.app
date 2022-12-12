@@ -1,0 +1,83 @@
+var moment = require('moment');
+
+export default {
+  props: {
+    block_histories: {
+        type: Array,
+        required: true
+    },
+    block_history_stats: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      default_score_class: "fas fa-circle me-1 score-"
+    }
+  },
+  methods: {
+    block_stats(history) {
+      return this.block_history_stats.find(o => o.batch_uuid == history.batch_uuid);
+    },
+    history_created_at(history) {
+      let created_at_UTC = moment(new Date(history.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
+      console.log(created_at_UTC)
+      return created_at_UTC
+    }
+  },
+  template: `
+    <div class="card">
+      <div class="card-content pb-0">
+        <h2 class="h4 card-heading">Recent Block Production</h2>
+      </div>
+      
+      <div class="table-responsive-lg">
+      <table class='table mb-0'>
+        <thead>
+        <tr>
+          <th class='column-xs text-end'>Epoch</th>
+          <th class='column-md text-end'>Leader Slots<br />Total Slots</th>
+          <th class='column-md text-end'>Leader Blocks<br />Total Blocks</th>
+          <th class='column-md text-end'>
+            Skipped Slots<br />
+            Skipped Total
+          </th>
+          <th class='column-md text-end'>
+            &percnt; Skipped<br />
+            &percnt; Total
+          </th>
+          <th class="column-md">Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr v-for="history in block_histories" :key="history.id">
+            <td class='text-end'>
+              {{ history.epoch }}
+            </td>
+            <td class='text-end'>
+              {{ history.leader_slots }}<br />
+              {{ block_stats(history).total_slots }}
+            </td>
+            <td class='text-end'>
+              {{ history.blocks_produced }}<br />
+              {{ block_stats(history).total_blocks_produced }}
+            </td>
+            <td class='text-end'>
+              {{ history.skipped_slots }}<br />
+              {{ block_stats(history).total_slots_skipped }}
+            </td>
+            <td class='text-end'>
+              {{ (history.skipped_slot_percent * 100.0) }}<br />
+              {{ (block_stats(history).total_slots_skipped / block_stats(history).total_slots * 100.0).toLocaleString(2) }}
+            </td>
+            <td v-html="history_created_at(history)">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+  
+    </div>
+`
+}

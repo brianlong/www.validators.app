@@ -45,8 +45,8 @@ class ValidatorsController < ApplicationController
     time_from = Time.now - 24.hours
     time_to = Time.now
 
-    @validator.name = @validator.name.gsub(" ", "-space-")
-    @validator.details = @validator.details.gsub(" ", "-space-")
+    @validator.name = @validator.name&.gsub(" ", "-space-")
+    @validator.details = @validator.details&.gsub(" ", "-space-")
     @score = @validator.score
     @data = {}
     

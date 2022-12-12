@@ -23,7 +23,9 @@ document.addEventListener('turbolinks:load', () => {
           score: JSON.parse(this.$el.attributes.score.value),
           root_blocks: JSON.parse(this.$el.attributes.root_blocks.value),
           vote_blocks: JSON.parse(this.$el.attributes.vote_blocks.value),
-          skipped_slots: JSON.parse(this.$el.attributes.skipped_slots.value)
+          skipped_slots: JSON.parse(this.$el.attributes.skipped_slots.value),
+          block_histories: JSON.parse(this.$el.attributes.block_histories.value),
+          block_history_stats: JSON.parse(this.$el.attributes.block_history_stats.value)
         }
       })
     }

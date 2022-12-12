@@ -305,5 +305,7 @@
      score=<%= @score.to_json(methods: [:displayed_total_score]) %>
      root_blocks=<%= @root_blocks.to_json %>
      vote_blocks=<%= @vote_blocks.to_json %>
-     skipped_slots=<%=@data.to_json %>>
+     skipped_slots=<%=@data.to_json %>
+     block_histories=<%= @block_histories.to_json %>
+     block_history_stats= <%= @block_history_stats.to_json %>>
 </div>

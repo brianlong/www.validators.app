@@ -194,6 +194,7 @@
       <vote-history-chart :vote_blocks="vote_blocks"></vote-history-chart>
       <skipped-slots-chart :skipped_slots="skipped_slots"></skipped-slots-chart>
     </div>
+    <block-history-table :block_histories="block_histories" :block_history_stats="block_history_stats"></block-history-table>
   </div>
 </template>
 
@@ -203,6 +204,7 @@
   import blockHistoryChart from './components/block_history_chart'
   import voteHistoryChart from './components/vote_history_chart'
   import skippedSlotsChart from './components/skipped_slots_chart'
+  import blockHistoryTable from './components/block_history_table'
 
   export default {
     props: {
@@ -226,6 +228,14 @@
         type: Object,
         required: true
       },
+      block_histories: {
+        type: Array,
+        required: true
+      },
+      block_history_stats: {
+        type: Array,
+        required: true
+      }
     },
     data() {
       return {
@@ -293,7 +303,8 @@
       "validator-scores": scores,
       "block-history-chart": blockHistoryChart,
       "vote-history-chart": voteHistoryChart,
-      "skipped-slots-chart": skippedSlotsChart
+      "skipped-slots-chart": skippedSlotsChart,
+      "block-history-table": blockHistoryTable
     }
   }
 </script>
