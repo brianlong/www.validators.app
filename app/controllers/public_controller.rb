@@ -7,11 +7,6 @@ class PublicController < ApplicationController
     @network = home_params[:network]
   end
 
-  # GET /home-new
-  def home_new
-    @network = home_params[:network]
-  end
-
   def api_documentation
     @title = 'API Documentation'
   end

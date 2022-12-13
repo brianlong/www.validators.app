@@ -74,7 +74,6 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   # Public Controller
-  get 'home-new', to: 'public#home_new'
   get 'contact-us', to: 'public#contact_us'
   get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
   get 'api-documentation',
