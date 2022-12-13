@@ -194,7 +194,23 @@
       <vote-history-chart :vote_blocks="vote_blocks"></vote-history-chart>
       <skipped-slots-chart :skipped_slots="skipped_slots"></skipped-slots-chart>
     </div>
+    <div class="row">
+      <div class="col-md-9 col-lg-10">
+        <a :href="'/validators?network=' + validator.network + '&order=' + order + '&refresh=' + refresh + '&page=' + page"
+           class="btn btn-sm btn-secondary mb-3">
+           Back to All Validators
+        </a>
+      </div>
+    </div>
     <block-history-table :block_histories="block_histories" :block_history_stats="block_history_stats"></block-history-table>
+    <div class="row">
+      <div class="col-md-9 col-lg-10">
+        <a :href="'/validators?network=' + validator.network + '&order=' + order + '&refresh=' + refresh + '&page=' + page"
+            class="btn btn-sm btn-secondary mb-3">
+            Back to All Validators
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -4,7 +4,7 @@
     <th class="column-info">
       <div class="column-info-row">
         <% if show_watchlist_btn %>
-          <div class="column-info-avatar">
+          <div class="column-info-avatar" >
             <%= link_to url_for(
                           order: params[:order],
                           page: 1,
@@ -113,7 +113,7 @@
               </i>
             <% end %>
           </div>
-          <div class="column-info-name">
+          <div class="column-info-name" data-turbolinks="false">
             <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                         class: 'fw-bold' do %>
               <%= validator_display_name(validator) %>
