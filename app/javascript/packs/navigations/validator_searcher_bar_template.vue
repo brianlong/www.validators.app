@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container mt-3" id="validator-searcher-bar">
     <b-form @submit="onSubmit" class="flex-fill">
       <div class="form-group-row">
         <b-input-group>
@@ -7,9 +7,7 @@
                         placeholder="Starts with... (validator name, validator account or data center key)"
                         required>
           </b-form-input>
-          <b-input-group-append>
-            <b-button variant="primary" class="btn-sm btn-radius-right">Search</b-button>
-          </b-input-group-append>
+          <b-button type="submit" variant="primary" class="btn-sm btn-radius-right">Search</b-button>
         </b-input-group>
       </div>
     </b-form>
@@ -27,7 +25,6 @@
         }
       }
     },
-    created() { },
     computed: {
       ...mapGetters([
         'network'

@@ -1,12 +1,13 @@
 @import "variables";
 
 header {
+  padding: 25px 0 55px 0;
+
   .navbar-brand {
     img { width: 250px; }
   }
 
   .navbar {
-    padding: 25px 0 55px 0;
     @include font-size-base();
   }
   .nav-link {
@@ -29,6 +30,38 @@ header {
     margin: 0;
     &.active .nav-link {
       color: $link-color-secondary;
+    }
+  }
+  #validator-searcher-btn {
+    margin-left: 15px;
+    background-color: transparent;
+
+    &.active {
+      background-color: $green;
+
+      .fa-search {
+        color: black;
+      }
+    }
+
+    &:hover {
+      background-color: $green;
+
+      .fa-search {
+        color: black;
+      }
+    }
+
+    .fa-search {
+      color: $link-color;
+    }
+  }
+
+  #validator-searcher-bar {
+    display: none;
+
+    &.active {
+      display: block;
     }
   }
 
@@ -96,7 +129,10 @@ header {
       max-height: 0;
       opacity: 0;
       transition: max-height .2s ease;
+      display: none;
+
       &.open {
+        display: block;
         height: auto;
         max-height: 200px;
         opacity: 1;
@@ -135,10 +171,16 @@ header {
       margin-left: 0;
       margin-top: 15px;
     }
+
+    #validator-searcher-btn {
+      margin-left: 0;
+      max-width: 52px;
+      margin-top: 10px;
+    }
   }
 
   @media(max-width: $screen-xs-max) {
-    .navbar {
+    .header {
       padding: 20px 0 30px 0;
     }
     .navbar-brand img {
