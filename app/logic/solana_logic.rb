@@ -70,8 +70,8 @@ module SolanaLogic
     end
   end
 
-  # Use the Solana CLI tool to get Validator information
-  def validators_cli
+  # Use the Solana CLI tool to update ValidatorHistory information
+  def validator_history_update
     lambda do |p|
       return p unless p[:code] == 200
 
@@ -108,8 +108,8 @@ module SolanaLogic
       }.max.to_i
 
       validator_histories = {}
-      # Create current validators
-      validators["validators"].each do |validator|
+
+      existing_validators(validators["validators"], p.payload[:network]).each do |validator|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? validator["identityPubkey"]
         
         if existing_history = validator_histories[validator["identityPubkey"]]
@@ -162,7 +162,7 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from validators_cli', e)
+      Pipeline.new(500, p.payload, "Error from validator_history_update", e)
     end
   end
 
@@ -179,6 +179,7 @@ module SolanaLogic
       validators = {}
       validators_json.each do |hash|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
+
         validators[hash['pubkey']] = {
           'gossip_ip_port' => hash['gossip'],
           'rpc_ip_port' => hash['rpc'],
@@ -670,6 +671,16 @@ module SolanaLogic
       message = "Request to solana RPC failed:\n Method: #{method}\nCluster: #{cluster_url}\nCLASS: #{e.class}\n#{e.message}"
       Rails.logger.error(message)
       nil
+    end
+  end
+
+  private
+
+  def existing_validators(validator_attrs, network)
+    accounts = validator_attrs.map { |validator| validator["identityPubkey"] }
+    db_validator_accounts = Validator.where(network: network, account: accounts).pluck(:account)
+    validator_attrs.select do |validator|
+      db_validator_accounts.include?(validator["identityPubkey"])
     end
   end
 end
