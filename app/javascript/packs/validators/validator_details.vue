@@ -272,10 +272,10 @@
     },
     computed: {
       val_name() {
-        return this.validator.name.replaceAll("-space-", ' ')
+        return this.validator?.name?.replaceAll("-space-", ' ')
       },
       val_details() {
-        return this.validator.details.replaceAll("-space-", ' ')
+        return this.validator?.details?.replaceAll("-space-", ' ')
       },
       ...mapGetters([
         'network'
