@@ -36,26 +36,25 @@ function changeUrlBasedOnActiveFilter(chartFilterButton) {
   window.history.replaceState(null, '', href);
 }
 
-function drawChart() {
-  const chartCoinGecko = document.getElementById('coinGeckoChart')
+function drawChart(data) {
+  const chartCoinGecko = document.getElementById('coinGeckoChartContent');
 
   if (chartCoinGecko == null) {
     return null;
   }
 
   const ctx = chartCoinGecko.getContext('2d');
-  const dataset = ctx.canvas.dataset
 
   new Chart(ctx, {
     type: 'line',
     data: {
       datasets: [{
         label: 'SOL Token Price',
-        data: JSON.parse(dataset.data),
+        data: data,
         fill: false,
         tension: 0.1,
-        borderColor: dataset.color,
-        backgroundColor: dataset.color,
+        borderColor: "rgb(170, 46, 184)",
+        backgroundColor: "rgb(170, 46, 184)",
         borderWidth: 1,
       }]
     },
