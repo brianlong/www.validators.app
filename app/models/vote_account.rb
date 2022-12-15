@@ -21,7 +21,7 @@
 #  index_vote_accounts_on_validator_id_and_account  (validator_id,account) UNIQUE
 #
 # Foreign Keys
-#
+#,
 #  fk_rails_...  (validator_id => validators.id)
 #
 
@@ -35,6 +35,7 @@ class VoteAccount < ApplicationRecord
   belongs_to :validator
   has_many :vote_account_histories
   before_save :set_network
+  after_save :create_vote_account_history, if: :saved_change_to_authorized_withdrawer?
 
   scope :for_api, -> { select(FIELDS_FOR_API).order(updated_at: :asc) }
   scope :active, -> { where(is_active: true) }
@@ -60,5 +61,13 @@ class VoteAccount < ApplicationRecord
     Jbuilder.new do |va|
       va.vote_account self.account
     end
+  end
+
+  def create_vote_account_history
+    vote_account_histories.create(
+      authorized_withdrawer_before: authorized_withdrawer_before_last_save,
+      authorized_withdrawer_after: authorized_withdrawer,
+      network: network
+    )
   end
 end
