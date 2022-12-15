@@ -9,6 +9,8 @@
 #
 #  id                                  :bigint           not null, primary key
 #  activated_stake                     :bigint
+#  authorized_withdrawer_after         :string(191)
+#  authorized_withdrawer_before        :string(191)
 #  batch_uuid                          :string(191)
 #  commission                          :integer
 #  credits                             :bigint
