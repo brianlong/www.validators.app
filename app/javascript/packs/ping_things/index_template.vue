@@ -25,8 +25,8 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
-  import statsChart from './stats_chart'
-  import bubbleChart from './bubble_chart'
+  import statsChart from './charts/stats_chart'
+  import bubbleChart from './charts/bubble_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
   import statsBar from './stats_bar'

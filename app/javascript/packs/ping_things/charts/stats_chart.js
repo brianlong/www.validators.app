@@ -2,7 +2,8 @@ import axios from 'axios'
 import Chart from 'chart.js/auto';
 import { DateTime } from "luxon";
 import 'chartjs-adapter-luxon';
-import '../../lib/chart-financial';
+import '../../../lib/chart-financial';
+import chart_vars from './chart_variables'
 
 var moment = require('moment');
 
@@ -16,8 +17,6 @@ export default {
   data() {
     return {
       ping_thing_stats: null,
-      dark_grey: "#979797",
-      chart_line: "#322f3d",
       chart: null,
       interval: 1
     }
@@ -135,7 +134,7 @@ export default {
                             title: {
                                 display: true,
                                 text: 'Response Time (ms)',
-                                color: this.dark_grey,
+                                color: chart_vars.dark_grey,
                                 padding: 5
                             }
                         }
@@ -170,7 +169,7 @@ export default {
                                 boxHeight: 8,
                                 usePointStyle: true,
                                 padding: 10,
-                                color: this.dark_grey,
+                                color: chart_vars.dark_grey,
                                 font: {
                                     size: 14
                                 }

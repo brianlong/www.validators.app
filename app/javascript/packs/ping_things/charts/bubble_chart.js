@@ -1,3 +1,5 @@
+import chart_vars from './chart_variables'
+
 export default {
   props: {
     vector: {
@@ -11,8 +13,6 @@ export default {
   },
   data() {
     return {
-      dark_grey: "#979797",
-      chart_line: "#322f3d",
       chart: null
     }
   },
@@ -54,7 +54,7 @@ export default {
                         title: {
                             display: true,
                             text: `Last ${this.vector.length} Observations`,
-                            color: this.dark_grey
+                            color: chart_vars.dark_grey
                         }
                     },
                     y: {
@@ -70,7 +70,7 @@ export default {
                         title: {
                             display: true,
                             text: 'Response Time (ms)',
-                            color: this.dark_grey,
+                            color: chart_vars.dark_grey,
                             padding: 5
                         }
                     }
