@@ -24,15 +24,15 @@ export default {
       }
   },
   methods: {
-    update_chart: function(){
-        if(this.chart){
+    update_chart: function() {
+        if(this.chart) {
             this.chart.destroy()
         }
+
         var ctx = document.getElementById("ping-thing-bubble-chart").getContext('2d');
         this.chart = new Chart(ctx, {
             type: 'bubble',
-    
-            // The data for our dataset
+            // The data
             data: {
                 datasets: [
                     {
@@ -42,28 +42,22 @@ export default {
                     }
                 ],
             },
-    
+
             // Configuration options
             options: {
                 animation: false,
-                legend: {
-                    display: false,
-                    labels: {
-                        fontColor: this.dark_grey
-                    },
-                },
                 scales: {
-                    xAxes: [{
+                    x: {
                         display: true,
                         ticks: { display: false },
-                        gridLines: { display: false },
-                        scaleLabel: {
+                        grid: { display: false },
+                        title: {
                             display: true,
-                            labelString: "Last " + this.vector.length + " Observations",
-                            fontColor: this.dark_grey
+                            text: `Last ${this.vector.length} Observations`,
+                            color: this.dark_grey
                         }
-                    }],
-                    yAxes: [{
+                    },
+                    y: {
                         display: true,
                         ticks: {
                             min: 0,
@@ -72,29 +66,30 @@ export default {
                                 return value.toLocaleString('en-US')
                             }
                         },
-                        gridLines: {
+                        grid: { display: false, },
+                        title: {
                             display: true,
-                            zeroLineColor: this.chart_line,
-                            color: this.chart_line
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Response Time (ms)',
-                            fontColor: this.dark_grey,
+                            text: 'Response Time (ms)',
+                            color: this.dark_grey,
                             padding: 5
                         }
-                    }]
+                    }
                 },
                 elements: {
                     point: {
                         radius: 3
                     }
                 },
-                tooltips: {
-                    displayColors: false,
-                    callbacks: {
-                        label: function(tooltipItem, data) {
-                            return tooltipItem.yLabel.toLocaleString('en-US').concat(' ms');
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        displayColors: false,
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw["y"].toLocaleString('en-US').concat(' ms');
+                            },
                         },
                     },
                 },

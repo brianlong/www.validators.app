@@ -24,9 +24,7 @@ export default {
   },
   channels: {
     PingThingStatChannel: {
-      connected() {
-        //   console.log("connected to PingThingStats")
-      },
+      connected() {},
       rejected() {},
       received(data) {
         var new_stat = JSON.parse(data)
@@ -78,7 +76,7 @@ export default {
             if(this.chart){
                 this.chart.destroy()
             }
-            var ctx = document.getElementById("ping-thing-scatter-chart").getContext('2d');
+            var ctx = document.getElementById("ping-thing-stats-chart").getContext('2d');
             Chart.defaults.scale.display = false
             this.chart = new Chart(ctx, {
                 type: 'bar',
@@ -107,6 +105,7 @@ export default {
                         }
                     ]
                 },
+                // Configuration options
                 options: {
                     animation: {
                         duration: 500,
@@ -115,7 +114,7 @@ export default {
                     scales: {
                         x: {
                             display: true,
-                            gridLines: { display: false },
+                            grid: { display: false },
                             ticks: {
                                 minRotation: 0,
                                 maxRotation: 0,
@@ -125,7 +124,7 @@ export default {
                         },
                         y: {
                             display: true,
-                            gridLines: { display: false },
+                            grid: { display: false, },
                             ticks: {
                                 min: 0,
                                 padding: 10,
@@ -155,10 +154,9 @@ export default {
                                         var min = tooltipItem.raw[1] ? tooltipItem.raw[1].toLocaleString('en-US') : "-";
                                         var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : "-";
                                         var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : "-";
-
-                                        return ["Min: " + min + " ms, Max: " + max + " ms", "Average slot latency: " + slot_lat + " slots"];
+                                        return [`Min: ${min} ms, Max: ${max} ms`, `Average slot latency: ${slot_lat} slots`]
                                     } else {
-                                        return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
+                                        return `Median: ${tooltipItem.formattedValue.toLocaleString('en-US')} ms`;
                                     }
                                 },
                                 title: function(tooltipItem) {
@@ -195,7 +193,7 @@ export default {
   },
   template: `
     <div>
-      <div class="text-center mb-4">
+      <div class="text-center mb-3">
         <div class="btn-group">
           <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 1}" @click.prevent="set_interval(1)">1h</a>
           <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
@@ -205,7 +203,7 @@ export default {
         </div>
       </div>
       
-      <canvas :id="'ping-thing-scatter-chart'"></canvas>
+      <canvas :id="'ping-thing-stats-chart'"></canvas>
     </div>
 `
 }
