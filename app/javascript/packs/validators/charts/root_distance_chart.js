@@ -16,25 +16,7 @@ export default {
     }
   },
 
-  methods: {
-    chart_line_color(val) {
-      if (val == 2) {
-        return chart_vars.chart_green
-      } else if(val == 1) {
-        return chart_vars.chart_blue
-      }
-      return chart_vars.chart_lightgrey
-    },
-
-    chart_fill_color(val) {
-      if (val == 2) {
-        return chart_vars.chart_green_t
-      } else if(val == 1) {
-        return chart_vars.chart_blue_t
-      }
-      return chart_vars.chart_lightgrey_t
-    },
-  },
+  methods: {},
 
   data() {
     var root_distance_vl = Math.min.apply(Math, [60, this.validator['root_distance_history'].length]);
@@ -46,8 +28,8 @@ export default {
       max_value_position: max_value_position,
       root_distance_chart: {
         vl: root_distance_vl,
-        line_color: this.chart_line_color(this.validator['root_distance_score']),
-        fill_color: this.chart_fill_color(this.validator['root_distance_score']),
+        line_color: this.$parent.chart_line_color(this.validator['root_distance_score']),
+        fill_color: this.$parent.chart_fill_color(this.validator['root_distance_score']),
         vector: root_distance_vector
       },
     }

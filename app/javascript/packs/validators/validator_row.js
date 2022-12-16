@@ -3,13 +3,7 @@ import rootDistanceChart from '../validators/charts/root_distance_chart'
 import voteDistanceChart from '../validators/charts/vote_distance_chart'
 import skippedSlotsChart from '../validators/charts/skipped_slot_chart'
 import skippedVoteSpeedometer from '../validators/charts/skipped_vote_speedometer'
-
-var chart_green = '#00ce99'
-var chart_blue = '#0091f2'
-var chart_lightgrey = '#cacaca'
-var chart_green_t = 'rgba(0, 206, 153, 0.4)'
-var chart_blue_t = 'rgba(0, 145, 242, 0.25)'
-var chart_lightgrey_t = 'rgba(202, 202, 202, 0.3)'
+import chart_vars from './charts/chart_variables'
 
 var ValidatorRow = Vue.component('validatorRow', {
   props: {
@@ -32,6 +26,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     'skipped-slots-chart': skippedSlotsChart,
     'skipped-vote-speedometer': skippedVoteSpeedometer
   },
+
   methods: {
     create_avatar_link() {
       if(this.validator['avatar_url']){
@@ -40,9 +35,11 @@ var ValidatorRow = Vue.component('validatorRow', {
         return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
       }
     },
+
     row_index() {
       return 'row-' + this.idx
     },
+
     validator_name() {
       if(this.validator["name"]){
         return this.validator["name"]
@@ -50,12 +47,15 @@ var ValidatorRow = Vue.component('validatorRow', {
         return this.validator["account"].substring(0,5) + "..." +  this.validator["account"].substring(this.validator["account"].length - 5)
       }
     },
+
     validator_url() {
       return "/validators/" + this.validator["account"] + "?network=" + this.validator["network"]
     },
+
     lamports_to_sol(lamports) {
       return lamports / 1000000000
     },
+
     skipped_vote_percent() {
       if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
         var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
@@ -65,22 +65,23 @@ var ValidatorRow = Vue.component('validatorRow', {
         return null
       }
     },
+
     chart_line_color(val) {
       if (val == 2) {
-        return chart_green
+        return chart_vars.chart_green
       } else if(val == 1) {
-        return chart_blue
+        return chart_vars.chart_blue
       }
-      return chart_lightgrey
+      return chart_vars.chart_lightgrey
     },
 
     chart_fill_color(val) {
       if (val == 2) {
-        return chart_green_t
+        return chart_vars.chart_green_t
       } else if(val == 1) {
-        return chart_blue_t
+        return chart_vars.chart_blue_t
       }
-      return chart_lightgrey_t
+      return chart_vars.chart_lightgrey_t
     },
 
     display_chart(target, event){
@@ -128,10 +129,8 @@ var ValidatorRow = Vue.component('validatorRow', {
         return this.validator["total_score"]
       }
     },
-    lamports_to_sol(lamports) {
-      return lamports / 1000000000;
-    }
   },
+
   template: `
     <tr :id="row_index()">
       <td class="column-info">

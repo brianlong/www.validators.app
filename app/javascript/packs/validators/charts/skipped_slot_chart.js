@@ -31,32 +31,15 @@ export default {
       y_root_distance_max: 20,
       skipped_slots_distance_chart: {
         vl: skipped_slots_vl,
-        line_color: this.chart_line_color(this.validator['skipped_slot_score']),
-        fill_color: this.chart_fill_color(this.validator['skipped_slot_score']),
+        line_color: this.$parent.chart_line_color(this.validator['skipped_slot_score']),
+        fill_color: this.$parent.chart_fill_color(this.validator['skipped_slot_score']),
         vector: skipped_slots_vector,
         moving_avg: skipped_slots_ma_vector
       }
     }
   },
 
-  methods: {
-    chart_line_color(val) {
-      if (val == 2) {
-        return chart_vars.chart_green
-      } else if(val == 1) {
-        return chart_vars.chart_blue
-      }
-      return chart_vars.chart_lightgrey
-    },
-    chart_fill_color(val) {
-      if (val == 2) {
-        return chart_vars.chart_green_t
-      } else if(val == 1) {
-        return chart_vars.chart_blue_t
-      }
-      return chart_vars.chart_lightgrey_t
-    },
-  },
+  methods: {},
 
   mounted: function () {
     var skipped_slots_el = document.getElementById("spark_line_skipped_slots_" + this.validator['account']).getContext('2d');

@@ -27,31 +27,14 @@ export default {
       y_root_distance_max: 20,
       vote_distance_chart: {
         vl: vote_distance_vl,
-        line_color: this.chart_line_color(this.validator['vote_distance_score']),
-        fill_color: this.chart_fill_color(this.validator['vote_distance_score']),
+        line_color: this.$parent.chart_line_color(this.validator['vote_distance_score']),
+        fill_color: this.$parent.chart_fill_color(this.validator['vote_distance_score']),
         vector: vote_distance_vector
       },
     }
   },
 
-  methods: {
-    chart_line_color(val) {
-      if (val == 2) {
-        return chart_vars.chart_green
-      } else if(val == 1) {
-        return chart_vars.chart_blue
-      }
-      return chart_vars.chart_lightgrey
-    },
-    chart_fill_color(val) {
-      if (val == 2) {
-        return chart_vars.chart_green_t
-      } else if(val == 1) {
-        return chart_vars.chart_blue_t
-      }
-      return chart_vars.chart_lightgrey_t
-    },
-  },
+  methods: {},
 
   mounted: function () {
     var vote_distance_el = document.getElementById("spark_line_vote_distance_" + this.validator['account']).getContext('2d');
