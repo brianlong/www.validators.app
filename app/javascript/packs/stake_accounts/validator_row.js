@@ -1,8 +1,8 @@
 import Vue from 'vue/dist/vue.esm'
-import rootDistanceChart from './charts/root_distance_chart'
-import voteDistanceChart from './charts/vote_distance_chart'
-import skippedSlotsChart from './charts/skipped_slot_chart'
-import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
+import rootDistanceChart from '../validators/charts/root_distance_chart'
+import voteDistanceChart from '../validators/charts/vote_distance_chart'
+import skippedSlotsChart from '../validators/charts/skipped_slot_chart'
+import skippedVoteSpeedometer from '../validators/charts/skipped_vote_speedometer'
 
 var chart_green = '#00ce99'
 var chart_blue = '#0091f2'
