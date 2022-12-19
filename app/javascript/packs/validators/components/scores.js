@@ -1,8 +1,8 @@
 export default {
   props: {
     score: {
-        type: Object,
-        required: true
+      type: Object,
+      required: true
     }
   },
   data() {

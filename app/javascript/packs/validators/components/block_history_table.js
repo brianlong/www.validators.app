@@ -3,8 +3,8 @@ var moment = require('moment');
 export default {
   props: {
     block_histories: {
-        type: Array,
-        required: true
+      type: Array,
+      required: true
     },
     block_history_stats: {
       type: Array,
@@ -21,9 +21,7 @@ export default {
       return this.block_history_stats.find(o => o.batch_uuid == history.batch_uuid);
     },
     history_created_at(history) {
-      let created_at_UTC = moment(new Date(history.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
-      console.log(created_at_UTC)
-      return created_at_UTC
+      return moment(new Date(history.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
     }
   },
   template: `
