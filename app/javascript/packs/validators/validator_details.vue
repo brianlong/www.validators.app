@@ -133,7 +133,7 @@
             <tr>
               <td><strong>Active Stake:</strong></td>
               <td>
-                {{ validator.active_stake }} SOL
+                {{ active_stake }} SOL
               </td>
             </tr>
 
@@ -276,6 +276,9 @@
       },
       val_details() {
         return this.validator?.details?.replaceAll("-space-", ' ')
+      },
+      active_stake(){
+        return this.lamports_to_sol(this.score.active_stake).toFixed(3).toString().replace(/\./, ",");
       },
       ...mapGetters([
         'network'

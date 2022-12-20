@@ -22,6 +22,9 @@ export default {
     },
     history_created_at(history) {
       return moment(new Date(history.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
+    },
+    formatted_number(n) {
+      return n.toLocaleString().replace("&nbsp;", ",")
     }
   },
   template: `
@@ -54,20 +57,20 @@ export default {
               {{ history.epoch }}
             </td>
             <td class='text-end'>
-              {{ history.leader_slots }}<br />
-              {{ block_stats(history).total_slots }}
+              {{ formatted_number(history.leader_slots) }}<br />
+              {{ formatted_number(block_stats(history).total_slots) }}
             </td>
             <td class='text-end'>
-              {{ history.blocks_produced }}<br />
-              {{ block_stats(history).total_blocks_produced }}
+              {{ formatted_number(history.blocks_produced) }}<br />
+              {{ formatted_number(block_stats(history).total_blocks_produced) }}
             </td>
             <td class='text-end'>
-              {{ history.skipped_slots }}<br />
-              {{ block_stats(history).total_slots_skipped }}
+              {{ formatted_number(history.skipped_slots) }}<br />
+              {{ formatted_number(block_stats(history).total_slots_skipped) }}
             </td>
             <td class='text-end'>
-              {{ (history.skipped_slot_percent * 100.0) }}<br />
-              {{ (block_stats(history).total_slots_skipped / block_stats(history).total_slots * 100.0).toLocaleString(2) }}
+              {{ (history.skipped_slot_percent * 100.0) }}%<br />
+              {{ (block_stats(history).total_slots_skipped / block_stats(history).total_slots * 100.0).toLocaleString(2) }}%
             </td>
             <td v-html="history_created_at(history)">
             </td>
