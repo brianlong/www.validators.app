@@ -37,8 +37,11 @@ class VoteAccount < ApplicationRecord
   has_many :vote_account_histories
   has_many :account_authority_histories
   before_save :set_network
-  after_save :create_account_authority_history, if: :saved_change_to_authorized_withdrawer?
-  after_save :create_account_authority_history, if: :saved_change_to_authorized_voters?
+  after_save do
+    if saved_change_to_authorized_withdrawer? || saved_change_to_authorized_voters?
+      create_account_authority_history
+    end
+  end
 
   serialize :authorized_voters, JSON
 
