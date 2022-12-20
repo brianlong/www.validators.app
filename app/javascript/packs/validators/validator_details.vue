@@ -12,18 +12,18 @@
 
       <div class="d-flex justify-content-between flex-wrap gap-3">
         <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
-          <a href="solstake_url(validator)" 
+          <a :href="solstake_url(validator)" 
             title="Delegate SOL to this validator on SolStake.io"
             class="btn btn-sm btn-secondary"
             target="_blank">Delegate on Solstake.io</a>
-          <a href="kiwi_url(validator)"
+          <a :href="kiwi_url(validator)"
             title="Delegate SOL to this validator on Staking.kiwi"
             class="btn btn-sm btn-secondary"
             target="_blank">Delegate on Staking.kiwi</a>
-          <a href="blazestake_url(validator)"
+          <a :href="blazestake_url(validator)"
             title="Delegate SOL to this validator on BlazeStake"
             class="btn btn-sm btn-secondary"
-            target="_blank">Delegate on Staking.kiwi</a>
+            target="_blank">Delegate on BlazeStake</a>
         </div>
 
         <div>
@@ -31,7 +31,7 @@
           <div class="btn btn-sm btn-danger me-2" title="Validator is delinquent." v-if="is_delinquent(validator)">delinquent</div>
           <div class="btn btn-sm btn-danger me-2" title="Validator is inactive." v-if="is_inactive(validator)">inactive</div>
 
-          <a href="/faq#admin-warning" :title="validator.admin_warning">
+          <a href="/faq#admin-warning" :title="validator.admin_warning" v-if="validator.admin_warning">
             <div class="btn btn-sm btn-danger me-2">admin warning</div>
           </a>
           <a href="/faq#withdraw-authority-warning"
@@ -313,6 +313,15 @@
       },
       vote_account_path(validator) {
         return "/validators/" + validator.account + "/vote_accounts/" + validator.vote_account_active.account + "?network="
+      },
+      solstake_url(validator) {
+        return "https://solstake.io/#/app/validator/" + validator.vote_account_active.account
+      },
+      kiwi_url(validator) {
+        return "https://staking.kiwi/app/" + validator.vote_account_active.account
+      },
+      blazestake_url(validator) {
+        return "https://stake.solblaze.org/app/?validator=" + validator.vote_account_active.account
       }
     },
     components: {
