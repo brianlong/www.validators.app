@@ -23,11 +23,7 @@
 
         const validator_searcher_bar = document.getElementById("validator-searcher-bar")
 
-        if (this.is_active) {
-          validator_searcher_bar.classList.add("active")
-        } else {
-          validator_searcher_bar.classList.remove("active")
-        }
+        validator_searcher_bar.classList.toggle("active")
       }
     }
   }
