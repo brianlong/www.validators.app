@@ -33,7 +33,9 @@
     methods: {
       onSubmit(event) {
         event.preventDefault()
-        window.location.replace(`validators?q=${this.form.query}&network=${this.network}`)
+        const path = `${window.location.origin}/validators?q=${this.form.query}&network=${this.network}`
+
+        window.location.replace(path)
       }
     }
   }
