@@ -112,7 +112,7 @@ module ValidatorsHelper
 
     if validator.private_validator?
       link_to validator_url(link_params) do
-        content_tag :div, content_tag(:span, nil, class: 'fas fa-users-slash', title: "Private Validator"), class: "img-circle-medium-private"
+        content_tag :div, content_tag(:span, nil, class: 'fa-solid fa-users-slash', title: "Private Validator"), class: "img-circle-medium-private"
       end
     elsif validator.avatar_url
       link_to validator_url(link_params) do

@@ -6,11 +6,11 @@
 
   <div class='toggle-container'>
     <% if params[:refresh] == 'true' %>
-      <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
+      <%= link_to raw('<i class="fa-solid fa-toggle-on toggle"></i>'),
                   url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
       <p class="small text-muted toggle-label">REFRESH ON</p>
     <% else %>
-      <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'),
+      <%= link_to raw('<i class="fa-solid fa-toggle-off toggle"></i>'),
                   url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
       <p class="small text-muted toggle-label">REFRESH OFF</p>
     <% end %>
@@ -20,7 +20,7 @@
                         network: params[:network],
                         refresh: params[:refresh],
                         watchlist: params[:watchlist] ? nil : true) do %>
-      <i class="<%= params[:watchlist] ? 'fas' : 'fa-regular' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
+      <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">

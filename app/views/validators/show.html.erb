@@ -2,7 +2,7 @@
   <div class='page-header-name'>
     <% if @validator.private_validator? %>
       <div class="img-circle-private img-circle-medium">
-        <span class='fas fa-users-slash' title="Private Validator"></span>
+        <span class='fa-solid fa-users-slash' title="Private Validator"></span>
       </div>
     <% elsif @validator.avatar_url %>
       <%= image_tag @validator.avatar_url, class: 'img-circle-medium' %>
@@ -215,10 +215,10 @@
 
   <div class='col-md-3 col-lg-2 toggle-container pt-2'>
     <% if params[:refresh] == 'true' %>
-      <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: false) %>
+      <%= link_to raw('<i class="fa-solid fa-toggle-on toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: false) %>
       <p class="small text-muted toggle-label">REFRESH ON</p>
     <% else %>
-      <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: true) %>
+      <%= link_to raw('<i class="fa-solid fa-toggle-off toggle"></i>'), url_for(order: params[:order], page: params[:page], network: params[:network], refresh: true) %>
       <p class="small text-muted toggle-label">REFRESH OFF</p>
     <% end %>
   </div>

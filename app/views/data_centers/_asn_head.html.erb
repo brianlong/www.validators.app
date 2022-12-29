@@ -1,7 +1,7 @@
 <tr>
   <th class="column-sm">
     ASN
-    <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+    <i class="fa-solid fa-info-circle font-size-xs text-muted ms-1"
       data-bs-toggle="tooltip"
       data-bs-placement="top"
       title="<%= t('definitions.asn_full_name')%>">
@@ -10,7 +10,7 @@
 
   <th class="column-sm">
     Average score
-    <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+    <i class="fa-solid fa-info-circle font-size-xs text-muted ms-1"
        data-bs-toggle="tooltip"
        data-bs-placement="top"
        title="<%= t('definitions.average_score') %>"></i>
@@ -23,7 +23,7 @@
   <th class="column-md text-nowrap">
     Population
     <small class="text-muted">(<%= @results[:total_population] %>)</small>
-    <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+    <i class="fa-solid fa-info-circle font-size-xs text-muted ms-1"
        data-bs-toggle="tooltip"
        data-bs-placement="top"
        title="<%= t('definitions.population_asn') %>">
@@ -37,7 +37,7 @@
         (<%= @results[:total_delinquent] %> |
         <%= (count_percentage(@results[:total_delinquent], @results[:total_population])) %>%)
       </small>
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-info-circle font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.delinquent_asn') %>">
@@ -49,7 +49,7 @@
         (<%= @results[:total_private] %> |
         <%= (count_percentage(@results[:total_private], @results[:total_population])) %>%)
       </small>
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-info-circle font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.private') %>">
@@ -63,7 +63,7 @@
       <small class="text-muted">
         (<%= number_with_delimiter lamports_to_sol(@results[:total_active_stake_from_active_validators]).round(0) %>)
       </small>
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-info-circle font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.active_stake') %>"></i>
@@ -73,7 +73,7 @@
       <small class="text-muted">
         (<%= number_with_delimiter lamports_to_sol(@results[:total_stake]).round(0) %>)
       </small>
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-info-circle font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.total_stake') %>"></i>

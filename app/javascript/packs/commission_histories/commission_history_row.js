@@ -41,7 +41,7 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
     <tr>
       <td>
         <a href="#" v-bind:account="comm_history_name" title="Click to show commission changes only for this validator." @click.prevent="filterByQuery">{{ comm_history_name }}</a>
-        <a v-bind:href="comm_history_href" title="Go to validator details." target="_blank"><i class="fas fa-external-link-alt small ms-2"></i></a>
+        <a v-bind:href="comm_history_href" title="Go to validator details." target="_blank"><i class="fa-solid fa-external-link-alt small ms-2"></i></a>
       </td>
       <td>
         {{ comm_history.epoch }}
@@ -52,10 +52,10 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       </td>
       <td class="text-center text-nowrap">
         {{ comm_history.commission_before }}%
-        <i class="fas fa-long-arrow-alt-right px-2"></i>
+        <i class="fa-solid fa-long-arrow-alt-right px-2"></i>
         {{ comm_history.commission_after }}%
-        <i class="fas fa-long-arrow-alt-down text-success" v-if="descending"></i>
-        <i class="fas fa-long-arrow-alt-up text-danger" v-if="!descending"></i>
+        <i class="fa-solid fa-long-arrow-alt-down text-success" v-if="descending"></i>
+        <i class="fa-solid fa-long-arrow-alt-up text-danger" v-if="!descending"></i>
       </td>
       <td class="small">
         {{ comm_history.created_at }}
