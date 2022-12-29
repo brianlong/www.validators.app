@@ -69,7 +69,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
 
           <div class="col-md-4 ps-lg-4 ps-xl-5">
             <div class="stat-title-3 mb-2">
-              <i class="fa-solid fa-hand-holding-usd text-success me-2"></i>Fees
+              <i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>Fees
             </div>
             <div>
               <span class="text-muted">Manager Fee:&nbsp;</span>
@@ -90,7 +90,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
 
             <div class="mb-3">
               <span class="stat-title-3">
-                <i class="fa-solid fa-chart-line text-purple me-2"></i>APY:&nbsp;
+                <i class="fa-solid fa-chart-line-up text-purple me-2"></i>APY:&nbsp;
               </span>
               <strong class="text-purple">{{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}</strong>
             </div>

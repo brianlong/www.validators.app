@@ -127,7 +127,7 @@
         if(success){
           return '<i class="fa-solid fa-check-circle text-success me-1"></i>'
         } else {
-          return '<i class="fa-solid fa-times-circle text-danger me-1"></i>'
+          return '<i class="fa-solid fa-circle-xmark text-danger me-1"></i>'
         }
       },
       link_from_signature(signature){
@@ -136,9 +136,9 @@
       transaction_type_icon(tx){
         switch(tx){
           case 'transfer':
-            return '<i class="fa-solid fa-exchange-alt text-success me-1"></i>'
+            return '<i class="fa-solid fa-right-left text-success me-1"></i>'
           default:
-            return '<i class="fa-solid fa-random text-success me-1"></i>'
+            return '<i class="fa-solid fa-shuffle text-success me-1"></i>'
         }
       },
       signature_shortened(signature) {

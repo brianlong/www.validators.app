@@ -14,13 +14,13 @@
           <i class="fa-solid fa-calculator text-success me-2"></i>Entries
         </div>
         <div class="col-md-2">
-          <i class="fa-solid fa-long-arrow-alt-down text-success me-2"></i>Min
+          <i class="fa-solid fa-down-long text-success me-2"></i>Min
         </div>
         <div class="col-lg-2">
           <i class="fa-solid fa-divide text-success me-2"></i>Median
         </div>
         <div class="col-lg-2">
-          <i class="fa-solid fa-long-arrow-alt-up text-success me-2"></i>P90
+          <i class="fa-solid fa-up-long text-success me-2"></i>P90
         </div>
         <div class="col-lg-2">
           <i class="fa-solid fa-clock text-success me-2"></i>Latency
@@ -42,7 +42,7 @@
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fa-solid fa-long-arrow-alt-down text-success me-2"></i>Min:&nbsp;
+                <i class="fa-solid fa-down-long text-success me-2"></i>Min:&nbsp;
               </span>
               <span class="text-success">{{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
@@ -54,7 +54,7 @@
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fa-solid fa-long-arrow-alt-up text-success me-2"></i>P90:&nbsp;
+                <i class="fa-solid fa-up-long text-success me-2"></i>P90:&nbsp;
               </span>
               <span class="text-success">{{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
@@ -79,7 +79,7 @@
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fa-solid fa-long-arrow-alt-down text-success me-2"></i>Min:&nbsp;
+                <i class="fa-solid fa-down-long text-success me-2"></i>Min:&nbsp;
               </span>
               <span class="text-success">{{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
@@ -91,7 +91,7 @@
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fa-solid fa-long-arrow-alt-up text-success me-2"></i>P90:&nbsp;
+                <i class="fa-solid fa-up-long text-success me-2"></i>P90:&nbsp;
               </span>
               <span class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>

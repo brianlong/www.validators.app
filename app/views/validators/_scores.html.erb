@@ -18,22 +18,22 @@
      title="Bonus Point = <%= validator.security_report_score.to_i %>"></i>
 
   <% if validator.consensus_mods_score.to_i < 0 %>
-    <i class="fa-solid fa-minus-circle me-1 text-warning"
+    <i class="fa-solid fa-circle-minus me-1 text-warning"
        title="Consensus Mods Score = <%= validator.consensus_mods_score %>. Validator appears to use software modifications with an unproven effect on consensus."></i>
   <% end %>
 
   <% if validator.authorized_withdrawer_score.to_i < 0 %>
-    <i class="fa-solid fa-minus-circle me-1 text-warning"
+    <i class="fa-solid fa-circle-minus me-1 text-warning"
        title="Authorized Withdrawer Score = <%= validator.authorized_withdrawer_score.to_i %>"></i>
   <% end %>
 
   <% if validator.stake_concentration_score.to_i < 0 %>
-    <i class="fa-solid fa-minus-circle me-1 text-warning"
+    <i class="fa-solid fa-circle-minus me-1 text-warning"
        title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>
   <% end %>
 
   <% if validator.data_center_concentration_score.to_i < 0 %>
-    <i class="fa-solid fa-minus-circle me-1 text-warning"
+    <i class="fa-solid fa-circle-minus me-1 text-warning"
        title="Data Center Concentration Score = <%= validator.data_center_concentration_score %>"></i>
   <% end %>
 
@@ -147,7 +147,7 @@
             <tr>
               <td class="column-md fw-bold">Stake Concentration Score</td>
               <td class="column-xs text-nowrap">
-                <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
+                <i class="fa-solid fa-circle-minus me-1 text-warning"></i>
                 <%= validator.stake_concentration_score %>
                 <small class="d-lg-none text-muted">(0)</small>
                 <small class="d-none d-lg-inline text-muted">(max 0)</small>
@@ -162,7 +162,7 @@
             <tr>
               <td class="column-md fw-bold">Data Center Concentration Score</td>
               <td class="column-xs text-nowrap">
-                <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
+                <i class="fa-solid fa-circle-minus me-1 text-warning"></i>
                 <%= validator.data_center_concentration_score %>
                 <small class="d-lg-none text-muted">(0)</small>
                 <small class="d-none d-lg-inline text-muted">(max 0)</small>
@@ -177,7 +177,7 @@
             <tr>
               <td class="column-md fw-bold">Authorized Withdrawer Score</td>
               <td class="column-xs text-nowrap">
-                <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
+                <i class="fa-solid fa-circle-minus me-1 text-warning"></i>
                 <%= validator.authorized_withdrawer_score.to_i %>
                 <small class="d-lg-none text-muted">(0)</small>
                 <small class="d-none d-lg-inline text-muted">(max 0)</small>
@@ -192,7 +192,7 @@
             <tr>
               <td class="column-md fw-bold">Consensus Mods Score</td>
               <td class="column-xs text-nowrap">
-                <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
+                <i class="fa-solid fa-circle-minus me-1 text-warning"></i>
                 <%= validator.consensus_mods_score.to_i %>
                 <small class="d-lg-none text-muted">(0)</small>
                 <small class="d-none d-lg-inline text-muted">(max 0)</small>
