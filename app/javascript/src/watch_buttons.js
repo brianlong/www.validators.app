@@ -18,7 +18,7 @@ document.addEventListener('turbolinks:load', () => {
           dataType: 'json'
         }).done(function (data) {
           $(btn).attr('disabled', false);
-          $(btn).toggleClass("fas far")
+          $(btn).toggleClass("fas fa-regular")
 
           if(data["status"] == "created") {
             $(btn).prop("title", "Remove from favourites")

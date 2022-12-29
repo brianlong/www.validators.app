@@ -11,7 +11,7 @@
                           network: params[:network],
                           refresh: params[:refresh],
                           watchlist: params[:watchlist] ? nil : true) do %>
-              <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning"
+              <i class="<%= params[:watchlist] ? 'fas' : 'fa-regular' %> fa-star text-warning"
                  data-bs-toggle="tooltip"
                  data-bs-placement="top"
                  title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
@@ -104,7 +104,7 @@
           <div class="column-info-avatar <%= 'no-watchlist' unless (current_user && show_watchlist_btn) %>">
             <%= create_avatar_link(validator) %>
             <% if current_user && show_watchlist_btn %>
-              <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'far' %> fa-star"
+              <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'fa-regular' %> fa-star"
                  data-bs-toggle="tooltip"
                  data-bs-placement="top"
                  data-network="<%= validator.network%>"
