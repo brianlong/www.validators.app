@@ -12,18 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2023_01_02_222933) do
 
-  create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "authorized_withdrawer_before"
-    t.string "authorized_withdrawer_after"
-    t.text "authorized_voters_before"
-    t.text "authorized_voters_after"
-    t.bigint "vote_account_id", null: false
-    t.string "network"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["vote_account_id"], name: "index_account_authority_histories_on_vote_account_id"
-  end
-
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -371,6 +359,10 @@ ActiveRecord::Schema.define(version: 2023_01_02_222933) do
     t.integer "currency"
     t.integer "epoch_mainnet"
     t.integer "epoch_testnet"
+    t.decimal "open", precision: 40, scale: 20
+    t.decimal "close", precision: 40, scale: 20
+    t.decimal "high", precision: 40, scale: 20
+    t.decimal "low", precision: 40, scale: 20
     t.decimal "volume", precision: 40, scale: 20
     t.datetime "datetime_from_exchange"
     t.datetime "created_at", precision: 6, null: false
@@ -662,13 +654,11 @@ ActiveRecord::Schema.define(version: 2023_01_02_222933) do
     t.string "validator_identity"
     t.string "authorized_withdrawer"
     t.boolean "is_active", default: true
-    t.text "authorized_voters"
     t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
     t.index ["network", "account"], name: "index_vote_accounts_on_network_and_account"
     t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
   end
 
-  add_foreign_key "account_authority_histories", "vote_accounts"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collectors", "users"
