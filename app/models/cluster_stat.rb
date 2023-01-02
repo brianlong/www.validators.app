@@ -12,6 +12,7 @@
 #  skipped_votes      :json
 #  software_version   :string(191)
 #  total_active_stake :bigint
+#  total_rewards      :bigint
 #  validator_count    :integer
 #  vote_distance      :json
 #  created_at         :datetime         not null
