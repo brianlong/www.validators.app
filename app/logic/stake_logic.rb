@@ -246,6 +246,7 @@ module StakeLogic
         account_rewards[lido_vote_accounts[key]] = lido_rewards[idx]
       end
 
+      # Sample account_rewards structure: {"account_id"=>{"amount"=>358573846, "commission"=>8, "effectiveSlot"=>169776008, "epoch"=>392, "postBalance"=>777282463666}}
       Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from get_rewards", e)

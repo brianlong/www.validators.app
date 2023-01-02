@@ -24,6 +24,8 @@ NETWORKS.each do |network|
               .then(&calculate_apy_for_accounts)
               .then(&calculate_apy_for_pools)
 
+  RewardRateUpdateService.call(p.payload[:network], p.payload[:account_rewards])
+
   puts "finished #{network} with status #{p[:code]}"
   puts "MESSAGE: #{p[:message]}"
   puts "ERROR: #{p[:errors].inspect}"
