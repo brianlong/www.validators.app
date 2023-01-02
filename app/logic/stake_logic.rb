@@ -2,7 +2,7 @@
 
 module StakeLogic
   include PipelineLogic
-  include SolanaLogic #for solana_client_request
+  include SolanaRequestsLogic
   include ApyHelper
 
   class NoResultsFromSolana < StandardError; end
