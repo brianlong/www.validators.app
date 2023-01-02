@@ -10,7 +10,7 @@
           <strong class="text-success" v-if="total_active_stake">{{ total_active_stake }}&nbsp;SOL</strong>
         </div>
 
-        <div>
+        <div class="mb-2">
           <span class="text-muted me-1">Circulating Supply:</span>
 
           <span class="text-muted" v-if="!circulating_supply">loading...</span>
@@ -18,6 +18,18 @@
           <div class="small text-muted" v-if="total_circulating_supply">
             ({{ percent_of_total_stake() }}% of total {{ total_circulating_supply }}&nbsp;SOL)
           </div>
+        </div>
+
+        <div class="mb-2">
+          <span class="text-muted me-1">Gross Yield:</span>
+
+          <span class="text-muted" v-if="!gross_yield">loading...</span>
+          <span v-if="gross_yield">
+            <strong class="text-success">{{ gross_yield }}%</strong>
+            <div class="small text-muted">
+              (Last 3 epochs annualized)
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -35,7 +47,8 @@
         circulating_supply: null,
         total_circulating_supply: null,
         total_active_stake: null,
-        api_params: { excludeNonCirculatingAccountsList: true }
+        api_params: { excludeNonCirculatingAccountsList: true },
+        gross_yield: null
       }
     },
     created() {
@@ -60,6 +73,9 @@
         received(data) {
           const stake = data.cluster_stats[this.network].total_active_stake;
           this.total_active_stake = this.lamports_to_sol(stake).toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+          const total_rewards = this.lamports_to_sol(data.cluster_stats[this.network].total_rewards);
+          this.gross_yield = (parseInt(total_rewards) * 100 / parseInt(this.total_active_stake)).toFixed(2);
         },
         disconnected() {},
       },
