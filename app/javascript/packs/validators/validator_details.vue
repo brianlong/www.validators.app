@@ -222,30 +222,6 @@
         type: String,
         required: true
       }
-      // score: {
-      //   type: Object,
-      //   required: true
-      // },
-      // root_blocks: {
-      //   type: Array,
-      //   required: true
-      // },
-      // vote_blocks: {
-      //   type: Array,
-      //   required: true
-      // },
-      // skipped_slots: {
-      //   type: Object,
-      //   required: true
-      // },
-      // block_histories: {
-      //   type: Array,
-      //   required: true
-      // },
-      // block_history_stats: {
-      //   type: Array,
-      //   required: true
-      // }
     },
     data() {
       return {
@@ -307,7 +283,7 @@
         return false
       },
       name_or_account(validator){
-        return validator.name ? this.val_name : validator.account
+        return validator.name ? validator.name : validator.account
       },
       display_staking_info(validator) {
         return !this.is_private(validator) && validator.is_active
