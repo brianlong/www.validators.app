@@ -90,7 +90,7 @@
               <tr>
                 <td><strong>Data Center:</strong></td>
                 <td>
-                  <a href="data_center_link(validator)" v-if="validator.dch_data_center_key">
+                  <a :href="data_center_link(validator)" v-if="validator.dch_data_center_key">
                     {{ validator.dch_data_center_key}}
                   </a>
                 </td>
