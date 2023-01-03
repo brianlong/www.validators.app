@@ -173,19 +173,10 @@
 
     <div class="row mb-3">
       <div class="col-md-9 col-lg-10">
-        <a :href="'/validators?network=' + validator.network + '&order=' + order + '&refresh=' + refresh + '&page=' + page"
+        <a :href="go_back_link"
            class="btn btn-sm btn-secondary mb-3">
            Back to All Validators
         </a>
-      </div>
-
-      <div class='col-md-3 col-lg-2 toggle-container pt-2' data-turbolinks="false">
-          <a :href="'/validators/' + validator.account + '?network=' + validator.network + '&order=' + order + '&refresh=' + !refresh + '&page=' + page">
-            <i class="fas fa-toggle-on toggle" v-if="refresh"></i>
-            <i class="fas fa-toggle-off toggle" v-if="!refresh"></i>
-          </a>
-          <p class="small text-muted toggle-label" v-if="refresh">REFRESH ON</p>
-          <p class="small text-muted toggle-label" v-if="!refresh">REFRESH OFF</p>
       </div>
     </div>
 
@@ -196,7 +187,7 @@
     </div>
     <div class="row">
       <div class="col-md-9 col-lg-10">
-        <a :href="'/validators?network=' + validator.network + '&order=' + order + '&refresh=' + refresh + '&page=' + page"
+        <a :href="go_back_link"
            class="btn btn-sm btn-secondary mb-3">
            Back to All Validators
         </a>
@@ -205,7 +196,7 @@
     <block-history-table :block_histories="block_histories" :block_history_stats="block_history_stats"></block-history-table>
     <div class="row">
       <div class="col-md-9 col-lg-10">
-        <a :href="'/validators?network=' + validator.network + '&order=' + order + '&refresh=' + refresh + '&page=' + page"
+        <a :href="go_back_link"
             class="btn btn-sm btn-secondary mb-3">
             Back to All Validators
         </a>
@@ -294,6 +285,9 @@
     computed: {
       active_stake(){
         return this.lamports_to_sol(this.score.active_stake).toFixed(3).toString().replace(/\./, ",");
+      },
+      go_back_link(){
+        return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
       },
       ...mapGetters([
         'network'
