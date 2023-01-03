@@ -156,7 +156,7 @@ export default {
     <div class="col-lg-6">
       <div class="card mb-4">
         <div class="card-content pb-0">
-          <h2 class="h4 card-heading mb-3">Vote History</h2>
+          <h2 class="h4 card-heading mb-3">Skipped Slots History</h2>
         </div>
         <div class="pb-3 px-3">
           <canvas id="skipped-slots-history"></canvas>

@@ -1,11 +1,7 @@
 <%= javascript_pack_tag "validators/validator_details.js" %>
 
-<div id="validator-details" 
-     validator=<%= @validator.to_json(methods: [:dch_data_center_key, :vote_account_active]) %> 
-     score=<%= @score.to_json(methods: [:displayed_total_score]) %>
-     root_blocks=<%= @root_blocks.to_json %>
-     vote_blocks=<%= @vote_blocks.to_json %>
-     skipped_slots=<%=@data.to_json %>
-     block_histories=<%= @block_histories.to_json %>
-     block_history_stats= <%= @block_history_stats.to_json %>>
+<div id="validator-details"
+     account= <%= params[:account]%>
+     network=<%= params[:network]%>
+>
 </div>

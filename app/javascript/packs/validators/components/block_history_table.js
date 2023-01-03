@@ -24,7 +24,7 @@ export default {
       return moment(new Date(history.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
     },
     formatted_number(n) {
-      return n.toLocaleString().replace("&nbsp;", ",")
+      return n.toLocaleString('en-US').replace("&nbsp;", ",")
     }
   },
   template: `
@@ -69,8 +69,8 @@ export default {
               {{ formatted_number(block_stats(history).total_slots_skipped) }}
             </td>
             <td class='text-end'>
-              {{ (history.skipped_slot_percent * 100.0) }}%<br />
-              {{ (block_stats(history).total_slots_skipped / block_stats(history).total_slots * 100.0).toLocaleString(2) }}%
+              {{ (history.skipped_slot_percent * 100.0).toLocaleString('en-US', {maximumFractionDigits: 2}) }}%<br />
+              {{ (block_stats(history).total_slots_skipped / block_stats(history).total_slots * 100.0).toLocaleString('en-US', {maximumFractionDigits: 2}) }}%
             </td>
             <td v-html="history_created_at(history)">
             </td>

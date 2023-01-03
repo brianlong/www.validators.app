@@ -61,13 +61,13 @@
               <tr>
                 <td class="column-lg"><strong>Name:</strong></td>
                 <td>
-                  {{ val_name }}
+                  {{ validator.name }}
                 </td>
               </tr>
 
               <tr>
                 <td><strong>Details:</strong></td>
-                <td class="text-break">{{ val_details }}</td>
+                <td class="text-break">{{ validator.details }}</td>
               </tr>
 
               <tr>
@@ -190,9 +190,9 @@
     </div>
 
     <div class="row">
-      <block-history-chart :root_blocks="root_blocks"></block-history-chart>
-      <vote-history-chart :vote_blocks="vote_blocks"></vote-history-chart>
-      <skipped-slots-chart :skipped_slots="skipped_slots"></skipped-slots-chart>
+      <block-history-chart :root_blocks="root_blocks" v-if="root_blocks.length > 0"></block-history-chart>
+      <vote-history-chart :vote_blocks="vote_blocks" v-if="vote_blocks.length > 0"></vote-history-chart>
+      <skipped-slots-chart :skipped_slots="skipped_slots" v-if="skipped_slots[1]"></skipped-slots-chart>
     </div>
     <div class="row">
       <div class="col-md-9 col-lg-10">
@@ -221,46 +221,67 @@
   import voteHistoryChart from './components/vote_history_chart'
   import skippedSlotsChart from './components/skipped_slots_chart'
   import blockHistoryTable from './components/block_history_table'
+  import axios from 'axios';
+
+  axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
     props: {
-      validator: {
-        type: Object,
-        required: true
-      },
-      score: {
-        type: Object,
-        required: true
-      },
-      root_blocks: {
-        type: Array,
-        required: true
-      },
-      vote_blocks: {
-        type: Array,
-        required: true
-      },
-      skipped_slots: {
-        type: Object,
-        required: true
-      },
-      block_histories: {
-        type: Array,
-        required: true
-      },
-      block_history_stats: {
-        type: Array,
+      account: {
+        type: String,
         required: true
       }
+      // score: {
+      //   type: Object,
+      //   required: true
+      // },
+      // root_blocks: {
+      //   type: Array,
+      //   required: true
+      // },
+      // vote_blocks: {
+      //   type: Array,
+      //   required: true
+      // },
+      // skipped_slots: {
+      //   type: Object,
+      //   required: true
+      // },
+      // block_histories: {
+      //   type: Array,
+      //   required: true
+      // },
+      // block_history_stats: {
+      //   type: Array,
+      //   required: true
+      // }
     },
     data() {
       return {
+        validator: {},
+        score: {},
+        root_blocks: [],
+        vote_blocks: [],
+        block_histories: [],
+        block_history_stats: [],
+        skipped_slots: {},
         refresh: null,
         order: null,
         page: null
       }
     },
     created() {
+      let ctx = this
+      axios.get("/validators/" + this.account + ".json?network=" + this.network).then(function (response) {
+        ctx.validator = JSON.parse(response.data.validator)
+        ctx.score = JSON.parse(response.data.score)
+        ctx.root_blocks = response.data.root_blocks
+        ctx.vote_blocks = response.data.vote_blocks
+        ctx.block_histories = response.data.block_histories
+        ctx.block_history_stats = response.data.block_history_stats
+        ctx.skipped_slots = JSON.parse(response.data.skipped_slots)
+      })
+
       let uri = window.location.search.substring(1); 
       let params = new URLSearchParams(uri);
       this.refresh = params.get("refresh") == 'true'
@@ -271,12 +292,6 @@
 
     },
     computed: {
-      val_name() {
-        return this.validator?.name?.replaceAll("-space-", ' ')
-      },
-      val_details() {
-        return this.validator?.details?.replaceAll("-space-", ' ')
-      },
       active_stake(){
         return this.lamports_to_sol(this.score.active_stake).toFixed(3).toString().replace(/\./, ",");
       },
