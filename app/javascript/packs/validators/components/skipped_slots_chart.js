@@ -88,7 +88,7 @@ export default {
           },
         },
         scales: {
-          xAxes: [{
+          x: {
             display: true,
             ticks: {
               display: true,
@@ -97,30 +97,30 @@ export default {
               autoSkip: true,
               autoSkipPadding: 30
             },
-            gridLines: { display: false },
-            scaleLabel: {
+            grid: { display: false },
+            title: {
               display: true,
-              labelString: "Previous Observations",
-              fontColor: '#979797'
+              text: "Previous Observations",
+              color: '#979797'
             }
-          }],
-          yAxes: [{
+          },
+          y: {
             display: true,
             ticks: {
               min: 0,
               padding: 5
             },
-            gridLines: {
+            grid: {
               display: true,
               zeroLineColor: '#322f3d',
               color: '#322f3d'
             },
-            scaleLabel: {
+            title: {
               display: true,
-              labelString: "Dist Behind Leader",
-              fontColor: '<%= #979797 %>'
+              text: "Percent",
+              color: '#979797'
             }
-          }]
+          }
         }
       },
       plugins: {
