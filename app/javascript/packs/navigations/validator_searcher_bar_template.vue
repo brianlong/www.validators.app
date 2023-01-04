@@ -1,5 +1,5 @@
 <template>
-  <div class="d-none" id="searcher-bar">
+  <div class="d-none mt-3 mb-2" id="searcher-bar">
     <b-form @submit="onSubmit" class="flex-fill">
       <div class="form-group-row">
         <b-input-group>
