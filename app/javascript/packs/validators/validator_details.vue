@@ -268,7 +268,7 @@
         return lamports * 0.000000001;
       },
       is_private(){
-        return this.validator.commission == 100
+        return this.score.commission == 100
       },
       is_delinquent(validator){
         return this.score.delinquent
