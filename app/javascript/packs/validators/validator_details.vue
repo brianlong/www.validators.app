@@ -10,7 +10,7 @@
         <h1 class="word-break">{{ name_or_account(validator) }}</h1>
       </div>
 
-      <div class="d-flex justify-content-between flex-wrap gap-3" v-if="!is_private() && is_active() && validator.vote_account_active">
+      <div class="d-flex justify-content-between flex-wrap gap-3">
         <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
           <a :href="solstake_url(validator)" 
             title="Delegate SOL to this validator on SolStake.io"
@@ -280,7 +280,7 @@
         return validator.name ? validator.name : validator.account
       },
       display_staking_info(validator) {
-        return !this.is_private(validator) && validator.is_active
+        return !this.is_private() && validator.is_active && this.validator.vote_account_active
       },
       commission_class() {
         if(this.validator.network == 'mainnet' && this.validator.commission == 100) {
