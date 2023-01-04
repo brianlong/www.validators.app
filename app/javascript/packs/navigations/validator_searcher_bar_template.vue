@@ -7,7 +7,7 @@
                         placeholder="Starts with... (validator name, validator account or data center key)"
                         required>
           </b-form-input>
-          <b-button type="submit" variant="primary" class="btn-sm btn-radius-right">Search</b-button>
+          <b-button type="submit" variant="primary" class="btn btn-sm btn-primary">Search</b-button>
         </b-input-group>
       </div>
     </b-form>
