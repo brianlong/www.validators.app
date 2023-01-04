@@ -119,14 +119,8 @@ header {
       max-height: 0;
       opacity: 0;
       transition: max-height .2s ease;
-      display: none;
-
-      &.open {
-        display: block;
-        height: auto;
-        max-height: 200px;
-        opacity: 1;
-        transition: max-height .2s ease;
+      @media(max-width: $screen-lg-max) {
+        display: none;
       }
       @media(max-width: $screen-md-max) {
         position: relative;
@@ -134,6 +128,14 @@ header {
         border: none;
         text-align: left;
         background-color: transparent;
+      }
+
+      &.open {
+        display: block;
+        height: auto;
+        max-height: 200px;
+        opacity: 1;
+        transition: max-height .2s ease;
       }
     }
 
