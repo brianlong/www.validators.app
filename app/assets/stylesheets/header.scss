@@ -1,14 +1,22 @@
 @import "variables";
 
 header {
-  padding: 25px 0 35px 0;
+  padding: 25px 0 40px 0;
+  @media(max-width: $screen-xs-max) {
+    padding: 20px 0 15px 0;
+  }
 
   .navbar-brand {
-    img { width: 250px; }
+    img {
+      width: 250px;
+      @media(max-width: $screen-xs-max) {
+        width: 230px;
+      }
+    }
   }
 
   .navbar {
-    padding: 0 0 20px 0;
+    padding: 0 0 15px 0;
     @include font-size-base();
 
     .btn {
@@ -32,6 +40,14 @@ header {
       margin-left: 10px;
       margin-top: -2px;
       &:hover { color: $white; }
+      @media(max-width: $screen-md-max) {
+        display: inline-block;
+        margin-left: 0;
+        margin-top: 15px;
+      }
+      @media(max-width: $screen-xs-max) {
+        padding-top: 20px;
+      }
     }
   }
 
@@ -136,26 +152,6 @@ header {
           color: $link-color-secondary;
         }
       }
-    }
-  }
-
-  @media(max-width: $screen-md-max) {
-    .nav-link.btn {
-      display: inline-block;
-      margin-left: 0;
-      margin-top: 15px;
-    }
-  }
-
-  @media(max-width: $screen-xs-max) {
-    .header {
-      padding: 20px 0 30px 0;
-    }
-    .navbar-brand img {
-      width: 230px;
-    }
-    .nav-link {
-      padding-top: 20px;
     }
   }
 }
