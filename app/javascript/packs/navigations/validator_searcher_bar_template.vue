@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-3" id="validator-searcher-bar">
+  <div class="d-none" id="searcher-bar">
     <b-form @submit="onSubmit" class="flex-fill">
       <div class="form-group-row">
         <b-input-group>
@@ -33,7 +33,7 @@
     methods: {
       onSubmit(event) {
         event.preventDefault()
-        const path = `${window.location.origin}/validators?q=${this.form.query}&network=${this.network}`
+        let path = `${window.location.origin}/validators?q=${this.form.query}&network=${this.network}`
 
         window.location.replace(path)
       }

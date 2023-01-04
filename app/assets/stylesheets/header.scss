@@ -1,16 +1,24 @@
 @import "variables";
 
 header {
-  padding: 25px 0 55px 0;
+  padding: 25px 0 35px 0;
 
   .navbar-brand {
     img { width: 250px; }
   }
 
   .navbar {
-    padding: 0;
+    padding: 0 0 20px 0;
     @include font-size-base();
+
+    .btn {
+      color: $link-color;
+      &:hover {
+        color: $background-color;
+      }
+    }
   }
+
   .nav-link {
     color: $link-color;
     padding: 14px 18px !important;
@@ -26,19 +34,12 @@ header {
       &:hover { color: $white; }
     }
   }
+
   .nav-item {
     padding: 0;
     margin: 0;
     &.active .nav-link {
       color: $link-color-secondary;
-    }
-  }
-
-  #validator-searcher-bar {
-    display: none;
-
-    &.active {
-      display: block;
     }
   }
 
@@ -60,13 +61,6 @@ header {
       transition: border-color .1s ease-in-out;
     }
     &:focus { outline: none; }
-  }
-
-  .btn {
-    color: $link-color;
-    &:hover {
-      color: $background-color;
-    }
   }
 
   .navbar-dropdown {
@@ -150,12 +144,6 @@ header {
       display: inline-block;
       margin-left: 0;
       margin-top: 15px;
-    }
-
-    #validator-searcher-btn {
-      margin-left: 0;
-      max-width: 52px;
-      margin-top: 10px;
     }
   }
 

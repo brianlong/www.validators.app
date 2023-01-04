@@ -1,7 +1,6 @@
 <template>
-  <button id="validator-searcher-btn"
-          :class="'btn btn-lg btn-secondary ms-3 ' + searcher_class()"
-          v-on:click="trigger_btn()">
+  <button :class="'btn btn-lg btn-secondary ms-3 ' + searcher_btn_class()"
+          v-on:click="toggle_searcher()">
     <i class="fas fa-search"></i>
   </button>
 </template>
@@ -13,16 +12,14 @@
         is_active: false
       }
     },
+
     methods: {
-      searcher_class() {
+      searcher_btn_class() {
         return this.is_active ? 'active' : ''
       },
-      trigger_btn() {
+      toggle_searcher() {
         this.is_active = !this.is_active
-
-        const validator_searcher_bar = document.getElementById("validator-searcher-bar")
-
-        validator_searcher_bar.classList.toggle("active")
+        document.getElementById("searcher-bar").classList.toggle("d-none")
       }
     }
   }
