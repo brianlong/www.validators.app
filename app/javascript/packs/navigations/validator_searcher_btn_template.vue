@@ -1,5 +1,5 @@
 <template>
-  <button :class="'btn btn-lg btn-secondary ms-3 ' + searcher_btn_class()"
+  <button :class="'btn btn-lg btn-secondary ms-lg-3 mt-3 mt-lg-0 ' + searcher_btn_class()"
           v-on:click="toggle_searcher()">
     <i class="fas fa-search"></i>
   </button>
