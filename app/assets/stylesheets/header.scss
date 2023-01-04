@@ -8,6 +8,7 @@ header {
   }
 
   .navbar {
+    padding: 0;
     @include font-size-base();
   }
   .nav-link {
@@ -30,30 +31,6 @@ header {
     margin: 0;
     &.active .nav-link {
       color: $link-color-secondary;
-    }
-  }
-  #validator-searcher-btn {
-    margin-left: 15px;
-    background-color: transparent;
-
-    &.active {
-      background-color: $green;
-
-      .fa-search {
-        color: black;
-      }
-    }
-
-    &:hover {
-      background-color: $green;
-
-      .fa-search {
-        color: black;
-      }
-    }
-
-    .fa-search {
-      color: $link-color;
     }
   }
 
@@ -85,18 +62,21 @@ header {
     &:focus { outline: none; }
   }
 
+  .btn {
+    color: $link-color;
+    &:hover {
+      color: $background-color;
+    }
+  }
+
   .navbar-dropdown {
     position: relative;
 
     .btn {
-      color: $link-color;
       &:after {
         content: '\2193';
         font-size: 12px;
         font-weight: bold;
-      }
-      &:hover {
-        color: $background-color;
       }
       &.open {
         color: $background-color;

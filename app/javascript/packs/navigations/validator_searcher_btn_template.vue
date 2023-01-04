@@ -1,7 +1,6 @@
 <template>
-  <button class="btn btn-lg btn-secondary"
-          id="validator-searcher-btn"
-          :class="searcher_class()"
+  <button id="validator-searcher-btn"
+          :class="'btn btn-lg btn-secondary ms-3 ' + searcher_class()"
           v-on:click="trigger_btn()">
     <i class="fas fa-search"></i>
   </button>
