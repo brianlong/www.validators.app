@@ -10,7 +10,7 @@
         <h1 class="word-break">{{ name_or_account(validator) }}</h1>
       </div>
 
-      <div class="d-flex justify-content-between flex-wrap gap-3">
+      <div class="d-flex justify-content-between flex-wrap gap-3" v-if="!is_private() && is_active() && validator.vote_account_active">
         <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
           <a :href="solstake_url(validator)" 
             title="Delegate SOL to this validator on SolStake.io"
@@ -23,13 +23,13 @@
           <a :href="blazestake_url(validator)"
             title="Delegate SOL to this validator on BlazeStake"
             class="btn btn-sm btn-secondary"
-            target="_blank">Delegate on BlazeStake</a>
+            target="_blank">Liquid Stake through BlazeStake</a>
         </div>
 
         <div>
           <div class="btn btn-sm btn-danger me-2" title="Validator has 100% commission." v-if="is_private(validator)">private</div>
           <div class="btn btn-sm btn-danger me-2" title="Validator is delinquent." v-if="is_delinquent(validator)">delinquent</div>
-          <div class="btn btn-sm btn-danger me-2" title="Validator is inactive." v-if="is_inactive(validator)">inactive</div>
+          <div class="btn btn-sm btn-danger me-2" title="Validator is inactive." v-if="!is_active()">inactive</div>
 
           <a href="/faq#admin-warning" :title="validator.admin_warning" v-if="validator.admin_warning">
             <div class="btn btn-sm btn-danger me-2">admin warning</div>
@@ -141,7 +141,7 @@
               <td><strong>Commission:</strong></td>
               <td :class="commission_class" data-turbolinks="false">
                 {{ score.commission }}&percnt;
-                <a :href="commission_histories_path(validator)" class="small">
+                <a :href="commission_histories_path(validator)" class="small" v-if="validator.commission_history_present">
                   (See commission changes)
                 </a>
               </td>
@@ -185,23 +185,15 @@
       <vote-history-chart :vote_blocks="vote_blocks" v-if="vote_blocks.length > 0"></vote-history-chart>
       <skipped-slots-chart :skipped_slots="skipped_slots" v-if="skipped_slots[1]"></skipped-slots-chart>
     </div>
-    <div class="row">
-      <div class="col-md-9 col-lg-10">
-        <a :href="go_back_link"
-           class="btn btn-sm btn-secondary mb-3">
-           Back to All Validators
-        </a>
-      </div>
-    </div>
+    <a :href="go_back_link"
+        class="btn btn-sm btn-secondary mb-4">
+        Back to All Validators
+    </a>
     <block-history-table :block_histories="block_histories" :block_history_stats="block_history_stats"></block-history-table>
-    <div class="row">
-      <div class="col-md-9 col-lg-10">
-        <a :href="go_back_link"
-            class="btn btn-sm btn-secondary mb-3">
-            Back to All Validators
-        </a>
-      </div>
-    </div>
+    <a :href="go_back_link"
+        class="btn btn-sm btn-secondary">
+        Back to All Validators
+    </a>
   </div>
 </template>
 
@@ -234,7 +226,8 @@
         skipped_slots: {},
         refresh: null,
         order: null,
-        page: null
+        page: null,
+        validator_history: {}
       }
     },
     created() {
@@ -247,6 +240,7 @@
         ctx.block_histories = response.data.block_histories
         ctx.block_history_stats = response.data.block_history_stats
         ctx.skipped_slots = JSON.parse(response.data.skipped_slots)
+        ctx.validator_history = response.data.validator_history
       })
 
       let uri = window.location.search.substring(1); 
@@ -260,7 +254,7 @@
     },
     computed: {
       active_stake(){
-        return this.lamports_to_sol(this.score.active_stake).toFixed(3).toString().replace(/\./, ",");
+        return this.validator_history?.active_stake ? this.lamports_to_sol(this.validator_history.active_stake).toLocaleString('en-US', {maximumFractionDigits: 0}) : "N/A";
       },
       go_back_link(){
         return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
@@ -271,16 +265,16 @@
     },
     methods: {
       lamports_to_sol(lamports) {
-        return lamports / 1000000000;
+        return lamports * 0.000000001;
       },
-      is_private(validator){
-        return false
+      is_private(){
+        return this.validator.commission == 100
       },
       is_delinquent(validator){
         return this.score.delinquent
       },
-      is_inactive(validator){
-        return false
+      is_active(){
+        return this.validator.is_active
       },
       name_or_account(validator){
         return validator.name ? validator.name : validator.account
@@ -300,7 +294,11 @@
         return '/data-centers/' + validator.dch_data_center_key + '?network=' + validator.network
       },
       vote_account_path(validator) {
-        return "/validators/" + validator.account + "/vote_accounts/" + validator.vote_account_active.account + "?network="
+        if (validator.vote_account_active) {
+          return "/validators/" + validator.account + "/vote_accounts/" + validator.vote_account_active.account + "?network="
+        } else {
+          return null
+        }
       },
       solstake_url(validator) {
         return "https://solstake.io/#/app/validator/" + validator.vote_account_active.account

@@ -120,13 +120,14 @@ class ValidatorsController < ApplicationController
         end
 
         render json: {
-          validator: @validator.to_json(methods: [:dch_data_center_key, :vote_account_active]),
+          validator: @validator.to_json(methods: [:dch_data_center_key, :vote_account_active, :commission_history_present]),
           score: @score.to_json(methods: [:displayed_total_score]),
           root_blocks: @root_blocks,
           vote_blocks: @vote_blocks,
           skipped_slots: @data.to_json,
           block_histories: @block_histories,
-          block_history_stats: @block_history_stats
+          block_history_stats: @block_history_stats,
+          validator_history: @val_history
         }
       end
     end

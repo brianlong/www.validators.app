@@ -28,7 +28,7 @@ export default {
     }
   },
   template: `
-    <div class="card">
+    <div class="card mb-4">
       <div class="card-content pb-0">
         <h2 class="h4 card-heading">Recent Block Production</h2>
       </div>
