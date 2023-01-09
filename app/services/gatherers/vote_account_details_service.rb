@@ -4,7 +4,7 @@ module Gatherers
 
   # Assigns validator_identit
   class VoteAccountDetailsService
-    include SolanaLogic
+    include SolanaRequestsLogic
 
     def initialize(network:, config_urls:, always_update: false)
       @always_update = always_update
