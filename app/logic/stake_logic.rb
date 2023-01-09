@@ -2,7 +2,7 @@
 
 module StakeLogic
   include PipelineLogic
-  include SolanaLogic #for solana_client_request
+  include SolanaRequestsLogic
   include ApyHelper
 
   class NoResultsFromSolana < StandardError; end
@@ -45,7 +45,8 @@ module StakeLogic
       end
 
       Pipeline.new(200, p.payload.merge(
-        stake_accounts: reduced_stake_accounts
+        stake_accounts: reduced_stake_accounts,
+        stake_accounts_active: stake_accounts_active(p.payload[:network], stake_accounts)
       ))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
@@ -206,7 +207,7 @@ module StakeLogic
     end
   end
 
-  def get_rewards
+  def get_rewards_from_stake_pools
     lambda do |p|
       stake_accounts = StakeAccount.where(network: p.payload[:network])
       account_rewards = {}
@@ -249,7 +250,7 @@ module StakeLogic
       # Sample account_rewards structure: {"account_id"=>{"amount"=>358573846, "commission"=>8, "effectiveSlot"=>169776008, "epoch"=>392, "postBalance"=>777282463666}}
       Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from get_rewards", e)
+      Pipeline.new(500, p.payload, "Error from get_rewards_from_stake_pools", e)
     end
   end
 
@@ -359,5 +360,20 @@ module StakeLogic
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from calculate_apy_for_pools", e)
     end
+  end
+
+  private
+
+  def epochs_recent(network)
+    @epochs_recent ||= EpochWallClock.by_network(network).offset(1).limit(3).pluck(:epoch)
+  end
+
+  def stake_accounts_active(network, stake_accounts)
+    stakes = stake_accounts.select do |account|
+      account["deactivationEpoch"].nil? ||
+        epochs_recent(network).include?(account["deactivationEpoch"])
+    end
+
+    stakes.map { |account| account["stakePubkey"] }
   end
 end
