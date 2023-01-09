@@ -359,10 +359,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_222933) do
     t.integer "currency"
     t.integer "epoch_mainnet"
     t.integer "epoch_testnet"
-    t.decimal "open", precision: 40, scale: 20
-    t.decimal "close", precision: 40, scale: 20
-    t.decimal "high", precision: 40, scale: 20
-    t.decimal "low", precision: 40, scale: 20
     t.decimal "volume", precision: 40, scale: 20
     t.datetime "datetime_from_exchange"
     t.datetime "created_at", precision: 6, null: false

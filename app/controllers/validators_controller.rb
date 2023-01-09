@@ -36,6 +36,7 @@ class ValidatorsController < ApplicationController
     if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
       @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
     end
+
     @at_33_stake_index ||= nil
   end
 

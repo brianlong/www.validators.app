@@ -1,14 +1,33 @@
 @import "variables";
 
 header {
+  padding: 25px 0 55px 0;
+  @media(max-width: $screen-xs-max) {
+    padding: 20px 0 30px 0;
+  }
+
   .navbar-brand {
-    img { width: 250px; }
+    img {
+      width: 250px;
+      @media(max-width: $screen-xs-max) {
+        width: 230px;
+      }
+    }
   }
 
   .navbar {
-    padding: 25px 0 55px 0;
     @include font-size-base();
+    padding: 0;
+
+    .btn {
+      width: fit-content;
+      color: $link-color;
+      &:hover {
+        color: $background-color;
+      }
+    }
   }
+
   .nav-link {
     color: $link-color;
     padding: 14px 18px !important;
@@ -22,8 +41,17 @@ header {
       margin-left: 10px;
       margin-top: -2px;
       &:hover { color: $white; }
+      @media(max-width: $screen-md-max) {
+        display: inline-block;
+        margin-left: 0;
+        margin-top: 15px;
+      }
+      @media(max-width: $screen-xs-max) {
+        padding-top: 20px;
+      }
     }
   }
+
   .nav-item {
     padding: 0;
     margin: 0;
@@ -56,14 +84,10 @@ header {
     position: relative;
 
     .btn {
-      color: $link-color;
       &:after {
         content: '\2193';
         font-size: 12px;
         font-weight: bold;
-      }
-      &:hover {
-        color: $background-color;
       }
       &.open {
         color: $background-color;
@@ -96,11 +120,8 @@ header {
       max-height: 0;
       opacity: 0;
       transition: max-height .2s ease;
-      &.open {
-        height: auto;
-        max-height: 200px;
-        opacity: 1;
-        transition: max-height .2s ease;
+      @media(max-width: $screen-lg-max) {
+        display: none;
       }
       @media(max-width: $screen-md-max) {
         position: relative;
@@ -108,6 +129,14 @@ header {
         border: none;
         text-align: left;
         background-color: transparent;
+      }
+
+      &.open {
+        display: block;
+        height: auto;
+        max-height: 200px;
+        opacity: 1;
+        transition: max-height .2s ease;
       }
     }
 
@@ -126,26 +155,6 @@ header {
           color: $link-color-secondary;
         }
       }
-    }
-  }
-
-  @media(max-width: $screen-md-max) {
-    .nav-link.btn {
-      display: inline-block;
-      margin-left: 0;
-      margin-top: 15px;
-    }
-  }
-
-  @media(max-width: $screen-xs-max) {
-    .navbar {
-      padding: 20px 0 30px 0;
-    }
-    .navbar-brand img {
-      width: 230px;
-    }
-    .nav-link {
-      padding-top: 20px;
     }
   }
 }
