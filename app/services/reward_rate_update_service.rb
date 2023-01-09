@@ -1,35 +1,57 @@
 # frozen_string_literal: true
 
 class RewardRateUpdateService
+  include SolanaRequestsLogic
 
-  def initialize(network, account_rewards)
+  def initialize(network, stake_accounts)
     @network = network
-    @account_rewards = account_rewards
+    @stake_accounts = stake_accounts
   end
 
   def call
-    cluster_stat.update(total_rewards: total_rewards)
+    rewards_start_epoch = total_rewards(epoch_range.min)
+    rewards_end_epoch = total_rewards(epoch_range.max)
+
+    cluster_stat.update(
+      total_rewards: rewards_end_epoch - rewards_start_epoch
+    )
   end
 
   private
 
-  attr_reader :network, :account_rewards
+  attr_reader :network, :stake_accounts
 
   def cluster_stat
     ClusterStat.find_or_create_by(network: network)
   end
 
   def epoch_range
-    @epoch_range ||= 
-      EpochWallClock.where(network: network)
-                    .where("extract(year from created_at) = ?", Date.current.year)
-                    .last(3)
-                    .pluck(:epoch)
+    @epoch_range ||= begin
+      # Get three latest epochs
+      # Current epoch is skipped by getInflationReward RPC method
+      epochs = EpochWallClock.by_network(network).offset(1).limit(3).pluck(:epoch)
+
+      OpenStruct.new(min: epochs.min, max: epochs.max)
+    end
   end
 
-  def total_rewards
-    account_rewards.inject(0) do |sum, (account, val)|
-      sum + val["amount"] if epoch_range.include?(val["epoch"])
+  def total_rewards(epoch)
+    solana_rewards(epoch).compact.inject(0) do |sum, val|
+      next unless val["amount"]
+
+      sum + val["amount"].to_i
     end
+  end
+
+  def solana_rewards(epoch)
+    solana_client_request(
+      NETWORK_URLS[network],
+      "get_inflation_reward",
+      params: [
+        stake_accounts, { "epoch": epoch }
+      ]
+    )
+  rescue StandardError => e
+    Pipeline.new(500, p.payload, 'Error from solana_rewards', e)
   end
 end
