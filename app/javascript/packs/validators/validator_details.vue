@@ -12,7 +12,7 @@
 
       <div class="d-flex justify-content-between flex-wrap gap-3">
         <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
-          <a :href="solstake_url(validator)" 
+          <a :href="solstake_url(validator)"
             title="Delegate SOL to this validator on SolStake.io"
             class="btn btn-sm btn-secondary"
             target="_blank">Delegate on Solstake.io</a>
@@ -174,8 +174,9 @@
     <div class="row mb-3">
       <div class="col-md-9 col-lg-10">
         <a :href="go_back_link"
-           class="btn btn-sm btn-secondary mb-3">
-           Back to All Validators
+           class="btn btn-sm btn-secondary mb-4"
+           data-turbolinks="false">
+          Back to All Validators
         </a>
       </div>
     </div>
@@ -186,13 +187,15 @@
       <skipped-slots-chart :skipped_slots="skipped_slots" v-if="skipped_slots[1]"></skipped-slots-chart>
     </div>
     <a :href="go_back_link"
-        class="btn btn-sm btn-secondary mb-4">
-        Back to All Validators
+        class="btn btn-sm btn-secondary mb-4"
+        data-turbolinks="false">
+      Back to All Validators
     </a>
     <block-history-table :block_histories="block_histories" :block_history_stats="block_history_stats"></block-history-table>
     <a :href="go_back_link"
-        class="btn btn-sm btn-secondary">
-        Back to All Validators
+        class="btn btn-sm btn-secondary"
+        data-turbolinks="false">
+      Back to All Validators
     </a>
   </div>
 </template>
@@ -243,7 +246,7 @@
         ctx.validator_history = response.data.validator_history
       })
 
-      let uri = window.location.search.substring(1); 
+      let uri = window.location.search.substring(1);
       let params = new URLSearchParams(uri);
       this.refresh = params.get("refresh") == 'true'
       this.order = params.get("order")
