@@ -15,7 +15,17 @@ export default {
   mounted(){
     var ctx = document.getElementById("skipped-slots-history").getContext('2d');
 
-    var chart = new Chart(ctx, {
+    var skipped_slot_percent_moving_average = this.skipped_slots_array.map( (vector_element, index) => (
+      vector_element['skipped_slot_percent_moving_average']
+    ))
+    var skipped_slot_percent = this.skipped_slots_array.map( (vector_element, index) => (
+      vector_element['skipped_slot_percent']
+    ))
+    var cluster_skipped_slot_percent_moving_average = this.skipped_slots_array.map( (vector_element, index) => (
+      vector_element['cluster_skipped_slot_percent_moving_average']
+    ))
+
+    new Chart(ctx, {
       type: 'line',
       data: {
         labels: this.labels(),
@@ -27,9 +37,7 @@ export default {
             borderColor: 'rgb(239, 206, 243)',
             borderWidth: 1,
             radius: 0,
-            data: this.skipped_slots_array.map( (vector_element, index) => (
-              vector_element['skipped_slot_percent_moving_average']
-            ))
+            data: skipped_slot_percent_moving_average
           },
           {
             label: ' Actual Skipped Slots  ',
@@ -39,9 +47,7 @@ export default {
             borderWidth: 1,
             borderDash: [2, 2],
             radius: 0,
-            data: this.skipped_slots_array.map( (vector_element, index) => (
-              vector_element['skipped_slot_percent']
-            ))
+            data: skipped_slot_percent
           },
           {
             label: ' Cluster Avg',
@@ -50,9 +56,7 @@ export default {
             borderColor: 'rgb(170, 46, 184)',
             borderWidth: 1,
             radius: 0,
-            data: this.skipped_slots_array.map( (vector_element, index) => (
-              vector_element['cluster_skipped_slot_percent_moving_average']
-            ))
+            data: cluster_skipped_slot_percent_moving_average
           }
         ]
       },
@@ -100,7 +104,7 @@ export default {
             grid: { display: false },
             title: {
               display: true,
-              text: "Previous Observations",
+              text: "Previous " + cluster_skipped_slot_percent_moving_average.length + " Observations",
               color: '#979797'
             }
           },
