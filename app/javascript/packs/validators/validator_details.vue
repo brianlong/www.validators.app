@@ -232,7 +232,7 @@
     },
     created() {
       let ctx = this
-      axios.get("/validators/" + this.account + ".json?network=" + this.network).then(function (response) {
+      axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
         ctx.validator = JSON.parse(response.data.validator)
         ctx.score = JSON.parse(response.data.score)
         ctx.root_blocks = response.data.root_blocks
