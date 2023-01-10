@@ -27,7 +27,21 @@
 class CommissionHistory < ApplicationRecord
   belongs_to :validator
 
+  after_commit :notify_users, on: :create
+
   def rising?
     commission_after.to_i > commission_before.to_i
+  end
+
+  private
+
+  def notify_users
+    validator.watchers.each do |watcher|
+      CommissionHistoryMailer.commission_change_info(
+        user: watcher,
+        validator: validator,
+        commission: self
+      ).deliver_later
+    end
   end
 end

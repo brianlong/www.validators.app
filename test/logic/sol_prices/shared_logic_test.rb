@@ -5,7 +5,6 @@ require 'test_helper'
 class SolPrices::SharedLogicTest < ActiveSupport::TestCase
   include SolPrices::Parsers::CoinGecko
   include SolPrices::CoinGeckoLogic
-  include SolPrices::FtxLogic
   include SolPrices::SharedLogic
   include VcrHelper
 
@@ -20,10 +19,6 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
     @price_example = {
       :exchange=>1,
       :currency=>0,
-      :open=>173.515,
-      :high=>198.2125,
-      :low=>146.6825,
-      :close=>190.9625,
       :volume=>571066472.04745,
       :datetime_from_exchange=>@datetime
     }
@@ -57,28 +52,6 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
       assert_difference 'SolPrice.count', 136 do
         p = Pipeline.new(200, payload)
                     .then(&get_ohlc_prices)
-                    .then(&save_sol_prices)
-      end
-    end
-  end
-
-  test '#save_sol_prices ftx' do
-    payload = @initial_payload.merge(
-      {
-        exchange: SolPrice.exchanges[:ftx],
-        client: FtxClient.new,
-        start_time: DateTime.new(2021,9,8),
-        resolution: 86400,
-      }
-    )
-
-    vcr_cassette(@namespace, __method__) do
-      create(:epoch_history, network: 'testnet', epoch: 200)
-      create(:epoch_history, network: 'mainnet', epoch: 205)
-
-      assert_difference 'SolPrice.count', 3 do
-        p = Pipeline.new(200, payload)
-                    .then(&get_historical_prices)
                     .then(&save_sol_prices)
       end
     end

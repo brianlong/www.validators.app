@@ -2,120 +2,109 @@
   <div class="card mb-4">
     <div class="card-content">
       <div class="card-heading" v-if="titleVisible" data-turbolinks="false">
-        <h2 class="h5 mb-2">Recent TX Confirmation Time Stats</h2>
+        <h2 class="h5 mb-2">Recent TX Confirmation Time&nbsp;Stats</h2>
         <a class="small" :href="pt_url">See details on the Ping Thing page</a>
       </div>
 
-      <div class="row d-none d-lg-flex text-lg-center">
-        <div class="col-lg-2 mb-2">
-          <span class="stat-title-4">Stats</span>
+      <div class="row d-none d-lg-flex text-lg-center mb-1">
+        <div class="col-lg-2">
+          Stats
         </div>
-        <div class="col-lg-2 mb-2">
-            <span class="stat-title-4">
-              <i class="fas fa-calculator text-success me-1"></i> Entries
-            </span>
+        <div class="col-lg-2">
+          <i class="fas fa-calculator text-success me-2"></i>Entries
         </div>
-        <div class="col-md-2 mb-2">
-            <span class="stat-title-4">
-              <i class="fas fa-long-arrow-alt-down text-success me-1"></i> Min
-            </span>
+        <div class="col-md-2">
+          <i class="fas fa-long-arrow-alt-down text-success me-2"></i>Min
         </div>
-        <div class="col-lg-2 mb-2">
-            <span class="stat-title-4">
-              <i class="fas fa-divide text-success me-1"></i> Median
-            </span>
+        <div class="col-lg-2">
+          <i class="fas fa-divide text-success me-2"></i>Median
         </div>
-        <div class="col-lg-2 mb-2">
-            <span class="stat-title-4">
-              <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i> P90
-            </span>
+        <div class="col-lg-2">
+          <i class="fas fa-long-arrow-alt-up text-success me-2"></i>P90
         </div>
-        <div class="col-lg-2 mb-2">
-            <span class="stat-title-4">
-              <i class="fas fa-clock text-success me-1" aria-hidden="true"></i> Latency
-            </span>
+        <div class="col-lg-2">
+          <i class="fas fa-clock text-success me-2"></i>Latency
         </div>
       </div>
 
-      <div class="row text-lg-center">
+      <!-- stats -->
+      <div class="row">
         <div class="col-sm-6 col-lg-12">
-          <div class="row">
-            <div class="col-lg-2 mb-3 mb-lg-2">
-              <span class="stat-title-3 d-lg-none">5 min stats</span>
-              <span class="stat-title-4 d-none d-lg-block">5 min</span>
+
+          <!-- 5 minutes stats -->
+          <div class="row text-lg-center mb-3 mb-sm-0 mb-lg-1">
+            <div class="col-lg-2 mb-1 mb-lg-0">5 min</div>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fas fa-calculator text-success me-2"></i>Entries:&nbsp;
+              </span>
+              <span class="text-success">{{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString() : '0' }}</span>
             </div>
-            <div class="col-lg-2 mb-2">
-            <span class="stat-title-4 d-lg-none">
-              <i class="fas fa-calculator text-success me-1"></i> Entries:&nbsp;
-            </span>
-              <strong class="text-success">{{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString() : '0' }}</strong>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fas fa-long-arrow-alt-down text-success me-2"></i>Min:&nbsp;
+              </span>
+              <span class="text-success">{{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
-            <div class="col-lg-2 mb-2">
-            <span class="stat-title-4 d-lg-none">
-              <i class="fas fa-long-arrow-alt-down text-success me-1"></i> Min:&nbsp;
-            </span>
-              <strong class="text-success">{{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fas fa-divide text-success me-2"></i>Median:&nbsp;
+              </span>
+              <span class="text-success">{{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
-            <div class="col-lg-2 mb-2">
-            <span class="stat-title-4 d-lg-none">
-              <i class="fas fa-divide text-success me-1"></i> Median:&nbsp;
-            </span>
-              <strong class="text-success">{{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fas fa-long-arrow-alt-up text-success me-2"></i>P90:&nbsp;
+              </span>
+              <span class="text-success">{{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
-            <div class="col-lg-2 mb-2">
-             <span class="stat-title-4 d-lg-none">
-              <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i> P90:&nbsp;
-            </span>
-              <strong class="text-success">{{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
-            </div>
-            <div class="col-lg-2 mb-2">
-            <span class="stat-title-4 d-lg-none">
-              <i class="fas fa-clock text-success me-1" aria-hidden="true"></i> Latency:&nbsp;
-            </span>
-              <strong class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</strong>
+            <div class="col-lg-2">
+              <span class="d-lg-none">
+                <i class="fas fa-clock text-success me-2"></i>Latency:&nbsp;
+              </span>
+              <span class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</span>
             </div>
           </div>
         </div>
 
+        <!-- 1 hour stats -->
         <div class="col-sm-6 col-lg-12">
-          <div class="row">
-            <div class="col-lg-2 my-3 mb-lg-2 mt-sm-0">
-              <span class="stat-title-3 d-lg-none">1 hour stats</span>
-              <span class="stat-title-4 d-none d-lg-block">1 hour</span>
-            </div>
-            <div class="col-lg-2 mb-2">
-                <span class="stat-title-4 d-lg-none">
-                  <i class="fas fa-calculator text-success me-1"></i> Entries:&nbsp;
-                </span>
+          <div class="row text-lg-center">
+            <div class="col-lg-2 mb-1 mb-lg-0">1 hour</div>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fas fa-calculator text-success me-2"></i>Entries:&nbsp;
+              </span>
               <strong class="text-success">{{ last_60_mins["num_of_records"] ? last_60_mins["num_of_records"].toLocaleString() : '0' }}</strong>
             </div>
-            <div class="col-lg-2 mb-2">
-                <span class="stat-title-4 d-lg-none">
-                  <i class="fas fa-long-arrow-alt-down text-success me-1"></i> Min:&nbsp;
-                </span>
-              <strong class="text-success">{{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fas fa-long-arrow-alt-down text-success me-2"></i>Min:&nbsp;
+              </span>
+              <span class="text-success">{{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
-            <div class="col-lg-2 mb-2">
-                <span class="stat-title-4 d-lg-none">
-                  <i class="fas fa-divide text-success me-1"></i> Median:&nbsp;
-                </span>
-              <strong class="text-success">{{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fas fa-divide text-success me-2"></i>Median:&nbsp;
+              </span>
+              <span class="text-success">{{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
-            <div class="col-lg-2 mb-2">
-                <span class="stat-title-4 d-lg-none">
-                  <i class="fas fa-long-arrow-alt-up text-success me-1" aria-hidden="true"></i> P90:&nbsp;
-                </span>
-              <strong class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</strong>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fas fa-long-arrow-alt-up text-success me-2"></i>P90:&nbsp;
+              </span>
+              <span class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
-            <div class="col-lg-2 mb-2">
-                <span class="stat-title-4 d-lg-none">
-                  <i class="fas fa-clock text-success me-1" aria-hidden="true"></i> Latency:&nbsp;
-                </span>
-              <strong class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</strong>
+            <div class="col-lg-2">
+              <span class="d-lg-none">
+                <i class="fas fa-clock text-success me-2"></i>Latency:&nbsp;
+              </span>
+              <span class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</span>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>

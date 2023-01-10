@@ -23,13 +23,16 @@ $green-purple-point: rgba(70, 121, 130, .95);
   &-background {
     background: url(asset_path("map.svg")) no-repeat top right;
     background-size: cover;
-    height: 620px;
+    height: 605px;
     @media(max-width: $screen-xl-max) {
-      height: 530px;
+      height: 525px;
     }
     @media(max-width: $screen-lg-max) {
-      height: 450px;
+      height: 440px;
       width: 936px;
+    }
+    @media(max-width: $screen-sm-max) {
+      height: 480px;
     }
   }
 
@@ -69,9 +72,11 @@ $green-purple-point: rgba(70, 121, 130, .95);
     }
 
     &-leader {
+      display: block;
       @include map-point-style(32px, 32px, 0);
       z-index: 2;
       border: 2px solid lighten($green-point, 15%);
+      background-color: lighten($green-point, 15%);
       img {
         width: 28px;
         height: 28px;
@@ -127,6 +132,10 @@ $green-purple-point: rgba(70, 121, 130, .95);
       flex-direction: column;
       gap: 20px;
       align-items: flex-start;
+    }
+
+    &-details {
+      text-shadow: $black 0 0 3px;
     }
   }
 

@@ -5,7 +5,6 @@ require_relative './concerns/front_software_versions_module.rb'
 
 include FrontSoftwareVersionsModule
 
-@networks = %w[mainnet testnet].freeze
 sleep_time = 5 # seconds
 update_stats_time = 60 # seconds
 @counter = 0
@@ -14,7 +13,8 @@ update_stats_time = 60 # seconds
 def get_latest_cluster_stats
   {
     mainnet: ClusterStat.by_network("mainnet").last&.attributes,
-    testnet: ClusterStat.by_network("testnet").last&.attributes
+    testnet: ClusterStat.by_network("testnet").last&.attributes,
+    pythnet: ClusterStat.by_network("pythnet").last&.attributes
   }
 end
 

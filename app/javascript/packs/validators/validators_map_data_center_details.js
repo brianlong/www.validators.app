@@ -24,7 +24,7 @@ var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetai
     },
   },
   template: `
-    <div>
+    <div class="map-legend-details mb-3">
       <strong :class="text_color(data_centers_group.active_validators_count, data_centers_group.active_gossip_nodes_count)">
         {{ data_centers_group.identifier }}, 
         {{ data_centers_group.data_centers.length }} Data Center(s)

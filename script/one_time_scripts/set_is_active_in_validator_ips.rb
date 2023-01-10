@@ -6,7 +6,7 @@ require_relative '../../config/environment'
 log_path = Rails.root.join('log', 'set_is_active_in_validator_ips.log')
 @logger ||= Logger.new(log_path)
 
-Validator.all.each do |validator|
+Validator.find_each do |validator|
   vips = validator.validator_ips.order('updated_at desc')
 
   most_recent_updated_validator_ip = vips.first

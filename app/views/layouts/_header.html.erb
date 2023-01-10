@@ -1,4 +1,6 @@
 <%= javascript_pack_tag 'navigations/network_buttons' %>
+<%= javascript_pack_tag 'navigations/validator_searcher_bar' %>
+<%= javascript_pack_tag 'navigations/validator_searcher_btn' %>
 
 <header>
   <nav class="navbar navbar-expand-lg">
@@ -16,14 +18,19 @@
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <%= link_to "Validators", validators_path(network: params[:network]), class: 'nav-link' %>
+            <%= link_to "Validators", validators_path(network: params[:network]), class: 'nav-link', "data-turbolinks": "false" %>
           </li>
           <li class="nav-item">
-            <%= link_to "Getting Started", faq_path, class: 'nav-link' %>
+            <%= link_to "Getting Started", faq_path, class: 'nav-link', "data-turbolinks": "false" %>
           </li>
           <div id="network-buttons"></div>
+          <div id="validator-searcher-btn"></div>
         </ul>
       </div>
     </div>
   </nav>
+
+  <div class="container">
+    <div id="validator-searcher-bar"></div>
+  </div>
 </header>

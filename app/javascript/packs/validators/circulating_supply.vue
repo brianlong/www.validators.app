@@ -42,7 +42,6 @@
       this.connection = new web3.Connection(this.web3_url);
 
       this.update_circulating_supply();
-      this.set_continuous_supply_update();
     },
     mounted: function(){
       this.$cable.subscribe({
@@ -79,11 +78,6 @@
       },
       percent_of_total_stake() {
         return (parseInt(this.circulating_supply) * 100 / parseInt(this.total_circulating_supply)).toFixed(0);
-      },
-      set_continuous_supply_update() {
-        setInterval(() => {
-          this.update_circulating_supply();
-        }, 5000);
       }
     }
   }

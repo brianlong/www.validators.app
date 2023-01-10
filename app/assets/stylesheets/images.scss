@@ -10,6 +10,7 @@
 @mixin img-private($padding-y, $padding-x, $font-size) {
   background-color: rgba($white, 0.6);
   padding: $padding-y $padding-x;
+  display: inline-block;
   span {
     color: $background-color;
     font-size: $font-size;
@@ -29,14 +30,14 @@
     @include img-circle(50px, 50px);
     &-private {
       @include img-circle(50px, 50px);
-      @include img-private(12px, 9px, 22px);
+      @include img-private(14px, 11px, 22px);
     }
   }
   &-small {
     @include img-circle(30px, 30px);
     &-private {
       @include img-circle(30px, 30px);
-      @include img-private(4px, 6px, 16px);
+      @include img-private(4px, 5px, 16px);
     }
   }
 }

@@ -162,62 +162,71 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validators_cli' do
-    # Empty the ValidatorHistory table
+  test "validator_history_update with stubbed validators" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
-    # We need to stub both the cli call (using minitest stub)
-    # plus the POST https://api.testnet.solana.com call (using VCR)
-    json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
-      VCR.use_cassette('validators_cli') do
+    json_data = {
+      "validators": [
+        {
+          "identityPubkey": "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr"
+        },
+        {
+          "identityPubkey": "6X8sHQkmxRVh7oR94VjsfffmQYPoGZ62Fp8gt4QivszH"
+        }
+      ]
+    }.to_json
 
-        # Show that the pipeline runs & the expected values are not empty.
+    create(:validator, account: "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr")
+
+    SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
+      VCR.use_cassette("validator_history_update") do
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
-                    .then(&epoch_get)
-                    .then(&validators_cli)
+                    .then(&validator_history_update)
+
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 
         assert_equal 200, p.code
-        assert_not_nil p.payload[:epoch]
-        assert_not_nil p.payload[:batch_uuid]
-
-        # Find the EpochHistory record and show that the values match
-        validators = ValidatorHistory.where(
-          batch_uuid: p.payload[:batch_uuid]
-        ).all
-        assert validators.count.positive?
+        assert validator_histories.size == 1
       end
     end
   end
 
-  test "validators_cli returns no validator form blacklist" do
-    # Empty the ValidatorHistory table
+  test "validator_history_update returns no validator from blacklist" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
-    # We need to stub both the cli call (using minitest stub)
-    # plus the POST https://api.testnet.solana.com call (using VCR)
     json_data = File.read("#{Rails.root}/test/json/validators_from_blacklist.json")
     SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
-      VCR.use_cassette("validators_cli_blacklist") do
-
-        # Show that the pipeline runs & the expected values are not empty.
+      VCR.use_cassette("validator_history_update_blacklist") do
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
-                    .then(&epoch_get)
-                    .then(&validators_cli)
+                    .then(&validator_history_update)
+
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 
         assert_equal 200, p.code
-        assert_not_nil p.payload[:epoch]
-        assert_not_nil p.payload[:batch_uuid]
+        assert_empty validator_histories
+      end
+    end
+  end
 
-        # Find the EpochHistory record and show that the values match
-        validators = ValidatorHistory.where(
-          batch_uuid: p.payload[:batch_uuid]
-        )
-        assert_empty validators
+  test "validator_history_update with validator_histories without validator relations" do
+    ValidatorHistory.delete_all
+    assert_equal 0, ValidatorHistory.count
+
+    json_data = File.read("#{Rails.root}/test/json/validators.json")
+    SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
+      VCR.use_cassette("validator_history_update") do
+        p = Pipeline.new(200, @testnet_initial_payload)
+                    .then(&batch_set)
+                    .then(&validator_history_update)
+
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
+
+        assert_equal 200, p.code
+        assert validator_histories.count.zero?
       end
     end
   end

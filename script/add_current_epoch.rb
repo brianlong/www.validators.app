@@ -4,18 +4,12 @@ require File.expand_path('../config/environment', __dir__)
 
 def solana_rpc_client(network)
   @solana_rpc_client ||= SolanaRpcClient.new
-   
-  return @solana_rpc_client.testnet_client if Rails.env.test?
+  network = 'testnet' if Rails.env.test?
 
-  case network
-  when "mainnet"
-    @solana_rpc_client.mainnet_client
-  when "testnet"
-    @solana_rpc_client.testnet_client
-  end
+  @solana_rpc_client.network_client(network)
 end
 
-%w[mainnet testnet].each do |network|
+NETWORKS.each do |network|
   slots_in_epoch = 432000
 
   # number of slots to search for a confirmed block
@@ -50,6 +44,8 @@ end
   rescue SolanaRpcRuby::ApiError, JSON::ParserError
     next
   end
+
+  next unless block_time
   
   last_epoch_start_datetime = DateTime.strptime(block_time, "%s")
 
