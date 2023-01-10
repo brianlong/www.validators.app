@@ -135,7 +135,7 @@ var ValidatorRow = Vue.component('validatorRow', {
   template: `
     <tr :id="row_index()">
       <td class="column-info">
-        <div class="column-info-row">
+        <div class="column-info-row" data-turbolinks=false>
           <div class="column-info-avatar no-watchlist">
             <img :src="create_avatar_link()" class='img-circle-medium'/>
           </div>
