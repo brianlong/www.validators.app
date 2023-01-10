@@ -21,7 +21,7 @@ export default {
         labels: this.labels(),
         datasets: [
           {
-            label: ' Block Diff ',
+            label: ' Vote Diff ',
             fill: true,
             borderColor: "rgb(221, 154, 229)",
             backgroundColor: "rgba(221, 154, 229, 0.4)",
