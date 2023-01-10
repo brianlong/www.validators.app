@@ -274,7 +274,7 @@
         return this.score.delinquent
       },
       is_active(){
-        return this.validator.is_active
+        return this.validator.is_active || true
       },
       name_or_account(validator){
         return validator.name ? validator.name : validator.account
