@@ -21,7 +21,7 @@ export default {
         labels: this.labels(),
         datasets: [
           {
-            label: ' Block Diff ',
+            label: ' Vote Diff ',
             fill: true,
             borderColor: "rgb(221, 154, 229)",
             backgroundColor: "rgba(221, 154, 229, 0.4)",
@@ -33,36 +33,6 @@ export default {
         ]
       },
       options: {
-        hover: {
-          intersect: false,
-        },
-        tooltips: {
-          enabled: true,
-          intersect: false,
-          mode: 'index',
-          displayColors: false,
-          xPadding: 8,
-          yPadding: 8,
-          callbacks: {
-            label: function(tooltipItem) {
-              return "Distance: " + tooltipItem.yLabel;
-            },
-            title: function(tooltipItem) {
-              return tooltipItem[0].xLabel + " UTC";
-            },
-          }
-        },
-        responsiveAnimationDuration: 0, // animation duration after a resize
-        legend: {
-          labels: {
-            fontColor: '#979797',
-            boxWidth: 8,
-            boxHeight: 8,
-            usePointStyle: true,
-            padding: 5,
-            fontSize: 14
-          },
-        },
         scales: {
           x: {
             display: true,
@@ -96,9 +66,40 @@ export default {
               color: '#979797'
             }
           }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        plugins: {
+          tooltip: {
+            enabled: true,
+            displayColors: false,
+            padding: 8,
+            callbacks: {
+              label: function(tooltipItem) {
+                return "Distance: " + tooltipItem.raw.y;
+              },
+              title: function(tooltipItem) {
+                return tooltipItem[0].label + " UTC";
+              },
+            }
+          },
+          legend: {
+            labels: {
+              boxWidth: 8,
+              boxHeight: 8,
+              usePointStyle: true,
+              padding: 10,
+              color: '#979797',
+              font: {
+                size: 14
+              }
+            },
+          },
         }
       },
-      plugins: {
+      plugins: [{
         beforeInit(chart) {
           const originalFit = chart.legend.fit;
           chart.legend.fit = function fit() {
@@ -106,7 +107,7 @@ export default {
             this.height += 12;
           }
         },
-      }
+      }]
     });
   },
   methods: {

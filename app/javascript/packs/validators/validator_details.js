@@ -20,12 +20,6 @@ document.addEventListener('turbolinks:load', () => {
       return createElement(ValidatorDetails, {
         props: {
           account: this.$el.attributes.account.value,
-          // score: JSON.parse(this.$el.attributes.score.value),
-          // root_blocks: JSON.parse(this.$el.attributes.root_blocks.value),
-          // vote_blocks: JSON.parse(this.$el.attributes.vote_blocks.value),
-          // skipped_slots: JSON.parse(this.$el.attributes.skipped_slots.value),
-          // block_histories: JSON.parse(this.$el.attributes.block_histories.value),
-          // block_history_stats: JSON.parse(this.$el.attributes.block_history_stats.value)
         }
       })
     }

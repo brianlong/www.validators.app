@@ -61,36 +61,6 @@ export default {
         ]
       },
       options: {
-        hover: {
-          intersect: false,
-        },
-        tooltips: {
-          enabled: true,
-          intersect: false,
-          mode: 'index',
-          displayColors: false,
-          xPadding: 8,
-          yPadding: 8,
-          callbacks: {
-            label: function(tooltipItem) {
-              return "Distance: " + tooltipItem.yLabel;
-            },
-            title: function(tooltipItem) {
-              return tooltipItem[0].xLabel + " UTC";
-            },
-          }
-        },
-        responsiveAnimationDuration: 0, // animation duration after a resize
-        legend: {
-          labels: {
-            fontColor: '#979797',
-            boxWidth: 8,
-            boxHeight: 8,
-            usePointStyle: true,
-            padding: 5,
-            fontSize: 14
-          },
-        },
         scales: {
           x: {
             display: true,
@@ -125,9 +95,46 @@ export default {
               color: '#979797'
             }
           }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        plugins: {
+          tooltip: {
+            enabled: true,
+            displayColors: false,
+            padding: 8,
+            callbacks: {
+              label: function(tooltipItem) {
+                if (tooltipItem.datasetIndex == 0) {
+                  return "Moving Avg: " + tooltipItem.raw;
+                } else if (tooltipItem.datasetIndex == 1) {
+                  return "Actual Skipped Slots: " + tooltipItem.raw;
+                } else {
+                  return "Cluster Avg: " + tooltipItem.raw;
+                }
+              },
+              title: function(tooltipItem) {
+                return tooltipItem[0].label + " UTC";
+              },
+            }
+          },
+          legend: {
+            labels: {
+              color: '#979797',
+              boxWidth: 8,
+              boxHeight: 8,
+              usePointStyle: true,
+              padding: 5,
+              font: {
+                size: 14
+              }
+            },
+          },
         }
       },
-      plugins: {
+      plugins: [{
         beforeInit(chart) {
           const originalFit = chart.legend.fit;
           chart.legend.fit = function fit() {
@@ -135,7 +142,7 @@ export default {
             this.height += 12;
           }
         },
-      }
+      }]
     });
   },
   computed: {

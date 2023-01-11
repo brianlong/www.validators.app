@@ -33,81 +33,82 @@ export default {
         ]
       },
       options: {
-        hover: {
-          intersect: false,
-        },
-        tooltips: {
-          enabled: true,
-          intersect: false,
-          mode: 'index',
-          displayColors: false,
-          xPadding: 8,
-          yPadding: 8,
-          callbacks: {
-            label: function(tooltipItem) {
-              return "Distance: " + tooltipItem.yLabel;
+        scales: {
+          x: {
+            display: true,
+            ticks: {
+              display: true,
+              minRotation: 0,
+              maxRotation: 0,
+              autoSkip: true,
+              autoSkipPadding: 30
             },
-            title: function(tooltipItem) {
-              return tooltipItem[0].xLabel + " UTC";
+            gridLines: { display: false },
+            title: {
+              display: true,
+              text: "Previous " + this.root_blocks.length + " Observations",
+              color: '#979797'
+            }
             },
+          y: {
+            display: true,
+            ticks: {
+              min: 0,
+              padding: 5
+            },
+            grid: {
+              display: true,
+              zeroLineColor: '#322f3d',
+              color: '#322f3d'
+            },
+            title: {
+              display: true,
+              text: "Dist Behind Leader",
+              color: '#979797'
+            }
           }
         },
-        responsiveAnimationDuration: 0, // animation duration after a resize
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        plugins: {
+          tooltip: {
+            enabled: true,
+            displayColors: false,
+            padding: 8,
+            callbacks: {
+              label: function(tooltipItem) {
+                return "Distance: " + tooltipItem.raw.y;
+              },
+              title: function(tooltipItem) {
+                return tooltipItem[0].label + " UTC";
+              },
+            }
+          },
           legend: {
             labels: {
-              fontColor: '#979797',
               boxWidth: 8,
               boxHeight: 8,
               usePointStyle: true,
-              padding: 5,
-              fontSize: 14
-            },
-          },
-          scales: {
-            x: {
-              display: true,
-              ticks: {
-                display: true,
-                minRotation: 0,
-                maxRotation: 0,
-                autoSkip: true,
-                autoSkipPadding: 30
-              },
-              gridLines: { display: false },
-              title: {
-                display: true,
-                text: "Previous " + this.root_blocks.length + " Observations",
-                color: '#979797'
+              padding: 10,
+              color: '#979797',
+              font: {
+                size: 14
               }
             },
-            y: {
-              display: true,
-              ticks: {
-                min: 0,
-                padding: 5
-              },
-              grid: {
-                display: true,
-                zeroLineColor: '#322f3d',
-                color: '#322f3d'
-              },
-              title: {
-                display: true,
-                text: "Dist Behind Leader",
-                color: '#979797'
-              }
-            }
-          }
-        },
-        plugins: {
-          beforeInit(chart) {
-            const originalFit = chart.legend.fit;
-            chart.legend.fit = function fit() {
-              originalFit.bind(chart.legend)();
-              this.height += 12;
-            }
           },
         }
+      },
+      plugins: [{
+        beforeInit(chart) {
+          const originalFit = chart.legend.fit;
+          chart.legend.fit = function fit() {
+            originalFit.bind(chart.legend)();
+            this.height += 12;
+          }
+        }
+      }]
     });
   },
   methods: {
