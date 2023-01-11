@@ -26,10 +26,10 @@
             target="_blank">Liquid Stake through BlazeStake</a>
         </div>
 
-        <div>
-          <div class="btn btn-sm btn-danger me-2" title="Validator has 100% commission." v-if="is_private(validator)">private</div>
-          <div class="btn btn-sm btn-danger me-2" title="Validator is delinquent." v-if="is_delinquent(validator)">delinquent</div>
-          <div class="btn btn-sm btn-danger me-2" title="Validator is inactive." v-if="!is_active()">inactive</div>
+        <div class="d-flex flex-wrap gap-3">
+          <div class="btn btn-sm btn-danger" title="Validator has 100% commission." v-if="is_private(validator)">private</div>
+          <div class="btn btn-sm btn-danger" title="Validator is delinquent." v-if="is_delinquent(validator)">delinquent</div>
+          <div class="btn btn-sm btn-danger" title="Validator is inactive." v-if="!is_active()">inactive</div>
 
           <a href="/faq#admin-warning" :title="validator.admin_warning" v-if="validator.admin_warning">
             <div class="btn btn-sm btn-danger me-2">admin warning</div>
