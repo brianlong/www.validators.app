@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RewardRateUpdateService
+class TotalRewardsUpdateService
   include SolanaRequestsLogic
 
   def initialize(network, stake_accounts)
@@ -13,7 +13,7 @@ class RewardRateUpdateService
     rewards_end_epoch = total_rewards(epoch_range.max)
 
     cluster_stat.update(
-      total_rewards: rewards_end_epoch - rewards_start_epoch
+      total_rewards_difference: rewards_end_epoch - rewards_start_epoch
     )
   end
 
@@ -46,9 +46,9 @@ class RewardRateUpdateService
   def solana_rewards(epoch)
     solana_client_request(
       NETWORK_URLS[network],
-      "get_inflation_reward",
+      :get_inflation_reward,
       params: [
-        stake_accounts, { "epoch": epoch }
+        stake_accounts
       ]
     )
   rescue StandardError => e

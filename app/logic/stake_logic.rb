@@ -273,7 +273,6 @@ module StakeLogic
       lido = StakePool.find_by(name: "Lido")
 
       val_accounts = lido.stake_accounts.map{ |sa| sa.validator.account }
-
       lido_histories = ValidatorHistory.select(
         "DISTINCT(account) account, active_stake"
       ).where(
