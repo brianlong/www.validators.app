@@ -125,7 +125,7 @@
     methods: {
       success_icon(success) {
         if(success){
-          return '<i class="fa-solid fa-check-circle text-success me-1"></i>'
+          return '<i class="fa-solid fa-circle-check text-success me-1"></i>'
         } else {
           return '<i class="fa-solid fa-circle-xmark text-danger me-1"></i>'
         }
