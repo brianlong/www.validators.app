@@ -298,7 +298,7 @@
       },
       vote_account_path(validator) {
         if (validator.vote_account_active) {
-          return "/validators/" + validator.account + "/vote_accounts/" + validator.vote_account_active.account + "?network="
+          return "/validators/" + validator.account + "/vote_accounts/" + validator.vote_account_active.account + "?network=" + validator.network
         } else {
           return null
         }
