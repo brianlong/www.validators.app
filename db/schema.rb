@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_02_222933) do
+ActiveRecord::Schema.define(version: 2023_01_11_114055) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -85,7 +85,8 @@ ActiveRecord::Schema.define(version: 2023_01_02_222933) do
     t.integer "validator_count"
     t.integer "nodes_count"
     t.string "software_version"
-    t.bigint "total_rewards"
+    t.bigint "total_rewards_difference"
+    t.bigint "network_total_active_stake"
     t.index ["network"], name: "index_cluster_stat_on_network"
   end
 

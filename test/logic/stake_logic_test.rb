@@ -231,7 +231,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 6.67, stake_pool.reload.average_score
   end
 
-  test "get_rewards \
+  test "get_rewards_from_stake_pools \
         when response is correct \
         should have correct payload" do
     stake_pool = create(:stake_pool)
@@ -244,9 +244,9 @@ class StakeLogicTest < ActiveSupport::TestCase
     create(:stake_account, validator: validator, stake_pool: stake_pool)
     create(:stake_account, validator: validator2, stake_pool: stake_pool)
 
-    VCR.use_cassette("stake_logic_get_rewards") do
+    VCR.use_cassette("stake_logic_get_rewards_from_stake_pools") do
       p = Pipeline.new(200, @initial_payload)
-                  .then(&get_rewards)
+                  .then(&get_rewards_from_stake_pools)
 
       refute p.payload[:account_rewards].empty?
     end

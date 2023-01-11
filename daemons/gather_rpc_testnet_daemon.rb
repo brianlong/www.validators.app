@@ -36,6 +36,7 @@ begin
                 .then(&log_errors)
                 .then(&batch_touch)
                 .then(&check_epoch)
+                .then(&update_network_total_active_stake)
 
     raise SkipAndSleep, p.code unless p.code == 200
 

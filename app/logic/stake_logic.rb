@@ -225,8 +225,7 @@ module StakeLogic
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
 
-      lido_stake_accounts = stake_accounts.joins(:stake_pool)
-                                          .where("stake_pools.name = ?", "Lido")
+      lido_stake_accounts = stake_accounts.joins(:stake_pool).where("stake_pools.name = ?", "Lido")
 
       lido_vote_accounts = {}
 
