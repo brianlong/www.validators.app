@@ -123,7 +123,7 @@
               </td>
               <td>
                 <small class="word-break">
-                  <a href="vote_account_path(validator)" v-if="validator.vote_account_active">
+                  <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
                     {{ validator.vote_account_active.account }}
                   </a>
                 </small>
