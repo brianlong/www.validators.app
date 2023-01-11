@@ -218,6 +218,7 @@
         required: true
       }
     },
+    
     data() {
       return {
         validator: {},
@@ -233,6 +234,7 @@
         validator_history: {}
       }
     },
+
     created() {
       let ctx = this
       axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
@@ -252,34 +254,35 @@
       this.order = params.get("order")
       this.page = params.get("page")
     },
-    mounted: function(){
 
-    },
+    mounted: function() {},
+
     computed: {
-      active_stake(){
+      active_stake() {
         return this.validator_history?.active_stake ? this.lamports_to_sol(this.validator_history.active_stake).toLocaleString('en-US', {maximumFractionDigits: 0}) : "N/A";
       },
-      go_back_link(){
+      go_back_link() {
         return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
       },
       ...mapGetters([
         'network'
       ])
     },
+
     methods: {
       lamports_to_sol(lamports) {
         return lamports * 0.000000001;
       },
-      is_private(){
+      is_private() {
         return this.score.commission == 100
       },
-      is_delinquent(validator){
+      is_delinquent(validator) {
         return this.score.delinquent
       },
-      is_active(){
+      is_active() {
         return this.validator.is_active || true
       },
-      name_or_account(validator){
+      name_or_account(validator) {
         return validator.name ? validator.name : validator.account
       },
       display_staking_info(validator) {
@@ -294,7 +297,8 @@
         return '/commission-changes/' + validator.id + '?network=' + validator.network
       },
       data_center_link(validator) {
-        return '/data-centers/' + validator.dch_data_center_key + '?network=' + validator.network
+        let key = validator.dch_data_center_key.replace('/', '-slash-')
+        return '/data-centers/' + key + '?network=' + validator.network
       },
       vote_account_path(validator) {
         if (validator.vote_account_active) {
