@@ -171,27 +171,26 @@
       </div>
     </div>
 
-    <div class="row mb-3">
-      <div class="col-md-9 col-lg-10">
-        <a :href="go_back_link"
-           class="btn btn-sm btn-secondary mb-4"
-           data-turbolinks="false">
-          Back to All Validators
-        </a>
-      </div>
-    </div>
+    <a :href="go_back_link"
+       class="btn btn-sm btn-secondary mb-4"
+       data-turbolinks="false">
+      Back to All Validators
+    </a>
 
     <div class="row">
       <block-history-chart :root_blocks="root_blocks" v-if="root_blocks.length > 0"></block-history-chart>
       <vote-history-chart :vote_blocks="vote_blocks" v-if="vote_blocks.length > 0"></vote-history-chart>
       <skipped-slots-chart :skipped_slots="skipped_slots" v-if="skipped_slots[1]"></skipped-slots-chart>
     </div>
+
     <a :href="go_back_link"
         class="btn btn-sm btn-secondary mb-4"
         data-turbolinks="false">
       Back to All Validators
     </a>
+
     <block-history-table :block_histories="block_histories" :block_history_stats="block_history_stats"></block-history-table>
+
     <a :href="go_back_link"
         class="btn btn-sm btn-secondary"
         data-turbolinks="false">
@@ -218,7 +217,7 @@
         required: true
       }
     },
-    
+
     data() {
       return {
         validator: {},
