@@ -74,8 +74,13 @@
           const stake = data.cluster_stats[this.network].total_active_stake;
           this.total_active_stake = this.lamports_to_sol(stake).toLocaleString('en-US', { maximumFractionDigits: 0 });
 
-          const total_rewards = this.lamports_to_sol(data.cluster_stats[this.network].total_rewards);
-          this.gross_yield = (parseInt(total_rewards) * 100 / parseInt(this.total_active_stake)).toFixed(2);
+          const total_rewards_difference = data.cluster_stats[this.network].total_rewards_difference;
+          const network_total_active_stake = data.cluster_stats[this.network].network_total_active_stake;
+
+          if (total_rewards_difference && network_total_active_stake) {
+            this.gross_yield = (this.lamports_to_sol(total_rewards_difference) * 100 /
+              this.lamports_to_sol(network_total_active_stake)).toFixed(2);
+          }
         },
         disconnected() {},
       },
