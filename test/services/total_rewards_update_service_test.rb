@@ -10,6 +10,8 @@ class TotalRewardsUpdateServiceTest < ActiveSupport::TestCase
   end
 
   test "updating cluster stat with total rewards difference" do
+    EpochWallClock.delete_all
+
     cluster_stat = create(:cluster_stat, network: @network)
     create(:epoch_wall_clock, epoch: 397, network: @network)
     create(:epoch_wall_clock, epoch: 398, network: @network)

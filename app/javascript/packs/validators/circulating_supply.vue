@@ -78,8 +78,10 @@
           const network_total_active_stake = data.cluster_stats[this.network].network_total_active_stake;
 
           if (total_rewards_difference && network_total_active_stake) {
-            this.gross_yield = (this.lamports_to_sol(total_rewards_difference) * 100 /
-              this.lamports_to_sol(network_total_active_stake)).toFixed(2);
+            this.gross_yield = (
+              this.lamports_to_sol(total_rewards_difference) * 100 /
+                this.lamports_to_sol(network_total_active_stake)
+            ).toFixed(2);
           }
         },
         disconnected() {},
