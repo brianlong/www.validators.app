@@ -56,7 +56,11 @@
             <h2 class="h4 card-heading">Validator Details</h2>
           </div>
 
-          <table class='table table-block-sm mb-0'>
+          <div class="img-loading" v-if="is_loading_validator">
+            <img v-bind:src="loading_image" width="100">
+          </div>
+
+          <table class="table table-block-sm mb-0" v-if="!is_loading_validator">
             <tbody>
               <tr>
                 <td class="column-lg"><strong>Name:</strong></td>
@@ -105,7 +109,12 @@
           <div class="card-content pb-0">
             <h2 class="h4 card-heading">Validator Details</h2>
           </div>
-          <table class='table table-block-sm mb-0'>
+
+          <div class="img-loading" v-if="is_loading_validator">
+            <img v-bind:src="loading_image" width="100">
+          </div>
+
+          <table class="table table-block-sm mb-0" v-if="!is_loading_validator">
             <tbody>
             <tr>
               <td class="column-lg"><strong>Keybase:</strong></td>
@@ -177,7 +186,11 @@
       Back to All Validators
     </a>
 
-    <div class="row">
+    <div class="img-loading" v-if="is_loading_validator">
+      <img v-bind:src="loading_image" width="100">
+    </div>
+
+    <div class="row" v-if="!is_loading_validator">
       <block-history-chart :root_blocks="root_blocks" v-if="root_blocks.length > 0"></block-history-chart>
       <vote-history-chart :vote_blocks="vote_blocks" v-if="vote_blocks.length > 0"></vote-history-chart>
       <skipped-slots-chart :skipped_slots="skipped_slots" v-if="skipped_slots[1]"></skipped-slots-chart>
@@ -189,7 +202,14 @@
       Back to All Validators
     </a>
 
-    <block-history-table :block_histories="block_histories" :block_history_stats="block_history_stats"></block-history-table>
+    <div class="img-loading" v-if="is_loading_validator">
+      <img v-bind:src="loading_image" width="100">
+    </div>
+
+    <block-history-table :block_histories="block_histories"
+                         :block_history_stats="block_history_stats"
+                          v-if="!is_loading_validator">
+    </block-history-table>
 
     <a :href="go_back_link"
         class="btn btn-sm btn-secondary"
@@ -207,6 +227,7 @@
   import skippedSlotsChart from './components/skipped_slots_chart'
   import blockHistoryTable from './components/block_history_table'
   import axios from 'axios';
+  import loadingImage from 'loading.gif';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -230,7 +251,9 @@
         refresh: null,
         order: null,
         page: null,
-        validator_history: {}
+        validator_history: {},
+        loading_image: loadingImage,
+        is_loading_validator: true
       }
     },
 
@@ -245,6 +268,7 @@
         ctx.block_history_stats = response.data.block_history_stats
         ctx.skipped_slots = JSON.parse(response.data.skipped_slots)
         ctx.validator_history = response.data.validator_history
+        ctx.is_loading_validator = false
       })
 
       let uri = window.location.search.substring(1);
