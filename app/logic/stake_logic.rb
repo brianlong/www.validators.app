@@ -224,27 +224,27 @@ module StakeLogic
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
 
-      lido_stake_accounts = stake_accounts.joins(:stake_pool)
-                                          .where("stake_pools.name = ?", "Lido")
+      # lido_stake_accounts = stake_accounts.joins(:stake_pool)
+      #                                     .where("stake_pools.name = ?", "Lido")
 
-      lido_vote_accounts = {}
+      # lido_vote_accounts = {}
 
-      lido_stake_accounts.map do |lsa|
-        lido_vote_accounts[lsa.validator.vote_accounts.last.account] = lsa["stake_pubkey"]
-      end
+      # lido_stake_accounts.map do |lsa|
+      #   lido_vote_accounts[lsa.validator.vote_accounts.last.account] = lsa["stake_pubkey"]
+      # end
 
-      lido_rewards = solana_client_request(
-        p.payload[:config_urls],
-        "get_inflation_reward",
-        params: [lido_vote_accounts.keys]
-      )
+      # lido_rewards = solana_client_request(
+      #   p.payload[:config_urls],
+      #   "get_inflation_reward",
+      #   params: [lido_vote_accounts.keys]
+      # )
       
-      raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
-        if reward_info.blank? || lido_rewards.blank?
+      # raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
+      #   if reward_info.blank? || lido_rewards.blank?
 
-      lido_vote_accounts.keys.each_with_index do |key, idx|
-        account_rewards[lido_vote_accounts[key]] = lido_rewards[idx]
-      end
+      # lido_vote_accounts.keys.each_with_index do |key, idx|
+      #   account_rewards[lido_vote_accounts[key]] = lido_rewards[idx]
+      # end
 
       Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
@@ -256,6 +256,8 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
       current_epoch, previous_epoch = set_epochs(p.payload[:network])
+      puts current_epoch.epoch
+      puts previous_epoch.epoch
 
       Pipeline.new(200, p.payload.merge!(
         previous_epoch: previous_epoch,
@@ -299,12 +301,12 @@ module StakeLogic
 
           rewards = p.payload[:account_rewards][acc.stake_pubkey].symbolize_keys
           credits_diff = reward_with_fee(acc.stake_pool&.manager_fee, rewards[:amount])
-          if acc.stake_pool.lido?
-            active_stake = p.payload[:lido_histories].select{ |lh| lh.account == acc.validator.account }[0].active_stake
-            apy = calculate_apy(credits_diff, rewards, num_of_epochs, active_stake)
-          else
-            apy = calculate_apy(credits_diff, rewards, num_of_epochs)
-          end
+          # if acc.stake_pool.lido?
+          #   active_stake = p.payload[:lido_histories].select{ |lh| lh.account == acc.validator.account }[0].active_stake
+          #   apy = calculate_apy(credits_diff, rewards, num_of_epochs, active_stake)
+          # else
+          apy = calculate_apy(credits_diff, rewards, num_of_epochs)
+          # end
         end
         acc.update(apy: apy)
       end
@@ -333,11 +335,11 @@ module StakeLogic
 
         # sum of apy * stake
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
-          if sa.stake_pool.lido?
-            stake = p.payload[:lido_histories].select{ |lh| lh.account == sa.validator.account }[0].active_stake
-          else
-            stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
-          end
+          # if sa.stake_pool.lido?
+          #   stake = p.payload[:lido_histories].select{ |lh| lh.account == sa.validator.account }[0].active_stake
+          # else
+          stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
+          # end
           # we don't want to include accounts with no stake
           if stake && stake > 0 
             total_stake += stake
