@@ -2,12 +2,14 @@
   <div>
     <section class="page-header">
       <div class='page-header-name'>
-          <div class="img-circle-private img-circle-medium" v-if="is_private(validator)">
-            <span class='fas fa-users-slash' title="Private Validator"></span>
-          </div>
-          <img :src="validator.avatar_url" class="img-circle-medium" v-else-if="validator.avatar_url" >
-          <img src="https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png" class="img-circle-medium" v-else >
-        <h1 class="word-break">{{ name_or_account(validator) }}</h1>
+        <div class="img-circle-private img-circle-medium" v-if="is_private(validator)">
+          <span class='fas fa-users-slash' title="Private Validator"></span>
+        </div>
+        <img :src="validator.avatar_url" class="img-circle-medium" v-else-if="validator.avatar_url" >
+        <img src="https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png" class="img-circle-medium" v-else >
+
+        <h1 class="word-break" v-if="is_loading_validator">loading...</h1>
+        <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-3">
