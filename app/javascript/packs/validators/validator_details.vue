@@ -152,7 +152,7 @@
                 <strong>Security Info:</strong>
               </td>
               <td>
-                <a href="validator.security_report_url" target="_blank">
+                <a :href="validator.security_report_url" target="_blank">
                   validator.security_report_url
                 </a>
               </td>
