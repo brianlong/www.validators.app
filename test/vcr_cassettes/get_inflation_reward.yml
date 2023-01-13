@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.mainnet-beta.solana.com/
+    uri: https://api.rpcpool.com/
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":73793,"method":"getInflationReward","params":[["*"]]}'
+      string: '{"jsonrpc":"2.0","id":26923,"method":"getInflationReward","params":[["*"]]}'
     headers:
       Content-Type:
       - application/json
@@ -16,7 +16,7 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - api.mainnet-beta.solana.com
+      - api.rpcpool.com
   response:
     status:
       code: 200
@@ -25,9 +25,9 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Wed, 11 Jan 2023 17:02:59 GMT
+      - Fri, 13 Jan 2023 15:01:42 GMT
       X-Rpc-Node:
-      - ams65
+      - ams61
       X-Ratelimit-Tier:
       - free
       X-Ratelimit-Method-Limit:
@@ -56,16 +56,16 @@ http_interactions:
       - Accept-Encoding
     body:
       encoding: ASCII-8BIT
-      string: '{"jsonrpc":"2.0","result":[{"amount":4522,"commission":99,"effectiveSlot":171936000,"epoch":397,"postBalance":3282973}],"id":73793}
+      string: '{"jsonrpc":"2.0","result":[{"amount":4422,"commission":99,"effectiveSlot":171936000,"epoch":397,"postBalance":3282973}],"id":26923}
 
 '
-  recorded_at: Wed, 11 Jan 2023 17:03:00 GMT
+  recorded_at: Fri, 13 Jan 2023 15:01:42 GMT
 - request:
     method: post
-    uri: https://api.mainnet-beta.solana.com/
+    uri: https://api.rpcpool.com/
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":65065,"method":"getInflationReward","params":[["3kdVFEQ5aXcTZ5K9A1LwqybT46h2GwhmVsLYwCeb4rbE"]]}'
+      string: '{"jsonrpc":"2.0","id":69907,"method":"getInflationReward","params":[["*"]]}'
     headers:
       Content-Type:
       - application/json
@@ -76,7 +76,7 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - api.mainnet-beta.solana.com
+      - api.rpcpool.com
   response:
     status:
       code: 200
@@ -85,9 +85,9 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Wed, 11 Jan 2023 17:03:00 GMT
+      - Fri, 13 Jan 2023 15:01:42 GMT
       X-Rpc-Node:
-      - ams65
+      - ams61
       X-Ratelimit-Tier:
       - free
       X-Ratelimit-Method-Limit:
@@ -116,8 +116,8 @@ http_interactions:
       - Accept-Encoding
     body:
       encoding: ASCII-8BIT
-      string: '{"jsonrpc":"2.0","result":[{"amount":6126,"commission":99,"effectiveSlot":171936000,"epoch":398,"postBalance":3282973}],"id":65065}
+      string: '{"jsonrpc":"2.0","result":[{"amount":5223,"commission":99,"effectiveSlot":171936000,"epoch":397,"postBalance":3282973}],"id":69907}
 
 '
-  recorded_at: Wed, 11 Jan 2023 17:03:01 GMT
+  recorded_at: Fri, 13 Jan 2023 15:01:43 GMT
 recorded_with: VCR 6.0.0

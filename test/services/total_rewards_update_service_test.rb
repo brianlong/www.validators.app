@@ -22,7 +22,7 @@ class TotalRewardsUpdateServiceTest < ActiveSupport::TestCase
 
       cluster_stat.reload
 
-      assert_equal 1604, cluster_stat.total_rewards_difference
+      assert_equal 801, cluster_stat.total_rewards_difference
     end
   end
 end
