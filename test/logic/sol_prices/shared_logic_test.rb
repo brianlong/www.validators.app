@@ -19,10 +19,6 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
     @price_example = {
       :exchange=>1,
       :currency=>0,
-      :open=>173.515,
-      :high=>198.2125,
-      :low=>146.6825,
-      :close=>190.9625,
       :volume=>571066472.04745,
       :datetime_from_exchange=>@datetime
     }
