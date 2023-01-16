@@ -268,25 +268,25 @@ module StakeLogic
     end
   end
 
-  def get_validator_history_for_lido
-    lambda do |p|
-      return p unless p.code == 200
-      lido = StakePool.find_by(name: "Lido")
+  # def get_validator_history_for_lido
+  #   lambda do |p|
+  #     return p unless p.code == 200
+  #     lido = StakePool.find_by(name: "Lido")
 
-      val_accounts = lido.stake_accounts.map{ |sa| sa.validator.account }
+  #     val_accounts = lido.stake_accounts.map{ |sa| sa.validator.account }
 
-      lido_histories = ValidatorHistory.select(
-        "DISTINCT(account) account, active_stake"
-      ).where(
-        network: p.payload[:network],
-        epoch: p.payload[:previous_epoch].epoch,
-        account: val_accounts
-      )
-      Pipeline.new(200, p.payload.merge!(lido_histories: lido_histories))
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from get_validator_history_for_lido", e)
-    end
-  end
+  #     lido_histories = ValidatorHistory.select(
+  #       "DISTINCT(account) account, active_stake"
+  #     ).where(
+  #       network: p.payload[:network],
+  #       epoch: p.payload[:previous_epoch].epoch,
+  #       account: val_accounts
+  #     )
+  #     Pipeline.new(200, p.payload.merge!(lido_histories: lido_histories))
+  #   rescue StandardError => e
+  #     Pipeline.new(500, p.payload, "Error from get_validator_history_for_lido", e)
+  #   end
+  # end
 
   def calculate_apy_for_accounts
     lambda do |p|
