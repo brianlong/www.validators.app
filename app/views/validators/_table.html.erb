@@ -1,3 +1,5 @@
+<%= javascript_pack_tag 'validators/validator_score_modal.js' %>
+
 <table class='table table-block-sm validators-table'>
   <thead>
   <tr>
@@ -127,6 +129,9 @@
 
             <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
             <%= render 'validators/scores', validator: validator %>
+            <div id="validator-score-modal"
+                 validator="<%= validator_score_attrs(validator) %>">
+            </div>
             <br/>
 
             <% if show_ip_and_gateway %>
