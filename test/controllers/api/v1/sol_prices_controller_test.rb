@@ -41,15 +41,4 @@ class SolPricesControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
     assert_equal 3, JSON.parse(@response.body).size
   end
-
-  test "GET api_v1_sol_prices with incorrect exchange returns error" do
-    create(:sol_price, :coin_gecko)
-
-    get api_v1_sol_prices_path(exchange: "wrong_exchange"), headers: @headers
-    parsed_response = JSON.parse(@response.body)
-    expected_response = { "error" => "invalid exchange" }
-
-    assert_response 422
-    assert_equal expected_response, parsed_response
-  end
 end

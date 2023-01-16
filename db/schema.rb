@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_19_152628) do
+ActiveRecord::Schema.define(version: 2022_12_20_130340) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -370,10 +370,6 @@ ActiveRecord::Schema.define(version: 2022_12_19_152628) do
     t.integer "currency"
     t.integer "epoch_mainnet"
     t.integer "epoch_testnet"
-    t.decimal "open", precision: 40, scale: 20
-    t.decimal "close", precision: 40, scale: 20
-    t.decimal "high", precision: 40, scale: 20
-    t.decimal "low", precision: 40, scale: 20
     t.decimal "volume", precision: 40, scale: 20
     t.datetime "datetime_from_exchange"
     t.datetime "created_at", precision: 6, null: false

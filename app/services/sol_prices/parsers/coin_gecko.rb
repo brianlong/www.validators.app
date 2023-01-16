@@ -4,18 +4,10 @@ module SolPrices
       def prices_from_ohlc_to_sol_price_hash(response)
         response.map do |row|
           datetime = convert_to_datetime_utc(row[0])
-          open_price = row[1]
-          high_price = row[2]
-          low_price = row[3]
-          close_price = row[4]
 
-          shared_data.merge ({
-            datetime_from_exchange: datetime,
-            open: open_price,
-            high: high_price,
-            low: low_price,
-            close: close_price
-          })
+          shared_data.merge (
+            { datetime_from_exchange: datetime }
+          )
         end
       end
 
