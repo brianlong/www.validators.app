@@ -216,7 +216,7 @@ module StakeLogic
       stake_accounts.each do |sa|
         account_rewards[sa.stake_pubkey] = nil
       end
-      
+
       reward_info = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
@@ -240,8 +240,6 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
       current_epoch, previous_epoch = set_epochs(p.payload[:network])
-      puts current_epoch.epoch
-      puts previous_epoch.epoch
 
       Pipeline.new(200, p.payload.merge!(
         previous_epoch: previous_epoch,
