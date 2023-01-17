@@ -30,7 +30,7 @@
 
         <div class="d-flex flex-wrap gap-3">
           <div class="btn btn-sm btn-danger" title="Validator has 100% commission." v-if="is_private(validator)">private</div>
-          <div class="btn btn-sm btn-danger" title="Validator is delinquent." v-if="is_delinquent(validator)">delinquent</div>
+          <div class="btn btn-sm btn-danger" title="Validator is delinquent." v-if="is_delinquent()">delinquent</div>
           <div class="btn btn-sm btn-danger" title="Validator is inactive." v-if="!is_active()">inactive</div>
 
           <a href="/faq#admin-warning" :title="validator.admin_warning" v-if="validator.admin_warning">
@@ -173,7 +173,7 @@
                   <strong>Scores:</strong>
                 </td>
                 <td>
-                  <validator-scores :score="score"></validator-scores>
+                  <validator-scores :score="score" :account="validator.account"></validator-scores>
                 </td>
               </tr>
             </tbody>
@@ -218,6 +218,10 @@
         data-turbolinks="false">
       Back to All Validators
     </a>
+
+    <validator-score-modal :validator="validator_score_details_attrs"
+                           v-if="!is_loading_validator">
+    </validator-score-modal>
   </div>
 </template>
 
@@ -228,6 +232,7 @@
   import voteHistoryChart from './components/vote_history_chart'
   import skippedSlotsChart from './components/skipped_slots_chart'
   import blockHistoryTable from './components/block_history_table'
+  import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
   import loadingImage from 'loading.gif';
 
@@ -255,7 +260,8 @@
         page: null,
         validator_history: {},
         loading_image: loadingImage,
-        is_loading_validator: true
+        is_loading_validator: true,
+        validator_score_details_attrs: {}
       }
     },
 
@@ -263,6 +269,7 @@
       let ctx = this
       axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
         ctx.validator = JSON.parse(response.data.validator)
+        ctx.validator_score_details_attrs = JSON.parse(response.data.validator_score_details)
         ctx.score = JSON.parse(response.data.score)
         ctx.root_blocks = response.data.root_blocks
         ctx.vote_blocks = response.data.vote_blocks
@@ -301,7 +308,7 @@
       is_private() {
         return this.score.commission == 100
       },
-      is_delinquent(validator) {
+      is_delinquent() {
         return this.score.delinquent
       },
       is_active() {
@@ -347,7 +354,8 @@
       "block-history-chart": blockHistoryChart,
       "vote-history-chart": voteHistoryChart,
       "skipped-slots-chart": skippedSlotsChart,
-      "block-history-table": blockHistoryTable
+      "block-history-table": blockHistoryTable,
+      "validator-score-modal": validatorScoreModal
     }
   }
 </script>

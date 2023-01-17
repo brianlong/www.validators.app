@@ -3,6 +3,7 @@
 module Api
   module V1
     class ValidatorsController < BaseController
+      include ValidatorsHelper
       include ValidatorsControllerHelper
 
       before_action :set_skipped_slots_report
@@ -114,7 +115,8 @@ module Api
             skipped_slots: @data.to_json,
             block_histories: @block_histories,
             block_history_stats: @block_history_stats,
-            validator_history: @val_history
+            validator_history: @val_history,
+            validator_score_details: validator_score_attrs(@validator)
           }
         else
           @validator = ValidatorQuery.new.call_single_validator(

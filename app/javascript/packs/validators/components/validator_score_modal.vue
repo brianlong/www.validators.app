@@ -1,5 +1,4 @@
 <template>
-
   <div class="modal modal-large fade"
        :id="'scoresModal' + validator.account"
        tabindex="-1"
@@ -179,7 +178,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>

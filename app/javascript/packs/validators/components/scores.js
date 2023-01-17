@@ -3,6 +3,10 @@ export default {
     score: {
       type: Object,
       required: true
+    },
+    account: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -47,7 +51,7 @@ export default {
   },
   template: `
     <div>
-      <a class="small text-nowrap base-color" data-bs-toggle="modal" data-bs-target="#scoresModal<%=validator.account%>">
+      <a class="small text-nowrap base-color" data-bs-toggle="modal" :data-bs-target="'#scoresModal' + account">
         <i :class="score_class(score.root_distance_score)"
            :title="root_distance_score_title()"></i>
 
