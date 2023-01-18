@@ -37,7 +37,7 @@ class ValidatorTest < ActiveSupport::TestCase
     create(:validator_score_v1, validator: @v_private, commission: 100)
   end
 
-  test 'relationship has_one most_recent_epoch_credits_by_account' do
+  test "relationship has_one most_recent_epoch_credits_by_account" do
     create_list(:validator_history, 5, account: @validator.account, epoch_credits: 100)
 
     assert_equal 100, @validator.most_recent_epoch_credits_by_account.epoch_credits
@@ -106,28 +106,28 @@ class ValidatorTest < ActiveSupport::TestCase
   end
   # /API relationships
 
-  test '#api_url creates correct link for test environment' do
+  test "#api_url creates correct link for test environment" do
     expected_url = "http://localhost:3000/api/v1/validators/#{@validator.network}/#{@validator.account}"
 
     assert_equal expected_url, @validator.api_url
   end
 
-  test '#ping_times_to' do
+  test "#ping_times_to" do
     assert_equal 3, validators(:one).ping_times_to.count
   end
 
-  test '#ping_times_to_avg' do
+  test "#ping_times_to_avg" do
     assert_equal 75.0, validators(:one).ping_times_to_avg
   end
 
-  test '#private_validator? returns true if validator\'s commission is 100%' do
+  test "#private_validator? returns true if validator's commission is 100%" do
     @validator.update(network: 'mainnet')
 
     assert create(:validator_score_v1, commission: 100, validator: @validator).validator.private_validator?
     refute create(:validator_score_v1, commission: 99, validator: @validator).validator.private_validator?
   end
 
-  test '#lido? returns true if name starts with Lido' do
+  test "#lido? returns true if name starts with Lido" do
     @validator.update(network: 'mainnet', name: 'Lido / Everstake')
     assert @validator.lido?
 
