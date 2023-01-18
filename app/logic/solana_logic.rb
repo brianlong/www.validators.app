@@ -626,7 +626,7 @@ module SolanaLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      stat = statClusterStat.find_or_create_by(network: p.payload[:network])
+      stat = ClusterStat.find_or_create_by(network: p.payload[:network])
 
       stat.update(network_total_active_stake: p[:network_total_active_stake])
     end
