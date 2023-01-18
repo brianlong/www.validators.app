@@ -80,10 +80,6 @@ module Api
             }
           end
 
-          @commission_histories = CommissionHistoryQuery.new(
-            network: params[:network]
-          ).exists_for_validator?(@validator.id)
-
           @validator.validator_block_histories
                     .includes(:batch)
                     .where("created_at BETWEEN ? AND ?", time_from, time_to)
