@@ -23,11 +23,13 @@ module Gatherers
 
         next if !@always_update && should_omit_update?(vacc, vote_account_details)
 
-        if vacc.update(
+        ActiveRecord::Base.transaction do
+          vacc.update(
             validator_identity: vote_account_details["validatorIdentity"],
-            authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
+            authorized_withdrawer: vote_account_details["authorizedWithdrawer"],
+            authorized_voters: vote_account_details["authorizedVoters"]
           )
-            update_score(vacc)
+          update_score(vacc)
         end
       end
     rescue ActiveRecord::LockWaitTimeout => e
@@ -38,8 +40,9 @@ module Gatherers
     private
 
     def should_omit_update?(vacc, vote_account_details)
-      vacc.validator_identity == vote_account_details["validatorIdentity"] && \
-      vacc.authorized_withdrawer == vote_account_details["authorizedWithdrawer"]
+      vacc.validator_identity == vote_account_details["validatorIdentity"] &&
+        vacc.authorized_withdrawer == vote_account_details["authorizedWithdrawer"] &&
+        vacc.authorized_voters == vote_account_details["authorizedVoters"]
     end
 
     # solana vote-account <account >
