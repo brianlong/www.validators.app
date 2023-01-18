@@ -38,9 +38,13 @@ class TrackCommissionChangesServiceTest < ActiveSupport::TestCase
 
   test "#call creates new commission_histories" do
     vcr_cassette(@namespace, __method__) do
-      puts "inside vcr"
       assert_equal CommissionHistory.count, 0
-      TrackCommissionChangesService.new(current_batch: @current_batch, network: @network, solana_url: [@solana_url]).call
+
+      TrackCommissionChangesService.new(
+        current_batch: @current_batch,
+        network: @network,
+        solana_url: [@solana_url]
+      ).call
 
       assert_equal CommissionHistory.count, 2
       assert_equal 400, CommissionHistory.first.epoch

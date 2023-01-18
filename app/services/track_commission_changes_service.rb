@@ -16,16 +16,13 @@ class TrackCommissionChangesService
   def call
     VoteAccount.includes(:validator).where(network: @network).in_batches(of: 100) do |batch|
       accounts = batch.pluck(:account)
-
       result = get_inflation_rewards(accounts)
-      puts result 
+
       batch.each_with_index do |va, idx|  
         next unless result[idx] # some accounts have no inflation reward e. g. if it was inactive
   
         # check if commission from db matches commission from get_inflation_reward
         if va.validator.commission != result[idx]["commission"].to_f
-          puts "#{va.validator.account}: #{va.validator.commission} != #{result[idx]["commission"]}"
-
           check_commission_for_current_epoch(va, result[idx])
           check_commission_for_previous_epoch(va, result[idx])
         end
@@ -39,7 +36,7 @@ class TrackCommissionChangesService
     validator_commission = va.validator.commission
 
     va.validator.commission_histories.find_or_create_by(
-      epoch: cli_rewards["epoch"],
+      epoch: cli_rewards["epoch"] + 1,
       commission_before: cli_rewards["commission"].to_f,
       network: @network
     ) do |commission|
@@ -54,7 +51,7 @@ class TrackCommissionChangesService
     validator_commission = va.validator.commission
 
     va.validator.commission_histories.find_or_create_by(
-      epoch: cli_rewards["epoch"] - 1,
+      epoch: cli_rewards["epoch"],
       commission_after: cli_rewards["commission"].to_f,
       network: @network
     ) do |commission|
