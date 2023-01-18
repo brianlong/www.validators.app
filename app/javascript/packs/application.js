@@ -18,8 +18,6 @@ import '../src/watch_buttons'
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-import "@fortawesome/fontawesome-free/css/all";
-
 document.addEventListener("turbolinks:load", function() {
     var links = document.getElementsByClassName("chart-link");
     Array.prototype.forEach.call(links, link => {
