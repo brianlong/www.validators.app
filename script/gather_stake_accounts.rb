@@ -20,7 +20,6 @@ NETWORKS.each do |network|
               .then(&count_average_validators_commission)
               .then(&get_rewards_from_stake_pools)
               .then(&assign_epochs)
-              .then(&get_validator_history_for_lido)
               .then(&calculate_apy_for_accounts)
               .then(&calculate_apy_for_pools)
 

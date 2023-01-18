@@ -259,22 +259,6 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal @previous_epoch, p.payload[:previous_epoch]
     assert_equal @current_epoch, p.payload[:current_epoch]
   end
-  
-  test "get_validator_history_for_lido adds correct history to payload" do
-    account = "lido_account"
-    lido = create(:stake_pool, name: "Lido", network: "testnet")
-    val = create(:validator, account: account, network: "testnet")
-    stake_account = create(:stake_account, stake_pool: lido, validator: val, network: "testnet")
-    val_history = create(:validator_history, account: account, network: "testnet", epoch: 1)
-
-    p = Pipeline.new(200, @initial_payload)
-                .then(&assign_epochs)
-                .then(&get_validator_history_for_lido)
-
-    assert_equal 200, p.code
-    assert_equal account, p.payload[:lido_histories][0].account
-    assert_equal 1, p.payload[:lido_histories].size
-  end
 
   test "calculate_apy_for_accounts should return correct apy" do
     stake_pool = create(:stake_pool)

@@ -66,7 +66,7 @@
   socean: 2, #https://www.socean.fi/en/ , https://soceanfi.notion.site/FAQ-e0e2b353a44a4c11b53f614f3dc7b730
   marinade: 6, #https://docs.marinade.finance/faq/faq
   jpool: 0, #https://jpool.one/pool-info
-  lido: 10, #https://solana.lido.fi/
+  lido: 5, #https://solana.lido.fi/
   daopool: 2,
   eversol: 7, #https://docs.eversol.one/extras/faq
   blazestake: 5, #https://stake-docs.solblaze.org/features/fees

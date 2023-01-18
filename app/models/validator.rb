@@ -203,6 +203,10 @@ class Validator < ApplicationRecord
     score&.commission
   end
 
+  def commission_history_present
+    commission_histories.exists?
+  end
+
   def active_stake
     score&.active_stake || 0
   end
