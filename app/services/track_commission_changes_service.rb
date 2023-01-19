@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TrackCommissionChangesService
-  include SolanaLogic
+  include SolanaRequestsLogic
 
   def initialize(current_batch: , network: "mainnet", solana_url: nil)
     @current_batch = current_batch
@@ -14,11 +14,11 @@ class TrackCommissionChangesService
   end
 
   def call
-    VoteAccount.includes(:validator).where(network: @network).in_batches(of: 100) do |batch|
-      accounts = batch.pluck(:account)
+    VoteAccount.includes(:validator).where(network: @network).in_batches(of: 100) do |va_batch|
+      accounts = va_batch.pluck(:account)
       result = get_inflation_rewards(accounts)
 
-      batch.each_with_index do |va, idx|  
+      va_batch.each_with_index do |va, idx|  
         next unless result[idx] # some accounts have no inflation reward e. g. if it was inactive
   
         # check if commission from db matches commission from get_inflation_reward
