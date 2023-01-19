@@ -11,7 +11,7 @@
                           network: params[:network],
                           refresh: params[:refresh],
                           watchlist: params[:watchlist] ? nil : true) do %>
-              <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning"
+              <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning"
                  data-bs-toggle="tooltip"
                  data-bs-placement="top"
                  title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
@@ -21,14 +21,14 @@
         <% end %>
         <div class="column-info-name">
           Name <small class="text-muted">(Commission)</small>
-          <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+          <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
              data-bs-toggle="tooltip"
              data-bs-placement="top"
              title="<%= t('definitions.commission') %>">
           </i>
           <br />
           Scores <small class="text-muted">(total)</small>
-          <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+          <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
              data-bs-toggle="tooltip"
              data-bs-placement="top"
              title="<%= t('definitions.scores') %>">
@@ -38,7 +38,7 @@
             IP & Gateway
           <% else %>
             Active Stake <small class="text-muted">(% of total)</small>
-            <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+            <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                data-bs-toggle="tooltip"
                data-bs-placement="top"
                title="<%= t('definitions.active_stake') %>">
@@ -50,7 +50,7 @@
 
     <th class='column-speedometer pe-0'>
       Skipped Vote
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
@@ -61,7 +61,7 @@
 
     <th class='column-chart py-3'>
       Root Distance
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.root_distance') %>">
@@ -72,7 +72,7 @@
 
     <th class='column-chart py-3'>
       Vote Distance
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.vote_distance') %>">
@@ -83,7 +83,7 @@
 
     <th class='column-chart py-3'>
       Skipped Slot&nbsp;&percnt;
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.skipped_slot') %>">
@@ -104,7 +104,7 @@
           <div class="column-info-avatar <%= 'no-watchlist' unless (current_user && show_watchlist_btn) %>">
             <%= create_avatar_link(validator) %>
             <% if current_user && show_watchlist_btn %>
-              <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'far' %> fa-star"
+              <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fa-solid' : 'fa-regular' %> fa-star"
                  data-bs-toggle="tooltip"
                  data-bs-placement="top"
                  data-network="<%= validator.network%>"

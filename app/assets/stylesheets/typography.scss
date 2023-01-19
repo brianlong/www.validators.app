@@ -69,7 +69,7 @@ strong, .fw-bold {
 }
 
 .stat {
-  .fas {
+  .fa-solid {
     font-size: 15px;
     margin-right: 6px;
   }
@@ -100,7 +100,7 @@ strong, .fw-bold {
     font-size: $font-size-h6;
     @media(max-width: $screen-sm-max) { font-size: $font-size-h6*.9; }
   }
-  small .fas {
+  small .fa-solid {
     font-size: 11px;
   }
 }
