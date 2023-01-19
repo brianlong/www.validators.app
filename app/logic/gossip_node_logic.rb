@@ -2,7 +2,7 @@
 
 module GossipNodeLogic
   include PipelineLogic
-  include SolanaLogic
+  include SolanaRequestsLogic
 
   def get_nodes
     lambda do |p|

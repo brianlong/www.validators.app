@@ -78,7 +78,7 @@ class Validator < ApplicationRecord
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
-  
+
   class << self
     def with_private(show: "true")
       show == "true" ? all : where.not("validator_score_v1s.commission = 100")
@@ -86,8 +86,8 @@ class Validator < ApplicationRecord
 
     def default_filters(network)
       network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{ |v| v == "private" }
-    end 
-  
+    end
+
     # accepts array of strings or string
     def filtered_by(filter)
       return nil if filter.blank?
@@ -201,6 +201,11 @@ class Validator < ApplicationRecord
 
   def commission
     score&.commission
+  end
+
+  def commission_histories_exist
+    CommissionHistoryQuery.new(network: network)
+                          .exists_for_validator?(id)
   end
 
   def active_stake
