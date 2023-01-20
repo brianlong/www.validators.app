@@ -32,33 +32,49 @@ class TrackCommissionChangesService
     end
   end
 
-  def check_commission_for_current_epoch(va, cli_rewards)
+  def create_commission_for_current_epoch(va, cli_rewards)
     validator_commission = va.validator.commission
 
-    va.validator.commission_histories.find_or_create_by(
+    last_commission_from_epoch = va.validator.commission_histories.where(
       epoch: cli_rewards["epoch"] + 1,
-      commission_before: cli_rewards["commission"].to_f,
-      network: @network
-    ) do |commission|
-      commission.commission_after = validator_commission
-      commission.epoch_completion = 0.05
-      commission.batch_uuid = @current_batch.uuid
-      commission.from_inflation_rewards = true
+      network: @network,
+    ).last
+
+    unless last_commission_from_epoch.commission_before == cli_rewards["commission"].to_f && \
+           last_commission_from_epoch.commission_after == validator_commission
+
+      va.validator.commission_histories.create(
+        epoch: cli_rewards["epoch"] + 1,
+        commission_before: cli_rewards["commission"].to_f,
+        network: @network,
+        commission_after: validator_commission,
+        epoch_completion: 0.05,
+        batch_uuid: @current_batch.uuid,
+        from_inflation_rewards: true
+      )
     end
   end
 
-  def check_commission_for_previous_epoch(va, cli_rewards)
+  def create_commission_for_previous_epoch(va, cli_rewards)
     validator_commission = va.validator.commission
 
-    va.validator.commission_histories.find_or_create_by(
+    first_commission_from_epoch = va.validator.commission_histories.where(
+      epoch: cli_rewards["epoch"],
+      network: @network,
+    ).first
+
+    unless first_commission_from_epoch.commission_before == validator_commission && \
+      last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
+
+    va.validator.commission_histories.create(
       epoch: cli_rewards["epoch"],
       commission_after: cli_rewards["commission"].to_f,
-      network: @network
-    ) do |commission|
-      commission.commission_before = validator_commission
-      commission.epoch_completion = 99.95
-      commission.batch_uuid = @previous_batch.uuid
-      commission.from_inflation_rewards = true
+      network: @network,
+      commission_before: validator_commission,
+      epoch_completion: 99.95,
+      batch_uuid: @previous_batch.uuid,
+      from_inflation_rewards: true
+    )
     end
   end
 
