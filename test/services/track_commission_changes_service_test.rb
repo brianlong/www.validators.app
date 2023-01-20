@@ -47,8 +47,8 @@ class TrackCommissionChangesServiceTest < ActiveSupport::TestCase
       ).call
 
       assert_equal CommissionHistory.count, 2
-      assert_equal 400, CommissionHistory.first.epoch
-      assert_equal 399, CommissionHistory.last.epoch
+      assert_equal 399, CommissionHistory.first.epoch
+      assert_equal 400, CommissionHistory.last.epoch
     end
   end
 end
