@@ -23,8 +23,8 @@ class TrackCommissionChangesService
   
         # check if commission from db matches commission from get_inflation_reward
         if va.validator.commission != result[idx]["commission"].to_f
-          check_commission_for_current_epoch(va, result[idx])
-          check_commission_for_previous_epoch(va, result[idx])
+          create_commission_for_current_epoch(va, result[idx])
+          create_commission_for_previous_epoch(va, result[idx])
         end
       end
   
@@ -40,7 +40,8 @@ class TrackCommissionChangesService
       network: @network,
     ).last
 
-    unless last_commission_from_epoch.commission_before == cli_rewards["commission"].to_f && \
+    unless last_commission_from_epoch && \
+           last_commission_from_epoch.commission_before == cli_rewards["commission"].to_f && \
            last_commission_from_epoch.commission_after == validator_commission
 
       va.validator.commission_histories.create(
@@ -50,7 +51,8 @@ class TrackCommissionChangesService
         commission_after: validator_commission,
         epoch_completion: 0.05,
         batch_uuid: @current_batch.uuid,
-        from_inflation_rewards: true
+        from_inflation_rewards: true,
+        created_at: @current_batch.created_at
       )
     end
   end
@@ -63,8 +65,9 @@ class TrackCommissionChangesService
       network: @network,
     ).first
 
-    unless first_commission_from_epoch.commission_before == validator_commission && \
-      last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
+    unless first_commission_from_epoch && \
+           first_commission_from_epoch.commission_before == validator_commission && \
+           first_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
 
     va.validator.commission_histories.create(
       epoch: cli_rewards["epoch"],
@@ -73,7 +76,8 @@ class TrackCommissionChangesService
       commission_before: validator_commission,
       epoch_completion: 99.95,
       batch_uuid: @previous_batch.uuid,
-      from_inflation_rewards: true
+      from_inflation_rewards: true,
+      created_at: @previous_batch.created_at
     )
     end
   end
