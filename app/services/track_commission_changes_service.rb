@@ -3,7 +3,7 @@
 class TrackCommissionChangesService
   include SolanaRequestsLogic
 
-  def initialize(current_batch: , network: "mainnet", solana_url: nil)
+  def initialize(current_batch:, network: "mainnet", solana_url: nil)
     @current_batch = current_batch
     @previous_batch = Batch.where("created_at < ?", @current_batch.created_at)
                            .where(network: network)
@@ -23,8 +23,8 @@ class TrackCommissionChangesService
   
         # check if commission from db matches commission from get_inflation_reward
         if va.validator.commission != result[idx]["commission"].to_f
-          create_commission_for_current_epoch(va, result[idx])
           create_commission_for_previous_epoch(va, result[idx])
+          create_commission_for_current_epoch(va, result[idx])
         end
       end
   
@@ -35,14 +35,14 @@ class TrackCommissionChangesService
   def create_commission_for_current_epoch(va, cli_rewards)
     validator_commission = va.validator.commission
 
-    last_commission_from_epoch = va.validator.commission_histories.where(
+    first_commission_from_epoch = va.validator.commission_histories.where(
       epoch: cli_rewards["epoch"] + 1,
       network: @network,
-    ).last
+    ).first
 
-    unless last_commission_from_epoch && \
-           last_commission_from_epoch.commission_before == cli_rewards["commission"].to_f && \
-           last_commission_from_epoch.commission_after == validator_commission
+    unless first_commission_from_epoch && \
+           first_commission_from_epoch.commission_before == cli_rewards["commission"].to_f && \
+           first_commission_from_epoch.commission_after == validator_commission
 
       va.validator.commission_histories.create(
         epoch: cli_rewards["epoch"] + 1,
@@ -60,14 +60,14 @@ class TrackCommissionChangesService
   def create_commission_for_previous_epoch(va, cli_rewards)
     validator_commission = va.validator.commission
 
-    first_commission_from_epoch = va.validator.commission_histories.where(
+    last_commission_from_epoch = va.validator.commission_histories.where(
       epoch: cli_rewards["epoch"],
       network: @network,
-    ).first
+    ).last
 
-    unless first_commission_from_epoch && \
-           first_commission_from_epoch.commission_before == validator_commission && \
-           first_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
+    unless last_commission_from_epoch && \
+           last_commission_from_epoch.commission_before == validator_commission && \
+           last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
 
     va.validator.commission_histories.create(
       epoch: cli_rewards["epoch"],
