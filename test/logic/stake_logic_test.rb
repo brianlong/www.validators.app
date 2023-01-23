@@ -23,14 +23,14 @@ class StakeLogicTest < ActiveSupport::TestCase
     @json_data = file_fixture("stake_accounts.json").read
   end
 
-  test 'get_last_batch' do
+  test "#get_last_batch" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&get_last_batch)
     assert_not_nil p[:payload][:batch]
     assert p[:payload][:batch].uuid.include?('-')
   end
 
-  test 'move_current_stakes_to_history' do
+  test "#move_current_stakes_to_history" do
     create(:stake_account, batch_uuid: 'old-batch')
 
     SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
@@ -43,9 +43,8 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "get_stake_accounts \
-        when getting correct response \
-        should save correct payload" do
+  test "#get_stake_accounts saves correct payload
+        when getting correct response" do
     authority = 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'
     create(:stake_pool, authority: authority, network: 'testnet')
 
@@ -60,7 +59,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "update_stake_accounts" do
+  test "#update_stake_accounts" do
     authority = "H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b"
     network = "testnet"
     create(:stake_pool, authority: authority, network: network)
@@ -94,7 +93,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'assign_stake_pools' do
+  test "#assign_stake_pools" do
     authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
     stake_pool = create(
       :stake_pool,
@@ -118,7 +117,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "update_validator_stats" do
+  test "#update_validator_stats" do
     authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
 
     validator = create(
@@ -175,8 +174,8 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 5, stake_pool.average_skipped_slots
     assert_equal score.total_score, stake_pool.average_score
   end
-  
-  test "count_average_validators_commission" do
+
+  test "#count_average_validators_commission" do
     stake_pool = create(:stake_pool, network: "testnet")
     validator = create(:validator)
     validator2 = create(:validator)
@@ -193,7 +192,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 7.5, stake_pool.reload.average_validators_commission
   end
 
-  test "count average_score" do
+  test "#update_validator_stats counts correct average_score" do
     stake_pool = create(:stake_pool)
     validator = create(:validator)
     validator2 = create(:validator)
@@ -231,9 +230,8 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 6.67, stake_pool.reload.average_score
   end
 
-  test "get_rewards \
-        when response is correct \
-        should have correct payload" do
+  test "#get_rewards has correct payload
+        when response is correct" do
     stake_pool = create(:stake_pool)
     validator = create(:validator)
     validator2 = create(:validator)
@@ -252,7 +250,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "assign_epochs adds correct values to payload" do
+  test "#assign_epochs adds correct values to payload" do
     p = Pipeline.new(200, @initial_payload)
                 .then(&assign_epochs)
 
@@ -260,7 +258,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal @current_epoch, p.payload[:current_epoch]
   end
 
-  test "calculate_apy_for_accounts should return correct apy" do
+  test "#calculate_apy_for_accounts returns correct apy" do
     stake_pool = create(:stake_pool)
 
     acc = create(
@@ -293,7 +291,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 12.5502, acc.apy
   end
 
-  test "calculate_apy_for_accounts returns nil apy if there are no rewards" do
+  test "#calculate_apy_for_accounts returns nil apy if there are no rewards" do
     acc = create(
       :stake_account,
       network: "testnet",
@@ -310,13 +308,13 @@ class StakeLogicTest < ActiveSupport::TestCase
     )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy_for_accounts)
-    
+
     acc.reload
     assert_equal 200, p.code
     assert_nil acc.apy
   end
 
-  test "calculate_apy_for_pools should return correct average apy" do
+  test "#calculate_apy_for_pools returns correct average apy" do
     stake_pool = create(:stake_pool, network: "testnet")
 
     create(
@@ -353,13 +351,13 @@ class StakeLogicTest < ActiveSupport::TestCase
     )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy_for_pools)
-    
+
     acc.reload
     assert_equal 200, p.code
     assert_equal 12.5502, stake_pool.average_apy
   end
 
-  test "calculate_apy_for_pools should return correct average apy for lido" do
+  test "#calculate_apy_for_pools returns correct average apy for lido" do
     stake_pool = create(:stake_pool, network: "testnet", name: "Lido")
     create(:validator_history, account: "lido_account", active_stake: 100)
     val = create(:validator, account: "lido_account")
@@ -400,13 +398,13 @@ class StakeLogicTest < ActiveSupport::TestCase
     )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy_for_pools)
-    
+
     acc.reload
     assert_equal 200, p.code
     assert_equal 12.5502, stake_pool.average_apy
   end
 
-  test "calculate_apy_for_pools returns nil if there's no stake" do
+  test "#calculate_apy_for_pools returns nil if there's no stake" do
     stake_pool = create(:stake_pool, network: "testnet")
 
     create(
@@ -445,7 +443,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy_for_pools)
-    
+
     acc.reload
     assert_equal 200, p.code
     assert_nil stake_pool.average_apy
