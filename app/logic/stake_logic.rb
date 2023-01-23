@@ -128,7 +128,7 @@ module StakeLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from save_stake_accounts", e)
+      Pipeline.new(500, p.payload, "Error from update_stake_accounts", e)
     end
   end
 
