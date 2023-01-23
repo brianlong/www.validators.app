@@ -89,7 +89,7 @@ module StakeLogic
                                     .epoch
 
       p.payload[:stake_accounts].each do |acc|
-        # ignore StakeAccounts with stake smaller than 1 SOL
+        # ignore StakeAccounts with stake smaller than minimum
         next unless acc["activeStake"].to_i > MINIMUM_STAKE
 
         vote_account = VoteAccount.where(
@@ -99,6 +99,7 @@ module StakeLogic
 
         validator_id = vote_account ? vote_account.validator.id : nil
 
+        # create or update StakeAccount
         StakeAccount.find_or_initialize_by(
           stake_pubkey: acc["stakePubkey"],
           network: p.payload[:network]
@@ -122,6 +123,7 @@ module StakeLogic
         )
       end
 
+      # remove old StakeAccounts
       StakeAccount.where(network: p.payload[:network]).where.not(batch_uuid: p.payload[:batch].uuid).delete_all
 
       Pipeline.new(200, p.payload)
