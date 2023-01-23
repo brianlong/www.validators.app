@@ -7,6 +7,8 @@ module StakeLogic
 
   class NoResultsFromSolana < StandardError; end
 
+  MINIMUM_STAKE = 1_000_000_000 # 1 SOL
+
   def get_last_batch
     lambda do |p|
       return p unless p.code == 200
@@ -85,7 +87,11 @@ module StakeLogic
                                     .order(created_at: :desc)
                                     .first
                                     .epoch
+
       p.payload[:stake_accounts].each do |acc|
+        # ignore StakeAccounts with stake smaller than 1 SOL
+        next unless acc['activeStake'].to_i > MINIMUM_STAKE
+
         vote_account = VoteAccount.where(
           network: p.payload[:network],
           account: acc['delegatedVoteAccountAddress']
@@ -293,7 +299,7 @@ module StakeLogic
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
           # we don't want to include accounts with no stake
-          if stake && stake > 0 
+          if stake && stake > 0
             total_stake += stake
             if sa.apy
               sum = sum + sa.apy * stake
