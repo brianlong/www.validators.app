@@ -13,16 +13,24 @@ class CreateClusterStatsService
     dominant_software_version = Batch.last_scored(@network).software_version
 
     network_stat = ClusterStat.find_or_create_by(network: @network)
-    network_stat.update(
-      total_active_stake: validator_history_stats.total_active_stake,
-      software_version: dominant_software_version,
-      validator_count: validators_total,
-      nodes_count: nodes_total,
-      root_distance: validator_score_stats.root_distance_stats,
-      vote_distance: validator_score_stats.vote_distance_stats,
-      skipped_slots: validator_block_history_stats.skipped_slot_stats,
-      skipped_votes: vote_account_history_stats.skipped_votes_stats
-    )
+
+    fields_for_update = {}
+    fields_for_update[:total_active_stake] = \
+      validator_history_stats.total_active_stake if validator_history_stats.total_active_stake
+    fields_for_update[:software_version] = dominant_software_version if dominant_software_version
+    fields_for_update[:validator_count] = validators_total if validators_total
+    fields_for_update[:nodes_count] = nodes_total if nodes_total
+    fields_for_update[:root_distance] = \
+      validator_score_stats.root_distance_stats if validator_score_stats.root_distance_stats
+    fields_for_update[:vote_distance] = \
+      validator_score_stats.vote_distance_stats if validator_score_stats.vote_distance_stats
+    fields_for_update[:skipped_slots] = \
+      validator_block_history_stats.skipped_slot_stats if validator_block_history_stats.skipped_slot_stats
+    fields_for_update[:skipped_votes] = \
+      vote_account_history_stats.skipped_votes_stats if vote_account_history_stats.skipped_votes_stats
+    puts "========================"
+    puts fields_for_update
+    network_stat.update(fields_for_update)
   end
 
   private
