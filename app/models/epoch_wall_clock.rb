@@ -29,7 +29,7 @@ class EpochWallClock < ApplicationRecord
     if self.network == "mainnet"
       current_batch_uuid = Batch.last_scored(self.network)&.uuid
       TrackCommissionChangesWorker.set(
-        wait_until: 1.minute,
+        wait_until: 1.hour,
         queue: "high_priority"
       ).perform_async({current_batch_uuid: current_batch_uuid})
     end
