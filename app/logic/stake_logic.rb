@@ -21,7 +21,7 @@ module StakeLogic
 
       Pipeline.new(200, p.payload.merge(batch: batch))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from set_this_batch', e)
+      Pipeline.new(500, p.payload, "Error from set_this_batch", e)
     end
   end
 
@@ -30,11 +30,11 @@ module StakeLogic
       return p unless p.code == 200
 
       stake_accounts = cli_request(
-        'stakes',
+        "stakes",
         p.payload[:config_urls]
       )
 
-      raise NoResultsFromSolana.new('No results from `solana stakes`') if stake_accounts.blank?
+      raise NoResultsFromSolana.new("No results from `solana stakes`") if stake_accounts.blank?
 
       reduced_stake_accounts = []
 
@@ -50,7 +50,7 @@ module StakeLogic
         stake_accounts: reduced_stake_accounts
       ))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
+      Pipeline.new(500, p.payload, "Error from get_stake_accounts", e)
     end
   end
 
@@ -75,7 +75,7 @@ module StakeLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from move_current_stakes_to_history', e)
+      Pipeline.new(500, p.payload, "Error from move_current_stakes_to_history", e)
     end
   end
 
@@ -90,32 +90,32 @@ module StakeLogic
 
       p.payload[:stake_accounts].each do |acc|
         # ignore StakeAccounts with stake smaller than 1 SOL
-        next unless acc['activeStake'].to_i > MINIMUM_STAKE
+        next unless acc["activeStake"].to_i > MINIMUM_STAKE
 
         vote_account = VoteAccount.where(
           network: p.payload[:network],
-          account: acc['delegatedVoteAccountAddress']
+          account: acc["delegatedVoteAccountAddress"]
         ).order(is_active: :desc).first
 
         validator_id = vote_account ? vote_account.validator.id : nil
 
         StakeAccount.find_or_initialize_by(
-          stake_pubkey: acc['stakePubkey'],
+          stake_pubkey: acc["stakePubkey"],
           network: p.payload[:network]
         ).update(
-          account_balance: acc['accountBalance'],
-          activation_epoch: acc['activationEpoch'],
-          active_stake: acc['activeStake'],
-          credits_observed: acc['creditsObserved'],
-          deactivating_stake: acc['deactivatingStake'],
-          deactivation_epoch: acc['deactivationEpoch'],
-          delegated_stake: acc['delegatedStake'],
-          delegated_vote_account_address: acc['delegatedVoteAccountAddress'],
-          rent_exempt_reserve: acc['rentExemptReserve'],
-          stake_pubkey: acc['stakePubkey'],
-          stake_type: acc['stakeType'],
-          staker: acc['staker'],
-          withdrawer: acc['withdrawer'],
+          account_balance: acc["accountBalance"],
+          activation_epoch: acc["activationEpoch"],
+          active_stake: acc["activeStake"],
+          credits_observed: acc["creditsObserved"],
+          deactivating_stake: acc["deactivatingStake"],
+          deactivation_epoch: acc["deactivationEpoch"],
+          delegated_stake: acc["delegatedStake"],
+          delegated_vote_account_address: acc["delegatedVoteAccountAddress"],
+          rent_exempt_reserve: acc["rentExemptReserve"],
+          stake_pubkey: acc["stakePubkey"],
+          stake_type: acc["stakeType"],
+          staker: acc["staker"],
+          withdrawer: acc["withdrawer"],
           batch_uuid: p.payload[:batch].uuid,
           validator_id: validator_id,
           epoch: current_epoch
@@ -126,7 +126,7 @@ module StakeLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from save_stake_accounts', e)
+      Pipeline.new(500, p.payload, "Error from save_stake_accounts", e)
     end
   end
 
@@ -143,7 +143,7 @@ module StakeLogic
 
       Pipeline.new(200, p.payload.merge(stake_pools: stake_pools))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from assign_stake_pools', e)
+      Pipeline.new(500, p.payload, "Error from assign_stake_pools", e)
     end
   end
 
