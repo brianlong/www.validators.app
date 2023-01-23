@@ -33,7 +33,11 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
           <tr>
             <th class="column-sm">Stake Pool</th>
             <th class="column-sm">
-              Nodes<br />
+              Nodes
+              <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="top"
+                 title="Includes nodes with minimum active stake of 1 SOL."></i><br />
               <small class="text-muted">(Delinquent)</small>
             </th>
             <th class="column-md">
