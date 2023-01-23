@@ -4,5 +4,9 @@ FactoryBot.define do
     validator
     account { 'Test Account' }
     network { 'testnet' }
+
+    trait :active do
+      is_active { true }
+    end
   end
 end

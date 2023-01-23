@@ -59,7 +59,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "#update_stake_accounts" do
+  test "#update_stake_accounts saves accounts in db" do
     authority = "H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b"
     network = "testnet"
     create(:stake_pool, authority: authority, network: network)
@@ -90,6 +90,27 @@ class StakeLogicTest < ActiveSupport::TestCase
       assert_equal p[:payload][:stake_accounts].count, StakeAccount.count
       assert StakeAccount.where.not(batch_uuid: @batch.uuid).empty?
 
+    end
+  end
+
+  test "#update_stake_accounts skips accounts with stake smaller than minimum" do
+    authority = "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT"
+    network = "testnet"
+    create(:stake_pool, authority: authority, network: network)
+
+    val = create(:validator, account: "validator", network: network)
+    va = create(:vote_account, :active, validator: val, account: "AjgcmeVHEGJAJ8kLcLc6YSkMqq7oP7ySFjKSWDU5J2sP")
+
+    SolanaCliService.stub(:request, @json_data, ["stakes", @testnet_url]) do
+      Pipeline.new(200, @initial_payload)
+              .then(&get_last_batch)
+              .then(&get_stake_accounts)
+              .then(&update_stake_accounts)
+
+      # doesn't create StakeAccount for small stake
+      refute StakeAccount.find_by(network: network, delegated_vote_account_address: va.account)
+      # removes StakeAccount if existed before
+      assert StakeAccount.where.not(batch_uuid: @batch.uuid).empty?
     end
   end
 
