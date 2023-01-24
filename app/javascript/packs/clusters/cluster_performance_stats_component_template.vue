@@ -7,10 +7,10 @@
           <small class="text-muted" v-if="!root_distance">loading...</small>
 
           <div class="text-muted mb-2" v-if="root_distance">
-            <i class="fas fa-long-arrow-alt-down text-purple" aria-hidden="true"></i>
+            <i class="fa-solid fa-down-long text-purple" aria-hidden="true"></i>
             {{ root_distance_min() }}
             &nbsp;–&nbsp;
-            <i class="fas fa-long-arrow-alt-up text-purple" aria-hidden="true"></i>
+            <i class="fa-solid fa-up-long text-purple" aria-hidden="true"></i>
             {{ root_distance_max() }}
           </div>
 
@@ -34,10 +34,10 @@
           <small class="text-muted" v-if="!vote_distance">loading...</small>
 
           <div class="text-muted mb-2" v-if="vote_distance">
-            <i class="fas fa-long-arrow-alt-down text-purple" aria-hidden="true"></i>
+            <i class="fa-solid fa-down-long text-purple" aria-hidden="true"></i>
             {{ vote_distance_min() }}
             &nbsp;–&nbsp;
-            <i class="fas fa-long-arrow-alt-up text-purple" aria-hidden="true"></i>
+            <i class="fa-solid fa-up-long text-purple" aria-hidden="true"></i>
             {{ vote_distance_max() }}
           </div>
 
@@ -61,7 +61,7 @@
           <small class="text-muted" v-if="!skipped_votes">loading...</small>
 
           <div class="text-muted mb-2" v-if="skipped_votes">
-            <i class="fas fa-trophy text-purple me-1" aria-hidden="true"></i>
+            <i class="fa-solid fa-trophy text-purple me-1" aria-hidden="true"></i>
             Best:
             <strong class="text-purple ms-1">{{ skipped_votes_best() }}%</strong>
           </div>
@@ -86,10 +86,10 @@
           <small class="text-muted" v-if="!skipped_slots">loading...</small>
 
           <div class="text-muted mb-2" v-if="skipped_slots">
-            <i class="fas fa-long-arrow-alt-down text-purple" aria-hidden="true"></i>
+            <i class="fa-solid fa-down-long text-purple" aria-hidden="true"></i>
             {{ skipped_slots_min() }}
             &nbsp;–&nbsp;
-            <i class="fas fa-long-arrow-alt-up text-purple" aria-hidden="true"></i>
+            <i class="fa-solid fa-up-long text-purple" aria-hidden="true"></i>
             {{ skipped_slots_max() }}
           </div>
 

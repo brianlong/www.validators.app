@@ -37,18 +37,18 @@
                                             v-if="selected_data_centers_group" />
         <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
           <span class="btn btn-xs btn-secondary active">
-            <i class="fas fa-eye"></i>
+            <i class="fa-solid fa-eye"></i>
           </span>
           <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(false)">
-            <i class="fas fa-eye-slash me-2"></i>RPC nodes
+            <i class="fa-solid fa-eye-slash me-2"></i>RPC nodes
           </span>
         </div>
         <div class="btn-group btn-group-toggle switch-button" v-else>
           <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(true)">
-            <i class="fas fa-eye me-2"></i>RPC nodes
+            <i class="fa-solid fa-eye me-2"></i>RPC nodes
           </span>
           <span class="btn btn-xs btn-secondary active">
-            <i class="fas fa-eye-slash"></i>
+            <i class="fa-solid fa-eye-slash"></i>
           </span>
         </div>
       </div>
