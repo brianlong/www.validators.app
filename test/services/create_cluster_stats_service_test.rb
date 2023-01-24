@@ -43,6 +43,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   test "#call updates ClusterStat with correct total_active_stake" do
     mock = Minitest::Mock.new
     mock.expect :total_active_stake, 123
+    mock.expect :total_active_stake, 123
 
     Stats::ValidatorHistory.stub :new, mock do
       CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
@@ -55,7 +56,11 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   test "#call updates ClusterStat with correct root_distance and vote_distance" do
     mock = Minitest::Mock.new
     mock.expect :root_distance_stats, 456
+    mock.expect :root_distance_stats, 456
     mock.expect :vote_distance_stats, 789
+    mock.expect :vote_distance_stats, 789
+    mock.expect :vote_distance_stats, 789
+
 
     Stats::ValidatorScore.stub :new, mock do
       CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
@@ -69,6 +74,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   test "#call updates ClusterStat with correct skipped_slots" do
     mock = Minitest::Mock.new
     mock.expect :skipped_slot_stats, 111
+    mock.expect :skipped_slot_stats, 111
 
     Stats::ValidatorBlockHistory.stub :new, mock do
       CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
@@ -80,6 +86,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
 
   test "#call updates ClusterStat with correct skipped_votes" do
     mock = Minitest::Mock.new
+    mock.expect :skipped_votes_stats, 222
     mock.expect :skipped_votes_stats, 222
 
     Stats::VoteAccountHistory.stub :new, mock do

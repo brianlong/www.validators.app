@@ -28,8 +28,7 @@ class CreateClusterStatsService
       validator_block_history_stats.skipped_slot_stats if validator_block_history_stats.skipped_slot_stats
     fields_for_update[:skipped_votes] = \
       vote_account_history_stats.skipped_votes_stats if vote_account_history_stats.skipped_votes_stats
-    puts "========================"
-    puts fields_for_update
+
     network_stat.update(fields_for_update)
   end
 
