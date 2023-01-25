@@ -11,19 +11,19 @@
           Stats
         </div>
         <div class="col-lg-2">
-          <i class="fas fa-calculator text-success me-2"></i>Entries
+          <i class="fa-solid fa-calculator text-success me-2"></i>Entries
         </div>
         <div class="col-md-2">
-          <i class="fas fa-long-arrow-alt-down text-success me-2"></i>Min
+          <i class="fa-solid fa-down-long text-success me-2"></i>Min
         </div>
         <div class="col-lg-2">
-          <i class="fas fa-divide text-success me-2"></i>Median
+          <i class="fa-solid fa-divide text-success me-2"></i>Median
         </div>
         <div class="col-lg-2">
-          <i class="fas fa-long-arrow-alt-up text-success me-2"></i>P90
+          <i class="fa-solid fa-up-long text-success me-2"></i>P90
         </div>
         <div class="col-lg-2">
-          <i class="fas fa-clock text-success me-2"></i>Latency
+          <i class="fa-solid fa-clock text-success me-2"></i>Latency
         </div>
       </div>
 
@@ -36,31 +36,31 @@
             <div class="col-lg-2 mb-1 mb-lg-0">5 min</div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fas fa-calculator text-success me-2"></i>Entries:&nbsp;
+                <i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;
               </span>
               <span class="text-success">{{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString() : '0' }}</span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fas fa-long-arrow-alt-down text-success me-2"></i>Min:&nbsp;
+                <i class="fa-solid fa-down-long text-success me-2"></i>Min:&nbsp;
               </span>
               <span class="text-success">{{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fas fa-divide text-success me-2"></i>Median:&nbsp;
+                <i class="fa-solid fa-divide text-success me-2"></i>Median:&nbsp;
               </span>
               <span class="text-success">{{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fas fa-long-arrow-alt-up text-success me-2"></i>P90:&nbsp;
+                <i class="fa-solid fa-up-long text-success me-2"></i>P90:&nbsp;
               </span>
               <span class="text-success">{{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
             <div class="col-lg-2">
               <span class="d-lg-none">
-                <i class="fas fa-clock text-success me-2"></i>Latency:&nbsp;
+                <i class="fa-solid fa-clock text-success me-2"></i>Latency:&nbsp;
               </span>
               <span class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</span>
             </div>
@@ -73,31 +73,31 @@
             <div class="col-lg-2 mb-1 mb-lg-0">1 hour</div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fas fa-calculator text-success me-2"></i>Entries:&nbsp;
+                <i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;
               </span>
               <strong class="text-success">{{ last_60_mins["num_of_records"] ? last_60_mins["num_of_records"].toLocaleString() : '0' }}</strong>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fas fa-long-arrow-alt-down text-success me-2"></i>Min:&nbsp;
+                <i class="fa-solid fa-down-long text-success me-2"></i>Min:&nbsp;
               </span>
               <span class="text-success">{{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fas fa-divide text-success me-2"></i>Median:&nbsp;
+                <i class="fa-solid fa-divide text-success me-2"></i>Median:&nbsp;
               </span>
               <span class="text-success">{{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
-                <i class="fas fa-long-arrow-alt-up text-success me-2"></i>P90:&nbsp;
+                <i class="fa-solid fa-up-long text-success me-2"></i>P90:&nbsp;
               </span>
               <span class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</span>
             </div>
             <div class="col-lg-2">
               <span class="d-lg-none">
-                <i class="fas fa-clock text-success me-2"></i>Latency:&nbsp;
+                <i class="fa-solid fa-clock text-success me-2"></i>Latency:&nbsp;
               </span>
               <span class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</span>
             </div>

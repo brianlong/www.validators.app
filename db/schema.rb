@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_20_130340) do
+ActiveRecord::Schema.define(version: 2023_01_13_115914) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2022_12_20_130340) do
     t.string "network"
     t.integer "epoch"
     t.float "epoch_completion"
+    t.boolean "from_inflation_rewards", default: false
     t.index ["epoch"], name: "index_commission_histories_on_epoch"
     t.index ["network", "created_at", "validator_id"], name: "index_commission_histories_on_validators"
     t.index ["network", "validator_id"], name: "index_commission_histories_on_network_and_validator_id"
