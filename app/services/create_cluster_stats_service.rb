@@ -16,7 +16,9 @@ class CreateClusterStatsService
 
     fields_for_update = {}
     fields_for_update[:total_active_stake] = \
-      validator_history_stats.total_active_stake if validator_history_stats.total_active_stake&.nonzero?
+      validator_history_stats.total_active_stake if \
+      validator_history_stats.total_active_stake && \
+      validator_history_stats.total_active_stake > 0
     fields_for_update[:software_version] = dominant_software_version if dominant_software_version
     fields_for_update[:validator_count] = validators_total if validators_total
     fields_for_update[:nodes_count] = nodes_total if nodes_total

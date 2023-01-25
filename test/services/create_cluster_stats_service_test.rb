@@ -44,6 +44,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
     mock = Minitest::Mock.new
     mock.expect :total_active_stake, 123
     mock.expect :total_active_stake, 123
+    mock.expect :total_active_stake, 123
 
     Stats::ValidatorHistory.stub :new, mock do
       CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
