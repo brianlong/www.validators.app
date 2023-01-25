@@ -21,18 +21,23 @@ class CreateClusterStatsService
     fields_for_update[:validator_count] = validators_total if validators_total
     fields_for_update[:nodes_count] = nodes_total if nodes_total
     fields_for_update[:root_distance] = \
-      validator_score_stats.root_distance_stats if validator_score_stats.root_distance_stats
+      validator_score_stats.root_distance_stats if hash_valid?(validator_score_stats.root_distance_stats)
     fields_for_update[:vote_distance] = \
-      validator_score_stats.vote_distance_stats if validator_score_stats.vote_distance_stats
+      validator_score_stats.vote_distance_stats if hash_valid?(validator_score_stats.vote_distance_stats)
     fields_for_update[:skipped_slots] = \
-      validator_block_history_stats.skipped_slot_stats if validator_block_history_stats.skipped_slot_stats
+      validator_block_history_stats.skipped_slot_stats if hash_valid?(validator_block_history_stats.skipped_slot_stats)
     fields_for_update[:skipped_votes] = \
-      vote_account_history_stats.skipped_votes_stats if vote_account_history_stats.skipped_votes_stats
+      vote_account_history_stats.skipped_votes_stats if hash_valid?(vote_account_history_stats.skipped_votes_stats)
 
     network_stat.update(fields_for_update)
   end
 
   private
+
+  def hash_valid? hash
+    hash.map{|k, v| return false unless v}
+    true
+  end
 
   def validator_history_stats
     Stats::ValidatorHistory.new(@network, @batch_uuid)

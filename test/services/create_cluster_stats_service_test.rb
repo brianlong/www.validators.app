@@ -55,45 +55,45 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
 
   test "#call updates ClusterStat with correct root_distance and vote_distance" do
     mock = Minitest::Mock.new
-    mock.expect :root_distance_stats, 456
-    mock.expect :root_distance_stats, 456
-    mock.expect :vote_distance_stats, 789
-    mock.expect :vote_distance_stats, 789
-    mock.expect :vote_distance_stats, 789
+    mock.expect :root_distance_stats, { max: 456 }
+    mock.expect :root_distance_stats, { max: 456 }
+    mock.expect :vote_distance_stats, { max: 789 }
+    mock.expect :vote_distance_stats, { max: 789 }
+    mock.expect :vote_distance_stats, { max: 789 }
 
 
     Stats::ValidatorScore.stub :new, mock do
       CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
       stat = ClusterStat.where(network: @network).last
 
-      assert_equal 456, stat.root_distance
-      assert_equal 789, stat.vote_distance
+      assert_equal 456, stat.root_distance["max"]
+      assert_equal 789, stat.vote_distance["max"]
     end
   end
 
   test "#call updates ClusterStat with correct skipped_slots" do
     mock = Minitest::Mock.new
-    mock.expect :skipped_slot_stats, 111
-    mock.expect :skipped_slot_stats, 111
+    mock.expect :skipped_slot_stats, { max: 111 }
+    mock.expect :skipped_slot_stats, { max: 111 }
 
     Stats::ValidatorBlockHistory.stub :new, mock do
       CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
       stat = ClusterStat.where(network: @network).last
 
-      assert_equal 111, stat.skipped_slots
+      assert_equal 111, stat.skipped_slots["max"]
     end
   end
 
   test "#call updates ClusterStat with correct skipped_votes" do
     mock = Minitest::Mock.new
-    mock.expect :skipped_votes_stats, 222
-    mock.expect :skipped_votes_stats, 222
+    mock.expect :skipped_votes_stats, { max: 222 }
+    mock.expect :skipped_votes_stats, { max: 222 }
 
     Stats::VoteAccountHistory.stub :new, mock do
       CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
       stat = ClusterStat.where(network: @network).last
 
-      assert_equal 222, stat.skipped_votes
+      assert_equal 222, stat.skipped_votes["max"]
     end
   end
 end
