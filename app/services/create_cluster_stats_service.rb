@@ -20,8 +20,8 @@ class CreateClusterStatsService
       validator_history_stats.total_active_stake && \
       validator_history_stats.total_active_stake > 0
     fields_for_update[:software_version] = dominant_software_version if dominant_software_version
-    fields_for_update[:validator_count] = validators_total if validators_total
-    fields_for_update[:nodes_count] = nodes_total if nodes_total
+    fields_for_update[:validator_count] = validators_total if validators_total && validators_total > 0
+    fields_for_update[:nodes_count] = nodes_total if nodes_total && nodes_total > 0
     fields_for_update[:root_distance] = \
       validator_score_stats.root_distance_stats if hash_valid?(validator_score_stats.root_distance_stats)
     fields_for_update[:vote_distance] = \
