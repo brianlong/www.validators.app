@@ -14,7 +14,7 @@ class TotalRewardsUpdateService
 
     cluster_stat.update(
       total_rewards_difference: rewards_end_epoch - rewards_start_epoch
-    )
+    ) if rewards_end_epoch && rewards_start_epoch
   end
 
   private
@@ -22,7 +22,7 @@ class TotalRewardsUpdateService
   attr_reader :network, :stake_accounts
 
   def cluster_stat
-    ClusterStat.find_or_create_by(network: network)
+    @cluster_stat ||= ClusterStat.find_or_create_by(network: network)
   end
 
   def epoch_range
