@@ -9,14 +9,16 @@ class TotalRewardsUpdateService
   end
 
   def call
-    rewards = total_rewards(completed_epoch)
-    completed_epoch.update(total_rewards: rewards, total_active_stake: cluster_stat.total_active_stake)
+    if completed_epoch
+      rewards = total_rewards(completed_epoch)
+      completed_epoch.update(total_rewards: rewards, total_active_stake: cluster_stat.total_active_stake)
+    end
   end
 
   private
 
   def cluster_stat
-    @cluster_stat ||= ClusterStat.find_or_create_by(network: network)
+    @cluster_stat ||= ClusterStat.find_or_create_by(network: @network)
   end
 
   def completed_epoch
@@ -26,7 +28,7 @@ class TotalRewardsUpdateService
   end
 
   def total_rewards(epoch)
-    solana_rewards(epoch).compact.inject(0) do |sum, val|
+    epoch_rewards(epoch).compact.inject(0) do |sum, val|
       next unless val["amount"]
 
       sum + val["amount"].to_i
@@ -35,7 +37,7 @@ class TotalRewardsUpdateService
 
   def epoch_rewards(epoch)
     solana_client_request(
-      NETWORK_URLS[network],
+      NETWORK_URLS[@network],
       :get_inflation_reward,
       params: [
         @stake_accounts,
