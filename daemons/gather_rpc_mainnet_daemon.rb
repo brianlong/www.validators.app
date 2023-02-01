@@ -36,7 +36,6 @@ begin
                 .then(&log_errors)
                 .then(&batch_touch)
                 .then(&check_epoch)
-                .then(&update_network_total_active_stake)
 
     # After switching to better server we exceed connection rate limit:
     # Maximum connection rate per 10 seconds per IP: 40

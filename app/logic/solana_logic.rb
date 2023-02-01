@@ -160,7 +160,7 @@ module SolanaLogic
         end
       end
 
-      Pipeline.new(200, p.payload.merge(network_total_active_stake: validators["totalActiveStake"]))
+      Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from validator_history_update", e)
     end
@@ -619,20 +619,6 @@ module SolanaLogic
       Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from check_epoch', e)
-    end
-  end
-
-  def update_network_total_active_stake
-    lambda do |p|
-      return p unless p[:code] == 200
-
-      stat = ClusterStat.find_or_create_by(network: p.payload[:network])
-      stat.update(network_total_active_stake: p[:network_total_active_stake])
-
-      puts "network total active stake: #{stat.network_total_active_stake}"
-      Pipeline.new(200, p.payload)
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from update_network_total_active_stake', e)
     end
   end
 

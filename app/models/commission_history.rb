@@ -2,16 +2,17 @@
 #
 # Table name: commission_histories
 #
-#  id                :bigint           not null, primary key
-#  batch_uuid        :string(191)
-#  commission_after  :float(24)
-#  commission_before :float(24)
-#  epoch             :integer
-#  epoch_completion  :float(24)
-#  network           :string(191)
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  validator_id      :bigint           not null
+#  id                     :bigint           not null, primary key
+#  batch_uuid             :string(191)
+#  commission_after       :float(24)
+#  commission_before      :float(24)
+#  epoch                  :integer
+#  epoch_completion       :float(24)
+#  from_inflation_rewards :boolean          default(FALSE)
+#  network                :string(191)
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  validator_id           :bigint           not null
 #
 # Indexes
 #

@@ -4,20 +4,19 @@
 #
 # Table name: cluster_stats
 #
-#  id                         :bigint           not null, primary key
-#  network                    :string(191)
-#  network_total_active_stake :bigint
-#  nodes_count                :integer
-#  root_distance              :json
-#  skipped_slots              :json
-#  skipped_votes              :json
-#  software_version           :string(191)
-#  total_active_stake         :bigint
-#  total_rewards_difference   :bigint
-#  validator_count            :integer
-#  vote_distance              :json
-#  created_at                 :datetime         not null
-#  updated_at                 :datetime         not null
+#  id                 :bigint           not null, primary key
+#  network            :string(191)
+#  nodes_count        :integer
+#  roi                :float(24)
+#  root_distance      :json
+#  skipped_slots      :json
+#  skipped_votes      :json
+#  software_version   :string(191)
+#  total_active_stake :bigint
+#  validator_count    :integer
+#  vote_distance      :json
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
 # Indexes
 #
