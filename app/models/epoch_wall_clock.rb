@@ -23,7 +23,7 @@ class EpochWallClock < ApplicationRecord
 
   scope :by_network, ->(network) { where(network: network).order(epoch: :desc) }
 
-  #after_create :track_commission_changes
+  after_create :track_commission_changes
 
   def track_commission_changes
     if self.network == "mainnet"

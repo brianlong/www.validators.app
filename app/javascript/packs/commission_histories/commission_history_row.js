@@ -35,6 +35,9 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
     },
     filterByQuery: function(e) {
       this.$emit('filter_by_query', this.comm_history.account);
+    },
+    source_name: function() {
+      return this.comm_history.from_inflation_rewards ? "rewards" : "pipeline"
     }
   },
   template: `
@@ -48,7 +51,7 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
         <small class="text-muted">({{ comm_history.epoch_completion }}%)</small>
       </td>
       <td class="small">
-        {{ comm_history.batch_uuid }}
+        {{ source_name() }}
       </td>
       <td class="text-center text-nowrap">
         {{ comm_history.commission_before }}%

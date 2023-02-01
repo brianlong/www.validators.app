@@ -11,7 +11,7 @@
               <a href="#" @click.prevent="sort_by_epoch">Epoch</a><br />
               <small class="text-muted">(completion %)</small>
             </th>
-            <th class="column-md">Batch</th>
+            <th class="column-md">Source</th>
             <th class="column-lg text-center px-2">
               Before<i class="fa-solid fa-right-long px-2"></i>After
             </th>
