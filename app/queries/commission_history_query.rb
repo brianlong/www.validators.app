@@ -13,6 +13,7 @@ class CommissionHistoryQuery
     id
     epoch_completion
     batch_uuid
+    from_inflation_rewards
   ].freeze
 
   VAL_FIELDS = %w[
