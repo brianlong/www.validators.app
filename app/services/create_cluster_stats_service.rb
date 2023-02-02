@@ -20,17 +20,26 @@ class CreateClusterStatsService
     end.compact
 
     network_stat = ClusterStat.find_or_create_by(network: @network)
-    network_stat.update(
-      total_active_stake: validator_history_stats.total_active_stake,
-      software_version: dominant_software_version,
-      validator_count: validators_total,
-      nodes_count: nodes_total,
-      root_distance: validator_score_stats.root_distance_stats,
-      vote_distance: validator_score_stats.vote_distance_stats,
-      skipped_slots: validator_block_history_stats.skipped_slot_stats,
-      skipped_votes: vote_account_history_stats.skipped_votes_stats,
-      roi: epochs_roi.average.round(2)
-    )
+
+    fields_for_update = {}
+    fields_for_update[:roi] = epochs_roi.average
+    fields_for_update[:total_active_stake] = \
+      validator_history_stats.total_active_stake if \
+      validator_history_stats.total_active_stake && \
+      validator_history_stats.total_active_stake > 0
+    fields_for_update[:software_version] = dominant_software_version if dominant_software_version
+    fields_for_update[:validator_count] = validators_total if validators_total && validators_total > 0
+    fields_for_update[:nodes_count] = nodes_total if nodes_total && nodes_total > 0
+    fields_for_update[:root_distance] = \
+      validator_score_stats.root_distance_stats if hash_valid?(validator_score_stats.root_distance_stats)
+    fields_for_update[:vote_distance] = \
+      validator_score_stats.vote_distance_stats if hash_valid?(validator_score_stats.vote_distance_stats)
+    fields_for_update[:skipped_slots] = \
+      validator_block_history_stats.skipped_slot_stats if hash_valid?(validator_block_history_stats.skipped_slot_stats)
+    fields_for_update[:skipped_votes] = \
+      vote_account_history_stats.skipped_votes_stats if hash_valid?(vote_account_history_stats.skipped_votes_stats)
+
+    network_stat.update(fields_for_update)
   end
 
   private
@@ -39,6 +48,11 @@ class CreateClusterStatsService
     @last_epochs ||= EpochWallClock.where(network: @network)
                                    .where.not(ending_slot: nil)
                                    .last(num)
+  end
+  
+  def hash_valid? hash
+    hash.map{|k, v| return false unless v}
+    true
   end
 
   def validator_history_stats
