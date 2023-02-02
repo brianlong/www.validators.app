@@ -35,21 +35,28 @@
       <div class="map-legend-col text-sm-end">
         <validators-map-data-center-details :data_centers_group="selected_data_centers_group"
                                             v-if="selected_data_centers_group" />
-        <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
+
+        <div class="d-flex flex-wrap gap-3">
+          <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
           <span class="btn btn-xs btn-secondary active">
             <i class="fa-solid fa-eye"></i>
           </span>
-          <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(false)">
+            <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(false)">
             <i class="fa-solid fa-eye-slash me-2"></i>RPC nodes
           </span>
-        </div>
-        <div class="btn-group btn-group-toggle switch-button" v-else>
+          </div>
+          <div class="btn-group btn-group-toggle switch-button" v-else>
           <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(true)">
             <i class="fa-solid fa-eye me-2"></i>RPC nodes
           </span>
-          <span class="btn btn-xs btn-secondary active">
+            <span class="btn btn-xs btn-secondary active">
             <i class="fa-solid fa-eye-slash"></i>
           </span>
+          </div>
+          <a :href="data_centers_link()" target="_blank" class="btn btn-xs btn-secondary">
+            Data Centers
+            <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i>
+          </a>
         </div>
       </div>
     </section>
@@ -139,6 +146,10 @@
 
       validator_details_link(account) {
         return `/validators/${account}?network=${this.network}`;
+      },
+
+      data_centers_link() {
+        return `/data-centers?network=${this.network}`;
       },
 
       set_map_point_size: function(validators_and_nodes_count) {
