@@ -21,7 +21,7 @@
         </div>
 
         <div class="mb-2">
-          <span class="text-muted me-1">Gross Yield:</span>
+          <span class="text-muted me-1">Gross ROI:</span>
 
           <span class="text-muted" v-if="!gross_yield">loading...</span>
           <span v-if="gross_yield">
@@ -73,16 +73,7 @@
         received(data) {
           const stake = data.cluster_stats[this.network].total_active_stake;
           this.total_active_stake = this.lamports_to_sol(stake).toLocaleString('en-US', { maximumFractionDigits: 0 });
-
-          const total_rewards_difference = data.cluster_stats[this.network].total_rewards_difference;
-          const network_total_active_stake = data.cluster_stats[this.network].network_total_active_stake;
-
-          if (total_rewards_difference && network_total_active_stake) {
-            this.gross_yield = (
-              this.lamports_to_sol(total_rewards_difference) * 100 /
-                this.lamports_to_sol(network_total_active_stake)
-            ).toFixed(2);
-          }
+          this.gross_yield = data.cluster_stats[this.network].roi
         },
         disconnected() {},
       },

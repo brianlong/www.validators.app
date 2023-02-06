@@ -7,22 +7,22 @@ class TotalRewardsUpdateServiceTest < ActiveSupport::TestCase
 
   def setup
     @network = "mainnet"
+    @solana_url = "https://api.mainnet-beta.solana.com"
+    @vote_acc = ["BFpfnLfnE4zY5TNvywbH1sPU9kCe1vo1pPF1QsMHU6gL", "BmZFrXp57Z8b4SDP6sn6pjMwKUzWt6WHT4qg943hGmwa"]
   end
 
   test "updating cluster stat with total rewards difference" do
     EpochWallClock.delete_all
 
     cluster_stat = create(:cluster_stat, network: @network)
-    create(:epoch_wall_clock, epoch: 397, network: @network)
-    create(:epoch_wall_clock, epoch: 398, network: @network)
-    create(:epoch_wall_clock, epoch: 399, network: @network)
+    epoch = create(:epoch_wall_clock, epoch: 407, network: @network, starting_slot: 1, ending_slot: 2)
 
     VCR.use_cassette("get_inflation_reward") do
-      TotalRewardsUpdateService.new(@network, []).call
+      TotalRewardsUpdateService.new(@network, @vote_acc, @solana_url).call
 
-      cluster_stat.reload
+      epoch.reload
 
-      assert_equal 801, cluster_stat.total_rewards_difference
+      assert_equal 29627766, epoch.total_rewards
     end
   end
 end

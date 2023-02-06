@@ -3,9 +3,10 @@
 class TotalRewardsUpdateService
   include SolanaRequestsLogic
 
-  def initialize(network, stake_accounts)
+  def initialize(network, stake_accounts, solana_url = nil)
     @network = network
     @stake_accounts = stake_accounts
+    @solana_url = solana_url ? [solana_url] : NETWORK_URLS[@network]
   end
 
   def call
@@ -28,19 +29,21 @@ class TotalRewardsUpdateService
   end
 
   def total_rewards(epoch)
-    epoch_rewards(epoch).compact.inject(0) do |sum, val|
-      next unless val["amount"]
-
-      sum + val["amount"].to_i
+    rewards_sum = 0
+    @stake_accounts&.in_groups_of(1000) do |stake_account_batch|
+      epoch_rewards(epoch.epoch, stake_account_batch.compact).each do |acc|
+        rewards_sum += acc["amount"].to_i if acc && acc["amount"]
+      end
     end
+    rewards_sum
   end
 
-  def epoch_rewards(epoch)
+  def epoch_rewards(epoch, stake_accounts)
     solana_client_request(
-      NETWORK_URLS[@network],
+      @solana_url,
       :get_inflation_reward,
       params: [
-        @stake_accounts,
+        stake_accounts,
         { epoch: epoch }
       ]
     )
