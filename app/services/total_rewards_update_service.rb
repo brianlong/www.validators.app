@@ -14,7 +14,9 @@ class TotalRewardsUpdateService
     if completed_epoch
       rewards = total_rewards(completed_epoch)
       rewards_logger.warn("total_rewards: #{rewards}") unless Rails.env.test?
-      completed_epoch.update(total_rewards: rewards, total_active_stake: cluster_stat.total_active_stake)
+      if rewards > 0
+        completed_epoch.update(total_rewards: rewards, total_active_stake: cluster_stat.total_active_stake)
+      end
     end
   end
 

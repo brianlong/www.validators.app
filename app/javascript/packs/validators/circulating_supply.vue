@@ -25,7 +25,7 @@
 
           <span class="text-muted" v-if="!gross_yield">loading...</span>
           <span v-if="gross_yield">
-            <strong class="text-success">{{ lamports_to_sol(gross_yield) }}</strong>
+            <strong class="text-success">{{ gross_yield }}</strong>
             <div class="small text-muted">
               (Last 3 epochs annualized)
             </div>
