@@ -22,7 +22,7 @@ class CreateClusterStatsService
         end
       end.compact
 
-      epochs_annual_roi = (365 / epochs_duration) * epochs_average_roi.average
+      epochs_annual_roi = (365 / epochs_duration) * epochs_average_roi.average * 100
     end
     epochs_annual_roi ||= 0
     network_stat = ClusterStat.find_or_create_by(network: @network)
