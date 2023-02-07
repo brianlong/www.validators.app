@@ -15,14 +15,14 @@ class CreateClusterStatsService
 
     last_epochs = last_epochs(EPOCHS_TO_CALCULATE)
     if last_epochs.count > 0
-      epochs_duration = last_epochs.second.created_at - last_epochs.first.created_at
+      epochs_duration = (last_epochs.second.created_at - last_epochs.first.created_at) / 60 / 60 / 24
       epochs_average_roi = last_epochs(EPOCHS_TO_CALCULATE).map do |epoch|
         if epoch.total_rewards && epoch.total_active_stake
-          epoch.total_rewards / epoch.total_active_stake.to_f
+          (epoch.total_rewards / epoch.total_active_stake.to_f) * 100
         end
-      end.compact
+      end.compact.average
 
-      epochs_annual_roi = (365 / epochs_duration) * epochs_average_roi.average * 100
+      epochs_annual_roi = (365 / epochs_duration) * epochs_average_roi
     end
     epochs_annual_roi ||= 0
     network_stat = ClusterStat.find_or_create_by(network: @network)
