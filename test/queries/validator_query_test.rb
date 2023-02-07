@@ -65,20 +65,21 @@ class ValidatorQueryTest < ActiveSupport::TestCase
   end
 
   test "#call returns matching results if admin_warning is present" do
-    create(:validator, :with_score, :with_admin_warning)
+    validator_with_warning = create(:validator, :with_score, :with_admin_warning)
     create_list(:validator, 2, :with_score) # without admin_warning
 
     admin_warning = "true"
     result = ValidatorQuery.new.call(network: @testnet_network, admin_warning: admin_warning)
 
     assert_equal 1, result.count
+    assert_includes result, validator_with_warning
     assert_equal [@testnet_network], result.pluck(:network).uniq
     assert_equal ["test warning"],  result.pluck(:admin_warning).uniq
 
     admin_warning = "false"
     result = ValidatorQuery.new.call(network: @testnet_network, admin_warning: admin_warning)
 
-    assert_equal (Validator.where(network: @testnet_network).count - 1), result.count
+    refute_includes result, validator_with_warning
     assert_equal [nil], result.pluck(:admin_warning).uniq
   end
 
