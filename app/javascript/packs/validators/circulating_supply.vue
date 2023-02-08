@@ -25,7 +25,7 @@
 
           <span class="text-muted" v-if="!gross_yield">loading...</span>
           <span v-if="gross_yield">
-            <strong class="text-success">{{ gross_yield }}</strong>
+            <strong class="text-success">{{ gross_yield }}%</strong>
             <div class="small text-muted">
               (Last 3 epochs annualized)
             </div>
@@ -73,7 +73,7 @@
         received(data) {
           const stake = data.cluster_stats[this.network].total_active_stake;
           this.total_active_stake = this.lamports_to_sol(stake).toLocaleString('en-US', { maximumFractionDigits: 0 });
-          this.gross_yield = data.cluster_stats[this.network].roi
+          this.gross_yield = data.cluster_stats[this.network].roi.toLocaleString('en-US', { maximumFractionDigits: 2 });
         },
         disconnected() {},
       },
