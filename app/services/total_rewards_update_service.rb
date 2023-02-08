@@ -55,8 +55,8 @@ class TotalRewardsUpdateService
   end
 
   def rewards_logger
-    log_path = File.join(Rails.root, 'log', Rails.env)
-    log_file_name = 'total_rewards_update_service.log'
+    log_path = File.join(Rails.root, "log", Rails.env)
+    log_file_name = "total_rewards_update_service.log"
     log_file_path = File.join(log_path, log_file_name)
   
     FileUtils.mkdir_p(log_path)
