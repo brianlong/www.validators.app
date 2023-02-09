@@ -1,18 +1,18 @@
 <template>
   <div class="modal modal-large fade"
-       :id="'scoresModal' + validator.account"
+       id="scoresModal"
        tabindex="-1"
        role="dialog"
        aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
+      <div class="modal-content" v-if="validator">
         <div class="modal-header">
           <h6 class="modal-title">
             <a :href="`validators/${validator.account}?network=${network}`"
                class="fw-bold" >
               {{ validator.name }}
             </a>
-            total score: {{ validator.score.displayed_total_score }} <span class="text-muted">(max 11)</span>
+            total score: {{ score.displayed_total_score }} <span class="text-muted">(max 11)</span>
           </h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -182,12 +182,25 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import axios from 'axios';
+  axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
-    props: {
-      validator: {
-        type: Object,
-        required: true
+    data() {
+      return {
+        account: '',
+        validator: null,
+        score: null
+      }
+    },
+    methods: {
+      update_account(account) {
+        this.account = account
+        ctx = this
+        axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
+          ctx.validator = JSON.parse(response.data.validator)
+          ctx.score = JSON.parse(response.data.score)
+        })
       }
     },
     computed: mapGetters([

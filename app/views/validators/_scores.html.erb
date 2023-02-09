@@ -1,4 +1,7 @@
-<a class="small text-nowrap base-color" data-bs-toggle="modal" data-bs-target="#scoresModal<%=validator.account%>">
+<a class="small text-nowrap base-color modal-trigger"
+   data-bs-toggle="modal"
+   data-bs-target="#scoresModal"
+   data-account="<%= validator.account %>">
   <i class="fas fa-circle me-1 score-<%= validator.root_distance_score.to_i %>"
      title="Root Distance Score = <%= validator.root_distance_score %>"></i>
 

@@ -1,0 +1,265 @@
+# Logfile created on 2023-02-06 08:22:39 +0100 by logger.rb/66358
+W, [2023-02-06T08:22:39.174105 #30257]  WARN -- : tracking commission changes started at 2023-02-06T08:22:39+01:00
+W, [2023-02-06T08:22:39.174420 #30257]  WARN -- : current_batch dc2c7f48-c669-4a73-92cb-189f804990df, created at: 2023-02-06 07:22:39 UTC
+W, [2023-02-06T08:22:39.174710 #30257]  WARN -- : previous_batch 295b964c-e954-4f2e-8067-fe035f75e00a, created at: 2023-02-05 07:17:39 UTC
+W, [2023-02-06T08:22:39.200405 #30257]  WARN -- : tracking commission changes started at 2023-02-06T08:22:39+01:00
+W, [2023-02-06T08:22:39.200656 #30257]  WARN -- : current_batch a1926adc-d2b0-4176-a348-81dd997a7984, created at: 2023-02-06 07:22:39 UTC
+W, [2023-02-06T08:22:39.200924 #30257]  WARN -- : previous_batch 638b5abe-d9a3-4576-bccb-8b1c48f30ab4, created at: 2023-02-05 07:17:39 UTC
+W, [2023-02-06T08:22:39.215029 #30257]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 07:17:39 UTC
+W, [2023-02-06T08:22:39.219140 #30257]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 07:22:39 UTC
+W, [2023-02-06T08:32:25.053679 #30776]  WARN -- : tracking commission changes started at 2023-02-06T08:32:25+01:00
+W, [2023-02-06T08:32:25.054630 #30776]  WARN -- : current_batch 3bab561c-c37c-4d81-8b22-63b460e8cf6f, created at: 2023-02-06 07:32:25 UTC
+W, [2023-02-06T08:32:25.054950 #30776]  WARN -- : previous_batch cee2949d-a0cc-4882-875b-bed961815aeb, created at: 2023-02-05 07:27:25 UTC
+W, [2023-02-06T08:32:25.079522 #30776]  WARN -- : tracking commission changes started at 2023-02-06T08:32:25+01:00
+W, [2023-02-06T08:32:25.079774 #30776]  WARN -- : current_batch 328a57a4-4000-4a63-a6f6-5d43e2e12b68, created at: 2023-02-06 07:32:25 UTC
+W, [2023-02-06T08:32:25.080040 #30776]  WARN -- : previous_batch 3f3d7a5c-45c2-4170-948a-a077c1add011, created at: 2023-02-05 07:27:25 UTC
+W, [2023-02-06T08:32:25.097050 #30776]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 07:27:25 UTC
+W, [2023-02-06T08:32:25.101155 #30776]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 07:32:25 UTC
+W, [2023-02-06T08:44:15.741045 #31122]  WARN -- : tracking commission changes started at 2023-02-06T08:44:15+01:00
+W, [2023-02-06T08:44:15.741984 #31122]  WARN -- : current_batch 798c8acf-a48b-4e65-b911-3ca3b07f9ecd, created at: 2023-02-06 07:44:15 UTC
+W, [2023-02-06T08:44:15.742319 #31122]  WARN -- : previous_batch e7f0a575-d3f6-4fa6-993e-9462ecba0bcd, created at: 2023-02-05 07:39:15 UTC
+W, [2023-02-06T08:44:15.784071 #31122]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 07:39:15 UTC
+W, [2023-02-06T08:44:15.788258 #31122]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 07:44:15 UTC
+W, [2023-02-06T08:44:17.815333 #31122]  WARN -- : tracking commission changes started at 2023-02-06T08:44:17+01:00
+W, [2023-02-06T08:44:17.815576 #31122]  WARN -- : current_batch e47dbba1-1359-48b6-abe1-50e4060d502a, created at: 2023-02-06 07:44:17 UTC
+W, [2023-02-06T08:44:17.815845 #31122]  WARN -- : previous_batch a243af4b-54e2-4ba6-a47e-afe1d8e1eac3, created at: 2023-02-05 07:39:17 UTC
+W, [2023-02-06T08:53:04.663952 #31394]  WARN -- : tracking commission changes started at 2023-02-06T08:53:04+01:00
+W, [2023-02-06T08:53:04.664640 #31394]  WARN -- : current_batch 12df87aa-93d5-4390-8439-a98665bfb870, created at: 2023-02-06 07:53:04 UTC
+W, [2023-02-06T08:53:04.664970 #31394]  WARN -- : previous_batch 1a1a24a8-7504-4c80-aa2e-c25652753edf, created at: 2023-02-05 07:48:04 UTC
+W, [2023-02-06T08:53:04.692765 #31394]  WARN -- : tracking commission changes started at 2023-02-06T08:53:04+01:00
+W, [2023-02-06T08:53:04.693076 #31394]  WARN -- : current_batch 17885f11-23ca-41c2-baa8-ef9be03ceb0e, created at: 2023-02-06 07:53:04 UTC
+W, [2023-02-06T08:53:04.693415 #31394]  WARN -- : previous_batch 7adad015-c185-4cbc-bc99-8530b074ac18, created at: 2023-02-05 07:48:04 UTC
+W, [2023-02-06T08:53:04.718748 #31394]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 07:48:04 UTC
+W, [2023-02-06T08:53:04.724747 #31394]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 07:53:04 UTC
+W, [2023-02-06T08:57:35.766013 #31606]  WARN -- : tracking commission changes started at 2023-02-06T08:57:35+01:00
+W, [2023-02-06T08:57:35.766705 #31606]  WARN -- : current_batch 7bb7e30e-675c-4c3c-89d8-951eac7451ae, created at: 2023-02-06 07:57:35 UTC
+W, [2023-02-06T08:57:35.767034 #31606]  WARN -- : previous_batch 0ae6a118-217d-4aa9-8a18-4edb21c7fc80, created at: 2023-02-05 07:52:35 UTC
+W, [2023-02-06T08:57:35.815299 #31606]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 07:52:35 UTC
+W, [2023-02-06T08:57:35.819786 #31606]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 07:57:35 UTC
+W, [2023-02-06T08:57:37.857094 #31606]  WARN -- : tracking commission changes started at 2023-02-06T08:57:37+01:00
+W, [2023-02-06T08:57:37.857374 #31606]  WARN -- : current_batch dadcbf16-a16e-4db4-a351-825958958cfd, created at: 2023-02-06 07:57:37 UTC
+W, [2023-02-06T08:57:37.857666 #31606]  WARN -- : previous_batch 0f6acd40-ab78-434f-a54d-efe6dbf72f6a, created at: 2023-02-05 07:52:37 UTC
+W, [2023-02-06T09:03:41.876399 #31782]  WARN -- : tracking commission changes started at 2023-02-06T09:03:41+01:00
+W, [2023-02-06T09:03:41.877161 #31782]  WARN -- : current_batch 0d452096-0f2d-4c20-ab2a-bdd0d8e3552b, created at: 2023-02-06 08:03:41 UTC
+W, [2023-02-06T09:03:41.877546 #31782]  WARN -- : previous_batch a50bffa9-f692-4db8-91a2-138a0ff1c983, created at: 2023-02-05 07:58:41 UTC
+W, [2023-02-06T09:03:41.904004 #31782]  WARN -- : tracking commission changes started at 2023-02-06T09:03:41+01:00
+W, [2023-02-06T09:03:41.904260 #31782]  WARN -- : current_batch 7c7fc9fc-e29e-4c63-8587-fb28bcd61c8c, created at: 2023-02-06 08:03:41 UTC
+W, [2023-02-06T09:03:41.904565 #31782]  WARN -- : previous_batch e268b45f-c35e-4cba-9da9-4a01629959ec, created at: 2023-02-05 07:58:41 UTC
+W, [2023-02-06T09:03:42.040042 #31782]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 07:58:41 UTC
+W, [2023-02-06T09:03:42.044583 #31782]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:03:41 UTC
+W, [2023-02-06T09:07:35.728152 #31941]  WARN -- : tracking commission changes started at 2023-02-06T09:07:35+01:00
+W, [2023-02-06T09:07:35.728828 #31941]  WARN -- : current_batch c27f6e4d-6639-48c7-8222-c2444abe7303, created at: 2023-02-06 08:07:35 UTC
+W, [2023-02-06T09:07:35.729150 #31941]  WARN -- : previous_batch e4d594d9-952b-4e02-b3a8-42f9cc7e9fd8, created at: 2023-02-05 08:02:35 UTC
+W, [2023-02-06T09:07:35.744283 #31941]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:02:35 UTC
+W, [2023-02-06T09:07:35.748103 #31941]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:07:35 UTC
+W, [2023-02-06T09:07:37.772565 #31941]  WARN -- : tracking commission changes started at 2023-02-06T09:07:37+01:00
+W, [2023-02-06T09:07:37.772814 #31941]  WARN -- : current_batch e8cfbf52-2751-487d-a213-0e72f3bb9358, created at: 2023-02-06 08:07:37 UTC
+W, [2023-02-06T09:07:37.773080 #31941]  WARN -- : previous_batch 211ede04-26c8-43df-97cc-41ca995c6025, created at: 2023-02-05 08:02:37 UTC
+W, [2023-02-06T09:11:48.122690 #32084]  WARN -- : tracking commission changes started at 2023-02-06T09:11:48+01:00
+W, [2023-02-06T09:11:48.123369 #32084]  WARN -- : current_batch 4a73e804-319c-4322-96b8-8ef0a99216e8, created at: 2023-02-06 08:11:48 UTC
+W, [2023-02-06T09:11:48.123710 #32084]  WARN -- : previous_batch 0a445dcf-5ba6-4214-85cb-6b7e06253855, created at: 2023-02-05 08:06:48 UTC
+W, [2023-02-06T09:11:48.138156 #32084]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:06:48 UTC
+W, [2023-02-06T09:11:48.142332 #32084]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:11:48 UTC
+W, [2023-02-06T09:11:50.169464 #32084]  WARN -- : tracking commission changes started at 2023-02-06T09:11:50+01:00
+W, [2023-02-06T09:11:50.169710 #32084]  WARN -- : current_batch 76ac2871-76f1-4523-ba37-e2c2f39da5b9, created at: 2023-02-06 08:11:50 UTC
+W, [2023-02-06T09:11:50.169975 #32084]  WARN -- : previous_batch 5fbcd96f-4b81-4905-9cb3-b8e5ab86378f, created at: 2023-02-05 08:06:50 UTC
+W, [2023-02-06T09:17:53.895097 #32265]  WARN -- : tracking commission changes started at 2023-02-06T09:17:53+01:00
+W, [2023-02-06T09:17:53.897258 #32265]  WARN -- : current_batch fc67b42e-aea6-4f77-8536-e4d57cf4e7fe, created at: 2023-02-06 08:17:53 UTC
+W, [2023-02-06T09:17:53.897517 #32265]  WARN -- : previous_batch 54dd2492-b307-4a4e-b618-b280f3c0de74, created at: 2023-02-05 08:12:53 UTC
+W, [2023-02-06T09:17:53.911078 #32265]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:12:53 UTC
+W, [2023-02-06T09:17:53.914329 #32265]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:17:53 UTC
+W, [2023-02-06T09:17:55.935192 #32265]  WARN -- : tracking commission changes started at 2023-02-06T09:17:55+01:00
+W, [2023-02-06T09:17:55.935392 #32265]  WARN -- : current_batch d1ded651-e72e-417a-a93d-4bb33a079fc7, created at: 2023-02-06 08:17:55 UTC
+W, [2023-02-06T09:17:55.935602 #32265]  WARN -- : previous_batch aa8e2656-1900-4a27-b58d-5e2dea58d99a, created at: 2023-02-05 08:12:55 UTC
+W, [2023-02-06T09:24:01.010098 #32513]  WARN -- : tracking commission changes started at 2023-02-06T09:24:01+01:00
+W, [2023-02-06T09:24:01.010946 #32513]  WARN -- : current_batch 6d080f01-e736-47e6-82a9-2aeb28c79310, created at: 2023-02-06 08:24:00 UTC
+W, [2023-02-06T09:24:01.011343 #32513]  WARN -- : previous_batch c14d3e29-04dd-410f-9ddf-0453780bdebd, created at: 2023-02-05 08:19:00 UTC
+W, [2023-02-06T09:24:01.025126 #32513]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:19:00 UTC
+W, [2023-02-06T09:24:01.030237 #32513]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:24:00 UTC
+W, [2023-02-06T09:24:03.067196 #32513]  WARN -- : tracking commission changes started at 2023-02-06T09:24:03+01:00
+W, [2023-02-06T09:24:03.067450 #32513]  WARN -- : current_batch f7adca67-714a-4a6e-9673-1823cc19f116, created at: 2023-02-06 08:24:03 UTC
+W, [2023-02-06T09:24:03.067699 #32513]  WARN -- : previous_batch 0af6ae97-fc4c-4af1-9ce6-469e45e72606, created at: 2023-02-05 08:19:03 UTC
+W, [2023-02-06T09:26:53.400515 #32602]  WARN -- : tracking commission changes started at 2023-02-06T09:26:53+01:00
+W, [2023-02-06T09:26:53.401201 #32602]  WARN -- : current_batch ed101e26-f068-48a2-938c-eab7015590f2, created at: 2023-02-06 08:26:53 UTC
+W, [2023-02-06T09:26:53.401542 #32602]  WARN -- : previous_batch d1a5d3da-5f38-4afe-b959-97e8475de150, created at: 2023-02-05 08:21:53 UTC
+W, [2023-02-06T09:26:53.416019 #32602]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:21:53 UTC
+W, [2023-02-06T09:26:53.419034 #32602]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:26:53 UTC
+W, [2023-02-06T09:26:55.439731 #32602]  WARN -- : tracking commission changes started at 2023-02-06T09:26:55+01:00
+W, [2023-02-06T09:26:55.439926 #32602]  WARN -- : current_batch e6fd67db-382e-4104-b169-53b9f5485d06, created at: 2023-02-06 08:26:55 UTC
+W, [2023-02-06T09:26:55.440129 #32602]  WARN -- : previous_batch be66d270-e825-489c-90f9-4e061b3d1812, created at: 2023-02-05 08:21:55 UTC
+W, [2023-02-06T09:30:54.954332 #32695]  WARN -- : tracking commission changes started at 2023-02-06T09:30:54+01:00
+W, [2023-02-06T09:30:54.955028 #32695]  WARN -- : current_batch b9e57174-038e-4f4d-ab86-56a0aa5be286, created at: 2023-02-06 08:30:54 UTC
+W, [2023-02-06T09:30:54.955424 #32695]  WARN -- : previous_batch d9e6032a-01b7-4792-968b-ec531baf772c, created at: 2023-02-05 08:25:54 UTC
+W, [2023-02-06T09:30:54.967519 #32695]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:25:54 UTC
+W, [2023-02-06T09:30:54.970932 #32695]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:30:54 UTC
+W, [2023-02-06T09:30:56.992264 #32695]  WARN -- : tracking commission changes started at 2023-02-06T09:30:56+01:00
+W, [2023-02-06T09:30:56.992477 #32695]  WARN -- : current_batch d498c099-feab-44c0-b2e9-8419dfb6a033, created at: 2023-02-06 08:30:56 UTC
+W, [2023-02-06T09:30:56.992718 #32695]  WARN -- : previous_batch e8ce1d3f-a721-4762-ab3b-c77afbd8e4eb, created at: 2023-02-05 08:25:56 UTC
+W, [2023-02-06T09:41:20.829243 #32980]  WARN -- : tracking commission changes started at 2023-02-06T09:41:20+01:00
+W, [2023-02-06T09:41:20.830244 #32980]  WARN -- : current_batch 48f964e9-6569-42b1-8111-8701d5531819, created at: 2023-02-06 08:41:20 UTC
+W, [2023-02-06T09:41:20.830510 #32980]  WARN -- : previous_batch d5298518-2d8e-4d46-bf4d-94f2aad8814b, created at: 2023-02-05 08:36:20 UTC
+W, [2023-02-06T09:41:20.843400 #32980]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:36:20 UTC
+W, [2023-02-06T09:41:20.846583 #32980]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:41:20 UTC
+W, [2023-02-06T09:41:22.869443 #32980]  WARN -- : tracking commission changes started at 2023-02-06T09:41:22+01:00
+W, [2023-02-06T09:41:22.869638 #32980]  WARN -- : current_batch e7fc8ac0-9927-4e48-b9f8-d327fc904f80, created at: 2023-02-06 08:41:22 UTC
+W, [2023-02-06T09:41:22.869847 #32980]  WARN -- : previous_batch d7c075e4-40c0-4a01-ae2a-4f79df77a394, created at: 2023-02-05 08:36:22 UTC
+W, [2023-02-06T09:45:31.915438 #33102]  WARN -- : tracking commission changes started at 2023-02-06T09:45:31+01:00
+W, [2023-02-06T09:45:31.916134 #33102]  WARN -- : current_batch 525768c5-7476-4032-bf2a-9bff6accff96, created at: 2023-02-06 08:45:31 UTC
+W, [2023-02-06T09:45:31.916526 #33102]  WARN -- : previous_batch 51635e76-58cb-4171-aaf2-f3858335d58d, created at: 2023-02-05 08:40:31 UTC
+W, [2023-02-06T09:45:31.930359 #33102]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:40:31 UTC
+W, [2023-02-06T09:45:31.934035 #33102]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:45:31 UTC
+W, [2023-02-06T09:45:33.955183 #33102]  WARN -- : tracking commission changes started at 2023-02-06T09:45:33+01:00
+W, [2023-02-06T09:45:33.955385 #33102]  WARN -- : current_batch a5683241-a210-4f3d-98f0-4a04a4a5fa78, created at: 2023-02-06 08:45:33 UTC
+W, [2023-02-06T09:45:33.955643 #33102]  WARN -- : previous_batch f13d4d2d-4db6-41e1-9562-0bfa561dc61c, created at: 2023-02-05 08:40:33 UTC
+W, [2023-02-06T09:52:39.479672 #33290]  WARN -- : tracking commission changes started at 2023-02-06T09:52:39+01:00
+W, [2023-02-06T09:52:39.480264 #33290]  WARN -- : current_batch 15576735-39a8-49d1-9ed2-d8bbc1978cfd, created at: 2023-02-06 08:52:39 UTC
+W, [2023-02-06T09:52:39.480490 #33290]  WARN -- : previous_batch 5261cbb4-a7c9-47d7-8400-dd513ef1d20c, created at: 2023-02-05 08:47:39 UTC
+W, [2023-02-06T09:52:39.494415 #33290]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:47:39 UTC
+W, [2023-02-06T09:52:39.497244 #33290]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:52:39 UTC
+W, [2023-02-06T09:52:41.519624 #33290]  WARN -- : tracking commission changes started at 2023-02-06T09:52:41+01:00
+W, [2023-02-06T09:52:41.519804 #33290]  WARN -- : current_batch df7b0dfe-d9ff-4bcb-9a2d-ff63d98b605b, created at: 2023-02-06 08:52:41 UTC
+W, [2023-02-06T09:52:41.519995 #33290]  WARN -- : previous_batch 28b9907a-c3fc-4c66-99e5-35cab8211a14, created at: 2023-02-05 08:47:41 UTC
+W, [2023-02-06T09:55:27.398623 #33430]  WARN -- : tracking commission changes started at 2023-02-06T09:55:27+01:00
+W, [2023-02-06T09:55:27.399213 #33430]  WARN -- : current_batch c765fbfa-3258-4e24-aec7-6480878771c2, created at: 2023-02-06 08:55:27 UTC
+W, [2023-02-06T09:55:27.399463 #33430]  WARN -- : previous_batch dd366945-6459-496e-a584-ded29eb77839, created at: 2023-02-05 08:50:27 UTC
+W, [2023-02-06T09:55:27.411608 #33430]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 08:50:27 UTC
+W, [2023-02-06T09:55:27.414743 #33430]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 08:55:27 UTC
+W, [2023-02-06T09:55:29.436149 #33430]  WARN -- : tracking commission changes started at 2023-02-06T09:55:29+01:00
+W, [2023-02-06T09:55:29.436344 #33430]  WARN -- : current_batch 2e50b1dd-26a4-4e65-9ab3-3b9c0e0bb1cc, created at: 2023-02-06 08:55:29 UTC
+W, [2023-02-06T09:55:29.436558 #33430]  WARN -- : previous_batch 06ac79d7-46cc-4a67-8595-4a59bfdbde35, created at: 2023-02-05 08:50:29 UTC
+W, [2023-02-06T13:18:32.249952 #38353]  WARN -- : tracking commission changes started at 2023-02-06T13:18:32+01:00
+W, [2023-02-06T13:18:32.250981 #38353]  WARN -- : current_batch d8420686-9e0c-4c49-aab8-4cbf7620265c, created at: 2023-02-06 12:18:32 UTC
+W, [2023-02-06T13:18:32.251538 #38353]  WARN -- : previous_batch 5ca25388-3c46-472e-9490-8bf83b4bdd00, created at: 2023-02-05 12:13:32 UTC
+W, [2023-02-06T13:18:32.266942 #38353]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 12:13:32 UTC
+W, [2023-02-06T13:18:32.270083 #38353]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 12:18:32 UTC
+W, [2023-02-06T13:18:34.293341 #38353]  WARN -- : tracking commission changes started at 2023-02-06T13:18:34+01:00
+W, [2023-02-06T13:18:34.293781 #38353]  WARN -- : current_batch 85065f8f-82d1-45cc-b2a3-b9880f39ba38, created at: 2023-02-06 12:18:34 UTC
+W, [2023-02-06T13:18:34.294086 #38353]  WARN -- : previous_batch 62e5db60-c8f0-4d84-9d8c-1f546ce4f162, created at: 2023-02-05 12:13:34 UTC
+W, [2023-02-06T13:29:25.527952 #38595]  WARN -- : tracking commission changes started at 2023-02-06T13:29:25+01:00
+W, [2023-02-06T13:29:25.528715 #38595]  WARN -- : current_batch da319c4c-1649-4951-9c2e-acec27c9c2ec, created at: 2023-02-06 12:29:25 UTC
+W, [2023-02-06T13:29:25.529055 #38595]  WARN -- : previous_batch 802d16d5-6b58-4caf-8617-8505af990ea2, created at: 2023-02-05 12:24:25 UTC
+W, [2023-02-06T13:29:25.550120 #38595]  WARN -- : tracking commission changes started at 2023-02-06T13:29:25+01:00
+W, [2023-02-06T13:29:25.550458 #38595]  WARN -- : current_batch 06aeb7a6-6d20-4bf5-907c-da9085ad847a, created at: 2023-02-06 12:29:25 UTC
+W, [2023-02-06T13:29:25.550751 #38595]  WARN -- : previous_batch 5d9ad4c6-d80a-49e0-997b-2e0077578078, created at: 2023-02-05 12:24:25 UTC
+W, [2023-02-06T13:29:25.566484 #38595]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 12:24:25 UTC
+W, [2023-02-06T13:29:25.569704 #38595]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 12:29:25 UTC
+W, [2023-02-06T13:34:23.936039 #38669]  WARN -- : tracking commission changes started at 2023-02-06T13:34:23+01:00
+W, [2023-02-06T13:34:23.936662 #38669]  WARN -- : current_batch f7c528b4-0c5e-432a-8874-2083cb1109f5, created at: 2023-02-06 12:34:23 UTC
+W, [2023-02-06T13:34:23.936944 #38669]  WARN -- : previous_batch 13312277-7100-4f7e-946c-56b3da314a20, created at: 2023-02-05 12:29:23 UTC
+W, [2023-02-06T13:34:23.958969 #38669]  WARN -- : tracking commission changes started at 2023-02-06T13:34:23+01:00
+W, [2023-02-06T13:34:23.959169 #38669]  WARN -- : current_batch 7abbdfed-3947-4a29-a651-3888d51010a5, created at: 2023-02-06 12:34:23 UTC
+W, [2023-02-06T13:34:23.959392 #38669]  WARN -- : previous_batch 9dd134d3-5a91-4024-8522-9195258db8d5, created at: 2023-02-05 12:29:23 UTC
+W, [2023-02-06T13:34:23.970973 #38669]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 12:29:23 UTC
+W, [2023-02-06T13:34:23.974291 #38669]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 12:34:23 UTC
+W, [2023-02-06T13:47:03.029119 #39008]  WARN -- : tracking commission changes started at 2023-02-06T13:47:03+01:00
+W, [2023-02-06T13:47:03.030209 #39008]  WARN -- : current_batch cab0bf44-a5bb-49b9-8326-0c5fd0038090, created at: 2023-02-06 12:47:02 UTC
+W, [2023-02-06T13:47:03.030568 #39008]  WARN -- : previous_batch 3e16a396-4fac-44d8-bc32-c588905471d8, created at: 2023-02-05 12:42:03 UTC
+W, [2023-02-06T13:47:03.055417 #39008]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 12:42:03 UTC
+W, [2023-02-06T13:47:03.058667 #39008]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 12:47:02 UTC
+W, [2023-02-06T13:47:05.081322 #39008]  WARN -- : tracking commission changes started at 2023-02-06T13:47:05+01:00
+W, [2023-02-06T13:47:05.081551 #39008]  WARN -- : current_batch a1ccc95e-6f85-4a25-96fe-4fc473bad622, created at: 2023-02-06 12:47:05 UTC
+W, [2023-02-06T13:47:05.081782 #39008]  WARN -- : previous_batch 30f3f4ab-64bd-4fd3-bb08-4e4c1ebaf727, created at: 2023-02-05 12:42:05 UTC
+W, [2023-02-06T14:19:46.558887 #39813]  WARN -- : tracking commission changes started at 2023-02-06T14:19:46+01:00
+W, [2023-02-06T14:19:46.559516 #39813]  WARN -- : current_batch 9b9f5016-ce54-4f25-b590-9d3935bb75e8, created at: 2023-02-06 13:19:46 UTC
+W, [2023-02-06T14:19:46.559783 #39813]  WARN -- : previous_batch 1aa8d5a3-1b6d-4ade-9412-51bf5551d22d, created at: 2023-02-05 13:14:46 UTC
+W, [2023-02-06T14:19:46.577426 #39813]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 13:14:46 UTC
+W, [2023-02-06T14:19:46.580396 #39813]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 13:19:46 UTC
+W, [2023-02-06T14:19:48.602362 #39813]  WARN -- : tracking commission changes started at 2023-02-06T14:19:48+01:00
+W, [2023-02-06T14:19:48.602564 #39813]  WARN -- : current_batch 1a88fda9-9ff5-4d1d-8781-9e566a9b174b, created at: 2023-02-06 13:19:48 UTC
+W, [2023-02-06T14:19:48.602849 #39813]  WARN -- : previous_batch 66e61bbc-4cda-4167-b9ae-1dde1a3420e2, created at: 2023-02-05 13:14:48 UTC
+W, [2023-02-06T14:32:36.342546 #40424]  WARN -- : tracking commission changes started at 2023-02-06T14:32:36+01:00
+W, [2023-02-06T14:32:36.343161 #40424]  WARN -- : current_batch 273a2bd8-8855-46bf-af2f-d7f010385b2f, created at: 2023-02-06 13:32:36 UTC
+W, [2023-02-06T14:32:36.343415 #40424]  WARN -- : previous_batch f95bd83a-73fd-4594-892b-a91076bc2e3a, created at: 2023-02-05 13:27:36 UTC
+W, [2023-02-06T14:32:36.364204 #40424]  WARN -- : tracking commission changes started at 2023-02-06T14:32:36+01:00
+W, [2023-02-06T14:32:36.364440 #40424]  WARN -- : current_batch bce07e1e-0727-467b-85fc-9862b79c7e80, created at: 2023-02-06 13:32:36 UTC
+W, [2023-02-06T14:32:36.364744 #40424]  WARN -- : previous_batch 7b9f4759-0a6a-4dfb-83e4-98ded609e43d, created at: 2023-02-05 13:27:36 UTC
+W, [2023-02-06T14:32:36.379325 #40424]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 13:27:36 UTC
+W, [2023-02-06T14:32:36.382530 #40424]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 13:32:36 UTC
+W, [2023-02-06T16:11:02.719231 #43637]  WARN -- : tracking commission changes started at 2023-02-06T16:11:02+01:00
+W, [2023-02-06T16:11:02.720004 #43637]  WARN -- : current_batch 67b825cc-12fe-4708-938a-a391139cdc69, created at: 2023-02-06 15:11:02 UTC
+W, [2023-02-06T16:11:02.720398 #43637]  WARN -- : previous_batch 986a7fc3-e40f-4f54-9bce-3fc76adee359, created at: 2023-02-05 15:06:02 UTC
+W, [2023-02-06T16:11:02.748209 #43637]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 15:06:02 UTC
+W, [2023-02-06T16:11:02.751323 #43637]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 15:11:02 UTC
+W, [2023-02-06T16:11:04.780162 #43637]  WARN -- : tracking commission changes started at 2023-02-06T16:11:04+01:00
+W, [2023-02-06T16:11:04.780375 #43637]  WARN -- : current_batch 2bc515d4-8a73-40fb-a3f8-ad631990b5fa, created at: 2023-02-06 15:11:04 UTC
+W, [2023-02-06T16:11:04.781157 #43637]  WARN -- : previous_batch f64a032a-f9eb-401b-97ca-801cd4cffe4f, created at: 2023-02-05 15:06:04 UTC
+W, [2023-02-06T16:13:45.792519 #43804]  WARN -- : tracking commission changes started at 2023-02-06T16:13:45+01:00
+W, [2023-02-06T16:13:45.793165 #43804]  WARN -- : current_batch c90cb186-75d9-45b1-ac01-c9ae29285368, created at: 2023-02-06 15:13:45 UTC
+W, [2023-02-06T16:13:45.793558 #43804]  WARN -- : previous_batch c41bba91-c51b-4bdc-bcdb-1942fe907d0d, created at: 2023-02-05 15:08:45 UTC
+W, [2023-02-06T16:13:45.805721 #43804]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 15:08:45 UTC
+W, [2023-02-06T16:13:45.808662 #43804]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 15:13:45 UTC
+W, [2023-02-06T16:13:47.826354 #43804]  WARN -- : tracking commission changes started at 2023-02-06T16:13:47+01:00
+W, [2023-02-06T16:13:47.826524 #43804]  WARN -- : current_batch 16d2cc30-5941-4b6d-ac38-db4faf868a03, created at: 2023-02-06 15:13:47 UTC
+W, [2023-02-06T16:13:47.826708 #43804]  WARN -- : previous_batch 013e912f-0471-4188-8697-0e4578f810b7, created at: 2023-02-05 15:08:47 UTC
+W, [2023-02-06T16:14:38.913754 #43988]  WARN -- : tracking commission changes started at 2023-02-06T16:14:38+01:00
+W, [2023-02-06T16:14:38.914351 #43988]  WARN -- : current_batch 472cd9f4-2e67-4f91-9dbb-e7660e199596, created at: 2023-02-06 15:14:38 UTC
+W, [2023-02-06T16:14:38.914563 #43988]  WARN -- : previous_batch 2e44f3b2-e055-4dc3-bc26-ff2909732043, created at: 2023-02-05 15:09:38 UTC
+W, [2023-02-06T16:14:38.933888 #43988]  WARN -- : tracking commission changes started at 2023-02-06T16:14:38+01:00
+W, [2023-02-06T16:14:38.934141 #43988]  WARN -- : current_batch 18505fa0-09db-4f64-ad4f-10357cdd2eb3, created at: 2023-02-06 15:14:38 UTC
+W, [2023-02-06T16:14:38.934420 #43988]  WARN -- : previous_batch 09704ce4-1db6-41f2-a3c6-31870b92c5fb, created at: 2023-02-05 15:09:38 UTC
+W, [2023-02-06T16:14:39.104482 #43988]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-05 15:09:38 UTC
+W, [2023-02-06T16:14:39.107818 #43988]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 15:14:38 UTC
+W, [2023-02-07T11:49:46.541751 #53867]  WARN -- : tracking commission changes started at 2023-02-07T11:49:46+01:00
+W, [2023-02-07T11:49:46.542692 #53867]  WARN -- : current_batch 88bf355f-1185-426b-bb15-3054e84eee3e, created at: 2023-02-07 10:49:46 UTC
+W, [2023-02-07T11:49:46.542912 #53867]  WARN -- : previous_batch 295f0759-6a48-4c64-9e62-4eadd59f147a, created at: 2023-02-06 10:44:46 UTC
+W, [2023-02-07T11:49:46.560797 #53867]  WARN -- : tracking commission changes started at 2023-02-07T11:49:46+01:00
+W, [2023-02-07T11:49:46.560976 #53867]  WARN -- : current_batch 04ba7681-c983-4234-ad1d-04b53829c99f, created at: 2023-02-07 10:49:46 UTC
+W, [2023-02-07T11:49:46.561179 #53867]  WARN -- : previous_batch a67b06ac-d92e-4e7e-b787-44f78744cb10, created at: 2023-02-06 10:44:46 UTC
+W, [2023-02-07T11:49:46.571454 #53867]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 10:44:46 UTC
+W, [2023-02-07T11:49:46.574103 #53867]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-07 10:49:46 UTC
+W, [2023-02-07T12:02:34.434431 #54246]  WARN -- : tracking commission changes started at 2023-02-07T12:02:34+01:00
+W, [2023-02-07T12:02:34.435544 #54246]  WARN -- : current_batch 2f883771-2b6c-4a19-a4d5-ced90d470a7c, created at: 2023-02-07 11:02:34 UTC
+W, [2023-02-07T12:02:34.435839 #54246]  WARN -- : previous_batch a5a30912-4278-4bc4-94af-61b55c0a415f, created at: 2023-02-06 10:57:34 UTC
+W, [2023-02-07T12:02:34.448902 #54246]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-06 10:57:34 UTC
+W, [2023-02-07T12:02:34.454259 #54246]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-07 11:02:34 UTC
+W, [2023-02-07T12:02:36.484023 #54246]  WARN -- : tracking commission changes started at 2023-02-07T12:02:36+01:00
+W, [2023-02-07T12:02:36.484378 #54246]  WARN -- : current_batch 98b884bd-9520-498c-ab09-51e12c5b15ce, created at: 2023-02-07 11:02:36 UTC
+W, [2023-02-07T12:02:36.484649 #54246]  WARN -- : previous_batch 3e73fe0d-5385-42d7-8534-27f98d8ebf56, created at: 2023-02-06 10:57:36 UTC
+W, [2023-02-08T10:03:18.422710 #63994]  WARN -- : tracking commission changes started at 2023-02-08T10:03:18+01:00
+W, [2023-02-08T10:03:18.423325 #63994]  WARN -- : current_batch bfe2b76a-aeef-4efb-9563-3f2097a9ce55, created at: 2023-02-08 09:03:18 UTC
+W, [2023-02-08T10:03:18.423582 #63994]  WARN -- : previous_batch 8861e880-4dff-4cc9-9585-489370a0ddf4, created at: 2023-02-07 08:58:18 UTC
+W, [2023-02-08T10:03:18.442543 #63994]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-07 08:58:18 UTC
+W, [2023-02-08T10:03:18.445996 #63994]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-08 09:03:18 UTC
+W, [2023-02-08T10:03:20.475185 #63994]  WARN -- : tracking commission changes started at 2023-02-08T10:03:20+01:00
+W, [2023-02-08T10:03:20.475441 #63994]  WARN -- : current_batch d4cb723a-1032-41b2-9488-fc05c2cfab9a, created at: 2023-02-08 09:03:20 UTC
+W, [2023-02-08T10:03:20.475673 #63994]  WARN -- : previous_batch 0f0cce39-8a88-4a61-84ba-c938b5f1773b, created at: 2023-02-07 08:58:20 UTC
+W, [2023-02-08T10:22:05.718406 #64485]  WARN -- : tracking commission changes started at 2023-02-08T10:22:05+01:00
+W, [2023-02-08T10:22:05.719587 #64485]  WARN -- : current_batch 51d92122-779d-42b9-a867-b10d2d8d023e, created at: 2023-02-08 09:22:05 UTC
+W, [2023-02-08T10:22:05.719857 #64485]  WARN -- : previous_batch 4e7ee1f8-bae0-4833-9960-3297c170516c, created at: 2023-02-07 09:17:05 UTC
+W, [2023-02-08T10:22:05.741949 #64485]  WARN -- : tracking commission changes started at 2023-02-08T10:22:05+01:00
+W, [2023-02-08T10:22:05.742153 #64485]  WARN -- : current_batch a8999cc5-453a-4848-901f-5ed06ef2830e, created at: 2023-02-08 09:22:05 UTC
+W, [2023-02-08T10:22:05.742421 #64485]  WARN -- : previous_batch 009d45fa-3e26-49f1-9812-7ed4435faa30, created at: 2023-02-07 09:17:05 UTC
+W, [2023-02-08T10:22:05.759392 #64485]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-07 09:17:05 UTC
+W, [2023-02-08T10:22:05.762363 #64485]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-08 09:22:05 UTC
+W, [2023-02-08T10:26:52.372333 #64569]  WARN -- : tracking commission changes started at 2023-02-08T10:26:52+01:00
+W, [2023-02-08T10:26:52.372919 #64569]  WARN -- : current_batch b014b7c3-4567-482c-980d-2884a82c32af, created at: 2023-02-08 09:26:52 UTC
+W, [2023-02-08T10:26:52.373167 #64569]  WARN -- : previous_batch 0906e5a6-6dc2-4a48-8fd9-644218771bc6, created at: 2023-02-07 09:21:52 UTC
+W, [2023-02-08T10:26:52.385912 #64569]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-07 09:21:52 UTC
+W, [2023-02-08T10:26:52.389312 #64569]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-08 09:26:52 UTC
+W, [2023-02-08T10:26:54.409651 #64569]  WARN -- : tracking commission changes started at 2023-02-08T10:26:54+01:00
+W, [2023-02-08T10:26:54.409848 #64569]  WARN -- : current_batch 1afe0713-4be3-453d-b493-d6b24eeeb2d0, created at: 2023-02-08 09:26:54 UTC
+W, [2023-02-08T10:26:54.410060 #64569]  WARN -- : previous_batch 63e91819-fa7b-498d-b501-b2c2147962bb, created at: 2023-02-07 09:21:54 UTC
+W, [2023-02-08T10:27:42.601317 #64681]  WARN -- : tracking commission changes started at 2023-02-08T10:27:42+01:00
+W, [2023-02-08T10:27:42.601895 #64681]  WARN -- : current_batch 44658437-c90f-455f-b0cb-c84eee6afbb5, created at: 2023-02-08 09:27:42 UTC
+W, [2023-02-08T10:27:42.602146 #64681]  WARN -- : previous_batch 6a81a6b3-dfc0-43a6-a68a-2e2cea5db0b1, created at: 2023-02-07 09:22:42 UTC
+W, [2023-02-08T10:27:42.614168 #64681]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-07 09:22:42 UTC
+W, [2023-02-08T10:27:42.617299 #64681]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-08 09:27:42 UTC
+W, [2023-02-08T10:27:44.638385 #64681]  WARN -- : tracking commission changes started at 2023-02-08T10:27:44+01:00
+W, [2023-02-08T10:27:44.638596 #64681]  WARN -- : current_batch 213e7d5a-dda8-448e-9fd0-9819f3637e16, created at: 2023-02-08 09:27:44 UTC
+W, [2023-02-08T10:27:44.638819 #64681]  WARN -- : previous_batch a0f94928-f581-47e2-bc75-2429c3ef02b8, created at: 2023-02-07 09:22:44 UTC
+W, [2023-02-08T10:31:00.054283 #64783]  WARN -- : tracking commission changes started at 2023-02-08T10:31:00+01:00
+W, [2023-02-08T10:31:00.055068 #64783]  WARN -- : current_batch 163f1d1d-c290-4c6d-9544-f936ae7472eb, created at: 2023-02-08 09:31:00 UTC
+W, [2023-02-08T10:31:00.055509 #64783]  WARN -- : previous_batch 557eff4c-513c-4996-8e18-383ff9b2f47c, created at: 2023-02-07 09:26:00 UTC
+W, [2023-02-08T10:31:00.069783 #64783]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-07 09:26:00 UTC
+W, [2023-02-08T10:31:00.073346 #64783]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-08 09:31:00 UTC
+W, [2023-02-08T10:31:02.096702 #64783]  WARN -- : tracking commission changes started at 2023-02-08T10:31:02+01:00
+W, [2023-02-08T10:31:02.096929 #64783]  WARN -- : current_batch fcefa8fa-8b98-437f-b353-29fb82b040f3, created at: 2023-02-08 09:31:02 UTC
+W, [2023-02-08T10:31:02.097226 #64783]  WARN -- : previous_batch d300b73b-3fd4-4401-a0c4-77bebd2c9d02, created at: 2023-02-07 09:26:02 UTC
+W, [2023-02-08T10:49:29.441989 #65303]  WARN -- : tracking commission changes started at 2023-02-08T10:49:29+01:00
+W, [2023-02-08T10:49:29.443001 #65303]  WARN -- : current_batch 873125e7-a360-4494-8dbc-59d21b5ca5dc, created at: 2023-02-08 09:49:29 UTC
+W, [2023-02-08T10:49:29.443305 #65303]  WARN -- : previous_batch d207bf8e-89f6-4c92-a923-ed0613094a44, created at: 2023-02-07 09:44:29 UTC
+W, [2023-02-08T10:49:29.459703 #65303]  WARN -- : created_commission_history:         epoch: 399,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-07 09:44:29 UTC
+W, [2023-02-08T10:49:29.463143 #65303]  WARN -- : created_commission_history:         epoch: 400,         val: BPKAfGkkzF5u1QRjjB1nWYYbPMUCMPJe1xZPmwEMNMCT,         created: 2023-02-08 09:49:29 UTC
+W, [2023-02-08T10:49:31.485110 #65303]  WARN -- : tracking commission changes started at 2023-02-08T10:49:31+01:00
+W, [2023-02-08T10:49:31.485349 #65303]  WARN -- : current_batch 78c0b76f-c777-46f1-943b-bd79729e56cf, created at: 2023-02-08 09:49:31 UTC
+W, [2023-02-08T10:49:31.485627 #65303]  WARN -- : previous_batch e6e38448-c1d8-4fe7-8a6a-574651754307, created at: 2023-02-07 09:44:31 UTC

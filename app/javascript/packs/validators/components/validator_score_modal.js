@@ -6,14 +6,12 @@ import ValidatorScoreModal from "./validator_score_modal.vue"
 Vue.use(TurbolinksAdapter)
 
 document.addEventListener("turbolinks:load", () => {
-  new Vue({
+  window.scores_modal = new Vue({
     el: "#validator-score-modal",
     store,
     render(createElement) {
       return createElement(ValidatorScoreModal, {
-        props: {
-          validator: JSON.parse(this.$el.attributes.validator.value)
-        }
+
       })
     }
   })
