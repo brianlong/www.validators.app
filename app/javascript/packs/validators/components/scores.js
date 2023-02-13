@@ -47,11 +47,14 @@ export default {
     },
     data_center_concentration_score_title() {
       return "Data Center Concentration Score = " + this.score.data_center_concentration_score
+    },
+    prepare_modal() {
+      this.$root.$emit('set_modal_account', this.account);
     }
   },
   template: `
     <div>
-      <a class="small text-nowrap base-color" data-bs-toggle="modal" :data-bs-target="'#scoresModal' + account">
+      <a class="small text-nowrap base-color modal-trigger" data-bs-toggle="modal" data-bs-target="#scoresModal" :data-account="account" @click="prepare_modal()">
         <i :class="score_class(score.root_distance_score)"
            :title="root_distance_score_title()"></i>
 

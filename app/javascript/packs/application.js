@@ -44,7 +44,7 @@ document.addEventListener("turbolinks:load", function() {
         })
     })
 
-    $('a.modal-trigger').on('click', function (e) {
+    $('.modal-trigger').on('click', function (e) {
         let account = $(this).data()["account"]
         window.scores_modal.$children[0].update_account(account)
       })

@@ -3,6 +3,8 @@ import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
 import skippedSlotsChart from './charts/skipped_slot_chart'
 import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
+import scores from '../validators/components/scores'
+
 
 var chart_green = '#00ce99'
 var chart_blue = '#0091f2'
@@ -30,7 +32,11 @@ var ValidatorRow = Vue.component('validatorRow', {
     'root-distance-chart': rootDistanceChart,
     'vote-distance-chart': voteDistanceChart,
     'skipped-slots-chart': skippedSlotsChart,
-    'skipped-vote-speedometer': skippedVoteSpeedometer
+    'skipped-vote-speedometer': skippedVoteSpeedometer,
+    "validator-scores": scores
+  },
+  created(){
+    this.validator['displayed_total_score'] = this.displayed_total_score()
   },
   methods: {
     create_avatar_link() {
@@ -148,33 +154,7 @@ var ValidatorRow = Vue.component('validatorRow', {
             </small>
             <br />
             <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
-            <small class="text-nowrap">
-              <i :class=" 'fas fa-circle me-1 score-' + validator['root_distance_score'] "
-                 :title=" 'Root Distance Score = ' + validator['root_distance_score'] "></i>
-              <i :class=" 'fas fa-circle me-1 score-' + validator['vote_distance_score'] "
-                 :title=" 'Vote Distance Score = ' + validator['vote_distance_score'] "></i>
-              <i :class=" 'fas fa-circle me-1 score-' + validator['skipped_slot_score'] "
-                 :title=" 'Skipped Slot Score = ' + validator['skipped_slot_score'] "></i>
-              <i :class=" 'fas fa-circle me-1 score-' + validator['published_information_score'] "
-                 :title=" 'Published Information Score = ' + validator['published_information_score'] "></i>
-              <i :class=" 'fas fa-circle me-1 score-' + validator['software_version_score'] "
-                 :title=" 'Software Version Score = ' + validator['software_version_score'] "></i>
-              <i :class=" 'fas fa-circle me-1 score-' + validator['security_report_score'] "
-                 :title=" 'Bonus Point = ' + validator['security_report_score'] "></i>
-              <i class="fas fa-minus-circle me-1 text-warning"
-                 v-if="validator['consensus_mods_score'] < 0"
-                 :title=" 'Consensus Mods Score = ' + validator['consensus_mods_score'] + '. Validator appears to use software modifications with an unproven effect on consensus.' "></i>
-              <i class="fas fa-minus-circle me-1 text-warning"
-                 v-if="validator['authorized_withdrawer_score'] < 0"
-                 :title=" 'Authorized Withdrawer Score = ' + validator['authorized_withdrawer_score'] "></i>
-              <i class="fas fa-minus-circle me-1 text-warning"
-                 v-if="validator['stake_concentration_score'] < 0"
-                 :title=" 'Stake Concentration Score = ' + validator['stake_concentration_score'] "></i>
-              <i class="fas fa-minus-circle me-1 text-warning"
-                 v-if="validator['data_center_concentration_score'] < 0"
-                 :title=" 'Data Center Concentration Score = ' + validator['data_center_concentration_score'] "></i>
-              ({{ displayed_total_score() }})
-            </small>
+            <validator-scores :score="validator" :account="validator['account']"></validator-scores>
             <br />
             <div class="small">
               <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>

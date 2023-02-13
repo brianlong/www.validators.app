@@ -25,10 +25,10 @@
               <tr>
                 <td class="column-md fw-bold">Root Distance Score</td>
                 <td class="column-xs text-nowrap">
-                  <i :class="'score-' + validator.root_distance_score"
+                  <i :class="'score-' + score.root_distance_score"
                      class="fas fa-circle me-1>">
                   </i>
-                  {{ validator.root_distance_score }}
+                  {{ score.root_distance_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
                 </td>
@@ -42,10 +42,10 @@
               <tr>
                 <td class="column-md fw-bold">Vote Distance Score</td>
                 <td class="column-xs text-nowrap">
-                  <i :class="'score-' + parseInt(validator.vote_distance_score)"
+                  <i :class="'score-' + parseInt(score.vote_distance_score)"
                      class="fas fa-circle me-1">
                   </i>
-                  {{ validator.vote_distance_score }}
+                  {{ score.vote_distance_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
                 </td>
@@ -58,10 +58,10 @@
               <tr>
                 <td class="column-md fw-bold">Skipped Slot Score</td>
                 <td class="column-xs text-nowrap">
-                  <i :class="'score-' + parseInt(validator.skipped_slot_score)"
+                  <i :class="'score-' + parseInt(score.skipped_slot_score)"
                      class="fas fa-circle me-1">
                   </i>
-                  {{ validator.skipped_slot_score }}
+                  {{ score.skipped_slot_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
                 </td>
@@ -74,9 +74,9 @@
               <tr>
                 <td class="column-md fw-bold">Published Information Score</td>
                 <td class="column-xs text-nowrap">
-                  <i :class="'score-' + parseInt(validator.published_information_score)"
+                  <i :class="'score-' + parseInt(score.published_information_score)"
                      class="fas fa-circle me-1"></i>
-                  {{ validator.published_information_score }}
+                  {{ score.published_information_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
                 </td>
@@ -89,9 +89,9 @@
               <tr>
                 <td class="column-md fw-bold">Software Version Score</td>
                 <td class="column-xs text-nowrap">
-                  <i :class="'score-' + parseInt(validator.software_version_score)"
+                  <i :class="'score-' + parseInt(score.software_version_score)"
                      class="fas fa-circle me-1"></i>
-                  {{ validator.software_version_score }}
+                  {{ score.software_version_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
                 </td>
@@ -103,9 +103,9 @@
               <tr>
                 <td class="column-md fw-bold">Bonus Point</td>
                 <td class="column-xs text-nowrap">
-                  <i :class="'score-' + parseInt(validator.security_report_score)"
+                  <i :class="'score-' + parseInt(score.security_report_score)"
                      class="fas fa-circle me-1"></i>
-                  {{ validator.security_report_score }}
+                  {{ score.security_report_score }}
                   <small class="d-lg-none text-muted">(1)</small>
                   <small class="d-none d-lg-inline text-muted">(max 1)</small>
                 </td>
@@ -114,11 +114,11 @@
                 </td>
               </tr>
 
-              <tr v-if="parseInt(validator.stake_concentration_score) < 0">
+              <tr v-if="parseInt(score.stake_concentration_score) < 0">
                 <td class="column-md fw-bold">Stake Concentration Score</td>
                 <td class="column-xs text-nowrap">
                   <i class="fas fa-minus-circle me-1 text-warning"></i>
-                  {{ validator.stake_concentration_score }}
+                  {{ score.stake_concentration_score }}
                   <small class="d-lg-none text-muted">(0)</small>
                   <small class="d-none d-lg-inline text-muted">(max 0)</small>
                 </td>
@@ -128,11 +128,11 @@
                 </td>
               </tr>
 
-              <tr v-if="parseInt(validator.data_center_concentration_score) < 0">
+              <tr v-if="parseInt(score.data_center_concentration_score) < 0">
                 <td class="column-md fw-bold">Data Center Concentration Score</td>
                 <td class="column-xs text-nowrap">
                   <i class="fas fa-minus-circle me-1 text-warning"></i>
-                  {{ validator.data_center_concentration_score }}
+                  {{ score.data_center_concentration_score }}
                   <small class="d-lg-none text-muted">(0)</small>
                   <small class="d-none d-lg-inline text-muted">(max 0)</small>
                 </td>
@@ -142,11 +142,11 @@
                 </td>
               </tr>
 
-              <tr v-if="parseInt(validator.authorized_withdrawer_score) < 0">
+              <tr v-if="parseInt(score.authorized_withdrawer_score) < 0">
                 <td class="column-md fw-bold">Authorized Withdrawer Score</td>
                 <td class="column-xs text-nowrap">
                   <i class="fas fa-minus-circle me-1 text-warning"></i>
-                  {{ validator.authorized_withdrawer_score.to_i }}
+                  {{ score.authorized_withdrawer_score.to_i }}
                     <small class="d-lg-none text-muted">(0)</small>
                     <small class="d-none d-lg-inline text-muted">(max 0)</small>
                 </td>
@@ -156,11 +156,11 @@
                 </td>
               </tr>
 
-              <tr v-if="parseInt(validator.consensus_mods_score) < 0">
+              <tr v-if="parseInt(score.consensus_mods_score) < 0">
                 <td class="column-md fw-bold">Consensus Mods Score</td>
                 <td class="column-xs text-nowrap">
                   <i class="fas fa-minus-circle me-1 text-warning"></i>
-                  {{ validator.consensus_mods_score.to_i }}
+                  {{ score.consensus_mods_score.to_i }}
                     <small class="d-lg-none text-muted">(0)</small>
                     <small class="d-none d-lg-inline text-muted">(max 0)</small>
                 </td>
@@ -186,21 +186,42 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
+    props: {
+      account_prop: {
+        type: String,
+        required: false
+      }
+    },
     data() {
       return {
-        account: '',
+        account: this.account_prop || '',
         validator: null,
         score: null
       }
     },
+    created() {
+      if(this.account != ""){
+        this.update_account(this.account)
+      }
+    },
+    mounted(){
+      this.$root.$on('set_modal_account', data => {
+        this.update_account(data);
+      });
+    },
     methods: {
       update_account(account) {
         this.account = account
-        ctx = this
+        let ctx = this
         axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
           ctx.validator = JSON.parse(response.data.validator)
           ctx.score = JSON.parse(response.data.score)
         })
+      }
+    },
+    watch: {
+      'account_prop': function(){
+        console.log(this.account_prop)
       }
     },
     computed: mapGetters([

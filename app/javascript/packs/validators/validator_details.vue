@@ -219,7 +219,7 @@
       Back to All Validators
     </a>
 
-    <validator-score-modal :validator="validator_score_details_attrs"
+    <validator-score-modal :account_prop="validator.account"
                            v-if="!is_loading_validator">
     </validator-score-modal>
   </div>
