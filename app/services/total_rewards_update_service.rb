@@ -15,7 +15,7 @@ class TotalRewardsUpdateService
       rewards, total_stake = total_rewards(completed_epoch)
       rewards_logger.warn("total_rewards: #{rewards}") unless Rails.env.test?
       if rewards > 0
-        completed_epoch.update(total_rewards: rewards, total_active_stake: cluster_stat.total_active_stake)
+        completed_epoch.update(total_rewards: rewards, total_active_stake: total_stake)
       end
     end
   end
@@ -39,9 +39,10 @@ class TotalRewardsUpdateService
     vote_accounts = VoteAccount.where(is_active: true, network: @network).pluck(:account)
     vote_accounts&.in_groups_of(1000) do |stake_account_batch|
       epoch_rewards(epoch.epoch, stake_account_batch.compact).each_with_index do |acc, index|
-        puts "#{stake_account_batch.compact[index]}: #{acc}"
-        rewards_sum += acc["amount"].to_i if acc && acc["amount"]
-        total_stake += (acc["postBalance"] - acc["amount"]) if acc && acc["amount"]
+        if acc && acc["amount"] && acc["postBalance"]    
+          rewards_sum += acc["amount"].to_i 
+          total_stake += (acc["postBalance"] - acc["amount"])
+        end
       end
     end
     [rewards_sum, total_stake]
