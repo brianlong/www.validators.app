@@ -26,7 +26,7 @@
                 <td class="column-md fw-bold">Root Distance Score</td>
                 <td class="column-xs text-nowrap">
                   <i :class="'score-' + score.root_distance_score"
-                     class="fas fa-circle me-1>">
+                     class="fa-solid fa-circle me-1>">
                   </i>
                   {{ score.root_distance_score }}
                   <small class="d-lg-none text-muted">(2)</small>
@@ -43,7 +43,7 @@
                 <td class="column-md fw-bold">Vote Distance Score</td>
                 <td class="column-xs text-nowrap">
                   <i :class="'score-' + parseInt(score.vote_distance_score)"
-                     class="fas fa-circle me-1">
+                     class="fa-solid fa-circle me-1">
                   </i>
                   {{ score.vote_distance_score }}
                   <small class="d-lg-none text-muted">(2)</small>
@@ -59,7 +59,7 @@
                 <td class="column-md fw-bold">Skipped Slot Score</td>
                 <td class="column-xs text-nowrap">
                   <i :class="'score-' + parseInt(score.skipped_slot_score)"
-                     class="fas fa-circle me-1">
+                     class="fa-solid fa-circle me-1">
                   </i>
                   {{ score.skipped_slot_score }}
                   <small class="d-lg-none text-muted">(2)</small>
@@ -75,7 +75,7 @@
                 <td class="column-md fw-bold">Published Information Score</td>
                 <td class="column-xs text-nowrap">
                   <i :class="'score-' + parseInt(score.published_information_score)"
-                     class="fas fa-circle me-1"></i>
+                     class="fa-solid fa-circle me-1"></i>
                   {{ score.published_information_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
@@ -90,7 +90,7 @@
                 <td class="column-md fw-bold">Software Version Score</td>
                 <td class="column-xs text-nowrap">
                   <i :class="'score-' + parseInt(score.software_version_score)"
-                     class="fas fa-circle me-1"></i>
+                     class="fa-solid fa-circle me-1"></i>
                   {{ score.software_version_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
@@ -104,7 +104,7 @@
                 <td class="column-md fw-bold">Bonus Point</td>
                 <td class="column-xs text-nowrap">
                   <i :class="'score-' + parseInt(score.security_report_score)"
-                     class="fas fa-circle me-1"></i>
+                     class="fa-solid fa-circle me-1"></i>
                   {{ score.security_report_score }}
                   <small class="d-lg-none text-muted">(1)</small>
                   <small class="d-none d-lg-inline text-muted">(max 1)</small>
@@ -117,7 +117,7 @@
               <tr v-if="parseInt(score.stake_concentration_score) < 0">
                 <td class="column-md fw-bold">Stake Concentration Score</td>
                 <td class="column-xs text-nowrap">
-                  <i class="fas fa-minus-circle me-1 text-warning"></i>
+                  <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
                   {{ score.stake_concentration_score }}
                   <small class="d-lg-none text-muted">(0)</small>
                   <small class="d-none d-lg-inline text-muted">(max 0)</small>
@@ -131,7 +131,7 @@
               <tr v-if="parseInt(score.data_center_concentration_score) < 0">
                 <td class="column-md fw-bold">Data Center Concentration Score</td>
                 <td class="column-xs text-nowrap">
-                  <i class="fas fa-minus-circle me-1 text-warning"></i>
+                  <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
                   {{ score.data_center_concentration_score }}
                   <small class="d-lg-none text-muted">(0)</small>
                   <small class="d-none d-lg-inline text-muted">(max 0)</small>
@@ -145,7 +145,7 @@
               <tr v-if="parseInt(score.authorized_withdrawer_score) < 0">
                 <td class="column-md fw-bold">Authorized Withdrawer Score</td>
                 <td class="column-xs text-nowrap">
-                  <i class="fas fa-minus-circle me-1 text-warning"></i>
+                  <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
                   {{ score.authorized_withdrawer_score.to_i }}
                     <small class="d-lg-none text-muted">(0)</small>
                     <small class="d-none d-lg-inline text-muted">(max 0)</small>
@@ -159,7 +159,7 @@
               <tr v-if="parseInt(score.consensus_mods_score) < 0">
                 <td class="column-md fw-bold">Consensus Mods Score</td>
                 <td class="column-xs text-nowrap">
-                  <i class="fas fa-minus-circle me-1 text-warning"></i>
+                  <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
                   {{ score.consensus_mods_score.to_i }}
                     <small class="d-lg-none text-muted">(0)</small>
                     <small class="d-none d-lg-inline text-muted">(max 0)</small>

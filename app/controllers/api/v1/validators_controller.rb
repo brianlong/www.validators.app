@@ -32,28 +32,28 @@ module Api
         if params[:internal]
           time_from = Time.now - 24.hours
           time_to = Time.now
-      
+
           @validator = Validator.where(
             network: params[:network],
             account: params[:account]
           ).first
-          
+
           @score = @validator.score
           @data = {}
-          
+
           @history_limit = 200
           @block_histories = @validator.validator_block_histories
                                       .where("created_at BETWEEN ? AND ?", time_from, time_to)
                                       .order(id: :desc)
                                       .limit(25)
-      
+
           @block_history_stats = ValidatorBlockHistoryStat.where(
             network: params[:network],
             batch_uuid: @block_histories.pluck(:batch_uuid)
           ).to_a
-      
+
           i = 0
-      
+
           @val_history = @validator.validator_history_last
           @val_histories = ValidatorHistory.validator_histories_from_period(
             account: @validator.account,
@@ -62,7 +62,7 @@ module Api
             to: time_to,
             limit: @history_limit
           )
-      
+
           # Grab the root distances to show on the chart
           @root_blocks = @val_histories.map do |val_history|
             next unless val_history.root_distance
@@ -71,7 +71,7 @@ module Api
               y: val_history.root_distance
             }
           end
-      
+
           # Grab the vote distances to show on the chart
           @vote_blocks = @val_histories.map do |val_history|
             next unless val_history.vote_distance
@@ -80,11 +80,7 @@ module Api
               y: val_history.vote_distance
             }
           end
-      
-          @commission_histories = CommissionHistoryQuery.new(
-            network: params[:network]
-          ).exists_for_validator?(@validator.id)
-      
+
           @validator.validator_block_histories
                     .includes(:batch)
                     .where("created_at BETWEEN ? AND ?", time_from, time_to)
@@ -92,13 +88,13 @@ module Api
                     .limit(@history_limit)
                     .reverse
                     .each do |vbh|
-      
+
             i += 1
-      
+
             # We want to skip if there is no batch yet for the vbh.
             skipped_slot_all_average = vbh.batch&.skipped_slot_all_average
             next unless skipped_slot_all_average
-      
+
             @data[i] = {
               skipped_slot_percent: (vbh.skipped_slot_percent.to_f * 100.0).round(1),
               skipped_slot_percent_moving_average: (vbh.skipped_slot_percent_moving_average.to_f * 100.0).round(1),
@@ -108,7 +104,7 @@ module Api
           end
 
           render json: {
-            validator: @validator.to_json(methods: [:dch_data_center_key, :vote_account_active, :commission_history_present]),
+            validator: @validator.to_json(methods: [:dch_data_center_key, :vote_account_active, :commission_histories_exist]),
             score: @score.to_json(methods: [:displayed_total_score]),
             root_blocks: @root_blocks,
             vote_blocks: @vote_blocks,
@@ -123,12 +119,12 @@ module Api
             network: validator_params["network"],
             account: validator_params["account"]
           )
-  
+
           raise ValidatorNotFound if @validator.nil?
-  
+
           current_epoch = EpochHistory.last
           with_history = set_boolean_field(validator_params[:with_history])
-  
+
           render json: create_json_result(@validator, with_history)
         end
       rescue ValidatorNotFound

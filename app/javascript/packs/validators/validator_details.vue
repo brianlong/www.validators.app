@@ -152,7 +152,7 @@
               <td><strong>Commission:</strong></td>
               <td :class="commission_class" data-turbolinks="false">
                 {{ score.commission }}&percnt;
-                <a :href="commission_histories_path(validator)" class="small" v-if="validator.commission_history_present">
+                <a :href="commission_histories_path(validator)" class="small" v-if="validator.commission_histories_exist">
                   (See commission changes)
                 </a>
               </td>

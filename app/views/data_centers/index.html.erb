@@ -1,5 +1,9 @@
 <section class="page-header">
-  <h1><%= params[:network].capitalize %> Data Centers</h1>
+  <h1>
+    <%= params[:network].capitalize %> Data Centers
+    <span class="text-muted">(<%= @results[:results].count %>)</span>
+  </h1>
+
   <div class="d-flex gap-2" role="toolbar" aria-label="filter">
     <%= link_to "Data Centers",
                 data_centers_url(network: params[:network], sort_by: :data_center),

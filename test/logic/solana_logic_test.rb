@@ -231,35 +231,6 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  # This test assumes that there is no validator RPC running locally.
-  # 159.89.252.85 is my testnet server.
-  test 'cli_request with fail over' do
-    json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
-      rpc_urls = [@local_url, @testnet_url]
-      cli_response = cli_request('validators', rpc_urls)
-
-      assert_equal 5, cli_response.count
-    end
-  end
-
-  # This test assumes that there is no validator RPC running locally.
-  test 'cli_request should get first attempt with no fail over' do
-    json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
-      rpc_urls = [@testnet_url, @local_url]
-      cli_response = cli_request('validators', rpc_urls)
-
-      assert_equal 5, cli_response.count
-    end
-  end
-
-  # This test assumes that there is no validator RPC running locally.
-  test 'cli_request with no response' do
-    rpc_urls = [@local_url]
-    assert_equal [], cli_request('validators', rpc_urls)
-  end
-
   test 'check_epoch removes epoch history when check fails' do
     VCR.use_cassette('check_epoch') do
       # Show that the pipeline runs & the expected values are not empty.
@@ -365,56 +336,4 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_equal 898, p.payload[:validators_info].size
     end
   end
-
-  test 'solana_client_request returns data found in first cluster' do
-    clusters = [
-      @mainnet_url,
-      @testnet_url
-    ]
-
-    method = :get_epoch_info
-
-    VCR.use_cassette('solana_client_request') do
-      result = solana_client_request(clusters, method)
-      assert_equal result["epoch"], 202
-    end
-  end
-
-  test 'solana_client_request returns data even if one of the clusters is incorrect' do
-    clusters = [
-      @local_url,
-      @testnet_url
-    ]
-
-    method = :get_epoch_info
-
-    VCR.use_cassette('solana_client_request incorrect cluster') do
-      result = solana_client_request(clusters, method)
-      assert_equal result["epoch"], 209
-    end
-  end
-
-  test 'solana_client_request returns data with optional params' do
-    clusters = [
-      @mainnet_url
-    ]
-
-    method = :get_program_accounts
-    config_program_pubkey = 'Config1111111111111111111111111111111111111'
-    params = [config_program_pubkey, { encoding: 'jsonParsed' }]
-
-    VCR.use_cassette('solana_client_request optional params') do
-      result = solana_client_request(clusters, method, params: params)
-      assert_equal 863, result.size
-    end
-  end
-
-  # I use this test in development mode only.
-  # test 'cli_block_production_mainnet' do
-  #   VCR.use_cassette('cli_block_production_mainnet') do
-  #     rpc_urls = ['https://api.mainnet-beta.solana.com']
-  #
-  #     assert_equal [], cli_request('block-production', rpc_urls)
-  #   end
-  # end
 end

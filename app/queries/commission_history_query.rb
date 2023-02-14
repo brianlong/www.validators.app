@@ -13,6 +13,7 @@ class CommissionHistoryQuery
     id
     epoch_completion
     batch_uuid
+    from_inflation_rewards
   ].freeze
 
   VAL_FIELDS = %w[
@@ -80,7 +81,6 @@ class CommissionHistoryQuery
 
   def matching_validators(query)
     validators = Validator.where(network: @network)
-                          .scorable
                           .joins(:validator_score_v1)
     ValidatorSearchQuery.new(validators).search(query)
   end

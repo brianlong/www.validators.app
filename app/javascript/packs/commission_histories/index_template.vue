@@ -11,9 +11,9 @@
               <a href="#" @click.prevent="sort_by_epoch">Epoch</a><br />
               <small class="text-muted">(completion %)</small>
             </th>
-            <th class="column-md">Batch</th>
+            <th class="column-sm">Source</th>
             <th class="column-lg text-center px-2">
-              Before<i class="fas fa-long-arrow-alt-right px-2"></i>After
+              Before<i class="fa-solid fa-right-long px-2"></i>After
             </th>
             <th class="column-md">
               <a href="#" @click.prevent="sort_by_timestamp">Timestamp</a>
