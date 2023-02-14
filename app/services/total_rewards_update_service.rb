@@ -36,12 +36,12 @@ class TotalRewardsUpdateService
     rewards_sum = 0
     total_stake = 0
     rewards_logger.warn("stake_accounts count: #{@stake_accounts.count}") unless Rails.env.test?
-    vote_accounts = VoteAccount.where(is_active: true, network: @network).pluck(:account)
+    vote_accounts = VoteAccount.where(network: @network).pluck(:account)
     vote_accounts&.in_groups_of(1000) do |stake_account_batch|
       epoch_rewards(epoch.epoch, stake_account_batch.compact).each_with_index do |acc, index|
         if acc && acc["amount"] && acc["postBalance"]    
           rewards_sum += acc["amount"].to_i 
-          total_stake += acc["postBalance"]
+          total_stake += (acc["postBalance"] - acc["amount"])
         end
       end
     end
