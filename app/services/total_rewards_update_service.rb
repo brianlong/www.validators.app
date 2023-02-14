@@ -41,7 +41,7 @@ class TotalRewardsUpdateService
       epoch_rewards(epoch.epoch, stake_account_batch.compact).each_with_index do |acc, index|
         if acc && acc["amount"] && acc["postBalance"]    
           rewards_sum += acc["amount"].to_i 
-          total_stake += (acc["postBalance"] - acc["amount"])
+          total_stake += acc["postBalance"]
         end
       end
     end
