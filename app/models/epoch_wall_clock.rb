@@ -4,14 +4,16 @@
 #
 # Table name: epoch_wall_clocks
 #
-#  id             :bigint           not null, primary key
-#  ending_slot    :bigint
-#  epoch          :integer
-#  network        :string(191)
-#  slots_in_epoch :integer
-#  starting_slot  :bigint
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  id                 :bigint           not null, primary key
+#  ending_slot        :bigint
+#  epoch              :integer
+#  network            :string(191)
+#  slots_in_epoch     :integer
+#  starting_slot      :bigint
+#  total_active_stake :bigint
+#  total_rewards      :bigint
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
 # Indexes
 #
