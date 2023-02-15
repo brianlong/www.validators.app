@@ -21,7 +21,8 @@ class ValidatorsController < ApplicationController
       sort_order: validators_params[:order],
       limit: @per,
       page: validators_params[:page],
-      query: validators_params[:q]
+      query: validators_params[:q],
+      admin_warning: validators_params[:admin_warning]
     )
 
     @batch = Batch.last_scored(validators_params[:network])
@@ -67,6 +68,6 @@ class ValidatorsController < ApplicationController
   end
 
   def validators_params
-    params.permit(:watchlist, :network, :q, :page, :order)
+    params.permit(:watchlist, :network, :q, :page, :order, :admin_warning)
   end
 end

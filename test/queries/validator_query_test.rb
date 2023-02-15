@@ -22,16 +22,16 @@ class ValidatorQueryTest < ActiveSupport::TestCase
 
   test "#call returns only validators from correct network" do
     create_list(
-      :validator, 
-      5, 
+      :validator,
+      5,
       :with_score,
       :with_data_center_through_validator_ip,
       :mainnet
     )
     create_list(
-      :validator, 
-      5, 
-      :with_score, 
+      :validator,
+      5,
+      :with_score,
       :with_data_center_through_validator_ip
     )
 
@@ -41,18 +41,18 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [@mainnet_network], result.pluck(:network).uniq
   end
 
-  test "#call when query is provided returns only matching results" do
+  test "#call returns only matching results when query is provided" do
     query = "test_account"
 
     create(
-      :validator, 
+      :validator,
       :with_score,
       :with_data_center_through_validator_ip,
       account: query
     )
     create_list(
-      :validator, 
-      5, 
+      :validator,
+      5,
       :with_score,
       :with_data_center_through_validator_ip
     )
@@ -64,10 +64,46 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [query], result.pluck(:account).uniq
   end
 
+  test "#call returns matching results if admin_warning is present" do
+    validator_with_warning = create(:validator, :with_score, :with_admin_warning)
+    create_list(:validator, 2, :with_score) # without admin_warning
+
+    admin_warning = "true"
+    result = ValidatorQuery.new.call(network: @testnet_network, admin_warning: admin_warning)
+
+    assert_equal 1, result.count
+    assert_includes result, validator_with_warning
+    assert_equal [@testnet_network], result.pluck(:network).uniq
+    assert_equal ["test warning"],  result.pluck(:admin_warning).uniq
+
+    admin_warning = "false"
+    result = ValidatorQuery.new.call(network: @testnet_network, admin_warning: admin_warning)
+
+    refute_includes result, validator_with_warning
+    assert_equal [nil], result.pluck(:admin_warning).uniq
+  end
+
+  test "#call ignores incorrect or missing admin_warning param" do
+    create(:validator, :with_score, :with_admin_warning)
+    create_list(:validator, 5, :with_score) # without admin_warning
+    all_validators_count = Validator.where(network: @testnet_network).count
+
+    admin_warning = "ASD"
+    result = ValidatorQuery.new.call(network: @testnet_network, admin_warning: admin_warning)
+
+    assert_equal all_validators_count, result.count
+
+    admin_warning = nil
+    result = ValidatorQuery.new.call(network: @testnet_network, admin_warning: admin_warning)
+
+    assert_equal all_validators_count, result.count
+
+  end
+
   test "#call returns results in correct score order" do
     5.times do |n|
       v = create(
-        :validator, 
+        :validator,
         :with_score,
         :mainnet,
         :with_data_center_through_validator_ip
@@ -81,10 +117,10 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [4, 3, 2, 1, 0], result.pluck("validator_score_v1s.total_score")
   end
 
-  test "#call  with api returns results in correct stake order" do
+  test "#call with api returns results in correct stake order" do
     5.times do |n|
       v = create(
-        :validator, 
+        :validator,
         :with_score,
         :mainnet,
         :with_data_center_through_validator_ip
@@ -101,7 +137,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
   test "#call returns results in correct name order" do
     5.times do |n|
       create(
-        :validator, 
+        :validator,
         :with_score,
         :mainnet,
         :with_data_center_through_validator_ip,
@@ -127,7 +163,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     validator = validators.first
 
     result = ValidatorQuery.new.call_single_validator(
-      network: @mainnet_network, 
+      network: @mainnet_network,
       account: validator.account
     )
 

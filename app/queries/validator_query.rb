@@ -11,10 +11,11 @@ class ValidatorQuery < ApplicationQuery
                      end
   end
 
-  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil)
+  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil, admin_warning: nil)
     scope = @default_scope.preload(:validator_score_v1_for_api)
     scope = filter_by_network(scope, network)
     scope = search_by(scope, query) if query
+    scope = filter_by_admin_warning(scope, admin_warning)
     scope = set_ordering(scope, sort_order)
     scope = set_pagination(scope, page, limit)
 
@@ -27,7 +28,7 @@ class ValidatorQuery < ApplicationQuery
   end
 
   private
-    
+
   def default_api_scope
     Validator.select(validator_fields, validator_score_v1_fields_for_api)
               .joins(:validator_score_v1_for_api)
@@ -44,7 +45,7 @@ class ValidatorQuery < ApplicationQuery
     scope = Validator.select(validator_fields, validator_score_v1_fields_for_validators_index_web)
                      .joins(:validator_score_v1_for_web)
                      .includes(:validator_score_v1)
-                     
+
     if watchlist_user
       watched_validators_ids = User.find(watchlist_user).watched_validators.pluck(:validator_id)
       scope = scope.where(id: watched_validators_ids)
@@ -55,6 +56,11 @@ class ValidatorQuery < ApplicationQuery
 
   def filter_by_network(scope, network)
     scope.where(network: network)
+  end
+
+  def filter_by_admin_warning(scope, admin_warning)
+    return scope unless admin_warning.in? ["true", "false"] # ignore incorrect param
+    admin_warning == "true" ? scope.where.not(admin_warning: nil) : scope.where(admin_warning: nil)
   end
 
   def set_ordering(scope, order)

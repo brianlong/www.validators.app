@@ -30,8 +30,13 @@ class SortedDataCenters
     select_statement << private_validators_count if @network == "mainnet"
 
     @dc_sql = DataCenter.select(select_statement)
-                        .joins(:validator_score_v1s)
-                        .where("validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", @network, 0)
+                        .joins(validator_score_v1s: :validator)
+                        .where(
+                          "validator_score_v1s.network = ? \
+                          AND validator_score_v1s.active_stake > ? \
+                          AND validators.is_active = true",
+                          @network, 0
+                        )
                         .group(group)
 
     @total_stake = @dc_sql.inject(0) { |sum, dc| sum + dc.total_active_stake }
