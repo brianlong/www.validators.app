@@ -19,7 +19,13 @@ class AsnsController < ApplicationController
 
     @validators = Validator.joins(:validator_score_v1, :data_center)
                            .preload(:validator_score_v1, :data_center_host)
-                           .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_center_ids, asn_params[:network], 0)
+                           .where(
+                             "data_centers.id IN (?)
+                             AND validators.is_active = true
+                             AND validator_score_v1s.network = ? 
+                             AND validator_score_v1s.active_stake > ?",
+                             data_center_ids, asn_params[:network], 0
+                           )
                            .filtered_by(@filter_by)
                            .order("validator_score_v1s.active_stake desc")
     
