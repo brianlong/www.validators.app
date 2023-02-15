@@ -18,18 +18,18 @@ server(
 )
 
 # Second web server
-server(
-  '167.172.17.244',
-  user: 'deploy',
-  roles: %w[web app cron]
-)
+#server(
+#  '167.172.17.244',
+#  user: 'deploy',
+#  roles: %w[web app cron]
+#)
 
 # Background server
-server(
-  '167.99.125.221',
-  user: 'deploy',
-  roles: %w[app background cron]
-)
+#server(
+#  '167.99.125.221',
+#  user: 'deploy',
+#  roles: %w[app background cron]
+#)
 
 # server-based syntax
 # ======================
