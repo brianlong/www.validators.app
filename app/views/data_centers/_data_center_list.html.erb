@@ -12,7 +12,7 @@
       <%= dc_data[:count] %>
     </td>
 
-    <td>
+    <td data-turbolinks="false">
       <% if dc_data[:delinquent_validators] > 0 %>
         <%= link_to dc_data[:delinquent_validators],
             data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-'), filter_by: ["delinquent"]) %>

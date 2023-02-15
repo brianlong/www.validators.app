@@ -26,7 +26,7 @@
                 <td class="column-md fw-bold">Root Distance Score</td>
                 <td class="column-xs text-nowrap">
                   <i :class="'score-' + score.root_distance_score"
-                     class="fa-solid fa-circle me-1>">
+                     class="fa-solid fa-circle me-1">
                   </i>
                   {{ score.root_distance_score }}
                   <small class="d-lg-none text-muted">(2)</small>
@@ -34,8 +34,7 @@
                 </td>
                 <td class="column-md small">
                   This score measures the&nbsp;median &&nbsp;average distance in block height between the&nbsp;validator
-                  and
-                  the&nbsp;tower's highest block.
+                  and the&nbsp;tower's highest block.
                 </td>
               </tr>
 

@@ -10,9 +10,7 @@ document.addEventListener("turbolinks:load", () => {
     el: "#validator-score-modal",
     store,
     render(createElement) {
-      return createElement(ValidatorScoreModal, {
-
-      })
+      return createElement(ValidatorScoreModal, {})
     }
   })
 })

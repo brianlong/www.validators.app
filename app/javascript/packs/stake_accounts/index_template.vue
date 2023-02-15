@@ -165,7 +165,7 @@
       <img v-bind:src="loading_image" width="100">
     </div>
 
-    <validator-score-modal> </validator-score-modal>
+    <validator-score-modal />
 
     <section class="mt-5" id="metrics">
       <h2>Metrics Explanation</h2>
