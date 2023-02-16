@@ -12,10 +12,11 @@ class TotalRewardsUpdateService
   def call
     rewards_logger.warn("found epoch: #{completed_epoch&.epoch}") unless Rails.env.test?
     if completed_epoch
-      rewards, total_stake = total_rewards(completed_epoch)
+      rewards = total_rewards_from_vote_accounts(completed_epoch)
+      rewards += total_rewards_from_stake_accounts(completed_epoch)
       rewards_logger.warn("total_rewards: #{rewards}") unless Rails.env.test?
       if rewards > 0
-        completed_epoch.update(total_rewards: rewards, total_active_stake: total_stake)
+        completed_epoch.update(total_rewards: rewards, total_active_stake: cluster_stat.total_active_stake)
       end
     end
   end
@@ -32,20 +33,29 @@ class TotalRewardsUpdateService
                                        .last
   end
 
-  def total_rewards(epoch)
+  def total_rewards_from_vote_accounts(epoch)
     rewards_sum = 0
-    total_stake = 0
-    rewards_logger.warn("stake_accounts count: #{@stake_accounts.count}") unless Rails.env.test?
     vote_accounts = VoteAccount.where(network: @network).pluck(:account)
-    vote_accounts&.in_groups_of(1000) do |stake_account_batch|
-      epoch_rewards(epoch.epoch, stake_account_batch.compact).each_with_index do |acc, index|
+    vote_accounts&.in_groups_of(1000) do |vote_account_batch|
+      epoch_rewards(epoch.epoch, vote_account_batch.compact).each_with_index do |acc, index|
         if acc && acc["amount"] && acc["postBalance"]    
           rewards_sum += acc["amount"].to_i 
-          total_stake += (acc["postBalance"] - acc["amount"])
         end
       end
     end
-    [rewards_sum, total_stake]
+    rewards_sum
+  end
+
+  def total_rewards_from_stake_accounts(epoch)
+    rewards_sum = 0
+    @stake_accounts&.in_groups_of(1000) do |stake_account_batch|
+      epoch_rewards(epoch.epoch, stake_account_batch.compact).each_with_index do |acc, index|
+        if acc && acc["amount"] && acc["postBalance"]    
+          rewards_sum += acc["amount"].to_i 
+        end
+      end
+    end
+    rewards_sum
   end
 
   def epoch_rewards(epoch, stake_accounts)
