@@ -11,18 +11,18 @@
 #              such as daemons and workers. Use for 167.99.125.221 server only.
 
 # Web server
-server(
-  '104.131.169.171',
-  user: 'deploy',
-  roles: %w[web app db cron]
-)
+# server(
+#   '104.131.169.171',
+#   user: 'deploy',
+#   roles: %w[web app db cron]
+# )
 
 # Second web server
-#server(
-#  '167.172.17.244',
-#  user: 'deploy',
-#  roles: %w[web app cron]
-#)
+server(
+  '167.172.17.244',
+  user: 'deploy',
+  roles: %w[web app cron]
+)
 
 # Background server
 #server(
