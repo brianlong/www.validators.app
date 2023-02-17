@@ -3,11 +3,15 @@ export default {
     score: {
       type: Object,
       required: true
+    },
+    account: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
-      default_score_class: "fas fa-circle me-1 score-"
+      default_score_class: "fa-solid fa-circle me-1 score-"
     }
   },
   methods: {
@@ -43,11 +47,14 @@ export default {
     },
     data_center_concentration_score_title() {
       return "Data Center Concentration Score = " + this.score.data_center_concentration_score
+    },
+    prepare_modal() {
+      this.$root.$emit('set_modal_account', this.account);
     }
   },
   template: `
     <div>
-      <a class="small text-nowrap base-color" data-bs-toggle="modal" data-bs-target="#scoresModal<%=validator.account%>">
+      <a class="small text-nowrap base-color modal-trigger" data-bs-toggle="modal" data-bs-target="#scoresModal" :data-account="account" @click="prepare_modal()">
         <i :class="score_class(score.root_distance_score)"
            :title="root_distance_score_title()"></i>
 
@@ -66,19 +73,19 @@ export default {
         <i :class="score_class(score.security_report_score)"
            :title="security_report_score_title()"></i>
 
-        <i class="fas fa-minus-circle me-1 text-warning"
+        <i class="fa-solid fa-minus-circle me-1 text-warning"
            v-if="score.consensus_mods_score < 0"
            :title="consensus_mods_score_title()"></i>
            
-        <i class="fas fa-minus-circle me-1 text-warning"
+        <i class="fa-solid fa-minus-circle me-1 text-warning"
            v-if="score.authorized_withdrawer_score < 0"
            :title="authorized_withdrawer_score_title()"></i>
 
-        <i class="fas fa-minus-circle me-1 text-warning"
+        <i class="fa-solid fa-minus-circle me-1 text-warning"
            v-if="score.stake_concentration_score < 0"
            :title="stake_concentration_score_title()"></i>
         
-        <i class="fas fa-minus-circle me-1 text-warning"
+        <i class="fa-solid fa-minus-circle me-1 text-warning"
            v-if="score.data_center_concentration_score < 0"
            :title="data_center_concentration_score_title()"></i>
       </a>

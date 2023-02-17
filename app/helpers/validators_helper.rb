@@ -126,4 +126,20 @@ module ValidatorsHelper
       end
     end
   end
+
+  def validator_score_attrs(validator)
+    validator.to_json(
+      methods: [
+        :root_distance_score, :vote_distance_score, :skipped_slot_score,
+        :published_information_score, :software_version_score,
+        :security_report_score, :stake_concentration_score,
+        :data_center_concentration_score, :authorized_withdrawer_score,
+        :consensus_mods_score
+      ],
+      only: :account,
+      include: [
+        score: { methods: :displayed_total_score, only: [] }
+      ]
+    )
+  end
 end

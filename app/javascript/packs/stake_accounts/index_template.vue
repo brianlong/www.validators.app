@@ -165,6 +165,8 @@
       <img v-bind:src="loading_image" width="100">
     </div>
 
+    <validator-score-modal />
+
     <section class="mt-5" id="metrics">
       <h2>Metrics Explanation</h2>
       <hr />
@@ -270,6 +272,7 @@
   import eversolImage from 'eversol.png'
   import blazestakeImage from 'blazestake.png'
   import jitoImage from 'jito.png'
+  import validatorScoreModal from "../validators/components/validator_score_modal"
 
   import debounce from 'lodash/debounce'
 
@@ -307,6 +310,9 @@
           jito: jitoImage
         }
       }
+    },
+    components: {
+      'validator-score-modal': validatorScoreModal
     },
     created () {
       this.stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network;
