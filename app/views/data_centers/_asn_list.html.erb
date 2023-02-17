@@ -1,5 +1,5 @@
 <% @results[:results].each do |_, asn_data| %>
-  <tr>
+  <tr data-turbolinks="false">
     <td>
       <%= link_to asn_data[:asn], asn_url(network: params[:network], asn: asn_data[:asn]) %>
       <br />
