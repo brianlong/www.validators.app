@@ -8,21 +8,35 @@ class TotalRewardsUpdateServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"
     @solana_url = "https://api.mainnet-beta.solana.com"
-    @vote_acc = ["BFpfnLfnE4zY5TNvywbH1sPU9kCe1vo1pPF1QsMHU6gL", "BmZFrXp57Z8b4SDP6sn6pjMwKUzWt6WHT4qg943hGmwa"]
+    @stake_acc = ["BFpfnLfnE4zY5TNvywbH1sPU9kCe1vo1pPF1QsMHU6gL", "BmZFrXp57Z8b4SDP6sn6pjMwKUzWt6WHT4qg943hGmwa"]
+
+    create(:vote_account, account: "9GJmEHGom9eWo4np4L5vC6b6ri1Df2xN8KFoWixvD1Bs", network: @network)
+    create(:vote_account, account: "Gzof6d9Hm9b1g9TqrbqbVBSXAaf1GdxkhKRBmG9Da8y7", network: @network)
   end
 
-  test "updating cluster stat with total rewards difference" do
+  test "#total_rewards_from_stake_accounts returns correct result" do
     EpochWallClock.delete_all
 
     cluster_stat = create(:cluster_stat, network: @network)
     epoch = create(:epoch_wall_clock, epoch: 407, network: @network, starting_slot: 1, ending_slot: 2)
 
-    VCR.use_cassette("get_inflation_reward") do
-      TotalRewardsUpdateService.new(@network, @vote_acc, @solana_url).call
+    VCR.use_cassette("total_rewards_from_stake_accounts") do
+      result = TotalRewardsUpdateService.new(@network, @stake_acc, @solana_url).total_rewards_from_stake_accounts(epoch)
 
-      epoch.reload
+      assert_equal 29627766, result
+    end
+  end
 
-      assert_equal 29627766, epoch.total_rewards
+  test "#total_rewards_from_vote_accounts returns correct result" do
+    EpochWallClock.delete_all
+
+    cluster_stat = create(:cluster_stat, network: @network)
+    epoch = create(:epoch_wall_clock, epoch: 407, network: @network, starting_slot: 1, ending_slot: 2)
+
+    VCR.use_cassette("total_rewards_from_vote_accounts") do
+      result = TotalRewardsUpdateService.new(@network, @stake_acc, @solana_url).total_rewards_from_vote_accounts(epoch)
+
+      assert_equal 77432940417, result
     end
   end
 end

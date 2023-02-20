@@ -12,25 +12,15 @@ class TotalRewardsUpdateService
   def call
     rewards_logger.warn("found epoch: #{completed_epoch&.epoch}") unless Rails.env.test?
     if completed_epoch
-      rewards = total_rewards_from_vote_accounts(completed_epoch)
-      rewards += total_rewards_from_stake_accounts(completed_epoch)
-      rewards_logger.warn("total_rewards: #{rewards}") unless Rails.env.test?
-      if rewards > 0
-        completed_epoch.update(total_rewards: rewards, total_active_stake: cluster_stat.total_active_stake)
+      vote_rewards = total_rewards_from_vote_accounts(completed_epoch)
+      stake_rewards = total_rewards_from_stake_accounts(completed_epoch)
+      if vote_rewards > 0 && stake_rewards > 0
+        completed_epoch.update(
+          total_rewards: vote_rewards + stake_rewards,
+          total_active_stake: cluster_stat.total_active_stake
+        )
       end
     end
-  end
-
-  private
-
-  def cluster_stat
-    @cluster_stat ||= ClusterStat.find_or_create_by(network: @network)
-  end
-
-  def completed_epoch
-    @completed_epoch ||= EpochWallClock.where(network: @network)
-                                       .where.not(ending_slot: nil)
-                                       .last
   end
 
   def total_rewards_from_vote_accounts(epoch)
@@ -56,6 +46,18 @@ class TotalRewardsUpdateService
       end
     end
     rewards_sum
+  end
+
+  private
+
+  def cluster_stat
+    @cluster_stat ||= ClusterStat.find_or_create_by(network: @network)
+  end
+
+  def completed_epoch
+    @completed_epoch ||= EpochWallClock.where(network: @network)
+                                       .where.not(ending_slot: nil)
+                                       .last
   end
 
   def epoch_rewards(epoch, stake_accounts)
