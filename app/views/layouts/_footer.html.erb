@@ -103,7 +103,7 @@
         <%= FMA_LLC.capitalize %> <%= t('footer.copyright_text') %>
       </div>
       <div>
-        server: <%= ENV["_APPSIGNAL_HOSTNAME"] %>
+        <%= ENV["_APPSIGNAL_HOSTNAME"] || "www.validators.app" %>
       </div>
     </div>
   </div>
