@@ -40,7 +40,7 @@ class CreateClusterStatsService
 
   def epochs_annual_roi
     if last_epochs.count > 0
-      epoch_duration = (last_epochs.second.created_at - last_epochs.first.created_at)
+      epoch_duration = (last_epochs.first.created_at - last_epochs.second.created_at)
       return 0 unless epoch_duration && epoch_duration > 0
       epoch_average_roi = last_epochs.map do |epoch|
         if epoch.total_rewards && epoch.total_active_stake
