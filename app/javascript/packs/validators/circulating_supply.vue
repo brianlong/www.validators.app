@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <div class="mb-2">
+        <div>
           <span class="text-muted me-1">Gross ROI:</span>
 
           <span class="text-muted" v-if="!gross_yield">loading...</span>

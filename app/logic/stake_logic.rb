@@ -325,16 +325,19 @@ module StakeLogic
 
   private
 
-  def epochs_recent(network)
-    @epochs_recent ||= EpochWallClock.by_network(network).offset(1).limit(3).pluck(:epoch)
+  def recent_epochs(network)
+    @recent_epochs ||= EpochWallClock.by_network(network)
+                                     .offset(1)
+                                     .limit(CreateClusterStatsService::EPOCHS_TO_CALCULATE)
+                                     .pluck(:epoch)
   end
 
   def stake_accounts_active(network, stake_accounts)
-    stakes = stake_accounts.select do |account|
+    active_stake_accounts = stake_accounts.select do |account|
       account["deactivationEpoch"].nil? ||
-        epochs_recent(network).include?(account["deactivationEpoch"])
+        recent_epochs(network).include?(account["deactivationEpoch"])
     end
 
-    stakes.map { |account| account["stakePubkey"] }
+    active_stake_accounts.map { |account| account["stakePubkey"] }
   end
 end
