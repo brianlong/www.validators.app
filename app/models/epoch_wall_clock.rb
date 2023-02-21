@@ -21,6 +21,8 @@
 #  index_epoch_wall_clocks_on_network_and_epoch  (network,epoch) UNIQUE
 #
 class EpochWallClock < ApplicationRecord
+  EPOCHS_TO_CALCULATE = 3
+
   validates :network, :epoch, presence: true
 
   scope :by_network, ->(network) { where(network: network).order(epoch: :desc) }
@@ -35,5 +37,10 @@ class EpochWallClock < ApplicationRecord
         queue: "high_priority"
       ).perform_async({current_batch_uuid: current_batch_uuid})
     end
+  end
+
+  def self.recent_finished(network)
+    by_network(network).offset(1)
+                       .limit(EPOCHS_TO_CALCULATE)
   end
 end

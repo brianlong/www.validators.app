@@ -39,9 +39,8 @@ class CreateClusterStatsService
   private
 
   def epochs_annual_roi
-    last_epochs = last_epochs(EPOCHS_TO_CALCULATE)
     if last_epochs.count > 0
-      epoch_duration = (last_epochs.second.created_at - last_epochs.first.created_at)
+      epoch_duration = (last_epochs.first.created_at - last_epochs.last.created_at)
       return 0 unless epoch_duration
       epoch_average_roi = last_epochs.map do |epoch|
         if epoch.total_rewards && epoch.total_active_stake
@@ -54,10 +53,8 @@ class CreateClusterStatsService
     epochs_annual_roi ||= 0
   end
 
-  def last_epochs(number_of_epochs)
-    @last_epochs ||= EpochWallClock.where(network: @network)
-                                   .where.not(ending_slot: nil)
-                                   .last(number_of_epochs)
+  def last_epochs
+    @last_epochs ||= EpochWallClock.recent_finished(@network)
   end
   
   def hash_valid? hash

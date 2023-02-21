@@ -38,7 +38,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
       ending_slot: 2,
       total_rewards: 100,
       total_active_stake: 1000,
-      created_at: 2.days.ago
+      created_at: 4.days.ago
     )
 
     create(
@@ -47,6 +47,17 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
       epoch: 2,
       starting_slot: 3,
       ending_slot: 4,
+      total_rewards: 100,
+      total_active_stake: 1000,
+      created_at: 2.days.ago
+    )
+
+    create(
+      :epoch_wall_clock,
+      network: @network,
+      epoch: 3,
+      starting_slot: 5,
+      ending_slot: 6,
       total_rewards: 100,
       total_active_stake: 1000
     )

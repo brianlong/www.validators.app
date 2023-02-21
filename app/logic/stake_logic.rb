@@ -326,10 +326,7 @@ module StakeLogic
   private
 
   def recent_epochs(network)
-    @recent_epochs ||= EpochWallClock.by_network(network)
-                                     .offset(1)
-                                     .limit(CreateClusterStatsService::EPOCHS_TO_CALCULATE)
-                                     .pluck(:epoch)
+    @recent_epochs ||= EpochWallClock.recent_finished(network).pluck(:epoch)
   end
 
   def stake_accounts_active(network, stake_accounts)
