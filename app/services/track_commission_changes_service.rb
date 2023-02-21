@@ -79,9 +79,7 @@ class TrackCommissionChangesService
       network: @network,
     ).last
 
-    unless last_commission_from_epoch && \
-           last_commission_from_epoch.commission_before == validator_commission && \
-           last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
+    unless last_commission_from_epoch && last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
 
       new_commission_history = va.validator.commission_histories.create(
         epoch: cli_rewards["epoch"],
