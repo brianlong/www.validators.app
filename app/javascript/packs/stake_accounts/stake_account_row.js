@@ -1,7 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
 import axios from 'axios'
 
-
 var StakeAccountRow = Vue.component('StakeAccountRow', {
   props: {
     stake_accounts: {
@@ -19,18 +18,25 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     current_epoch: {
       type: Number,
       required: true
+    },
+    is_cheap_stake_accounts_visible: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
-    var stake_accounts_for_val = this.stake_accounts[Object.keys(this.stake_accounts)[0]]
     return {
       validator: null,
-      validator_url: "/validators/" + this.val_account + "?network=" + stake_accounts_for_val[0].network,
-      stake_accounts_for_val: stake_accounts_for_val,
-      val_account: Object.keys(this.stake_accounts)[0]
+      stake_accounts_for_val: null,
+      val_account: Object.keys(this.stake_accounts)[0],
+      has_higher_sol_stake_accounts: null,
+      ONE_SOL: 1000000000
     }
   },
   created () {
+    this.stake_accounts_for_val = this.stake_accounts[this.val_account]
+    this.has_higher_sol_stake_accounts = this.stake_accounts_for_val[0].active_stake > this.ONE_SOL
+
     var ctx = this
     if(this.val_account){
       axios.get('/api/v1/validators/' + this.stake_accounts_for_val[0]["network"] + '/' + this.val_account + '?with_history=true')
@@ -39,8 +45,19 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       })
     }
   },
+  methods: {
+    is_cheap(account) {
+      return account.active_stake < this.ONE_SOL
+    },
+    is_validator_visible() {
+      return this.is_cheap_stake_accounts_visible ? true : this.has_higher_sol_stake_accounts
+    },
+    is_stake_account_visible(account) {
+      return this.is_cheap_stake_accounts_visible ? true : !this.is_cheap(account)
+    }
+  },
   template: `
-    <tbody>
+    <tbody v-if="is_validator_visible">
       <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
       
       <tr>
@@ -62,7 +79,9 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
               </tr>
             </thead>
             <tbody class="small">
-            <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
+            <tr v-for="stake_account in stake_accounts_for_val"
+                :key="stake_account.id"
+                v-if="is_stake_account_visible(stake_account)">
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
                 <div class="text-muted">
@@ -83,7 +102,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                   </span>
                 </span>
                 <span v-else>
-                  {{ (stake_account.active_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
+                  {{ (stake_account.active_stake / ONE_SOL).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
                   <br />
                   <span class="text-muted">
                     {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator's stake

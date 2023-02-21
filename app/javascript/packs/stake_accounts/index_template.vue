@@ -70,6 +70,25 @@
     <!-- Validators and accounts table -->
     <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
+        <div class="text-end p-4 align-items-center">
+          Show Stake Accounts with less than&nbsp <b>1 SOL</b>&nbsp
+          <div class="btn-group btn-group-toggle switch-button" v-if="is_cheap_stake_accounts_visible">
+            <span class="btn btn-xs btn-secondary active">
+              ON
+            </span>
+            <span class="btn btn-xs btn-secondary" v-on:click="set_cheap_stake_accounts_visibility(false)">
+              OFF
+            </span>
+          </div>
+          <div class="btn-group btn-group-toggle switch-button" v-else>
+            <span class="btn btn-xs btn-secondary" v-on:click="set_cheap_stake_accounts_visibility(true)">
+              ON
+            </span>
+            <span class="btn btn-xs btn-secondary active">
+              OFF
+            </span>
+          </div>
+        </div>
         <table class="table table-block-sm validators-table">
           <thead>
             <tr>
@@ -146,6 +165,7 @@
             :idx="index + (page - 1) * 20"
             :batch="batch"
             :current_epoch="current_epoch"
+            :is_cheap_stake_accounts_visible="is_cheap_stake_accounts_visible"
           >
           </stake-account-row>
         </table>
@@ -308,7 +328,8 @@
           eversol: eversolImage,
           blazestake: blazestakeImage,
           jito: jitoImage
-        }
+        },
+        is_cheap_stake_accounts_visible: true
       }
     },
     components: {
@@ -424,6 +445,9 @@
       },
       filters_present: function(){
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
+      },
+      set_cheap_stake_accounts_visibility(val) {
+        this.is_cheap_stake_accounts_visible = val
       }
     }
   }
