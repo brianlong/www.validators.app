@@ -61,8 +61,7 @@ class TotalRewardsUpdateService
 
   def completed_epoch
     @completed_epoch ||= EpochWallClock.where(network: @network)
-                                       .offset(1)
-                                       .last
+                                       .last(2).first
   end
 
   def epoch_rewards(epoch, stake_accounts)
