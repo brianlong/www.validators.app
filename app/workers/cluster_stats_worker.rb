@@ -2,7 +2,7 @@
 
 class ClusterStatsWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => 1, :dead => false
+  sidekiq_options retry: 1, dead: false
 
   def perform(args = {})
     CreateClusterStatsService.new(network: args["network"], batch_uuid: args["batch_uuid"]).call
