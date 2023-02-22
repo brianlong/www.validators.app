@@ -1,16 +1,15 @@
 class Rack::Attack
   ### Throttle Spammy Clients ###
-  # Throttle all requests by IP (60rpm)
-  #
+  # Throttle requests to API by IP
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle('req/ip', limit: 2, period: 2.minutes) do |req| # TODO adjust limit
+  throttle('req/ip', limit: 2, period: 5.minutes) do |req| # TODO adjust limit
     if req.path.start_with?('/api/v1/') && req.get?
       req.ip
     end
   end
 
   ### Prevent Brute-Force Login Attacks ###
-  # Throttle POST requests to /login by IP address
+  # Throttle POST requests to sign in page by IP address
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
   throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
     if req.path == '/users/sign_in' && req.post?
@@ -20,9 +19,9 @@ class Rack::Attack
 
   ### Custom Throttle Response ###
   # By default, Rack::Attack returns an HTTP 429 for throttled responses.
-  # If you want to return 503 or you just want to customize the response), then uncomment the lines below.
+  # If you want to customize the response), then uncomment the lines below.
   self.throttled_response = lambda do |env|
-    [ 503, {}, ["Server Error\n"]]
+    [ 429, {}, ["Too Many Requests. Retry later.\n"]]
   end
 end
 
