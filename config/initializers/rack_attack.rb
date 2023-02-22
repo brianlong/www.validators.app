@@ -42,21 +42,22 @@ class Rack::Attack
 end
 
 ### Define whitelists ###
-# TODO Allow all internal requests
-# Rack::Attack.safelist("allow internal requests") do |req|
-#   internal_authorization_key = (req.env["HTTP_AUTHORIZATION"] == Rails.application.credentials.api_authorization)
-#   internal_host = !!(req.env["HTTP_HOST"] =~ /validators.app/)
-#   internal_authorization_key || internal_host
-# end
+
+# Allow all internal requests
+Rack::Attack.safelist("allow internal requests") do |req|
+  internal_authorization_key = (req.env["HTTP_AUTHORIZATION"] == Rails.application.credentials.api_authorization)
+  internal_host = !!(req.host =~ /validators.app/)
+  internal_authorization_key || internal_host
+end
 
 # Allow no limit requests to specific endpoints
 # Uncomment and edit the following lines to allow no limit requests to some methods
-# Rack::Attack.safelist("allow post requests to PATH") do |req|
-#   req.path.start_with?("/api/v1/PATH") && req.getg?
+# Rack::Attack.safelist("allow all requests to PATH") do |req|
+#   req.path.start_with?("/api/v1/PATH") && req.get?
 # end
 
 # TODO Always allow requests from localhost
 # Rack::Attack.safelist('allow from localhost') do |req|
 #   '127.0.0.1' == req.ip || '::1' == req.ip
-#   !!(req.env["HTTP_HOST"] =~ /localhost:/)
+#   !!(req.host == "localhost")
 # end
