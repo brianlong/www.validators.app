@@ -56,7 +56,7 @@ class TotalRewardsUpdateService
 
   def completed_epoch
     @completed_epoch ||= EpochWallClock.where(network: @network)
-                                       .where.not(ending_slot: nil)
+                                       .offset(1)
                                        .last
   end
 

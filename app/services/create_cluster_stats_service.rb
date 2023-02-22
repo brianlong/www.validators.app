@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class CreateClusterStatsService
-  EPOCHS_TO_CALCULATE = 3
-  
+class CreateClusterStatsService  
   def initialize(network:, batch_uuid:)
     @network = network
     @batch_uuid = batch_uuid
@@ -41,7 +39,7 @@ class CreateClusterStatsService
   def epochs_annual_roi
     if last_epochs.count > 0
       epoch_duration = (last_epochs.first.created_at - last_epochs.second.created_at)
-      return 0 unless epoch_duration && epoch_duration > 0
+      return 0 unless epoch_duration.to_f > 0
       epoch_average_roi = last_epochs.map do |epoch|
         if epoch.total_rewards && epoch.total_active_stake
           (epoch.total_rewards / epoch.total_active_stake.to_f) * 100
