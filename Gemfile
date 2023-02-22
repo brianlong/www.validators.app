@@ -160,3 +160,6 @@ gem 'browser'
 # PDFs creator
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
+
+# Requests limiter
+gem 'rack-attack'
