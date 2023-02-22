@@ -1,9 +1,25 @@
 class Rack::Attack
+  API_ENDPOINTS_WITH_HIGH_LIMIT = [
+    "/api/v1/commission-changes",
+    "/api/v1/ping-thing",
+    "/api/v1/ping-thing-stats"
+  ].freeze
+
   ### Throttle Spammy Clients ###
-  # Throttle requests to API by IP
-  # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle('req/ip', limit: 2, period: 5.minutes) do |req| # TODO adjust limit
-    if req.path.start_with?('/api/v1/') && req.get?
+  # Throttle GET requests to API by IP
+  #
+  # Set higher limit for API requests defined in constant
+  # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-high/ip:#{req.ip}"
+  throttle("req-api-high/ip", limit: 5, period: 5.minutes) do |req| # TODO adjust higher limit
+    if req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.get?
+      req.ip
+    end
+  end
+
+  # Set default limit for other API requests
+  # Key: "rack::attack:#{Time.now.to_i/:period}:req-api/ip:#{req.ip}"
+  throttle("req-api/ip", limit: 10, period: 5.minutes) do |req| # TODO adjust default limit
+    if !req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.path.start_with?("/api/v1/") && req.get?
       req.ip
     end
   end
@@ -11,8 +27,8 @@ class Rack::Attack
   ### Prevent Brute-Force Login Attacks ###
   # Throttle POST requests to sign in page by IP address
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
-    if req.path == '/users/sign_in' && req.post?
+  throttle("logins/ip", limit: 5, period: 20.seconds) do |req|
+    if req.path == "/users/sign_in" && req.post?
       req.ip
     end
   end
