@@ -6,7 +6,7 @@ class TotalRewardsUpdateService
   def initialize(network, stake_accounts, solana_url = nil)
     @network = network
     @stake_accounts = stake_accounts
-    puts @stake_accounts.count
+    puts "stake accounts count: #{@stake_accounts.count}"
     @solana_url = solana_url ? [solana_url] : NETWORK_URLS[@network]
   end
 
@@ -14,9 +14,9 @@ class TotalRewardsUpdateService
     rewards_logger.warn("found epoch: #{completed_epoch&.epoch}") unless Rails.env.test?
     if completed_epoch
       vote_rewards = total_rewards_from_vote_accounts(completed_epoch)
-      puts vote_rewards
+      puts "vote_rewards #{vote_rewards}"
       stake_rewards = total_rewards_from_stake_accounts(completed_epoch)
-      puts stake_rewards
+      puts "stake_rewards #{stake_rewards}"
       if vote_rewards > 0 && stake_rewards > 0
         completed_epoch.update(
           total_rewards: vote_rewards + stake_rewards,
@@ -29,7 +29,7 @@ class TotalRewardsUpdateService
   def total_rewards_from_vote_accounts(epoch)
     rewards_sum = 0
     vote_accounts = VoteAccount.where(network: @network).pluck(:account)
-    puts vote_accounts.count
+    puts "vote_accounts.count: #{vote_accounts.count}"
     vote_accounts&.in_groups_of(1000) do |vote_account_batch|
       epoch_rewards(epoch.epoch, vote_account_batch.compact).each_with_index do |acc, index|
         if acc && acc["amount"] && acc["postBalance"]    
@@ -43,6 +43,7 @@ class TotalRewardsUpdateService
   def total_rewards_from_stake_accounts(epoch)
     rewards_sum = 0
     @stake_accounts&.in_groups_of(1000) do |stake_account_batch|
+      puts "rewards_sum: #{rewards_sum}"
       epoch_rewards(epoch.epoch, stake_account_batch.compact).each_with_index do |acc, index|
         if acc && acc["amount"] && acc["postBalance"]    
           rewards_sum += acc["amount"].to_i 

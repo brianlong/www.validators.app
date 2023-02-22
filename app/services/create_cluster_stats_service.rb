@@ -44,8 +44,8 @@ class CreateClusterStatsService
         if epoch.total_rewards && epoch.total_active_stake
           (epoch.total_rewards / epoch.total_active_stake.to_f) * 100
         end
-      end.compact.average
-
+      end.compact&.average
+      return 0 unless epoch_average_roi.to_f > 0
       epochs_annual_roi = (1.year.to_i / epoch_duration.to_f) * epoch_average_roi
     end
     epochs_annual_roi ||= 0
