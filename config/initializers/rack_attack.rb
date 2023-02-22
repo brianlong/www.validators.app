@@ -1,10 +1,15 @@
-# Define requests whitelist
-Rack::Attack.safelist("mark any authenticated access safe") do |request|
-  # Requests are allowed if coming from the app
-  authorization_key = Rails.application.credentials.api_authorization
-  whitelisted_host = !!(request.env["HTTP_HOST"] =~ /validators.app/)
+# Define requests whitelists
 
-  request.env["HTTP_AUTHORIZATION"] == authorization_key || whitelisted_host
+Rack::Attack.safelist("allow internal requests") do |request|
+  internal_authorization_key = (request.env["HTTP_AUTHORIZATION"] == Rails.application.credentials.api_authorization)
+  internal_host = !!(request.env["HTTP_HOST"] =~ /validators.app/)
+  internal_authorization_key || internal_host
+end
+
+Rack::Attack.safelist("allow post requests to specified endpoints") do |request|
+  # ping thing POST requests
+  puts request.path
+  request.path.start_with?("/api/v1/ping-thing") && request.request_method == "POST"
 end
 
 # TODO Always allow requests from localhost
