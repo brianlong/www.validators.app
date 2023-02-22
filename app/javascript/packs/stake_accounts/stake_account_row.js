@@ -57,7 +57,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     }
   },
   template: `
-    <tbody v-if="is_validator_visible">
+    <tbody v-if="is_validator_visible()">
       <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
       
       <tr>
