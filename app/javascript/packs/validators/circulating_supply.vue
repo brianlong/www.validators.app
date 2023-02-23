@@ -26,11 +26,12 @@
           <span class="text-muted" v-if="!gross_yield">loading...</span>
           <span v-if="gross_yield">
             <strong class="text-success">{{ gross_yield }}%</strong>
-            <a href="/faq#roi">
-              <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"></i>
-            </a>
+
             <div class="small text-muted">
               (Last 3 epochs annualized)
+              <a href="/faq#roi">
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"></i>
+              </a>
             </div>
           </span>
         </div>

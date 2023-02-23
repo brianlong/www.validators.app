@@ -332,25 +332,27 @@
   a&nbsp;validator to delegate&nbsp;to.
 </p>
 
-<h5 id="stake-pool">Stake Pool</h5>
-<p class="mb-5">
-  Stake pools are an alternative method of earning staking rewards. This program allows SOL holders
-  to stake and earn rewards without managing stakes. Read more about the&nbsp;program on
-  <%= link_to "Solana website", "https://spl.solana.com/stake-pool/overview" %>.
-</p>
-
-<hr />
-
-<h5 id="roi">Gross ROI</h5>
+<h3 class="h5" id="roi">Gross ROI</h3>
 <p>
   Gross Return of Interest is a percentage value that represents total return from Solana network to both 
   validators and stakers. It is calculated as follows:
 </p>
 <pre>
-  (stake_account_rewards + vote_account_rewards / total active stake) * number_of_epochs_in_year
+  (stake_account_rewards + vote_account_rewards / total_active_stake) * number_of_epochs_per_year
 </pre>
+<p>
+  Where number_of_epochs_per_year is calculated as follows: seconds_in_year / duration_of_last_epoch_in_seconds. 
+  This gives the number of epochs in a year assuming all epochs were as long as the last epoch.
+</p>
 <p class="mb-5">
-  where stake_account_rewards and vote_account_rewards are the average reward per epoch based on last 3 epochs.
+  And stake_account_rewards and vote_account_rewards are the average reward per epoch based on last 3 epochs.
+</p>
+
+<h5 id="stake-pool">Stake Pool</h5>
+<p class="mb-5">
+  Stake pools are an alternative method of earning staking rewards. This program allows SOL holders
+  to stake and earn rewards without managing stakes. Read more about the&nbsp;program on
+  <%= link_to "Solana website", "https://spl.solana.com/stake-pool/overview" %>.
 </p>
 
 <hr />
