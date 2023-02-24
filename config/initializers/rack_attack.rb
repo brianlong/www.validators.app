@@ -56,9 +56,3 @@ end
 # Rack::Attack.safelist("allow all requests to PATH") do |req|
 #   req.path.start_with?("/api/v1/PATH") && req.get?
 # end
-
-# TODO Always allow requests from localhost
-# Rack::Attack.safelist('allow from localhost') do |req|
-#   '127.0.0.1' == req.ip || '::1' == req.ip
-#   !!(req.host == "localhost")
-# end
