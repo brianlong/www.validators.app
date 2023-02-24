@@ -39,6 +39,8 @@ class ValidatorsController < ApplicationController
     end
 
     @at_33_stake_index ||= nil
+
+    render params[:trent_mode] == true ? :trent_mode : :index
   end
 
   # GET /validators/1

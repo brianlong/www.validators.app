@@ -1,0 +1,34 @@
+<h1>Trent Mode</h1>
+
+<% unless @validators.empty? %>
+  <div class="card">
+    <div class="card-content pb-3">
+      <%= render 'validators/sort_bar' %>
+      <%= render 'validators/toggle_bar' %>
+    </div>
+
+    <%= render 'validators/table',
+               batch: @batch,
+               validators: @validators,
+               at_33_stake_index: @at_33_stake_index,
+               show_ip_and_gateway: false,
+               items_per_page: @per,
+               show_watchlist_btn: true %>
+
+    <div class="card-footer">
+      <p class="small text-muted">
+        Score updated at <%= @batch&.scored_at || 'N/A' %> <br class="d-md-none"/>
+        in batch <%= @batch&.uuid || 'N/A' %>
+      </p>
+      <%= paginate @validators %>
+    </div>
+  </div>
+<% end %>
+
+<% if @validators.blank? && !params[:q].blank? %>
+  <%= render 'validators/no_search_results' %>
+<% end %>
+
+<% if @validators.blank? && !params[:watchlist].blank? %>
+  <%= render 'validators/empty_watchlist' %>
+<% end %>

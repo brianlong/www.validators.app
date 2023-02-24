@@ -103,6 +103,7 @@ Rails.application.routes.draw do
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
   get "current-user", to: "users#current_user_info"
+  get 'trent-mode', to: "validators#index", defaults: { trent_mode: true }
 
   ### API
   namespace :api do
