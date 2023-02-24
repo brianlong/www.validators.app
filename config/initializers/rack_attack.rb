@@ -10,6 +10,7 @@ class Rack::Attack
   #
   # Set higher limit for API requests defined in constant
   # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-high/ip:#{req.ip}"
+  #  eg. "rack::attack:5590831:req-api-high/ip:127.0.0.1"
   throttle("req-api-high/ip", limit: 5, period: 5.minutes) do |req| # TODO adjust higher limit
     if req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.get?
       req.ip
