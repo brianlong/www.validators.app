@@ -97,7 +97,6 @@ ActiveRecord::Schema.define(version: 2023_02_24_094005) do
     t.integer "validator_count"
     t.integer "nodes_count"
     t.string "software_version"
-    t.float "roi"
     t.index ["network"], name: "index_cluster_stat_on_network"
   end
 
@@ -122,7 +121,7 @@ ActiveRecord::Schema.define(version: 2023_02_24_094005) do
     t.string "network"
     t.integer "epoch"
     t.float "epoch_completion"
-    t.boolean "source_from_rewards", default: false
+    t.boolean "from_inflation_rewards", default: false
     t.index ["epoch"], name: "index_commission_histories_on_epoch"
     t.index ["network", "created_at", "validator_id"], name: "index_commission_histories_on_validators"
     t.index ["network", "validator_id"], name: "index_commission_histories_on_network_and_validator_id"
@@ -224,8 +223,6 @@ ActiveRecord::Schema.define(version: 2023_02_24_094005) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ending_slot"
-    t.bigint "total_rewards"
-    t.bigint "total_active_stake"
     t.index ["epoch"], name: "index_epoch_wall_clocks_on_epoch"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
   end
