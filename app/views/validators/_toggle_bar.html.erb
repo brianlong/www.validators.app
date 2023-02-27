@@ -1,3 +1,5 @@
+<% trent_mode = local_assigns[:trent_mode] %>
+
 <div class="d-flex flex-column-reverse flex-md-row">
   <div class="flex-fill small text-muted pt-1 me-md-5">
     Score updated at <%= @batch&.scored_at || 'N/A' %> <br class="d-md-none" />
@@ -7,15 +9,30 @@
   <div class='toggle-container'>
     <% if params[:refresh] == 'true' %>
       <%= link_to raw('<i class="fa-solid fa-toggle-on toggle"></i>'),
-                  url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
+                  url_for(
+                    **validators_search_page_attrs(trent_mode),
+                    order: params[:order],
+                    page: params[:page],
+                    network: params[:network],
+                    q: params[:q],
+                    refresh: false
+                  ) %>
       <p class="small text-muted toggle-label">REFRESH ON</p>
     <% else %>
       <%= link_to raw('<i class="fa-solid fa-toggle-off toggle"></i>'),
-                  url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
+                  url_for(
+                    **validators_search_page_attrs(trent_mode),
+                    order: params[:order],
+                    page: params[:page],
+                    network: params[:network],
+                    q: params[:q],
+                    refresh: true
+                  ) %>
       <p class="small text-muted toggle-label">REFRESH OFF</p>
     <% end %>
 
-    <%= link_to url_for(order: params[:order],
+    <%= link_to url_for(**validators_search_page_attrs(trent_mode),
+                        order: params[:order],
                         page: params[:page],
                         network: params[:network],
                         refresh: params[:refresh],

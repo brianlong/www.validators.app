@@ -142,4 +142,12 @@ module ValidatorsHelper
       ]
     )
   end
+
+  def validators_search_page_attrs(trent_mode)
+    if trent_mode
+      { action: :trent_mode, controller: :public }
+    else
+      { action: :index, controller: :validators }
+    end
+  end
 end

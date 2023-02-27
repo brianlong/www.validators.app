@@ -3,8 +3,8 @@
 <% unless @validators.empty? %>
   <div class="card">
     <div class="card-content pb-3">
-      <%= render 'validators/sort_bar' %>
-      <%= render 'validators/toggle_bar' %>
+      <%= render 'validators/sort_bar', trent_mode: true %>
+      <%= render 'validators/toggle_bar', trent_mode: true %>
     </div>
 
     <%= render 'validators/table',
@@ -26,9 +26,9 @@
 <% end %>
 
 <% if @validators.blank? && !params[:q].blank? %>
-  <%= render 'validators/no_search_results' %>
+  <%= render 'validators/no_search_results', trent_mode: true %>
 <% end %>
 
 <% if @validators.blank? && !params[:watchlist].blank? %>
-  <%= render 'validators/empty_watchlist' %>
+  <%= render 'validators/empty_watchlist', trent_mode: true %>
 <% end %>

@@ -1,3 +1,5 @@
+<% trent_mode = local_assigns[:trent_mode] %>
+
 <div class="card">
   <div class="card-content">
     <div class="text-center">
@@ -5,8 +7,11 @@
       <div class="row">
         <div class="col-md-3 col-lg-2 pe-0 mb-2">
           <%= link_to "Reset filters",
-                      validators_path(network: params[:network]),
-                      class: "btn btn-sm btn-secondary mb-3"%>
+                      url_for(
+                        **validators_search_page_attrs(trent_mode),
+                        network: params[:network]
+                      ),
+                      class: "btn btn-sm btn-secondary mb-3" %>
         </div>
         <div class="col-md-9 col-lg-10">
           <%= render 'validators/search_bar' %>
