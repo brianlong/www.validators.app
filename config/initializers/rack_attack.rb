@@ -48,13 +48,8 @@ end
 
 # Allow all internal requests
 Rack::Attack.safelist("allow internal requests") do |req|
-  internal_authorization_key = (req.env["HTTP_AUTHORIZATION"] == Rails.application.credentials.api_authorization)
-  if req.path.starts_with? "/api/v1/ping.json"
-    internal_host = !!(req.host =~ /validators.app/)
-    puts req.host
-    puts internal_host
-  end
-  internal_authorization_key #|| internal_host
+  key = Rails.application.credentials.api_authorization
+  req.env["HTTP_AUTHORIZATION"] == key
 end
 
 # Allow no limit requests to specific endpoints
