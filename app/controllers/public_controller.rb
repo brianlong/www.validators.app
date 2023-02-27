@@ -2,6 +2,8 @@
 
 # PublicController
 class PublicController < ApplicationController
+  include ValidatorsControllerHelper
+
   # GET /
   def home
     @network = home_params[:network]
@@ -51,10 +53,18 @@ class PublicController < ApplicationController
     end
   end
 
+  def trent_mode
+    search_with_results_action
+  end
+
   private
 
   def home_params
     params.permit(:network)
+  end
+
+  def validators_params
+    params.permit(:watchlist, :network, :q, :page, :order, :admin_warning)
   end
 
   def validate_order
