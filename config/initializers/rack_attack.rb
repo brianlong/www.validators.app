@@ -47,11 +47,11 @@ end
 ### Define whitelists ###
 
 # Allow all internal requests
-Rack::Attack.safelist("allow internal requests") do |req|
-  internal_authorization_key = (req.env["HTTP_AUTHORIZATION"] == Rails.application.credentials.api_authorization)
-  internal_host = !!(req.host =~ /validators.app/)
-  internal_authorization_key || internal_host
-end
+# Rack::Attack.safelist("allow internal requests") do |req|
+#   internal_authorization_key = (req.env["HTTP_AUTHORIZATION"] == Rails.application.credentials.api_authorization)
+#   internal_host = !!(req.host =~ /validators.app/)
+#   internal_authorization_key || internal_host
+# end
 
 # Allow no limit requests to specific endpoints
 # Uncomment and edit the following lines to allow no limit requests to some methods
