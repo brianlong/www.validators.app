@@ -1,4 +1,6 @@
 class Rack::Attack
+  #Rack::Attack.cache.store = Redis.new(url: Rails.application.credentials.dig(:redis, :url))
+
   API_ENDPOINTS_WITH_HIGH_LIMIT = [
     "/api/v1/commission-changes",
     "/api/v1/ping-thing",
@@ -11,7 +13,7 @@ class Rack::Attack
   # Set higher limit for API requests defined in constant
   # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-high/ip:#{req.ip}"
   #  eg. "rack::attack:5590831:req-api-high/ip:127.0.0.1"
-  throttle("req-api-high/ip", limit: 5, period: 5.minutes) do |req| # TODO adjust higher limit
+  throttle("req-api-high/ip", limit: 10, period: 5.minutes) do |req| # TODO adjust higher limit
     if req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.get?
       req.ip
     end
@@ -19,7 +21,7 @@ class Rack::Attack
 
   # Set default limit for other API requests
   # Key: "rack::attack:#{Time.now.to_i/:period}:req-api/ip:#{req.ip}"
-  throttle("req-api/ip", limit: 10, period: 5.minutes) do |req| # TODO adjust default limit
+  throttle("req-api/ip", limit: 5, period: 5.minutes) do |req| # TODO adjust default limit
     if !req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.path.start_with?("/api/v1/") && req.get?
       req.ip
     end
