@@ -60,15 +60,14 @@ Rails.application.configure do
   # Use a different cache store in production.
   #config.cache_store = :redis_cache_store, { url: Rails.application.credentials.dig(:redis, :url) }
   cache_servers = [Rails.application.credentials.dig(:redis, :url)]
-  config.cache_store = :redis_cache_store, { url: cache_servers,
-                                             connect_timeout:    30,  # Defaults to 20 seconds
-                                             read_timeout:       0.5, # Defaults to 1 second
-                                             write_timeout:      0.5, # Defaults to 1 second
-                                             reconnect_attempts: 1,   # Defaults to 0
-                                             error_handler: -> (method:, returning:, exception:) {
-                                               AppSignal.send_error(exception)
-                                             }
-  }
+  config.cache_store = :redis_cache_store, { url: cache_servers }
+                                             # connect_timeout:    30,  # Defaults to 20 seconds
+                                             # read_timeout:       0.5, # Defaults to 1 second
+                                             # write_timeout:      0.5, # Defaults to 1 second
+                                             # reconnect_attempts: 1,   # Defaults to 0
+                                             # error_handler: -> (method:, returning:, exception:) {
+                                             #   AppSignal.send_error(exception)
+                                             # }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
