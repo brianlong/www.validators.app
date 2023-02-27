@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.mainnet-beta.solana.com/
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":52620,"method":"getInflationReward","params":[["BFpfnLfnE4zY5TNvywbH1sPU9kCe1vo1pPF1QsMHU6gL","BmZFrXp57Z8b4SDP6sn6pjMwKUzWt6WHT4qg943hGmwa"],{"epoch":407}]}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.mainnet-beta.solana.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Mon, 06 Feb 2023 13:31:35 GMT
+      X-Rpc-Node:
+      - ams60
+      X-Ratelimit-Tier:
+      - free
+      X-Ratelimit-Method-Limit:
+      - '5'
+      X-Ratelimit-Method-Remaining:
+      - '4'
+      X-Ratelimit-Rps-Limit:
+      - '100'
+      X-Ratelimit-Rps-Remaining:
+      - '99'
+      X-Ratelimit-Conn-Limit:
+      - '40'
+      X-Ratelimit-Conn-Remaining:
+      - '39'
+      X-Ratelimit-Connrate-Limit:
+      - '40'
+      X-Ratelimit-Connrate-Remaining:
+      - '39'
+      X-Ratelimit-Pubsub-Limit:
+      - '5'
+      X-Ratelimit-Pubsub-Remaining:
+      - '5'
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: ASCII-8BIT
+      string: '{"jsonrpc":"2.0","result":[{"amount":1490072,"commission":99,"effectiveSlot":176256000,"epoch":407,"postBalance":311398240928},{"amount":28137694,"commission":7,"effectiveSlot":176256000,"epoch":407,"postBalance":60396656392}],"id":52620}
+
+        '
+  recorded_at: Mon, 06 Feb 2023 13:31:36 GMT
+recorded_with: VCR 6.0.0

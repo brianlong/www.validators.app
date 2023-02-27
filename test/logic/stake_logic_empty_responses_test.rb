@@ -38,7 +38,7 @@ class StakeLogicEmptyResponsesTest < ActiveSupport::TestCase
     assert_equal 500, p.code
   end
 
-  test "get_rewards \
+  test "get_rewards_from_stake_pools \
        when response is empty \
        should raise error" do
     stake_pool = create(:stake_pool)
@@ -52,7 +52,7 @@ class StakeLogicEmptyResponsesTest < ActiveSupport::TestCase
     create(:stake_account, validator: validator2, stake_pool: stake_pool)
 
     p = Pipeline.new(200, @initial_payload)
-              .then(&get_rewards)
+              .then(&get_rewards_from_stake_pools)
 
     assert_equal "No results from `get_inflation_reward`", p.errors.message
     assert_equal NoResultsFromSolana, p.errors.class
