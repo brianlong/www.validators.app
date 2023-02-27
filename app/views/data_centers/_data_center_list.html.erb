@@ -1,5 +1,5 @@
 <% @results[:results].each do |dc_key, dc_data| %>
-  <tr>
+  <tr data-turbolinks="false">
     <td>
       <%= link_to dc_key, data_center_url(network: params[:network], key: dc_key.gsub('/', '-slash-')) %>
     </td>

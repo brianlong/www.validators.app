@@ -18,7 +18,11 @@ class TrackCommissionChangesService
     commission_history_logger.warn("current_batch #{@current_batch.uuid}, created at: #{@current_batch.created_at}")
     commission_history_logger.warn("previous_batch #{@previous_batch.uuid}, created at: #{@previous_batch.created_at}")
 
-    VoteAccount.includes(:validator).where(network: @network, is_active: true).in_batches(of: 100) do |va_batch|
+    VoteAccount.joins(:validator)
+               .includes(validator: :validator_score_v1)
+               .where(network: @network, is_active: true)
+               .where("validators.is_active = TRUE")
+               .in_batches(of: 100) do |va_batch|
       accounts = va_batch.pluck(:account)
       result = get_inflation_rewards(accounts)
 
@@ -75,9 +79,7 @@ class TrackCommissionChangesService
       network: @network,
     ).last
 
-    unless last_commission_from_epoch && \
-           last_commission_from_epoch.commission_before == validator_commission && \
-           last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
+    unless last_commission_from_epoch && last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
 
       new_commission_history = va.validator.commission_histories.create(
         epoch: cli_rewards["epoch"],
