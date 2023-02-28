@@ -12,6 +12,10 @@ class ValidatorsController < ApplicationController
     search_with_results_action
   end
 
+  def trent_mode
+    search_with_results_action
+  end
+
   # GET /validators/1
   # GET /validators/1.json
   def show

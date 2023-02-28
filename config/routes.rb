@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   # Default root path
   root to: 'public#home'
-  
+
   get 'asns/:asn',
       to: 'asns#show',
       as: 'asn'
@@ -30,6 +30,11 @@ Rails.application.routes.draw do
   get 'validators',
       to: 'validators#index',
       as: 'validators'
+
+  get 'trent-mode',
+      to: 'validators#trent_mode',
+      as: 'trent_mode'
+
   get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
   get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
   get 'validators/pythnet/:account', to: redirect('/validators/%{account}?network=pythnet')
@@ -103,7 +108,6 @@ Rails.application.routes.draw do
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
   get "current-user", to: "users#current_user_info"
-  get 'trent-mode', to: "public#trent_mode"
 
   ### API
   namespace :api do
