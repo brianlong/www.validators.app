@@ -37,7 +37,7 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       this.$emit('filter_by_query', this.comm_history.account);
     },
     source_name: function() {
-      return this.comm_history.from_inflation_rewards ? "rewards" : "pipeline"
+      return this.comm_history.source_from_rewards ? "rewards" : "pipeline"
     }
   },
   template: `
