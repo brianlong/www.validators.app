@@ -9,10 +9,7 @@
       <div class="row">
         <div class="col-md text-center">
           <%= link_to "Show all validators",
-                      url_for(
-                        **validators_search_page_attrs(trent_mode),
-                        network: params[:network]
-                      ),
+                      validators_path(network: params[:network]),
                       class: "btn btn-sm btn-secondary" %>
         </div>
       </div>

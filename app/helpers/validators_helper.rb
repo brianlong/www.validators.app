@@ -143,11 +143,7 @@ module ValidatorsHelper
     )
   end
 
-  def validators_search_page_attrs(trent_mode)
-    if trent_mode
-      { action: :trent_mode, controller: :public }
-    else
-      { action: :index, controller: :validators }
-    end
+  def validators_reset_action(trent_mode = false)
+    trent_mode ? :trent_mode : :index
   end
 end
