@@ -20,8 +20,8 @@ class Rack::Attack
   end
 
   # Set default limit for other API requests
-  # Key: "rack::attack:#{Time.now.to_i/:period}:req-api/ip:#{req.ip}"
-  throttle("req-api/ip", limit: 15, period: 5.minutes) do |req|
+  # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-low/ip:#{req.ip}"
+  throttle("req-api-low/ip", limit: 15, period: 5.minutes) do |req|
     if !req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.path.start_with?("/api/v1/") && req.get?
       req.ip
     end
