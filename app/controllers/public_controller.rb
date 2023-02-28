@@ -2,8 +2,6 @@
 
 # PublicController
 class PublicController < ApplicationController
-  include ValidatorsControllerHelper
-
   # GET /
   def home
     @network = home_params[:network]
