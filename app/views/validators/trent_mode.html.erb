@@ -2,11 +2,12 @@
   <h1 class="heading-primary mb-1 mb-md-3"><span>Trent</span> Mode</h1>
 </section>
 
-<% unless @validators.empty? %>
-  <div class="card">
-    <div class="card-content">
-      <%= render 'validators/search_bar' %>
-    </div>
+<div class="card">
+  <div class="card-content">
+    <%= render 'validators/search_bar' %>
+  </div>
+
+  <% unless @validators.empty? %>
 
     <%= render 'validators/table',
                batch: @batch,
@@ -23,8 +24,9 @@
       </p>
       <%= paginate @validators %>
     </div>
-  </div>
-<% end %>
+
+  <% end %>
+</div>
 
 <% if @validators.blank? && !params[:q].blank? %>
   <%= render 'validators/no_search_results', trent_mode: true %>
