@@ -2,9 +2,8 @@
 
 <% unless @validators.empty? %>
   <div class="card">
-    <div class="card-content pb-3">
-      <%= render 'validators/sort_bar', trent_mode: true %>
-      <%= render 'validators/toggle_bar', trent_mode: true %>
+    <div class="card-content">
+      <%= render 'validators/search_bar' %>
     </div>
 
     <%= render 'validators/table',
