@@ -64,7 +64,7 @@ pl:
           telephone: 'Telefon'
           comments: 'Wiadomość'
           created_at: 'Dodano'
-  site_title: "FMA Ruby On Rails Szablon"
+  site_title: "Solana Validators | www.validators.app"
   error:
     one: '%{count} błąd'
     other: '%{count} błędy'
