@@ -3,6 +3,7 @@
 # ValidatorsController
 class ValidatorsController < ApplicationController
   before_action :set_validator, only: %i[show]
+  before_action :set_batch_and_epoch, only: %i[index]
 
   # GET /validators
   # GET /validators.json
@@ -24,8 +25,6 @@ class ValidatorsController < ApplicationController
       query: validators_params[:q],
       admin_warning: validators_params[:admin_warning]
     )
-
-    set_batch_and_epoch
 
     if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
       @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
