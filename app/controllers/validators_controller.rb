@@ -35,7 +35,7 @@ class ValidatorsController < ApplicationController
 
   def trent_mode
     @per = 25
-    @page_title = 'Trent Mode | www.validators.app'
+    @page_title = "Trent Mode | www.validators.app"
 
     return @validators = [] unless validators_params[:q]
 
