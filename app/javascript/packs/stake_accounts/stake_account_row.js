@@ -18,24 +18,17 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     current_epoch: {
       type: Number,
       required: true
-    },
-    is_cheap_stake_accounts_visible: {
-      type: Boolean,
-      required: false
     }
   },
   data() {
     return {
       validator: null,
       stake_accounts_for_val: null,
-      val_account: Object.keys(this.stake_accounts)[0],
-      has_higher_sol_stake_accounts: null,
-      ONE_SOL: 1000000000
+      val_account: Object.keys(this.stake_accounts)[0]
     }
   },
   created () {
     this.stake_accounts_for_val = this.stake_accounts[this.val_account]
-    this.has_higher_sol_stake_accounts = this.stake_accounts_for_val[0].active_stake > this.ONE_SOL
 
     var ctx = this
     if(this.val_account){
@@ -45,19 +38,8 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       })
     }
   },
-  methods: {
-    is_cheap(account) {
-      return account.active_stake < this.ONE_SOL
-    },
-    is_validator_visible() {
-      return this.is_cheap_stake_accounts_visible ? true : this.has_higher_sol_stake_accounts
-    },
-    is_stake_account_visible(account) {
-      return this.is_cheap_stake_accounts_visible ? true : !this.is_cheap(account)
-    }
-  },
   template: `
-    <tbody v-if="is_validator_visible()">
+    <tbody>
       <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
       
       <tr>
@@ -80,8 +62,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
             </thead>
             <tbody class="small">
             <tr v-for="stake_account in stake_accounts_for_val"
-                :key="stake_account.id"
-                v-if="is_stake_account_visible(stake_account)">
+                :key="stake_account.id">
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
                 <div class="text-muted">
@@ -102,7 +83,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                   </span>
                 </span>
                 <span v-else>
-                  {{ (stake_account.active_stake / ONE_SOL).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
+                  {{ (stake_account.active_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL
                   <br />
                   <span class="text-muted">
                     {{ ((stake_account.active_stake / stake_account.validator_active_stake) * 100).toLocaleString('en-US', {maximumFractionDigits: 2}) }}% of validator's stake

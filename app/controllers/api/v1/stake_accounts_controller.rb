@@ -23,7 +23,8 @@ module Api
           filter_account: index_params[:filter_account],
           filter_staker: index_params[:filter_staker],
           filter_withdrawer: index_params[:filter_withdrawer],
-          filter_validator: index_params[:filter_validator]
+          filter_validator: index_params[:filter_validator],
+          exclude_cheap_accounts: index_params[:exclude_cheap_accounts]
         )
       end
 
@@ -69,7 +70,8 @@ module Api
           :per,
           :seed,
           :sort_by,
-          :with_batch
+          :with_batch,
+          :exclude_cheap_accounts
         )
       end
     end

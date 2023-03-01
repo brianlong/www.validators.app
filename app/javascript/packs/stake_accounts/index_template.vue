@@ -72,19 +72,15 @@
       <div class="card">
         <div class="text-end p-4 align-items-center">
           Show Stake Accounts with less than&nbsp <b>1 SOL</b>&nbsp
-          <div class="btn-group btn-group-toggle switch-button" v-if="is_cheap_stake_accounts_visible">
-            <span class="btn btn-xs btn-secondary active">
+          <div class="btn-group btn-group-toggle switch-button">
+            <span class="btn btn-xs btn-secondary"
+                  :class="is_cheap_stake_accounts_visible ? 'active' : ''"
+                  v-on:click="set_cheap_stake_accounts_visibility(true)">
               ON
             </span>
-            <span class="btn btn-xs btn-secondary" v-on:click="set_cheap_stake_accounts_visibility(false)">
-              OFF
-            </span>
-          </div>
-          <div class="btn-group btn-group-toggle switch-button" v-else>
-            <span class="btn btn-xs btn-secondary" v-on:click="set_cheap_stake_accounts_visibility(true)">
-              ON
-            </span>
-            <span class="btn btn-xs btn-secondary active">
+            <span class="btn btn-xs btn-secondary"
+                  :class="is_cheap_stake_accounts_visible ? '' : 'active'"
+                  v-on:click="set_cheap_stake_accounts_visibility(false)">
               OFF
             </span>
           </div>
@@ -160,15 +156,20 @@
 
           <stake-account-row
             v-for="(sa, index) in stake_accounts"
+            v-if="!is_loading_stake_account_records"
             :key="sa.id"
             :stake_accounts="sa"
             :idx="index + (page - 1) * 20"
             :batch="batch"
             :current_epoch="current_epoch"
-            :is_cheap_stake_accounts_visible="is_cheap_stake_accounts_visible"
           >
           </stake-account-row>
         </table>
+
+        <div class="img-loading col-12 text-center my-5"
+            v-if="is_loading_stake_account_records">
+          <img v-bind:src="loading_image" width="100">
+        </div>
 
         <div class="card-footer">
           <b-pagination
@@ -329,7 +330,8 @@
           blazestake: blazestakeImage,
           jito: jitoImage
         },
-        is_cheap_stake_accounts_visible: true
+        is_cheap_stake_accounts_visible: true,
+        is_loading_stake_account_records: false
       }
     },
     components: {
@@ -345,7 +347,8 @@
           page: ctx.page,
           with_batch: true,
           seed: ctx.seed,
-          grouped_by: 'delegated_vote_accounts_address'
+          grouped_by: 'delegated_vote_accounts_address',
+          exclude_cheap_accounts: !ctx.is_cheap_stake_accounts_visible
         }
       }
 
@@ -385,16 +388,19 @@
       },
       filter_validator: function(){
         this.refresh_results()
+      },
+      is_cheap_stake_accounts_visible() {
+        this.is_loading_stake_account_records = true
+
+        this.refresh_cheap_stake_accounts()
       }
     },
     methods: {
       paginate: function(){
         this.refresh_results()
       },
-      refresh_results: debounce(function() {
+      get_stake_accounts_call() {
         var ctx = this
-
-        ctx.is_loading_stake_accounts = true
 
         var query_params = {
           params: {
@@ -405,17 +411,28 @@
             filter_withdrawer: ctx.filter_withdrawer,
             filter_validator: ctx.filter_validator,
             grouped_by: 'delegated_vote_accounts_address',
-            seed: ctx.seed
+            seed: ctx.seed,
+            exclude_cheap_accounts: !ctx.is_cheap_stake_accounts_visible
           }
         }
 
         axios.get(ctx.stake_accounts_api_url, query_params)
-             .then(function (response) {
-               ctx.stake_accounts = response.data.stake_accounts;
-               ctx.total_count = response.data.total_count;
-               ctx.current_epoch = response.data.current_epoch;
-               ctx.is_loading_stake_accounts = false;
-             })
+          .then(function (response) {
+            ctx.stake_accounts = response.data.stake_accounts;
+            ctx.total_count = response.data.total_count;
+            ctx.current_epoch = response.data.current_epoch;
+            ctx.is_loading_stake_accounts = false;
+          })
+      },
+      refresh_results: debounce(function() {
+        this.is_loading_stake_accounts = true
+
+        this.get_stake_accounts_call()
+      }, 2000),
+      refresh_cheap_stake_accounts: debounce(function () {
+        this.get_stake_accounts_call()
+
+        this.is_loading_stake_account_records = false
       }, 2000),
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
@@ -446,8 +463,8 @@
       filters_present: function(){
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
       },
-      set_cheap_stake_accounts_visibility(val) {
-        this.is_cheap_stake_accounts_visible = val
+      set_cheap_stake_accounts_visibility(visible) {
+        this.is_cheap_stake_accounts_visible = visible
       }
     }
   }

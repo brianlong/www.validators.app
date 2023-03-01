@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StakeAccountQuery
   STAKE_ACCOUNT_FIELDS = %w[
     created_at
@@ -25,9 +27,12 @@ class StakeAccountQuery
 
   VALIDATOR_SCORE_V1_FIELDS = ["active_stake as validator_active_stake"].freeze
 
+  ONE_SOL = 1000000000
+
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
     @sort_by = options.fetch(:sort_by, nil)
+    @exclude_cheap_accounts = options.fetch(:exclude_cheap_accounts)
     @filter_by = {
       account: options.fetch(:filter_account),
       staker: options.fetch(:filter_staker),
@@ -53,6 +58,9 @@ class StakeAccountQuery
 
     stake_accounts = stake_accounts.filter_by_withdrawer(@filter_by[:withdrawer]) \
       unless @filter_by[:withdrawer].blank?
+
+    stake_accounts = stake_accounts.where("stake_accounts.active_stake > ?", ONE_SOL) \
+      if @exclude_cheap_accounts == 'true'
 
     unless @filter_by[:validator].blank?
       selected_validators = ValidatorSearchQuery.new(
