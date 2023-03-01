@@ -60,7 +60,7 @@ class StakeAccountQuery
       unless @filter_by[:withdrawer].blank?
 
     stake_accounts = stake_accounts.where("stake_accounts.active_stake > ?", ONE_SOL) \
-      if @exclude_cheap_accounts == 'true'
+      if @exclude_cheap_accounts == "true"
 
     unless @filter_by[:validator].blank?
       selected_validators = ValidatorSearchQuery.new(
