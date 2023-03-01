@@ -32,7 +32,7 @@ class StakeAccountQuery
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
     @sort_by = options.fetch(:sort_by, nil)
-    @exclude_cheap_accounts = options.fetch(:exclude_cheap_accounts)
+    @exclude_cheap_accounts = options.fetch(:exclude_cheap_accounts, nil)
     @filter_by = {
       account: options.fetch(:filter_account),
       staker: options.fetch(:filter_staker),
