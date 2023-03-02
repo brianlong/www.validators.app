@@ -228,7 +228,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     create(:stake_account, validator: validator3, stake_pool: stake_pool)
     Pipeline.new(200, payload).then(&update_validator_stats)
 
-    assert_equal 4.22, stake_pool.reload.average_score
+    assert_equal 4.12, stake_pool.reload.average_score
   end
 
   test "get_rewards \

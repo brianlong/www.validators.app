@@ -155,8 +155,8 @@ module StakeLogic
         total_active_stake = 0
 
         Validator.where(id: validator_ids).includes(:stake_accounts).each do |validator|
-          stake_acc = validator.stake_accounts.active.where(stake_pool: pool).first
-          total_active_stake += stake_acc.active_stake
+          val_active_stake = validator.stake_accounts.active.where(stake_pool: pool).pluck(:active_stake).sum
+          total_active_stake += val_active_stake
           score = validator.score
 
           last_delinquent = validator.validator_histories
@@ -169,7 +169,7 @@ module StakeLogic
           lifetime = (DateTime.now - validator.created_at.to_datetime).to_i
           uptimes.push uptime
           lifetimes.push lifetime
-          scores.push stake_acc.active_stake * score.total_score.to_i
+          scores.push val_active_stake * score.total_score.to_i
           delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
           last_skipped_slots.push score.skipped_slot_history&.last
         end
