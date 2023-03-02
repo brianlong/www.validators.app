@@ -6,14 +6,14 @@
 
   <div class="mt-2 mt-lg-0">
     <div class="toggle-container">
-      <% jito_link_class = "fa-solid toggle fa-toggle-" + (params[:jito_collaboration] == "true" ? "on" : "off") %>
+      <% jito_link_class = "fa-solid toggle fa-toggle-" + (params[:jito] == "true" ? "on" : "off") %>
       <%= link_to raw("<i class=\"#{jito_link_class}\"></i>"),
                   url_for(
                     order: params[:order],
                     page: params[:page],
                     network: params[:network],
                     refresh: params[:refresh],
-                    jito_collaboration: params[:jito_collaboration] == "true" ? "false" : "true"
+                    jito: params[:jito] == "true" ? "false" : "true"
                   )
       %>
       <p class="small text-muted toggle-label">JITO</p>
@@ -27,7 +27,7 @@
                       page: params[:page],
                       network: params[:network],
                       q: params[:q],
-                      jito_collaboration: params[:jito_collaboration],
+                      jito: params[:jito],
                       refresh: false
                     ) %>
         <p class="small text-muted toggle-label">REFRESH</p>
@@ -38,7 +38,7 @@
                       page: params[:page],
                       network: params[:network],
                       q: params[:q],
-                      jito_collaboration: params[:jito_collaboration],
+                      jito: params[:jito],
                       refresh: true
                     ) %>
         <p class="small text-muted toggle-label">REFRESH</p>
@@ -48,7 +48,7 @@
                           page: params[:page],
                           network: params[:network],
                           refresh: params[:refresh],
-                          jito_collaboration: params[:jito_collaboration],
+                          jito: params[:jito],
                           watchlist: params[:watchlist] ? nil : true) do %>
         <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
            data-bs-toggle="tooltip"

@@ -12,7 +12,7 @@
                           page: 1,
                           network: params[:network],
                           refresh: params[:refresh],
-                          jito_collaboration: params[:jito_collaboration],
+                          jito: params[:jito],
                           watchlist: params[:watchlist] ? nil : true) do %>
               <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning"
                  data-bs-toggle="tooltip"
