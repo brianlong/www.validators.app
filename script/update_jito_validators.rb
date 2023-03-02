@@ -4,7 +4,6 @@ require File.expand_path('../config/environment', __dir__)
 require 'uri'
 require 'net/http'
 
-
 uri = URI("https://kobe.mainnet.jito.network/api/v1/validators")
 response = Net::HTTP.get_response(uri)
 if response.is_a?(Net::HTTPSuccess)
@@ -15,10 +14,13 @@ if response.is_a?(Net::HTTPSuccess)
 
   jito_db_validators = Validator.joins(:vote_accounts)
                                 .where(
-                                  "validators.network = ? AND vote_accounts.account IN (?)",
+                                  "validators.network = ?
+                                   AND vote_accounts.account IN (?)
+                                   AND vote_accounts.is_active = TRUE",
                                   "mainnet",
                                   jito_vote_accounts
                                 )
+
   jito_db_validators.update_all(jito_collaboration: true)
   Validator.where.not(id: jito_db_validators.pluck(:id)).update_all(jito_collaboration: false)
 end

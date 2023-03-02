@@ -58,7 +58,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       jito_collaboration: true
     )
 
-    result = ValidatorQuery.new.call(network: @mainnet_network, jito: true)
+    result = ValidatorQuery.new.call(network: @mainnet_network, jito_collaboration: true)
 
     assert_equal 3, result.count
     assert_equal [true], result.pluck(:jito_collaboration).uniq
@@ -81,7 +81,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       jito_collaboration: true
     )
 
-    result = ValidatorQuery.new.call(network: @mainnet_network, jito: false)
+    result = ValidatorQuery.new.call(network: @mainnet_network, jito_collaboration: false)
 
     assert_equal 5, result.count
   end

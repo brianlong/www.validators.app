@@ -6,7 +6,7 @@
                   page: params[:page],
                   network: params[:network],
                   refresh: params[:refresh],
-                  jito: params[:jito]
+                  jito_collaboration: params[:jito_collaboration]
                 ),
                 class: "btn btn-sm btn-secondary me-2 #{ 'active' unless %w[random name stake].include?(params[:order]) }"
     %>
@@ -17,19 +17,8 @@
                   page: params[:page],
                   network: params[:network],
                   refresh: params[:refresh],
-                  jito: params[:jito]),
-                class: "btn btn-sm btn-secondary me-2 #{ 'active' if params[:order] == 'stake' }"
-    %>
-
-    <%= link_to 'Jito',
-                url_for(
-                  order: 'stake',
-                  page: params[:page],
-                  network: params[:network],
-                  refresh: params[:refresh],
-                  jito: params[:jito] == "true" ? "false" : "true"
-                ),
-                class: "btn btn-sm btn-secondary me-3 #{ 'active' if params[:jito] == "true"}"
+                  jito_collaboration: params[:jito_collaboration]),
+                class: "btn btn-sm btn-secondary me-3 #{ 'active' if params[:order] == 'stake' }"
     %>
   </div>
   <%= render 'validators/search_bar' %>

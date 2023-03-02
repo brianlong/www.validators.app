@@ -2,6 +2,7 @@
 
 class ValidatorQuery < ApplicationQuery
   include ValidatorsControllerHelper
+
   def initialize(watchlist_user: nil, api: false)
     @api = api
     @default_scope = if @api
@@ -11,9 +12,9 @@ class ValidatorQuery < ApplicationQuery
                      end
   end
 
-  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil, admin_warning: nil, jito: false)
+  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, query: nil, admin_warning: nil, jito_collaboration: false)
     scope = @default_scope.preload(:validator_score_v1_for_api)
-    scope = filter_by_collaboration(scope, jito)
+    scope = filter_by_collaboration(scope, jito_collaboration)
     scope = filter_by_network(scope, network)
     scope = search_by(scope, query) if query
     scope = filter_by_admin_warning(scope, admin_warning)

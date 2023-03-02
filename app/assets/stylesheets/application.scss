@@ -162,11 +162,12 @@ hr {
 }
 
 .toggle {
-  position: absolute;
   font-size: $font-size-sm*2;
   margin-left: -40px;
   margin-top: -2px;
+  vertical-align: middle;
   color: darken($link-color, 5%);
+  width: 80px;
   @media(max-width: $screen-sm-max) {
     margin-left: 0;
   }

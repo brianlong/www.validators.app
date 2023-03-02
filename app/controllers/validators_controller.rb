@@ -23,7 +23,7 @@ class ValidatorsController < ApplicationController
       page: validators_params[:page],
       query: validators_params[:q],
       admin_warning: validators_params[:admin_warning],
-      jito: validators_params[:jito] == "true"
+      jito_collaboration: validators_params[:jito_collaboration] == "true"
     )
 
     @batch = Batch.last_scored(validators_params[:network])
@@ -69,6 +69,6 @@ class ValidatorsController < ApplicationController
   end
 
   def validators_params
-    params.permit(:watchlist, :network, :q, :page, :order, :admin_warning, :jito)
+    params.permit(:watchlist, :network, :q, :page, :order, :admin_warning, :jito_collaboration)
   end
 end
