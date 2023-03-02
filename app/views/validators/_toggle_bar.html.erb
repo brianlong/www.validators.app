@@ -8,7 +8,7 @@
     <% jito_link_class = "fa-solid toggle fa-toggle-" + (params[:jito_collaboration] == "true" ? "on" : "off") %>
     <%= link_to raw("<i class=\"#{jito_link_class}\"></i>"),
               url_for(
-                order: 'stake',
+                order: params[:order],
                 page: params[:page],
                 network: params[:network],
                 refresh: params[:refresh],
@@ -16,6 +16,8 @@
               )
     %>
     <p class="small text-muted toggle-label">JITO</p>
+  </div>
+  <div class='toggle-container'>
     <% if params[:refresh] == 'true' %>
       <%= link_to raw('<i class="fa-solid fa-toggle-on toggle"></i>'),
                   url_for(
