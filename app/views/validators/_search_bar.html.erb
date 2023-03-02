@@ -6,7 +6,8 @@
             placeholder: 'Starts with... (validator name, validator account or data center key)',
             class: 'form-control',
             value: params[:q],
-            required: true
+            required: true,
+            autofocus: true
       ) %>
       <%= hidden_field_tag(:network, params[:network]) %>
       <%= hidden_field_tag(:order, params[:order]) %>

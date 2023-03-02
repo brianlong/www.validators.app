@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   # Default root path
   root to: 'public#home'
-  
+
   get 'asns/:asn',
       to: 'asns#show',
       as: 'asn'
@@ -30,6 +30,11 @@ Rails.application.routes.draw do
   get 'validators',
       to: 'validators#index',
       as: 'validators'
+
+  get 'trent-mode',
+      to: 'validators#trent_mode',
+      as: 'trent_mode'
+
   get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
   get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
   get 'validators/pythnet/:account', to: redirect('/validators/%{account}?network=pythnet')

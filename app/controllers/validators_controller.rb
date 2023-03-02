@@ -3,6 +3,7 @@
 # ValidatorsController
 class ValidatorsController < ApplicationController
   before_action :set_validator, only: %i[show]
+  before_action :set_batch_and_epoch, only: %i[index]
 
   # GET /validators
   # GET /validators.json
@@ -26,20 +27,27 @@ class ValidatorsController < ApplicationController
       jito_collaboration: validators_params[:jito_collaboration] == "true"
     )
 
-    @batch = Batch.last_scored(validators_params[:network])
-
-    if @batch
-      @this_epoch = EpochHistory.where(
-        network: validators_params[:network],
-        batch_uuid: @batch.uuid
-      ).first
-    end
-
     if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
       @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
     end
 
     @at_33_stake_index ||= nil
+  end
+
+  def trent_mode
+    @per = 25
+    @page_title = "Trent Mode | www.validators.app"
+
+    return @validators = [] unless validators_params[:q]
+
+    @validators = ValidatorQuery.new().call(
+      network: validators_params[:network],
+      limit: @per,
+      page: validators_params[:page],
+      query: validators_params[:q]
+    )
+
+    set_batch_and_epoch
   end
 
   # GET /validators/1
@@ -56,6 +64,17 @@ class ValidatorsController < ApplicationController
       network: params[:network],
       account: params[:account]
     ).first or redirect_to(root_url(network: params[:network]))
+  end
+
+  def set_batch_and_epoch
+    @batch = Batch.last_scored(validators_params[:network])
+
+    if @batch
+      @this_epoch = EpochHistory.where(
+        network: validators_params[:network],
+        batch_uuid: @batch.uuid
+      ).first
+    end
   end
 
   def at_33_stake_index(validators, batch, per_page)

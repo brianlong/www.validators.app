@@ -2,15 +2,13 @@
   <div class="card-content">
     <div class="text-center">
       <h1 class="h2 card-heading">No results for given criteria</h1>
-      <div class="row">
-        <div class="col-md-3 col-lg-2 pe-0 mb-2">
-          <%= link_to "Reset filters",
-                      validators_path(network: params[:network]),
-                      class: "btn btn-sm btn-secondary mb-3"%>
-        </div>
-        <div class="col-md-9 col-lg-10">
-          <%= render 'validators/search_bar' %>
-        </div>
+      <div class="d-flex flex-column-reverse flex-md-row gap-3">
+        <%= render "validators/search_bar" %>
+        <%= link_to "Reset filters",
+                    url_for(controller: "validators",
+                            action: validators_reset_action(trent_mode),
+                            network: params[:network]),
+                    class: "btn btn-sm btn-primary" %>
       </div>
     </div>
   </div>
