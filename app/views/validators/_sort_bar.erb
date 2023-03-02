@@ -1,11 +1,17 @@
 <div class="d-flex flex-column-reverse flex-md-row mb-3">
   <div class="mt-3 mt-md-0">
     <%= link_to 'Score',
-                url_for(order: 'score', page: params[:page], network: params[:network], refresh: params[:refresh]),
+                url_for(order: 'score',
+                        page: params[:page],
+                        network: params[:network],
+                        refresh: params[:refresh]),
                 class: "btn btn-sm btn-secondary me-2 #{ 'active' unless %w[random name stake].include?(params[:order]) }" %>
 
     <%= link_to 'Stake',
-                url_for(order: 'stake', page: params[:page], network: params[:network], refresh: params[:refresh]),
+                url_for(order: 'stake',
+                        page: params[:page],
+                        network: params[:network],
+                        refresh: params[:refresh]),
                 class: "btn btn-sm btn-secondary me-3 #{ 'active' if params[:order] == 'stake' }" %>
   </div>
   <%= render 'validators/search_bar' %>

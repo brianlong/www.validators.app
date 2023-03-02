@@ -7,11 +7,19 @@
   <div class='toggle-container'>
     <% if params[:refresh] == 'true' %>
       <%= link_to raw('<i class="fa-solid fa-toggle-on toggle"></i>'),
-                  url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
+                  url_for(order: params[:order],
+                          page: params[:page],
+                          network: params[:network],
+                          q: params[:q],
+                          refresh: false) %>
       <p class="small text-muted toggle-label">REFRESH ON</p>
     <% else %>
       <%= link_to raw('<i class="fa-solid fa-toggle-off toggle"></i>'),
-                  url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
+                  url_for(order: params[:order],
+                          page: params[:page],
+                          network: params[:network],
+                          q: params[:q],
+                          refresh: true) %>
       <p class="small text-muted toggle-label">REFRESH OFF</p>
     <% end %>
 
