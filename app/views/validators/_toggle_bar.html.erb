@@ -28,7 +28,7 @@
                     jito_collaboration: params[:jito_collaboration],
                     refresh: false
                   ) %>
-      <p class="small text-muted toggle-label">REFRESH ON</p>
+      <p class="small text-muted toggle-label">REFRESH</p>
     <% else %>
       <%= link_to raw('<i class="fa-solid fa-toggle-off toggle"></i>'),
                   url_for(
@@ -39,7 +39,7 @@
                     jito_collaboration: params[:jito_collaboration],
                     refresh: true
                   ) %>
-      <p class="small text-muted toggle-label">REFRESH OFF</p>
+      <p class="small text-muted toggle-label">REFRESH</p>
     <% end %>
 
     <%= link_to url_for(order: params[:order],
