@@ -23,7 +23,8 @@ class ValidatorsController < ApplicationController
       limit: @per,
       page: validators_params[:page],
       query: validators_params[:q],
-      admin_warning: validators_params[:admin_warning]
+      admin_warning: validators_params[:admin_warning],
+      jito_collaboration: validators_params[:jito] == "true"
     )
 
     if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
@@ -87,6 +88,6 @@ class ValidatorsController < ApplicationController
   end
 
   def validators_params
-    params.permit(:watchlist, :network, :q, :page, :order, :admin_warning)
+    params.permit(:watchlist, :network, :q, :page, :order, :admin_warning, :jito)
   end
 end

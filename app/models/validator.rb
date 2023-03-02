@@ -14,6 +14,7 @@
 #  is_active           :boolean          default(TRUE)
 #  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
+#  jito_collaboration  :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
 #  security_report_url :string(191)
