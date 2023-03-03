@@ -142,4 +142,8 @@ module ValidatorsHelper
       ]
     )
   end
+
+  def validators_reset_action(trent_mode = false)
+    trent_mode ? :trent_mode : :index
+  end
 end

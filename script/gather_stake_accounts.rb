@@ -18,10 +18,12 @@ NETWORKS.each do |network|
               .then(&assign_stake_pools)
               .then(&update_validator_stats)
               .then(&count_average_validators_commission)
-              .then(&get_rewards)
+              .then(&get_rewards_from_stake_pools)
               .then(&assign_epochs)
               .then(&calculate_apy_for_accounts)
               .then(&calculate_apy_for_pools)
+
+  TotalRewardsUpdateService.new(p.payload[:network], p.payload[:stake_accounts_active]).call
 
   puts "finished #{network} with status #{p[:code]}"
   puts "MESSAGE: #{p[:message]}"

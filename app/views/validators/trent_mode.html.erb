@@ -1,0 +1,33 @@
+<section class="banner">
+  <h1 class="heading-primary mb-1 mb-md-3"><span>Trent</span> Mode</h1>
+</section>
+
+<% if @validators.blank? && !params[:q].blank? %>
+  <%= render 'validators/no_search_results', trent_mode: true %>
+
+<% else %>
+  <div class="card">
+    <div class="card-content">
+      <%= render "validators/search_bar" %>
+    </div>
+
+    <% unless @validators.empty? %>
+
+      <%= render 'validators/table',
+                 batch: @batch,
+                 validators: @validators,
+                 show_ip_and_gateway: false,
+                 items_per_page: @per,
+                 show_watchlist_btn: false %>
+
+      <div class="card-footer">
+        <p class="small text-muted">
+          Score updated at <%= @batch&.scored_at || 'N/A' %> <br class="d-md-none"/>
+          in batch <%= @batch&.uuid || 'N/A' %>
+        </p>
+        <%= paginate @validators %>
+      </div>
+
+    <% end %>
+  </div>
+<% end %>

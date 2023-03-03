@@ -45,7 +45,8 @@ module StakeLogic
       end
 
       Pipeline.new(200, p.payload.merge(
-        stake_accounts: reduced_stake_accounts
+        stake_accounts: reduced_stake_accounts,
+        stake_accounts_active: stake_accounts_active(p.payload[:network], stake_accounts)
       ))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
@@ -206,7 +207,7 @@ module StakeLogic
     end
   end
 
-  def get_rewards
+  def get_rewards_from_stake_pools
     lambda do |p|
       return p unless p.code == 200
 
@@ -230,9 +231,17 @@ module StakeLogic
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
 
+      # Sample account_rewards structure: 
+      # { "account_id"=>{
+      #   "amount"=>358573846,
+      #   "commission"=>8,
+      #   "effectiveSlot"=>169776008,
+      #   "epoch"=>392,
+      #   "postBalance"=>777282463666
+      # }}
       Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from get_rewards", e)
+      Pipeline.new(500, p.payload, "Error from get_rewards_from_stake_pools", e)
     end
   end
 
@@ -312,5 +321,20 @@ module StakeLogic
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from calculate_apy_for_pools", e)
     end
+  end
+
+  private
+
+  def recent_epochs(network)
+    @recent_epochs ||= EpochWallClock.recent_finished(network).pluck(:epoch)
+  end
+
+  def stake_accounts_active(network, stake_accounts)
+    active_stake_accounts = stake_accounts.select do |account|
+      account["deactivationEpoch"].nil? ||
+        recent_epochs(network).include?(account["deactivationEpoch"])
+    end
+
+    active_stake_accounts.map { |account| account["stakePubkey"] }
   end
 end
