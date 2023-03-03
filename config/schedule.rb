@@ -101,6 +101,10 @@ every 1.day, at: '3:10am', roles: [:background] do
   ruby_script_data_centers 'check_unknown_data_centers_for_updates.rb'
 end
 
+every 1.day, at: '3:35am', roles: [:background] do
+  ruby_script 'update_jito_validators.rb'
+end
+
 every 10.minutes, roles: [:background] do
   runner "ValidatorCheckActiveWorker.perform_async"
 end

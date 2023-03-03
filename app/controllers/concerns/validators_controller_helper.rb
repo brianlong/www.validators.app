@@ -18,7 +18,7 @@ module ValidatorsControllerHelper
     hash.merge!(data_center_host.to_builder.attributes!) unless data_center_host.blank?
     hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
     hash.merge!(validator_history.to_builder.attributes!) unless validator_history.blank?
-    
+
     # Data from the skipped_slots_report
     unless @skipped_slots_report.nil?
       this_report = @skipped_slots_report.payload.select do |ssr|
@@ -53,7 +53,7 @@ module ValidatorsControllerHelper
   def set_boolean_field(value)
     true_values = [true, "true", 1, "1"]
 
-    return true if true_values.include?(value) 
-    false 
+    return true if true_values.include?(value)
+    false
   end
 end
