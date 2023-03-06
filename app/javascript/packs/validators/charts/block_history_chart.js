@@ -50,11 +50,11 @@ export default {
               text: "Previous " + this.root_blocks.length + " Observations",
               color: chart_variables.chart_darkgrey
             }
-            },
+          },
           y: {
             display: true,
+            min: 0,
             ticks: {
-              min: 0,
               padding: 5
             },
             grid: {
