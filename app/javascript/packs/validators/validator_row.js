@@ -4,14 +4,7 @@ import voteDistanceChart from './charts/vote_distance_chart'
 import skippedSlotsChart from './charts/skipped_slot_chart'
 import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
 import scores from '../validators/components/scores'
-
-
-var chart_green = '#00ce99'
-var chart_blue = '#0091f2'
-var chart_lightgrey = '#cacaca'
-var chart_green_t = 'rgba(0, 206, 153, 0.4)'
-var chart_blue_t = 'rgba(0, 145, 242, 0.25)'
-var chart_lightgrey_t = 'rgba(202, 202, 202, 0.3)'
+import chart_variables from './charts/chart_variables'
 
 var ValidatorRow = Vue.component('validatorRow', {
   props: {
@@ -28,6 +21,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       required: true
     }
   },
+
   components: {
     'root-distance-chart': rootDistanceChart,
     'vote-distance-chart': voteDistanceChart,
@@ -35,9 +29,11 @@ var ValidatorRow = Vue.component('validatorRow', {
     'skipped-vote-speedometer': skippedVoteSpeedometer,
     "validator-scores": scores
   },
-  created(){
+
+  created() {
     this.validator['displayed_total_score'] = this.displayed_total_score()
   },
+
   methods: {
     create_avatar_link() {
       if(this.validator['avatar_url']){
@@ -71,22 +67,23 @@ var ValidatorRow = Vue.component('validatorRow', {
         return null
       }
     },
+
     chart_line_color(val) {
       if (val == 2) {
-        return chart_green
+        return chart_variables.chart_green
       } else if(val == 1) {
-        return chart_blue
+        return chart_variables.chart_blue
       }
-      return chart_lightgrey
+      return chart_variables.chart_lightgrey
     },
 
     chart_fill_color(val) {
       if (val == 2) {
-        return chart_green_t
+        return chart_variables.chart_green_t
       } else if(val == 1) {
-        return chart_blue_t
+        return chart_variables.chart_blue_t
       }
-      return chart_lightgrey_t
+      return chart_variables.chart_lightgrey_t
     },
 
     display_chart(target, event){
@@ -138,6 +135,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       return lamports / 1000000000;
     }
   },
+
   template: `
     <tr :id="row_index()">
       <td class="column-info">

@@ -1,7 +1,7 @@
 import Vue from 'vue/dist/vue.esm'
 import IndexTemplate from './index_template'
 import StakeAccountRow from './stake_account_row'
-import ValidatorRow from './validator_row'
+import ValidatorRow from '../validators/validator_row'
 import StakePoolStats from './pool_stats'
 import StakePoolsOverview from './pools_overview'
 import { PaginationPlugin } from "bootstrap-vue";

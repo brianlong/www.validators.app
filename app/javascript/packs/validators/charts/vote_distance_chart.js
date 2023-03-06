@@ -1,4 +1,4 @@
-import chart_vars from './chart_variables'
+import chart_variables from './chart_variables'
 
 export default {
   props: {
@@ -35,19 +35,19 @@ export default {
   methods: {
     chart_line_color(val) {
       if (val == 2) {
-        return chart_vars.chart_green
+        return chart_variables.chart_green
       } else if(val == 1) {
-        return chart_vars.chart_blue
+        return chart_variables.chart_blue
       }
-      return chart_vars.chart_lightgrey
+      return chart_variables.chart_lightgrey
     },
     chart_fill_color(val) {
       if (val == 2) {
-        return chart_vars.chart_green_t
+        return chart_variables.chart_green_t
       } else if(val == 1) {
-        return chart_vars.chart_blue_t
+        return chart_variables.chart_blue_t
       }
-      return chart_vars.chart_lightgrey_t
+      return chart_variables.chart_lightgrey_t
     },
   },
   mounted: function () {
@@ -90,9 +90,9 @@ export default {
                     ticks: {
                         min: 0,
                         padding: 3,
-                        fontColor: chart_vars.chart_darkgrey,
+                        fontColor: chart_variables.chart_darkgrey,
                         max: this.y_root_distance_max,
-                        fontSize: chart_vars.chart_font_size,
+                        fontSize: chart_variables.chart_font_size,
                     },
                     gridLines: {
                         display: false,
