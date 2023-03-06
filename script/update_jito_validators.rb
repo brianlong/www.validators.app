@@ -21,6 +21,6 @@ if response.is_a?(Net::HTTPSuccess)
                                   jito_vote_accounts
                                 )
 
-  jito_db_validators.update_all(jito_collaboration: true)
-  Validator.where.not(id: jito_db_validators.pluck(:id)).update_all(jito_collaboration: false)
+  jito_db_validators.update_all(jito: true)
+  Validator.where.not(id: jito_db_validators.pluck(:id)).update_all(jito: false)
 end
