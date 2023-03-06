@@ -42,9 +42,11 @@ var ValidatorRow = Vue.component('validatorRow', {
         return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
       }
     },
+    
     row_index() {
       return 'row-' + this.idx
     },
+
     validator_name() {
       if(this.validator["name"]){
         return this.validator["name"]
@@ -52,12 +54,15 @@ var ValidatorRow = Vue.component('validatorRow', {
         return this.validator["account"].substring(0,5) + "..." +  this.validator["account"].substring(this.validator["account"].length - 5)
       }
     },
+
     validator_url() {
       return "/validators/" + this.validator["account"] + "?network=" + this.validator["network"]
     },
+
     lamports_to_sol(lamports) {
       return lamports / 1000000000
     },
+
     skipped_vote_percent() {
       if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
         var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
@@ -131,9 +136,6 @@ var ValidatorRow = Vue.component('validatorRow', {
         return this.validator["total_score"]
       }
     },
-    lamports_to_sol(lamports) {
-      return lamports / 1000000000;
-    }
   },
 
   template: `
