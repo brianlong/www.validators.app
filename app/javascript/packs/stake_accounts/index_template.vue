@@ -391,7 +391,6 @@
       },
       is_cheap_stake_accounts_visible() {
         this.is_loading_stake_account_records = true
-
         this.refresh_cheap_stake_accounts()
       }
     },
@@ -422,6 +421,7 @@
             ctx.total_count = response.data.total_count;
             ctx.current_epoch = response.data.current_epoch;
             ctx.is_loading_stake_accounts = false;
+            ctx.is_loading_stake_account_records = false
           })
       },
       refresh_results: debounce(function() {
@@ -431,8 +431,6 @@
       }, 2000),
       refresh_cheap_stake_accounts: debounce(function () {
         this.get_stake_accounts_call()
-
-        this.is_loading_stake_account_records = false
       }, 2000),
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
