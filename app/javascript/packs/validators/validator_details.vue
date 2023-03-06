@@ -228,9 +228,9 @@
 <script>
   import { mapGetters } from 'vuex'
   import scores from './components/scores'
-  import blockHistoryChart from './components/block_history_chart'
-  import voteHistoryChart from './components/vote_history_chart'
-  import skippedSlotsChart from './components/skipped_slots_chart'
+  import blockHistoryChart from './charts/block_history_chart'
+  import voteHistoryChart from './charts/vote_history_chart'
+  import skippedSlotsChart from './charts/skipped_slots_chart'
   import blockHistoryTable from './components/block_history_table'
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
