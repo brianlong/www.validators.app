@@ -92,7 +92,6 @@ export default {
                 backgroundColor: chart_variables.chart_purple_2_t,
                 hoverBackgroundColor: chart_variables.chart_purple_2_m,
                 borderColor: "transparent",
-                borderWidth: 1,
                 order: 2,
                 barPercentage: 1.0,
                 categoryPercentage: 0.15,
@@ -166,7 +165,7 @@ export default {
                       var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : "-";
                       return ["Min: " + min + " ms, Max: " + max + " ms", "Average slot latency: " + slot_lat + " slots"];
                     } else {
-                      return "Median: " + tooltipItem.formattedValue.toLocaleString('en-US') + " ms";
+                      return "Median: " + tooltipItem.raw.toLocaleString('en-US') + " ms";
                     }
                   },
                   title: function(tooltipItem) {
