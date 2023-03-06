@@ -25,7 +25,7 @@ class ValidatorsController < ApplicationController
       query: validators_params[:q],
       admin_warning: validators_params[:admin_warning],
       jito: validators_params[:jito] == "true"
-    )
+    ).includes(:stake_pools)
 
     if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
       @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
@@ -45,7 +45,7 @@ class ValidatorsController < ApplicationController
       limit: @per,
       page: validators_params[:page],
       query: validators_params[:q]
-    )
+    ).includes(:stake_pools)
 
     set_batch_and_epoch
   end

@@ -32,7 +32,7 @@ class DataCentersController < ApplicationController
                              AND validator_score_v1s.active_stake > ?",
                              data_centers.ids, show_params[:network], 0
                            )
-                           .includes(:validator_score_v1, :data_center_host)
+                           .includes(:validator_score_v1, :data_center_host, :stake_pools)
                            .filtered_by(@filter_by)
                            .order("validator_score_v1s.active_stake desc")
 
