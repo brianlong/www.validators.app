@@ -42,7 +42,7 @@ var ValidatorRow = Vue.component('validatorRow', {
         return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
       }
     },
-    
+
     row_index() {
       return 'row-' + this.idx
     },
@@ -128,7 +128,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     displayed_total_score() {
-      if(this.validator["commission"] == 100 && this.validator["network"] == 'mainnet'){
+      if(this.validator["commission"] == 100 && this.validator["network"] == 'mainnet') {
         return 'N/A'
       } else if(this.validator["admin_warning"]) {
         return 'N/A'
