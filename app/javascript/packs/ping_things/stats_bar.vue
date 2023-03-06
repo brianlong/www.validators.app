@@ -165,8 +165,8 @@
         rejected() {},
         received(data) {
           data = JSON.parse(data)
-          if(data["network"] == this.network){
-              switch(data["interval"]){
+          if(data["network"] == this.network) {
+              switch(data["interval"]) {
                 case 5:
                   this.last_5_mins = data
                   break

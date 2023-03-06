@@ -92,6 +92,7 @@ export default {
                 backgroundColor: chart_variables.chart_purple_2_t,
                 hoverBackgroundColor: chart_variables.chart_purple_2_m,
                 borderColor: "transparent",
+                borderWidth: 1,
                 order: 2,
                 barPercentage: 1.0,
                 categoryPercentage: 0.15,

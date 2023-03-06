@@ -8,12 +8,14 @@ export default {
         required: true
     }
   },
+
   data() {
     return {
       default_score_class: "fas fa-circle me-1 score-"
     }
   },
-  mounted(){
+
+  mounted() {
     var ctx = document.getElementById("root-distance-history").getContext('2d');
 
     var chart = new Chart(ctx, {
@@ -44,7 +46,7 @@ export default {
               autoSkip: true,
               autoSkipPadding: 30
             },
-            gridLines: { display: false },
+            grid: { display: false },
             title: {
               display: true,
               text: "Previous " + this.root_blocks.length + " Observations",
@@ -59,7 +61,6 @@ export default {
             },
             grid: {
               display: true,
-              zeroLineColor: chart_variables.chart_grid_color,
               color: chart_variables.chart_grid_color
             },
             title: {

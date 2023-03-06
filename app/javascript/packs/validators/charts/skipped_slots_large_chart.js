@@ -87,7 +87,6 @@ export default {
             },
             grid: {
               display: true,
-              zeroLineColor: chart_variables.chart_grid_color,
               color: chart_variables.chart_grid_color
             },
             title: {
