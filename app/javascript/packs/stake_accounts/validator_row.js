@@ -145,6 +145,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           <div class="column-info-avatar no-watchlist">
             <img :src="create_avatar_link()" class='img-circle-medium'/>
           </div>
+          
           <div class="column-info-name">
             <a :href="validator_url()" class="fw-bold">
               {{ validator_name() }}
@@ -155,10 +156,17 @@ var ValidatorRow = Vue.component('validatorRow', {
             <br />
             <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
             <validator-scores :score="validator" :account="validator['account']"></validator-scores>
-            <br />
-            <div class="small">
+
+            <div class="d-sm-inline-block small mt-2 mt-sm-0">
               <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-              {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
+              <span class="me-3">
+                {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
+              </span>
+            </div>
+            <div class="d-sm-inline-block small">
+              <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+              <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+              {{ validator['software_version'] }}
             </div>
           </div>
         </div>
