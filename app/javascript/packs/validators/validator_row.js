@@ -1,7 +1,7 @@
 import Vue from 'vue/dist/vue.esm'
 import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
-import skippedSlotsChart from './charts/skipped_slot_chart'
+import skippedSlotsChart from './charts/skipped_slots_small_chart'
 import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
 import scores from '../validators/components/scores'
 import chart_variables from './charts/chart_variables'
@@ -36,7 +36,7 @@ var ValidatorRow = Vue.component('validatorRow', {
 
   methods: {
     create_avatar_link() {
-      if(this.validator['avatar_url']){
+      if(this.validator['avatar_url']) {
         return this.validator['avatar_url']
       } else {
         return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
@@ -48,7 +48,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     validator_name() {
-      if(this.validator["name"]){
+      if(this.validator["name"]) {
         return this.validator["name"]
       } else {
         return this.validator["account"].substring(0,5) + "..." +  this.validator["account"].substring(this.validator["account"].length - 5)
@@ -91,7 +91,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       return chart_variables.chart_lightgrey_t
     },
 
-    display_chart(target, event){
+    display_chart(target, event) {
       var i = this.idx;
       var target = target+'-'+i;
       var row = document.getElementById('row-'+i);
