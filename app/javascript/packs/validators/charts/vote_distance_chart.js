@@ -10,10 +10,6 @@ export default {
       type: Number,
       required: true
     },
-    batch: {
-      type: Object,
-      required: true
-    }
   },
 
     methods: {},

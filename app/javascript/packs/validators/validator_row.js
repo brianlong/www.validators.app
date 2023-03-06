@@ -205,11 +205,11 @@ var ValidatorRow = Vue.component('validatorRow', {
         </div>
       </td>
 
-      <root-distance-chart :validator="validator" :idx="idx" :batch="batch" />
+      <root-distance-chart :validator="validator" :idx="idx" />
 
-      <vote-distance-chart :validator="validator" :idx="idx" :batch="batch" />
+      <vote-distance-chart :validator="validator" :idx="idx" />
 
-      <skipped-slots-chart :validator="validator" :idx="idx" :batch="batch" />
+      <skipped-slots-chart :validator="validator" :idx="idx" />
 
     </tr>
   `
