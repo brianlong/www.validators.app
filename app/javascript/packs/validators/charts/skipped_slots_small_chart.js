@@ -1,3 +1,4 @@
+import Chart from 'chart.js/auto'
 import chart_variables from './chart_variables'
 
 export default {
@@ -27,11 +28,10 @@ export default {
     }, skipped_slots_ma_vector)
     return {
       skipped_slots_distance_chart: {
-        vl: skipped_slots_vl,
         line_color: this.$parent.chart_line_color(this.validator['skipped_slot_score']),
         fill_color: this.$parent.chart_fill_color(this.validator['skipped_slot_score']),
         vector: skipped_slots_vector,
-        moving_avg: skipped_slots_ma_vector
+        moving_avg_vector: skipped_slots_ma_vector
       }
     }
   },
@@ -44,60 +44,49 @@ export default {
         labels: Array.from(Array(this.skipped_slots_distance_chart['vector'].length).keys()).reverse(),
         datasets: [
           {
-            label: 'Skip %',
             fill: false,
             borderColor: this.skipped_slots_distance_chart['line_color'],
             borderWidth: 1,
             borderDash: [2, 2],
             radius: 0,
-            data: this.skipped_slots_distance_chart['vector']
+            data: this.skipped_slots_distance_chart['vector'],
+            tension: 0
           },
           {
-            label: '24h Moving Avg Skip %',
             fill: false,
             borderColor: this.skipped_slots_distance_chart['line_color'],
             borderWidth: 1,
             radius: 0,
-            data: this.skipped_slots_distance_chart['moving_avg']
+            data: this.skipped_slots_distance_chart['moving_avg_vector'],
+            tension: 0
           }
         ]
       },
 
       options: {
-        animation: { duration: 0 }, // general animation time
-        elements: { line: { tension: 0 } }, // disables bezier curves
-        hover: { mode: null },
-        tooltips: { enabled: false },
-        responsiveAnimationDuration: 0, // animation duration after a resize
-        legend: { display: false },
         scales: {
-          xAxes: [{
+          x: {
             display: true,
             ticks: { display: false },
-            gridLines: { display: false },
-            scaleLabel: {
-              display: false,
-              labelString: ''
-            }
-          }],
-          yAxes: [{
+            grid: { display: false },
+            title: { display: false },
+          },
+          y: {
             display: true,
             ticks: {
-              beginAtZero: false,
-              padding: 3,
-              fontColor: chart_variables.chart_darkgrey,
-              fontSize: chart_variables.chart_font_size,
+              color: chart_variables.chart_darkgrey,
+              font: {
+                size: chart_variables.chart_font_size,
+              },
             },
-            gridLines: {
-              display: true,
-              zeroLineColor: 'transparent'
-            },
-            scaleLabel: {
-              display: false,
-              labelString: ''
-            }
-          }]
-        }
+            grid: { display: false },
+            title: { display: false }
+          }
+        },
+        plugins: {
+          tooltip: { display: false },
+          legend: { display: false }
+        },
       }
     });
   },
