@@ -72,12 +72,8 @@ export default {
           }
         },
         plugins: {
-          tooltip: {
-            display: false
-          },
-          legend: {
-            display: false
-          }
+          tooltip: { display: false },
+          legend: { display: false }
         },
       }
     });
