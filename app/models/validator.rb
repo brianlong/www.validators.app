@@ -66,6 +66,8 @@ class Validator < ApplicationRecord
   has_one :most_recent_epoch_credits_by_account, -> {
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
+  has_many :stake_accounts, dependent: :nullify
+  has_many :stake_pools, dependent: :nullify, through: :stake_accounts
 
   # API
   has_many :vote_accounts_for_api, -> { for_api }, class_name: "VoteAccount"
