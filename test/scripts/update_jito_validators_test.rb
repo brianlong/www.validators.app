@@ -15,7 +15,7 @@ class UpdateJitoValidatorsTest < ActiveSupport::TestCase
     VCR.use_cassette("update_jito_validators") do
       load(Rails.root.join("script", "update_jito_validators.rb"))
 
-      assert @validator.reload.jito_collaboration
+      assert @validator.reload.jito
     end
   end
 
@@ -23,7 +23,7 @@ class UpdateJitoValidatorsTest < ActiveSupport::TestCase
     @validator.vote_accounts.update_all(is_active: false)
     VCR.use_cassette("update_jito_validators") do
       load(Rails.root.join("script", "update_jito_validators.rb"))
-      refute @validator.reload.jito_collaboration
+      refute @validator.reload.jito
     end
   end
 end

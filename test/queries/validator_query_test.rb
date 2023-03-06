@@ -55,13 +55,13 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       :with_score,
       :with_data_center_through_validator_ip,
       :mainnet,
-      jito_collaboration: true
+      jito: true
     )
 
-    result = ValidatorQuery.new.call(network: @mainnet_network, jito_collaboration: true)
+    result = ValidatorQuery.new.call(network: @mainnet_network, jito: true)
 
     assert_equal 3, result.count
-    assert_equal [true], result.pluck(:jito_collaboration).uniq
+    assert_equal [true], result.pluck(:jito).uniq
   end
 
   test "#call returns all validators without jito param" do
@@ -78,10 +78,10 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       :with_score,
       :with_data_center_through_validator_ip,
       :mainnet,
-      jito_collaboration: true
+      jito: true
     )
 
-    result = ValidatorQuery.new.call(network: @mainnet_network, jito_collaboration: false)
+    result = ValidatorQuery.new.call(network: @mainnet_network, jito: false)
 
     assert_equal 5, result.count
   end

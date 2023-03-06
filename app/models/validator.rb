@@ -14,7 +14,7 @@
 #  is_active           :boolean          default(TRUE)
 #  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
-#  jito_collaboration  :boolean          default(FALSE)
+#  jito                :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
 #  security_report_url :string(191)
@@ -41,6 +41,7 @@ class Validator < ApplicationRecord
     updated_at
     www_url
     admin_warning
+    jito
   ].freeze
 
   FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
@@ -317,7 +318,8 @@ class Validator < ApplicationRecord
         :avatar_url,
         :created_at,
         :updated_at,
-        :admin_warning
+        :admin_warning,
+        :jito
       )
     end
   end
