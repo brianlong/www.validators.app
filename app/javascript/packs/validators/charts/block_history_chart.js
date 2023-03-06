@@ -1,4 +1,5 @@
 import Chart from 'chart.js/auto'
+import chart_variables from './chart_variables'
 
 export default {
   props: {
@@ -23,8 +24,8 @@ export default {
           {
             label: ' Block Diff ',
             fill: true,
-            borderColor: "rgb(221, 154, 229)",
-            backgroundColor: "rgba(221, 154, 229, 0.4)",
+            borderColor: chart_variables.chart_purple_2,
+            backgroundColor: chart_variables.chart_purple_2_t,
             borderWidth: 1,
             radius: 0,
             data: this.root_blocks,
@@ -47,7 +48,7 @@ export default {
             title: {
               display: true,
               text: "Previous " + this.root_blocks.length + " Observations",
-              color: '#979797'
+              color: chart_variables.chart_darkgrey
             }
             },
           y: {
@@ -58,13 +59,13 @@ export default {
             },
             grid: {
               display: true,
-              zeroLineColor: '#322f3d',
-              color: '#322f3d'
+              zeroLineColor: chart_variables.chart_grid_color,
+              color: chart_variables.chart_grid_color
             },
             title: {
               display: true,
               text: "Dist Behind Leader",
-              color: '#979797'
+              color: chart_variables.chart_darkgrey
             }
           }
         },
@@ -88,13 +89,13 @@ export default {
           },
           legend: {
             labels: {
-              boxWidth: 8,
-              boxHeight: 8,
+              boxWidth: chart_variables.chart_legend_box_size,
+              boxHeight: chart_variables.chart_legend_box_size,
               usePointStyle: true,
               padding: 10,
-              color: '#979797',
+              color: chart_variables.chart_darkgrey,
               font: {
-                size: 14
+                size: chart_variables.chart_legend_font_size
               }
             },
           },
