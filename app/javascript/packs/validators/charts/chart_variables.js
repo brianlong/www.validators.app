@@ -11,6 +11,7 @@ export default {
     chart_purple_1_t: 'rgb(239, 206, 243, 0.4)',
     chart_purple_2: 'rgb(221, 154, 229)',
     chart_purple_2_t: 'rgba(221, 154, 229, 0.4)',
+    chart_purple_2_m: 'rgba(221, 154, 229, 0.7)',
     chart_purple_3: 'rgb(170, 46, 184)',
     chart_purple_3_t: 'rgba(170, 46, 184, 0.4)',
     chart_font_size: 11,
