@@ -1,3 +1,4 @@
+import Chart from 'chart.js/auto';
 import chart_variables from './chart_variables'
 
 export default {
@@ -15,6 +16,7 @@ export default {
       required: true
     }
   },
+
   methods: {
     chart_line_color(val) {
       if (val == 2) {
@@ -24,6 +26,7 @@ export default {
       }
       return chart_variables.chart_lightgrey
     },
+
     chart_fill_color(val) {
       if (val == 2) {
         return chart_variables.chart_green_t
@@ -32,6 +35,7 @@ export default {
       }
       return chart_variables.chart_lightgrey_t
     },
+
     skipped_vote_percent() {
       if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
         var history_array = this.validator['skipped_vote_history']
@@ -40,48 +44,82 @@ export default {
       } else {
         return null
       }
+    },
+
+    set_needle_position() {
+      let needle_value = this.skipped_vote_percent();
+      let single_range_size = this.batch['skipped_vote_all_median'];
+      if(!needle_value || !single_range_size) {
+        return 0;
+      }
+      let chart_maximum = single_range_size*3;
+      let value_in_percents = (needle_value / chart_maximum) * 100;
+      value_in_percents = Math.min.apply(Math, [value_in_percents, 100]).toFixed(2);
+      return (100 - value_in_percents);
     }
   },
+
   mounted: function () {
-    var speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
+    let speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
     new Chart(speedometer, {
-        type: 'gauge',
-        data: {
-            datasets: [{
-                data: [this.batch['skipped_vote_all_median'] * 2, this.batch['skipped_vote_all_median'], 0.05],
-                value: Math.max.apply(Math, [this.skipped_vote_percent(), this.batch['skipped_vote_all_median'] * 3]),
-                minValue: this.batch['skipped_vote_all_median'] * 3,
-                maxValue: 0.05,
-                backgroundColor: [
-                  'rgba(202, 202, 202, 0.45)',
-                  'rgba(0, 145, 242, 0.4)',
-                  'rgba(0, 206, 153, 0.55)'
-                ],
-                borderColor: ['#cacaca', '#0091f2', '#00ce99'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            title: {
-                display: false
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0
-                }
-            },
-            needle: {
-                radiusPercentage: 0,
-                widthPercentage: 5,
-                lengthPercentage: 80,
-                color: '#979797'
-            },
-            valueLabel: {
-                display: false
-            }
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          data: [33.33, 33.33, 33.33],
+          needleValue: this.set_needle_position(),
+          backgroundColor: [
+            chart_variables.chart_lightgrey_speedometer,
+            chart_variables.chart_blue_speedometer,
+            chart_variables.chart_green_speedometer
+          ],
+          borderColor: [
+            chart_variables.chart_lightgrey,
+            chart_variables.chart_blue,
+            chart_variables.chart_green
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        rotation: 270,
+        circumference: 180,
+        cutout: 40,
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false },
         }
+      },
+      plugins: [{
+        afterDatasetDraw(chart, args, options) {
+          const { ctx, config, data, chartArea: { top, bottom, left, right, width, height } } = chart;
+          ctx.save();
+
+          const dataTotal = 100; // total width of data - in our case 100%
+          let needleValue = data.datasets[0].needleValue;
+          let needleAngle = Math.PI + ( 1 / dataTotal * needleValue * Math.PI);
+          // find the bottom center of chart
+          let chart_x = width / 2;
+          let chart_y = chart._metasets[0].data[0].y;
+          // set needle width
+          let needleWidth = width / 2 - 10;
+
+          // draw needle (triangle)
+          ctx.translate(chart_x, chart_y); // set starting point
+          ctx.rotate(needleAngle); // rotate towards destination point
+          ctx.beginPath(); // start drawing
+          ctx.moveTo(0, -3); // move 2px to the left
+          ctx.lineTo(needleWidth, 0); // draw a line
+          ctx.lineTo(0, 3); // go to 2px to the right from starting point
+          ctx.lineTo(0, -3); // go back to starting point
+          ctx.fillStyle = chart_variables.chart_lightgrey_speedometer_needle; // set color
+          ctx.strokeStyle = chart_variables.chart_lightgrey_speedometer_needle;
+          ctx.lineWidth = 1;
+          ctx.stroke(); // draw triangle borders
+          ctx.fill(); // fill triangle with color
+
+          ctx.restore();
+        }
+      }]
     });
   },
   template: `
