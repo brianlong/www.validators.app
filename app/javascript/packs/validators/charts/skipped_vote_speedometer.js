@@ -61,7 +61,7 @@ export default {
       options: {
         rotation: 270,
         circumference: 180,
-        cutout: 40,
+        cutout: 35,
         plugins: {
           tooltip: { enabled: false },
           legend: { display: false },
