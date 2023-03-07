@@ -181,12 +181,25 @@
         </div>
       </div>
     </div>
+    <div class="d-flex flex-column-reverse flex-lg-row">
+      <div class="flex-fill">
+        <a :href="go_back_link"
+           class="btn btn-sm btn-secondary mb-4"
+           data-turbolinks="false">
+             Back to All Validators
+        </a>
+      </div>
 
-    <a :href="go_back_link"
-       class="btn btn-sm btn-secondary mb-4"
-       data-turbolinks="false">
-      Back to All Validators
-    </a>
+
+      <div class="mt-md-2 me-1">
+        <div class="toggle-container">
+            <a :href="refresh_href"><i class="fa-solid toggle" :class="refresh ? 'fa-toggle-on' : 'fa-toggle-off'"></i></a>
+            <p class="small text-muted toggle-label">REFRESH</p>
+        </div>
+      </div>
+    </div>
+
+
 
     <div class="img-loading" v-if="is_loading_validator">
       <img v-bind:src="loading_image" width="100">
@@ -261,7 +274,8 @@
         validator_history: {},
         loading_image: loadingImage,
         is_loading_validator: true,
-        validator_score_details_attrs: {}
+        validator_score_details_attrs: {},
+        refresh: null
       }
     },
 
@@ -279,7 +293,6 @@
         ctx.validator_history = response.data.validator_history
         ctx.is_loading_validator = false
       })
-
       let uri = window.location.search.substring(1);
       let params = new URLSearchParams(uri);
       this.refresh = params.get("refresh") == 'true'
@@ -295,6 +308,9 @@
       },
       go_back_link() {
         return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
+      },
+      refresh_href() {
+        return '/validators/' + this.validator.account +'?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page + '&refresh=' + !this.refresh
       },
       ...mapGetters([
         'network'
