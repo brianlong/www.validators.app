@@ -181,25 +181,20 @@
         </div>
       </div>
     </div>
-    <div class="d-flex flex-column-reverse flex-lg-row">
-      <div class="flex-fill">
+
+    <div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
+      <div>
         <a :href="go_back_link"
-           class="btn btn-sm btn-secondary mb-4"
+           class="btn btn-sm btn-secondary"
            data-turbolinks="false">
              Back to All Validators
         </a>
       </div>
-
-
-      <div class="mt-md-2 me-1">
-        <div class="toggle-container">
-            <a :href="refresh_href"><i class="fa-solid toggle" :class="refresh ? 'fa-toggle-on' : 'fa-toggle-off'"></i></a>
-            <p class="small text-muted toggle-label">REFRESH</p>
-        </div>
+      <div class="toggle-container pt-1">
+        <a :href="refresh_href"><i class="fa-solid toggle" :class="refresh ? 'fa-toggle-on' : 'fa-toggle-off'"></i></a>
+        <p class="small text-muted toggle-label">REFRESH</p>
       </div>
     </div>
-
-
 
     <div class="img-loading" v-if="is_loading_validator">
       <img v-bind:src="loading_image" width="100">
