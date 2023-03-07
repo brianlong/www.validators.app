@@ -11,7 +11,7 @@ class YouController < ApplicationController
       network: index_params[:network],
       limit: @per,
       page: index_params[:page]
-    ).includes(:stake_pools)
+    )
   end
 
   # POST you/regenerate_token

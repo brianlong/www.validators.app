@@ -104,12 +104,7 @@ module Api
           end
 
           render json: {
-            validator: @validator.to_json(
-              methods: [:dch_data_center_key, :vote_account_active, :commission_histories_exist],
-              include: {
-                stake_pools: { only: :name }
-              }
-            ),
+            validator: @validator.to_json(methods: [:dch_data_center_key, :vote_account_active, :commission_histories_exist]),
             score: @score.to_json(methods: [:displayed_total_score]),
             root_blocks: @root_blocks,
             vote_blocks: @vote_blocks,
