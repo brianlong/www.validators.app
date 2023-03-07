@@ -1,18 +1,14 @@
-<!-- required parameters: canvas_name, chart_steps, value -->
+<!-- required parameters: canvas_name, value -->
 
 <canvas id="<%= local_assigns[:canvas_name] %>"></canvas>
 <script type="text/javascript">
-    console.log(<%#= local_assigns[:chart_steps] %>)
-    console.log(<%#= local_assigns[:value] %>)
 
     var chart = new Chart(document.getElementById("<%= local_assigns[:canvas_name] %>").getContext('2d'), {
         type: 'doughnut',
         data: {
             datasets: [{
-                //data: <%= local_assigns[:chart_steps] %>,
-                data: [33.33, 33.33, 33.33], // TODO use chart steps
-                value: <%= local_assigns[:value] %>,
-                needleValue: (Math.floor(Math.random() * 70) + 10), // TODO - use value
+                data: [33.33, 33.33, 33.33],
+                needleValue: <%= local_assigns[:needle_value] %>,
                 backgroundColor: [
                     '<%= LIGHT_GREY_SPEEDOMETER %>',
                     '<%= BLUE_SPEEDOMETER %>',
