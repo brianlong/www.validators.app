@@ -3,7 +3,7 @@
 module StakePoolsHelper
 
   def stake_pool_logo_urls(stake_pools)
-    stake_pools.map { |sp| logo_url[sp.name] }
+    stake_pools.map { |stake_pool| logo_url[stake_pool] }
   end
 
   private

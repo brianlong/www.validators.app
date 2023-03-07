@@ -121,7 +121,7 @@
                         class: 'fw-bold' do %>
               <%= validator_display_name(validator) %>
             <% end %>
-            <%= stake_pool_logo_urls(validator.stake_pools) %>
+            <%= stake_pool_logo_urls(validator.stake_pool_list) %>
             <% unless validator.private_validator? && !validator.lido? %>
               <small class="ms-1 text-muted">
                 (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
