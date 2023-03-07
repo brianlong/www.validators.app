@@ -247,7 +247,7 @@
 
       <h3 class="h5">Avg Score</h3>
       <p class="mb-5">
-        Average score of the validators from the stake pool. See
+        Stake-weighted average score of the validators in the stake pool. See
         <a href="/faq#score" target="_blank">how are scores calculated?</a>
       </p>
 
