@@ -7,10 +7,6 @@ export default {
       type: Object,
       required: true
     },
-    idx: {
-      type: Number,
-      required: true
-    },
     batch: {
       type: Object,
       required: true
@@ -28,8 +24,7 @@ export default {
       }
     },
 
-    set_needle_position() {
-      let needle_value = this.skipped_vote_percent();
+    set_needle_position(needle_value) {
       let single_range_size = this.batch['skipped_vote_all_median'];
       if(!needle_value || !single_range_size) {
         return 0;
@@ -42,13 +37,14 @@ export default {
   },
 
   mounted: function () {
+    let skipped_vote_percent = this.skipped_vote_percent();
     let speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
     new Chart(speedometer, {
       type: 'doughnut',
       data: {
         datasets: [{
           data: [33.33, 33.33, 33.33],
-          needleValue: this.set_needle_position(),
+          needleValue: this.set_needle_position(skipped_vote_percent),
           backgroundColor: [
             chart_variables.chart_lightgrey_speedometer,
             chart_variables.chart_blue_speedometer,
@@ -115,7 +111,7 @@ export default {
         </div>
         
         <span class="d-inline-block d-lg-none">
-          Skipped Vote&nbsp;%:
+          Skipped Vote&nbsp;%:&nbsp;
           {{ skipped_vote_percent() ? skipped_vote_percent() + "%" : "N / A" }}
         </span>
       </div>
