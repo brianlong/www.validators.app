@@ -18,24 +18,6 @@ export default {
   },
 
   methods: {
-    chart_line_color(val) {
-      if (val == 2) {
-        return chart_variables.chart_green
-      } else if(val == 1) {
-        return chart_variables.chart_blue
-      }
-      return chart_variables.chart_lightgrey
-    },
-
-    chart_fill_color(val) {
-      if (val == 2) {
-        return chart_variables.chart_green_t
-      } else if(val == 1) {
-        return chart_variables.chart_blue_t
-      }
-      return chart_variables.chart_lightgrey_t
-    },
-
     skipped_vote_percent() {
       if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
         var history_array = this.validator['skipped_vote_history']
