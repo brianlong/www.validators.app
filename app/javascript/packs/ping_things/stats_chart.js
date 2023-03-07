@@ -7,8 +7,8 @@ var moment = require('moment');
 export default {
   props: {
     network: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     }
   },
 
@@ -26,10 +26,10 @@ export default {
       rejected() {},
       received(data) {
         var new_stat = JSON.parse(data)
-        if(new_stat["interval"] == this.interval && new_stat["network"] == this.network){
-            this.ping_thing_stats.push(new_stat)
-            this.ping_thing_stats.shift()
-            this.update_chart()
+        if(new_stat["interval"] == this.interval && new_stat["network"] == this.network) {
+          this.ping_thing_stats.push(new_stat)
+          this.ping_thing_stats.shift()
+          this.update_chart()
         }
       },
       disconnected() {},
