@@ -10,7 +10,7 @@ export default {
     chart_lightgrey: '#cacaca',
     chart_lightgrey_t: 'rgba(202, 202, 202, 0.3)',
     chart_lightgrey_speedometer: 'rgba(202, 202, 202, 0.45)',
-    chart_lightgrey_speedometer_needle: 'rgba(202, 202, 202, 0.75)',
+    chart_lightgrey_speedometer_needle: 'rgba(202, 202, 202, 0.80)',
     chart_purple_1: 'rgb(239, 206, 243)',
     chart_purple_1_t: 'rgb(239, 206, 243, 0.4)',
     chart_purple_2: 'rgb(221, 154, 229)',
