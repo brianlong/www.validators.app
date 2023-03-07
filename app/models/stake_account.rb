@@ -37,6 +37,9 @@ class StakeAccount < ApplicationRecord
   belongs_to :stake_pool, optional: true
   belongs_to :validator, optional: true
 
+  BLAZESTAKE = "BlazeStake"
+  MIN_BLAZESTAKE_LIMIT = 100000000
+
   scope :filter_by_account, ->(account) { where('stake_pubkey LIKE ?', "#{account}%") }
   scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
   scope :filter_by_withdrawer, ->(withdrawer) { where('withdrawer LIKE ?', "#{withdrawer}%") }
@@ -47,5 +50,12 @@ class StakeAccount < ApplicationRecord
       stake_pubkey: stake_pubkey,
       epoch: epoch
     )
+  end
+
+  def stake_pool_valid
+    return unless stake_pool
+    return if stake_pool.name == BLAZESTAKE && active_stake < MIN_BLAZESTAKE_LIMIT
+
+    stake_pool
   end
 end

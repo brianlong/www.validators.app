@@ -105,6 +105,10 @@ every 1.day, at: '3:35am', roles: [:background] do
   ruby_script 'update_jito_validators.rb'
 end
 
+every 1.day, at: '3:40am', roles: [:background] do
+  ruby_script 'update_validator_stake_pools.rb'
+end
+
 every 10.minutes, roles: [:background] do
   runner "ValidatorCheckActiveWorker.perform_async"
 end
