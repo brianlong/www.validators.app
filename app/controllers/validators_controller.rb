@@ -24,7 +24,7 @@ class ValidatorsController < ApplicationController
       page: validators_params[:page],
       query: validators_params[:q],
       admin_warning: validators_params[:admin_warning],
-      jito_collaboration: validators_params[:jito] == "true"
+      jito: validators_params[:jito] == "true"
     )
 
     if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]

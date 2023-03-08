@@ -14,7 +14,7 @@ class TotalRewardsUpdateService
     if completed_epoch
       vote_rewards = total_rewards_from_vote_accounts(completed_epoch)
       stake_rewards = total_rewards_from_stake_accounts(completed_epoch)
-      if vote_rewards > 0 && stake_rewards > 0
+      if (vote_rewards > 0 && stake_rewards > 0) || @network == "pythnet"
         completed_epoch.update(
           total_rewards: vote_rewards + stake_rewards,
           total_active_stake: cluster_stat.total_active_stake
