@@ -131,7 +131,7 @@
         }
       },
       link_from_signature(signature){
-        return "https://solanabeach.io/transaction/" + signature
+        return "https://explorer.solana.com/tx/" + signature
       },
       transaction_type_icon(tx){
         switch(tx){

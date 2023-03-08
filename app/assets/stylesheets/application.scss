@@ -164,26 +164,26 @@ hr {
 .toggle {
   position: absolute;
   font-size: $font-size-sm*2;
-  margin-left: -40px;
-  margin-top: -2px;
+  margin-left: 17px;
+  margin-top: -1px;
   color: darken($link-color, 5%);
-  @media(max-width: $screen-sm-max) {
+  @media(max-width: $screen-md-max) {
     margin-left: 0;
   }
   &-container {
+    position: relative;
     text-align: right;
+    display: inline-block;
     @media(max-width: $screen-sm-max) {
       text-align: left;
     }
   }
   &-label {
     display: inline-block;
+    padding-left: 55px;
     @media(max-width: $screen-md-max) {
-      display: none;
-    }
-    @media(max-width: $screen-sm-max) {
-      padding-left: 40px;
-      display: inline-block;
+      padding-left: 38px;
+      padding-right: 15px;
     }
   }
 }
