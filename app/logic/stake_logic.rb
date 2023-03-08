@@ -45,7 +45,8 @@ module StakeLogic
       end
 
       Pipeline.new(200, p.payload.merge(
-        stake_accounts: reduced_stake_accounts
+        stake_accounts: reduced_stake_accounts,
+        stake_accounts_active: stake_accounts_active(p.payload[:network], stake_accounts)
       ))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
@@ -152,8 +153,11 @@ module StakeLogic
         uptimes = []
         lifetimes = []
         scores = []
+        total_active_stake = 0
 
-        Validator.where(id: validator_ids).each do |validator|
+        Validator.where(id: validator_ids).includes(:stake_accounts).each do |validator|
+          val_active_stake = validator.stake_accounts.active.where(stake_pool: pool).pluck(:active_stake).sum
+          total_active_stake += val_active_stake
           score = validator.score
 
           last_delinquent = validator.validator_histories
@@ -166,14 +170,14 @@ module StakeLogic
           lifetime = (DateTime.now - validator.created_at.to_datetime).to_i
           uptimes.push uptime
           lifetimes.push lifetime
-          scores.push score.total_score.to_i
+          scores.push val_active_stake * score.total_score.to_i
           delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
           last_skipped_slots.push score.skipped_slot_history&.last
         end
 
         pool.average_uptime = uptimes.average
         pool.average_lifetime = lifetimes.average
-        pool.average_score = scores.average.round(2)
+        pool.average_score = (scores.sum / total_active_stake.to_f).round(2)
         pool.average_delinquent = (delinquent_count / validator_ids.size) * 100
         pool.average_skipped_slots = last_skipped_slots.compact.average
       end
@@ -206,7 +210,7 @@ module StakeLogic
     end
   end
 
-  def get_rewards
+  def get_rewards_from_stake_pools
     lambda do |p|
       return p unless p.code == 200
 
@@ -230,9 +234,17 @@ module StakeLogic
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
 
+      # Sample account_rewards structure: 
+      # { "account_id"=>{
+      #   "amount"=>358573846,
+      #   "commission"=>8,
+      #   "effectiveSlot"=>169776008,
+      #   "epoch"=>392,
+      #   "postBalance"=>777282463666
+      # }}
       Pipeline.new(200, p.payload.merge!(account_rewards: account_rewards))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from get_rewards", e)
+      Pipeline.new(500, p.payload, "Error from get_rewards_from_stake_pools", e)
     end
   end
 
@@ -312,5 +324,20 @@ module StakeLogic
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from calculate_apy_for_pools", e)
     end
+  end
+
+  private
+
+  def recent_epochs(network)
+    @recent_epochs ||= EpochWallClock.recent_finished(network).pluck(:epoch)
+  end
+
+  def stake_accounts_active(network, stake_accounts)
+    active_stake_accounts = stake_accounts.select do |account|
+      account["deactivationEpoch"].nil? ||
+        recent_epochs(network).include?(account["deactivationEpoch"])
+    end
+
+    active_stake_accounts.map { |account| account["stakePubkey"] }
   end
 end

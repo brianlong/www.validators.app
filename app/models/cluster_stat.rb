@@ -7,6 +7,7 @@
 #  id                 :bigint           not null, primary key
 #  network            :string(191)
 #  nodes_count        :integer
+#  roi                :float(24)
 #  root_distance      :json
 #  skipped_slots      :json
 #  skipped_votes      :json

@@ -31,7 +31,7 @@
 <% end %>
 
 <% if @validators.blank? && !params[:q].blank? %>
-  <%= render 'validators/no_search_results' %>
+  <%= render 'validators/no_search_results', trent_mode: false %>
 <% end %>
 
 <% if @validators.blank? && !params[:watchlist].blank? %>

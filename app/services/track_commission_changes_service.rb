@@ -59,7 +59,7 @@ class TrackCommissionChangesService
         commission_after: validator_commission,
         epoch_completion: 0.05,
         batch_uuid: @current_batch.uuid,
-        from_inflation_rewards: true,
+        source_from_rewards: true,
         created_at: @current_batch.created_at
       )
       commission_history_logger.warn(
@@ -79,9 +79,7 @@ class TrackCommissionChangesService
       network: @network,
     ).last
 
-    unless last_commission_from_epoch && \
-           last_commission_from_epoch.commission_before == validator_commission && \
-           last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
+    unless last_commission_from_epoch && last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
 
       new_commission_history = va.validator.commission_histories.create(
         epoch: cli_rewards["epoch"],
@@ -90,7 +88,7 @@ class TrackCommissionChangesService
         commission_before: validator_commission,
         epoch_completion: 99.95,
         batch_uuid: @previous_batch.uuid,
-        from_inflation_rewards: true,
+        source_from_rewards: true,
         created_at: @previous_batch.created_at
       )
 
