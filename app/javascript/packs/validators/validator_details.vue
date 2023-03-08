@@ -10,6 +10,7 @@
 
         <h1 class="word-break" v-if="is_loading_validator">loading...</h1>
         <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
+        <!-- stakePoolLogoUrls(validator.stake_pool_list) -->
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-3">
@@ -243,6 +244,7 @@
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
   import loadingImage from 'loading.gif';
+  import { stakePoolLogoUrls } from './../utils/stake_pool_helper.js'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
