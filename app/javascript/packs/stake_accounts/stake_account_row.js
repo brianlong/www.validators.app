@@ -1,6 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
 import axios from 'axios'
-
+import { stakePoolLogoUrls } from './../utils/stake_pool_helper.js'
 
 var StakeAccountRow = Vue.component('StakeAccountRow', {
   props: {
