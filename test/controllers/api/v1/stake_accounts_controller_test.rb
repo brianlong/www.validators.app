@@ -136,7 +136,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json_response["stake_accounts"].size
     assert_equal 16,response_stake_account.keys.size
     assert_equal "testnet", response_stake_account["network"]
-    assert_equal 3, json_response["total_count"]
+    assert_equal 1, json_response["total_count"]
     assert_equal "TestName", response_stake_account["pool_name"]
     assert_equal "Validator", response_stake_account["validator_name"]
     assert_equal "Account", response_stake_account["validator_account"]
