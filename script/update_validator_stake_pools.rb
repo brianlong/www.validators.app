@@ -7,7 +7,7 @@ stake_pool_attrs = Validator.includes(stake_accounts: :stake_pool)
                             .map do |v|
   {
     id: v.id,
-    stake_pool_list: v.stake_accounts.map { |sa| sa.stake_pool_valid&.name }.compact.uniq
+    stake_pools_list: v.stake_accounts.map { |sa| sa.stake_pool_valid&.name }.compact.uniq
   }
 end
 
