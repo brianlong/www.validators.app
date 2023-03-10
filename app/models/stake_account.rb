@@ -40,7 +40,7 @@ class StakeAccount < ApplicationRecord
   belongs_to :validator, optional: true
 
   BLAZESTAKE = "BlazeStake"
-  MIN_BLAZESTAKE_LIMIT = 100_000_000
+  MIN_BLAZESTAKE_LIMIT = 100_000_000 # 0.1 SOL
 
   scope :filter_by_account, ->(account) { where('stake_pubkey LIKE ?', "#{account}%") }
   scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
