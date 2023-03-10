@@ -38,7 +38,7 @@ class Rack::Attack
 
   ### Custom Throttle Response ###
   # By default, Rack::Attack returns an HTTP 429 for throttled responses.
-  # If you want to customize the response), then uncomment the lines below.
+  # If you want to customize the response, then uncomment the lines below.
   self.throttled_response = lambda do |env|
     [ 429, {}, ["Too Many Requests. Retry later.\n"]]
   end
@@ -52,8 +52,11 @@ Rack::Attack.safelist("allow internal requests") do |req|
   req.env["HTTP_AUTHORIZATION"] == key
 end
 
-# Allow no limit requests to specific endpoints
-# Uncomment and edit the following lines to allow no limit requests to some methods
+# Allow no limit requests to specified endpoints or for specified users
+# Uncomment and edit the following lines to allow no limit requests
 # Rack::Attack.safelist("allow all requests to PATH") do |req|
 #   req.path.start_with?("/api/v1/PATH") && req.get?
+# end
+# Rack::Attack.safelist("allow all requests for USER") do |req|
+#   req.env["HTTP_AUTHORIZATION"] == USER_AUTHORIZATION_KEY
 # end
