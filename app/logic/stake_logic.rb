@@ -210,7 +210,7 @@ module StakeLogic
 
           total_active_stake += validator_active_stake
 
-          commissions.push(validator_active_stake * validator.score.commission)
+          commissions.push(validator_active_stake * validator.commission)
         end
 
         average_commission = (commissions.sum / total_active_stake.to_f).round(2)
