@@ -106,7 +106,7 @@ every 1.day, at: '3:35am', roles: [:background] do
 end
 
 every 1.day, at: '3:40am', roles: [:background] do
-  ruby_script 'update_validator_stake_pools.rb'
+  ruby_script 'update_validator_stake_pools_list.rb'
 end
 
 every 10.minutes, roles: [:background] do
