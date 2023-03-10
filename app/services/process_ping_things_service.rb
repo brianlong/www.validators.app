@@ -17,8 +17,9 @@ class ProcessPingThingsService
         created_at: raw.created_at
       )
       start_create = Time.now
+      Rails.logger.warn("ProcessPingThing: process_ping_things_service starting .create method (#{raw.id})")
       PingThing.create(params)
-      Rails.logger.warn("ProcessPingThing: create (#{raw.id}): #{Time.now - start_create}s")
+      Rails.logger.warn("ProcessPingThing: process_ping_things_service finished .create (#{raw.id}): #{Time.now - start_create}s")
       raw.delete
 
     # in case of passing wrong commitment_level, which is an enum
