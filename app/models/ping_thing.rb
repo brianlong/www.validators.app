@@ -79,10 +79,15 @@ class PingThing < ApplicationRecord
   def update_stats_if_present
     start = Time.now
     Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) start")
-    stats = PingThingStat.by_network(network).between_time_range(reported_at)
-    Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) stats_count: #{stats&.count}")
+    Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) reported_at: #{reported_at}")
+
+    stats = PingThingStat.by_network("mainnet").between_time_range(reported_at)
+    Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) stats query time: #{Time.now - start}")
+    
+    stats_time = Time.now
     stats.each(&:recalculate)
-    Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}): #{Time.now - start}s")
+    Rails.logger.warn("ProcessPingThing: update_stats_if_present time since stats (#{self.id}): #{Time.now - stats_time}s")
+    Rails.logger.warn("ProcessPingThing: update_stats_if_present full method (#{self.id}): #{Time.now - start}s")
   end
 
   def self.average_slot_latency
