@@ -80,7 +80,7 @@ class PingThing < ApplicationRecord
     start = Time.now
     Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) start")
     stats = PingThingStat.by_network(network).between_time_range(reported_at)
-    Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) stats_count: #{stats.count}")
+    Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) stats_count: #{stats&.count}")
     stats.each(&:recalculate)
     Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}): #{Time.now - start}s")
   end
