@@ -198,10 +198,24 @@ module StakeLogic
 
       StakePool.where(network: p.payload[:network]).each do |pool|
         validator_ids = pool.stake_accounts.active.pluck(:validator_id)
-        average_commission = ValidatorScoreV1.where(validator_id: validator_ids)
-                                             .average(:commission)
+        total_active_stake = 0
+        commissions = []
 
-        pool.update_attribute(:average_validators_commission, average_commission)
+        Validator.where(id: validator_ids)
+                 .includes(:stake_accounts, :validator_score_v1)
+                 .find_each do |validator|
+          validator_active_stake = validator.stake_accounts.active.where(
+            stake_pool: pool
+          ).sum(:active_stake)
+
+          total_active_stake += validator_active_stake
+
+          commissions.push(validator_active_stake * validator.score.commission)
+        end
+
+        average_commission = (commissions.sum / total_active_stake.to_f).round(2)
+
+        pool.update(average_validators_commission: average_commission)
       end
 
       Pipeline.new(200, p.payload)
