@@ -30,11 +30,11 @@ Rails.application.configure do
   # caching-dev.txt file is created by rails dev:cache command.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
-    config.cache_store = :redis_cache_store, { url: Rails.application.credentials.dig(:redis, :url),
-                                               connect_timeout:    30,  # Defaults to 20 seconds
-                                               read_timeout:       0.5, # Defaults to 1 second
-                                               write_timeout:      0.5, # Defaults to 1 second
-                                               reconnect_attempts: 1,   # Defaults to 0
+    config.action_controller.enable_fragment_cache_logging = true
+
+    config.cache_store = :memory_store
+    config.public_file_server.headers = {
+      'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
