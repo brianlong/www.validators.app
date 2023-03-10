@@ -69,18 +69,18 @@ class PingThing < ApplicationRecord
   end
 
   def broadcast
-    start = Time.now
     hash = {}
     hash.merge!(self.to_builder.attributes!)
     hash.merge!(self.user.to_builder.attributes!)
 
     ActionCable.server.broadcast("ping_thing_channel", hash)
-    Rails.logger.warn("ProcessPingThing: broadcast (#{self.id}): #{Time.now - start}s")
   end
 
   def update_stats_if_present
     start = Time.now
+    Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) start")
     stats = PingThingStat.by_network(network).between_time_range(reported_at)
+    Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}) stats_count: #{stats.count}")
     stats.each(&:recalculate)
     Rails.logger.warn("ProcessPingThing: update_stats_if_present (#{self.id}): #{Time.now - start}s")
   end
