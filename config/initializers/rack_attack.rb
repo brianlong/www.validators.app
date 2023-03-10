@@ -1,5 +1,5 @@
 class Rack::Attack
-  #Rack::Attack.cache.store = Redis.new(url: Rails.application.credentials.dig(:redis, :url))
+  Rack::Attack.cache.store = Redis.new(url: Rails.application.credentials.dig(:redis, :rack_attack))
 
   API_ENDPOINTS_WITH_HIGH_LIMIT = [
     "/api/v1/commission-changes",
