@@ -54,9 +54,14 @@ class StakeAccount < ApplicationRecord
     )
   end
 
+  def active?
+    !active_stake.in?([0, nil])
+  end
+
   def stake_pool_valid
-    return unless stake_pool
+    return unless stake_pool && self.active?
     return if stake_pool.name == BLAZESTAKE && active_stake < MIN_BLAZESTAKE_LIMIT
+    # TODO similar condition for Jito?
 
     stake_pool
   end
