@@ -13,7 +13,7 @@ class Rack::Attack
   # Set higher limit for API requests defined in API_ENDPOINTS_WITH_HIGH_LIMIT constant
   # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-high/user:#{KEY}"
   #  eg. "rack::attack:5590831:req-api-high/user:abcde-edcba"
-  throttle("req-api-high/user", limit: 35, period: 5.minutes) do |req|
+  throttle("req-api-high/user", limit: 40, period: 5.minutes) do |req|
     if req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.get?
       token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
       "#{token[0..5]}-#{token[-5..-1]}"
@@ -22,7 +22,7 @@ class Rack::Attack
 
   # Set default limit for other API GET requests
   # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-low/user:#{KEY}"
-  throttle("req-api-low/user", limit: 20, period: 5.minutes) do |req|
+  throttle("req-api-low/user", limit: 25, period: 5.minutes) do |req|
     if !req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.path.start_with?("/api/v1/") && req.get?
       token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
       "#{token[0..5]}-#{token[-5..-1]}"
