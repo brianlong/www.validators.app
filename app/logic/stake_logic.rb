@@ -142,86 +142,34 @@ module StakeLogic
     end
   end
 
-  def update_validator_stats
+  def update_stake_pools
     lambda do |p|
       return p unless p.code == 200
 
       p.payload[:stake_pools].each do |pool|
-        validator_ids = pool.stake_accounts.active.pluck(:validator_id)
-        delinquent_count = 0
-        last_skipped_slots = []
-        uptimes = []
-        lifetimes = []
-        scores = []
-        total_active_stake = 0
+        sp_attrs = initial_stake_pool_attrs(pool)
 
-        Validator.where(id: validator_ids).includes(:stake_accounts).each do |validator|
-          val_active_stake = validator.stake_accounts.active.where(stake_pool: pool).pluck(:active_stake).sum
-          total_active_stake += val_active_stake
-          score = validator.score
+        process_stake_pool_validators(sp_attrs)
 
-          last_delinquent = validator.validator_histories
-                                     .order(created_at: :desc)
-                                     .where(delinquent: true)
-                                     .first
-                                     &.created_at || (DateTime.now - 30.days)
+        average_commission =
+          (sp_attrs[:commissions].sum / sp_attrs[:total_active_stake].to_f).round(2)
 
-          uptime = (DateTime.now - last_delinquent.to_datetime).to_i
-          lifetime = (DateTime.now - validator.created_at.to_datetime).to_i
-          uptimes.push uptime
-          lifetimes.push lifetime
-          scores.push val_active_stake * score.total_score.to_i
-          delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
-          last_skipped_slots.push score.skipped_slot_history&.last
-        end
-
-        pool.average_uptime = uptimes.average
-        pool.average_lifetime = lifetimes.average
-        pool.average_score = (scores.sum / total_active_stake.to_f).round(2)
-        pool.average_delinquent = (delinquent_count / validator_ids.size) * 100
-        pool.average_skipped_slots = last_skipped_slots.compact.average
+        pool.average_validators_commission = average_commission
+        pool.average_uptime = sp_attrs[:uptimes].average
+        pool.average_lifetime = sp_attrs[:lifetimes].average
+        pool.average_score = (sp_attrs[:scores].sum / sp_attrs[:total_active_stake].to_f).round(2)
+        pool.average_delinquent = (sp_attrs[:delinquent_count] / sp_attrs[:validator_ids].size) * 100
+        pool.average_skipped_slots = sp_attrs[:last_skipped_slots].compact.average
       end
 
       StakePool.transaction do
         p.payload[:stake_pools].each(&:save)
       end
-
-      Pipeline.new(200, p.payload)
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from update_validator_stats", e)
     end
-  end
 
-  def count_average_validators_commission
-    lambda do |p|
-      return p unless p.code == 200
-
-      StakePool.where(network: p.payload[:network]).each do |pool|
-        validator_ids = pool.stake_accounts.active.pluck(:validator_id)
-        total_active_stake = 0
-        commissions = []
-
-        Validator.where(id: validator_ids)
-                 .includes(:stake_accounts, :validator_score_v1)
-                 .find_each do |validator|
-          validator_active_stake = validator.stake_accounts.active.where(
-            stake_pool: pool
-          ).sum(:active_stake)
-
-          total_active_stake += validator_active_stake
-
-          commissions.push(validator_active_stake * validator.commission)
-        end
-
-        average_commission = (commissions.sum / total_active_stake.to_f).round(2)
-
-        pool.update(average_validators_commission: average_commission)
-      end
-
-      Pipeline.new(200, p.payload)
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from count_average_validator_fee", e)
-    end
+    Pipeline.new(200, p.payload)
+  rescue StandardError => e
+    Pipeline.new(500, p.payload, "Error from update_stake_pools", e)
   end
 
   def get_rewards_from_stake_pools
@@ -353,5 +301,47 @@ module StakeLogic
     end
 
     active_stake_accounts.map { |account| account["stakePubkey"] }
+  end
+
+  def initial_stake_pool_attrs(pool)
+    {
+      validator_ids: pool.stake_accounts.active.pluck(:validator_id),
+      total_active_stake: 0,
+      commissions: [],
+      delinquent_count: 0,
+      last_skipped_slots: [],
+      uptimes: [],
+      lifetimes: [],
+      scores: [],
+      pool: pool
+    }
+  end
+
+  def process_stake_pool_validators(sp_attrs)
+    Validator.where(id: sp_attrs[:validator_ids])
+             .includes(:stake_accounts, :validator_score_v1)
+             .find_each do |validator|
+      validator_active_stake = validator.stake_accounts.active.where(
+        stake_pool: sp_attrs[:pool]
+      ).sum(:active_stake)
+      score = validator.score
+      last_delinquent = validator.validator_histories
+                                 .order(created_at: :desc)
+                                 .where(delinquent: true)
+                                 .first
+                                 &.created_at || (DateTime.now - 30.days)
+
+      sp_attrs[:total_active_stake] += validator_active_stake
+
+      uptime = (DateTime.now - last_delinquent.to_datetime).to_i
+      lifetime = (DateTime.now - validator.created_at.to_datetime).to_i
+
+      sp_attrs[:uptimes].push uptime
+      sp_attrs[:lifetimes].push lifetime
+      sp_attrs[:scores].push validator_active_stake * score.total_score.to_i
+      sp_attrs[:delinquent_count] = score.delinquent ? sp_attrs[:delinquent_count] + 1 : sp_attrs[:delinquent_count]
+      sp_attrs[:last_skipped_slots].push score.skipped_slot_history&.last
+      sp_attrs[:commissions].push(validator_active_stake * validator.score.commission)
+    end
   end
 end

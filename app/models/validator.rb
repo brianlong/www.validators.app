@@ -81,7 +81,6 @@ class Validator < ApplicationRecord
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
-  delegate :commission, to: :validator_score_v1, allow_nil: true
 
   class << self
     def with_private(show: "true")
