@@ -118,7 +118,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "update_validator_stats" do
+  test "update_stake_pools" do
     authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
 
     validator = create(
@@ -166,7 +166,7 @@ class StakeLogicTest < ActiveSupport::TestCase
 
     payload = @initial_payload.merge(stake_pools: [stake_pool])
     p = Pipeline.new(200, payload)
-                .then(&update_validator_stats)
+                .then(&update_stake_pools)
 
     assert_equal p.code, 200
     assert_equal 3, stake_pool.average_uptime
@@ -174,9 +174,9 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal 0, stake_pool.average_delinquent
     assert_equal 5, stake_pool.average_skipped_slots
     assert_equal score.total_score, stake_pool.average_score
-  end
-  
-  test "count_average_validators_commission" do
+
+
+
     stake_pool = create(:stake_pool, network: "testnet")
     validator = create(:validator)
     validator2 = create(:validator)
@@ -188,7 +188,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     refute stake_pool.average_validators_commission
 
     p = Pipeline.new(200, @initial_payload)
-                .then(&count_average_validators_commission)
+                .then(&update_stake_pools)
 
     assert_equal 7.5, stake_pool.reload.average_validators_commission
   end
@@ -207,12 +207,12 @@ class StakeLogicTest < ActiveSupport::TestCase
     refute stake_pool.average_score
 
     payload = @initial_payload.merge(stake_pools: [stake_pool])
-    Pipeline.new(200, payload).then(&update_validator_stats)
+    Pipeline.new(200, payload).then(&update_stake_pools)
 
     assert_equal 3.25, stake_pool.reload.average_score
 
     score2.update_columns(total_score: 6)
-    Pipeline.new(200, payload).then(&update_validator_stats)
+    Pipeline.new(200, payload).then(&update_stake_pools)
 
     assert_equal 7.0, stake_pool.reload.average_score
 
@@ -220,13 +220,13 @@ class StakeLogicTest < ActiveSupport::TestCase
     score3 = create(:validator_score_v1, validator: validator3)
     score3.update_columns(total_score: nil)
     create(:stake_account, validator: validator3, stake_pool: stake_pool)
-    Pipeline.new(200, payload).then(&update_validator_stats)
+    Pipeline.new(200, payload).then(&update_stake_pools)
 
     assert_equal 0.52, stake_pool.reload.average_score
 
     score3.update_columns(total_score: 4)
     create(:stake_account, validator: validator3, stake_pool: stake_pool)
-    Pipeline.new(200, payload).then(&update_validator_stats)
+    Pipeline.new(200, payload).then(&update_stake_pools)
 
     assert_equal 4.12, stake_pool.reload.average_score
   end
