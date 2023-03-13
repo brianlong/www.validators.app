@@ -8,31 +8,24 @@ class Rack::Attack
   ].freeze
 
   ### Throttle Spammy Clients ###
-  # Throttle GET requests to API by IP
+  # Throttle GET requests to API by user authorization token
   #
-  # Set higher limit for API requests defined in constant
-  # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-high/ip:#{req.ip}"
-  #  eg. "rack::attack:5590831:req-api-high/ip:127.0.0.1"
-  throttle("req-api-high/ip", limit: 35, period: 5.minutes) do |req|
+  # Set higher limit for API requests defined in API_ENDPOINTS_WITH_HIGH_LIMIT constant
+  # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-high/user:#{KEY}"
+  #  eg. "rack::attack:5590831:req-api-high/user:abcde-edcba"
+  throttle("req-api-high/user", limit: 35, period: 5.minutes) do |req|
     if req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.get?
-      req.ip
+      token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
+      "#{token[0..5]}-#{token[-5..-1]}"
     end
   end
 
-  # Set default limit for other API requests
-  # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-low/ip:#{req.ip}"
-  throttle("req-api-low/ip", limit: 20, period: 5.minutes) do |req|
+  # Set default limit for other API GET requests
+  # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-low/user:#{KEY}"
+  throttle("req-api-low/user", limit: 20, period: 5.minutes) do |req|
     if !req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.path.start_with?("/api/v1/") && req.get?
-      req.ip
-    end
-  end
-
-  ### Prevent Brute-Force Login Attacks ###
-  # Throttle POST requests to sign in page by IP address
-  # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  throttle("logins/ip", limit: 5, period: 20.seconds) do |req|
-    if req.path == "/users/sign_in" && req.post?
-      req.ip
+      token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
+      "#{token[0..5]}-#{token[-5..-1]}"
     end
   end
 
