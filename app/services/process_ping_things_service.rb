@@ -16,10 +16,10 @@ class ProcessPingThingsService
         network: raw.network,
         created_at: raw.created_at
       )
-      ping_thing = PingThing.create(params)
+      ping_thing = PingThing.new(params)
 
       # create sidekiq job to update stats if it's not a latest data
-      if raw.should_recalculate_stats_after_processing?
+      if ping_thing.save && raw.should_recalculate_stats_after_processing?
         RecalculatePingThingStatsWorker.perform_async({
           reported_at: ping_thing.reported_at,
           network: ping_thing.network
