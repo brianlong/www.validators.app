@@ -16,9 +16,18 @@ class ProcessPingThingsService
         network: raw.network,
         created_at: raw.created_at
       )
+      ping_thing = PingThing.new(params)
 
-      PingThing.create(params)
+      # create sidekiq job to update stats if it's not a latest data
+      if ping_thing.save && raw.should_recalculate_stats_after_processing?
+        RecalculatePingThingStatsWorker.perform_async({
+          reported_at: ping_thing.reported_at,
+          network: ping_thing.network
+        })
+      end
+
       raw.delete
+
     # in case of passing wrong commitment_level, which is an enum
     # that raises an ArgumentError when wrong value is assigned
     rescue ArgumentError => e

@@ -42,6 +42,10 @@ class PingThingRaw < ApplicationRecord
     required_params.merge(optional_params)
   end
 
+  def should_recalculate_stats_after_processing?
+    JSON.parse(raw_data).keys.include?("reported_at")
+  end
+
   private
 
   def raw_data_size
