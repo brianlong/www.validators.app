@@ -81,6 +81,7 @@ export default {
               }
             }
           },
+          animation: { duration: 0 },
           plugins: {
             tooltip: {
               enabled: true,
