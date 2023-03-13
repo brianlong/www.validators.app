@@ -1,4 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
+import '../mixins/stake_pools_mixins';
+
 import IndexTemplate from './index_template'
 import StakeAccountRow from './stake_account_row'
 import ValidatorRow from './validator_row'
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'StakePoolStats': StakePoolStats,
       'StakePoolsOverview': StakePoolsOverview,
       'ValidatorRow': ValidatorRow,
-      'BPagination': BPagination
+      'BPagination': BPagination,
     }
   })
 })

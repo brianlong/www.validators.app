@@ -1,10 +1,12 @@
 import Vue from 'vue/dist/vue.esm'
+import '../mixins/stake_pools_mixins';
+
 import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
 import skippedSlotsChart from './charts/skipped_slot_chart'
 import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
-import scores from '../validators/components/scores'
 
+import scores from '../validators/components/scores'
 
 var chart_green = '#00ce99'
 var chart_blue = '#0091f2'

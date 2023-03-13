@@ -244,7 +244,6 @@
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
   import loadingImage from 'loading.gif';
-  import { stakePoolLogos } from '../utils/stake_pool_logos.js'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
