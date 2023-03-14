@@ -82,7 +82,7 @@ gem 'maxmind-geoip2'
 gem 'rack-cors'
 
 # Ruby client for Solana
-gem 'solana_rpc_ruby'
+gem 'solana_rpc_ruby', tag: 'v1.3.0'
 
 # Ruby client for CoinGecko
 gem 'coingecko_ruby'
