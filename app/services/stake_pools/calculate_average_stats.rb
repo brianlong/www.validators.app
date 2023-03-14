@@ -7,7 +7,7 @@ module StakePools
     end
 
     def call
-      sp_attrs = initial_attrs
+      @sp_attrs = initial_attrs
 
       Validator.where(id: validator_ids)
                .includes(:stake_accounts, :validator_score_v1)
@@ -31,10 +31,10 @@ module StakePools
 
     private
 
-    attr_reader :pool, :validator, :validator_ids
+    attr_reader :pool, :validator, :validator_ids, :sp_attrs
 
     def calculate_active_stake
-      validator.stake_accounts.active.where(pool: pool).sum(:active_stake)
+      validator.stake_accounts.active.where(stake_pool: pool).sum(:active_stake)
     end
 
     def validator_ids

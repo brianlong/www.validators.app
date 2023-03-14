@@ -153,11 +153,11 @@ module StakeLogic
       StakePool.transaction do
         p.payload[:stake_pools].each(&:save)
       end
-    end
 
-    Pipeline.new(200, p.payload)
-  rescue StandardError => e
-    Pipeline.new(500, p.payload, "Error from update_stake_pools", e)
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from update_stake_pools", e)
+    end
   end
 
   def get_rewards_from_stake_pools
