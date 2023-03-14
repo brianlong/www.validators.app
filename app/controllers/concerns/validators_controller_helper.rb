@@ -38,6 +38,16 @@ module ValidatorsControllerHelper
     hash
   end
 
+  def index_csv_headers
+    headers = Validator::FIELDS_FOR_API + 
+              ValidatorScoreV1::ATTRIBUTES_FOR_BUILDER + 
+              DataCenter::FIELDS_FOR_CSV + 
+              [:data_center_host] + 
+              [:vote_account] +
+              ValidatorHistory::FIELDS_FOR_CSV
+    headers.map(&:to_s)
+  end
+
   def validator_fields
     Validator::FIELDS_FOR_API.map { |e| "validators.#{e}" }
   end

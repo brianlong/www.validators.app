@@ -6,7 +6,7 @@ module Api
       include ValidatorsHelper
       include ValidatorsControllerHelper
 
-      before_action :set_skipped_slots_report
+      before_action :set_skipped_slots_report, except: [:index]
 
       def index
         @validators = ValidatorQuery.new(api: true).call(
@@ -18,14 +18,22 @@ module Api
         )
 
         json_result = @validators.map { |val| create_json_result(val) }
-
         # render json: json_result, status: :ok
-        render json: JSON.dump(json_result), status: :ok
+        respond_to do |format|
+          format.json do
+            render json: JSON.dump(json_result), status: :ok
+          end
+          format.csv do
+            json_result = @validators.map { |val| create_json_result(val) }
+            send_data convert_to_csv(index_csv_headers, json_result),
+                      filename: "validator-list-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
-      rescue StandardError => e
-        Appsignal.send_error(e)
-        render json: { "status" => "server error" }, status: 500
+      # rescue StandardError => e
+      #   Appsignal.send_error(e)
+      #   render json: { "status" => "server error" }, status: 500
       end
 
       def show

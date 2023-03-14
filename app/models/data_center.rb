@@ -60,6 +60,13 @@ class DataCenter < ApplicationRecord
     traits_autonomous_system_number
   ].freeze
 
+  FIELDS_FOR_CSV = %i[
+    data_center_key
+    autonomous_system_number
+    latitude
+    longitude
+  ]
+
   FIELDS_FOR_GOSSIP_NODES = [
     "country_iso_code",
     "subdivision_iso_code",
