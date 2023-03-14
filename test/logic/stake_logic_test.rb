@@ -119,8 +119,6 @@ class StakeLogicTest < ActiveSupport::TestCase
   end
 
   test "update_stake_pools" do
-    authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
-
     validator = create(
       :validator,
       network: "testnet",
@@ -139,7 +137,6 @@ class StakeLogicTest < ActiveSupport::TestCase
     stake_pool = create(
       :stake_pool,
       network: "testnet",
-      authority: authority,
       average_validators_commission: nil,
       average_uptime: nil,
       average_lifetime: nil,
