@@ -50,6 +50,10 @@ end
 # Rack::Attack.safelist("allow all requests to PATH") do |req|
 #   req.path.start_with?("/api/v1/PATH") && req.get?
 # end
-# Rack::Attack.safelist("allow all requests for USER") do |req|
-#   req.env["HTTP_AUTHORIZATION"] == USER_AUTHORIZATION_KEY
-# end
+
+# Set no limits to all endpoints for listed users
+Rack::Attack.safelist("allow all requests for users") do |req|
+  user_token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
+  whitelisted_tokens = Rails.application.credentials.dig(:rack_attack, :whitelist_all_endpoints)
+  user_token.in? whitelisted_tokens
+end
