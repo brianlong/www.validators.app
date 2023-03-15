@@ -404,7 +404,7 @@ GEM
       redis (>= 4.2.0)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    solana_rpc_ruby (1.2.0)
+    solana_rpc_ruby (1.3.0)
       faye-websocket (~> 0.11)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
