@@ -610,10 +610,15 @@
 <hr />
 
 <h2 class="h4" id="limits">Requests Limits:</h2>
-Requests limit to our API is 40 or 25 requests per 5 minutes, depending on the endpoint.
-Higher limit is available for data that changes more often: <a href="#ping-thing-list">Ping Thing</a>,
-<a href="#ping-thing-stats">Ping Thing Stats</a> and <a href="#commission-change-index">Commission Changes</a> endpoints.
-After exceeding the limit, your will get 429 Too Many Requests error. Limits are automatically reset after 5 minutes.
+<p>
+  Requests limit to our API is <%= @high_limit %> or <%= @low_limit %> requests per <%= @reset_period %> minutes, depending
+  on the endpoint. Higher limit is available for data that changes more often: <a href="#ping-thing-list">Ping Thing</a>,
+  <a href="#ping-thing-stats">Ping Thing Stats</a> and <a href="#commission-change-index">Commission Changes</a> endpoints.
+</p>
+<p>
+  After exceeding the limit, your will get <strong>429 Too Many Requests</strong> error.
+</p>
+Limits are automatically reset after <%= @reset_period %> minutes.
 
 <hr />
 

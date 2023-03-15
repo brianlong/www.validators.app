@@ -7,13 +7,17 @@ class Rack::Attack
     "/api/v1/ping-thing-stats"
   ].freeze
 
+  API_LOW_LIMIT = 25
+  API_HIGH_LIMIT = 40
+  LIMIT_RESET_PERIOD = 5.minutes
+
   ### Throttle Spammy Clients ###
   # Throttle GET requests to API by user authorization token
   #
   # Set higher limit for API requests defined in API_ENDPOINTS_WITH_HIGH_LIMIT constant
   # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-high/user:#{KEY}"
   #  eg. "rack::attack:5590831:req-api-high/user:abcde-edcba"
-  throttle("req-api-high/user", limit: 40, period: 5.minutes) do |req|
+  throttle("req-api-high/user", limit: API_HIGH_LIMIT, period: LIMIT_RESET_PERIOD) do |req|
     if req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.get?
       token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
       "#{token[0..5]}-#{token[-5..-1]}"
@@ -22,7 +26,7 @@ class Rack::Attack
 
   # Set default limit for other API GET requests
   # Key: "rack::attack:#{Time.now.to_i/:period}:req-api-low/user:#{KEY}"
-  throttle("req-api-low/user", limit: 25, period: 5.minutes) do |req|
+  throttle("req-api-low/user", limit: API_LOW_LIMIT, period: LIMIT_RESET_PERIOD) do |req|
     if !req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.path.start_with?("/api/v1/") && req.get?
       token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
       "#{token[0..5]}-#{token[-5..-1]}"
@@ -50,6 +54,10 @@ end
 # Rack::Attack.safelist("allow all requests to PATH") do |req|
 #   req.path.start_with?("/api/v1/PATH") && req.get?
 # end
-# Rack::Attack.safelist("allow all requests for USER") do |req|
-#   req.env["HTTP_AUTHORIZATION"] == USER_AUTHORIZATION_KEY
-# end
+
+# Set no limits to all endpoints for listed users
+Rack::Attack.safelist("allow all requests for users") do |req|
+  user_token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
+  whitelisted_tokens = Rails.application.credentials.dig(:rack_attack, :whitelist_all_endpoints)
+  user_token.in? whitelisted_tokens
+end
