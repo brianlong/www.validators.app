@@ -6,7 +6,7 @@ module Api
       include ValidatorsHelper
       include ValidatorsControllerHelper
 
-      before_action :set_skipped_slots_report, except: [:index]
+      before_action :set_skipped_slots_report
 
       def index
         @validators = ValidatorQuery.new(api: true).call(
@@ -24,8 +24,7 @@ module Api
             render json: JSON.dump(json_result), status: :ok
           end
           format.csv do
-            json_result = @validators.map { |val| create_json_result(val) }
-            send_data convert_to_csv(index_csv_headers, json_result),
+            send_data convert_to_csv(index_csv_headers(false), json_result),
                       filename: "validator-list-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end
@@ -132,16 +131,25 @@ module Api
 
           current_epoch = EpochHistory.last
           with_history = set_boolean_field(validator_params[:with_history])
+          json_result = create_json_result(@validator, with_history)
 
-          render json: create_json_result(@validator, with_history)
+          respond_to do |format|
+            format.json do
+              render json: json_result
+            end
+            format.csv do
+              send_data convert_to_csv(index_csv_headers(with_history), json_result),
+                        filename: "validator-list-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+            end
+          end
         end
       rescue ValidatorNotFound
         render json: { "status" => "Validator Not Found" }, status: 404
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
-      rescue StandardError => e
-        Appsignal.send_error(e)
-        render json: { "status" => e.message }, status: 500
+      # rescue StandardError => e
+      #   Appsignal.send_error(e)
+      #   render json: { "status" => e.message }, status: 500
       end
 
       private
