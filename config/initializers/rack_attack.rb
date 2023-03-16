@@ -20,7 +20,7 @@ class Rack::Attack
   throttle("req-api-high/user", limit: API_HIGH_LIMIT, period: LIMIT_RESET_PERIOD) do |req|
     if req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.get?
       token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
-      "#{token[0..5]}-#{token[-5..-1]}"
+      "#{token[0..5]}-#{token[-5..-1]}" if token
     end
   end
 
@@ -29,7 +29,7 @@ class Rack::Attack
   throttle("req-api-low/user", limit: API_LOW_LIMIT, period: LIMIT_RESET_PERIOD) do |req|
     if !req.path.start_with?(*API_ENDPOINTS_WITH_HIGH_LIMIT) && req.path.start_with?("/api/v1/") && req.get?
       token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
-      "#{token[0..5]}-#{token[-5..-1]}"
+      "#{token[0..5]}-#{token[-5..-1]}" if token
     end
   end
 
