@@ -32,7 +32,7 @@ class StakeAccountQuery
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
     @sort_by = options.fetch(:sort_by, nil)
-    @exclude_cheap_accounts = options.fetch(:exclude_cheap_accounts, nil)
+    @exclude_accounts_below_minimum_stake = options.fetch(:exclude_accounts_below_minimum_stake, nil)
     @filter_by = {
       account: options.fetch(:filter_account),
       staker: options.fetch(:filter_staker),
@@ -60,7 +60,7 @@ class StakeAccountQuery
       unless @filter_by[:withdrawer].blank?
 
     stake_accounts = stake_accounts.where("stake_accounts.active_stake > ?", MINIMUM_STAKE) \
-      if @exclude_cheap_accounts == "true"
+      if @exclude_accounts_below_minimum_stake == "true"
 
     unless @filter_by[:validator].blank?
       selected_validators = ValidatorSearchQuery.new(

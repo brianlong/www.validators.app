@@ -349,7 +349,7 @@
           with_batch: true,
           seed: ctx.seed,
           grouped_by: 'delegated_vote_accounts_address',
-          exclude_cheap_accounts: !ctx.is_cheap_stake_accounts_visible
+          exclude_accounts_below_minimum_stake: !ctx.is_cheap_stake_accounts_visible
         }
       }
 
@@ -412,7 +412,7 @@
             filter_validator: ctx.filter_validator,
             grouped_by: 'delegated_vote_accounts_address',
             seed: ctx.seed,
-            exclude_cheap_accounts: !ctx.is_cheap_stake_accounts_visible
+            exclude_accounts_below_minimum_stake: !ctx.is_cheap_stake_accounts_visible
           }
         }
 
