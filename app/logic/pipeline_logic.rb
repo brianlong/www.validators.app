@@ -16,8 +16,11 @@ end
 
 def array_average(array)
   return nil unless array.is_a? Array
-  return nil if array.compact!.empty?
-  return nil if array.sum.zero?
+
+  array.compact!
+
+  return nil if array.empty?
+  return nil if array.sum.nil?
 
   array.sum.to_i / array.size.to_f
 end

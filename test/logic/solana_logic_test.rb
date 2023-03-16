@@ -42,10 +42,9 @@ class SolanaLogicTest < ActiveSupport::TestCase
     assert_nil array_average('TEST')
     assert_nil array_average(nil)
     assert_nil array_average([])
-    assert_equal 'ABC', ['A','B','C'].sum
-    assert_equal 0, ['A','B','C'].sum.to_i
     assert_equal 0, array_average(['A','B','C'])
     assert_equal 1, array_average([1])
+    assert_equal 2, array_average([1, nil, 3])
   end
 
   test 'batch_set' do
