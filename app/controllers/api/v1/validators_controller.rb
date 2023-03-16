@@ -139,7 +139,7 @@ module Api
             end
             format.csv do
               send_data convert_to_csv(index_csv_headers(with_history), json_result),
-                        filename: "validator-list-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+                        filename: "validator-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
             end
           end
         end
