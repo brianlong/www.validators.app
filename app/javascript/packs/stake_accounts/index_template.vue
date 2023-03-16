@@ -67,24 +67,25 @@
       <stake-pool-stats :pool="selected_pool"/>
     </div>
 
-    <!-- Validators and accounts table -->
-    <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
-      <div class="card">
-        <div class="text-end p-4 align-items-center">
-          Show Stake Accounts with less than&nbsp;<strong>1 SOL</strong>&nbsp;
-          <div class="btn-group btn-group-toggle switch-button">
+    <div class="mb-4">
+      <div class="small mb-2 ps-3">Stake less than <strong>1&nbsp;SOL</strong></div>
+      <div class="btn-group btn-group-toggle switch-button">
             <span class="btn btn-xs btn-secondary"
                   :class="is_cheap_stake_accounts_visible ? 'active' : ''"
                   v-on:click="set_cheap_stake_accounts_visibility(true)">
-              ON
+              <i class="fa-solid fa-eye me-2"></i>Show
             </span>
-            <span class="btn btn-xs btn-secondary"
-                  :class="is_cheap_stake_accounts_visible ? '' : 'active'"
-                  v-on:click="set_cheap_stake_accounts_visibility(false)">
-              OFF
+        <span class="btn btn-xs btn-secondary"
+              :class="is_cheap_stake_accounts_visible ? '' : 'active'"
+              v-on:click="set_cheap_stake_accounts_visibility(false)">
+              <i class="fa-solid fa-eye-slash me-2"></i>Hide
             </span>
-          </div>
-        </div>
+      </div>
+    </div>
+
+    <!-- Validators and accounts table -->
+    <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
+      <div class="card">
         <table class="table table-block-sm validators-table">
           <thead>
             <tr>
