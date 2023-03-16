@@ -70,16 +70,16 @@
     <div class="mb-4">
       <div class="small mb-2 ps-3">Stake less than <strong>1&nbsp;SOL</strong></div>
       <div class="btn-group btn-group-toggle switch-button">
-            <span class="btn btn-xs btn-secondary"
-                  :class="is_stake_below_minimum_visible ? 'active' : ''"
-                  v-on:click="set_stake_below_minimum_visibility(true)">
-              <i class="fa-solid fa-eye me-2"></i>Show
-            </span>
+        <span class="btn btn-xs btn-secondary"
+              :class="is_stake_below_minimum_visible ? 'active' : ''"
+              v-on:click="set_stake_below_minimum_visibility(true)">
+          <i class="fa-solid fa-eye me-2"></i>Show
+        </span>
         <span class="btn btn-xs btn-secondary"
               :class="is_stake_below_minimum_visible ? '' : 'active'"
               v-on:click="set_stake_below_minimum_visibility(false)">
-              <i class="fa-solid fa-eye-slash me-2"></i>Hide
-            </span>
+          <i class="fa-solid fa-eye-slash me-2"></i>Hide
+        </span>
       </div>
     </div>
 
