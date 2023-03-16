@@ -71,13 +71,13 @@
       <div class="small mb-2 ps-3">Stake less than <strong>1&nbsp;SOL</strong></div>
       <div class="btn-group btn-group-toggle switch-button">
             <span class="btn btn-xs btn-secondary"
-                  :class="is_cheap_stake_accounts_visible ? 'active' : ''"
-                  v-on:click="set_cheap_stake_accounts_visibility(true)">
+                  :class="is_stake_below_minimum_visible ? 'active' : ''"
+                  v-on:click="set_stake_below_minimum_visibility(true)">
               <i class="fa-solid fa-eye me-2"></i>Show
             </span>
         <span class="btn btn-xs btn-secondary"
-              :class="is_cheap_stake_accounts_visible ? '' : 'active'"
-              v-on:click="set_cheap_stake_accounts_visibility(false)">
+              :class="is_stake_below_minimum_visible ? '' : 'active'"
+              v-on:click="set_stake_below_minimum_visibility(false)">
               <i class="fa-solid fa-eye-slash me-2"></i>Hide
             </span>
       </div>
@@ -331,7 +331,7 @@
           blazestake: blazestakeImage,
           jito: jitoImage
         },
-        is_cheap_stake_accounts_visible: true,
+        is_stake_below_minimum_visible: true,
         is_loading_stake_account_records: false
       }
     },
@@ -349,7 +349,7 @@
           with_batch: true,
           seed: ctx.seed,
           grouped_by: 'delegated_vote_accounts_address',
-          exclude_accounts_below_minimum_stake: !ctx.is_cheap_stake_accounts_visible
+          exclude_accounts_below_minimum_stake: !ctx.is_stake_below_minimum_visible
         }
       }
 
@@ -387,10 +387,10 @@
       filter_withdrawer: function(){
         this.refresh_results()
       },
-      filter_validator: function(){
+      filter_validator: function() {
         this.refresh_results()
       },
-      is_cheap_stake_accounts_visible() {
+      is_stake_below_minimum_visible() {
         this.is_loading_stake_account_records = true
         this.refresh_cheap_stake_accounts()
       }
@@ -412,7 +412,7 @@
             filter_validator: ctx.filter_validator,
             grouped_by: 'delegated_vote_accounts_address',
             seed: ctx.seed,
-            exclude_accounts_below_minimum_stake: !ctx.is_cheap_stake_accounts_visible
+            exclude_accounts_below_minimum_stake: !ctx.is_stake_below_minimum_visible
           }
         }
 
@@ -462,8 +462,8 @@
       filters_present: function(){
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
       },
-      set_cheap_stake_accounts_visibility(visible) {
-        this.is_cheap_stake_accounts_visible = visible
+      set_stake_below_minimum_visibility(visible) {
+        this.is_stake_below_minimum_visible = visible
       }
     }
   }
