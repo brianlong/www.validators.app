@@ -71,7 +71,7 @@
     <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
         <div class="text-end p-4 align-items-center">
-          Show Stake Accounts with less than&nbsp <b>1 SOL</b>&nbsp
+          Show Stake Accounts with less than&nbsp;<strong>1 SOL</strong>&nbsp;
           <div class="btn-group btn-group-toggle switch-button">
             <span class="btn btn-xs btn-secondary"
                   :class="is_cheap_stake_accounts_visible ? 'active' : ''"
