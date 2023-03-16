@@ -392,7 +392,7 @@
       },
       is_stake_below_minimum_visible() {
         this.is_loading_stake_account_records = true
-        this.refresh_cheap_stake_accounts()
+        this.refresh_results()
       }
     },
     methods: {
@@ -428,9 +428,6 @@
       refresh_results: debounce(function() {
         this.is_loading_stake_accounts = true
 
-        this.get_stake_accounts_call()
-      }, 2000),
-      refresh_cheap_stake_accounts: debounce(function () {
         this.get_stake_accounts_call()
       }, 2000),
       sort_by_epoch: function(){
