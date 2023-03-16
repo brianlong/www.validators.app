@@ -10,9 +10,13 @@ trap('INT') { interrupted = true }  unless Rails.env.test?
 
 begin
   loop do
-    ProcessPingThingsService.new(records_count: 100).call
+    if PingThingRaw.exists?
+      ProcessPingThingsService.new(records_count: 100).call
+    else
+      sleep(3)
+    end
+    
     break if interrupted
-    sleep(5)
   end
 rescue => e
   puts e

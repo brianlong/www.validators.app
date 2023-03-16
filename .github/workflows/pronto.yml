@@ -4,6 +4,9 @@ on: [pull_request]
 jobs:
   pronto:
     runs-on: ubuntu-latest
+    permissions: # https://github.com/marketplace/actions/pronto-action#required-permissions-in-github-workflow
+      pull-requests: write
+      statuses: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

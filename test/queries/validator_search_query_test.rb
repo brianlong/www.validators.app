@@ -59,6 +59,13 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
     assert_equal results.to_a, @validators_name1
   end
 
+  test "returns validators for query that is any part of validator name (ame1)" do
+    query   = "ame1"
+    results = ValidatorSearchQuery.new.search(query)
+
+    assert_equal results.pluck(:name).uniq, ["Name1"]
+  end
+
   test "returns validators only for network provided in the relation" do
     query    = "Name1"
     relation = Validator.where(network: "searchnet")
@@ -70,7 +77,7 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
   test "returns validators with name/account/software_version/data_center_key or account like query (Name)" do
     query     = "Name"
     results   = ValidatorSearchQuery.new.search(query)
-    
+
     assert_equal 9, results.count
   end
 
