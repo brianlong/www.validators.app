@@ -27,7 +27,7 @@ class StakeAccountQuery
 
   VALIDATOR_SCORE_V1_FIELDS = ["active_stake as validator_active_stake"].freeze
 
-  ONE_SOL = 1000000000
+  MINIMUM_STAKE = 1_000_000_000 # 1 sol
 
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
@@ -59,7 +59,7 @@ class StakeAccountQuery
     stake_accounts = stake_accounts.filter_by_withdrawer(@filter_by[:withdrawer]) \
       unless @filter_by[:withdrawer].blank?
 
-    stake_accounts = stake_accounts.where("stake_accounts.active_stake > ?", ONE_SOL) \
+    stake_accounts = stake_accounts.where("stake_accounts.active_stake > ?", MINIMUM_STAKE) \
       if @exclude_cheap_accounts == "true"
 
     unless @filter_by[:validator].blank?
