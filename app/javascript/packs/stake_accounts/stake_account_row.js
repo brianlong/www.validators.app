@@ -1,7 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
 import axios from 'axios'
 
-
 var StakeAccountRow = Vue.component('StakeAccountRow', {
   props: {
     stake_accounts: {
@@ -22,15 +21,15 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     }
   },
   data() {
-    var stake_accounts_for_val = this.stake_accounts[Object.keys(this.stake_accounts)[0]]
     return {
       validator: null,
-      validator_url: "/validators/" + this.val_account + "?network=" + stake_accounts_for_val[0].network,
-      stake_accounts_for_val: stake_accounts_for_val,
+      stake_accounts_for_val: null,
       val_account: Object.keys(this.stake_accounts)[0]
     }
   },
   created () {
+    this.stake_accounts_for_val = this.stake_accounts[this.val_account]
+
     var ctx = this
     if(this.val_account){
       axios.get('/api/v1/validators/' + this.stake_accounts_for_val[0]["network"] + '/' + this.val_account + '?with_history=true')
@@ -62,7 +61,8 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
               </tr>
             </thead>
             <tbody class="small">
-            <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
+            <tr v-for="stake_account in stake_accounts_for_val"
+                :key="stake_account.id">
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
                 <div class="text-muted">

@@ -50,7 +50,7 @@
             <tr v-for="(pt) in all_or_filtered" :key="pt.id">
               <td class="text-nowrap">
                 <span v-html="success_icon(pt.success)"></span>
-                <strong class="text-success h6">{{ pt.response_time.toLocaleString() }}</strong>&nbsp;ms
+                <strong class="text-success h6">{{ pt.response_time.toLocaleString('en-US') }}</strong>&nbsp;ms
               </td>
               <td class="small">
                 {{ formatted_date(pt.reported_at) }}<br />

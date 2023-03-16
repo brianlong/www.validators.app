@@ -27,6 +27,7 @@
   <li><a href="#sol-prices">Sol Prices</a></li>
   <li><a href="#gossip-nodes">Gossip Nodes</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
+  <li><a href="#limits">Requests Limits</a></li>
   <li><a href="#notes">Notes</a></li>
 </ul>
 
@@ -600,9 +601,24 @@
   <dd class="col-10 col-sm-11">Unauthorized</dd>
   <dt class="col-2 col-sm-1">404</dt>
   <dd class="col-10 col-sm-11">Record Not Found</dd>
+  <dt class="col-2 col-sm-1">429</dt>
+  <dd class="col-10 col-sm-11">Too Many Requests</dd>
   <dt class="col-2 col-sm-1">500</dt>
   <dd class="col-10 col-sm-11">Server Error (Admin has been notified)</dd>
 </dl>
+
+<hr />
+
+<h2 class="h4" id="limits">Requests Limits:</h2>
+<p>
+  Requests limit to our API is <%= @high_limit %> or <%= @low_limit %> requests per <%= @reset_period %> minutes, depending
+  on the endpoint. Higher limit is available for data that changes more often: <a href="#ping-thing-list">Ping Thing</a>,
+  <a href="#ping-thing-stats">Ping Thing Stats</a> and <a href="#commission-change-index">Commission Changes</a> endpoints.
+</p>
+<p>
+  After exceeding the limit, your will get <strong>429 Too Many Requests</strong> error.
+</p>
+Limits are automatically reset after <%= @reset_period %> minutes.
 
 <hr />
 
