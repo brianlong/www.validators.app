@@ -191,6 +191,7 @@
         required: false
       }
     },
+
     data() {
       return {
         account: this.account_prop || '',
@@ -198,16 +199,19 @@
         score: null
       }
     },
+
     created() {
       if(this.account != ""){
         this.update_account(this.account)
       }
     },
+
     mounted(){
       this.$root.$on('set_modal_account', data => {
         this.update_account(data);
       });
     },
+
     methods: {
       update_account(account) {
         this.account = account
@@ -218,10 +222,9 @@
         })
       }
     },
+
     watch: {
-      'account_prop': function(){
-        console.log(this.account_prop)
-      }
+      'account_prop': function() {}
     },
     computed: mapGetters([
       'web3_url',

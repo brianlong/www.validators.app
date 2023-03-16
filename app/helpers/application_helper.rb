@@ -61,4 +61,13 @@ module ApplicationHelper
       'text-danger'
     end
   end
+
+  def set_speedometer_needle_position(value:, single_range_size:)
+    return 0 unless value && single_range_size
+    chart_maximum = single_range_size*3 # speedometer has three equal ranges
+    value_in_percents = (value / chart_maximum) * 100
+    value_in_percents = [value_in_percents, 100].min.round(2)
+    return value_in_percents unless (value < 0)
+    100 - value_in_percents
+  end
 end
