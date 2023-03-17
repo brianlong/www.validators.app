@@ -76,4 +76,13 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 44, resp['epochs_count']
   end
 
+  test 'request csv with token should succeed' do
+    path = api_v1_epoch_index_url(network: 'testnet') + ".csv"
+    get path, headers: { 'Token' => @user.api_token }
+    
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+  end
 end

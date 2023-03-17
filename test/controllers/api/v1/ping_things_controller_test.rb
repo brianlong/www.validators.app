@@ -201,4 +201,18 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 5, json_response.size
     assert_equal [], json_response.select{ |pt| pt["response_time"].to_i < filter }
   end
+
+  test "GET api_v1_ping_things as csv returns success" do
+    10.times do |n|
+      create(:ping_thing, :testnet, response_time: n)
+    end
+
+    path = api_v1_ping_things_path(network: "testnet") + ".csv"
+    get path, headers: @headers
+
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+  end
 end

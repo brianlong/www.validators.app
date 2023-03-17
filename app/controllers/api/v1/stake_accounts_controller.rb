@@ -1,8 +1,6 @@
 module Api
   module V1
     class StakeAccountsController < BaseController
-      include CsvHelper
-
       def index
         stake_accounts = base_query.all_records.where.not(validator_id: nil)
         page = index_params[:page].to_i <= 0 ? 1 : index_params[:page].to_i

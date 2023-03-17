@@ -19,10 +19,21 @@ module Api
           page: nodes_params[:page] || NODES_DEFAULT_PAGE,
         )
 
-        render json: nodes.as_json(except: [:id])
+        respond_to do |format|
+          format.json { render json: nodes.as_json(except: [:id]) }
+          format.csv do
+            send_data convert_to_csv(index_csv_headers, nodes.as_json),
+                      filename: "gossip-nodes-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
+        
       end
 
       private
+
+      def index_csv_headers
+        GossipNode.column_names.reject{ |c| c == "id" }
+      end
 
       def nodes_params
         params.permit(:network, :staked, :per, :page)

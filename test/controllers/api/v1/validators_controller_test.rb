@@ -554,4 +554,42 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_response, json_response
   end
 
+  test "GET api_v1_validator as csv with token returns correct results" do
+    validator = create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip, 
+      account: "Test Account"
+    )
+    
+    path = api_v1_validator_url(
+      network: "testnet",
+      account: validator.account
+    ) + ".csv"
+
+    get path, headers: { "Token" => @user.api_token }
+
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+  end
+
+  test "GET api_v1_validators as csv with token returns correct results" do
+    create_list(
+      :validator,
+      10,
+      :with_score,
+      :with_data_center_through_validator_ip
+    )
+
+    path = api_v1_validators_url(network: "testnet") + ".csv"
+
+    get path, headers: { "Token" => @user.api_token }
+
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+  end
 end

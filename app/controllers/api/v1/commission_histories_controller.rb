@@ -4,8 +4,6 @@ module Api
   module V1
     # Commission changes API controller
     class CommissionHistoriesController < BaseController
-      include CsvHelper
-
       # /api/v1/commission-changes/:network
       def index
         ch_query = CommissionHistoryQuery.new(

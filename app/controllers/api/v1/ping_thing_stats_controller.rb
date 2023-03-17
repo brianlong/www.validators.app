@@ -3,8 +3,6 @@
 module Api
   module V1
     class PingThingStatsController < BaseController
-      include CsvHelper
-
       RECORDS_COUNT = 60
 
       def index
