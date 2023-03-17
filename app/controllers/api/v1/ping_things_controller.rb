@@ -23,7 +23,13 @@ module Api
 
         json_result = ping_things.map { |pt| create_json_result(pt) }
 
-        render json: json_result, status: :ok
+        respond_to do |format|
+          format.json { render json: json_result, status: :ok}
+          format.csv do
+            send_data convert_to_csv(index_csv_headers, json_result),
+                      filename: "ping-things-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
       rescue StandardError => e
@@ -68,6 +74,10 @@ module Api
       end
 
       private
+
+      def index_csv_headers
+        PingThing::FIELDS_FOR_API.map(&:to_s) + ["username"]
+      end
 
       def index_params
         params.permit(:network, :limit, :page, :with_stats, :time_filter)

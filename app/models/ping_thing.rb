@@ -35,6 +35,19 @@
 class PingThing < ApplicationRecord
   belongs_to :user
   include ObjectCopier
+  FIELDS_FOR_API = %i[
+    application
+    commitment_level
+    created_at
+    network
+    response_time
+    signature
+    success
+    transaction_type
+    slot_sent
+    slot_landed
+    reported_at
+  ]
 
   enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
 
@@ -55,17 +68,7 @@ class PingThing < ApplicationRecord
     Jbuilder.new do |ping_thing|
       ping_thing.(
         self,
-        :application,
-        :commitment_level,
-        :created_at,
-        :network,
-        :response_time,
-        :signature,
-        :success,
-        :transaction_type,
-        :slot_sent,
-        :slot_landed,
-        :reported_at
+        *FIELDS_FOR_API
       )
     end
   end
