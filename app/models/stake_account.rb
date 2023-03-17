@@ -34,6 +34,23 @@
 #
 
 class StakeAccount < ApplicationRecord
+  FIELDS_FOR_API = %i[
+    id
+    activation_epoch
+    delegated_stake
+    delegated_vote_account_address
+    stake_pubkey
+    staker
+    withdrawer
+    stake_pool_id
+    network
+    batch_uuid
+    pool_name
+    validator_name
+    validator_account
+    validator_active_stake
+  ]
+
   belongs_to :stake_pool, optional: true
   belongs_to :validator, optional: true
 
