@@ -47,11 +47,25 @@ var ValidatorRow = Vue.component('validatorRow', {
       return 'row-' + this.idx
     },
 
+    truncate_account() {
+      const account = this.validator['account']
+
+      return account.substr(0, 5) + "..." + account.substr(account.length - 5)
+    },
+
+    is_validator_lido() {
+      return this.validator['name']?.substr(0, 4) === 'Lido'
+    },
+
+    is_validator_private() {
+      return this.validator['commission'] === 100 && this.validator['network'] === 'network'
+    },
+
     validator_name() {
-      if(this.validator["name"]) {
-        return this.validator["name"]
+      if (this.is_validator_private() && !this.is_validator_lido()) {
+        return 'Private Validator'
       } else {
-        return this.validator["account"].substring(0,5) + "..." +  this.validator["account"].substring(this.validator["account"].length - 5)
+        return this.validator["name"] ? this.validator["name"] : this.truncate_account()
       }
     },
 
