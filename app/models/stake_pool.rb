@@ -45,7 +45,7 @@ class StakePool < ApplicationRecord
     validators_count
     total_stake
     average_stake
-  ]
+  ].freeze
 
   has_many :stake_accounts
   has_many :stake_account_histories

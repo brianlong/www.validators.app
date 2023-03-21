@@ -49,7 +49,7 @@ class StakeAccount < ApplicationRecord
     validator_name
     validator_account
     validator_active_stake
-  ]
+  ].freeze
 
   belongs_to :stake_pool, optional: true
   belongs_to :validator, optional: true

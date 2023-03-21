@@ -49,10 +49,8 @@ class CommissionHistoriesControllerTest < ActionDispatch::IntegrationTest
         with correct token and csv format\
         should return 200' do
 
-    path = api_v1_commission_histories_index_path(network: 'testnet') + ".csv"
-    get path, headers: {
-    'Token' => @user.api_token
-    }
+    path = api_v1_commission_histories_index_path(network: "testnet") + ".csv"
+    get path, headers: { "Token" => @user.api_token }
 
     assert_response :success
     assert_equal "text/csv", response.content_type

@@ -65,7 +65,7 @@ class DataCenter < ApplicationRecord
     autonomous_system_number
     latitude
     longitude
-  ]
+  ].freeze
 
   FIELDS_FOR_GOSSIP_NODES = [
     "country_iso_code",

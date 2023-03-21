@@ -30,9 +30,9 @@ module Api
         end
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
-      # rescue StandardError => e
-      #   Appsignal.send_error(e)
-      #   render json: { "status" => "server error" }, status: 500
+      rescue StandardError => e
+        Appsignal.send_error(e)
+        render json: { "status" => "server error" }, status: 500
       end
 
       def show
@@ -147,9 +147,9 @@ module Api
         render json: { "status" => "Validator Not Found" }, status: 404
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
-      # rescue StandardError => e
-      #   Appsignal.send_error(e)
-      #   render json: { "status" => e.message }, status: 500
+      rescue StandardError => e
+        Appsignal.send_error(e)
+        render json: { "status" => e.message }, status: 500
       end
 
       private

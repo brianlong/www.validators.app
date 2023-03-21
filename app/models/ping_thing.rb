@@ -47,7 +47,7 @@ class PingThing < ApplicationRecord
     slot_sent
     slot_landed
     reported_at
-  ]
+  ].freeze
 
   enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
 
