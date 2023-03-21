@@ -18,7 +18,7 @@ module Api
         )
 
         json_result = @validators.map { |val| create_json_result(val) }
-        # render json: json_result, status: :ok
+
         respond_to do |format|
           format.json do
             render json: JSON.dump(json_result), status: :ok

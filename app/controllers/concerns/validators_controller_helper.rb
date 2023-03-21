@@ -34,7 +34,7 @@ module ValidatorsControllerHelper
       end
     end
 
-    hash.merge!({url: validator.api_url})
+    hash.merge!({"url" => validator.api_url})
     hash
   end
 
