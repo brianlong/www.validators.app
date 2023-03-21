@@ -56,7 +56,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     is_validator_private() {
-      return this.validator['commission'] === 100 && this.validator['network'] === 'network'
+      return this.validator['commission'] === 100 && this.validator['network'] === 'mainnet'
     },
 
     fixed_validator_name(name) {
