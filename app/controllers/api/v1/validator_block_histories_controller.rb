@@ -16,7 +16,15 @@ module Api
                                    .order("id desc")
                                    .limit(@limit)
 
-        render "api/v1/validators/block_history", formats: :json
+        respond_to do |format|
+          format.json do
+            render "api/v1/validators/block_history", formats: :json
+          end
+          format.csv do
+            send_data convert_to_csv(index_csv_headers, @block_history.as_json),
+                      filename: "validator-block-histories-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
       rescue ValidatorNotFound
         render json: { "status" => "Validator Not Found" }, status: 404
       rescue ActionController::ParameterMissing
@@ -30,6 +38,11 @@ module Api
 
       def block_params
         params.permit(:network, :account, :limit)
+      end
+
+      def index_csv_headers
+        %w[epoch leader_slots blocks_produced skipped_slots
+          skipped_slot_percent created_at batch_uuid]
       end
     end
   end
