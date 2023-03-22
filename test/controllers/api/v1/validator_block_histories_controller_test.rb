@@ -105,7 +105,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_response, json_response
   end
 
-  test 'GET show | csv format should return 200' do
+  test "GET show | csv format should return 200" do
     path = api_v1_validator_block_history_path(
       network: "testnet", account: @validator.account
     ) + ".csv"
