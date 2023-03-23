@@ -52,7 +52,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     is_validator_lido() {
-      return this.validator['name']?.substr(0, 4) === 'Lido'
+      return this.validator['name']?.substring(0, 4) === 'Lido'
     },
 
     is_validator_private() {
