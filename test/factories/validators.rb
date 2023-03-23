@@ -45,5 +45,12 @@ FactoryBot.define do
         create :validator_score_v1, validator: validator, network: validator.network, delinquent: true
       end
     end
+
+    trait :private do
+      network { "mainnet" }
+      after(:create) do |validator|
+        create :validator_score_v1, validator: validator, network: validator.network, commission: 100
+      end
+    end
   end
 end
