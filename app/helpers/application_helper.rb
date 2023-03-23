@@ -24,6 +24,7 @@ module ApplicationHelper
     if validator.private_validator? && !validator.lido?
       "Private Validator"
     else
+      return shorten_key(validator.name) if validator.name == validator.account
       validator.name || shorten_key(validator.account)
     end
   end
