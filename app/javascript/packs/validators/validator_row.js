@@ -47,7 +47,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       return 'row-' + this.idx
     },
 
-    truncate_attr(name) {
+    shorten_key(name) {
       return name.substr(0, 5) + "..." + name.substr(name.length - 5)
     },
 
@@ -59,18 +59,18 @@ var ValidatorRow = Vue.component('validatorRow', {
       return this.validator['commission'] === 100 && this.validator['network'] === 'mainnet'
     },
 
-    fixed_validator_name(name) {
-      return name === this.validator['account'] ? this.truncate_attr(name) : name
+    shortened_validator_name(name) {
+      return (name === this.validator['account'] ? this.shorten_key(name) : name)
     },
 
-    validator_name() {
+    displayed_validator_name() {
       if (this.is_validator_private() && !this.is_validator_lido()) {
         return 'Private Validator'
       } else {
         if (this.validator["name"]) {
-          return this.fixed_validator_name(this.validator["name"])
+          return this.shortened_validator_name(this.validator["name"])
         } else {
-          return this.truncate_attr(this.validator['account'])
+          return this.shorten_key(this.validator['account'])
         }
       }
     },
@@ -168,7 +168,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           
           <div class="column-info-name">
             <a :href="validator_url()" class="fw-bold">
-              {{ validator_name() }}
+              {{ displayed_validator_name() }}
             </a>
             <small class="ms-1 text-muted">
               (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)

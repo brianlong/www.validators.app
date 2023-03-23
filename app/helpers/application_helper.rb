@@ -20,9 +20,9 @@ module ApplicationHelper
     msg == t('flash.cookie')
   end
 
-  def validator_display_name(validator)
+  def displayed_validator_name(validator)
     if validator.private_validator? && !validator.lido?
-      'Private Validator'
+      "Private Validator"
     else
       validator.name || shorten_key(validator.account)
     end
