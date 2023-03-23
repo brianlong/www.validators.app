@@ -47,11 +47,31 @@ var ValidatorRow = Vue.component('validatorRow', {
       return 'row-' + this.idx
     },
 
-    validator_name() {
-      if(this.validator["name"]) {
-        return this.validator["name"]
+    shorten_key(key) {
+      return key.substring(0, 6) + "..." + key.substring(key.length - 4)
+    },
+
+    is_validator_lido() {
+      return this.validator['name']?.substring(0, 4) === 'Lido'
+    },
+
+    is_validator_private() {
+      return this.validator['commission'] === 100 && this.validator['network'] === 'mainnet'
+    },
+
+    shortened_validator_name(name) {
+      return (name === this.validator['account'] ? this.shorten_key(name) : name)
+    },
+
+    displayed_validator_name() {
+      if (this.is_validator_private() && !this.is_validator_lido()) {
+        return 'Private Validator'
       } else {
-        return this.validator["account"].substring(0,5) + "..." +  this.validator["account"].substring(this.validator["account"].length - 5)
+        if (this.validator["name"]) {
+          return this.shortened_validator_name(this.validator["name"])
+        } else {
+          return this.shorten_key(this.validator['account'])
+        }
       }
     },
 
@@ -148,7 +168,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           
           <div class="column-info-name">
             <a :href="validator_url()" class="fw-bold">
-              {{ validator_name() }}
+              {{ displayed_validator_name() }}
             </a>
             <small class="ms-1 text-muted">
               (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)

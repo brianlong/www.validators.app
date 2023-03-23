@@ -1,4 +1,17 @@
 module ValidatorsHelper
+  def displayed_validator_name(validator)
+    if validator.private_validator? && !validator.lido?
+      "Private Validator"
+    else
+      return shorten_key(validator.name) if validator.name == validator.account
+      validator.name || shorten_key(validator.account)
+    end
+  end
+
+  def shorten_key(pub_key)
+    "#{pub_key[0..5]}...#{pub_key[-4..-1]}"
+  end
+
   def chart_line_color(score)
     return GREEN if score == 2
     return BLUE if score == 1
