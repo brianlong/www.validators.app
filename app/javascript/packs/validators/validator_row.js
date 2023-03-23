@@ -47,8 +47,8 @@ var ValidatorRow = Vue.component('validatorRow', {
       return 'row-' + this.idx
     },
 
-    shorten_key(name) {
-      return name.substr(0, 5) + "..." + name.substr(name.length - 5)
+    shorten_key(key) {
+      return key.substring(0, 6) + "..." + key.substring(key.length - 4)
     },
 
     is_validator_lido() {
