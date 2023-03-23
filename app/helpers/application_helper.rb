@@ -20,19 +20,6 @@ module ApplicationHelper
     msg == t('flash.cookie')
   end
 
-  def displayed_validator_name(validator)
-    if validator.private_validator? && !validator.lido?
-      "Private Validator"
-    else
-      return shorten_key(validator.name) if validator.name == validator.account
-      validator.name || shorten_key(validator.account)
-    end
-  end
-
-  def shorten_key(pub_key)
-    "#{pub_key[0..5]}...#{pub_key[-4..-1]}"
-  end
-
   def lamports_to_sol(lamports)
     lamports / 1_000_000_000.to_f
   end
