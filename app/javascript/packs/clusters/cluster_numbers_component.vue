@@ -24,8 +24,17 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import Vue from 'vue/dist/vue.esm'
+  import ActionCableVue from "actioncable-vue"
 
-  export default {
+  Vue.use(ActionCableVue, {
+    debug: true,
+    debugLevel: "error",
+    connectionUrl: "/cable",
+    connectImmediately: true,
+  })
+
+  const ClusterNumbersComponent = Vue.component('ClusterNumbersComponent', {
     data() {
       return {
         connection: null,
@@ -55,5 +64,7 @@
         disconnected() {},
       },
     },
-  }
+  })
+
+  export default ClusterNumbersComponent
 </script>
