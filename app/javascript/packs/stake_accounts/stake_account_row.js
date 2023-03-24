@@ -31,11 +31,11 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     this.stake_accounts_for_val = this.stake_accounts[this.val_account]
 
     var ctx = this
-    if(this.val_account){
+    if(this.val_account) {
       axios.get('/api/v1/validators/' + this.stake_accounts_for_val[0]["network"] + '/' + this.val_account + '?with_history=true')
-      .then(function (response){
-        ctx.validator = response.data
-      })
+           .then(function (response) {
+             ctx.validator = response.data
+           })
     }
   },
   template: `
