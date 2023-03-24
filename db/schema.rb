@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_08_092825) do
+ActiveRecord::Schema.define(version: 2023_03_07_141434) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -621,8 +621,8 @@ ActiveRecord::Schema.define(version: 2023_03_08_092825) do
     t.string "name"
     t.string "keybase_id"
     t.string "www_url"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "details"
     t.string "info_pub_key"
     t.string "avatar_url"
