@@ -1,7 +1,6 @@
-
 import Chart from 'chart.js/auto';
-import 'chartjs-adapter-luxon';
-import '../lib/chart-financial';
+import chart_variables from '../packs/validators/charts/chart_variables'
+
 
 document.addEventListener('turbolinks:load', () => {
   window.drawChart = drawChart;
@@ -24,7 +23,7 @@ document.addEventListener('turbolinks:load', () => {
 function removeActiveClass(chartFilterButtons) {
   for (const chartFilterButton of chartFilterButtons) {
     chartFilterButton.classList.remove('active')
-  } 
+  }
 }
 
 function addActiveClass(button) {
@@ -49,12 +48,11 @@ function drawChart(data) {
     type: 'line',
     data: {
       datasets: [{
-        label: 'SOL Token Price',
         data: data,
         fill: false,
         tension: 0.1,
-        borderColor: "rgb(170, 46, 184)",
-        backgroundColor: "rgb(170, 46, 184)",
+        borderColor: chart_variables.chart_purple_3,
+        backgroundColor: chart_variables.chart_purple_3,
         borderWidth: 1,
       }]
     },
@@ -66,14 +64,23 @@ function drawChart(data) {
             maxRotation: 0,
             autoSkip: true,
             autoSkipPadding: 50
-          }
-        }
+          },
+          grid: { display: false },
+        },
+        y: {
+          display: true,
+          ticks: {
+            padding: 10,
+            callback: function(value) {
+              return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            }
+          },
+          grid: { display: false },
+          title: { display: false },
+        },
       },
       plugins: {
-        legend: {
-          display: false,
-          onClick: null
-        },
+        legend: { display: false },
         tooltip: {
           intersect: false,
           mode: 'index',
@@ -81,7 +88,8 @@ function drawChart(data) {
           padding: 8,
           callbacks: {
             label(tooltipItem) {
-              return `SOL Price: ` + tooltipItem.formattedValue;
+              let price = tooltipItem.raw.y.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+              return `SOL Price: ` + price;
             },
           }
         }

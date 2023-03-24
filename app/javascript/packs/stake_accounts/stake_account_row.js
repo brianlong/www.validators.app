@@ -21,15 +21,15 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     }
   },
   data() {
-    var stake_accounts_for_val = this.stake_accounts[Object.keys(this.stake_accounts)[0]]
     return {
       validator: null,
-      validator_url: "/validators/" + this.val_account + "?network=" + stake_accounts_for_val[0].network,
-      stake_accounts_for_val: stake_accounts_for_val,
+      stake_accounts_for_val: null,
       val_account: Object.keys(this.stake_accounts)[0]
     }
   },
   created () {
+    this.stake_accounts_for_val = this.stake_accounts[this.val_account]
+
     var ctx = this
     if(this.val_account){
       axios.get('/api/v1/validators/' + this.stake_accounts_for_val[0]["network"] + '/' + this.val_account + '?with_history=true')

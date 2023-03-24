@@ -6,7 +6,9 @@
 
     <div class="card mb-4">
       <div class="card-content">
-        <h2 class="h4 card-heading">{{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time Stats</h2>
+        <h2 class="h4 card-heading">
+          {{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time Stats
+        </h2>
         <stats-chart :network="network"/>
       </div>
     </div>
@@ -42,6 +44,7 @@
         api_url: null
       }
     },
+
     created () {
       this.api_url = '/api/v1/ping-thing/' + this.network
       var ctx = this
@@ -50,6 +53,7 @@
              ctx.ping_things = response.data;
            })
     },
+
     channels: {
       PingThingChannel: {
         connected() {},
@@ -63,15 +67,18 @@
         disconnected() {},
       },
     },
-    mounted: function(){
+
+    mounted: function() {
       this.$cable.subscribe({
           channel: "PingThingChannel",
           room: "public",
         });
     },
+
     computed: mapGetters([
       'network'
     ]),
+
     methods: {
       ping_things_for_table: function(){
         if(this.ping_things.length <= this.records_in_table){
@@ -81,6 +88,7 @@
         }
       }
     },
+
     components: {
       "stats-chart": statsChart,
       "bubble-chart": bubbleChart,
