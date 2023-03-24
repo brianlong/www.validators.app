@@ -10,7 +10,6 @@
 
         <h1 class="word-break" v-if="is_loading_validator">loading...</h1>
         <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
-        <!-- stakePoolLogos(validator.stake_pools_list) -->
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-3">
