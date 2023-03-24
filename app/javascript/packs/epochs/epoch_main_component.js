@@ -9,13 +9,6 @@ const EpochMainComponent = Vue.component('EpochMainComponent', {
       type: Number
     }
   },
-  data() {
-    return {
-      chart: null
-    }
-  },
-  methods: {
-  },
   template: `
     <div class= "col-md-4 col-sm-4 mb-4">
       <div class="card h-100">
