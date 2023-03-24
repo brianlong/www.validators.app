@@ -1,5 +1,6 @@
 <template>
-  <div class="col-md-4 col-sm-6 mb-4">
+  <div :class="network === 'pythnet' ? 'col-md-6' : 'col-md-4'"
+       class=" col-sm-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
         <h2 class="h5 card-heading-left">Transactions</h2>
@@ -46,7 +47,8 @@
       this.get_1_sec_data()
     },
     computed: mapGetters([
-      'web3_url'
+      'web3_url',
+      'network'
     ]),
     methods: {
       get_total_transactions_count: function() {

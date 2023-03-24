@@ -1,5 +1,6 @@
 <template>
-  <section class="col-lg-6 mb-4">
+  <section :class="network === 'pythnet' ? 'col-lg-12' : 'col-lg-6'"
+           class="mb-4">
     <div class="card h-100">
       <div class="card-content pb-0">
         <h2 class="h4 card-heading">Software Versions</h2>
