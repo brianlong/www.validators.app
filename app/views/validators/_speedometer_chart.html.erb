@@ -1,45 +1,63 @@
-<!-- required parameters: canvas_name, chart_steps, value, min_value -->
+<!-- required parameters: canvas_name, value -->
 
 <canvas id="<%= local_assigns[:canvas_name] %>"></canvas>
 <script type="text/javascript">
-    var ctx = document.getElementById("<%= local_assigns[:canvas_name] %>").getContext('2d');
-    var chart = new Chart(ctx, {
-        type: 'gauge',
+
+    var chart = new Chart(document.getElementById("<%= local_assigns[:canvas_name] %>").getContext('2d'), {
+        type: 'doughnut',
         data: {
             datasets: [{
-                data: <%= local_assigns[:chart_steps] %>,
-                value: <%= local_assigns[:value] %>,
-                minValue: <%= local_assigns[:min_value] %>,
-                maxValue: <%= local_assigns[:max_value] %>,
+                data: [33.33, 33.33, 33.33],
+                needleValue: <%= local_assigns[:needle_value] %>,
                 backgroundColor: [
                     '<%= LIGHT_GREY_SPEEDOMETER %>',
                     '<%= BLUE_SPEEDOMETER %>',
                     '<%= GREEN_SPEEDOMETER %>'
                 ],
                 borderColor: ['<%= LIGHT_GREY %>', '<%= BLUE %>', '<%= GREEN %>'],
-                borderWidth: 1
+                borderWidth: 1,
             }]
         },
         options: {
-            responsive: true,
-            title: {
-                display: false
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0
-                }
-            },
-            needle: {
-                radiusPercentage: 0,
-                widthPercentage: 5,
-                lengthPercentage: 80,
-                color: '<%= DARK_GREY %>'
-            },
-            valueLabel: {
-                display: false
+            rotation: 270,
+            circumference: 180,
+            cutout: 18,
+            aspectRatio: 2,
+            plugins: {
+                tooltip: { enabled: false },
+                legend: { display: false },
             }
-        }
+        },
+        plugins: [{
+            afterDatasetDraw(chart, args, options) {
+                const { ctx, config, data, chartArea: { top, bottom, left, right, width, height } } = chart;
+                ctx.save();
+
+                const dataTotal = 100; // total width of data - in our case 100%
+                let needleValue = data.datasets[0].needleValue;
+                let needleAngle = Math.PI + ( 1 / dataTotal * needleValue * Math.PI);
+                // find the bottom center of chart
+                let chart_x = width / 2;
+                let chart_y = chart._metasets[0].data[0].y;
+                // set needle width
+                let needleWidth = width / 2 - 10;
+
+                // draw needle (triangle)
+                ctx.translate(chart_x, chart_y); // set starting point
+                ctx.rotate(needleAngle); // rotate towards destination point
+                ctx.beginPath(); // start drawing
+                ctx.moveTo(0, -3); // move 2px to the left
+                ctx.lineTo(needleWidth, 0); // draw a line
+                ctx.lineTo(0, 3); // go to 2px to the right from starting point
+                ctx.lineTo(0, -3); // go back to starting point
+                ctx.fillStyle = "<%= LIGHT_GREY_SPEEDOMETER_NEEDLE %>"; // set color
+                ctx.strokeStyle = "<%= LIGHT_GREY_SPEEDOMETER_NEEDLE %>";
+                ctx.lineWidth = 1;
+                ctx.stroke(); // draw triangle borders
+                ctx.fill(); // fill triangle with color
+
+                ctx.restore();
+            }
+        }]
     });
 </script>

@@ -67,6 +67,22 @@
       <stake-pool-stats :pool="selected_pool"/>
     </div>
 
+    <div class="mb-4">
+      <div class="small mb-2 ps-3">Stake less than <strong>1&nbsp;SOL</strong></div>
+      <div class="btn-group btn-group-toggle switch-button">
+        <span class="btn btn-xs btn-secondary"
+              :class="is_stake_below_minimum_visible ? 'active' : ''"
+              v-on:click="set_stake_below_minimum_visibility(true)">
+          <i class="fa-solid fa-eye me-2"></i>Show
+        </span>
+        <span class="btn btn-xs btn-secondary"
+              :class="is_stake_below_minimum_visible ? '' : 'active'"
+              v-on:click="set_stake_below_minimum_visibility(false)">
+          <i class="fa-solid fa-eye-slash me-2"></i>Hide
+        </span>
+      </div>
+    </div>
+
     <!-- Validators and accounts table -->
     <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
@@ -141,6 +157,7 @@
 
           <stake-account-row
             v-for="(sa, index) in stake_accounts"
+            v-if="!is_loading_stake_account_records"
             :key="sa.id"
             :stake_accounts="sa"
             :idx="index + (page - 1) * 20"
@@ -149,6 +166,11 @@
           >
           </stake-account-row>
         </table>
+
+        <div class="img-loading col-12 text-center my-5"
+            v-if="is_loading_stake_account_records">
+          <img v-bind:src="loading_image" width="100">
+        </div>
 
         <div class="card-footer">
           <b-pagination
@@ -308,7 +330,9 @@
           eversol: eversolImage,
           blazestake: blazestakeImage,
           jito: jitoImage
-        }
+        },
+        is_stake_below_minimum_visible: true,
+        is_loading_stake_account_records: false
       }
     },
     components: {
@@ -324,7 +348,8 @@
           page: ctx.page,
           with_batch: true,
           seed: ctx.seed,
-          grouped_by: 'delegated_vote_accounts_address'
+          grouped_by: 'delegated_vote_accounts_address',
+          exclude_accounts_below_minimum_stake: !ctx.is_stake_below_minimum_visible
         }
       }
 
@@ -362,7 +387,11 @@
       filter_withdrawer: function(){
         this.refresh_results()
       },
-      filter_validator: function(){
+      filter_validator: function() {
+        this.refresh_results()
+      },
+      is_stake_below_minimum_visible() {
+        this.is_loading_stake_account_records = true
         this.refresh_results()
       }
     },
@@ -370,10 +399,8 @@
       paginate: function(){
         this.refresh_results()
       },
-      refresh_results: debounce(function() {
+      get_stake_accounts_call() {
         var ctx = this
-
-        ctx.is_loading_stake_accounts = true
 
         var query_params = {
           params: {
@@ -384,17 +411,24 @@
             filter_withdrawer: ctx.filter_withdrawer,
             filter_validator: ctx.filter_validator,
             grouped_by: 'delegated_vote_accounts_address',
-            seed: ctx.seed
+            seed: ctx.seed,
+            exclude_accounts_below_minimum_stake: !ctx.is_stake_below_minimum_visible
           }
         }
 
         axios.get(ctx.stake_accounts_api_url, query_params)
-             .then(function (response) {
-               ctx.stake_accounts = response.data.stake_accounts;
-               ctx.total_count = response.data.total_count;
-               ctx.current_epoch = response.data.current_epoch;
-               ctx.is_loading_stake_accounts = false;
-             })
+          .then(function (response) {
+            ctx.stake_accounts = response.data.stake_accounts;
+            ctx.total_count = response.data.total_count;
+            ctx.current_epoch = response.data.current_epoch;
+            ctx.is_loading_stake_accounts = false;
+            ctx.is_loading_stake_account_records = false
+          })
+      },
+      refresh_results: debounce(function() {
+        this.is_loading_stake_accounts = true
+
+        this.get_stake_accounts_call()
       }, 2000),
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
@@ -424,6 +458,9 @@
       },
       filters_present: function(){
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
+      },
+      set_stake_below_minimum_visibility(visible) {
+        this.is_stake_below_minimum_visible = visible
       }
     }
   }

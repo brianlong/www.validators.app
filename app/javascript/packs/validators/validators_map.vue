@@ -38,20 +38,20 @@
 
         <div class="d-flex flex-wrap gap-3">
           <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
-          <span class="btn btn-xs btn-secondary active">
-            <i class="fa-solid fa-eye"></i>
-          </span>
+            <span class="btn btn-xs btn-secondary active">
+              <i class="fa-solid fa-eye"></i>
+            </span>
             <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(false)">
-            <i class="fa-solid fa-eye-slash me-2"></i>RPC nodes
-          </span>
+              <i class="fa-solid fa-eye-slash me-2"></i>RPC nodes
+            </span>
           </div>
           <div class="btn-group btn-group-toggle switch-button" v-else>
-          <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(true)">
-            <i class="fa-solid fa-eye me-2"></i>RPC nodes
-          </span>
+            <span class="btn btn-xs btn-secondary" v-on:click="set_nodes_visibility(true)">
+              <i class="fa-solid fa-eye me-2"></i>RPC nodes
+            </span>
             <span class="btn btn-xs btn-secondary active">
-            <i class="fa-solid fa-eye-slash"></i>
-          </span>
+              <i class="fa-solid fa-eye-slash"></i>
+            </span>
           </div>
           <a :href="data_centers_link()" target="_blank" class="btn btn-xs btn-secondary">
             Data Centers

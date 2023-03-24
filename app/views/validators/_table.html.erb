@@ -119,7 +119,7 @@
           <div class="column-info-name">
             <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                         class: 'fw-bold' do %>
-              <%= validator_display_name(validator) %>
+              <%= displayed_validator_name(validator) %>
             <% end %>
             <% unless validator.private_validator? && !validator.lido? %>
               <small class="ms-1 text-muted">
@@ -188,14 +188,12 @@
       <td class="column-speedometer">
         <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
         <% if skipped_vote_percent %>
+          <% needle_value = set_speedometer_needle_position(value: skipped_vote_percent,
+                                                            single_range_size: batch.skipped_vote_all_median.to_f) %>
           <div class="d-none d-lg-block">
             <%= render 'validators/speedometer_chart',
-                       canvas_name: "spark_line_skipped_vote_#{validator.account}",
-                       value: [skipped_vote_percent, batch.skipped_vote_all_median.to_f * 3].max,
-                       chart_steps: [batch.skipped_vote_all_median.to_f * 2, batch.skipped_vote_all_median.to_f, 0.05],
-                       min_value: batch.skipped_vote_all_median.to_f * 3,
-                       max_value: 0.05
-            %>
+                       canvas_name: "skipped_vote_#{validator.account}",
+                       needle_value: needle_value %>
             <div class="text-center text-muted small mt-2">
               <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
             </div>
@@ -246,8 +244,8 @@
             </div>
           </div>
         <% end %>
-        <%= render 'validators/spark_line_block_distance',
-                   account: validator.account,
+        <%= render 'validators/validator_small_chart',
+                   chart_name: "block_distance_#{validator.account}",
                    vector: vector,
                    line_color: line_color,
                    fill_color: fill_color
@@ -270,8 +268,8 @@
             </div>
           </div>
         <% end %>
-        <%= render 'validators/spark_line_vote_distance',
-                   account: validator.account,
+        <%= render 'validators/validator_small_chart',
+                   chart_name: "vote_distance_#{validator.account}",
                    vector: vote_vector,
                    line_color: line_color,
                    fill_color: fill_color
@@ -288,14 +286,12 @@
           slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
           line_color = chart_line_color(validator.skipped_slot_score)
-          fill_color = chart_fill_color(validator.skipped_slot_score)
         %>
-        <%= render 'validators/spark_line_skipped_slots',
+        <%= render 'validators/validator_skipped_slots_chart',
                    account: validator.account,
                    vector: slot_vector,
                    line_color: line_color,
-                   fill_color: fill_color,
-                   moving_avg: skipped_slots_moving_avg
+                   moving_avg_vector: skipped_slots_moving_avg
         %>
       </td>
     </tr>

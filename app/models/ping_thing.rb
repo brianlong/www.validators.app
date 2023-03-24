@@ -60,9 +60,7 @@ class PingThing < ApplicationRecord
     where(network: network, reported_at: (from..to))
   }
 
-  after_create :update_stats_if_present, :broadcast
-
-  after_create :update_stats_if_present
+  after_create :broadcast
 
   def to_builder
     Jbuilder.new do |ping_thing|
@@ -79,11 +77,6 @@ class PingThing < ApplicationRecord
     hash.merge!(self.user.to_builder.attributes!)
 
     ActionCable.server.broadcast("ping_thing_channel", hash)
-  end
-
-  def update_stats_if_present
-    stats = PingThingStat.by_network(network).between_time_range(reported_at)
-    stats.each(&:recalculate)
   end
 
   def self.average_slot_latency
