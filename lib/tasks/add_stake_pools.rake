@@ -44,9 +44,9 @@ namespace :add_stake_pools do
 end
 
 # Run the following task if @manager_fees changes
-# RAILS_ENV=stage bundle exec rake update_fee_in_stake_pools:mainnet
-# RAILS_ENV=production bundle exec rake update_fee_in_stake_pools:mainnet
-namespace :update_fee_in_stake_pools do
+# RAILS_ENV=stage bundle exec rake update_fees_in_stake_pools:mainnet
+# RAILS_ENV=production bundle exec rake update_fees_in_stake_pools:mainnet
+namespace :update_fees_in_stake_pools do
   task mainnet: :environment do
     update_stake_pools_fees(MAINNET_STAKE_POOLS)
   end
