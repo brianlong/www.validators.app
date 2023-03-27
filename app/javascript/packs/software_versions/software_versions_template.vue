@@ -93,6 +93,7 @@
         is_loading: true
       }
     },
+
     methods: {
       software_version_class(version){
         if(version == this.current_software_version) {
@@ -105,6 +106,7 @@
         return '/validators?q=' + version + '&network=' + this.network
       }
     },
+
     channels: {
       SoftwareVersionsChannel: {
         connected() {},
@@ -120,17 +122,19 @@
         disconnected() {},
       },
     },
-    mounted: function(){
+
+    mounted: function() {
       this.$cable.subscribe({
         channel: "SoftwareVersionsChannel",
         room: "public",
       });
     },
+
     computed: {
       current_software_version: function() {
         var current = null
         Object.keys(this.software_versions).forEach(sv => {
-          if(!current || this.software_versions[current].stake_percent < this.software_versions[sv].stake_percent){
+          if(!current || this.software_versions[current].stake_percent < this.software_versions[sv].stake_percent) {
             current = sv
           }
         })

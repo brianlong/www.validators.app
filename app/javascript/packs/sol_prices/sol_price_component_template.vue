@@ -46,9 +46,9 @@
         volume_24h: null
       }
     },
-    methods: {
 
-    },
+    methods: {},
+
     channels: {
       FrontStatsChannel: {
         connected() {},
@@ -61,7 +61,8 @@
         disconnected() {},
       },
     },
-    mounted: function(){
+
+    mounted: function() {
       this.$cable.subscribe({
           channel: "FrontStatsChannel",
           room: "public",

@@ -55,17 +55,20 @@
         gross_yield: null
       }
     },
+
     created() {
       this.connection = new web3.Connection(this.web3_url);
 
       this.update_circulating_supply();
     },
-    mounted: function(){
+
+    mounted: function() {
       this.$cable.subscribe({
           channel: "FrontStatsChannel",
           room: "public",
         });
     },
+
     computed: mapGetters([
       'web3_url',
       'network'
@@ -82,10 +85,12 @@
         disconnected() {},
       },
     },
+
     methods: {
       lamports_to_sol(lamports) {
         return lamports / 1000000000;
       },
+
       update_circulating_supply() {
         this.connection.getSupply(this.api_params)
           .then(response => {
@@ -94,6 +99,7 @@
             this.total_circulating_supply = this.lamports_to_sol(val.total).toLocaleString('en-US', { maximumFractionDigits: 0 });
           });
       },
+
       percent_of_total_stake() {
         return (parseInt(this.circulating_supply) * 100 / parseInt(this.total_circulating_supply)).toFixed(0);
       }

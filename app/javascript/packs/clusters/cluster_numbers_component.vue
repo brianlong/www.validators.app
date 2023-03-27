@@ -34,15 +34,18 @@
         software_version: null
       }
     },
+
     computed: mapGetters([
       'network'
     ]),
-    mounted: function(){
+
+    mounted: function() {
       this.$cable.subscribe({
           channel: "FrontStatsChannel",
           room: "public",
         });
     },
+
     channels: {
       FrontStatsChannel: {
         connected() {},

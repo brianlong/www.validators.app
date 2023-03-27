@@ -62,16 +62,20 @@
         epoch_graph_position: null
       }
     },
+
     created() {
       this.connection = new web3.Connection(this.web3_url)
     },
+
     mounted() {
       this.get_epoch_info()
       this.get_1_sec_data()
     },
+
     computed: mapGetters([
       'web3_url'
     ]),
+
     methods: {
       get_epoch_info: function() {
         var ctx = this
@@ -84,9 +88,10 @@
           ctx.epoch_graph_position = ctx.complete_percent + '%'
         })
       },
+
       get_1_sec_data: function() {
         var ctx = this
-        setTimeout(function(){
+        setTimeout(function() {
           ctx.get_epoch_info()
           ctx.get_1_sec_data()
         }, ctx.gather_interval * 1000)
