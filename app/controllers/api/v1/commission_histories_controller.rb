@@ -31,7 +31,7 @@ module Api
             status: :ok
           end
           format.csv do
-            send_data convert_to_csv(index_csv_headers, commission_histories.as_json(except: [:validator_id])),
+            send_data convert_to_csv(index_csv_headers, commission_histories.as_json),
                       filename: "commission-changes-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end

@@ -6,13 +6,17 @@ module Api
         respond_to do |format|
           format.json
           format.csv do
-            send_data convert_to_csv(index_csv_headers, @stake_pools.as_json),
-                      filename: "stake-pools-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+            send_data convert_to_csv(index_csv_headers, index_csv_row_data),
+            filename: "stake-pools-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end
       end
 
       private
+
+      def index_csv_row_data
+        @stake_pools.as_json(methods: [:validators_count, :total_stake, :average_stake])
+      end
 
       def index_csv_headers
         StakePool::FIELDS_FOR_API.map(&:to_s)

@@ -33,6 +33,16 @@ class ValidatorBlockHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
 
+  FIELDS_FOR_API = %i[
+    epoch
+    leader_slots
+    blocks_produced
+    skipped_slots
+    skipped_slot_percent
+    created_at
+    batch_uuid
+  ].freeze
+
   belongs_to :validator
   has_one :batch, primary_key: :batch_uuid, foreign_key: :uuid
 

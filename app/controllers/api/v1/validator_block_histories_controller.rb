@@ -41,8 +41,7 @@ module Api
       end
 
       def index_csv_headers
-        %w[epoch leader_slots blocks_produced skipped_slots
-          skipped_slot_percent created_at batch_uuid]
+        ValidatorBlockHistory::FIELDS_FOR_API.map(&:to_s)
       end
     end
   end
