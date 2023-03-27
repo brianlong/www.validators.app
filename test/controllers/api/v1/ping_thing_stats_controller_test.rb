@@ -31,8 +31,10 @@ class PingThingStatsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_ping_thing_stats with token as csv returns 200" do
     path = api_v1_ping_thing_stats_path(
-      network: "testnet"
-    ) + ".csv"
+      network: "testnet",
+      interval: 1,
+      format: "csv"
+    )
     get path, headers: @headers
 
     assert_response :success

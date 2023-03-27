@@ -12,11 +12,11 @@ module Api
         ).last(RECORDS_COUNT)
 
         json_result = create_json_result(stats)
-        
+
         respond_to do |format|
           format.json { render json: json_result, status: :ok }
           format.csv do
-            send_data convert_to_csv(index_csv_headers, json_result),
+            send_data convert_to_csv(index_csv_headers, json_result.as_json),
                       filename: "ping-thing-stats-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end
@@ -34,7 +34,7 @@ module Api
 
       def create_json_result(stats)
         return {} if stats.blank?
-        
+
         stats.map { |el| el.to_builder.attributes! }
       end
     end
