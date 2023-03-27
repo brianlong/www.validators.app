@@ -27,7 +27,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   test "#call updates ClusterStat with correct values" do
     5.times do |n|
       create(:gossip_node, network: @network)
-      create(:validator, network: @network)
+      create(:validator, :with_score, network: @network)
     end
 
     create(
@@ -128,5 +128,14 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
 
       assert_equal 222, stat.skipped_votes["max"]
     end
+  end
+
+  test "#call does not include delinquent validators into ClusterStats" do
+    create_list(:validator, 5, :with_score, network: @network)
+    ValidatorScoreV1.last.update(delinquent: true)
+    CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
+    stat = ClusterStat.where(network: @network).last
+
+    assert_equal 4, stat.validator_count
   end
 end

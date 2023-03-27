@@ -7,7 +7,10 @@ class CreateClusterStatsService
   end
 
   def call
-    validators_total = Validator.where(network: @network).active.count
+    validators_total = Validator.joins(:validator_score_v1)
+                                .where(network: @network)
+                                .where("validator_score_v1s.delinquent = false")
+                                .active.count
     nodes_total = GossipNode.where(network: @network).active.not_staked.count
     dominant_software_version = Batch.last_scored(@network).software_version
 
