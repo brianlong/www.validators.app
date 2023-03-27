@@ -43,7 +43,10 @@ module Api
       private
 
       def index_csv_headers
-        CommissionHistory.column_names.reject { |c| ["id", "validator_id", "updated_at"].include? c }
+        (
+          CommissionHistory::API_FIELDS +
+          CommissionHistory::API_VALIDATOR_FIELDS
+        ).map(&:to_s)
       end
 
       def index_params

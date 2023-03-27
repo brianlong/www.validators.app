@@ -26,13 +26,16 @@ module Api
                       filename: "gossip-nodes-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end
-        
       end
 
       private
 
       def index_csv_headers
-        GossipNode.column_names.reject{ |c| c == "id" }
+        (
+          GossipNode::API_FIELDS +
+          GossipNode::API_VALIDATOR_FIELDS +
+          GossipNode::API_DATA_CENTER_FIELDS
+        ).map(&:to_s)
       end
 
       def nodes_params

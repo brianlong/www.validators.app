@@ -24,14 +24,32 @@
 #
 
 class GossipNode < ApplicationRecord
-  FIELDS_FOR_API = [
-    "account",
-    "ip",
-    "network",
-    "staked",
-    "software_version",
-    "created_at",
-    "updated_at"
+
+  API_FIELDS = %i[
+    account
+    ip
+    network
+    staked
+    software_version
+    created_at
+    updated_at
+  ].freeze
+
+  API_VALIDATOR_FIELDS = %i[
+    account
+    avatar_url
+    details
+    keybase_id
+    name
+    www_url
+    admin_warning
+    jito
+  ].freeze
+
+  API_DATA_CENTER_FIELDS = %i[
+    data_center_key
+    latitude
+    longitude
   ].freeze
 
   has_one :validator_ip, primary_key: :ip, foreign_key: :address

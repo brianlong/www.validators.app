@@ -70,8 +70,8 @@ class DataCenter < ApplicationRecord
   FIELDS_FOR_GOSSIP_NODES = [
     "country_iso_code",
     "subdivision_iso_code",
-    "data_center_key" ,
-    "location_latitude as latitude" ,
+    "data_center_key",
+    "location_latitude as latitude",
     "location_longitude as longitude"
   ].freeze
 

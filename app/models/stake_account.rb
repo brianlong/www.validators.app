@@ -34,7 +34,8 @@
 #
 
 class StakeAccount < ApplicationRecord
-  FIELDS_FOR_API = %i[
+
+  API_FIELDS = %i[
     id
     activation_epoch
     delegated_stake
@@ -46,9 +47,16 @@ class StakeAccount < ApplicationRecord
     network
     batch_uuid
     pool_name
+    active_stake
+  ].freeze
+
+  API_VALIDATOR_FIELDS = %i[
     validator_name
     validator_account
-    validator_active_stake
+  ].freeze
+
+  API_STAKE_POOL_FIELDS = %i[
+    pool_name
   ].freeze
 
   belongs_to :stake_pool, optional: true

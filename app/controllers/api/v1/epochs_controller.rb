@@ -24,7 +24,7 @@ module Api
       private
 
       def index_csv_headers
-        %w[epoch starting_slot slots_in_epoch  network created_at]
+        EpochWallClock::API_FIELDS.map(&:to_s)
       end
 
       def epoch_params

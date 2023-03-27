@@ -39,7 +39,7 @@ module Api
       private
 
       def index_csv_headers
-        SolPrice.column_names
+        SolPrice::API_FIELDS.map(&:to_s)
       end
 
       def index_params

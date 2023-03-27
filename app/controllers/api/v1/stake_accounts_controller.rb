@@ -25,7 +25,11 @@ module Api
       private
 
       def index_csv_headers
-        StakeAccount::FIELDS_FOR_API.map(&:to_s)
+        (
+          StakeAccount::API_FIELDS +
+          StakeAccount::API_VALIDATOR_FIELDS +
+          StakeAccount::API_STAKE_POOL_FIELDS
+        ).map(&:to_s)
       end
 
       def base_query
