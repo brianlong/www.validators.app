@@ -4,17 +4,18 @@ require File.expand_path('../config/environment', __dir__)
 
 include GossipNodeLogic
 
-%w[mainnet testnet].each do |network|
+NETWORKS.each do |network|
   logger = Logger.new("#{Rails.root}/log/gossip_nodes_#{network}.log")
 
   payload = {
-    config_urls: Rails.application.credentials.solana["#{network}_urls".to_sym],
+    config_urls: NETWORK_URLS[network],
     network: network
   }
 
   p = Pipeline.new(200, payload)
               .then(&get_nodes)
               .then(&update_nodes)
+              .then(&set_inactive_nodes_status)
               .then(&set_staked_flag)
 
   logger.info "Finished at #{DateTime.now} with status #{p.code}"

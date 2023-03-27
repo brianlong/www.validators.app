@@ -16,8 +16,10 @@ module Api
         ping_things = PingThing.where(network: index_params[:network])
                                .includes(:user)
                                .order(reported_at: :desc)
-                               .page(page)
-                               .per(limit)
+        if index_params[:time_filter]
+          ping_things = ping_things.where("response_time >= ?", index_params[:time_filter].to_i)
+        end
+        ping_things = ping_things.page(page).per(limit)
 
         json_result = ping_things.map { |pt| create_json_result(pt) }
 
@@ -68,7 +70,7 @@ module Api
       private
 
       def index_params
-        params.permit(:network, :limit, :page, :with_stats)
+        params.permit(:network, :limit, :page, :with_stats, :time_filter)
       end
 
       def ping_thing_params

@@ -12,7 +12,7 @@
   <div class="col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
-        <h2 class="card-heading"><i class="fas fa-sliders-h me-1"></i> Basics</h2>
+        <h2 class="card-heading"><i class="fa-solid fa-sliders me-1"></i> Basics</h2>
         <ul class="list-large list-no-bullets text-center">
           <li><a href="#staking">What is staking</a></li>
           <li><a href="#timeline">Staking timeline</a></li>
@@ -47,7 +47,7 @@
   <div class="col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-content">
-        <h2 class="card-heading"><i class="fas fa-spell-check me-1"></i> Dictionary</h2>
+        <h2 class="card-heading"><i class="fa-solid fa-spell-check me-1"></i> Dictionary</h2>
         <ul class="list-large list-no-bullets text-center">
           <li><a href="#commission">Commission</a></li>
           <li><a href="#epoch">Epoch</a></li>
@@ -57,6 +57,7 @@
           <li><a href="#delinquency">Delinquency</a></li>
           <li><a href="#stake-concentration">Stake Concentration</a></li>
           <li><a href="#stake-pool">Stake Pool</a></li>
+          <li><a href="#roi">Gross ROI</a></li>
         </ul>
       </div>
     </div>
@@ -65,7 +66,7 @@
     <div class="card h-100">
       <div class="card-content">
         <h2 class="card-heading">
-          <i class="fas fa-dollar-sign me-1"></i> FAQ - investors</h2>
+          <i class="fa-solid fa-dollar-sign me-1"></i> FAQ - investors</h2>
         <ul class="list-large list-no-bullets text-center">
           <li><a href="#investing">How do I start investing?</a></li>
           <li><a href="#best-validator">How to find the&nbsp;best validator?</a></li>
@@ -139,7 +140,8 @@
     at that time.
     <br />
     We can help you track commission changes of the validators.
-    To get email notifications, <%= link_to 'create an account', new_user_registration_path %> and add the validator to your favourites.
+    To get email notifications, <%= link_to 'create an account', new_user_registration_path %> and add the validator
+    to your favourites.
   </p>
   <p>
     <strong>Reliability</strong> - if the&nbsp;validator has all the&nbsp;information filled up, has its own website and
@@ -160,19 +162,19 @@
 <div class="mb-5">
   <p>
     We track validator performance over several dimensions and assign a&nbsp;score in the&nbsp;range of (0..2) for each.
-    the&nbsp;scores also correlate with colored icons: <i class="fas fa-circle score-2"></i> is excellent,
-    <i class="fas fa-circle score-1"></i> is OK, and <i class="fas fa-circle score-0"></i> means there is room for
+    the&nbsp;scores also correlate with colored icons: <i class="fa-solid fa-circle score-2"></i> is excellent,
+    <i class="fa-solid fa-circle score-1"></i> is OK, and <i class="fa-solid fa-circle score-0"></i> means there is room for
     improvement. The&nbsp;scored dimensions are:
   </p>
 
   <ol class="list-with-numbers">
     <li>
       <strong>Root Block Distance</strong> <br />
-      <i class="fas fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator median block distance is at,
+      <i class="fa-solid fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator median block distance is at,
       or below, the&nbsp;cluster median.<br />
-      <i class="fas fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator average block distance is at,
+      <i class="fa-solid fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator average block distance is at,
       or below, the&nbsp;cluster average.<br />
-      <i class="fas fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator average is higher than
+      <i class="fa-solid fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator average is higher than
       the&nbsp;cluster average.<br />
       The&nbsp;medians and averages are calculated over a&nbsp;trailing 2-day period and do not reset with each epoch.
     </li>
@@ -184,11 +186,11 @@
       For this metric, we track a&nbsp;trailing 24-hour moving average of the&nbsp;skip rate. The&nbsp;moving average (MA) is
       then compared to the&nbsp;cluster median(MA) and cluster average(MA). On the&nbsp;charts, a&nbsp;dotted line shows
       the&nbsp;spot reading that resets with every epoch. The&nbsp;solid line shows the&nbsp;24-hour moving average.<br />
-      <i class="fas fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator skipped slot &percnt; is at, or below,
+      <i class="fa-solid fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator skipped slot &percnt; is at, or below,
       the&nbsp;cluster median.<br />
-      <i class="fas fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;skipped slot &percnt; is at, or below,
+      <i class="fa-solid fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;skipped slot &percnt; is at, or below,
       the&nbsp;cluster average.<br />
-      <i class="fas fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator average is higher than
+      <i class="fa-solid fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator average is higher than
       the&nbsp;cluster average.<br />
       The&nbsp;moving averages reflect the&nbsp;previous 24-hours, and the&nbsp;spot reading resets with each new epoch.
     </li>
@@ -197,20 +199,20 @@
       Investors or delegators want to know who is running a&nbsp;node. The&nbsp;Published Information Score measures
       the&nbsp;contact information that the&nbsp;validator has posted to the&nbsp;blockchain using the
       `solana validator-info` feature.<br />
-      <i class="fas fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator has published all four data
+      <i class="fa-solid fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator has published all four data
       elements (Name, Keybase ID, Website URL, and Details).<br />
-      <i class="fas fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator has published two or three parts.<br />
-      <i class="fas fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator has published only one, or zero,
+      <i class="fa-solid fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator has published two or three parts.<br />
+      <i class="fa-solid fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator has published only one, or zero,
       pieces of contact data.
     </li>
     <li>
       <strong>Software Version</strong><br />
       This score is based on the&nbsp;Solana software version currently in use on this node.<br />
-      <i class="fas fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator is using the&nbsp;correct major,
+      <i class="fa-solid fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator is using the&nbsp;correct major,
       minor, & patch versions.<br />
-      <i class="fas fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator is using the&nbsp;correct major,
+      <i class="fa-solid fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator is using the&nbsp;correct major,
       & minor versions (but not patch).<br />
-      <i class="fas fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator is only using the&nbsp;current
+      <i class="fa-solid fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator is only using the&nbsp;current
       major version (or less).<br />
       This score is updated as soon as the&nbsp;validator starts voting with a&nbsp;new software update.
     </li>
@@ -221,14 +223,14 @@
       be aware that I am not evaluating the&nbsp;content on that web page. I will merely confirm that the&nbsp;web page
       discusses security or operating procedures before posting the&nbsp;link to this site. Validators that use mods
       with an&nbsp;unproven effect on consensus are always assigned with bonus point 0.<br />
-      <i class="fas fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator has provided a&nbsp;valid URL.<br />
-      <i class="fas fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator has not published a&nbsp;description
+      <i class="fa-solid fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator has provided a&nbsp;valid URL.<br />
+      <i class="fa-solid fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator has not published a&nbsp;description
       of their security policies, or validator uses software modifications.<br />
       Validators, please directly <%= link_to 'contact Brian Long', contact_us_path %> to provide the&nbsp;URL.
     </li>
     <li>
       <strong>Stake Concentration</strong> is a&nbsp;contra-score and will DEDUCT points from a&nbsp;validator's total score:<br />
-      <i class="fas fa-minus-circle text-warning me-1"></i> (-2 points) means that this validator is one of
+      <i class="fa-solid fa-circle-minus text-warning me-1"></i> (-2 points) means that this validator is one of
       the&nbsp;top 33&percnt; active stake holders.<br />
       The&nbsp;concentration of stake is a&nbsp;bad thing on a&nbsp;decentralized proof-of-stake blockchain. There is
       no deduction of points, and no icon, if the&nbsp;validator controls less than 3%. If you are an investor who is
@@ -239,9 +241,9 @@
       This is another contra-score that will DEDUCT points from validators located in data centers that host a&nbsp;high
       percentage of other Solana validators. A&nbsp;high data center concentration means that a&nbsp;problem with
       the&nbsp;hosting provider could take many of the&nbsp;nodes offline.<br />
-      <i class="fas fa-minus-circle text-danger me-1"></i> (-2 points) means that this validator is in a&nbsp;data center
+      <i class="fa-solid fa-circle-minus text-danger me-1"></i> (-2 points) means that this validator is in a&nbsp;data center
       with a&nbsp;very high percent of the&nbsp;active stake.<br />
-      <i class="fas fa-minus-circle text-warning me-1"></i> (-1 point) means that this validator is in a&nbsp;data center
+      <i class="fa-solid fa-circle-minus text-warning me-1"></i> (-1 point) means that this validator is in a&nbsp;data center
       with a&nbsp;high percent of the&nbsp;active stake.<br />
       If you are an investor who is delegating stake, please consider high performing nodes without a&nbsp;high data
       center concentration.
@@ -251,7 +253,7 @@
       Validator identity matching authorized withdrawer is a&nbsp;serious security risk, eg. if someone hacks into your
       validator, they can steal from the&nbsp;vote account. Keep the&nbsp;withdraw authority key offline
       to minimize the&nbsp;risk.<br />
-      <i class="fas fa-minus-circle text-warning me-1"></i> (-2 points) means that this validator identity is
+      <i class="fa-solid fa-circle-minus text-warning me-1"></i> (-2 points) means that this validator identity is
       the&nbsp;same as the&nbsp;authorized withdrawer identity.<br />
     </li>
     <li>
@@ -262,7 +264,7 @@
       the&nbsp;cluster can stall if the&nbsp;validators cannot reach a&nbsp;majority consensus. In such an event,
       the&nbsp;only way to resume is to restart after slashing the&nbsp;stake of the&nbsp;validators with modified
       software. Stakeholders who delegate to these validators should be aware of a&nbsp;small risk that they can lose funds.<br />
-      <i class="fas fa-minus-circle text-warning me-1"></i> (-2 points) means that this validator appears to use unproven
+      <i class="fa-solid fa-circle-minus text-warning me-1"></i> (-2 points) means that this validator appears to use unproven
       software modifications. Validators that use mods with an&nbsp;unproven effect on consensus are also assigned
       with bonus point 0.
     </li>
@@ -271,12 +273,12 @@
   <p>
     The&nbsp;maximum score is currently eleven (11) points:
     <small class="text-nowrap">
-      <i class="fas fa-circle score-2"></i>
-      <i class="fas fa-circle score-2"></i>
-      <i class="fas fa-circle score-2"></i>
-      <i class="fas fa-circle score-2"></i>
-      <i class="fas fa-circle score-2"></i>
-      <i class="fas fa-circle score-1"></i>
+      <i class="fa-solid fa-circle score-2"></i>
+      <i class="fa-solid fa-circle score-2"></i>
+      <i class="fa-solid fa-circle score-2"></i>
+      <i class="fa-solid fa-circle score-2"></i>
+      <i class="fa-solid fa-circle score-2"></i>
+      <i class="fa-solid fa-circle score-1"></i>
     </small>
   </p>
 </div>
@@ -328,6 +330,22 @@
   Solana is a&nbsp;decentralized proof-of-stake blockchain. It is best for the&nbsp;network and for those who uses it,
   that the&nbsp;total stake is divided among as many validators as possible. Keep this in mind while choosing
   a&nbsp;validator to delegate&nbsp;to.
+</p>
+
+<h3 class="h5" id="roi">Gross ROI</h3>
+<p>
+  Gross Return of Interest is a percentage value that represents total return from Solana network to both 
+  validators and stakers. It is calculated as follows:
+</p>
+<pre>
+  (stake_account_rewards + vote_account_rewards / total_active_stake) * number_of_epochs_per_year
+</pre>
+<p>
+  Where number_of_epochs_per_year is calculated as follows: seconds_in_year / duration_of_last_epoch_in_seconds. 
+  This gives the number of epochs in a year assuming all epochs were as long as the last epoch.
+</p>
+<p class="mb-5">
+  And stake_account_rewards and vote_account_rewards are the average reward per epoch based on last 3 epochs.
 </p>
 
 <h5 id="stake-pool">Stake Pool</h5>
@@ -449,5 +467,5 @@
 <h3 class="h5" id="fav">Can I add a validator to my favourites?</h3>
 <p class="mb-5">
   You need to <%= link_to 'create user account', new_user_registration_path %> or <%= link_to 'sign in to your user account', new_user_session_path %>
-  first. Then you can create your own watchlist by clicking on star <i class="fas fa-star text-warning"></i> icon next to each validator on the list.
+  first. Then you can create your own watchlist by clicking on star <i class="fa-solid fa-star text-warning"></i> icon next to each validator on the list.
 </p>

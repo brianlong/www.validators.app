@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CommissionHistoryQuery
+  TIME_RANGE_AGO = 60.days.ago
+
   CH_FIELDS = %w[
     created_at
     commission_before
@@ -11,6 +13,7 @@ class CommissionHistoryQuery
     id
     epoch_completion
     batch_uuid
+    source_from_rewards
   ].freeze
 
   VAL_FIELDS = %w[
@@ -20,7 +23,7 @@ class CommissionHistoryQuery
 
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
-    @time_from = options.fetch(:time_from, 30.days.ago) || 30.days.ago
+    @time_from = options.fetch(:time_from, TIME_RANGE_AGO) || TIME_RANGE_AGO
     @time_to = options.fetch(:time_to, DateTime.now) || DateTime.now
     @time_range = @time_from..@time_to
     @sort_by = options.fetch(:sort_by, 'timestamp_desc') || 'timestamp_desc'
@@ -78,7 +81,6 @@ class CommissionHistoryQuery
 
   def matching_validators(query)
     validators = Validator.where(network: @network)
-                          .scorable
                           .joins(:validator_score_v1)
     ValidatorSearchQuery.new(validators).search(query)
   end

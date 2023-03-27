@@ -9,7 +9,7 @@ require 'timeout'
 # See `config/initializers/pipeline.rb` for a description of the Pipeline struct
 module SolanaLogic
   include PipelineLogic
-  RPC_TIMEOUT = 60 # seconds
+  include SolanaRequestsLogic
 
   # Create a batch record and set the :batch_uuid in the payload
   def batch_set
@@ -70,8 +70,8 @@ module SolanaLogic
     end
   end
 
-  # Use the Solana CLI tool to get Validator information
-  def validators_cli
+  # Use the Solana CLI tool to update ValidatorHistory information
+  def validator_history_update
     lambda do |p|
       return p unless p[:code] == 200
 
@@ -108,8 +108,8 @@ module SolanaLogic
       }.max.to_i
 
       validator_histories = {}
-      # Create current validators
-      validators["validators"].each do |validator|
+
+      existing_validators(validators["validators"], p.payload[:network]).each do |validator|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? validator["identityPubkey"]
         
         if existing_history = validator_histories[validator["identityPubkey"]]
@@ -162,7 +162,7 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from validators_cli', e)
+      Pipeline.new(500, p.payload, "Error from validator_history_update", e)
     end
   end
 
@@ -179,6 +179,7 @@ module SolanaLogic
       validators = {}
       validators_json.each do |hash|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
+
         validators[hash['pubkey']] = {
           'gossip_ip_port' => hash['gossip'],
           'rpc_ip_port' => hash['rpc'],
@@ -621,55 +622,13 @@ module SolanaLogic
     end
   end
 
-  # cli_request will accept a command line command to run and then return the
-  # results as parsed JSON. [] is returned if there is no data
-  def cli_request(cli_method, rpc_urls)
-    rpc_urls.each do |rpc_url|
-      response_json = Timeout.timeout(RPC_TIMEOUT) do
+  private
 
-        SolanaCliService.request(cli_method, rpc_url)
-
-      rescue Errno::ENOENT, Errno::ECONNREFUSED, Timeout::Error => e
-        # Log errors and return '' if there is a problem
-        Rails.logger.error "CLI TIMEOUT\n#{e.class}\nRPC URL: #{rpc_url}"
-        ''
-      end
-      # puts response_json
-      response_utf8 = response_json.encode(
-                            'UTF-8',
-                            invalid: :replace,
-                            undef: :replace
-                          )
-      # If the response includes extra notes at the top, we need to
-      # strip the notes before parsing JSON
-      #
-      # "\nNote: Requested start slot was 63936000 but minimum ledger slot is 63975209\n{
-      if response_utf8.include?('Note: ')
-        note_end_index = response_utf8.index("\n{")+1
-        response_utf8 = response_utf8[note_end_index..-1]
-      end
-
-      # byebug
-
-      return JSON.parse(response_utf8) unless response_utf8 == ''
-    rescue JSON::ParserError => e
-      Rails.logger.error "CLI ERROR #{e.class} RPC URL: #{rpc_url} for #{cli_method}\n#{response_utf8}"
-    end
-    []
-  end
-
-  # Clusters array, method symbol
-  def solana_client_request(clusters, method, params: [])
-    clusters.each do |cluster_url|
-      client = SolanaRpcClient.new(cluster: cluster_url).client
-      result = client.public_send(method, *params).result
-
-      return result unless result.blank?
-    rescue SolanaRpcRuby::ApiError => e
-      Appsignal.send_error(e) if Rails.env.in?(['stage', 'production'])
-      message = "Request to solana RPC failed:\n Method: #{method}\nCluster: #{cluster_url}\nCLASS: #{e.class}\n#{e.message}"
-      Rails.logger.error(message)
-      nil
+  def existing_validators(validator_attrs, network)
+    accounts = validator_attrs.map { |validator| validator["identityPubkey"] }
+    db_validator_accounts = Validator.where(network: network, account: accounts).pluck(:account)
+    validator_attrs.select do |validator|
+      db_validator_accounts.include?(validator["identityPubkey"])
     end
   end
 end

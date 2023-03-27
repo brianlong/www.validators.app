@@ -48,20 +48,21 @@
 #  index_data_centers_on_traits_autonomous_system_number  (traits_autonomous_system_number)
 #
 class DataCenter < ApplicationRecord
-  # Data Center for validators not assigned anywhere (mostly due to lack of validator_ip) 
+  # Data Center for validators not assigned anywhere (mostly due to lack of validator_ip)
   UNKNOWN_DATA_CENTER_KEY = "0--Unknown"
 
   FIELDS_FOR_API = %i[
     country_name
-    data_center_key 
+    data_center_key
     id
-    location_latitude 
+    location_latitude
     location_longitude
-    traits_autonomous_system_number 
+    traits_autonomous_system_number
   ].freeze
 
   FIELDS_FOR_GOSSIP_NODES = [
-    "country_name",
+    "country_iso_code",
+    "subdivision_iso_code",
     "data_center_key" ,
     "location_latitude as latitude" ,
     "location_longitude as longitude"
@@ -77,7 +78,7 @@ class DataCenter < ApplicationRecord
   has_many :data_center_stats, dependent: :destroy do
     def by_network(network)
       find_by(network: network)
-    end      
+    end
   end
 
   scope :for_api, -> { select(FIELDS_FOR_API) }
@@ -92,6 +93,13 @@ class DataCenter < ApplicationRecord
       data_center.autonomous_system_number self.traits_autonomous_system_number
       data_center.latitude self.location_latitude
       data_center.longitude self.location_longitude
+    end
+  end
+
+  def normalize_empty_strings
+    self.attributes.each do |column, value|
+      # to_s to cover 'false' boolean case
+      self[column].to_s.present? || self[column] = nil
     end
   end
 

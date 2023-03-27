@@ -14,8 +14,8 @@
         <li class="nav-item">
           <%= link_to 'API Docs', api_documentation_path, class: 'nav-link active' %>
         </li>
-        <li class="nav-item">
-          <%= link_to 'Cluster Stats', cluster_stats_path(network: params[:network]), class: 'nav-link' %>
+        <li class="nav-item" data-turbolinks="false">
+          <%= link_to 'Validators', validators_path(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Data Centers', data_centers_url(network: params[:network]), class: 'nav-link' %>
@@ -30,7 +30,7 @@
           <%= link_to 'Ping Thing', ping_things_path(network: params[:network]), class: 'nav-link' %>
         </li>
         <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Sol Prices', sol_prices_url(exchange: SolPrice::EXCHANGES[0], filtering: 7), class: 'nav-link' %>
+          <%= link_to 'Sol Prices', sol_prices_path, class: 'nav-link' %>
         </li>
         <li class="nav-item">
           <%= link_to 'Log Deep Dives', log_deep_dives_index_path, class: 'nav-link' %>
@@ -97,10 +97,14 @@
       <% end %>
     </p>
 
-    <div class="footer-copyright">
-      &copy; 2019<%= "-#{Date.today.year}" if Date.today.year > 2019 %>
-      <%= FMA_LLC.capitalize %> <%= t('footer.copyright_text') %>
-      (<%= request.env['SERVER_NAME'] %>)
+    <div class="footer-copyright d-flex justify-content-between flex-wrap gap-3">
+      <div>
+        &copy; 2019<%= "-#{Date.today.year}" if Date.today.year > 2019 %>
+        <%= FMA_LLC.capitalize %> <%= t('footer.copyright_text') %>
+      </div>
+      <div>
+        <%= ENV["_APPSIGNAL_HOSTNAME"] || "www.validators.app" %>
+      </div>
     </div>
   </div>
 </footer>

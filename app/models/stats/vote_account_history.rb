@@ -5,7 +5,7 @@ module Stats
   # VoteAccountHistory set of stats scoped to certain batch.
   #
   # Usage: stats = Stats::VoteAccountHistory.new(network, batch_uuid)
-  #            # network    - 'testnet' or 'mainnet' atm
+  #            # network    - 'testnet', 'mainnet' or 'pythnet' atm
   #            # batch_uuid - batch in which look for
   #        stats.average_skipped_vote_percent
   #        stats.median_skipped_vote_percent

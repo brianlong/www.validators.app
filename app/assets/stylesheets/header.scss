@@ -1,17 +1,36 @@
 @import "variables";
 
 header {
+  padding: 25px 0 55px 0;
+  @media(max-width: $screen-xs-max) {
+    padding: 20px 0 30px 0;
+  }
+
   .navbar-brand {
-    img { width: 250px; }
+    img {
+      width: 250px;
+      @media(max-width: $screen-xs-max) {
+        width: 230px;
+      }
+    }
   }
 
   .navbar {
-    padding: 25px 0 45px 0;
     @include font-size-base();
+    padding: 0;
+
+    .btn {
+      width: fit-content;
+      color: $link-color;
+      &:hover {
+        color: $background-color;
+      }
+    }
   }
+
   .nav-link {
     color: $link-color;
-    padding: 12px 18px !important;
+    padding: 14px 18px !important;
     &:hover, &:focus {
       color: $link-color-secondary;
       cursor: pointer;
@@ -22,8 +41,17 @@ header {
       margin-left: 10px;
       margin-top: -2px;
       &:hover { color: $white; }
+      @media(max-width: $screen-md-max) {
+        display: inline-block;
+        margin-left: 0;
+        margin-top: 15px;
+      }
+      @media(max-width: $screen-xs-max) {
+        padding-top: 20px;
+      }
     }
   }
+
   .nav-item {
     padding: 0;
     margin: 0;
@@ -41,9 +69,9 @@ header {
       transition: border-color .1s ease-in-out;
       background-color: $link-color;
       border: 1px solid $link-color;
-      &:nth-of-type(1) { margin-top: 8px}
-      &:nth-of-type(2) { margin-top: -8px}
-      &:nth-of-type(3) { margin-top: -22px}
+      &:nth-of-type(1) { margin-top: 8px; }
+      &:nth-of-type(2) { margin-top: -8px; }
+      &:nth-of-type(3) { margin-top: -22px; }
     }
     &:hover .navbar-toggler-icon {
       border-color: $link-color-secondary;
@@ -52,24 +80,81 @@ header {
     &:focus { outline: none; }
   }
 
+  .navbar-dropdown {
+    position: relative;
 
-  @media(max-width: $screen-md-max) {
-    .nav-link.btn {
-      display: inline-block;
-      margin-left: 0;
-      margin-top: 15px;
+    .btn {
+      &:after {
+        content: '\2193';
+        font-size: 12px;
+        font-weight: bold;
+      }
+      &.open {
+        color: $background-color;
+        background-color: $green;
+        @media(min-width: $screen-lg-min) {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        &:after {
+          content: '\2191';
+        }
+      }
     }
-  }
 
-  @media(max-width: $screen-xs-max) {
-    .navbar {
-      padding: 20px 0 30px 0;
+    &-options {
+      background: $background-color;
+      color: $link-color;
+      position: absolute;
+      z-index: 3;
+      width: 100%;
+      margin: 0;
+      padding: 5px 0;
+      border: 2px solid $green;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      list-style-type: none;
+      text-align: center;
+      display: block;
+      height: 0;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height .2s ease;
+      @media(max-width: $screen-lg-max) {
+        display: none;
+      }
+      @media(max-width: $screen-md-max) {
+        position: relative;
+        transform: none;
+        border: none;
+        text-align: left;
+        background-color: transparent;
+      }
+
+      &.open {
+        display: block;
+        height: auto;
+        max-height: 200px;
+        opacity: 1;
+        transition: max-height .2s ease;
+      }
     }
-    .navbar-brand img {
-      width: 230px;
+
+    &-item {
+      padding: 0;
+      margin: 0;
     }
-    .nav-link {
-      padding-top: 20px;
+
+    &-link {
+      display: block;
+      padding: 8px 0;
+      @media(max-width: $screen-md-max) {
+        padding-left: 18px;
+        &:hover {
+          background-color: transparent;
+          color: $link-color-secondary;
+        }
+      }
     }
   }
 }

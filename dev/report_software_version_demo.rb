@@ -7,6 +7,6 @@ payload = {
 }
 
 p = Pipeline.new(200, payload)
-             .then(&report_cluster_stats)
+             .then(&report_software_versions)
 
 puts p.errors

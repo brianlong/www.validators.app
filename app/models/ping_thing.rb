@@ -40,16 +40,14 @@ class PingThing < ApplicationRecord
 
   validates_presence_of :user_id, :response_time, :signature, :network
   validates_length_of :application, maximum: 80, allow_blank: true
-  validates :network, inclusion: { in: %w(mainnet testnet) }
+  validates :network, inclusion: { in: NETWORKS }
   validates :signature, length: { in: 64..128 }
 
   scope :for_reported_at_range_and_network, -> (network, from, to) {
     where(network: network, reported_at: (from..to))
   }
 
-  after_create :update_stats_if_present, :broadcast
-
-  after_create :update_stats_if_present
+  after_create :broadcast
 
   def to_builder
     Jbuilder.new do |ping_thing|
@@ -78,8 +76,7 @@ class PingThing < ApplicationRecord
     ActionCable.server.broadcast("ping_thing_channel", hash)
   end
 
-  def update_stats_if_present
-    stats = PingThingStat.by_network(network).between_time_range(reported_at)
-    stats.each(&:recalculate)
+  def self.average_slot_latency
+    all.map{ |pt| pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil }.compact.average
   end
 end

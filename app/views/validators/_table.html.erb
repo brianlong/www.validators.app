@@ -1,3 +1,5 @@
+<%= javascript_pack_tag 'validators/components/validator_score_modal.js' %>
+
 <table class='table table-block-sm validators-table'>
   <thead>
   <tr>
@@ -10,8 +12,9 @@
                           page: 1,
                           network: params[:network],
                           refresh: params[:refresh],
+                          jito: params[:jito],
                           watchlist: params[:watchlist] ? nil : true) do %>
-              <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning"
+              <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning"
                  data-bs-toggle="tooltip"
                  data-bs-placement="top"
                  title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
@@ -21,14 +24,14 @@
         <% end %>
         <div class="column-info-name">
           Name <small class="text-muted">(Commission)</small>
-          <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+          <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
              data-bs-toggle="tooltip"
              data-bs-placement="top"
              title="<%= t('definitions.commission') %>">
           </i>
           <br />
           Scores <small class="text-muted">(total)</small>
-          <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+          <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
              data-bs-toggle="tooltip"
              data-bs-placement="top"
              title="<%= t('definitions.scores') %>">
@@ -38,7 +41,7 @@
             IP & Gateway
           <% else %>
             Active Stake <small class="text-muted">(% of total)</small>
-            <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+            <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                data-bs-toggle="tooltip"
                data-bs-placement="top"
                title="<%= t('definitions.active_stake') %>">
@@ -50,7 +53,7 @@
 
     <th class='column-speedometer pe-0'>
       Skipped Vote
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
@@ -61,7 +64,7 @@
 
     <th class='column-chart py-3'>
       Root Distance
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.root_distance') %>">
@@ -72,7 +75,7 @@
 
     <th class='column-chart py-3'>
       Vote Distance
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.vote_distance') %>">
@@ -83,7 +86,7 @@
 
     <th class='column-chart py-3'>
       Skipped Slot&nbsp;&percnt;
-      <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.skipped_slot') %>">
@@ -100,11 +103,11 @@
     <% i += 1 %>
     <tr id="row-<%= i %>">
       <td class="column-info">
-        <div class="column-info-row">
+        <div class="column-info-row" data-turbolinks="false">
           <div class="column-info-avatar <%= 'no-watchlist' unless (current_user && show_watchlist_btn) %>">
             <%= create_avatar_link(validator) %>
             <% if current_user && show_watchlist_btn %>
-              <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fas' : 'far' %> fa-star"
+              <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fa-solid' : 'fa-regular' %> fa-star"
                  data-bs-toggle="tooltip"
                  data-bs-placement="top"
                  data-network="<%= validator.network%>"
@@ -116,7 +119,7 @@
           <div class="column-info-name">
             <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                         class: 'fw-bold' do %>
-              <%= validator_display_name(validator) %>
+              <%= displayed_validator_name(validator) %>
             <% end %>
             <% unless validator.private_validator? && !validator.lido? %>
               <small class="ms-1 text-muted">
@@ -140,6 +143,11 @@
                   <span class="d-inline-block d-lg-none">Gateway:&nbsp;</span>
                   <%= data_center_host %>
                 <% end %>
+              </div>
+              <div class="small text-muted">
+                <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+                <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+                <%= validator.score&.software_version %>
               </div>
             <% else %>
               <div class="d-sm-inline-block small mt-2 mt-sm-0">
@@ -180,14 +188,12 @@
       <td class="column-speedometer">
         <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
         <% if skipped_vote_percent %>
+          <% needle_value = set_speedometer_needle_position(value: skipped_vote_percent,
+                                                            single_range_size: batch.skipped_vote_all_median.to_f) %>
           <div class="d-none d-lg-block">
             <%= render 'validators/speedometer_chart',
-                       canvas_name: "spark_line_skipped_vote_#{validator.account}",
-                       value: [skipped_vote_percent, batch.skipped_vote_all_median.to_f * 3].max,
-                       chart_steps: [batch.skipped_vote_all_median.to_f * 2, batch.skipped_vote_all_median.to_f, 0.05],
-                       min_value: batch.skipped_vote_all_median.to_f * 3,
-                       max_value: 0.05
-            %>
+                       canvas_name: "skipped_vote_#{validator.account}",
+                       needle_value: needle_value %>
             <div class="text-center text-muted small mt-2">
               <%= number_to_percentage(skipped_vote_percent, precision: 2) %>
             </div>
@@ -232,12 +238,14 @@
         %>
         <% max_value = vector&.max %>
         <% if max_value && max_value > Y_ROOT_DISTANCE_MAX %>
-          <div class="chart-top-value">
-            <%= max_value %>
+          <div class="chart-top-container">
+            <div class="chart-top-value" style="left: <%= max_value_position(vector) %>">
+              <%= max_value %>
+            </div>
           </div>
         <% end %>
-        <%= render 'validators/spark_line_block_distance',
-                   account: validator.account,
+        <%= render 'validators/validator_small_chart',
+                   chart_name: "block_distance_#{validator.account}",
                    vector: vector,
                    line_color: line_color,
                    fill_color: fill_color
@@ -254,12 +262,14 @@
         %>
         <% max_value = vote_vector&.max %>
         <% if max_value && max_value > Y_VOTE_DISTANCE_MAX %>
-          <div class="chart-top-value">
-            <%= max_value %>
+          <div class="chart-top-container">
+            <div class="chart-top-value" style="left: <%= max_value_position(vote_vector) %>">
+              <%= max_value %>
+            </div>
           </div>
         <% end %>
-        <%= render 'validators/spark_line_vote_distance',
-                   account: validator.account,
+        <%= render 'validators/validator_small_chart',
+                   chart_name: "vote_distance_#{validator.account}",
                    vector: vote_vector,
                    line_color: line_color,
                    fill_color: fill_color
@@ -276,14 +286,12 @@
           slot_vector = validator.score&.skipped_slot_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
           line_color = chart_line_color(validator.skipped_slot_score)
-          fill_color = chart_fill_color(validator.skipped_slot_score)
         %>
-        <%= render 'validators/spark_line_skipped_slots',
+        <%= render 'validators/validator_skipped_slots_chart',
                    account: validator.account,
                    vector: slot_vector,
                    line_color: line_color,
-                   fill_color: fill_color,
-                   moving_avg: skipped_slots_moving_avg
+                   moving_avg_vector: skipped_slots_moving_avg
         %>
       </td>
     </tr>
@@ -301,3 +309,5 @@
   <% end %>
   </tbody>
 </table>
+
+<div id="validator-score-modal" validator=""></div>

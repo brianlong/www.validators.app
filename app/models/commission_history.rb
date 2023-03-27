@@ -2,16 +2,17 @@
 #
 # Table name: commission_histories
 #
-#  id                :bigint           not null, primary key
-#  batch_uuid        :string(191)
-#  commission_after  :float(24)
-#  commission_before :float(24)
-#  epoch             :integer
-#  epoch_completion  :float(24)
-#  network           :string(191)
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  validator_id      :bigint           not null
+#  id                  :bigint           not null, primary key
+#  batch_uuid          :string(191)
+#  commission_after    :float(24)
+#  commission_before   :float(24)
+#  epoch               :integer
+#  epoch_completion    :float(24)
+#  network             :string(191)
+#  source_from_rewards :boolean          default(FALSE)
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  validator_id        :bigint           not null
 #
 # Indexes
 #
@@ -27,7 +28,21 @@
 class CommissionHistory < ApplicationRecord
   belongs_to :validator
 
+  after_commit :notify_users, on: :create
+
   def rising?
     commission_after.to_i > commission_before.to_i
+  end
+
+  private
+
+  def notify_users
+    validator.watchers.each do |watcher|
+      CommissionHistoryMailer.commission_change_info(
+        user: watcher,
+        validator: validator,
+        commission: self
+      ).deliver_later
+    end
   end
 end

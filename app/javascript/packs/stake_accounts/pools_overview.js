@@ -21,7 +21,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
   template: `
     <div class="card h-100">
       <div class="card-content">
-        <h2 class="h3 card-heading mb-2">Stake Pools Overview</h2>
+        <h2 class="h4 card-heading mb-2">Stake Pools Overview</h2>
         <div class="text-center text-muted small">
           <a href="#" @click.prevent="go_to_metrics()">See metrics explanation</a>
         </div>

@@ -20,18 +20,6 @@ module ApplicationHelper
     msg == t('flash.cookie')
   end
 
-  def validator_display_name(validator)
-    if validator.private_validator? && !validator.lido?
-      'Private Validator'
-    else
-      validator.name || shorten_key(validator.account)
-    end
-  end
-
-  def shorten_key(pub_key)
-    "#{pub_key[0..5]}...#{pub_key[-4..-1]}"
-  end
-
   def lamports_to_sol(lamports)
     lamports / 1_000_000_000.to_f
   end
@@ -60,5 +48,14 @@ module ApplicationHelper
     else
       'text-danger'
     end
+  end
+
+  def set_speedometer_needle_position(value:, single_range_size:)
+    return 0 unless value && single_range_size
+    chart_maximum = single_range_size*3 # speedometer has three equal ranges
+    value_in_percents = (value / chart_maximum) * 100
+    value_in_percents = [value_in_percents, 100].min.round(2)
+    return value_in_percents unless (value < 0)
+    100 - value_in_percents
   end
 end

@@ -77,7 +77,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 37, validator_with_all_data.keys.size
+    assert_equal 38, validator_with_all_data.keys.size
 
     # Validator
     assert_equal "testnet", validator_with_all_data["network"]
@@ -346,7 +346,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 37, json_response.keys.size
+    assert_equal 38, json_response.keys.size
 
     # Validator
     assert_equal "testnet", json_response["network"]
@@ -392,6 +392,73 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 222, json_response["epoch"]
   end
 
+  test "GET api_v1_validator with internal param returns all data" do
+    validator = create(
+      :validator, 
+      :with_score,
+      :with_data_center_through_validator_ip, 
+      account: "Test Account"
+    )
+    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
+    create(:vote_account, validator: validator)
+    create(:report, :build_skipped_slot_percent)
+
+    get api_v1_validator_url(
+      network: "testnet",
+      account: validator.account,
+      internal: true
+    ),
+        headers: { "Token" => @user.api_token }
+    assert_response 200
+
+    json = JSON.parse @response.body
+    validator_json = JSON.parse json["validator"]
+    vote_account_json = validator_json["vote_account_active"]
+    score_json = JSON.parse json["score"]
+    validator_history_json = json["validator_history"]
+
+    validator_json.each do |k, v|
+      next if %w[id created_at updated_at vote_account_active].include? k
+      if validator.send(k).nil?
+        assert_nil v
+      else
+        assert_equal v, validator.send(k)
+      end
+    end
+
+    vote_account_json.each do |k, v|
+      next if %w[created_at updated_at].include? k
+      if validator.vote_account_active.send(k).nil?
+        assert_nil v
+      else
+        assert_equal v, validator.vote_account_active.send(k)
+      end
+    end
+
+    score_json.each do |k, v|
+      next if %w[created_at updated_at stake_concentration].include? k
+      if validator.score.send(k).nil?
+        assert_nil v
+      else
+        assert_equal v, validator.score.send(k)
+      end
+    end
+
+    assert_equal score_json["stake_concentration"].to_f, validator.score.stake_concentration
+
+    validator_history_json.each do |k, v|
+      next if %w[created_at updated_at].include? k
+      if validator.validator_history_last.send(k).nil?
+        assert_nil v
+      else
+        assert_equal v, validator.validator_history_last.send(k)
+      end
+    end
+    # assert_equal validator.account, validator_json["account"]
+    # assert_equal validator.name, validator_json["name"]
+    # assert_equal
+  end
+
   test "GET api_v1_validator with token and with_history=true returns all data with history fields" do
     validator = create(
       :validator, 
@@ -415,7 +482,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 43, json_response.keys.size
+    assert_equal 44, json_response.keys.size
 
     # Score
     assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
@@ -452,8 +519,8 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     end
 
     ### with_history: integer different than 1
-    get api_v1_validator_url(required_params), 
-      headers: { "Token" => @user.api_token }, 
+    get api_v1_validator_url(required_params),
+      headers: { "Token" => @user.api_token },
       params: { with_history: 2 }
 
     json_response = response_to_json(@response.body)

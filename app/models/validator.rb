@@ -14,6 +14,7 @@
 #  is_active           :boolean          default(TRUE)
 #  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
+#  jito                :boolean          default(FALSE)
 #  name                :string(191)
 #  network             :string(191)
 #  security_report_url :string(191)
@@ -40,6 +41,7 @@ class Validator < ApplicationRecord
     updated_at
     www_url
     admin_warning
+    jito
   ].freeze
 
   FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
@@ -47,6 +49,7 @@ class Validator < ApplicationRecord
   DEFAULT_FILTERS = %w(inactive active private delinquent).freeze
 
   has_many :vote_accounts, dependent: :destroy
+  has_many :stake_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
   has_many :validator_ips, dependent: :nullify
   has_many :validator_block_histories, dependent: :destroy
@@ -78,7 +81,7 @@ class Validator < ApplicationRecord
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
-  
+
   class << self
     def with_private(show: "true")
       show == "true" ? all : where.not("validator_score_v1s.commission = 100")
@@ -86,8 +89,8 @@ class Validator < ApplicationRecord
 
     def default_filters(network)
       network == "mainnet" ? DEFAULT_FILTERS : DEFAULT_FILTERS.reject{ |v| v == "private" }
-    end 
-  
+    end
+
     # accepts array of strings or string
     def filtered_by(filter)
       return nil if filter.blank?
@@ -203,6 +206,11 @@ class Validator < ApplicationRecord
     score&.commission
   end
 
+  def commission_histories_exist
+    CommissionHistoryQuery.new(network: network)
+                          .exists_for_validator?(id)
+  end
+
   def active_stake
     score&.active_stake || 0
   end
@@ -311,7 +319,8 @@ class Validator < ApplicationRecord
         :avatar_url,
         :created_at,
         :updated_at,
-        :admin_warning
+        :admin_warning,
+        :jito
       )
     end
   end

@@ -1,0 +1,44 @@
+<section class="col-lg-6 mb-4">
+  <div class="card h-100">
+    <div class="card-content">
+      <h2 class="h5 card-heading-left">Stake Pools</h2>
+
+      <p class="lead">
+        You can now improve the&nbsp;security of the&nbsp;Solana blockchain by participating in
+        <%= link_to 'Stake Pools', stake_pools_path, target: '_blank' %>.
+        A&nbsp;stake pool spreads your delegation across hundreds of&nbsp;validators. Liquid stake pools allow you
+        to&nbsp;move in and out of the&nbsp;pool without warm-up or cool-down periods. See the&nbsp;links below to&nbsp;learn
+        more about liquid staking.
+      </p>
+      <div class="text-muted mb-3 mb-xl-4">
+        Need to unstake SOL in a&nbsp;hurry? Try the new <%= link_to 'Unstake It', 'https://www.unstake.it/en/', target: '_blank' %>
+        tool and get paid immediately for your active stake account.
+      </div>
+
+      <div class="row d-none d-md-flex">
+        <% shuffle_logos.each_with_index do |logo| %>
+          <%= link_to logo[0], target: "_blank", class: "col-6 col-xl-4" do %>
+            <%= image_tag logo[1], class: "img-link w-100 mb-4 px-2 px-lg-3" %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div id="carouselLogosMobile" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="4000">
+        <div class="carousel-inner">
+          <% shuffle_logos.each_with_index do |logo, index_slide| %>
+            <div class="carousel-item <%= 'active' if index_slide == 0 %>">
+              <%= link_to logo[0], target: "_blank" do %>
+                <%= image_tag logo[1], class: "img-link w-100 px-5" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <div class="carousel-indicators">
+          <% shuffle_logos.count.times do |index| %>
+            <button type="button" data-bs-target="#carouselLogosMobile" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

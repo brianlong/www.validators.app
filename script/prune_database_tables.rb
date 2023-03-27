@@ -14,9 +14,6 @@ puts sixty_days_ago if verbose
   ActiveRecord::Base.connection.execute(sql)
 end
 
-# delete cluster stats report older than 5 days
-Report.where(name: "report_cluster_stats").where("created_at < ?", 5.days.ago).delete_all
-
 # Remove old validators that are not active after 60 days
 ValidatorScoreV1.where("active_stake = 0 and created_at < '#{sixty_days_ago}'")
                 .each do |score|

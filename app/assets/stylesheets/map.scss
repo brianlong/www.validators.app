@@ -1,0 +1,145 @@
+@import "variables";
+$green-point: rgba(0, 143, 107, .95);
+$purple-point: rgba(141, 99, 153, .95);
+$green-purple-point: rgba(70, 121, 130, .95);
+
+@mixin map-point-style($height, $width, $padding) {
+  height: $height;
+  width: $width;
+  padding-top: $padding;
+  transition: all .2s;
+  &:hover {
+    cursor: pointer;
+    z-index: 2;
+    transition: all .2s;
+  }
+}
+
+.map {
+  @media(max-width: $screen-lg-max) {
+    overflow-x: scroll;
+  }
+
+  &-background {
+    background: url(asset_path("map.svg")) no-repeat top right;
+    background-size: cover;
+    height: 605px;
+    @media(max-width: $screen-xl-max) {
+      height: 525px;
+    }
+    @media(max-width: $screen-lg-max) {
+      height: 440px;
+      width: 936px;
+    }
+    @media(max-width: $screen-sm-max) {
+      height: 480px;
+    }
+  }
+
+  &-points {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    @media(max-width: $screen-lg-max) {
+      height: 450px;
+      width: 936px;
+      position: relative;
+    }
+  }
+
+  &-point {
+    z-index: 1;
+    border-radius: 50%;
+    position: absolute;
+    color: $black;
+    letter-spacing: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 11px;
+    line-height: 11px;
+
+    &-sm {
+      @include map-point-style(15px, 15px, 1.5px)
+    }
+    &-md {
+      @include map-point-style(18px, 18px, 3px)
+    }
+    &-lg {
+      @include map-point-style(23px, 23px, 5px)
+    }
+    &-xl {
+      @include map-point-style(27px, 27px, 8px)
+    }
+
+    &-leader {
+      display: block;
+      @include map-point-style(32px, 32px, 0);
+      z-index: 2;
+      border: 2px solid lighten($green-point, 15%);
+      background-color: lighten($green-point, 15%);
+      img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+      }
+    }
+
+    &-green {
+      background-color: $green-point;
+      border: 1px solid lighten($green-point, 6%);
+      &:hover {
+        background-color: lighten($green-point, 15%);
+        border: 1px solid lighten($green-point, 15%);
+        outline: $green-point solid 2px;
+      }
+    }
+    &-purple {
+      background-color: $purple-point;
+      border: 1px solid lighten($purple-point, 6%);
+      &:hover {
+        background-color: lighten($purple-point, 15%);
+        border: 1px solid lighten($purple-point, 15%);
+        outline: $purple-point solid 2px;
+      }
+    }
+    &-mixed {
+      background-color: $green-purple-point;
+      border: 1px solid lighten($green-purple-point, 6%);
+      &:hover {
+        background-color: lighten($green-purple-point, 15%);
+        border: 1px solid lighten($green-purple-point, 15%);
+        outline: $green-purple-point solid 2px;
+      }
+    }
+  }
+
+  &-legend {
+    position: absolute;
+    z-index: 0;
+    text-align: left;
+    bottom: 0;
+    padding: $padding-standard*2;
+    padding-top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    @media(max-width: $screen-md-max) {
+      z-index: 1;
+    }
+    @media(max-width: $screen-xs-max) {
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    &-details {
+      text-shadow: $black 0 0 3px;
+    }
+  }
+
+  .text-green-purple {
+    color: lighten($green-purple-point, 15%);
+  }
+}

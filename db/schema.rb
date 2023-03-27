@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_16_065710) do
+ActiveRecord::Schema.define(version: 2023_03_06_071445) do
+
+  create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "authorized_withdrawer_before"
+    t.string "authorized_withdrawer_after"
+    t.text "authorized_voters_before"
+    t.text "authorized_voters_after"
+    t.bigint "vote_account_id", null: false
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["vote_account_id"], name: "index_account_authority_histories_on_vote_account_id"
+  end
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -73,6 +85,22 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
   end
 
+  create_table "cluster_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "total_active_stake"
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.json "root_distance"
+    t.json "vote_distance"
+    t.json "skipped_slots"
+    t.json "skipped_votes"
+    t.integer "validator_count"
+    t.integer "nodes_count"
+    t.string "software_version"
+    t.float "roi"
+    t.index ["network"], name: "index_cluster_stat_on_network"
+  end
+
   create_table "collectors", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "payload_type"
@@ -94,6 +122,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.string "network"
     t.integer "epoch"
     t.float "epoch_completion"
+    t.boolean "source_from_rewards", default: false
     t.index ["epoch"], name: "index_commission_histories_on_epoch"
     t.index ["network", "created_at", "validator_id"], name: "index_commission_histories_on_validators"
     t.index ["network", "validator_id"], name: "index_commission_histories_on_network_and_validator_id"
@@ -128,6 +157,8 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "active_validators_count"
+    t.integer "active_gossip_nodes_count"
     t.index ["data_center_id"], name: "index_data_center_stats_on_data_center_id"
     t.index ["network", "data_center_id"], name: "index_data_center_stats_on_network_and_data_center_id", unique: true
   end
@@ -193,6 +224,8 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ending_slot"
+    t.bigint "total_rewards"
+    t.bigint "total_active_stake"
     t.index ["epoch"], name: "index_epoch_wall_clocks_on_epoch"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
   end
@@ -207,7 +240,9 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "staked", default: false
+    t.boolean "is_active", default: true
     t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
+    t.index ["network", "is_active"], name: "index_gossip_nodes_on_network_and_is_active"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
   end
 
@@ -246,6 +281,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.string "network"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "average_slot_latency"
     t.index ["network", "interval"], name: "index_ping_thing_recent_stats_on_network_and_interval"
   end
 
@@ -259,6 +295,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.datetime "time_from"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "average_slot_latency"
     t.index ["network", "interval"], name: "index_ping_thing_stats_on_network_and_interval"
   end
 
@@ -337,10 +374,6 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.integer "currency"
     t.integer "epoch_mainnet"
     t.integer "epoch_testnet"
-    t.decimal "open", precision: 40, scale: 20
-    t.decimal "close", precision: 40, scale: 20
-    t.decimal "high", precision: 40, scale: 20
-    t.decimal "low", precision: 40, scale: 20
     t.decimal "volume", precision: 40, scale: 20
     t.datetime "datetime_from_exchange"
     t.datetime "created_at", precision: 6, null: false
@@ -599,6 +632,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.boolean "is_destroyed", default: false
     t.string "admin_warning"
     t.boolean "consensus_mods", default: false
+    t.boolean "jito", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
     t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end
@@ -632,11 +666,13 @@ ActiveRecord::Schema.define(version: 2022_09_16_065710) do
     t.string "validator_identity"
     t.string "authorized_withdrawer"
     t.boolean "is_active", default: true
+    t.text "authorized_voters"
     t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
     t.index ["network", "account"], name: "index_vote_accounts_on_network_and_account"
     t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
   end
 
+  add_foreign_key "account_authority_histories", "vote_accounts"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collectors", "users"

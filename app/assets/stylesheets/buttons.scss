@@ -62,7 +62,7 @@
 
   &-lg {
     border-radius: 30px;
-    padding: 12px 18px;
+    padding: 11px 18px;
     @include font-size-base;
   }
   &-md {
@@ -77,6 +77,11 @@
     @include font-size-sm;
     @media(max-width: $screen-xs-max) { min-width: 65px; }
   }
+  &-xs {
+    border-radius: 24px;
+    padding: 5px 11px;
+    @include font-size-sm;
+  }
 }
 
 .watch-button {
@@ -85,11 +90,11 @@
   margin-left: -10px;
   filter: drop-shadow(0px 0px 4px black);
   color: $orange;
-  
+
   &:hover {
     cursor: pointer;
   }
-  
+
   @media(max-width: $screen-lg-max) {
     margin: 0;
     position: relative;
@@ -98,3 +103,28 @@
     margin-right: 5px;
   }
 }
+
+.switch-button {
+  .btn {
+    &:first-of-type {
+      background: linear-gradient(to right, transparent 50%, $green 50%);
+      background-size: 200% 100%;
+      background-position: left bottom;
+      transition: all .5s ease;
+      &:hover {
+        background-position: right bottom;
+      }
+    }
+
+    &:last-of-type {
+      background: linear-gradient(to left, transparent 50%, $green 50%);
+      background-size: 200% 100%;
+      background-position: right bottom;
+      transition: all .5s ease;
+      &:hover {
+        background-position: left bottom;
+      }
+    }
+  }
+}
+

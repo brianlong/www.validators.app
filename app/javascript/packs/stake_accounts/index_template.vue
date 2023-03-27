@@ -4,7 +4,7 @@
       <div class="card h-100">
         <div class="card-content">
           <div class="card-heading">
-            <h2 class="h3 mb-2">Filter by Stake Pool</h2>
+            <h2 class="h4 mb-2">Filter by Stake Pool</h2>
             <small class="text-muted">Click on stake pool logo to see pool stats</small>
           </div>
 
@@ -67,6 +67,22 @@
       <stake-pool-stats :pool="selected_pool"/>
     </div>
 
+    <div class="mb-4">
+      <div class="small mb-2 ps-3">Stake less than <strong>1&nbsp;SOL</strong></div>
+      <div class="btn-group btn-group-toggle switch-button">
+        <span class="btn btn-xs btn-secondary"
+              :class="is_stake_below_minimum_visible ? 'active' : ''"
+              v-on:click="set_stake_below_minimum_visibility(true)">
+          <i class="fa-solid fa-eye me-2"></i>Show
+        </span>
+        <span class="btn btn-xs btn-secondary"
+              :class="is_stake_below_minimum_visible ? '' : 'active'"
+              v-on:click="set_stake_below_minimum_visibility(false)">
+          <i class="fa-solid fa-eye-slash me-2"></i>Hide
+        </span>
+      </div>
+    </div>
+
     <!-- Validators and accounts table -->
     <div class="col-12" v-if="!is_loading_stake_accounts && !is_loading_stake_pools">
       <div class="card">
@@ -77,14 +93,14 @@
                 <div class="column-info-row">
                   <div class="column-info-name">
                     Name <small class="text-muted">(Commission)</small>
-                    <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                    <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                        data-bs-toggle="tooltip"
                        data-bs-placement="top"
                        title="Commission is the percent of network rewards earned by a validator that are deposited into the validator's vote account.">
                     </i>
                     <br />
                     Scores <small class="text-muted">(total)</small>
-                    <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                    <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                        data-bs-toggle="tooltip"
                        data-bs-placement="top"
                        title="Our score system.">
@@ -95,7 +111,7 @@
 
               <th class='column-speedometer pe-0'>
                 Skipped Vote
-                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
                    title="Skipped vote measures the percent of the time that a leader fails to vote.">
@@ -106,7 +122,7 @@
 
               <th class='column-chart py-3'>
                 Root Distance
-                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
                    title="Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower.">
@@ -117,7 +133,7 @@
 
               <th class='column-chart py-3'>
                 Vote Distance
-                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
                    title="Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group.">
@@ -128,7 +144,7 @@
 
               <th class='column-chart py-3'>
                 Skipped Slot&nbsp;&percnt;
-                <i class="fas fa-info-circle font-size-xs text-muted ms-1"
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
                    title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
@@ -141,6 +157,7 @@
 
           <stake-account-row
             v-for="(sa, index) in stake_accounts"
+            v-if="!is_loading_stake_account_records"
             :key="sa.id"
             :stake_accounts="sa"
             :idx="index + (page - 1) * 20"
@@ -149,6 +166,11 @@
           >
           </stake-account-row>
         </table>
+
+        <div class="img-loading col-12 text-center my-5"
+            v-if="is_loading_stake_account_records">
+          <img v-bind:src="loading_image" width="100">
+        </div>
 
         <div class="card-footer">
           <b-pagination
@@ -164,6 +186,8 @@
     <div v-if="is_loading_stake_accounts && is_loading_stake_pools" class="col-12 text-center my-5">
       <img v-bind:src="loading_image" width="100">
     </div>
+
+    <validator-score-modal />
 
     <section class="mt-5" id="metrics">
       <h2>Metrics Explanation</h2>
@@ -211,7 +235,7 @@
 
       <h3 class="h5">APY</h3>
       <p>
-        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the weighted average of the APY's 
+        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the weighted average of the APY's
         from all the validators reduced by the <strong>manager fee</strong>. Validators weight is proportional to the active_stake of the accounts.<br />
         APY of the validator is calculated as follows:
       </p>
@@ -245,7 +269,7 @@
 
       <h3 class="h5">Avg Score</h3>
       <p class="mb-5">
-        Average score of the validators from the stake pool. See
+        Stake-weighted average score of the validators in the stake pool. See
         <a href="/faq#score" target="_blank">how are scores calculated?</a>
       </p>
 
@@ -259,6 +283,7 @@
 
 <script>
   import axios from 'axios'
+  import { mapGetters } from 'vuex';
   import loadingImage from 'loading.gif'
 
   import marinadeImage from 'marinade.png'
@@ -268,24 +293,22 @@
   import daopoolImage from 'daopool.png'
   import eversolImage from 'eversol.png'
   import blazestakeImage from 'blazestake.png'
+  import jitoImage from 'jito.png'
+  import validatorScoreModal from "../validators/components/validator_score_modal"
 
   import debounce from 'lodash/debounce'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
-    props: ['query', 'network'],
     data () {
-      var stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network
-      var stake_pools_api_url = '/api/v1/stake-pools/' + this.network
-
       return {
         stake_accounts: [],
         page: 1,
         total_count: 0,
         sort_by: 'epoch_desc',
-        stake_accounts_api_url: stake_accounts_api_url,
-        stake_pools_api_url: stake_pools_api_url,
+        stake_accounts_api_url: null,
+        stake_pools_api_url: null,
         filter_withdrawer: null,
         filter_staker: null,
         filter_account: null,
@@ -305,11 +328,19 @@
           jpool: jpoolImage,
           daopool: daopoolImage,
           eversol: eversolImage,
-          blazestake: blazestakeImage
-        }
+          blazestake: blazestakeImage,
+          jito: jitoImage
+        },
+        is_stake_below_minimum_visible: true,
+        is_loading_stake_account_records: false
       }
     },
+    components: {
+      'validator-score-modal': validatorScoreModal
+    },
     created () {
+      this.stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network;
+      this.stake_pools_api_url = '/api/v1/stake-pools/' + this.network;
       var ctx = this
       var stake_accounts_query_params = {
         params: {
@@ -317,7 +348,8 @@
           page: ctx.page,
           with_batch: true,
           seed: ctx.seed,
-          grouped_by: 'delegated_vote_accounts_address'
+          grouped_by: 'delegated_vote_accounts_address',
+          exclude_accounts_below_minimum_stake: !ctx.is_stake_below_minimum_visible
         }
       }
 
@@ -336,6 +368,9 @@
              ctx.is_loading_stake_pools = false
            })
     },
+    computed: mapGetters([
+      'network'
+    ]),
     watch: {
       sort_by: function(){
         this.refresh_results()
@@ -352,7 +387,11 @@
       filter_withdrawer: function(){
         this.refresh_results()
       },
-      filter_validator: function(){
+      filter_validator: function() {
+        this.refresh_results()
+      },
+      is_stake_below_minimum_visible() {
+        this.is_loading_stake_account_records = true
         this.refresh_results()
       }
     },
@@ -360,10 +399,8 @@
       paginate: function(){
         this.refresh_results()
       },
-      refresh_results: debounce(function() {
+      get_stake_accounts_call() {
         var ctx = this
-
-        ctx.is_loading_stake_accounts = true
 
         var query_params = {
           params: {
@@ -374,17 +411,24 @@
             filter_withdrawer: ctx.filter_withdrawer,
             filter_validator: ctx.filter_validator,
             grouped_by: 'delegated_vote_accounts_address',
-            seed: ctx.seed
+            seed: ctx.seed,
+            exclude_accounts_below_minimum_stake: !ctx.is_stake_below_minimum_visible
           }
         }
 
         axios.get(ctx.stake_accounts_api_url, query_params)
-             .then(function (response) {
-               ctx.stake_accounts = response.data.stake_accounts;
-               ctx.total_count = response.data.total_count;
-               ctx.current_epoch = response.data.current_epoch;
-               ctx.is_loading_stake_accounts = false;
-             })
+          .then(function (response) {
+            ctx.stake_accounts = response.data.stake_accounts;
+            ctx.total_count = response.data.total_count;
+            ctx.current_epoch = response.data.current_epoch;
+            ctx.is_loading_stake_accounts = false;
+            ctx.is_loading_stake_account_records = false
+          })
+      },
+      refresh_results: debounce(function() {
+        this.is_loading_stake_accounts = true
+
+        this.get_stake_accounts_call()
       }, 2000),
       sort_by_epoch: function(){
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
@@ -414,6 +458,9 @@
       },
       filters_present: function(){
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
+      },
+      set_stake_below_minimum_visibility(visible) {
+        this.is_stake_below_minimum_visible = visible
       }
     }
   }

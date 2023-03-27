@@ -1,30 +1,61 @@
-<div class="d-flex flex-column-reverse flex-md-row">
-  <div class="flex-fill small text-muted pt-1 me-md-5">
+<div class="d-flex flex-column-reverse flex-lg-row">
+  <div class="flex-fill small text-muted pt-1">
     Score updated at <%= @batch&.scored_at || 'N/A' %> <br class="d-md-none" />
     in batch <%= @batch&.uuid || 'N/A' %>
   </div>
 
-  <div class='toggle-container'>
-    <% if params[:refresh] == 'true' %>
-      <%= link_to raw('<i class="fas fa-toggle-on toggle"></i>'),
-                  url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: false) %>
-      <p class="small text-muted toggle-label">REFRESH ON</p>
-    <% else %>
-      <%= link_to raw('<i class="fas fa-toggle-off toggle"></i>'),
-                  url_for(order: params[:order], page: params[:page], network: params[:network], q: params[:q], refresh: true) %>
-      <p class="small text-muted toggle-label">REFRESH OFF</p>
-    <% end %>
+  <div class="mt-2 mt-lg-0">
+    <div class="toggle-container">
+      <% jito_link_class = "fa-solid toggle fa-toggle-" + (params[:jito] == "true" ? "on" : "off") %>
+      <%= link_to raw("<i class=\"#{jito_link_class}\"></i>"),
+                  url_for(
+                    order: params[:order],
+                    page: params[:page],
+                    network: params[:network],
+                    refresh: params[:refresh],
+                    jito: params[:jito] == "true" ? "false" : "true"
+                  )
+      %>
+      <p class="small text-muted toggle-label">JITO</p>
+    </div>
 
-    <%= link_to url_for(order: params[:order],
-                        page: params[:page],
-                        network: params[:network],
-                        refresh: params[:refresh],
-                        watchlist: params[:watchlist] ? nil : true) do %>
-      <i class="<%= params[:watchlist] ? 'fas' : 'far' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
-         data-bs-toggle="tooltip"
-         data-bs-placement="top"
-         title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
-      </i>
-    <% end %>
+    <div class="toggle-container">
+      <% if params[:refresh] == 'true' %>
+        <%= link_to raw('<i class="fa-solid fa-toggle-on toggle"></i>'),
+                    url_for(
+                      order: params[:order],
+                      page: params[:page],
+                      network: params[:network],
+                      q: params[:q],
+                      jito: params[:jito],
+                      refresh: false
+                    ) %>
+        <p class="small text-muted toggle-label">REFRESH</p>
+      <% else %>
+        <%= link_to raw('<i class="fa-solid fa-toggle-off toggle"></i>'),
+                    url_for(
+                      order: params[:order],
+                      page: params[:page],
+                      network: params[:network],
+                      q: params[:q],
+                      jito: params[:jito],
+                      refresh: true
+                    ) %>
+        <p class="small text-muted toggle-label">REFRESH</p>
+      <% end %>
+
+      <%= link_to url_for(order: params[:order],
+                          page: params[:page],
+                          network: params[:network],
+                          refresh: params[:refresh],
+                          jito: params[:jito],
+                          watchlist: params[:watchlist] ? nil : true) do %>
+        <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
+           data-bs-toggle="tooltip"
+           data-bs-placement="top"
+           title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
+        </i>
+      <% end %>
+    </div>
   </div>
 </div>

@@ -42,10 +42,9 @@ class SolanaLogicTest < ActiveSupport::TestCase
     assert_nil array_average('TEST')
     assert_nil array_average(nil)
     assert_nil array_average([])
-    assert_equal 'ABC', ['A','B','C'].sum
-    assert_equal 0, ['A','B','C'].sum.to_i
     assert_equal 0, array_average(['A','B','C'])
     assert_equal 1, array_average([1])
+    assert_equal 2, array_average([1, nil, 3])
   end
 
   test 'batch_set' do
@@ -162,93 +161,73 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validators_cli' do
-    # Empty the ValidatorHistory table
+  test "validator_history_update with stubbed validators" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
-    # We need to stub both the cli call (using minitest stub)
-    # plus the POST https://api.testnet.solana.com call (using VCR)
-    json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
-      VCR.use_cassette('validators_cli') do
+    json_data = {
+      "validators": [
+        {
+          "identityPubkey": "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr"
+        },
+        {
+          "identityPubkey": "6X8sHQkmxRVh7oR94VjsfffmQYPoGZ62Fp8gt4QivszH"
+        }
+      ]
+    }.to_json
 
-        # Show that the pipeline runs & the expected values are not empty.
+    create(:validator, account: "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr")
+
+    SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
+      VCR.use_cassette("validator_history_update") do
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
-                    .then(&epoch_get)
-                    .then(&validators_cli)
+                    .then(&validator_history_update)
+
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 
         assert_equal 200, p.code
-        assert_not_nil p.payload[:epoch]
-        assert_not_nil p.payload[:batch_uuid]
-
-        # Find the EpochHistory record and show that the values match
-        validators = ValidatorHistory.where(
-          batch_uuid: p.payload[:batch_uuid]
-        ).all
-        assert validators.count.positive?
+        assert validator_histories.size == 1
       end
     end
   end
 
-  test "validators_cli returns no validator form blacklist" do
-    # Empty the ValidatorHistory table
+  test "validator_history_update returns no validator from blacklist" do
     ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
-    # We need to stub both the cli call (using minitest stub)
-    # plus the POST https://api.testnet.solana.com call (using VCR)
     json_data = File.read("#{Rails.root}/test/json/validators_from_blacklist.json")
     SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
-      VCR.use_cassette("validators_cli_blacklist") do
-
-        # Show that the pipeline runs & the expected values are not empty.
+      VCR.use_cassette("validator_history_update_blacklist") do
         p = Pipeline.new(200, @testnet_initial_payload)
                     .then(&batch_set)
-                    .then(&epoch_get)
-                    .then(&validators_cli)
+                    .then(&validator_history_update)
+
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
 
         assert_equal 200, p.code
-        assert_not_nil p.payload[:epoch]
-        assert_not_nil p.payload[:batch_uuid]
-
-        # Find the EpochHistory record and show that the values match
-        validators = ValidatorHistory.where(
-          batch_uuid: p.payload[:batch_uuid]
-        )
-        assert_empty validators
+        assert_empty validator_histories
       end
     end
   end
 
-  # This test assumes that there is no validator RPC running locally.
-  # 159.89.252.85 is my testnet server.
-  test 'cli_request with fail over' do
+  test "validator_history_update with validator_histories without validator relations" do
+    ValidatorHistory.delete_all
+    assert_equal 0, ValidatorHistory.count
+
     json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
-      rpc_urls = [@local_url, @testnet_url]
-      cli_response = cli_request('validators', rpc_urls)
+    SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
+      VCR.use_cassette("validator_history_update") do
+        p = Pipeline.new(200, @testnet_initial_payload)
+                    .then(&batch_set)
+                    .then(&validator_history_update)
 
-      assert_equal 5, cli_response.count
+        validator_histories = ValidatorHistory.where(batch_uuid: p.payload[:batch_uuid])
+
+        assert_equal 200, p.code
+        assert validator_histories.count.zero?
+      end
     end
-  end
-
-  # This test assumes that there is no validator RPC running locally.
-  test 'cli_request should get first attempt with no fail over' do
-    json_data = File.read("#{Rails.root}/test/json/validators.json")
-    SolanaCliService.stub(:request, json_data, ['validators', @testnet_url]) do
-      rpc_urls = [@testnet_url, @local_url]
-      cli_response = cli_request('validators', rpc_urls)
-
-      assert_equal 5, cli_response.count
-    end
-  end
-
-  # This test assumes that there is no validator RPC running locally.
-  test 'cli_request with no response' do
-    rpc_urls = [@local_url]
-    assert_equal [], cli_request('validators', rpc_urls)
   end
 
   test 'check_epoch removes epoch history when check fails' do
@@ -356,56 +335,4 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_equal 898, p.payload[:validators_info].size
     end
   end
-
-  test 'solana_client_request returns data found in first cluster' do
-    clusters = [
-      @mainnet_url,
-      @testnet_url
-    ]
-
-    method = :get_epoch_info
-
-    VCR.use_cassette('solana_client_request') do
-      result = solana_client_request(clusters, method)
-      assert_equal result["epoch"], 202
-    end
-  end
-
-  test 'solana_client_request returns data even if one of the clusters is incorrect' do
-    clusters = [
-      @local_url,
-      @testnet_url
-    ]
-
-    method = :get_epoch_info
-
-    VCR.use_cassette('solana_client_request incorrect cluster') do
-      result = solana_client_request(clusters, method)
-      assert_equal result["epoch"], 209
-    end
-  end
-
-  test 'solana_client_request returns data with optional params' do
-    clusters = [
-      @mainnet_url
-    ]
-
-    method = :get_program_accounts
-    config_program_pubkey = 'Config1111111111111111111111111111111111111'
-    params = [config_program_pubkey, { encoding: 'jsonParsed' }]
-
-    VCR.use_cassette('solana_client_request optional params') do
-      result = solana_client_request(clusters, method, params: params)
-      assert_equal 863, result.size
-    end
-  end
-
-  # I use this test in development mode only.
-  # test 'cli_block_production_mainnet' do
-  #   VCR.use_cassette('cli_block_production_mainnet') do
-  #     rpc_urls = ['https://api.mainnet-beta.solana.com']
-  #
-  #     assert_equal [], cli_request('block-production', rpc_urls)
-  #   end
-  # end
 end

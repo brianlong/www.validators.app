@@ -1,0 +1,17 @@
+<section class="banner">
+  <h1 class="heading-primary">Meet the <span>validators</span> who power Solana</h1>
+  <% unless @validators.blank? %>
+    <p class="lead mb-4">
+      The&nbsp;tables below show each validator by&nbsp;name and include some recent statistics for&nbsp;each. If you appreciate
+      this website, please delegate to <%= link_to "Block Logic", "https://www.blocklogic.net/", target: "_blank" %>.
+      Your delegations keep this&nbsp;website running!
+    </p>
+    <div class="d-flex flex-wrap gap-3 mb-3">
+      <%= link_to "Getting Started", faq_path(anchor: ""), class: "btn btn-md btn-secondary" %>
+      <%= link_to "Choosing the right validator", faq_path(anchor: "choosing-validator"), class: "btn btn-md btn-secondary d-none d-md-block" %>
+      <%= link_to "Choosing validator", faq_path(anchor: "choosing-validator"), class: "btn btn-md btn-secondary d-md-none" %>
+      <%= link_to "Our Scoring System", faq_path(anchor: "score"), class: "btn btn-md btn-secondary" %>
+      <%= link_to "FAQ", faq_path(anchor: "questions"), class: "btn btn-md btn-secondary" %>
+    </div>
+  <% end %>
+</section>

@@ -18,7 +18,6 @@ import '../src/watch_buttons'
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-
 document.addEventListener("turbolinks:load", function() {
     var links = document.getElementsByClassName("chart-link");
     Array.prototype.forEach.call(links, link => {
@@ -43,4 +42,9 @@ document.addEventListener("turbolinks:load", function() {
             link.classList.add('active');
         })
     })
+
+    $('.modal-trigger').on('click', function (e) {
+        let account = $(this).data()["account"]
+        window.scores_modal.$children[0].update_account(account)
+      })
 })

@@ -2,8 +2,16 @@
 
 # PublicController
 class PublicController < ApplicationController
+  # GET /
+  def home
+    @network = home_params[:network]
+  end
+
   def api_documentation
     @title = 'API Documentation'
+    @low_limit = Rack::Attack::API_LOW_LIMIT
+    @high_limit = Rack::Attack::API_HIGH_LIMIT
+    @reset_period = Rack::Attack::LIMIT_RESET_PERIOD.seconds.in_minutes.round
   end
 
   def cookie_policy
@@ -47,6 +55,10 @@ class PublicController < ApplicationController
   end
 
   private
+
+  def home_params
+    params.permit(:network)
+  end
 
   def validate_order
     valid_orders = %w[score name stake random]

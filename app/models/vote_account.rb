@@ -6,6 +6,7 @@
 #
 #  id                    :bigint           not null, primary key
 #  account               :string(191)
+#  authorized_voters     :text(65535)
 #  authorized_withdrawer :string(191)
 #  is_active             :boolean          default(TRUE)
 #  network               :string(191)
@@ -34,7 +35,15 @@ class VoteAccount < ApplicationRecord
 
   belongs_to :validator
   has_many :vote_account_histories
+  has_many :account_authority_histories
   before_save :set_network
+  after_save do
+    if saved_change_to_authorized_withdrawer? || saved_change_to_authorized_voters?
+      create_account_authority_history
+    end
+  end
+
+  serialize :authorized_voters, JSON
 
   scope :for_api, -> { select(FIELDS_FOR_API).order(updated_at: :asc) }
   scope :active, -> { where(is_active: true) }
@@ -60,5 +69,15 @@ class VoteAccount < ApplicationRecord
     Jbuilder.new do |va|
       va.vote_account self.account
     end
+  end
+
+  def create_account_authority_history
+    account_authority_histories.create(
+      authorized_withdrawer_before: authorized_withdrawer_before_last_save,
+      authorized_withdrawer_after: authorized_withdrawer,
+      authorized_voters_before: authorized_voters_before_last_save,
+      authorized_voters_after: authorized_voters,
+      network: network
+    )
   end
 end

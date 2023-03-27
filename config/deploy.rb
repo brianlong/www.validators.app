@@ -115,10 +115,16 @@ namespace :deamons do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :start, :validator_score_mainnet_v1
           execute :systemctl, '--user', :start, :validator_score_testnet_v1
+          execute :systemctl, '--user', :start, :validator_score_pythnet_v1
           execute :systemctl, '--user', :start, :gather_rpc_mainnet
           execute :systemctl, '--user', :start, :gather_rpc_testnet
+          execute :systemctl, '--user', :start, :gather_rpc_pythnet
           execute :systemctl, '--user', :start, :gather_vote_account_details
           execute :systemctl, '--user', :start, :process_ping_thing
+          execute :systemctl, '--user', :start, :front_stats_update
+          execute :systemctl, '--user', :start, :leader_stats_mainnet_update
+          execute :systemctl, '--user', :start, :leader_stats_testnet_update
+          execute :systemctl, '--user', :start, :leader_stats_pythnet_update
         end
       end
     end
@@ -131,10 +137,16 @@ namespace :deamons do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :stop, :validator_score_mainnet_v1
           execute :systemctl, '--user', :stop, :validator_score_testnet_v1
+          execute :systemctl, '--user', :stop, :validator_score_pythnet_v1
           execute :systemctl, '--user', :stop, :gather_rpc_mainnet
           execute :systemctl, '--user', :stop, :gather_rpc_testnet
+          execute :systemctl, '--user', :stop, :gather_rpc_pythnet
           execute :systemctl, '--user', :stop, :gather_vote_account_details
           execute :systemctl, '--user', :stop, :process_ping_thing
+          execute :systemctl, '--user', :stop, :front_stats_update
+          execute :systemctl, '--user', :stop, :leader_stats_mainnet_update
+          execute :systemctl, '--user', :stop, :leader_stats_testnet_update
+          execute :systemctl, '--user', :stop, :leader_stats_pythnet_update
         end
       end
     end
@@ -147,10 +159,16 @@ namespace :deamons do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :validator_score_mainnet_v1
           execute :systemctl, '--user', :restart, :validator_score_testnet_v1
+          execute :systemctl, '--user', :restart, :validator_score_pythnet_v1
           execute :systemctl, '--user', :restart, :gather_rpc_mainnet
           execute :systemctl, '--user', :restart, :gather_rpc_testnet
+          execute :systemctl, '--user', :restart, :gather_rpc_pythnet
           execute :systemctl, '--user', :restart, :gather_vote_account_details
           execute :systemctl, '--user', :restart, :process_ping_thing
+          execute :systemctl, '--user', :restart, :front_stats_update
+          execute :systemctl, '--user', :restart, :leader_stats_mainnet_update
+          execute :systemctl, '--user', :restart, :leader_stats_testnet_update
+          execute :systemctl, '--user', :restart, :leader_stats_pythnet_update
         end
       end
     end
@@ -168,7 +186,7 @@ namespace :rake_task do
       end
     end
   end
-  
+
   desc 'Update manager fees to Stake Pools'
   task :update_fee_in_stake_pools do
     on release_roles([:background]) do

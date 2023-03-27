@@ -1,5 +1,5 @@
 <% @results[:results].each do |_, asn_data| %>
-  <tr>
+  <tr data-turbolinks="false">
     <td>
       <%= link_to asn_data[:asn], asn_url(network: params[:network], asn: asn_data[:asn]) %>
       <br />
@@ -8,17 +8,15 @@
 
     <td style="max-width: 180px;">
       <%
-        asn_stat = @asn_stat.find { |stat| stat.traits_autonomous_system_number == asn_data[:asn] }
+        asn_average_score = @asn_stat.find { |stat| stat.traits_autonomous_system_number == asn_data[:asn] }&.average_score
+        needle_value = set_speedometer_needle_position(value: asn_average_score,
+                                                       single_range_size: 11/3.to_f)
       %>
       <%= render 'validators/speedometer_chart',
                  canvas_name: "average_score_#{asn_data[:asn]}",
-                 value: [asn_stat&.average_score || 0, 11].min,
-                 chart_steps: [4, 7, 11],
-                 min_value: 0,
-                 max_value: 11
-      %>
+                 needle_value: needle_value %>
       <div class="text-center small mt-2">
-        <%= asn_stat.average_score.round(3) rescue '' %>
+        <%= asn_average_score.round(3) rescue '' %>
       </div>
     </td>
 

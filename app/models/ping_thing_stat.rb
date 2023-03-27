@@ -4,16 +4,17 @@
 #
 # Table name: ping_thing_stats
 #
-#  id             :bigint           not null, primary key
-#  interval       :integer
-#  max            :float(24)
-#  median         :float(24)
-#  min            :float(24)
-#  network        :string(191)
-#  num_of_records :integer
-#  time_from      :datetime
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  id                   :bigint           not null, primary key
+#  average_slot_latency :integer
+#  interval             :integer
+#  max                  :float(24)
+#  median               :float(24)
+#  min                  :float(24)
+#  network              :string(191)
+#  num_of_records       :integer
+#  time_from            :datetime
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
 #
 # Indexes
 #
@@ -27,13 +28,14 @@ class PingThingStat < ApplicationRecord
     :min,
     :network,
     :num_of_records,
-    :time_from
+    :time_from,
+    :average_slot_latency
   ].freeze
 
-  INTERVALS = [1, 3, 12, 24].freeze #minutes
+  INTERVALS = [1, 3, 12, 24, 168].freeze #minutes
 
   validates :network, presence: true
-  validates :network, inclusion: { in: %w(mainnet testnet) }
+  validates :network, inclusion: { in: NETWORKS }
   validates :interval, presence: true
   validates :interval, inclusion: { in: INTERVALS }
 

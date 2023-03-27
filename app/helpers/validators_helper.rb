@@ -1,4 +1,17 @@
 module ValidatorsHelper
+  def displayed_validator_name(validator)
+    if validator.private_validator? && !validator.lido?
+      "Private Validator"
+    else
+      return shorten_key(validator.name) if validator.name == validator.account
+      validator.name || shorten_key(validator.account)
+    end
+  end
+
+  def shorten_key(pub_key)
+    "#{pub_key[0..5]}...#{pub_key[-4..-1]}"
+  end
+
   def chart_line_color(score)
     return GREEN if score == 2
     return BLUE if score == 1
@@ -15,6 +28,20 @@ module ValidatorsHelper
     [X_SCALE_MAX, count].min
   end
 
+  def max_value_position(vector)
+    max_value = vector.max
+    max_value_index = vector.index(max_value)
+    position = max_value_index.to_f / vector.size * 100
+    position = [position, 2].max
+    # set max position for large numbers
+    if max_value > 100_000
+      position = [position, 70].min
+    elsif max_value > 10_000
+      position = [position, 80].min
+    end
+    number_to_percentage(position, precision: 0)
+  end
+
   def display_avatar(validator)
     if validator&.avatar_url
       image_tag validator.avatar_url, class: 'img-circle mb-1'
@@ -29,11 +56,9 @@ module ValidatorsHelper
   end
 
   def current_software_version(batch, network)
-    if batch&.software_version.blank?
-      network == 'mainnet' ? MAINNET_CLUSTER_VERSION : TESTNET_CLUSTER_VERSION
-    else
-      batch.software_version
-    end
+    return CLUSTER_VERSION[network] if batch&.software_version.blank?
+
+    batch&.software_version
   end
 
   def skipped_vote_percent(validator, batch)
@@ -50,11 +75,19 @@ module ValidatorsHelper
   end
 
   def sort_software_versions(versions)
-    versions.sort_by { |ver| Gem::Version.new(ver.keys.first)}.reverse
+    versions&.sort_by { |ver| Gem::Version.new(ver.keys.first)}&.reverse
   end
 
-  def solstake_url(vote_key)
-    "https://solstake.io/#/app/validator/#{vote_key}"
+  def solstake_url(vote_account)
+    "https://solstake.io/#/app/validator/#{vote_account}"
+  end
+
+  def staking_kiwi_url(vote_account)
+    "https://staking.kiwi/app/#{vote_account}"
+  end
+
+  def blazestake_url(vote_account)
+    "https://stake.solblaze.org/app/?validator=#{vote_account}"
   end
 
   def shuffle_logos
@@ -65,7 +98,8 @@ module ValidatorsHelper
       ["https://jpool.one", "jpool.png"],
       ["https://daopool.monkedao.io", "daopool.png"],
       ["https://eversol.one/", "eversol.png"],
-      ["https://stake.solblaze.org/", "blazestake.png"]
+      ["https://stake.solblaze.org/", "blazestake.png"],
+      ["https://www.jito.network/", "jito.png"]
       # add more stake pools here
     ].shuffle
   end
@@ -91,7 +125,9 @@ module ValidatorsHelper
 
     if validator.private_validator?
       link_to validator_url(link_params) do
-        content_tag :div, content_tag(:span, nil, class: 'fas fa-users-slash', title: "Private Validator"), class: "img-circle-medium-private"
+        content_tag :div,
+                    content_tag(:span, nil, class: "fa-solid fa-users-slash", title: "Private Validator"),
+                    class: "img-circle-medium-private"
       end
     elsif validator.avatar_url
       link_to validator_url(link_params) do
@@ -102,5 +138,25 @@ module ValidatorsHelper
         image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium'
       end
     end
+  end
+
+  def validator_score_attrs(validator)
+    validator.to_json(
+      methods: [
+        :root_distance_score, :vote_distance_score, :skipped_slot_score,
+        :published_information_score, :software_version_score,
+        :security_report_score, :stake_concentration_score,
+        :data_center_concentration_score, :authorized_withdrawer_score,
+        :consensus_mods_score
+      ],
+      only: :account,
+      include: [
+        score: { methods: :displayed_total_score, only: [] }
+      ]
+    )
+  end
+
+  def validators_reset_action(trent_mode = false)
+    trent_mode ? :trent_mode : :index
   end
 end

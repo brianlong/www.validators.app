@@ -18,6 +18,11 @@
     margin-bottom: 30px;
   }
 
+  &-heading-left {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
   &-footer {
     padding: $padding-standard $padding-standard*2 $padding-standard*2 $padding-standard*2;
   }

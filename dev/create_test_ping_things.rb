@@ -10,16 +10,21 @@ counts = [{count: 5000, min_time: 700,   max_time: 4500},
 
 counts.each do |loop|
   loop[:count].times do |n|
+    slot_sent = rand(10_000_000..100_000_000)
     p = PingThing.create(
       user_id: 1,
-      amount: 1, signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
+      user_id: User.first.id,
+      amount: 1, 
+      signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
       response_time: rand(loop[:min_time]..loop[:max_time]),
       transaction_type: "transfer",
-      network: "testnet",
+      network: "mainnet",
       commitment_level: "confirmed",
       success: true,
       application: "web3",
-      reported_at: rand(24.hours.ago..Time.now)
+      reported_at: rand(7.days.ago..Time.now),
+      slot_sent: slot_sent,
+      slot_landed: slot_sent + rand(100..10_000)
     )
     if p.valid?
       puts p.inspect

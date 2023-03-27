@@ -2,7 +2,7 @@
 
 module GossipNodeLogic
   include PipelineLogic
-  include SolanaLogic
+  include SolanaRequestsLogic
 
   def get_nodes
     lambda do |p|
@@ -28,6 +28,7 @@ module GossipNodeLogic
         db_node.tpu_port = node["tpuPort"]
         db_node.gossip_port = node["gossipPort"]
         db_node.software_version = node["version"]
+        db_node.is_active = true
 
         db_node.save if db_node.changed?
 
@@ -40,10 +41,25 @@ module GossipNodeLogic
     end
   end
 
+  def set_inactive_nodes_status
+    lambda do |p|
+      active_nodes_identities = p.payload[:current_nodes]&.map { |cn| cn["identityPubkey"] }
+      GossipNode.where(network: p.payload[:network]).each do |gn|
+        unless active_nodes_identities&.include? gn.account
+          gn.is_active = false
+          gn.save if gn.will_save_change_to_attribute?(:is_active)
+        end
+      end
+      Pipeline.new(200, p.payload)
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, "Error from set_inactive_nodes_status", e)
+    end
+  end
+
   def set_staked_flag
     lambda do |p|
       staked_validators = Validator.joins(:validator_score_v1)
-                                   .includes(:validator_ips)
+                                   .includes(:validator_ip_active)
                                    .where("validator_score_v1s.active_stake > 0")
                                    .where(network: p.payload[:network])
 

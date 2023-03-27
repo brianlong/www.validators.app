@@ -6,7 +6,7 @@ module Api
         page = index_params[:page].to_i <= 0 ? 1 : index_params[:page].to_i
 
         @stake_accounts = get_correct_records(stake_accounts, page)
-        @total_count = stake_accounts.size
+        @total_count ||= stake_accounts.length
         @current_epoch = EpochWallClock.where(network: index_params[:network]).last&.epoch
 
         if index_params[:with_batch]
@@ -23,7 +23,8 @@ module Api
           filter_account: index_params[:filter_account],
           filter_staker: index_params[:filter_staker],
           filter_withdrawer: index_params[:filter_withdrawer],
-          filter_validator: index_params[:filter_validator]
+          filter_validator: index_params[:filter_validator],
+          exclude_accounts_below_minimum_stake: index_params[:exclude_accounts_below_minimum_stake]
         )
       end
 
@@ -38,6 +39,7 @@ module Api
 
       def records_for_vue_frontend(stake_accounts, page)
         stake_accounts = stake_accounts.group_by(&:delegated_vote_account_address)
+        @total_count = stake_accounts.length
 
         shuffled_keys = stake_accounts.keys.shuffle(random: random_by_seed(seed: index_params[:seed].to_i))
         paginated_keys = shuffled_keys[((page - 1) * 20)...((page - 1) * 20 + 20)]
@@ -69,7 +71,8 @@ module Api
           :per,
           :seed,
           :sort_by,
-          :with_batch
+          :with_batch,
+          :exclude_accounts_below_minimum_stake
         )
       end
     end

@@ -25,7 +25,14 @@ class DataCentersController < ApplicationController
 
     data_centers = DataCenter.where(data_center_key: key)
     @validators = Validator.joins(:validator_score_v1, :data_center)
-                           .where("data_centers.id IN (?) AND validator_score_v1s.network = ? AND validator_score_v1s.active_stake > ?", data_centers.ids, show_params[:network], 0)
+                           .where(
+                             "data_centers.id IN (?)
+                             AND validators.is_active = true
+                             AND validator_score_v1s.network = ? 
+                             AND validator_score_v1s.active_stake > ?",
+                             data_centers.ids, show_params[:network], 0
+                           )
+                           .includes(:validator_score_v1, :data_center_host)
                            .filtered_by(@filter_by)
                            .order("validator_score_v1s.active_stake desc")
 

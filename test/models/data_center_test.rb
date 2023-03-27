@@ -73,7 +73,7 @@ class DataCenterTest < ActiveSupport::TestCase
   test "relationship has_many gossip_nodes returns gossip_nodes through data_center_hosts" do
     node = create(:gossip_node)
     dch = create(:data_center_host, data_center: @data_center)
-    vip = create(:validator_ip, data_center_host: dch, address: node.ip)
+    vip = create(:validator_ip, data_center_host: dch, address: node.ip, is_active: true)
 
     assert_equal 1, @data_center.gossip_nodes.count
     assert_equal node, @data_center.gossip_nodes.first
@@ -121,4 +121,24 @@ class DataCenterTest < ActiveSupport::TestCase
   test "before_save #assign_data_center_key assigns key correctly" do
     assert_equal "12345-DE-Berlin", @data_center.data_center_key
   end
+
+  test "normalize_empty_strings" \
+       "changes empty strings to nil" do
+    data_center = create(:data_center,
+                         :berlin,
+                         country_confidence:0,
+                         registered_country_geoname_id: nil,
+                         continent_name: "   ",
+                         country_iso_code: "  r ",
+                         traits_anonymous: false)
+    data_center.normalize_empty_strings
+
+    assert_nil data_center.continent_name
+    assert_equal "  r ", data_center.country_iso_code
+    assert_nil data_center.registered_country_geoname_id
+    assert_equal 0 ,data_center.country_confidence
+    assert_equal false ,data_center.traits_anonymous
+    assert data_center.created_at.present?
+  end
+
 end

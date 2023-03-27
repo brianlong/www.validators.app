@@ -6,14 +6,15 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
   setup do
     @network = "testnet"
     @pts_Service = CreatePingThingStatsService.new(network: @network)
-    usr = create(:user)
+    @usr = create(:user)
 
-    25.times do |n|
+    170.times do |n|
       create(
         :ping_thing,
         network: @network,
-        user: usr,
-        reported_at: DateTime.now - (n.minutes + 5.seconds)
+        user: @usr,
+        response_time: n,
+        reported_at: DateTime.now - (n.minutes + 5.seconds),
       )
     end
   end
@@ -50,5 +51,53 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
     assert_equal 8, PingThingStat.where(interval: PingThingStat::INTERVALS[1]).count
     assert_equal 2, PingThingStat.where(interval: PingThingStat::INTERVALS[2]).count
     assert_equal 1, PingThingStat.where(interval: PingThingStat::INTERVALS[3]).count
+  end
+
+  test "CreatePingThingStatsService does not return error when slot fields are empty" do
+    PingThing.update_all(slot_sent: nil, slot_landed: nil)
+    
+    assert_nothing_raised do
+      CreatePingThingStatsService.new(time_to: 1.minutes.ago, network: @network).call
+    end
+  end
+
+  test "CreatePingThingStatsService creates records with correct fields" do
+    begin_minutes_ago = 1
+    begin_minutes_ago.times.each do |n|
+      CreatePingThingStatsService.new(time_to: (begin_minutes_ago - n).minutes.ago, network: @network).call
+    end
+    
+    stat = PingThingStat.where(interval: PingThingStat::INTERVALS[3]).last
+    assert_equal 24, stat.interval
+    assert_equal 1, stat.min
+    assert_equal 24, stat.max
+    assert_equal 13, stat.median
+    assert_equal 24, stat.num_of_records
+    assert_equal @network, stat.network
+    assert_equal 2, stat.average_slot_latency
+  end
+
+  test "CreatePingThingStatsService calculates real average of slot_latency" do
+    slot_latency = 4
+
+    25.times do |n|
+      create(
+        :ping_thing,
+        network: "mainnet",
+        user: @usr,
+        response_time: n,
+        reported_at: DateTime.now - (n.minutes + 5.seconds),
+        slot_sent: n,
+        slot_landed: n + slot_latency
+      )
+    end
+
+    begin_minutes_ago = 1
+    begin_minutes_ago.times.each do |n|
+      CreatePingThingStatsService.new(time_to: (begin_minutes_ago - n).minutes.ago, network: "mainnet").call
+    end
+    
+    stat = PingThingStat.where(interval: PingThingStat::INTERVALS[3]).last
+    assert_equal slot_latency, stat.average_slot_latency
   end
 end

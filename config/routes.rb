@@ -3,6 +3,9 @@
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
+  # Default root path
+  root to: 'public#home'
+
   get 'asns/:asn',
       to: 'asns#show',
       as: 'asn'
@@ -27,13 +30,20 @@ Rails.application.routes.draw do
   get 'validators',
       to: 'validators#index',
       as: 'validators'
+
+  get 'trent-mode',
+      to: 'validators#trent_mode',
+      as: 'trent_mode'
+
   get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
   get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
+  get 'validators/pythnet/:account', to: redirect('/validators/%{account}?network=pythnet')
 
   get 'validators/:account', to: 'validators#show', as: 'validator'
 
-  get 'validators/:account/vote_accounts/:vote_account', to: 'vote_accounts#show', 
+  get 'validators/:account/vote_accounts/:vote_account', to: 'vote_accounts#show',
                                                          as: 'validator_vote_account'
+
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
 
@@ -66,6 +76,8 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
   # Public Controller
   get 'contact-us', to: 'public#contact_us'
   get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
@@ -85,21 +97,17 @@ Rails.application.routes.draw do
   get 'commission-changes/testnet/(:validator_id)',
       to: redirect( '/commission-changes/%{validator_id}?network=testnet'),
       defaults: { validator_id: nil }
+  get 'commission-changes/pythnet/(:validator_id)',
+      to: redirect( '/commission-changes/%{validator_id}?network=pythnet'),
+      defaults: { validator_id: nil }
   get 'commission-changes/(:validator_id)',
       to: 'public#commission_histories',
       as: 'commission_histories'
-
-  get 'cluster-stats',
-      to: 'cluster_stats#index',
-      as: 'cluster_stats'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
   get "current-user", to: "users#current_user_info"
-
-  # Default root path
-  root to: 'validators#index'
 
   ### API
   namespace :api do

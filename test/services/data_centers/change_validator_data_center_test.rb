@@ -45,6 +45,32 @@ module DataCenters
       @vcr_namespace ||= File.join("services", "data_centers", "change_validators_data_center_test")
     end
 
+    test "creates data_center and data_center_host when they didn't exist before" do
+      validator2 = create(:validator)
+      validator_ip2 = create(
+        :validator_ip,
+        :active,
+        address: "146.59.55.140",
+        validator: validator2,
+      )
+
+      vcr_cassette(@vcr_namespace, "empty_data_center") do
+        service = ChangeValidatorDataCenter.new(validator2.id)
+        service.call
+
+        validator2.reload
+
+        # new data_center
+        validator_data_center = validator2.data_center
+        assert_equal "France", validator2.data_center.country_name
+        assert_equal "16276-FR-Europe/Paris", validator2.dch_data_center_key
+        assert_equal 16276, validator2.data_center.traits_autonomous_system_number
+        # new data_center_host
+        assert validator2.data_center_host
+        assert_equal validator_data_center, validator2.data_center_host.data_center
+      end
+    end
+
     test "when MaxMind returns different geo data for ip (Spectrum Staking) and existing data_center_host has exactly one validator assigned "\
          "creates new data_center, assigns existing data_center_host to it "\
          "and update validator_score_v1 data_center_key" do

@@ -4,22 +4,16 @@ module Gatherers
 
   # Assigns validator_identit
   class VoteAccountDetailsService
-    include SolanaLogic
+    include SolanaRequestsLogic
 
     def initialize(network:, config_urls:, always_update: false)
       @always_update = always_update
       @network = network
       @config_urls = config_urls
-      @range_start = VoteAccount.where(network: @network).order(id: :asc).first.id
-      @range_end = VoteAccount.where(network: @network).order(id: :asc).last.id
     end
 
     def call
-      VoteAccount.where(id: @range_start..@range_end, network: @network)
-                 .order(id: :asc)
-                 .each do |vacc|
-        @range_start = vacc.id
-
+      VoteAccount.where(network: @network).find_each do |vacc|
         vote_account_details = get_vote_account_details(vacc.account)
 
         if vote_account_details.blank? || vote_account_details["validatorIdentity"].blank?
@@ -29,11 +23,13 @@ module Gatherers
 
         next if !@always_update && should_omit_update?(vacc, vote_account_details)
 
-        if vacc.update(
+        ActiveRecord::Base.transaction do
+          vacc.update(
             validator_identity: vote_account_details["validatorIdentity"],
-            authorized_withdrawer: vote_account_details["authorizedWithdrawer"]
+            authorized_withdrawer: vote_account_details["authorizedWithdrawer"],
+            authorized_voters: vote_account_details["authorizedVoters"]
           )
-            update_score(vacc)
+          update_score(vacc)
         end
       end
     rescue ActiveRecord::LockWaitTimeout => e
@@ -44,8 +40,9 @@ module Gatherers
     private
 
     def should_omit_update?(vacc, vote_account_details)
-      vacc.validator_identity == vote_account_details["validatorIdentity"] && \
-      vacc.authorized_withdrawer == vote_account_details["authorizedWithdrawer"]
+      vacc.validator_identity == vote_account_details["validatorIdentity"] &&
+        vacc.authorized_withdrawer == vote_account_details["authorizedWithdrawer"] &&
+        vacc.authorized_voters == vote_account_details["authorizedVoters"]
     end
 
     # solana vote-account <account >

@@ -140,6 +140,7 @@ class DataCenterHostTest < ActiveSupport::TestCase
   end
 
   test "relationship has_many gossip_nodes returns correct nodes" do
+    @validator_ip.update(is_active: true)
     node = create(:gossip_node, ip: @validator_ip.address)
 
     assert_equal node, @data_center_host.gossip_nodes.first

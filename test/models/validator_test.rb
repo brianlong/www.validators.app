@@ -37,7 +37,7 @@ class ValidatorTest < ActiveSupport::TestCase
     create(:validator_score_v1, validator: @v_private, commission: 100)
   end
 
-  test 'relationship has_one most_recent_epoch_credits_by_account' do
+  test "relationship has_one most_recent_epoch_credits_by_account" do
     create_list(:validator_history, 5, account: @validator.account, epoch_credits: 100)
 
     assert_equal 100, @validator.most_recent_epoch_credits_by_account.epoch_credits
@@ -46,14 +46,14 @@ class ValidatorTest < ActiveSupport::TestCase
   test "relationship has_one data_center_host through validator_ips" do
     data_center_host = create(:data_center_host)
     create(:validator_ip, :active, validator: @validator, data_center_host: data_center_host)
-    
+
     assert_equal data_center_host, @validator.validator_ip_active.data_center_host
   end
 
   test "relationship has_one validator_ip_active" do
     validator_ip = create(:validator_ip, validator: @validator)
     validator_ip2 = create(:validator_ip, :active, validator: @validator)
-    
+
     assert_equal validator_ip2, @validator.validator_ip_active
   end
 
@@ -92,7 +92,7 @@ class ValidatorTest < ActiveSupport::TestCase
     validator_ip = create(:validator_ip, :active, :with_data_center, validator: @validator)
 
     assert_equal validator_ip.data_center_host, @validator.data_center_host_for_api
-    assert_equal DataCenterHost::FIELDS_FOR_API.map(&:to_s), 
+    assert_equal DataCenterHost::FIELDS_FOR_API.map(&:to_s),
       @validator.validator_ip_active_for_api.data_center_host_for_api.attributes.keys
   end
 
@@ -106,28 +106,28 @@ class ValidatorTest < ActiveSupport::TestCase
   end
   # /API relationships
 
-  test '#api_url creates correct link for test environment' do
+  test "#api_url creates correct link for test environment" do
     expected_url = "http://localhost:3000/api/v1/validators/#{@validator.network}/#{@validator.account}"
 
     assert_equal expected_url, @validator.api_url
   end
 
-  test 'ping_times_to' do
+  test "#ping_times_to" do
     assert_equal 3, validators(:one).ping_times_to.count
   end
 
-  test 'ping_times_to_avg' do
+  test "#ping_times_to_avg" do
     assert_equal 75.0, validators(:one).ping_times_to_avg
   end
 
-  test '#private_validator? returns true if validator\'s commission is 100%' do
+  test "#private_validator? returns true if validator's commission is 100%" do
     @validator.update(network: 'mainnet')
 
     assert create(:validator_score_v1, commission: 100, validator: @validator).validator.private_validator?
     refute create(:validator_score_v1, commission: 99, validator: @validator).validator.private_validator?
   end
 
-  test 'lido? returns true if name starts with Lido' do
+  test "#lido? returns true if name starts with Lido" do
     @validator.update(network: 'mainnet', name: 'Lido / Everstake')
     assert @validator.lido?
 
@@ -156,12 +156,12 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal validator_ip.address, @validator.vip_address
   end
 
-  test "vote_account_active should return correct vote account" do
+  test "#vote_account_active returns correct vote account" do
 
     assert_equal @va2, @validator.vote_account_active
   end
 
-  test "set_active_vote_account updates vote_accounts correctly" do
+  test "#set_active_vote_account updates vote_accounts correctly" do
     @validator.set_active_vote_account(@va1)
 
     assert @va1.reload.is_active
@@ -169,35 +169,35 @@ class ValidatorTest < ActiveSupport::TestCase
     refute @va3.reload.is_active
   end
 
-  test "filtered_by delinquent provided with a string returns correct values" do
+  test "#filtered_by delinquent provided with a string returns correct values" do
     result = Validator.filtered_by("delinquent")
 
     assert_equal 1, result.count
     assert result.last.delinquent?
   end
 
-  test "filtered_by delinquent excludes correct validators from collection" do
+  test "#filtered_by delinquent excludes correct validators from collection" do
     result = Validator.filtered_by(["delinquent"])
 
     assert_equal 1, result.count
     assert result.last.delinquent?
   end
 
-  test "filtered_by inactive excludes correct validators from collection" do
+  test "#filtered_by inactive excludes correct validators from collection" do
     result = Validator.filtered_by(["inactive"])
 
     assert_equal 1, result.count
     refute result.last.is_active
   end
 
-  test "filtered_by private excludes correct validators from collection" do
+  test "#filtered_by private excludes correct validators from collection" do
     result = Validator.filtered_by(["private"])
 
     assert_equal 1, result.count
     assert_equal 100, result.last.score.commission
   end
 
-  test "filtered_by multiple parameters excludes correct validators from collection" do
+  test "#filtered_by multiple parameters excludes correct validators from collection" do
     result = Validator.filtered_by(["delinquent", "inactive"])
 
     assert_equal 2, result.count
@@ -216,5 +216,17 @@ class ValidatorTest < ActiveSupport::TestCase
     val = Validator.for_api.first
 
     assert_equal Validator::FIELDS_FOR_API, val.attributes.keys.map(&:to_sym)
+  end
+
+  test "#commission_histories_exist returns true if there are commission changes created in last 60 days" do
+    create(:commission_history, validator: @validator)
+    assert @validator.commission_histories_exist
+  end
+
+  test "#commission_histories_exist returns false if there are no commission changes or older than 60 days" do
+    refute @validator.commission_histories_exist
+
+    create(:commission_history, validator: @validator, created_at: 62.days.ago)
+    refute @validator.commission_histories_exist
   end
 end

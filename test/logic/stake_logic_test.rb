@@ -200,21 +200,21 @@ class StakeLogicTest < ActiveSupport::TestCase
     score = create(:validator_score_v1, validator: validator)
     score2 = create(:validator_score_v1, validator: validator2)
     score.update_columns(total_score: 10)
-    score2.update_columns(total_score: 9)
-    create(:stake_account, validator: validator, stake_pool: stake_pool)
-    create(:stake_account, validator: validator2, stake_pool: stake_pool)
+    score2.update_columns(total_score: 1)
+    create(:stake_account, validator: validator, stake_pool: stake_pool, active_stake: 2)
+    create(:stake_account, validator: validator2, stake_pool: stake_pool, active_stake: 6)
 
     refute stake_pool.average_score
 
     payload = @initial_payload.merge(stake_pools: [stake_pool])
     Pipeline.new(200, payload).then(&update_validator_stats)
 
-    assert_equal 9.5, stake_pool.reload.average_score
+    assert_equal 3.25, stake_pool.reload.average_score
 
     score2.update_columns(total_score: 6)
     Pipeline.new(200, payload).then(&update_validator_stats)
 
-    assert_equal 8, stake_pool.reload.average_score
+    assert_equal 7.0, stake_pool.reload.average_score
 
     validator3 = create(:validator)
     score3 = create(:validator_score_v1, validator: validator3)
@@ -222,16 +222,16 @@ class StakeLogicTest < ActiveSupport::TestCase
     create(:stake_account, validator: validator3, stake_pool: stake_pool)
     Pipeline.new(200, payload).then(&update_validator_stats)
 
-    assert_equal 5.33, stake_pool.reload.average_score
+    assert_equal 0.52, stake_pool.reload.average_score
 
     score3.update_columns(total_score: 4)
     create(:stake_account, validator: validator3, stake_pool: stake_pool)
     Pipeline.new(200, payload).then(&update_validator_stats)
 
-    assert_equal 6.67, stake_pool.reload.average_score
+    assert_equal 4.12, stake_pool.reload.average_score
   end
 
-  test "get_rewards \
+  test "get_rewards_from_stake_pools \
         when response is correct \
         should have correct payload" do
     stake_pool = create(:stake_pool)
@@ -244,9 +244,9 @@ class StakeLogicTest < ActiveSupport::TestCase
     create(:stake_account, validator: validator, stake_pool: stake_pool)
     create(:stake_account, validator: validator2, stake_pool: stake_pool)
 
-    VCR.use_cassette("stake_logic_get_rewards") do
+    VCR.use_cassette("stake_logic_get_rewards_from_stake_pools") do
       p = Pipeline.new(200, @initial_payload)
-                  .then(&get_rewards)
+                  .then(&get_rewards_from_stake_pools)
 
       refute p.payload[:account_rewards].empty?
     end
@@ -258,22 +258,6 @@ class StakeLogicTest < ActiveSupport::TestCase
 
     assert_equal @previous_epoch, p.payload[:previous_epoch]
     assert_equal @current_epoch, p.payload[:current_epoch]
-  end
-  
-  test "get_validator_history_for_lido adds correct history to payload" do
-    account = "lido_account"
-    lido = create(:stake_pool, name: "Lido", network: "testnet")
-    val = create(:validator, account: account, network: "testnet")
-    stake_account = create(:stake_account, stake_pool: lido, validator: val, network: "testnet")
-    val_history = create(:validator_history, account: account, network: "testnet", epoch: 1)
-
-    p = Pipeline.new(200, @initial_payload)
-                .then(&assign_epochs)
-                .then(&get_validator_history_for_lido)
-
-    assert_equal 200, p.code
-    assert_equal account, p.payload[:lido_histories][0].account
-    assert_equal 1, p.payload[:lido_histories].size
   end
 
   test "calculate_apy_for_accounts should return correct apy" do

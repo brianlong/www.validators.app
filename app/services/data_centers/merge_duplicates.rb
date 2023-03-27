@@ -37,6 +37,7 @@ module DataCenters
 
         log_message("---------------", type: :info)
       end
+      log_message("---------------SCRIPT HAS FINISHED----------------", type: :info)
     end
 
 
@@ -152,13 +153,27 @@ module DataCenters
       # pointed by validator_ip_active of validator.
       # 
       # Gossip node can have only one ip so it's not checked.
-      unless val.data_center.id == validator_ip.data_center.id
+      return false unless val&.data_center.present? && validator_ip&.data_center.present?
+
+      unless val.data_center.id == validator_ip.data_center.id        
         message = <<-EOS
           Validator #{val.name} (##{val.id}) current data center 
-          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id}), skipping.
+          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id})
+          validator IP will be destroyed.
         EOS
 
         log_message(message)
+
+        if validator_ip.gossip_node.nil? && validator_ip.is_active == false && @run_update
+          address = validator_ip.address
+          id = validator_ip.id
+
+          validator_ip.destroy 
+
+          message = <<-EOS
+            Validator IP #{address} (##{id}) destroyed.
+          EOS
+        end
 
         return false
       end

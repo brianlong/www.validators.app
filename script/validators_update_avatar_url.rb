@@ -9,8 +9,8 @@ include KeybaseLogic
 interrupted = false
 trap('INT') { interrupted = true }  unless Rails.env.test?
 
-%w[testnet mainnet].each do |network|
-  Validator.where(network: network).where.not(keybase_id: '').where.not(avatar_url: nil).each do |validator|
+NETWORKS.each do |network|
+  Validator.where(network: network).where.not(keybase_id: '').where.not(avatar_url: nil).find_each do |validator|
     validator_url = get_validator_avatar(validator.keybase_id)
     if(validator_url != validator.avatar_url)
       validator.update(avatar_url: validator_url)

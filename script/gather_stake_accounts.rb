@@ -4,16 +4,9 @@ require File.expand_path('../config/environment', __dir__)
 require 'stake_logic'
 
 include StakeLogic
-
-%w[mainnet testnet].each do |network|
-  config_urls = if network == 'mainnet'
-    Rails.application.credentials.solana[:mainnet_urls]
-  else
-    Rails.application.credentials.solana[:testnet_urls]
-  end
-
+NETWORKS.each do |network|
   payload = {
-    config_urls: config_urls,
+    config_urls: NETWORK_URLS[network],
     network: network
   }
 
@@ -25,11 +18,12 @@ include StakeLogic
               .then(&assign_stake_pools)
               .then(&update_validator_stats)
               .then(&count_average_validators_commission)
-              .then(&get_rewards)
+              .then(&get_rewards_from_stake_pools)
               .then(&assign_epochs)
-              .then(&get_validator_history_for_lido)
               .then(&calculate_apy_for_accounts)
               .then(&calculate_apy_for_pools)
+
+  TotalRewardsUpdateService.new(p.payload[:network], p.payload[:stake_accounts_active]).call
 
   puts "finished #{network} with status #{p[:code]}"
   puts "MESSAGE: #{p[:message]}"
