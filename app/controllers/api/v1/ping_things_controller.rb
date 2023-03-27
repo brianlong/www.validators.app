@@ -26,7 +26,7 @@ module Api
         respond_to do |format|
           format.json { render json: json_result, status: :ok}
           format.csv do
-            send_data convert_to_csv(index_csv_headers, json_result),
+            send_data convert_to_csv(index_csv_headers, json_result.as_json),
                       filename: "ping-things-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end

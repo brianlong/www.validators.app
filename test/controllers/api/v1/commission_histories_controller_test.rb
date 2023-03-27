@@ -56,5 +56,12 @@ class CommissionHistoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/csv", response.content_type
     csv = CSV.parse response.body # Let raise if invalid CSV
     assert csv
+    assert_equal csv.size, 4
+
+    headers = (
+      CommissionHistory::API_FIELDS +
+      CommissionHistory::API_VALIDATOR_FIELDS
+    ).map(&:to_s)
+    assert_equal csv.first, headers
   end
 end

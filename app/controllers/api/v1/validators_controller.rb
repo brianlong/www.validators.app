@@ -24,7 +24,7 @@ module Api
             render json: JSON.dump(json_result), status: :ok
           end
           format.csv do
-            send_data convert_to_csv(index_csv_headers(false), json_result),
+            send_data convert_to_csv(index_csv_headers(false), json_result.as_json),
                       filename: "validator-list-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end
@@ -138,7 +138,7 @@ module Api
               render json: json_result
             end
             format.csv do
-              send_data convert_to_csv(index_csv_headers(with_history), json_result),
+              send_data convert_to_csv(index_csv_headers(with_history), json_result.as_json),
                         filename: "validator-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
             end
           end

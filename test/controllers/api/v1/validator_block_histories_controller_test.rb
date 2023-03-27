@@ -127,5 +127,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/csv", response.content_type
     csv = CSV.parse response.body # Let raise if invalid CSV
     assert csv
+    assert_equal csv.size, 2
+
+    headers = ValidatorBlockHistory::FIELDS_FOR_API.map(&:to_s)
+    assert_equal csv.first, headers
   end
 end

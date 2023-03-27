@@ -7,6 +7,7 @@ require "rack/test"
 # ApiControllerTest
 class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   include ResponseHelper
+  include ValidatorsControllerHelper
 
   def setup
     @user_params = {
@@ -573,6 +574,10 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/csv", response.content_type
     csv = CSV.parse response.body # Let raise if invalid CSV
     assert csv
+    assert_equal csv.size, 2
+
+    headers = index_csv_headers(nil)
+    assert_equal csv.first, headers
   end
 
   test "GET api_v1_validators as csv with token returns correct results" do
@@ -591,5 +596,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/csv", response.content_type
     csv = CSV.parse response.body # Let raise if invalid CSV
     assert csv
+    assert_equal csv.size, 11
+
+    headers = index_csv_headers(nil)
+    assert_equal csv.first, headers
   end
 end

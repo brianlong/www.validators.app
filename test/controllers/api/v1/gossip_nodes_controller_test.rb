@@ -45,5 +45,13 @@ class GossipNodesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/csv", response.content_type
     csv = CSV.parse response.body # Let raise if invalid CSV
     assert csv
+    assert_equal csv.size, 61
+
+    headers = (
+      GossipNode::API_FIELDS +
+      GossipNode::API_VALIDATOR_FIELDS +
+      GossipNode::API_DATA_CENTER_FIELDS
+    ).map(&:to_s)
+    assert_equal csv.first, headers
   end
 end
