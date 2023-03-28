@@ -68,7 +68,7 @@ set :whenever_roles, ["cron"]
 
 namespace :deploy do
   after :restart, 'sidekiq:restart'
-  after :restart, 'rake_task:add_stake_pool'
+  after :restart, 'rake_task:add_stake_pools'
   after :restart, 'deamons:restart'
 end
 
@@ -176,23 +176,23 @@ namespace :deamons do
 end
 
 namespace :rake_task do
-  desc 'Update Stake Pools'
-  task :add_stake_pool do
+  desc 'Add Stake Pools'
+  task :add_stake_pools do
     on release_roles([:background]) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :rake, 'add_stake_pool:mainnet'
+          execute :rake, 'add_stake_pools:mainnet'
         end
       end
     end
   end
 
-  desc 'Update manager fees to Stake Pools'
-  task :update_fee_in_stake_pools do
+  desc 'Update fees in Stake Pools'
+  task :update_fees_in_stake_pools do
     on release_roles([:background]) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :rake, 'update_fee_in_stake_pools:mainnet'
+          execute :rake, 'update_fees_in_stake_pools:mainnet'
         end
       end
     end

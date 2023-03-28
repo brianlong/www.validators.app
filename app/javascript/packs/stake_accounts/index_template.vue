@@ -13,10 +13,12 @@
                v-for="pool in stake_pools"
                :key="pool.id"
                href="#"
-               title="Filter by Stake Pool"
+               :title="'Filter by ' + pool.name"
                @click.prevent="filter_by_withdrawer(pool)"
             >
-              <img class="img-link w-100 px-2 px-lg-3 px-lx-2 py-4 py-md-3 py-xl-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
+              <img :src="stakePoolLargeLogo(pool.name)"
+                   :alt="pool.name"
+                   class="img-link w-100 px-2 px-lg-3 px-lx-2 py-4 py-md-3 py-xl-4" />
             </a>
           </div>
         </div>
@@ -286,14 +288,6 @@
   import { mapGetters } from 'vuex';
   import loadingImage from 'loading.gif'
 
-  import marinadeImage from 'marinade.png'
-  import soceanImage from 'socean.png'
-  import lidoImage from 'lido.png'
-  import jpoolImage from 'jpool.png'
-  import daopoolImage from 'daopool.png'
-  import eversolImage from 'eversol.png'
-  import blazestakeImage from 'blazestake.png'
-  import jitoImage from 'jito.png'
   import validatorScoreModal from "../validators/components/validator_score_modal"
 
   import debounce from 'lodash/debounce'
@@ -321,16 +315,6 @@
         current_epoch: null,
         loading_image: loadingImage,
         seed: Math.floor(Math.random() * 1000),
-        pool_images: {
-          marinade: marinadeImage,
-          socean: soceanImage,
-          lido: lidoImage,
-          jpool: jpoolImage,
-          daopool: daopoolImage,
-          eversol: eversolImage,
-          blazestake: blazestakeImage,
-          jito: jitoImage
-        },
         is_stake_below_minimum_visible: true,
         is_loading_stake_account_records: false
       }

@@ -1,10 +1,13 @@
 import Vue from 'vue/dist/vue.esm'
+import '../mixins/stake_pools_mixins';
+
+import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
 import skippedSlotsChart from './charts/skipped_slots_small_chart'
 import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
+
 import scores from './components/scores'
-import chart_variables from './charts/chart_variables'
 
 var ValidatorRow = Vue.component('validatorRow', {
   props: {
