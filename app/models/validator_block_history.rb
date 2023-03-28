@@ -33,7 +33,7 @@ class ValidatorBlockHistory < ApplicationRecord
   # Use the monkey patch for median
   include PipelineLogic
 
-  FIELDS_FOR_API = %i[
+  API_FIELDS = %i[
     epoch
     leader_slots
     blocks_produced

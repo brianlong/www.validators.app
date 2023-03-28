@@ -46,13 +46,12 @@ class StakeAccount < ApplicationRecord
     stake_pool_id
     network
     batch_uuid
-    pool_name
-    active_stake
   ].freeze
 
   API_VALIDATOR_FIELDS = %i[
     validator_name
     validator_account
+    validator_active_stake
   ].freeze
 
   API_STAKE_POOL_FIELDS = %i[

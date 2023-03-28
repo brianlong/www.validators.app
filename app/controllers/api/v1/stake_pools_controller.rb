@@ -19,7 +19,7 @@ module Api
       end
 
       def index_csv_headers
-        StakePool::FIELDS_FOR_API.map(&:to_s)
+        StakePool::API_FIELDS.map(&:to_s)
       end
 
       def index_params

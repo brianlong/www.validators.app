@@ -5,7 +5,7 @@ module Api
     class ValidatorBlockHistoriesController < BaseController
       def show
         @validator = Validator.where(
-          network: block_params[:network], account: block_params[:account]
+          network: block_params[:network], account: block_params[:account],
         ).order("network, account").first
 
         raise ValidatorNotFound if @validator.nil?
@@ -34,14 +34,14 @@ module Api
         render json: { "status" => "server error" }, status: 500
       end
 
-      private 
+      private
 
       def block_params
         params.permit(:network, :account, :limit)
       end
 
       def index_csv_headers
-        ValidatorBlockHistory::FIELDS_FOR_API.map(&:to_s)
+        ValidatorBlockHistory::API_FIELDS.map(&:to_s)
       end
     end
   end

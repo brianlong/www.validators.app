@@ -129,7 +129,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert csv
     assert_equal csv.size, 2
 
-    headers = ValidatorBlockHistory::FIELDS_FOR_API.map(&:to_s)
+    headers = ValidatorBlockHistory::API_FIELDS.map(&:to_s)
     assert_equal csv.first, headers
   end
 end

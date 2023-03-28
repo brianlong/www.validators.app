@@ -67,8 +67,7 @@ class StakePoolsControllerTest < ActionDispatch::IntegrationTest
     assert csv
     assert_equal csv.size, 3
 
-    headers = StakePool::FIELDS_FOR_API.map(&:to_s)
+    headers = StakePool::API_FIELDS.map(&:to_s)
     assert_equal csv.first, headers
   end
-
 end

@@ -76,7 +76,10 @@ module Api
       private
 
       def index_csv_headers
-        PingThing::FIELDS_FOR_API.map(&:to_s) + ["username"]
+        (
+          PingThing::API_FIELDS +
+          PingThing::API_USER_FIELDS
+        ).map(&:to_s)
       end
 
       def index_params

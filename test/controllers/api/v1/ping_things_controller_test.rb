@@ -216,7 +216,10 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert csv
     assert_equal csv.size, 11
 
-    headers = PingThing::FIELDS_FOR_API.map(&:to_s) + ["username"]
+    headers = (
+      PingThing::API_FIELDS +
+      PingThing::API_USER_FIELDS
+    ).map(&:to_s)
     assert_equal csv.first, headers
   end
 end

@@ -26,7 +26,8 @@
 #
 
 class StakePool < ApplicationRecord
-  FIELDS_FOR_API = %i[
+
+  API_FIELDS = %i[
     id
     authority
     average_apy

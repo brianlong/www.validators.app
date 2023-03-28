@@ -33,9 +33,10 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class PingThing < ApplicationRecord
-  belongs_to :user
+
   include ObjectCopier
-  FIELDS_FOR_API = %i[
+
+  API_FIELDS = %i[
     application
     commitment_level
     created_at
@@ -48,6 +49,12 @@ class PingThing < ApplicationRecord
     slot_landed
     reported_at
   ].freeze
+
+  API_USER_FIELDS = %i[
+    username
+  ].freeze
+
+  belongs_to :user
 
   enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
 
@@ -66,7 +73,7 @@ class PingThing < ApplicationRecord
     Jbuilder.new do |ping_thing|
       ping_thing.(
         self,
-        *FIELDS_FOR_API
+        *API_FIELDS
       )
     end
   end
