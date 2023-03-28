@@ -36,7 +36,6 @@ class GossipNode < ApplicationRecord
   ].freeze
 
   API_VALIDATOR_FIELDS = %i[
-    account
     avatar_url
     details
     keybase_id
