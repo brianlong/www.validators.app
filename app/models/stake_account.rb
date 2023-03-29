@@ -39,6 +39,7 @@ class StakeAccount < ApplicationRecord
     id
     activation_epoch
     delegated_stake
+    active_stake
     delegated_vote_account_address
     stake_pubkey
     staker
