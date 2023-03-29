@@ -13,7 +13,7 @@ export default {
       default_score_class: "fas fa-circle me-1 score-"
     }
   },
-  mounted(){
+  mounted() {
     var ctx = document.getElementById("skipped-slots-history").getContext('2d');
 
     var skipped_slot_percent_moving_average = this.skipped_slots_array.map( (vector_element, index) => (
@@ -157,7 +157,7 @@ export default {
   methods: {
     labels() {
       let labels = []
-      this.skipped_slots_array.forEach(function(val){
+      this.skipped_slots_array.forEach(function(val) {
         labels.push(val['label'])
       })
       return labels

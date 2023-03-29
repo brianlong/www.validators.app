@@ -9,6 +9,7 @@ sleep_time = 5 # seconds
 update_stats_time = 60 # seconds
 @counter = 0
 @software_versions = get_versions_for_networks
+@coin_gecko_response = nil
 
 def get_latest_cluster_stats
   {
@@ -18,7 +19,16 @@ def get_latest_cluster_stats
   }
 end
 
+def update_prices
+  @coin_gecko_response = begin 
+    CoinGeckoClient.new.price
+  rescue CoinGeckoClient::CoinGeckoResponseError
+    @coin_gecko_response || {}
+  end
+end
+
 @last_cluster_stats = get_latest_cluster_stats
+update_prices
 
 loop do
   begin
@@ -29,11 +39,11 @@ loop do
       @counter = 0
       @last_cluster_stats = get_latest_cluster_stats
       @software_versions = get_versions_for_networks
+      update_prices
     end
 
     # Data updates | each time
-    coin_gecko_response = CoinGeckoClient.new.price
-    parsed_response = coin_gecko_response
+    parsed_response = @coin_gecko_response
     parsed_response["cluster_stats"] = @last_cluster_stats
     
     broadcast_software_versions(@software_versions)

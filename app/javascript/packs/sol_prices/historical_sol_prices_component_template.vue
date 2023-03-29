@@ -47,18 +47,22 @@
         days: filter_by_days_options[0]
       }
     },
+
     created() {
       this.draw_chart();
     },
+
     methods: {
       is_active_filter(days) {
         return this.days === days;
       },
+
       select_filter_by_days(days) {
         this.days = days;
 
         this.draw_chart();
       },
+
       recreate_chart_skeleton() {
         const chartCoinGeckoContent = document.getElementById('coinGeckoChartContent');
         const chartCoinGecko = document.getElementById('coinGeckoChart');
@@ -66,6 +70,7 @@
         chartCoinGeckoContent.remove();
         chartCoinGecko.innerHTML = "<canvas id='coinGeckoChartContent'</canvas>";
       },
+
       draw_chart() {
         const ctx = this;
         const url = "/api/v1/sol-prices";

@@ -201,12 +201,12 @@
     },
 
     created() {
-      if(this.account != ""){
+      if(this.account != "") {
         this.update_account(this.account)
       }
     },
 
-    mounted(){
+    mounted() {
       this.$root.$on('set_modal_account', data => {
         this.update_account(data);
       });
@@ -226,6 +226,7 @@
     watch: {
       'account_prop': function() {}
     },
+
     computed: mapGetters([
       'web3_url',
       'network'

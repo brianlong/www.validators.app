@@ -20,6 +20,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       required: true
     }
   },
+
   data() {
     return {
       validator: null,
@@ -27,6 +28,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       val_account: Object.keys(this.stake_accounts)[0]
     }
   },
+
   created () {
     this.stake_accounts_for_val = this.stake_accounts[this.val_account]
 
@@ -38,6 +40,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
            })
     }
   },
+
   template: `
     <tbody>
       <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
