@@ -1,5 +1,5 @@
 import Vue from 'vue/dist/vue.esm';
-import DistanceStatsComponentTemplate from './cluster_performance_stats_component_template';
+import ClusterPerformanceStatsComponentTemplate from './cluster_performance_stats_component_template';
 import TurbolinksAdapter from 'vue-turbolinks';
 import store from "../stores/main_store.js";
 import ActionCableVue from "actioncable-vue";
@@ -14,10 +14,10 @@ Vue.use(ActionCableVue, {
 
 document.addEventListener('turbolinks:load', () => {
   new Vue({
-    el: '#distance-stats-component',
+    el: '#cluster-performance-stats-component',
     store,
     render(createElement) {
-      return createElement(DistanceStatsComponentTemplate);
+      return createElement(ClusterPerformanceStatsComponentTemplate);
     }
   })
 })

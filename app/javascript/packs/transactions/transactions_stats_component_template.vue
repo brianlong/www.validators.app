@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-4 col-sm-6 mb-4">
+  <div class="col-lg-4 mb-4">
     <div class="card h-100">
       <div class="card-content">
         <h2 class="h5 card-heading-left">Transactions</h2>
@@ -38,16 +38,20 @@
         transactions_per_second: null
       }
     },
+
     created() {
       this.connection = new web3.Connection(this.web3_url)
     },
+
     mounted() {
       this.get_total_transactions_count()
       this.get_1_sec_data()
     },
+
     computed: mapGetters([
       'web3_url'
     ]),
+
     methods: {
       get_total_transactions_count: function() {
         var ctx = this
@@ -59,9 +63,10 @@
           ctx.total_transactions_count = resp
         })
       },
+
       get_1_sec_data: function() {
         var ctx = this
-        setTimeout(function(){
+        setTimeout(function() {
           ctx.get_total_transactions_count()
           ctx.get_1_sec_data()
         }, ctx.gather_interval * 1000)

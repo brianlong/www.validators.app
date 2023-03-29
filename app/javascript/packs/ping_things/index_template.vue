@@ -59,7 +59,7 @@
         connected() {},
         rejected() {},
         received(data) {
-          if(data["network"] == this.network){
+          if(data["network"] == this.network) {
               this.ping_things.unshift(data)
               this.ping_things.pop()
           }
@@ -80,8 +80,8 @@
     ]),
 
     methods: {
-      ping_things_for_table: function(){
-        if(this.ping_things.length <= this.records_in_table){
+      ping_things_for_table: function() {
+        if(this.ping_things.length <= this.records_in_table) {
           return this.ping_things
         } else {
           return this.ping_things.slice(0, this.records_in_table)

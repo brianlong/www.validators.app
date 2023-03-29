@@ -7,9 +7,11 @@ var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetai
       required: true
     },
   },
+
   data() {
     return {}
   },
+
   methods: {
     text_color: function(validators_count, nodes_count) {
       if(typeof(nodes_count) != 'number') {
@@ -23,6 +25,7 @@ var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetai
       }
     },
   },
+
   template: `
     <div class="map-legend-details mb-3">
       <strong :class="text_color(data_centers_group.active_validators_count, data_centers_group.active_gossip_nodes_count)">

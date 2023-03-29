@@ -13,7 +13,7 @@ export default {
       default_score_class: "fas fa-circle me-1 score-"
     }
   },
-  mounted(){
+  mounted() {
     var ctx = document.getElementById("vote-distance-history").getContext('2d');
 
     var chart = new Chart(ctx, {
@@ -113,7 +113,7 @@ export default {
   methods: {
     labels() {
       let labels = []
-      this.vote_blocks.forEach(function(val){
+      this.vote_blocks.forEach(function(val) {
         labels.push(val['x'])
       })
       return labels
