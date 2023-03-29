@@ -23,18 +23,18 @@ class ValidatorsHelperTest < ActiveSupport::TestCase
 
   test '#sort_software_versions sort versions in correct order' do
     expected_order = [
-      "1.8.0",
-      "1.7.7",
       "1.7.6",
-      "1.7.5",
       "1.7.4",
+      "1.7.5",
       "1.7.3",
+      "1.7.7",
+      "1.8.0",
       "1.7.2",
       "1.7.1",
       "1.7.0",
+      "1.6.9",
       "1.6.18",
-      "1.6.16",
-      "1.6.9"
+      "1.6.16"
     ]
 
     sorted_versions = sort_software_versions(@versions_array)
