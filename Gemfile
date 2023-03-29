@@ -82,7 +82,7 @@ gem 'maxmind-geoip2'
 gem 'rack-cors'
 
 # Ruby client for Solana
-gem 'solana_rpc_ruby'
+gem 'solana_rpc_ruby', git: 'https://github.com/Block-Logic/solana-rpc-ruby.git', branch: '184529687-fix-get-block-method'
 
 # Ruby client for CoinGecko
 gem 'coingecko_ruby'

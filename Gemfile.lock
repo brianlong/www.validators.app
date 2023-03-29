@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/Block-Logic/solana-rpc-ruby.git
+  revision: 338aba9cc00cc2529553f6da3acf9d6e135471c6
+  branch: 184529687-fix-get-block-method
+  specs:
+    solana_rpc_ruby (1.3.0)
+      faye-websocket (~> 0.11)
+
+GIT
   remote: https://github.com/faker-ruby/faker.git
   revision: 5169f7b03761b927ffa2bea39cd14b55c6bb0ca5
   branch: master
@@ -406,8 +414,6 @@ GEM
       redis (>= 4.2.0)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    solana_rpc_ruby (1.3.0)
-      faye-websocket (~> 0.11)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -520,7 +526,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   sidekiq
-  solana_rpc_ruby
+  solana_rpc_ruby!
   spring
   spring-watcher-listen (~> 2.0.0)
   timecop
