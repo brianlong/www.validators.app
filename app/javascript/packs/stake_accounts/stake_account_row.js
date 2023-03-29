@@ -35,9 +35,9 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     var ctx = this
     if(this.val_account) {
       axios.get('/api/v1/validators/' + this.stake_accounts_for_val[0]["network"] + '/' + this.val_account + '?with_history=true')
-      .then(function (response) {
-        ctx.validator = response.data
-      })
+           .then(function (response) {
+             ctx.validator = response.data
+           })
     }
   },
 
@@ -50,6 +50,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
           <table class="table table-block-sm stake-accounts-table">
             <thead>
               <tr>
+                <th class="column-xxs d-none d-xl-table-cell"></th>
                 <th class="column-xl small">Stake Account & Staker</th>
                 <th class="column-xl small">Withdrawer</th>
                 <th class="column-sm">Stake</th>
@@ -63,9 +64,14 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
                 </th>
               </tr>
             </thead>
+            
             <tbody class="small">
-            <tr v-for="stake_account in stake_accounts_for_val"
-                :key="stake_account.id">
+            <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
+              <td class="text-center pe-0 d-none d-xl-table-cell">
+                <img class="img-sm"
+                     :title="stake_account.pool_name"
+                     :src="stakePoolSmallLogo(stake_account.pool_name)" />
+              </td>
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
                 <div class="text-muted">
