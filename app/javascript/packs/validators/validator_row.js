@@ -166,7 +166,10 @@ var ValidatorRow = Vue.component('validatorRow', {
       <td class="column-info">
         <div class="column-info-row" data-turbolinks=false>
           <div class="column-info-avatar no-watchlist">
-            <img :src="create_avatar_link()" class='img-circle-medium'/>
+            <div class="img-circle-medium-private" v-if="is_validator_private()">
+              <span class="fa-solid fa-users-slash" title="Private Validator"></span>
+            </div>
+            <img :src="create_avatar_link()" class='img-circle-medium' v-if="!is_validator_private()"/>
           </div>
           
           <div class="column-info-name">
