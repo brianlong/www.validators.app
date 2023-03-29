@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: stake_accounts
@@ -47,5 +49,16 @@ class StakeAccount < ApplicationRecord
       stake_pubkey: stake_pubkey,
       epoch: epoch
     )
+  end
+
+  def active?
+    !active_stake.in?([0, nil])
+  end
+
+  def stake_pool_valid
+    return unless stake_pool && self.active?
+    return if active_stake < StakeAccountQuery::MINIMUM_STAKE
+
+    stake_pool
   end
 end

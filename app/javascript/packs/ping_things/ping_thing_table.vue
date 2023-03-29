@@ -105,6 +105,7 @@
         required: true
       }
     },
+
     data() {
       return {
         filter_time: null,
@@ -113,50 +114,58 @@
         ping_things_filtered: []
       }
     },
+
     computed: {
       all_or_filtered() {
-        if(this.show_filtered_records){
+        if(this.show_filtered_records) {
           return this.ping_things_filtered
         } else {
           return this.ping_things
         }
       }
     },
+
     methods: {
       success_icon(success) {
-        if(success){
+        if(success) {
           return '<i class="fa-solid fa-circle-check text-success me-1"></i>'
         } else {
           return '<i class="fa-solid fa-circle-xmark text-danger me-1"></i>'
         }
       },
-      link_from_signature(signature){
+
+      link_from_signature(signature) {
         return "https://explorer.solana.com/tx/" + signature
       },
-      transaction_type_icon(tx){
-        switch(tx){
+
+      transaction_type_icon(tx) {
+        switch(tx) {
           case 'transfer':
             return '<i class="fa-solid fa-right-left text-success me-1"></i>'
           default:
             return '<i class="fa-solid fa-shuffle text-success me-1"></i>'
         }
       },
+
       signature_shortened(signature) {
         return signature.substring(0,6) + "..." + signature.substring(signature.length - 4, signature.length)
       },
-      formatted_date(date){
+
+      formatted_date(date) {
         var date = new Date(date)
         var formatted_date = moment(date).utc().format('YYYY-MM-DD HH:mm:ss z')
 
         return formatted_date
       },
-      slot_latency(sent, landed){
-        if(sent && landed){
+
+      slot_latency(sent, landed) {
+        if(sent && landed) {
           return landed - sent
         } else {
           return " - "
         }
       },
+
       get_filtered_records() {
         var ctx = this
 
@@ -166,6 +175,7 @@
                ctx.show_filtered_records = true
              })
       },
+
       reset_filter() {
         this.filter_time = null
         this.show_filtered_records = false

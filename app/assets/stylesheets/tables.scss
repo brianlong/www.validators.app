@@ -105,6 +105,10 @@ table, .table {
   }
 
   .column {
+    &-xxs {
+      width: 1%;
+      min-width: 70px;
+    }
     &-xs {
       width: 10%;
       min-width: 100px;

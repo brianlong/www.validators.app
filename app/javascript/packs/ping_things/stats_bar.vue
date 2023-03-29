@@ -141,6 +141,7 @@
         default: false
       }
     },
+
     data () {
       var api_url = '/api/v1/ping-thing-recent-stats/' + this.network
       var pt_url = '/ping-thing?locale=en&network=' + this.network
@@ -151,6 +152,7 @@
         pt_url: pt_url
       }
     },
+
     created () {
       var ctx = this
       axios.get(ctx.api_url)
@@ -159,6 +161,7 @@
              ctx.last_60_mins = response.data.last_60_mins ? response.data.last_60_mins : {};
            })
     },
+
     channels: {
       PingThingRecentStatChannel: {
         connected() {},
@@ -179,7 +182,8 @@
         disconnected() {},
       },
     },
-    mounted: function(){
+
+    mounted: function() {
       this.$cable.subscribe({
           channel: "PingThingRecentStatChannel",
           room: "public",

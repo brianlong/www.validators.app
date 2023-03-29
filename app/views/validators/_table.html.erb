@@ -121,6 +121,7 @@
                         class: 'fw-bold' do %>
               <%= displayed_validator_name(validator) %>
             <% end %>
+
             <% unless validator.private_validator? && !validator.lido? %>
               <small class="ms-1 text-muted">
                 (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
@@ -161,6 +162,15 @@
                 <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
                 <span class="d-none d-lg-inline-block">V:&nbsp;</span>
                 <%= validator.score&.software_version %>
+              </div>
+            <% end %>
+
+            <% if validator.stake_pools_list %>
+              <div class="mt-3 mt-lg-0">
+                <span class="d-inline-block d-lg-none">Pools:&nbsp;</span>
+                <% stake_pool_logos(validator.stake_pools_list).each do |logo| %>
+                  <%= image_tag(logo, class: 'img-xs me-1') %>
+                <% end %>
               </div>
             <% end %>
           </div>

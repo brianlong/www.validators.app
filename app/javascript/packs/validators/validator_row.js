@@ -1,10 +1,13 @@
 import Vue from 'vue/dist/vue.esm'
+import '../mixins/stake_pools_mixins';
+
+import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
 import skippedSlotsChart from './charts/skipped_slots_small_chart'
 import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
+
 import scores from './components/scores'
-import chart_variables from './charts/chart_variables'
 
 var ValidatorRow = Vue.component('validatorRow', {
   props: {
@@ -84,7 +87,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     skipped_vote_percent() {
-      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
+      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']) {
         var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
 
         return skipped_votes_percent ? ((batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).round(2) : null
