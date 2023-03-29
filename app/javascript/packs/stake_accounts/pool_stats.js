@@ -18,14 +18,17 @@ var StakePoolStats = Vue.component('StakePoolStats', {
       required: true
     }
   },
+
   data() {
     return {}
   },
+
   methods: {
     delegation_strategy_url() {
       return DELEGATION_STRATEGY_URLS[this.pool.name]
     }
   },
+
   template: `
     <div class="card h-100">
       <div class="card-content">

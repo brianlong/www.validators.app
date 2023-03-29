@@ -15,7 +15,7 @@ export default {
 
   methods: {
     skipped_vote_percent() {
-      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
+      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']) {
         var history_array = this.validator['skipped_vote_history']
         var skipped_votes_percent = history_array[history_array.length - 1]
         return skipped_votes_percent ? ((this.batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).toFixed(2) : null

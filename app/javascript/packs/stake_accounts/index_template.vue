@@ -335,9 +335,11 @@
         is_loading_stake_account_records: false
       }
     },
+
     components: {
       'validator-score-modal': validatorScoreModal
     },
+
     created () {
       this.stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network;
       this.stake_pools_api_url = '/api/v1/stake-pools/' + this.network;
@@ -354,7 +356,7 @@
       }
 
       axios.get(ctx.stake_accounts_api_url, stake_accounts_query_params)
-           .then(function (response){
+           .then(function (response) {
              ctx.stake_accounts = response.data.stake_accounts
              ctx.total_count = response.data.total_count;
              ctx.is_loading_stake_accounts = false;
@@ -363,42 +365,52 @@
            })
 
       axios.get(ctx.stake_pools_api_url)
-           .then(function (response){
+           .then(function (response) {
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.is_loading_stake_pools = false
            })
     },
+
     computed: mapGetters([
       'network'
     ]),
+
     watch: {
-      sort_by: function(){
+      sort_by: function() {
         this.refresh_results()
       },
-      page: function(){
+
+      page: function() {
         this.paginate()
       },
-      filter_account: function(){
+
+      filter_account: function() {
         this.refresh_results()
       },
-      filter_staker: function(){
+
+      filter_staker: function() {
         this.refresh_results()
       },
-      filter_withdrawer: function(){
+
+      filter_withdrawer: function() {
         this.refresh_results()
       },
+
       filter_validator: function() {
         this.refresh_results()
       },
+
       is_stake_below_minimum_visible() {
         this.is_loading_stake_account_records = true
         this.refresh_results()
       }
     },
+
     methods: {
-      paginate: function(){
+      paginate: function() {
         this.refresh_results()
       },
+
       get_stake_accounts_call() {
         var ctx = this
 
@@ -425,30 +437,38 @@
             ctx.is_loading_stake_account_records = false
           })
       },
+
       refresh_results: debounce(function() {
         this.is_loading_stake_accounts = true
 
         this.get_stake_accounts_call()
       }, 2000),
-      sort_by_epoch: function(){
+
+      sort_by_epoch: function() {
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
       },
-      sort_by_stake: function(){
+
+      sort_by_stake: function() {
         this.sort_by = this.sort_by == 'stake_desc' ? 'stake_asc' : 'stake_desc'
       },
-      sort_by_staker: function(){
+
+      sort_by_staker: function() {
         this.sort_by = this.sort_by == 'staker_desc' ? 'staker_asc' : 'staker_desc'
       },
-      sort_by_withdrawer: function(){
+
+      sort_by_withdrawer: function() {
         this.sort_by = this.sort_by == 'withdrawer_desc' ? 'withdrawer_asc' : 'withdrawer_desc'
       },
-      filter_by_staker: function(staker){
+
+      filter_by_staker: function(staker) {
         this.filter_staker = staker
       },
-      filter_by_withdrawer: function(pool){
+
+      filter_by_withdrawer: function(pool) {
         this.filter_withdrawer = pool.authority
         this.selected_pool = pool
       },
+
       reset_filters: function() {
         this.filter_withdrawer = null
         this.filter_staker = null
@@ -456,9 +476,11 @@
         this.filter_validator = null
         this.selected_pool = null
       },
-      filters_present: function(){
+
+      filters_present: function() {
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
       },
+
       set_stake_below_minimum_visibility(visible) {
         this.is_stake_below_minimum_visible = visible
       }

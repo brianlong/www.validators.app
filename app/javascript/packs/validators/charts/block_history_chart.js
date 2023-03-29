@@ -116,7 +116,7 @@ export default {
   methods: {
     labels() {
       let labels = []
-      this.root_blocks.forEach(function(val){
+      this.root_blocks.forEach(function(val) {
         labels.push(val['x'])
       })
       return labels

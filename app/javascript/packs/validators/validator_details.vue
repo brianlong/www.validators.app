@@ -301,12 +301,15 @@
       active_stake() {
         return this.validator_history?.active_stake ? this.lamports_to_sol(this.validator_history.active_stake).toLocaleString('en-US', {maximumFractionDigits: 0}) : "N/A";
       },
+
       go_back_link() {
         return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
       },
+
       refresh_href() {
         return '/validators/' + this.validator.account +'?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page + '&refresh=' + !this.refresh
       },
+
       ...mapGetters([
         'network'
       ])
@@ -316,33 +319,42 @@
       lamports_to_sol(lamports) {
         return lamports * 0.000000001;
       },
+
       is_private() {
         return this.score.commission == 100
       },
+
       is_delinquent() {
         return this.score.delinquent
       },
+
       is_active() {
         return this.validator.is_active || true
       },
+
       name_or_account(validator) {
         return validator.name ? validator.name : validator.account
       },
+
       display_staking_info(validator) {
         return !this.is_private() && validator.is_active && this.validator.vote_account_active
       },
+
       commission_class() {
         if(this.validator.network == 'mainnet' && this.validator.commission == 100) {
           return 'text-danger'
         }
       },
+
       commission_histories_path(validator) {
         return '/commission-changes/' + validator.id + '?network=' + validator.network
       },
+
       data_center_link(validator) {
         let key = validator.dch_data_center_key.replace('/', '-slash-')
         return '/data-centers/' + key + '?network=' + validator.network
       },
+
       vote_account_path(validator) {
         if (validator.vote_account_active) {
           return "/validators/" + validator.account + "/vote_accounts/" + validator.vote_account_active.account + "?network=" + validator.network
@@ -350,16 +362,20 @@
           return null
         }
       },
+
       solstake_url(validator) {
         return "https://solstake.io/#/app/validator/" + validator.vote_account_active.account
       },
+
       kiwi_url(validator) {
         return "https://staking.kiwi/app/" + validator.vote_account_active.account
       },
+
       blazestake_url(validator) {
         return "https://stake.solblaze.org/app/?validator=" + validator.vote_account_active.account
       }
     },
+
     components: {
       "validator-scores": scores,
       "block-history-chart": blockHistoryChart,

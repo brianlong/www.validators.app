@@ -82,6 +82,7 @@
         next_leaders: [],
       }
     },
+
     created () {
       this.api_url = "/api/v1/data-centers-with-nodes/" + this.network;
       let ctx = this;
@@ -95,12 +96,14 @@
         ctx.data_centers_groups = response.data.data_centers_groups;
       })
     },
+
     mounted() {
       this.$cable.subscribe({
         channel: 'LeadersChannel',
         room: "public"
       });
     },
+
     computed: {
       is_leader_valid() {
         return this.current_leader && this.current_leader.location_latitude && this.current_leader.location_longitude
@@ -109,6 +112,7 @@
         'network'
       ])
     },
+
     channels: {
       LeadersChannel: {
         connected() { },
@@ -123,6 +127,7 @@
         disconnected() { }
       }
     },
+
     methods: {
       position_horizontal: function(longitude) {
         let division_factor = longitude < 0 ? 142 : 145

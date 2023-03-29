@@ -95,14 +95,14 @@
     },
 
     methods: {
-      software_version_class(version){
+      software_version_class(version) {
         if(version == this.current_software_version) {
           return "h4 text-success"
         } else {
           return ""
         }
       },
-      software_version_link(version){
+      software_version_link(version) {
         return '/validators?q=' + version + '&network=' + this.network
       }
     },

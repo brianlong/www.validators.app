@@ -20,6 +20,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       required: true
     }
   },
+
   data() {
     return {
       validator: null,
@@ -27,17 +28,19 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       val_account: Object.keys(this.stake_accounts)[0]
     }
   },
+
   created () {
     this.stake_accounts_for_val = this.stake_accounts[this.val_account]
 
     var ctx = this
-    if(this.val_account){
+    if(this.val_account) {
       axios.get('/api/v1/validators/' + this.stake_accounts_for_val[0]["network"] + '/' + this.val_account + '?with_history=true')
-      .then(function (response){
+      .then(function (response) {
         ctx.validator = response.data
       })
     }
   },
+
   template: `
     <tbody>
       <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
