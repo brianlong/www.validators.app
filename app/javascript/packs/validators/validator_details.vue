@@ -101,6 +101,12 @@
                   </a>
                 </td>
               </tr>
+              <tr>
+                <td><strong>Creation Date:</strong></td>
+                <td>
+                  {{ creation_date() }}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -118,56 +124,57 @@
 
           <table class="table table-block-sm mb-0" v-if="!is_loading_validator">
             <tbody>
-            <tr>
-              <td class="column-lg"><strong>Keybase:</strong></td>
-              <td>{{ validator.keybase_id }}</td>
-            </tr>
+              <tr>
+                <td class="column-lg"><strong>Keybase:</strong></td>
+                <td>{{ validator.keybase_id }}</td>
+              </tr>
 
-            <tr>
-              <td><strong>Website:</strong></td>
-              <td><a :href="validator.www_url">{{ validator.www_url }}</a></td>
-            </tr>
+              <tr>
+                <td><strong>Website:</strong></td>
+                <td><a :href="validator.www_url">{{ validator.www_url }}</a></td>
+              </tr>
 
-            <tr>
-              <td>
-                <strong>Vote Account:</strong>
-              </td>
-              <td>
-                <small class="word-break">
-                  <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
-                    {{ validator.vote_account_active.account }}
+              <tr>
+                <td>
+                  <strong>Vote Account:</strong>
+                </td>
+                <td>
+                  <small class="word-break">
+                    <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
+                      {{ validator.vote_account_active.account }}
+                    </a>
+                  </small>
+                </td>
+              </tr>
+
+              <tr>
+                <td><strong>Active Stake:</strong></td>
+                <td>
+                  {{ active_stake }} SOL
+                </td>
+              </tr>
+
+              <tr>
+                <td><strong>Commission:</strong></td>
+                <td :class="commission_class" data-turbolinks="false">
+                  {{ score.commission }}&percnt;
+                  <a :href="commission_histories_path(validator)" class="small" v-if="validator.commission_histories_exist">
+                    (See commission changes)
                   </a>
-                </small>
-              </td>
-            </tr>
+                </td>
+              </tr>
 
-            <tr>
-              <td><strong>Active Stake:</strong></td>
-              <td>
-                {{ active_stake }} SOL
-              </td>
-            </tr>
+              <tr v-if="validator.security_report_url">
+                <td>
+                  <strong>Security Info:</strong>
+                </td>
+                <td>
+                  <a :href="validator.security_report_url" target="_blank">
+                    {{ validator.security_report_url }}
+                  </a>
+                </td>
+              </tr>
 
-            <tr>
-              <td><strong>Commission:</strong></td>
-              <td :class="commission_class" data-turbolinks="false">
-                {{ score.commission }}&percnt;
-                <a :href="commission_histories_path(validator)" class="small" v-if="validator.commission_histories_exist">
-                  (See commission changes)
-                </a>
-              </td>
-            </tr>
-
-            <tr v-if="validator.security_report_url">
-              <td>
-                <strong>Security Info:</strong>
-              </td>
-              <td>
-                <a :href="validator.security_report_url" target="_blank">
-                  {{ validator.security_report_url }}
-                </a>
-              </td>
-            </tr>
               <tr>
                 <td>
                   <strong>Scores:</strong>
@@ -245,6 +252,8 @@
   import loadingImage from 'loading.gif';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
+
+  var moment = require('moment');
 
   export default {
     props: {
@@ -373,7 +382,11 @@
 
       blazestake_url(validator) {
         return "https://stake.solblaze.org/app/?validator=" + validator.vote_account_active.account
-      }
+      },
+
+      creation_date() {
+        return moment(new Date(this.validator.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
+      },
     },
 
     components: {
