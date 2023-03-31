@@ -1,15 +1,23 @@
 <div class="card h-100 mb-4">
   <div class="card-content">
-    <h2 class="h5 card-heading-left">New: validators watchlist</h2>
+    <div class="row">
+      <div class="col-lg-9 col-xl-10">
+        <h2 class="h5 card-heading-left">New: validators watchlist</h2>
 
-    <div class="lead">
-      Sign up and add validators to your favourites
-      <i class="fa-regular fa-star text-warning mx-1"></i> to watch them.
-    </div>
-    <div class="text-muted mb-4">
-      We will send you e-mail notification every time your favourite validator changes its commission.
-    </div>
+        <div class="lead">
+          Sign up and add validators to your favourites
+          <i class="fa-regular fa-star text-warning mx-1"></i> to watch them.
+        </div>
+        <div class="text-muted mb-4">
+          We will send you e-mail notification every time your favourite validator changes its commission.
+        </div>
+      </div>
 
-    <%= link_to "Sign up now", new_user_registration_path, class: "btn btn-sm btn-secondary" %>
+      <div class="col text-lg-end d-flex flex-column justify-content-center">
+        <div>
+          <%= link_to "Sign up now", new_user_registration_path, class: "btn btn-lg btn-secondary" %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
