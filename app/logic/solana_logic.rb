@@ -114,7 +114,7 @@ module SolanaLogic
         
         if existing_history = validator_histories[validator["identityPubkey"]]
           if existing_history.last_vote < validator["lastVote"]
-            existing_history.update(
+            existing_history.update!(
               account: validator["identityPubkey"],
               vote_account: validator["voteAccountPubkey"],
               commission: validator["commission"],
@@ -136,7 +136,7 @@ module SolanaLogic
             validator_histories[validator["identityPubkey"]] = existing_history
           end
         else
-          vh = ValidatorHistory.create(
+          vh = ValidatorHistory.create!(
             network: p.payload[:network],
             batch_uuid: p.payload[:batch_uuid],
             account: validator["identityPubkey"],
@@ -162,6 +162,8 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
+      Appsignal.send_error(e)
+      Rails.logger.error "validator_history_update MESSAGE: #{e.message} CLASS: #{e.class}"
       Pipeline.new(500, p.payload, "Error from validator_history_update", e)
     end
   end
