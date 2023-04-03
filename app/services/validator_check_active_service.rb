@@ -40,19 +40,17 @@ class ValidatorCheckActiveService
     false
   end
 
-  # number of previous by network
-  # def previous_epoch(network)
-  #   @previous_epochs ||= {}
-  #   return @previous_epochs[network] if @previous_epochs[network].present?
+  def current_epoch(network)
+    @current_epochs ||= {}
+    return @current_epochs[network] if @current_epochs[network].present?
 
-  #   current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).first
-  #   @previous_epochs[network] = current_epoch.epoch - 1
-  # end
+    @current_epochs[network] = EpochWallClock.where(network: network).order(created_at: :desc).first
+  end
 
   # returns true if validator has no history from previous epoch
   def too_young?(validator)
     !validator.validator_histories
-              .where("epoch < ?", EpochWallClock.where(network: validator.network).order(epoch: :desc).first.epoch)
+              .where("epoch < ?", current_epoch(validator.network).epoch)
               .exists?
   end
 
