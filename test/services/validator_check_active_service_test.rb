@@ -105,7 +105,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
   test "validator with recent history should not be marked as destroyed" do
     v = create(:validator, :with_score, account: "account7")
-    create(:validator_history, account: "account7", created_at: 22.hours.ago)
+    create(:validator_history, account: "account7", created_at: 11.hours.ago)
 
     refute v.is_destroyed
 
@@ -116,7 +116,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
   test "validator with recent history that is marked as destroyed should not be destroyed" do
     v = create(:validator, :with_score, account: "account7", is_destroyed: true)
-    create(:validator_history, account: "account7", created_at: 22.hours.ago)
+    create(:validator_history, account: "account7", created_at: 11.hours.ago)
 
     assert v.is_destroyed
 
