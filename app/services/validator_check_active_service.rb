@@ -50,7 +50,7 @@ class ValidatorCheckActiveService
   # returns true if validator has no history from previous epoch
   def too_young?(validator)
     !validator.validator_histories
-              .where("epoch < ?", current_epoch(validator.network).epoch)
+              .where("created_at < ?", @delinquent_time.ago)
               .exists?
   end
 
