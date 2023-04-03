@@ -5,7 +5,7 @@ class ValidatorCheckActiveService
     @stake_exclude_height = 0
 
     # if delinquent for this period of time validator becomes inactive
-    @delinquent_time = 24.hours
+    @delinquent_time = 12.hours
   end
 
   def update_validator_activity
