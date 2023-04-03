@@ -9,8 +9,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   end
 
   test 'validator with active stake and nondelinquent should be active' do
-    v = create(:validator, :with_score, account: 'account1')
-    create(:validator_history, account: 'account1')
+    v = create(:validator, :with_score, account: "account1")
+    create(:validator_history, account: "account1")
     create(:validator_block_history, validator: v, epoch: 122)
 
     assert v.is_active
@@ -22,8 +22,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
   test 'validator with zero active stake should be inactive' do
     
-    v = create(:validator, :with_score, account: 'account2', network: @network)
-    create(:validator_history, account: 'account2', active_stake: 0, network: @network, epoch: 122)
+    v = create(:validator, :with_score, account: "account2", network: @network)
+    create(:validator_history, account: "account2", active_stake: 0, network: @network, epoch: 122)
 
     assert v.is_active
 
@@ -35,8 +35,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   test 'validator with zero active stake but too young should be active' do
     current_epoch = EpochWallClock.where(network: @network).order(created_at: :desc).first
 
-    v = create(:validator, :with_score, account: 'account3', network: @network)
-    create(:validator_history, account: 'account3', active_stake: 0, epoch: current_epoch.epoch, network: @network)
+    v = create(:validator, :with_score, account: "account3", network: @network)
+    create(:validator_history, account: "account3", active_stake: 0, epoch: current_epoch.epoch, network: @network)
 
     assert v.is_active
 
@@ -45,8 +45,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   end
 
   test 'inactive validator with active stake should become active' do
-    v = create(:validator, :with_score, account: 'account4', is_active: false)
-    create(:validator_history, account: 'account4', active_stake: 1000)
+    v = create(:validator, :with_score, account: "account4", is_active: false)
+    create(:validator_history, account: "account4", active_stake: 1000)
     create(:validator_block_history, validator: v, epoch: 122)
 
     refute v.is_active
@@ -57,8 +57,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   end
 
   test 'validator without vote_account should become rpc' do
-    v = create(:validator, :with_score, account: 'account4', created_at: 2.days.ago)
-    create(:validator_history, account: 'account4', active_stake: 1000)
+    v = create(:validator, :with_score, account: "account4", created_at: 2.days.ago)
+    create(:validator_history, account: "account4", active_stake: 1000)
     create(:validator_block_history, validator: v, epoch: 122)
 
     refute v.is_rpc
@@ -69,7 +69,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   end
 
   test "validator delinquent for too long should be inactive" do
-    v = create(:validator, :with_score, account: 'account5')
+    v = create(:validator, :with_score, account: "account5")
     create(:validator_history, account: "account5", delinquent: true)
     create(:validator_block_history, validator: v, epoch: 122)
     create(:validator_history, account: "account5", delinquent: false, created_at: 25.hours.ago)
@@ -136,7 +136,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
       is_rpc: true
     )
     create(:vote_account, validator: v)
-    create(:validator_history, account: 'account7', active_stake: 1000)
+    create(:validator_history, account: "account7", active_stake: 1000)
     create(:validator_block_history, validator: v, epoch: 122)
 
     refute v.is_active
