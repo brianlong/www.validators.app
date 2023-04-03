@@ -41,18 +41,18 @@ class ValidatorCheckActiveService
   end
 
   # number of previous by network
-  def previous_epoch(network)
-    @previous_epochs ||= {}
-    return @previous_epochs[network] if @previous_epochs[network].present?
+  # def previous_epoch(network)
+  #   @previous_epochs ||= {}
+  #   return @previous_epochs[network] if @previous_epochs[network].present?
 
-    current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).last
-    @previous_epochs[network] = current_epoch.epoch - 1
-  end
+  #   current_epoch = EpochWallClock.where(network: network).order(created_at: :desc).first
+  #   @previous_epochs[network] = current_epoch.epoch - 1
+  # end
 
   # returns true if validator has no history from previous epoch
   def too_young?(validator)
-    !validator.validator_block_histories
-              .where(epoch: previous_epoch(validator.network))
+    !validator.validator_histories
+              .where("epoch < ?", EpochWallClock.where(network: validator.network).order(epoch: :desc).first.epoch)
               .exists?
   end
 
@@ -86,7 +86,7 @@ class ValidatorCheckActiveService
   def delinquent?(validator)
     return false if !validator.delinquent?
 
-    non_delinquent_history(validator).empty?
+    !non_delinquent_history_exists?(validator)
   end
 
   # returns true if if validator had stake gt STAKE_EXCLUDE_HEIGHT since DELINQUENT_TIME
@@ -101,8 +101,9 @@ class ValidatorCheckActiveService
     with_acceptable_stake.exists?
   end
 
-  def non_delinquent_history(validator)
+  def non_delinquent_history_exists?(validator)
     ValidatorHistory.where(account: validator.account, delinquent: false)
-                    .where("created_at > ?", DateTime.now - @delinquent_time)
+                    .where("created_at > ?", @delinquent_time.ago)
+                    .exists?
   end
 end

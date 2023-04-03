@@ -5,6 +5,7 @@ require 'test_helper'
 class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   setup do
     create(:epoch_wall_clock, epoch: 123)
+    @network = "testnet"
   end
 
   test 'validator with active stake and nondelinquent should be active' do
@@ -20,9 +21,9 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   end
 
   test 'validator with zero active stake should be inactive' do
-    v = create(:validator, :with_score, account: 'account2')
-    create(:validator_history, account: 'account2', active_stake: 0)
-    create(:validator_block_history, validator: v, epoch: 122)
+    
+    v = create(:validator, :with_score, account: 'account2', network: @network)
+    create(:validator_history, account: 'account2', active_stake: 0, network: @network, epoch: 122)
 
     assert v.is_active
 
@@ -32,14 +33,14 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   end
 
   test 'validator with zero active stake but too young should be active' do
-    v = create(:validator, :with_score, account: 'account3')
-    create(:validator_history, account: 'account3', active_stake: 0)
-    create(:validator_block_history, validator: v, epoch: 123)
+    current_epoch = EpochWallClock.where(network: @network).order(created_at: :desc).first
+
+    v = create(:validator, :with_score, account: 'account3', network: @network)
+    create(:validator_history, account: 'account3', active_stake: 0, epoch: current_epoch.epoch, network: @network)
 
     assert v.is_active
 
     ValidatorCheckActiveService.new.update_validator_activity
-
     assert v.reload.is_active
   end
 
@@ -81,7 +82,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
   test "validator with active stake but with delinquent state should be inactive" do
     validator = create(:validator, :delinquent, account: "account5", is_active: false)
-    create(:validator_history, account: "account5", delinquent: true)
+    create(:validator_history, account: "account5", delinquent: true, active_stake: 10)
     create(:validator_block_history, validator: validator, epoch: 122)
     create(:validator_history, account: "account5", delinquent: false, created_at: 25.hours.ago)
     create(:validator_block_history, validator: validator, epoch: 122)
