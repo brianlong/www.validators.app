@@ -20,7 +20,7 @@ def get_latest_cluster_stats
 end
 
 def update_prices
-  @coin_gecko_response = begin 
+  @coin_gecko_response = begin
     CoinGeckoClient.new.price
   rescue CoinGeckoClient::CoinGeckoResponseError
     @coin_gecko_response || {}
@@ -34,7 +34,7 @@ loop do
   begin
     @counter += 1
 
-    # Data updates | 1 minute
+    # Data updates | each 1 minute
     if @counter == update_stats_time / sleep_time
       @counter = 0
       @last_cluster_stats = get_latest_cluster_stats
@@ -42,7 +42,12 @@ loop do
       update_prices
     end
 
-    # Data updates | each time
+    # Data updates | each 10 seconds
+    if @counter % 2 == 0
+      update_prices
+    end
+
+    # Data updates | each 5 seconds
     parsed_response = @coin_gecko_response
     parsed_response["cluster_stats"] = @last_cluster_stats
     
