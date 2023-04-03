@@ -38,30 +38,59 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
+  axios.defaults.headers.get["Authorization"] = window.api_authorization;
+
   export default {
     data() {
       return {
         price: null,
         change_24h: null,
-        volume_24h: null
+        volume_24h: null,
+        init_price: null,
+        init_change_24h: null,
+        init_volume_24h: null
       }
     },
+    created() {
+      const ctx = this
+      const url = "/api/v1/sol-prices"
 
-    methods: {},
+      axios.get(url)
+        .then(response => {
+          const data = response.data
 
+          ctx.init_price = data[0].average_price
+          ctx.init_change_24h = -(data[1].average_price - data[0].average_price)
+          ctx.init_volume_24h = data[0].volume
+          ctx.price = (+ctx.init_price).toFixed(2)
+          ctx.change_24h = (+ctx.init_change_24h).toFixed(2)
+          ctx.volume_24h = (+ctx.init_volume_24h).toLocaleString('en-US', { maximumFractionDigits: 0 })
+        })
+    },
     channels: {
       FrontStatsChannel: {
         connected() {},
         rejected() {},
         received(data) {
-          this.price = data.solana.usd.toFixed(2)
-          this.change_24h = data.solana.usd_24h_change.toFixed(2)
-          this.volume_24h = data.solana.usd_24h_vol.toLocaleString('en-US', { maximumFractionDigits: 0 })
+          if (data.solana) {
+            this.price = data.solana.usd
+            this.change_24h = data.solana.usd_24h_change
+            this.volume_24h = data.solana.usd_24h_vol
+          } else {
+            this.price = this.init_price
+            this.change_24h = this.init_change_24h
+            this.volume_24h = this.init_volume_24h
+          }
+
+          this.price = (+this.price).toFixed(2)
+          this.change_24h = (+this.change_24h).toFixed(2)
+          this.volume_24h = (+this.volume_24h).toLocaleString('en-US', { maximumFractionDigits: 0 })
         },
         disconnected() {},
       },
     },
-
     mounted: function() {
       this.$cable.subscribe({
           channel: "FrontStatsChannel",
