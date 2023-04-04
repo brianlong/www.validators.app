@@ -6,6 +6,8 @@ module Api
     # authentication.
     class BaseController < ActionController::API
       helper ApplicationHelper
+      include ActionController::MimeResponds
+      include CsvHelper
       # Special error classes:
       class ValidatorNotFound < StandardError; end
 

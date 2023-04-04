@@ -36,6 +36,31 @@
 #
 
 class StakeAccount < ApplicationRecord
+
+  API_FIELDS = %i[
+    id
+    activation_epoch
+    delegated_stake
+    active_stake
+    delegated_vote_account_address
+    stake_pubkey
+    staker
+    withdrawer
+    stake_pool_id
+    network
+    batch_uuid
+  ].freeze
+
+  API_VALIDATOR_FIELDS = %i[
+    validator_name
+    validator_account
+    validator_active_stake
+  ].freeze
+
+  API_STAKE_POOL_FIELDS = %i[
+    pool_name
+  ].freeze
+
   belongs_to :stake_pool, optional: true
   belongs_to :validator, optional: true
 
