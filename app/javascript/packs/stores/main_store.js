@@ -25,6 +25,7 @@ const getters = {
         return state.testnet_url
     }
   },
+
   network() {
     if (location.href.match(/network=pythnet/)) {
       return 'pythnet'

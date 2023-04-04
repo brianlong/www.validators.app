@@ -18,6 +18,7 @@
 #  name                :string(191)
 #  network             :string(191)
 #  security_report_url :string(191)
+#  stake_pools_list    :text(65535)
 #  www_url             :string(191)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -42,6 +43,7 @@ class Validator < ApplicationRecord
     www_url
     admin_warning
     jito
+    stake_pools_list
   ].freeze
 
   FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
@@ -67,6 +69,7 @@ class Validator < ApplicationRecord
   has_one :most_recent_epoch_credits_by_account, -> {
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
+  has_many :stake_accounts, dependent: :nullify
 
   # API
   has_many :vote_accounts_for_api, -> { for_api }, class_name: "VoteAccount"
@@ -78,6 +81,8 @@ class Validator < ApplicationRecord
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
   scope :for_api, -> { select(FIELDS_FOR_API) }
+
+  serialize :stake_pools_list, Array, default: []
 
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true

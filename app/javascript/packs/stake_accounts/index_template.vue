@@ -13,10 +13,12 @@
                v-for="pool in stake_pools"
                :key="pool.id"
                href="#"
-               title="Filter by Stake Pool"
+               :title="'Filter by ' + pool.name"
                @click.prevent="filter_by_withdrawer(pool)"
             >
-              <img class="img-link w-100 px-2 px-lg-3 px-lx-2 py-4 py-md-3 py-xl-4" v-bind:src="pool_images[pool.name.toLowerCase()]">
+              <img :src="stakePoolLargeLogo(pool.name)"
+                   :alt="pool.name"
+                   class="img-link w-100 px-2 px-lg-3 px-lx-2 py-4 py-md-3 py-xl-4" />
             </a>
           </div>
         </div>
@@ -65,6 +67,22 @@
     <!-- Stake pool stats -->
     <div class="col-12 mb-4" v-if="selected_pool && !is_loading_stake_pools">
       <stake-pool-stats :pool="selected_pool"/>
+    </div>
+
+    <div class="mb-4">
+      <div class="small mb-2 ps-3">Stake less than <strong>1&nbsp;SOL</strong></div>
+      <div class="btn-group btn-group-toggle switch-button">
+        <span class="btn btn-xs btn-secondary"
+              :class="is_stake_below_minimum_visible ? 'active' : ''"
+              v-on:click="set_stake_below_minimum_visibility(true)">
+          <i class="fa-solid fa-eye me-2"></i>Show
+        </span>
+        <span class="btn btn-xs btn-secondary"
+              :class="is_stake_below_minimum_visible ? '' : 'active'"
+              v-on:click="set_stake_below_minimum_visibility(false)">
+          <i class="fa-solid fa-eye-slash me-2"></i>Hide
+        </span>
+      </div>
     </div>
 
     <!-- Validators and accounts table -->
@@ -141,6 +159,7 @@
 
           <stake-account-row
             v-for="(sa, index) in stake_accounts"
+            v-if="!is_loading_stake_account_records"
             :key="sa.id"
             :stake_accounts="sa"
             :idx="index + (page - 1) * 20"
@@ -149,6 +168,11 @@
           >
           </stake-account-row>
         </table>
+
+        <div class="img-loading col-12 text-center my-5"
+            v-if="is_loading_stake_account_records">
+          <img v-bind:src="loading_image" width="100">
+        </div>
 
         <div class="card-footer">
           <b-pagination
@@ -264,14 +288,6 @@
   import { mapGetters } from 'vuex';
   import loadingImage from 'loading.gif'
 
-  import marinadeImage from 'marinade.png'
-  import soceanImage from 'socean.png'
-  import lidoImage from 'lido.png'
-  import jpoolImage from 'jpool.png'
-  import daopoolImage from 'daopool.png'
-  import eversolImage from 'eversol.png'
-  import blazestakeImage from 'blazestake.png'
-  import jitoImage from 'jito.png'
   import validatorScoreModal from "../validators/components/validator_score_modal"
 
   import debounce from 'lodash/debounce'
@@ -299,21 +315,15 @@
         current_epoch: null,
         loading_image: loadingImage,
         seed: Math.floor(Math.random() * 1000),
-        pool_images: {
-          marinade: marinadeImage,
-          socean: soceanImage,
-          lido: lidoImage,
-          jpool: jpoolImage,
-          daopool: daopoolImage,
-          eversol: eversolImage,
-          blazestake: blazestakeImage,
-          jito: jitoImage
-        }
+        is_stake_below_minimum_visible: true,
+        is_loading_stake_account_records: false
       }
     },
+
     components: {
       'validator-score-modal': validatorScoreModal
     },
+
     created () {
       this.stake_accounts_api_url = '/api/v1/stake-accounts/' + this.network;
       this.stake_pools_api_url = '/api/v1/stake-pools/' + this.network;
@@ -324,12 +334,13 @@
           page: ctx.page,
           with_batch: true,
           seed: ctx.seed,
-          grouped_by: 'delegated_vote_accounts_address'
+          grouped_by: 'delegated_vote_accounts_address',
+          exclude_accounts_below_minimum_stake: !ctx.is_stake_below_minimum_visible
         }
       }
 
       axios.get(ctx.stake_accounts_api_url, stake_accounts_query_params)
-           .then(function (response){
+           .then(function (response) {
              ctx.stake_accounts = response.data.stake_accounts
              ctx.total_count = response.data.total_count;
              ctx.is_loading_stake_accounts = false;
@@ -338,42 +349,54 @@
            })
 
       axios.get(ctx.stake_pools_api_url)
-           .then(function (response){
+           .then(function (response) {
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.is_loading_stake_pools = false
            })
     },
+
     computed: mapGetters([
       'network'
     ]),
+
     watch: {
-      sort_by: function(){
+      sort_by: function() {
         this.refresh_results()
       },
-      page: function(){
+
+      page: function() {
         this.paginate()
       },
-      filter_account: function(){
+
+      filter_account: function() {
         this.refresh_results()
       },
-      filter_staker: function(){
+
+      filter_staker: function() {
         this.refresh_results()
       },
-      filter_withdrawer: function(){
+
+      filter_withdrawer: function() {
         this.refresh_results()
       },
-      filter_validator: function(){
+
+      filter_validator: function() {
+        this.refresh_results()
+      },
+
+      is_stake_below_minimum_visible() {
+        this.is_loading_stake_account_records = true
         this.refresh_results()
       }
     },
+
     methods: {
-      paginate: function(){
+      paginate: function() {
         this.refresh_results()
       },
-      refresh_results: debounce(function() {
-        var ctx = this
 
-        ctx.is_loading_stake_accounts = true
+      get_stake_accounts_call() {
+        var ctx = this
 
         var query_params = {
           params: {
@@ -384,37 +407,52 @@
             filter_withdrawer: ctx.filter_withdrawer,
             filter_validator: ctx.filter_validator,
             grouped_by: 'delegated_vote_accounts_address',
-            seed: ctx.seed
+            seed: ctx.seed,
+            exclude_accounts_below_minimum_stake: !ctx.is_stake_below_minimum_visible
           }
         }
 
         axios.get(ctx.stake_accounts_api_url, query_params)
-             .then(function (response) {
-               ctx.stake_accounts = response.data.stake_accounts;
-               ctx.total_count = response.data.total_count;
-               ctx.current_epoch = response.data.current_epoch;
-               ctx.is_loading_stake_accounts = false;
-             })
+          .then(function (response) {
+            ctx.stake_accounts = response.data.stake_accounts;
+            ctx.total_count = response.data.total_count;
+            ctx.current_epoch = response.data.current_epoch;
+            ctx.is_loading_stake_accounts = false;
+            ctx.is_loading_stake_account_records = false
+          })
+      },
+
+      refresh_results: debounce(function() {
+        this.is_loading_stake_accounts = true
+
+        this.get_stake_accounts_call()
       }, 2000),
-      sort_by_epoch: function(){
+
+      sort_by_epoch: function() {
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
       },
-      sort_by_stake: function(){
+
+      sort_by_stake: function() {
         this.sort_by = this.sort_by == 'stake_desc' ? 'stake_asc' : 'stake_desc'
       },
-      sort_by_staker: function(){
+
+      sort_by_staker: function() {
         this.sort_by = this.sort_by == 'staker_desc' ? 'staker_asc' : 'staker_desc'
       },
-      sort_by_withdrawer: function(){
+
+      sort_by_withdrawer: function() {
         this.sort_by = this.sort_by == 'withdrawer_desc' ? 'withdrawer_asc' : 'withdrawer_desc'
       },
-      filter_by_staker: function(staker){
+
+      filter_by_staker: function(staker) {
         this.filter_staker = staker
       },
-      filter_by_withdrawer: function(pool){
+
+      filter_by_withdrawer: function(pool) {
         this.filter_withdrawer = pool.authority
         this.selected_pool = pool
       },
+
       reset_filters: function() {
         this.filter_withdrawer = null
         this.filter_staker = null
@@ -422,8 +460,13 @@
         this.filter_validator = null
         this.selected_pool = null
       },
-      filters_present: function(){
+
+      filters_present: function() {
         return this.filter_withdrawer || this.filter_staker || this.filter_account || this.filter_validator
+      },
+
+      set_stake_below_minimum_visibility(visible) {
+        this.is_stake_below_minimum_visible = visible
       }
     }
   }

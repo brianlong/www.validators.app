@@ -121,6 +121,7 @@
         skipped_slots: null
       }
     },
+    
     channels: {
       FrontStatsChannel: {
         connected() { },
@@ -135,15 +136,18 @@
         disconnected() { }
       }
     },
+
     mounted() {
       this.$cable.subscribe({
         channel: 'FrontStatsChannel',
         room: "public"
       });
     },
+
     computed: mapGetters([
       'network'
     ]),
+
     methods: {
       root_distance_average() {
         let average = parseFloat(this.root_distance.average);

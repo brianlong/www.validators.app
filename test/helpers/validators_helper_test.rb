@@ -22,23 +22,50 @@ class ValidatorsHelperTest < ActiveSupport::TestCase
   end
 
   test '#sort_software_versions sort versions in correct order' do
-
     expected_order = [
-      "1.8.0",
-      "1.7.7",
       "1.7.6",
-      "1.7.5",
       "1.7.4",
+      "1.7.5",
       "1.7.3",
+      "1.7.7",
+      "1.8.0",
       "1.7.2",
       "1.7.1",
       "1.7.0",
+      "1.6.9",
       "1.6.18",
-      "1.6.16",
-      "1.6.9"
+      "1.6.16"
     ]
 
     sorted_versions = sort_software_versions(@versions_array)
     assert_equal expected_order, sorted_versions.map{ |e| e.keys }.flatten
+  end
+
+  test "#displayed_validator_name returns correct string" do
+    validator = build(:validator,
+                      account: "DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp",
+                      name: nil)
+
+    assert_equal "DDnAqx...shdp", displayed_validator_name(validator), "identity should be shortened"
+
+    validator = build(:validator,
+                      account: "DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp",
+                      name: "DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp")
+
+    assert_equal "DDnAqx...shdp", displayed_validator_name(validator), "name the same as account should be shortened"
+
+    validator = build(:validator,
+                      account: "DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp",
+                      name: "Block Logic")
+
+    assert_equal "Block Logic", displayed_validator_name(validator), "name different than account should be displayed"
+  end
+
+  test "#displayed_validator_name hides name if validator is private" do
+    validator = create(:validator, :private, name: "Block Logic")
+    assert_equal "Private Validator", displayed_validator_name(validator), "private validator's name should be hidden"
+
+    validator = create(:validator, :private, name: "Lido / Block Logic")
+    assert_equal "Lido / Block Logic", displayed_validator_name(validator), "lido's name should not be hidden"
   end
 end

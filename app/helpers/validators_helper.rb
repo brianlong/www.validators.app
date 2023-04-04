@@ -1,4 +1,17 @@
 module ValidatorsHelper
+  def displayed_validator_name(validator)
+    if validator.private_validator? && !validator.lido?
+      "Private Validator"
+    else
+      return shorten_key(validator.name) if validator.name == validator.account
+      validator.name || shorten_key(validator.account)
+    end
+  end
+
+  def shorten_key(pub_key)
+    "#{pub_key[0..5]}...#{pub_key[-4..-1]}"
+  end
+
   def chart_line_color(score)
     return GREEN if score == 2
     return BLUE if score == 1
@@ -62,7 +75,7 @@ module ValidatorsHelper
   end
 
   def sort_software_versions(versions)
-    versions&.sort_by { |ver| Gem::Version.new(ver.keys.first)}&.reverse
+    versions&.sort_by { |ver| ver.values[0]["stake_percent"] }&.reverse
   end
 
   def solstake_url(vote_account)
@@ -75,20 +88,6 @@ module ValidatorsHelper
 
   def blazestake_url(vote_account)
     "https://stake.solblaze.org/app/?validator=#{vote_account}"
-  end
-
-  def shuffle_logos
-    [
-      ["https://lido.fi/solana", "lido.png"],
-      ["https://marinade.finance", "marinade.png"],
-      ["https://www.socean.fi", "socean.png"],
-      ["https://jpool.one", "jpool.png"],
-      ["https://daopool.monkedao.io", "daopool.png"],
-      ["https://eversol.one/", "eversol.png"],
-      ["https://stake.solblaze.org/", "blazestake.png"],
-      ["https://www.jito.network/", "jito.png"]
-      # add more stake pools here
-    ].shuffle
   end
 
   def link_to_validator_website(url)

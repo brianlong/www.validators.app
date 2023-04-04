@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2023_03_15_083630) do
-
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
     t.string "authorized_withdrawer_after"
@@ -619,8 +618,8 @@ ActiveRecord::Schema.define(version: 2023_03_15_083630) do
     t.string "name"
     t.string "keybase_id"
     t.string "www_url"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "details"
     t.string "info_pub_key"
     t.string "avatar_url"
@@ -631,6 +630,7 @@ ActiveRecord::Schema.define(version: 2023_03_15_083630) do
     t.string "admin_warning"
     t.boolean "consensus_mods", default: false
     t.boolean "jito", default: false
+    t.text "stake_pools_list"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
     t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end

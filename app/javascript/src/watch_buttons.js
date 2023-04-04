@@ -2,10 +2,10 @@ document.addEventListener('turbolinks:load', () => {
   $(".watch-button").on('click', function() {
     var btn = this
 
-    if( !($(btn).attr("disabled") == 'disabled') ){
+    if( !($(btn).attr("disabled") == 'disabled') ) {
       $(btn).attr('disabled', true);
 
-      $.get("/current-user", function(resp){
+      $.get("/current-user", function(resp) {
         $.ajax({
           url: "/api/v1/update-watchlist/" + $(btn).data()['network'],
           type: "post",

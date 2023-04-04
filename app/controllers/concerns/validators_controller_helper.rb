@@ -34,8 +34,19 @@ module ValidatorsControllerHelper
       end
     end
 
-    hash.merge!({url: validator.api_url})
+    hash.merge!({"url" => validator.api_url})
     hash
+  end
+
+  def index_csv_headers(with_history)
+    headers = Validator::FIELDS_FOR_API +
+              ValidatorScoreV1::ATTRIBUTES_FOR_BUILDER +
+              DataCenter::FIELDS_FOR_CSV +
+              ValidatorHistory::FIELDS_FOR_CSV +
+              [:data_center_host] +
+              [:vote_account]
+    headers += ValidatorScoreV1::HISTORY_FIELDS if with_history
+    headers.map(&:to_s)
   end
 
   def validator_fields

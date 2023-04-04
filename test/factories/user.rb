@@ -10,6 +10,7 @@ FactoryBot.define do
     password { "Password123" }
     api_token { SecureRandom.uuid }
     is_admin { false }
+    last_sign_in_at { DateTime.now }
     
 
     trait :admin do

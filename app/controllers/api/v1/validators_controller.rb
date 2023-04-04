@@ -19,8 +19,15 @@ module Api
 
         json_result = @validators.map { |val| create_json_result(val) }
 
-        # render json: json_result, status: :ok
-        render json: JSON.dump(json_result), status: :ok
+        respond_to do |format|
+          format.json do
+            render json: JSON.dump(json_result), status: :ok
+          end
+          format.csv do
+            send_data convert_to_csv(index_csv_headers(false), json_result.as_json),
+                      filename: "validator-list-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
       rescue ActionController::ParameterMissing
         render json: { "status" => "Parameter Missing" }, status: 400
       rescue StandardError => e
@@ -124,8 +131,17 @@ module Api
 
           current_epoch = EpochHistory.last
           with_history = set_boolean_field(validator_params[:with_history])
+          json_result = create_json_result(@validator, with_history)
 
-          render json: create_json_result(@validator, with_history)
+          respond_to do |format|
+            format.json do
+              render json: json_result
+            end
+            format.csv do
+              send_data convert_to_csv(index_csv_headers(with_history), json_result.as_json),
+                        filename: "validator-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+            end
+          end
         end
       rescue ValidatorNotFound
         render json: { "status" => "Validator Not Found" }, status: 404

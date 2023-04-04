@@ -7,9 +7,11 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
       required: true
     }
   },
+
   data() {
     return {}
   },
+
   methods: {
     go_to_metrics() {
       document.getElementById("metrics").scrollIntoView()
@@ -18,6 +20,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
       this.$emit('filter_by_withdrawer', pool);
     }
   },
+
   template: `
     <div class="card h-100">
       <div class="card-content">

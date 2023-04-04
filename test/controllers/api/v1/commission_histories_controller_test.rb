@@ -44,4 +44,24 @@ class CommissionHistoriesControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
     assert_equal 2, json.size
   end
+
+  test 'When reaching the commission changes api \
+        with correct token and csv format\
+        should return 200' do
+
+    path = api_v1_commission_histories_index_path(network: "testnet") + ".csv"
+    get path, headers: { "Token" => @user.api_token }
+
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+    assert_equal csv.size, 4
+
+    headers = (
+      CommissionHistory::API_FIELDS +
+      CommissionHistory::API_VALIDATOR_FIELDS
+    ).map(&:to_s)
+    assert_equal csv.first, headers
+  end
 end

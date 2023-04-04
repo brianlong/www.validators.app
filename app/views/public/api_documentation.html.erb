@@ -27,6 +27,7 @@
   <li><a href="#sol-prices">Sol Prices</a></li>
   <li><a href="#gossip-nodes">Gossip Nodes</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
+  <li><a href="#limits">Requests Limits</a></li>
   <li><a href="#notes">Notes</a></li>
 </ul>
 
@@ -80,7 +81,7 @@
 [
   {
     "network":"testnet",
-    "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
+    "account":"12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX",
     "name":"Example Name",
     "keybase_id":null,
     "www_url":"https://www.example.com",
@@ -114,7 +115,9 @@
     "skipped_slots":664,
     "skipped_slot_percent":"0.5155",
     "ping_time":"205.703",
-    "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
+    "url":"https://www.validators.app/api/v1/validators/testnet/12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX.json",
+    "stake_pools_list":["Jito", "Marinade"]
+
   },
   ...
 ]
@@ -143,7 +146,7 @@
 <pre>
 {
   "network":"testnet",
-  "account":"123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY",
+  "account":"12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX",
   "name":"Example Name",
   "keybase_id":null,
   "www_url":"https://www.example.com",
@@ -176,7 +179,8 @@
   "skipped_slots":664,
   "skipped_slot_percent":"0.5155",
   "ping_time":"205.703",
-  "url":"https://www.validators.app/api/v1/validators/testnet/123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY.json"
+  "url":"https://www.validators.app/api/v1/validators/testnet/12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX.json",
+  "stake_pools_list":["Jito", "Marinade"]
 }
 </pre>
 
@@ -269,7 +273,7 @@
   <strong class="text-muted">`query=%account-or-key`</strong> returns data only for validators matching by name,
   pubkey or vote account.
 </p>
-<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?query=123vij84ecQEKUvQ7gYMKxKwKF6PbYSzCzzURYA4xULY'</pre>
+<pre>curl -H "Token: secret-api-token" 'https://www.validators.app/api/v1/commission-changes/:network?query=12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
@@ -282,8 +286,8 @@
     "network": "mainnet",
     "epoch_completion": 0.05,
     "batch_uuid": "18d35532-7b13-4696-baec-269ac4e0cc9f",
-    "account": "GkxhyfXtiiwXgy51UcmJrXxv5Rrbf9vVgFCPVqkA5cdV",
-    "name": "jasonmason67",
+    "account": "12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX",
+    "name": "Example Name",
     "source_from_rewards": true
   },
   ...
@@ -306,20 +310,24 @@
 { "stake_pools":
   [
     {
-    "id": 72,
-    "authority": "authority",
-    "average_apy": 12,
-    "average_delinquent": 1,
-    "average_lifetime": 22,
-    "average_score": 7,
-    "average_skipped_slots": 12,
-    "average_uptime": 1,
-    "average_validators_commission": 2,
-    "manager_fee": 0,
-    "name": "TestName",
-    "network": "testnet",
-    "ticker": 'ticker',
-    "validators_count": 0
+      "id": 72,
+      "authority": "authority",
+      "average_apy": 12,
+      "average_delinquent": 1,
+      "average_lifetime": 22,
+      "average_score": 7,
+      "average_skipped_slots": 12,
+      "average_uptime": 1,
+      "average_validators_commission": 2,
+      "manager_fee": 0,
+      "deposit_fee": 0,
+      "withdrawal_fee": 0,
+      "name": "TestName",
+      "network": "testnet",
+      "ticker": 'ticker',
+      "validators_count": 0,
+      "total_stake": 0,
+      "average_stake": 0
     },
     ...
   ]
@@ -600,9 +608,24 @@
   <dd class="col-10 col-sm-11">Unauthorized</dd>
   <dt class="col-2 col-sm-1">404</dt>
   <dd class="col-10 col-sm-11">Record Not Found</dd>
+  <dt class="col-2 col-sm-1">429</dt>
+  <dd class="col-10 col-sm-11">Too Many Requests</dd>
   <dt class="col-2 col-sm-1">500</dt>
   <dd class="col-10 col-sm-11">Server Error (Admin has been notified)</dd>
 </dl>
+
+<hr />
+
+<h2 class="h4" id="limits">Requests Limits:</h2>
+<p>
+  Requests limit to our API is <%= @high_limit %> or <%= @low_limit %> requests per <%= @reset_period %> minutes, depending
+  on the endpoint. Higher limit is available for data that changes more often: <a href="#ping-thing-list">Ping Thing</a>,
+  <a href="#ping-thing-stats">Ping Thing Stats</a> and <a href="#commission-change-index">Commission Changes</a> endpoints.
+</p>
+<p>
+  After exceeding the limit, your will get <strong>429 Too Many Requests</strong> error.
+</p>
+Limits are automatically reset after <%= @reset_period %> minutes.
 
 <hr />
 
@@ -612,5 +635,9 @@
 <p>
   Our database uses null values when there is no data. You should expect to see `null` as a possible return value
   for any attribute. If an attribute is missing from the output, then you can also assume the value is null.
+</p>
+<p>
+  Besides JSON format, our API provides CSV format as well. For this case please change .json suffix into .csv
+  in url when making up a request call. E.g: https://www.validators.app/api/v1/ping.csv
 </p>
 <p class="text-muted">Version 1 of this API is still in development. Check back here to see updates!</p>

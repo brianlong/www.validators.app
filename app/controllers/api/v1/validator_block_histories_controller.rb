@@ -5,7 +5,7 @@ module Api
     class ValidatorBlockHistoriesController < BaseController
       def show
         @validator = Validator.where(
-          network: block_params[:network], account: block_params[:account]
+          network: block_params[:network], account: block_params[:account],
         ).order("network, account").first
 
         raise ValidatorNotFound if @validator.nil?
@@ -16,7 +16,15 @@ module Api
                                    .order("id desc")
                                    .limit(@limit)
 
-        render "api/v1/validators/block_history", formats: :json
+        respond_to do |format|
+          format.json do
+            render "api/v1/validators/block_history", formats: :json
+          end
+          format.csv do
+            send_data convert_to_csv(index_csv_headers, @block_history.as_json),
+                      filename: "validator-block-histories-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
       rescue ValidatorNotFound
         render json: { "status" => "Validator Not Found" }, status: 404
       rescue ActionController::ParameterMissing
@@ -26,10 +34,14 @@ module Api
         render json: { "status" => "server error" }, status: 500
       end
 
-      private 
+      private
 
       def block_params
         params.permit(:network, :account, :limit)
+      end
+
+      def index_csv_headers
+        ValidatorBlockHistory::API_FIELDS.map(&:to_s)
       end
     end
   end

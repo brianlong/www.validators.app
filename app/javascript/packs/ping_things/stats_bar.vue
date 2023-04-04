@@ -38,31 +38,41 @@
               <span class="d-lg-none">
                 <i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;
               </span>
-              <span class="text-success">{{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString() : '0' }}</span>
+              <span class="text-success">
+                {{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString('en-US') : '0' }}
+              </span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
                 <i class="fa-solid fa-down-long text-success me-2"></i>Min:&nbsp;
               </span>
-              <span class="text-success">{{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</span>
+              <span class="text-success">
+                {{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString('en-US') + ' ms' : 'N / A' }}
+              </span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
                 <i class="fa-solid fa-divide text-success me-2"></i>Median:&nbsp;
               </span>
-              <span class="text-success">{{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</span>
+              <span class="text-success">
+                {{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString('en-US') + ' ms' : 'N / A' }}
+              </span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
                 <i class="fa-solid fa-up-long text-success me-2"></i>P90:&nbsp;
               </span>
-              <span class="text-success">{{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</span>
+              <span class="text-success">
+                {{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString('en-US') + ' ms' : 'N / A' }}
+              </span>
             </div>
             <div class="col-lg-2">
               <span class="d-lg-none">
                 <i class="fa-solid fa-clock text-success me-2"></i>Latency:&nbsp;
               </span>
-              <span class="text-success">{{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</span>
+              <span class="text-success">
+                {{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}
+              </span>
             </div>
           </div>
         </div>
@@ -75,31 +85,41 @@
               <span class="d-lg-none">
                 <i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;
               </span>
-              <strong class="text-success">{{ last_60_mins["num_of_records"] ? last_60_mins["num_of_records"].toLocaleString() : '0' }}</strong>
+              <strong class="text-success">
+                {{ last_60_mins["num_of_records"] ? last_60_mins["num_of_records"].toLocaleString('en-US') : '0' }}
+              </strong>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
                 <i class="fa-solid fa-down-long text-success me-2"></i>Min:&nbsp;
               </span>
-              <span class="text-success">{{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString() + ' ms' : 'N / A' }}</span>
+              <span class="text-success">
+                {{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString('en-US') + ' ms' : 'N / A' }}
+              </span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
                 <i class="fa-solid fa-divide text-success me-2"></i>Median:&nbsp;
               </span>
-              <span class="text-success">{{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString() + ' ms' : 'N / A' }}</span>
+              <span class="text-success">
+                {{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString('en-US') + ' ms' : 'N / A' }}
+              </span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">
                 <i class="fa-solid fa-up-long text-success me-2"></i>P90:&nbsp;
               </span>
-              <span class="text-success">{{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString() + ' ms' : 'N / A' }}</span>
+              <span class="text-success">
+                {{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString('en-US') + ' ms' : 'N / A' }}
+              </span>
             </div>
             <div class="col-lg-2">
               <span class="d-lg-none">
                 <i class="fa-solid fa-clock text-success me-2"></i>Latency:&nbsp;
               </span>
-              <span class="text-success">{{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}</span>
+              <span class="text-success">
+                {{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}
+              </span>
             </div>
           </div>
         </div>
@@ -121,6 +141,7 @@
         default: false
       }
     },
+
     data () {
       var api_url = '/api/v1/ping-thing-recent-stats/' + this.network
       var pt_url = '/ping-thing?locale=en&network=' + this.network
@@ -131,6 +152,7 @@
         pt_url: pt_url
       }
     },
+
     created () {
       var ctx = this
       axios.get(ctx.api_url)
@@ -139,14 +161,15 @@
              ctx.last_60_mins = response.data.last_60_mins ? response.data.last_60_mins : {};
            })
     },
+
     channels: {
       PingThingRecentStatChannel: {
         connected() {},
         rejected() {},
         received(data) {
           data = JSON.parse(data)
-          if(data["network"] == this.network){
-              switch(data["interval"]){
+          if(data["network"] == this.network) {
+              switch(data["interval"]) {
                 case 5:
                   this.last_5_mins = data
                   break
@@ -159,7 +182,8 @@
         disconnected() {},
       },
     },
-    mounted: function(){
+
+    mounted: function() {
       this.$cable.subscribe({
           channel: "PingThingRecentStatChannel",
           room: "public",

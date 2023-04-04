@@ -68,3 +68,14 @@
   padding-bottom: 50px;
   img { width: 100px; }
 }
+
+.img {
+  &-xs {
+    height: 13px;
+    width: auto;
+  }
+  &-sm {
+    height: 18px;
+    width: auto;
+  }
+}

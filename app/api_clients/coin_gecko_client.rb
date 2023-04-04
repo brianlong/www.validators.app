@@ -8,6 +8,8 @@ require "net/http"
 class CoinGeckoClient
   attr_reader :coin
 
+  class CoinGeckoResponseError < StandardError; end
+
   def initialize(
     api_client: CoingeckoRuby::Client.new,
     coin: "solana",
@@ -27,7 +29,11 @@ class CoinGeckoClient
 
   # Fetches the current price for a coin in the given coin or currency.
   def price(ids = @coin)
-    @api_client.price(ids, include_24hr_vol: true, include_24hr_change: true)
+    begin
+      @api_client.price(ids, include_24hr_vol: true, include_24hr_change: true)
+    rescue JSON::ParserError => e
+      raise CoinGeckoResponseError
+    end
   end
 
   # ohlc - open, high, low, close

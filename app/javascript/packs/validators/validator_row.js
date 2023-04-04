@@ -1,17 +1,13 @@
 import Vue from 'vue/dist/vue.esm'
+import '../mixins/stake_pools_mixins';
+
+import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
-import skippedSlotsChart from './charts/skipped_slot_chart'
+import skippedSlotsChart from './charts/skipped_slots_small_chart'
 import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
-import scores from '../validators/components/scores'
 
-
-var chart_green = '#00ce99'
-var chart_blue = '#0091f2'
-var chart_lightgrey = '#cacaca'
-var chart_green_t = 'rgba(0, 206, 153, 0.4)'
-var chart_blue_t = 'rgba(0, 145, 242, 0.25)'
-var chart_lightgrey_t = 'rgba(202, 202, 202, 0.3)'
+import scores from './components/scores'
 
 var ValidatorRow = Vue.component('validatorRow', {
   props: {
@@ -28,6 +24,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       required: true
     }
   },
+
   components: {
     'root-distance-chart': rootDistanceChart,
     'vote-distance-chart': voteDistanceChart,
@@ -35,35 +32,62 @@ var ValidatorRow = Vue.component('validatorRow', {
     'skipped-vote-speedometer': skippedVoteSpeedometer,
     "validator-scores": scores
   },
-  created(){
+
+  created() {
     this.validator['displayed_total_score'] = this.displayed_total_score()
   },
+
   methods: {
     create_avatar_link() {
-      if(this.validator['avatar_url']){
+      if(this.validator['avatar_url']) {
         return this.validator['avatar_url']
       } else {
         return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
       }
     },
+
     row_index() {
       return 'row-' + this.idx
     },
-    validator_name() {
-      if(this.validator["name"]){
-        return this.validator["name"]
+
+    shorten_key(key) {
+      return key.substring(0, 6) + "..." + key.substring(key.length - 4)
+    },
+
+    is_validator_lido() {
+      return this.validator['name']?.substring(0, 4) === 'Lido'
+    },
+
+    is_validator_private() {
+      return this.validator['commission'] === 100 && this.validator['network'] === 'mainnet'
+    },
+
+    shortened_validator_name(name) {
+      return (name === this.validator['account'] ? this.shorten_key(name) : name)
+    },
+
+    displayed_validator_name() {
+      if (this.is_validator_private() && !this.is_validator_lido()) {
+        return 'Private Validator'
       } else {
-        return this.validator["account"].substring(0,5) + "..." +  this.validator["account"].substring(this.validator["account"].length - 5)
+        if (this.validator["name"]) {
+          return this.shortened_validator_name(this.validator["name"])
+        } else {
+          return this.shorten_key(this.validator['account'])
+        }
       }
     },
+
     validator_url() {
       return "/validators/" + this.validator["account"] + "?network=" + this.validator["network"]
     },
+
     lamports_to_sol(lamports) {
       return lamports / 1000000000
     },
+
     skipped_vote_percent() {
-      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']){
+      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']) {
         var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
 
         return skipped_votes_percent ? ((batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).round(2) : null
@@ -71,25 +95,26 @@ var ValidatorRow = Vue.component('validatorRow', {
         return null
       }
     },
+
     chart_line_color(val) {
       if (val == 2) {
-        return chart_green
+        return chart_variables.chart_green
       } else if(val == 1) {
-        return chart_blue
+        return chart_variables.chart_blue
       }
-      return chart_lightgrey
+      return chart_variables.chart_lightgrey
     },
 
     chart_fill_color(val) {
       if (val == 2) {
-        return chart_green_t
+        return chart_variables.chart_green_t
       } else if(val == 1) {
-        return chart_blue_t
+        return chart_variables.chart_blue_t
       }
-      return chart_lightgrey_t
+      return chart_variables.chart_lightgrey_t
     },
 
-    display_chart(target, event){
+    display_chart(target, event) {
       var i = this.idx;
       var target = target+'-'+i;
       var row = document.getElementById('row-'+i);
@@ -126,7 +151,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     displayed_total_score() {
-      if(this.validator["commission"] == 100 && this.validator["network"] == 'mainnet'){
+      if(this.validator["commission"] == 100 && this.validator["network"] == 'mainnet') {
         return 'N/A'
       } else if(this.validator["admin_warning"]) {
         return 'N/A'
@@ -134,20 +159,22 @@ var ValidatorRow = Vue.component('validatorRow', {
         return this.validator["total_score"]
       }
     },
-    lamports_to_sol(lamports) {
-      return lamports / 1000000000;
-    }
   },
+
   template: `
     <tr :id="row_index()">
       <td class="column-info">
         <div class="column-info-row" data-turbolinks=false>
           <div class="column-info-avatar no-watchlist">
-            <img :src="create_avatar_link()" class='img-circle-medium'/>
+            <div class="img-circle-medium-private" v-if="is_validator_private()">
+              <span class="fa-solid fa-users-slash" title="Private Validator"></span>
+            </div>
+            <img :src="create_avatar_link()" class='img-circle-medium' v-if="!is_validator_private()"/>
           </div>
+          
           <div class="column-info-name">
             <a :href="validator_url()" class="fw-bold">
-              {{ validator_name() }}
+              {{ displayed_validator_name() }}
             </a>
             <small class="ms-1 text-muted">
               (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)
@@ -155,10 +182,17 @@ var ValidatorRow = Vue.component('validatorRow', {
             <br />
             <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
             <validator-scores :score="validator" :account="validator['account']"></validator-scores>
-            <br />
-            <div class="small">
+
+            <div class="d-sm-inline-block small mt-2 mt-sm-0">
               <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-              {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
+              <span class="me-3">
+                {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
+              </span>
+            </div>
+            <div class="d-sm-inline-block small">
+              <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+              <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+              {{ validator['software_version'] }}
             </div>
           </div>
         </div>
@@ -197,11 +231,11 @@ var ValidatorRow = Vue.component('validatorRow', {
         </div>
       </td>
 
-      <root-distance-chart :validator="validator" :idx="idx" :batch="batch" />
+      <root-distance-chart :validator="validator" :idx="idx" />
 
-      <vote-distance-chart :validator="validator" :idx="idx" :batch="batch" />
+      <vote-distance-chart :validator="validator" :idx="idx" />
 
-      <skipped-slots-chart :validator="validator" :idx="idx" :batch="batch" />
+      <skipped-slots-chart :validator="validator" :idx="idx" />
 
     </tr>
   `
