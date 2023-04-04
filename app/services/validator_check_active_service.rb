@@ -9,7 +9,7 @@ class ValidatorCheckActiveService
   end
 
   def update_validator_activity
-    Validator.find_each do |validator|
+    Validator.includes(:vote_accounts, :validator_score_v1).find_each do |validator|
       if should_be_destroyed?(validator)
         validator.update(is_active: false, is_destroyed: true)
       elsif validator.scorable?
