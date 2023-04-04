@@ -1,6 +1,5 @@
 import Vue from 'vue/dist/vue.esm'
 
-
 var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
   props: {
     comm_history: {
@@ -8,8 +7,9 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       required: true
     }
   },
+
   data() {
-    if(this.comm_history.name == null){
+    if(this.comm_history.name == null) {
       var comm_history_name = this.comm_history.account.substring(0,6) + "..." + this.comm_history.account.substring(this.comm_history.account.length - 4)
     } else {
       var comm_history_name = this.comm_history.name
@@ -20,14 +20,17 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       descending: (this.comm_history.commission_before > this.comm_history.commission_after) ? true : false
     }
   },
+
   watch: {
     comm_history: function() {
       this.prepareData()
     }
   },
-  mounted: function(){
+
+  mounted: function() {
     this.prepareData()
   },
+
   methods: {
     prepareData: function() {
       this.comm_history.commission_before = this.comm_history.commission_before ? this.comm_history.commission_before : 0
@@ -40,6 +43,7 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       return this.comm_history.source_from_rewards ? "rewards" : "pipeline"
     }
   },
+
   template: `
     <tr>
       <td>

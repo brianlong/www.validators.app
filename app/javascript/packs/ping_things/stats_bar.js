@@ -4,7 +4,6 @@ import TurbolinksAdapter from 'vue-turbolinks';
 import axios from 'axios'
 import ActionCableVue from "actioncable-vue";
 
-
 Vue.use(TurbolinksAdapter);
 
 axios.defaults.headers.get["Authorization"] = window.api_authorization

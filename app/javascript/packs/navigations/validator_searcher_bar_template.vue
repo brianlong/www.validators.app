@@ -25,11 +25,13 @@
         }
       }
     },
+
     computed: {
       ...mapGetters([
         'network'
       ])
     },
+
     methods: {
       onSubmit(event) {
         event.preventDefault()

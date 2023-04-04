@@ -1,47 +1,49 @@
 <template>
-  <section class="row">
-    <div class="col-md-6 mb-4">
-      <div class="card h-100">
-        <div class="card-content">
-          <h2 class="h5 card-heading-left">Epoch</h2>
+  <div class="col-lg-8 col-md-12">
+    <div class="row h-100">
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h5 card-heading-left">Epoch</h2>
 
-          <div>
-            <span class="text-muted me-1">Slot Height:</span>
-            <strong class="text-success">
-              {{ slot_height ? slot_height.toLocaleString('en-US', {maximumFractionDigits: 0}) : null }}
-            </strong>
-          </div>
-
-          <div class="mb-4">
-            <span class="text-muted me-1">Block Height:</span>
-            <strong class="text-success">
-              {{ block_height ? block_height.toLocaleString('en-US', {maximumFractionDigits: 0}) : null }}
-            </strong>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 mb-4">
-      <div class="card h-100">
-        <div class="card-content">
-          <h2 class="h5 card-heading-left">Epoch Progress</h2>
-
-          <div class="d-flex justify-content-between gap-3">
             <div>
-              <span class="text-muted me-1">Current Epoch:</span>
-              <strong class="text-success">{{ epoch_number }}</strong>
+              <span class="text-muted me-1">Slot Height:</span>
+              <strong class="text-success">
+                {{ slot_height ? slot_height.toLocaleString('en-US', {maximumFractionDigits: 0}) : null }}
+              </strong>
             </div>
-            <div>{{ complete_percent }}%</div>
-          </div>
 
-          <div class="img-line-graph mt-3">
-            <div class="img-line-graph-fill" :style="{ width: epoch_graph_position }"></div>
+            <div class="mb-4">
+              <span class="text-muted me-1">Block Height:</span>
+              <strong class="text-success">
+                {{ block_height ? block_height.toLocaleString('en-US', {maximumFractionDigits: 0}) : null }}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h5 card-heading-left">Epoch Progress</h2>
+
+            <div class="d-flex justify-content-between gap-3">
+              <div>
+                <span class="text-muted me-1">Current Epoch:</span>
+                <strong class="text-success">{{ epoch_number }}</strong>
+              </div>
+              <div>{{ complete_percent }}%</div>
+            </div>
+
+            <div class="img-line-graph mt-3">
+              <div class="img-line-graph-fill" :style="{ width: epoch_graph_position }"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -60,16 +62,20 @@
         epoch_graph_position: null
       }
     },
+
     created() {
       this.connection = new web3.Connection(this.web3_url)
     },
+
     mounted() {
       this.get_epoch_info()
       this.get_1_sec_data()
     },
+
     computed: mapGetters([
       'web3_url'
     ]),
+
     methods: {
       get_epoch_info: function() {
         var ctx = this
@@ -82,9 +88,10 @@
           ctx.epoch_graph_position = ctx.complete_percent + '%'
         })
       },
+
       get_1_sec_data: function() {
         var ctx = this
-        setTimeout(function(){
+        setTimeout(function() {
           ctx.get_epoch_info()
           ctx.get_1_sec_data()
         }, ctx.gather_interval * 1000)

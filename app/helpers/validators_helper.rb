@@ -75,7 +75,7 @@ module ValidatorsHelper
   end
 
   def sort_software_versions(versions)
-    versions&.sort_by { |ver| Gem::Version.new(ver.keys.first)}&.reverse
+    versions&.sort_by { |ver| ver.values[0]["stake_percent"] }&.reverse
   end
 
   def solstake_url(vote_account)
@@ -88,20 +88,6 @@ module ValidatorsHelper
 
   def blazestake_url(vote_account)
     "https://stake.solblaze.org/app/?validator=#{vote_account}"
-  end
-
-  def shuffle_logos
-    [
-      ["https://lido.fi/solana", "lido.png"],
-      ["https://marinade.finance", "marinade.png"],
-      ["https://www.socean.fi", "socean.png"],
-      ["https://jpool.one", "jpool.png"],
-      ["https://daopool.monkedao.io", "daopool.png"],
-      ["https://eversol.one/", "eversol.png"],
-      ["https://stake.solblaze.org/", "blazestake.png"],
-      ["https://www.jito.network/", "jito.png"]
-      # add more stake pools here
-    ].shuffle
   end
 
   def link_to_validator_website(url)

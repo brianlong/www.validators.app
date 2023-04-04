@@ -11,16 +11,20 @@ var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
             required: true
         },
     },
+
     data() {
         return {}
     },
+
     methods: {
         validator_details_link: function(account) {
             return this.$parent.validator_details_link(account);
         },
+
         avatar_link: function(leader) {
             return this.$parent.avatar_link(leader);
         },
+
         leader_name: function(leader) {
             if (leader.name) {
                 return leader.name;
@@ -30,6 +34,7 @@ var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
             }
         },
     },
+
     template: `
     <div class="map-legend-col">
       <div class="small text-muted mb-2">Current Leader</div>
