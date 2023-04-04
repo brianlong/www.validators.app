@@ -23,7 +23,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   test 'validator with zero active stake should be inactive' do
     
     v = create(:validator, :with_score, account: "account2", network: @network)
-    create(:validator_history, account: "account2", active_stake: 0, network: @network, epoch: 122)
+    create(:validator_history, account: "account2", active_stake: 0, network: @network)
+    create(:validator_history, account: "account2", active_stake: 0, network: @network, created_at: 13.hours.ago)
 
     assert v.is_active
 
