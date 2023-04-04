@@ -2,7 +2,7 @@
 
 module CsvHelper
   def convert_to_csv(headers, data)
-    CSV.generate do |csv|
+    ::CSV.generate do |csv|
       csv << headers
       data = data.is_a?(Array) ? data : [data]
       data.each do |row|
