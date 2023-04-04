@@ -39,7 +39,6 @@ loop do
       @counter = 0
       @last_cluster_stats = get_latest_cluster_stats
       @software_versions = get_versions_for_networks
-      update_prices
     end
 
     # Data updates | each 10 seconds
