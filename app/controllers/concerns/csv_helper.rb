@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'csv'
+require "csv"
 
 module CsvHelper
   def convert_to_csv(headers, data)
