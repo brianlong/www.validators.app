@@ -42,6 +42,7 @@ def update_prices
 end
 
 @last_cluster_stats = get_latest_cluster_stats
+@init_sol_price = fetch_db_sol_price
 
 loop do
   begin
@@ -60,7 +61,7 @@ loop do
     end
 
     # Data updates | each 5 seconds
-    parsed_response = @coin_gecko_response || fetch_db_sol_price
+    parsed_response = @coin_gecko_response || @init_sol_price
     parsed_response["cluster_stats"] = @last_cluster_stats
     
     broadcast_software_versions(@software_versions)
