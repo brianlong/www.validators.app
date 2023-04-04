@@ -310,20 +310,24 @@
 { "stake_pools":
   [
     {
-    "id": 72,
-    "authority": "authority",
-    "average_apy": 12,
-    "average_delinquent": 1,
-    "average_lifetime": 22,
-    "average_score": 7,
-    "average_skipped_slots": 12,
-    "average_uptime": 1,
-    "average_validators_commission": 2,
-    "manager_fee": 0,
-    "name": "TestName",
-    "network": "testnet",
-    "ticker": 'ticker',
-    "validators_count": 0
+      "id": 72,
+      "authority": "authority",
+      "average_apy": 12,
+      "average_delinquent": 1,
+      "average_lifetime": 22,
+      "average_score": 7,
+      "average_skipped_slots": 12,
+      "average_uptime": 1,
+      "average_validators_commission": 2,
+      "manager_fee": 0,
+      "deposit_fee": 0,
+      "withdrawal_fee": 0,
+      "name": "TestName",
+      "network": "testnet",
+      "ticker": 'ticker',
+      "validators_count": 0,
+      "total_stake": 0,
+      "average_stake": 0
     },
     ...
   ]
@@ -631,5 +635,9 @@ Limits are automatically reset after <%= @reset_period %> minutes.
 <p>
   Our database uses null values when there is no data. You should expect to see `null` as a possible return value
   for any attribute. If an attribute is missing from the output, then you can also assume the value is null.
+</p>
+<p>
+  Besides JSON format, our API provides CSV format as well. For this case please change .json suffix into .csv
+  in url when making up a request call. E.g: https://www.validators.app/api/v1/ping.csv
 </p>
 <p class="text-muted">Version 1 of this API is still in development. Check back here to see updates!</p>

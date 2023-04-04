@@ -9,7 +9,7 @@ class ValidatorCheckActiveService
   end
 
   def update_validator_activity
-    Validator.includes(:vote_accounts).find_each do |validator|
+    Validator.includes(:vote_accounts, :validator_score_v1).find_each do |validator|
       if should_be_destroyed?(validator)
         validator.update(is_active: false, is_destroyed: true)
       elsif validator.scorable?
@@ -50,7 +50,7 @@ class ValidatorCheckActiveService
   # returns true if validator has no history from previous epoch
   def too_young?(validator)
     !validator.validator_histories
-              .where("epoch < ?", current_epoch(validator.network).epoch)
+              .where("created_at < ?", @delinquent_time.ago)
               .exists?
   end
 

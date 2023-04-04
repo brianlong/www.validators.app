@@ -26,6 +26,23 @@
 #  fk_rails_...  (validator_id => validators.id)
 #
 class CommissionHistory < ApplicationRecord
+
+  API_FIELDS = %i[
+    created_at
+    commission_before
+    commission_after
+    epoch
+    network
+    epoch_completion
+    batch_uuid
+    source_from_rewards
+  ].freeze
+
+  API_VALIDATOR_FIELDS = %i[
+    account
+    name
+  ].freeze
+
   belongs_to :validator
 
   after_commit :notify_users, on: :create

@@ -21,7 +21,16 @@
 #  index_epoch_wall_clocks_on_network_and_epoch  (network,epoch) UNIQUE
 #
 class EpochWallClock < ApplicationRecord
+
   EPOCHS_TO_CALCULATE = 3
+
+  API_FIELDS = %i[
+    epoch
+    starting_slot
+    slots_in_epoch
+    network
+    created_at
+  ].freeze
 
   validates :network, :epoch, presence: true
 

@@ -36,4 +36,22 @@ class GossipNodesControllerTest < ActionDispatch::IntegrationTest
     api_nodes = response_to_json(@response.body)
     refute api_nodes.include?(inactive_node)
   end
+
+  test "GET api_v1_gossip_nodes with token as csv returns 200" do
+    path = api_v1_gossip_nodes_path(network: @network) + ".csv"
+    get path, headers: @headers
+
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+    assert_equal csv.size, 61
+
+    headers = (
+      GossipNode::API_FIELDS +
+      GossipNode::API_VALIDATOR_FIELDS +
+      GossipNode::API_DATA_CENTER_FIELDS
+    ).map(&:to_s)
+    assert_equal csv.first, headers
+  end
 end

@@ -20,6 +20,18 @@
 class SolPrice < ApplicationRecord
   EXCHANGES = %w[coin_gecko].freeze
   CURRENCIES = %w[usd].freeze
+
+  API_FIELDS = %i[
+    id
+    currency
+    epoch_mainnet
+    epoch_testnet
+    volume
+    datetime_from_exchange
+    created_at
+    updated_at
+    average_price
+  ].freeze
   
   enum exchange: EXCHANGES.to_h { |el| [el, EXCHANGES.find_index(el)] }, _prefix: true
   enum currency: CURRENCIES.to_h { |el| [el, CURRENCIES.find_index(el)] }, _prefix: true

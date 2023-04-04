@@ -26,6 +26,28 @@
 #
 
 class StakePool < ApplicationRecord
+
+  API_FIELDS = %i[
+    id
+    authority
+    average_apy
+    average_delinquent
+    average_lifetime
+    average_score
+    average_skipped_slots
+    average_uptime
+    average_validators_commission
+    manager_fee
+    deposit_fee
+    withdrawal_fee
+    name
+    network
+    ticker
+    validators_count
+    total_stake
+    average_stake
+  ].freeze
+
   has_many :stake_accounts
   has_many :stake_account_histories
 

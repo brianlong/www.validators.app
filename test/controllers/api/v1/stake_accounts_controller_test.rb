@@ -161,4 +161,22 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     # 2 stake accounts has filter_staker equal to 'staker1'
     assert_equal 2, json_response["stake_accounts"].map { |el| el["Account"] }.flatten.size
   end
+
+  test "request as csv with token should succeed" do
+    path = api_v1_stake_accounts_index_url(@params) + ".csv"
+    get path, headers: @headers
+
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+    assert_equal csv.size, 4
+
+    headers = (
+      StakeAccount::API_FIELDS +
+      StakeAccount::API_VALIDATOR_FIELDS +
+      StakeAccount::API_STAKE_POOL_FIELDS
+    ).map(&:to_s)
+    assert_equal csv.first, headers
+  end
 end

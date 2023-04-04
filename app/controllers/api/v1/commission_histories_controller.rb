@@ -22,17 +22,32 @@ module Api
         total_count = commission_histories.size
         commission_histories = commission_histories.page(index_params[:page])
                                                    .per(index_params[:per])
+        respond_to do |format|
+          format.json do
+            render json: {
+              commission_histories: commission_histories.as_json(except: [:validator_id]),
+              total_count: total_count
+            },
+            status: :ok
+          end
+          format.csv do
+            send_data convert_to_csv(index_csv_headers, commission_histories.as_json),
+                      filename: "commission-changes-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
 
-        render json: {
-          commission_histories: commission_histories.as_json(except: [:validator_id]),
-          total_count: total_count
-        },
-        status: :ok
       rescue ArgumentError => e
         render json: { error: e.message }, status: 400
       end
 
       private
+
+      def index_csv_headers
+        (
+          CommissionHistory::API_FIELDS +
+          CommissionHistory::API_VALIDATOR_FIELDS
+        ).map(&:to_s)
+      end
 
       def index_params
         params.permit(:date_from, :date_to, :network, :query, :page, :per, :sort_by)

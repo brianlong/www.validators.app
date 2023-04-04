@@ -11,9 +11,21 @@ module Api
                                     .page(epoch_params[:page])
                                     .per(epoch_params[:per])
         @total = EpochWallClock.by_network(epoch_params[:network]).count
+
+        respond_to do |format|
+          format.json
+          format.csv do
+            send_data convert_to_csv(index_csv_headers, @epoch_list.as_json),
+                      filename: "epochs-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
       end
 
       private
+
+      def index_csv_headers
+        EpochWallClock::API_FIELDS.map(&:to_s)
+      end
 
       def epoch_params
         params.permit(:network, :per, :page)
