@@ -7,8 +7,8 @@ class Rack::Attack
     "/api/v1/ping-thing-stats"
   ].freeze
 
-  API_LOW_LIMIT = 25
-  API_HIGH_LIMIT = 40
+  API_LOW_LIMIT = 30
+  API_HIGH_LIMIT = 60
   LIMIT_RESET_PERIOD = 5.minute
 
   ### Throttle Spammy Clients ###
