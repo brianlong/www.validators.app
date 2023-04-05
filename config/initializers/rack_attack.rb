@@ -36,7 +36,7 @@ class Rack::Attack
   ### Custom Throttle Response ###
   # By default, Rack::Attack returns an HTTP 429 for throttled responses.
   # If you want to customize the response, then uncomment the lines below.
-  self.throttled_response = lambda do |env|
+  self.throttled_responder = lambda do |env|
     [ 429, {}, ["Too Many Requests. Retry later.\n"]]
   end
 end
