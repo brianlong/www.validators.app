@@ -9,7 +9,7 @@ class Rack::Attack
 
   API_LOW_LIMIT = 25
   API_HIGH_LIMIT = 40
-  LIMIT_RESET_PERIOD = 5.minutes
+  LIMIT_RESET_PERIOD = 5.minute
 
   ### Throttle Spammy Clients ###
   # Throttle GET requests to API by user authorization token
@@ -36,7 +36,7 @@ class Rack::Attack
   ### Custom Throttle Response ###
   # By default, Rack::Attack returns an HTTP 429 for throttled responses.
   # If you want to customize the response, then uncomment the lines below.
-  self.throttled_responder = lambda do |env|
+  self.throttled_responder = lambda do |request|
     [ 429, {}, ["Too Many Requests. Retry later.\n"]]
   end
 
