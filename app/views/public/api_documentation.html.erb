@@ -625,7 +625,8 @@
 <p>
   After exceeding the limit, your will get <strong>429 Too Many Requests</strong> error.
 </p>
-Limits are automatically reset after <%= @reset_period %> minutes.
+Limits are automatically reset after <%= @reset_period %> minutes. See RateLimit-Reset header to check how much time is
+left (in seconds) until the limit resets.
 
 <hr />
 
