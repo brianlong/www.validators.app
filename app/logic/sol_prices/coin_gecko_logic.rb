@@ -1,16 +1,28 @@
 module SolPrices::CoinGeckoLogic
   include SolPrices::Parsers::CoinGecko
+  class IncompleteDataError < StandardError; end
+
   # Fetches historical price data for a coin at a given date.
   # Adds to payload an array with one price for given date.
   def get_historical_average_price
+    retry_count ||= 1
     lambda do |p|
       datetime = p.payload[:datetime]
 
       response = p.payload[:client].historical_price(date: datetime.strftime("%d-%m-%Y"))
       price = historical_price_to_sol_price_hash(response, datetime: datetime)
 
+      raise IncompleteDataError if price[0][:volume].blank? || price[0][:average_price].blank?
       Pipeline.new(200, p.payload.merge(prices_from_exchange: price))
+    rescue IncompleteDataError => e
+      if (retry_count += 1) < 5
+        sleep(5 * retry_count)
+        retry
+      else
+        Pipeline.new(500, p.payload, 'Error from get_historical_average_price', e)
+      end
     rescue StandardError => e
+      puts e
       Pipeline.new(500, p.payload, 'Error from get_historical_average_price', e)
     end
   end
