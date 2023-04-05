@@ -34,10 +34,21 @@ class Rack::Attack
   end
 
   ### Custom Throttle Response ###
-  # By default, Rack::Attack returns an HTTP 429 for throttled responses.
-  # If you want to customize the response, then uncomment the lines below.
-  self.throttled_responder = lambda do |request|
-    [ 429, {}, ["Too Many Requests. Retry later.\n"]]
+  # By default, Rack::Attack returns an HTTP 429 for throttled responses and no headers.
+  # Uncomment the lines below to customize the response.
+  self.throttled_responder = lambda do |req|
+    match_data = req.env["rack.attack.match_data"]
+    reset_time = match_data[:period] # LIMIT_RESET_PERIOD in seconds
+    used_time = match_data[:epoch_time].to_i % reset_time # in seconds
+    remaining_time_till_reset = (reset_time - used_time).to_s
+
+    headers = {
+      "RateLimit-Limit" => match_data[:limit].to_s,
+      "RateLimit-Remaining" => "0",
+      "RateLimit-Reset" => remaining_time_till_reset
+    }
+
+    [ 429, headers, ["Too Many Requests. Retry later.\n"]]
   end
 
   ### Define whitelists ###
