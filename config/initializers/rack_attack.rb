@@ -39,8 +39,8 @@ class Rack::Attack
   self.throttled_responder = lambda do |req|
     match_data = req.env["rack.attack.match_data"]
     reset_time = match_data[:period] # LIMIT_RESET_PERIOD in seconds
-    used_time = match_data[:epoch_time].to_i % reset_time # in seconds
-    remaining_time_till_reset = (reset_time - used_time).to_s
+    passed_time = match_data[:epoch_time].to_i % reset_time # in seconds
+    remaining_time_till_reset = (reset_time - passed_time).to_s
 
     headers = {
       "RateLimit-Limit" => match_data[:limit].to_s,
