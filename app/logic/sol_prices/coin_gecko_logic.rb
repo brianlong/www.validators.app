@@ -19,7 +19,7 @@ module SolPrices::CoinGeckoLogic
         sleep(5 * retry_count)
         retry
       else
-        Pipeline.new(500, p.payload, 'Error from get_historical_average_price', e)
+        Pipeline.new(500, p.payload, "Error from get_historical_average_price", e)
       end
     rescue StandardError => e
       puts e
