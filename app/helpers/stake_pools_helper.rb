@@ -3,7 +3,7 @@
 module StakePoolsHelper
   def stake_pool_logos(stake_pools)
     stake_pools.map do |stake_pool|
-      MAINNET_STAKE_POOLS[stake_pool.downcase.to_sym][:small_logo]
+      {image: MAINNET_STAKE_POOLS[stake_pool.downcase.to_sym][:small_logo], name: stake_pool}
     end
   end
 
