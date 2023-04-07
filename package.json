@@ -23,7 +23,6 @@
     "bootstrap-vue": "^2.21.2",
     "chart.js": "^3.9.1",
     "chartjs-adapter-luxon": "1.2.1",
-    "jquery": "^3.6.0",
     "loadash": "^1.0.0",
     "luxon": "^2.5.2",
     "millify": "^5.0.1",
