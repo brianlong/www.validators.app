@@ -50,6 +50,8 @@ module StakePools
     end
 
     def average_commission
+      return if sp_attrs[:total_active_stake].to_i.zero?
+
       (sp_attrs[:commissions].sum / sp_attrs[:total_active_stake].to_f).round(2)
     end
 
