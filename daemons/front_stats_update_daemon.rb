@@ -9,7 +9,7 @@ sleep_time = 5 # seconds
 update_stats_time = 60 # seconds
 @counter = 0
 @software_versions = get_versions_for_networks
-@coin_gecko_response = nil
+@coin_gecko_response = {}
 
 def get_latest_cluster_stats
   {
@@ -37,12 +37,11 @@ def update_prices
   @coin_gecko_response = begin
     CoinGeckoClient.new.price
   rescue CoinGeckoClient::CoinGeckoResponseError
-    fetch_db_sol_price
+    @coin_gecko_response["solana"] || fetch_db_sol_price
   end
 end
 
 @last_cluster_stats = get_latest_cluster_stats
-@init_sol_price = fetch_db_sol_price
 
 loop do
   begin
@@ -61,7 +60,7 @@ loop do
     end
 
     # Data updates | each 5 seconds
-    parsed_response = @coin_gecko_response || @init_sol_price
+    parsed_response = @coin_gecko_response
     parsed_response["cluster_stats"] = @last_cluster_stats
     
     broadcast_software_versions(@software_versions)
