@@ -7,7 +7,7 @@ import store from "../../../app/javascript/packs/stores/main_store.js";
 
 jest.mock('axios');
 
-var mock_commission_changes = function(){
+var mock_commission_changes = function() {
   axios.get.mockResolvedValue({
     data: [
       {

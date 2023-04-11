@@ -1,4 +1,5 @@
 import Chart from 'chart.js/auto'
+import chart_variables from './chart_variables'
 
 export default {
   props: {
@@ -12,7 +13,7 @@ export default {
       default_score_class: "fas fa-circle me-1 score-"
     }
   },
-  mounted(){
+  mounted() {
     var ctx = document.getElementById("skipped-slots-history").getContext('2d');
 
     var skipped_slot_percent_moving_average = this.skipped_slots_array.map( (vector_element, index) => (
@@ -33,8 +34,8 @@ export default {
           {
             label: ' Moving Avg  ',
             fill: false,
-            backgroundColor: 'rgba(239, 206, 243, 0.4)',
-            borderColor: 'rgb(239, 206, 243)',
+            borderColor: chart_variables.chart_purple_1,
+            backgroundColor: chart_variables.chart_purple_1_t,
             borderWidth: 1,
             radius: 0,
             data: skipped_slot_percent_moving_average
@@ -42,8 +43,8 @@ export default {
           {
             label: ' Actual Skipped Slots  ',
             fill: false,
-            backgroundColor: 'rgba(221, 154, 229, 0.4)',
-            borderColor: 'rgb(221, 154, 229)',
+            borderColor: chart_variables.chart_purple_2,
+            backgroundColor: chart_variables.chart_purple_2_t,
             borderWidth: 1,
             borderDash: [2, 2],
             radius: 0,
@@ -52,8 +53,8 @@ export default {
           {
             label: ' Cluster Avg',
             fill: false,
-            backgroundColor: 'rgba(170, 46, 184, 0.4)',
-            borderColor: 'rgb(170, 46, 184)',
+            borderColor: chart_variables.chart_purple_3,
+            backgroundColor: chart_variables.chart_purple_3_t,
             borderWidth: 1,
             radius: 0,
             data: cluster_skipped_slot_percent_moving_average
@@ -75,7 +76,7 @@ export default {
             title: {
               display: true,
               text: "Previous " + cluster_skipped_slot_percent_moving_average.length + " Observations",
-              color: '#979797'
+              color: chart_variables.chart_darkgrey
             }
           },
           y: {
@@ -86,13 +87,12 @@ export default {
             },
             grid: {
               display: true,
-              zeroLineColor: '#322f3d',
-              color: '#322f3d'
+              color: chart_variables.chart_grid_color
             },
             title: {
               display: true,
               text: "Percent",
-              color: '#979797'
+              color: chart_variables.chart_darkgrey
             }
           }
         },
@@ -122,13 +122,13 @@ export default {
           },
           legend: {
             labels: {
-              color: '#979797',
-              boxWidth: 8,
-              boxHeight: 8,
+              color: chart_variables.chart_darkgrey,
+              boxWidth: chart_variables.chart_legend_box_size,
+              boxHeight: chart_variables.chart_legend_box_size,
               usePointStyle: true,
               padding: 5,
               font: {
-                size: 14
+                size: chart_variables.chart_legend_font_size
               }
             },
           },
@@ -157,7 +157,7 @@ export default {
   methods: {
     labels() {
       let labels = []
-      this.skipped_slots_array.forEach(function(val){
+      this.skipped_slots_array.forEach(function(val) {
         labels.push(val['label'])
       })
       return labels

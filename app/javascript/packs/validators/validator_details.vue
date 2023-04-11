@@ -101,6 +101,12 @@
                   </a>
                 </td>
               </tr>
+              <tr>
+                <td><strong>Creation Date:</strong></td>
+                <td>
+                  {{ creation_date() }}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -118,56 +124,57 @@
 
           <table class="table table-block-sm mb-0" v-if="!is_loading_validator">
             <tbody>
-            <tr>
-              <td class="column-lg"><strong>Keybase:</strong></td>
-              <td>{{ validator.keybase_id }}</td>
-            </tr>
+              <tr>
+                <td class="column-lg"><strong>Keybase:</strong></td>
+                <td>{{ validator.keybase_id }}</td>
+              </tr>
 
-            <tr>
-              <td><strong>Website:</strong></td>
-              <td><a :href="validator.www_url">{{ validator.www_url }}</a></td>
-            </tr>
+              <tr>
+                <td><strong>Website:</strong></td>
+                <td><a :href="validator.www_url">{{ validator.www_url }}</a></td>
+              </tr>
 
-            <tr>
-              <td>
-                <strong>Vote Account:</strong>
-              </td>
-              <td>
-                <small class="word-break">
-                  <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
-                    {{ validator.vote_account_active.account }}
+              <tr>
+                <td>
+                  <strong>Vote Account:</strong>
+                </td>
+                <td>
+                  <small class="word-break">
+                    <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
+                      {{ validator.vote_account_active.account }}
+                    </a>
+                  </small>
+                </td>
+              </tr>
+
+              <tr>
+                <td><strong>Active Stake:</strong></td>
+                <td>
+                  {{ active_stake }} SOL
+                </td>
+              </tr>
+
+              <tr>
+                <td><strong>Commission:</strong></td>
+                <td :class="commission_class" data-turbolinks="false">
+                  {{ score.commission }}&percnt;
+                  <a :href="commission_histories_path(validator)" class="small" v-if="validator.commission_histories_exist">
+                    (See commission changes)
                   </a>
-                </small>
-              </td>
-            </tr>
+                </td>
+              </tr>
 
-            <tr>
-              <td><strong>Active Stake:</strong></td>
-              <td>
-                {{ active_stake }} SOL
-              </td>
-            </tr>
+              <tr v-if="validator.security_report_url">
+                <td>
+                  <strong>Security Info:</strong>
+                </td>
+                <td>
+                  <a :href="validator.security_report_url" target="_blank">
+                    {{ validator.security_report_url }}
+                  </a>
+                </td>
+              </tr>
 
-            <tr>
-              <td><strong>Commission:</strong></td>
-              <td :class="commission_class" data-turbolinks="false">
-                {{ score.commission }}&percnt;
-                <a :href="commission_histories_path(validator)" class="small" v-if="validator.commission_histories_exist">
-                  (See commission changes)
-                </a>
-              </td>
-            </tr>
-
-            <tr v-if="validator.security_report_url">
-              <td>
-                <strong>Security Info:</strong>
-              </td>
-              <td>
-                <a :href="validator.security_report_url" target="_blank">
-                  {{ validator.security_report_url }}
-                </a>
-              </td>
-            </tr>
               <tr>
                 <td>
                   <strong>Scores:</strong>
@@ -236,15 +243,17 @@
 <script>
   import { mapGetters } from 'vuex'
   import scores from './components/scores'
-  import blockHistoryChart from './components/block_history_chart'
-  import voteHistoryChart from './components/vote_history_chart'
-  import skippedSlotsChart from './components/skipped_slots_chart'
+  import blockHistoryChart from './charts/block_history_chart'
+  import voteHistoryChart from './charts/vote_history_chart'
+  import skippedSlotsChart from './charts/skipped_slots_large_chart'
   import blockHistoryTable from './components/block_history_table'
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
   import loadingImage from 'loading.gif';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
+
+  var moment = require('moment');
 
   export default {
     props: {
@@ -301,12 +310,15 @@
       active_stake() {
         return this.validator_history?.active_stake ? this.lamports_to_sol(this.validator_history.active_stake).toLocaleString('en-US', {maximumFractionDigits: 0}) : "N/A";
       },
+
       go_back_link() {
         return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
       },
+
       refresh_href() {
         return '/validators/' + this.validator.account +'?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page + '&refresh=' + !this.refresh
       },
+
       ...mapGetters([
         'network'
       ])
@@ -316,33 +328,42 @@
       lamports_to_sol(lamports) {
         return lamports * 0.000000001;
       },
+
       is_private() {
         return this.score.commission == 100
       },
+
       is_delinquent() {
         return this.score.delinquent
       },
+
       is_active() {
         return this.validator.is_active || true
       },
+
       name_or_account(validator) {
         return validator.name ? validator.name : validator.account
       },
+
       display_staking_info(validator) {
         return !this.is_private() && validator.is_active && this.validator.vote_account_active
       },
+
       commission_class() {
         if(this.validator.network == 'mainnet' && this.validator.commission == 100) {
           return 'text-danger'
         }
       },
+
       commission_histories_path(validator) {
         return '/commission-changes/' + validator.id + '?network=' + validator.network
       },
+
       data_center_link(validator) {
         let key = validator.dch_data_center_key.replace('/', '-slash-')
         return '/data-centers/' + key + '?network=' + validator.network
       },
+
       vote_account_path(validator) {
         if (validator.vote_account_active) {
           return "/validators/" + validator.account + "/vote_accounts/" + validator.vote_account_active.account + "?network=" + validator.network
@@ -350,16 +371,24 @@
           return null
         }
       },
+
       solstake_url(validator) {
         return "https://solstake.io/#/app/validator/" + validator.vote_account_active.account
       },
+
       kiwi_url(validator) {
         return "https://staking.kiwi/app/" + validator.vote_account_active.account
       },
+
       blazestake_url(validator) {
         return "https://stake.solblaze.org/app/?validator=" + validator.vote_account_active.account
-      }
+      },
+
+      creation_date() {
+        return moment(new Date(this.validator.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
+      },
     },
+
     components: {
       "validator-scores": scores,
       "block-history-chart": blockHistoryChart,

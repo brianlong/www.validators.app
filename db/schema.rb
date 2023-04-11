@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_06_071445) do
-
+ActiveRecord::Schema.define(version: 2023_03_15_083630) do
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
     t.string "authorized_withdrawer_after"
@@ -314,8 +313,6 @@ ActiveRecord::Schema.define(version: 2023_03_06_071445) do
     t.datetime "reported_at"
     t.bigint "slot_sent"
     t.bigint "slot_landed"
-    t.index ["created_at", "network", "transaction_type"], name: "index_ping_things_on_created_at_and_network_and_transaction_type"
-    t.index ["created_at", "network", "user_id"], name: "index_ping_things_on_created_at_and_network_and_user_id"
     t.index ["network"], name: "index_ping_things_on_network"
     t.index ["reported_at", "network"], name: "index_ping_things_on_reported_at_and_network"
     t.index ["user_id"], name: "index_ping_things_on_user_id"
@@ -621,8 +618,8 @@ ActiveRecord::Schema.define(version: 2023_03_06_071445) do
     t.string "name"
     t.string "keybase_id"
     t.string "www_url"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "details"
     t.string "info_pub_key"
     t.string "avatar_url"
@@ -633,6 +630,7 @@ ActiveRecord::Schema.define(version: 2023_03_06_071445) do
     t.string "admin_warning"
     t.boolean "consensus_mods", default: false
     t.boolean "jito", default: false
+    t.text "stake_pools_list"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
     t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end

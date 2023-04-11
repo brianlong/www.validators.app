@@ -12,9 +12,25 @@ module Api
         if index_params[:with_batch]
           @batch = Batch.last_scored(index_params[:network])
         end
+
+        respond_to do |format|
+          format.json
+          format.csv do
+            send_data convert_to_csv(index_csv_headers, @stake_accounts.as_json),
+                      filename: "stake-accounts-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
       end
 
       private
+
+      def index_csv_headers
+        (
+          StakeAccount::API_FIELDS +
+          StakeAccount::API_VALIDATOR_FIELDS +
+          StakeAccount::API_STAKE_POOL_FIELDS
+        ).map(&:to_s)
+      end
 
       def base_query
         StakeAccountQuery.new(
@@ -23,7 +39,8 @@ module Api
           filter_account: index_params[:filter_account],
           filter_staker: index_params[:filter_staker],
           filter_withdrawer: index_params[:filter_withdrawer],
-          filter_validator: index_params[:filter_validator]
+          filter_validator: index_params[:filter_validator],
+          exclude_accounts_below_minimum_stake: index_params[:exclude_accounts_below_minimum_stake]
         )
       end
 
@@ -70,7 +87,8 @@ module Api
           :per,
           :seed,
           :sort_by,
-          :with_batch
+          :with_batch,
+          :exclude_accounts_below_minimum_stake
         )
       end
     end

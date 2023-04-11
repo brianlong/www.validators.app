@@ -93,7 +93,7 @@ table, .table {
       position: absolute;
       font-size: 11px;
       color: #979797;
-      margin-top: -13px;
+      margin-top: -10px;
       @media(max-width: $screen-md-max) {
         display: none;
       }
@@ -105,6 +105,10 @@ table, .table {
   }
 
   .column {
+    &-xxs {
+      width: 1%;
+      min-width: 70px;
+    }
     &-xs {
       width: 10%;
       min-width: 100px;
@@ -186,7 +190,7 @@ table, .table {
     .column {
       &-chart {
         width: 21%;
-        padding-top: 20px;
+        padding-top: 15px;
         padding-bottom: 8px;
         @media(max-width: $screen-lg-max) {
           width: 25%;

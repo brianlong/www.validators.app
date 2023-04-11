@@ -4,7 +4,7 @@
       <div class="form-group-row">
         <b-input-group>
           <b-form-input v-model="form.query"
-                        placeholder="Starts with... (validator name, validator account or data center key)"
+                        placeholder="Validator name, account or data center"
                         required>
           </b-form-input>
           <b-button type="submit" variant="primary" class="btn btn-sm btn-primary">Search</b-button>
@@ -25,11 +25,13 @@
         }
       }
     },
+
     computed: {
       ...mapGetters([
         'network'
       ])
     },
+
     methods: {
       onSubmit(event) {
         event.preventDefault()

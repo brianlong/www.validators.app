@@ -11,11 +11,13 @@ export default {
       required: true
     }
   },
+
   data() {
     return {
       default_score_class: "fas fa-circle me-1 score-"
     }
   },
+
   methods: {
     block_stats(history) {
       return this.block_history_stats.find(o => o.batch_uuid == history.batch_uuid);
@@ -27,6 +29,7 @@ export default {
       return n.toLocaleString('en-US').replace("&nbsp;", ",")
     }
   },
+
   template: `
     <div class="card mb-4">
       <div class="card-content pb-0">

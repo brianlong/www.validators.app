@@ -11,7 +11,7 @@ module Api
         sol_prices = SolPrice.where.not(average_price: nil)
                              .order(datetime_from_exchange: :asc)
 
-        response =
+        result =
           if index_params[:filtering].presence
             sol_prices.last(days_size.to_i).map do |coin_gecko_price|
               {
@@ -23,10 +23,24 @@ module Api
             sol_prices.where(datetime_from_exchange: from..to)
           end
 
-        render json: response, status: :ok
+        respond_to do |format|
+          format.json { render json: result, status: :ok }
+          format.csv do
+            if index_params[:filtering].presence
+              render json: { "status" => "filtering option not available for csv format" }, status: 405
+            else
+              send_data convert_to_csv(index_csv_headers, result.as_json),
+                        filename: "sol-prices-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+            end
+          end
+        end
       end
 
       private
+
+      def index_csv_headers
+        SolPrice::API_FIELDS.map(&:to_s)
+      end
 
       def index_params
         params.permit(:from, :to, :filtering)

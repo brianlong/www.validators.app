@@ -61,6 +61,7 @@
         account_name: this.query
       }
     },
+
     created () {
       if (this.query) {
         this.api_url = '/api/v1/commission-changes/' + this.network + '?query=' + this.query + '&'
@@ -71,13 +72,14 @@
       var url = ctx.api_url + 'sort_by=' + ctx.sort_by
 
       axios.get(url)
-      .then(function (response){
+      .then(function (response) {
         ctx.commission_histories = response.data.commission_histories;
         ctx.total_count = response.data.total_count;
       })
     },
+
     watch: {
-      sort_by: function(){
+      sort_by: function() {
         var ctx = this
         var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
 
@@ -91,7 +93,7 @@
                ctx.total_count = response.data.total_count;
              })
       },
-      page: function(){
+      page: function() {
         this.paginate()
       },
       account_name: function() {
@@ -105,11 +107,13 @@
               })
       }
     },
+
     computed: mapGetters([
       'network'
     ]),
+
     methods: {
-      paginate: function(){
+      paginate: function() {
         var ctx = this
         var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
 
@@ -122,13 +126,13 @@
                ctx.commission_histories = response.data.commission_histories
              ))
       },
-      sort_by_epoch: function(){
+      sort_by_epoch: function() {
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
       },
-      sort_by_timestamp: function(){
+      sort_by_timestamp: function() {
         this.sort_by = this.sort_by == 'timestamp_asc' ? 'timestamp_desc' : 'timestamp_asc'
       },
-      sort_by_validator: function(){
+      sort_by_validator: function() {
         this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc'
       },
       filter_by_query: function(query) {

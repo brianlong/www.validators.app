@@ -25,7 +25,7 @@ class GossipNodeQuery
   end
 
   def query_fields
-    gossip_node_fields = GossipNode::FIELDS_FOR_API.map do |field|
+    gossip_node_fields = GossipNode::API_FIELDS.map do |field|
       "gossip_nodes.#{field}"
     end.join(", ")
 
@@ -36,7 +36,6 @@ class GossipNodeQuery
     data_center_fields = DataCenter::FIELDS_FOR_GOSSIP_NODES.map do |field|
       "data_centers.#{field}"
     end.join(", ")
-
     [gossip_node_fields, validator_fields, data_center_fields].join(", ")
   end
 end

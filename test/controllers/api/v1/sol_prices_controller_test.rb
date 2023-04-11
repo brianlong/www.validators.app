@@ -41,4 +41,18 @@ class SolPricesControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
     assert_equal 3, JSON.parse(@response.body).size
   end
+
+  test "GET api_v1_sol_prices as csv with token returns 200" do
+    path = api_v1_sol_prices_path + ".csv"
+    get path, headers: @headers
+    
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+    assert_equal csv.size, 32
+
+    headers = SolPrice::API_FIELDS.map(&:to_s)
+    assert_equal csv.first, headers
+  end
 end

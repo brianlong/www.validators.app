@@ -9,11 +9,13 @@ export default {
       required: true
     }
   },
+
   data() {
     return {
       default_score_class: "fa-solid fa-circle me-1 score-"
     }
   },
+
   methods: {
     score_class(class_score) {
       return this.default_score_class + class_score
@@ -52,6 +54,7 @@ export default {
       this.$root.$emit('set_modal_account', this.account);
     }
   },
+
   template: `
     <div>
       <a class="small text-nowrap base-color modal-trigger" data-bs-toggle="modal" data-bs-target="#scoresModal" :data-account="account" @click="prepare_modal()">

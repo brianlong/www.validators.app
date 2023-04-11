@@ -22,19 +22,37 @@
 #
 # Indexes
 #
-#  index_ping_things_on_created_at_and_network_and_transaction_type  (created_at,network,transaction_type)
-#  index_ping_things_on_created_at_and_network_and_user_id           (created_at,network,user_id)
-#  index_ping_things_on_network                                      (network)
-#  index_ping_things_on_reported_at_and_network                      (reported_at,network)
-#  index_ping_things_on_user_id                                      (user_id)
+#  index_ping_things_on_network                  (network)
+#  index_ping_things_on_reported_at_and_network  (reported_at,network)
+#  index_ping_things_on_user_id                  (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (user_id => users.id)
 #
 class PingThing < ApplicationRecord
-  belongs_to :user
+
   include ObjectCopier
+
+  API_FIELDS = %i[
+    application
+    commitment_level
+    created_at
+    network
+    response_time
+    signature
+    success
+    transaction_type
+    slot_sent
+    slot_landed
+    reported_at
+  ].freeze
+
+  API_USER_FIELDS = %i[
+    username
+  ].freeze
+
+  belongs_to :user
 
   enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
 
@@ -47,25 +65,13 @@ class PingThing < ApplicationRecord
     where(network: network, reported_at: (from..to))
   }
 
-  after_create :update_stats_if_present, :broadcast
-
-  after_create :update_stats_if_present
+  after_create :broadcast
 
   def to_builder
     Jbuilder.new do |ping_thing|
       ping_thing.(
         self,
-        :application,
-        :commitment_level,
-        :created_at,
-        :network,
-        :response_time,
-        :signature,
-        :success,
-        :transaction_type,
-        :slot_sent,
-        :slot_landed,
-        :reported_at
+        *API_FIELDS
       )
     end
   end
@@ -76,11 +82,6 @@ class PingThing < ApplicationRecord
     hash.merge!(self.user.to_builder.attributes!)
 
     ActionCable.server.broadcast("ping_thing_channel", hash)
-  end
-
-  def update_stats_if_present
-    stats = PingThingStat.by_network(network).between_time_range(reported_at)
-    stats.each(&:recalculate)
   end
 
   def self.average_slot_latency

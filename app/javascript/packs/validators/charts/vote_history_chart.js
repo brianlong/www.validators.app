@@ -1,8 +1,9 @@
 import Chart from 'chart.js/auto'
+import chart_variables from './chart_variables'
 
 export default {
   props: {
-    root_blocks: {
+    vote_blocks: {
         type: Array,
         required: true
     }
@@ -12,8 +13,8 @@ export default {
       default_score_class: "fas fa-circle me-1 score-"
     }
   },
-  mounted(){
-    var ctx = document.getElementById("root-distance-history").getContext('2d');
+  mounted() {
+    var ctx = document.getElementById("vote-distance-history").getContext('2d');
 
     var chart = new Chart(ctx, {
       type: 'line',
@@ -21,13 +22,13 @@ export default {
         labels: this.labels(),
         datasets: [
           {
-            label: ' Block Diff ',
+            label: ' Vote Diff ',
             fill: true,
-            borderColor: "rgb(221, 154, 229)",
-            backgroundColor: "rgba(221, 154, 229, 0.4)",
+            borderColor: chart_variables.chart_purple_2,
+            backgroundColor: chart_variables.chart_purple_2_t,
             borderWidth: 1,
             radius: 0,
-            data: this.root_blocks,
+            data: this.vote_blocks,
             tension: 0
           }
         ]
@@ -43,13 +44,12 @@ export default {
               autoSkip: true,
               autoSkipPadding: 30
             },
-            gridLines: { display: false },
             title: {
               display: true,
-              text: "Previous " + this.root_blocks.length + " Observations",
-              color: '#979797'
+              text: "Previous " + this.vote_blocks.length + " Observations",
+              color: chart_variables.chart_darkgrey
             }
-            },
+          },
           y: {
             display: true,
             ticks: {
@@ -58,13 +58,12 @@ export default {
             },
             grid: {
               display: true,
-              zeroLineColor: '#322f3d',
-              color: '#322f3d'
+              color: chart_variables.chart_grid_color
             },
             title: {
               display: true,
               text: "Dist Behind Leader",
-              color: '#979797'
+              color: chart_variables.chart_darkgrey
             }
           }
         },
@@ -88,13 +87,13 @@ export default {
           },
           legend: {
             labels: {
-              boxWidth: 8,
-              boxHeight: 8,
+              boxWidth: chart_variables.chart_legend_box_size,
+              boxHeight: chart_variables.chart_legend_box_size,
               usePointStyle: true,
               padding: 10,
-              color: '#979797',
+              color: chart_variables.chart_darkgrey,
               font: {
-                size: 14
+                size: chart_variables.chart_legend_font_size
               }
             },
           },
@@ -107,14 +106,14 @@ export default {
             originalFit.bind(chart.legend)();
             this.height += 12;
           }
-        }
+        },
       }]
     });
   },
   methods: {
     labels() {
       let labels = []
-      this.root_blocks.forEach(function(val){
+      this.vote_blocks.forEach(function(val) {
         labels.push(val['x'])
       })
       return labels
@@ -124,10 +123,10 @@ export default {
     <div class="col-lg-6">
       <div class="card mb-4">
         <div class="card-content pb-0">
-          <h2 class="h4 card-heading mb-3">Block History</h2>
+          <h2 class="h4 card-heading mb-3">Vote History</h2>
         </div>
         <div class="pb-3 px-3">
-          <canvas id="root-distance-history"></canvas>
+          <canvas id="vote-distance-history"></canvas>
         </div>
       </div>
     </div>
