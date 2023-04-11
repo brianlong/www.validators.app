@@ -231,7 +231,7 @@
 
       <h3 class="h5">Avg Validators Fee</h3>
       <p class="mb-5">
-        Average commission of all the validators used by the stake pool. See
+        Stake-weighted average commission of all the validators used by the stake pool. See
         <a href="/faq#commission" target="_blank">what is validator commission?</a>
       </p>
 
