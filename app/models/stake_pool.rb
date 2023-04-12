@@ -47,6 +47,7 @@ class StakePool < ApplicationRecord
     validators_count
     total_stake
     average_stake
+    delinquent_count
   ].freeze
 
   has_many :stake_accounts
