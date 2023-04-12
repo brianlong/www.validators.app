@@ -53,7 +53,7 @@ class StakePool < ApplicationRecord
   has_many :stake_account_histories
 
   def validators_count
-    stake_accounts.pluck(:validator_id).compact.uniq.count
+    stake_accounts.active.pluck(:validator_id).compact.uniq.count
   end
 
   def total_stake
