@@ -9,29 +9,32 @@ class StakePoolTest < ActiveSupport::TestCase
 
     @validator1 = create(:validator, :with_score, name: "Validator", account: "Account")
     @validator2 = create(:validator, :with_score, name: "Validator", account: "Account2")
+    @validator3 = create(:validator, :with_score, name: "Validator", account: "Account3")
 
     [5_000_000_000_000, 4_000_000_000_000].each do |stake_value|
       create(:stake_account,
-             network: "testnet",
              validator: @validator1,
              stake_pool: @stake_pool,
              active_stake: stake_value,
-             delegated_stake: stake_value,
-             staker: "staker1")
+             delegated_stake: stake_value)
     end
 
     [2_000_000_000_000, 1_000_000_000_000].each do |stake_value|
       create(:stake_account,
-             network: "testnet",
              validator: @validator2,
              stake_pool: @stake_pool,
              active_stake: stake_value,
-             delegated_stake: stake_value,
-             staker: "staker1")
+             delegated_stake: stake_value)
     end
+
+    create(:stake_account,
+           validator: @validator3,
+           stake_pool: @stake_pool,
+           active_stake: 0,
+           delegated_stake: 1_000_000_000_000)
   end
 
-  test "#validators_count returns total number of validators that pool delegates to" do
+  test "#validators_count returns total number of active validators that pool delegates to" do
     assert_equal 2, @stake_pool.reload.validators_count
   end
 
