@@ -155,7 +155,7 @@ module StakeLogic
         scores = []
         total_active_stake = 0
 
-        Validator.where(id: validator_ids).includes(:stake_accounts).each do |validator|
+        Validator.where(id: validator_ids).includes(:stake_accounts, :validator_score_v1).each do |validator|
           val_active_stake = validator.stake_accounts.active.where(stake_pool: pool).pluck(:active_stake).sum
           total_active_stake += val_active_stake
           score = validator.score
@@ -178,8 +178,9 @@ module StakeLogic
         pool.average_uptime = uptimes.average
         pool.average_lifetime = lifetimes.average
         pool.average_score = (scores.sum / total_active_stake.to_f).round(2)
-        pool.average_delinquent = (delinquent_count / validator_ids.size) * 100
+        pool.average_delinquent = (delinquent_count / validator_ids.size.to_f) * 100
         pool.average_skipped_slots = last_skipped_slots.compact.average
+        pool.delinquent_count = delinquent_count
       end
 
       StakePool.transaction do

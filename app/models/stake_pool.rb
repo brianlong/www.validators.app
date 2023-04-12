@@ -11,6 +11,7 @@
 #  average_skipped_slots         :float(24)
 #  average_uptime                :float(24)
 #  average_validators_commission :float(24)
+#  delinquent_count              :integer
 #  deposit_fee                   :float(24)
 #  manager_fee                   :float(24)
 #  name                          :string(191)
