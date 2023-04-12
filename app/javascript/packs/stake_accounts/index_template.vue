@@ -235,11 +235,12 @@
         <a href="/faq#commission" target="_blank">what is validator commission?</a>
       </p>
 
-      <h3 class="h5">APY</h3>
+      <h3 class="h5">ROD</h3>
       <p>
-        <strong>Annual Percentage Yield</strong> - rate of return from delegating to a stake pool. It is the weighted average of the APY's
-        from all the validators reduced by the <strong>manager fee</strong>. Validators weight is proportional to the active_stake of the accounts.<br />
-        APY of the validator is calculated as follows:
+        <strong>Return on Delegation</strong> - rate of return from delegating to a stake pool. 
+        It is the weighted average of the RODs from all the validators reduced by the manager fee. 
+        Validators weight is proportional to the active_stake of the accounts.<br />
+        ROD of the validator is calculated as follows:
       </p>
       <p>
         <strong> ((1 + rewards_percent) ^ number_of_epochs_per_year) - 1 </strong>
