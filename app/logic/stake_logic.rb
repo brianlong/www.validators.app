@@ -142,45 +142,12 @@ module StakeLogic
     end
   end
 
-  def update_validator_stats
+  def update_stake_pools
     lambda do |p|
       return p unless p.code == 200
 
       p.payload[:stake_pools].each do |pool|
-        validator_ids = pool.stake_accounts.active.pluck(:validator_id)
-        delinquent_count = 0
-        last_skipped_slots = []
-        uptimes = []
-        lifetimes = []
-        scores = []
-        total_active_stake = 0
-
-        Validator.where(id: validator_ids).includes(:stake_accounts, :validator_score_v1).each do |validator|
-          val_active_stake = validator.stake_accounts.active.where(stake_pool: pool).pluck(:active_stake).sum
-          total_active_stake += val_active_stake
-          score = validator.score
-
-          last_delinquent = validator.validator_histories
-                                     .order(created_at: :desc)
-                                     .where(delinquent: true)
-                                     .first
-                                     &.created_at || (DateTime.now - 30.days)
-
-          uptime = (DateTime.now - last_delinquent.to_datetime).to_i
-          lifetime = (DateTime.now - validator.created_at.to_datetime).to_i
-          uptimes.push uptime
-          lifetimes.push lifetime
-          scores.push val_active_stake * score.total_score.to_i
-          delinquent_count = score.delinquent ? delinquent_count + 1 : delinquent_count
-          last_skipped_slots.push score.skipped_slot_history&.last
-        end
-
-        pool.average_uptime = uptimes.average
-        pool.average_lifetime = lifetimes.average
-        pool.average_score = (scores.sum / total_active_stake.to_f).round(2)
-        pool.average_delinquent = (delinquent_count / validator_ids.size.to_f) * 100
-        pool.average_skipped_slots = last_skipped_slots.compact.average
-        pool.delinquent_count = delinquent_count
+        StakePools::CalculateAverageStats.new(pool).call
       end
 
       StakePool.transaction do
@@ -189,25 +156,7 @@ module StakeLogic
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from update_validator_stats", e)
-    end
-  end
-
-  def count_average_validators_commission
-    lambda do |p|
-      return p unless p.code == 200
-
-      StakePool.where(network: p.payload[:network]).each do |pool|
-        validator_ids = pool.stake_accounts.active.pluck(:validator_id)
-        average_commission = ValidatorScoreV1.where(validator_id: validator_ids)
-                                             .average(:commission)
-
-        pool.update_attribute(:average_validators_commission, average_commission)
-      end
-
-      Pipeline.new(200, p.payload)
-    rescue StandardError => e
-      Pipeline.new(500, p.payload, "Error from count_average_validator_fee", e)
+      Pipeline.new(500, p.payload, "Error from update_stake_pools", e)
     end
   end
 

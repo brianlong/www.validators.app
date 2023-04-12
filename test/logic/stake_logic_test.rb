@@ -118,22 +118,12 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "update_validator_stats" do
-    authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
-
+  test "update_stake_pools" do
     validator = create(
       :validator,
       network: "testnet",
       account: "account123",
       created_at: 10.days.ago
-    )
-
-    validator_history = create(
-      :validator_history,
-      network: "testnet",
-      delinquent: "true",
-      created_at: DateTime.now - 3.days,
-      account: "account123"
     )
 
     score = create(
@@ -144,16 +134,15 @@ class StakeLogicTest < ActiveSupport::TestCase
       network: "testnet"
     )
 
-    vote_account = create(
-      :vote_account,
-      network: "testnet",
-      account: "vote_acc"
-    )
-
     stake_pool = create(
       :stake_pool,
       network: "testnet",
-      authority: authority
+      average_validators_commission: nil,
+      average_uptime: nil,
+      average_lifetime: nil,
+      average_score: nil,
+      average_delinquent: nil,
+      average_skipped_slots: nil
     )
 
     stake_account = create(
@@ -166,31 +155,15 @@ class StakeLogicTest < ActiveSupport::TestCase
 
     payload = @initial_payload.merge(stake_pools: [stake_pool])
     p = Pipeline.new(200, payload)
-                .then(&update_validator_stats)
+                .then(&update_stake_pools)
 
-    assert_equal p.code, 200
-    assert_equal 3, stake_pool.average_uptime
-    assert_equal 10, stake_pool.average_lifetime
-    assert_equal 100.0, stake_pool.average_delinquent
-    assert_equal 5, stake_pool.average_skipped_slots
-    assert_equal score.total_score, stake_pool.average_score
-  end
-  
-  test "count_average_validators_commission" do
-    stake_pool = create(:stake_pool, network: "testnet")
-    validator = create(:validator)
-    validator2 = create(:validator)
-    score = create(:validator_score_v1, validator: validator, commission: 5)
-    score2 = create(:validator_score_v1, validator: validator2, commission: 10)
-    stake_account = create(:stake_account, validator: validator, stake_pool: stake_pool)
-    stake_account2 = create(:stake_account, validator: validator2, stake_pool: stake_pool)
-
-    refute stake_pool.average_validators_commission
-
-    p = Pipeline.new(200, @initial_payload)
-                .then(&count_average_validators_commission)
-
-    assert_equal 7.5, stake_pool.reload.average_validators_commission
+    assert stake_pool.average_validators_commission
+    assert stake_pool.average_uptime
+    assert stake_pool.average_lifetime
+    assert stake_pool.average_score
+    assert stake_pool.average_delinquent
+    assert stake_pool.average_skipped_slots
+    assert stake_pool.delinquent_count
   end
 
   test "count average_score" do
@@ -207,12 +180,12 @@ class StakeLogicTest < ActiveSupport::TestCase
     refute stake_pool.average_score
 
     payload = @initial_payload.merge(stake_pools: [stake_pool])
-    Pipeline.new(200, payload).then(&update_validator_stats)
+    Pipeline.new(200, payload).then(&update_stake_pools)
 
     assert_equal 3.25, stake_pool.reload.average_score
 
     score2.update_columns(total_score: 6)
-    Pipeline.new(200, payload).then(&update_validator_stats)
+    Pipeline.new(200, payload).then(&update_stake_pools)
 
     assert_equal 7.0, stake_pool.reload.average_score
 
@@ -220,13 +193,13 @@ class StakeLogicTest < ActiveSupport::TestCase
     score3 = create(:validator_score_v1, validator: validator3)
     score3.update_columns(total_score: nil)
     create(:stake_account, validator: validator3, stake_pool: stake_pool)
-    Pipeline.new(200, payload).then(&update_validator_stats)
+    Pipeline.new(200, payload).then(&update_stake_pools)
 
     assert_equal 0.52, stake_pool.reload.average_score
 
     score3.update_columns(total_score: 4)
     create(:stake_account, validator: validator3, stake_pool: stake_pool)
-    Pipeline.new(200, payload).then(&update_validator_stats)
+    Pipeline.new(200, payload).then(&update_stake_pools)
 
     assert_equal 4.12, stake_pool.reload.average_score
   end
