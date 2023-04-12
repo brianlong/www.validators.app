@@ -65,7 +65,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
               </a>
             </td>
             <td>
-              {{ pool.validators_count }}&nbsp;<span class="text-muted">({{ pool.average_delinquent }})</span>
+              {{ pool.validators_count }}&nbsp;<span class="text-muted">({{ pool.delinquent_count }})</span>
             </td>
             <td>
               {{ (pool.total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL<br />

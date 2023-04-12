@@ -52,7 +52,7 @@ var StakePoolStats = Vue.component('StakePoolStats', {
             </div>
             <div class="mb-4">
               <span class="text-muted">Delinquent:&nbsp;</span>
-              <strong class="text-success">{{ pool.average_delinquent }}</strong>
+              <strong class="text-success">{{ pool.delinquent_count }}</strong>
             </div>
 
             <div class="mb-3">

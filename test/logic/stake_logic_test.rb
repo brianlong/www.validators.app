@@ -140,7 +140,7 @@ class StakeLogicTest < ActiveSupport::TestCase
       :validator_score_v1,
       validator: validator,
       skipped_slot_history: [2, 5],
-      delinquent: false,
+      delinquent: true,
       network: "testnet"
     )
 
@@ -171,7 +171,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert_equal p.code, 200
     assert_equal 3, stake_pool.average_uptime
     assert_equal 10, stake_pool.average_lifetime
-    assert_equal 0, stake_pool.average_delinquent
+    assert_equal 100.0, stake_pool.average_delinquent
     assert_equal 5, stake_pool.average_skipped_slots
     assert_equal score.total_score, stake_pool.average_score
   end
