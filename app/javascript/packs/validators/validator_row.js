@@ -180,12 +180,12 @@ var ValidatorRow = Vue.component('validatorRow', {
               (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)
             </small>
             <br />
-            <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
-            <validator-scores :score="validator" :account="validator['account']"></validator-scores>
+            <small class="d-inline-block d-lg-none">Scores:&nbsp;</small>
+            <validator-scores class="d-inline-block" :score="validator" :account="validator['account']"></validator-scores>
 
             <div class="d-sm-inline-block small mt-2 mt-sm-0">
               <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-              <span class="me-3">
+              <span class="me-2">
                 {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
               </span>
             </div>
@@ -212,7 +212,7 @@ var ValidatorRow = Vue.component('validatorRow', {
 
       <!-- Charts menu -->
       <td class="d-lg-none pt-0">
-        <div class="row mb-3">
+        <div class="row small mb-3">
           <div class="col pe-0">
             <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('root-distance', $event)" href="">
               Root <br class="d-xxs-inline-block" />Distance

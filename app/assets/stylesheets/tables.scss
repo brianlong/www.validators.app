@@ -244,6 +244,7 @@ table, .table {
         }
         @media(max-width: $screen-md-max) {
           padding-left: $padding-standard*2;
+          padding-top: 0.5rem;
         }
       }
     }
