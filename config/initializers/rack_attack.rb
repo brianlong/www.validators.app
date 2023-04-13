@@ -7,9 +7,9 @@ class Rack::Attack
     "/api/v1/ping-thing-stats"
   ].freeze
 
-  API_LOW_LIMIT = 25
-  API_HIGH_LIMIT = 40
-  LIMIT_RESET_PERIOD = 5.minutes
+  API_LOW_LIMIT = 30
+  API_HIGH_LIMIT = 60
+  LIMIT_RESET_PERIOD = 5.minute
 
   ### Throttle Spammy Clients ###
   # Throttle GET requests to API by user authorization token
@@ -34,30 +34,41 @@ class Rack::Attack
   end
 
   ### Custom Throttle Response ###
-  # By default, Rack::Attack returns an HTTP 429 for throttled responses.
-  # If you want to customize the response, then uncomment the lines below.
-  self.throttled_response = lambda do |env|
-    [ 429, {}, ["Too Many Requests. Retry later.\n"]]
+  # By default, Rack::Attack returns an HTTP 429 for throttled responses and no headers.
+  # Uncomment the lines below to customize the response.
+  self.throttled_responder = lambda do |req|
+    match_data = req.env["rack.attack.match_data"]
+    reset_time = match_data[:period] # LIMIT_RESET_PERIOD in seconds
+    passed_time = match_data[:epoch_time].to_i % reset_time # in seconds
+    remaining_time_till_reset = (reset_time - passed_time).to_s
+
+    headers = {
+      "RateLimit-Limit" => match_data[:limit].to_s,
+      "RateLimit-Remaining" => "0",
+      "RateLimit-Reset" => remaining_time_till_reset
+    }
+
+    [ 429, headers, ["Too Many Requests. Retry later.\n"]]
   end
-end
 
-### Define whitelists ###
+  ### Define whitelists ###
 
-# Allow all internal requests
-Rack::Attack.safelist("allow internal requests") do |req|
-  key = Rails.application.credentials.api_authorization
-  req.env["HTTP_AUTHORIZATION"] == key
-end
+  # Allow all internal requests
+  self.safelist("allow internal requests") do |req|
+    key = Rails.application.credentials.api_authorization
+    req.env["HTTP_AUTHORIZATION"] == key
+  end
 
-# Allow no limit requests to specified endpoints or for specified users
-# Uncomment and edit the following lines to allow no limit requests
-# Rack::Attack.safelist("allow all requests to PATH") do |req|
-#   req.path.start_with?("/api/v1/PATH") && req.get?
-# end
+  # Allow no limit requests to specified endpoints or for specified users
+  # Uncomment and edit the following lines to allow no limit requests
+  # self.safelist("allow all requests to PATH") do |req|
+  #   req.path.start_with?("/api/v1/PATH") && req.get?
+  # end
 
-# Set no limits to all endpoints for listed users
-Rack::Attack.safelist("allow all requests for users") do |req|
-  user_token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
-  whitelisted_tokens = Rails.application.credentials.dig(:rack_attack, :whitelist_all_endpoints)
-  user_token.in? whitelisted_tokens
+  # Set no limits to all endpoints for listed users
+  self.safelist("allow all requests for users") do |req|
+    user_token = req.env["HTTP_TOKEN"] || req.env["HTTP_AUTHORIZATION"]
+    whitelisted_tokens = Rails.application.credentials.dig(:rack_attack, :whitelist_all_endpoints)
+    user_token.in? whitelisted_tokens
+  end
 end
