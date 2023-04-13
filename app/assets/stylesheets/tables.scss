@@ -107,7 +107,7 @@ table, .table {
   .column {
     &-xxs {
       width: 1%;
-      min-width: 70px;
+      min-width: 76px;
     }
     &-xs {
       width: 10%;
@@ -218,12 +218,12 @@ table, .table {
           align-items: center;
         }
         &-avatar {
-          width: 70px;
+          width: 76px;
           text-align: center;
           padding-right: 20px;
           @media(max-width: $screen-lg-max) {
             width: 35px;
-            .img-circle-medium, .img-circle-medium-private {
+            .img-circle-large, .img-circle-large-private {
               display: none;
             }
             &.no-watchlist {

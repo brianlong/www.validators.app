@@ -19,10 +19,10 @@
 
 .img-circle {
   &-large {
-    @include img-circle(60px, 60px);
+    @include img-circle(56px, 56px);
     &-private {
-      @include img-circle(60px, 60px);
-      @include img-private(16px, 11px, 30px);
+      @include img-circle(56px, 56px);
+      @include img-private(14px, 9px, 30px);
     }
   }
   &-medium {

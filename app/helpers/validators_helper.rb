@@ -104,15 +104,15 @@ module ValidatorsHelper
       link_to validator_url(link_params) do
         content_tag :div,
                     content_tag(:span, nil, class: "fa-solid fa-users-slash", title: "Private Validator"),
-                    class: "img-circle-medium-private"
+                    class: "img-circle-large-private"
       end
     elsif validator.avatar_url
       link_to validator_url(link_params) do
-        image_tag validator.avatar_url, class: 'img-circle-medium'
+        image_tag validator.avatar_url, class: 'img-circle-large'
       end
     else
       link_to validator_url(link_params) do
-        image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium'
+        image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-large'
       end
     end
   end
