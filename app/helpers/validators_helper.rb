@@ -42,15 +42,6 @@ module ValidatorsHelper
     number_to_percentage(position, precision: 0)
   end
 
-  def display_avatar(validator)
-    if validator&.avatar_url
-      image_tag validator.avatar_url, class: 'img-circle mb-1'
-    else
-      image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png',
-                class: 'img-circle mb-1'
-    end
-  end
-
   def percent_of_total_stake(active_stake, total_stake)
     number_to_percentage((active_stake / total_stake.to_f) * 100.0, precision: 2)
   end
