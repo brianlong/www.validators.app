@@ -47,7 +47,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
               Manager Fee<br />
               <small class="text-muted">Avg Validators Fee</small>
             </th>
-            <th class="column-sm">APY</th>
+            <th class="column-sm">ROD</th>
             <th class="column-md">
               Avg Score<br />
               <small class="text-muted">Maximum: 11</small>

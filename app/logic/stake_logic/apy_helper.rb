@@ -19,7 +19,7 @@ module StakeLogic::ApyHelper
     rewards - rewards * (manager_fee / 100.0)
   end
 
-  # returns APY for a single account or nil
+  # returns ROD for a single account or nil
   def calculate_apy(credits_diff, rewards, num_of_epochs, active_stake = nil)
     active_stake ||= rewards[:postBalance]
     credits_diff_percent = credits_diff / (active_stake - rewards[:amount]).to_f
