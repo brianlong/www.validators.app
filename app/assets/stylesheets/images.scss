@@ -18,19 +18,18 @@
 }
 
 .img-circle {
-  @include img-circle(60px, 60px);
-  &-private {
+  &-large {
     @include img-circle(60px, 60px);
-    @include img-private(16px, 11px, 30px);
-    &.img-circle-medium {
-      @include img-private(13px, 10px, 22px);
+    &-private {
+      @include img-circle(60px, 60px);
+      @include img-private(16px, 11px, 30px);
     }
   }
   &-medium {
-    @include img-circle(50px, 50px);
+    @include img-circle(46px, 46px);
     &-private {
-      @include img-circle(50px, 50px);
-      @include img-private(14px, 11px, 22px);
+      @include img-circle(46px, 46px);
+      @include img-private(13px, 10px, 22px);
     }
   }
   &-small {
