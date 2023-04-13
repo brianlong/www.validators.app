@@ -104,7 +104,7 @@ body {
     h1 {
       display: inline-block;
       margin-bottom: 0;
-      padding-left: 70px;
+      padding-left: 64px;
       @media(max-width: $screen-sm-max) {
         font-size: 28px;
         padding-left: 50px;
@@ -113,7 +113,7 @@ body {
     img, .img-circle-medium, .img-circle-medium-private {
       display: inline-block;
       position: absolute;
-      margin-top: 1px;
+      margin-top: 2px;
       @media(max-width: $screen-md-max) {
        margin-top: -2px;
       }

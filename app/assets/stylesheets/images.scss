@@ -26,10 +26,10 @@
     }
   }
   &-medium {
-    @include img-circle(46px, 46px);
+    @include img-circle(44px, 44px);
     &-private {
-      @include img-circle(46px, 46px);
-      @include img-private(13px, 10px, 22px);
+      @include img-circle(44px, 44px);
+      @include img-private(12px, 9px, 22px);
     }
   }
   &-small {
