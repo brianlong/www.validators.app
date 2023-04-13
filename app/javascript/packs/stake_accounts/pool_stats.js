@@ -55,18 +55,9 @@ var StakePoolStats = Vue.component('StakePoolStats', {
                 title="Number of active validators.">
               </i>
             </div>
-            <div>
+            <div class="mb-4">
               <span class="text-muted">Delinquent:&nbsp;</span>
               <strong class="text-success">{{ pool.delinquent_count }}</strong>
-            </div>
-            <div class="mb-4">
-              <span class="text-muted">Avg Delinquent:&nbsp;</span>
-              <strong class="text-success">{{ pool.average_delinquent.toFixed(2) + '%' }}</strong>
-              <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                title="Percent of delinquents of all validators.">
-              </i>
             </div>
 
             <div class="mb-3">

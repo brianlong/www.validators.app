@@ -80,7 +80,6 @@ module StakePools
 
       assert_equal 3, stake_pool.average_uptime
       assert_equal 10, stake_pool.average_lifetime
-      assert_equal 50, stake_pool.average_delinquent
       assert_equal 2.55, stake_pool.average_skipped_slots
       assert_equal 7, stake_pool.average_score
       assert_equal 8.15, stake_pool.average_validators_commission

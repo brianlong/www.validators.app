@@ -141,7 +141,6 @@ class StakeLogicTest < ActiveSupport::TestCase
       average_uptime: nil,
       average_lifetime: nil,
       average_score: nil,
-      average_delinquent: nil,
       average_skipped_slots: nil
     )
 
@@ -161,7 +160,6 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert stake_pool.average_uptime
     assert stake_pool.average_lifetime
     assert stake_pool.average_score
-    assert stake_pool.average_delinquent
     assert stake_pool.average_skipped_slots
     assert stake_pool.delinquent_count
   end

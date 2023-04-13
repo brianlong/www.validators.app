@@ -68,7 +68,6 @@ module StakePools
       pool.average_uptime = sp_attrs[:uptimes].average
       pool.average_lifetime = sp_attrs[:lifetimes].average
       pool.average_score = (sp_attrs[:scores].sum / sp_attrs[:total_active_stake].to_f).round(2)
-      pool.average_delinquent = (sp_attrs[:delinquent_count] / validator_ids.size.to_f) * 100
       pool.average_skipped_slots = sp_attrs[:last_skipped_slots].compact.average
       pool.delinquent_count = sp_attrs[:delinquent_count]
     end
