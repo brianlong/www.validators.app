@@ -37,6 +37,8 @@
 
 class StakeAccount < ApplicationRecord
 
+  MINIMUM_STAKE = 1_000_000_000.freeze # 1 sol
+
   API_FIELDS = %i[
     id
     activation_epoch
@@ -68,6 +70,7 @@ class StakeAccount < ApplicationRecord
   scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
   scope :filter_by_withdrawer, ->(withdrawer) { where('withdrawer LIKE ?', "#{withdrawer}%") }
   scope :active, ->() { where.not(active_stake: [0, nil]) }
+  scope :greater_than_one_sol, ->() { where("active_stake > ?", MINIMUM_STAKE) }
 
   def history_from_epoch(epoch)
     StakeAccountHistory.find_by(
