@@ -67,7 +67,7 @@ module StakePools
         stake_pool: stake_pool,
         delegated_vote_account_address: "vote_acc",
         validator: validator,
-        active_stake: 422_555_666
+        active_stake: 2_555_666_777
       )
       create(:stake_account,
         validator: validator_2,
@@ -82,7 +82,7 @@ module StakePools
       assert_equal 10, stake_pool.average_lifetime
       assert_equal 2.55, stake_pool.average_skipped_slots
       assert_equal 7, stake_pool.average_score
-      assert_equal 8.15, stake_pool.average_validators_commission
+      assert_equal 6.1, stake_pool.average_validators_commission
       assert_equal 1, stake_pool.delinquent_count
     end
   end

@@ -47,16 +47,11 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               </span>
             </div>
             <div>
-              <span class="text-muted">Total:&nbsp;</span>
+              <span class="text-muted">Total > 1 SOL:&nbsp;</span>
               <strong class="text-success">{{ pool.validators_count }}</strong>
-              <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                title="Number of active validators.">
-              </i>
             </div>
             <div class="mb-4">
-              <span class="text-muted">Delinquent:&nbsp;</span>
+              <span class="text-muted">Delinquent > 1 SOL:&nbsp;</span>
               <strong class="text-success">{{ pool.delinquent_count }}</strong>
             </div>
 

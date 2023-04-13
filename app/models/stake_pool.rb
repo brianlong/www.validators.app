@@ -52,15 +52,16 @@ class StakePool < ApplicationRecord
   has_many :stake_account_histories
 
   def validators_count
-    stake_accounts.active.pluck(:validator_id).compact.uniq.count
+    stake_accounts.greater_than_one_sol.pluck(:validator_id).compact.uniq.count
   end
 
   def total_stake
-    stake_accounts&.pluck(:active_stake).compact.sum
+    stake_accounts.greater_than_one_sol.pluck(:active_stake).compact.sum
   end
 
   def average_stake
     return 0 if validators_count == 0
+
     total_stake / validators_count
   end
 end
