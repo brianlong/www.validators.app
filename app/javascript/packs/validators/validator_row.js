@@ -175,10 +175,10 @@ var ValidatorRow = Vue.component('validatorRow', {
           <div class="column-info-name">
             <a :href="validator_url()" class="fw-bold">
               {{ displayed_validator_name() }}
+              <small class="text-muted text-nowrap" v-if="!is_validator_private()">
+                (<span class="d-inline-block d-lg-none">Comm.:&nbsp;</span>{{ validator["commission"] }}%)
+              </small>
             </a>
-            <small class="ms-1 text-muted">
-              (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)
-            </small>
             <br />
             <small class="d-inline-block d-lg-none">Scores:&nbsp;</small>
             <validator-scores class="d-inline-block" :score="validator" :account="validator['account']"></validator-scores>
