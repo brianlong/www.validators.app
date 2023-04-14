@@ -117,7 +117,7 @@
             <% end %>
           </div>
           <div class="column-info-name">
-            <%= link_to validator_url(network: params[:network], account: validator.account), class: "fw-bold" do %>
+            <%= link_to validator_url(network: params[:network], account: validator.account), class: "column-info-link fw-bold #{'no-watchlist' unless current_user}" do %>
               <%= displayed_validator_name(validator) %><%= displayed_validator_commission(validator) %>
             <% end %>
             <br />

@@ -216,6 +216,7 @@ table, .table {
         &-row {
           display: flex;
           align-items: center;
+          position: relative;
         }
         &-avatar {
           width: 86px;
@@ -231,8 +232,19 @@ table, .table {
               padding-right: 0;
             }
           }
+          @media(max-width: $screen-md-max) {
+            position: absolute;
+            top: 0;
+          }
         }
         &-name {}
+        &-link {
+          &:not(.no-watchlist) {
+            @media(max-width: $screen-md-max) {
+              padding-left: 25px;
+            }
+          }
+        }
       }
 
       &-speedometer {
