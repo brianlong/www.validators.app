@@ -10,8 +10,8 @@ module ValidatorsHelper
 
   def displayed_validator_commission(validator)
     unless validator.private_validator? && !validator.lido?
-      commission_tag = "<span class='d-inline-block d-lg-none'>Commission: </span>"
-      "<small class='text-muted'>&nbsp;(#{commission_tag}#{validator.commission}%)</small>".html_safe
+      commission_tag = "<span class='d-inline-block d-lg-none'>Comm.:</span>&nbsp;"
+      "<small class='text-muted text-nowrap'>&nbsp;(#{commission_tag}#{validator.commission}%)</small>".html_safe
     end
   end
 
