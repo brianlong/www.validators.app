@@ -20,7 +20,9 @@
 </div>
 
 <% unless @network == "pythnet" %>
-  <%= render 'validators/watchlist_info_banner' %>
+  <div class="mb-4">
+    <%= render 'validators/watchlist_info_banner', half_size: false %>
+  </div>
 <% end %>
 
 <section class="row">
@@ -42,7 +44,7 @@
 <section class="row">
   <% if @network == "pythnet" %>
     <div class="col-lg-6 mb-4">
-      <%= render 'validators/watchlist_info_banner' %>
+      <%= render 'validators/watchlist_info_banner', half_size: true %>
     </div>
   <% else %>
     <%= render 'validators/stake_pools_banner' %>
