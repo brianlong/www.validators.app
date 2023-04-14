@@ -8,6 +8,13 @@ module ValidatorsHelper
     end
   end
 
+  def displayed_validator_commission(validator)
+    unless validator.private_validator? && !validator.lido?
+      commission_tag = "<span class='d-inline-block d-lg-none'>Commission: </span>"
+      "<small class='text-muted'>&nbsp;(#{commission_tag}#{validator.commission}%)</small>".html_safe
+    end
+  end
+
   def shorten_key(pub_key)
     "#{pub_key[0..5]}...#{pub_key[-4..-1]}"
   end

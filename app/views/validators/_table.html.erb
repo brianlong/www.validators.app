@@ -119,13 +119,7 @@
           <div class="column-info-name">
             <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
                         class: 'fw-bold' do %>
-              <%= displayed_validator_name(validator) %>
-            <% end %>
-
-            <% unless validator.private_validator? && !validator.lido? %>
-              <small class="ms-1 text-muted">
-                (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
-              </small>
+              <%= displayed_validator_name(validator) %><%= displayed_validator_commission(validator) %>
             <% end %>
             <br />
 
