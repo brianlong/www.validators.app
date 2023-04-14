@@ -19,9 +19,9 @@
 
 .img-circle {
   &-large {
-    @include img-circle(56px, 56px);
+    @include img-circle(58px, 58px);
     &-private {
-      @include img-circle(56px, 56px);
+      @include img-circle(58px, 58px);
       @include img-private(14px, 9px, 30px);
     }
   }

@@ -107,7 +107,7 @@ table, .table {
   .column {
     &-xxs {
       width: 1%;
-      min-width: 76px;
+      min-width: 86px;
     }
     &-xs {
       width: 10%;
@@ -189,7 +189,7 @@ table, .table {
 
     .column {
       &-chart {
-        width: 21%;
+        width: 22%;
         padding-top: 15px;
         padding-bottom: 8px;
         @media(max-width: $screen-lg-max) {
@@ -205,7 +205,7 @@ table, .table {
       }
 
       &-info {
-        width: 24%;
+        width: 26%;
         padding-right: 0;
         @media(max-width: $screen-xl-max) {
           width: 26%;
@@ -218,9 +218,9 @@ table, .table {
           align-items: center;
         }
         &-avatar {
-          width: 76px;
+          width: 86px;
           text-align: center;
-          padding-right: 20px;
+          padding-right: 28px;
           @media(max-width: $screen-lg-max) {
             width: 35px;
             .img-circle-large, .img-circle-large-private {
@@ -236,7 +236,7 @@ table, .table {
       }
 
       &-speedometer {
-        width: 16%;
+        width: 17%;
         @media(max-width: $screen-lg-max) {
           width: 16%;
           padding-right: 10px;
