@@ -250,6 +250,7 @@
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
   import loadingImage from 'loading.gif';
+  import '../mixins/stake_accounts_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -325,10 +326,6 @@
     },
 
     methods: {
-      lamports_to_sol(lamports) {
-        return lamports * 0.000000001;
-      },
-
       is_private() {
         return this.score.commission == 100
       },
