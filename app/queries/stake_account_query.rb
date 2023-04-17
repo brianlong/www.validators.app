@@ -60,7 +60,7 @@ class StakeAccountQuery
       unless @filter_by[:withdrawer].blank?
 
     if @exclude_accounts_below_minimum_stake == "true"
-      stake_accounts = stake_accounts.greater_than_one_sol
+      stake_accounts = stake_accounts.with_minimum_stake
     end
 
     unless @filter_by[:validator].blank?

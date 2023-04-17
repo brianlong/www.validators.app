@@ -70,7 +70,7 @@ class StakeAccount < ApplicationRecord
   scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
   scope :filter_by_withdrawer, ->(withdrawer) { where('withdrawer LIKE ?', "#{withdrawer}%") }
   scope :active, ->() { where.not(active_stake: [0, nil]) }
-  scope :greater_than_one_sol, ->() { where("active_stake > ?", MINIMUM_STAKE) }
+  scope :with_minimum_stake, ->() { where("active_stake > ?", MINIMUM_STAKE) }
 
   def history_from_epoch(epoch)
     StakeAccountHistory.find_by(

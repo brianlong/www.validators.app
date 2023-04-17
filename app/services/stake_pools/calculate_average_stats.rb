@@ -34,7 +34,7 @@ module StakePools
     attr_reader :pool, :validator, :validator_ids, :sp_attrs
 
     def delinquent?(score)
-      score.delinquent? && validator.stake_accounts.greater_than_one_sol.present?
+      score.delinquent? && validator.stake_accounts.with_minimum_stake.present?
     end
 
     def calculate_active_stake

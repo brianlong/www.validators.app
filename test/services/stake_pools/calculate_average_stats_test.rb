@@ -25,14 +25,14 @@ module StakePools
       create(
         :validator_history,
         network: "testnet",
-        delinquent: "true",
+        delinquent: true,
         created_at: DateTime.now - 3.days,
         account: "account_test"
       )
       create(
         :validator_history,
         network: "testnet",
-        delinquent: "true",
+        delinquent: true,
         created_at: DateTime.now - 3.days,
         account: "account_test_2"
       )
