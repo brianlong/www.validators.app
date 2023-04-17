@@ -327,7 +327,6 @@
       reload_validator_data(){
         setTimeout( () => {
           if(this.live){
-            console.log("reloading")
             this.get_validator_data()
           }
           this.reload_validator_data()
