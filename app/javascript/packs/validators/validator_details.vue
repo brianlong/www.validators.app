@@ -279,7 +279,7 @@
         loading_image: loadingImage,
         is_loading_validator: true,
         validator_score_details_attrs: {},
-        reload_time: 1000 * 60 * 1 // 3 minutes
+        reload_time: 1000 * 60 * 3 // 3 minutes
       }
     },
 
