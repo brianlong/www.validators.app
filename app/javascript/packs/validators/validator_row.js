@@ -175,7 +175,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           <div class="column-info-name">
             <a :href="validator_url()" class="column-info-link no-watchlist fw-bold">
               {{ displayed_validator_name() }}
-              <small class="text-muted text-nowrap" v-if="!is_validator_private()">
+              <small class="text-muted text-nowrap fw-normal" v-if="!is_validator_private()">
                 (<span class="d-inline-block d-lg-none">Comm.:&nbsp;</span>{{ validator["commission"] }}%)
               </small>
             </a>
