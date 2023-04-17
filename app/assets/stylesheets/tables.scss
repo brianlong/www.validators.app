@@ -174,6 +174,9 @@ table, .table {
   width: 100%;
   table-layout: fixed;
   thead {
+    @media(max-width: $screen-lg-max) {
+      .column-info-avatar { display: none; }
+    }
     @media(max-width: $screen-md-max) { display: none; }
   }
   thead, tbody {
@@ -211,7 +214,7 @@ table, .table {
           width: 28%;
         }
         @media(max-width: $screen-lg-max) {
-          width: 220px;
+          width: 215px;
         }
         &-row {
           display: flex;
@@ -223,24 +226,18 @@ table, .table {
           text-align: center;
           padding-right: 28px;
           @media(max-width: $screen-lg-max) {
-            width: 35px;
+            text-align: left;
+            position: absolute;
+            top: 0;
             .img-circle-large, .img-circle-large-private {
               display: none;
             }
-            &.no-watchlist {
-              width: 0;
-              padding-right: 0;
-            }
-          }
-          @media(max-width: $screen-md-max) {
-            position: absolute;
-            top: 0;
           }
         }
         &-name {}
         &-link {
           &:not(.no-watchlist) {
-            @media(max-width: $screen-md-max) {
+            @media(max-width: $screen-lg-max) {
               padding-left: 25px;
             }
           }
