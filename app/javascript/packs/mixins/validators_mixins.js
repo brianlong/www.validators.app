@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 Vue.mixin({
   methods: {
-    g(validator, batch) {
+    skipped_vote_percent(validator, batch) {
       if (validator['skipped_vote_history'] && batch['best_skipped_vote']) {
         const history_array = validator['skipped_vote_history']
         const skipped_votes_percent = history_array[history_array.length - 1]
