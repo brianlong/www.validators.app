@@ -18,6 +18,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import '../mixins/string_mixins'
 
   export default {
     data() {
@@ -40,10 +41,6 @@
     },
 
     methods: {
-      capitalize: function(word) {
-        return word[0].toUpperCase() + word.slice(1)
-      },
-
       change_network: function(target_network) {
         let splitted_url = this.url.split("/")
         this.url = window.location.href

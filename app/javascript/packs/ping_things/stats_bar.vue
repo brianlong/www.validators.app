@@ -188,9 +188,6 @@
           channel: "PingThingRecentStatChannel",
           room: "public",
         });
-    },
-    methods: {
-
     }
   }
 </script>

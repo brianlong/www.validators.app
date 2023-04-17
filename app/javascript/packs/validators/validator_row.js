@@ -7,6 +7,7 @@ import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
 import skippedSlotsChart from './charts/skipped_slots_small_chart'
 import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
+import '../mixins/validators_mixins'
 
 import scores from './components/scores'
 
@@ -81,16 +82,6 @@ var ValidatorRow = Vue.component('validatorRow', {
 
     validator_url() {
       return "/validators/" + this.validator["account"] + "?network=" + this.validator["network"]
-    },
-
-    skipped_vote_percent() {
-      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']) {
-        var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
-
-        return skipped_votes_percent ? ((batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).round(2) : null
-      } else {
-        return null
-      }
     },
 
     chart_line_color(val) {

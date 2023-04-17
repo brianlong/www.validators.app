@@ -1,5 +1,6 @@
 import Chart from 'chart.js/auto';
 import chart_variables from './chart_variables'
+import '../mixins/validators_mixins'
 
 export default {
   props: {
@@ -14,16 +15,6 @@ export default {
   },
 
   methods: {
-    skipped_vote_percent() {
-      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']) {
-        var history_array = this.validator['skipped_vote_history']
-        var skipped_votes_percent = history_array[history_array.length - 1]
-        return skipped_votes_percent ? ((this.batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).toFixed(2) : null
-      } else {
-        return null
-      }
-    },
-
     set_needle_position(needle_value) {
       let single_range_size = this.batch['skipped_vote_all_median'];
       if(!needle_value || !single_range_size) {

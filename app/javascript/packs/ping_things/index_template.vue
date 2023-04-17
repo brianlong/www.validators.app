@@ -7,7 +7,7 @@
     <div class="card mb-4">
       <div class="card-content">
         <h2 class="h4 card-heading">
-          {{ network[0].toUpperCase() + network.substring(1) }} TX Confirmation Time Stats
+          {{ capitalize(network) }} TX Confirmation Time Stats
         </h2>
         <stats-chart :network="network"/>
       </div>
@@ -32,6 +32,7 @@
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
   import statsBar from './stats_bar'
+  import '../mixins/string_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
