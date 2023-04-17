@@ -1,19 +1,19 @@
-<div class="card h-100 mb-4">
+<div class="card h-100">
   <div class="card-content">
     <div class="row">
-      <div class="col-lg-9 col-xl-10">
+      <div class="<%= half_size ? 'col-12' : 'col-lg-9 col-xl-10' %>">
         <h2 class="h5 card-heading-left">New: validators watchlist</h2>
 
         <div class="lead">
           Sign up and add validators to your favourites
           <i class="fa-regular fa-star text-warning mx-1"></i> to watch them.
         </div>
-        <div class="text-muted mb-4 mb-lg-0">
+        <div class="text-muted <%= half_size ? 'mb-4' : 'mb-4 mb-lg-0' %>">
           We will send you e-mail notification every time your favourite validator changes its commission.
         </div>
       </div>
 
-      <div class="col text-lg-end d-flex flex-column justify-content-center">
+      <div class="col d-flex flex-column justify-content-center <%= half_size ? 'text-start' : 'text-lg-end' %>">
         <div>
           <%= link_to "Sign up now", new_user_registration_path, class: "btn btn-lg btn-secondary" %>
         </div>

@@ -51,10 +51,10 @@ class DataCenters::CheckIpInfoService
       continent_code: max_mind_info.continent.code,
       continent_geoname_id: max_mind_info.continent.geoname_id,
       continent_name: max_mind_info.continent.name,
-      country_iso_code: max_mind_info.country.iso_code,
+      country_iso_code: unified_country_code(max_mind_info.country.iso_code),
       country_geoname_id: max_mind_info.country.geoname_id,
       country_name: max_mind_info.country.name,
-      registered_country_iso_code: max_mind_info.registered_country.iso_code,
+      registered_country_iso_code: unified_country_code(max_mind_info.registered_country.iso_code),
       registered_country_geoname_id: max_mind_info.registered_country.geoname_id,
       registered_country_name: max_mind_info.registered_country.name,
       traits_anonymous: max_mind_info.traits.anonymous?,
@@ -92,5 +92,9 @@ class DataCenters::CheckIpInfoService
       data_center.subdivision_geoname_id ||= max_mind_info.most_specific_subdivision.geoname_id
       data_center.subdivision_name ||= max_mind_info.most_specific_subdivision.name
     end
+  end
+
+  def unified_country_code(code)
+    code == "EN" ? "GB" : code
   end
 end

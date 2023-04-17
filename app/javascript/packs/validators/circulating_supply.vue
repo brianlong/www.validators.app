@@ -21,7 +21,7 @@
         </div>
 
         <div>
-          <span class="text-muted me-1">Gross ROI:</span>
+          <span class="text-muted me-1">Gross ROD:</span>
 
           <span class="text-muted" v-if="!gross_yield">loading...</span>
           <span v-if="gross_yield">
@@ -29,7 +29,7 @@
 
             <div class="small text-muted">
               (Last 3 epochs annualized)
-              <a href="/faq#roi">
+              <a href="/faq#rod">
                 <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"></i>
               </a>
             </div>
