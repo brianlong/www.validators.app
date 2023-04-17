@@ -89,10 +89,10 @@ module ValidatorsHelper
   end
 
   def link_to_validator_website(url)
-    return '' unless url.present?
+    return "" unless url.present?
 
-    if url.start_with?('https', 'http')
-      link_to url, url, target: 'blank'
+    if url.start_with?("https", "http")
+      link_to url, url, target: "blank"
     else
       url
     end
@@ -115,11 +115,11 @@ module ValidatorsHelper
       end
     elsif validator.avatar_url
       link_to validator_url(link_params) do
-        image_tag validator.avatar_url, class: 'img-circle-large'
+        image_tag validator.avatar_url, class: "img-circle-large"
       end
     else
       link_to validator_url(link_params) do
-        image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-large'
+        image_tag "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png", class: "img-circle-large"
       end
     end
   end
