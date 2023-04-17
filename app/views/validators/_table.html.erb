@@ -144,17 +144,19 @@
                 <%= validator.score&.software_version %>
               </div>
             <% else %>
-              <div class="d-sm-inline-block small mt-2 mt-sm-0">
-                <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-                <span class="me-2">
+              <div class="mt-2 mt-lg-0 small">
+                <div class="d-lg-inline-block">
+                  <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+                  <span class="me-2">
                   <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
-                  <span class="text-muted">(<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)</span>
+                    <span class="text-muted">(<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)</span>
                 </span>
-              </div>
-              <div class="d-sm-inline-block small">
-                <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
-                <span class="d-none d-lg-inline-block">V:&nbsp;</span>
-                <%= validator.score&.software_version %>
+                </div>
+                <div class="d-lg-inline-block">
+                  <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+                  <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+                  <%= validator.score&.software_version %>
+                </div>
               </div>
             <% end %>
 

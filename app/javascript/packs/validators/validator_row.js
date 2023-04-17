@@ -183,16 +183,18 @@ var ValidatorRow = Vue.component('validatorRow', {
             <small class="d-inline-block d-lg-none">Scores:&nbsp;</small>
             <validator-scores class="d-inline-block" :score="validator" :account="validator['account']"></validator-scores>
 
-            <div class="d-sm-inline-block small mt-2 mt-sm-0">
-              <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-              <span class="me-2">
+            <div class="mt-2 mt-lg-0 small">
+              <div class="d-lg-inline-block">
+                <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+                <span class="me-2">
                 {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
               </span>
-            </div>
-            <div class="d-sm-inline-block small">
-              <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
-              <span class="d-none d-lg-inline-block">V:&nbsp;</span>
-              {{ validator['software_version'] }}
+              </div>
+              <div class="d-lg-inline-block">
+                <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+                <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+                {{ validator['software_version'] }}
+              </div>
             </div>
           </div>
         </div>
