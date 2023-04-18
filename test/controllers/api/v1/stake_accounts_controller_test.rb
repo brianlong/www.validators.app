@@ -131,7 +131,12 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
     json_response = response_to_json(@response.body)
 
-    response_stake_account = json_response["stake_accounts"][0]["Account"][0]
+    sorted_stake_accounts =
+      json_response["stake_accounts"].first["Account"].sort_by do |account|
+        account['active_stake']
+      end
+
+    response_stake_account = sorted_stake_accounts.first
 
     assert_equal 1, json_response["stake_accounts"].size
     assert_equal 16,response_stake_account.keys.size
@@ -140,7 +145,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "TestName", response_stake_account["pool_name"]
     assert_equal "Validator", response_stake_account["validator_name"]
     assert_equal "Account", response_stake_account["validator_account"]
-    assert_equal 5_000_000_000_000, response_stake_account["active_stake"]
+    assert_equal 3_000_000_000_000, response_stake_account["active_stake"]
     assert_equal "delegated_vote_account_address", \
       response_stake_account["delegated_vote_account_address"]
     assert_equal 100_000_000_000, \
