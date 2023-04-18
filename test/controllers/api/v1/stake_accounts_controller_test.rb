@@ -133,7 +133,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
     sorted_stake_accounts =
       json_response["stake_accounts"].first["Account"].sort_by do |account|
-        account['active_stake']
+        account["active_stake"]
       end
 
     response_stake_account = sorted_stake_accounts.first
