@@ -1,5 +1,4 @@
 <div class="btn-group btn-group-xs btn-group-toggle">
-  <%= create_filter_by_link(view: view, params_list: params, current_filters: @filter_by, filter_by: "inactive") %>
   <%= create_filter_by_link(view: view, params_list: params, current_filters: @filter_by, filter_by: "active") %>
   <%= create_filter_by_link(view: view, params_list: params, current_filters: @filter_by, filter_by: "delinquent") %>
   <% if params[:network] == "mainnet" %>
