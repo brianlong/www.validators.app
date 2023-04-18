@@ -11,108 +11,23 @@ export default {
 
   data() {
     return {
-      default_score_class: "fas fa-circle me-1 score-"
+      default_score_class: "fas fa-circle me-1 score-",
+      chart: null
     }
   },
 
   mounted() {
-    var ctx = document.getElementById("root-distance-history").getContext('2d');
-
-    var chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: this.labels(),
-        datasets: [
-          {
-            label: ' Block Diff ',
-            fill: true,
-            borderColor: chart_variables.chart_purple_2,
-            backgroundColor: chart_variables.chart_purple_2_t,
-            borderWidth: 1,
-            radius: 0,
-            data: this.root_blocks,
-            tension: 0
-          }
-        ]
-      },
-      options: {
-        scales: {
-          x: {
-            display: true,
-            ticks: {
-              display: true,
-              minRotation: 0,
-              maxRotation: 0,
-              autoSkip: true,
-              autoSkipPadding: 30
-            },
-            grid: { display: false },
-            title: {
-              display: true,
-              text: "Previous " + this.root_blocks.length + " Observations",
-              color: chart_variables.chart_darkgrey
-            }
-          },
-          y: {
-            display: true,
-            min: 0,
-            ticks: {
-              padding: 5
-            },
-            grid: {
-              display: true,
-              color: chart_variables.chart_grid_color
-            },
-            title: {
-              display: true,
-              text: "Dist Behind Leader",
-              color: chart_variables.chart_darkgrey
-            }
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        plugins: {
-          tooltip: {
-            enabled: true,
-            displayColors: false,
-            padding: 8,
-            callbacks: {
-              label: function(tooltipItem) {
-                return "Distance: " + tooltipItem.raw.y;
-              },
-              title: function(tooltipItem) {
-                return tooltipItem[0].label + " UTC";
-              },
-            }
-          },
-          legend: {
-            labels: {
-              boxWidth: chart_variables.chart_legend_box_size,
-              boxHeight: chart_variables.chart_legend_box_size,
-              usePointStyle: true,
-              padding: 10,
-              color: chart_variables.chart_darkgrey,
-              font: {
-                size: chart_variables.chart_legend_font_size
-              }
-            },
-          },
-        }
-      },
-      plugins: [{
-        beforeInit(chart) {
-          const originalFit = chart.legend.fit;
-          chart.legend.fit = function fit() {
-            originalFit.bind(chart.legend)();
-            this.height += 12;
-          }
-        }
-      }]
-    });
+    this.update_chart()
   },
+
+  watch: {
+    'root_blocks': {
+      handler: function() {
+        this.update_chart()
+      }
+    }
+  },
+
   methods: {
     labels() {
       let labels = []
@@ -120,6 +35,109 @@ export default {
         labels.push(val['x'])
       })
       return labels
+    },
+
+    update_chart() {
+      var ctx = document.getElementById("root-distance-history").getContext('2d');
+
+      if(this.chart) {
+        this.chart.destroy()
+      }
+
+      this.chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: this.labels(),
+          datasets: [
+            {
+              label: ' Block Diff ',
+              fill: true,
+              borderColor: chart_variables.chart_purple_2,
+              backgroundColor: chart_variables.chart_purple_2_t,
+              borderWidth: 1,
+              radius: 0,
+              data: this.root_blocks,
+              tension: 0
+            }
+          ]
+        },
+        options: {
+          scales: {
+            x: {
+              display: true,
+              ticks: {
+                display: true,
+                minRotation: 0,
+                maxRotation: 0,
+                autoSkip: true,
+                autoSkipPadding: 30
+              },
+              grid: { display: false },
+              title: {
+                display: true,
+                text: "Previous " + this.root_blocks.length + " Observations",
+                color: chart_variables.chart_darkgrey
+              }
+            },
+            y: {
+              display: true,
+              min: 0,
+              ticks: {
+                padding: 5
+              },
+              grid: {
+                display: true,
+                color: chart_variables.chart_grid_color
+              },
+              title: {
+                display: true,
+                text: "Dist Behind Leader",
+                color: chart_variables.chart_darkgrey
+              }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index',
+          },
+          plugins: {
+            tooltip: {
+              enabled: true,
+              displayColors: false,
+              padding: 8,
+              callbacks: {
+                label: function(tooltipItem) {
+                  return "Distance: " + tooltipItem.raw.y;
+                },
+                title: function(tooltipItem) {
+                  return tooltipItem[0].label + " UTC";
+                },
+              }
+            },
+            legend: {
+              labels: {
+                boxWidth: chart_variables.chart_legend_box_size,
+                boxHeight: chart_variables.chart_legend_box_size,
+                usePointStyle: true,
+                padding: 10,
+                color: chart_variables.chart_darkgrey,
+                font: {
+                  size: chart_variables.chart_legend_font_size
+                }
+              },
+            },
+          }
+        },
+        plugins: [{
+          beforeInit(chart) {
+            const originalFit = chart.legend.fit;
+            chart.legend.fit = function fit() {
+              originalFit.bind(chart.legend)();
+              this.height += 12;
+            }
+          }
+        }]
+      });
     }
   },
   template: `
