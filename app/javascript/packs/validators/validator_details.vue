@@ -198,7 +198,7 @@
         </a>
       </div>
       <div class="toggle-container pt-1">
-        <a :href="refresh_href"><i class="fa-solid toggle" :class="refresh ? 'fa-toggle-on' : 'fa-toggle-off'"></i></a>
+        <a href="#" @click.prevent="live = !live"><i class="fa-solid toggle" :class="live ? 'fa-toggle-on' : 'fa-toggle-off'"></i></a>
         <p class="small text-muted toggle-label">REFRESH</p>
       </div>
     </div>
@@ -272,36 +272,24 @@
         block_histories: [],
         block_history_stats: [],
         skipped_slots: {},
-        refresh: null,
+        live: false,
         order: null,
         page: null,
         validator_history: {},
         loading_image: loadingImage,
         is_loading_validator: true,
         validator_score_details_attrs: {},
-        refresh: null
+        reload_time: 1000 * 60 * 3 // 3 minutes
       }
     },
 
     created() {
-      let ctx = this
-      axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
-        ctx.validator = JSON.parse(response.data.validator)
-        ctx.validator_score_details_attrs = JSON.parse(response.data.validator_score_details)
-        ctx.score = JSON.parse(response.data.score)
-        ctx.root_blocks = response.data.root_blocks
-        ctx.vote_blocks = response.data.vote_blocks
-        ctx.block_histories = response.data.block_histories
-        ctx.block_history_stats = response.data.block_history_stats
-        ctx.skipped_slots = JSON.parse(response.data.skipped_slots)
-        ctx.validator_history = response.data.validator_history
-        ctx.is_loading_validator = false
-      })
-      let uri = window.location.search.substring(1);
-      let params = new URLSearchParams(uri);
-      this.refresh = params.get("refresh") == 'true'
+      this.get_validator_data()
+      let uri = window.location.search.substring(1)
+      let params = new URLSearchParams(uri)
       this.order = params.get("order")
       this.page = params.get("page")
+      this.reload_validator_data()
     },
 
     mounted: function() {},
@@ -314,17 +302,37 @@
       go_back_link() {
         return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
       },
-
-      refresh_href() {
-        return '/validators/' + this.validator.account +'?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page + '&refresh=' + !this.refresh
-      },
-
       ...mapGetters([
         'network'
       ])
     },
 
     methods: {
+      get_validator_data(){
+        let ctx = this
+        axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
+          ctx.validator = JSON.parse(response.data.validator)
+          ctx.validator_score_details_attrs = JSON.parse(response.data.validator_score_details)
+          ctx.score = JSON.parse(response.data.score)
+          ctx.root_blocks = response.data.root_blocks
+          ctx.vote_blocks = response.data.vote_blocks
+          ctx.block_histories = response.data.block_histories
+          ctx.block_history_stats = response.data.block_history_stats
+          ctx.skipped_slots = JSON.parse(response.data.skipped_slots)
+          ctx.validator_history = response.data.validator_history
+          ctx.is_loading_validator = false
+        })
+      },
+
+      reload_validator_data(){
+        setTimeout( () => {
+          if(this.live){
+            this.get_validator_data()
+          }
+          this.reload_validator_data()
+        }, this.reload_time)
+      },
+      
       lamports_to_sol(lamports) {
         return lamports * 0.000000001;
       },
