@@ -56,7 +56,9 @@ module Stats
     end
 
     def vote_distance_all_history
-      @vote_distance_all_history ||= relation&.joins(:validator)&.pluck(:vote_distance_history, :account)
+      @vote_distance_all_history ||= relation&.joins(:validator)
+                                             &.where("validators.is_active = ? AND validator_score_v1s.delinquent = ?", true, false)
+                                             &.pluck(:vote_distance_history, :account)
     end
 
     def vote_distance_all_averages
