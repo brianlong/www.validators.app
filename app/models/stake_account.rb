@@ -29,6 +29,7 @@
 #
 # Indexes
 #
+#  index_stake_accounts_on_active_stake              (active_stake)
 #  index_stake_accounts_on_stake_pool_id             (stake_pool_id)
 #  index_stake_accounts_on_stake_pubkey_and_network  (stake_pubkey,network)
 #  index_stake_accounts_on_staker_and_network        (staker,network)
