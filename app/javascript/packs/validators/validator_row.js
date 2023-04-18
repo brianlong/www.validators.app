@@ -120,6 +120,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       let row = document.getElementById("row-"+i);
 
       if(!target_tag.classList.contains("d-none")) {
+        // Hide the chart if selected chart is already shown
         target_tag.classList.add("d-none");
         event.target.classList.remove("active");
       } else {
