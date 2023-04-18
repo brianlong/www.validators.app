@@ -115,23 +115,26 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     display_chart(target, event) {
-      var i = this.idx;
-      var target = target+'-'+i;
-      var row = document.getElementById('row-'+i);
+      let i = this.idx;
+      let target_tag = document.getElementById(target+"-"+i);
+      let row = document.getElementById("row-"+i);
 
-      // Show selected chart, hide the rest
-      var charts = row.getElementsByClassName("column-chart");
-      Array.prototype.forEach.call(charts, chart => {
-          chart.classList.add('d-none');
-      })
-      document.getElementById(target).classList.remove('d-none');
+      if(!target_tag.classList.contains("d-none")) {
+        target_tag.classList.add("d-none");
+        event.target.classList.remove("active");
+      } else {
+        // Otherwise show the selected chart and hide the rest
+        row.querySelectorAll(".column-chart").forEach(chart => {
+          chart.classList.add("d-none");
+        })
+        target_tag.classList.remove("d-none");
 
-      // Set active link
-      var ls = row.getElementsByClassName("chart-link");
-      Array.prototype.forEach.call(ls, l => {
-          l.classList.remove('active')
-      });
-      event.target.classList.add('active');
+        // Set active link
+        row.querySelectorAll(".chart-link").forEach(l => {
+          l.classList.remove("active")
+        });
+        event.target.classList.add("active");
+      }
     },
 
     // Set max_value position for root & vote distance charts
