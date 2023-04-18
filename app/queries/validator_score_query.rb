@@ -15,8 +15,7 @@ class ValidatorScoreQuery < ApplicationQuery
                                   .map(&:validator)
                                   .compact
 
-    validator_ids = @validators.map{ |v| v.id if v.is_active && !v.delinquent}
-    @relation = ValidatorScoreV1.where(validator_id: validator_ids)
+    @relation = ValidatorScoreV1.where(validator_id: @validators.map(&:id))
   end
 
   def for_batch

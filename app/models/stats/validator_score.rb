@@ -22,6 +22,7 @@ module Stats
 
     def root_distance_all_history
       @root_distance_all_history ||= relation.joins(:validator)
+                                             .where("validators.is_active = ? AND validator_score_v1s.delinquent = ?", true, false)
                                              .pluck(:root_distance_history, :account)
     end
 
