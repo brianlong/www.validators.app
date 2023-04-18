@@ -99,6 +99,6 @@ class DataCenters::CheckIpInfoService
   end
 
   def unified_country(country)
-    ["great britain", "england"].include?(country.downcase) ? "United Kingdom" : country
+    ["great britain", "england"].include?(country&.downcase) ? "United Kingdom" : country
   end
 end
