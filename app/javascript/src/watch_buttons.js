@@ -1,32 +1,38 @@
-document.addEventListener('turbolinks:load', () => {
-  $(".watch-button").on('click', function() {
-    var btn = this
+import axios from 'axios';
 
-    if( !($(btn).attr("disabled") == 'disabled') ) {
-      $(btn).attr('disabled', true);
+document.addEventListener("turbolinks:load", function() {
+  document.querySelectorAll(".watch-button").forEach(element => {
+    element.addEventListener("click", function() {
+      let btn = this;
 
-      $.get("/current-user", function(resp) {
-        $.ajax({
-          url: "/api/v1/update-watchlist/" + $(btn).data()['network'],
-          type: "post",
-          data: {
-            account: $(btn).data()['account']
-          },
-          headers: {
-            Token: resp["api_token"]
-          },
-          dataType: 'json'
-        }).done(function (data) {
-          $(btn).attr('disabled', false);
-          $(btn).toggleClass("fa-solid fa-regular")
+      if (!btn.disabled) {
+        btn.disabled = true; // prevents from double clicks on the button
 
-          if(data["status"] == "created") {
-            $(btn).prop("title", "Remove from favourites")
-          } else {
-            $(btn).prop("title", "Add to favourites")
-          }
+        axios.get("/current-user").then(function (response) {
+          let api_token = response.data.api_token;
+          let url = "/api/v1/update-watchlist/" + btn.dataset.network;
+          let validator_data = { account: btn.dataset.account };
+
+          axios.post(url, validator_data, {
+            headers: {
+              "Token": api_token,
+              "Content-Type": "application/json"
+            }
+          }).then(function (response) {
+            if (response.status === 200) {
+              btn.classList.toggle("fa-solid");
+              btn.classList.toggle("fa-regular");
+              btn.title = "Add to favourites";
+              btn.disabled = false;
+            } else if(response.status === 201) {
+              btn.classList.toggle("fa-solid");
+              btn.classList.toggle("fa-regular");
+              btn.title = "Remove from favourites";
+              btn.disabled = false;
+            }
+          });
         })
-      })
-    }
+      }
+    })
   })
-})
+});
