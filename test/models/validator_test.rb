@@ -28,8 +28,6 @@ class ValidatorTest < ActiveSupport::TestCase
 
     @score = create(:validator_score_v1, validator: @validator)
 
-    @v_inactive = create(:validator, :with_score, is_active: false)
-
     @v_delinquent = create(:validator, account: "v_delinquent")
     create(:validator_score_v1, validator: @v_delinquent, delinquent: true)
 
@@ -183,11 +181,11 @@ class ValidatorTest < ActiveSupport::TestCase
     assert result.last.delinquent?
   end
 
-  test "#filtered_by inactive excludes correct validators from collection" do
-    result = Validator.filtered_by(["inactive"])
+  test "#filtered_by active excludes correct validators from collection" do
+    result = Validator.filtered_by(["active"])
 
-    assert_equal 1, result.count
-    refute result.last.is_active
+    assert_equal 4, result.count
+    assert result.last.is_active
   end
 
   test "#filtered_by private excludes correct validators from collection" do
@@ -198,10 +196,10 @@ class ValidatorTest < ActiveSupport::TestCase
   end
 
   test "#filtered_by multiple parameters excludes correct validators from collection" do
-    result = Validator.filtered_by(["delinquent", "inactive"])
+    result = Validator.filtered_by(["delinquent", "private"])
 
     assert_equal 2, result.count
-    assert result.include?(@v_inactive)
+    assert result.include?(@v_private)
     assert result.include?(@v_delinquent)
   end
 
