@@ -73,6 +73,6 @@ class ValidatorsHelperTest < ActiveSupport::TestCase
 
   test "#displayed_validator_commission doesn't display commission for private validator" do
     validator = create(:validator, :private)
-    assert_nil displayed_validator_commission(validator), "commission is not displayed if validator is private"
+    assert_nil displayed_validator_commission(validator)
   end
 end
