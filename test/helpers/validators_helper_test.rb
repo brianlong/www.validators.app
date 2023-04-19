@@ -62,10 +62,17 @@ class ValidatorsHelperTest < ActiveSupport::TestCase
   end
 
   test "#displayed_validator_name hides name if validator is private" do
-    validator = create(:validator, :private, name: "Block Logic")
-    assert_equal "Private Validator", displayed_validator_name(validator), "private validator's name should be hidden"
+    validator = create(:validator, :private)
+    assert_equal "Private Validator", displayed_validator_name(validator)
+  end
 
-    validator = create(:validator, :private, name: "Lido / Block Logic")
-    assert_equal "Lido / Block Logic", displayed_validator_name(validator), "lido's name should not be hidden"
+  test "#displayed_validator_commission displays commission tag" do
+    validator = create(:validator, :with_score)
+    assert_includes displayed_validator_commission(validator), "10%"
+  end
+
+  test "#displayed_validator_commission doesn't display commission for private validator" do
+    validator = create(:validator, :private)
+    assert_nil displayed_validator_commission(validator), "commission is not displayed if validator is private"
   end
 end
