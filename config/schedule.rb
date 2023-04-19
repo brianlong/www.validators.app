@@ -50,7 +50,7 @@ every 1.hour, at: 5, roles: [:background] do
   ruby_script 'validators_get_avatar_url.rb'
 end
 
-every 1.hour, at: 10, roles: [:background] do
+every 2.hour, at: 10, roles: [:background] do
   ruby_script 'gather_stake_accounts.rb'
 end
 
