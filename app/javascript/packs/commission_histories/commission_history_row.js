@@ -1,4 +1,5 @@
 import Vue from 'vue/dist/vue.esm'
+import '../mixins/date_mixins'
 
 var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
   props: {
@@ -65,7 +66,7 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
         <i class="fa-solid fa-up-long text-danger" v-if="!descending"></i>
       </td>
       <td class="small">
-        {{ comm_history.created_at }}
+        {{ date_time_with_timezone(comm_history.created_at) }}
       </td>
     </tr>
   `
