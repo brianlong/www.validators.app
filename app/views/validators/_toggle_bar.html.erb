@@ -50,7 +50,7 @@
                           refresh: params[:refresh],
                           jito: params[:jito],
                           watchlist: params[:watchlist] ? nil : true) do %>
-        <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning lead ms-2 ms-md-0 d-lg-none"
+        <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning lead ms-2 ms-xl-0 d-xl-none"
            data-bs-toggle="tooltip"
            data-bs-placement="top"
            title="<%= params[:watchlist] ? 'Show all' : 'Show favourites' %>">
