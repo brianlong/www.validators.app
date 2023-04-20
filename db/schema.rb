@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_15_083630) do
+ActiveRecord::Schema.define(version: 2023_04_19_115610) do
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
     t.string "authorized_withdrawer_after"
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 2023_03_15_083630) do
     t.integer "nodes_count"
     t.string "software_version"
     t.float "roi"
+    t.float "epoch_duration"
     t.index ["network"], name: "index_cluster_stat_on_network"
   end
 
