@@ -14,6 +14,7 @@ class ValidatorScoreQuery < ApplicationQuery
     @validators = ValidatorHistory.for_batch(network, batch_uuid)
                                   .map(&:validator)
                                   .compact
+
     @relation = ValidatorScoreV1.where(validator_id: @validators.map(&:id))
   end
 

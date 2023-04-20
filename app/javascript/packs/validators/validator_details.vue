@@ -2,7 +2,7 @@
   <div>
     <section class="page-header">
       <div class='page-header-name'>
-        <div class="img-circle-private img-circle-medium" v-if="is_private(validator)">
+        <div class="img-circle-medium-private" v-if="is_private(validator)">
           <span class='fas fa-users-slash' title="Private Validator"></span>
         </div>
         <img :src="validator.avatar_url" class="img-circle-medium" v-else-if="validator.avatar_url" >
