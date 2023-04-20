@@ -16,7 +16,9 @@ def update_epoch_duration(network)
   epochs = EpochWallClock.where(network: network).last(LAST_EPOCH_SIZE)
   epoch_duration = (epochs.last.created_at - epochs.first.created_at) / LAST_EPOCH_SIZE
 
-  stats.update(epoch_duration: epoch_duration)
+  unless stats.update(epoch_duration: epoch_duration)
+    Appsignal.send_error(stats.errors.full_messages)
+  end
 end
 
 NETWORKS.each do |network|
