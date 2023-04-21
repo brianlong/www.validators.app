@@ -218,13 +218,13 @@
 <p>The Epochs endpoint will return all epoch data. Replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired. </p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/epochs/:network'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/epochs/:network.json'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 50.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/epochs/:network?per=50'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/epochs/:network.json?per=50'</pre>
 <p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/epochs/:network?per=50&page=1'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/epochs/:network.json?per=50&page=1'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
@@ -252,28 +252,28 @@
 </p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network.json'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p>
   <strong class="text-muted">`date_from=%year-%month-%dayT%hour:%minute:%second`</strong> beginning of a search period,
   defaults to 30 days ago.
 </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network?date_from=2021-07-01T11:02:12'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network.json?date_from=2021-07-01T11:02:12'</pre>
 <p>
   <strong class="text-muted">`date_to=%year-%month-%dayT%hour:%minute:%second`</strong> end of a search period,
   defaults to now.
 </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network?date_to=2021-07-28T11:02:12'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network.json?date_to=2021-07-28T11:02:12'</pre>
 <p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 25.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network?per=50'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network.json?per=50'</pre>
 <p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network?page=2'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network.json?page=2'</pre>
 <p>
   <strong class="text-muted">`query=%account-or-key`</strong> returns data only for validators matching by name,
   pubkey or vote account.
 </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network?query=12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/commission-changes/:network.json?query=12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
@@ -303,7 +303,7 @@
 </p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-pools/:network'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-pools/:network.json'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
@@ -343,22 +343,22 @@
 </p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network.json'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p>
   <strong class="text-muted">`filter_[account|staker|withdrawer|validator]=`</strong> filters by chosen value.
 </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network?filter_account=7hTEVqbQmt3UPQQKcavaxzzakt1FWbwVXyE8MZGadhW6'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network.json?filter_account=7hTEVqbQmt3UPQQKcavaxzzakt1FWbwVXyE8MZGadhW6'</pre>
 <p>
   <strong class="text-muted">`sort_by=[epoch_|withdrawer_|staker_|stake_]`</strong> will sort the results by epoch,
   withdrawer, staker or stake. NOTE: after underscore add `asc` or `desc`, example below.
 </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network?sort_by=epoch_desc'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network.json?sort_by=epoch_desc'</pre>
 <p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 25.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network?per=50'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network.json?per=50'</pre>
 <p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network?page=1'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-accounts/:network.json?page=1'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
@@ -395,7 +395,7 @@
 <p>The Ping Thing Post endpoint allows you to push information about transaction times.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}' <%= @api_path %>/ping-thing/:network</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}' <%= @api_path %>/ping-thing/:network.json</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
@@ -423,7 +423,7 @@
 <p>The Ping Thing Batch endpoint allows you to push multiple transaction informations at once.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}, { ... }, ...]}' <%= @api_path %>/ping-thing-batch/:network</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}, { ... }, ...]}' <%= @api_path %>/ping-thing-batch/:network.json</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
@@ -454,19 +454,19 @@
 </p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-thing/:network'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-thing/:network.json'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p>
   <strong class="text-muted">`limit=NN`</strong>
   will limit the results to NN entries, defaults to 240.
 </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-thing/:network?limit=10'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-thing/:network.json?limit=10'</pre>
 <p>
   <strong class="text-muted">`page=NN`</strong>
   will return the results from passed page, defaults to 1. Can be combined with limit param.
 </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-thing/:network?page=1'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-thing/:network.json?page=1'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
@@ -498,7 +498,7 @@
 </p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-thing-stats/:network?interval=1'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-thing-stats/:network.json?interval=1'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p>
@@ -529,13 +529,13 @@
 <p>The Sol Prices endpoint will return prices.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/sol-prices'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/sol-prices.json'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`from=%year-%month-%dayT%hour:%minute:%second`</strong> will return results starting from a given time, defaults to 30 days ago. </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/sol-prices?from=2022-01-01T00:00:00'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/sol-prices.json?from=2022-01-01T00:00:00'</pre>
 <p><strong class="text-muted">`to=%year-%month-%dayT%hour:%minute:%second`</strong> will return results until a given time, defaults to today. </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/sol-prices?to=2022-01-01T00:00:00'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/sol-prices.json?to=2022-01-01T00:00:00'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
@@ -561,15 +561,15 @@
 <p>Gossip Nodes endpoint will return all nodes visible in Gossip, including RPC nodes, with basic information & geo coordinates for mapping.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/gossip-nodes/:network'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/gossip-nodes/:network.json'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`staked=(true | false)`</strong> will limit the results only to staked / unstaked nodes. Omit this parameter for all nodes.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/gossip-nodes/:network?staked=true'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/gossip-nodes/:network.json?staked=true'</pre>
 <p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 100.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/gossip-nodes/:network?per=50'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/gossip-nodes/:network.json?per=50'</pre>
 <p><strong class="text-muted">`page=NN`</strong> will return the results from provided page, defaults to 1.</p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/gossip-nodes/:network?per=50&page=1'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/gossip-nodes/:network.json?per=50&page=1'</pre>
 
 <h3 class="h6">Response:</h3>
 <pre>
