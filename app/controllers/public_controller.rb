@@ -12,6 +12,14 @@ class PublicController < ApplicationController
     @low_limit = Rack::Attack::API_LOW_LIMIT
     @high_limit = Rack::Attack::API_HIGH_LIMIT
     @reset_period = Rack::Attack::LIMIT_RESET_PERIOD.seconds.in_minutes.round
+    @api_path = case Rails.env
+                when "stage", "staging"
+                  "https://stage.validators.app/api/v1"
+                when "production"
+                  "https://validators.app/api/v1"
+                else
+                  "http://localhost:#{request.port}/api/v1"
+                end
   end
 
   def cookie_policy
