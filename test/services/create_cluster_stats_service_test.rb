@@ -37,8 +37,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
       starting_slot: 1,
       ending_slot: 2,
       total_rewards: 100,
-      total_active_stake: 1000,
-      created_at: 4.days.ago
+      total_active_stake: 1000
     )
 
     create(
@@ -48,8 +47,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
       starting_slot: 3,
       ending_slot: 4,
       total_rewards: 100,
-      total_active_stake: 1000,
-      created_at: 2.days.ago
+      total_active_stake: 1000
     )
 
     create(
@@ -62,6 +60,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
       total_active_stake: 1000
     )
     create(:gossip_node, network: @network, staked: true)
+    create(:cluster_stat, network: @network, epoch_duration: 195674.0)
     
     CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
     stat = ClusterStat.where(network: @network).last
@@ -69,7 +68,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
     assert_equal @software_version, stat.software_version
     assert_equal 5, stat.validator_count
     assert_equal 5, stat.nodes_count
-    assert_equal 1826.21, stat.roi
+    assert_equal 1612.73, stat.roi
   end
 
   test "#call updates ClusterStat with correct total_active_stake" do

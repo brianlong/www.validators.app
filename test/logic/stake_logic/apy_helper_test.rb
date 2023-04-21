@@ -9,9 +9,11 @@ class ApyHelperTest < ActiveSupport::TestCase
   end
 
   test "number_of_epochs returns correct number" do
-    num_of_epochs = number_of_epochs(1.day.ago, 2.days.ago)
+    create(:cluster_stat, network: @network, epoch_duration: 159521.0)
 
-    assert_equal 365, num_of_epochs.to_i
+    num_of_epochs = number_of_epochs(@network)
+
+    assert_equal 197, num_of_epochs.to_i
   end
 
   test "set_epochs returns last two epochs" do
