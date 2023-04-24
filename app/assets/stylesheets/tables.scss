@@ -226,6 +226,8 @@ table, .table {
           text-align: center;
           padding-right: 28px;
           @media(max-width: $screen-lg-max) {
+            width: 25px;
+            padding-right: 0;
             text-align: left;
             position: absolute;
             top: 0;
