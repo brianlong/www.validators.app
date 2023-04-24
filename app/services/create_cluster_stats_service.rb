@@ -38,6 +38,11 @@ class CreateClusterStatsService
     @network_stat ||= ClusterStat.find_or_create_by(network: @network)
   end
 
+  def epoch_duration
+    network_stat.epoch_duration ||
+      ClusterStats::UpdateEpochDurationService.new(@network).call.epoch_duration
+  end
+
   def epochs_annual_roi
     if last_epochs.count > 0
       epoch_average_roi =
@@ -49,7 +54,7 @@ class CreateClusterStatsService
       return 0 unless epoch_average_roi > 0
 
       epochs_annual_roi =
-        (1.year.to_i / network_stat.epoch_duration) * epoch_average_roi
+        (1.year.to_i / epoch_duration) * epoch_average_roi
     end
     epochs_annual_roi ||= 0
   end

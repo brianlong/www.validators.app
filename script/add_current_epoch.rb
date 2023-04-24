@@ -2,23 +2,11 @@
 
 require File.expand_path('../config/environment', __dir__)
 
-LAST_EPOCH_SIZE = 5
-
 def solana_rpc_client(network)
   @solana_rpc_client ||= SolanaRpcClient.new
   network = 'testnet' if Rails.env.test?
 
   @solana_rpc_client.network_client(network)
-end
-
-def update_epoch_duration(network)
-  stats = ClusterStat.by_network(network).last
-  epochs = EpochWallClock.where(network: network).last(LAST_EPOCH_SIZE)
-  epoch_duration = (epochs.last.created_at - epochs.first.created_at) / LAST_EPOCH_SIZE
-
-  unless stats.update(epoch_duration: epoch_duration)
-    Appsignal.send_error(stats.errors.full_messages)
-  end
 end
 
 NETWORKS.each do |network|
@@ -72,7 +60,7 @@ NETWORKS.each do |network|
 
   Rails.logger.warn "created new epoch #{created_epoch.epoch}"
 
-  update_epoch_duration(network)
+  ClusterStats::UpdateEpochDurationService.new(network).call
 
   confirmed_end_block = nil
   block_search_count.times do |b_diff|
