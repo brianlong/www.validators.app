@@ -115,23 +115,27 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     display_chart(target, event) {
-      var i = this.idx;
-      var target = target+'-'+i;
-      var row = document.getElementById('row-'+i);
+      let i = this.idx;
+      let target_tag = document.getElementById(target+"-"+i);
+      let row = document.getElementById("row-"+i);
 
-      // Show selected chart, hide the rest
-      var charts = row.getElementsByClassName("column-chart");
-      Array.prototype.forEach.call(charts, chart => {
-          chart.classList.add('d-none');
-      })
-      document.getElementById(target).classList.remove('d-none');
+      if(!target_tag.classList.contains("d-none")) {
+        // Hide the chart if selected chart is already shown
+        target_tag.classList.add("d-none");
+        event.target.classList.remove("active");
+      } else {
+        // Otherwise show the selected chart and hide the rest
+        row.querySelectorAll(".column-chart").forEach(chart => {
+          chart.classList.add("d-none");
+        })
+        target_tag.classList.remove("d-none");
 
-      // Set active link
-      var ls = row.getElementsByClassName("chart-link");
-      Array.prototype.forEach.call(ls, l => {
-          l.classList.remove('active')
-      });
-      event.target.classList.add('active');
+        // Set active link
+        row.querySelectorAll(".chart-link").forEach(l => {
+          l.classList.remove("active")
+        });
+        event.target.classList.add("active");
+      }
     },
 
     // Set max_value position for root & vote distance charts
@@ -165,34 +169,36 @@ var ValidatorRow = Vue.component('validatorRow', {
     <tr :id="row_index()">
       <td class="column-info">
         <div class="column-info-row" data-turbolinks=false>
-          <div class="column-info-avatar no-watchlist">
-            <div class="img-circle-medium-private" v-if="is_validator_private()">
+          <div class="column-info-avatar">
+            <div class="img-circle-large-private" v-if="is_validator_private()">
               <span class="fa-solid fa-users-slash" title="Private Validator"></span>
             </div>
-            <img :src="create_avatar_link()" class='img-circle-medium' v-if="!is_validator_private()"/>
+            <img :src="create_avatar_link()" class='img-circle-large' v-if="!is_validator_private()"/>
           </div>
           
           <div class="column-info-name">
-            <a :href="validator_url()" class="fw-bold">
+            <a :href="validator_url()" class="column-info-link no-watchlist fw-bold">
               {{ displayed_validator_name() }}
+              <small class="text-muted text-nowrap fw-normal" v-if="!is_validator_private()">
+                (<span class="d-inline-block d-lg-none">Comm.:&nbsp;</span>{{ validator["commission"] }}%)
+              </small>
             </a>
-            <small class="ms-1 text-muted">
-              (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span>{{ validator["commission"] }}%)
-            </small>
             <br />
-            <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
-            <validator-scores :score="validator" :account="validator['account']"></validator-scores>
+            <small class="d-inline-block d-lg-none">Scores:&nbsp;</small>
+            <validator-scores class="d-inline-block" :score="validator" :account="validator['account']"></validator-scores>
 
-            <div class="d-sm-inline-block small mt-2 mt-sm-0">
-              <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-              <span class="me-3">
+            <div class="mt-2 mt-lg-0 small">
+              <div class="d-lg-inline-block">
+                <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+                <span class="me-2">
                 {{ lamports_to_sol(validator['active_stake']).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}&nbsp;SOL
               </span>
-            </div>
-            <div class="d-sm-inline-block small">
-              <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
-              <span class="d-none d-lg-inline-block">V:&nbsp;</span>
-              {{ validator['software_version'] }}
+              </div>
+              <div class="d-lg-inline-block">
+                <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+                <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+                {{ validator['software_version'] }}
+              </div>
             </div>
           </div>
         </div>
@@ -212,7 +218,7 @@ var ValidatorRow = Vue.component('validatorRow', {
 
       <!-- Charts menu -->
       <td class="d-lg-none pt-0">
-        <div class="row mb-3">
+        <div class="row small mb-3">
           <div class="col pe-0">
             <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('root-distance', $event)" href="">
               Root <br class="d-xxs-inline-block" />Distance
