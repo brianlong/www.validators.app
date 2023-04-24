@@ -3,12 +3,6 @@
 require 'test_helper'
 
 class AddCurrentEpochScriptTest < ActiveSupport::TestCase
-  setup do
-    create(:cluster_stat, network: "mainnet")
-    create(:cluster_stat, network: "testnet")
-    create(:cluster_stat, network: "pythnet")
-  end
-
   test 'script when no current epoch should add epoch to db' do
     EpochWallClock.delete_all
 
