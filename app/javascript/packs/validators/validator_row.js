@@ -63,7 +63,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     displayed_validator_name() {
-      if this.is_validator_private() {
+      if(this.is_validator_private()) {
         return "Private Validator"
       } else {
         if (this.validator["name"]) {
