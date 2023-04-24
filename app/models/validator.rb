@@ -300,10 +300,6 @@ class Validator < ApplicationRecord
     score&.commission == 100 && network == 'mainnet'
   end
 
-  def lido?
-    name&.start_with?('Lido')
-  end
-
   def api_url
     Rails.application.routes.url_helpers.api_v1_validator_url(
       network: self.network,

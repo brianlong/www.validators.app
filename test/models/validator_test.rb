@@ -127,17 +127,6 @@ class ValidatorTest < ActiveSupport::TestCase
     refute create(:validator_score_v1, commission: 99, validator: @validator).validator.private_validator?
   end
 
-  test "#lido? returns true if name starts with Lido" do
-    @validator.update(network: 'mainnet', name: 'Lido / Everstake')
-    assert @validator.lido?
-
-    @validator.update(name: 'IAmNotLido')
-    refute @validator.lido?
-
-    @validator.update(name: "")
-    refute @validator.lido?
-  end
-
   test "validator attributes are correctly stored in db after using utf_8_encode method" do
     special_chars_sentence = "Staking-P◎◎l FREE Validati◎n"
 
