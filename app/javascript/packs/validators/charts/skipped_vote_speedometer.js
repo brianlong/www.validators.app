@@ -14,6 +14,12 @@ export default {
     }
   },
 
+  data() {
+    return {
+      skipped_vote_percent_val: null
+    }
+  },
+
   methods: {
     set_needle_position(needle_value) {
       let single_range_size = this.batch['skipped_vote_all_median'];
@@ -28,7 +34,8 @@ export default {
   },
 
   mounted: function () {
-    let skipped_vote_percent = this.skipped_vote_percent();
+    this.skipped_vote_percent_val =
+      this.skipped_vote_percent(this.validator, this.batch);
     let speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
     new Chart(speedometer, {
       type: 'doughnut',
@@ -92,19 +99,20 @@ export default {
       }]
     });
   },
+
   template: `
     <td class="column-speedometer">
-      <div v-if="skipped_vote_percent">
+      <div v-if="skipped_vote_percent_val">
         <div class="d-none d-lg-block">
-          <canvas :id="'spark_line_skipped_vote_' + validator['account'] " v-if="skipped_vote_percent()"></canvas>
+          <canvas :id="'spark_line_skipped_vote_' + validator['account']"></canvas>
           <div class="text-center text-muted small mt-2">
-            {{ skipped_vote_percent() ? skipped_vote_percent() + "%" : "N / A" }}
+            {{ skipped_vote_percent_string(skipped_vote_percent_val) }}
           </div>
         </div>
         
         <span class="d-inline-block d-lg-none small">
           Skipped Vote&nbsp;%:&nbsp;
-          {{ skipped_vote_percent() ? skipped_vote_percent() + "%" : "N / A" }}
+          {{ skipped_vote_percent_string(skipped_vote_percent_val) }}
         </span>
       </div>
     </td>

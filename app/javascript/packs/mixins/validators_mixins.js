@@ -11,6 +11,10 @@ Vue.mixin({
       } else {
         return null
       }
+    },
+
+    skipped_vote_percent_string(skipped_vote) {
+      return skipped_vote ? skipped_vote + "%" : "N / A"
     }
   }
 })

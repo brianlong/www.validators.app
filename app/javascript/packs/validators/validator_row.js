@@ -1,6 +1,6 @@
 import Vue from 'vue/dist/vue.esm'
 import '../mixins/stake_pools_mixins'
-import '../mixins/stake_accounts_mixins'
+import '../mixins/numbers_mixins'
 import '../mixins/validators_mixins'
 
 import chart_variables from './charts/chart_variables'

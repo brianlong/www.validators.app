@@ -248,7 +248,7 @@
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
   import loadingImage from 'loading.gif';
-  import '../mixins/stake_accounts_mixins'
+  import '../mixins/numbers_mixins'
   import '../mixins/dates_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
