@@ -1,5 +1,5 @@
 import Vue from 'vue/dist/vue.esm'
-import '../mixins/date_mixins'
+import '../mixins/dates_mixins'
 
 var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
   props: {

@@ -1,4 +1,4 @@
-import '../../mixins/date_mixins'
+import '../../mixins/dates_mixins'
 
 export default {
   props: {

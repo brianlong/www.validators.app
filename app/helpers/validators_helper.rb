@@ -1,10 +1,15 @@
 module ValidatorsHelper
   def displayed_validator_name(validator)
-    if validator.private_validator? && !validator.lido?
-      "Private Validator"
-    else
-      return shorten_key(validator.name) if validator.name == validator.account
-      validator.name || shorten_key(validator.account)
+    return "Private Validator" if validator.private_validator?
+    return shorten_key(validator.name) if validator.name == validator.account
+
+    validator.name || shorten_key(validator.account)
+  end
+
+  def displayed_validator_commission(validator)
+    unless validator.private_validator?
+      commission_tag = "<span class='d-inline-block d-lg-none'>Comm.:&nbsp;</span>"
+      "<small class='text-muted text-nowrap fw-normal'>(#{commission_tag}#{validator.commission}%)</small>".html_safe
     end
   end
 
@@ -40,15 +45,6 @@ module ValidatorsHelper
       position = [position, 80].min
     end
     number_to_percentage(position, precision: 0)
-  end
-
-  def display_avatar(validator)
-    if validator&.avatar_url
-      image_tag validator.avatar_url, class: 'img-circle mb-1'
-    else
-      image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png',
-                class: 'img-circle mb-1'
-    end
   end
 
   def percent_of_total_stake(active_stake, total_stake)
@@ -91,10 +87,10 @@ module ValidatorsHelper
   end
 
   def link_to_validator_website(url)
-    return '' unless url.present?
+    return "" unless url.present?
 
-    if url.start_with?('https', 'http')
-      link_to url, url, target: 'blank'
+    if url.start_with?("https", "http")
+      link_to url, url, target: "blank"
     else
       url
     end
@@ -113,15 +109,15 @@ module ValidatorsHelper
       link_to validator_url(link_params) do
         content_tag :div,
                     content_tag(:span, nil, class: "fa-solid fa-users-slash", title: "Private Validator"),
-                    class: "img-circle-medium-private"
+                    class: "img-circle-large-private"
       end
     elsif validator.avatar_url
       link_to validator_url(link_params) do
-        image_tag validator.avatar_url, class: 'img-circle-medium'
+        image_tag validator.avatar_url, class: "img-circle-large"
       end
     else
       link_to validator_url(link_params) do
-        image_tag 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png', class: 'img-circle-medium'
+        image_tag "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png", class: "img-circle-large"
       end
     end
   end

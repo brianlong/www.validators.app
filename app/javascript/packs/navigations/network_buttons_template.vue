@@ -18,7 +18,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import '../mixins/string_mixins'
+  import '../mixins/strings_mixins'
 
   export default {
     data() {

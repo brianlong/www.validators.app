@@ -36,7 +36,7 @@
              data-bs-placement="top"
              title="<%= t('definitions.scores') %>">
           </i>
-          <br/>
+          <br />
           <% if show_ip_and_gateway %>
             IP & Gateway
           <% else %>
@@ -104,7 +104,7 @@
     <tr id="row-<%= i %>">
       <td class="column-info">
         <div class="column-info-row" data-turbolinks="false">
-          <div class="column-info-avatar <%= 'no-watchlist' unless (current_user && show_watchlist_btn) %>">
+          <div class="column-info-avatar">
             <%= create_avatar_link(validator) %>
             <% if current_user && show_watchlist_btn %>
               <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fa-solid' : 'fa-regular' %> fa-star"
@@ -117,21 +117,14 @@
             <% end %>
           </div>
           <div class="column-info-name">
-            <%= link_to validator_url(network: params[:network], account: validator.account, order: params[:order], page: params[:page], refresh: params[:refresh]),
-                        class: 'fw-bold' do %>
-              <%= displayed_validator_name(validator) %>
+            <%= link_to validator_url(network: params[:network], account: validator.account), class: "column-info-link fw-bold #{'no-watchlist' unless (current_user && show_watchlist_btn)}" do %>
+              <%= displayed_validator_name(validator) %> <%= displayed_validator_commission(validator) %>
             <% end %>
+            <br />
 
-            <% unless validator.private_validator? && !validator.lido? %>
-              <small class="ms-1 text-muted">
-                (<span class="d-inline-block d-lg-none">Commission:&nbsp;</span><%= validator.commission %>%)
-              </small>
-            <% end %>
-            <br/>
-
-            <span class="d-inline-block d-lg-none">Scores:&nbsp;</span>
+            <small class="d-inline-block d-lg-none">Scores:&nbsp;</small>
             <%= render 'validators/scores', validator: validator %>
-            <br/>
+            <br />
 
             <% if show_ip_and_gateway %>
               <div class="small text-muted">
@@ -151,30 +144,32 @@
                 <%= validator.score&.software_version %>
               </div>
             <% else %>
-              <div class="d-sm-inline-block small mt-2 mt-sm-0">
-                <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-                <span class="me-3">
+              <div class="mt-2 mt-lg-0 small">
+                <div class="d-lg-inline-block">
+                  <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+                  <span class="me-2">
                   <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
-                  <span class="text-muted">(<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)</span>
+                    <span class="text-muted">(<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)</span>
                 </span>
-              </div>
-              <div class="d-sm-inline-block small">
-                <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
-                <span class="d-none d-lg-inline-block">V:&nbsp;</span>
-                <%= validator.score&.software_version %>
+                </div>
+                <div class="d-lg-inline-block">
+                  <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
+                  <span class="d-none d-lg-inline-block">V:&nbsp;</span>
+                  <%= validator.score&.software_version %>
+                </div>
               </div>
             <% end %>
 
-            <% if validator.stake_pools_list %>
-              <div class="mt-3 mt-lg-0">
-                <span class="d-inline-block d-lg-none">Pools:&nbsp;</span>
+            <% if validator.stake_pools_list.present? %>
+              <div class="mt-2 mt-lg-0">
+                <small class="d-inline-block d-lg-none">Pools:&nbsp;</small>
                 <%= link_to stake_pools_path(network: params[:network]), target: "_blank" do %>
                   <% stake_pool_logos(validator.stake_pools_list).each do |logo| %>
                     <%= image_tag(
                       logo[:image],
                       class: 'img-xs me-1',
                       title: logo[:name] + " stake pool",
-                      alt: logo[:name]) 
+                      alt: logo[:name])
                     %>
                   <% end %>
                 <% end %>
@@ -218,15 +213,15 @@
         <% else %>
           <span class="d-none d-lg-block text-center text-muted">N/A</span>
         <% end %>
-        <span class="d-inline-block d-lg-none">
+        <small class="d-inline-block d-lg-none">
           Skipped Vote&nbsp;%:
           <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
-        </span>
+        </small>
       </td>
 
       <!-- Charts menu -->
       <td class="d-lg-none pt-0">
-        <div class="row mb-3">
+        <div class="row small mb-3">
           <div class="col pe-0">
             <a class="chart-link" data-iterator="<%=i%>" data-bs-target="root-distance" href="">
               Root <br class="d-xxs-inline-block" />Distance

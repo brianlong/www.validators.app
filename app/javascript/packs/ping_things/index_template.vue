@@ -32,7 +32,7 @@
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
   import statsBar from './stats_bar'
-  import '../mixins/string_mixins'
+  import '../mixins/strings_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 

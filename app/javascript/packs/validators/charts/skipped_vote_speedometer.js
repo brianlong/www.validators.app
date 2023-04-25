@@ -102,7 +102,7 @@ export default {
           </div>
         </div>
         
-        <span class="d-inline-block d-lg-none">
+        <span class="d-inline-block d-lg-none small">
           Skipped Vote&nbsp;%:&nbsp;
           {{ skipped_vote_percent() ? skipped_vote_percent() + "%" : "N / A" }}
         </span>

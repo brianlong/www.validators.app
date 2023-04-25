@@ -104,26 +104,29 @@ body {
     h1 {
       display: inline-block;
       margin-bottom: 0;
-      padding-left: 70px;
+      padding-left: 64px;
       @media(max-width: $screen-sm-max) {
         font-size: 28px;
         padding-left: 50px;
       }
     }
-    img, .img-circle, .img-circle-private {
+    img, .img-circle-medium, .img-circle-medium-private {
       display: inline-block;
       position: absolute;
-      margin-top: 1px;
-      @media(max-width: $screen-md-max) { margin-top: -1px; }
+      margin-top: 2px;
+      @media(max-width: $screen-md-max) {
+       margin-top: -2px;
+      }
       @media(max-width: $screen-sm-max) {
         width: 35px;
         height: 35px;
+        margin-top: -1px;
       }
     }
-    .img-circle-private {
+    .img-circle-medium-private {
       @media(max-width: $screen-sm-max) {
-        padding: 9px 5px;
-        span { font-size: 20px; }
+        padding: 8px 6px;
+        span { font-size: 18px; }
       }
     }
   }

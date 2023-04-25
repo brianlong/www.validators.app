@@ -89,7 +89,7 @@
 </template>
 
 <script>
-  import '../mixins/date_mixins'
+  import '../mixins/dates_mixins'
   import axios from 'axios'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization

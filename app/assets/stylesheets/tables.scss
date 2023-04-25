@@ -107,7 +107,7 @@ table, .table {
   .column {
     &-xxs {
       width: 1%;
-      min-width: 70px;
+      min-width: 86px;
     }
     &-xs {
       width: 10%;
@@ -174,6 +174,9 @@ table, .table {
   width: 100%;
   table-layout: fixed;
   thead {
+    @media(max-width: $screen-lg-max) {
+      .column-info-avatar { display: none; }
+    }
     @media(max-width: $screen-md-max) { display: none; }
   }
   thead, tbody {
@@ -189,7 +192,7 @@ table, .table {
 
     .column {
       &-chart {
-        width: 21%;
+        width: 22%;
         padding-top: 15px;
         padding-bottom: 8px;
         @media(max-width: $screen-lg-max) {
@@ -205,38 +208,46 @@ table, .table {
       }
 
       &-info {
-        width: 24%;
+        width: 27%;
         padding-right: 0;
         @media(max-width: $screen-xl-max) {
-          width: 26%;
+          width: 28%;
         }
         @media(max-width: $screen-lg-max) {
-          width: 220px;
+          width: 215px;
         }
         &-row {
           display: flex;
           align-items: center;
+          position: relative;
         }
         &-avatar {
-          width: 70px;
+          width: 86px;
           text-align: center;
-          padding-right: 20px;
+          padding-right: 28px;
           @media(max-width: $screen-lg-max) {
-            width: 35px;
-            .img-circle-medium, .img-circle-medium-private {
+            width: 25px;
+            padding-right: 0;
+            text-align: left;
+            position: absolute;
+            top: 0;
+            .img-circle-large, .img-circle-large-private {
               display: none;
-            }
-            &.no-watchlist {
-              width: 0;
-              padding-right: 0;
             }
           }
         }
         &-name {}
+        &-link {
+          &:not(.no-watchlist) {
+            @media(max-width: $screen-lg-max) {
+              padding-left: 25px;
+            }
+          }
+        }
       }
 
       &-speedometer {
-        width: 16%;
+        width: 17%;
         @media(max-width: $screen-lg-max) {
           width: 16%;
           padding-right: 10px;
@@ -244,6 +255,7 @@ table, .table {
         }
         @media(max-width: $screen-md-max) {
           padding-left: $padding-standard*2;
+          padding-top: 0.5rem;
         }
       }
     }
