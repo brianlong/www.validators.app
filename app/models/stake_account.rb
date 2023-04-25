@@ -86,7 +86,7 @@ class StakeAccount < ApplicationRecord
 
   def stake_pool_valid
     return unless stake_pool && self.active?
-    return if active_stake < StakeAccountQuery::MINIMUM_STAKE
+    return if active_stake < MINIMUM_STAKE
 
     stake_pool
   end

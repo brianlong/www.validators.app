@@ -22,8 +22,11 @@ module StakePools
         sp_attrs[:scores].push validator_active_stake * score.total_score.to_i
         sp_attrs[:last_skipped_slots].push score.skipped_slot_history&.last
         sp_attrs[:commissions].push(validator_active_stake * validator.score.commission)
-        sp_attrs[:delinquent_count] =
-          delinquent?(score) ? sp_attrs[:delinquent_count] + 1 : sp_attrs[:delinquent_count]
+        sp_attrs[:delinquent_count] = if validator_delinquent?(score)
+                                        sp_attrs[:delinquent_count] + 1
+                                      else
+                                        sp_attrs[:delinquent_count]
+                                      end
       end
 
       set_averages
@@ -33,7 +36,7 @@ module StakePools
 
     attr_reader :pool, :validator, :validator_ids, :sp_attrs
 
-    def delinquent?(score)
+    def validator_delinquent?(score)
       score.delinquent? && validator.stake_accounts.with_minimum_stake.present?
     end
 

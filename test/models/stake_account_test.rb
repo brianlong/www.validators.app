@@ -3,7 +3,7 @@ require "test_helper"
 class StakeAccountTest < ActiveSupport::TestCase
   setup do
     @stake_pool = build(:stake_pool)
-    @minimum_stake = StakeAccountQuery::MINIMUM_STAKE
+    @minimum_stake = StakeAccount::MINIMUM_STAKE
   end
 
   test "#stake_pool_valid returns stake pool if meets conditions" do

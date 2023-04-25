@@ -27,8 +27,6 @@ class StakeAccountQuery
 
   VALIDATOR_SCORE_V1_FIELDS = ["active_stake as validator_active_stake"].freeze
 
-  MINIMUM_STAKE = 1_000_000_000.freeze # 1 sol
-
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
     @sort_by = options.fetch(:sort_by, nil)

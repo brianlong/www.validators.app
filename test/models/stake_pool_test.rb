@@ -34,7 +34,9 @@ class StakePoolTest < ActiveSupport::TestCase
            delegated_stake: 1_000_000_000_000)
   end
 
-  test "#validators_count returns total number of active validators that pool delegates to" do
+  test "#validators_count returns total number of active validators \
+        and with minimum stake \
+        that pool delegates to" do
     assert_equal 2, @stake_pool.reload.validators_count
   end
 
