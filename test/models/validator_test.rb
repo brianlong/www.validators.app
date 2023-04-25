@@ -174,28 +174,29 @@ class ValidatorTest < ActiveSupport::TestCase
     assert result.last.delinquent?
   end
 
-  test "#filtered_by delinquent excludes correct validators from collection" do
+  test "#filtered_by delinquent includes all delinquent validators in collection" do
     result = Validator.filtered_by(["delinquent"])
 
     assert_equal 1, result.count
     assert result.last.delinquent?
   end
 
-  test "#filtered_by active excludes correct validators from collection" do
+  test "#filtered_by active includes all active validators in collection" do
     result = Validator.filtered_by(["active"])
 
     assert_equal 4, result.count
     assert result.last.is_active
   end
 
-  test "#filtered_by private excludes correct validators from collection" do
+  test "#filtered_by private includes all private validators in collection" do
     result = Validator.filtered_by(["private"])
 
     assert_equal 1, result.count
     assert_equal 100, result.last.score.commission
   end
 
-  test "#filtered_by multiple parameters excludes correct validators from collection" do
+  test "#filtered_by multiple parameters \
+        includes all validators that meet any of selected criteria" do
     result = Validator.filtered_by(["delinquent", "private"])
 
     assert_equal 2, result.count

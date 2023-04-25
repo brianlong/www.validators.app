@@ -41,6 +41,13 @@
             <td><%= @population %></td>
           </tr>
           <tr>
+            <td><strong>Stake</strong></td>
+            <td>
+              <%= number_with_delimiter(lamports_to_sol(@asn_stake).round(0)) %>
+              <span class="text-muted">
+                (<%= number_to_percentage((@asn_stake/@total_stake.to_f) * 100.0, precision: 2) %>)
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
