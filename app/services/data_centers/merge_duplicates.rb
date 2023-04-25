@@ -2,7 +2,8 @@ module DataCenters
   # WARNING: Run service with "run_update: true" argument and you'll update, 
   # without you'll get only logs and see what will be updated.
   class MergeDuplicates
-    def initialize
+    def initialize(switch_all: true)
+      @switch_all = switch_all
       @validator_ips_to_detach = []
     end
 
@@ -27,10 +28,10 @@ module DataCenters
           end
         end
         switch_validator_ips(main_dc_host)
-        puts "switched #{@validator_ips_to_switch.count} validators and nodes"
+        puts "switched validators and nodes: #{@validator_ips_to_switch.count}"
       end
-
       detach_validator_ips
+      puts "detached validator_ips: #{@validator_ips_to_detach.count}"
     end
 
     private
@@ -45,7 +46,7 @@ module DataCenters
     end
 
     def append_ip_to_update(val_ip, detach)
-      detach ?  @validator_ips_to_detach.push(val_ip.id) : @validator_ips_to_switch.push(val_ip.id)
+      detach && !@switch_all ?  @validator_ips_to_detach.push(val_ip.id) : @validator_ips_to_switch.push(val_ip.id)
     end
 
     def switch_validator_ips(main_dc_host)
