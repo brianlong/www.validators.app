@@ -54,10 +54,6 @@ var ValidatorRow = Vue.component('validatorRow', {
       return key.substring(0, 6) + "..." + key.substring(key.length - 4)
     },
 
-    is_validator_lido() {
-      return this.validator['name']?.substring(0, 4) === 'Lido'
-    },
-
     is_validator_private() {
       return this.validator['commission'] === 100 && this.validator['network'] === 'mainnet'
     },
@@ -67,8 +63,8 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     displayed_validator_name() {
-      if (this.is_validator_private() && !this.is_validator_lido()) {
-        return 'Private Validator'
+      if(this.is_validator_private()) {
+        return "Private Validator"
       } else {
         if (this.validator["name"]) {
           return this.shortened_validator_name(this.validator["name"])
@@ -175,7 +171,7 @@ var ValidatorRow = Vue.component('validatorRow', {
             </div>
             <img :src="create_avatar_link()" class='img-circle-large' v-if="!is_validator_private()"/>
           </div>
-          
+
           <div class="column-info-name">
             <a :href="validator_url()" class="column-info-link no-watchlist fw-bold">
               {{ displayed_validator_name() }}
