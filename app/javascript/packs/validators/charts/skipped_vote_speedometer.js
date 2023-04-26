@@ -34,15 +34,14 @@ export default {
   },
 
   mounted: function () {
-    this.skipped_vote_percent_val =
-      this.skipped_vote_percent(this.validator, this.batch);
+    this.skipped_vote_percent_val = this.skipped_vote_percent(this.validator, this.batch);
     let speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
     new Chart(speedometer, {
       type: 'doughnut',
       data: {
         datasets: [{
           data: [33.33, 33.33, 33.33],
-          needleValue: this.set_needle_position(skipped_vote_percent),
+          needleValue: this.set_needle_position(skipped_vote_percent_val),
           backgroundColor: [
             chart_variables.chart_lightgrey_speedometer,
             chart_variables.chart_blue_speedometer,
