@@ -24,11 +24,11 @@ module ClusterStats
     end
 
     def epochs
-      @epochs ||= EpochWallClock.where(network: network).last(AVG_EPOCH_SIZE)
+      @epochs ||= EpochWallClock.by_network(network).last(AVG_EPOCH_SIZE)
     end
 
     def epoch_duration
-      (epochs.last.created_at - epochs.first.created_at) / AVG_EPOCH_SIZE
+      (epochs.last.created_at - epochs.first.created_at.to_f) / AVG_EPOCH_SIZE
     end
   end
 end
