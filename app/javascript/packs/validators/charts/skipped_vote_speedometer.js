@@ -38,6 +38,9 @@ export default {
   },
 
   mounted: function () {
+    if(!this.skipped_vote_percent_val) {
+      return null;
+    }
     let speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
     new Chart(speedometer, {
       type: 'doughnut',
