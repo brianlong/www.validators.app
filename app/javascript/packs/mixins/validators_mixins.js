@@ -13,8 +13,8 @@ Vue.mixin({
       }
     },
 
-    skipped_vote_percent_string(skipped_vote) {
-      return skipped_vote ? skipped_vote + "%" : "N / A"
-    }
+    skipped_vote_percent_string(skipped_vote_value) {
+      return skipped_vote_value ? skipped_vote_value + "%" : "N / A"
+    },
   }
 })
