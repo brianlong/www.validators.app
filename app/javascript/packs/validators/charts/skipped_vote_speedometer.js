@@ -33,15 +33,18 @@ export default {
     }
   },
 
-  mounted: function () {
+  created() {
     this.skipped_vote_percent_val = this.skipped_vote_percent(this.validator, this.batch);
+  },
+
+  mounted: function () {
     let speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
     new Chart(speedometer, {
       type: 'doughnut',
       data: {
         datasets: [{
           data: [33.33, 33.33, 33.33],
-          needleValue: this.set_needle_position(skipped_vote_percent_val),
+          needleValue: this.set_needle_position(this.skipped_vote_percent_val),
           backgroundColor: [
             chart_variables.chart_lightgrey_speedometer,
             chart_variables.chart_blue_speedometer,
@@ -101,9 +104,9 @@ export default {
 
   template: `
     <td class="column-speedometer">
-      <div v-if="skipped_vote_percent_val">
+      <div>
         <div class="d-none d-lg-block">
-          <canvas :id="'spark_line_skipped_vote_' + validator['account']"></canvas>
+          <canvas :id="'spark_line_skipped_vote_' + validator['account']" v-if="skipped_vote_percent_val"></canvas>
           <div class="text-center text-muted small mt-2">
             {{ skipped_vote_percent_string(skipped_vote_percent_val) }}
           </div>
