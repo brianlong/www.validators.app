@@ -1,15 +1,13 @@
 module ValidatorsHelper
   def displayed_validator_name(validator)
-    if validator.private_validator? && !validator.lido?
-      "Private Validator"
-    else
-      return shorten_key(validator.name) if validator.name == validator.account
-      validator.name || shorten_key(validator.account)
-    end
+    return "Private Validator" if validator.private_validator?
+    return shorten_key(validator.name) if validator.name == validator.account
+
+    validator.name || shorten_key(validator.account)
   end
 
   def displayed_validator_commission(validator)
-    unless validator.private_validator? && !validator.lido?
+    unless validator.private_validator?
       commission_tag = "<span class='d-inline-block d-lg-none'>Comm.:&nbsp;</span>"
       "<small class='text-muted text-nowrap fw-normal'>(#{commission_tag}#{validator.commission}%)</small>".html_safe
     end
