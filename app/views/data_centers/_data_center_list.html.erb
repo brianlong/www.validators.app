@@ -42,11 +42,6 @@
         <%= number_with_delimiter lamports_to_sol(dc_data[:active_stake_from_active_validators]).round(0) %>
         (<%= percent_of_total_stake(dc_data[:active_stake_from_active_validators], @results[:total_stake]) %>)
       </small>
-      <br />
-      <small>
-        <%= number_with_delimiter lamports_to_sol(dc_data[:active_stake_from_all_validators]).round(0) %>
-        (<%= percent_of_total_stake(dc_data[:active_stake_from_all_validators], @results[:total_stake]) %>)
-      </small>
     </td>
   </tr>
 <% end %>

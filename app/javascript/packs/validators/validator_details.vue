@@ -73,12 +73,12 @@
 
               <tr>
                 <td><strong>Details:</strong></td>
-                <td class="text-break">{{ validator.details }}</td>
+                <td class="small text-break">{{ validator.details }}</td>
               </tr>
 
               <tr>
                 <td><strong>Identity:</strong></td>
-                <td><small class="word-break">{{ validator.account }}</small></td>
+                <td class="small word-break">{{ validator.account }}</td>
               </tr>
 
               <tr>
@@ -131,19 +131,17 @@
 
               <tr>
                 <td><strong>Website:</strong></td>
-                <td><a :href="validator.www_url">{{ validator.www_url }}</a></td>
+                <td class="small"><a :href="validator.www_url">{{ validator.www_url }}</a></td>
               </tr>
 
               <tr>
                 <td>
                   <strong>Vote Account:</strong>
                 </td>
-                <td>
-                  <small class="word-break">
-                    <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
-                      {{ validator.vote_account_active.account }}
-                    </a>
-                  </small>
+                <td class="small word-break">
+                  <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
+                    {{ validator.vote_account_active.account }}
+                  </a>
                 </td>
               </tr>
 
@@ -168,7 +166,7 @@
                 <td>
                   <strong>Security Info:</strong>
                 </td>
-                <td>
+                <td class="small word-break">
                   <a :href="validator.security_report_url" target="_blank">
                     {{ validator.security_report_url }}
                   </a>
@@ -332,7 +330,7 @@
           this.reload_validator_data()
         }, this.reload_time)
       },
-      
+
       lamports_to_sol(lamports) {
         return lamports * 0.000000001;
       },
