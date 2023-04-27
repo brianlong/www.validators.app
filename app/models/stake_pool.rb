@@ -28,7 +28,6 @@
 class StakePool < ApplicationRecord
 
   API_FIELDS = %i[
-    id
     authority
     average_apy
     average_delinquent
