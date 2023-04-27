@@ -10,6 +10,9 @@ class ValidatorCheckActiveService
 
   def update_validator_activity
     Validator.includes(:vote_accounts, :validator_score_v1).find_each do |validator|
+      # Skip if validator has no history that is older than DELINQUENT_TIME
+      next if too_young?(validator)
+
       if should_be_destroyed?(validator)
         validator.update(is_active: false, is_destroyed: true)
       elsif validator.scorable?
@@ -30,21 +33,14 @@ class ValidatorCheckActiveService
 
   private
 
-  def should_be_destroyed?(validator)
-    if !validator.validator_histories.exists? || \
-      (!validator.validator_histories.where("created_at > ?", @delinquent_time.ago).exists? && \
-       validator.validator_histories.where("created_at < ?", @delinquent_time.ago).exists?)
-      return true
-    end
-
-    false
+  def validator_histories_for_validator(validator)
+    ValidatorHistory.where(account: validator.account)
+                    .where("created_at > ?", @delinquent_time.ago)
+                    .order(created_at: :desc).to_a
   end
 
-  def current_epoch(network)
-    @current_epochs ||= {}
-    return @current_epochs[network] if @current_epochs[network].present?
-
-    @current_epochs[network] = EpochWallClock.where(network: network).order(created_at: :desc).first
+  def should_be_destroyed?(validator)
+    validator_histories_for_validator(validator).empty? ? true : false
   end
 
   # returns true if validator has no history from previous epoch
