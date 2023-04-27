@@ -39,7 +39,7 @@
         </a>
       </div>
 
-      <div class="modal modal-large modal-top fade" id="versionsModal" tabindex="-1" role="dialog"
+      <div class="modal modal-large fade" id="versionsModal" tabindex="-1" role="dialog"
            aria-labelledby="versionsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
