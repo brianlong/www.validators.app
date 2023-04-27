@@ -36,7 +36,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
           <tr>
             <th class="column-sm">Stake Pool</th>
             <th class="column-sm">
-              Nodes<br />
+              Nodes <small class="text-nowrap">> 1 SOL</small><br />
               <small class="text-muted">(Delinquent)</small>
             </th>
             <th class="column-md">
