@@ -28,7 +28,7 @@ module ClusterStats
     end
 
     def epoch_duration
-      (epochs.last.created_at - epochs.first.created_at.to_f) / AVG_EPOCH_SIZE
+      (epochs.first.created_at - epochs.last.created_at) / AVG_EPOCH_SIZE
     end
   end
 end
