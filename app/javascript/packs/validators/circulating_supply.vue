@@ -43,6 +43,7 @@
 <script>
   import * as web3 from "@solana/web3.js";
   import { mapGetters } from 'vuex'
+  import '../mixins/numbers_mixins'
 
   export default {
     data() {
@@ -87,10 +88,6 @@
     },
 
     methods: {
-      lamports_to_sol(lamports) {
-        return lamports / 1000000000;
-      },
-
       update_circulating_supply() {
         this.connection.getSupply(this.api_params)
           .then(response => {

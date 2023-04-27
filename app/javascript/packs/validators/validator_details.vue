@@ -104,7 +104,7 @@
               <tr>
                 <td><strong>Creation Date:</strong></td>
                 <td>
-                  {{ creation_date() }}
+                  {{ date_time_with_timezone(validator.created_at) }}
                 </td>
               </tr>
             </tbody>
@@ -248,10 +248,10 @@
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
   import loadingImage from 'loading.gif';
+  import '../mixins/numbers_mixins'
+  import '../mixins/dates_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
-
-  var moment = require('moment');
 
   export default {
     props: {
@@ -331,10 +331,6 @@
         }, this.reload_time)
       },
 
-      lamports_to_sol(lamports) {
-        return lamports * 0.000000001;
-      },
-
       is_private() {
         return this.score.commission == 100
       },
@@ -388,11 +384,7 @@
 
       blazestake_url(validator) {
         return "https://stake.solblaze.org/app/?validator=" + validator.vote_account_active.account
-      },
-
-      creation_date() {
-        return moment(new Date(this.validator.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
-      },
+      }
     },
 
     components: {
