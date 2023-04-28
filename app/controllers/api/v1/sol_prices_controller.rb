@@ -21,6 +21,7 @@ module Api
             end
           else
             sol_prices.where(datetime_from_exchange: from..to)
+                      .as_json(only: api_field_names)
           end
 
         respond_to do |format|
@@ -41,6 +42,7 @@ module Api
       def index_csv_headers
         SolPrice::API_FIELDS.map(&:to_s)
       end
+      alias api_field_names index_csv_headers
 
       def index_params
         params.permit(:from, :to, :filtering)

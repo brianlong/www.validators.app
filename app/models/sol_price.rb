@@ -22,7 +22,6 @@ class SolPrice < ApplicationRecord
   CURRENCIES = %w[usd].freeze
 
   API_FIELDS = %i[
-    id
     currency
     epoch_mainnet
     epoch_testnet
@@ -31,6 +30,7 @@ class SolPrice < ApplicationRecord
     created_at
     updated_at
     average_price
+    exchange
   ].freeze
   
   enum exchange: EXCHANGES.to_h { |el| [el, EXCHANGES.find_index(el)] }, _prefix: true
