@@ -60,8 +60,6 @@ NETWORKS.each do |network|
 
   Rails.logger.warn "created new epoch #{created_epoch.epoch}"
 
-  ClusterStats::UpdateEpochDurationService.new(network).call
-
   confirmed_end_block = nil
   block_search_count.times do |b_diff|
     slot = last_epoch_start_slot - 1 - b_diff

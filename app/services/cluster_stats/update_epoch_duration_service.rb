@@ -3,7 +3,7 @@
 module ClusterStats
   class UpdateEpochDurationService
 
-    AVG_EPOCH_SIZE = 5
+    NUMBER_OF_EPOCHS = 5
 
     def initialize(network)
       @network = network
@@ -24,11 +24,11 @@ module ClusterStats
     end
 
     def epochs
-      @epochs ||= EpochWallClock.by_network(network).last(AVG_EPOCH_SIZE)
+      @epochs ||= EpochWallClock.by_network(network).first(NUMBER_OF_EPOCHS)
     end
 
     def epoch_duration
-      (epochs.first.created_at - epochs.last.created_at) / AVG_EPOCH_SIZE
+      (epochs.first.created_at - epochs.last.created_at) / NUMBER_OF_EPOCHS
     end
   end
 end

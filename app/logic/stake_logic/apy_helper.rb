@@ -30,9 +30,7 @@ module StakeLogic::ApyHelper
 
   def number_of_epochs(network)
     stats = ClusterStat.find_or_create_by(network: network)
-    epoch_duration = stats.epoch_duration ||
-      ClusterStats::UpdateEpochDurationService.new(network).call.epoch_duration
 
-    1.year.to_i / epoch_duration
+    1.year.to_i / stats.epoch_duration
   end
 end
