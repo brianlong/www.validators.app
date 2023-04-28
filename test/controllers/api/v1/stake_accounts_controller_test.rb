@@ -92,7 +92,7 @@ class StakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
     json_response = response_to_json(@response.body)
 
-    assert_equal 16, json_response["stake_accounts"].first.keys.size
+    assert_equal 14, json_response["stake_accounts"].first.keys.size
   end
 
   test "request with page and limit params should return limited results" do

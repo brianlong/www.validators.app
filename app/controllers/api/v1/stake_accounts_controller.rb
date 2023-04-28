@@ -16,7 +16,7 @@ module Api
         respond_to do |format|
           format.json
           format.csv do
-            send_data convert_to_csv(index_csv_headers, @stake_accounts.as_json),
+            send_data convert_to_csv(index_csv_headers, @stake_accounts),
                       filename: "stake-accounts-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end
@@ -31,6 +31,7 @@ module Api
           StakeAccount::API_STAKE_POOL_FIELDS
         ).map(&:to_s)
       end
+      alias api_field_names index_csv_headers
 
       def base_query
         StakeAccountQuery.new(
@@ -49,7 +50,7 @@ module Api
         if index_params[:grouped_by] && index_params[:grouped_by] == "delegated_vote_accounts_address"
           records_for_vue_frontend(stake_accounts, page)
         else
-          records_for_api(stake_accounts, page)
+          records_for_api(stake_accounts, page).as_json(only: api_field_names)
         end
       end
 
