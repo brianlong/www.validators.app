@@ -430,6 +430,7 @@ ActiveRecord::Schema.define(version: 2023_04_19_115610) do
     t.string "batch_uuid"
     t.integer "epoch"
     t.float "apy"
+    t.index ["active_stake"], name: "index_stake_accounts_on_active_stake"
     t.index ["stake_pool_id"], name: "index_stake_accounts_on_stake_pool_id"
     t.index ["stake_pubkey", "network"], name: "index_stake_accounts_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_accounts_on_staker_and_network"
@@ -445,7 +446,6 @@ ActiveRecord::Schema.define(version: 2023_04_19_115610) do
     t.float "manager_fee"
     t.string "ticker"
     t.float "average_validators_commission"
-    t.float "average_delinquent"
     t.float "average_skipped_slots"
     t.float "average_uptime"
     t.integer "average_lifetime"
@@ -453,6 +453,7 @@ ActiveRecord::Schema.define(version: 2023_04_19_115610) do
     t.float "withdrawal_fee"
     t.float "deposit_fee"
     t.float "average_apy"
+    t.integer "delinquent_count"
     t.index ["network"], name: "index_stake_pools_on_network"
   end
 

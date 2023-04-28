@@ -196,12 +196,12 @@
       <hr />
       <h3 class="h5">Nodes total</h3>
       <p class="mb-5">
-        Number of validators used by the stake pool. Bigger validator diversity helps to maintain good network health.
+        Number of validators (> 1 SOL) used by the stake pool. Bigger validator diversity helps to maintain good network health.
       </p>
 
       <h3 class="h5">Nodes Delinquent</h3>
       <p class="mb-5">
-        Number of delinquent validators used by the stake pool.
+        Number of delinquent validators (> 1 SOL) used by the stake pool.
       </p>
 
       <h3 class="h5">Nodes Stake</h3>

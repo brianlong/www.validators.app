@@ -36,7 +36,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
           <tr>
             <th class="column-sm">Stake Pool</th>
             <th class="column-sm">
-              Nodes<br />
+              Nodes <small class="text-nowrap">> 1 SOL</small><br />
               <small class="text-muted">(Delinquent)</small>
             </th>
             <th class="column-md">
@@ -65,7 +65,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
               </a>
             </td>
             <td>
-              {{ pool.validators_count }}&nbsp;<span class="text-muted">({{ pool.average_delinquent }})</span>
+              {{ pool.validators_count }}&nbsp;<span class="text-muted">({{ pool.delinquent_count }})</span>
             </td>
             <td>
               {{ (pool.total_stake / 1000000000).toLocaleString('en-US', {maximumFractionDigits: 0}) }} SOL<br />
