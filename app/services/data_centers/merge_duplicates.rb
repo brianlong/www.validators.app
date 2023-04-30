@@ -1,37 +1,35 @@
 module DataCenters
-  # WARNING: Run service with "run_update: true" argument and you'll update, 
+  # WARNING: Run service with "perform_update: true" argument and you'll update, 
   # without you'll get only logs and see what will be updated.
   class MergeDuplicates
-    def initialize(switch_all: true)
-      @switch_all = switch_all
-      @validator_ips_to_detach = []
+    LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
+
+    def initialize(perform_update: false)
+      @perform_update = perform_update
+      @logger ||= Logger.new(LOG_PATH)
     end
 
     def call
       duplicated_data_center_keys = select_duplicated_keys
 
       duplicated_data_center_keys.each do |dc_key|
-        puts dc_key
         sorted_data_centers = sort_data_centers_by_created_at(dc_key)
         main_dc = sorted_data_centers.last
-        main_dc_host = main_dc.data_center_hosts.last
-        @validator_ips_to_switch = []
+        log_chosen_data_center(main_dc, sorted_data_centers)
 
         sorted_data_centers.each do |dc|
           next if dc == main_dc
-          dc.validators.joins(:validator_ips).each do |val|
-            append_ip_to_update(val.validator_ip_active, val.is_active)
-          end
 
-          dc.gossip_nodes.joins(:validator_ip).each do |node|
-            append_ip_to_update(node.validator_ip_active, node.is_active)
+          dc.data_center_hosts.each do |dch|
+            # copy data_center_hosts from duplicate to main data_center
+            main_dc_host = find_or_create_host(main_dc, dch)
+
+            dch.validator_ips.each do |ip|
+              update_validator_ip(ip, main_dc_host)
+            end
           end
         end
-        switch_validator_ips(main_dc_host)
-        puts "switched validators and nodes: #{@validator_ips_to_switch.count}"
       end
-      detach_validator_ips
-      puts "detached validator_ips: #{@validator_ips_to_detach.count}"
     end
 
     private
@@ -45,16 +43,102 @@ module DataCenters
       DataCenter.where(data_center_key: dc_key).order(created_at: :asc)
     end
 
-    def append_ip_to_update(val_ip, detach)
-      detach && !@switch_all ?  @validator_ips_to_detach.push(val_ip.id) : @validator_ips_to_switch.push(val_ip.id)
-    end
-
-    def switch_validator_ips(main_dc_host)
-      ValidatorIp.where(id: @validator_ips_to_switch).update_all(data_center_host_id: main_dc_host.id)
-    end
-
     def detach_validator_ips
       ValidatorIp.where(id: @validator_ips_to_detach).update_all(data_center_host_id: nil)
     end
+
+    def find_or_create_host(data_center, data_center_host)
+      if @perform_update
+        data_center.data_center_hosts.find_or_create_by(host: data_center_host.host)
+      else
+        data_center.data_center_hosts.find_or_initialize_by(host: data_center_host.host)
+      end
+    end
+
+    def update_validator_ip(validator_ip, main_dc_dch)
+      val = validator_ip.validator
+      gossip_node = validator_ip.gossip_node
+
+      return unless (val.present? || gossip_node.present?)
+
+      if val.present?
+        return unless vip_assigned_to_same_dc_as_validator?(val, validator_ip)
+      end
+
+      log_updated_validator_or_gossip_node_info(
+        val,
+        gossip_node,
+        validator_ip,
+        main_dc_dch
+      )
+
+      validator_ip.update(data_center_host_id: main_dc_dch.id) if @perform_update == true
+    end
+
+    def vip_assigned_to_same_dc_as_validator?(val, validator_ip)
+      # This checks if validator is currently assigned to data center 
+      # pointed by validator_ip_active of validator.
+      # 
+      # Gossip node can have only one ip so it's not checked.
+      return false unless val&.data_center.present? && validator_ip&.data_center.present?
+
+      unless val.data_center.id == validator_ip.data_center.id        
+        message = <<-EOS
+          Validator #{val.name} (##{val.id}) current data center 
+          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id})
+          validator IP will be destroyed.
+        EOS
+
+        log_message(message)
+
+        if validator_ip.gossip_node.nil? && validator_ip.is_active == false && @run_update
+          address = validator_ip.address
+          id = validator_ip.id
+          main_dc_host
+          validator_ip.destroy 
+
+          message = <<-EOS
+            Validator IP #{address} (##{id}) destroyed.
+          EOS
+        end
+
+        return false
+      end
+
+      true
+    end
+
+    # logging
+
+    def log_message(message, type: :info)
+      # Remove unless clause to see log file from tests.
+      @logger.send(type, message.squish) unless Rails.env.test?
+    end
+
+    def log_updated_validator_or_gossip_node_info(val, gossip_node, validator_ip, main_dc_dch)
+      first_line = if val
+                     "Assign validator #{val.name} (##{val.id})"
+                   else
+                     "Assign gossip_node #{gossip_node.account} (##{gossip_node.id})"
+                   end
+      message = <<-EOS
+        #{first_line}
+        with ip #{validator_ip.address} (##{validator_ip.id}) 
+        to data center host #{main_dc_dch.host} (##{main_dc_dch.id}).
+      EOS
+
+      log_message(message)
+    end
+
+    def log_chosen_data_center(data_center, sorted_data_centers)
+      message = <<-EOS
+        Chosen data center #{data_center.data_center_key} (##{data_center.id})
+        created at #{data_center.created_at}.
+        available options: #{sorted_data_centers.map { |dc| "##{dc.id} (#{dc.created_at})" }.join(", ")}
+      EOS
+
+      log_message(message)
+    end
+
   end
 end
