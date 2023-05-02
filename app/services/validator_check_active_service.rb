@@ -13,25 +13,26 @@ class ValidatorCheckActiveService
       # Skip if validator has no history that is older than DELINQUENT_TIME
       next if too_young?(validator)
 
+      # mark validator as destroyed if it has no recent history
       if should_be_destroyed?(validator)
-        validator.update(is_active: false, is_destroyed: true)
-      elsif validator.scorable?
-        update_scorable(validator)
+        validator.assign_attributes(is_active: false, is_destroyed: true)
       else
-        # Check validators that are currently not scorable in case they reactivate
-        if acceptable_stake?(validator) && !delinquent?(validator)
-          validator.update(is_active: true, is_destroyed: false)
-        end
-        
-        # Check if vote account has been created for rpc_node
-        if validator.vote_accounts.exists?
-          validator.update(is_rpc: false) if validator.is_rpc
-        end
+        validator.assign_attributes(is_destroyed: false)
+        update_scorable(validator)
       end
+
+      validator.save if validator.changed?
     end
   end
 
   private
+
+  # returns true if validator has no history from previous epoch
+  def too_young?(validator)
+    !validator.validator_histories
+              .where("created_at < ?", @delinquent_time.ago)
+              .exists?
+  end
 
   def validator_histories_for_validator(validator)
     ValidatorHistory.where(account: validator.account)
@@ -43,41 +44,23 @@ class ValidatorCheckActiveService
     validator_histories_for_validator(validator).empty? ? true : false
   end
 
-  # returns true if validator has no history from previous epoch
-  def too_young?(validator)
-    !validator.validator_histories
-              .where("created_at < ?", @delinquent_time.ago)
-              .exists?
-  end
-
-  def became_inactive?(validator)
-    if ValidatorHistory.where(account: validator.account).exists?
-      unless acceptable_stake?(validator) && !delinquent?(validator)
-        return true
-      end
-    end
-
+  def should_be_active?(validator)
+    return true if acceptable_stake?(validator) && !long_time_delinquent?(validator)
     false
   end
 
-  def is_rpc?(validator)
-    if validator.created_at < (DateTime.now - @delinquent_time) && \
-       !validator.vote_accounts.exists?
-      return true
-    end
-
-    false
+  def should_be_rpc?(validator)
+    !validator.vote_accounts.exists?
   end
 
   def update_scorable(validator)
-    if !too_young?(validator) && became_inactive?(validator)
-      validator.update(is_active: false)
-    end
-
-    validator.update(is_rpc: true) if is_rpc?(validator)
+    validator.assign_attributes(
+      is_active: should_be_active?(validator),
+      is_rpc: should_be_rpc?(validator)
+    )
   end
 
-  def delinquent?(validator)
+  def long_time_delinquent?(validator)
     return false if !validator.delinquent?
 
     !non_delinquent_history_exists?(validator)
@@ -95,6 +78,7 @@ class ValidatorCheckActiveService
     with_acceptable_stake.exists?
   end
 
+  # check if validator had no delinquent history since DELINQUENT_TIME
   def non_delinquent_history_exists?(validator)
     ValidatorHistory.where(account: validator.account, delinquent: false)
                     .where("created_at > ?", @delinquent_time.ago)
