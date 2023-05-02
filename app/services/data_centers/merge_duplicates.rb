@@ -91,10 +91,9 @@ module DataCenters
 
         log_message(message)
 
-        if validator_ip.gossip_node.nil? && validator_ip.is_active == false && @run_update
+        if validator_ip.gossip_node.nil? && validator_ip.is_active == false && @perform_update
           address = validator_ip.address
           id = validator_ip.id
-          main_dc_host
           validator_ip.destroy 
 
           message = <<-EOS
