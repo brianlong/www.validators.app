@@ -8,15 +8,16 @@ module ClusterStats
       @network = "testnet"
 
       create(:epoch_wall_clock, epoch: 301, created_at: 16.days.ago)
-      create(:epoch_wall_clock, epoch: 311, created_at: 13.days.ago)
-      create(:epoch_wall_clock, epoch: 322, created_at: 10.days.ago)
-      create(:epoch_wall_clock, epoch: 333, created_at: 7.days.ago)
-      create(:epoch_wall_clock, epoch: 344, created_at: 4.days.ago)
-      create(:epoch_wall_clock, epoch: 355, created_at: 1.day.ago)
+      create(:epoch_wall_clock, epoch: 302, created_at: 13.days.ago)
+      create(:epoch_wall_clock, epoch: 303, created_at: 10.days.ago)
+      create(:epoch_wall_clock, epoch: 304, created_at: 7.days.ago)
+      create(:epoch_wall_clock, epoch: 305, created_at: 4.days.ago)
+      create(:epoch_wall_clock, epoch: 306, created_at: 1.day.ago)
     end
 
     test "updates epoch duration" do
-      cluster_stat = create(:cluster_stat, network: @network)
+      cluster_stat = ClusterStat.last
+      cluster_stat.update(epoch_duration: 0)
 
       ClusterStats::UpdateEpochDurationService.new(@network).call
 

@@ -232,7 +232,6 @@ class StakeLogicTest < ActiveSupport::TestCase
   end
 
   test "calculate_apy_for_accounts should return correct apy" do
-    create(:cluster_stat, network: "testnet", epoch_duration: 195674.0)
     stake_pool = create(:stake_pool)
 
     acc = create(
@@ -262,12 +261,10 @@ class StakeLogicTest < ActiveSupport::TestCase
 
     acc.reload
     assert_equal 200, p.code
-    assert_equal 16.9542, acc.apy
+    assert_equal 80.6056, acc.apy
   end
 
   test "calculate_apy_for_accounts returns nil apy if there are no rewards" do
-    create(:cluster_stat, network: "testnet", epoch_duration: 195674.0)
-
     acc = create(
       :stake_account,
       network: "testnet",
