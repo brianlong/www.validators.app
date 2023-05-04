@@ -14,11 +14,11 @@ class ValidatorCheckActiveService
       next if too_young?(validator)
 
       # mark validator as destroyed if it has no recent history
-      if should_be_destroyed?(validator)
+      if validator_histories_for_validator(validator).empty?
         validator.assign_attributes(is_active: false, is_destroyed: true)
       else
         validator.assign_attributes(is_destroyed: false)
-        update_scorable(validator)
+        assign_validator_flags(validator)
       end
 
       validator.save if validator.changed?
@@ -40,10 +40,6 @@ class ValidatorCheckActiveService
                     .order(created_at: :desc).to_a
   end
 
-  def should_be_destroyed?(validator)
-    validator_histories_for_validator(validator).empty? ? true : false
-  end
-
   def should_be_active?(validator)
     return true if acceptable_stake?(validator) && !long_time_delinquent?(validator)
     false
@@ -53,7 +49,7 @@ class ValidatorCheckActiveService
     !validator.vote_accounts.exists?
   end
 
-  def update_scorable(validator)
+  def assign_validator_flags(validator)
     validator.assign_attributes(
       is_active: should_be_active?(validator),
       is_rpc: should_be_rpc?(validator)
@@ -63,7 +59,7 @@ class ValidatorCheckActiveService
   def long_time_delinquent?(validator)
     return false if !validator.delinquent?
 
-    !non_delinquent_history_exists?(validator)
+    validator_histories_for_validator(validator).select { |history| !history.delinquent? }.empty?
   end
 
   # returns true if if validator had stake gt STAKE_EXCLUDE_HEIGHT since DELINQUENT_TIME
@@ -76,12 +72,5 @@ class ValidatorCheckActiveService
                                             )
 
     with_acceptable_stake.exists?
-  end
-
-  # check if validator had no delinquent history since DELINQUENT_TIME
-  def non_delinquent_history_exists?(validator)
-    ValidatorHistory.where(account: validator.account, delinquent: false)
-                    .where("created_at > ?", @delinquent_time.ago)
-                    .exists?
   end
 end
