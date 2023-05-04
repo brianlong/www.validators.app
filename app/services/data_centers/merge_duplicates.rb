@@ -86,21 +86,9 @@ module DataCenters
         message = <<-EOS
           Validator #{val.name} (##{val.id}) current data center 
           is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id})
-          validator IP will be destroyed.
         EOS
 
         log_message(message)
-
-        if validator_ip.gossip_node.nil? && validator_ip.is_active == false && @perform_update
-          address = validator_ip.address
-          id = validator_ip.id
-          validator_ip.destroy 
-
-          message = <<-EOS
-            Validator IP #{address} (##{id}) destroyed.
-          EOS
-        end
-
         return false
       end
 
