@@ -75,8 +75,10 @@ module DataCenters
     def log_updated_validator_or_gossip_node_info(val, gossip_node, validator_ip, main_dc_dch)
       first_line = if val
                      "Assign validator #{val.name} (##{val.id})"
-                   else
+                   elsif gossip_node
                      "Assign gossip_node #{gossip_node.account} (##{gossip_node.id})"
+                   else
+                     "Assign validator_ip without node nor validator (##{validator_ip.id})"
                    end
       message = <<-EOS
         #{first_line}
