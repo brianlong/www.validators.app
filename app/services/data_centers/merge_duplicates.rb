@@ -59,12 +59,6 @@ module DataCenters
       val = validator_ip.validator
       gossip_node = validator_ip.gossip_node
 
-      return unless (val.present? || gossip_node.present?)
-
-      if val.present?
-        return unless vip_assigned_to_same_dc_as_validator?(val, validator_ip)
-      end
-
       log_updated_validator_or_gossip_node_info(
         val,
         gossip_node,
@@ -73,26 +67,6 @@ module DataCenters
       )
 
       validator_ip.update(data_center_host_id: main_dc_dch.id) if @perform_update == true
-    end
-
-    def vip_assigned_to_same_dc_as_validator?(val, validator_ip)
-      # This checks if validator is currently assigned to data center 
-      # pointed by validator_ip_active of validator.
-      # 
-      # Gossip node can have only one ip so it's not checked.
-      return false unless val&.data_center.present? && validator_ip&.data_center.present?
-
-      unless val.data_center.id == validator_ip.data_center.id        
-        message = <<-EOS
-          Validator #{val.name} (##{val.id}) current data center 
-          is different than assigned to validator ip #{validator_ip.address} (##{validator_ip.id})
-        EOS
-
-        log_message(message)
-        return false
-      end
-
-      true
     end
 
     # logging
