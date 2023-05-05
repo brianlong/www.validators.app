@@ -47,8 +47,8 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
   test 'inactive validator with active stake should become active' do
     v = create(:validator, :with_score, account: "account4", is_active: false)
+    create(:validator_history, account: "account4", active_stake: 1000, created_at: 2.days.ago)
     create(:validator_history, account: "account4", active_stake: 1000)
-    create(:validator_block_history, validator: v, epoch: 122)
 
     refute v.is_active
 
@@ -60,8 +60,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   test 'validator without vote_account should become rpc' do
     v = create(:validator, :with_score, account: "account4", created_at: 2.days.ago)
     create(:validator_history, account: "account4", active_stake: 1000)
-    create(:validator_block_history, validator: v, epoch: 122)
-
+    create(:validator_history, account: "account4", active_stake: 1000, created_at: 2.days.ago)
     refute v.is_rpc
 
     ValidatorCheckActiveService.new.update_validator_activity
@@ -118,7 +117,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
   test "validator with recent history that is marked as destroyed should not be destroyed" do
     v = create(:validator, :with_score, account: "account7", is_destroyed: true)
     create(:validator_history, account: "account7", created_at: 11.hours.ago)
-
+    create(:validator_history, account: "account7", created_at: 15.hours.ago)
     assert v.is_destroyed
 
     ValidatorCheckActiveService.new.update_validator_activity
@@ -138,8 +137,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
     )
     create(:vote_account, validator: v)
     create(:validator_history, account: "account7", active_stake: 1000)
-    create(:validator_block_history, validator: v, epoch: 122)
-
+    create(:validator_history, account: "account7", created_at: 13.hours.ago)
     refute v.is_active
     assert v.is_destroyed
     assert v.is_rpc

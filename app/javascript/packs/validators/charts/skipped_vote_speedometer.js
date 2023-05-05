@@ -1,5 +1,6 @@
 import Chart from 'chart.js/auto';
 import chart_variables from './chart_variables'
+import '../../mixins/validators_mixins'
 
 export default {
   props: {
@@ -13,17 +14,13 @@ export default {
     }
   },
 
-  methods: {
-    skipped_vote_percent() {
-      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']) {
-        var history_array = this.validator['skipped_vote_history']
-        var skipped_votes_percent = history_array[history_array.length - 1]
-        return skipped_votes_percent ? ((this.batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).toFixed(2) : null
-      } else {
-        return null
-      }
-    },
+  data() {
+    return {
+      skipped_vote_percent_val: null
+    }
+  },
 
+  methods: {
     set_needle_position(needle_value) {
       let single_range_size = this.batch['skipped_vote_all_median'];
       if(!needle_value || !single_range_size) {
@@ -36,15 +33,21 @@ export default {
     }
   },
 
+  created() {
+    this.skipped_vote_percent_val = this.skipped_vote_percent(this.validator, this.batch);
+  },
+
   mounted: function () {
-    let skipped_vote_percent = this.skipped_vote_percent();
+    if(!this.skipped_vote_percent_val) {
+      return null;
+    }
     let speedometer = document.getElementById("spark_line_skipped_vote_" + this.validator['account']).getContext('2d');
     new Chart(speedometer, {
       type: 'doughnut',
       data: {
         datasets: [{
           data: [33.33, 33.33, 33.33],
-          needleValue: this.set_needle_position(skipped_vote_percent),
+          needleValue: this.set_needle_position(this.skipped_vote_percent_val),
           backgroundColor: [
             chart_variables.chart_lightgrey_speedometer,
             chart_variables.chart_blue_speedometer,
@@ -101,19 +104,20 @@ export default {
       }]
     });
   },
+
   template: `
     <td class="column-speedometer">
-      <div v-if="skipped_vote_percent">
+      <div>
         <div class="d-none d-lg-block">
-          <canvas :id="'spark_line_skipped_vote_' + validator['account'] " v-if="skipped_vote_percent()"></canvas>
+          <canvas :id="'spark_line_skipped_vote_' + validator['account']" v-if="skipped_vote_percent_val"></canvas>
           <div class="text-center text-muted small mt-2">
-            {{ skipped_vote_percent() ? skipped_vote_percent() + "%" : "N / A" }}
+            {{ skipped_vote_percent_string(skipped_vote_percent_val) }}
           </div>
         </div>
         
         <span class="d-inline-block d-lg-none small">
           Skipped Vote&nbsp;%:&nbsp;
-          {{ skipped_vote_percent() ? skipped_vote_percent() + "%" : "N / A" }}
+          {{ skipped_vote_percent_string(skipped_vote_percent_val) }}
         </span>
       </div>
     </td>

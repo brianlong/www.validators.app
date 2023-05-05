@@ -28,8 +28,6 @@ class ValidatorTest < ActiveSupport::TestCase
 
     @score = create(:validator_score_v1, validator: @validator)
 
-    @v_inactive = create(:validator, :with_score, is_active: false)
-
     @v_delinquent = create(:validator, account: "v_delinquent")
     create(:validator_score_v1, validator: @v_delinquent, delinquent: true)
 
@@ -127,17 +125,6 @@ class ValidatorTest < ActiveSupport::TestCase
     refute create(:validator_score_v1, commission: 99, validator: @validator).validator.private_validator?
   end
 
-  test "#lido? returns true if name starts with Lido" do
-    @validator.update(network: 'mainnet', name: 'Lido / Everstake')
-    assert @validator.lido?
-
-    @validator.update(name: 'IAmNotLido')
-    refute @validator.lido?
-
-    @validator.update(name: "")
-    refute @validator.lido?
-  end
-
   test "validator attributes are correctly stored in db after using utf_8_encode method" do
     special_chars_sentence = "Staking-P◎◎l FREE Validati◎n"
 
@@ -176,32 +163,33 @@ class ValidatorTest < ActiveSupport::TestCase
     assert result.last.delinquent?
   end
 
-  test "#filtered_by delinquent excludes correct validators from collection" do
+  test "#filtered_by delinquent includes all delinquent validators in collection" do
     result = Validator.filtered_by(["delinquent"])
 
     assert_equal 1, result.count
     assert result.last.delinquent?
   end
 
-  test "#filtered_by inactive excludes correct validators from collection" do
-    result = Validator.filtered_by(["inactive"])
+  test "#filtered_by active includes all active validators in collection" do
+    result = Validator.filtered_by(["active"])
 
-    assert_equal 1, result.count
-    refute result.last.is_active
+    assert_equal 4, result.count
+    assert result.last.is_active
   end
 
-  test "#filtered_by private excludes correct validators from collection" do
+  test "#filtered_by private includes all private validators in collection" do
     result = Validator.filtered_by(["private"])
 
     assert_equal 1, result.count
     assert_equal 100, result.last.score.commission
   end
 
-  test "#filtered_by multiple parameters excludes correct validators from collection" do
-    result = Validator.filtered_by(["delinquent", "inactive"])
+  test "#filtered_by multiple parameters \
+        includes all validators that meet any of selected criteria" do
+    result = Validator.filtered_by(["delinquent", "private"])
 
     assert_equal 2, result.count
-    assert result.include?(@v_inactive)
+    assert result.include?(@v_private)
     assert result.include?(@v_delinquent)
   end
 

@@ -73,12 +73,12 @@
 
               <tr>
                 <td><strong>Details:</strong></td>
-                <td class="text-break">{{ validator.details }}</td>
+                <td class="small text-break">{{ validator.details }}</td>
               </tr>
 
               <tr>
                 <td><strong>Identity:</strong></td>
-                <td><small class="word-break">{{ validator.account }}</small></td>
+                <td class="small word-break">{{ validator.account }}</td>
               </tr>
 
               <tr>
@@ -104,7 +104,7 @@
               <tr>
                 <td><strong>Creation Date:</strong></td>
                 <td>
-                  {{ creation_date() }}
+                  {{ date_time_with_timezone(validator.created_at) }}
                 </td>
               </tr>
             </tbody>
@@ -131,19 +131,17 @@
 
               <tr>
                 <td><strong>Website:</strong></td>
-                <td><a :href="validator.www_url">{{ validator.www_url }}</a></td>
+                <td class="small"><a :href="validator.www_url">{{ validator.www_url }}</a></td>
               </tr>
 
               <tr>
                 <td>
                   <strong>Vote Account:</strong>
                 </td>
-                <td>
-                  <small class="word-break">
-                    <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
-                      {{ validator.vote_account_active.account }}
-                    </a>
-                  </small>
+                <td class="small word-break">
+                  <a :href="vote_account_path(validator)" v-if="validator.vote_account_active">
+                    {{ validator.vote_account_active.account }}
+                  </a>
                 </td>
               </tr>
 
@@ -168,7 +166,7 @@
                 <td>
                   <strong>Security Info:</strong>
                 </td>
-                <td>
+                <td class="small word-break">
                   <a :href="validator.security_report_url" target="_blank">
                     {{ validator.security_report_url }}
                   </a>
@@ -250,10 +248,10 @@
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
   import loadingImage from 'loading.gif';
+  import '../mixins/numbers_mixins'
+  import '../mixins/dates_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
-
-  var moment = require('moment');
 
   export default {
     props: {
@@ -332,10 +330,6 @@
           this.reload_validator_data()
         }, this.reload_time)
       },
-      
-      lamports_to_sol(lamports) {
-        return lamports * 0.000000001;
-      },
 
       is_private() {
         return this.score.commission == 100
@@ -390,11 +384,7 @@
 
       blazestake_url(validator) {
         return "https://stake.solblaze.org/app/?validator=" + validator.vote_account_active.account
-      },
-
-      creation_date() {
-        return moment(new Date(this.validator.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
-      },
+      }
     },
 
     components: {
