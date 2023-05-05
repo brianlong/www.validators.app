@@ -10,7 +10,7 @@ module StakePools
       @sp_attrs = initial_attrs
 
       Validator.where(id: validator_ids)
-               .includes(:stake_accounts, :validator_score_v1)
+               .includes(:validator_score_v1, stake_accounts: :stake_pool)
                .find_each do |validator|
         @validator = validator
         score = validator.score
@@ -22,8 +22,11 @@ module StakePools
         sp_attrs[:scores].push validator_active_stake * score.total_score.to_i
         sp_attrs[:last_skipped_slots].push score.skipped_slot_history&.last
         sp_attrs[:commissions].push(validator_active_stake * validator.score.commission)
-        sp_attrs[:delinquent_count] =
-          score.delinquent ? sp_attrs[:delinquent_count] + 1 : sp_attrs[:delinquent_count]
+        sp_attrs[:delinquent_count] = if delinquent_with_minimum_stake?
+                                        sp_attrs[:delinquent_count] + 1
+                                      else
+                                        sp_attrs[:delinquent_count]
+                                      end
       end
 
       set_averages
@@ -32,6 +35,11 @@ module StakePools
     private
 
     attr_reader :pool, :validator, :validator_ids, :sp_attrs
+
+    def delinquent_with_minimum_stake?
+      validator.delinquent? &&
+        validator.stake_accounts.where(stake_pool: pool).with_minimum_stake.present?
+    end
 
     def calculate_active_stake
       validator.stake_accounts.active.where(stake_pool: pool).sum(:active_stake)
@@ -68,8 +76,8 @@ module StakePools
       pool.average_uptime = sp_attrs[:uptimes].average
       pool.average_lifetime = sp_attrs[:lifetimes].average
       pool.average_score = (sp_attrs[:scores].sum / sp_attrs[:total_active_stake].to_f).round(2)
-      pool.average_delinquent = (sp_attrs[:delinquent_count] / validator_ids.size) * 100
       pool.average_skipped_slots = sp_attrs[:last_skipped_slots].compact.average
+      pool.delinquent_count = sp_attrs[:delinquent_count]
     end
 
     def initial_attrs

@@ -16,7 +16,7 @@
                :title="'Filter by ' + pool.name"
                @click.prevent="filter_by_withdrawer(pool)"
             >
-              <img :src="stakePoolLargeLogo(pool.name)"
+              <img :src="stake_pool_large_logo(pool.name)"
                    :alt="pool.name"
                    class="img-link w-100 px-2 px-lg-3 px-lx-2 py-4 py-md-3 py-xl-4" />
             </a>
@@ -196,12 +196,12 @@
       <hr />
       <h3 class="h5">Nodes total</h3>
       <p class="mb-5">
-        Number of validators used by the stake pool. Bigger validator diversity helps to maintain good network health.
+        Number of validators (> 1 SOL) used by the stake pool. Bigger validator diversity helps to maintain good network health.
       </p>
 
       <h3 class="h5">Nodes Delinquent</h3>
       <p class="mb-5">
-        Number of delinquent validators used by the stake pool.
+        Number of delinquent validators (> 1 SOL) used by the stake pool.
       </p>
 
       <h3 class="h5">Nodes Stake</h3>
@@ -237,8 +237,8 @@
 
       <h3 class="h5">ROD</h3>
       <p>
-        <strong>Return on Delegation</strong> - rate of return from delegating to a stake pool. 
-        It is the weighted average of the RODs from all the validators reduced by the manager fee. 
+        <strong>Return on Delegation</strong> - rate of return from delegating to a stake pool.
+        It is the weighted average of the RODs from all the validators reduced by the manager fee.
         Validators weight is proportional to the active_stake of the accounts.<br />
         ROD of the validator is calculated as follows:
       </p>

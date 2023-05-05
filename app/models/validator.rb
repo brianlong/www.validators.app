@@ -48,7 +48,7 @@ class Validator < ApplicationRecord
 
   FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
 
-  DEFAULT_FILTERS = %w(inactive active private delinquent).freeze
+  DEFAULT_FILTERS = %w(active private delinquent).freeze
 
   has_many :vote_accounts, dependent: :destroy
   has_many :stake_accounts, dependent: :destroy
@@ -104,7 +104,6 @@ class Validator < ApplicationRecord
       query = []
 
       query.push "validator_score_v1s.delinquent = true" if filter.include? "delinquent"
-      query.push "validators.is_active = false" if filter.include? "inactive"
       query.push "validators.is_active = true" if filter.include? "active"
       query.push "validator_score_v1s.commission = 100" if filter.include? "private"
 
@@ -298,10 +297,6 @@ class Validator < ApplicationRecord
 
   def private_validator?
     score&.commission == 100 && network == 'mainnet'
-  end
-
-  def lido?
-    name&.start_with?('Lido')
   end
 
   def api_url

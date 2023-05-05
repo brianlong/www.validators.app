@@ -1,5 +1,7 @@
 import Vue from 'vue/dist/vue.esm'
-import '../mixins/stake_pools_mixins';
+import '../mixins/stake_pools_mixins'
+import '../mixins/numbers_mixins'
+import '../mixins/validators_mixins'
 
 import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
@@ -54,10 +56,6 @@ var ValidatorRow = Vue.component('validatorRow', {
       return key.substring(0, 6) + "..." + key.substring(key.length - 4)
     },
 
-    is_validator_lido() {
-      return this.validator['name']?.substring(0, 4) === 'Lido'
-    },
-
     is_validator_private() {
       return this.validator['commission'] === 100 && this.validator['network'] === 'mainnet'
     },
@@ -67,8 +65,8 @@ var ValidatorRow = Vue.component('validatorRow', {
     },
 
     displayed_validator_name() {
-      if (this.is_validator_private() && !this.is_validator_lido()) {
-        return 'Private Validator'
+      if(this.is_validator_private()) {
+        return "Private Validator"
       } else {
         if (this.validator["name"]) {
           return this.shortened_validator_name(this.validator["name"])
@@ -80,20 +78,6 @@ var ValidatorRow = Vue.component('validatorRow', {
 
     validator_url() {
       return "/validators/" + this.validator["account"] + "?network=" + this.validator["network"]
-    },
-
-    lamports_to_sol(lamports) {
-      return lamports / 1000000000
-    },
-
-    skipped_vote_percent() {
-      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']) {
-        var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
-
-        return skipped_votes_percent ? ((batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).round(2) : null
-      } else {
-        return null
-      }
     },
 
     chart_line_color(val) {
@@ -175,7 +159,7 @@ var ValidatorRow = Vue.component('validatorRow', {
             </div>
             <img :src="create_avatar_link()" class='img-circle-large' v-if="!is_validator_private()"/>
           </div>
-          
+
           <div class="column-info-name">
             <a :href="validator_url()" class="column-info-link no-watchlist fw-bold">
               {{ displayed_validator_name() }}

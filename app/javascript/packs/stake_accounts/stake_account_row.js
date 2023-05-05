@@ -70,7 +70,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
               <td class="text-center pe-0 d-none d-xl-table-cell">
                 <img class="img-sm"
                      :title="stake_account.pool_name"
-                     :src="stakePoolSmallLogo(stake_account.pool_name)" />
+                     :src="stake_pool_small_logo(stake_account.pool_name)" />
               </td>
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}

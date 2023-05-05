@@ -53,7 +53,7 @@
                 <strong class="text-success h6">{{ pt.response_time.toLocaleString('en-US') }}</strong>&nbsp;ms
               </td>
               <td class="small">
-                {{ formatted_date(pt.reported_at) }}<br />
+                {{ date_time_with_timezone(pt.reported_at) }}<br />
                 <span class="word-break">
                   <a :href="link_from_signature(pt.signature)" target="_blank" class="small">
                     {{ signature_shortened(pt.signature) }}
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-  var moment = require('moment');
+  import '../mixins/dates_mixins'
   import axios from 'axios'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
@@ -149,13 +149,6 @@
 
       signature_shortened(signature) {
         return signature.substring(0,6) + "..." + signature.substring(signature.length - 4, signature.length)
-      },
-
-      formatted_date(date) {
-        var date = new Date(date)
-        var formatted_date = moment(date).utc().format('YYYY-MM-DD HH:mm:ss z')
-
-        return formatted_date
       },
 
       slot_latency(sent, landed) {

@@ -130,7 +130,7 @@ class StakeLogicTest < ActiveSupport::TestCase
       :validator_score_v1,
       validator: validator,
       skipped_slot_history: [2, 5],
-      delinquent: false,
+      delinquent: true,
       network: "testnet"
     )
 
@@ -141,7 +141,6 @@ class StakeLogicTest < ActiveSupport::TestCase
       average_uptime: nil,
       average_lifetime: nil,
       average_score: nil,
-      average_delinquent: nil,
       average_skipped_slots: nil
     )
 
@@ -161,8 +160,8 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert stake_pool.average_uptime
     assert stake_pool.average_lifetime
     assert stake_pool.average_score
-    assert stake_pool.average_delinquent
     assert stake_pool.average_skipped_slots
+    assert stake_pool.delinquent_count
   end
 
   test "count average_score" do
