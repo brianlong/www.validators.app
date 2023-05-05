@@ -43,10 +43,6 @@ module DataCenters
       DataCenter.where(data_center_key: dc_key).order(created_at: :asc)
     end
 
-    def detach_validator_ips
-      ValidatorIp.where(id: @validator_ips_to_detach).update_all(data_center_host_id: nil)
-    end
-
     def find_or_create_host(data_center, data_center_host)
       if @perform_update
         data_center.data_center_hosts.find_or_create_by(host: data_center_host.host)
