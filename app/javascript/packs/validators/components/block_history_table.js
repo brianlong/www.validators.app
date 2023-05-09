@@ -1,4 +1,4 @@
-var moment = require('moment');
+import '../../mixins/dates_mixins'
 
 export default {
   props: {
@@ -21,9 +21,6 @@ export default {
   methods: {
     block_stats(history) {
       return this.block_history_stats.find(o => o.batch_uuid == history.batch_uuid);
-    },
-    history_created_at(history) {
-      return moment(new Date(history.created_at)).utc().format('YYYY-MM-DD HH:mm:ss z')
     },
     formatted_number(n) {
       return n.toLocaleString('en-US').replace("&nbsp;", ",")
@@ -75,7 +72,7 @@ export default {
               {{ (history.skipped_slot_percent * 100.0).toLocaleString('en-US', {maximumFractionDigits: 2}) }}%<br />
               {{ (block_stats(history).total_slots_skipped / block_stats(history).total_slots * 100.0).toLocaleString('en-US', {maximumFractionDigits: 2}) }}%
             </td>
-            <td v-html="history_created_at(history)">
+            <td v-html="date_time_with_timezone(history.created_at)">
             </td>
           </tr>
         </tbody>

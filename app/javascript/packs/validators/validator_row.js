@@ -1,5 +1,7 @@
 import Vue from 'vue/dist/vue.esm'
-import '../mixins/stake_pools_mixins';
+import '../mixins/stake_pools_mixins'
+import '../mixins/numbers_mixins'
+import '../mixins/validators_mixins'
 
 import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
@@ -76,20 +78,6 @@ var ValidatorRow = Vue.component('validatorRow', {
 
     validator_url() {
       return "/validators/" + this.validator["account"] + "?network=" + this.validator["network"]
-    },
-
-    lamports_to_sol(lamports) {
-      return lamports / 1000000000
-    },
-
-    skipped_vote_percent() {
-      if (this.validator['skipped_vote_history'] && this.batch['best_skipped_vote']) {
-        var skipped_votes_percent = this.validator['skipped_vote_history'][-1]
-
-        return skipped_votes_percent ? ((batch['best_skipped_vote'] - skipped_votes_percent) * 100.0).round(2) : null
-      } else {
-        return null
-      }
     },
 
     chart_line_color(val) {

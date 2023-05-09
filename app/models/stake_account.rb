@@ -29,6 +29,7 @@
 #
 # Indexes
 #
+#  index_stake_accounts_on_active_stake              (active_stake)
 #  index_stake_accounts_on_stake_pool_id             (stake_pool_id)
 #  index_stake_accounts_on_stake_pubkey_and_network  (stake_pubkey,network)
 #  index_stake_accounts_on_staker_and_network        (staker,network)
@@ -36,6 +37,8 @@
 #
 
 class StakeAccount < ApplicationRecord
+
+  MINIMUM_STAKE = 1_000_000_000.freeze # 1 sol
 
   API_FIELDS = %i[
     id
@@ -68,6 +71,7 @@ class StakeAccount < ApplicationRecord
   scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
   scope :filter_by_withdrawer, ->(withdrawer) { where('withdrawer LIKE ?', "#{withdrawer}%") }
   scope :active, ->() { where.not(active_stake: [0, nil]) }
+  scope :with_minimum_stake, ->() { where("stake_accounts.active_stake > ?", MINIMUM_STAKE) }
 
   def history_from_epoch(epoch)
     StakeAccountHistory.find_by(
@@ -82,7 +86,7 @@ class StakeAccount < ApplicationRecord
 
   def stake_pool_valid
     return unless stake_pool && self.active?
-    return if active_stake < StakeAccountQuery::MINIMUM_STAKE
+    return if active_stake < MINIMUM_STAKE
 
     stake_pool
   end

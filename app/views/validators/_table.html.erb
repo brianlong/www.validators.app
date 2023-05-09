@@ -104,7 +104,7 @@
     <tr id="row-<%= i %>">
       <td class="column-info">
         <div class="column-info-row" data-turbolinks="false">
-          <div class="column-info-avatar <%= 'no-watchlist' unless (current_user && show_watchlist_btn) %>">
+          <div class="column-info-avatar">
             <%= create_avatar_link(validator) %>
             <% if current_user && show_watchlist_btn %>
               <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fa-solid' : 'fa-regular' %> fa-star"
@@ -117,7 +117,7 @@
             <% end %>
           </div>
           <div class="column-info-name">
-            <%= link_to validator_url(network: params[:network], account: validator.account), class: "column-info-link fw-bold #{'no-watchlist' unless current_user}" do %>
+            <%= link_to validator_url(network: params[:network], account: validator.account), class: "column-info-link fw-bold #{'no-watchlist' unless (current_user && show_watchlist_btn)}" do %>
               <%= displayed_validator_name(validator) %> <%= displayed_validator_commission(validator) %>
             <% end %>
             <br />

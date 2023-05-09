@@ -26,46 +26,46 @@ import SoceanLarge from 'socean.png'
 
 const logos = {
   "blazestake": {
-    "smallLogo": BlazeStakeSmall,
-    "largeLogo": BlazeStakeLarge,
+    "small_logo": BlazeStakeSmall,
+    "large_logo": BlazeStakeLarge,
   },
   "daopool": {
-    "smallLogo": DAOPoolSmall,
-    "largeLogo": DAOPoolLarge,
+    "small_logo": DAOPoolSmall,
+    "large_logo": DAOPoolLarge,
   },
   "eversol": {
-    "smallLogo": EversolSmall,
-    "largeLogo": EversolLarge,
+    "small_logo": EversolSmall,
+    "large_logo": EversolLarge,
   },
   "jito": {
-    "smallLogo": JitoSmall,
-    "largeLogo": JitoLarge,
+    "small_logo": JitoSmall,
+    "large_logo": JitoLarge,
   },
   "jpool": {
-    "smallLogo": JpoolSmall,
-    "largeLogo": JpoolLarge,
+    "small_logo": JpoolSmall,
+    "large_logo": JpoolLarge,
   },
   "lido": {
-    "smallLogo": LidoSmall,
-    "largeLogo": LidoLarge,
+    "small_logo": LidoSmall,
+    "large_logo": LidoLarge,
   },
   "marinade": {
-    "smallLogo": MarinadeSmall,
-    "largeLogo": MarinadeLarge,
+    "small_logo": MarinadeSmall,
+    "large_logo": MarinadeLarge,
   },
   "socean": {
-    "smallLogo": SoceanSmall,
-    "largeLogo": SoceanLarge,
+    "small_logo": SoceanSmall,
+    "large_logo": SoceanLarge,
   },
 }
 
 Vue.mixin({
   methods: {
-    stakePoolSmallLogo(stake_pool) {
-      return logos[stake_pool.toLowerCase()]["smallLogo"];
+    stake_pool_small_logo(stake_pool) {
+      return logos[stake_pool.toLowerCase()]["small_logo"];
     },
-    stakePoolLargeLogo(stake_pool) {
-      return logos[stake_pool.toLowerCase()]["largeLogo"];
+    stake_pool_large_logo(stake_pool) {
+      return logos[stake_pool.toLowerCase()]["large_logo"];
     },
   }
 });
