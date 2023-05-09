@@ -7,14 +7,18 @@ module Api
         per = authority_params[:per].to_i <= 0 ? 100 : authority_params[:per].to_i
         page = authority_params[:page].to_i <= 0 ? 1 : authority_params[:page].to_i
 
-        @validator = Validator.where(network: authority_params[:network], account: authority_params[:validator]).first
+        @validator = Validator.where(
+          network: authority_params[:network],
+          account: authority_params[:validator]
+        ).first unless authority_params[:validator].blank?
 
         @account_authority_histories = AccountAuthorityHistory.where(
           network: authority_params[:network],
         )
 
         if @validator
-          @account_authority_histories = @account_authority_histories.where(validator: @validator)
+          va_ids = @validator.vote_accounts.pluck(:id)
+          @account_authority_histories = @account_authority_histories.where(vote_account_id: va_ids)
         end
 
         @account_authority_histories = @account_authority_histories.order(created_at: :desc)

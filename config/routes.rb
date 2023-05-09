@@ -172,7 +172,7 @@ Rails.application.routes.draw do
 
       get "data-centers-with-nodes/:network", to: "data_centers#index_with_nodes", as: "data_centers_with_nodes"
 
-      get "account-authorities/:network", to: "account_authorities#index", as: "account_authorities"
+      get "account-authorities/:network", to: "account_authority#index", as: "account_authorities"
     end
   end
 end
