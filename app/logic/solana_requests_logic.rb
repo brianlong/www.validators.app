@@ -4,10 +4,14 @@ module SolanaRequestsLogic
   RPC_TIMEOUT = 60 # seconds
 
   # Clusters array, method symbol
-  def solana_client_request(clusters, method, params: [])
+  def solana_client_request(clusters, method, params: nil)
     clusters.each do |cluster_url|
       client = SolanaRpcClient.new(cluster: cluster_url).client
-      result = client.public_send(method, *params).result
+      result =  if params
+                  client.public_send(method, params.first, **params.last).result
+                else
+                  client.public_send(method).result
+                end
 
       return result unless result.blank?
     rescue SolanaRpcRuby::ApiError => e
