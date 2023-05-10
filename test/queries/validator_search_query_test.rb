@@ -6,7 +6,7 @@ class ValidatorSearchQueryTest < ActiveSupport::TestCase
   def setup
     super
 
-    current_version = '1.5.4'
+    current_version = "1.5.4"
     create(:batch, software_version: current_version, network: "searchnet")
 
     # Setup data centers with data center hosts
