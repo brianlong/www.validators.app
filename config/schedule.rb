@@ -39,9 +39,9 @@ job_type :ruby_script_data_centers,
 # role background should be set on every schedule to limit it to a correct server
 
 every 1.hour, at: 0, roles: [:background] do
-  runner "AsnLogicWorker.perform_async('network' => 'mainnet')"
-  runner "AsnLogicWorker.perform_async('network' => 'testnet')"
-  runner "AsnLogicWorker.perform_async('network' => 'pythnet')"
+  runner "AsnLogicWorker.perform_async(network: 'mainnet')"
+  runner "AsnLogicWorker.perform_async(network: 'testnet')"
+  runner "AsnLogicWorker.perform_async(network: 'pythnet')"
   ruby_script_data_centers "check_hetzner_admin_warning.rb"
 end
 
