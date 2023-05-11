@@ -44,7 +44,7 @@ class EpochWallClock < ApplicationRecord
       TrackCommissionChangesWorker.set(
         wait_until: 1.hour,
         queue: "high_priority"
-      ).perform_async({current_batch_uuid: current_batch_uuid})
+      ).perform_async({ "current_batch_uuid" => current_batch_uuid })
     end
   end
 
