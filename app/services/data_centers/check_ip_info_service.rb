@@ -48,22 +48,9 @@ class DataCenters::CheckIpInfoService
 
   def set_data_center(max_mind_info)
     DataCenter.find_or_initialize_by(
-      continent_code: max_mind_info.continent.code,
-      continent_geoname_id: max_mind_info.continent.geoname_id,
-      continent_name: max_mind_info.continent.name,
-      country_iso_code: unified_country_code(max_mind_info.country.iso_code),
-      country_geoname_id: max_mind_info.country.geoname_id,
-      country_name: unified_country(max_mind_info.country.name),
-      registered_country_iso_code: unified_country_code(max_mind_info.registered_country.iso_code),
-      registered_country_geoname_id: max_mind_info.registered_country.geoname_id,
-      registered_country_name: unified_country(max_mind_info.registered_country.name),
-      traits_anonymous: max_mind_info.traits.anonymous?,
-      traits_hosting_provider: max_mind_info.traits.hosting_provider?,
-      traits_user_type: max_mind_info.traits.user_type,
       traits_autonomous_system_number: max_mind_info.traits.autonomous_system_number,
-      traits_autonomous_system_organization: max_mind_info.traits.autonomous_system_organization,
+      country_iso_code: unified_country_code(max_mind_info.country.iso_code),
       city_name: max_mind_info.city.name,
-      location_metro_code: max_mind_info.location.metro_code,
       location_time_zone: max_mind_info.location.time_zone,
     )
   end
@@ -73,18 +60,40 @@ class DataCenters::CheckIpInfoService
     data_center.normalize_empty_strings
 
     # This data cause duplicated data_center records
-    data_center.city_confidence ||= max_mind_info.city.confidence
-    data_center.city_geoname_id ||= max_mind_info.city.geoname_id
-    data_center.country_confidence ||= max_mind_info.country.confidence
-    data_center.location_accuracy_radius ||= max_mind_info.location.accuracy_radius
-    data_center.location_average_income ||= max_mind_info.location.average_income
-    data_center.location_latitude ||= max_mind_info.location.latitude
-    data_center.location_longitude ||= max_mind_info.location.longitude
-    data_center.location_population_density ||= max_mind_info.location.population_density
-    data_center.postal_code ||= max_mind_info.postal.code
-    data_center.postal_confidence ||= max_mind_info.postal.confidence
-    data_center.traits_isp ||= max_mind_info.traits.isp
-    data_center.traits_organization ||= max_mind_info.traits.organization
+    data_center.continent_code = max_mind_info.continent.code unless max_mind_info.continent.code.blank?
+    data_center.continent_geoname_id = max_mind_info.continent.geoname_id \
+      unless max_mind_info.continent.geoname_id.blank?
+    data_center.continent_name = max_mind_info.continent.name unless max_mind_info.continent.name.blank?
+    data_center.country_geoname_id = max_mind_info.country.geoname_id unless max_mind_info.country.geoname_id.blank?
+    data_center.country_name = unified_country(max_mind_info.country.name) \
+      unless unified_country(max_mind_info.country.name).blank?
+    data_center.registered_country_iso_code = unified_country_code(max_mind_info.registered_country.iso_code) \
+      unless unified_country_code(max_mind_info.registered_country.iso_code).blank?
+    data_center.registered_country_geoname_id = max_mind_info.registered_country.geoname_id \
+      unless max_mind_info.registered_country.geoname_id.blank?
+    data_center.registered_country_name = unified_country(max_mind_info.registered_country.name) \
+      unless unified_country(max_mind_info.registered_country.name).blank?
+    data_center.traits_anonymous = max_mind_info.traits.anonymous?
+    data_center.traits_hosting_provider = max_mind_info.traits.hosting_provider?
+    data_center.traits_user_type = max_mind_info.traits.user_type unless max_mind_info.traits.user_type.blank?
+    data_center.traits_autonomous_system_organization = max_mind_info.traits.autonomous_system_organization \
+      unless max_mind_info.traits.autonomous_system_organization.blank?
+    data_center.location_metro_code = max_mind_info.location.metro_code unless max_mind_info.location.metro_code.blank?
+    data_center.city_confidence = max_mind_info.city.confidence unless max_mind_info.city.confidence.blank?
+    data_center.city_geoname_id = max_mind_info.city.geoname_id unless max_mind_info.city.geoname_id.blank?
+    data_center.country_confidence = max_mind_info.country.confidence unless max_mind_info.country.confidence.blank?
+    data_center.location_accuracy_radius = max_mind_info.location.accuracy_radius \
+      unless max_mind_info.location.accuracy_radius.blank?
+    data_center.location_average_income = max_mind_info.location.average_income \
+      unless max_mind_info.location.average_income.blank?
+    data_center.location_latitude = max_mind_info.location.latitude unless max_mind_info.location.latitude.blank?
+    data_center.location_longitude = max_mind_info.location.longitude unless max_mind_info.location.longitude.blank?
+    data_center.location_population_density = max_mind_info.location.population_density \
+      unless max_mind_info.location.population_density.blank?
+    data_center.postal_code = max_mind_info.postal.code unless max_mind_info.postal.code.blank?
+    data_center.postal_confidence = max_mind_info.postal.confidence unless max_mind_info.postal.confidence.blank?
+    data_center.traits_isp = max_mind_info.traits.isp unless max_mind_info.traits.isp.blank?
+    data_center.traits_organization = max_mind_info.traits.organization unless max_mind_info.traits.organization.blank?
 
     unless max_mind_info.most_specific_subdivision.nil?
       data_center.subdivision_confidence ||= max_mind_info.most_specific_subdivision.confidence
