@@ -26,6 +26,7 @@
   <li><a href="#ping-thing-stats">Ping Thing Stats</a></li>
   <li><a href="#sol-prices">Sol Prices</a></li>
   <li><a href="#gossip-nodes">Gossip Nodes</a></li>
+  <li><a href="#account-authorities">Authority History</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#limits">Requests Limits</a></li>
   <li><a href="#notes">Notes</a></li>
@@ -593,6 +594,45 @@
     "latitude": "52.3716",
     "longitude": "4.8883"
   },
+  ...
+]
+
+</pre>
+
+<hr />
+
+<h2 class="h4" id="account-authorities">Authority History</h2>
+<p>Authority History endpoint will return changes in authorities for validators in a given network.</p>
+
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json'</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`validator=identity`</strong> will return results only for a given validator</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json?validator=:identity'</pre>
+<p><strong class="text-muted">`vote_account=account`</strong> will return results only for a given vote account</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json?vote_account=:account'</pre>
+<p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 100.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json?per=50'</pre>
+<p><strong class="text-muted">`page=NN`</strong> will return the results from provided page, defaults to 1.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json?per=50&page=1'</pre>
+
+<h3 class="h6">Response:</h3>
+<pre>
+[
+	{
+		"id": 175,
+		"authorized_withdrawer_before": null,
+		"authorized_withdrawer_after": "4hEF3wqsyr1NxXf2SYec3Qs8yk24vWsT7o7Cw7HsTLej",
+		"authorized_voters_before": null,
+		"authorized_voters_after": {
+			"432": "DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp"
+		},
+		"vote_account_id": 176,
+		"network": "mainnet",
+		"created_at": "2023-04-05T11:24:51.593Z",
+		"updated_at": "2023-04-05T11:24:51.593Z"
+	},
   ...
 ]
 
