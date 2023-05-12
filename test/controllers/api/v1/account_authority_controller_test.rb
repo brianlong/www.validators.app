@@ -2,7 +2,7 @@
 # test/controllers/api/v1/account_authority_controller_test.rb
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
