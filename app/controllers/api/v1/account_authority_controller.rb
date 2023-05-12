@@ -23,10 +23,15 @@ module Api
 
         @account_authority_histories = @account_authority_histories.page(page).per(per)
 
+        json_result = @account_authority_histories.as_json(
+          methods: [:vote_account_address],
+          except: [:id, :vote_account_id, :updated_at]
+        )
+
         respond_to do |format|
-          format.json { render json: @account_authority_histories.to_json }
+          format.json { render json: json_result }
           format.csv do
-            send_data convert_to_csv(index_csv_headers, @account_authority_histories.as_json),
+            send_data convert_to_csv(index_csv_headers, json_result),
                       filename: "account-authority-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end

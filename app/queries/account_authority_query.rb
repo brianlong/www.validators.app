@@ -6,7 +6,7 @@ class AccountAuthorityQuery
     @vote_account = VoteAccount.find_by(account: vote_account, network: network)
     @validator = Validator.find_by(account: validator, network: network)
 
-    @results = AccountAuthorityHistory.where(network: network)
+    @results = AccountAuthorityHistory.joins(:vote_account).where(network: network)
   end
 
   def call

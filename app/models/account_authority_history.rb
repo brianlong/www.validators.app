@@ -37,4 +37,8 @@ class AccountAuthorityHistory < ApplicationRecord
     created_at
     updated_at
   ].freeze
+
+  def vote_account_address
+    vote_account.account
+  end
 end
