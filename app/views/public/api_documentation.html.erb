@@ -608,9 +608,9 @@
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json'</pre>
 
 <h3 class="h6">Parameter Options:</h3>
-<p><strong class="text-muted">`validator=identity`</strong> will return results only for a given validator</p>
+<p><strong class="text-muted">`validator=identity`</strong> will return results only for a given validator.</p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json?validator=:identity'</pre>
-<p><strong class="text-muted">`vote_account=account`</strong> will return results only for a given vote account</p>
+<p><strong class="text-muted">`vote_account=account`</strong> will return results only for a given vote account.</p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json?vote_account=:account'</pre>
 <p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 100.</p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json?per=50'</pre>
