@@ -17,6 +17,10 @@ module SolanaLogic
       batch = Batch.create!(network: p.payload[:network])
 
       Pipeline.new(200, p.payload.merge(batch_uuid: batch.uuid))
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from batch_set', e)
     end
@@ -40,6 +44,10 @@ module SolanaLogic
       batch&.save
 
       Pipeline.new(200, p.payload)
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from batch_touch', e)
     end
@@ -65,6 +73,10 @@ module SolanaLogic
                           epoch: epoch.epoch,
                           epoch_slot_index: epoch.slot_index
                         ))
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from epoch_get', e)
     end
@@ -161,6 +173,11 @@ module SolanaLogic
       end
 
       Pipeline.new(200, p.payload)
+
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, "Error from validator_history_update", e)
     end
@@ -400,6 +417,10 @@ module SolanaLogic
       end
 
       Pipeline.new(200, p.payload)
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from validators_save', e)
     end
@@ -578,6 +599,10 @@ module SolanaLogic
         validator.info_pub_key = result['infoPubkey'].strip
 
         validator.save!
+      rescue ActiveRecord::ConnectionNotEstablished => e
+        Appsignal.send_error(e)
+        puts "#{e.class}\n#{e.message}"
+        exit(500)
       rescue StandardError => e
         # I don't want to break the loop, but I do want to write these to the
         # Rails log so I can see failures.

@@ -7,6 +7,6 @@
 
 require_relative '../../config/environment'
 
-run_update = ARGV[0] == "yes" ? true : false
+perform_update = ARGV[0] == "yes" ? true : false
 
-DataCenters::MergeDuplicates.new(run_update: run_update).call
+DataCenters::MergeDuplicates.new(perform_update: perform_update).call
