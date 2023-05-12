@@ -60,7 +60,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
     assert_equal @software_version, stat.software_version
     assert_equal 5, stat.validator_count
     assert_equal 5, stat.nodes_count
-    assert_equal 2191.46, stat.roi
+    assert_equal 1460.97, stat.roi
   end
 
   test "#call updates ClusterStat with correct total_active_stake" do

@@ -7,13 +7,12 @@ module ClusterStats
     setup do
       @network = "testnet"
 
-      create(:epoch_wall_clock, epoch: 301, created_at: 16.days.ago)
+      create(:epoch_wall_clock, epoch: 301, created_at: 15.days.ago)
       create(:epoch_wall_clock, epoch: 302, created_at: 12.5.days.ago)
       create(:epoch_wall_clock, epoch: 303, created_at: 10.days.ago)
       create(:epoch_wall_clock, epoch: 304, created_at: 7.5.days.ago)
       create(:epoch_wall_clock, epoch: 305, created_at: 5.days.ago)
       create(:epoch_wall_clock, epoch: 306, created_at: 2.5.days.ago)
-      create(:epoch_wall_clock, epoch: 307)
     end
 
     test "updates epoch duration" do
@@ -22,7 +21,7 @@ module ClusterStats
 
       ClusterStats::UpdateEpochDurationService.new(@network).call
 
-      assert_equal 180000.0, cluster_stat.reload.epoch_duration
+      assert_equal 216000.0, cluster_stat.reload.epoch_duration
     end
 
     test "updates epoch duration if there are less of epoch_wall_clock records" do
