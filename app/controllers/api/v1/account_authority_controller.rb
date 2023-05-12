@@ -8,6 +8,7 @@ module Api
 
       def index
         per = authority_params[:per].to_i <= 0 ? DEFAULT_PER : authority_params[:per].to_i
+        per = [per, 9999].min # max per page is 9999
         page = authority_params[:page].to_i <= 0 ? DEFAULT_PAGE : authority_params[:page].to_i
 
         begin
