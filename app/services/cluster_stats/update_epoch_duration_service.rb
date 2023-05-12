@@ -3,7 +3,7 @@
 module ClusterStats
   class UpdateEpochDurationService
 
-    NUMBER_OF_EPOCHS = 5
+    NUMBER_OF_EPOCHS = 6
 
     def initialize(network)
       @network = network
@@ -28,7 +28,10 @@ module ClusterStats
     end
 
     def epoch_duration
-      (epochs.first.created_at - epochs.last.created_at) / NUMBER_OF_EPOCHS
+      diff = (epochs.first.created_at - epochs.last.created_at)
+      return diff if epochs.size == 2
+
+      diff / epochs.size
     end
   end
 end
