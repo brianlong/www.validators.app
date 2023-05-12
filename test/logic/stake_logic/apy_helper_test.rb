@@ -8,7 +8,7 @@ class ApyHelperTest < ActiveSupport::TestCase
     @network = "testnet"
   end
 
-  test "number_of_epnumber_of_epochs_in_yearochs returns correct number" do
+  test "number_of_epochs_in_year returns correct number" do
     create(:cluster_stat, network: @network)
 
     num_of_epochs = number_of_epochs_in_year(@network)
