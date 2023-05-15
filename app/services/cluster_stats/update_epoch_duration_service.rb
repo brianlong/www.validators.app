@@ -28,11 +28,10 @@ module ClusterStats
     end
 
     def epoch_duration
-      diff = epochs.first.created_at - epochs.last.created_at
-      diffs_between_epochs_amount = epochs.size - 1
-      return diff if diffs_between_epochs_amount <= 1
+      last_epochs_duration = epochs.first.created_at - epochs.last.created_at
+      return last_epochs_duration if epochs.size <= 2
 
-      diff / diffs_between_epochs_amount
+      last_epochs_duration / (epochs.size - 1)
     end
   end
 end
