@@ -19,7 +19,7 @@
       },
       toggle_searcher() {
         this.is_active = !this.is_active
-        let searcher_bar = document.getElementById("searcher-bar")
+        const searcher_bar = document.getElementById("searcher-bar")
         searcher_bar.classList.toggle("d-none")
         if (this.is_active == true) {
           searcher_bar.getElementsByClassName("form-control")[0].focus()
