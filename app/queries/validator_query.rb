@@ -3,6 +3,8 @@
 class ValidatorQuery < ApplicationQuery
   include ValidatorsControllerHelper
 
+  RAND_SEED_VAL = 123
+
   def initialize(watchlist_user: nil, api: false)
     @api = api
     @default_scope = if @api
@@ -86,7 +88,11 @@ class ValidatorQuery < ApplicationQuery
       "validator_score_v1s.network, validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc"
     else # Order by score by default
       main_sort = "validator_score_v1s.network, validator_score_v1s.total_score desc"
-      secondary_sort = @api ? "validator_score_v1s.network, validator_score_v1s.active_stake desc" : "RAND()"
+      secondary_sort = if @api
+                         "validator_score_v1s.active_stake desc"
+                       else
+                         "RAND(#{RAND_SEED_VAL + DateTime.current.hour})"
+                       end
 
       [main_sort, secondary_sort].join(", ")
     end
