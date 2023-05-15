@@ -51,6 +51,7 @@ class Validator < ApplicationRecord
   DEFAULT_FILTERS = %w(active private delinquent).freeze
 
   has_many :vote_accounts, dependent: :destroy
+  has_many :account_authority_histories, through: :vote_accounts, dependent: :destroy
   has_many :stake_accounts, dependent: :destroy
   has_many :vote_account_histories, through: :vote_accounts, dependent: :destroy
   has_many :validator_ips, dependent: :nullify

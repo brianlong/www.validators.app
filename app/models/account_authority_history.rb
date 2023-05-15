@@ -27,4 +27,18 @@ class AccountAuthorityHistory < ApplicationRecord
 
   serialize :authorized_voters_before, JSON
   serialize :authorized_voters_after, JSON
+
+  API_FIELDS = %i[
+    authorized_voters_after
+    authorized_voters_before
+    authorized_withdrawer_after
+    authorized_withdrawer_before
+    network
+    created_at
+    updated_at
+  ].freeze
+
+  def vote_account_address
+    vote_account.account
+  end
 end
