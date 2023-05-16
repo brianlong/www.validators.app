@@ -7,13 +7,13 @@ module SolanaRequestsLogic
   def solana_client_request(clusters, method, params: nil)
     clusters.each do |cluster_url|
       client = SolanaRpcClient.new(cluster: cluster_url).client
-      result =  if params
-                  client.public_send(method, params.first, **params.last).result
-                else
-                  client.public_send(method).result
-                end
+      response = if params
+                   client.public_send(method, params.first, **params.last).result
+                 else
+                   client.public_send(method).result
+                 end
 
-      return result unless result.blank?
+      return response unless response.blank?
     rescue SolanaRpcRuby::ApiError => e
       Appsignal.send_error(e) if Rails.env.in?(['stage', 'production'])
       message = "Request to solana RPC failed:\n Method: #{method}\nCluster: #{cluster_url}\nCLASS: #{e.class}\n#{e.message}"
