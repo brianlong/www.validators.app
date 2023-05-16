@@ -74,18 +74,6 @@ module ValidatorsHelper
     versions&.sort_by { |ver| ver.values[0]["stake_percent"] }&.reverse
   end
 
-  def solstake_url(vote_account)
-    "https://solstake.io/#/app/validator/#{vote_account}"
-  end
-
-  def staking_kiwi_url(vote_account)
-    "https://staking.kiwi/app/#{vote_account}"
-  end
-
-  def blazestake_url(vote_account)
-    "https://stake.solblaze.org/app/?validator=#{vote_account}"
-  end
-
   def link_to_validator_website(url)
     return "" unless url.present?
 
