@@ -16,15 +16,19 @@ class ValidatorsController < ApplicationController
     end
 
     watchlist_user = validators_params[:watchlist] ? current_user&.id : nil
+    session[:random_seed_val] ||= rand(0..1000)
 
     @validators = ValidatorQuery.new(watchlist_user: watchlist_user).call(
       network: validators_params[:network],
       sort_order: validators_params[:order],
       limit: @per,
       page: validators_params[:page],
-      query: validators_params[:q],
-      admin_warning: validators_params[:admin_warning],
-      jito: validators_params[:jito] == "true"
+      jito: validators_params[:jito] == "true",
+      params: {
+        query: validators_params[:q],
+        admin_warning: validators_params[:admin_warning],
+        random_seed_val: session[:random_seed_val]
+      }
     )
 
     if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
@@ -44,7 +48,9 @@ class ValidatorsController < ApplicationController
       network: validators_params[:network],
       limit: @per,
       page: validators_params[:page],
-      query: validators_params[:q]
+      params: {
+        query: validators_params[:q]
+      }
     )
 
     set_batch_and_epoch
