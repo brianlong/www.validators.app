@@ -15,11 +15,15 @@
 
     methods: {
       searcher_btn_class() {
-        return this.is_active ? 'active' : ''
+        return this.is_active ? "active" : ""
       },
       toggle_searcher() {
         this.is_active = !this.is_active
-        document.getElementById("searcher-bar").classList.toggle("d-none")
+        const searcher_bar = document.getElementById("searcher-bar")
+        searcher_bar.classList.toggle("d-none")
+        if (this.is_active == true) {
+          searcher_bar.getElementsByClassName("form-control")[0].focus()
+        }
       }
     }
   }

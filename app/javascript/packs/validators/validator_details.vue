@@ -26,6 +26,10 @@
             title="Delegate SOL to this validator on BlazeStake"
             class="btn btn-sm btn-secondary"
             target="_blank">Liquid Stake through BlazeStake</a>
+          <a :href="marinade_url(validator)"
+            title="Delegate SOL to this validator on Marinade"
+            class="btn btn-sm btn-secondary"
+            target="_blank">Direct stake with mSOL</a>
         </div>
 
         <div class="d-flex flex-wrap gap-3">
@@ -384,6 +388,10 @@
 
       blazestake_url(validator) {
         return "https://stake.solblaze.org/app/?validator=" + validator.vote_account_active.account
+      },
+
+      marinade_url(validator) {
+        return "https://marinade.finance/app/staking/?stakeTo=" + validator.vote_account_active.account
       }
     },
 

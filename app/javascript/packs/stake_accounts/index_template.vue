@@ -246,9 +246,9 @@
         <strong> ((1 + rewards_percent) ^ number_of_epochs_per_year) - 1 </strong>
       </p>
       <p>
-        Where number_of_epochs_per_year is calculated as follows:
-        <strong>seconds_in_year / duration_of_last_epoch_in_seconds</strong><br />
-        This gives the number of epochs in a year assuming all epochs were as long as the last epoch.
+        Where number_of_epochs_per_year is calculated as follows: seconds_in_year / average_epoch_duration.
+        Average_epoch_duration is an average in seconds, based on last
+        {{ number_of_epochs }} epochs.
       </p>
       <p class="mb-5">
         And <strong>rewards_percent</strong> is the interest rate of validator, based on the reward from the last epoch.
@@ -295,6 +295,8 @@
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
+  const NUMBER_OF_EPOCHS = 6
+
   export default {
     data () {
       return {
@@ -317,7 +319,8 @@
         loading_image: loadingImage,
         seed: Math.floor(Math.random() * 1000),
         is_stake_below_minimum_visible: true,
-        is_loading_stake_account_records: false
+        is_loading_stake_account_records: false,
+        number_of_epochs: NUMBER_OF_EPOCHS
       }
     },
 
