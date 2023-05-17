@@ -174,7 +174,7 @@ module StakeLogic
       reward_info = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
-        params: [account_rewards.keys]
+        params: [account_rewards.keys, {}]
       )
 
       raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \

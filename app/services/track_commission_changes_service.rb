@@ -107,7 +107,7 @@ class TrackCommissionChangesService
     solana_client_request(
       @solana_url,
       "get_inflation_reward",
-      params: [accounts]
+      params: [accounts, {}]
     )
   end
 
