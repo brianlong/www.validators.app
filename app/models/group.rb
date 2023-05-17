@@ -1,0 +1,12 @@
+# == Schema Information
+#
+# Table name: groups
+#
+#  id         :bigint           not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+class Group < ApplicationRecord
+  has_many :group_validators
+  has_many :validators, through: :group_validators
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_18_105345) do
+ActiveRecord::Schema.define(version: 2023_05_17_084810) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -244,6 +244,18 @@ ActiveRecord::Schema.define(version: 2023_04_18_105345) do
     t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
     t.index ["network", "is_active"], name: "index_gossip_nodes_on_network_and_is_active"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
+  end
+
+  create_table "group_validators", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "group_id"
+    t.integer "validator_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
