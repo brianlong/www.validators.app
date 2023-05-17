@@ -341,8 +341,9 @@
   (stake_account_rewards + vote_account_rewards / total_active_stake) * number_of_epochs_per_year
 </pre>
 <p>
-  Where number_of_epochs_per_year is calculated as follows: seconds_in_year / duration_of_last_epoch_in_seconds. 
-  This gives the number of epochs in a year assuming all epochs were as long as the last epoch.
+  Where number_of_epochs_per_year is calculated as follows: seconds_in_year / average_epoch_duration.
+  Average_epoch_duration is an average in seconds, based on last
+  <%= ClusterStats::UpdateEpochDurationService::NUMBER_OF_EPOCHS %> epochs.
 </p>
 <p class="mb-5">
   And stake_account_rewards and vote_account_rewards are the average reward per epoch based on last 3 epochs.
