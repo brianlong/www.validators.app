@@ -2,8 +2,8 @@ import Vue from "vue/dist/vue.esm"
 import IndexTemplate from './index_template'
 import TurbolinksAdapter from "vue-turbolinks"
 import store from "../stores/main_store.js"
-import { AuthorizedVoters } from "./authorized_voters"
-import { AuthorizedWithdrawer } from "./authorized_withdrawer"
+import * as AuthorizedVoters from "./authorized_voters"
+import * as AuthorizedWithdrawer from "./authorized_withdrawer"
 
 Vue.use(TurbolinksAdapter)
 
