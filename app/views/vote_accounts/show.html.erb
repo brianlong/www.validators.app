@@ -1,3 +1,5 @@
+<%= javascript_pack_tag 'account_authority_histories/index.js' %>
+
 <h1 class="page-header"><%= params[:network].capitalize %> Vote Account</h1>
 
 <div class="card">
@@ -27,10 +29,19 @@
       <td><strong>Commission:</strong></td>
       <td><%= @vote_account.vote_account_histories.last.commission rescue 'N/A' %> &percnt;</td>
     </tr>
+    <tr>
+      <td><strong>Authorized Withdrawer:</strong></td>
+      <td><%= @vote_account.authorized_withdrawer %></td>
+    </tr>
+    <tr>
+      <td><strong>Authorized Voters:</strong></td>
+      <td><%= @vote_account.authorized_voters %></td>
+    </tr>
     </tbody>
   </table>
 </div>
 
+<div id="authority-histories" vote_account="<%= @vote_account.account %>"></div>
 
 <div class="card mb-4">
   <div class="card-content pb-0">
@@ -38,7 +49,6 @@
   </div>
   <%= render partial: 'vote_account_histories_table' %>
 </div>
-
 
 <%= link_to 'Back to All Validators',
             validators_path(network: params[:network]),
