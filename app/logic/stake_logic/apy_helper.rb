@@ -28,7 +28,9 @@ module StakeLogic::ApyHelper
     apy < 100 && apy > 0 ? apy.round(6) : nil
   end
 
-  def number_of_epochs(current_epoch_created_at, previous_epoch_created_at)
-    1.year.to_i / (current_epoch_created_at - previous_epoch_created_at).to_f
+  def number_of_epochs_in_year(network)
+    stats = ClusterStat.find_or_create_by(network: network)
+
+    1.year.to_i / stats.epoch_duration
   end
 end

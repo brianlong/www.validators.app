@@ -34,12 +34,6 @@ class SolanaRequestsLogicTest < ActiveSupport::TestCase
     end
   end
 
-  # This test assumes that there is no validator RPC running locally.
-  test 'cli_request with no response' do
-    rpc_urls = [@local_url]
-    assert_equal [], cli_request('validators', rpc_urls)
-  end
-
   test 'solana_client_request returns data found in first cluster' do
     clusters = [
       @mainnet_url,

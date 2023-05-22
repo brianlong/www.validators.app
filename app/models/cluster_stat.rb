@@ -5,6 +5,7 @@
 # Table name: cluster_stats
 #
 #  id                 :bigint           not null, primary key
+#  epoch_duration     :float(24)
 #  network            :string(191)
 #  nodes_count        :integer
 #  roi                :float(24)

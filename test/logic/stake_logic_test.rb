@@ -18,7 +18,7 @@ class StakeLogicTest < ActiveSupport::TestCase
       ],
       network: 'testnet'
     }
-    @previous_epoch = create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 3.days.ago)
+    @previous_epoch = create(:epoch_wall_clock, network: "testnet", epoch: 1, created_at: 2.5.days.ago)
     @current_epoch = create(:epoch_wall_clock, network: "testnet", epoch: 2)
     @json_data = file_fixture("stake_accounts.json").read
   end
@@ -261,7 +261,7 @@ class StakeLogicTest < ActiveSupport::TestCase
 
     acc.reload
     assert_equal 200, p.code
-    assert_equal 12.5502, acc.apy
+    assert_equal 15.2432, acc.apy
   end
 
   test "calculate_apy_for_accounts returns nil apy if there are no rewards" do
