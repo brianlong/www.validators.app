@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th class="col-md-6 text-end">
-            Authorized Voter
+            Authorized Withdrawer
           </th>
           <th class="col-md-6">
             Timestamp
@@ -12,12 +12,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="voter in voters">
+        <tr v-for="withdrawer in withdrawers">
           <td class="text-end">
-            {{ voter.authorized_voters_after }}
+            {{ withdrawer.authorized_withdrawer_after }}
           </td>
           <td>
-            {{ date_time_with_timezone(voter.created_at) }}
+            {{ date_time_with_timezone(withdrawer.created_at) }}
           </td>
         </tr>
       </tbody>
@@ -30,7 +30,7 @@
 
   export default {
     props: {
-      voters: {
+      withdrawers: {
         type: Array,
         required: true
       }

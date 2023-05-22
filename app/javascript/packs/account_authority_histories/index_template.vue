@@ -4,13 +4,13 @@
       <img v-bind:src="loading_image" width="100">
     </div>
     <div v-else>
-      <div class="card mb-4">
+      <div v-if="authorized_withdrawers.length" class="card mb-4">
         <div class="card-content pb-0">
           <h2 class="h2 card-heading">Withdrawers History</h2>
           <AuthorizedWithdrawers :withdrawers="authorized_withdrawers" />
         </div>
       </div>
-      <div class="card mb-4">
+      <div v-if="authorized_voters.length" class="card mb-4">
         <div class="card-content pb-0">
           <h2 class="h2 card-heading">Voters History</h2>
           <AuthorizedVoters :voters="authorized_voters" />
@@ -55,7 +55,6 @@
           ctx.authorized_withdrawers = histories.filter(h => h.authorized_withdrawer_after)
           ctx.authorized_voters = histories.filter(h => h.authorized_voters_after)
           ctx.is_loading = false
-          console.log('ctx.authorized_voters', ctx.authorized_voters)
         })
     },
 
