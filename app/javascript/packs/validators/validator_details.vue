@@ -13,13 +13,14 @@
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-3">
-        <div class="d-flex flex-wrap gap-3"
-             v-if="display_staking_info(validator)"
-             v-for="stake in stake_delegations_shuffled()">
+        <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
           <a :href="generate_stake_url(stake[0], validator)"
             :title="stake[1].title"
             class="btn btn-sm btn-secondary"
-            target="_blank">{{ stake[1].name }}</a>
+            target="_blank"
+            v-for="stake in stake_delegations_shuffled()">
+            {{ stake[1].name }}
+          </a>
         </div>
 
         <div class="d-flex flex-wrap gap-3">
@@ -301,7 +302,6 @@
       this.order = params.get("order")
       this.page = params.get("page")
       this.reload_validator_data()
-      console.log('stake_delegations_shuffled', this.stake_delegations_shuffled())
     },
 
     computed: {
