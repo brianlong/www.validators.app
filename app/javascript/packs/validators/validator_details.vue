@@ -13,23 +13,13 @@
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-3">
-        <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
-          <a :href="solstake_url(validator)"
-            title="Delegate SOL to this validator on SolStake.io"
+        <div class="d-flex flex-wrap gap-3"
+             v-if="display_staking_info(validator)"
+             v-for="stake in stake_delegations_shuffled()">
+          <a :href="generate_stake_url(stake[0], validator)"
+            :title="stake[1].title"
             class="btn btn-sm btn-secondary"
-            target="_blank">Delegate on Solstake.io</a>
-          <a :href="kiwi_url(validator)"
-            title="Delegate SOL to this validator on Staking.kiwi"
-            class="btn btn-sm btn-secondary"
-            target="_blank">Delegate on Staking.kiwi</a>
-          <a :href="blazestake_url(validator)"
-            title="Delegate SOL to this validator on BlazeStake"
-            class="btn btn-sm btn-secondary"
-            target="_blank">Liquid Stake through BlazeStake</a>
-          <a :href="marinade_url(validator)"
-            title="Delegate SOL to this validator on Marinade"
-            class="btn btn-sm btn-secondary"
-            target="_blank">Direct stake with mSOL</a>
+            target="_blank">{{ stake[1].name }}</a>
         </div>
 
         <div class="d-flex flex-wrap gap-3">
@@ -257,6 +247,25 @@
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
+  const STAKE_DELEGATIONS = {
+    solstake: {
+      title: 'Delegate SOL to this validator on SolStake.io',
+      name: 'Delegate on Solstake.io'
+    },
+    kiwi: {
+      title: 'Delegate SOL to this validator on Staking.kiwi',
+      name: 'Delegate on Staking.kiwi'
+    },
+    blazestake: {
+      title: 'Delegate SOL to this validator on BlazeStake',
+      name: 'Liquid Stake through BlazeStake'
+    },
+    marinade: {
+      title: 'Delegate SOL to this validator on Marinade',
+      name: 'Direct Stake with Marinade'
+    }
+  }
+
   export default {
     props: {
       account: {
@@ -292,9 +301,8 @@
       this.order = params.get("order")
       this.page = params.get("page")
       this.reload_validator_data()
+      console.log('stake_delegations_shuffled', this.stake_delegations_shuffled())
     },
-
-    mounted: function() {},
 
     computed: {
       active_stake() {
@@ -392,6 +400,15 @@
 
       marinade_url(validator) {
         return "https://marinade.finance/app/staking/?stakeTo=" + validator.vote_account_active.account
+      },
+
+      generate_stake_url(stake, validator) {
+        return this[stake + '_url'](validator)
+      },
+
+      stake_delegations_shuffled() {
+        return Object.entries(STAKE_DELEGATIONS).map(stake => [stake[0], stake[1]])
+                                                .sort((a, b) => 0.5 - Math.random())
       }
     },
 
