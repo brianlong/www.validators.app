@@ -53,8 +53,7 @@ module DataCentersHelper
     url = send("#{view}_url",
                 network:params_list[:network],
                 key: params[:key],
-                filter_by: new_filter_by,
-                display: display
+                filter_by: new_filter_by
               )
 
     link_to "#{filter_by}", url, class: classes_list

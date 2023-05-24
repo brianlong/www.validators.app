@@ -5,6 +5,10 @@ require "test_helper"
 class ValidatorSearchQueryTest < ActiveSupport::TestCase
   def setup
     super
+
+    current_version = "1.5.4"
+    create(:batch, software_version: current_version, network: "searchnet")
+
     # Setup data centers with data center hosts
     data_center = create(:data_center, :china)
     data_center.update_column(:data_center_key, "Name1") # Update to match query

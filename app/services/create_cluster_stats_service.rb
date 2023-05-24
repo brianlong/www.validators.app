@@ -14,7 +14,7 @@ class CreateClusterStatsService
     network_stat = ClusterStat.find_or_create_by(network: @network)
 
     fields_for_update = {}
-    fields_for_update[:roi] = epochs_annual_roi if epochs_annual_roi > 0
+    fields_for_update[:roi] = epochs_annual_roi(network_stat) if epochs_annual_roi(network_stat) > 0
     fields_for_update[:total_active_stake] = \
       validator_history_stats.total_active_stake if \
       validator_history_stats.total_active_stake && \
@@ -36,17 +36,17 @@ class CreateClusterStatsService
 
   private
 
-  def epochs_annual_roi
+  def epochs_annual_roi(network_stat)
     if last_epochs.count > 0
-      epoch_duration = (last_epochs.first.created_at - last_epochs.second.created_at)
-      return 0 unless epoch_duration.to_f > 0
       epoch_average_roi = last_epochs.map do |epoch|
         if epoch.total_rewards && epoch.total_active_stake
           (epoch.total_rewards / epoch.total_active_stake.to_f) * 100
         end
       end.compact&.average.to_f
+
       return 0 unless epoch_average_roi > 0
-      epochs_annual_roi = (1.year.to_i / epoch_duration.to_f) * epoch_average_roi
+
+      epochs_annual_roi = (1.year.to_i / network_stat.epoch_duration) * epoch_average_roi
     end
     epochs_annual_roi ||= 0
   end

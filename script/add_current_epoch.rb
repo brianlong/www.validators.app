@@ -57,6 +57,7 @@ NETWORKS.each do |network|
     created_at: last_epoch_start_datetime,
     ending_slot: nil
   )
+
   Rails.logger.warn "created new epoch #{created_epoch.epoch}"
 
   confirmed_end_block = nil
