@@ -41,6 +41,9 @@ class VoteAccount < ApplicationRecord
     if saved_change_to_authorized_withdrawer? || saved_change_to_authorized_voters?
       create_account_authority_history
     end
+    if saved_change_to_authorized_withdrawer? || saved_change_to_authorized_voters? || saved_change_to_validator_identity?
+      check_group_assignment
+    end
   end
 
   serialize :authorized_voters, JSON
@@ -69,6 +72,10 @@ class VoteAccount < ApplicationRecord
     Jbuilder.new do |va|
       va.vote_account self.account
     end
+  end
+
+  def check_group_assignment
+    # TODO run worker that assigns validators to groups
   end
 
   def create_account_authority_history

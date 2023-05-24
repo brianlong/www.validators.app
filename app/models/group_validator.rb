@@ -9,4 +9,6 @@
 #  validator_id :integer
 #
 class GroupValidator < ApplicationRecord
+  belongs_to :group
+  belongs_to :validator
 end
