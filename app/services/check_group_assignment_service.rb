@@ -19,6 +19,8 @@ class CheckGroupAssignmentService
     delete_empty_groups
   end
 
+  private
+  
   def assign_by_authorized_withdrawer_or_validator_identity
     return unless @vote_account.authorized_withdrawer || @vote_account.validator_identity
     VoteAccount.where(authorized_withdrawer: @vote_account.authorized_withdrawer, network: @network)
@@ -38,9 +40,10 @@ class CheckGroupAssignmentService
     return unless @vote_account.authorized_voters
     @vote_account.authorized_voters.each do |epoch, voter|
       puts "epoch: #{epoch}, voter: #{voter}"
-      VoteAccount.where(authorized_voters: { epoch => voter }, network: @network).each do |va|
+      VoteAccount.where(network: @network).each do |va|
         next if va == @vote_account
-        
+        next unless va.authorized_voters&.values.include?(voter)
+
         if va.validator.group
           @groups_list << va.validator.group.id
         else

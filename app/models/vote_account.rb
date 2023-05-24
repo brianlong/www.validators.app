@@ -75,7 +75,9 @@ class VoteAccount < ApplicationRecord
   end
 
   def check_group_assignment
-    # TODO run worker that assigns validators to groups
+    CheckGroupAssignmentWorker.perform_async({
+      vote_account_id: self.id
+    })
   end
 
   def create_account_authority_history
