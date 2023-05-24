@@ -5,8 +5,8 @@ https://www.validators.app/
 ## System dependencies
   - Ruby 2.7.5 (as denoted in the `.ruby-version` file)
   - Rails 6.1+
-  - MySQL 5.7+
-  - Redis
+  - MySQL 8
+  - Redis 6+
   - Node 16.14+
   - Solana CLI (see instruction below)
 

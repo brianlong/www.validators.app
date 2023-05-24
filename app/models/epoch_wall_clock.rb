@@ -37,6 +37,7 @@ class EpochWallClock < ApplicationRecord
   scope :by_network, ->(network) { where(network: network).order(epoch: :desc) }
 
   after_create :track_commission_changes
+  after_create :update_epoch_duration
 
   def track_commission_changes
     if self.network == "mainnet"
@@ -44,12 +45,18 @@ class EpochWallClock < ApplicationRecord
       TrackCommissionChangesWorker.set(
         wait_until: 1.hour,
         queue: "high_priority"
-      ).perform_async({current_batch_uuid: current_batch_uuid})
+      ).perform_async({ "current_batch_uuid" => current_batch_uuid })
     end
   end
 
   def self.recent_finished(network)
     by_network(network).offset(1)
                        .limit(EPOCHS_TO_CALCULATE)
+  end
+
+  private
+
+  def update_epoch_duration
+    ClusterStats::UpdateEpochDurationService.new(network).call
   end
 end

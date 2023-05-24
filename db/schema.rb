@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 2023_05_17_084810) do
     t.integer "nodes_count"
     t.string "software_version"
     t.float "roi"
+    t.float "epoch_duration"
     t.index ["network"], name: "index_cluster_stat_on_network"
   end
 

@@ -44,7 +44,6 @@ class CreateCommissionHistoryServiceTest < ActiveSupport::TestCase
       network: "testnet"
     )
 
-    puts "before email"
     assert_enqueued_emails 1 do
       result = CreateCommissionHistoryService.new(score).call
       assert result.success?

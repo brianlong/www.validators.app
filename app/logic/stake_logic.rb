@@ -174,7 +174,7 @@ module StakeLogic
       reward_info = solana_client_request(
         p.payload[:config_urls],
         "get_inflation_reward",
-        params: [account_rewards.keys]
+        params: [account_rewards.keys, {}]
       )
 
       raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
@@ -216,8 +216,7 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      # number of epochs in year calculated using the duration of last finished epoch
-      num_of_epochs = number_of_epochs(p.payload[:current_epoch].created_at, p.payload[:previous_epoch].created_at)
+      num_of_epochs = number_of_epochs_in_year(p.payload[:network])
 
       StakeAccount.where(network: p.payload[:network]).each do |acc|
         apy = nil
