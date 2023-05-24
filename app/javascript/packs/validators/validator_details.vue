@@ -15,10 +15,10 @@
       <div class="d-flex justify-content-between flex-wrap gap-3">
         <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
           <a :href="generate_stake_url(stake[0], validator)"
-            :title="stake[1].title"
-            class="btn btn-sm btn-secondary"
-            target="_blank"
-            v-for="stake in shuffle_stake_delegations()">
+             :title="stake[1].title"
+             class="btn btn-sm btn-secondary"
+             target="_blank"
+             v-for="stake in shuffle_stake_delegations()">
             {{ stake[1].name }}
           </a>
         </div>
