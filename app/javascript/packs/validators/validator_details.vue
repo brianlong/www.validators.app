@@ -18,7 +18,7 @@
             :title="stake[1].title"
             class="btn btn-sm btn-secondary"
             target="_blank"
-            v-for="stake in stake_delegations_shuffled()">
+            v-for="stake in shuffle_stake_delegations()">
             {{ stake[1].name }}
           </a>
         </div>
@@ -406,7 +406,7 @@
         return this[stake + '_url'](validator)
       },
 
-      stake_delegations_shuffled() {
+      shuffle_stake_delegations() {
         return Object.entries(STAKE_DELEGATIONS).map(stake => [stake[0], stake[1]])
                                                 .sort((a, b) => 0.5 - Math.random())
       }
