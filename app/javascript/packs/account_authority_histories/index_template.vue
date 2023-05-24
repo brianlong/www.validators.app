@@ -29,6 +29,8 @@
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
+  const unique = require('array-unique')
+
   export default {
     props: {
       vote_account: {
@@ -39,8 +41,8 @@
 
     data() {
       return {
-        authorized_voters: null,
-        authorized_withdrawers: null,
+        authorized_voters: [],
+        authorized_withdrawers: [],
         is_loading: true,
         loading_image: loadingImage
       }
@@ -51,9 +53,16 @@
 
       axios.get(ctx.account_authorities_path())
         .then(response => {
-          const histories = response.data.sort((a, b) => a.created_at - b.created_at)
-          ctx.authorized_withdrawers = histories.filter(h => h.authorized_withdrawer_after)
-          ctx.authorized_voters = histories.filter(h => h.authorized_voters_after)
+          // Sort by ascending order
+          const histories = response.data.sort((a, b) => a.created_at < b.created_at ? -1 : 1)
+
+          this.set_unique_authorized_withdrawers(histories)
+          this.set_unique_authorized_voters(histories)
+
+          // Sort by descending order in order to display the latest records
+          ctx.authorized_withdrawers = ctx.authorized_withdrawers.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
+          ctx.authorized_voters = ctx.authorized_voters.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
+
           ctx.is_loading = false
         })
     },
@@ -61,6 +70,27 @@
     methods: {
       account_authorities_path() {
         return "/api/v1/account-authorities/" + this.network  + "?vote_account=" + this.vote_account
+      },
+
+      set_unique_authorized_withdrawers(histories) {
+        const authorized_withdrawers_vals = histories.map(function (history) {
+          return JSON.stringify(history.authorized_withdrawer_after)
+        })
+        unique(authorized_withdrawers_vals).forEach(voter => {
+          this.authorized_withdrawers.push(
+            histories.find(history => JSON.stringify(history.authorized_withdrawer_after) === voter)
+          )
+        })
+      },
+      set_unique_authorized_voters(histories) {
+        const authorized_voters_vals = histories.map(function (history) {
+          return JSON.stringify(history.authorized_voters_after)
+        })
+        unique(authorized_voters_vals).forEach(voter => {
+          this.authorized_voters.push(
+            histories.find(history => JSON.stringify(history.authorized_voters_after) === voter)
+          )
+        })
       }
     },
 
