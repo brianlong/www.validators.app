@@ -42,7 +42,7 @@ class CheckGroupAssignmentService
       puts "epoch: #{epoch}, voter: #{voter}"
       VoteAccount.where(network: @network).each do |va|
         next if va == @vote_account
-        next unless va.authorized_voters&.values.include?(voter)
+        next unless va.authorized_voters&.values&.include?(voter)
 
         if va.validator.group
           @groups_list << va.validator.group.id
