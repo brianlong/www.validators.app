@@ -24,7 +24,7 @@ class ValidatorsController < ApplicationController
       limit: @per,
       page: validators_params[:page],
       jito: validators_params[:jito] == "true",
-      params: {
+      extra_params: {
         query: validators_params[:q],
         admin_warning: validators_params[:admin_warning],
         random_seed_val: session[:random_seed_val]
@@ -48,7 +48,7 @@ class ValidatorsController < ApplicationController
       network: validators_params[:network],
       limit: @per,
       page: validators_params[:page],
-      params: {
+      extra_params: {
         query: validators_params[:q]
       }
     )

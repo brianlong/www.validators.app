@@ -14,7 +14,7 @@ module Api
           sort_order: params[:order],
           page: params[:page],
           limit: params[:limit],
-          params: {
+          extra_params: {
             query: params[:q]
           }
         )

@@ -12,13 +12,13 @@ class ValidatorQuery < ApplicationQuery
                      end
   end
 
-  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, jito: false, params: {})
+  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, jito: false, extra_params: { admin_warning: nil, query: nil, random_seed_val: 123 })
     scope = @default_scope.preload(:validator_score_v1_for_api)
     scope = filter_by_collaboration(scope, jito)
     scope = filter_by_network(scope, network)
-    scope = search_by(scope, params[:query]) if params[:query]
-    scope = filter_by_admin_warning(scope, params[:admin_warning])
-    scope = set_ordering(scope, sort_order, params[:random_seed_val])
+    scope = search_by(scope, extra_params[:query]) if extra_params[:query]
+    scope = filter_by_admin_warning(scope, extra_params[:admin_warning])
+    scope = set_ordering(scope, sort_order, extra_params[:random_seed_val])
     scope = set_pagination(scope, page, limit)
 
     @api ? scope : scope.scorable
