@@ -3,10 +3,13 @@
     <table class="table mb-0">
       <thead>
         <tr>
-          <th class="col-md-6 text-end">
-            Authorized Withdrawer
+          <th class="col-md-4">
+            Authorized Withdrawer Before
           </th>
-          <th class="col-md-6">
+          <th class="col-md-4">
+            Authorized Withdrawer After
+          </th>
+          <th class="col-md-4">
             Timestamp
           </th>
         </tr>
@@ -14,7 +17,10 @@
       <tbody>
         <tr v-for="withdrawer in withdrawers"
             v-if="display_withdrawer(withdrawer)">
-          <td class="text-end">
+          <td>
+            {{ withdrawer.authorized_withdrawer_before }}
+            </td>
+          <td>
             {{ withdrawer.authorized_withdrawer_after }}
           </td>
           <td>

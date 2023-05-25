@@ -3,10 +3,13 @@
     <table class="table mb-0">
       <thead>
         <tr>
-          <th class="col-md-6 text-end">
-            Authorized Voter
+          <th class="col-md-4">
+            Authorized Voter Before
           </th>
-          <th class="col-md-6">
+          <th class="col-md-4">
+            Authorized Voter After
+          </th>
+          <th class="col-md-4">
             Timestamp
           </th>
         </tr>
@@ -14,7 +17,10 @@
       <tbody>
         <tr v-for="voter in voters"
             v-if="display_voter(voter)">
-          <td class="text-end">
+          <td>
+            {{ voter.authorized_voters_before }}
+          </td>
+          <td>
             {{ voter.authorized_voters_after }}
           </td>
           <td>

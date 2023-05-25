@@ -29,8 +29,6 @@
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
-  const unique = require('array-unique')
-
   export default {
     props: {
       vote_account: {
@@ -64,27 +62,6 @@
     methods: {
       account_authorities_path() {
         return "/api/v1/account-authorities/" + this.network  + "?vote_account=" + this.vote_account
-      },
-
-      set_unique_authorized_withdrawers(histories) {
-        const authorized_withdrawers_vals = histories.map(function (history) {
-          return JSON.stringify(history.authorized_withdrawer_after)
-        })
-        unique(authorized_withdrawers_vals).forEach(voter => {
-          this.authorized_withdrawers.push(
-            histories.find(history => JSON.stringify(history.authorized_withdrawer_after) === voter)
-          )
-        })
-      },
-      set_unique_authorized_voters(histories) {
-        const authorized_voters_vals = histories.map(function (history) {
-          return JSON.stringify(history.authorized_voters_after)
-        })
-        unique(authorized_voters_vals).forEach(voter => {
-          this.authorized_voters.push(
-            histories.find(history => JSON.stringify(history.authorized_voters_after) === voter)
-          )
-        })
       }
     },
 
