@@ -53,15 +53,9 @@
 
       axios.get(ctx.account_authorities_path())
         .then(response => {
-          // Sort by ascending order
-          const histories = response.data.sort((a, b) => a.created_at < b.created_at ? -1 : 1)
-
-          this.set_unique_authorized_withdrawers(histories)
-          this.set_unique_authorized_voters(histories)
-
-          // Sort by descending order in order to display the latest records
-          ctx.authorized_withdrawers = ctx.authorized_withdrawers.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
-          ctx.authorized_voters = ctx.authorized_voters.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
+          const histories = response.data.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
+          ctx.authorized_withdrawers = histories.filter(h => h.authorized_withdrawer_after)
+          ctx.authorized_voters = histories.filter(h => h.authorized_voters_after)
 
           ctx.is_loading = false
         })

@@ -12,7 +12,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="voter in voters">
+        <tr v-for="voter in voters"
+            v-if="display_voter(voter)">
           <td class="text-end">
             {{ voter.authorized_voters_after }}
           </td>
@@ -33,6 +34,12 @@
       voters: {
         type: Array,
         required: true
+      }
+    },
+
+    methods: {
+      display_voter(voter) {
+        return JSON.stringify(voter.authorized_voters_after) !== JSON.stringify(voter.authorized_voters_before)
       }
     }
   }

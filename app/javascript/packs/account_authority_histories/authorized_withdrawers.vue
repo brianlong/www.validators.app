@@ -12,7 +12,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="withdrawer in withdrawers">
+        <tr v-for="withdrawer in withdrawers"
+            v-if="display_withdrawer(withdrawer)">
           <td class="text-end">
             {{ withdrawer.authorized_withdrawer_after }}
           </td>
@@ -33,6 +34,12 @@
       withdrawers: {
         type: Array,
         required: true
+      }
+    },
+
+    methods: {
+      display_withdrawer(withdrawer) {
+        return JSON.stringify(withdrawer.authorized_withdrawer_after) !== JSON.stringify(withdrawer.authorized_withdrawer_before)
       }
     }
   }
