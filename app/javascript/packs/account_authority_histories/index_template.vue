@@ -32,16 +32,16 @@
             </thead>
             <tbody>
               <tr v-for="history in histories">
-                <td>
+                <td :class="!is_withdrawer_changed(history) ? 'text-muted' : null">
                   {{ history.authorized_withdrawer_before }}
-                  </td>
-                <td>
+                </td>
+                <td :class="!is_withdrawer_changed(history) ? 'text-muted' : null">
                   {{ history.authorized_withdrawer_after }}
                 </td>
-                <td>
+                <td :class="!is_voters_changed(history) ? 'text-muted' : null">
                   {{ history.authorized_voters_before }}
                 </td>
-                <td>
+                <td :class="!is_voters_changed(history) ? 'text-muted' : null">
                   {{ history.authorized_voters_after }}
                 </td>
                 <td>
@@ -106,6 +106,14 @@
     methods: {
       account_authorities_path() {
         return "/api/v1/account-authorities/" + this.network + "?vote_account=" + this.vote_account + "&per=" + PER_SIZE
+      },
+
+      is_withdrawer_changed(history) {
+        return JSON.stringify(history.authorized_withdrawer_before) !== JSON.stringify(history.authorized_withdrawer_after)
+      },
+
+      is_voters_changed(history) {
+        return JSON.stringify(history.authorized_voters_before) !== JSON.stringify(history.authorized_voters_after)
       }
     },
 
