@@ -4,17 +4,21 @@
       <img v-bind:src="loading_image" width="100">
     </div>
     <div v-else>
-      <div v-if="authorized_withdrawers.length" class="card mb-4">
+      <div v-if="histories.length" class="card mb-4">
         <div class="card-content pb-0">
-          <h2 class="h2 card-heading">Withdrawers History</h2>
-          <AuthorizedWithdrawers :withdrawers="authorized_withdrawers" />
+          <h2 class="h2 card-heading">Authorities Changes</h2>
+
+
         </div>
       </div>
-      <div v-if="authorized_voters.length" class="card mb-4">
-        <div class="card-content pb-0">
-          <h2 class="h2 card-heading">Voters History</h2>
-          <AuthorizedVoters :voters="authorized_voters" />
-        </div>
+
+      <div class="card-footer">
+        <b-pagination
+          v-model="page"
+          :total-rows="total_count"
+          :per-page="20"
+          first-text="« First"
+          last-text="Last »"/>
       </div>
     </div>
   </div>
@@ -23,11 +27,11 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
-  import AuthorizedWithdrawers from './authorized_withdrawers'
-  import AuthorizedVoters from './authorized_voters'
   import loadingImage from 'loading.gif'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
+
+  const PER_SIZE = 20
 
   export default {
     props: {
@@ -39,8 +43,7 @@
 
     data() {
       return {
-        authorized_voters: [],
-        authorized_withdrawers: [],
+        histories: [],
         is_loading: true,
         loading_image: loadingImage
       }
@@ -52,8 +55,7 @@
       axios.get(ctx.account_authorities_path())
         .then(response => {
           const histories = response.data.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
-          ctx.authorized_withdrawers = histories.filter(h => h.authorized_withdrawer_after)
-          ctx.authorized_voters = histories.filter(h => h.authorized_voters_after)
+          this.histories = histories
 
           ctx.is_loading = false
         })
@@ -61,17 +63,12 @@
 
     methods: {
       account_authorities_path() {
-        return "/api/v1/account-authorities/" + this.network  + "?vote_account=" + this.vote_account
+        return "/api/v1/account-authorities/" + this.network + "?vote_account=" + this.vote_account + "&per" + PER_SIZE
       }
     },
 
     computed: mapGetters([
       'network'
-    ]),
-
-    components: {
-      "AuthorizedWithdrawers": AuthorizedWithdrawers,
-      "AuthorizedVoters": AuthorizedVoters
-    }
+    ])
   }
 </script>
