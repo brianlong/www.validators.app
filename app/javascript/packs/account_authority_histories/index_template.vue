@@ -7,19 +7,60 @@
       <div v-if="histories.length" class="card mb-4">
         <div class="card-content pb-0">
           <h2 class="h2 card-heading">Authorities Changes</h2>
+        </div>
 
-
+        <div class="table-responsive account-authority-histories-table">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th class="col-md-4">
+                  Authorized Withdrawer Before
+                </th>
+                <th class="col-md-4">
+                  Authorized Withdrawer After
+                </th>
+                <th class="col-md-4">
+                  Authorized Voters Before
+                </th>
+                <th class="col-md-4">
+                  Authorized Voters After
+                </th>
+                <th class="col-md-4">
+                  Timestamp
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="history in histories">
+                <td>
+                  {{ history.authorized_withdrawer_before }}
+                  </td>
+                <td>
+                  {{ history.authorized_withdrawer_after }}
+                </td>
+                <td>
+                  {{ history.authorized_voters_before }}
+                </td>
+                <td>
+                  {{ history.authorized_voters_after }}
+                </td>
+                <td>
+                  {{ date_time_with_timezone(history.created_at) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div class="card-footer">
+      <!-- <div class="card-footer">
         <b-pagination
           v-model="page"
           :total-rows="total_count"
           :per-page="20"
           first-text="« First"
           last-text="Last »"/>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -28,6 +69,7 @@
   import axios from 'axios'
   import { mapGetters } from 'vuex'
   import loadingImage from 'loading.gif'
+  import '../mixins/dates_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -63,7 +105,7 @@
 
     methods: {
       account_authorities_path() {
-        return "/api/v1/account-authorities/" + this.network + "?vote_account=" + this.vote_account + "&per" + PER_SIZE
+        return "/api/v1/account-authorities/" + this.network + "?vote_account=" + this.vote_account + "&per=" + PER_SIZE
       }
     },
 

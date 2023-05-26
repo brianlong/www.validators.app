@@ -276,3 +276,11 @@ table, .table {
     }
   }
 }
+
+.account-authority-histories-table {
+  table {
+    @media(min-width: $screen-xl-min) {
+      table-layout: fixed;
+    }
+  }
+}
