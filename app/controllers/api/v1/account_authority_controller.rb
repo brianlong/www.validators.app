@@ -22,6 +22,7 @@ module Api
         end
 
         @account_authority_histories = @account_authority_histories.page(page).per(per)
+        total_count = @account_authority_histories.size
 
         json_result = @account_authority_histories.as_json(
           methods: [:vote_account_address],
@@ -29,7 +30,12 @@ module Api
         )
 
         respond_to do |format|
-          format.json { render json: json_result }
+          format.json do
+            render json: {
+              account_authority_histories: json_result,
+              total_count: total_count
+            }
+          end
           format.csv do
             send_data convert_to_csv(index_csv_headers, json_result),
                       filename: "account-authority-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"

@@ -53,14 +53,14 @@
         </div>
       </div>
 
-      <!-- <div class="card-footer">
+      <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
         <b-pagination
           v-model="page"
           :total-rows="total_count"
-          :per-page="20"
+          :per-page="25"
           first-text="« First"
           last-text="Last »"/>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -73,7 +73,7 @@
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
-  const PER_SIZE = 20
+  const PER_SIZE = 25
 
   export default {
     props: {
@@ -87,7 +87,9 @@
       return {
         histories: [],
         is_loading: true,
-        loading_image: loadingImage
+        loading_image: loadingImage,
+        page: 1,
+        total_count: 0
       }
     },
 
@@ -96,8 +98,9 @@
 
       axios.get(ctx.account_authorities_path())
         .then(response => {
-          const histories = response.data.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
-          this.histories = histories
+          const histories = response.data.account_authority_histories.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
+          ctx.histories = histories
+          ctx.total_count = response.data.total_count
 
           ctx.is_loading = false
         })
@@ -105,7 +108,7 @@
 
     methods: {
       account_authorities_path() {
-        return "/api/v1/account-authorities/" + this.network + "?vote_account=" + this.vote_account + "&per=" + PER_SIZE
+        return "/api/v1/account-authorities/" + this.network + "?vote_account=" + this.vote_account + "&per=" + PER_SIZE + '&page=' + this.page
       },
 
       is_withdrawer_changed(history) {
@@ -114,6 +117,24 @@
 
       is_voters_changed(history) {
         return JSON.stringify(history.authorized_voters_before) !== JSON.stringify(history.authorized_voters_after)
+      },
+
+      paginate() {
+        const ctx = this
+        axios.get(ctx.account_authorities_path())
+          .then(response => {
+            const histories = response.data.account_authority_histories.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
+            ctx.histories = histories
+            ctx.total_count = response.data.total_count
+
+            ctx.is_loading = false
+          })
+      },
+    },
+
+    watch: {
+      page: function() {
+        this.paginate()
       }
     },
 
