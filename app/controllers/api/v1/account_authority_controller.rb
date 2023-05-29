@@ -32,7 +32,7 @@ module Api
         respond_to do |format|
           format.json do
             render json: {
-              account_authority_histories: json_result,
+              authority_changes: json_result,
               total_count: total_count
             }
           end
