@@ -121,7 +121,6 @@
             const histories = response.data.account_authority_histories.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
             ctx.histories = histories
             ctx.total_count = response.data.total_count
-
             ctx.is_loading = false
           })
       }
