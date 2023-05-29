@@ -51,15 +51,15 @@
             </tbody>
           </table>
         </div>
-      </div>
 
-      <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
-        <b-pagination
-          v-model="page"
-          :total-rows="total_count"
-          :per-page="25"
-          first-text="« First"
-          last-text="Last »"/>
+        <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
+          <b-pagination
+            v-model="page"
+            :total-rows="total_count"
+            :per-page="25"
+            first-text="« First"
+            last-text="Last »"/>
+        </div>
       </div>
     </div>
   </div>
@@ -94,16 +94,7 @@
     },
 
     mounted() {
-      const ctx = this
-
-      axios.get(ctx.account_authorities_path())
-        .then(response => {
-          const histories = response.data.account_authority_histories.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
-          ctx.histories = histories
-          ctx.total_count = response.data.total_count
-
-          ctx.is_loading = false
-        })
+      this.send_request()
     },
 
     methods: {
@@ -120,6 +111,10 @@
       },
 
       paginate() {
+        this.send_request()
+      },
+
+      send_request() {
         const ctx = this
         axios.get(ctx.account_authorities_path())
           .then(response => {
@@ -129,11 +124,11 @@
 
             ctx.is_loading = false
           })
-      },
+      }
     },
 
     watch: {
-      page: function() {
+      page() {
         this.paginate()
       }
     },

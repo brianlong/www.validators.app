@@ -21,8 +21,8 @@ module Api
           render json: { error: e.message }, status: :bad_request and return
         end
 
-        @account_authority_histories = @account_authority_histories.page(page).per(per)
         total_count = @account_authority_histories.size
+        @account_authority_histories = @account_authority_histories.page(page).per(per)
 
         json_result = @account_authority_histories.as_json(
           methods: [:vote_account_address],
