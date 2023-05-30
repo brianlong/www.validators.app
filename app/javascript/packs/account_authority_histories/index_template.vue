@@ -52,7 +52,7 @@
           <b-pagination
             v-model="page"
             :total-rows="total_count"
-            :per-page="25"
+            :per-page="20"
             first-text="« First"
             last-text="Last »"/>
         </div>
@@ -69,7 +69,7 @@
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
-  const PER_SIZE = 25
+  const PER_SIZE = 20
 
   export default {
     props: {
