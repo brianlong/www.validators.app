@@ -48,7 +48,7 @@
           </table>
         </div>
 
-        <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
+        <div class="card-footer">
           <b-pagination
             v-model="page"
             :total-rows="total_count"
