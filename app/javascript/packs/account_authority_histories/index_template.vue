@@ -114,8 +114,7 @@
         const ctx = this
         axios.get(ctx.account_authorities_path())
              .then(response => {
-               const histories = response.data.authority_changes.sort((a, b) => a.created_at < b.created_at ? 1 : -1)
-               ctx.histories = histories
+               ctx.histories = response.data.authority_changes
                ctx.total_count = response.data.total_count
                ctx.is_loading = false
              })
