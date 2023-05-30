@@ -13,35 +13,31 @@
           <table class="table mb-0">
             <thead>
               <tr>
-                <th class="column-md">
-                  Authorized Withdrawer Before
-                </th>
-                <th class="column-md">
-                  Authorized Withdrawer After
-                </th>
-                <th class="column-md">
-                  Authorized Voters Before
-                </th>
-                <th class="column-md">
-                  Authorized Voters After
-                </th>
-                <th class="column-md">
-                  Timestamp
-                </th>
+                <th class="column-sm">Authority</th>
+                <th class="column-xl">Before</th>
+                <th class="column-xl">After</th>
+                <th class="column-md">Timestamp</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="history in histories" class="word-break small">
-                <td :class="!is_withdrawer_changed(history) ? 'text-muted' : null">
+            <tbody v-for="history in histories">
+              <tr v-if="is_withdrawer_changed(history)">
+                <td>Authorized Withdrawer</td>
+                <td class="word-break small">
                   {{ history.authorized_withdrawer_before }}
                 </td>
-                <td :class="!is_withdrawer_changed(history) ? 'text-muted' : null">
+                <td class="word-break small">
                   {{ history.authorized_withdrawer_after }}
                 </td>
-                <td :class="!is_voters_changed(history) ? 'text-muted' : null">
+                <td>
+                  {{ date_time_with_timezone(history.created_at) }}
+                </td>
+              </tr>
+              <tr v-if="is_voters_changed(history)">
+                <td>Authorized Voters</td>
+                <td class="word-break small">
                   {{ history.authorized_voters_before }}
                 </td>
-                <td :class="!is_voters_changed(history) ? 'text-muted' : null">
+                <td class="word-break small">
                   {{ history.authorized_voters_after }}
                 </td>
                 <td>
