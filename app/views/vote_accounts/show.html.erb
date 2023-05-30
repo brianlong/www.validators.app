@@ -22,7 +22,7 @@
         <%= link_to @vote_account.validator.account, validator_url(
           network: params[:network],
           account: @vote_account.validator.account
-        ) %>
+        ), "data-turbolinks": false %>
       </td>
     </tr>
     <tr>
