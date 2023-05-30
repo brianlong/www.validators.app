@@ -9,29 +9,29 @@
           <h2 class="h2 card-heading">Authorities Changes</h2>
         </div>
 
-        <div class="table-responsive account-authority-histories-table">
+        <div class="table-responsive-md">
           <table class="table mb-0">
             <thead>
               <tr>
-                <th class="col-md-4">
+                <th class="column-md">
                   Authorized Withdrawer Before
                 </th>
-                <th class="col-md-4">
+                <th class="column-md">
                   Authorized Withdrawer After
                 </th>
-                <th class="col-md-4">
+                <th class="column-md">
                   Authorized Voters Before
                 </th>
-                <th class="col-md-4">
+                <th class="column-md">
                   Authorized Voters After
                 </th>
-                <th class="col-md-4">
+                <th class="column-md">
                   Timestamp
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="history in histories">
+              <tr v-for="history in histories" class="word-break small">
                 <td :class="!is_withdrawer_changed(history) ? 'text-muted' : null">
                   {{ history.authorized_withdrawer_before }}
                 </td>
