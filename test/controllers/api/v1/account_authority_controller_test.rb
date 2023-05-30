@@ -24,25 +24,14 @@ module Api
       end
 
       test "#index returns valid response with total_count value" do
-        history = create :account_authority_history
+        create :account_authority_history
 
         get api_v1_account_authorities_url(network: @network), headers: @headers
         response_body = JSON.parse response.body
 
-        assert(response_body, {
-          "authority_changes" => [
-            {
-              "authorized_withdrawer_before" => "withdrawer",
-              "authorized_withdrawer_after" => nil,
-              "authorized_voters_before" => nil,
-              "authorized_voters_after" => nil,
-              "network" => "testnet",
-              "created_at" => history.created_at.as_json,
-              "vote_account_address" => "Test Account"
-            }
-          ],
-          "total_count" => 1
-        })
+        assert_equal "withdrawer", response_body["authority_changes"][0]["authorized_withdrawer_before"]
+        assert_equal "newwithdrawer", response_body["authority_changes"][0]["authorized_withdrawer_after"]
+        assert_equal 1, response_body["total_count"]
       end
     end
   end
