@@ -58,7 +58,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       jito: true
     )
 
-    result = ValidatorQuery.new.call(network: @mainnet_network, jito: true)
+    result = ValidatorQuery.new.call(network: @mainnet_network, query_params: { jito: true })
 
     assert_equal 3, result.count
     assert_equal [true], result.pluck(:jito).uniq
@@ -81,7 +81,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       jito: true
     )
 
-    result = ValidatorQuery.new.call(network: @mainnet_network, jito: false)
+    result = ValidatorQuery.new.call(network: @mainnet_network, query_params: { jito: false })
 
     assert_equal 5, result.count
   end
@@ -102,7 +102,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       :with_data_center_through_validator_ip
     )
 
-    result = ValidatorQuery.new.call(network: @testnet_network, extra_params: { query: query })
+    result = ValidatorQuery.new.call(network: @testnet_network, query_params: { query: query })
 
     assert_equal 1, result.count
     assert_equal [@testnet_network], result.pluck(:network).uniq
@@ -114,7 +114,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     create_list(:validator, 2, :with_score) # without admin_warning
 
     admin_warning = "true"
-    result = ValidatorQuery.new.call(network: @testnet_network, extra_params: { admin_warning: admin_warning })
+    result = ValidatorQuery.new.call(network: @testnet_network, query_params: { admin_warning: admin_warning })
 
     assert_equal 1, result.count
     assert_includes result, validator_with_warning
@@ -122,7 +122,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal ["test warning"],  result.pluck(:admin_warning).uniq
 
     admin_warning = "false"
-    result = ValidatorQuery.new.call(network: @testnet_network, extra_params: { admin_warning: admin_warning })
+    result = ValidatorQuery.new.call(network: @testnet_network, query_params: { admin_warning: admin_warning })
 
     refute_includes result, validator_with_warning
     assert_equal [nil], result.pluck(:admin_warning).uniq
@@ -134,12 +134,12 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     all_validators_count = Validator.where(network: @testnet_network).count
 
     admin_warning = "ASD"
-    result = ValidatorQuery.new.call(network: @testnet_network, extra_params: { admin_warning: admin_warning })
+    result = ValidatorQuery.new.call(network: @testnet_network, query_params: { admin_warning: admin_warning })
 
     assert_equal all_validators_count, result.count
 
     admin_warning = nil
-    result = ValidatorQuery.new.call(network: @testnet_network, extra_params: { admin_warning: admin_warning })
+    result = ValidatorQuery.new.call(network: @testnet_network, query_params: { admin_warning: admin_warning })
 
     assert_equal all_validators_count, result.count
 
@@ -246,15 +246,11 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     validator = create(:validator, :with_score, network: @mainnet_network)
     create_list(:validator, 5, :with_score, network: @mainnet_network)
 
-    result = ValidatorQuery.new.call(
-      extra_params: { random_seed_val: 123 }
-    )
+    result = ValidatorQuery.new.call(random_seed_val: 123)
 
     assert_equal validator, result.last
 
-    result = ValidatorQuery.new.call(
-      extra_params: { random_seed_val: 0 }
-    )
+    result = ValidatorQuery.new.call(random_seed_val: 0)
 
     assert_equal validator, result.first
   end

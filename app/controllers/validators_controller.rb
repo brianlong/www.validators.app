@@ -23,11 +23,11 @@ class ValidatorsController < ApplicationController
       sort_order: validators_params[:order],
       limit: @per,
       page: validators_params[:page],
-      jito: validators_params[:jito] == "true",
-      extra_params: {
+      random_seed_val: session[:random_seed_val],
+      query_params: {
         query: validators_params[:q],
         admin_warning: validators_params[:admin_warning],
-        random_seed_val: session[:random_seed_val]
+        jito: validators_params[:jito] == "true"
       }
     )
 
@@ -48,7 +48,7 @@ class ValidatorsController < ApplicationController
       network: validators_params[:network],
       limit: @per,
       page: validators_params[:page],
-      extra_params: {
+      query_params: {
         query: validators_params[:q]
       }
     )
