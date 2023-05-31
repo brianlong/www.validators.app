@@ -72,7 +72,7 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     validator_history = validator_histories_most_recent.find_by(
       account: @validator.account, network: @network
     )
-    binding.pry
+
     assert_equal 1, validator_histories_most_recent.size
     assert_equal @validator.account, validator_history.account
     assert_equal 300, validator_history.epoch_credits
