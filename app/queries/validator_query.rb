@@ -36,7 +36,8 @@ class ValidatorQuery < ApplicationQuery
               .joins(:validator_score_v1_for_api)
               .includes(
                 :vote_accounts_for_api,
-                :most_recent_epoch_credits_by_account,
+                # TODO: Uncomment after Rails 7 upgrade - https://github.com/rails/rails/issues/45406 "Preloading instance dependent scopes is not supported."
+                # :newest_epoch_credits_by_account_and_network,
                 validator_ip_active_for_api: [
                   data_center_host_for_api: [ :data_center_for_api ]
                 ]

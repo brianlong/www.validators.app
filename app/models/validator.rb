@@ -67,8 +67,8 @@ class Validator < ApplicationRecord
   has_one :data_center_host, through: :validator_ip_active
   has_one :validator_score_v1, dependent: :destroy
   has_one :validator_score_v1_for_web, -> { for_web }, class_name: "ValidatorScoreV1"
-  has_one :most_recent_epoch_credits_by_account, -> {
-    merge(ValidatorHistory.most_recent_epoch_credits_by_account)
+  has_one :newest_epoch_credits_by_account_and_network, ->(validator) {
+    merge(ValidatorHistory.newest_epoch_credits_by_account_and_network(validator.network))
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
   has_many :stake_accounts, dependent: :nullify
 
