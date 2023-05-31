@@ -35,10 +35,10 @@ class ValidatorTest < ActiveSupport::TestCase
     create(:validator_score_v1, validator: @v_private, commission: 100)
   end
 
-  test "relationship has_one most_recent_epoch_credits_by_account" do
+  test "relationship has_one newest_epoch_credits_by_account_and_network" do
     create_list(:validator_history, 5, account: @validator.account, epoch_credits: 100)
 
-    assert_equal 100, @validator.most_recent_epoch_credits_by_account.epoch_credits
+    assert_equal 100, @validator.newest_epoch_credits_by_account_and_network.epoch_credits
   end
 
   test "relationship has_one data_center_host through validator_ips" do
