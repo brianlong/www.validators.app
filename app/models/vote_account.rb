@@ -75,7 +75,7 @@ class VoteAccount < ApplicationRecord
   end
 
   def check_group_assignment
-    CheckGroupAssignmentWorker.perform_async({
+    CheckGroupValidatorAssignmentWorker.perform_async({
       vote_account_id: self.id
     })
   end

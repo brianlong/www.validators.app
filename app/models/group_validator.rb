@@ -10,6 +10,11 @@
 #  group_id     :integer
 #  validator_id :integer
 #
+# Indexes
+#
+#  index_group_validators_on_group_id      (group_id)
+#  index_group_validators_on_validator_id  (validator_id)
+#
 class GroupValidator < ApplicationRecord
   belongs_to :group
   belongs_to :validator

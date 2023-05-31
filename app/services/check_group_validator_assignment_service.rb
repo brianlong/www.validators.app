@@ -1,43 +1,55 @@
 # frozen_string_literal: true
 
-class CheckGroupAssignmentService
+class CheckGroupValidatorAssignmentService
+  LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
+
   def initialize(vote_account_id:)
     @vote_account = VoteAccount.find(vote_account_id)
     @network = @vote_account.network
     @groups_list = []
     @unassigned_list = []
     @group = nil
+    @logger ||= Logger.new(LOG_PATH)
   end
 
   def call
+    log_message("checking vote account ##{@vote_account.account} for group assignment")
     assign_by_authorized_withdrawer_or_validator_identity
     assign_by_authorized_voters
+    log_message("linked groups: #{@groups_list}")
+    log_message("linked validators: #{@unassigned_list}")
     return if @groups_list.empty? && @unassigned_list.empty?
+
     find_or_create_group
+    log_message("used group: #{@group}")
     assign_validators_to_group
     move_validators_to_group
     delete_empty_groups
+    log_message("-----------------------")
   end
 
   private
   
   def assign_by_authorized_withdrawer_or_validator_identity
     return unless @vote_account.authorized_withdrawer || @vote_account.validator_identity
-    VoteAccount.where(authorized_withdrawer: @vote_account.authorized_withdrawer, network: @network)
-                .or(VoteAccount.where(validator_identity: @vote_account.validator_identity, network: @network))
-                .each do |va|
-                  next if va == @vote_account
-                  
-                  if va.validator.group
-                    @groups_list << va.validator.group.id
-                  else
-                    @unassigned_list << va.validator_id
-                  end
-    end
+
+    VoteAccount.includes(validator: :group)
+               .where(authorized_withdrawer: @vote_account.authorized_withdrawer, network: @network)
+               .or(VoteAccount.where(validator_identity: @vote_account.validator_identity, network: @network))
+               .each do |va|
+                 next if va.validator == @vote_account.validator
+
+                 if va.validator.group
+                   @groups_list << va.validator.group.id
+                 else
+                   @unassigned_list << va.validator_id
+                 end
+               end
   end
 
   def assign_by_authorized_voters
     return unless @vote_account.authorized_voters
+
     @vote_account.authorized_voters.each do |epoch, voter|
       puts "epoch: #{epoch}, voter: #{voter}"
       VoteAccount.where(network: @network).each do |va|
@@ -83,7 +95,12 @@ class CheckGroupAssignmentService
     Group.where(id: @groups_list).each do |group|
       if group.validators.empty?
         group.destroy
+        log_message("deleted empty group ##{group.id}")
       end
     end
+  end
+
+  def log_message(message, type: :info)
+    @logger.send(type, message.squish) unless Rails.env.test?
   end
 end

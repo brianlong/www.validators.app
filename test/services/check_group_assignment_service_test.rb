@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class CheckGroupAssignmentServiceTest < ActiveSupport::TestCase
+class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"
     @group1 = create(:group)
@@ -21,7 +21,7 @@ class CheckGroupAssignmentServiceTest < ActiveSupport::TestCase
     validator = create(:validator, network: @network)
     vote_account = create(:vote_account, validator: validator, network: @network)
 
-    CheckGroupAssignmentService.new(vote_account_id: vote_account.id).call
+    CheckGroupValidatorAssignmentService.new(vote_account_id: vote_account.id).call
     refute validator.group
     assert_equal 1, Group.count
   end
@@ -35,7 +35,7 @@ class CheckGroupAssignmentServiceTest < ActiveSupport::TestCase
       validator_identity: "validator_identity_test"
     )
 
-    CheckGroupAssignmentService.new(vote_account_id: vote_account.id).call
+    CheckGroupValidatorAssignmentService.new(vote_account_id: vote_account.id).call
     validator.reload
     assert validator.group
     assert_equal @group1, validator.group
@@ -51,7 +51,7 @@ class CheckGroupAssignmentServiceTest < ActiveSupport::TestCase
       authorized_withdrawer: "authorized_withdrawer_test"
     )
 
-    CheckGroupAssignmentService.new(vote_account_id: vote_account.id).call
+    CheckGroupValidatorAssignmentService.new(vote_account_id: vote_account.id).call
     validator.reload
     assert validator.group
     assert_equal @group1, validator.group
@@ -67,7 +67,7 @@ class CheckGroupAssignmentServiceTest < ActiveSupport::TestCase
       authorized_voters: { 123 => "test_voter_value" }
     )
 
-    CheckGroupAssignmentService.new(vote_account_id: vote_account.id).call
+    CheckGroupValidatorAssignmentService.new(vote_account_id: vote_account.id).call
     validator.reload
     assert validator.group
     assert_equal @group1, validator.group
