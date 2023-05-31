@@ -66,6 +66,7 @@
   import { mapGetters } from 'vuex'
   import loadingImage from 'loading.gif'
   import '../mixins/dates_mixins'
+  import '../mixins/arrays_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -105,7 +106,7 @@
       is_voters_changed(history) {
         let voters_before = Object.values(history.authorized_voters_before || [""])
         let voters_after = Object.values(history.authorized_voters_after)
-        return voters_before[0] !== voters_after[0]
+        return !this.arrays_equal(voters_before, voters_after)
       },
 
       paginate() {
