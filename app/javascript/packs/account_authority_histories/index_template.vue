@@ -103,7 +103,9 @@
       },
 
       is_voters_changed(history) {
-        return JSON.stringify(history.authorized_voters_before) !== JSON.stringify(history.authorized_voters_after)
+        let voters_before = Object.values(history.authorized_voters_before || [""])
+        let voters_after = Object.values(history.authorized_voters_after)
+        return voters_before[0] !== voters_after[0]
       },
 
       paginate() {
