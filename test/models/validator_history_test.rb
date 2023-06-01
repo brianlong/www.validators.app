@@ -42,45 +42,36 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     assert_equal validator, validator_history.validator
   end
 
-  test "#newest_epoch_credits_by_account_and_network returns most recent validator histories \
-        per account for specific network" do
+  test "#newest_epoch_credits_by_account_and_network returns most recent validator histories by account" do
     time = DateTime.current
-    dates_with_epoch_credits_testnet = [[time - 2.day, 100],[time - 1.day, 200], [time, 300]]
-    dates_with_epoch_credits_mainnet = [[time - 2.day, 120],[time - 1.day, 220], [time, 320]]
+    create(:validator_history, created_at: time - 2.day, epoch_credits: 100, epoch: 223)
+    create(:validator_history, created_at: time - 1.day, epoch_credits: 200, epoch: 223)
+    vh = create(:validator_history, created_at: time, epoch_credits: 300, epoch: 223)
 
-    dates_with_epoch_credits_testnet.each do |date, epoch_credit|
-      create(
-        :validator_history,
-        account: @validator.account,
-        created_at: date,
-        epoch_credits: epoch_credit,
-        epoch: 243
-      )
-    end
+    newest_vote_histories = ValidatorHistory.newest_epoch_credits_by_account_and_network(@network)
+    assert_equal 1, newest_vote_histories.size
+    assert_equal vh.account, newest_vote_histories.first.account
+    assert_equal vh.account, newest_vote_histories.first.account
+    assert_equal vh.epoch_credits, newest_vote_histories.first.epoch_credits
+    assert_equal time, newest_vote_histories.first.created_at.to_datetime
+  end
 
-    dates_with_epoch_credits_mainnet.each do |date, epoch_credit|
-      create(
-        :validator_history,
-        account: @validator.account,
-        created_at: date,
-        epoch_credits: epoch_credit,
-        epoch: 223,
-        network: "mainnet"
-      )
-    end
+  test "#newest_epoch_credits_by_account_and_network returns validator histories by network" do
+    time = DateTime.current
+    create(:validator_history, created_at: time, epoch_credits: 100, epoch: 223)
+    create(:validator_history, created_at: time, epoch_credits: 100, epoch: 223)
+    create(:validator_history, created_at: time, epoch_credits: 200, epoch: 243, network: 'mainnet')
 
-    newest_testnet_vote_histories = ValidatorHistory.newest_epoch_credits_by_account_and_network(@network)
-    newest_mainnet_vote_histories = ValidatorHistory.newest_epoch_credits_by_account_and_network("mainnet")
-    validator_history = newest_testnet_vote_histories.find_by(
-      account: @validator.account, network: @network
-    )
+    newest_vote_histories_testnet = ValidatorHistory.newest_epoch_credits_by_account_and_network(@network)
+    newest_vote_histories_mainnet = ValidatorHistory.newest_epoch_credits_by_account_and_network('mainnet')
 
-    assert_equal 1, newest_testnet_vote_histories.size
-    assert_equal 1, newest_mainnet_vote_histories.size
-    assert_equal @validator.account, validator_history.account
-    assert_equal 300, validator_history.epoch_credits
-    assert_equal 243, validator_history.epoch
-    assert_equal time, validator_history.created_at
+    assert_equal 1, newest_vote_histories_testnet.size
+    assert_equal 100, newest_vote_histories_testnet.first.epoch_credits
+    assert_equal 223, newest_vote_histories_testnet.first.epoch
+
+    assert_equal 1, newest_vote_histories_mainnet.size
+    assert_equal 200, newest_vote_histories_mainnet.first.epoch_credits
+    assert_equal 243, newest_vote_histories_mainnet.first.epoch
   end
 
   test "validator_histories_from_period returns number of records equal to given limit" do
