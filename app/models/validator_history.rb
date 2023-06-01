@@ -46,13 +46,12 @@ class ValidatorHistory < ApplicationRecord
   scope :newest_epoch_credits_by_account_and_network, ->(network) do
     latest_network_vh = ValidatorHistory.order(created_at: :desc)
                                         .where(network: network)
-                                        .first
-    return unless latest_network_vh
+    return latest_network_vh if latest_network_vh.empty?
 
     ValidatorHistory.where(
-                      account: latest_network_vh.account,
+                      account: latest_network_vh.first.account,
                       network: network,
-                      created_at: latest_network_vh.created_at)
+                      created_at: latest_network_vh.first.created_at)
                     .select(:epoch_credits, :account, :created_at, :epoch, :network)
   end
 
