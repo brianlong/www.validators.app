@@ -9,6 +9,6 @@
 #  updated_at :datetime         not null
 #
 class Group < ApplicationRecord
-  has_many :group_validators
+  has_many :group_validators, dependent: :destroy
   has_many :validators, through: :group_validators
 end

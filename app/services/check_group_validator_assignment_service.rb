@@ -76,9 +76,10 @@ class CheckGroupValidatorAssignmentService
   def assign_validators_to_group
     @unassigned_list.each do |validator_id|
       validator = Validator.find(validator_id)
-      GroupValidator.create(group: @group, validator: validator)
+      GroupValidator.create(group: @group, validator: validator) unless @group.validators.include?(validator)
     end
-    GroupValidator.create(group: @group, validator: @vote_account.validator)
+    GroupValidator.create(group: @group, validator: @vote_account.validator) \
+      unless @group.validators.include?(@vote_account.validator)
   end
 
   def move_validators_to_group
