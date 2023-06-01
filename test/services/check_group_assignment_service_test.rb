@@ -73,4 +73,19 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
   end
+
+  test "#call destroys empty groups" do
+    group2 = create(:group)
+    validator = create(:validator, network: @network, group: group2)
+    vote_account = create(
+      :vote_account,
+      validator: validator,
+      network: @network,
+      authorized_voters: { 123 => "test_voter_value" }
+    )
+    puts Group.count
+    CheckGroupValidatorAssignmentService.new(vote_account_id: vote_account.id).call
+
+    assert_equal 1, Group.count
+  end
 end

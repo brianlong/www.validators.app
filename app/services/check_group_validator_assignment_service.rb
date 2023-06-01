@@ -6,7 +6,7 @@ class CheckGroupValidatorAssignmentService
   def initialize(vote_account_id:, log_path: LOG_PATH)
     @vote_account = VoteAccount.find(vote_account_id)
     @network = @vote_account.network
-    @groups_list = []
+    @groups_list = [@vote_account.validator.group&.id].compact
     @unassigned_list = []
     @group = nil
     @logger ||= Logger.new(log_path)
@@ -51,8 +51,7 @@ class CheckGroupValidatorAssignmentService
     return unless @vote_account.authorized_voters
 
     @vote_account.authorized_voters.each do |epoch, voter|
-      puts "epoch: #{epoch}, voter: #{voter}"
-      VoteAccount.where(network: @network).each do |va|
+      VoteAccount.where(network: @network).find_each do |va|
         next if va == @vote_account
         next unless va.authorized_voters&.values&.include?(voter)
 
