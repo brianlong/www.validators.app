@@ -60,10 +60,10 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     time = DateTime.current
     create(:validator_history, created_at: time, epoch_credits: 100, epoch: 223)
     create(:validator_history, created_at: time, epoch_credits: 100, epoch: 223)
-    create(:validator_history, created_at: time, epoch_credits: 200, epoch: 243, network: 'mainnet')
+    create(:validator_history, created_at: time, epoch_credits: 200, epoch: 243, network: "mainnet")
 
     newest_vote_histories_testnet = ValidatorHistory.newest_epoch_credits_by_account_and_network(@network)
-    newest_vote_histories_mainnet = ValidatorHistory.newest_epoch_credits_by_account_and_network('mainnet')
+    newest_vote_histories_mainnet = ValidatorHistory.newest_epoch_credits_by_account_and_network("mainnet")
 
     assert_equal 1, newest_vote_histories_testnet.size
     assert_equal 100, newest_vote_histories_testnet.first.epoch_credits
@@ -72,6 +72,11 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     assert_equal 1, newest_vote_histories_mainnet.size
     assert_equal 200, newest_vote_histories_mainnet.first.epoch_credits
     assert_equal 243, newest_vote_histories_mainnet.first.epoch
+  end
+
+  test "#newest_epoch_credits_by_account_and_network returns none records if latest validator history is missing" do
+    newest_vote_histories = ValidatorHistory.newest_epoch_credits_by_account_and_network("mainnet")
+    assert_equal [], newest_vote_histories.to_a
   end
 
   test "validator_histories_from_period returns number of records equal to given limit" do
