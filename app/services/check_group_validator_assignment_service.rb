@@ -3,13 +3,13 @@
 class CheckGroupValidatorAssignmentService
   LOG_PATH = Rails.root.join("log", "#{self.name.demodulize.underscore}.log")
 
-  def initialize(vote_account_id:)
+  def initialize(vote_account_id:, log_path: LOG_PATH)
     @vote_account = VoteAccount.find(vote_account_id)
     @network = @vote_account.network
     @groups_list = []
     @unassigned_list = []
     @group = nil
-    @logger ||= Logger.new(LOG_PATH)
+    @logger ||= Logger.new(log_path)
   end
 
   def call
@@ -82,7 +82,7 @@ class CheckGroupValidatorAssignmentService
   end
 
   def move_validators_to_group
-    @groups_list.each do |group_id|
+    @groups_list.uniq.each do |group_id|
       group = Group.find(group_id)
       group.validators.each do |validator|
         validator.group = @group
