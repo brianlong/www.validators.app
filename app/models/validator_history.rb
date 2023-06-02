@@ -48,10 +48,9 @@ class ValidatorHistory < ApplicationRecord
                                         .where(network: network)
     return latest_network_vh if latest_network_vh.empty?
 
-    ValidatorHistory.where(
-                      account: latest_network_vh.first.account,
-                      network: network,
-                      created_at: latest_network_vh.first.created_at)
+    ValidatorHistory.where(account: latest_network_vh.first.account,
+                           network: network,
+                           created_at: latest_network_vh.first.created_at)
                     .select(:epoch_credits, :account, :created_at, :epoch, :network)
   end
 
