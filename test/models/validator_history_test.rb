@@ -44,9 +44,9 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
 
   test "#newest_epoch_credits_by_account_and_network returns most recent validator histories by account" do
     time = DateTime.current
-    create(:validator_history, created_at: time - 2.day, epoch_credits: 100, epoch: 223)
-    create(:validator_history, created_at: time - 1.day, epoch_credits: 200, epoch: 223)
-    vh = create(:validator_history, created_at: time, epoch_credits: 300, epoch: 223)
+    create(:validator_history, account: @account, created_at: time - 2.day, epoch_credits: 100, epoch: 223)
+    create(:validator_history, account: @account, created_at: time - 1.day, epoch_credits: 200, epoch: 223)
+    vh = create(:validator_history, account: @account, created_at: time, epoch_credits: 300, epoch: 223)
 
     newest_vote_histories = ValidatorHistory.newest_epoch_credits_by_account_and_network(@network)
     assert_equal 1, newest_vote_histories.size
@@ -58,14 +58,14 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
 
   test "#newest_epoch_credits_by_account_and_network returns validator histories by network" do
     time = DateTime.current
-    create(:validator_history, created_at: time, epoch_credits: 100, epoch: 223)
-    create(:validator_history, created_at: time, epoch_credits: 100, epoch: 223)
-    create(:validator_history, created_at: time, epoch_credits: 200, epoch: 243, network: "mainnet")
+    create(:validator_history, account: @account, created_at: time, epoch_credits: 100, epoch: 223)
+    create(:validator_history, account: @account, created_at: time, epoch_credits: 100, epoch: 223)
+    create(:validator_history, account: @account, created_at: time, epoch_credits: 200, epoch: 243, network: "mainnet")
 
     newest_vote_histories_testnet = ValidatorHistory.newest_epoch_credits_by_account_and_network(@network)
     newest_vote_histories_mainnet = ValidatorHistory.newest_epoch_credits_by_account_and_network("mainnet")
 
-    assert_equal 1, newest_vote_histories_testnet.size
+    assert_equal 2, newest_vote_histories_testnet.size
     assert_equal 100, newest_vote_histories_testnet.first.epoch_credits
     assert_equal 223, newest_vote_histories_testnet.first.epoch
 
