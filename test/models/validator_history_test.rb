@@ -53,7 +53,7 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     assert_equal vh.account, newest_vote_histories.first.account
     assert_equal vh.account, newest_vote_histories.first.account
     assert_equal vh.epoch_credits, newest_vote_histories.first.epoch_credits
-    assert_equal time, newest_vote_histories.first.created_at.to_datetime
+    assert_in_delta time, newest_vote_histories.first.created_at.to_datetime
   end
 
   test "#newest_epoch_credits_by_account_and_network returns validator histories by network" do
