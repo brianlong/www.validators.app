@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_19_115610) do
+ActiveRecord::Schema.define(version: 2023_06_02_122559) do
+
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
     t.string "authorized_withdrawer_after"
@@ -554,10 +555,12 @@ ActiveRecord::Schema.define(version: 2023_04_19_115610) do
     t.bigint "max_vote_height", unsigned: true
     t.bigint "vote_distance", unsigned: true
     t.integer "epoch"
+    t.integer "validator_id", null: false
     t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
     t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
     t.index ["network", "batch_uuid", "account"], name: "index_validator_histories_on_network_and_batch_uuid_and_account"
+    t.index ["validator_id"], name: "index_validator_histories_on_validator_id"
   end
 
   create_table "validator_ips", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
