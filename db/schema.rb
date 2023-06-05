@@ -555,7 +555,7 @@ ActiveRecord::Schema.define(version: 2023_06_02_122559) do
     t.bigint "max_vote_height", unsigned: true
     t.bigint "vote_distance", unsigned: true
     t.integer "epoch"
-    t.integer "validator_id", null: false
+    t.integer "validator_id"
     t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
     t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
