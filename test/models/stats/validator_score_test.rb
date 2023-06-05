@@ -24,7 +24,8 @@ module Stats
                                    account: validator.account,
                                    root_block: 2,
                                    last_vote: 21,
-                                   active_stake: 10)
+                                   active_stake: 10,
+                                   validator: validator)
       end
       @validator_scores = @validators.map(&:score)
       @validator_scores.last.update(active_stake: nil)

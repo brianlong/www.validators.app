@@ -36,7 +36,11 @@ class ValidatorTest < ActiveSupport::TestCase
   end
 
   test "relationship has_one most_recent_epoch_credits_by_account" do
-    create_list(:validator_history, 5, account: @validator.account, epoch_credits: 100)
+    create_list(:validator_history,
+                5,
+                account: @validator.account,
+                epoch_credits: 100,
+                validator: @validator)
 
     assert_equal 100, @validator.most_recent_epoch_credits_by_account.epoch_credits
   end

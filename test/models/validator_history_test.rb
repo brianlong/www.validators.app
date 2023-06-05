@@ -37,7 +37,9 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
 
   test 'relationships belongs_to validator' do
     validator = create(:validator)
-    validator_history = create(:validator_history, account: validator.account)
+    validator_history = create(:validator_history,
+                               account: validator.account,
+                               validator: validator)
 
     assert_equal validator, validator_history.validator
   end
@@ -52,7 +54,8 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
         account: @validator.account,
         created_at: arr[0], 
         epoch_credits: arr[1],
-        epoch: 222
+        epoch: 222,
+        validator: @validator
       )
     end
 
@@ -74,7 +77,8 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
         :validator_history,
         network: @network,
         account: @account,
-        created_at: n.minutes.ago
+        created_at: n.minutes.ago,
+        validator: @validator
       )
     end
 
@@ -93,21 +97,24 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
       :validator_history,
       network: @network,
       account: @account,
-      created_at: 20.hours.ago
+      created_at: 20.hours.ago,
+      validator: @validator
     )
 
     create(
       :validator_history,
       network: @network,
       account: @account,
-      created_at: 25.hours.ago
+      created_at: 25.hours.ago,
+      validator: @validator
     )
 
     create(
       :validator_history,
       network: "mainnet",
       account: @account,
-      created_at: 2.hours.ago
+      created_at: 2.hours.ago,
+      validator: @validator
     )
 
     result = ValidatorHistory.validator_histories_from_period(

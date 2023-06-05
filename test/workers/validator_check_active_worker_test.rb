@@ -8,7 +8,7 @@ class ValidatorCheckActiveWorkerTest < ActiveSupport::TestCase
 
   test 'worker should be performed as expected' do
     v = create(:validator, :with_score, account: 'account1')
-    create(:validator_history, account: 'account1')
+    create(:validator_history, account: 'account1', validator: v)
     create(:validator_block_history, validator: v, epoch: 124)
 
     Sidekiq::Testing.inline! do
