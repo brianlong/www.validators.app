@@ -5,8 +5,9 @@ class CheckGroupValidatorAssignmentService
 
   def initialize(vote_account_id:, log_path: LOG_PATH)
     @vote_account = VoteAccount.find(vote_account_id)
+    @vote_account_group = @vote_account.validator.group
     @network = @vote_account.network
-    @groups_list = [@vote_account.validator.group&.id].compact
+    @groups_list = []
     @unassigned_list = []
     @group = nil
     @logger ||= Logger.new(log_path)
@@ -40,9 +41,9 @@ class CheckGroupValidatorAssignmentService
                  next if va.validator == @vote_account.validator
 
                  if va.validator.group
-                   @groups_list << va.validator.group.id
+                   @groups_list << group_list_elemnt(va)
                  else
-                   @unassigned_list << va.validator_id
+                   @unassigned_list << unassigned_list_element(va)
                  end
                end
   end
@@ -56,42 +57,82 @@ class CheckGroupValidatorAssignmentService
         next unless va.authorized_voters&.values&.include?(voter)
 
         if va.validator.group
-          @groups_list << va.validator.group.id
+          @groups_list << group_list_elemnt(va)
         else
-          @unassigned_list << va.validator_id
+          @unassigned_list << unassigned_list_element(va)
         end
       end
     end
+  end
+
+  def group_list_elemnt(va)
+    {
+      group_id: va.validator.group.id,
+      link_reason: {
+        va.id => if va.authorized_withdrawer == @vote_account.authorized_withdrawer
+                   "authorized_withdrawer"
+                 elsif  va.validator_identity == @vote_account.validator_identity
+                   "validator_identity"
+                 else
+                   "authorized_voters"
+                 end
+      }
+    }
+  end
+
+  def unassigned_list_element(va)
+    {
+      validator_id: va.validator.id,
+      link_reason: {
+        va.id => if va.authorized_withdrawer == @vote_account.authorized_withdrawer
+                   "authorized_withdrawer"
+                 elsif  va.validator_identity == @vote_account.validator_identity
+                   "validator_identity"
+                 else
+                   "authorized_voter"
+                 end
+      }
+    }
   end
 
   def find_or_create_group
     if @groups_list.empty?
       @group = Group.create(network: @network)
     else
-      @group = Group.find(@groups_list.first)
+      @group = Group.find(@groups_list.first[:group_id])
     end
   end
 
   def assign_validators_to_group
-    @unassigned_list.each do |validator_id|
-      validator = Validator.find(validator_id)
-      GroupValidator.create(group: @group, validator: validator) unless @group.validators.include?(validator)
+    @unassigned_list.each do |unassigned_element|
+      validator = Validator.find(unassigned_element[:validator_id])
+      GroupValidator.create(
+        group: @group,
+        validator: validator,
+        link_reason: unassigned_element[:link_reason]
+      ) unless @group.validators.include?(validator)
     end
     GroupValidator.create(group: @group, validator: @vote_account.validator) \
       unless @group.validators.include?(@vote_account.validator)
   end
 
   def move_validators_to_group
-    @groups_list.uniq.each do |group_id|
-      group = Group.find(group_id)
+    @groups_list.uniq.each do |group_element|
+      group = Group.find(group_element[:group_id])
       group.validators.each do |validator|
-        validator.group = @group
-        validator.save
+        validator.group_validator.destroy
+        GroupValidator.create(
+          group: @group,
+          validator: validator,
+          link_reason: group_element[:link_reason]
+        )
       end
     end
   end
 
   def delete_empty_groups
+    @vote_account_group.destroy if @vote_account_group&.validators&.empty?
+
     Group.where(id: @groups_list).each do |group|
       if group.validators.empty?
         group.destroy
