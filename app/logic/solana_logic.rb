@@ -655,7 +655,7 @@ module SolanaLogic
     accounts = validator_attrs.map { |validator| validator["identityPubkey"] }
     db_validator_accounts = Validator.where(network: network, account: accounts)
                                      .map { |v| { v.account => v.id }}
-                                     .reduce({}, :merge)
+                                     .inject({}, :merge)
 
     validator_attrs.map do |validator|
       if db_validator_accounts[validator["identityPubkey"]]
