@@ -20,5 +20,5 @@ class GroupValidator < ApplicationRecord
   belongs_to :group
   belongs_to :validator
 
-  serialize :reason, JSON
+  serialize :link_reason, JSON
 end

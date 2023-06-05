@@ -42,7 +42,7 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
     assert_equal @network, Group.first.network
-    assert_equal ({ @vote_account1.id => "validator_identity" }.to_s), validator.group_validator.link_reason
+    assert_equal ({ @vote_account1.id.to_s => "validator_identity" }), validator.group_validator.link_reason
   end
 
   test "#call assigns validator to a group if there are validators that matches by withdrawer" do
@@ -60,7 +60,7 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
     assert_equal @network, Group.first.network
-    assert_equal ({ @vote_account1.id => "authorized_withdrawer" }.to_s), validator.group_validator.link_reason
+    assert_equal ({ @vote_account1.id.to_s => "authorized_withdrawer" }), validator.group_validator.link_reason
   end
 
   test "#call assigns validator to a group if there are validators that matches by voters" do
@@ -78,7 +78,7 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
     assert_equal @network, Group.first.network
-    assert_equal ({ @vote_account1.id => "authorized_voters" }.to_s), validator.group_validator.link_reason
+    assert_equal ({ @vote_account1.id.to_s => "authorized_voters" }), validator.group_validator.link_reason
   end
 
   test "#call destroys empty groups" do
