@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_31_055313) do
+ActiveRecord::Schema.define(version: 2023_06_02_132048) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -259,6 +259,7 @@ ActiveRecord::Schema.define(version: 2023_05_31_055313) do
   create_table "groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
   end
 
   create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

@@ -66,7 +66,7 @@ class CheckGroupValidatorAssignmentService
 
   def find_or_create_group
     if @groups_list.empty?
-      @group = Group.create
+      @group = Group.create(network: @network)
     else
       @group = Group.find(@groups_list.first)
     end

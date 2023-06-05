@@ -5,7 +5,7 @@ require "test_helper"
 class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"
-    @group1 = create(:group)
+    @group1 = create(:group, network: @network)
     @validator1 = create(:validator, group: @group1, network: @network)
     @vote_account1 = create(
       :vote_account,
@@ -24,6 +24,7 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     CheckGroupValidatorAssignmentService.new(vote_account_id: vote_account.id).call
     refute validator.group
     assert_equal 1, Group.count
+    assert_equal @network, Group.first.network
   end
 
   test "#call assigns validator to a group if there are validators that matches by identity" do
@@ -40,6 +41,7 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert validator.group
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
+    assert_equal @network, Group.first.network
   end
 
   test "#call assigns validator to a group if there are validators that matches by withdrawer" do
@@ -56,6 +58,7 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert validator.group
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
+    assert_equal @network, Group.first.network
   end
 
   test "#call assigns validator to a group if there are validators that matches by voters" do
@@ -72,6 +75,7 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert validator.group
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
+    assert_equal @network, Group.first.network
   end
 
   test "#call destroys empty groups" do
