@@ -44,7 +44,7 @@ class ValidatorHistory < ApplicationRecord
     epoch
   ].freeze
 
-  belongs_to :validator
+  belongs_to :validator, optional: true
 
   scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
   scope :most_recent_epoch_credits_by_account, -> do
