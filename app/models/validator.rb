@@ -154,10 +154,7 @@ class Validator < ApplicationRecord
   end
 
   def validator_history_last
-    ValidatorHistory.where(
-      network: network,
-      account: account
-    ).last
+    validator_histories.last
   end
 
   # Return the vote account that was most recently used
