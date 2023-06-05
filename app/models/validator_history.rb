@@ -25,7 +25,7 @@
 #  vote_distance    :bigint           unsigned
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  validator_id     :integer          not null
+#  validator_id     :integer
 #
 # Indexes
 #
