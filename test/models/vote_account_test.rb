@@ -23,9 +23,16 @@ class VoteAccountTest < ActiveSupport::TestCase
     vote_account = create(:vote_account, authorized_voters: { "test_voter_key" => "test_voter_value" })
     vote_account.update(authorized_voters: { "test_voter_key_2" => "test_voter_value_2" })
 
-    va_histories = vote_account.account_authority_histories
+    va_history = vote_account.account_authority_histories.last
 
-    assert_equal va_histories.last.authorized_voters_before, { "test_voter_key" => "test_voter_value" }
-    assert_equal va_histories.last.authorized_voters_after, { "test_voter_key_2" => "test_voter_value_2" }
+    assert_equal va_history.authorized_voters_before, { "test_voter_key" => "test_voter_value" }
+    assert_equal va_history.authorized_voters_after, { "test_voter_key_2" => "test_voter_value_2" }
+
+    vote_account.update(authorized_voters: { "test_voter_key_3" => "test_voter_value_2" })
+
+    va_history = vote_account.account_authority_histories.last
+
+    assert_equal va_history.authorized_voters_before, { "test_voter_key" => "test_voter_value" }
+    assert_equal va_history.authorized_voters_after, { "test_voter_key_2" => "test_voter_value_2" }
   end
 end

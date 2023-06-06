@@ -38,7 +38,7 @@ class VoteAccount < ApplicationRecord
   has_many :account_authority_histories
   before_save :set_network
   after_save do
-    if saved_change_to_authorized_withdrawer? || saved_change_to_authorized_voters?
+    if saved_change_to_authorized_withdrawer? || authorized_voters_value_changed?
       create_account_authority_history
     end
   end
@@ -53,22 +53,25 @@ class VoteAccount < ApplicationRecord
     self.save(touch: false)
   end
 
-  def vote_account_history_last
-    vote_account_histories.last
+  def to_builder
+    Jbuilder.new do |va|
+      va.vote_account self.account
+    end
   end
 
-  def vote_account_history_for(batch_uuid)
-    vote_account_histories.find_by(batch_uuid: batch_uuid)
-  end
+  private
 
   def set_network
     self.network = validator.network if validator && network.blank?
   end
 
-  def to_builder
-    Jbuilder.new do |va|
-      va.vote_account self.account
-    end
+  def authorized_voters_value_changed?
+    changes = Array(saved_changes[:authorized_voters]).compact
+
+    # create
+    return true if changes.size == 1
+
+    changes.map(&:values).flatten.uniq.size > 1
   end
 
   def create_account_authority_history
