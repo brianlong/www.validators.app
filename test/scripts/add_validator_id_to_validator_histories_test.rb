@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class AddValidatorIdToValidatorHistoriesTest < ActiveSupport::TestCase
   test "script ignores validator histories that validator not exists" do
