@@ -1,4 +1,4 @@
-app/models/vote_account.rb# frozen_string_literal: true
+# frozen_string_literal: true
 
 # == Schema Information
 #

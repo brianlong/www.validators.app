@@ -56,7 +56,6 @@ class VoteAccountTest < ActiveSupport::TestCase
           "test_voter_key_2" => "test_voter_value_2"
         }
       )
-
       vote_account.update(
         authorized_voters: {
           "test_voter_key_3" => "test_voter_value",
@@ -77,6 +76,24 @@ class VoteAccountTest < ActiveSupport::TestCase
       vote_account.update(authorized_voters: nil)
 
       assert_empty vote_account.account_authority_histories
+    end
+
+    test "returns valid history attributes during the update with nil" do
+      vote_account = create(
+        :vote_account,
+        authorized_voters: {
+          "test_voter_key" => "test_voter_value",
+          "test_voter_key_2" => "test_voter_value_2"
+        }
+      )
+      vote_account.update(authorized_voters: nil)
+
+      va_history = vote_account.account_authority_histories.last
+      assert_equal va_history.authorized_voters_before, {
+        "test_voter_key" => "test_voter_value",
+        "test_voter_key_2" => "test_voter_value_2"
+      }
+      assert_nil va_history.authorized_voters_after
     end
   end
 end
