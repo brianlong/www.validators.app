@@ -18,11 +18,7 @@ VoteAccount.joins(:account_authority_histories)
 
   history_last = va.account_authority_histories.last
 
-  if va.authorized_voters != history_last.authorized_voters_after ||
-    va.authorized_withdrawer != history_last.authorized_withdrawer_after
-    va.update_columns(
-      authorized_voters: history_last.authorized_voters_after,
-      authorized_withdrawer: history_last.authorized_withdrawer_after
-    )
+  if va.authorized_voters != history_last.authorized_voters_after
+    va.update_column(:authorized_voters, history_last.authorized_voters_after)
   end
 end
