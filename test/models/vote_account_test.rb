@@ -1,10 +1,6 @@
 require 'test_helper'
 
 class VoteAccountTest < ActiveSupport::TestCase
-  setup do
-    @vote_account = create(:vote_account)
-  end
-
   test "scope for_api returs vote_accounts specified fields" do
     assert_equal VoteAccount::FIELDS_FOR_API.map(&:to_s), VoteAccount.for_api.first.attributes.keys
   end
@@ -19,20 +15,61 @@ class VoteAccountTest < ActiveSupport::TestCase
     assert_equal va_histories.last.authorized_withdrawer_after, "test_withdrawer_2"
   end
 
-  test "authorized_voters" do
-    vote_account = create(:vote_account, authorized_voters: { "test_voter_key" => "test_voter_value" })
-    vote_account.update(authorized_voters: { "test_voter_key_2" => "test_voter_value_2" })
+  class AuthorizedVotersTests < ActiveSupport::TestCase
+    test "returns valid attributes during the update with a single key" do
+      vote_account = create(:vote_account, authorized_voters: { "test_voter_key" => "test_voter_value" })
+      vote_account.update(authorized_voters: { "test_voter_key_2" => "test_voter_value_2" })
 
-    va_history = vote_account.account_authority_histories.last
+      va_history = vote_account.account_authority_histories.last
 
-    assert_equal va_history.authorized_voters_before, { "test_voter_key" => "test_voter_value" }
-    assert_equal va_history.authorized_voters_after, { "test_voter_key_2" => "test_voter_value_2" }
+      assert_equal va_history.authorized_voters_before, { "test_voter_key" => "test_voter_value" }
+      assert_equal va_history.authorized_voters_after, { "test_voter_key_2" => "test_voter_value_2" }
+    end
 
-    vote_account.update(authorized_voters: { "test_voter_key_3" => "test_voter_value_2" })
+    test "returns valid attributes during the update with multiple keys" do
+      vote_account = create(
+        :vote_account,
+        authorized_voters: { "test_voter_key" => "test_voter_value" }
+      )
+      vote_account.update(
+        authorized_voters: {
+          "test_voter_key_2" => "test_voter_value_2",
+          "test_voter_key_3" => "test_voter_value_3"
+        }
+      )
 
-    va_history = vote_account.account_authority_histories.last
+      va_history = vote_account.account_authority_histories.last
+      assert_equal va_history.authorized_voters_before, {
+        "test_voter_key" => "test_voter_value"
+      }
+      assert_equal va_history.authorized_voters_after, {
+        "test_voter_key_2" => "test_voter_value_2",
+        "test_voter_key_3" => "test_voter_value_3"
+      }
+    end
 
-    assert_equal va_history.authorized_voters_before, { "test_voter_key" => "test_voter_value" }
-    assert_equal va_history.authorized_voters_after, { "test_voter_key_2" => "test_voter_value_2" }
+    test "returns valid attributes during the update with multiple keys but different keys only" do
+      vote_account = create(
+        :vote_account,
+        authorized_voters: {
+          "test_voter_key" => "test_voter_value",
+          "test_voter_key_2" => "test_voter_value_2"
+        }
+      )
+
+      vote_account.update(
+        authorized_voters: {
+          "test_voter_key_3" => "test_voter_value",
+          "test_voter_key_4" => "test_voter_value_2"
+        }
+      )
+
+      va_history = vote_account.account_authority_histories.last
+      assert_nil va_history.authorized_voters_before
+      assert_equal va_history.authorized_voters_after, {
+        "test_voter_key" => "test_voter_value",
+        "test_voter_key_2" => "test_voter_value_2"
+      }
+    end
   end
 end

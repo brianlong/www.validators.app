@@ -66,12 +66,13 @@ class VoteAccount < ApplicationRecord
   end
 
   def authorized_voters_value_changed?
-    changes = Array(saved_changes[:authorized_voters]).compact
+    changes = Array(saved_changes[:authorized_voters]).compact.map(&:values)
 
     # create
     return true if changes.size == 1
 
-    changes.map(&:values).flatten.uniq.size > 1
+    before_changes, after_changes = changes.first, changes.last
+    before_changes.size != (before_changes & after_changes).size
   end
 
   def create_account_authority_history
