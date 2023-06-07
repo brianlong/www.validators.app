@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+app/models/vote_account.rb# frozen_string_literal: true
 
 # == Schema Information
 #
@@ -66,6 +66,8 @@ class VoteAccount < ApplicationRecord
   end
 
   def authorized_voters_value_changed?
+    return unless saved_change_to_authorized_voters?
+
     changes = Array(saved_changes[:authorized_voters]).compact.map(&:values)
 
     # create

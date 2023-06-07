@@ -16,7 +16,7 @@ class VoteAccountTest < ActiveSupport::TestCase
   end
 
   class AuthorizedVotersTests < ActiveSupport::TestCase
-    test "returns valid attributes during the update with a single key" do
+    test "returns valid history attributes during the update with a single key" do
       vote_account = create(:vote_account, authorized_voters: { "test_voter_key" => "test_voter_value" })
       vote_account.update(authorized_voters: { "test_voter_key_2" => "test_voter_value_2" })
 
@@ -26,7 +26,7 @@ class VoteAccountTest < ActiveSupport::TestCase
       assert_equal va_history.authorized_voters_after, { "test_voter_key_2" => "test_voter_value_2" }
     end
 
-    test "returns valid attributes during the update with multiple keys" do
+    test "returns valid history attributes during the update with multiple keys" do
       vote_account = create(
         :vote_account,
         authorized_voters: { "test_voter_key" => "test_voter_value" }
@@ -48,7 +48,7 @@ class VoteAccountTest < ActiveSupport::TestCase
       }
     end
 
-    test "returns valid attributes during the update with multiple keys but different keys only" do
+    test "returns valid history attributes during the update with multiple keys but different keys only" do
       vote_account = create(
         :vote_account,
         authorized_voters: {
@@ -70,6 +70,13 @@ class VoteAccountTest < ActiveSupport::TestCase
         "test_voter_key" => "test_voter_value",
         "test_voter_key_2" => "test_voter_value_2"
       }
+    end
+
+    test "skips saving history if authorized_voters does not change" do
+      vote_account = create(:vote_account, authorized_voters: nil)
+      vote_account.update(authorized_voters: nil)
+
+      assert_empty vote_account.account_authority_histories
     end
   end
 end
