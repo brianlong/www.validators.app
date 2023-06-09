@@ -5,7 +5,7 @@ require "test_helper"
 class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"
-    @group1 = create(:group)
+    @group1 = create(:group, network: @network)
     @validator1 = create(:validator, group: @group1, network: @network)
     @vote_account1 = create(
       :vote_account,
@@ -24,6 +24,7 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     CheckGroupValidatorAssignmentService.new(vote_account_id: vote_account.id).call
     refute validator.group
     assert_equal 1, Group.count
+    assert_equal @network, Group.first.network
   end
 
   test "#call assigns validator to a group if there are validators that matches by identity" do
@@ -40,6 +41,8 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert validator.group
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
+    assert_equal @network, Group.first.network
+    assert_equal ({ @vote_account1.id.to_s => "validator_identity" }), validator.group_validator.link_reason
   end
 
   test "#call assigns validator to a group if there are validators that matches by withdrawer" do
@@ -56,6 +59,8 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     assert validator.group
     assert_equal @group1, validator.group
     assert_equal 1, Group.count
+    assert_equal @network, Group.first.network
+    assert_equal ({ @vote_account1.id.to_s => "authorized_withdrawer" }), validator.group_validator.link_reason
   end
 
   test "#call assigns validator to a group if there are validators that matches by voters" do
@@ -71,6 +76,23 @@ class CheckGroupValidatorAssignmentServiceTest < ActiveSupport::TestCase
     validator.reload
     assert validator.group
     assert_equal @group1, validator.group
+    assert_equal 1, Group.count
+    assert_equal @network, Group.first.network
+    assert_equal ({ @vote_account1.id.to_s => "authorized_voters" }), validator.group_validator.link_reason
+  end
+
+  test "#call destroys empty groups" do
+    group2 = create(:group)
+    validator = create(:validator, network: @network, group: group2)
+    vote_account = create(
+      :vote_account,
+      validator: validator,
+      network: @network,
+      authorized_voters: { 123 => "test_voter_value" }
+    )
+    puts Group.count
+    CheckGroupValidatorAssignmentService.new(vote_account_id: vote_account.id).call
+
     assert_equal 1, Group.count
   end
 end
