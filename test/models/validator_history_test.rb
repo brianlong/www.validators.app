@@ -44,25 +44,34 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
 
   test "scope #most_recent_epoch_credits_by_account returns most recent validator histories per account" do
     time = Date.today
+    validator_mainnet = create(:validator, network: "mainnet", account: @validator.account)
     dates_with_epoch_credits = [[time - 2.day, 100],[time - 1.day, 200], [time, 300]]
 
     dates_with_epoch_credits.each do |arr|
       create(
         :validator_history,
         account: @validator.account,
-        created_at: arr[0], 
+        created_at: arr[0],
         epoch_credits: arr[1],
-        epoch: 222
+        epoch: 242
+      )
+      create(
+        :validator_history,
+        account: validator_mainnet.account,
+        created_at: arr[0],
+        epoch_credits: arr[1],
+        epoch: 222,
+        network: validator_mainnet.network
       )
     end
 
     validator_histories_most_recent = ValidatorHistory.most_recent_epoch_credits_by_account
-    validator_history = validator_histories_most_recent.find_by(account: @validator.account)
+    validator_history = validator_histories_most_recent.find_by(account: @validator.account, network: @network)
 
     assert_equal Validator.all.size, validator_histories_most_recent.size
     assert_equal @validator.account, validator_history.account
     assert_equal 300, validator_history.epoch_credits
-    assert_equal 222, validator_history.epoch
+    assert_equal 242, validator_history.epoch
     assert_equal time, validator_history.created_at
     assert_equal @network, validator_history.network
   end

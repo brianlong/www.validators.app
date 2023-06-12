@@ -47,7 +47,7 @@ class ValidatorHistory < ApplicationRecord
     from(
       <<~SQL
         (
-          SELECT validator_histories.epoch_credits, validator_histories.account, validator_histories.created_at, validator_histories.epoch, validator_histories.network
+          SELECT DISTINCT validator_histories.epoch_credits, validator_histories.account, validator_histories.created_at, validator_histories.epoch, validator_histories.network
           FROM validator_histories JOIN (
             SELECT account, max(created_at) AS created_at
             FROM validator_histories
