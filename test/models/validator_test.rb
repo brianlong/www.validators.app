@@ -35,8 +35,9 @@ class ValidatorTest < ActiveSupport::TestCase
     create(:validator_score_v1, validator: @v_private, commission: 100)
   end
 
-  test "relationship has_one newest_epoch_credits_by_account_and_network" do
+  test "relationship has_one newest_epoch_credits_by_account_and_network by network" do
     create_list(:validator_history, 5, account: @validator.account, epoch_credits: 100)
+    create_list(:validator_history, 5, account: @validator.account, epoch_credits: 200, network: "mainnet")
 
     assert_equal 100, @validator.newest_epoch_credits_by_account_and_network.epoch_credits
   end
