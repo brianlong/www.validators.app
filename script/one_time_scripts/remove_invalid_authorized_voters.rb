@@ -10,7 +10,7 @@ VoteAccount.joins(:account_authority_histories)
       before_values = Array(history.authorized_voters_before&.values)
       after_values = Array(history.authorized_voters_after&.values)
 
-      before_values.size == (before_values & after_values).size
+      (before_values <=> after_values).zero?
     end
   end
 
