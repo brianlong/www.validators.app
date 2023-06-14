@@ -119,5 +119,29 @@ class VoteAccountTest < ActiveSupport::TestCase
         "test_voter_key_2" => "test_voter_value_2"
       }
     end
+
+    test "returns valid history attributes when authorizations have been mixed up" do
+      vote_account = create(
+        :vote_account,
+        authorized_voters: {
+          "test_voter_key" => "test_voter_value",
+          "test_voter_key_2" => "test_voter_value_2"
+        }
+      )
+      vote_account.update(
+        authorized_voters: {
+          "test_voter_key_2" => "test_voter_value_2",
+          "test_voter_key" => "test_voter_value"
+        }
+      )
+
+      va_history = vote_account.account_authority_histories.last
+
+      assert_nil va_history.authorized_voters_before
+      assert_equal va_history.authorized_voters_after, {
+        "test_voter_key" => "test_voter_value",
+        "test_voter_key_2" => "test_voter_value_2"
+      }
+    end
   end
 end

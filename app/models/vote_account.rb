@@ -74,7 +74,7 @@ class VoteAccount < ApplicationRecord
     return true if changes.size == 1
 
     before_changes, after_changes = changes.first, changes.last
-    !(before_changes <=> after_changes).zero?
+    before_changes.sort != after_changes.sort
   end
 
   def create_account_authority_history
