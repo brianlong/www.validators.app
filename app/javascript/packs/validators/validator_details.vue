@@ -126,7 +126,7 @@
 
               <tr>
                 <td><strong>Website:</strong></td>
-                <td class="small"><a :href="validator.www_url">{{ validator.www_url }}</a></td>
+                <td class="small">{{ validator.www_url }}</td>
               </tr>
 
               <tr>

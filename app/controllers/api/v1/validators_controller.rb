@@ -14,7 +14,9 @@ module Api
           sort_order: params[:order],
           page: params[:page],
           limit: params[:limit],
-          query: params[:q]
+          query_params: {
+            query: params[:q]
+          }
         )
 
         json_result = @validators.map { |val| create_json_result(val) }
