@@ -22,6 +22,17 @@ module Api
         get api_v1_account_authorities_url(network: @network), headers: @headers
         assert_response :success
       end
+
+      test "#index returns valid response with total_count value" do
+        create :account_authority_history
+
+        get api_v1_account_authorities_url(network: @network), headers: @headers
+        response_body = JSON.parse response.body
+
+        assert_equal "withdrawer", response_body["authority_changes"][0]["authorized_withdrawer_before"]
+        assert_equal "newwithdrawer", response_body["authority_changes"][0]["authorized_withdrawer_after"]
+        assert_equal 1, response_body["total_count"]
+      end
     end
   end
 end
