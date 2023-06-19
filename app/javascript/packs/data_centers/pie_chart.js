@@ -39,7 +39,7 @@ export default {
     labels() {
       let labels = []
       this.data_center_stats_for_chart.forEach(function(val) {
-        labels.push(val[0] + ' (' + val[1] + ')')
+        labels.push(val[0] + ' (' + val[1] + ') ')
       })
       return labels
     },
@@ -61,7 +61,6 @@ export default {
           labels: this.labels(),
           datasets: [
             {
-              label: ' Block Diff ',
               data: this.data_center_stats_for_chart.map( (k) => ( k[1] ) ),
               backgroundColor: [
                 chart_variables.chart_green_speedometer,
@@ -71,25 +70,54 @@ export default {
                 chart_variables.chart_purple_2_m,
                 chart_variables.chart_lightgrey_speedometer,
               ],
-              borderColor: chart_variables.chart_grid_color,
+              borderColor: [
+                chart_variables.chart_green_speedometer,
+                chart_variables.chart_green_t,
+                chart_variables.chart_blue_speedometer,
+                chart_variables.chart_blue_t,
+                chart_variables.chart_purple_2_m,
+                chart_variables.chart_lightgrey_speedometer,
+              ],
               borderWidth: 1,
             }
           ]
         },
         options: {
           plugins: {
+            tooltip: {
+              enabled: true,
+              displayColors: false,
+              padding: 8,
+              callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.label;
+                },
+              }
+            },
             legend: {
-              position: 'bottom',
               minHeight: 100,
-              align: 'start',
               labels: {
+                boxWidth: chart_variables.chart_legend_box_size,
+                boxHeight: chart_variables.chart_legend_box_size,
                 usePointStyle: true,
                 color: chart_variables.chart_lightgrey,
-                padding: 20,
+                padding: 10,
+                font: {
+                  size: chart_variables.chart_legend_font_size
+                }
               }
             }
           }
-        }
+        },
+        plugins: [{
+          beforeInit(chart) {
+            const originalFit = chart.legend.fit;
+            chart.legend.fit = function fit() {
+              originalFit.bind(chart.legend)();
+              this.height += 20;
+            }
+          }
+        }]
       });
     }
   },

@@ -3,7 +3,7 @@
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <h2 class="h4 card-heading">Stats By Country</h2>
+          <h2 class="h4 card-heading mb-3">Stats By Country</h2>
             <div class="px-lg-3 px-xl-4">
               <pie-chart
                   :data_center_stats="data_centers['dc_by_country']"
@@ -16,7 +16,7 @@
     <div class="col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <h2 class="h4 card-heading">Stats By Organization</h2>
+          <h2 class="h4 card-heading mb-3">Stats By Organization</h2>
           <div class="px-lg-3 px-xl-4">
             <pie-chart
                 :data_center_stats="data_centers['dc_by_organization']"
