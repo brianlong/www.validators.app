@@ -71,7 +71,7 @@ class Validator < ApplicationRecord
   has_one :validator_score_v1_for_web, -> { for_web }, class_name: "ValidatorScoreV1"
   has_one :newest_epoch_credits_by_account_and_network, ->(validator) {
     merge(ValidatorHistory.most_recent_epoch_credits_by_account)
-      .where(network: validator.network)
+    .where(network: validator.network)
   }, primary_key: :account, foreign_key: :account, class_name: 'ValidatorHistory'
   has_many :stake_accounts, dependent: :nullify
 
