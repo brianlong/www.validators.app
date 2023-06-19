@@ -47,7 +47,6 @@
       axios.get('/api/v1/data-center-stats/' + this.network)
         .then(response => {
           this.data_centers = response.data;
-          console.log(this.data_centers['dc_by_country']);
         })
         .catch(error => {
           console.log(error);
