@@ -6,15 +6,15 @@
     <span class="text-muted">(<%= @results[:results].count %>)</span>
   </h1>
 
-  <div class="btn-group btn-group-toggle" aria-label="filter">
-    <%= link_to "Data Centers",
+  <div class="btn-group btn-group-toggle me-2" aria-label="filter">
+    <%= link_to "Data Center",
                 data_centers_url(network: params[:network], sort_by: :data_center),
                 class: "btn btn-sm #{[nil, 'data_center'].include?(@sort_by) ? 'btn-primary' : 'btn-secondary'}" %>
     <%= link_to "ASN",
                 data_centers_url(network: params[:network], sort_by: :asn),
                 class: "btn btn-sm #{@sort_by == 'asn' ? 'btn-primary' : 'btn-secondary'}" %>
   </div>
-  <a href="#data-center-charts-component" class="btn btn-sm btn-secondary"> data center stats </a>
+  <a href="#data-center-charts-component" class="btn btn-sm btn-secondary">Data Center Stats</a>
 </section>
 
 <div class="card mb-4">
