@@ -65,14 +65,14 @@ module Api
       end
 
       def data_center_stats
-        dc_by_country = DataCenterStat.where(network: "mainnet")
+        dc_by_country = DataCenterStat.where(network: dc_params[:network])
                                       .joins(:data_center)
                                       .group(:country_name)
                                       .sum(:active_validators_count)
                                       .sort_by { |k, v| v}
                                       .reverse
 
-        dc_by_organization = DataCenterStat.where(network: "mainnet")
+        dc_by_organization = DataCenterStat.where(network: dc_params[:network])
                                            .joins(:data_center)
                                            .group(:traits_organization)
                                            .sum(:active_validators_count)
