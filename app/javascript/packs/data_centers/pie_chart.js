@@ -123,5 +123,5 @@ export default {
   },
   template: `
     <canvas :id="chart_name()"></canvas>
-`
+  `
 }

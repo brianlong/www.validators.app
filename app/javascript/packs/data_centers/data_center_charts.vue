@@ -34,7 +34,6 @@
   import { mapGetters } from 'vuex';
   import pieChart from './pie_chart.js'
 
-
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
@@ -46,12 +45,9 @@
 
     created() {
       axios.get('/api/v1/data-center-stats/' + this.network)
-        .then(response => {
-          this.data_centers = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-        })
+           .then(response => {
+             this.data_centers = response.data;
+           })
     },
 
     computed: mapGetters([
