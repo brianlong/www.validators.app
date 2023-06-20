@@ -6,5 +6,3 @@ class AddValidatorIdToValidatorHistories < ActiveRecord::Migration[6.1]
     add_index :validator_histories, :validator_id
   end
 end
-
-
