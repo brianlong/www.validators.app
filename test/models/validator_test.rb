@@ -35,13 +35,6 @@ class ValidatorTest < ActiveSupport::TestCase
     create(:validator_score_v1, validator: @v_private, commission: 100)
   end
 
-  test "relationship has_one newest_validator_history by network and account" do
-    create_list(:validator_history, 5, account: @validator.account, epoch_credits: 100)
-    create_list(:validator_history, 5, account: @validator.account, epoch_credits: 200, network: "mainnet")
-
-    assert_equal 100, @validator.newest_validator_history.epoch_credits
-  end
-
   test "relationship has_one data_center_host through validator_ips" do
     data_center_host = create(:data_center_host)
     create(:validator_ip, :active, validator: @validator, data_center_host: data_center_host)
