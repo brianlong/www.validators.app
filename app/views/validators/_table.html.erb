@@ -106,6 +106,14 @@
         <div class="column-info-row" data-turbolinks="false">
           <div class="column-info-avatar">
             <%= create_avatar_link(validator) %>
+            <% if validator.jito %>
+              <%= image_tag(
+                "jito.svg",
+                class: 'jito-badge',
+                title: "Jito validator",
+                alt: "J")
+              %>
+            <% end %>
             <% if current_user && show_watchlist_btn %>
               <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fa-solid' : 'fa-regular' %> fa-star"
                  data-bs-toggle="tooltip"
