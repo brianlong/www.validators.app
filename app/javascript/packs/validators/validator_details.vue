@@ -158,6 +158,13 @@
                 </td>
               </tr>
 
+              <tr v-if="validator.jito">
+                <td><strong>Jito Commission:</strong></td>
+                <td :class="commission_class" data-turbolinks="false">
+                  {{ validator.jito_commission }}
+                </td>
+              </tr>
+
               <tr v-if="validator.security_report_url">
                 <td>
                   <strong>Security Info:</strong>

@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_19_115610) do
+ActiveRecord::Schema.define(version: 2023_06_21_124736) do
+
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
     t.string "authorized_withdrawer_after"
@@ -244,6 +245,22 @@ ActiveRecord::Schema.define(version: 2023_04_19_115610) do
     t.index ["network", "account"], name: "index_gossip_nodes_on_network_and_account"
     t.index ["network", "is_active"], name: "index_gossip_nodes_on_network_and_is_active"
     t.index ["network", "staked"], name: "index_gossip_nodes_on_network_and_staked"
+  end
+
+  create_table "group_validators", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "group_id"
+    t.integer "validator_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "link_reason"
+    t.index ["group_id"], name: "index_group_validators_on_group_id"
+    t.index ["validator_id"], name: "index_group_validators_on_validator_id"
+  end
+
+  create_table "groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
   end
 
   create_table "opt_out_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -633,6 +650,7 @@ ActiveRecord::Schema.define(version: 2023_04_19_115610) do
     t.boolean "consensus_mods", default: false
     t.boolean "jito", default: false
     t.text "stake_pools_list"
+    t.integer "jito_commission"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
     t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end
