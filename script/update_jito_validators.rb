@@ -24,7 +24,7 @@ if response.is_a?(Net::HTTPSuccess)
   jito_db_validators.each do |validator|
     validator.update(
       jito_commission: jito_vote_accounts.find { |jito_vote_account| 
-        jito_vote_account[0] == validator.vote_accounts.first.account 
+        jito_vote_account[0] == validator.vote_account_active.account 
       }[1],
       jito: true
     )
