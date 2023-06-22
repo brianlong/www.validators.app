@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'test_helper'
-require 'sidekiq/testing'
+require "test_helper"
+require "sidekiq/testing"
 
 # ReportLogicTest
 class ReportLogicTest < ActiveSupport::TestCase
@@ -19,7 +19,7 @@ class ReportLogicTest < ActiveSupport::TestCase
   end
 
   test "report_software_versions creates correct report with software versions included" do
-    software_versions = ['1.6.8', '1.7.1', '1.7.2']
+    software_versions = ["1.6.8", "1.7.1", "1.7.2"]
     software_versions.each do |sw|
       list = create_list(:validator, 5, network: @network)
       list.each do |validator|
@@ -29,7 +29,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
     generate_report
 
-    report = Report.find_by(name: 'report_software_versions', batch_uuid: @batch.uuid)
+    report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
     expected_result = { "count" => 5, "stake_percent" => 33.33 }
 
     assert_equal @network, report.network
@@ -57,37 +57,37 @@ class ReportLogicTest < ActiveSupport::TestCase
 
     generate_report
 
-    report = Report.find_by(name: 'report_software_versions', batch_uuid: @batch.uuid)
+    report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
     assert_nil report
   end
 
   test "does not create report if software version is malformed" do
     validator = create(:validator, network: @network)
-    create(:validator_score_v1, validator: validator, software_version: '1.3.9 e45f1df5')
+    create(:validator_score_v1, validator: validator, software_version: "1.3.9 e45f1df5")
 
     generate_report
 
-    report = Report.find_by(name: 'report_software_versions', batch_uuid: @batch.uuid)
+    report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
     assert_nil report
   end
 
   test "does not create report if software version is unknown" do
     validator = create(:validator, network: @network)
-    create(:validator_score_v1, validator: validator, software_version: 'unknown')
+    create(:validator_score_v1, validator: validator, software_version: "unknown")
 
     generate_report
 
-    report = Report.find_by(name: 'report_software_versions', batch_uuid: @batch.uuid)
+    report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
     assert_nil report
   end
 
   test "does not create report if software version is empty" do
     validator = create(:validator, network: @network)
-    create(:validator_score_v1, validator: validator, software_version: '')
+    create(:validator_score_v1, validator: validator, software_version: "")
 
     generate_report
 
-    report = Report.find_by(name: 'report_software_versions', batch_uuid: @batch.uuid)
+    report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
     assert_nil report
   end
 end
