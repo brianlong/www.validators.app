@@ -23,18 +23,13 @@ class ReportLogicTest < ActiveSupport::TestCase
     software_versions.each do |sw|
       list = create_list(:validator, 5, network: @network)
       list.each do |validator|
-        create(
-          :validator_score_v1, 
-          validator: validator,
-          software_version: sw
-        )
+        create(:validator_score_v1, validator: validator, software_version: sw)
       end
     end
 
     generate_report
 
     report = Report.find_by(name: 'report_software_versions', batch_uuid: @batch.uuid)
-
     expected_result = { "count" => 5, "stake_percent" => 33.33 }
 
     assert_equal @network, report.network
@@ -48,8 +43,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
   test "does not create report if active_stake sum is blank or zero" do
     validator = create(:validator, network: @network)
-    create(
-      :validator_score_v1,
+    create(:validator_score_v1,
       software_version: "1.5.7",
       validator: validator,
       active_stake: nil
@@ -69,11 +63,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
   test "does not create report if software version is malformed" do
     validator = create(:validator, network: @network)
-    create(
-      :validator_score_v1,
-      validator: validator,
-      software_version: '1.3.9 e45f1df5'
-    )
+    create(:validator_score_v1, validator: validator, software_version: '1.3.9 e45f1df5')
 
     generate_report
 
@@ -83,11 +73,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
   test "does not create report if software version is unknown" do
     validator = create(:validator, network: @network)
-    create(
-      :validator_score_v1,
-      validator: validator,
-      software_version: 'unknown'
-    )
+    create(:validator_score_v1, validator: validator, software_version: 'unknown')
 
     generate_report
 
@@ -97,11 +83,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
   test "does not create report if software version is empty" do
     validator = create(:validator, network: @network)
-    create(
-      :validator_score_v1,
-      validator: validator,
-      software_version: ''
-    )
+    create(:validator_score_v1, validator: validator, software_version: '')
 
     generate_report
 
