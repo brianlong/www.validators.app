@@ -41,18 +41,27 @@ class ReportLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "does not create report if active_stake sum is blank or zero" do
+  test "creates a report when active_stake sum is zero" do
     validator = create(:validator, network: @network)
-    create(:validator_score_v1,
-      software_version: "1.5.7",
-      validator: validator,
-      active_stake: nil
-    )
     create(
       :validator_score_v1,
       software_version: "1.5.7",
       validator: validator,
       active_stake: 0
+    )
+
+    generate_report
+
+    report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
+    assert_equal 1, report.payload.size
+  end
+
+  test "does not create report if active_stake sum is nil" do
+    validator = create(:validator, network: @network)
+    create(:validator_score_v1,
+      software_version: "1.5.7",
+      validator: validator,
+      active_stake: nil
     )
 
     generate_report

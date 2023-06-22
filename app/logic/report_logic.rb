@@ -85,7 +85,7 @@ module ReportLogic
 
         next if software_version.blank? ||
                   !Gem::Version.correct?(software_version) ||
-                  active_stake_sum.to_i.zero?
+                  active_stake_sum.nil?
 
         stake_percent = ((active_stake_sum / total_active_stake.to_f) * 100).round(2)
 
