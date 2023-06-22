@@ -88,7 +88,7 @@ module ReportLogic
         stake_percent = if active_stake_sum # as_sum
                           ((active_stake_sum / total_active_stake.to_f) * 100).round(2)
                         else
-                          nil
+                          0
                         end
 
         result << { 

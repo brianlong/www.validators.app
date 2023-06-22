@@ -39,6 +39,14 @@ class ReportLogicTest < ActiveSupport::TestCase
           software_version: sw,
           network: network
         )
+
+        create(
+          :validator_score_v1,
+          software_version: "1.5.7",
+          validator: val,
+          network: network,
+          active_stake: nil
+        )
       end
 
       validator_lists << list
@@ -98,7 +106,7 @@ class ReportLogicTest < ActiveSupport::TestCase
 
     assert_equal network, report.network
     assert_equal batch_uuid, report.batch_uuid
-    assert_equal 3, report.payload.size # empty and unknown software_versions are ignored
+    assert_equal 4, report.payload.size # empty and unknown software_versions are ignored
 
     software_versions.each do |sw|
       assert_equal report.payload.find { |v| v[sw] }[sw], expected_result
