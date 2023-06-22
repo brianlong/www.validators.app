@@ -6,6 +6,8 @@
     <span class="text-muted">(<%= @results[:results].count %>)</span>
   </h1>
 
+  <div id="data-center-charts-component"></div>
+
   <div class="btn-group btn-group-toggle me-2" aria-label="filter">
     <%= link_to "Data Center",
                 data_centers_url(network: params[:network], sort_by: :data_center),
@@ -14,7 +16,6 @@
                 data_centers_url(network: params[:network], sort_by: :asn),
                 class: "btn btn-sm #{@sort_by == 'asn' ? 'btn-primary' : 'btn-secondary'}" %>
   </div>
-  <a href="#data-center-charts-component" class="btn btn-sm btn-secondary">Data Center Stats</a>
 </section>
 
 <div class="card mb-4">
@@ -30,5 +31,3 @@
     </table>
   </div>
 </div>
-
-<div id="data-center-charts-component"></div>
