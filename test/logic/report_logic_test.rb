@@ -41,7 +41,7 @@ class ReportLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test "creates a report when active_stake sum is zero" do
+  test "report_software_versions creates a report when active_stake sum is zero" do
     validator = create(:validator, network: @network)
     create(
       :validator_score_v1,
