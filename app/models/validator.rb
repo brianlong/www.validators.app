@@ -69,6 +69,8 @@ class Validator < ApplicationRecord
   has_one :data_center_host, through: :validator_ip_active
   has_one :validator_score_v1, dependent: :destroy
   has_one :validator_score_v1_for_web, -> { for_web }, class_name: "ValidatorScoreV1"
+  has_one :group_validator, dependent: :destroy
+  has_one :group, through: :group_validator
   has_many :stake_accounts, dependent: :nullify
 
   # API
