@@ -127,6 +127,14 @@
           <div class="column-info-name">
             <%= link_to validator_url(network: params[:network], account: validator.account), class: "column-info-link fw-bold #{'no-watchlist' unless (current_user && show_watchlist_btn)}" do %>
               <%= displayed_validator_name(validator) %> <%= displayed_validator_commission(validator) %>
+              <% if validator.jito %>
+                <%= image_tag(
+                  "jito.svg",
+                  class: 'jito-badge-mobile',
+                  title: "Jito validator",
+                  alt: "J")
+                %>
+              <% end %>
             <% end %>
             <br />
 

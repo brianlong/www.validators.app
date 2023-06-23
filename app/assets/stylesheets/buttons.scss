@@ -113,15 +113,18 @@
   margin-left: -70px;
   height: .9em;
   width: auto;
-  filter: drop-shadow(0px 0px 3px black);
-  color: $orange;
-
   @media(max-width: $screen-lg-max) {
-    margin: 0;
-    position: relative;
+    display: none
   }
-  @media(max-width: $screen-md-max) {
-    margin-right: 5px;
+}
+
+.jito-badge-mobile {
+  height: .7em;
+  width: auto;
+  filter: drop-shadow(0px 0px 3px black);
+
+  @media(min-width: $screen-lg-max) {
+    display: none
   }
 }
 
