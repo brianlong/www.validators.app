@@ -22,6 +22,9 @@ class AccountAuthorityQueryTest < ActiveSupport::TestCase
   end
 
   test "#call provides results from the given network" do
+    VoteAccount.where(network: @network).each do |va|
+      va.update(authorized_voters: { "test_withdrawer_key2" => "test_withdrawer_value2" })
+    end
     res = AccountAuthorityQuery.new(network: @network).call
 
     assert_equal 5, res.count
@@ -29,6 +32,7 @@ class AccountAuthorityQueryTest < ActiveSupport::TestCase
   end
 
   test "#call provides results from the correct validator if validator param is provided" do
+    @vote_account.update(authorized_voters: { "test_withdrawer_key2" => "test_withdrawer_value2" })
     res = AccountAuthorityQuery.new(network: @network, validator: @validator.account).call
 
     assert_equal 1, res.count
@@ -36,6 +40,7 @@ class AccountAuthorityQueryTest < ActiveSupport::TestCase
   end
 
   test "#call provides results from the correct vote_account if vote_account param is provided" do
+    @vote_account.update(authorized_voters: { "test_withdrawer_key2" => "test_withdrawer_value2" })
     res = AccountAuthorityQuery.new(network: @network, vote_account: @vote_account.account).call
 
     assert_equal 1, res.count
