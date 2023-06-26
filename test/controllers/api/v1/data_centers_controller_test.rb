@@ -97,4 +97,46 @@ class DataCentersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, resp.keys.count
     refute resp["data_centers_groups"].values.flat_map{|dc| dc["data_centers"]}.include? "0--Unknown"
   end
+
+  test "#data_center_stats request with token returns success" do
+    get api_v1_data_center_stats_url(network: @network), headers: @headers
+    assert_response 200
+  end
+
+  test "#data_center_stats request without token returns error" do
+    get api_v1_data_center_stats_url(network: @network)
+    assert_response 401
+    expected_response = { "error" => "Unauthorized"  }
+
+    assert_equal expected_response, response_to_json(@response.body)
+  end
+
+  test "#data_center_stats returns stats by country and organization" do
+    data_center2 = create(:data_center, :frankfurt)
+    data_center_stats2 = create(
+      :data_center_stat,
+      data_center: data_center2,
+      network: @network,
+      active_gossip_nodes_count: 13,
+      active_validators_count: 2
+    )
+
+    data_center3 = create(:data_center, :china)
+    data_center_stats3 = create(
+      :data_center_stat,
+      data_center: data_center3,
+      network: @network,
+      active_gossip_nodes_count: 8,
+      active_validators_count: 5
+    )
+
+    get api_v1_data_center_stats_url(network: @network), headers: @headers
+    resp = JSON.parse(@response.body)
+    
+    assert_response 200
+    assert_equal ["China", 5], resp["dc_by_country"][0]
+    assert_equal ["Germany", 3], resp["dc_by_country"][1]
+    assert_equal ["Chinese Organisation", 5], resp["dc_by_organization"][0]
+    assert_equal ["Germany Organisation", 3], resp["dc_by_organization"][1]
+  end
 end

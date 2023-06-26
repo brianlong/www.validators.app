@@ -41,6 +41,9 @@ class VoteAccount < ApplicationRecord
     if saved_change_to_authorized_withdrawer? || authorized_voters_value_changed?
       create_account_authority_history
     end
+    if saved_change_to_authorized_withdrawer? || saved_change_to_authorized_voters? || saved_change_to_validator_identity?
+      check_group_assignment
+    end
   end
 
   serialize :authorized_voters, JSON
@@ -75,6 +78,12 @@ class VoteAccount < ApplicationRecord
 
     before_changes, after_changes = changes.first, changes.last
     before_changes.sort != after_changes.sort
+  end
+
+  def check_group_assignment
+    CheckGroupValidatorAssignmentWorker.perform_async({
+      vote_account_id: self.id
+    })
   end
 
   def create_account_authority_history

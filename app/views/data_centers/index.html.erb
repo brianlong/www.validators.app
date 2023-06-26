@@ -1,11 +1,15 @@
+<%= javascript_pack_tag "data_centers/data_center_charts.js" %>
+
 <section class="page-header">
   <h1>
     <%= params[:network].capitalize %> Data Centers
     <span class="text-muted">(<%= @results[:results].count %>)</span>
   </h1>
 
-  <div class="d-flex gap-2" role="toolbar" aria-label="filter">
-    <%= link_to "Data Centers",
+  <div id="data-center-charts-component"></div>
+
+  <div class="btn-group btn-group-toggle me-2" aria-label="filter">
+    <%= link_to "Data Center",
                 data_centers_url(network: params[:network], sort_by: :data_center),
                 class: "btn btn-sm #{[nil, 'data_center'].include?(@sort_by) ? 'btn-primary' : 'btn-secondary'}" %>
     <%= link_to "ASN",
