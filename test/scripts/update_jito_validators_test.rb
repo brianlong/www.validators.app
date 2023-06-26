@@ -6,9 +6,11 @@ class UpdateJitoValidatorsTest < ActiveSupport::TestCase
   setup do
     @network = "mainnet"
     @validator = create(:validator, network: @network)
-    create(:vote_account,
+    create(
+      :vote_account,
       account: "E3yhPs5PPN4RZh8FbJo2eqtdrAYKCK9H7pcSinactive",
-      validator: @validator, is_active: false)
+      validator: @validator,
+      is_active: false)
     create(:vote_account,
            account: "E3yhPs5PPN4RZh8FbJo2eqtdrAYKCK9H7pcSD1vCNCP4",
            validator: @validator, is_active: true)

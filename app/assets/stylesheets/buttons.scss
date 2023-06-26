@@ -113,6 +113,8 @@
   margin-left: -70px;
   height: .9em;
   width: auto;
+  filter: drop-shadow(0px 0px 3px black);
+
   @media(max-width: $screen-lg-max) {
     display: none
   }
@@ -135,6 +137,7 @@
   height: .9em;
   width: auto;
   filter: drop-shadow(0px 0px 3px black);
+  
   color: $orange;
 
   @media(max-width: $screen-sm-max) {
