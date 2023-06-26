@@ -43,23 +43,6 @@ class ValidatorHistory < ApplicationRecord
   ].freeze
 
   scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
-  scope :most_recent_epoch_credits_by_account, -> do
-    from(
-      <<~SQL
-        (
-          SELECT validator_histories.epoch_credits, validator_histories.account, validator_histories.created_at, validator_histories.epoch
-          FROM validator_histories JOIN (
-            SELECT account, max(created_at) AS created_at
-            FROM validator_histories
-            GROUP BY account
-          ) latest_by_account
-          ON validator_histories.created_at = latest_by_account.created_at
-          AND validator_histories.account = latest_by_account.account
-        ) validator_histories
-      SQL
-    )
-  end
-
   scope :validator_histories_from_period, ->(network:, account:, from:, to:, limit:) do
     where(network: network, account: account, created_at: from...to)
       .order(created_at: :asc)

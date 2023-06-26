@@ -92,5 +92,6 @@
 </div>
 
 <%= link_to 'Back to All Data Centers',
-    data_centers_url(network: params[:network]),
-    class: 'btn btn-sm btn-secondary' %>
+            data_centers_url(network: params[:network]),
+            class: 'btn btn-sm btn-secondary',
+            "data-turbolinks": "false" %>

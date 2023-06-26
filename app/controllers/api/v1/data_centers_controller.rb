@@ -64,6 +64,27 @@ module Api
         }, status: :ok
       end
 
+      def data_center_stats
+        dc_by_country = DataCenterStat.where(network: dc_params[:network])
+                                      .joins(:data_center)
+                                      .group(:country_name)
+                                      .sum(:active_validators_count)
+                                      .sort_by { |k, v| v}
+                                      .reverse
+
+        dc_by_organization = DataCenterStat.where(network: dc_params[:network])
+                                           .joins(:data_center)
+                                           .group(:traits_organization)
+                                           .sum(:active_validators_count)
+                                           .sort_by { |k, v| v}
+                                           .reverse
+
+        render json: {
+          dc_by_country: dc_by_country,
+          dc_by_organization: dc_by_organization
+        }, status: :ok
+      end
+
       private
 
       def dc_params
