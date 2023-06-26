@@ -28,7 +28,6 @@ class ReportLogicTest < ActiveSupport::TestCase
     end
 
     generate_report
-
     report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
     expected_result = { "count" => 5, "stake_percent" => 33.33 }
 
@@ -51,12 +50,13 @@ class ReportLogicTest < ActiveSupport::TestCase
     )
 
     generate_report
-
     report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
+
     assert_equal 1, report.payload.size
+    assert report.payload.first.keys, ["1.5.7"]
   end
 
-  test "does not create report if active_stake sum is nil" do
+  test "does not create a report if active_stake sum is nil" do
     validator = create(:validator, network: @network)
     create(:validator_score_v1,
       software_version: "1.5.7",
@@ -65,38 +65,38 @@ class ReportLogicTest < ActiveSupport::TestCase
     )
 
     generate_report
-
     report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
+
     assert_nil report
   end
 
-  test "does not create report if software version is malformed" do
+  test "does not create a report if software version is malformed" do
     validator = create(:validator, network: @network)
     create(:validator_score_v1, validator: validator, software_version: "1.3.9 e45f1df5")
 
     generate_report
-
     report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
+
     assert_nil report
   end
 
-  test "does not create report if software version is unknown" do
+  test "does not create a report if software version is unknown" do
     validator = create(:validator, network: @network)
     create(:validator_score_v1, validator: validator, software_version: "unknown")
 
     generate_report
-
     report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
+
     assert_nil report
   end
 
-  test "does not create report if software version is empty" do
+  test "does not create a report if software version is empty" do
     validator = create(:validator, network: @network)
     create(:validator_score_v1, validator: validator, software_version: "")
 
     generate_report
-
     report = Report.find_by(name: "report_software_versions", batch_uuid: @batch.uuid)
+
     assert_nil report
   end
 end
