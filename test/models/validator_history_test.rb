@@ -51,10 +51,11 @@ class ValidatorHistoryTest < ActiveSupport::TestCase
     dates_with_epoch_credits.each do |arr|
       create(
         :validator_history,
-        account: @validator.account,
-        created_at: arr[0], 
+        created_at: arr[0],
         epoch_credits: arr[1],
-        epoch: 222
+        epoch: 222,
+        validator: @validator,
+        account: @validator.account
       )
     end
 
