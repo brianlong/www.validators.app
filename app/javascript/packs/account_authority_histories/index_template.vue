@@ -120,6 +120,8 @@
                ctx.histories = response.data.authority_changes
                ctx.total_count = response.data.total_count
                ctx.is_loading = false
+               console.log(ctx.histories)
+               console.log(ctx.total_count)
              })
       }
     },
