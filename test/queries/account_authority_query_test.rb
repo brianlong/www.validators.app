@@ -47,6 +47,13 @@ class AccountAuthorityQueryTest < ActiveSupport::TestCase
     assert_equal @vote_account, res.first.vote_account
   end
 
+  test "#call does no return record where only nil value changed" do
+    @vote_account.update(authorized_withdrawer: SecureRandom.hex(16))
+    res = AccountAuthorityQuery.new(network: @network, vote_account: @vote_account.account).call
+
+    assert_equal 0, res.count
+  end
+
   test "#call raises error when validator and vote_account params do not match" do
     assert_raises ArgumentError do
       AccountAuthorityQuery.new(
