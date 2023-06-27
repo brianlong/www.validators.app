@@ -83,13 +83,11 @@ module ReportLogic
         count = row[1]  
         active_stake_sum = row[2]
 
-        next if software_version.blank? || !Gem::Version.correct?(software_version) 
+        next if software_version.blank? ||
+                  !Gem::Version.correct?(software_version) ||
+                  active_stake_sum.nil?
 
-        stake_percent = if active_stake_sum # as_sum
-                          ((active_stake_sum / total_active_stake.to_f) * 100).round(2)
-                        else
-                          nil
-                        end
+        stake_percent = ((active_stake_sum / total_active_stake.to_f) * 100).round(2)
 
         result << { 
           software_version => { count: count, stake_percent: stake_percent } 
