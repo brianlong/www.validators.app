@@ -15,6 +15,7 @@
 #  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
 #  jito                :boolean          default(FALSE)
+#  jito_commission     :integer
 #  name                :string(191)
 #  network             :string(191)
 #  security_report_url :string(191)

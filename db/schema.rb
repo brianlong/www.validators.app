@@ -652,6 +652,7 @@ ActiveRecord::Schema.define(version: 2023_06_28_114457) do
     t.boolean "consensus_mods", default: false
     t.boolean "jito", default: false
     t.text "stake_pools_list"
+    t.integer "jito_commission"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
     t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end
