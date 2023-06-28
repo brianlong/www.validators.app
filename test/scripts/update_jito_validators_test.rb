@@ -6,6 +6,11 @@ class UpdateJitoValidatorsTest < ActiveSupport::TestCase
   setup do
     @network = "mainnet"
     @validator = create(:validator, network: @network)
+    create(
+      :vote_account,
+      account: "E3yhPs5PPN4RZh8FbJo2eqtdrAYKCK9H7pcSinactive",
+      validator: @validator,
+      is_active: false)
     create(:vote_account,
            account: "E3yhPs5PPN4RZh8FbJo2eqtdrAYKCK9H7pcSD1vCNCP4",
            validator: @validator, is_active: true)
@@ -24,6 +29,15 @@ class UpdateJitoValidatorsTest < ActiveSupport::TestCase
     VCR.use_cassette("update_jito_validators") do
       load(Rails.root.join("script", "update_jito_validators.rb"))
       refute @validator.reload.jito
+    end
+  end
+
+  test "script updates jito_commission" do
+    VCR.use_cassette("update_jito_validators") do
+      load(Rails.root.join("script", "update_jito_validators.rb"))
+
+      assert @validator.reload.jito
+      assert_equal 800, @validator.jito_commission
     end
   end
 end
