@@ -44,6 +44,11 @@ class ValidatorHistory < ApplicationRecord
     epoch
   ].freeze
 
+  API_FIELDS = %i[
+    epoch_credits
+    epoch
+  ].freeze
+
   belongs_to :validator, optional: true
 
   scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
@@ -88,8 +93,7 @@ class ValidatorHistory < ApplicationRecord
     Jbuilder.new do |validator_history|
       validator_history.(
         self,
-        :epoch_credits,
-        :epoch
+        *API_FIELDS
       )
     end
   end
