@@ -25,7 +25,7 @@ module Api
         @account_authority_histories = @account_authority_histories.page(page).per(per)
 
         json_result = @account_authority_histories.as_json(
-          methods: [:vote_account_address],
+          methods: [:vote_account_address, :validator_identity],
           except: [:id, :vote_account_id, :updated_at]
         )
 

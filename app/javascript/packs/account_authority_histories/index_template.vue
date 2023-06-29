@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <div v-if="histories.length" class="card mb-4">
-        <div class="card-content pb-0">
+        <div class="card-content pb-0" v-if="!standalone">
           <h2 class="h2 card-heading">Authorities Changes</h2>
         </div>
 
@@ -13,6 +13,7 @@
           <table class="table mb-0">
             <thead>
               <tr>
+                <th class="column-xl" v-if="standalone">Validator</th>
                 <th class="column-sm">Authority</th>
                 <th class="column-xl">Before</th>
                 <th class="column-xl">After</th>
@@ -21,6 +22,7 @@
             </thead>
             <tbody v-for="history in histories">
               <tr v-if="is_withdrawer_changed(history)">
+                <td v-if="standalone">{{ history.validator_identity }}</td>
                 <td>Authorized Withdrawer</td>
                 <td class="word-break small">
                   {{ history.authorized_withdrawer_before }}
@@ -33,6 +35,7 @@
                 </td>
               </tr>
               <tr v-if="is_voters_changed(history)">
+                <td v-if="standalone">{{ history.validator_identity }}</td>
                 <td>Authorized Voters</td>
                 <td class="word-break small">
                   {{ history.authorized_voters_before }}
@@ -76,7 +79,12 @@
     props: {
       vote_account: {
         type: String,
-        required: true
+        required: false
+      },
+      standalone: {
+        type: Boolean,
+        required: false,
+        default: false
       }
     },
 
@@ -96,7 +104,11 @@
 
     methods: {
       account_authorities_path() {
-        return "/api/v1/account-authorities/" + this.network + "?vote_account=" + this.vote_account + "&per=" + PER_SIZE + '&page=' + this.page
+        if(this.vote_account) {
+          return "/api/v1/account-authorities/" + this.network + "?vote_account=" + this.vote_account + "&per=" + PER_SIZE + '&page=' + this.page
+        } else {
+          return "/api/v1/account-authorities/" + this.network + "?per=" + PER_SIZE + '&page=' + this.page
+        }
       },
 
       is_withdrawer_changed(history) {
@@ -105,7 +117,7 @@
 
       is_voters_changed(history) {
         let voters_before = Object.values(history.authorized_voters_before || [""])
-        let voters_after = Object.values(history.authorized_voters_after)
+        let voters_after = Object.values(history.authorized_voters_after || [""])
         return !this.arrays_equal(voters_before, voters_after)
       },
 
@@ -115,11 +127,13 @@
 
       send_request() {
         const ctx = this
+        console.log(ctx.account_authorities_path())
         axios.get(ctx.account_authorities_path())
              .then(response => {
                ctx.histories = response.data.authority_changes
                ctx.total_count = response.data.total_count
                ctx.is_loading = false
+               console.log(ctx.histories)
              })
       }
     },

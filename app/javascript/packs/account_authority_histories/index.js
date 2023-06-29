@@ -16,7 +16,8 @@ document.addEventListener("turbolinks:load", () => {
     render(createElement) {
       return createElement(IndexTemplate, {
         props: {
-          vote_account: this.$el.attributes.vote_account ? this.$el.attributes.vote_account.value : null
+          vote_account: this.$el.attributes.vote_account ? this.$el.attributes.vote_account.value : null,
+          standalone: this.$el.attributes.standalone ? this.$el.attributes.standalone.value : null
         }
       })
     },
