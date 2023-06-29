@@ -46,7 +46,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
         :validator_history,
         network: 'testnet',
         batch_uuid: '1234',
-        account: v.account
+        account: v.account,
+        validator: v
       )
       create(
         :vote_account_history,
@@ -107,7 +108,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
         :validator_history,
         network: 'testnet',
         batch_uuid: '1234',
-        account: v.account
+        account: v.account,
+        validator: v
       )
       create(
         :vote_account_history,

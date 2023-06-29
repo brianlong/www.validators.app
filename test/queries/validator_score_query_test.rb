@@ -21,7 +21,8 @@ class ValidatorScoreQueryTest < ActiveSupport::TestCase
         root_block: 2,
         last_vote: 21,
         active_stake: 10,
-        network: "testnet"
+        network: "testnet",
+        validator: validator
       )
     end
 

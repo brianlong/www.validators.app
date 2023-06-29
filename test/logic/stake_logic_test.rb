@@ -332,8 +332,8 @@ class StakeLogicTest < ActiveSupport::TestCase
 
   test "calculate_apy_for_pools should return correct average apy for lido" do
     stake_pool = create(:stake_pool, network: "testnet", name: "Lido")
-    create(:validator_history, account: "lido_account", active_stake: 100)
     val = create(:validator, account: "lido_account")
+    create(:validator_history, account: "lido_account", active_stake: 100, validator: val)
 
     create(
       :stake_account_history,
