@@ -12,10 +12,5 @@
       also upload your own TX&nbsp;confirmation times. Any Solana application or transaction type is allowed. Use this
       tool to&nbsp;show recent confirmation times to&nbsp;your users. See GitHub for our reference <a href='https://github.com/Block-Logic/ping-thing-client' target='_blank'>Ping Thing Client</a>.
     </p>
-    <p>
-      If you enjoy The Ping Thing, please delegate to&nbsp;<a href="https://www.blocklogic.net/" target="_blank">Block Logic</a>
-      or toss some SOL into The Ping Thing tip jar:&nbsp;ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989.<br />
-      Your contributions keep this website running!
-    </p>
   </section>
 </template>
