@@ -11,6 +11,7 @@
         <h1 class="word-break" v-if="is_loading_validator">loading...</h1>
         <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
       </div>
+      <img :src="jito_badge" class="jito-badge-header" title="Jito validator" v-if="validator.jito">
 
       <div class="d-flex justify-content-between flex-wrap gap-3">
         <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
@@ -157,6 +158,13 @@
                 </td>
               </tr>
 
+              <tr v-if="validator.jito">
+                <td><strong>Jito Commission:</strong></td>
+                <td :class="commission_class" data-turbolinks="false">
+                  {{ validator.jito_commission / 100 }}&percnt;
+                </td>
+              </tr>
+
               <tr v-if="validator.security_report_url">
                 <td>
                   <strong>Security Info:</strong>
@@ -242,7 +250,8 @@
   import blockHistoryTable from './components/block_history_table'
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
-  import loadingImage from 'loading.gif';
+  import loadingImage from 'loading.gif'
+  import jitoBadge from 'jito.svg'
   import '../mixins/numbers_mixins'
   import '../mixins/dates_mixins'
 
@@ -289,6 +298,7 @@
         page: null,
         validator_history: {},
         loading_image: loadingImage,
+        jito_badge: jitoBadge,
         is_loading_validator: true,
         validator_score_details_attrs: {},
         reload_time: 1000 * 60 * 3 // 3 minutes

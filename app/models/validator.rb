@@ -15,6 +15,7 @@
 #  is_destroyed        :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
 #  jito                :boolean          default(FALSE)
+#  jito_commission     :integer
 #  name                :string(191)
 #  network             :string(191)
 #  security_report_url :string(191)
@@ -57,9 +58,7 @@ class Validator < ApplicationRecord
   has_many :validator_ips, dependent: :nullify
   has_many :validator_block_histories, dependent: :destroy
   has_many :commission_histories, dependent: :destroy
-  has_many :validator_histories, ->(validator) {
-    where(network: validator.network)
-  }, primary_key: :account, foreign_key: :account
+  has_many :validator_histories, dependent: :nullify
 
   has_many :user_watchlist_elements, dependent: :destroy
   has_many :watchers, through: :user_watchlist_elements, source: :user
@@ -155,10 +154,7 @@ class Validator < ApplicationRecord
   end
 
   def validator_history_last
-    ValidatorHistory.where(
-      network: network,
-      account: account
-    ).last
+    validator_histories.last
   end
 
   # Return the vote account that was most recently used

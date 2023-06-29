@@ -63,7 +63,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :with_data_center_through_validator_ip, 
       account: "Test Account"
     )
-    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
+    create(:validator_history,
+           account: validator.account,
+           epoch_credits: 100,
+           epoch: 222,
+           validator: validator)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
 
@@ -332,7 +336,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :with_data_center_through_validator_ip, 
       account: "Test Account"
     )
-    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
+    create(:validator_history,
+           account: validator.account,
+           epoch_credits: 100,
+           epoch: 222,
+           validator: validator)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
 
@@ -400,7 +408,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :with_data_center_through_validator_ip, 
       account: "Test Account"
     )
-    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
+    create(:validator_history,
+           account: validator.account,
+           epoch_credits: 100,
+           epoch: 222,
+           validator: validator)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
 
@@ -467,7 +479,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :with_data_center_through_validator_ip,
       account: "Test Account"
     )
-    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
+    create(:validator_history,
+           account: validator.account,
+           epoch_credits: 100,
+           epoch: 222,
+           validator: validator)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
 
@@ -502,7 +518,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :with_data_center_through_validator_ip,
       account: "Test Account"
     )
-    create(:validator_history, account: validator.account, epoch_credits: 100, epoch: 222)
+    create(:validator_history,
+           account: validator.account,
+           epoch_credits: 100,
+           epoch: 222,
+           validator: validator)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
     

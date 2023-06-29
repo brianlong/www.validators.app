@@ -176,7 +176,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
       ]
     }.to_json
 
-    create(:validator, account: "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr")
+    v = create(:validator, account: "4wjZmBoiwQ2s3fEL1og4gUcgWNtJoEkXNdG1yMW44nzr")
 
     SolanaCliService.stub(:request, json_data, ["validators", @testnet_url]) do
       VCR.use_cassette("validator_history_update") do
@@ -188,6 +188,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
 
         assert_equal 200, p.code
         assert validator_histories.size == 1
+        assert validator_histories.first.validator, v
       end
     end
   end

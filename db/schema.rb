@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_05_085152) do
+ActiveRecord::Schema.define(version: 2023_06_28_114457) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -571,10 +571,12 @@ ActiveRecord::Schema.define(version: 2023_06_05_085152) do
     t.bigint "max_vote_height", unsigned: true
     t.bigint "vote_distance", unsigned: true
     t.integer "epoch"
+    t.integer "validator_id"
     t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
     t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
     t.index ["network", "batch_uuid", "account"], name: "index_validator_histories_on_network_and_batch_uuid_and_account"
+    t.index ["validator_id"], name: "index_validator_histories_on_validator_id"
   end
 
   create_table "validator_ips", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -650,6 +652,7 @@ ActiveRecord::Schema.define(version: 2023_06_05_085152) do
     t.boolean "consensus_mods", default: false
     t.boolean "jito", default: false
     t.text "stake_pools_list"
+    t.integer "jito_commission"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
     t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end
