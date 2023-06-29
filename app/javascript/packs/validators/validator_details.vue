@@ -161,7 +161,7 @@
               <tr v-if="validator.jito">
                 <td><strong>Jito Commission:</strong></td>
                 <td :class="commission_class" data-turbolinks="false">
-                  {{ validator.jito_commission }}
+                  {{ validator.jito_commission / 100 }}&percnt;
                 </td>
               </tr>
 
