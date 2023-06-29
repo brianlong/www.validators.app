@@ -62,14 +62,16 @@ module StakePools
         network: "testnet",
         delinquent: true,
         created_at: DateTime.now - 3.days,
-        account: "account_test"
+        account: "account_test",
+        validator: @validator
       )
       create(
         :validator_history,
         network: "testnet",
         delinquent: true,
         created_at: DateTime.now - 3.days,
-        account: "account_test_2"
+        account: "account_test_2",
+        validator: @validator_2
       )
 
       StakePools::CalculateAverageStats.new(@stake_pool).call

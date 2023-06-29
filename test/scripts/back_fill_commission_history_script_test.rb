@@ -15,7 +15,8 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
         account: v.account,
         commission: this_commission,
         network: v.network,
-        created_at: DateTime.new(2021, 7, 9) - i.minutes
+        created_at: DateTime.new(2021, 7, 9) - i.minutes,
+        validator: v
       )
     end
   end

@@ -9,3 +9,4 @@ one:
   credits: 1
   active_stake: 100
   delinquent: false
+  validator_id: 1

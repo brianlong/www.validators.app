@@ -123,7 +123,7 @@ module SolanaLogic
 
       existing_validators(validators["validators"], p.payload[:network]).each do |validator|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? validator["identityPubkey"]
-        
+
         if existing_history = validator_histories[validator["identityPubkey"]]
           if existing_history.last_vote < validator["lastVote"]
             existing_history.update(
@@ -142,7 +142,8 @@ module SolanaLogic
               root_distance: max_root_height - validator["rootSlot"].to_i,
               vote_distance: max_vote_height - validator["lastVote"].to_i,
               max_root_height: max_root_height,
-              max_vote_height: max_vote_height
+              max_vote_height: max_vote_height,
+              validator_id: validator["id"]
             )
 
             validator_histories[validator["identityPubkey"]] = existing_history
@@ -166,7 +167,8 @@ module SolanaLogic
             root_distance: max_root_height - validator["rootSlot"].to_i,
             vote_distance: max_vote_height - validator["lastVote"].to_i,
             max_root_height: max_root_height,
-            max_vote_height: max_vote_height
+            max_vote_height: max_vote_height,
+            validator_id: validator["id"]
           )
           validator_histories[validator["identityPubkey"]] = vh
         end
@@ -651,9 +653,15 @@ module SolanaLogic
 
   def existing_validators(validator_attrs, network)
     accounts = validator_attrs.map { |validator| validator["identityPubkey"] }
-    db_validator_accounts = Validator.where(network: network, account: accounts).pluck(:account)
-    validator_attrs.select do |validator|
-      db_validator_accounts.include?(validator["identityPubkey"])
-    end
+    db_validator_accounts = Validator.where(network: network, account: accounts)
+                                     .map { |v| { v.account => v.id }}
+                                     .inject({}, :merge)
+
+    validator_attrs.map do |validator|
+      if db_validator_accounts[validator["identityPubkey"]]
+        validator["id"] = db_validator_accounts[validator["identityPubkey"]]
+        validator
+      end
+    end.compact
   end
 end

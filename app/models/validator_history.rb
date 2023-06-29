@@ -25,6 +25,7 @@
 #  vote_distance    :bigint           unsigned
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  validator_id     :integer
 #
 # Indexes
 #
@@ -32,6 +33,7 @@
 #  delinquent_by_account_index                                      (account,delinquent,created_at)
 #  index_validator_histories_on_network_and_account_and_id          (network,account,id)
 #  index_validator_histories_on_network_and_batch_uuid_and_account  (network,batch_uuid,account)
+#  index_validator_histories_on_validator_id                        (validator_id)
 #
 class ValidatorHistory < ApplicationRecord
   # Use the monkey patch for median
@@ -41,6 +43,8 @@ class ValidatorHistory < ApplicationRecord
     epoch_credits
     epoch
   ].freeze
+
+  belongs_to :validator, optional: true
 
   scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
   scope :most_recent_epoch_credits_by_account, -> do
@@ -95,10 +99,6 @@ class ValidatorHistory < ApplicationRecord
     def median_last_vote_for(network, batch_uuid)
       for_batch(network, batch_uuid).median(:last_vote)
     end
-  end
-
-  def validator
-    Validator.find_by(network: network, account: account)
   end
 
   def to_builder
