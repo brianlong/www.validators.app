@@ -38,7 +38,10 @@
                 </td>
               </tr>
               <tr v-if="is_voters_changed(history)">
-                <td v-if="standalone">{{ history.validator_identity }}</td>
+                <td v-if="standalone" class="small" data-turbolinks="false">
+                  <span v-html="validator_url(history)"></span><br />
+                  <span v-html="vote_account_url(history)"></span>
+                </td>
                 <td>Authorized Voters</td>
                 <td class="word-break small">
                   {{ history.authorized_voters_before }}
