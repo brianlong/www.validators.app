@@ -13,7 +13,7 @@
           <table class="table mb-0">
             <thead>
               <tr>
-                <th class="column-xl" v-if="standalone">Validator</th>
+                <th class="column-xl" v-if="standalone">Validator<br />Vote Account</th>
                 <th class="column-sm">Authority</th>
                 <th class="column-xl">Before</th>
                 <th class="column-xl">After</th>
@@ -22,7 +22,10 @@
             </thead>
             <tbody v-for="history in histories">
               <tr v-if="is_withdrawer_changed(history)">
-                <td v-if="standalone">{{ history.validator_identity }}</td>
+                <td v-if="standalone" class="small">
+                  <span v-html="validator_url(history)"></span><br />
+                  <span v-html="vote_account_url(history)"></span>
+                </td>
                 <td>Authorized Withdrawer</td>
                 <td class="word-break small">
                   {{ history.authorized_withdrawer_before }}
@@ -119,6 +122,22 @@
         let voters_before = Object.values(history.authorized_voters_before || [""])
         let voters_after = Object.values(history.authorized_voters_after || [""])
         return !this.arrays_equal(voters_before, voters_after)
+      },
+
+      validator_url(history) {
+        return "<a href='/validators/" + history.vote_account.validator.account + "'>" + this.validator_name_or_account(history) + "</a>"
+      },
+
+      vote_account_url(history) {
+        return "<a href='/validators/" + history.vote_account.validator.account + "/vote_accounts/" + history.vote_account.account + "'>" + history.vote_account.account + "</a>"
+      },
+
+      validator_name_or_account(history) {
+        if(history.vote_account.validator.name) {
+          return history.vote_account.validator.name
+        } else {
+          return history.vote_account.validator.account
+        }
       },
 
       paginate() {
