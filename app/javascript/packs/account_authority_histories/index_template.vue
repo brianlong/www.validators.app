@@ -22,7 +22,7 @@
             </thead>
             <tbody v-for="history in histories">
               <tr v-if="is_withdrawer_changed(history)">
-                <td v-if="standalone" class="small">
+                <td v-if="standalone" class="small" data-turbolinks="false">
                   <span v-html="validator_url(history)"></span><br />
                   <span v-html="vote_account_url(history)"></span>
                 </td>
