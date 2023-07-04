@@ -27,7 +27,7 @@
               <tr v-if="is_withdrawer_changed(history)">
                 <td v-if="standalone" class="small" data-turbolinks="false">
                   <span v-html="validator_url(history)"></span><br />
-                  <span class="text-muted" v-html="vote_account_url(history)"></span>
+                  <span v-html="vote_account_url(history)"></span>
                 </td>
                 <td>Authorized Withdrawer</td>
                 <td class="word-break small">
@@ -43,7 +43,7 @@
               <tr v-if="is_voters_changed(history)">
                 <td v-if="standalone" class="small" data-turbolinks="false">
                   <span v-html="validator_url(history)"></span><br />
-                  <span class="text-muted" v-html="vote_account_url(history)"></span>
+                  <span v-html="vote_account_url(history)"></span>
                 </td>
                 <td>Authorized Voters</td>
                 <td class="word-break small">
@@ -135,7 +135,7 @@
       },
 
       vote_account_url(history) {
-        return "<a href='/validators/" + history.vote_account.validator.account + "/vote_accounts/" + history.vote_account.account + "'>" + history.vote_account.account + "</a>"
+        return "<a class='text-muted mt-1' href='/validators/" + history.vote_account.validator.account + "/vote_accounts/" + history.vote_account.account + "'>" + history.vote_account.account + "</a>"
       },
 
       validator_name_or_account(history) {
