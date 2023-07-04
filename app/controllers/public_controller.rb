@@ -55,6 +55,16 @@ class PublicController < ApplicationController
     end
   end
 
+  def authorities_changes
+    if params[:vote_account_id]
+      begin
+        @vote_account = VoteAccount.find(params[:validator_id])
+      rescue ActiveRecord::RecordNotFound
+        render_404
+      end
+    end
+  end
+
   private
 
   def home_params

@@ -41,4 +41,8 @@ class AccountAuthorityHistory < ApplicationRecord
   def vote_account_address
     vote_account.account
   end
+
+  def validator_identity
+    vote_account.validator.account
+  end
 end

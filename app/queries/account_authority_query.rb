@@ -10,7 +10,7 @@ class AccountAuthorityQuery
     @validator = Validator.find_by(account: validator, network: network)
 
     @results = AccountAuthorityHistory.joins(:vote_account)
-                                      .includes(:vote_account)
+                                      .includes(vote_account: :validator)
                                       .where(network: network)
                                       .where("authorized_withdrawer_before IS NOT NULL \
                                               OR authorized_voters_before IS NOT NULL")

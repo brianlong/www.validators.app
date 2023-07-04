@@ -103,6 +103,9 @@ Rails.application.routes.draw do
   get 'commission-changes/(:validator_id)',
       to: 'public#commission_histories',
       as: 'commission_histories'
+  get 'authorities_changes/(:vote_account_id)',
+      to: 'public#authorities_changes',
+      as: 'authorities_changes'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
