@@ -34,6 +34,7 @@
   &.alert-success {
     background-color: $green-transparent;
     border: 1px solid $green;
+    word-break: break-word;
   }
 
   &.alert-warning {
