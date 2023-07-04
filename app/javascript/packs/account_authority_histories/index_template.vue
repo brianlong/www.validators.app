@@ -13,7 +13,10 @@
           <table class="table mb-0">
             <thead>
               <tr>
-                <th class="column-xl" v-if="standalone">Validator<br />Vote Account</th>
+                <th class="column-xl" v-if="standalone">Validator
+                  <br />
+                  <span class="text-muted">Vote Account</span>
+                </th>
                 <th class="column-sm">Authority</th>
                 <th class="column-xl">Before</th>
                 <th class="column-xl">After</th>
@@ -24,7 +27,7 @@
               <tr v-if="is_withdrawer_changed(history)">
                 <td v-if="standalone" class="small" data-turbolinks="false">
                   <span v-html="validator_url(history)"></span><br />
-                  <span v-html="vote_account_url(history)"></span>
+                  <span class="text-muted" v-html="vote_account_url(history)"></span>
                 </td>
                 <td>Authorized Withdrawer</td>
                 <td class="word-break small">
@@ -40,7 +43,7 @@
               <tr v-if="is_voters_changed(history)">
                 <td v-if="standalone" class="small" data-turbolinks="false">
                   <span v-html="validator_url(history)"></span><br />
-                  <span v-html="vote_account_url(history)"></span>
+                  <span class="text-muted" v-html="vote_account_url(history)"></span>
                 </td>
                 <td>Authorized Voters</td>
                 <td class="word-break small">
@@ -149,13 +152,11 @@
 
       send_request() {
         const ctx = this
-        console.log(ctx.account_authorities_path())
         axios.get(ctx.account_authorities_path())
              .then(response => {
                ctx.histories = response.data.authority_changes
                ctx.total_count = response.data.total_count
                ctx.is_loading = false
-               console.log(ctx.histories)
              })
       }
     },
