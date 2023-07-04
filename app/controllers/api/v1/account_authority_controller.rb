@@ -27,7 +27,7 @@ module Api
         json_result = @account_authority_histories.as_json(
           methods: [:vote_account_address],
           except: [:id, :vote_account_id, :updated_at],
-          :include => {:vote_account => { include: :validator }}
+          include: {vote_account: { include: :validator }}
         )
 
         respond_to do |format|
