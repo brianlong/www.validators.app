@@ -11,7 +11,7 @@ module ValidatorsControllerHelper
     data_center = validator.validator_ip_active_for_api&.data_center_host_for_api&.data_center_for_api
     data_center_host = validator.validator_ip_active_for_api&.data_center_host_for_api
     vote_account = validator.vote_accounts_for_api.last
-    validator_history = validator.most_recent_epoch_credits_by_account
+    validator_history = validator.validator_histories.select(ValidatorHistory::API_FIELDS).last
 
     hash.merge!(validator_score.to_builder(with_history: with_history).attributes!)
     hash.merge!(data_center.to_builder.attributes!) unless data_center.blank?
