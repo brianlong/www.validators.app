@@ -30,6 +30,8 @@ class EpochWallClock < ApplicationRecord
     slots_in_epoch
     network
     created_at
+    total_rewards
+    total_active_stake
   ].freeze
 
   validates :network, :epoch, presence: true
