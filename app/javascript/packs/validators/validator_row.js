@@ -52,32 +52,16 @@ var ValidatorRow = Vue.component('validatorRow', {
       return 'row-' + this.idx
     },
 
-    shorten_key(key) {
-      return key.substring(0, 6) + "..." + key.substring(key.length - 4)
-    },
-
     is_validator_private() {
       return this.validator['commission'] === 100 && this.validator['network'] === 'mainnet'
-    },
-
-    shortened_validator_name(name) {
-      return (name === this.validator['account'] ? this.shorten_key(name) : name)
     },
 
     displayed_validator_name() {
       if(this.is_validator_private()) {
         return "Private Validator"
       } else {
-        if (this.validator["name"]) {
-          return this.shortened_validator_name(this.validator["name"])
-        } else {
-          return this.shorten_key(this.validator['account'])
-        }
+        return this.shortened_validator_name(this.validator["name"], this.validator["account"])
       }
-    },
-
-    validator_url() {
-      return "/validators/" + this.validator["account"] + "?network=" + this.validator["network"]
     },
 
     chart_line_color(val) {
@@ -161,7 +145,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           </div>
 
           <div class="column-info-name">
-            <a :href="validator_url()" class="column-info-link no-watchlist fw-bold">
+            <a :href="validator_url(this.validator['account'], this.validator['network'])" class="column-info-link no-watchlist fw-bold">
               {{ displayed_validator_name() }}
               <small class="text-muted text-nowrap fw-normal" v-if="!is_validator_private()">
                 (<span class="d-inline-block d-lg-none">Comm.:&nbsp;</span>{{ validator["commission"] }}%)

@@ -13,11 +13,11 @@
           <table class="table mb-0">
             <thead>
               <tr>
-                <th class="column-xl" v-if="standalone">Validator
-                  <br />
+                <th class="column-xl" v-if="standalone">
+                  Validator<br />
                   <span class="text-muted">Vote Account</span>
                 </th>
-                <th class="column-sm">Authority</th>
+                <th class="column-md">Authority</th>
                 <th class="column-xl">Before</th>
                 <th class="column-xl">After</th>
                 <th class="column-md">Timestamp</th>
@@ -25,9 +25,9 @@
             </thead>
             <tbody v-for="history in histories">
               <tr v-if="is_withdrawer_changed(history)">
-                <td v-if="standalone" class="small" data-turbolinks="false">
-                  <span v-html="validator_url(history)"></span><br />
-                  <span v-html="vote_account_url(history)"></span>
+                <td v-if="standalone" class="word-break small" data-turbolinks="false">
+                  <span v-html="validator_link(history)"></span><br />
+                  <span v-html="vote_account_link(history)"></span>
                 </td>
                 <td>Authorized Withdrawer</td>
                 <td class="word-break small">
@@ -36,14 +36,14 @@
                 <td class="word-break small">
                   {{ history.authorized_withdrawer_after }}
                 </td>
-                <td>
+                <td class="small">
                   {{ date_time_with_timezone(history.created_at) }}
                 </td>
               </tr>
               <tr v-if="is_voters_changed(history)">
-                <td v-if="standalone" class="small" data-turbolinks="false">
-                  <span v-html="validator_url(history)"></span><br />
-                  <span v-html="vote_account_url(history)"></span>
+                <td v-if="standalone" class="word-break small" data-turbolinks="false">
+                  <span v-html="validator_link(history)"></span><br />
+                  <span v-html="vote_account_link(history)"></span>
                 </td>
                 <td>Authorized Voters</td>
                 <td class="word-break small">
@@ -52,7 +52,7 @@
                 <td class="word-break small">
                   {{ history.authorized_voters_after }}
                 </td>
-                <td>
+                <td class="small">
                   {{ date_time_with_timezone(history.created_at) }}
                 </td>
               </tr>
@@ -79,6 +79,7 @@
   import loadingImage from 'loading.gif'
   import '../mixins/dates_mixins'
   import '../mixins/arrays_mixins'
+  import '../mixins/validators_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -130,20 +131,15 @@
         return !this.arrays_equal(voters_before, voters_after)
       },
 
-      validator_url(history) {
-        return "<a href='/validators/" + history.vote_account.validator.account + "'>" + this.validator_name_or_account(history) + "</a>"
+      validator_link(history) {
+        let validator_url = this.validator_url(history.vote_account.validator.account, history.network);
+        let displayed_validator = history.vote_account.validator.name ? history.vote_account.validator.name : history.vote_account.validator.account;
+        return "<a href='" + validator_url + "'>" + displayed_validator + "</a>"
       },
 
-      vote_account_url(history) {
-        return "<a class='text-muted mt-1' href='/validators/" + history.vote_account.validator.account + "/vote_accounts/" + history.vote_account.account + "'>" + history.vote_account.account + "</a>"
-      },
-
-      validator_name_or_account(history) {
-        if(history.vote_account.validator.name) {
-          return history.vote_account.validator.name
-        } else {
-          return history.vote_account.validator.account
-        }
+      vote_account_link(history) {
+        let vote_account_url = this.vote_account_url(history.vote_account.validator.account, history.vote_account.account, history.network);
+        return "<a class='text-muted' href='" + vote_account_url + "'>" + history.vote_account.account + "</a>"
       },
 
       paginate() {
