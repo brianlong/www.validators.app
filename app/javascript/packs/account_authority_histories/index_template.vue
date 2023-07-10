@@ -9,17 +9,17 @@
           <h2 class="h2 card-heading">Authorities Changes</h2>
         </div>
 
-        <div class="table-responsive-md">
+        <div class="table-responsive-lg">
           <table class="table mb-0">
             <thead>
               <tr>
-                <th class="column-xl" v-if="standalone">
+                <th class="column-xxl" v-if="standalone">
                   Validator<br />
                   <span class="text-muted">Vote Account</span>
                 </th>
-                <th class="column-md">Authority</th>
-                <th class="column-xl">Before</th>
-                <th class="column-xl">After</th>
+                <th class="column-sm">Authority</th>
+                <th class="column-lg">Before</th>
+                <th class="column-lg">After</th>
                 <th class="column-md">Timestamp</th>
               </tr>
             </thead>
