@@ -338,7 +338,7 @@
   validators and stakers. It is calculated as follows:
 </p>
 <pre>
-  (stake_account_rewards + vote_account_rewards / total_active_stake) * number_of_epochs_per_year
+  (stake_accounts_rewards + vote_accounts_rewards / total_active_stake) * number_of_epochs_per_year
 </pre>
 <p>
   Where number_of_epochs_per_year is calculated as follows: seconds_in_year / average_epoch_duration.
@@ -346,7 +346,7 @@
   <%= ClusterStats::UpdateEpochDurationService::NUMBER_OF_EPOCHS %> epochs.
 </p>
 <p class="mb-5">
-  And stake_account_rewards and vote_account_rewards are the average reward per epoch based on last 3 epochs.
+  And stake_accounts_rewards and vote_accounts_rewards are the average reward per epoch based on last 3 epochs.
 </p>
 
 <h5 id="stake-pool">Stake Pool</h5>

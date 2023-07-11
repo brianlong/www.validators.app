@@ -46,6 +46,8 @@ class EpochsControllerTest < ActionDispatch::IntegrationTest
       slots_in_epoch
       network
       created_at
+      total_rewards
+      total_active_stake
     ].sort, resp['epochs'][0].keys.sort
   end
 
