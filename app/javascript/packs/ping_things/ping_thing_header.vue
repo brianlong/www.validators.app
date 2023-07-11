@@ -5,7 +5,7 @@
     <div class="alert alert-info mt-4" role="alert">
       If you enjoy The Ping Thing, please delegate to <a href='https://www.blocklogic.net/'>Block Logic</a> or toss some
       SOL into The Ping Thing tip jar: <strong class='word-break'>ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989</strong>.
-      Your&nbsp;contributions keep this website running!"
+      Your&nbsp;contributions keep this website running!
     </div>
 
     <p>
