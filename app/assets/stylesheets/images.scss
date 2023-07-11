@@ -78,3 +78,39 @@
     width: auto;
   }
 }
+
+@mixin jito-badge($margin-top, $margin-left, $height) {
+  margin-top: $margin-top !important;
+  margin-left: $margin-left;
+  height: $height !important;
+  width: auto;
+  filter: drop-shadow(0px 0px 3px black);
+}
+
+.jito-badge {
+  &-large {
+    position: absolute;
+    @include jito-badge(52px, -60px, 12px);
+    @media(max-width: $screen-lg-max) {
+      display: none;
+    }
+  }
+
+  &-medium {
+    position: absolute;
+    @include jito-badge(40px, 6px, 12px);
+    @media(max-width: $screen-md-max) {
+      @include jito-badge(36px, 6px, 12px);
+    }
+    @media(max-width: $screen-sm-max) {
+      @include jito-badge(30px, 0px, 10px);
+    }
+  }
+
+  &-small {
+    @include jito-badge(-1px, 1px, 9px);
+    @media(min-width: $screen-lg-max) {
+      display: none;
+    }
+  }
+}
