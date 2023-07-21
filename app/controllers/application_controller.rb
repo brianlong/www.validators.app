@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_network
-    return if params[:network].present? && NETWORKS.include?(params[:network])
+    return if NETWORKS.include?(params[:network])
 
     params[:network] = "mainnet"
   end
