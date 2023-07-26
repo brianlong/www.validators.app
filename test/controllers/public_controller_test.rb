@@ -14,6 +14,21 @@ class PublicControllerTest < ActionDispatch::IntegrationTest
     @admin_one = create(:user, :admin)
   end
 
+  test "root_url has mainnet network set as default if param is missing" do
+    get root_url
+    assert @controller.params[:network], "mainnet"
+  end
+
+  test "root_url has mainnet network set as default if param is invalid" do
+    get root_url(network: "fake_network")
+    assert @controller.params[:network], "mainnet"
+  end
+
+  test "root_url has custom network set if param is valid" do
+    get root_url(network: "testnet")
+    assert @controller.params[:network], "testnet"
+  end
+
   test "root_url leads to public#home" do
     get root_url(network: "testnet")
 

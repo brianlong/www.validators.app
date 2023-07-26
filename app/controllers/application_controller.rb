@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
     I18n.with_locale(locale, &action)
   end
 
-  # app/controllers/application_controller.rb
   def default_url_options
     network = params[:network] ||= 'mainnet'
     { locale: I18n.locale, network: network }
@@ -30,7 +29,9 @@ class ApplicationController < ActionController::Base
   end
 
   def set_network
-    params[:network] ||= 'mainnet'
+    return if NETWORKS.include?(params[:network])
+
+    params[:network] = "mainnet"
   end
 
   protected
