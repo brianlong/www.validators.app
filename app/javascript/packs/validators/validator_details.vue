@@ -7,10 +7,12 @@
         </div>
         <img :src="validator.avatar_url" class="img-circle-medium" v-else-if="validator.avatar_url" >
         <img src="https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png" class="img-circle-medium" v-else>
-        <img :src="jito_badge" class="jito-badge-d-medium" title="Jito validator" v-if="validator.jito">
 
         <h1 class="word-break" v-if="is_loading_validator">loading...</h1>
-        <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
+        <h1 class="word-break" v-else>
+          {{ name_or_account(validator) }}
+          <img :src="jito_badge" class="jito-badge-validator-details" title="Jito validator" v-if="validator.jito">
+        </h1>
       </div>
 
       <div class="d-flex justify-content-between flex-wrap gap-3">

@@ -96,21 +96,23 @@
     }
   }
 
-  &-d-medium {
-    position: absolute;
-    @include jito-badge(40px, 6px, 12px);
-    @media(max-width: $screen-md-max) {
-      @include jito-badge(36px, 6px, 12px);
-    }
-    @media(max-width: $screen-sm-max) {
-      @include jito-badge(30px, 0px, 10px);
-    }
-  }
-
   &-d-small {
     @include jito-badge(-1px, 1px, 9px);
     @media(min-width: $screen-lg-max) {
       display: none;
+    }
+  }
+
+  &-validator-details {
+    position: absolute;
+    @include jito-badge(16px, 20px, 18px);
+
+    @media(max-width: $screen-md-max) {
+      @include jito-badge(36px, 6px, 12px);
+    }
+
+    @media(max-width: $screen-sm-max) {
+      @include jito-badge(30px, 0px, 10px);
     }
   }
 }
