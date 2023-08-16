@@ -88,15 +88,15 @@
 }
 
 .jito-badge {
-  &-large {
+  &-d-large {
     position: absolute;
-    @include jito-badge(52px, -60px, 12px);
+    @include jito-badge(8px, 3px, 9px);
     @media(max-width: $screen-lg-max) {
       display: none;
     }
   }
 
-  &-medium {
+  &-d-medium {
     position: absolute;
     @include jito-badge(40px, 6px, 12px);
     @media(max-width: $screen-md-max) {
@@ -107,7 +107,7 @@
     }
   }
 
-  &-small {
+  &-d-small {
     @include jito-badge(-1px, 1px, 9px);
     @media(min-width: $screen-lg-max) {
       display: none;

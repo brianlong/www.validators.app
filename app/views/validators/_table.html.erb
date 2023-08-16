@@ -106,14 +106,6 @@
         <div class="column-info-row" data-turbolinks="false">
           <div class="column-info-avatar">
             <%= create_avatar_link(validator) %>
-            <% if validator.jito %>
-              <%= image_tag(
-                "jito.svg",
-                class: 'jito-badge-large',
-                title: "Jito validator",
-                alt: "J")
-              %>
-            <% end %>
             <% if current_user && show_watchlist_btn %>
               <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fa-solid' : 'fa-regular' %> fa-star"
                  data-bs-toggle="tooltip"
@@ -130,7 +122,7 @@
               <% if validator.jito %>
                 <%= image_tag(
                   "jito.svg",
-                  class: 'jito-badge-small',
+                  class: 'jito-badge-d-small',
                   title: "Jito validator",
                   alt: "J")
                 %>
@@ -176,8 +168,8 @@
               </div>
             <% end %>
 
-            <% if validator.stake_pools_list.present? %>
-              <div class="mt-2 mt-lg-0">
+            <div class="mt-2 mt-lg-0">
+              <% if validator.stake_pools_list.present? %>
                 <small class="d-inline-block d-lg-none">Pools:&nbsp;</small>
                 <%= link_to stake_pools_path(network: params[:network]), target: "_blank" do %>
                   <% stake_pool_logos(validator.stake_pools_list).each do |logo| %>
@@ -189,8 +181,17 @@
                     %>
                   <% end %>
                 <% end %>
-              </div>
-            <% end %>
+              <% end %>
+
+              <% if validator.jito %>
+                <%= image_tag(
+                  "jito.svg",
+                  class: 'jito-badge-d-large',
+                  title: "Jito validator",
+                  alt: "J")
+                %>
+              <% end %>
+            </div>
           </div>
         </div>
 
