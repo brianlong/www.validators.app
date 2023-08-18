@@ -106,14 +106,6 @@
         <div class="column-info-row" data-turbolinks="false">
           <div class="column-info-avatar">
             <%= create_avatar_link(validator) %>
-            <% if validator.jito %>
-              <%= image_tag(
-                "jito.svg",
-                class: 'jito-badge-large',
-                title: "Jito validator",
-                alt: "J")
-              %>
-            <% end %>
             <% if current_user && show_watchlist_btn %>
               <i class="watch-button <%= validator.watchers.include?(current_user) ? 'fa-solid' : 'fa-regular' %> fa-star"
                  data-bs-toggle="tooltip"
@@ -127,14 +119,6 @@
           <div class="column-info-name">
             <%= link_to validator_url(network: params[:network], account: validator.account), class: "column-info-link fw-bold #{'no-watchlist' unless (current_user && show_watchlist_btn)}" do %>
               <%= displayed_validator_name(validator) %> <%= displayed_validator_commission(validator) %>
-              <% if validator.jito %>
-                <%= image_tag(
-                  "jito.svg",
-                  class: 'jito-badge-small',
-                  title: "Jito validator",
-                  alt: "J")
-                %>
-              <% end %>
             <% end %>
             <br />
 
@@ -176,21 +160,30 @@
               </div>
             <% end %>
 
-            <% if validator.stake_pools_list.present? %>
-              <div class="mt-2 mt-lg-0">
-                <small class="d-inline-block d-lg-none">Pools:&nbsp;</small>
-                <%= link_to stake_pools_path(network: params[:network]), target: "_blank" do %>
-                  <% stake_pool_logos(validator.stake_pools_list).each do |logo| %>
-                    <%= image_tag(
-                      logo[:image],
-                      class: 'img-xs me-1',
-                      title: logo[:name] + " stake pool",
-                      alt: logo[:name])
-                    %>
+            <div>
+              <% if validator.stake_pools_list.present? %>
+                <div class="mt-2 mt-lg-0 me-1 d-inline-block">
+                  <small class="d-inline-block d-lg-none">Pools:&nbsp;</small>
+                  <%= link_to stake_pools_path(network: params[:network]), target: "_blank" do %>
+                    <% stake_pool_logos(validator.stake_pools_list).each do |logo| %>
+                      <%= image_tag(
+                            logo[:image],
+                            class: 'img-xs me-1',
+                            title: logo[:name] + " stake pool",
+                            alt: logo[:name])
+                      %>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </div>
-            <% end %>
+                </div>
+              <% end %>
+              <% if validator.jito %>
+                <div class="mt-2 mt-lg-0 d-inline-block">
+                  <%= link_to validators_path(network: params[:network], jito: params[:jito]) do %>
+                    <%= image_tag("jito.svg", class: 'img-xxs me-1', title: "Show Jito validators", alt: "J") %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
           </div>
         </div>
 

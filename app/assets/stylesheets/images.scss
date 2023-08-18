@@ -69,6 +69,10 @@
 }
 
 .img {
+  &-xxs {
+    height: 11px;
+    width: auto;
+  }
   &-xs {
     height: 13px;
     width: auto;
