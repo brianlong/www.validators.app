@@ -162,7 +162,7 @@
                 <td><strong>Jito Commission:</strong></td>
                 <td :class="commission_class" data-turbolinks="false">
                   {{ validator.jito_commission / 100 }}&percnt;
-                  <img :src="jito_badge" class="img-xxs ms-2" title="Jito validator">
+                  <img :src="jito_badge" class="img-xxs ms-2" style="margin-top: -3px" title="Jito validator">
                 </td>
               </tr>
 
