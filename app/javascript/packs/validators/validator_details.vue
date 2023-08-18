@@ -162,11 +162,10 @@
                 <td><strong>Jito Commission:</strong></td>
                 <td :class="commission_class" data-turbolinks="false">
                   {{ validator.jito_commission / 100 }}&percnt;
-                  <img :src="jito_badge" class="img-xxs ms-2" style="margin-top: -3px" title="Jito validator">
                 </td>
               </tr>
 
-              <tr>
+              <tr v-if="validator.stake_pools_list.length > 0 || validator.jito">
                 <td><strong>Stake Pools:</strong></td>
                 <td>
                   <span v-for="stake_pool_name in validator.stake_pools_list">
@@ -175,6 +174,7 @@
                          :alt="stake_pool_name"
                          :src="stake_pool_small_logo(stake_pool_name)" />
                   </span>
+                  <img :src="jito_badge" class="img-xxs ms-1" title="Jito validator" v-if="validator.jito">
                 </td>
               </tr>
 
