@@ -7,7 +7,6 @@
         </div>
         <img :src="validator.avatar_url" class="img-circle-medium" v-else-if="validator.avatar_url" >
         <img src="https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png" class="img-circle-medium" v-else>
-        <img :src="jito_badge" class="jito-badge-medium" title="Jito validator" v-if="validator.jito">
 
         <h1 class="word-break" v-if="is_loading_validator">loading...</h1>
         <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
@@ -97,6 +96,7 @@
                   </a>
                 </td>
               </tr>
+
               <tr>
                 <td><strong>Creation Date:</strong></td>
                 <td>
@@ -162,6 +162,19 @@
                 <td><strong>Jito Commission:</strong></td>
                 <td :class="commission_class" data-turbolinks="false">
                   {{ validator.jito_commission / 100 }}&percnt;
+                  <img :src="jito_badge" class="img-xxs ms-2" title="Jito validator">
+                </td>
+              </tr>
+
+              <tr>
+                <td><strong>Stake Pools:</strong></td>
+                <td>
+                  <span v-for="stake_pool_name in validator.stake_pools_list">
+                    <img class="img-xs me-2"
+                         :title="stake_pool_name + ' stake pool'"
+                         :alt="stake_pool_name"
+                         :src="stake_pool_small_logo(stake_pool_name)" />
+                  </span>
                 </td>
               </tr>
 
@@ -254,6 +267,7 @@
   import jitoBadge from 'jito.svg'
   import '../mixins/numbers_mixins'
   import '../mixins/dates_mixins'
+  import '../mixins/stake_pools_mixins';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
