@@ -101,7 +101,7 @@ module ValidatorsHelper
       end
     elsif validator.avatar_url
       link_to validator_url(link_params) do
-        image_tag validator.avatar_url, class: "img-circle-large"
+        sanitize("<img src=\"#{validator.avatar_url}\" class='img-circle-large'")
       end
     else
       link_to validator_url(link_params) do

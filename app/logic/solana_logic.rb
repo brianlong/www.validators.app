@@ -592,6 +592,11 @@ module SolanaLogic
         keybase_name = result['info']['keybaseUsername'].to_s.strip
         validator.keybase_id = keybase_name unless keybase_name.to_s.downcase.include?('script')
 
+        url = result['info']['iconUrl'].to_s.strip
+        if url && url_valid?(url)
+          validator.avatar_url = url
+        end
+
         www_url = result['info']['website'].to_s.strip
         validator.www_url = www_url unless www_url.to_s.downcase.include?('script')
 
@@ -663,5 +668,17 @@ module SolanaLogic
         validator
       end
     end.compact
+  end
+
+  def url_valid?(url)
+    return false if url.to_s.downcase.include?('script')
+
+    avatar_url = URI.parse(url)
+    return false unless avatar_url.kind_of?(URI::HTTP) || avatar_url.kind_of?(URI::HTTPS)
+
+    true
+  rescue URI::InvalidURIError => e
+    binding.pry
+    false
   end
 end
