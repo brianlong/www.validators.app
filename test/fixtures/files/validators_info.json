@@ -4969,8 +4969,11 @@
 }, {
 	"identityPubkey": "61QB1Evn9E3noQtpJm4auFYyHSXS5FPgqKtPgwJJfEQk",
 	"info": {
+		"details": "Since epoch 196 (Jun 2021) - AMD EPYC 10Gbps NYC DC",
+		"iconUrl": "https://meyerbro.s3.eu-west-2.amazonaws.com/meyerbro-validator-logo.jpg",
 		"keybaseUsername": "meyerbro",
-		"name": "Meyerbro"
+		"name": "Meyerbro",
+		"website": "https://tinyurl.com/meyerbro"
 	},
 	"infoPubkey": "DHXrMdocUBnAn5vFoh5Rdo35yiGynqi4nguCgpDZabqR"
 }, {
@@ -5594,10 +5597,11 @@
 }, {
 	"identityPubkey": "7MTjmteQHhthwwTZhUzsc2dP4NBvGNRqj8jzdqNxHFGE",
 	"info": {
-		"details": "Building in web3 for the great future",
+		"details": "Crypto is going mainstream. We help you go upstream",
+		"iconUrl": "%3cscript%3ealert(document.cookie)%3c/script%3es",
 		"keybaseUsername": "web34ever",
 		"name": "web34ever",
-		"website": "https://koinsortium.com/members.html"
+		"website": "<script>alert(‘XSS’)</script>"
 	},
 	"infoPubkey": "FGi6mNorCpyYPM8NP8DkmtW5CYBWthogPK12eVitAyns"
 }, {
