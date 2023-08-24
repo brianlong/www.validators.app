@@ -593,7 +593,7 @@ module SolanaLogic
         validator.keybase_id = keybase_name unless keybase_name.to_s.downcase.include?('script')
 
         url = result['info']['iconUrl'].to_s.strip
-        if url && url_valid?(url)
+        if url.present? && url_valid?(url)
           validator.avatar_url = url
         end
 
