@@ -301,7 +301,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
                   .then(&program_accounts)
                   .then(&validators_info_save)
       assert_equal 898, Validator.count
-      
+
       validator = Validator.find_by(account: '7MTjmteQHhthwwTZhUzsc2dP4NBvGNRqj8jzdqNxHFGE')
       assert_equal 'web34ever', validator.name
       assert_equal 'web34ever', validator.keybase_id
