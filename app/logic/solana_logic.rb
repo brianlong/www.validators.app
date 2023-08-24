@@ -590,9 +590,9 @@ module SolanaLogic
         keybase_name = result['info']['keybaseUsername'].to_s.strip
         validator.keybase_id = keybase_name unless keybase_name.to_s.downcase.include?('script')
 
-        url = result['info']['iconUrl'].to_s.strip
-        if url.present? && url_valid?(url)
-          validator.avatar_url = url
+        avatar_url = result['info']['iconUrl'].to_s.strip
+        if avatar_url.present? && url_valid?(avatar_url)
+          validator.avatar_url = avatar_url
         end
 
         www_url = result['info']['website'].to_s.strip
