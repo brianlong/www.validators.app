@@ -596,7 +596,7 @@ module SolanaLogic
         end
 
         www_url = result['info']['website'].to_s.strip
-        if www_url && www_url_valid?(www_url)
+        if www_url && url_valid?(www_url)
           validator.www_url = www_url
         end
 
@@ -678,7 +678,6 @@ module SolanaLogic
 
     true
   rescue URI::InvalidURIError => e
-    binding.pry
     false
   end
 end
