@@ -579,21 +579,26 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       p.payload[:validators_info].each do |result|
-        # puts result.inspect
         validator = Validator.find_or_create_by(
           network: p.payload[:network],
           account: result['identityPubkey']
         )
 
-        # puts "#{result['info']['name']} => #{result['info']['name'].encoding}"
         utf_8_name = result['info']['name'].to_s.encode_utf_8.strip
         validator.name = utf_8_name unless utf_8_name.to_s.downcase.include?('script')
 
         keybase_name = result['info']['keybaseUsername'].to_s.strip
         validator.keybase_id = keybase_name unless keybase_name.to_s.downcase.include?('script')
 
+        avatar_url = result['info']['iconUrl'].to_s.strip
+        if avatar_url.present? && url_valid?(avatar_url)
+          validator.avatar_url = avatar_url
+        end
+
         www_url = result['info']['website'].to_s.strip
-        validator.www_url = www_url unless www_url.to_s.downcase.include?('script')
+        if www_url && url_valid?(www_url)
+          validator.www_url = www_url
+        end
 
         utf_8_details = result['info']['details'].to_s.encode_utf_8.strip[0..254]
         validator.details = utf_8_details unless utf_8_details.to_s.downcase.include?('script')
@@ -663,5 +668,16 @@ module SolanaLogic
         validator
       end
     end.compact
+  end
+
+  def url_valid?(url)
+    return false if url.to_s.downcase.include?('script')
+
+    avatar_url = URI.parse(url)
+    return false unless avatar_url.kind_of?(URI::HTTP) || avatar_url.kind_of?(URI::HTTPS)
+
+    true
+  rescue URI::InvalidURIError => e
+    false
   end
 end

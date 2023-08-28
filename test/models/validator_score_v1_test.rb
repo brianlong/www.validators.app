@@ -96,7 +96,7 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
       authorized_withdrawer_score: 0,
       consensus_mods_score: 0
     )
-    
+
     assert_equal 14, @validator_score_v1.calculate_total_score
   end
 
@@ -105,7 +105,8 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
 
     @validator.assign_attributes(
       www_url: 'http://www.example.com',
-      details: 'Test details'
+      details: 'Test details',
+      keybase_id: nil
     )
 
     @validator.save

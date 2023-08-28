@@ -62,7 +62,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     batch = Batch.where(uuid: p[:payload][:batch_uuid]).first
 
     list = create_list(
-      :validator_block_history, 3, 
+      :validator_block_history, 3,
       batch_uuid: p[:payload][:batch_uuid],
       network: p[:payload][:network]
     )
@@ -280,6 +280,34 @@ class SolanaLogicTest < ActiveSupport::TestCase
                   .then(&program_accounts)
                   .then(&validators_info_save)
       assert_equal 898, Validator.count
+
+      validator = Validator.find_by(account: '61QB1Evn9E3noQtpJm4auFYyHSXS5FPgqKtPgwJJfEQk')
+      assert_equal 'Meyerbro', validator.name
+      assert_equal 'meyerbro', validator.keybase_id
+      assert_equal 'Since epoch 196 (Jun 2021) - AMD EPYC 10Gbps NYC DC', validator.details
+      assert_equal 'https://meyerbro.s3.eu-west-2.amazonaws.com/meyerbro-validator-logo.jpg', validator.avatar_url
+      assert_equal 'https://tinyurl.com/meyerbro', validator.www_url
+    end
+  end
+
+  test 'validators_info_save does not save incorrect attributes' do
+    #  To skip validators_info_get
+    payload = @mainnet_initial_payload.merge(
+      validators_info: @validators_info
+    )
+
+    VCR.use_cassette('validators_info_save') do
+      p = Pipeline.new(200, payload)
+                  .then(&program_accounts)
+                  .then(&validators_info_save)
+      assert_equal 898, Validator.count
+
+      validator = Validator.find_by(account: '7MTjmteQHhthwwTZhUzsc2dP4NBvGNRqj8jzdqNxHFGE')
+      assert_equal 'web34ever', validator.name
+      assert_equal 'web34ever', validator.keybase_id
+      assert_equal 'Crypto is going mainstream. We help you go upstream', validator.details
+      assert_nil validator.avatar_url
+      assert_nil validator.www_url
     end
   end
 
@@ -292,7 +320,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     VCR.use_cassette('find_invalid_configs') do
       p = Pipeline.new(200, payload)
                   .then(&program_accounts)
-      
+
       assert_equal 899, p.payload[:validators_info].size
       assert_equal 904, p.payload[:program_accounts].size
 
@@ -304,11 +332,11 @@ class SolanaLogicTest < ActiveSupport::TestCase
       # One vailidator has info set to empty hash due to having false signer.
       assert_equal config_account['pubkey'], p.payload[:false_signers].first[1]['pubkey']
       assert_equal [
-          "4En2EzuCGjsXDAmWpecmQz2Z2sBrPZAfrDqP35qcTUhu", 
-          "H4hqVttu3AXbUZeUGtV5hxQRg1VUDMXdMzz84P76PLhN", 
-          "DPe3AebFaHfSRJjt1rcFWZWfSUsEa3MmLpBLZNheLUXx", 
+          "4En2EzuCGjsXDAmWpecmQz2Z2sBrPZAfrDqP35qcTUhu",
+          "H4hqVttu3AXbUZeUGtV5hxQRg1VUDMXdMzz84P76PLhN",
+          "DPe3AebFaHfSRJjt1rcFWZWfSUsEa3MmLpBLZNheLUXx",
           "3j1hSHKYgLVydvv35DmcELex7YfoKSV4E7biK765ECZb"
-        ], 
+        ],
         p.payload[:duplicated_configs].values.flatten
     end
   end
@@ -322,7 +350,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     VCR.use_cassette('remove_invalid_configs') do
       p = Pipeline.new(200, payload)
                   .then(&program_accounts)
-                  
+
       assert_equal 899, p.payload[:validators_info].size
       assert_equal 904, p.payload[:program_accounts].size
 

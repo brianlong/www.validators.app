@@ -103,7 +103,7 @@ class ValidatorScoreV1 < ApplicationRecord
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?
   before_save :calculate_total_score
-  
+
   belongs_to :validator
   has_many :validator_ips, through: :validator
   has_one :validator_ip_active, through: :validator
@@ -125,7 +125,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   scope :by_data_centers, ->(data_center_keys) do
     select_statement = "validator_score_v1s.*, data_centers.data_center_key"
-    
+
     select(select_statement).joins(:data_center)
                             .where("data_centers.data_center_key = ?", data_center_keys)
   end
@@ -214,7 +214,7 @@ class ValidatorScoreV1 < ApplicationRecord
   def assign_published_information_score
     sc = 0.0
     sc += validator.name.blank? ? 0.0 : 0.5
-    sc += validator.keybase_id.blank? ? 0.0 : 0.5
+    sc += validator.avatar_url.blank? ? 0.0 : 0.5
     sc += validator.www_url.blank? ? 0.0 : 0.5
     sc += validator.details.blank? ? 0.0 : 0.5
     self.published_information_score = sc.floor
