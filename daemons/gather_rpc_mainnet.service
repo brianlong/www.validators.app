@@ -21,9 +21,9 @@ Environment=RAILS_ENV=production
 RestartSec=10
 Restart=always
 
-# output goes to /var/log/syslog
-StandardOutput=syslog
-StandardError=syslog
+# output goes to log/daemons/gather_rpc_mainnet.log
+StandardOutput=log/daemons/gather_rpc_mainnet.log
+StandardError=log/daemons/gather_rpc_mainnet.log
 
 # Limits
 LimitNOFILE=infinity
