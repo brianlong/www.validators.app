@@ -23,8 +23,8 @@ RestartSec=10
 Restart=always
 
 # output goes to log/daemons/gather_rpc_mainnet.log
-StandardOutput=append:log/daemons/gather_rpc_mainnet.log
-StandardError=append:log/daemons/gather_rpc_mainnet.log
+StandardOutput=file:log/daemons/gather_rpc_mainnet.log
+StandardError=file:log/daemons/gather_rpc_mainnet.log
 
 # Limits
 LimitNOFILE=infinity
