@@ -1,4 +1,5 @@
 [Unit]
+[Unit]
 Description=Gather RPC Data Mainnet
 After=syslog.target network.target
 
@@ -22,8 +23,8 @@ RestartSec=10
 Restart=always
 
 # output goes to log/daemons/gather_rpc_mainnet.log
-StandardOutput=log/daemons/gather_rpc_mainnet.log
-StandardError=log/daemons/gather_rpc_mainnet.log
+StandardOutput=append:log/daemons/gather_rpc_mainnet.log
+StandardError=append:log/daemons/gather_rpc_mainnet.log
 
 # Limits
 LimitNOFILE=infinity
