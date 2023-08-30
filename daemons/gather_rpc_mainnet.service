@@ -1,5 +1,4 @@
 [Unit]
-[Unit]
 Description=Gather RPC Data Mainnet
 After=syslog.target network.target
 
@@ -7,7 +6,7 @@ After=syslog.target network.target
 Type=simple
 WorkingDirectory=/home/deploy/validators.app/current/
 
-ExecStart=/usr/bin/bundle exec /usr/bin/ruby daemons/gather_rpc_mainnet_daemon.rb
+ExecStart=/usr/bin/bundle exec /usr/bin/ruby daemons/gather_rpc_mainnet_daemon.rb 2>&1 >> ./log/daemons/gather_rpc_mainnet.log
 
 UMask=0002
 
@@ -22,9 +21,9 @@ Environment=RAILS_ENV=production
 RestartSec=10
 Restart=always
 
-# output goes to log/daemons/gather_rpc_mainnet.log
-StandardOutput=file:log/daemons/gather_rpc_mainnet.log
-StandardError=file:log/daemons/gather_rpc_mainnet.log
+# output goes to /var/log/syslog
+StandardOutput=syslog
+StandardError=syslog
 
 # Limits
 LimitNOFILE=infinity
