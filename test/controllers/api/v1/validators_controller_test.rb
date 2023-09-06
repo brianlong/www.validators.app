@@ -626,7 +626,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator = create(
       :validator,
       :with_score,
-      account: "Test Account",
+      account: "Test Account"
     )
 
     get api_v1_validator_ledger_path(network: "testnet", account: "Test Account"),
