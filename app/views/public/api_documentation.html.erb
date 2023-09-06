@@ -15,7 +15,6 @@
   <li><a href="#ping">Server Ping</a></li>
   <li><a href="#validators-list">Validators List</a></li>
   <li><a href="#validator-detail">Validator Details</a></li>
-  <li><a href="#validator-detail-ledger">Validator Details for Ledger</a></li>
   <li><a href="#validator-block">Validator Block Production History</a></li>
   <li><a href="#epoch-index">Epochs</a></li>
   <li><a href="#commission-change-index">Commission Changes</a></li>
@@ -183,30 +182,6 @@
   "ping_time":"205.703",
   "url":"<%= @api_path %>/validators/testnet/12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX.json",
   "stake_pools_list":["Jito", "Marinade"]
-}
-</pre>
-
-<hr />
-
-<h2 class="h4" id="validator-detail-ledger">Validator Details for Ledger</h2>
-<p>
-  The Validator Details for Ledger endpoint will return only the basic information about a single validator. In the example
-  below, replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired. Replace `:account` with the desired account ID.
-</p>
-
-<h3 class="h6">Request:</h3>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/validators-ledger/:network/:account.json'</pre>
-
-<h3 class="h6">Response:</h3>
-<pre>
-{
-  "active_stake":100000,
-  "commission":10,
-  "total_score":10,
-  "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
-  "name":"Example Name",
-  "avatar_url":"www.avatar_url.com",
-  "www_url":"https://www.example.com"
 }
 </pre>
 
