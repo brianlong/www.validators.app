@@ -7,7 +7,7 @@ module Api
       include ValidatorsControllerHelper
 
       before_action :set_skipped_slots_report
-      before_action :set_validator_and_score, only: [:show, :show_ledger]
+      before_action :set_validator_and_score, only: %i[show show_ledger]
 
       def index
         @validators = ValidatorQuery.new(api: true).call(

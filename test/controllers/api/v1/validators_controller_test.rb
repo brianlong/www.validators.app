@@ -648,6 +648,31 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal json, expected_response
   end
 
+  test "GET api_v1_validators_ledger returns correct data even if there is no score attached" do
+    validator = create(
+      :validator,
+      account: "Test Account"
+    )
+
+    get api_v1_validator_ledger_path(network: "testnet", account: "Test Account"),
+      headers: { "Token" => @user.api_token }
+    assert_response 200
+
+    expected_response = {
+      active_stake: validator.active_stake,
+      commission: validator.commission,
+      total_score: nil,
+      vote_account: validator.vote_account_active&.account,
+      name: validator.name,
+      avatar_url: validator.avatar_url,
+      www_url: validator.www_url
+    }.map { |k, v| [k.to_s, v] }.to_h
+
+    json = response_to_json(@response.body)
+
+    assert_equal json, expected_response
+  end
+
   test "GET api_v1_validators_ledger returns 404 if no validator found" do
     get api_v1_validator_ledger_path(network: "testnet", account: "zzz"),
       headers: { "Token" => @user.api_token }
