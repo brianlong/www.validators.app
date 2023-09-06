@@ -132,6 +132,11 @@ Rails.application.routes.draw do
           to: 'validators#show',
           as: 'validator'
 
+      # api_v1_validators_ledger GET /api/v1/validators-ledger/:network/:account
+      get 'validators-ledger/:network/:account',
+          to: 'validators#show_ledger',
+          as: 'validator_ledger'
+
       # GET /api/v1/validator_block_history/:network/:account
       get 'validator-block-history/:network/:account',
           to: 'validator_block_histories#show',
