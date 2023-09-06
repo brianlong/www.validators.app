@@ -655,6 +655,6 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response 404
 
     json = response_to_json(@response.body)
-    assert_equal json, {"status"=>"Validator Not Found"}
+    assert_equal json, { "status"=>"Validator Not Found" }
   end
 end
