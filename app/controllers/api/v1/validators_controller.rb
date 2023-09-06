@@ -153,7 +153,7 @@ module Api
         render json: {
           active_stake: @validator.active_stake,
           commission: @validator.commission,
-          total_score: @score.displayed_total_score,
+          total_score: @score&.displayed_total_score,
           vote_account: @validator.vote_account_active&.account,
           name: @validator.name,
           avatar_url: @validator.avatar_url,
