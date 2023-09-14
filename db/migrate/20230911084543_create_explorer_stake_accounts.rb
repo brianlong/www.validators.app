@@ -1,6 +1,6 @@
-class CreateStakeAccounts < ActiveRecord::Migration[6.1]
+class CreateExplorerStakeAccounts < ActiveRecord::Migration[6.1]
   def change
-    create_table :stake_accounts do |t|
+    create_table :explorer_stake_accounts do |t|
       t.bigint :account_balance
       t.integer :activation_epoch
       t.bigint :active_stake
@@ -14,15 +14,15 @@ class CreateStakeAccounts < ActiveRecord::Migration[6.1]
       t.string :stake_type
       t.string :staker
       t.string :withdrawer
+      t.integer :stake_pool_id
       t.string :network
-      t.integer :validator_id
 
       t.timestamps
 
       t.index [:stake_pubkey, :network]
       t.index [:staker, :network]
       t.index [:withdrawer, :network]
-      t.index [:delegated_vote_account_address, :network]
+      t.index :stake_pool_id
     end
   end
 end

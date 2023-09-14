@@ -24,6 +24,8 @@ NETWORKS.each do |network|
 
   TotalRewardsUpdateService.new(p.payload[:network], p.payload[:stake_accounts_active]).call
 
+  if 
+
   puts "finished #{network} with status #{p[:code]}"
   puts "MESSAGE: #{p[:message]}"
   puts "ERROR: #{p[:errors].inspect}"

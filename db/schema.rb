@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_28_114457) do
+ActiveRecord::Schema.define(version: 2023_09_11_084543) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -229,6 +229,30 @@ ActiveRecord::Schema.define(version: 2023_06_28_114457) do
     t.bigint "total_active_stake"
     t.index ["epoch"], name: "index_epoch_wall_clocks_on_epoch"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
+  end
+
+  create_table "explorer_stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "account_balance"
+    t.integer "activation_epoch"
+    t.bigint "active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.integer "deactivation_epoch"
+    t.bigint "delegated_stake"
+    t.string "delegated_vote_account_address"
+    t.bigint "rent_exempt_reserve"
+    t.string "stake_pubkey"
+    t.string "stake_type"
+    t.string "staker"
+    t.string "withdrawer"
+    t.integer "stake_pool_id"
+    t.string "network"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stake_pool_id"], name: "index_explorer_stake_accounts_on_stake_pool_id"
+    t.index ["stake_pubkey", "network"], name: "index_explorer_stake_accounts_on_stake_pubkey_and_network"
+    t.index ["staker", "network"], name: "index_explorer_stake_accounts_on_staker_and_network"
+    t.index ["withdrawer", "network"], name: "index_explorer_stake_accounts_on_withdrawer_and_network"
   end
 
   create_table "gossip_nodes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
