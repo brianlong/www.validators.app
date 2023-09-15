@@ -24,7 +24,8 @@ Rails.application.routes.draw do
       as: 'data_centers'
   get 'data-centers/:key',
       to: 'data_centers#data_center',
-      as: 'data_center'
+      as: 'data_center',
+      constraints: { key: %r{[^\/]+} }
 
   # Validators
   get 'validators',
