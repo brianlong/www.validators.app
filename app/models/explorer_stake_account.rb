@@ -29,4 +29,5 @@
 #  index_explorer_stake_accounts_on_withdrawer_and_network    (withdrawer,network)
 #
 class ExplorerStakeAccount < ApplicationRecord
+  audited
 end

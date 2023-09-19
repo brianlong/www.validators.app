@@ -19,7 +19,6 @@ class GatherExplorerStakeAccountsService
   def call
     get_stake_accounts
     update_stake_accounts
-    puts "finished"
   end
 
   private
