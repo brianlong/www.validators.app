@@ -46,7 +46,7 @@ module StakeLogic
 
       Pipeline.new(200, p.payload.merge(
         stake_accounts: reduced_stake_accounts,
-        all_stake_accounts: stake_accounts - reduced_stake_accounts,
+        all_stake_accounts: stake_accounts,
         stake_accounts_active: stake_accounts_active(p.payload[:network], stake_accounts)
       ))
     rescue StandardError => e

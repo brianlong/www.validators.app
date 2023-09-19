@@ -245,11 +245,11 @@ ActiveRecord::Schema.define(version: 2023_09_11_084543) do
     t.string "stake_type"
     t.string "staker"
     t.string "withdrawer"
-    t.integer "stake_pool_id"
     t.string "network"
+    t.integer "epoch"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["stake_pool_id"], name: "index_explorer_stake_accounts_on_stake_pool_id"
+    t.index ["epoch", "network"], name: "index_explorer_stake_accounts_on_epoch_and_network"
     t.index ["stake_pubkey", "network"], name: "index_explorer_stake_accounts_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_explorer_stake_accounts_on_staker_and_network"
     t.index ["withdrawer", "network"], name: "index_explorer_stake_accounts_on_withdrawer_and_network"

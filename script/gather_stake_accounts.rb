@@ -24,7 +24,16 @@ NETWORKS.each do |network|
 
   TotalRewardsUpdateService.new(p.payload[:network], p.payload[:stake_accounts_active]).call
 
-  if 
+  if (StakeAccount.where(network: network).last&.epoch || 0) > \
+     (StakeAccountHistory.where(network: network).last&.epoch || 0)
+     GatherExplorerStakeAccountsService.new(
+      network: network,
+      config_urls: NETWORK_URLS[network],
+      current_epoch: StakeAccount.where(network: network).last.epoch,
+      demo: false,
+      stake_accounts: p.payload[:all_stake_accounts]
+    ).call
+  end
 
   puts "finished #{network} with status #{p[:code]}"
   puts "MESSAGE: #{p[:message]}"

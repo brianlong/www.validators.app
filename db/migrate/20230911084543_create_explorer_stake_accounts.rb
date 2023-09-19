@@ -14,15 +14,15 @@ class CreateExplorerStakeAccounts < ActiveRecord::Migration[6.1]
       t.string :stake_type
       t.string :staker
       t.string :withdrawer
-      t.integer :stake_pool_id
       t.string :network
+      t.integer :epoch
 
       t.timestamps
 
       t.index [:stake_pubkey, :network]
       t.index [:staker, :network]
       t.index [:withdrawer, :network]
-      t.index :stake_pool_id
+      t.index [:epoch, :network]
     end
   end
 end
