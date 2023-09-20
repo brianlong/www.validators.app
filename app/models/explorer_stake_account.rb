@@ -23,6 +23,7 @@
 #
 # Indexes
 #
+#  index_explorer_stake_accounts_for_vote_account             (delegated_vote_account_address,network)
 #  index_explorer_stake_accounts_on_epoch_and_network         (epoch,network)
 #  index_explorer_stake_accounts_on_stake_pubkey_and_network  (stake_pubkey,network)
 #  index_explorer_stake_accounts_on_staker_and_network        (staker,network)

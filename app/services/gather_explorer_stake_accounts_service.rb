@@ -10,7 +10,7 @@ class GatherExplorerStakeAccountsService
     @network = network
     @config_urls = config_urls
     @stake_accounts = stake_accounts
-    @current_epoch = current_epoch || EpochWallClock.where(network: network).order(created_at: :desc).first.epoch
+    @current_epoch = current_epoch || EpochWallClock.by_network(@network).first.epoch
     @demo = demo
     log_path = Rails.root.join("log", "#{self.class.name.demodulize.underscore}_#{@network}.log")
     @logger ||= Logger.new(log_path)

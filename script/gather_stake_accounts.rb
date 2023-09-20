@@ -24,8 +24,9 @@ NETWORKS.each do |network|
 
   TotalRewardsUpdateService.new(p.payload[:network], p.payload[:stake_accounts_active]).call
 
-  if (StakeAccount.where(network: network).last&.epoch || 0) > \
-     (StakeAccountHistory.where(network: network).last&.epoch || 0)
+  # run GatherExplorerStakeAccountsService only if there is a new epoch discovered in the stake accounts
+  if StakeAccount.where(network: network).last&.epoch.to_i > \
+     StakeAccountHistory.where(network: network).last&.epoch.to_i
      GatherExplorerStakeAccountsService.new(
       network: network,
       config_urls: NETWORK_URLS[network],

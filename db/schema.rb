@@ -271,6 +271,7 @@ ActiveRecord::Schema.define(version: 2023_09_19_062249) do
     t.integer "epoch"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["delegated_vote_account_address", "network"], name: "index_explorer_stake_accounts_for_vote_account"
     t.index ["epoch", "network"], name: "index_explorer_stake_accounts_on_epoch_and_network"
     t.index ["stake_pubkey", "network"], name: "index_explorer_stake_accounts_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_explorer_stake_accounts_on_staker_and_network"
