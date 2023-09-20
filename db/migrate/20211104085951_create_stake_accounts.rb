@@ -15,6 +15,7 @@ class CreateStakeAccounts < ActiveRecord::Migration[6.1]
       t.string :staker
       t.string :withdrawer
       t.string :network
+      t.integer :stake_pool_id
       t.integer :validator_id
 
       t.timestamps
@@ -22,7 +23,7 @@ class CreateStakeAccounts < ActiveRecord::Migration[6.1]
       t.index [:stake_pubkey, :network]
       t.index [:staker, :network]
       t.index [:withdrawer, :network]
-      t.index [:delegated_vote_account_address, :network]
+      t.index :stake_pool_id
     end
   end
 end

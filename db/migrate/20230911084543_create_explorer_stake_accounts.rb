@@ -23,6 +23,7 @@ class CreateExplorerStakeAccounts < ActiveRecord::Migration[6.1]
       t.index [:staker, :network]
       t.index [:withdrawer, :network]
       t.index [:epoch, :network]
+      t.index [:delegated_vote_account_address, :network]
     end
   end
 end
