@@ -54,7 +54,7 @@ class TrackCommissionChangesServiceTest < ActiveSupport::TestCase
 
   test "#call does not create previous_history if it's already in the epoch" do
     vcr_cassette(@namespace, self.class.name.underscore) do
-      assert_equal CommissionHistory.count, 0
+      assert_equal 0, CommissionHistory.count
       create(
         :commission_history,
         epoch: 399,
