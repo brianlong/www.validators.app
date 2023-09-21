@@ -10,7 +10,7 @@ Rails.application.configure do
     Bullet.enable        = true
     Bullet.bullet_logger = true
     Bullet.raise         = false # raise an error if n+1 query occurs
-    Bullet.add_whitelist(type: :n_plus_one_query, class_name: "Validator", association: :validator_ip_active)
+    Bullet.add_safelist(type: :n_plus_one_query, class_name: "Validator", association: :validator_ip_active)
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
