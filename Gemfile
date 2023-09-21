@@ -136,7 +136,7 @@ end
 # configure in production.
 #
 # User data encryption
-gem 'attr_encrypted', '>= 3.1.0'
+gem 'attr_encrypted', '>= 4.0'
 
 # Or use this for Vault. NOTE: Use this version of the gem until
 # https://github.com/hashicorp/vault-rails/pull/76 is merged:

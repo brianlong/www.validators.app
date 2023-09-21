@@ -78,7 +78,7 @@ GEM
     appsignal (3.0.10)
       rack
     ast (2.4.2)
-    attr_encrypted (3.1.0)
+    attr_encrypted (4.0.0)
       encryptor (~> 3.0.0)
     aws-eventstream (1.1.1)
     aws-partitions (1.479.0)
@@ -478,7 +478,7 @@ DEPENDENCIES
   actionview (>= 6.0.3.1)
   annotate
   appsignal
-  attr_encrypted (>= 3.1.0)
+  attr_encrypted (>= 4.0)
   aws-sdk-s3
   bcrypt_pbkdf
   bootsnap (>= 1.4.2)
