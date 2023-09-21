@@ -42,7 +42,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'redis', '~> 5.0'
 
 # This is for the free version of Sidekiq.
-gem 'sidekiq', '~> 7.1'
+gem 'sidekiq', ' ~> 7.1'
 
 # Use this for SideKiq Pro if you have our production keys
 # source 'https://gems.contribsys.com/' do
