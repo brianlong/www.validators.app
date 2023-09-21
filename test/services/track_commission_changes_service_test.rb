@@ -46,7 +46,7 @@ class TrackCommissionChangesServiceTest < ActiveSupport::TestCase
         solana_url: [@solana_url]
       ).call
 
-      assert_equal CommissionHistory.count, 2
+      assert_equal 2, CommissionHistory.count
       assert_equal 399, CommissionHistory.first.epoch
       assert_equal 400, CommissionHistory.last.epoch
     end
