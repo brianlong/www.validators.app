@@ -75,7 +75,7 @@ class TrackCommissionChangesService
     validator_commission = va.validator.commission
 
     last_commission_from_epoch = va.validator.commission_histories.where(
-      network: @network,
+      network: @network
     ).last
 
     unless last_commission_from_epoch && last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f
