@@ -38,7 +38,7 @@ class TrackCommissionChangesServiceTest < ActiveSupport::TestCase
 
   test "#call creates new commission_histories" do
     vcr_cassette(@namespace, self.class.name.underscore) do
-      assert_equal CommissionHistory.count, 0
+      assert_equal 0, CommissionHistory.count
 
       TrackCommissionChangesService.new(
         current_batch: @current_batch,
