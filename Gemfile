@@ -39,7 +39,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 
 # Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 5.0'
+gem 'redis', '~> 4.8.1'
 
 # This is for the free version of Sidekiq.
 gem 'sidekiq', ' ~> 7.1'

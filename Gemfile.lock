@@ -359,8 +359,7 @@ GEM
       ffi (~> 1.0)
     recaptcha (5.8.1)
       json
-    redis (5.0.7)
-      redis-client (>= 0.9.0)
+    redis (4.8.1)
     redis-client (0.17.0)
       connection_pool
     regexp_parser (2.1.1)
@@ -521,7 +520,7 @@ DEPENDENCIES
   rails (~> 6.1)
   rails-controller-testing
   recaptcha
-  redis (~> 5.0)
+  redis (~> 4.8.1)
   rubocop
   sass-rails (>= 6)
   selenium-webdriver
