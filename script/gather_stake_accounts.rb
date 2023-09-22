@@ -27,7 +27,8 @@ NETWORKS.each do |network|
   if network == "mainnet"
     # run GatherExplorerStakeAccountsService only if there is a new epoch discovered in the stake accounts
     if StakeAccount.where(network: network).last&.epoch.to_i > \
-      StakeAccountHistory.where(network: network).last&.epoch.to_i
+      StakeAccountHistory.where(network: network).last&.epoch.to_i || \
+      !ExplorerStakeAccount.exists?(network: network)
       GatherExplorerStakeAccountsService.new(
         network: network,
         config_urls: NETWORK_URLS[network],
