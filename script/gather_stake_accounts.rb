@@ -24,20 +24,6 @@ NETWORKS.each do |network|
 
   TotalRewardsUpdateService.new(p.payload[:network], p.payload[:stake_accounts_active]).call
 
-  if network == "mainnet"
-    # run GatherExplorerStakeAccountsService only if there is a new epoch discovered in the stake accounts
-    last_epoch = StakeAccount.where(network: network).last&.epoch.to_i
-    unless ExplorerStakeAccount.exists?(network: network, epoch: last_epoch)
-      GatherExplorerStakeAccountsService.new(
-        network: network,
-        config_urls: NETWORK_URLS[network],
-        current_epoch: StakeAccount.where(network: network).last.epoch,
-        demo: false,
-        stake_accounts: p.payload[:all_stake_accounts]
-      ).call
-    end
-  end
-
   puts "finished #{network} with status #{p[:code]}"
   puts "MESSAGE: #{p[:message]}"
   puts "ERROR: #{p[:errors].inspect}"

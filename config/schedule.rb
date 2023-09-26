@@ -54,6 +54,10 @@ every 2.hour, at: 10, roles: [:background] do
   ruby_script 'gather_stake_accounts.rb'
 end
 
+every 2.hour, at: 35, roles: [:background] do
+  ruby_script 'gather_explorer_stake_accounts.rb'
+end
+
 every 1.hour, at: 20, roles: [:background] do
   ruby_script_data_centers 'append_data_centers_geo_data.rb'
 end
