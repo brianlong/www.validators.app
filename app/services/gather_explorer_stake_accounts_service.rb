@@ -40,7 +40,7 @@ class GatherExplorerStakeAccountsService
     @stake_accounts.in_groups_of(BATCH_SIZE) do |batch|
       batch_no += 1
       updated_stake_accounts = []
-      @logger.info("processing batch #{batch_no} of #{@stake_accounts.count / BATCH_SIZE}")
+      @logger.info("processing batch #{batch_no} of #{@stake_accounts.count / BATCH_SIZE.to_f}.ceil")
 
       batch.compact.each do |acc|
         esa = ExplorerStakeAccount.find_or_initialize_by(
