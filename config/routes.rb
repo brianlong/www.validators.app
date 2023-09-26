@@ -24,7 +24,8 @@ Rails.application.routes.draw do
       as: 'data_centers'
   get 'data-centers/:key',
       to: 'data_centers#data_center',
-      as: 'data_center'
+      as: 'data_center',
+      constraints: { key: %r{[^\/]+} }
 
   # Validators
   get 'validators',
@@ -131,6 +132,11 @@ Rails.application.routes.draw do
       get 'validators/:network/:account',
           to: 'validators#show',
           as: 'validator'
+
+      # api_v1_validators_ledger GET /api/v1/validators-ledger/:network/:account
+      get 'validators-ledger/:network/:account',
+          to: 'validators#show_ledger',
+          as: 'validator_ledger'
 
       # GET /api/v1/validator_block_history/:network/:account
       get 'validator-block-history/:network/:account',

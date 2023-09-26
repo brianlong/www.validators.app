@@ -7,6 +7,7 @@ module Api
       include ValidatorsControllerHelper
 
       before_action :set_skipped_slots_report
+      before_action :set_validator_and_score, only: %i[show show_ledger]
 
       def index
         @validators = ValidatorQuery.new(api: true).call(
@@ -42,12 +43,6 @@ module Api
           time_from = Time.now - 24.hours
           time_to = Time.now
 
-          @validator = Validator.where(
-            network: params[:network],
-            account: params[:account]
-          ).first
-
-          @score = @validator.score
           @data = {}
 
           @history_limit = 200
@@ -154,6 +149,21 @@ module Api
         render json: { "status" => e.message }, status: 500
       end
 
+      def show_ledger
+        render json: {
+          active_stake: @validator.active_stake,
+          commission: @validator.commission,
+          total_score: @score&.displayed_total_score,
+          vote_account: @validator.vote_account_active&.account,
+          name: @validator.name,
+          avatar_url: @validator.avatar_url,
+          www_url: @validator.www_url
+        }
+      rescue StandardError => e
+        Appsignal.send_error(e)
+        render json: { "status" => e.message }, status: 500
+      end
+
       private
 
       def validator_params
@@ -165,6 +175,21 @@ module Api
           network: validator_params[:network],
           name: "build_skipped_slot_percent"
         ).last
+      end
+
+      def set_validator_and_score
+        @validator = Validator.where(
+          network: validator_params[:network],
+          account: validator_params[:account]
+        ).first
+
+        raise ValidatorNotFound unless @validator
+
+        @score = @validator.score
+      rescue ValidatorNotFound
+        render json: { "status" => "Validator Not Found" }, status: 404
+      rescue ActionController::ParameterMissing
+        render json: { "status" => "Parameter Missing" }, status: 400
       end
     end
   end
