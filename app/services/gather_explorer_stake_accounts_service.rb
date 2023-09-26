@@ -4,7 +4,7 @@ class GatherExplorerStakeAccountsService
   include PipelineLogic
   include SolanaRequestsLogic
 
-  BATCH_SIZE = 500
+  BATCH_SIZE = 15_000
 
   def initialize(network: "mainnet", config_urls:, current_epoch: nil, demo: true, stake_accounts: [])
     @network = network
