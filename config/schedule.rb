@@ -50,10 +50,6 @@ every 1.hour, at: 5, roles: [:background] do
   ruby_script 'validators_get_avatar_url.rb'
 end
 
-every 2.hour, at: 10, roles: [:background] do
-  ruby_script 'gather_stake_accounts.rb'
-end
-
 every 2.hour, at: 35, roles: [:background] do
   ruby_script 'gather_explorer_stake_accounts.rb'
 end
@@ -128,5 +124,12 @@ if environment == 'production'
 elsif environment == 'stage'
   every 1.day, at: '1:00pm', roles: [:background] do
     ruby_script 'prune_database_tables.rb'
+  end
+end
+
+# Production only
+if ENV['RAILS_ENV'] == "production"
+  every 2.hour, at: 10, roles: [:background] do
+    ruby_script 'gather_stake_accounts.rb'
   end
 end
