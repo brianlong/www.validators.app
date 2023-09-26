@@ -6,14 +6,14 @@ class GatherExplorerStakeAccountsService
 
   BATCH_SIZE = 15_000
 
-  def initialize(network: "mainnet", config_urls:, current_epoch: nil, demo: true, stake_accounts: [])
+  def initialize(network: "mainnet", config_urls:, current_epoch: nil, demo: true, stake_accounts: [], logger: nil)
     @network = network
     @config_urls = config_urls
     @stake_accounts = stake_accounts
     @current_epoch = current_epoch || EpochWallClock.by_network(@network).first.epoch
     @demo = demo
     log_path = Rails.root.join("log", "#{self.class.name.demodulize.underscore}_#{@network}.log")
-    @logger ||= Logger.new(log_path)
+    @logger = logger || Logger.new(log_path)
   end
 
   def call
