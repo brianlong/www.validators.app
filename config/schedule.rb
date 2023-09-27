@@ -126,3 +126,10 @@ elsif environment == 'stage'
     ruby_script 'prune_database_tables.rb'
   end
 end
+
+# Production only
+if ENV['RAILS_ENV'] == "production"
+  every 2.hour, at: 35, roles: [:background] do
+    ruby_script 'gather_explorer_stake_accounts.rb'
+  end
+end
