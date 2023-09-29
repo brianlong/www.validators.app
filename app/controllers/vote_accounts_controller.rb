@@ -12,6 +12,15 @@ class VoteAccountsController < ApplicationController
                                            .where("created_at BETWEEN ? AND ?", time_from, time_to)
                                            .order(id: :desc)
                                            .limit(60)
+
+    @explorer_stake_accounts = ExplorerStakeAccount.where(
+      delegated_vote_account_address: @vote_account.account,
+      network: params[:network]
+    ).order(delegated_stake: :desc)
+
+    @explorer_stake_accounts_total = @explorer_stake_accounts.count
+
+    @explorer_stake_accounts = @explorer_stake_accounts.page(params[:page] || 1).per(params[:per_page] || 30)
   end
 
   private

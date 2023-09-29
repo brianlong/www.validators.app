@@ -1,0 +1,25 @@
+<table class='table table-block-sm mb-0'>
+  <thead>
+    <td>stake pubkey</td>
+    <td>
+      staker <br />
+      withdrawer
+    </td>
+    <td>delegated stake (SOL)</td>
+  </thead>
+  <tbody>
+    <% @explorer_stake_accounts.each do |e_stake_acc| %>
+      <tr>
+        <td><%= e_stake_acc.stake_pubkey %></td>
+        <td>
+          <%= e_stake_acc.staker %><br />
+          <%= e_stake_acc.withdrawer %>
+        </td>
+        <td><%= (stake = lamports_to_sol(e_stake_acc.delegated_stake).round(2)) == 0 ? " < 0.01" : stake %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="card-footer">
+  <%= paginate @explorer_stake_accounts %>
+</div>
