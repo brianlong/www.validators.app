@@ -35,6 +35,10 @@ module Gatherers
     rescue ActiveRecord::LockWaitTimeout => e
       sleep 5
       retry
+    rescue StandardError => e
+      Appsignal.send_error(e)
+      sleep 5
+      retry
     end
 
     private
