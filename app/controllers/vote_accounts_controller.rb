@@ -14,12 +14,14 @@ class VoteAccountsController < ApplicationController
                                            .limit(60)
 
     @explorer_stake_accounts = ExplorerStakeAccountQuery.new(
-      staker: "test_staker_2",
-      withdrawer: "test_withdrawer_2",
-      network: @network,
+      vote_account: params[:vote_account],
+      withdrawer: params[:withdrawer],
+      staker: params[:staker],
+      stake_pubkey: params[:stake_pubkey], 
+      network: params[:network]
     ).call(page: params[:page], per: params[:per_page])
 
-    @explorer_stake_accounts_total = @explorer_stake_accounts[:total_count]
+    @explorer_stake_accounts_total = @explorer_stake_accounts[:total_count].to_i
 
     @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
     @stake_accounts = StakeAccount.where(stake_pubkey: @explorer_stake_accounts.pluck(:stake_pubkey))
