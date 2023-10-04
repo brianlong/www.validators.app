@@ -40,3 +40,6 @@ ValidatorScoreV1.where("active_stake IS NULL and created_at < '#{sixty_days_ago}
                   # score.validator.vote_accounts
                   score.validator.destroy
                 end
+
+# remove old audit records (from explorer stake accounts)
+Audited::Audit.where("created_at < ?", sixty_days_ago).destroy_all
