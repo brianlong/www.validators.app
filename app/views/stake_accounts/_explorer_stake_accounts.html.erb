@@ -6,16 +6,35 @@
       withdrawer
     </td>
     <td>delegated stake (SOL)</td>
+    <td>stake pool</td>
   </thead>
   <tbody>
     <% @explorer_stake_accounts.each do |e_stake_acc| %>
       <tr>
         <td><%= e_stake_acc.stake_pubkey %></td>
         <td>
-          <%= e_stake_acc.staker %><br />
-          <%= e_stake_acc.withdrawer %>
+          <%= link_to \
+              e_stake_acc.staker, 
+              validator_vote_account_path(@validator.account, @vote_account.account, staker: e_stake_acc.staker) 
+          %><br />
+          <%= link_to \
+              e_stake_acc.withdrawer,
+              validator_vote_account_path(@validator.account, @vote_account.account, withdrawer: e_stake_acc.withdrawer)
+          %>
         </td>
-        <td><%= (stake = lamports_to_sol(e_stake_acc.delegated_stake).round(2)) == 0 ? " < 0.01" : stake %></td>
+        <td class="text-center">
+          <%= (stake = lamports_to_sol(e_stake_acc.delegated_stake).round(2)) == 0 ? " < 0.01" : stake %>
+        </td>
+        <td>
+          <% if stake_acc = @stake_accounts.find_by(stake_pubkey: e_stake_acc.stake_pubkey) %>
+            <% logo = stake_pool_logos([stake_acc.stake_pool.name])&.first %>
+            <%= image_tag(
+                  logo[:image],
+                  class: 'img-xs me-1',
+                  title: logo[:name] + " stake pool",
+                  alt: logo[:name])
+            %>
+          <% end %>
       </tr>
     <% end %>
   </tbody>
