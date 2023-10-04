@@ -1,0 +1,25 @@
+#frozen_string_literal: true
+
+class ExplorerStakeAccountQuery
+  def initialize(withdrawer: nil, staker: nil, vote_account: nil, stake_pubkey: nil, network: "mainnet")
+    @withdrawer = withdrawer
+    @staker = staker
+    @vote_account = vote_account
+    @stake_pubkey = stake_pubkey
+    @network = network
+  end
+
+  def call(page: 1, per: 20)
+    explorer_stake_accounts = ExplorerStakeAccount.where(network: @network)
+    explorer_stake_accounts = explorer_stake_accounts.where("withdrawer LIKE ?", @withdrawer) \
+      if @withdrawer.present?
+    explorer_stake_accounts = explorer_stake_accounts.where("staker LIKE ?", @staker) \
+      if @staker.present?
+    explorer_stake_accounts = explorer_stake_accounts.where("vote_account LIKE ?", @vote_account) \
+      if @vote_account.present?
+    explorer_stake_accounts = explorer_stake_accounts.where("stake_pubkey LIKE ?", @stake_pubkey) \
+      if @stake_pubkey.present?
+
+    explorer_stake_accounts.order(delegated_stake: :desc).page(page).per(per)
+  end
+end
