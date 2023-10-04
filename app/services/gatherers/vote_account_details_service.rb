@@ -61,7 +61,7 @@ module Gatherers
     def update_score(vacc)
       return unless vacc
 
-      score = vacc.validator.validator_score_v1
+      score = vacc.validator.score
       return unless score
 
       if vacc.validator_identity == vacc.authorized_withdrawer
