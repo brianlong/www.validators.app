@@ -15,11 +15,16 @@ class ExplorerStakeAccountQuery
       if @withdrawer.present?
     explorer_stake_accounts = explorer_stake_accounts.where("staker LIKE ?", @staker) \
       if @staker.present?
-    explorer_stake_accounts = explorer_stake_accounts.where("vote_account LIKE ?", @vote_account) \
+    explorer_stake_accounts = explorer_stake_accounts.where("delegated_vote_account_address LIKE ?", @vote_account) \
       if @vote_account.present?
     explorer_stake_accounts = explorer_stake_accounts.where("stake_pubkey LIKE ?", @stake_pubkey) \
       if @stake_pubkey.present?
-
-    explorer_stake_accounts.order(delegated_stake: :desc).page(page).per(per)
+    
+    total = explorer_stake_accounts.count
+    
+    {
+      explorer_stake_accounts: explorer_stake_accounts.order(delegated_stake: :desc).page(page).per(per),
+      total_count: total
+    }
   end
 end

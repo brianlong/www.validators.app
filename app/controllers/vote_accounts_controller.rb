@@ -13,21 +13,15 @@ class VoteAccountsController < ApplicationController
                                            .order(id: :desc)
                                            .limit(60)
 
-    @explorer_stake_accounts = ExplorerStakeAccount.where(
-      delegated_vote_account_address: @vote_account.account,
-      network: params[:network]
-    ).order(delegated_stake: :desc)
+    @explorer_stake_accounts = ExplorerStakeAccountQuery.new(
+      staker: "test_staker_2",
+      withdrawer: "test_withdrawer_2",
+      network: @network,
+    ).call(page: params[:page], per: params[:per_page])
 
-    @explorer_stake_accounts = @explorer_stake_accounts.where("withdrawer LIKE ?", params[:withdrawer]) \
-      if params[:withdrawer].present?
-    @explorer_stake_accounts = @explorer_stake_accounts.where("staker LIKE ?", params[:staker]) \
-      if params[:staker].present?
-    @explorer_stake_accounts = @explorer_stake_accounts.where("stake_pubkey LIKE ?", params[:stake_pubkey]) \
-      if params[:stake_pubkey].present?
+    @explorer_stake_accounts_total = @explorer_stake_accounts[:total_count]
 
-    @explorer_stake_accounts_total = @explorer_stake_accounts.count
-
-    @explorer_stake_accounts = @explorer_stake_accounts.page(params[:page] || 1).per(params[:per_page] || 30)
+    @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
     @stake_accounts = StakeAccount.where(stake_pubkey: @explorer_stake_accounts.pluck(:stake_pubkey))
 
   end
