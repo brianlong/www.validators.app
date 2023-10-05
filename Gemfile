@@ -87,6 +87,8 @@ gem 'solana_rpc_ruby'
 # Ruby client for CoinGecko
 gem 'coingecko_ruby'
 
+gem "audited", "~> 5.3.3"
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'bullet', '~> 7.0'
@@ -136,7 +138,7 @@ end
 # configure in production.
 #
 # User data encryption
-gem 'attr_encrypted', '>= 3.1.0'
+gem 'attr_encrypted', '>= 4.0'
 
 # Or use this for Vault. NOTE: Use this version of the gem until
 # https://github.com/hashicorp/vault-rails/pull/76 is merged:

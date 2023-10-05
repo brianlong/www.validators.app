@@ -9,3 +9,4 @@ development:
   - high_priority
   - default
   - low_priority
+  - lowest_priority
