@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_28_114457) do
+ActiveRecord::Schema.define(version: 2023_09_19_062249) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -63,6 +63,28 @@ ActiveRecord::Schema.define(version: 2023_06_28_114457) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["network"], name: "index_asn_stats_on_network"
+  end
+
+  create_table "audits", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "auditable_id"
+    t.string "auditable_type"
+    t.integer "associated_id"
+    t.string "associated_type"
+    t.integer "user_id"
+    t.string "user_type"
+    t.string "username"
+    t.string "action"
+    t.text "audited_changes"
+    t.integer "version", default: 0
+    t.string "comment"
+    t.string "remote_address"
+    t.string "request_uuid"
+    t.datetime "created_at"
+    t.index ["associated_type", "associated_id"], name: "associated_index"
+    t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index"
+    t.index ["created_at"], name: "index_audits_on_created_at"
+    t.index ["request_uuid"], name: "index_audits_on_request_uuid"
+    t.index ["user_id", "user_type"], name: "user_index"
   end
 
   create_table "batches", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -229,6 +251,31 @@ ActiveRecord::Schema.define(version: 2023_06_28_114457) do
     t.bigint "total_active_stake"
     t.index ["epoch"], name: "index_epoch_wall_clocks_on_epoch"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
+  end
+
+  create_table "explorer_stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "account_balance"
+    t.integer "activation_epoch"
+    t.bigint "active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.integer "deactivation_epoch"
+    t.bigint "delegated_stake"
+    t.string "delegated_vote_account_address"
+    t.bigint "rent_exempt_reserve"
+    t.string "stake_pubkey"
+    t.string "stake_type"
+    t.string "staker"
+    t.string "withdrawer"
+    t.string "network"
+    t.integer "epoch"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["delegated_vote_account_address", "network"], name: "index_explorer_stake_accounts_for_vote_account"
+    t.index ["epoch", "network"], name: "index_explorer_stake_accounts_on_epoch_and_network"
+    t.index ["stake_pubkey", "network"], name: "index_explorer_stake_accounts_on_stake_pubkey_and_network"
+    t.index ["staker", "network"], name: "index_explorer_stake_accounts_on_staker_and_network"
+    t.index ["withdrawer", "network"], name: "index_explorer_stake_accounts_on_withdrawer_and_network"
   end
 
   create_table "gossip_nodes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

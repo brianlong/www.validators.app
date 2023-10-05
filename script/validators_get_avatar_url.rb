@@ -35,7 +35,7 @@ NETWORKS.each do |network|
     # break # for development
     break if interrupted
   rescue StandardError => e
-    AppSignal.send_error(e)
+    Appsignal.send_error(e)
     next
   end
 end

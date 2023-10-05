@@ -87,6 +87,8 @@ gem 'solana_rpc_ruby'
 # Ruby client for CoinGecko
 gem 'coingecko_ruby'
 
+gem "audited", "~> 5.3.3"
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'bullet', '~> 6.1'
