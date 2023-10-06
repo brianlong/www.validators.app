@@ -10,7 +10,11 @@ class ExplorerStakeAccountQuery
   end
 
   def call(page: 1, per: 20)
-    explorer_stake_accounts = ExplorerStakeAccount.where(network: @network)
+    explorer_stake_accounts = ExplorerStakeAccount.where(
+      network: @network,
+      epoch: EpochWallClock.by_network(@network).first.epoch
+    )
+    
     explorer_stake_accounts = explorer_stake_accounts.where("withdrawer LIKE ?", @withdrawer) \
       if @withdrawer.present?
     explorer_stake_accounts = explorer_stake_accounts.where("staker LIKE ?", @staker) \

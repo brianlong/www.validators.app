@@ -14,12 +14,12 @@ class VoteAccountsController < ApplicationController
                                            .limit(60)
 
     @explorer_stake_accounts = ExplorerStakeAccountQuery.new(
-      vote_account: params[:vote_account],
-      withdrawer: params[:withdrawer],
-      staker: params[:staker],
-      stake_pubkey: params[:stake_pubkey], 
-      network: params[:network]
-    ).call(page: params[:page], per: params[:per_page])
+      vote_account: va_params[:vote_account],
+      withdrawer: va_params[:withdrawer],
+      staker: va_params[:staker],
+      stake_pubkey: va_params[:stake_pubkey], 
+      network: va_params[:network]
+    ).call(page: va_params[:page], per: va_params[:per_page])
 
     @explorer_stake_accounts_total = @explorer_stake_accounts[:total_count].to_i
 
@@ -33,8 +33,8 @@ class VoteAccountsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_vote_account
     @vote_account = VoteAccount.where(
-      network: params[:network],
-      account: params[:vote_account],
+      network: va_params[:network],
+      account: va_params[:vote_account],
       validator_id: @validator&.id
     ).last
 
@@ -42,6 +42,10 @@ class VoteAccountsController < ApplicationController
   end
 
   def set_validator
-    @validator = Validator.find_by(network: params[:network], account: params[:account])
+    @validator = Validator.find_by(network: va_params[:network], account: va_params[:account])
+  end
+
+  def va_params
+    params.permit(:vote_account, :account, :network, :per, :page, :withdrawer, :staker, :stake_pubkey)
   end
 end
