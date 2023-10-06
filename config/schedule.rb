@@ -40,33 +40,36 @@ job_type :ruby_script_data_centers,
 
 every 1.hour, at: 0, roles: [:background] do
   runner "AsnLogicWorker.perform_async('network' => 'mainnet')"
+end
+
+every 1.hour, at: 5, roles: [:background] do
   runner "AsnLogicWorker.perform_async('network' => 'testnet')"
   runner "AsnLogicWorker.perform_async('network' => 'pythnet')"
   ruby_script_data_centers "check_hetzner_admin_warning.rb"
 end
 
-every 1.hour, at: 5, roles: [:background] do
+every 1.hour, at: 10, roles: [:background] do
   ruby_script 'validators_get_info.rb'
   ruby_script 'validators_get_avatar_url.rb'
 end
 
-every 2.hour, at: 10, roles: [:background] do
+every 2.hour, at: 15, roles: [:background] do
   ruby_script 'gather_stake_accounts.rb'
 end
 
-every 1.hour, at: 20, roles: [:background] do
+every 1.hour, at: 30, roles: [:background] do
   ruby_script_data_centers 'append_data_centers_geo_data.rb'
 end
 
-every 1.hour, at: 25, roles: [:background] do
+every 1.hour, at: 35, roles: [:background] do
   ruby_script_data_centers 'assign_data_center_scores.rb'
 end
 
-every 1.hour, at: 30, roles: [:background] do
+every 1.hour, at: 40, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_hetzner.rb'
 end
 
-every 1.hour, at: 40, roles: [:background] do
+every 1.hour, at: 45, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_ovh.rb'
 end
 
@@ -105,7 +108,7 @@ every 1.day, at: '3:40am', roles: [:background] do
   ruby_script 'update_validator_stake_pools_list.rb'
 end
 
-every 10.minutes, roles: [:background] do
+every 20.minutes, roles: [:background] do
   runner "ValidatorCheckActiveWorker.perform_async"
 end
 
