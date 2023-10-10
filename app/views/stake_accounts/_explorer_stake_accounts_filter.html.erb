@@ -22,11 +22,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <% if @validator %>
-          <%= link_to "reset filters", validator_vote_account_path(@validator.account, @vote_account.account), class: "mt-1 btn btn-sm btn-tertiary float-end" %>
-        <% else %>
-          <%= link_to "reset filters", explorer_url, class: "mt-1 btn btn-sm btn-tertiary float-end" %>
-        <% end %>
+        <%= link_to "reset filters", url_for(account: @validator&.account, vote_account: @vote_account&.account), class: "mt-1 btn btn-sm btn-tertiary float-end" %>
         <%= f.submit "apply", class: "mt-1 btn btn-sm btn-primary float-end me-2" %>
       </div>
     </div>

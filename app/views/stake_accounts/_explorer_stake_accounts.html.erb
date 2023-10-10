@@ -39,12 +39,14 @@
         <td>
           <% if stake_acc = @stake_accounts.find_by(stake_pubkey: e_stake_acc.stake_pubkey) %>
             <% logo = stake_pool_logos([stake_acc.stake_pool.name])&.first %>
-            <%= image_tag(
-                  logo[:image],
-                  class: 'img-xs me-1',
-                  title: logo[:name] + " stake pool",
-                  alt: logo[:name])
-            %>
+            <%= link_to stake_pools_path, data: { turbolinks: false } do%>
+              <%= image_tag(
+                    logo[:image],
+                    class: 'img-xs me-1',
+                    title: logo[:name] + " stake pool",
+                    alt: logo[:name])
+              %>
+            <% end %>
           <% end %>
       </tr>
     <% end %>
