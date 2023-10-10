@@ -1,0 +1,16 @@
+<section class="page-header">
+  <h1>
+    <%= params[:network].capitalize %> Stake Accounts
+  </h1>
+</section>
+<div class="card">
+  <div class="card-content pb-0">
+    <%= render "stake_accounts/explorer_stake_accounts_filter", explorer_url: explorer_stake_accounts_path %>
+
+    <% if @explorer_stake_accounts %>
+      <%= render "stake_accounts/explorer_stake_accounts" %>
+    <% else %>
+      <h2 class="text-center"> Apply correct filters above for stake accounts. </h2>
+    <% end %>
+  </div>
+</div>

@@ -15,12 +15,23 @@
         <td>
           <%= link_to \
               e_stake_acc.staker, 
-              validator_vote_account_path(@validator.account, @vote_account.account, staker: e_stake_acc.staker) 
-          %><br />
+              url_for(account: @validator&.account, vote_account: @vote_account&.account, staker: e_stake_acc.staker) 
+          %>
+          <% if @validator %>
+            <%= link_to explorer_stake_accounts_path(staker: e_stake_acc.staker) do %>
+              <i class="fa-solid fa-up-right-from-square small ms-2"></i>
+            <% end %>
+          <% end %>
+          <br />
           <%= link_to \
               e_stake_acc.withdrawer,
-              validator_vote_account_path(@validator.account, @vote_account.account, withdrawer: e_stake_acc.withdrawer)
+              url_for(account: @validator&.account, vote_account: @vote_account&.account, withdrawer: e_stake_acc.withdrawer)
           %>
+          <% if @validator %>
+            <%= link_to explorer_stake_accounts_path(withdrawer: e_stake_acc.withdrawer) do %>
+              <i class="fa-solid fa-up-right-from-square small ms-2"></i>
+            <% end %>
+          <% end %>
         </td>
         <td class="text-center">
           <%= (stake = lamports_to_sol(e_stake_acc.delegated_stake).round(2)) == 0 ? " < 0.01" : stake %>

@@ -25,7 +25,6 @@ class VoteAccountsController < ApplicationController
 
     @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
     @stake_accounts = StakeAccount.where(stake_pubkey: @explorer_stake_accounts.pluck(:stake_pubkey))
-
   end
 
   private

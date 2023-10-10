@@ -108,6 +108,8 @@ Rails.application.routes.draw do
       to: 'public#authorities_changes',
       as: 'authorities_changes'
 
+  get 'explorer_stake_accounts/index', as: 'explorer_stake_accounts'
+
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
