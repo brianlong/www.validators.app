@@ -185,6 +185,8 @@ Rails.application.routes.draw do
       get "data-center-stats/:network", to: "data_centers#data_center_stats", as: "data_center_stats"
 
       get "account-authorities/:network", to: "account_authority#index", as: "account_authorities"
+
+      get "explorer-stake-accounts/:network", to: "explorer_stake_accounts#index", as: "explorer_stake_accounts"
     end
   end
 end
