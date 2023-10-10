@@ -5,6 +5,7 @@ require "test_helper"
 class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
   setup do
     @network = "mainnet"
+    @epoch = create(:epoch_wall_clock, network: @network)
     5.times do |i|
       create(:explorer_stake_account,
         network: @network,
@@ -12,6 +13,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
         staker: "test_staker_#{i}",
         withdrawer: "test_withdrawer_#{i}",
         delegated_vote_account_address: "test_delegated_vote_account_address_#{i}",
+        epoch: @epoch.epoch
       )
     end
   end
@@ -63,6 +65,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       staker: "test_staker_2",
       withdrawer: "test_withdrawer_2",
       delegated_vote_account_address: "test_delegated_vote_account_address_6",
+      epoch: @epoch.epoch
     )
 
     explorer_stake_accounts = ExplorerStakeAccountQuery.new(
