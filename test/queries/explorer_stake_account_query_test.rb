@@ -58,7 +58,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal 1, explorer_stake_account.count
   end
 
-  test "ExplorerStakeAccountQueryTest returns multiple correct records multiple attributes" do
+  test "ExplorerStakeAccountQueryTest returns multiple correct records given multiple attributes" do
     create(
       :explorer_stake_account,
       network: @network,

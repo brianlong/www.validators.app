@@ -13,7 +13,7 @@
     <div class="row mb-3">
       <div class="mb-3 col-md-6 col-sm-12">
         <%= f.label :vote_account, class: "form-label" %>
-        <%= f.text_field :vote_account, class: "form-control", value: @vote_account&.account, disabled: !@validator.nil? %>
+        <%= f.text_field :vote_account, class: "form-control", value: @vote_account&.account || params[:vote_account], disabled: @validator.present? %>
       </div>
       <div class="mb-2 col-md-6 col-sm-12">
         <%= f.label :stake_pubkey, class: "form-label" %>
