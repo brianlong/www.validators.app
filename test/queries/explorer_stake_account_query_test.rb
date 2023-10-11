@@ -44,7 +44,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_account.first.withdrawer, "test_withdrawer_3"
+    assert_equal "test_withdrawer_3", explorer_stake_account.first.withdrawer
     assert_equal 1, explorer_stake_account.count
   end
 
