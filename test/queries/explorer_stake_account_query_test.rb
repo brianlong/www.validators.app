@@ -24,7 +24,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_account.first.stake_pubkey, "test_stake_pubkey_1"
+    assert_equal "test_stake_pubkey_1", explorer_stake_account.first.stake_pubkey
     assert_equal 1, explorer_stake_account.count
   end
 
@@ -34,7 +34,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_account.first.staker, "test_staker_2"
+    assert_equal "test_staker_2", explorer_stake_account.first.staker
     assert_equal 1, explorer_stake_account.count
   end
 
@@ -44,7 +44,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_account.first.withdrawer, "test_withdrawer_3"
+    assert_equal "test_withdrawer_3", explorer_stake_account.first.withdrawer
     assert_equal 1, explorer_stake_account.count
   end
 
@@ -54,7 +54,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_account.first.delegated_vote_account_address, "test_delegated_vote_account_address_4"
+    assert_equal "test_delegated_vote_account_address_4", explorer_stake_account.first.delegated_vote_account_address
     assert_equal 1, explorer_stake_account.count
   end
 
@@ -74,8 +74,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_accounts.pluck(:delegated_vote_account_address), \
-      ["test_delegated_vote_account_address_2", "test_delegated_vote_account_address_6"]
+    assert_equal ["test_delegated_vote_account_address_2", "test_delegated_vote_account_address_6"], /explorer_stake_accounts.pluck(:delegated_vote_account_address)
     assert_equal 2, explorer_stake_accounts.count
   end
 end
