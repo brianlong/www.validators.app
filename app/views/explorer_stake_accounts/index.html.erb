@@ -10,6 +10,10 @@
 
   <% if @explorer_stake_accounts&.count.to_i > 0 %>
     <%= render "stake_accounts/explorer_stake_accounts" %>
+  <% elsif params[:withdrawer] || params[:staker] || params[:vote_account] || params[:stake_pubkey] %>
+    <div class="card-footer pt-0 text-center lead">
+      No results for given criteria.
+    </div>
   <% else %>
     <div class="card-footer pt-0 text-center lead">
       Use the filters above to see Stake Accounts.

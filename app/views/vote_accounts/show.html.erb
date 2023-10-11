@@ -41,7 +41,9 @@
   </table>
 </div>
 
-<%= render "stake_accounts" %>
+<% if params[:network] == "mainnet" %>
+  <%= render "stake_accounts" %>
+<% end %>
 
 <div id="authority-histories" vote_account="<%= @vote_account.account %>"></div>
 
