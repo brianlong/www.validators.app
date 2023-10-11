@@ -22,9 +22,8 @@
             <% end %>
           <% end %>
           <br />
-          <%= link_to \
-              e_stake_acc.withdrawer,
-              url_for(account: @validator&.account, vote_account: @vote_account&.account, withdrawer: e_stake_acc.withdrawer)
+          <%= link_to e_stake_acc.withdrawer,
+                      url_for(account: @validator&.account, vote_account: @vote_account&.account, withdrawer: e_stake_acc.withdrawer)
           %>
           <% if @validator %>
             <%= link_to explorer_stake_accounts_path(withdrawer: e_stake_acc.withdrawer) do %>
