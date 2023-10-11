@@ -24,7 +24,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_account.first.stake_pubkey, "test_stake_pubkey_1"
+    assert_equal "test_stake_pubkey_1", explorer_stake_account.first.stake_pubkey
     assert_equal 1, explorer_stake_account.count
   end
 
