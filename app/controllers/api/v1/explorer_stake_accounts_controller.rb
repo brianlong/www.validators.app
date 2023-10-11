@@ -3,15 +3,12 @@
 module Api
   module V1
     class ExplorerStakeAccountsController < BaseController
+      include StakeAccountsControllerHelper
+      
       before_action :ensure_params
 
       def index
-        @explorer_stake_accounts = ExplorerStakeAccountQuery.new(
-          withdrawer: explorer_params[:withdrawer],
-          staker: explorer_params[:staker],
-          vote_account: explorer_params[:vote_account],
-          stake_pubkey: explorer_params[:stake_pubkey]
-        ).call(per: explorer_params[:per] || 100, page: explorer_params[:page])
+        @explorer_stake_accounts = get_explorer_stake_accounts(params: explorer_params)[0]
         
         render json: @explorer_stake_accounts
       end
