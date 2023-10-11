@@ -11,6 +11,8 @@
   <% if @explorer_stake_accounts&.count.to_i > 0 %>
     <%= render "stake_accounts/explorer_stake_accounts" %>
   <% else %>
-    <p class="text-center h3 mb-4"> Apply correct filters above for stake accounts. </p>
+    <div class="card-footer pt-0 text-center">
+      <p class="lead">Use the filters above to see Stake Accounts.</p>
+    </div>
   <% end %>
 </div>

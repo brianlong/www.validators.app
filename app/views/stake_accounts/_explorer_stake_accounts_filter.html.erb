@@ -1,30 +1,28 @@
 <div class="col-12 mb-4">
   <%= form_with(validator: @validator, vote_account: @vote_account, method: :get) do |f| %>
-    <div class="row mb-3">
-      <div class="col-md-6 col-sm-12">
+    <div class="row">
+      <div class="col-md-6 mb-3">
         <%= f.label :withdrawer, class: "form-label" %>
         <%= f.text_field :withdrawer, class: "form-control", value: params[:withdrawer] %>
       </div>
-      <div class="col-md-6 col-sm-12">
+      <div class="col-md-6 mb-3">
         <%= f.label :staker, class: "form-label" %>
         <%= f.text_field :staker, class: "form-control", value: params[:staker] %>
       </div>
     </div>
-    <div class="row mb-3">
-      <div class="mb-3 col-md-6 col-sm-12">
-        <%= f.label :vote_account, class: "form-label" %>
+    <div class="row mb-1">
+      <div class="col-md-6 mb-3">
+        <%= f.label :vote_account, "Vote Account", class: "form-label" %>
         <%= f.text_field :vote_account, class: "form-control", value: @vote_account&.account || params[:vote_account], disabled: @validator.present? %>
       </div>
-      <div class="mb-2 col-md-6 col-sm-12">
-        <%= f.label :stake_pubkey, class: "form-label" %>
+      <div class="col-md-6 mb-3">
+        <%= f.label :stake_pubkey, "Stake Pubkey", class: "form-label" %>
         <%= f.text_field :stake_pubkey, class: "form-control", value: params[:stake_pubkey] %>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <%= link_to "reset filters", url_for(account: @validator&.account, vote_account: @vote_account&.account), class: "mt-1 btn btn-sm btn-tertiary float-end" %>
-        <%= f.submit "apply", class: "mt-1 btn btn-sm btn-primary float-end me-2" %>
-      </div>
+    <div class="d-flex flex-wrap justify-content-between gap-3">
+      <%= f.submit "Apply", class: "btn btn-sm btn-primary mt-0" %>
+      <%= link_to "Reset filters", url_for(account: @validator&.account, vote_account: @vote_account&.account), class: "btn btn-sm btn-tertiary" %>
     </div>
   <% end %>
 </div>
