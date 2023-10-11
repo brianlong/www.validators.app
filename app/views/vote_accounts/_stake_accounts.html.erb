@@ -2,6 +2,10 @@
   <div class="card-content pb-0">
     <h2 class="h2 card-heading">Stake Accounts</h2>
     <%= render "stake_accounts/explorer_stake_accounts_filter" %>
-    <%= render "stake_accounts/explorer_stake_accounts"%>
+    <% if @explorer_stake_accounts&.count.to_i > 0 %>
+      <%= render "stake_accounts/explorer_stake_accounts" %>
+    <% else %>
+      <p class="text-center h3 mb-4"> No results match given criteria. </p>
+    <% end %>
   </div>
 </div>
