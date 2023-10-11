@@ -54,7 +54,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_account.first.delegated_vote_account_address, "test_delegated_vote_account_address_4"
+    assert_equal "test_delegated_vote_account_address_4", explorer_stake_account.first.delegated_vote_account_address
     assert_equal 1, explorer_stake_account.count
   end
 
