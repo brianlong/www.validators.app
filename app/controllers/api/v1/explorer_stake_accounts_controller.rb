@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 module Api
   module V1
@@ -10,7 +10,7 @@ module Api
           vote_account: explorer_params[:vote_account],
           stake_pubkey: explorer_params[:stake_pubkey]
         ).call(per: explorer_params[:per], page: explorer_params[:page])
-        
+
         render json: @explorer_stake_accounts
       end
 
