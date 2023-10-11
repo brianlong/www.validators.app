@@ -4,13 +4,13 @@
   </h1>
 </section>
 <div class="card">
-  <div class="card-content pb-0">
+  <div class="card-content">
     <%= render "stake_accounts/explorer_stake_accounts_filter" %>
-
-    <% if @explorer_stake_accounts&.count.to_i > 0 %>
-      <%= render "stake_accounts/explorer_stake_accounts" %>
-    <% else %>
-      <p class="text-center h3 mb-4"> Apply correct filters above for stake accounts. </p>
-    <% end %>
   </div>
+
+  <% if @explorer_stake_accounts&.count.to_i > 0 %>
+    <%= render "stake_accounts/explorer_stake_accounts" %>
+  <% else %>
+    <p class="text-center h3 mb-4"> Apply correct filters above for stake accounts. </p>
+  <% end %>
 </div>

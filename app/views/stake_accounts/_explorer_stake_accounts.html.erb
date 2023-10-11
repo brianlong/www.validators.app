@@ -1,56 +1,62 @@
-<table class='table table-block-sm mb-0'>
-  <thead>
-    <td>stake pubkey</td>
-    <td>
-      staker <br />
-      withdrawer
-    </td>
-    <td>delegated stake (SOL)</td>
-    <td>stake pool</td>
-  </thead>
-  <tbody>
-    <% @explorer_stake_accounts.each do |e_stake_acc| %>
+<div class="table-responsive-lg">
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= e_stake_acc.stake_pubkey %></td>
-        <td>
-          <%= link_to e_stake_acc.staker, 
-                      url_for(account: @validator&.account, vote_account: @vote_account&.account, staker: e_stake_acc.staker) 
-          %>
-          <% if @validator %>
-            <%= link_to explorer_stake_accounts_path(staker: e_stake_acc.staker) do %>
-              <i class="fa-solid fa-up-right-from-square small ms-2"></i>
-            <% end %>
-          <% end %>
-          <br />
-          <%= link_to e_stake_acc.withdrawer,
-                      url_for(account: @validator&.account, vote_account: @vote_account&.account, withdrawer: e_stake_acc.withdrawer)
-          %>
-          <% if @validator %>
-            <%= link_to explorer_stake_accounts_path(withdrawer: e_stake_acc.withdrawer) do %>
-              <i class="fa-solid fa-up-right-from-square small ms-2"></i>
-            <% end %>
-          <% end %>
-        </td>
-        <td class="text-center">
-          <%stake = e_stake_acc.delegated_stake ? lamports_to_sol(e_stake_acc.delegated_stake).round(2) : 0 %>
-          <%= stake == 0 ? " < 0.01" : stake %>
-        </td>
-        <td>
-          <% if stake_acc = @stake_accounts.find_by(stake_pubkey: e_stake_acc.stake_pubkey) %>
-            <% logo = stake_pool_logos([stake_acc.stake_pool.name])&.first %>
-            <%= link_to stake_pools_path, data: { turbolinks: false } do%>
-              <%= image_tag(
-                    logo[:image],
-                    class: 'img-xs me-1',
-                    title: logo[:name] + " stake pool",
-                    alt: logo[:name])
-              %>
-            <% end %>
-          <% end %>
+        <th class="column-xxl">Stake Pubkey</th>
+        <th class="column-xxl">Staker &amp;&nbsp;Withdrawer</th>
+        <th class="column-md">Delegated Stake</th>
+        <th class="column-sm text-center px-0">Pool</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @explorer_stake_accounts.each do |e_stake_acc| %>
+        <tr>
+          <td class="small"><%= e_stake_acc.stake_pubkey %></td>
+          <td class="small">
+            <%= link_to e_stake_acc.staker,
+                        url_for(account: @validator&.account, vote_account: @vote_account&.account, staker: e_stake_acc.staker)
+            %>
+            <% if @validator %>
+              <%= link_to explorer_stake_accounts_path(staker: e_stake_acc.staker) do %>
+                <i class="fa-solid fa-up-right-from-square small ms-2"></i>
+              <% end %>
+            <% end %>
+            <br />
+            <%= link_to e_stake_acc.withdrawer,
+                        url_for(account: @validator&.account, vote_account: @vote_account&.account, withdrawer: e_stake_acc.withdrawer)
+            %>
+            <% if @validator %>
+              <%= link_to explorer_stake_accounts_path(withdrawer: e_stake_acc.withdrawer) do %>
+                <i class="fa-solid fa-up-right-from-square small ms-2"></i>
+              <% end %>
+            <% end %>
+          </td>
+          <td>
+            <% stake = e_stake_acc.delegated_stake ? lamports_to_sol(e_stake_acc.delegated_stake) : 0 %>
+            <% if stake < 0.01 %>
+              <0.01&nbsp;SOL
+            <% else %>
+              <%= number_with_delimiter stake.round(2) %>&nbsp;SOL
+            <% end %>
+          </td>
+          <td class="text-center">
+            <% if stake_acc = @stake_accounts.find_by(stake_pubkey: e_stake_acc.stake_pubkey) %>
+              <% logo = stake_pool_logos([stake_acc.stake_pool.name])&.first %>
+              <%= link_to stake_pools_path, data: { turbolinks: false } do%>
+                <%= image_tag(logo[:image],
+                              class: 'img-xs',
+                              title: logo[:name] + " stake pool",
+                              alt: logo[:name])
+                %>
+              <% end %>
+            <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
 <div class="card-footer">
   <%= paginate @explorer_stake_accounts %>
 </div>
