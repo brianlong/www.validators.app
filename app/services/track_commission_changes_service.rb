@@ -27,7 +27,8 @@ class TrackCommissionChangesService
       result = get_inflation_rewards(accounts)
 
       va_batch.each_with_index do |va, idx|  
-        next unless result[idx] # some accounts have no inflation reward e. g. if it was inactive
+        # some accounts have no inflation reward e. g. if it was inactive
+        next unless result[idx] && result[idx]["epoch"].present?
   
         # check if commission from db matches commission from get_inflation_reward
         if va.validator.commission != result[idx]["commission"].to_f
