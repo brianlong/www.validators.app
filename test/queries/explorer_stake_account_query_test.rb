@@ -34,7 +34,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_account.first.staker, "test_staker_2"
+    assert_equal "test_staker_2", explorer_stake_account.first.staker
     assert_equal 1, explorer_stake_account.count
   end
 
