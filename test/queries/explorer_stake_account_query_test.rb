@@ -58,7 +58,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal 1, explorer_stake_account.count
   end
 
-  test "ExplorerStakeAccountQueryTest returns multiple correct records multiple attributes" do
+  test "ExplorerStakeAccountQueryTest returns multiple correct records given multiple attributes" do
     create(
       :explorer_stake_account,
       network: @network,
@@ -74,7 +74,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal ["test_delegated_vote_account_address_2", "test_delegated_vote_account_address_6"], /explorer_stake_accounts.pluck(:delegated_vote_account_address)
+    assert_equal ["test_delegated_vote_account_address_2", "test_delegated_vote_account_address_6"], explorer_stake_accounts.pluck(:delegated_vote_account_address)
     assert_equal 2, explorer_stake_accounts.count
   end
 end
