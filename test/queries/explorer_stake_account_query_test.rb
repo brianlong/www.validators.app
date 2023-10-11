@@ -74,8 +74,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
       network: @network
     ).call[:explorer_stake_accounts]
 
-    assert_equal explorer_stake_accounts.pluck(:delegated_vote_account_address), \
-      ["test_delegated_vote_account_address_2", "test_delegated_vote_account_address_6"]
+    assert_equal ["test_delegated_vote_account_address_2", "test_delegated_vote_account_address_6"], /explorer_stake_accounts.pluck(:delegated_vote_account_address)
     assert_equal 2, explorer_stake_accounts.count
   end
 end
