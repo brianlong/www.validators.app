@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class VoteAccountsController < ApplicationController
+  include StakeAccountsControllerHelper
+
   before_action :set_validator, only: %i[show]
   before_action :set_vote_account, only: %i[show]
 
@@ -13,18 +15,9 @@ class VoteAccountsController < ApplicationController
                                            .order(id: :desc)
                                            .limit(60)
 
-    @explorer_stake_accounts = ExplorerStakeAccountQuery.new(
-      vote_account: va_params[:vote_account],
-      withdrawer: va_params[:withdrawer],
-      staker: va_params[:staker],
-      stake_pubkey: va_params[:stake_pubkey], 
-      network: va_params[:network]
-    ).call(page: va_params[:page], per: va_params[:per_page])
-
-    @explorer_stake_accounts_total = @explorer_stake_accounts[:total_count].to_i
-
+    @explorer_stake_accounts, @stake_accounts = get_explorer_stake_accounts(params: va_params)
+    @explorer_stake_accounts_total = @explorer_stake_accounts[:total_count]
     @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
-    @stake_accounts = StakeAccount.where(stake_pubkey: @explorer_stake_accounts.pluck(:stake_pubkey))
   end
 
   private
