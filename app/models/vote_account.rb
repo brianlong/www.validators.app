@@ -35,7 +35,7 @@ class VoteAccount < ApplicationRecord
 
   belongs_to :validator
   has_many :vote_account_histories
-  has_many :account_authority_histories
+  has_many :account_authority_histories, dependent: :destroy
   before_save :set_network
   after_save do
     if saved_change_to_authorized_withdrawer? || authorized_voters_value_changed?
