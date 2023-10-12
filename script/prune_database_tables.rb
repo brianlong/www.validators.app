@@ -19,7 +19,7 @@ ValidatorScoreV1.where("active_stake = 0 and created_at < '#{sixty_days_ago}'")
                 .each do |score|
                   puts "#{score.validator.account} (#{score.network})" \
                     if verbose
-                  if score.validator.vote_account_histories.count > 0
+                  if score.validator&.vote_account_histories.count > 0
                     puts "  Skipping due to non-empty vote_account_histories"
                     next
                   end
@@ -32,7 +32,7 @@ ValidatorScoreV1.where("active_stake IS NULL and created_at < '#{sixty_days_ago}
                 .each do |score|
                   puts "#{score.validator.account} (#{score.network})" \
                     if verbose
-                  if score.validator.vote_account_histories.count > 0
+                  if score.validator&.vote_account_histories.count > 0
                     puts "  Skipping due to non-empty vote_account_histories"
                     next
                   end
