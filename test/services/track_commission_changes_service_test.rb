@@ -117,4 +117,19 @@ class TrackCommissionChangesServiceTest < ActiveSupport::TestCase
 
     end
   end
+
+  test "#call does not create new commission_histories when there is no epoch from solana" do
+    vcr_cassette(@namespace, self.class.name.underscore + "_no_epoch") do
+      assert_equal CommissionHistory.count, 0
+
+      TrackCommissionChangesService.new(
+        current_batch: @current_batch,
+        network: @network,
+        solana_url: [@solana_url]
+      ).call
+
+      assert_equal CommissionHistory.count, 0
+
+    end
+  end
 end
