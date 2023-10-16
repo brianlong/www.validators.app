@@ -13,6 +13,18 @@ class ExplorerStakeAccountsController < ApplicationController
    end
   end
 
+  def show  
+    @explorer_stake_account = ExplorerStakeAccount.find_by(
+      stake_pubkey: params[:stake_pubkey],
+      network: params[:network]
+    )
+    @stake_account = StakeAccount.find_by(stake_pubkey: params[:stake_pubkey])
+    @vote_account = VoteAccount.find_by(
+      account: @explorer_stake_account.delegated_vote_account_address,
+      network:params[:network]
+    )
+  end
+
   private
 
   def index_params
