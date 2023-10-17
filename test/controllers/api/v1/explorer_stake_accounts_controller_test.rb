@@ -47,4 +47,15 @@ class ExplorerStakeAccountsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal expected_response, resp
   end
+
+  test "request csv with token should succeed" do
+    get api_v1_explorer_stake_accounts_path(
+      network: @network
+    ) + ".csv?staker=test_staker_1", headers: @headers
+    
+    assert_response :success
+    assert_equal "text/csv", response.content_type
+    csv = CSV.parse response.body # Let raise if invalid CSV
+    assert csv
+  end
 end

@@ -10,7 +10,17 @@ module Api
       def index
         @explorer_stake_accounts = get_explorer_stake_accounts(params: explorer_params)[0]
         
-        render json: @explorer_stake_accounts
+        respond_to do |format|
+          format.json do
+            render json: @explorer_stake_accounts
+          end
+          format.csv do
+            @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
+            send_data convert_to_csv(@explorer_stake_accounts.first.attributes.keys, @explorer_stake_accounts.as_json),
+                      filename: "stake-accounts-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
+          end
+        end
+        
       end
 
       private
