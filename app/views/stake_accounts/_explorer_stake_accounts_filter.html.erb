@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="d-flex flex-wrap justify-content-between gap-3">
-      <%= f.submit "Apply", class: "btn btn-sm btn-primary mt-0" %>
+      <%= f.submit "Apply", class: "btn btn-sm btn-primary mt-0", style: "min-width: 90px;" %>
       <%= link_to "Reset filters",
                   url_for(account: @validator&.account, vote_account: @vote_account&.account),
                   class: "btn btn-sm btn-tertiary" %>
