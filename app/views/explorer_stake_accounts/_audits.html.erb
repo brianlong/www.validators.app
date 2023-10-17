@@ -1,43 +1,45 @@
 <div class="col-md-12 mb-4">
-  <div class="card mb-4 h-100">
-    <div class="card-heading">
-      <h2 class="h3 mt-3">Account History</h2>
+  <div class="card">
+    <div class="card-content pb-0">
+      <h2 class="h4 card-heading">Recent Changes</h2>
     </div>
-      <div class="table-responsive-xl">
-        <table class='table mb-0'>
-          <thead>
-            <tr>
-              <th>epoch</th>
-              <th>Rent Exempt Reserve <small class="text-muted">(difference)</small></th>
-              <th>account balance <small class="text-muted">(difference)</small></th>
-              <th>delegated stake <small class="text-muted">(difference)</small></th>
-              <th>active stake <small class="text-muted">(difference)</small></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @explorer_stake_account.audits.order(created_at: :asc).pluck(:audited_changes).reverse.each do |audit| %>
-              <tr>
-                <td><%= [audit["epoch"]].flatten.last %></td>
-                <td>
-                  <%= lamports_to_sol([audit["rent_exempt_reserve"]].flatten.last.to_i).round(5) %>
-                  <%= display_sol_difference(audit["rent_exempt_reserve"], 5)%>
-                </td>
-                <td>
-                  <%= lamports_to_sol([audit["account_balance"]].flatten.last.to_i).round(2) %>
-                  <%= display_sol_difference(audit["account_balance"])%>
-                </td>
-                <td>
-                  <%= lamports_to_sol([audit["delegated_stake"]].flatten.last.to_i).round(2) %>
-                  <%= display_sol_difference(audit["delegated_stake"])%>
-                </td>
-                <td>
-                  <%= lamports_to_sol([audit["active_stake"]].flatten.last.to_i).round(2) %>
-                  <%= display_sol_difference(audit["active_stake"])%>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+
+    <div class="table-responsive-lg">
+      <table class='table small mb-0'>
+        <thead>
+        <tr>
+          <th class="column-sm">Epoch</th>
+          <th class="column-md">Rent Exempt Reserve <small class="text-muted">(difference)</small></th>
+          <th class="column-md">Account balance <small class="text-muted">(difference)</small></th>
+          <th class="column-md">Delegated stake <small class="text-muted">(difference)</small></th>
+          <th class="column-md">Active stake <small class="text-muted">(difference)</small></th>
+          <!--<th class="column-md">Timestamp</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <% @explorer_stake_account.audits.order(created_at: :asc).pluck(:audited_changes).reverse.each do |audit| %>
+          <tr>
+            <td><%= [audit["epoch"]].flatten.last %></td>
+            <td>
+              <%= lamports_to_sol([audit["rent_exempt_reserve"]].flatten.last.to_i).round(5) %>
+              <%= display_sol_difference(audit["rent_exempt_reserve"], 5)%>
+            </td>
+            <td>
+              <%= lamports_to_sol([audit["account_balance"]].flatten.last.to_i).round(2) %>
+              <%= display_sol_difference(audit["account_balance"])%>
+            </td>
+            <td>
+              <%= lamports_to_sol([audit["delegated_stake"]].flatten.last.to_i).round(2) %>
+              <%= display_sol_difference(audit["delegated_stake"])%>
+            </td>
+            <td>
+              <%= lamports_to_sol([audit["active_stake"]].flatten.last.to_i).round(2) %>
+              <%= display_sol_difference(audit["active_stake"])%>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
