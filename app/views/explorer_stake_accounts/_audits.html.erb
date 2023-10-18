@@ -1,51 +1,49 @@
-<div class="col-md-12 mb-4">
-  <div class="card">
-    <div class="card-content pb-0">
-      <h2 class="h4 card-heading">Recent Changes</h2>
-    </div>
-      <div class="table-responsive-xl">
-        <table class='table mb-0'>
-          <thead>
-            <tr class="text-center">
-              <th>
-                Account Balance
-                <br />
-                Delegated Stake
-              </th>
-              <th>
-                Active Stake
-                <br />
-                Deactivating Stake
-              </th>
-              <th>Rent Exempt Reserve</th>
-              <th>Credits Observed</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @audits.reverse.each do |audit| %>
-              <tr class="text-center">
-                <td>
-                  <%= display_sol_difference(audit.audited_changes["account_balance"])%>
-                  <br />
-                  <%= display_sol_difference(audit.audited_changes["delegated_stake"])%>
-                </td>
-                <td>
-                  <%= display_sol_difference(audit.audited_changes["active_stake"])%>
-                  <br />
-                  <%= display_sol_difference(audit.audited_changes["deactivating_stake"])%>
-                </td>
-                <td>
-                  <%= display_sol_difference(audit.audited_changes["rent_exempt_reserve"]) %>
-                </td>
-                <td>
-                  <%= display_sol_difference(audit.audited_changes["credits_observed"])%>
-                </td>
-                <td><%= audit.created_at.strftime("%d-%m-%Y %H:%m") %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-    </div>
+<div class="card">
+  <div class="card-content pb-0">
+    <h2 class="h4 card-heading">Recent Changes</h2>
+  </div>
+
+  <div class="table-responsive-lg">
+    <table class='table'>
+      <thead>
+      <tr>
+        <th class="column-lg">
+          Account Balance<br />
+          Delegated Stake
+        </th>
+        <th class="column-lg">
+          Active Stake<br />
+          Deactivating Stake
+        </th>
+        <th class="column-lg">Rent Exempt Reserve</th>
+        <th class="column-md">Credits Observed</th>
+        <th class="column-md">Timestamp</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @audits.reverse.each do |audit| %>
+          <tr class="small">
+            <td class="text-nowrap">
+              <%= display_sol_difference(audit.audited_changes["account_balance"])%>
+              <br />
+              <%= display_sol_difference(audit.audited_changes["delegated_stake"])%>
+            </td>
+            <td class="text-nowrap">
+              <%= display_sol_difference(audit.audited_changes["active_stake"])%>
+              <br />
+              <%= display_sol_difference(audit.audited_changes["deactivating_stake"])%>
+            </td>
+            <td class="text-nowrap">
+              <%= display_sol_difference(audit.audited_changes["rent_exempt_reserve"]) %>
+            </td>
+            <td class="text-nowrap">
+              <%= display_sol_difference(audit.audited_changes["credits_observed"])%>
+            </td>
+            <td><%= audit.created_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>
+
