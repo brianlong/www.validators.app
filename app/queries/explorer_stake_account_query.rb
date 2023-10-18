@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 class ExplorerStakeAccountQuery
   def initialize(withdrawer: nil, staker: nil, vote_account: nil, stake_pubkey: nil, network: "mainnet")
@@ -14,7 +14,7 @@ class ExplorerStakeAccountQuery
       network: @network,
       epoch: EpochWallClock.by_network(@network).first&.epoch
     )
-    
+
     explorer_stake_accounts = explorer_stake_accounts.where("withdrawer LIKE ?", @withdrawer) \
       if @withdrawer.present?
     explorer_stake_accounts = explorer_stake_accounts.where("staker LIKE ?", @staker) \
@@ -23,9 +23,9 @@ class ExplorerStakeAccountQuery
       if @vote_account.present?
     explorer_stake_accounts = explorer_stake_accounts.where("stake_pubkey LIKE ?", @stake_pubkey) \
       if @stake_pubkey.present?
-    
+
     total = explorer_stake_accounts.count
-    
+
     {
       explorer_stake_accounts: explorer_stake_accounts.order(delegated_stake: :desc).page(page).per(per),
       total_count: total

@@ -1,11 +1,14 @@
 <div class="card mb-4">
   <div class="card-content pb-0">
-    <h2 class="h2 card-heading">Stake Accounts</h2>
+    <h2 class="h4 card-heading">Stake Accounts</h2>
     <%= render "stake_accounts/explorer_stake_accounts_filter" %>
-    <% if @explorer_stake_accounts&.count.to_i > 0 %>
-      <%= render "stake_accounts/explorer_stake_accounts" %>
-    <% else %>
-      <p class="text-center h3 mb-4"> No results match given criteria. </p>
-    <% end %>
   </div>
+
+  <% if @explorer_stake_accounts&.count.to_i > 0 %>
+    <%= render "stake_accounts/explorer_stake_accounts" %>
+  <% else %>
+    <div class="card-footer pt-0 text-center lead">
+      No results for given criteria.
+    </div>
+  <% end %>
 </div>
