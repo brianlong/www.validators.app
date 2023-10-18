@@ -404,7 +404,7 @@
 <h3 class="h6">Request:</h3>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/explorer-stake-accounts/mainnet.json'</pre>
 
-<h3 class="h6">Parameter Options:</h3>
+<h3 class="h6">Parameter Options (note that at least one of below parameters is required):</h3>
 
 <p><strong class="text-muted">`staker=string`</strong> will output all the stake accounts by staker </p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/explorer-stake-accounts/mainnet.json?staker=mpa4abUkjQoAvPzREkh5Mo75hZhPFQ2FSH6w7dWKuQ5'</pre>
@@ -415,7 +415,7 @@
 <p><strong class="text-muted">`vote_account=string`</strong> will output stake accounts delegated to a given vote account.</p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/explorer-stake-accounts/mainnet.json?vote_account=6559KMdiUseNSAkRcK9WcFcNTppoj6jWtKVedpMkBYCn'</pre>
 
-<p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 100.</p>
+<p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 25, max 999</p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/explorer-stake-accounts/mainnet.json?per=50'</pre>
 <p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1.</p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/explorer-stake-accounts/mainnet.json?page=1'</pre>

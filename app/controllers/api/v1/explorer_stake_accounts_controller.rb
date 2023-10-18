@@ -8,19 +8,20 @@ module Api
       before_action :ensure_params
 
       def index
+        explorer_params[:per] = [(explorer_params[:per] || 25).to_i, 999].min
         @explorer_stake_accounts = get_explorer_stake_accounts(params: explorer_params)[0]
         
+        @explorer_stake_accounts = @explorer_stake_accounts.as_json(except: :id)
         respond_to do |format|
           format.json do
             render json: @explorer_stake_accounts
           end
           format.csv do
-            @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
-            send_data convert_to_csv(@explorer_stake_accounts.first.attributes.keys, @explorer_stake_accounts.as_json),
+            @explorer_stake_accounts = @explorer_stake_accounts["explorer_stake_accounts"]
+            send_data convert_to_csv(@explorer_stake_accounts[0].keys, @explorer_stake_accounts),
                       filename: "stake-accounts-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"
           end
         end
-        
       end
 
       private

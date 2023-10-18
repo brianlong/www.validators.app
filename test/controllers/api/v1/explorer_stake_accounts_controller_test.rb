@@ -58,4 +58,27 @@ class ExplorerStakeAccountsControllerTest < ActionDispatch::IntegrationTest
     csv = CSV.parse response.body # Let raise if invalid CSV
     assert csv
   end
+
+  test "request with per should return correct number of records" do
+    25.times do |i|
+      create(:explorer_stake_account,
+        network: @network,
+        stake_pubkey: "test_stake_pubkey_#{i}",
+        staker: "test_staker_#{i}",
+        withdrawer: "test_withdrawer",
+        delegated_vote_account_address: "test_delegated_vote_account_address_#{i}",
+        epoch: @epoch.epoch
+      )
+    end
+    get api_v1_explorer_stake_accounts_path(network: @network, withdrawer: "test_withdrawer", per: 3), headers: @headers
+    resp1 = JSON.parse(@response.body)
+
+    assert_equal 3, resp1["explorer_stake_accounts"].count
+
+    get api_v1_explorer_stake_accounts_path(network: @network, withdrawer: "test_withdrawer", per: 3, page: 2), headers: @headers
+    resp2 = JSON.parse(@response.body)
+
+    assert_equal 3, resp1["explorer_stake_accounts"].count
+    assert_not_equal resp1["explorer_stake_accounts"], resp2["explorer_stake_accounts"]
+  end
 end
