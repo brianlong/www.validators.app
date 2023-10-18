@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       as: 'authorities_changes'
 
   get 'explorer_stake_accounts/index', as: 'explorer_stake_accounts'
+  get 'explorer_stake_accounts/:stake_pubkey', to: 'explorer_stake_accounts#show', as: 'explorer_stake_account'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
