@@ -60,10 +60,16 @@
   <div class="col-lg-6 mb-4">
     <div class="card h-100">
       <div class="card-content pb-0">
-        <h2 class="h4 card-heading">Account Details</h2>
+        <h2 class="h4 card-heading">Account Stake Details</h2>
       </div>
       <table class="table table-block-sm mb-0">
         <tbody>
+        <tr>
+          <td><strong>Active Stake</strong></td>
+          <td>
+            <%= lamports_to_sol(@explorer_stake_account.active_stake.to_i).round(2) %> SOL
+          </td>
+        </tr>
         <tr>
           <td><strong>Delegated Stake</strong></td>
           <td>
