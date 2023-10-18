@@ -2,7 +2,7 @@
 
 module ExplorerHelper
   def display_sol_difference(sol_change, round = 2)
-    if [sol_change].flatten.count == 2
+    if [sol_change].flatten.compact.count == 2
       tags = html_escape('')
       tags << content_tag(
         :span,
@@ -22,7 +22,7 @@ module ExplorerHelper
     elsif sol_change
       content_tag(
         :span,
-        number_with_delimiter(lamports_to_sol(sol_change.to_i).round(round))
+        number_with_delimiter(lamports_to_sol([sol_change].flatten.last.to_i).round(round))
       )
     else
       content_tag(:span, "no changes")
