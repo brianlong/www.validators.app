@@ -2,123 +2,114 @@
   <h1>
     <%= params[:network].capitalize %> Stake Account
   </h1>
-  <h2 class="h3"> <%= @explorer_stake_account.stake_pubkey%> </h2>
+  <h2 class="h3 word-break"><%= @explorer_stake_account.stake_pubkey %></h2>
 </section>
 
 <div class="row">
-  <div class="col-md-6 mb-4">
-    <div class="card mb-4 h-100">
-      <div class="table-responsive-xl">
-        <table class='table mb-0'>
-            <thead>
-            <tr>
-              <th colspan="2">&nbsp;</th>
-            </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="column-lg"><strong>Staker</strong></td>
-                <td><%= link_to @explorer_stake_account.staker, \
-                        explorer_stake_accounts_path(staker: @explorer_stake_account.staker)
-                    %>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Withdrawer</strong></td>
-                <td><%= link_to @explorer_stake_account.withdrawer, \
-                        explorer_stake_accounts_path(withdrawer: @explorer_stake_account.withdrawer)
-                    %>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Vote Account</strong></td>
-                <td>
-                  <%= link_to @explorer_stake_account.delegated_vote_account_address, \
-                      validator_vote_account_path(@vote_account.validator.account, @vote_account.account)
-                  %>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Stake Pool</strong></td>
-                <td>
-                  <% if @stake_account %>
-                    <%= link_to @stake_account.stake_pool.name, stake_pools_path, data: { turbolinks: false } %>
-                  <% end %>
-                </td>
-              </tr>
-              <tr>
-                <td class="column-lg"><strong>Activation Epoch</strong></td>
-                <td><%= @explorer_stake_account.activation_epoch %></td>
-              </tr>
-              <tr>
-                <td><strong>Deactivation Epoch</strong></td>
-                <td>
-                  <%= @explorer_stake_account.deactivation_epoch || " - " %>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+  <div class="col-lg-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content pb-0">
+        <h2 class="h4 card-heading">Account Details</h2>
       </div>
+      <table class="table table-block-sm mb-0">
+        <tbody>
+        <tr>
+          <td class="column-lg"><strong>Staker</strong></td>
+          <td class="small word-break">
+            <%= link_to @explorer_stake_account.staker,
+                        explorer_stake_accounts_path(staker: @explorer_stake_account.staker) %>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Withdrawer</strong></td>
+          <td class="small word-break">
+            <%= link_to @explorer_stake_account.withdrawer,
+                        explorer_stake_accounts_path(withdrawer: @explorer_stake_account.withdrawer) %>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Vote Account</strong></td>
+          <td class="small word-break">
+            <%= link_to @explorer_stake_account.delegated_vote_account_address,
+                        validator_vote_account_path(@vote_account.validator.account, @vote_account.account) %>
+          </td>
+        </tr>
+        <% if @stake_account %>
+          <tr>
+            <td><strong>Stake Pool</strong></td>
+            <td>
+              <%= link_to @stake_account.stake_pool.name, stake_pools_path, data: { turbolinks: false } %>
+            </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td class="column-lg"><strong>Activation Epoch</strong></td>
+          <td><%= @explorer_stake_account.activation_epoch %></td>
+        </tr>
+        <tr>
+          <td><strong>Deactivation Epoch</strong></td>
+          <td>
+            <%= @explorer_stake_account.deactivation_epoch || " - " %>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="col-md-6 mb-4">
-    <div class="card mb-4 h-100">
-      <div class="table-responsive-xl">
-        <table class='table mb-0'>
-          <thead>
-            <tr>
-              <th colspan="2">&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Delegated Stake</strong></td>
-              <td>
-                <%= lamports_to_sol(@explorer_stake_account.delegated_stake.to_i).round(2) %> SOL
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Account Balance</strong></td>
-              <td>
-                <%= lamports_to_sol(@explorer_stake_account.account_balance.to_i).round(2) %> SOL
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Credits Observed</strong></td>
-              <td>
-                <%= lamports_to_sol(@explorer_stake_account.credits_observed.to_i).round(2) %> SOL
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Deactivating Stake</strong></td>
-              <td>
-                <%= lamports_to_sol(@explorer_stake_account.deactivating_stake.to_i).round(2) %> SOL
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Rent Exempt Reserve</strong></td>
-              <td>
-                <%= lamports_to_sol(@explorer_stake_account.rent_exempt_reserve.to_i).round(5) %> SOL
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Stake Type</strong></td>
-              <td>
-                <%= @explorer_stake_account.stake_type %>
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Current Commission</strong></td>
-              <td>
-                <%= 
-                  @vote_account.validator.commission
-                %> %
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="col-lg-6 mb-4">
+    <div class="card h-100">
+      <div class="card-content pb-0">
+        <h2 class="h4 card-heading">Account Details</h2>
       </div>
+      <table class="table table-block-sm mb-0">
+        <tbody>
+        <tr>
+          <td><strong>Delegated Stake</strong></td>
+          <td>
+            <%= lamports_to_sol(@explorer_stake_account.delegated_stake.to_i).round(2) %> SOL
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Account Balance</strong></td>
+          <td>
+            <%= lamports_to_sol(@explorer_stake_account.account_balance.to_i).round(2) %> SOL
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Credits Observed</strong></td>
+          <td>
+            <%= lamports_to_sol(@explorer_stake_account.credits_observed.to_i).round(2) %> SOL
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Deactivating Stake</strong></td>
+          <td>
+            <%= lamports_to_sol(@explorer_stake_account.deactivating_stake.to_i).round(2) %> SOL
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Rent Exempt Reserve</strong></td>
+          <td>
+            <%= lamports_to_sol(@explorer_stake_account.rent_exempt_reserve.to_i).round(5) %> SOL
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Stake Type</strong></td>
+          <td>
+            <%= @explorer_stake_account.stake_type %>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Current Commission</strong></td>
+          <td>
+            <%=
+              @vote_account.validator.commission
+            %> %
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
