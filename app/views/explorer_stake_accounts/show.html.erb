@@ -67,37 +67,37 @@
         <tr>
           <td><strong>Active Stake</strong></td>
           <td>
-            <%= lamports_to_sol(@explorer_stake_account.active_stake.to_i).round(2) %> SOL
+            <%= number_with_delimiter(lamports_to_sol(@explorer_stake_account.active_stake.to_i).round(2)) %> SOL
           </td>
         </tr>
         <tr>
           <td><strong>Delegated Stake</strong></td>
           <td>
-            <%= lamports_to_sol(@explorer_stake_account.delegated_stake.to_i).round(2) %> SOL
+            <%= number_with_delimiter(lamports_to_sol(@explorer_stake_account.delegated_stake.to_i).round(2)) %> SOL
           </td>
         </tr>
         <tr>
           <td><strong>Account Balance</strong></td>
           <td>
-            <%= lamports_to_sol(@explorer_stake_account.account_balance.to_i).round(2) %> SOL
+            <%= number_with_delimiter(lamports_to_sol(@explorer_stake_account.account_balance.to_i).round(2)) %> SOL
           </td>
         </tr>
         <tr>
           <td><strong>Credits Observed</strong></td>
           <td>
-            <%= lamports_to_sol(@explorer_stake_account.credits_observed.to_i).round(2) %> SOL
+            <%= number_with_delimiter(lamports_to_sol(@explorer_stake_account.credits_observed.to_i).round(2)) %> SOL
           </td>
         </tr>
         <tr>
           <td><strong>Deactivating Stake</strong></td>
           <td>
-            <%= lamports_to_sol(@explorer_stake_account.deactivating_stake.to_i).round(2) %> SOL
+            <%= number_with_delimiter(lamports_to_sol(@explorer_stake_account.deactivating_stake.to_i).round(2)) %> SOL
           </td>
         </tr>
         <tr>
           <td><strong>Rent Exempt Reserve</strong></td>
           <td>
-            <%= lamports_to_sol(@explorer_stake_account.rent_exempt_reserve.to_i).round(5) %> SOL
+            <%= number_with_delimiter(lamports_to_sol(@explorer_stake_account.rent_exempt_reserve.to_i).round(5)) %> SOL
           </td>
         </tr>
         <tr>

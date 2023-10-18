@@ -7,10 +7,17 @@
         <table class='table mb-0'>
           <thead>
             <tr class="text-center">
-              <th>Account Balance</th>
-              <th>Delegated Stake</th>
-              <th>Active Stake</th>
-              <th>Deactivating Stake</th>
+              <th>
+                Account Balance
+                <br />
+                Delegated Stake
+              </th>
+              <th>
+                Active Stake
+                <br />
+                Deactivating Stake
+              </th>
+              <th>Rent Exempt Reserve</th>
               <th>Credits Observed</th>
               <th>Timestamp</th>
             </tr>
@@ -20,15 +27,16 @@
               <tr class="text-center">
                 <td>
                   <%= display_sol_difference(audit.audited_changes["account_balance"])%>
-                </td>
-                <td>
+                  <br />
                   <%= display_sol_difference(audit.audited_changes["delegated_stake"])%>
                 </td>
                 <td>
                   <%= display_sol_difference(audit.audited_changes["active_stake"])%>
+                  <br />
+                  <%= display_sol_difference(audit.audited_changes["deactivating_stake"])%>
                 </td>
                 <td>
-                  <%= display_sol_difference(audit.audited_changes["deactivating_stake"])%>
+                  <%= display_sol_difference(audit.audited_changes["rent_exempt_reserve"]) %>
                 </td>
                 <td>
                   <%= display_sol_difference(audit.audited_changes["credits_observed"])%>

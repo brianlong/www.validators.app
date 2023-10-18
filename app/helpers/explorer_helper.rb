@@ -16,7 +16,7 @@ module ExplorerHelper
       if sol_change.first < sol_change.last
         tags << content_tag(:i, "", class: "fa-solid fa-up-long text-success ms-2")
       else
-        tags << content_tag(:i, "", class: "fa-solid fa-down-long text-danger")
+        tags << content_tag(:i, "", class: "fa-solid fa-down-long text-danger ms-2")
       end
       tags
     elsif sol_change
