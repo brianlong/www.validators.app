@@ -3,9 +3,20 @@
 module ExplorerHelper
   def display_sol_difference(sol_change, round = 2)
     if [sol_change].flatten.count == 2
-      content_tag(:small, class: "text-muted") do
-        "(" + lamports_to_sol(sol_change[1] - sol_change[0]).round(round).to_s + ")"
+      tags = html_escape('')
+      tags << content_tag(:span, lamports_to_sol([sol_change].flatten.first.to_i).round(round))
+      tags << content_tag(:i, "", class: "fa-solid fa-right-long px-2")
+      tags << content_tag(:span, lamports_to_sol([sol_change].flatten.last.to_i).round(round).to_s)
+      if sol_change.first < sol_change.last
+        tags << content_tag(:i, "", class: "fa-solid fa-up-long text-success ms-2")
+      else
+        tags << content_tag(:i, "", class: "fa-solid fa-down-long text-danger")
       end
+      tags
+    elsif sol_change
+      content_tag(:span, lamports_to_sol(sol_change.to_i).round(round))
+    else
+      content_tag(:span, "no changes")
     end
   end
 end

@@ -23,6 +23,7 @@ class ExplorerStakeAccountsController < ApplicationController
       account: @explorer_stake_account.delegated_vote_account_address,
       network:params[:network]
     )
+    @audits = @explorer_stake_account.audits.order(created_at: :desc)
   end
 
   private

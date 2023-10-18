@@ -6,34 +6,38 @@
       <div class="table-responsive-xl">
         <table class='table mb-0'>
           <thead>
-            <tr>
-              <th>epoch</th>
-              <th>Rent Exempt Reserve <small class="text-muted">(difference)</small></th>
-              <th>account balance <small class="text-muted">(difference)</small></th>
-              <th>delegated stake <small class="text-muted">(difference)</small></th>
-              <th>active stake <small class="text-muted">(difference)</small></th>
+            <tr class="text-center">
+              <th>Rent Exempt Reserve</th>
+              <th>Account Balance</th>
+              <th>Delegated Stake</th>
+              <th>Active Stake</th>
+              <th>Deactivating Stake</th>
+              <th>Credits Observed</th>
+              <th>Timestamp</th>
             </tr>
           </thead>
           <tbody>
-            <% @explorer_stake_account.audits.order(created_at: :asc).pluck(:audited_changes).reverse.each do |audit| %>
-              <tr>
-                <td><%= [audit["epoch"]].flatten.last %></td>
+            <% @audits.reverse.each do |audit| %>
+              <tr class="text-center">
                 <td>
-                  <%= lamports_to_sol([audit["rent_exempt_reserve"]].flatten.last.to_i).round(5) %>
-                  <%= display_sol_difference(audit["rent_exempt_reserve"], 5)%>
+                  <%= display_sol_difference(audit.audited_changes["rent_exempt_reserve"]) %>
                 </td>
                 <td>
-                  <%= lamports_to_sol([audit["account_balance"]].flatten.last.to_i).round(2) %>
-                  <%= display_sol_difference(audit["account_balance"])%>
+                  <%= display_sol_difference(audit.audited_changes["account_balance"])%>
                 </td>
                 <td>
-                  <%= lamports_to_sol([audit["delegated_stake"]].flatten.last.to_i).round(2) %>
-                  <%= display_sol_difference(audit["delegated_stake"])%>
+                  <%= display_sol_difference(audit.audited_changes["delegated_stake"])%>
                 </td>
                 <td>
-                  <%= lamports_to_sol([audit["active_stake"]].flatten.last.to_i).round(2) %>
-                  <%= display_sol_difference(audit["active_stake"])%>
+                  <%= display_sol_difference(audit.audited_changes["active_stake"])%>
                 </td>
+                <td>
+                  <%= display_sol_difference(audit.audited_changes["deactivating_stake"])%>
+                </td>
+                <td>
+                  <%= display_sol_difference(audit.audited_changes["credits_observed"])%>
+                </td>
+                <td><%= audit.created_at.strftime("%d-%m-%Y %H:%m") %></td>
               </tr>
             <% end %>
           </tbody>
