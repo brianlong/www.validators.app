@@ -3,6 +3,8 @@
 class ExplorerStakeAccountsController < ApplicationController
   include StakeAccountsControllerHelper
 
+  AUDITS_FILTERS = %w[active_stake account_balance credits_observed deactivating_stake delegated_stake rent_exempt_reserve].freeze
+
   def index
     if index_params[:staker].present? || \
        index_params[:withdrawer].present? || \
@@ -23,7 +25,9 @@ class ExplorerStakeAccountsController < ApplicationController
       account: @explorer_stake_account.delegated_vote_account_address,
       network:params[:network]
     )
-    @audits = @explorer_stake_account.audits.order(created_at: :desc)
+    @audits = @explorer_stake_account.audits.order(created_at: :desc).reject do |audit|
+      audit.audited_changes.slice(*AUDITS_FILTERS).compact.empty?
+    end
   end
 
   private
