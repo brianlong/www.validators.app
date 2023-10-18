@@ -30,15 +30,16 @@ module Api
       end
 
       def ensure_params
-        render(json: {
-                 status: "Parameter Missing - provide one of: staker, withdrawer, vote_account, stake_pubkey"
-               }, status: 400) \
-          unless explorer_params[:network].present? && (
-            explorer_params[:staker].present? || 
-            explorer_params[:withdrawer].present? || 
-            explorer_params[:vote_account].present? || 
-            explorer_params[:stake_pubkey].present?
-          )
+        if (explorer_params[:staker].blank? && \
+           explorer_params[:withdrawer].blank? && \
+           explorer_params[:vote_account].blank? && \
+           explorer_params[:stake_pubkey].blank?) || \
+           params[:network].blank?
+
+          render(json: {
+            status: "Parameter Missing - provide one of: staker, withdrawer, vote_account, stake_pubkey"
+          }, status: 400)
+        end
       end
     end
   end
