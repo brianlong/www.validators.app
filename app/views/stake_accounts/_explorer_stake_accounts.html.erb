@@ -5,7 +5,7 @@
         <th class="column-xxl">Stake Pubkey</th>
         <th class="column-md">Validator</th>
         <th class="column-xxl">Staker &amp;&nbsp;Withdrawer</th>
-        <th class="column-xs">Delegated Stake </th>
+        <th class="column-sm">Delegated Stake</th>
         <th class="column-xs text-center px-0">Pool</th>
       </tr>
     </thead>
@@ -16,7 +16,7 @@
           <td class="word-break small">
             <%= link_to e_stake_acc.stake_pubkey, explorer_stake_account_path(e_stake_acc.stake_pubkey) %>
           </td>
-          <td>
+          <td data-turbolinks="false">
             <% validator = VoteAccount.find_by(account: e_stake_acc.delegated_vote_account_address, network: params[:network])&.validator %>
             <% if validator %>
               <%= link_to displayed_validator_name(validator),
@@ -44,12 +44,12 @@
               <% end %>
             <% end %>
           </td>
-          <td>
+          <td class="small">
             <% stake = e_stake_acc.delegated_stake ? lamports_to_sol(e_stake_acc.delegated_stake) : 0 %>
             <% if stake < 0.01 %>
               <0.01
             <% else %>
-              <small><%= number_with_delimiter stake.round(2) %></small>
+              <%= number_with_delimiter stake.round(2) %>
             <% end %>
           </td>
           <td class="text-center">
