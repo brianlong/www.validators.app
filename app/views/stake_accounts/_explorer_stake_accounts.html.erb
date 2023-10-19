@@ -3,8 +3,8 @@
     <thead>
       <tr>
         <th class="column-xxl">Stake Pubkey</th>
-        <th class="column-xxl">Staker &amp;&nbsp;Withdrawer</th>
         <th class="column-md">Validator</th>
+        <th class="column-xxl">Staker &amp;&nbsp;Withdrawer</th>
         <th class="column-xs">Delegated Stake </th>
         <th class="column-xs text-center px-0">Pool</th>
       </tr>
@@ -15,6 +15,14 @@
         <tr>
           <td class="word-break small">
             <%= link_to e_stake_acc.stake_pubkey, explorer_stake_account_path(e_stake_acc.stake_pubkey) %>
+          </td>
+          <td>
+            <% validator = VoteAccount.find_by(account: e_stake_acc.delegated_vote_account_address, network: params[:network])&.validator %>
+            <% if validator %>
+              <%= link_to displayed_validator_name(validator),
+                          validator_path(account: validator.account, network: params[:network])
+              %>
+            <% end %>
           </td>
           <td class="word-break small">
             <div class="mb-2 mb-xl-0">
@@ -34,14 +42,6 @@
               <%= link_to explorer_stake_accounts_path(withdrawer: e_stake_acc.withdrawer), title: "Show all Stake Accounts for this Withdrawer." do %>
                 <i class="fa-solid fa-up-right-from-square small ms-2"></i>
               <% end %>
-            <% end %>
-          </td>
-          <td>
-            <% validator = VoteAccount.find_by(account: e_stake_acc.delegated_vote_account_address, network: params[:network])&.validator %>
-            <% if validator %>
-              <%= link_to displayed_validator_name(validator),
-                          validator_path(account: validator.account, network: params[:network])
-              %>
             <% end %>
           </td>
           <td>
