@@ -14,7 +14,10 @@
       <% @explorer_stake_accounts.each do |e_stake_acc| %>
         <tr>
           <td class="word-break small">
-            <%= link_to e_stake_acc.stake_pubkey, explorer_stake_account_path(e_stake_acc.stake_pubkey) %>
+            <%= link_to "#{e_stake_acc.stake_pubkey[0..10]}...#{e_stake_acc.stake_pubkey[-9..-1]}", \
+                explorer_stake_account_path(e_stake_acc.stake_pubkey),
+                title: e_stake_acc.stake_pubkey
+            %>
           </td>
           <td data-turbolinks="false">
             <% validator = VoteAccount.find_by(account: e_stake_acc.delegated_vote_account_address, network: params[:network])&.validator %>
