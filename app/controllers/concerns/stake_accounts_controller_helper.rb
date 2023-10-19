@@ -8,7 +8,7 @@ module StakeAccountsControllerHelper
       staker: params[:staker],
       stake_pubkey: params[:stake_pubkey], 
       network: params[:network]
-    ).call(page: params[:page], per: params[:per_page])
+    ).call(page: params[:page], per: params[:per])
 
     @stake_accounts = StakeAccount.where(
       stake_pubkey: @explorer_stake_accounts[:explorer_stake_accounts].pluck(:stake_pubkey)
