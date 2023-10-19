@@ -108,8 +108,8 @@ Rails.application.routes.draw do
       to: 'public#authorities_changes',
       as: 'authorities_changes'
 
-  get 'explorer_stake_accounts/index', as: 'explorer_stake_accounts'
-  get 'explorer_stake_accounts/:stake_pubkey', to: 'explorer_stake_accounts#show', as: 'explorer_stake_account'
+  get 'stake-explorer', to: 'explorer_stake_accounts#index', as: 'explorer_stake_accounts'
+  get 'stake-explorer/:stake_pubkey', to: 'explorer_stake_accounts#show', as: 'explorer_stake_account'
 
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
@@ -187,7 +187,7 @@ Rails.application.routes.draw do
 
       get "account-authorities/:network", to: "account_authority#index", as: "account_authorities"
 
-      get "explorer-stake-accounts/:network", to: "explorer_stake_accounts#index", as: "explorer_stake_accounts"
+      get "stake-explorer/:network", to: "explorer_stake_accounts#index", as: "explorer_stake_accounts"
     end
   end
 end

@@ -34,6 +34,15 @@
                         validator_vote_account_path(@vote_account.validator.account, @vote_account.account) %>
           </td>
         </tr>
+        <tr>
+          <td><strong>Validator</strong></td>
+          <td class="small word-break">
+            <%= link_to displayed_validator_name(@vote_account.validator), \
+                validator_path(account: @vote_account.validator.account, network: params[:network]),
+                data: { turbolinks: false }
+            %>
+          </td>
+        </tr>
         <% if @stake_account %>
           <tr>
             <td><strong>Stake Pool</strong></td>
