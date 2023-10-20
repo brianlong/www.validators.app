@@ -59,7 +59,7 @@ gem 'whenever', require: false
 # gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
+gem 'bootsnap', '>= 1.16', require: false
 
 # Capistrano
 gem 'capistrano-passenger', '>= 0.2.1'
@@ -68,8 +68,8 @@ gem 'capistrano-rails', group: :development
 # AppSignal
 gem 'appsignal'
 
-gem "mechanize", ">= 2.7.7"
-gem 'nokogiri', '1.14.3'
+gem "mechanize", ">= 2.9.1"
+gem 'nokogiri', '1.15.4'
 
 # Pagination
 gem 'kaminari'
@@ -87,16 +87,18 @@ gem 'solana_rpc_ruby'
 # Ruby client for CoinGecko
 gem 'coingecko_ruby'
 
+gem "audited", "~> 5.3.3"
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'bullet', '~> 6.1'
+  gem 'bullet', '~> 7.0'
   gem 'factory_bot_rails'
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
   gem 'pronto'
   gem 'pronto-flay', require: false
   gem 'pronto-rubocop', require: false
-  gem 'pry', '~> 0.12.2'
-  gem 'rubocop'
+  gem 'pry', '~> 0.14.2'
+  gem 'rubocop', '~> 1.18', require: false
   gem 'letter_opener_web'
 end
 
@@ -104,7 +106,7 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Access an interactive console on exception pages or by calling 'console'
   # anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
+  gem 'web-console', '>= 4.2.1'
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -112,12 +114,12 @@ group :development do
   gem 'annotate'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
-  gem 'puma'
+  gem 'puma', '~> 6.4.0'
 end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
+  gem 'capybara', '>= 3.39.2'
   gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'timecop'
@@ -136,7 +138,7 @@ end
 # configure in production.
 #
 # User data encryption
-gem 'attr_encrypted', '>= 3.1.0'
+gem 'attr_encrypted', '>= 4.0'
 
 # Or use this for Vault. NOTE: Use this version of the gem until
 # https://github.com/hashicorp/vault-rails/pull/76 is merged:

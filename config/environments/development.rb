@@ -9,7 +9,7 @@ Rails.application.configure do
   # Bullet.growl         = true
     Bullet.rails_logger  = true
     Bullet.add_footer    = true
-    Bullet.add_whitelist(type: :n_plus_one_query, class_name: "Validator", association: :validator_ip_active)
+    Bullet.add_safelist(type: :n_plus_one_query, class_name: "Validator", association: :validator_ip_active)
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
