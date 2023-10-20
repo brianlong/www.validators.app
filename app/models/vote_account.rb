@@ -82,8 +82,8 @@ class VoteAccount < ApplicationRecord
 
   def check_group_assignment
     CheckGroupValidatorAssignmentWorker.perform_async({
-      vote_account_id: self.id
-    }.to_json)
+      "vote_account_id" => self.id
+    })
   end
 
   def create_account_authority_history
