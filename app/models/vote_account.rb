@@ -81,8 +81,8 @@ class VoteAccount < ApplicationRecord
   end
 
   def check_group_assignment
-    CheckGroupValidatorAssignmentWorker.set(queue: :low_priority).perform_async({
-      vote_account_id: self.id
+    CheckGroupValidatorAssignmentWorker.perform_async({
+      "vote_account_id" => self.id
     })
   end
 
