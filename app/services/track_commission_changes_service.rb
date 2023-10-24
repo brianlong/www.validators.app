@@ -48,10 +48,14 @@ class TrackCommissionChangesService
       epoch: cli_rewards["epoch"] + 1,
       network: @network,
     ).first
+    last_commission = va.validator.commission_histories.where(network: @network).last
 
-    unless first_commission_from_epoch && \
+    unless (first_commission_from_epoch && \
            first_commission_from_epoch.commission_before == cli_rewards["commission"].to_f && \
-           first_commission_from_epoch.commission_after == validator_commission
+           first_commission_from_epoch.commission_after == validator_commission) || \
+           (last_commission && \
+           last_commission.commission_after == cli_rewards["commission"].to_f && \
+           last_commission.commission_before == validator_commission)
 
       new_commission_history = va.validator.commission_histories.create(
         epoch: cli_rewards["epoch"] + 1,
@@ -81,10 +85,10 @@ class TrackCommissionChangesService
     ).last
     last_commission = va.validator.commission_histories.where(network: @network).last
 
-    unless last_commission_from_epoch && \
-           last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f || \
-           last_commission && \
-           last_commission.commission_after == cli_rewards["commission"].to_f
+    unless (last_commission_from_epoch && \
+           last_commission_from_epoch.commission_after == cli_rewards["commission"].to_f) || \
+           (last_commission && \
+           last_commission.commission_after == cli_rewards["commission"].to_f)
 
       new_commission_history = va.validator.commission_histories.create(
         epoch: cli_rewards["epoch"],
