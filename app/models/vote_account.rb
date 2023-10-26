@@ -41,7 +41,7 @@ class VoteAccount < ApplicationRecord
     if saved_change_to_authorized_withdrawer? || authorized_voters_value_changed?
       create_account_authority_history
     end
-    if saved_change_to_authorized_withdrawer? || saved_change_to_authorized_voters? || saved_change_to_validator_identity?
+    if saved_change_to_authorized_withdrawer? || authorized_voters_value_changed? || saved_change_to_validator_identity?
       check_group_assignment
     end
   end
