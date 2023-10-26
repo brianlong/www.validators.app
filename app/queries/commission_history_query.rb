@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CommissionHistoryQuery
-  TIME_RANGE_AGO = 120.days.ago
+  TIME_RANGE_AGO = 365.days.ago
 
   CH_FIELDS = %w[
     created_at
