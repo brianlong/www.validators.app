@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ExplorerStakeAccountQuery
-  MIN_ACCOUNTS_NUMBER = Rails.env.test? 1 : 500_000
+  MIN_ACCOUNTS_NUMBER = Rails.env.test? ? 1 : 500_000
 
   def initialize(withdrawer: nil, staker: nil, vote_account: nil, stake_pubkey: nil, network: "mainnet")
     @withdrawer = withdrawer
