@@ -12,15 +12,17 @@ class ExplorerStakeAccountQuery
   end
 
   def call(page: 1, per: 20)
+    current_epoch = EpochWallClock.by_network(@network).first&.epoch
+
     explorer_stake_accounts = ExplorerStakeAccount.where(
       network: @network,
-      epoch: EpochWallClock.by_network(@network).last&.epoch
+      epoch: current_epoch
     )
 
-    if explorer_stake_accounts.count < MIN_ACCOUNTS_NUMBER
+    if current_epoch && explorer_stake_accounts.count < MIN_ACCOUNTS_NUMBER
       explorer_stake_accounts = ExplorerStakeAccount.where(
         network: @network,
-        epoch: EpochWallClock.by_network(@network).last&.epoch - 1
+        epoch: current_epoch - 1
       )
     end
 
