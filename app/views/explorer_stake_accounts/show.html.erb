@@ -30,17 +30,21 @@
         <tr>
           <td><strong>Vote Account</strong></td>
           <td class="small word-break">
-            <%= link_to @explorer_stake_account.delegated_vote_account_address,
-                        validator_vote_account_path(@vote_account.validator.account, @vote_account.account) %>
+            <% if @vote_account.validator %>
+              <%= link_to @explorer_stake_account.delegated_vote_account_address,
+                          validator_vote_account_path(@vote_account.validator.account, @vote_account.account) %>
+            <% end %>
           </td>
         </tr>
         <tr>
           <td><strong>Validator</strong></td>
           <td class="small word-break">
-            <%= link_to displayed_validator_name(@vote_account.validator), \
-                validator_path(account: @vote_account.validator.account, network: params[:network]),
-                data: { turbolinks: false }
-            %>
+            <% if @vote_account.validator %>
+              <%= link_to displayed_validator_name(@vote_account.validator), \
+                  validator_path(account: @vote_account.validator.account, network: params[:network]),
+                  data: { turbolinks: false }
+              %>
+            <% end %>
           </td>
         </tr>
         <% if @stake_account %>
@@ -119,7 +123,7 @@
           <td><strong>Current Commission</strong></td>
           <td>
             <%=
-              @vote_account.validator.commission
+              @vote_account.validator&.commission
             %> %
           </td>
         </tr>
