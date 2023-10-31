@@ -145,7 +145,7 @@
                 <td class="column-md fw-bold">Authorized Withdrawer Score</td>
                 <td class="column-xs text-nowrap">
                   <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
-                  {{ score.authorized_withdrawer_score.to_i }}
+                  {{ score.authorized_withdrawer_score }}
                     <small class="d-lg-none text-muted">(0)</small>
                     <small class="d-none d-lg-inline text-muted">(max 0)</small>
                 </td>
@@ -159,7 +159,7 @@
                 <td class="column-md fw-bold">Consensus Mods Score</td>
                 <td class="column-xs text-nowrap">
                   <i class="fa-solid fa-minus-circle me-1 text-warning"></i>
-                  {{ score.consensus_mods_score.to_i }}
+                  {{ score.consensus_mods_score }}
                     <small class="d-lg-none text-muted">(0)</small>
                     <small class="d-none d-lg-inline text-muted">(max 0)</small>
                 </td>
