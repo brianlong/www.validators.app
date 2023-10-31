@@ -1,4 +1,8 @@
-require 'test_helper'
+#frozen_string_literal: true
+
+require "test_helper"
+require "sidekiq/testing"
+
 
 class VoteAccountTest < ActiveSupport::TestCase
   test "scope for_api returs vote_accounts specified fields" do
@@ -13,6 +17,66 @@ class VoteAccountTest < ActiveSupport::TestCase
 
     assert_equal va_histories.last.authorized_withdrawer_before, "test_withdrawer"
     assert_equal va_histories.last.authorized_withdrawer_after, "test_withdrawer_2"
+  end
+
+  test "on authorized withdrawer update CheckGroupValidatorAssignmentWorker should be enqueued" do
+    validator = create(:validator)
+    vote_account = create(
+      :vote_account,
+      authorized_withdrawer: "test_withdrawer",
+      authorized_voters: { "test_voter_key" => "test_voter_value" },
+      validator_identity: "test_validator_identity"
+    )
+    # remove all enqueued jobs
+    Sidekiq::Worker.clear_all
+
+    vote_account.update(authorized_withdrawer: "test_withdrawer_updated")
+    assert_equal 1, CheckGroupValidatorAssignmentWorker.jobs.size
+  end
+
+  test "on authorized voters key update CheckGroupValidatorAssignmentWorker should not be enqueued" do
+    validator = create(:validator)
+    vote_account = create(
+      :vote_account,
+      authorized_withdrawer: "test_withdrawer",
+      authorized_voters: { "test_voter_key" => "test_voter_value" },
+      validator_identity: "test_validator_identity"
+    )
+    # remove all enqueued jobs
+    Sidekiq::Worker.clear_all
+
+    vote_account.update(authorized_voters: { "test_voter_key_updated" => "test_voter_value" })
+    assert_equal 0, CheckGroupValidatorAssignmentWorker.jobs.size
+  end
+
+  test "on authorized voters value update CheckGroupValidatorAssignmentWorker should be enqueued" do
+    validator = create(:validator)
+    vote_account = create(
+      :vote_account,
+      authorized_withdrawer: "test_withdrawer",
+      authorized_voters: { "test_voter_key" => "test_voter_value" },
+      validator_identity: "test_validator_identity"
+    )
+    # remove all enqueued jobs
+    Sidekiq::Worker.clear_all
+
+    vote_account.update(authorized_voters: { "test_voter_key" => "test_voter_value_updated" })
+    assert_equal 1, CheckGroupValidatorAssignmentWorker.jobs.size
+  end
+
+  test "on validator identity update CheckGroupValidatorAssignmentWorker should be enqueued" do
+    validator = create(:validator)
+    vote_account = create(
+      :vote_account,
+      authorized_withdrawer: "test_withdrawer",
+      authorized_voters: { "test_voter_key" => "test_voter_value" },
+      validator_identity: "test_validator_identity"
+    )
+    # remove all enqueued jobs
+    Sidekiq::Worker.clear_all
+
+    vote_account.update(validator_identity: "test_validator_identity_updated")
+    assert_equal 1, CheckGroupValidatorAssignmentWorker.jobs.size
   end
 
   class AuthorizedVotersTests < ActiveSupport::TestCase

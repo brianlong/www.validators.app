@@ -38,7 +38,7 @@ class EpochWallClock < ApplicationRecord
 
   scope :by_network, ->(network) { where(network: network).order(epoch: :desc) }
 
-  after_create :track_commission_changes
+  after_create :track_commission_changes, unless: Proc.new { Rails.env.production? }
   after_create :update_epoch_duration
 
   def track_commission_changes
