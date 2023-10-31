@@ -19,7 +19,8 @@
   <li><a href="#epoch-index">Epochs</a></li>
   <li><a href="#commission-change-index">Commission Changes</a></li>
   <li><a href="#stake-pools">Stake Pools</a></li>
-  <li><a href="#stake-accounts">Stake Accounts</a></li>
+  <li><a href="#stake-accounts">Stake Pools Stake Accounts</a></li>
+  <li><a href="#stake-explorer">Stake Explorer</a></li>
   <li><a href="#ping-thing">Ping Thing Post</a></li>
   <li><a href="#ping-thing-batch">Ping Thing Batch</a></li>
   <li><a href="#ping-thing-list">Ping Thing List</a></li>
@@ -339,9 +340,9 @@
 
 <hr />
 
-<h2 class="h4" id="stake-accounts">Stake Accounts</h2>
+<h2 class="h4" id="stake-accounts">Stake Pools Stake Accounts</h2>
 <p>
-  The Stake Accounts endpoint will return all the stake accounts grouped by vote accounts. Replace `:network`
+  The Stake Accounts endpoint will return all the stake accounts delegated to stake pools grouped by vote accounts. Replace `:network`
   with either 'testnet', 'mainnet' or 'pythnet' as desired.
 </p>
 
@@ -389,6 +390,62 @@
       ]
     },
   ...
+}
+</pre>
+
+<hr />
+
+<h2 class="h4" id="stake-explorer">Stake Explorer</h2>
+<p>
+  The Explorer Stake Accounts endpoint will return all the stake accounts according to provided criteria. Only mainnet network
+  is available for this query.
+</p>
+
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-explorer/mainnet.json'</pre>
+
+<h3 class="h6">Parameter Options (note that at least one of below parameters is required):</h3>
+
+<p><strong class="text-muted">`staker=string`</strong> will output all the stake accounts by staker </p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-explorer/mainnet.json?staker=mpa4abUkjQoAvPzREkh5Mo75hZhPFQ2FSH6w7dWKuQ5'</pre>
+<p><strong class="text-muted">`withdrawer=string`</strong> will output all the stake accounts by withdrawer.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-explorer/mainnet.json?withdrawer=4ZJhPQAgUseCsWhKvJLTmmRRUV74fdoTpQLNfKoekbPY'</pre>
+<p><strong class="text-muted">`stake_pubkey=string`</strong> will output stake account with the given pubkey.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-explorer/mainnet.json?stake_pubkey=G4R85Eyqrrf5giV3Uino7KjQqMGujJX5wgByvRwQA9En'</pre>
+<p><strong class="text-muted">`vote_account=string`</strong> will output stake accounts delegated to a given vote account.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-explorer/mainnet.json?vote_account=6559KMdiUseNSAkRcK9WcFcNTppoj6jWtKVedpMkBYCn'</pre>
+
+<p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 25, max 999</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-explorer/mainnet.json?per=50'</pre>
+<p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-explorer/mainnet.json?page=1'</pre>
+
+<h3 class="h6">Response:</h3>
+<pre>
+{
+  "explorer_stake_accounts": [
+    {
+      "account_balance": 43841611667953,
+      "activation_epoch": 368,
+      "active_stake": 43840438767889,
+      "credits_observed": 170222984,
+      "deactivating_stake": null,
+      "deactivation_epoch": null,
+      "delegated_stake": 43840438767889,
+      "delegated_vote_account_address": "6559KMdiUseNSAkRcK9WcFcNTppoj6jWtKVedpMkBYCn",
+      "rent_exempt_reserve": 2282880,
+      "stake_pubkey": "G4R85Eyqrrf5giV3Uino7KjQqMGujJX5wgByvRwQA9En",
+      "stake_type": "Stake",
+      "staker": "mpa4abUkjQoAvPzREkh5Mo75hZhPFQ2FSH6w7dWKuQ5",
+      "withdrawer": "4ZJhPQAgUseCsWhKvJLTmmRRUV74fdoTpQLNfKoekbPY",
+      "network": "mainnet",
+      "epoch": 511,
+      "created_at": "2023-09-26T10:21:30.044Z",
+      "updated_at": "2023-09-26T10:21:30.044Z"
+    },
+    ...
+  ],
+  total_count: 100
 }
 </pre>
 
