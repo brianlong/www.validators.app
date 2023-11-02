@@ -12,11 +12,11 @@ class KeybaseLogicTest < ActiveSupport::TestCase
     end # VCR
   end
 
-  test "get nonexistent url" do
+  test "get nonexistent url leaves empty avatar_url column" do
     VCR.use_cassette('keybase_logic/get_nonexistent_url', record: :new_episodes) do
       keybase_id = "brianlongbrianlong"
       avatar_url = get_validator_avatar(keybase_id)
-      assert_equal DEFAULT_AVATAR_URL, avatar_url
+      assert_equal nil, avatar_url
     end # VCR
   end
 end
