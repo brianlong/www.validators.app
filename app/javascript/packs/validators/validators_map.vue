@@ -17,7 +17,7 @@
           </span>
         </div>
 
-        <a :href="validator_details_link(current_leader.account)"
+        <a :href="validator_url(current_leader.account, network)"
            title="Go to validator details" target="_blank"
            v-if="is_leader_valid"
            :style="{ left: position_horizontal(current_leader.location_longitude),
@@ -140,10 +140,6 @@
         let division_factor = latitude < 0 ? 64 : 58
         let start_position = 32
         return start_position + ((latitude / division_factor) * 50) + '%';
-      },
-
-      validator_details_link(account) {
-        return `/validators/${account}?network=${this.network}`;
       },
 
       data_centers_link() {
