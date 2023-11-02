@@ -5,8 +5,7 @@
         <div class="img-circle-medium-private" v-if="is_private(validator)">
           <span class='fas fa-users-slash' title="Private Validator"></span>
         </div>
-        <img :src="validator.avatar_url" class="img-circle-medium" v-else-if="validator.avatar_url" >
-        <img src="https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png" class="img-circle-medium" v-else>
+        <img :src="avatar_url(validator)" class='img-circle-medium' v-else />
 
         <h1 class="word-break" v-if="is_loading_validator">loading...</h1>
         <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
@@ -267,7 +266,8 @@
   import jitoBadge from 'jito.svg'
   import '../mixins/numbers_mixins'
   import '../mixins/dates_mixins'
-  import '../mixins/stake_pools_mixins';
+  import '../mixins/stake_pools_mixins'
+  import '../mixins/validators_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 

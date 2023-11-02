@@ -23,7 +23,7 @@
            :style="{ left: position_horizontal(current_leader.location_longitude),
                      bottom: position_vertical(current_leader.location_latitude) }"
            class="map-point map-point-leader">
-          <img :src="avatar_link(current_leader)" alt="avatar" />
+          <img :src="avatar_url(current_leader)" alt="avatar" class="img-circle-small" />
         </a>
       </div>
     </section>
@@ -68,6 +68,7 @@
   import debounce from 'lodash/debounce';
   import axios from 'axios';
   import { mapGetters } from 'vuex';
+  import '../mixins/validators_mixins';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -139,14 +140,6 @@
         let division_factor = latitude < 0 ? 64 : 58
         let start_position = 32
         return start_position + ((latitude / division_factor) * 50) + '%';
-      },
-
-      avatar_link(leader) {
-        if (leader.avatar_url) {
-          return leader.avatar_url
-        } else {
-          return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
-        }
       },
 
       validator_details_link(account) {

@@ -21,8 +21,8 @@ var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
             return this.$parent.validator_details_link(account);
         },
 
-        avatar_link: function(leader) {
-            return this.$parent.avatar_link(leader);
+        avatar_url: function(leader) {
+            return this.$parent.avatar_url(leader);
         },
 
         leader_name: function(leader) {
@@ -43,7 +43,7 @@ var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
       <div class="d-flex flex-wrap gap-3 mb-3" v-if="current_leader">
         <a :href="validator_details_link(current_leader.account)"
            title="Go to validator details" target="_blank">
-          <img :src="avatar_link(current_leader)" class="img-circle-small" />
+          <img :src="avatar_url(current_leader)" class="img-circle-small" />
         </a>
         <div class="d-flex flex-column justify-content-center">
           <a :href="validator_details_link(current_leader.account)"
@@ -60,7 +60,7 @@ var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
           <a v-for="leader in next_leaders"
              :href="validator_details_link(leader.account)"
              title="Go to validator details" target="_blank">
-            <img :src="avatar_link(leader)" class='img-circle-small' />
+            <img :src="avatar_url(leader)" class='img-circle-small' />
           </a>
         </div>
       </div>
