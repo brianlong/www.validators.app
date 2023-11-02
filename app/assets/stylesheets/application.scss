@@ -12,6 +12,7 @@
  *
  */
 
+@import "@fortawesome/fontawesome-free/css/all.css";
 @import "variables";
 @import "typography";
 @import "buttons";
@@ -28,7 +29,7 @@
 @import "alerts";
 @import "carousels";
 @import "map";
-@import "@fortawesome/fontawesome-free/css/all.css";
+@import "modals";
 
 html {
   overflow-x: hidden;
@@ -197,57 +198,3 @@ hr {
     display: inline-block;
   }
 }
-
-.modal {
-  padding-right: 0 !important;
-  &-dialog {
-    margin: auto;
-    top: 50%;
-    transform: translateY(-50%) !important;
-    @media(max-width: $screen-sm-max) {
-      padding: 15px;
-    }
-  }
-  &-content {
-    background-color: $card-background-color;
-    border: 2px solid $card-background-color;
-    border-radius: $border-radius;
-    color: $base-color;
-  }
-  &-header {
-    .btn-close { color: $white }
-  }
-  &-body {}
-}
-
-.modal-large {
-  .modal-dialog {
-    max-width: 950px;
-    @media(max-width: $screen-lg-max) {
-      max-width: 900px;
-    }
-    @media(max-width: $screen-md-max) {
-      max-width: 660px;
-    }
-    @media(max-width: $screen-sm-max) {
-      max-width: 100vw;
-      top: initial !important;
-      transform: none !important;
-    }
-  }
-}
-
-.modal-top {
-  .modal-dialog {
-    top: initial !important;
-    transform: none !important;
-    padding: 15px;
-  }
-}
-
-.ping-thing-stats-header {
-  @media(max-width: $screen-md-max) {
-    display: none;
-  }
-}
-
