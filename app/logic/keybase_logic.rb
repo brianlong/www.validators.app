@@ -3,7 +3,6 @@ module KeybaseLogic
   include AgentLogic
 
   KEYBASE_URL = 'https://keybase.io/'
-  DEFAULT_AVATAR_URL = 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png'
 
   def get_validator_avatar(validator_keybase_id)
     image_css = '.picture > .img-circle'
@@ -15,7 +14,7 @@ module KeybaseLogic
                             .attribute('src').value
       return avatar_url if avatar_url.to_s.include?('keybase_processed_uploads')
     end
-    DEFAULT_AVATAR_URL
+    nil
   end
 
   private
