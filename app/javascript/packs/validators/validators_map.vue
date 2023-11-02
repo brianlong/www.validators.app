@@ -23,7 +23,7 @@
            :style="{ left: position_horizontal(current_leader.location_longitude),
                      bottom: position_vertical(current_leader.location_latitude) }"
            class="map-point map-point-leader">
-          <img :src="avatar_url(current_leader)" alt="avatar" class="img-circle-small" />
+          <img :src="avatar_url(current_leader)" alt="avatar" />
         </a>
       </div>
     </section>
