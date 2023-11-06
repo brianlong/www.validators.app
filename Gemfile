@@ -77,6 +77,7 @@ gem 'kaminari'
 # MaxMind
 gem 'dnsruby'
 gem 'maxmind-geoip2'
+gem 'maxminddb'
 
 # use rack-cors for cross-origin api queries
 gem 'rack-cors'
