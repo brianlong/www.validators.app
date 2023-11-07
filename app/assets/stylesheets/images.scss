@@ -4,6 +4,7 @@
   border-radius: 15%;
   height: $height;
   width: $width;
+  background-color: #f0f0f0;
 }
 
 @mixin img-private($padding-y, $padding-x, $font-size) {
