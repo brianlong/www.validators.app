@@ -40,14 +40,6 @@ var ValidatorRow = Vue.component('validatorRow', {
   },
 
   methods: {
-    create_avatar_link() {
-      if(this.validator['avatar_url']) {
-        return this.validator['avatar_url']
-      } else {
-        return "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png"
-      }
-    },
-
     row_index() {
       return 'row-' + this.idx
     },
@@ -141,7 +133,7 @@ var ValidatorRow = Vue.component('validatorRow', {
             <div class="img-circle-large-private" v-if="is_validator_private()">
               <span class="fa-solid fa-users-slash" title="Private Validator"></span>
             </div>
-            <img :src="create_avatar_link()" class='img-circle-large' v-if="!is_validator_private()"/>
+            <img :src="avatar_url(this.validator)" class='img-circle-large' v-else />
           </div>
 
           <div class="column-info-name">

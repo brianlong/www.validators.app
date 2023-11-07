@@ -31,7 +31,7 @@ class ValidatorUpdateAvatarUrlTest < ActiveSupport::TestCase
   end
 
   test "validators with broken urls" do
-    broken_url = 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-181@2x.png'
+    broken_url = 'https://incorrect-url.png'
     Validator.all.each{ |v| v.update(avatar_url: broken_url) }
     VCR.use_cassette('validators_update_avatar_url/validators_with_broken_urls', record: :new_episodes) do
       assert_changes 'Validator.last.avatar_url == broken_url' do
