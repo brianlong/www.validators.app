@@ -36,8 +36,8 @@ class ApplicationController < ActionController::Base
   end
 
   def log_request_headers
-    request.env.select do |k, _|
-      k.downcase.start_with?('http-x-forwarded') || k.downcase.start_with?('x_forwarded') || k.downcase.start_with?('x-forwarded')
+    request.headers.env.select do |k, _|
+      k.downcase.start_with?('http-x-forwarded') || k.downcase.start_with?('http_x_forwarded') || k.downcase.start_with?('x_forwarded') || k.downcase.start_with?('x-forwarded')
     end
     logger ||= Logger.new("#{Rails.root}/log/load_balancer_headers_logger.log")
     logger.info headers
