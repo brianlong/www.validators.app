@@ -1,14 +1,24 @@
 # frozen_string_literal: true
 
 class CreatePingThingStatsService
+  include SolanaRequestsLogic
+
   def initialize(time_to: DateTime.now, network: "mainnet")
     @time_to = time_to
     @network = network
   end
 
   def call
+    transactions_count = get_transactions_count.to_i
+    puts transactions_count
     PingThingStat::INTERVALS.each do |interval|
       if should_add_new_stats?(interval)
+        tps = if interval == 1
+          get_current_tps
+        else
+          
+        end
+
         ping_things = gather_ping_things(interval)
         next unless ping_things.any?
 
@@ -39,6 +49,13 @@ class CreatePingThingStatsService
       @network,
       (@time_to - interval.minutes),
       @time_to
+    )
+  end
+
+  def get_transactions_count(config_urls: Rails.application.credentials.solana[:mainnet_urls])
+    cli_request(
+      'transaction-count',
+      config_urls
     )
   end
 end
