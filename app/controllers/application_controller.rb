@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   around_action :switch_locale
   before_action :check_if_saw_cookie_notice
   before_action :set_network
+  before_action :log_request_headers
 
   def switch_locale(&action)
     locale = params[:locale] || I18n.default_locale
@@ -32,6 +33,14 @@ class ApplicationController < ActionController::Base
     return if NETWORKS.include?(params[:network])
 
     params[:network] = "mainnet"
+  end
+
+  def log_request_headers
+    request.env.select do |k, _|
+      k.downcase.start_with?('http-x-forwarded') || k.downcase.start_with?('x_forwarded') || k.downcase.start_with?('x-forwarded')
+    end
+    logger ||= Logger.new("#{Rails.root}/log/load_balancer_headers_logger.log")
+    logger.info headers
   end
 
   protected
