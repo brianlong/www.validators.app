@@ -9,14 +9,15 @@ class CreatePingThingStatsService
   end
 
   def call
-    transactions_count = get_transactions_count.to_i
-    puts transactions_count
+    transactions_count = get_transactions_count.to_i rescue nil
+
     PingThingStat::INTERVALS.each do |interval|
       if should_add_new_stats?(interval)
-        tps = if interval == 1
-          get_current_tps
+        previous_stat = PingThingStat.where(network: @network, interval: interval).order(created_at: :desc).first
+        tps = if previous_stat&.transactions_count&.positive? && transactions_count.positive?
+          (transactions_count - previous_stat.transactions_count) / (interval * 60).to_f rescue nil
         else
-          
+          nil
         end
 
         ping_things = gather_ping_things(interval)
@@ -32,7 +33,9 @@ class CreatePingThingStatsService
           max: resp_times.max,
           time_from: @time_to - interval.minutes,
           num_of_records: ping_things.count,
-          average_slot_latency: ping_things.average_slot_latency
+          average_slot_latency: ping_things.average_slot_latency,
+          transactions_count: transactions_count,
+          tps: tps
         )
       end
     end

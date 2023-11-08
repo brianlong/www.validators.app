@@ -13,6 +13,8 @@
 #  network              :string(191)
 #  num_of_records       :integer
 #  time_from            :datetime
+#  tps                  :integer
+#  transactions_count   :bigint
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #

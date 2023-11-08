@@ -1,15 +1,19 @@
 #frozen_string_literal: true
 
-MIN_TIME = 700
-MAX_TIME = 5_000
+pt_count = 0
+
+interrupted = false
+trap('INT') { interrupted = true }  unless Rails.env.test?
 
 loop do
+  pt_count += 1
+  
   slot_sent = rand(10_000_000..100_000_000)
-  PingThing.create(
+  pt = PingThing.create(
     user_id: User.first.id,
     amount: 1, 
-    signature: SecureRandom.hex(16),
-    response_time: rand(MIN_TIME..MAX_TIME),
+    signature: SecureRandom.hex(32),
+    response_time: rand(700..5_000),
     transaction_type: "transfer",
     network: "mainnet",
     commitment_level: "confirmed",
@@ -19,5 +23,13 @@ loop do
     slot_sent: slot_sent,
     slot_landed: slot_sent + rand(100..10_000)
   )
+
+  if pt_count == 120
+    puts "starting PingThingStatsWorker"
+    PingThingStatsWorker.perform_async
+    pt_count = 0
+  end
+
+  break if interrupted
   sleep(0.5)
 end
