@@ -30,7 +30,7 @@ class CheckGroupValidatorAssignmentService
   end
 
   private
-  
+
   def assign_by_authorized_withdrawer_or_validator_identity
     return unless @vote_account.authorized_withdrawer || @vote_account.validator_identity
 
@@ -120,7 +120,7 @@ class CheckGroupValidatorAssignmentService
     @groups_list.uniq.each do |group_element|
       group = Group.find(group_element[:group_id])
       group.validators.each do |validator|
-        validator.group_validator.destroy
+        validator.group_validator&.destroy
         GroupValidator.create(
           group: @group,
           validator: validator,
@@ -131,7 +131,7 @@ class CheckGroupValidatorAssignmentService
   end
 
   def delete_empty_groups
-    @vote_account_group.destroy if @vote_account_group&.validators&.empty?
+    @vote_account_group&.destroy if @vote_account_group&.validators&.empty?
 
     Group.where(id: @groups_list).each do |group|
       if group.validators.empty?
