@@ -15,7 +15,10 @@ class CreatePingThingStatsService
       if should_add_new_stats?(interval)
         previous_stat = PingThingStat.where(network: @network, interval: interval).order(created_at: :desc).first
         tps = if previous_stat&.transactions_count&.positive? && transactions_count.positive?
-          (transactions_count - previous_stat.transactions_count) / (interval * 60).to_f rescue nil
+          # time diff in seconds
+          time_diff = DateTime.now.to_f - previous_stat.created_at.to_f
+          
+          (transactions_count - previous_stat.transactions_count) / time_diff rescue nil
         else
           nil
         end
