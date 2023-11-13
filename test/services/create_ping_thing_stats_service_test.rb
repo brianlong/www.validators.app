@@ -44,27 +44,40 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
   test "CreatePingThingStatsService creates correct records" do
     begin_minutes_ago = 24
     begin_minutes_ago.times.each do |n|
-      CreatePingThingStatsService.new(time_to: (begin_minutes_ago - n).minutes.ago, network: @network).call
+      serv = CreatePingThingStatsService.new(time_to: (begin_minutes_ago - n).minutes.ago, network: @network)
+      serv.stub(:get_transactions_count, n * 100) do
+        serv.call
+      end
     end
     
     assert_equal 24, PingThingStat.where(interval: PingThingStat::INTERVALS[0]).count
     assert_equal 8, PingThingStat.where(interval: PingThingStat::INTERVALS[1]).count
     assert_equal 2, PingThingStat.where(interval: PingThingStat::INTERVALS[2]).count
     assert_equal 1, PingThingStat.where(interval: PingThingStat::INTERVALS[3]).count
+    assert_equal 2_300, PingThingStat.where(interval: PingThingStat::INTERVALS[0]).last.transactions_count
+    assert_equal 2_100, PingThingStat.where(interval: PingThingStat::INTERVALS[1]).last.transactions_count
+    assert_equal 1_200, PingThingStat.where(interval: PingThingStat::INTERVALS[2]).last.transactions_count
+    assert PingThingStat.where(interval: PingThingStat::INTERVALS[0]).last.tps.positive?
   end
 
   test "CreatePingThingStatsService does not return error when slot fields are empty" do
     PingThing.update_all(slot_sent: nil, slot_landed: nil)
     
     assert_nothing_raised do
-      CreatePingThingStatsService.new(time_to: 1.minutes.ago, network: @network).call
+      serv = CreatePingThingStatsService.new(time_to: 1.minutes.ago, network: @network)
+      serv.stub(:get_transactions_count, 100) do
+        serv.call
+      end
     end
   end
 
   test "CreatePingThingStatsService creates records with correct fields" do
     begin_minutes_ago = 1
     begin_minutes_ago.times.each do |n|
-      CreatePingThingStatsService.new(time_to: (begin_minutes_ago - n).minutes.ago, network: @network).call
+      serv = CreatePingThingStatsService.new(time_to: (begin_minutes_ago - n).minutes.ago, network: @network)
+      serv.stub(:get_transactions_count, n * 100) do
+        serv.call
+      end
     end
     
     stat = PingThingStat.where(interval: PingThingStat::INTERVALS[3]).last
@@ -94,7 +107,10 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
 
     begin_minutes_ago = 1
     begin_minutes_ago.times.each do |n|
-      CreatePingThingStatsService.new(time_to: (begin_minutes_ago - n).minutes.ago, network: "mainnet").call
+      serv = CreatePingThingStatsService.new(time_to: (begin_minutes_ago - n).minutes.ago, network: "mainnet")
+      serv.stub(:get_transactions_count, n * 100) do
+        serv.call
+      end
     end
     
     stat = PingThingStat.where(interval: PingThingStat::INTERVALS[3]).last

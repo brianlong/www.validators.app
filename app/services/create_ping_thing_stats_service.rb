@@ -10,7 +10,6 @@ class CreatePingThingStatsService
 
   def call
     transactions_count = get_transactions_count.to_i rescue nil
-
     PingThingStat::INTERVALS.each do |interval|
       if should_add_new_stats?(interval)
         previous_stat = PingThingStat.where(network: @network, interval: interval).order(created_at: :desc).first
@@ -60,7 +59,7 @@ class CreatePingThingStatsService
 
   def get_transactions_count(config_urls: Rails.application.credentials.solana[:mainnet_urls])
     cli_request(
-      'transaction-count',
+      "transaction-count",
       config_urls
     )
   end
