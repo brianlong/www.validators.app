@@ -41,6 +41,20 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
     }
   },
 
+  methods: {
+    stake_acc_details_link: function (stake_pubkey) {
+      return '/stake-explorer/' + stake_pubkey
+    },
+
+    stake_explorer_withdrawer_link: function (withdrawer) {
+      return "/stake-explorer?network=" + this.stake_accounts_for_val[0]["network"] + "&withdrawer=" + withdrawer
+    },
+
+    stake_explorer_staker_link: function (staker) {
+      return "/stake-explorer?network=" + this.stake_accounts_for_val[0]["network"] + "&staker=" + staker
+    }
+  },
+
   template: `
     <tbody>
       <validator-row :validator="validator" :idx="idx" :batch="batch" v-if="validator"/>
@@ -66,22 +80,25 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
             </thead>
             
             <tbody class="small">
-            <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id">
+            <tr v-for="stake_account in stake_accounts_for_val" :key="stake_account.id" v-if="validator">
               <td class="text-center pe-0 d-none d-xl-table-cell">
                 <img class="img-sm"
                      :title="stake_account.pool_name"
                      :src="stake_pool_small_logo(stake_account.pool_name)" />
               </td>
               <td class="word-break">
-                <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>{{ stake_account.stake_pubkey }}
+                <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>
+                <a :href="stake_acc_details_link(stake_account.stake_pubkey)">{{ stake_account.stake_pubkey }}</a>
                 <div class="text-muted">
                   <strong class="d-inline-block d-lg-none">Staker:&nbsp;&nbsp;</strong>
-                  {{ stake_account.staker }}
+                  <a :href="stake_explorer_staker_link(stake_account.staker)">{{ stake_account.staker }}</a>
                 </div>
               </td>
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Withdrawer:&nbsp;&nbsp;</strong>{{ stake_account.pool_name }}
-                <div class="text-muted">{{ stake_account.withdrawer }}</div>
+                <div class="text-muted">
+                  <a :href="stake_explorer_withdrawer_link(stake_account.withdrawer)">{{ stake_account.withdrawer }}</a>
+                </div>
               </td>
               <td>
                 <strong class="d-inline-block d-lg-none">Stake:&nbsp;</strong>
