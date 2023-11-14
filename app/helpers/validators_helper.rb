@@ -105,7 +105,7 @@ module ValidatorsHelper
       end
     else
       link_to validator_url(link_params) do
-        image_tag "https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png", class: "img-circle-large"
+        image_tag "default-avatar.png", class: "img-circle-large"
       end
     end
   end

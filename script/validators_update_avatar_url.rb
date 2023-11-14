@@ -2,7 +2,6 @@
 
 # RAILS_ENV=production bundle exec ruby script/validators_get_avatar_url.rb
 require File.expand_path('../config/environment', __dir__)
-# Default URL is at 'https://keybase.io/images/no-photo/placeholder-avatar-180-x-180@2x.png'
 
 include KeybaseLogic
 
