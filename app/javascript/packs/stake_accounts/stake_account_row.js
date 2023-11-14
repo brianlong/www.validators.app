@@ -42,8 +42,8 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
   },
 
   methods: {
-    vote_account_link: function (validator_account, vote_account) {
-      return '/validators/' + validator_account + '/vote_accounts/' + vote_account
+    stake_acc_details_link: function (stake_pubkey) {
+      return '/stake-explorer/' + stake_pubkey
     },
 
     stake_explorer_withdrawer_link: function (withdrawer) {
@@ -88,7 +88,7 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
               </td>
               <td class="word-break">
                 <strong class="d-inline-block d-lg-none">Stake Account:&nbsp;&nbsp;</strong>
-                <a :href="vote_account_link(validator.account, validator.vote_account)">{{ stake_account.stake_pubkey }}</a>
+                <a :href="stake_acc_details_link(stake_account.stake_pubkey)">{{ stake_account.stake_pubkey }}</a>
                 <div class="text-muted">
                   <strong class="d-inline-block d-lg-none">Staker:&nbsp;&nbsp;</strong>
                   <a :href="stake_explorer_staker_link(stake_account.staker)">{{ stake_account.staker }}</a>
