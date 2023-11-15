@@ -116,11 +116,7 @@ export default {
                 data: tps_data,
                 backgroundColor: chart_variables.chart_blue,
                 yAxisID: 'yTPS',
-                borderColor: chart_variables.chart_blue_t,
-                // borderWidth: 1,
-                // order: 1,
-                // radius: 3,
-                // tension: 0
+                borderColor: chart_variables.chart_blue_t
               }
             ]
           },
