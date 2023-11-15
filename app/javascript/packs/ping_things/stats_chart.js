@@ -68,6 +68,8 @@ export default {
         var variation_data = this.ping_thing_stats.map( (vector_element, index) => (
           [vector_element['max'], vector_element['min'], vector_element['average_slot_latency']]
         ))
+        var tps_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['tps']) )
+
         var labels = this.ping_thing_stats.map( (vector_element) => {
           if(this.interval > 24) {
             return moment(new Date(vector_element["time_from"])).utc().format('HH:mm (ddd)')
@@ -82,11 +84,11 @@ export default {
         var ctx = document.getElementById("ping-thing-scatter-chart").getContext('2d');
         Chart.defaults.scale.display = false
         this.chart = new Chart(ctx, {
-          type: 'bar',
           data: {
             labels: labels,
             datasets: [
               {
+                type: 'bar',
                 label: ' Variation',
                 data: variation_data,
                 backgroundColor: chart_variables.chart_purple_2_t,
@@ -107,6 +109,14 @@ export default {
                 order: 1,
                 radius: 3,
                 tension: 0
+              },
+              {
+                type: 'line',
+                label: ' TPS  ',
+                data: tps_data,
+                backgroundColor: chart_variables.chart_blue,
+                yAxisID: 'yTPS',
+                borderColor: chart_variables.chart_blue_t
               }
             ]
           },
@@ -146,6 +156,24 @@ export default {
                   color: chart_variables.chart_darkgrey,
                   padding: 5
                 }
+              },
+              yTPS: {
+                display: true,
+                min: 0,
+                grid: { display: false },
+                position: 'right',
+                ticks: {
+                  padding: 10,
+                  callback: function(value) {
+                    return value.toLocaleString('en-US')
+                  }
+                },
+                title: {
+                  display: true,
+                  text: 'Number of Transactions',
+                  color: chart_variables.chart_darkgrey,
+                  padding: 5
+                }
               }
             },
             interaction: {
@@ -164,6 +192,8 @@ export default {
                       var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : "-";
                       var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : "-";
                       return ["Min: " + min + " ms, Max: " + max + " ms", "Average slot latency: " + slot_lat + " slots"];
+                    } else if (tooltipItem.datasetIndex == 2) {
+                      return "TPS: " + tooltipItem.raw.toLocaleString('en-US');
                     } else {
                       return "Median: " + tooltipItem.raw.toLocaleString('en-US') + " ms";
                     }

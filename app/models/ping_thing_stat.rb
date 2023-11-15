@@ -13,6 +13,8 @@
 #  network              :string(191)
 #  num_of_records       :integer
 #  time_from            :datetime
+#  tps                  :integer
+#  transactions_count   :bigint
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #
@@ -29,7 +31,8 @@ class PingThingStat < ApplicationRecord
     :network,
     :num_of_records,
     :time_from,
-    :average_slot_latency
+    :average_slot_latency,
+    :tps
   ].freeze
 
   INTERVALS = [1, 3, 12, 24, 168].freeze #minutes

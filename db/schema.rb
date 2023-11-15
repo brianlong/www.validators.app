@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_19_062249) do
+ActiveRecord::Schema.define(version: 2023_11_08_131733) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -360,6 +360,8 @@ ActiveRecord::Schema.define(version: 2023_09_19_062249) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "average_slot_latency"
+    t.bigint "transactions_count"
+    t.integer "tps"
     t.index ["network", "interval"], name: "index_ping_thing_stats_on_network_and_interval"
   end
 
