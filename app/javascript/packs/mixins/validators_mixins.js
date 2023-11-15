@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import defaultAvatar from 'default-avatar.png'
 
 Vue.mixin({
   methods: {
@@ -35,6 +36,14 @@ Vue.mixin({
 
     vote_account_url(validator_account, vote_account, network) {
       return "/validators/" + validator_account + "/vote_accounts/" + vote_account + "?network=" + network
+    },
+
+    avatar_url(validator) {
+      if(validator['avatar_url']) {
+        return validator['avatar_url']
+      } else {
+        return defaultAvatar
+      }
     }
   }
 })
