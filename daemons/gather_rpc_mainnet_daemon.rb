@@ -55,6 +55,8 @@ begin
     BuildSkippedSlotPercentWorker.set(queue: :high_priority).perform_async(common_params)
     ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(common_params)
 
+    puts "finished at #{Time.current}"
+    Rails.logger.info "finished at #{Time.current}"
     break if interrupted
   rescue SkipAndSleep => e
     break if interrupted
