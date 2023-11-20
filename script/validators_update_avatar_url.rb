@@ -10,14 +10,13 @@ include KeybaseLogic
 interrupted = false
 trap('INT') { interrupted = true }  unless Rails.env.test?
 
-keybase_url_pattern = /^https:\/\/s3.amazonaws.com\/keybase_processed_uploads/
+keybase_url_pattern = '^https:\/\/s3.amazonaws.com\/keybase_processed_uploads/'.freeze
 
 NETWORKS.each do |network|
   Validator.active.where(network: network)
            .where.not(keybase_id: '')
-           .where.not(avatar_url: nil)
+           .where("avatar_url REGEXP ?", keybase_url_pattern)
            .find_each do |validator|
-    next unless validator.avatar_url.match? keybase_url_pattern
     new_validator_url = get_validator_avatar(validator.keybase_id)
     if(new_validator_url != validator.avatar_url)
       validator.update(avatar_url: new_validator_url)
