@@ -8,7 +8,7 @@ class ValidatorUpdateAvatarUrlTest < ActiveSupport::TestCase
     validator = create(:validator, keybase_id: "polkachu", network: "testnet", avatar_url: url)
     VCR.use_cassette("validators_update_avatar_url/validators_with_correct_urls", record: :new_episodes) do
       load(Rails.root.join("script", "validators_update_avatar_url.rb") )
-      assert_equal validator.reload.avatar_url, url
+      assert_equal url, validator.reload.avatar_url
     end
   end
 
@@ -17,8 +17,8 @@ class ValidatorUpdateAvatarUrlTest < ActiveSupport::TestCase
     validator = create(:validator, keybase_id: "coinbasecloud", network: "mainnet", avatar_url: url)
     VCR.use_cassette("validators_update_avatar_url/validators_with_broken_keybase_urls", record: :new_episodes) do
       load(Rails.root.join("script", "validators_update_avatar_url.rb") )
-      refute_equal validator.reload.avatar_url, url
-      assert_equal validator.reload.avatar_url, "https://s3.amazonaws.com/keybase_processed_uploads/68d8ed237f31e993a8eac1bca7512a05_360_360.jpg"
+      refute_equal url, validator.reload.avatar_url
+      assert_equal "https://s3.amazonaws.com/keybase_processed_uploads/68d8ed237f31e993a8eac1bca7512a05_360_360.jpg", validator.reload.avatar_url
     end
   end
 
@@ -27,7 +27,7 @@ class ValidatorUpdateAvatarUrlTest < ActiveSupport::TestCase
     validator = create(:validator, keybase_id: "validatorcom", network: "mainnet", avatar_url: url)
     VCR.use_cassette("validators_update_avatar_url/validators_with_non_keybase_avatars", record: :new_episodes) do
       load(Rails.root.join("script", "validators_update_avatar_url.rb") )
-      assert_equal validator.reload.avatar_url, url
+      assert_equal url, validator.reload.avatar_url
     end
   end
 end
