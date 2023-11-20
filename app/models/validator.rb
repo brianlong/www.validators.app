@@ -7,6 +7,7 @@
 #  id                  :bigint           not null, primary key
 #  account             :string(191)
 #  admin_warning       :string(191)
+#  avatar_hash         :string(191)
 #  avatar_url          :string(191)
 #  consensus_mods      :boolean          default(FALSE)
 #  details             :string(191)
@@ -31,6 +32,9 @@
 #  index_validators_on_network_is_active_is_destroyed_is_rpc  (network,is_active,is_destroyed,is_rpc)
 #
 class Validator < ApplicationRecord
+
+  include AvatarAttachment
+
   FIELDS_FOR_API = %i[
     account
     avatar_url
