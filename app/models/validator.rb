@@ -34,6 +34,7 @@
 class Validator < ApplicationRecord
 
   include AvatarAttachment
+  include Rails.application.routes.url_helpers
 
   FIELDS_FOR_API = %i[
     account
@@ -92,6 +93,8 @@ class Validator < ApplicationRecord
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
 
+  after_save :update_avatar_file, if: :saved_change_to_avatar_url?
+
   class << self
     def with_private(show: "true")
       show == "true" ? all : where.not("validator_score_v1s.commission = 100")
@@ -147,6 +150,14 @@ class Validator < ApplicationRecord
     def total_active_stake
       includes(:validator_score_v1).sum(:active_stake)
     end
+  end
+
+  def avatar_file_url
+    polymorphic_url(avatar) if avatar.attached?
+  end
+
+  def update_avatar_file
+    UpdateAvatarFileWorker.perform_async({validator_id: id}.stringify_keys) unless avatar_url.nil?
   end
 
   def active?
