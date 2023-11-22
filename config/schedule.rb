@@ -118,7 +118,7 @@ end
 
 every 1.minute, roles: [:background] do
   ruby_script "add_current_epoch.rb"
-  runner "PingThingStatsWorker.perform_async"
+  runner "PingThingStatsWorker.set(queue: :high_priority).perform_async"
   runner "PingThingRecentStatsWorker.perform_async('mainnet')"
   runner "PingThingRecentStatsWorker.perform_async('testnet')"
   runner "PingThingRecentStatsWorker.perform_async('pythnet')"

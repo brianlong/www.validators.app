@@ -7,11 +7,11 @@ trap('INT') { interrupted = true }  unless Rails.env.test?
 
 loop do
   pt_count += 1
-  
+
   slot_sent = rand(10_000_000..100_000_000)
   pt = PingThing.create(
     user_id: User.first.id,
-    amount: 1, 
+    amount: 1,
     signature: SecureRandom.hex(32),
     response_time: rand(700..5_000),
     transaction_type: "transfer",
@@ -26,7 +26,7 @@ loop do
 
   if pt_count == 120
     puts "starting PingThingStatsWorker"
-    PingThingStatsWorker.perform_async
+    PingThingStatsWorker.set(queue: :high_priority).perform_async
     pt_count = 0
   end
 
