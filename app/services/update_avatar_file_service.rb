@@ -20,10 +20,10 @@ class UpdateAvatarFileService
     if @validator.avatar_url.present?
 
       # Download raw file from validator avatar_url
-      if @tmp_file = download_tmp_file
+      if download_tmp_file
         if @validator.avatar_hash != tmp_file_md5
           @logger.info("Found new image for validator: " + @validator.account)
-          if @avatar_file = process_and_save_avatar
+          if process_and_save_avatar
             update_attached_avatar
             @validator.avatar_hash = tmp_file_md5
             @validator.save
@@ -36,10 +36,10 @@ class UpdateAvatarFileService
 
   def download_tmp_file
     download = URI.open(@validator.avatar_url)
-    tmp_file_path = STORAGE_PATH + "/tmp/" + @validator.avatar_tmp_file_name
-    if IO.copy_stream(download, tmp_file_path).positive?
-      @logger.info("Downloaded file: " + tmp_file_path)
-      tmp_file_path
+    @tmp_file = STORAGE_PATH + "/tmp/" + @validator.avatar_tmp_file_name
+    if IO.copy_stream(download, @tmp_file).positive?
+      @logger.info("Downloaded file: " + @tmp_file)
+      @tmp_file
     else
       @logger.error("Error downloading file: " + tmp_file_path)
       nil
@@ -51,15 +51,20 @@ class UpdateAvatarFileService
   end
 
   def process_and_save_avatar
-    destination = STORAGE_PATH + "/" + @validator.avatar_file_name
+    @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
     ImageProcessing::MiniMagick
       .source(@tmp_file)
       .convert("png")
       .resize_to_limit(*IMAGE_SIZE_LIMIT)
-      .call(destination: destination)
+      .call(destination: @avatar_file)
 
-    @logger.info("Prepared file to attach: " + destination)
-    destination
+    if File.exist?(@avatar_file)
+      @logger.info("Prepared file to attach: " + @avatar_file)
+      @avatar_file
+    else
+      @logger.error("Error preparing file to attach: " + @avatar_file)
+      nil
+    end
   end
 
   def update_attached_avatar
