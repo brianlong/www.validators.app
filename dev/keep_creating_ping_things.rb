@@ -15,7 +15,7 @@ loop do
     signature: SecureRandom.hex(32),
     response_time: rand(700..5_000),
     transaction_type: "transfer",
-    network: "mainnet",
+    network: "pythnet",
     commitment_level: "confirmed",
     success: true,
     application: "web3",

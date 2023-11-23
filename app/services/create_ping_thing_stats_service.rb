@@ -6,6 +6,7 @@ class CreatePingThingStatsService
   def initialize(time_to: DateTime.now, network: "mainnet")
     @time_to = time_to
     @network = network
+    @config_urls = Rails.application.credentials.solana["#{@network}_urls".to_sym]
   end
 
   def call
@@ -60,7 +61,7 @@ class CreatePingThingStatsService
   def get_transactions_count(config_urls: Rails.application.credentials.solana[:mainnet_urls])
     cli_request(
       "transaction-count",
-      config_urls
+      @config_urls
     )
   end
 end
