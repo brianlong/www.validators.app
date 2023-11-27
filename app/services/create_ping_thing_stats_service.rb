@@ -20,7 +20,7 @@ class CreatePingThingStatsService
           
           (transactions_count - previous_stat.transactions_count) / time_diff rescue nil
         else
-          previous_stat.tps
+          previous_stat&.tps
         end
 
         ping_things = gather_ping_things(interval)
@@ -37,7 +37,7 @@ class CreatePingThingStatsService
           time_from: @time_to - interval.minutes,
           num_of_records: ping_things.count,
           average_slot_latency: ping_things.average_slot_latency,
-          transactions_count: transactions_count || tps * (DateTime.now.to_f - previous_stat.created_at.to_f)
+          transactions_count: transactions_count || tps * (DateTime.now.to_f - previous_stat.created_at.to_f),
           tps: tps
         )
       end
