@@ -20,7 +20,7 @@ class CreatePingThingStatsService
           
           (transactions_count - previous_stat.transactions_count) / time_diff rescue nil
         else
-          nil
+          previous_stat.tps
         end
 
         ping_things = gather_ping_things(interval)
@@ -37,7 +37,7 @@ class CreatePingThingStatsService
           time_from: @time_to - interval.minutes,
           num_of_records: ping_things.count,
           average_slot_latency: ping_things.average_slot_latency,
-          transactions_count: transactions_count,
+          transactions_count: transactions_count || tps * (DateTime.now.to_f - previous_stat.created_at.to_f)
           tps: tps
         )
       end
@@ -59,9 +59,21 @@ class CreatePingThingStatsService
   end
 
   def get_transactions_count(config_urls: Rails.application.credentials.solana[:mainnet_urls])
-    cli_request(
-      "transaction-count",
-      @config_urls
-    )
+    retried = false
+    begin
+      tx_count = cli_request(
+        "transaction-count",
+        @config_urls
+      )
+      raise "error getting transactions count" if tx_count.nil? || tx_count.to_i <= 0
+    rescue
+      if !retried
+        retried = true
+        retry
+      else
+        tx_count = nil
+      end
+    end
+    tx_count
   end
 end
