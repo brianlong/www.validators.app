@@ -74,5 +74,6 @@ class CreatePingThingStatsService
         tx_count = nil
       end
     end
+    tx_count
   end
 end
