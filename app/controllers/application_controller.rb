@@ -36,12 +36,11 @@ class ApplicationController < ActionController::Base
   end
 
   def log_request_headers
-    request.env.select do |k, _|
-      k.downcase.start_with?('http-') || k.downcase.start_with?('http_') || k.downcase.start_with?('x_forwarded') || k.downcase.start_with?('x-forwarded')
-    end
     logger ||= Logger.new("#{Rails.root}/log/load_balancer_headers_logger.log")
-    logger.info request.env.keys
-    logger.info request.remote_ip
+    logger.info request.headers.to_h.keys
+    logger.info "Remote IP: " + request.remote_ip
+    logger.info "X_FORWARDED_FOR: " + request.env["X_FORWARDED_FOR"].to_s
+    logger.info "X-Forwarded-For: " + request.env["X-Forwarded-For"].to_s
     logger.info "---"
   end
 
