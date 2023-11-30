@@ -2,6 +2,8 @@
 
 # ValidatorsController
 class ValidatorsController < ApplicationController
+  include ValidatorsControllerHelper
+
   before_action :set_validator, only: %i[show]
   before_action :set_batch_and_epoch, only: %i[index]
   before_action :set_session_seed, only: %i[index]

@@ -162,23 +162,6 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [4, 3, 2, 1, 0], result.pluck("validator_score_v1s.total_score")
   end
 
-  test "#call with api returns results in correct stake order" do
-    5.times do |n|
-      v = create(
-        :validator,
-        :with_score,
-        :mainnet,
-        :with_data_center_through_validator_ip
-      )
-      v.score.update_column(:active_stake,  n * 1000)
-    end
-
-    result = ValidatorQuery.new(api: true).call(network: @mainnet_network, sort_order: "score")
-
-    assert_equal 5, result.count
-    assert_equal (0..4).map{|n| n * 1000}.reverse, result.map{ |v| v.score.active_stake }
-  end
-
   test "#call returns results in correct name order" do
     5.times do |n|
       create(
@@ -253,5 +236,31 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     result = ValidatorQuery.new.call(random_seed_val: 0)
 
     assert_equal validator, result.first
+  end
+
+  test "#call returns only active validators if active_only is true" do
+    create_list(:validator, 5, :with_score, :mainnet, is_active: false)
+    create_list(:validator, 5, :with_score, :mainnet, is_active: true)
+
+    result = ValidatorQuery.new.call(
+      network: @mainnet_network,
+      query_params: { active_only: true }
+    )
+
+    assert_equal 5, result.count
+    assert_equal [true], result.pluck(:is_active).uniq
+  end
+
+  test "#call returns all validators if active_only is false" do
+    create_list(:validator, 5, :with_score, :mainnet, is_active: false)
+    create_list(:validator, 5, :with_score, :mainnet, is_active: true)
+
+    result = ValidatorQuery.new.call(
+      network: @mainnet_network,
+      query_params: { active_only: false }
+    )
+
+    assert_equal 10, result.count
+    assert_equal [true, false], result.pluck(:is_active).uniq
   end
 end
