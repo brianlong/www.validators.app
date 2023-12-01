@@ -5,7 +5,6 @@ class UpdateAvatarFileServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
   include VcrHelper
 
-
   def setup
     @namespace = File.join("services", "update_avatar_file_service")
     @cassette = self.class.name.underscore

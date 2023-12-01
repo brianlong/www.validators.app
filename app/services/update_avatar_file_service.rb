@@ -52,11 +52,10 @@ class UpdateAvatarFileService
 
   def process_and_save_avatar
     @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
-    ImageProcessing::MiniMagick
-      .source(@tmp_file)
-      .convert("png")
-      .resize_to_limit(*IMAGE_SIZE_LIMIT)
-      .call(destination: @avatar_file)
+    ImageProcessing::MiniMagick.source(@tmp_file)
+                               .convert("png")
+                               .resize_to_limit(*IMAGE_SIZE_LIMIT)
+                               .call(destination: @avatar_file)
 
     if File.exist?(@avatar_file)
       @logger.info("Prepared file to attach: " + @avatar_file)
