@@ -93,7 +93,7 @@ class Validator < ApplicationRecord
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
 
-  after_save :update_avatar_file, if: :saved_change_to_avatar_url?
+  after_save :update_avatar_file, if: :should_update_avatar_file?
 
   class << self
     def with_private(show: "true")
@@ -154,6 +154,10 @@ class Validator < ApplicationRecord
 
   def avatar_file_url
     polymorphic_url(avatar) if avatar.attached?
+  end
+
+  def should_update_avatar_file?
+    saved_change_to_avatar_url? || saved_change_to_is_active? && is_active
   end
 
   def update_avatar_file
