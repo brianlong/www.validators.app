@@ -50,7 +50,7 @@ end
 
 every 1.hour, at: 10, roles: [:background] do
   ruby_script 'validators_get_info.rb'
-  ruby_script 'validators_get_avatar_url.rb'
+  ruby_script 'validators_get_keybase_avatar_url.rb'
 end
 
 every 2.hour, at: 15, roles: [:background] do
@@ -109,7 +109,7 @@ every 1.day, at: '3:40am', roles: [:background] do
 end
 
 every 7.days, at: '4:00am', roles: [:background] do
-  ruby_script 'update_validator_avatars.rb'
+  ruby_script 'validators_update_avatar_files.rb'
 end
 
 every 20.minutes, roles: [:background] do

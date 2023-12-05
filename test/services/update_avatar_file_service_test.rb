@@ -14,8 +14,8 @@ class UpdateAvatarFileServiceTest < ActiveSupport::TestCase
       avatar_url: "https://s3.amazonaws.com/keybase_processed_uploads/3af995d21a8fe4cec4d6e83104f87205_360_360.jpg"
     )
     @service = UpdateAvatarFileService.new(@validator)
-    @tmp_file_path = Rails.root.join("storage", "validators", "avatars", "tmp", @validator.avatar_tmp_file_name)
-    @avatar_file_path = Rails.root.join("storage", "validators", "avatars", @validator.avatar_file_name)
+    @tmp_file_path = Rails.root.join("tmp", @validator.avatar_tmp_file_name)
+    @avatar_file_path = Rails.root.join("tmp", @validator.avatar_file_name)
   end
 
   def teardown

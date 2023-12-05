@@ -4,7 +4,7 @@ require "digest/md5"
 require "open-uri"
 require "image_processing/mini_magick"
 
-STORAGE_PATH = Rails.root.join("storage", "validators", "avatars").to_s.freeze
+STORAGE_PATH = Rails.root.join("tmp").to_s.freeze
 IMAGE_SIZE_LIMIT = [320, 320].freeze
 LOG_PATH = Rails.root.join("log", "update_avatar_file_service.log").to_s.freeze
 
@@ -36,12 +36,12 @@ class UpdateAvatarFileService
 
   def download_tmp_file
     download = URI.open(@validator.avatar_url)
-    @tmp_file = STORAGE_PATH + "/tmp/" + @validator.avatar_tmp_file_name
+    @tmp_file = STORAGE_PATH + "/" + @validator.avatar_tmp_file_name
     if IO.copy_stream(download, @tmp_file).positive?
       @logger.info("Downloaded file: " + @tmp_file)
       @tmp_file
     else
-      @logger.error("Error downloading file: " + tmp_file_path)
+      @logger.error("Error downloading file: " + @tmp_file)
       nil
     end
   end
@@ -52,10 +52,14 @@ class UpdateAvatarFileService
 
   def process_and_save_avatar
     @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
-    ImageProcessing::MiniMagick.source(@tmp_file)
-                               .convert("png")
-                               .resize_to_limit(*IMAGE_SIZE_LIMIT)
-                               .call(destination: @avatar_file)
+    begin
+      ImageProcessing::MiniMagick.source(@tmp_file)
+                                .convert("png")
+                                .resize_to_limit(*IMAGE_SIZE_LIMIT)
+                                .call(destination: @avatar_file)
+    rescue => e
+      Appsignal.send_error(e)
+    end
 
     if File.exist?(@avatar_file)
       @logger.info("Prepared file to attach: " + @avatar_file)
