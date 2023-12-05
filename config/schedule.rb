@@ -82,6 +82,10 @@ every 1.day, at: '0:15am', roles: [:background] do
   ruby_script_data_centers 'append_to_unknown_data_center.rb'
 end
 
+every 1.day, at: '1:00am', roles: [:background] do
+  ruby_script 'validators_update_avatar_url.rb'
+end
+
 every 1.day, at: '2:00am', roles: [:background] do
   ruby_script 'remove_unconfirmed_users.rb'
 end
@@ -118,7 +122,7 @@ end
 
 every 1.minute, roles: [:background] do
   ruby_script "add_current_epoch.rb"
-  runner "PingThingStatsWorker.perform_async"
+  runner "PingThingStatsWorker.set(queue: :high_priority).perform_async"
   runner "PingThingRecentStatsWorker.perform_async('mainnet')"
   runner "PingThingRecentStatsWorker.perform_async('testnet')"
   runner "PingThingRecentStatsWorker.perform_async('pythnet')"
