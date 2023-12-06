@@ -3,6 +3,7 @@
 require "digest/md5"
 require "open-uri"
 require "image_processing/mini_magick"
+require 'rmagick'
 
 STORAGE_PATH = Rails.root.join("tmp").to_s.freeze
 IMAGE_SIZE_LIMIT = [320, 320].freeze
@@ -53,11 +54,12 @@ class UpdateAvatarFileService
   def process_and_save_avatar
     @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
     begin
-      ImageProcessing::MiniMagick.source(@tmp_file)
-                                .loader(page: 0)
-                                .convert("png")
-                                .resize_to_limit(*IMAGE_SIZE_LIMIT)
-                                .call(destination: @avatar_file)
+      frames_count = MiniMagick::Image.new(@tmp_file).pages.count
+      if frames_count > 1
+        process_gif_file
+      else
+        process_image_file
+      end
     rescue => e
       Appsignal.send_error(e)
     end
@@ -69,6 +71,24 @@ class UpdateAvatarFileService
       @logger.error("Error preparing file to attach: " + @avatar_file)
       nil
     end
+  end
+
+  def process_gif_file
+    original_gif = File.new(@tmp_file)
+    frames = Magick::ImageList.new.from_blob original_gif.read
+    frames = frames.coalesce.remap
+    frames.each do |x|
+      x.resize_to_fit!(*IMAGE_SIZE_LIMIT)
+    end
+    frames = frames.optimize_layers( Magick::OptimizeLayer )
+    File.open(@avatar_file, 'wb') { |f| f.write frames.to_blob }
+  end
+
+  def process_image_file
+    ImageProcessing::MiniMagick.source(@tmp_file)
+                               .convert("png")
+                               .resize_to_limit(*IMAGE_SIZE_LIMIT)
+                               .call(destination: @avatar_file)
   end
 
   def update_attached_avatar
