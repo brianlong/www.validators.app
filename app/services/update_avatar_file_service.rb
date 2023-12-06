@@ -54,6 +54,7 @@ class UpdateAvatarFileService
     @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
     begin
       ImageProcessing::MiniMagick.source(@tmp_file)
+                                .loader(page: 0)
                                 .convert("png")
                                 .resize_to_limit(*IMAGE_SIZE_LIMIT)
                                 .call(destination: @avatar_file)
