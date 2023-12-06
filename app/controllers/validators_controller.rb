@@ -4,6 +4,8 @@
 class ValidatorsController < ApplicationController
   before_action :set_validator, only: %i[show]
   before_action :set_batch_and_epoch, only: %i[index]
+  before_action :set_cache_headers
+
 
   # GET /validators
   # GET /validators.json
@@ -81,6 +83,10 @@ class ValidatorsController < ApplicationController
         batch_uuid: @batch.uuid
       ).first
     end
+  end
+
+  def set_cache_headers
+    expires_in 5.minutes, public: true
   end
 
   def at_33_stake_index(validators, batch, per_page)
