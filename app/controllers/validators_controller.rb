@@ -2,8 +2,11 @@
 
 # ValidatorsController
 class ValidatorsController < ApplicationController
+  include ValidatorsControllerHelper
+
   before_action :set_validator, only: %i[show]
   before_action :set_batch_and_epoch, only: %i[index]
+  before_action :set_session_seed, only: %i[index]
 
   # GET /validators
   # GET /validators.json
@@ -16,7 +19,6 @@ class ValidatorsController < ApplicationController
     end
 
     watchlist_user = validators_params[:watchlist] ? current_user&.id : nil
-    session[:random_seed_val] ||= rand(0..1000)
 
     @validators = ValidatorQuery.new(watchlist_user: watchlist_user).call(
       network: validators_params[:network],

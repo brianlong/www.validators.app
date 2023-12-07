@@ -45,6 +45,7 @@ class Validator < ApplicationRecord
     admin_warning
     jito
     stake_pools_list
+    is_active
   ].freeze
 
   FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
@@ -318,7 +319,8 @@ class Validator < ApplicationRecord
         :created_at,
         :updated_at,
         :admin_warning,
-        :jito
+        :jito,
+        :is_active
       )
     end
   end
