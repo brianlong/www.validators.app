@@ -251,6 +251,18 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [true], result.pluck(:is_active).uniq
   end
 
+  test "#call returns only active validators if active_only parameter is not provided" do
+    create_list(:validator, 5, :with_score, :mainnet, is_active: false)
+    create_list(:validator, 5, :with_score, :mainnet, is_active: true)
+
+    result = ValidatorQuery.new.call(
+      network: @mainnet_network
+    )
+
+    assert_equal 5, result.count
+    assert_equal [true], result.pluck(:is_active).uniq
+  end
+
   test "#call returns all validators if active_only is false" do
     create_list(:validator, 5, :with_score, :mainnet, is_active: false)
     create_list(:validator, 5, :with_score, :mainnet, is_active: true)

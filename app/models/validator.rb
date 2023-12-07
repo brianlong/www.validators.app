@@ -319,7 +319,8 @@ class Validator < ApplicationRecord
         :created_at,
         :updated_at,
         :admin_warning,
-        :jito
+        :jito,
+        :is_active
       )
     end
   end
