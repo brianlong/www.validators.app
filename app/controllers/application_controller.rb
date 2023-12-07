@@ -39,8 +39,8 @@ class ApplicationController < ActionController::Base
     logger ||= Logger.new("#{Rails.root}/log/load_balancer_headers_logger.log")
     logger.info request.headers.to_h.keys
     logger.info "Remote IP: " + request.remote_ip
-    logger.info "X_FORWARDED_FOR: " + request.env["X_FORWARDED_FOR"].to_s
-    logger.info "X-Forwarded-For: " + request.env["X-Forwarded-For"].to_s
+    logger.info "HTTP_X_FORWARDED_FOR: " + request.env["HTTP_X_FORWARDED_FOR"].to_s
+    logger.info "HTTP_CF_IPCOUNTRY: " + request.env["HTTP_CF_IPCOUNTRY"].to_s
     logger.info "---"
   end
 
