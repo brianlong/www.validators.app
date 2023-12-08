@@ -5,6 +5,7 @@ module Api
     class ValidatorsController < BaseController
       include ValidatorsHelper
       include ValidatorsControllerHelper
+      include IpGeoCountryHelper
 
       before_action :set_skipped_slots_report
       before_action :set_validator_and_score, only: %i[show show_ledger]
@@ -119,7 +120,8 @@ module Api
             block_histories: @block_histories,
             block_history_stats: @block_history_stats,
             validator_history: @val_history,
-            validator_score_details: validator_score_attrs(@validator)
+            validator_score_details: validator_score_attrs(@validator),
+            geo_country: set_geo_country
           }
         else
           @validator = ValidatorQuery.new.call_single_validator(
