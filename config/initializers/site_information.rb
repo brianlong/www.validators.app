@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ADMIN_EMAIL = 'customer.service@fmadata.com'
+ADMIN_EMAIL = 'hello@blocklogic.net'
 ADMIN_SITE = ''
 BRIAN_EMAIL = 'brian.long@fmadata.com'
 COMPANY_AKA = 'validators.app'
@@ -15,3 +15,4 @@ OUR_STREET_ADDRESS = '2575 PEARL ST STE 230'
 OUR_TELEPHONE = '(303) 443-2070'
 THIS_SITE = 'www.validators.app'
 THIS_HOST = 'validators.app'
+

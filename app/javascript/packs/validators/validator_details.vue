@@ -17,7 +17,8 @@
              :title="stake[1].title"
              class="btn btn-sm btn-secondary"
              target="_blank"
-             v-for="stake in shuffle_stake_delegations()">
+             v-for="stake in shuffle_stake_delegations()"
+             v-bind="stake.name">
             {{ stake[1].name }}
           </a>
         </div>
@@ -274,19 +275,23 @@
   const STAKE_DELEGATIONS = {
     solstake: {
       title: 'Delegate SOL to this validator on SolStake.io',
-      name: 'Delegate on Solstake.io'
+      name: 'Delegate on Solstake.io',
+      excluded_countries: []
     },
     kiwi: {
       title: 'Delegate SOL to this validator on Staking.kiwi',
-      name: 'Delegate on Staking.kiwi'
+      name: 'Delegate on Staking.kiwi',
+      excluded_countries: []
     },
     blazestake: {
       title: 'Delegate SOL to this validator on BlazeStake',
-      name: 'Liquid Stake through BlazeStake'
+      name: 'Liquid Stake through BlazeStake',
+      excluded_countries: ['GB']
     },
     marinade: {
       title: 'Delegate SOL to this validator on Marinade',
-      name: 'Direct Stake with Marinade'
+      name: 'Direct Stake with Marinade',
+      excluded_countries: ['GB']
     }
   }
 
@@ -310,6 +315,7 @@
         live: false,
         order: null,
         page: null,
+        geo_country: null,
         validator_history: {},
         loading_image: loadingImage,
         jito_badge: jitoBadge,
@@ -354,6 +360,7 @@
           ctx.block_history_stats = response.data.block_history_stats
           ctx.skipped_slots = JSON.parse(response.data.skipped_slots)
           ctx.validator_history = response.data.validator_history
+          ctx.geo_country = response.data.geo_country
           ctx.is_loading_validator = false
         })
       },
@@ -431,8 +438,16 @@
       },
 
       shuffle_stake_delegations() {
-        return Object.entries(STAKE_DELEGATIONS).map(stake => [stake[0], stake[1]])
-                                                .sort((a, b) => 0.5 - Math.random())
+        let delegations = {}
+        if(this.geo_country == null) {
+          delegations = Object.entries(STAKE_DELEGATIONS)
+        } else {
+          delegations = Object.entries(STAKE_DELEGATIONS).filter(
+            stake => !stake[1].excluded_countries.includes(this.geo_country)
+          )
+        }
+        return delegations.map(stake => [stake[0], stake[1]])
+                          .sort((a, b) => 0.5 - Math.random())
       }
     },
 

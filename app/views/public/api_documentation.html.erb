@@ -71,6 +71,8 @@
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/validators/:network.json?order=score&limit=50'</pre>
 <p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1. Can be combined with limit param.</p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/validators/:network.json?order=score&page=1&limit=50'</pre>
+<p><strong class="text-muted">`active_only=[true, false]`</strong> will exclude validators delinquent for more than 24h. Defaults to true.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/validators/:network.json?order=score&page=1&limit=50&active_only=false'</pre>
 <p>
   <strong class="text-muted">`q=query`</strong> will limit the results to entries containing query.
   The query value is compared against validator's name, account and score data center key.
@@ -118,8 +120,8 @@
     "skipped_slot_percent":"0.5155",
     "ping_time":"205.703",
     "url":"<%= @api_path %>/validators/testnet/12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX.json",
-    "stake_pools_list":["Jito", "Marinade"]
-
+    "stake_pools_list":["Jito", "Marinade"],
+    "is_active": true
   },
   ...
 ]
