@@ -28,7 +28,7 @@ class CreatePingThingStatsService
 
         resp_times = ping_things.pluck(:response_time).compact
 
-        PingThingStat.create(
+        PingThingStat.find_or_create_by(
           network: @network,
           interval: interval,
           median: resp_times.median,
