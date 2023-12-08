@@ -438,11 +438,16 @@
       },
 
       shuffle_stake_delegations() {
-        let delegations = Object.entries(STAKE_DELEGATIONS).filter(
-          stake => !stake[1].excluded_countries.includes(this.geo_country)
-        )
+        let delegations = {}
+        if(this.geo_country == null) {
+          delegations = Object.entries(STAKE_DELEGATIONS)
+        } else {
+          delegations = Object.entries(STAKE_DELEGATIONS).filter(
+            stake => !stake[1].excluded_countries.includes(this.geo_country)
+          )
+        }
         return delegations.map(stake => [stake[0], stake[1]])
-                                                .sort((a, b) => 0.5 - Math.random())
+                          .sort((a, b) => 0.5 - Math.random())
       }
     },
 
