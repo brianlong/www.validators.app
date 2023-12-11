@@ -33,7 +33,7 @@ class ValidatorQuery < ApplicationQuery
     scope = set_ordering(scope, sort_order, random_seed_val)
     scope = set_pagination(scope, page, limit)
 
-    [true, "true"].include?(query_params[:active_only]) ? scope.scorable : scope
+    [false, "false"].include?(query_params[:active_only]) ? scope : scope.scorable
   end
 
   def call_single_validator(network: "mainnet", account:)
