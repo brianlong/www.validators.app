@@ -82,7 +82,7 @@ class UpdateAvatarFileService
       x.resize_to_fit!(*IMAGE_SIZE_LIMIT)
     end
     frames = frames.optimize_layers( Magick::OptimizeLayer )
-    File.open(@avatar_file, 'wb') { |f| f.write frames.to_blob }
+    File.open(@avatar_file, "wb") { |f| f.write frames.to_blob }
   end
 
   def process_image_file

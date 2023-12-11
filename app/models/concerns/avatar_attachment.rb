@@ -10,7 +10,7 @@ module AvatarAttachment
 
   def avatar_type
     if avatar.attached? && !avatar.content_type.in?(%w(image/png))
-      errors.add(:avatar, 'must be PNG')
+      errors.add(:avatar, "must be PNG")
     end
   end
 
