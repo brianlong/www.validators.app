@@ -30,8 +30,7 @@ class ValidatorsController < ApplicationController
       query_params: {
         query: validators_params[:q],
         admin_warning: validators_params[:admin_warning],
-        jito: validators_params[:jito] == "true",
-        active_only: true
+        jito: validators_params[:jito] == "true"
       }
     )
 
