@@ -12,7 +12,19 @@ class ValidatorQuery < ApplicationQuery
                      end
   end
 
-  def call(network: "mainnet", sort_order: "score", limit: 9999, page: 1, random_seed_val: 123, query_params: { admin_warning: nil, query: nil, jito: false })
+  def call(
+      network: "mainnet",
+      sort_order: "score",
+      limit: 9999,
+      page: 1,
+      random_seed_val: 123,
+      query_params: {
+        admin_warning: nil,
+        query: nil,
+        jito: false,
+        active_only: true
+      }
+    )
     scope = @default_scope.preload(:validator_score_v1_for_api)
     scope = filter_by_collaboration(scope, query_params[:jito])
     scope = filter_by_network(scope, network)
@@ -21,7 +33,7 @@ class ValidatorQuery < ApplicationQuery
     scope = set_ordering(scope, sort_order, random_seed_val)
     scope = set_pagination(scope, page, limit)
 
-    @api ? scope : scope.scorable
+    [false, "false"].include?(query_params[:active_only]) ? scope : scope.scorable
   end
 
   def call_single_validator(network: "mainnet", account:)
@@ -83,11 +95,12 @@ class ValidatorQuery < ApplicationQuery
       "validators.name asc"
     when "stake"
       "validator_score_v1s.network, validator_score_v1s.active_stake desc, validator_score_v1s.total_score desc"
-    else # Order by score by default
-      main_sort = "validator_score_v1s.network, validator_score_v1s.total_score desc"
-      secondary_sort = @api ? "validator_score_v1s.active_stake desc" : "RAND(#{random_seed_val})"
-
-      [main_sort, secondary_sort].join(", ")
+    else # Order by network + score + random by default
+      [
+        "validator_score_v1s.network",
+        "validator_score_v1s.total_score desc",
+        "RAND(#{random_seed_val})"
+      ].join(", ")
     end
   end
 

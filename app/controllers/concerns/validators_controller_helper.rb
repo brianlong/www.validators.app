@@ -68,4 +68,8 @@ module ValidatorsControllerHelper
     return true if true_values.include?(value)
     false
   end
+
+  def set_session_seed
+    session[:random_seed_val] ||= rand(0..1000)
+  end
 end
