@@ -5,6 +5,7 @@ module Api
     class ValidatorsController < BaseController
       include ValidatorsHelper
       include ValidatorsControllerHelper
+      include IpGeoCountryHelper
 
       before_action :set_skipped_slots_report
       before_action :set_validator_and_score, only: %i[show show_ledger]
@@ -111,7 +112,12 @@ module Api
           end
 
           render json: {
-            validator: @validator.to_json(methods: [:dch_data_center_key, :vote_account_active, :commission_histories_exist]),
+            validator: @validator.to_json(methods: [
+              :dch_data_center_key,
+              :vote_account_active,
+              :commission_histories_exist,
+              :avatar_file_url
+            ]),
             score: @score.to_json(methods: [:displayed_total_score]),
             root_blocks: @root_blocks,
             vote_blocks: @vote_blocks,
@@ -119,7 +125,8 @@ module Api
             block_histories: @block_histories,
             block_history_stats: @block_history_stats,
             validator_history: @val_history,
-            validator_score_details: validator_score_attrs(@validator)
+            validator_score_details: validator_score_attrs(@validator),
+            geo_country: set_geo_country
           }
         else
           @validator = ValidatorQuery.new.call_single_validator(

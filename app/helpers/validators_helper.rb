@@ -99,6 +99,10 @@ module ValidatorsHelper
                     content_tag(:span, nil, class: "fa-solid fa-users-slash", title: "Private Validator"),
                     class: "img-circle-large-private"
       end
+    elsif validator.avatar.attached?
+      link_to validator_url(link_params) do
+        image_tag validator.avatar, class: "img-circle-large"
+      end
     elsif validator.avatar_url.present?
       link_to validator_url(link_params) do
         sanitize("<img src=\"#{validator.avatar_url}\" class='img-circle-large'")

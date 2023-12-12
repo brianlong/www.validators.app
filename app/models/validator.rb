@@ -7,6 +7,7 @@
 #  id                  :bigint           not null, primary key
 #  account             :string(191)
 #  admin_warning       :string(191)
+#  avatar_hash         :string(191)
 #  avatar_url          :string(191)
 #  consensus_mods      :boolean          default(FALSE)
 #  details             :string(191)
@@ -31,6 +32,10 @@
 #  index_validators_on_network_is_active_is_destroyed_is_rpc  (network,is_active,is_destroyed,is_rpc)
 #
 class Validator < ApplicationRecord
+
+  include AvatarAttachment
+  include Rails.application.routes.url_helpers
+
   FIELDS_FOR_API = %i[
     account
     avatar_url
@@ -89,6 +94,8 @@ class Validator < ApplicationRecord
   delegate :data_center_key, to: :data_center_host, prefix: :dch, allow_nil: true
   delegate :address, to: :validator_ip_active, prefix: :vip, allow_nil: true
 
+  after_save :update_avatar_file, if: :should_update_avatar_file?
+
   class << self
     def with_private(show: "true")
       show == "true" ? all : where.not("validator_score_v1s.commission = 100")
@@ -144,6 +151,19 @@ class Validator < ApplicationRecord
     def total_active_stake
       includes(:validator_score_v1).sum(:active_stake)
     end
+  end
+
+  def avatar_file_url
+    polymorphic_url(avatar) if avatar.attached?
+  end
+
+  def should_update_avatar_file?
+    saved_change_to_avatar_url? || saved_change_to_is_active? && is_active
+  end
+
+  def update_avatar_file
+    UpdateAvatarFileWorker.set(queue: :low_priority)
+                          .perform_async({validator_id: id}.stringify_keys) unless avatar_url.nil?
   end
 
   def active?

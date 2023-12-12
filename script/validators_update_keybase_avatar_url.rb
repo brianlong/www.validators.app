@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# RAILS_ENV=production bundle exec ruby script/validators_get_avatar_url.rb
+# RAILS_ENV=production bundle exec ruby script/validators_get_keybase_avatar_url.rb
 # This script refreshes existing keybase avatars, doesn't override non-keybase avatars
 
 require File.expand_path('../config/environment', __dir__)
