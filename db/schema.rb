@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_08_131733) do
+ActiveRecord::Schema.define(version: 2023_11_20_105904) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -702,6 +702,7 @@ ActiveRecord::Schema.define(version: 2023_11_08_131733) do
     t.boolean "jito", default: false
     t.text "stake_pools_list"
     t.integer "jito_commission"
+    t.string "avatar_hash"
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
     t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end

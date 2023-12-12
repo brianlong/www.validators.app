@@ -13,6 +13,16 @@ amazon:
   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
   region: <%= Rails.application.credentials.dig(:aws, :region) %>
   bucket: <%= Rails.application.credentials.dig(:aws, :bucket) %>
+  public: true
+
+digitalocean:
+  service: S3
+  access_key_id: <%= Rails.application.credentials.dig(:digitalocean, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:digitalocean, :secret_access_key) %>
+  region: <%= Rails.application.credentials.dig(:digitalocean, :region) %>
+  bucket: <%= Rails.application.credentials.dig(:digitalocean, :bucket) %>
+  endpoint: <%= Rails.application.credentials.dig(:digitalocean, :endpoint) %>
+  public: true
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:

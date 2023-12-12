@@ -5,6 +5,7 @@ module ValidatorsControllerHelper
     hash = {}
 
     hash.merge!(validator.to_builder.attributes!)
+    hash.merge!({avatar_file_url: validator.avatar_file_url}) if validator.avatar.attached?
 
     validator_score = with_history ? validator.validator_score_v1 : validator.validator_score_v1_for_api
 
