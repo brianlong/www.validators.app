@@ -15,7 +15,6 @@ class UpdateAvatarFileServiceTest < ActiveSupport::TestCase
     )
     @service = UpdateAvatarFileService.new(@validator)
     @tmp_file_path = Rails.root.join("tmp", @validator.avatar_tmp_file_name)
-    @avatar_file_path = Rails.root.join("tmp", @validator.avatar_file_name)
   end
 
   def teardown
@@ -40,22 +39,26 @@ class UpdateAvatarFileServiceTest < ActiveSupport::TestCase
   end
 
   test "#process_and_save_avatar saves image ready to attach" do
+    avatar_file_path = Rails.root.join("tmp", @validator.avatar_file_png_name)
+
     vcr_cassette(@namespace, @cassette) do
       @service.download_tmp_file
       @service.process_and_save_avatar
 
-      assert File.exist?(@avatar_file_path)
+      assert File.exist?(avatar_file_path)
     end
   end
 
   test "#process_and_save_avatar saves gif ready to attach" do
+    avatar_file_path = Rails.root.join("tmp", @validator.avatar_file_gif_name)
+
     @validator.update(avatar_url: "https://upload.wikimedia.org/wikipedia/commons/c/c0/An_example_animation_made_with_Pivot.gif")
     @validator.reload
     vcr_cassette(@namespace, @cassette + "-gif") do
       @service.download_tmp_file
       @service.process_and_save_avatar
 
-      assert File.exist?(@avatar_file_path)
+      assert File.exist?(avatar_file_path)
     end
   end
 
