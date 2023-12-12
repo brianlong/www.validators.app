@@ -52,7 +52,6 @@ class UpdateAvatarFileService
   end
 
   def process_and_save_avatar
-    @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
     begin
       frames_count = MiniMagick::Image.new(@tmp_file).pages.count
       if frames_count > 1
@@ -74,6 +73,7 @@ class UpdateAvatarFileService
   end
 
   def process_gif_file
+    @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_gif_name
     original_gif = File.new(@tmp_file)
     frames = Magick::ImageList.new.from_blob original_gif.read
     frames = frames.coalesce.remap
@@ -85,6 +85,7 @@ class UpdateAvatarFileService
   end
 
   def process_image_file
+    @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_png_name
     ImageProcessing::MiniMagick.source(@tmp_file)
                                .convert("png")
                                .resize_to_limit(*IMAGE_SIZE_LIMIT)
@@ -94,7 +95,7 @@ class UpdateAvatarFileService
   def update_attached_avatar
     @validator.avatar.purge
     @logger.info("Purged old avatar for validator: " + @validator.account)
-    @validator.avatar.attach(io: File.open(@avatar_file), filename: @validator.avatar_file_name)
+    @validator.avatar.attach(io: File.open(@avatar_file), filename: @avatar_file.split("/").last)
     @logger.info("Attached new avatar for validator: " + @validator.account)
   end
 
