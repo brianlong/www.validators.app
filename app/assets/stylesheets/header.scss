@@ -22,6 +22,7 @@ header {
     .btn {
       width: fit-content;
       color: $link-color;
+      height: 49px;
       &:hover {
         color: $background-color;
       }
