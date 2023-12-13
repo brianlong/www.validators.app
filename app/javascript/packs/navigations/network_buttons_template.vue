@@ -1,14 +1,14 @@
 <template>
-  <div class="navbar-dropdown">
-    <button :class="dropdown_visibility_class + ' btn btn-lg btn-secondary'"
+  <div class="dropdown">
+    <button :class="dropdown_visibility_class + ' btn btn-lg btn-secondary btn'"
             type="button" @click="toggle_dropdown">
       {{ capitalize(network) }}
     </button>
 
-    <ul :class="dropdown_visibility_class + ' navbar-dropdown-options'" v-click-outside="hide_dropdown">
+    <ul :class="dropdown_visibility_class + ' dropdown-options'" v-click-outside="hide_dropdown">
       <li v-for="network_entry in $store.state.networks"
-          :key="network_entry" class="navbar-dropdown-item">
-        <a class="navbar-dropdown-link" href="#" @click.prevent="change_network(network_entry)">
+          :key="network_entry" class="dropdown-item">
+        <a class="dropdown-link" href="#" @click.prevent="change_network(network_entry)">
           {{ capitalize(network_entry) }}
         </a>
       </li>
