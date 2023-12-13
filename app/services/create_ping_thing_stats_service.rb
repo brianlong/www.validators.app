@@ -31,15 +31,16 @@ class CreatePingThingStatsService
         PingThingStat.find_or_create_by(
           network: @network,
           interval: interval,
-          median: resp_times.median,
-          min: resp_times.min,
-          max: resp_times.max,
-          time_from: @time_to - interval.minutes,
-          num_of_records: ping_things.count,
-          average_slot_latency: ping_things.average_slot_latency,
-          transactions_count: transactions_count || tps * (DateTime.now.to_f - previous_stat.created_at.to_f),
-          tps: tps
-        )
+          time_from: @time_to - interval.minutes
+        ) do |pts|
+          pts.median = resp_times.median
+          pts.min = resp_times.min
+          pts.max = resp_times.max
+          pts.num_of_records = ping_things.count
+          pts.average_slot_latency = ping_things.average_slot_latency
+          pts.transactions_count = transactions_count || tps * (DateTime.now.to_f - previous_stat.created_at.to_f)
+          pts.tps = tps
+        end
       end
     end
   end
