@@ -52,15 +52,15 @@ class UpdateAvatarFileService
   end
 
   def process_and_save_avatar
-    @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
     begin
-      # frames_count = MiniMagick::Image.new(@tmp_file).pages.count
-      # if frames_count > 1
-      #   process_gif_file
-      # else
-      #   process_image_file
-      # end
-      process_image_file
+      frames_count = MiniMagick::Image.new(@tmp_file).pages.count
+      if frames_count > 1
+        @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name(gif: true)
+        process_gif_file
+      else
+        @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
+        process_image_file
+      end
     rescue => e
       Appsignal.send_error(e)
     end

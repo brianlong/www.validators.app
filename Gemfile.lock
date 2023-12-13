@@ -285,6 +285,7 @@ GEM
     parser (3.0.2.0)
       ast (~> 2.4.1)
     path_expander (1.1.0)
+    pkg-config (1.5.6)
     pronto (0.11.2)
       gitlab (>= 4.4.0, < 5.0)
       httparty (>= 0.13.7, < 1.0)
@@ -364,6 +365,8 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.6)
+    rmagick (5.3.0)
+      pkg-config (~> 1.4)
     rubocop (1.18.3)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
@@ -523,6 +526,7 @@ DEPENDENCIES
   rails-controller-testing
   recaptcha
   redis (~> 4.8.1)
+  rmagick
   rubocop (~> 1.18)
   sass-rails (>= 6)
   selenium-webdriver

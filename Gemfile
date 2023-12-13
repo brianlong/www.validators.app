@@ -57,7 +57,7 @@ gem 'whenever', require: false
 
 # Use Active Storage variant
 gem 'image_processing'
-#gem 'rmagick'
+gem 'rmagick'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.16', require: false

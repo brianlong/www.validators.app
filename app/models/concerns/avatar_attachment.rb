@@ -9,16 +9,22 @@ module AvatarAttachment
   end
 
   def avatar_type
-    if avatar.attached? && !avatar.content_type.in?(%w(image/png))
-      errors.add(:avatar, 'must be PNG')
+    if avatar.attached? && !avatar.content_type.in?(%w(image/png image/gif))
+      errors.add(:avatar, "must be PNG or GIF")
     end
   end
 
-  def avatar_file_name
-    self.account + "_" + self.network + ".png"
+  def avatar_core_name
+    self.account + "_" + self.network
   end
 
-  def avatar_tmp_file_name
-    self.account + "_" + self.network + "_tmp.png"
+  def avatar_file_name(gif: false)
+    extension = gif ? ".gif" : ".png"
+    avatar_core_name + extension
+  end
+
+  def avatar_tmp_file_name(gif: false)
+    extension = gif ? ".gif" : ".png"
+    avatar_core_name + "_tmp" + extension
   end
 end
