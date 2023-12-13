@@ -11,12 +11,12 @@ class CreatePingThingStatsService
   end
 
   def call
-    @logger.info "#{self.object_id} - CreatePingThingStatsService started at #{@time_to}"
+    @logger.info "#{self.object_id} - #{@network} - CreatePingThingStatsService started at #{@time_to}"
     transactions_count = get_transactions_count.to_i rescue nil
-    @logger.info "#{self.object_id} - transactions_count: #{transactions_count}"
+    @logger.info "##{self.object_id} - #{@network} - transactions_count: #{transactions_count}"
     PingThingStat::INTERVALS.each do |interval|
       if should_add_new_stats?(interval)
-        @logger.info "#{self.object_id} - adding new stats for interval: #{interval}"
+        @logger.info "#{self.object_id} - #{@network} - searching new stats for interval: #{interval}"
         previous_stat = PingThingStat.where(network: @network, interval: interval).order(created_at: :desc).first
         tps = if previous_stat&.transactions_count&.positive? && transactions_count.positive?
           # time diff in seconds
@@ -30,7 +30,7 @@ class CreatePingThingStatsService
         ping_things = gather_ping_things(interval)
         next unless ping_things.any?
 
-        @logger.info "#{self.object_id} - found #{ping_things.count} ping things for interval"
+        @logger.info "#{self.object_id} - #{@network} - found #{ping_things.count} ping things for interval"
         resp_times = ping_things.pluck(:response_time).compact
 
         pt_stat = PingThingStat.create(
@@ -45,9 +45,9 @@ class CreatePingThingStatsService
           transactions_count: transactions_count || tps * (DateTime.now.to_f - previous_stat.created_at.to_f),
           tps: tps
         )
-        @logger.info "#{self.object_id} - created pt_stat: #{pt_stat.inspect}"
+        @logger.info "#{self.object_id} - #{@network} - created pt_stat: #{pt_stat.inspect}"
       else
-        @logger.info "#{self.object_id} - skipping interval: #{interval}"
+        @logger.info "#{self.object_id} - #{@network} - skipping interval: #{interval}"
       end
     end
   end
