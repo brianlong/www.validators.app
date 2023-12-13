@@ -16,18 +16,18 @@ class ExplorerStakeAccountsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'assigns explorer_stake_accounts variable' do
-    get explorer_stake_accounts_url(network: 'testnet')
+  test "assigns explorer_stake_accounts variable" do
+    get explorer_stake_accounts_url(network: "testnet")
     assert_equal @explorer_stake_accounts.sort_by(&:delegated_stake).reverse.first(20),
-      @controller.view_assigns['explorer_stake_accounts']
+      @controller.view_assigns["explorer_stake_accounts"]
   end
 
-  test 'assigns explorer_stake_accounts variable when filters presented' do
+  test "assigns explorer_stake_accounts variable when filters presented" do
     get explorer_stake_accounts_url(
-      network: 'testnet', staker: 'staker', stake_pubkey: 'stake_pubkey',
-      delegated_vote_account_address: 'vote_account_address'
+      network: "testnet", staker: "staker", stake_pubkey: "stake_pubkey",
+      delegated_vote_account_address: "vote_account_address"
     )
     assert_equal @explorer_stake_accounts.sort_by(&:delegated_stake).reverse.first(25),
-      @controller.view_assigns['explorer_stake_accounts']
+      @controller.view_assigns["explorer_stake_accounts"]
   end
 end
