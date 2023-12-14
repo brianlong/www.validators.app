@@ -252,7 +252,7 @@ module ValidatorScoreV1Logic
 
       p.payload[:validators].each do |validator|
         last_validator_block_history_for_validator = vbh.find { |r| r.first == validator.id }
-        puts last_validator_block_history_for_validator.inspect
+
         next unless last_validator_block_history_for_validator.present?
 
         skipped_slot_percent = last_validator_block_history_for_validator[1]
