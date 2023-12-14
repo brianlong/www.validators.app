@@ -3,6 +3,8 @@
 class CreatePingThingStatsService
   include SolanaRequestsLogic
 
+  INTERVAL_PRECISION = 5.seconds
+
   def initialize(time_to: DateTime.now, network: "mainnet")
     @time_to = time_to
     @network = network
@@ -53,7 +55,7 @@ class CreatePingThingStatsService
   end
 
   def should_add_new_stats?(interval)
-    !PingThingStat.where("time_from > ?", @time_to - (interval.minutes * 2))
+    !PingThingStat.where("time_from > ?", @time_to - (interval.minutes * 2) + INTERVAL_PRECISION)
                   .where(network: @network, interval: interval)
                   .exists?
   end
