@@ -459,7 +459,9 @@ module SolanaLogic
           'leader_slots' => v['leaderSlots'],
           'blocks_produced' => v['blocksProduced'],
           'skipped_slots' => v['skippedSlots'],
-          'skipped_slot_percent' => v['skippedSlots'] / v['leaderSlots'].to_f
+          'skipped_slot_percent' => v['skippedSlots'] / v['leaderSlots'].to_f,
+          'skipped_slots_after' => 0,
+          'skipped_slots_after_percent' => 0.0
         }
       end
 
@@ -483,11 +485,18 @@ module SolanaLogic
           #   puts "  NEW LEADER: #{current_leader}"
           #   puts "  #{block_history['individual_slot_status'][i..i + 3].map { |s| s['skipped'] }}"
           # end
+          skipped_slots_after_leader = \
+            block_history['individual_slot_status'][i..i + 3].count do |s|
+              s['skipped'] == true
+            end
 
           if prior_leader.nil?
             i += 1
             next
           end
+
+          validator_block_history[prior_leader]['skipped_slots_after'] += \
+            skipped_slots_after_leader
         end
 
         i += 1
@@ -542,7 +551,10 @@ module SolanaLogic
           leader_slots: v['leader_slots'],
           blocks_produced: v['blocks_produced'],
           skipped_slots: v['skipped_slots'],
-          skipped_slot_percent: v['skipped_slot_percent'].round(4)
+          skipped_slot_percent: v['skipped_slot_percent'].round(4),
+          skipped_slots_after: v['skipped_slots_after'],
+          skipped_slots_after_percent:
+            (v['skipped_slots_after'] / v['leader_slots'].to_f)
         )
       end
 

@@ -241,6 +241,16 @@ table, .table {
           }
         }
         &-name {}
+        &-small {
+          width: 13%;
+          padding-right: 0;
+          @media(max-width: $screen-xl-max) {
+            width: 15%;
+          }
+          @media(max-width: $screen-lg-max) {
+            width: 130px;
+          }
+        }
         &-link {
           &:not(.no-watchlist) {
             @media(max-width: $screen-lg-max) {

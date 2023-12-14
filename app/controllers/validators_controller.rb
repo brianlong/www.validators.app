@@ -83,6 +83,17 @@ class ValidatorsController < ApplicationController
         network: validators_params[:network],
         batch_uuid: @batch.uuid
       ).first
+
+      @skipped_after_average = \
+        ValidatorBlockHistory.average_skipped_slots_after_percent_for(
+          params[:network],
+          @batch.uuid
+        )
+      @skipped_after_median = \
+        ValidatorBlockHistory.median_skipped_slots_after_percent_for(
+          params[:network],
+          @batch.uuid
+        )
     end
   end
 

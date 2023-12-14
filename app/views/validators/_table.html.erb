@@ -94,6 +94,8 @@
       <br />
       <small class="text-muted">60-Min Chart</small>
     </th>
+
+    <th class='column-info-small py-3 text-right'>Skipped<br />After &percnt;</th>
   </tr>
   </thead>
 
@@ -313,6 +315,16 @@
                    vector: slot_vector,
                    line_color: line_color,
                    moving_avg_vector: skipped_slots_moving_avg
+        %>
+      </td>
+
+      <td class="score-<%= validator.skipped_after_score %> text-right">
+        <%=
+          if validator.skipped_after_percent.nil?
+            'N/A'
+          else
+            number_to_percentage(validator.skipped_after_percent.to_f * 100.0, precision: 1)
+          end
         %>
       </td>
     </tr>
