@@ -450,18 +450,18 @@ module SolanaLogic
       }
 
       # Leaders
-      validator_block_json = block_history['leaders']
+      validator_block_json = block_history["leaders"]
       validator_block_history = {}
       validator_block_json.each do |v|
-        validator_block_history[v['identityPubkey']] = {
-          'batch_uuid' => p.payload[:batch_uuid],
-          'epoch' => p.payload[:epoch],
-          'leader_slots' => v['leaderSlots'],
-          'blocks_produced' => v['blocksProduced'],
-          'skipped_slots' => v['skippedSlots'],
-          'skipped_slot_percent' => v['skippedSlots'] / v['leaderSlots'].to_f,
-          'skipped_slots_after' => 0,
-          'skipped_slots_after_percent' => 0.0
+        validator_block_history[v["identityPubkey"]] = {
+          "batch_uuid" => p.payload[:batch_uuid],
+          "epoch" => p.payload[:epoch],
+          "leader_slots" => v["leaderSlots"],
+          "blocks_produced" => v["blocksProduced"],
+          "skipped_slots" => v["skippedSlots"],
+          "skipped_slot_percent" => v["skippedSlots"] / v["leaderSlots"].to_f,
+          "skipped_slots_after" => 0,
+          "skipped_slots_after_percent" => 0.0
         }
       end
 
@@ -470,8 +470,8 @@ module SolanaLogic
       current_leader = nil
       i = 0
       # byebug
-      block_history['individual_slot_status'].each do |h|
-        this_leader = h['leader']
+      block_history["individual_slot_status"].each do |h|
+        this_leader = h["leader"]
         if this_leader == current_leader
           # We have the same leader
         else
@@ -486,8 +486,8 @@ module SolanaLogic
           #   puts "  #{block_history['individual_slot_status'][i..i + 3].map { |s| s['skipped'] }}"
           # end
           skipped_slots_after_leader = \
-            block_history['individual_slot_status'][i..i + 3].count do |s|
-              s['skipped'] == true
+            block_history["individual_slot_status"][i..i + 3].count do |s|
+              s["skipped"] == true
             end
 
           if prior_leader.nil?
@@ -495,7 +495,7 @@ module SolanaLogic
             next
           end
 
-          validator_block_history[prior_leader]['skipped_slots_after'] += \
+          validator_block_history[prior_leader]["skipped_slots_after"] += \
             skipped_slots_after_leader
         end
 
