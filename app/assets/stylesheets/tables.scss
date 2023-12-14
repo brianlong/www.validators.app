@@ -196,7 +196,7 @@ table, .table {
 
     .column {
       &-chart {
-        width: 22%;
+        width: 20%;
         padding-top: 15px;
         padding-bottom: 8px;
         @media(max-width: $screen-lg-max) {
@@ -212,13 +212,10 @@ table, .table {
       }
 
       &-info {
-        width: 27%;
+        width: 29%;
         padding-right: 0;
-        @media(max-width: $screen-xl-max) {
-          width: 28%;
-        }
         @media(max-width: $screen-lg-max) {
-          width: 215px;
+          width: 210px;
         }
         &-row {
           display: flex;
@@ -241,16 +238,6 @@ table, .table {
           }
         }
         &-name {}
-        &-small {
-          width: 13%;
-          padding-right: 0;
-          @media(max-width: $screen-xl-max) {
-            width: 15%;
-          }
-          @media(max-width: $screen-lg-max) {
-            width: 130px;
-          }
-        }
         &-link {
           &:not(.no-watchlist) {
             @media(max-width: $screen-lg-max) {
@@ -270,6 +257,13 @@ table, .table {
         @media(max-width: $screen-md-max) {
           padding-left: $padding-standard*2;
           padding-top: 0.5rem;
+        }
+      }
+
+      &-numeric {
+        width: 10%;
+        @media(max-width: $screen-lg-max) {
+          width: 95px;
         }
       }
     }
