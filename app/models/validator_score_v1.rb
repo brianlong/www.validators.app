@@ -87,6 +87,7 @@ class ValidatorScoreV1 < ApplicationRecord
     vote_distance_history
     skipped_slot_history
     skipped_vote_history
+    skipped_after_history
     skipped_slot_moving_average_history
     stake_concentration
   ].freeze
@@ -310,6 +311,10 @@ class ValidatorScoreV1 < ApplicationRecord
     if skipped_slot_moving_average_history.length > MAX_HISTORY
       self.skipped_slot_moving_average_history = skipped_slot_moving_average_history[-MAX_HISTORY..-1]
     end
+  end
+
+  def skipped_after_percent
+    self.skipped_after_history.last * 100 rescue nil
   end
 
   def to_builder(with_history: false)
