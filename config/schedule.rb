@@ -77,6 +77,10 @@ every 1.hour, at: 50, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
+every 1.hour, at: 55, roles: [:background] do
+  rake "-s sitemap:refresh"
+end
+
 every 1.day, at: '0:15am', roles: [:background] do
   ruby_script_sol_prices 'coin_gecko_gather_yesterday_prices.rb'
   ruby_script_data_centers 'append_to_unknown_data_center.rb'
