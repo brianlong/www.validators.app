@@ -278,6 +278,10 @@ class Validator < ApplicationRecord
     score&.skipped_after_history&.last
   end
 
+  def skipped_after_score
+    score&.skipped_after_score
+  end
+
   def skipped_slot_score
     score&.skipped_slot_score
   end
