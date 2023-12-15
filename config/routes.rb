@@ -1,71 +1,71 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  mount ActionCable.server => "/cable"
+  mount ActionCable.server => '/cable'
 
   # Default root path
-  root to: "public#home"
+  root to: 'public#home'
 
-  get "robots.txt", to: "public#robots"
+  get 'robots.txt', to: 'public#robots'
 
-  get "asns/:asn",
-      to: "asns#show",
-      as: "asn"
+  get 'asns/:asn',
+      to: 'asns#show',
+      as: 'asn'
   # Pages for Log Deep Dives
-  get "log-deep-dives/",
-      to: "log_deep_dives#index",
-      as: "log_deep_dives_index"
+  get 'log-deep-dives/',
+      to: 'log_deep_dives#index',
+      as: 'log_deep_dives_index'
 
-  get "log-deep-dives/slot-72677728",
-      to: "log_deep_dives#slot_72677728",
-      as: "log_deep_dives_slot_72677728"
+  get 'log-deep-dives/slot-72677728',
+      to: 'log_deep_dives#slot_72677728',
+      as: 'log_deep_dives_slot_72677728'
 
   # Data Centers
-  get "data-centers",
-      to: "data_centers#index",
-      as: "data_centers"
-  get "data-centers/:key",
-      to: "data_centers#data_center",
-      as: "data_center",
+  get 'data-centers',
+      to: 'data_centers#index',
+      as: 'data_centers'
+  get 'data-centers/:key',
+      to: 'data_centers#data_center',
+      as: 'data_center',
       constraints: { key: %r{[^\/]+} }
 
   # Validators
-  get "validators",
-      to: "validators#index",
-      as: "validators"
+  get 'validators',
+      to: 'validators#index',
+      as: 'validators'
 
-  get "trent-mode",
-      to: "validators#trent_mode",
-      as: "trent_mode"
+  get 'trent-mode',
+      to: 'validators#trent_mode',
+      as: 'trent_mode'
 
-  get "validators/mainnet/:account", to: redirect("/validators/%{account}?network=mainnet")
-  get "validators/testnet/:account", to: redirect("/validators/%{account}?network=testnet")
-  get "validators/pythnet/:account", to: redirect("/validators/%{account}?network=pythnet")
+  get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
+  get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
+  get 'validators/pythnet/:account', to: redirect('/validators/%{account}?network=pythnet')
 
-  get "validators/:account", to: "validators#show", as: "validator"
+  get 'validators/:account', to: 'validators#show', as: 'validator'
 
-  get "validators/:account/vote_accounts/:vote_account", to: "vote_accounts#show",
-                                                         as: "validator_vote_account"
+  get 'validators/:account/vote_accounts/:vote_account', to: 'vote_accounts#show',
+                                                         as: 'validator_vote_account'
 
-  get "you/", to: "you#index", as: :user_root
-  post "you/regenerate_token", to: "you#regenerate_token"
+  get 'you/', to: 'you#index', as: :user_root
+  post 'you/regenerate_token', to: 'you#regenerate_token'
 
-  resources :opt_out_requests, path: "opt-out-requests", only: [:index, :new, :create, :destroy] do
-    collection { get "thank-you" => "opt_out_requests#thank_you" }
+  resources :opt_out_requests, path: 'opt-out-requests', only: [:index, :new, :create, :destroy] do
+    collection { get 'thank-you' => 'opt_out_requests#thank_you' }
   end
 
   # SolPrices
-  get "sol-prices", to: "sol_prices#index"
+  get 'sol-prices', to:'sol_prices#index'
 
   # Stake Pools
-  get "stake-pools", to: "stake_accounts#index"
+  get 'stake-pools', to: 'stake_accounts#index'
 
   devise_for :users
 
   # Free Sidekiq
-  if Gem.loaded_specs.key? "sidekiq"
-    require "sidekiq"
-    require "sidekiq/web"
+  if Gem.loaded_specs.key? 'sidekiq'
+    require 'sidekiq'
+    require 'sidekiq/web'
   end
 
   # Sidekiq Pro
@@ -76,45 +76,45 @@ Rails.application.routes.draw do
 
   # Only admins can see the Sidekiq Dashboard
   authenticate :user, ->(u) { u.is_admin? } do
-    mount Sidekiq::Web => "/sidekiq"
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   # Public Controller
-  get "contact-us", to: "public#contact_us"
-  get "stake-boss", to: "public#stake_boss", as: "stake_boss"
-  get "api-documentation",
-      to: "public#api_documentation",
-      as: "api_documentation"
-  get "contact-requests", to: "contact_requests#index"
-  get "cookie-policy", to: "public#cookie_policy"
-  get "faq", to: "public#faq"
-  get "privacy-policy-california", to: "public#privacy_policy_california"
-  get "privacy-policy", to: "public#privacy_policy"
-  get "sample-chart", to: "public#sample_chart"
-  get "terms-of-use", to: "public#terms_of_use"
-  get "commission-changes/mainnet/(:validator_id)",
-      to: redirect("/commission-changes/%{validator_id}?network=mainnet"),
+  get 'contact-us', to: 'public#contact_us'
+  get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
+  get 'api-documentation',
+      to: 'public#api_documentation',
+      as: 'api_documentation'
+  get 'contact-requests', to: 'contact_requests#index'
+  get 'cookie-policy', to: 'public#cookie_policy'
+  get 'faq', to: 'public#faq'
+  get 'privacy-policy-california', to: 'public#privacy_policy_california'
+  get 'privacy-policy', to: 'public#privacy_policy'
+  get 'sample-chart', to: 'public#sample_chart'
+  get 'terms-of-use', to: 'public#terms_of_use'
+  get 'commission-changes/mainnet/(:validator_id)',
+      to: redirect( '/commission-changes/%{validator_id}?network=mainnet'),
       defaults: { validator_id: nil }
-  get "commission-changes/testnet/(:validator_id)",
-      to: redirect("/commission-changes/%{validator_id}?network=testnet"),
+  get 'commission-changes/testnet/(:validator_id)',
+      to: redirect( '/commission-changes/%{validator_id}?network=testnet'),
       defaults: { validator_id: nil }
-  get "commission-changes/pythnet/(:validator_id)",
-      to: redirect("/commission-changes/%{validator_id}?network=pythnet"),
+  get 'commission-changes/pythnet/(:validator_id)',
+      to: redirect( '/commission-changes/%{validator_id}?network=pythnet'),
       defaults: { validator_id: nil }
-  get "commission-changes/(:validator_id)",
-      to: "public#commission_histories",
-      as: "commission_histories"
-  get "authorities_changes/(:vote_account_id)",
-      to: "public#authorities_changes",
-      as: "authorities_changes"
+  get 'commission-changes/(:validator_id)',
+      to: 'public#commission_histories',
+      as: 'commission_histories'
+  get 'authorities_changes/(:vote_account_id)',
+      to: 'public#authorities_changes',
+      as: 'authorities_changes'
 
-  get "stake-explorer", to: "explorer_stake_accounts#index", as: "explorer_stake_accounts"
-  get "stake-explorer/:stake_pubkey", to: "explorer_stake_accounts#show", as: "explorer_stake_account"
+  get 'stake-explorer', to: 'explorer_stake_accounts#index', as: 'explorer_stake_accounts'
+  get 'stake-explorer/:stake_pubkey', to: 'explorer_stake_accounts#show', as: 'explorer_stake_account'
 
-  post "saw_cookie_notice", to: "public#saw_cookie_notice"
-  get "saw_cookie_notice", to: "public#saw_cookie_notice"
+  post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
+  get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
   get "current-user", to: "users#current_user_info"
 
@@ -122,65 +122,65 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1, defaults: { format: :json } do
       # api_v1_ping GET /api/v1/ping(.:format)
-      get "ping", to: "api#ping"
+      get 'ping', to: 'api#ping'
 
       # TODO to remove - endpoint no longer in use
       # api_v1_collector POST /api/v1/collector
-      post "collector", to: "api#collector"
+      post 'collector', to: 'api#collector'
 
       # api_v1_validators GET /api/v1/validators/:network
-      get "validators/:network",
-          to: "validators#index",
-          as: "validators"
+      get 'validators/:network',
+          to: 'validators#index',
+          as: 'validators'
 
       # api_v1_validators GET /api/v1/validators/:network/:account
-      get "validators/:network/:account",
-          to: "validators#show",
-          as: "validator"
+      get 'validators/:network/:account',
+          to: 'validators#show',
+          as: 'validator'
 
       # api_v1_validators_ledger GET /api/v1/validators-ledger/:network/:account
-      get "validators-ledger/:network/:account",
-          to: "validators#show_ledger",
-          as: "validator_ledger"
+      get 'validators-ledger/:network/:account',
+          to: 'validators#show_ledger',
+          as: 'validator_ledger'
 
       # GET /api/v1/validator_block_history/:network/:account
-      get "validator-block-history/:network/:account",
-          to: "validator_block_histories#show",
-          as: "validator_block_history"
+      get 'validator-block-history/:network/:account',
+          to: 'validator_block_histories#show',
+          as: 'validator_block_history'
 
-      get "validator_block_history/:network/:account",
-          to: "validator_block_histories#show",
-          as: "validator_block_history_old"
+      get 'validator_block_history/:network/:account',
+          to: 'validator_block_histories#show',
+          as: 'validator_block_history_old'
 
       # Epoch Wall Clock
-      get "epochs/:network", to: "epochs#index", as: "epoch_index"
+      get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
 
       # GET /api/v1/commission-changes/:network
-      get "commission-changes/:network", to: "commission_histories#index", as: "commission_histories_index"
+      get 'commission-changes/:network', to: 'commission_histories#index', as: 'commission_histories_index'
 
       # GET /api/v1/stake-accounts/:network
-      get "stake-accounts/:network", to: "stake_accounts#index", as: "stake_accounts_index"
+      get 'stake-accounts/:network', to: 'stake_accounts#index', as: 'stake_accounts_index'
 
       # GET /api/v1/stake-pools/:network
-      get "stake-pools/:network", to: "stake_pools#index", as: "stake_pools_index"
+      get 'stake-pools/:network', to: 'stake_pools#index', as: 'stake_pools_index'
 
       # TODO to remove - endpoint no longer in use
       # api_v1_ping_times GET /api/v1/ping_times
-      get "ping-times/:network", to: "api#ping_times", as: "ping_times"
+      get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
 
       # POST /api/v1/ping-thing/
-      post "ping-thing/:network", to: "ping_things#create", as: "ping_thing"
+      post 'ping-thing/:network', to: 'ping_things#create', as: 'ping_thing'
       # POST /api/v1/ping-thing-batch/
-      post "ping-thing-batch/:network", to: "ping_things#create_batch", as: "ping_thing_batch"
+      post 'ping-thing-batch/:network', to: 'ping_things#create_batch', as: 'ping_thing_batch'
       # GET /api/v1/ping-thing/
-      get "ping-thing/:network", to: "ping_things#index", as: "ping_things"
+      get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
 
-      get "ping-thing-stats/:network", to: "ping_thing_stats#index", as: "ping_thing_stats"
-      get "ping-thing-recent-stats/:network", to: "ping_thing_recent_stats#last", as: "ping_thing_recent_stats"
+      get 'ping-thing-stats/:network', to: 'ping_thing_stats#index', as: 'ping_thing_stats'
+      get 'ping-thing-recent-stats/:network', to: 'ping_thing_recent_stats#last', as: 'ping_thing_recent_stats'
 
-      get "sol-prices", to: "sol_prices#index", as: "sol_prices"
+      get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
 
-      post "update-watchlist/:network", to: "watchlists#update_watchlist"
+      post 'update-watchlist/:network', to: 'watchlists#update_watchlist'
 
       get "gossip-nodes/:network", to: "gossip_nodes#index", as: "gossip_nodes"
 

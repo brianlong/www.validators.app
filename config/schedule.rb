@@ -78,7 +78,7 @@ every 1.hour, at: 50, roles: [:background] do
 end
 
 every 1.hour, at: 55, roles: [:background] do
-  rake "-s sitemap:refresh"
+  rake "-s sitemap:refresh:no_ping"
 end
 
 every 1.day, at: '0:15am', roles: [:background] do
