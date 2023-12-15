@@ -8,5 +8,6 @@ Disallow: /current-user
 Disallow: /rails/active_storage/
 Disallow: /rails/action_mailbox/
 Disallow: /rails/conductor/action_mailbox/
+Disallow: /you
 
 Sitemap: https://www.validators.app/sitemap.xml.gz
