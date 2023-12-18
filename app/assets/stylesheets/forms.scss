@@ -17,6 +17,10 @@
     color: $background-color;
     transition: .1s ease;
   }
+
+  &.form-filter {
+    width: 190px;
+  }
 }
 
 label {

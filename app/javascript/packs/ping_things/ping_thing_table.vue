@@ -1,48 +1,47 @@
 <template>
   <section>
-    <div class="d-flex mb-4 row">
-      <div class="col-2">
-        <input name="filter_time"
-              @keyup.enter="get_filtered_records()"
-              v-model="filter_time"
-              type="number"
-              class="form-control"
-              step="10"
-              placeholder="Minimum time (ms)">
-      </div>
-      <div class="col-2">
-        <input name="posted by"
-              @keyup.enter="get_filtered_records()"
-              v-model="sender"
-              type="text"
-              class="form-control"
-              placeholder="posted by">
-      </div>
+    <div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
+      <div class="d-flex flex-wrap gap-3">
+        <div>
+          <input name="filter_time"
+                 @keyup.enter="get_filtered_records()"
+                 v-model="filter_time"
+                 type="number"
+                 class="form-control form-filter"
+                 step="10"
+                 placeholder="Minimum time (ms)">
+        </div>
+        <div>
+          <input name="posted_by"
+                 @keyup.enter="get_filtered_records()"
+                 v-model="sender"
+                 type="text"
+                 class="form-control form-filter"
+                 placeholder="Posted By">
+        </div>
+        <div>
+          <select name="success"
+                  @keyup.enter="get_filtered_records()"
+                  v-model="success"
+                  class="form-select form-control form-filter">
+            <option value="" selected>Status (all)</option>
+            <option value="true">success</option>
+            <option value="false">failure</option>
+          </select>
+        </div>
 
-      <div class="col-2">
-        <select name="success"
-                @keyup.enter="get_filtered_records()"
-                v-model="success"
-                class="form-select form-control">
-          <option value="">all</option>
-          <option value="true">success</option>
-          <option value="false">failure</option>
-        </select>
-      </div>
-
-      <div class="col-2">
         <button @click.prevent="get_filtered_records()"
-                class="btn btn-sm btn-primary">
+                class="btn btn-sm btn-primary"
+                style="width: 109px;">
           Search
         </button>
       </div>
-      <div class="col-2">
-        <button @click.prevent="reset_filter()"
+
+      <button @click.prevent="reset_filter()"
               class="btn btn-sm btn-tertiary"
               v-if="show_filtered_records">
-          Reset filters
-        </button>
-      </div>
+        Reset filters
+      </button>
     </div>
 
     <div class="card">
