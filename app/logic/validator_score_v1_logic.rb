@@ -240,7 +240,10 @@ module ValidatorScoreV1Logic
       med_skipped_slot_pct_all = vbh_stats.median_skipped_slot_percent
 
       vbh_sql = <<-SQL_END
-        SELECT vbh.validator_id, vbh.skipped_slot_percent, vbh.skipped_slot_percent_moving_average
+        SELECT vbh.validator_id,
+               vbh.skipped_slot_percent,
+               vbh.skipped_slot_percent_moving_average,
+               vbh.skipped_slots_after_percent
         FROM validator_block_histories vbh
         WHERE vbh.network = '#{p.payload[:network]}' AND vbh.batch_uuid = '#{p.payload[:batch_uuid]}'
       SQL_END
