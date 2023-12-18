@@ -19,6 +19,10 @@ module Api
         if index_params[:time_filter]
           ping_things = ping_things.where("response_time >= ?", index_params[:time_filter].to_i)
         end
+        if index_params[:posted_by]
+          user_ids = User.where("username LIKE ?", index_params[:posted_by].strip).pluck(:id)
+          ping_things = ping_things.where(user_id: user_ids)
+        end
         ping_things = ping_things.page(page).per(limit)
 
         json_result = ping_things.map { |pt| create_json_result(pt) }
@@ -83,7 +87,7 @@ module Api
       end
 
       def index_params
-        params.permit(:network, :limit, :page, :with_stats, :time_filter)
+        params.permit(:network, :limit, :page, :with_stats, :time_filter, :posted_by, :success)
       end
 
       def ping_thing_params

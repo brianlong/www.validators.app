@@ -1,27 +1,48 @@
 <template>
   <section>
-    <div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
-      <div class="form-group-row">
-        <div class="input-group">
-          <input name="filter_time"
-                 @keyup.enter="get_filtered_records()"
-                 v-model="filter_time"
-                 type="number"
-                 class="form-control"
-                 step="10"
-                 placeholder="Minimum time (ms)">
-          <button @click.prevent="get_filtered_records()"
-                  class="btn btn-sm btn-primary">
-            Search
-          </button>
-        </div>
+    <div class="d-flex mb-4 row">
+      <div class="col-2">
+        <input name="filter_time"
+              @keyup.enter="get_filtered_records()"
+              v-model="filter_time"
+              type="number"
+              class="form-control"
+              step="10"
+              placeholder="Minimum time (ms)">
+      </div>
+      <div class="col-2">
+        <input name="posted by"
+              @keyup.enter="get_filtered_records()"
+              v-model="sender"
+              type="text"
+              class="form-control"
+              placeholder="posted by">
       </div>
 
-      <button @click.prevent="reset_filter()"
+      <div class="col-2">
+        <select name="success"
+                @keyup.enter="get_filtered_records()"
+                v-model="success"
+                class="form-select form-control">
+          <option value="">all</option>
+          <option value="true">success</option>
+          <option value="false">failure</option>
+        </select>
+      </div>
+
+      <div class="col-2">
+        <button @click.prevent="get_filtered_records()"
+                class="btn btn-sm btn-primary">
+          Search
+        </button>
+      </div>
+      <div class="col-2">
+        <button @click.prevent="reset_filter()"
               class="btn btn-sm btn-tertiary"
               v-if="show_filtered_records">
-        Reset filters
-      </button>
+          Reset filters
+        </button>
+      </div>
     </div>
 
     <div class="card">
@@ -108,10 +129,15 @@
 
     data() {
       return {
-        filter_time: null,
         show_filtered_records: false,
         api_url: '/api/v1/ping-thing/' + this.network,
-        ping_things_filtered: []
+        ping_things_filtered: [],
+
+        // filters
+        filter_time: null,
+        sender: null,
+        success: ""
+
       }
     },
 
@@ -161,8 +187,13 @@
 
       get_filtered_records() {
         var ctx = this
+        var filters = {
+          time_filter: ctx.filter_time,
+          sender: ctx.sender,
+          success: ctx.success
+        }
 
-        axios.get(ctx.api_url, { params: { time_filter: ctx.filter_time }})
+        axios.get(ctx.api_url, { params: filters})
              .then(function(response) {
                ctx.ping_things_filtered = response.data;
                ctx.show_filtered_records = true
