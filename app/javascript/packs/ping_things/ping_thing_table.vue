@@ -14,7 +14,7 @@
         <div>
           <input name="posted_by"
                  @keyup.enter="get_filtered_records()"
-                 v-model="sender"
+                 v-model="posted_by"
                  type="text"
                  class="form-control form-filter"
                  placeholder="Posted By">
@@ -134,7 +134,7 @@
 
         // filters
         filter_time: null,
-        sender: null,
+        posted_by: null,
         success: ""
 
       }
@@ -188,7 +188,7 @@
         var ctx = this
         var filters = {
           time_filter: ctx.filter_time,
-          sender: ctx.sender,
+          posted_by: ctx.posted_by,
           success: ctx.success
         }
 
