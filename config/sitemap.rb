@@ -47,13 +47,17 @@ SitemapGenerator::Sitemap.create do
     add explorer_stake_account_path(esa.stake_pubkey), lastmod: esa.updated_at
   end
 
+  add '/data-centers', changefreq: 'daily'
+  add '/validators', changefreq: 'daily'
+  add '/trent-mode', changefreq: 'daily'
+  add '/sol-prices', changefreq: 'daily'
+  add '/stake-pools', changefreq: 'daily'
+  add '/commission-changes', changefreq: 'daily'
+  add '/authorities_changes', changefreq: 'hourly'
+  add '/stake-explorer', changefreq: 'daily'
+  add '/ping-thing', changefreq: 'daily'
   add '/log-deep-dives'
   add '/log-deep-dives/slot-72677728'
-  add '/data-centers'
-  add '/validators'
-  add '/trent-mode'
-  add '/sol-prices'
-  add '/stake-pools'
   add '/users/sign_in'
   add '/users/sign_out'
   add '/users/password/new'
@@ -69,8 +73,4 @@ SitemapGenerator::Sitemap.create do
   add '/privacy-policy'
   add '/sample-chart'
   add '/terms-of-use'
-  add '/commission-changes'
-  add '/authorities_changes'
-  add '/stake-explorer'
-  add '/ping-thing'
 end
