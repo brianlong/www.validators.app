@@ -1,13 +1,13 @@
 <template>
   <section>
-    <div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
-      <div class="d-flex flex-wrap gap-3">
+    <div class="d-flex justify-content-between flex-wrap flex-column flex-md-row gap-3 mb-4">
+      <div class="d-flex flex-wrap flex-column flex-md-row gap-3">
         <div>
           <input name="filter_time"
                  @keyup.enter="get_filtered_records()"
                  v-model="filter_time"
                  type="number"
-                 class="form-control form-filter"
+                 class="form-control"
                  step="10"
                  placeholder="Minimum time (ms)">
         </div>
@@ -16,14 +16,14 @@
                  @keyup.enter="get_filtered_records()"
                  v-model="posted_by"
                  type="text"
-                 class="form-control form-filter"
+                 class="form-control"
                  placeholder="Posted By">
         </div>
         <div>
           <select name="success"
                   @keyup.enter="get_filtered_records()"
                   v-model="success"
-                  class="form-select form-control form-filter">
+                  class="form-select form-control">
             <option value="" selected>Status (all)</option>
             <option value="true">success</option>
             <option value="false">failure</option>
@@ -32,14 +32,15 @@
 
         <button @click.prevent="get_filtered_records()"
                 class="btn btn-sm btn-primary"
-                style="width: 109px;">
+                style="width: 115px;">
           Search
         </button>
       </div>
 
       <button @click.prevent="reset_filter()"
               class="btn btn-sm btn-tertiary"
-              v-if="show_filtered_records">
+              v-if="show_filtered_records"
+              style="width: 115px;">
         Reset filters
       </button>
     </div>
