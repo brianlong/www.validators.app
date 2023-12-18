@@ -23,6 +23,9 @@ module Api
           user_ids = User.where("username LIKE ?", index_params[:posted_by].strip).pluck(:id)
           ping_things = ping_things.where(user_id: user_ids)
         end
+        if index_params[:success] && boolean_valid?(index_params[:success])
+          ping_things = ping_things.where(success: index_params[:success])
+        end
         ping_things = ping_things.page(page).per(limit)
 
         json_result = ping_things.map { |pt| create_json_result(pt) }
@@ -88,6 +91,10 @@ module Api
 
       def index_params
         params.permit(:network, :limit, :page, :with_stats, :time_filter, :posted_by, :success)
+      end
+
+      def boolean_valid?(param)
+        ["true", true, "false", false].include?(param)
       end
 
       def ping_thing_params
