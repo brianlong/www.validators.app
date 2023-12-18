@@ -47,7 +47,7 @@ class PublicController < ApplicationController
 
   # Robots.txt
   def robots
-    robots = File.read(Rails.root.join('config', 'robots', "robots.#{Rails.env}.txt"))
+    robots = File.read(Rails.root.join("config", "robots", "robots.#{Rails.env}.txt"))
     render plain: robots
   end
 
