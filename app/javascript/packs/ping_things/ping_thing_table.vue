@@ -193,7 +193,7 @@
           success: ctx.success
         }
 
-        axios.get(ctx.api_url, { params: filters})
+        axios.get(ctx.api_url, { params: filters })
              .then(function(response) {
                ctx.ping_things_filtered = response.data;
                ctx.show_filtered_records = true
