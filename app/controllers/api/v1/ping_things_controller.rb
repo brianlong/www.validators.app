@@ -9,7 +9,7 @@ module Api
       MAX_RECORDS = 1000
 
       def index
-        limit = [(index_params[:limit] || 60).to_i, 9999].min
+        limit = [(index_params[:limit] || 120).to_i, 9999].min
         page = index_params[:page] || 1
         with_stats = index_params[:with_stats].to_s == "true" ? true : false
 
