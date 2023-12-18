@@ -51,8 +51,6 @@
       </div>
     </th>
 
-    <th class='column-numeric pe-0'>Skipped After&nbsp;&percnt;</th>
-
     <th class='column-speedometer pe-0'>
       Skipped Vote
       <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
@@ -208,15 +206,6 @@
         <% end %>
       </td>
 
-      <!-- Skipped After % -->
-      <td class="column-numeric pb-1 pb-lg-3">
-        <% skipped_after = validator.skipped_after_percent.nil? ? 'N/A' : number_to_percentage(validator.skipped_after_percent.to_f * 100.0, precision: 1) %>
-        <small class="d-inline-block d-lg-none">Skipped After %:&nbsp;</small>
-        <small class="d-inline-block d-lg-none"><%= skipped_after %></small>
-        <span class="d-none d-lg-block"><%= skipped_after %></span>
-      </td>
-
-      <!-- Skipped Vote -->
       <td class="column-speedometer">
         <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
         <% if skipped_vote_percent %>
