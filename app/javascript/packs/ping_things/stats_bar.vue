@@ -7,11 +7,14 @@
       </div>
 
       <div class="row d-none d-lg-flex text-lg-center mb-1">
-        <div class="col-lg-2">
+        <div class="col-lg-1">
           Stats
         </div>
+        <div class="col-lg-1">
+          <i class="fa-solid fa-calculator text-success me-1 d-xl-inline d-lg-none"></i>Entries
+        </div>
         <div class="col-lg-2">
-          <i class="fa-solid fa-calculator text-success me-2"></i>Entries
+          <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Failures
         </div>
         <div class="col-md-2">
           <i class="fa-solid fa-down-long text-success me-2"></i>Min
@@ -33,13 +36,24 @@
 
           <!-- 5 minutes stats -->
           <div class="row text-lg-center mb-3 mb-sm-0 mb-lg-1">
-            <div class="col-lg-2 mb-1 mb-lg-0">5 min</div>
-            <div class="col-lg-2 mb-1 mb-lg-0">
+            <div class="col-lg-1 mb-1 mb-lg-0">5 min</div>
+            <div class="col-lg-1 mb-1 mb-lg-0">
               <span class="d-lg-none">
                 <i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;
               </span>
               <span class="text-success">
                 {{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString('en-US') : '0' }}
+              </span>
+            </div>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fa-solid fa-circle-xmark text-danger me-1"></i>Failures:&nbsp;
+              </span>
+              <span class="text-danger">
+                {{ last_5_mins["fails_count"] ? last_5_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
+              </span>
+              <span class="text-muted small">
+                {{ last_5_mins["fails_count"] ? '(' + (last_5_mins["fails_count"] / last_5_mins["num_of_records"] * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : '' }}
               </span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
@@ -80,14 +94,25 @@
         <!-- 1 hour stats -->
         <div class="col-sm-6 col-lg-12">
           <div class="row text-lg-center">
-            <div class="col-lg-2 mb-1 mb-lg-0">1 hour</div>
-            <div class="col-lg-2 mb-1 mb-lg-0">
+            <div class="col-lg-1 mb-1 mb-lg-0">1 hour</div>
+            <div class="col-lg-1 mb-1 mb-lg-0">
               <span class="d-lg-none">
                 <i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;
               </span>
               <strong class="text-success">
                 {{ last_60_mins["num_of_records"] ? last_60_mins["num_of_records"].toLocaleString('en-US') : '0' }}
               </strong>
+            </div>
+            <div class="col-lg-2 mb-1 mb-lg-0">
+              <span class="d-lg-none">
+                <i class="fa-solid fa-circle-xmark text-danger me-1"></i>Failures:&nbsp;
+              </span>
+              <strong class="text-danger">
+                {{ last_60_mins["fails_count"] ? last_60_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
+              </strong>
+              <span class="text-muted small">
+                {{ last_60_mins["fails_count"] ? '(' + (last_60_mins["fails_count"] / last_60_mins["num_of_records"] * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : '' }}
+              </span>
             </div>
             <div class="col-lg-2 mb-1 mb-lg-0">
               <span class="d-lg-none">

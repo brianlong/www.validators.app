@@ -6,7 +6,6 @@
 #
 #  id                   :bigint           not null, primary key
 #  average_slot_latency :integer
-#  fails_count          :integer
 #  interval             :integer
 #  max                  :float(24)
 #  median               :float(24)
