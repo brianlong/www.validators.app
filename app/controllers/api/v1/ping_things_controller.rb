@@ -7,9 +7,9 @@ module Api
       class InvalidRecordCount < StandardError; end
 
       MAX_RECORDS = 1000
-      
+
       def index
-        limit = [(index_params[:limit] || 240).to_i, 9999].min
+        limit = [(index_params[:limit] || 120).to_i, 9999].min
         page = index_params[:page] || 1
         with_stats = index_params[:with_stats].to_s == "true" ? true : false
 
@@ -18,6 +18,13 @@ module Api
                                .order(reported_at: :desc)
         if index_params[:time_filter]
           ping_things = ping_things.where("response_time >= ?", index_params[:time_filter].to_i)
+        end
+        if index_params[:posted_by]
+          user_ids = User.where("username LIKE ?", index_params[:posted_by].strip).pluck(:id)
+          ping_things = ping_things.where(user_id: user_ids)
+        end
+        if index_params[:success] && boolean_valid?(index_params[:success])
+          ping_things = ping_things.where(success: index_params[:success])
         end
         ping_things = ping_things.page(page).per(limit)
 
@@ -83,7 +90,11 @@ module Api
       end
 
       def index_params
-        params.permit(:network, :limit, :page, :with_stats, :time_filter)
+        params.permit(:network, :limit, :page, :with_stats, :time_filter, :posted_by, :success)
+      end
+
+      def boolean_valid?(param)
+        ["true", true, "false", false].include?(param)
       end
 
       def ping_thing_params

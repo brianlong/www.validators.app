@@ -41,7 +41,7 @@
       return {
         ping_things: [],
         page: 1,
-        records_in_table: 120,
+        records_in_table: 60,
         api_url: null
       }
     },
