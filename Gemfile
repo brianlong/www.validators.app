@@ -90,6 +90,8 @@ gem 'coingecko_ruby'
 
 gem "audited", "~> 5.3.3"
 
+gem 'sitemap_generator', '~> 6.3.0'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'bullet', '~> 7.0'

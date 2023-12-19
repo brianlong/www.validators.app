@@ -45,6 +45,12 @@ class PublicController < ApplicationController
     @title = t('public.contact_us.title')
   end
 
+  # Robots.txt
+  def robots
+    robots = File.read(Rails.root.join("config", "robots", "robots.#{Rails.env}.txt"))
+    render plain: robots
+  end
+
   def commission_histories
     if params[:validator_id]
       begin
