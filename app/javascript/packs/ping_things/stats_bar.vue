@@ -37,12 +37,14 @@
             <div class="col-12 col-lg-7">
               <span class="d-lg-none"><i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;</span>
               <span class="text-success">
-                {{ last_5_mins["num_of_records"] ? last_5_mins["num_of_records"].toLocaleString('en-US') : '0' }}
+                {{ (last_5_mins["num_of_records"] || last_5_mins["num_of_records"] === 0) ? last_5_mins["num_of_records"].toLocaleString('en-US') : '0' }}
               </span>
             </div>
             <div class="col-12 col-lg-7">
               <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-danger me-2"></i>Failures:&nbsp;</span>
-              <span class="text-danger">{{ last_5_mins["fails_count"] ? last_5_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}</span>
+              <span class="text-danger">
+                {{ (last_5_mins["fails_count"] || last_5_mins["fails_count"] === 0) ? last_5_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
+              </span>
               <span class="text-muted">
                 {{ last_5_mins["fails_count"] ? '(' + (last_5_mins["fails_count"] / last_5_mins["num_of_records"] * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : '' }}
               </span>
@@ -81,13 +83,13 @@
             <div class="col-12 col-lg-7">
               <span class="d-lg-none"><i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;</span>
               <span class="text-success">
-                {{ last_60_mins["num_of_records"] ? last_60_mins["num_of_records"].toLocaleString('en-US') : '0' }}
+                {{ (last_60_mins["num_of_records"] || last_60_mins["num_of_records"] === 0) ? last_60_mins["num_of_records"].toLocaleString('en-US') : '0' }}
               </span>
             </div>
             <div class="col-12 col-lg-7">
               <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-danger me-2"></i>Failures:&nbsp;</span>
               <span class="text-danger">
-                {{ last_60_mins["fails_count"] ? last_60_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
+                {{ (last_60_mins["fails_count"] || last_60_mins["fails_count"] === 0) ? last_60_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
               </span>
               <span class="text-muted">
                 {{ last_60_mins["fails_count"] ? '(' + (last_60_mins["fails_count"] / last_60_mins["num_of_records"] * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : '' }}
