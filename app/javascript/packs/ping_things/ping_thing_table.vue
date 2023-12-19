@@ -97,7 +97,9 @@
                 <span class="text-muted">{{ pt.slot_sent }}</span> <br />
                 <span class="text-muted">{{ pt.slot_landed }}</span> ({{ slot_latency(pt.slot_sent, pt.slot_landed) }})
               </td>
-              <td class="text-muted">{{ pt.username }}</td>
+              <td>
+                <a href="" title="Filter by this sender" @click.prevent="filter_by_posted_by(pt.username)">{{ pt.username }}</a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -183,6 +185,11 @@
         } else {
           return " - "
         }
+      },
+
+      filter_by_posted_by(username) {
+        this.posted_by = username;
+        this.get_filtered_records();
       },
 
       get_filtered_records() {
