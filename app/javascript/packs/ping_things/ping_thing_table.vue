@@ -210,6 +210,8 @@
 
       reset_filter() {
         this.filter_time = null
+        this.posted_by = null
+        this.success = ""
         this.show_filtered_records = false
         this.ping_things_filtered = []
       }
