@@ -44,7 +44,7 @@ SitemapGenerator::Sitemap.create do
   #   end
 
   DataCenter.find_each do |dc|
-    add(data_center_path(dc.data_center_key),
+    add(data_center_path(key: dc.data_center_key),
         lastmod: dc.updated_at,
         changefreq: 'daily')
   end
