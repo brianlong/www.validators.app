@@ -1,8 +1,8 @@
 <template>
   <section>
-    <div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
-      <div class="form-group-row">
-        <div class="input-group">
+    <div class="d-flex justify-content-between flex-wrap flex-column flex-md-row gap-3 mb-4">
+      <div class="d-flex flex-wrap flex-column flex-md-row gap-3">
+        <div>
           <input name="filter_time"
                  @keyup.enter="get_filtered_records()"
                  v-model="filter_time"
@@ -10,16 +10,37 @@
                  class="form-control"
                  step="10"
                  placeholder="Minimum time (ms)">
-          <button @click.prevent="get_filtered_records()"
-                  class="btn btn-sm btn-primary">
-            Search
-          </button>
         </div>
+        <div>
+          <input name="posted_by"
+                 @keyup.enter="get_filtered_records()"
+                 v-model="posted_by"
+                 type="text"
+                 class="form-control"
+                 placeholder="Posted By">
+        </div>
+        <div>
+          <select name="success"
+                  @keyup.enter="get_filtered_records()"
+                  v-model="success"
+                  class="form-select form-control">
+            <option value="" selected>Status (all)</option>
+            <option value="true">success</option>
+            <option value="false">failure</option>
+          </select>
+        </div>
+
+        <button @click.prevent="get_filtered_records()"
+                class="btn btn-sm btn-primary"
+                style="width: 115px;">
+          Search
+        </button>
       </div>
 
       <button @click.prevent="reset_filter()"
               class="btn btn-sm btn-tertiary"
-              v-if="show_filtered_records">
+              v-if="show_filtered_records"
+              style="width: 115px;">
         Reset filters
       </button>
     </div>
@@ -76,7 +97,9 @@
                 <span class="text-muted">{{ pt.slot_sent }}</span> <br />
                 <span class="text-muted">{{ pt.slot_landed }}</span> ({{ slot_latency(pt.slot_sent, pt.slot_landed) }})
               </td>
-              <td class="text-muted">{{ pt.username }}</td>
+              <td>
+                <a href="" title="Filter by this sender" @click.prevent="filter_by_posted_by(pt.username)">{{ pt.username }}</a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -108,10 +131,15 @@
 
     data() {
       return {
-        filter_time: null,
         show_filtered_records: false,
         api_url: '/api/v1/ping-thing/' + this.network,
-        ping_things_filtered: []
+        ping_things_filtered: [],
+
+        // filters
+        filter_time: null,
+        posted_by: null,
+        success: ""
+
       }
     },
 
@@ -159,10 +187,21 @@
         }
       },
 
+      filter_by_posted_by(username) {
+        this.posted_by = username;
+        this.get_filtered_records();
+      },
+
       get_filtered_records() {
         var ctx = this
+        var filters = {
+          time_filter: ctx.filter_time,
+          posted_by: ctx.posted_by,
+          success: ctx.success,
+          limit: 60
+        }
 
-        axios.get(ctx.api_url, { params: { time_filter: ctx.filter_time }})
+        axios.get(ctx.api_url, { params: filters })
              .then(function(response) {
                ctx.ping_things_filtered = response.data;
                ctx.show_filtered_records = true
@@ -171,6 +210,8 @@
 
       reset_filter() {
         this.filter_time = null
+        this.posted_by = null
+        this.success = ""
         this.show_filtered_records = false
         this.ping_things_filtered = []
       }
