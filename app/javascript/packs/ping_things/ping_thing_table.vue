@@ -190,7 +190,8 @@
         var filters = {
           time_filter: ctx.filter_time,
           posted_by: ctx.posted_by,
-          success: ctx.success
+          success: ctx.success,
+          limit: 60
         }
 
         axios.get(ctx.api_url, { params: filters })
