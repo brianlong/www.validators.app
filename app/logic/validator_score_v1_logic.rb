@@ -257,6 +257,9 @@ module ValidatorScoreV1Logic
 
         skipped_slot_percent = last_validator_block_history_for_validator[1]
         validator.score.skipped_slot_history_push(skipped_slot_percent.to_f)
+        validator.validator_score_v1.skipped_after_history_push(
+          last_validator_block_history_for_validator[3].to_f
+        )
 
         moving_average = last_validator_block_history_for_validator[2]
         validator.score.skipped_slot_moving_average_history_push(moving_average.to_f)
