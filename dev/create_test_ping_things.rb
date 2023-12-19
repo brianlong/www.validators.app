@@ -8,19 +8,20 @@ counts = [{count: 5000, min_time: 700,   max_time: 4000},
           {count: 50,   min_time: 20000, max_time: 30000},
           {count: 5,    min_time: 30000, max_time: 100000}]
 
+users = User.all.pluck(:id)
+
 counts.each do |loop|
   loop[:count].times do |n|
     slot_sent = rand(10_000_000..100_000_000)
     p = PingThing.create(
-      user_id: 1,
-      user_id: User.first.id,
+      user_id: users.sample,
       amount: 1,
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
       response_time: rand(loop[:min_time]..loop[:max_time]),
       transaction_type: "transfer",
       network: "mainnet",
       commitment_level: "confirmed",
-      success: true,
+      success: [true, false].sample,
       application: "web3",
       reported_at: rand(7.days.ago..Time.now),
       slot_sent: slot_sent,
