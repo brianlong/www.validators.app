@@ -1,18 +1,13 @@
-SitemapGenerator::Sitemap.default_host = if Rails.env.production?
-                                           "https://www.validators.app"
-                                         elsif Rails.env.stage?
-                                           "https://stage.validators.app"
-                                         else
-                                           "http://www.example.com"
-                                         end
+host = if Rails.env.production?
+         "https://www.validators.app"
+       elsif Rails.env.stage?
+         "https://stage.validators.app"
+       else
+         "http://www.example.com"
+       end
 
-sitemap_url = if Rails.env.production?
-                "https://www.validators.app/sitemap.xml.gz"
-              elsif Rails.env.stage?
-                "https://stage.validators.app/sitemap.xml.gz"
-              else
-                "http://www.example.com/sitemap.xml.gz"
-              end
+SitemapGenerator::Sitemap.default_host = host
+sitemap_url = "#{host}/sitemap.xml.gz"
 
 SitemapGenerator::Sitemap.search_engines = {
   google: "http://www.google.com/webmasters/tools/ping?sitemap=#{sitemap_url}",
