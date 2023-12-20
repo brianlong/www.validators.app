@@ -57,7 +57,7 @@ gem 'whenever', require: false
 
 # Use Active Storage variant
 gem 'image_processing'
-gem 'rmagick'
+#gem 'rmagick'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.16', require: false
@@ -95,9 +95,9 @@ group :development, :test do
   gem 'bullet', '~> 7.0'
   gem 'factory_bot_rails'
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
-  gem 'pronto'
-  gem 'pronto-flay', require: false
-  gem 'pronto-rubocop', require: false
+  gem 'pronto', '~> 0.11.2'
+  gem 'pronto-flay', '~> 0.11.1', require: false
+  gem 'pronto-rubocop', '~> 0.11.5', require: false
   gem 'pry', '~> 0.14.2'
   gem 'rubocop', '~> 1.18', require: false
   gem 'letter_opener_web'

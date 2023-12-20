@@ -5,18 +5,22 @@ module Api
     class ValidatorsController < BaseController
       include ValidatorsHelper
       include ValidatorsControllerHelper
+      include IpGeoCountryHelper
 
       before_action :set_skipped_slots_report
       before_action :set_validator_and_score, only: %i[show show_ledger]
+      before_action :set_session_seed, only: %i[index]
 
       def index
         @validators = ValidatorQuery.new(api: true).call(
-          network: params[:network],
-          sort_order: params[:order],
-          page: params[:page],
-          limit: params[:limit],
+          network: index_params[:network],
+          sort_order: index_params[:order],
+          page: index_params[:page],
+          limit: index_params[:limit],
+          random_seed_val: session[:random_seed_val],
           query_params: {
-            query: params[:q]
+            query: index_params[:q],
+            active_only: index_params[:active_only].nil? ? true : index_params[:active_only]
           }
         )
 
@@ -121,7 +125,8 @@ module Api
             block_histories: @block_histories,
             block_history_stats: @block_history_stats,
             validator_history: @val_history,
-            validator_score_details: validator_score_attrs(@validator)
+            validator_score_details: validator_score_attrs(@validator),
+            geo_country: set_geo_country
           }
         else
           @validator = ValidatorQuery.new.call_single_validator(
@@ -173,6 +178,10 @@ module Api
 
       def validator_params
         params.permit(:network, :order, :page, :limit, :q, :account, :with_history)
+      end
+
+      def index_params
+        params.permit(:network, :order, :page, :limit, :q, :active_only)
       end
 
       def set_skipped_slots_report
