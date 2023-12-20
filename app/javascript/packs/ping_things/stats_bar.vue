@@ -13,7 +13,7 @@
           <i class="fa-solid fa-calculator text-success me-2"></i>Entries
         </div>
         <div class="col-lg-7">
-          <i class="fa-solid fa-circle-xmark text-danger me-2"></i>Failures
+          <i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures
         </div>
         <div class="col-lg-7">
           <i class="fa-solid fa-down-long text-success me-2"></i>Min
@@ -41,8 +41,8 @@
               </span>
             </div>
             <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-danger me-2"></i>Failures:&nbsp;</span>
-              <span class="text-danger">
+              <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures:&nbsp;</span>
+              <span class="text-success">
                 {{ (last_5_mins["fails_count"] || last_5_mins["fails_count"] === 0) ? last_5_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
               </span>
               <span class="text-muted">
@@ -87,8 +87,8 @@
               </span>
             </div>
             <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-danger me-2"></i>Failures:&nbsp;</span>
-              <span class="text-danger">
+              <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures:&nbsp;</span>
+              <span class="text-success">
                 {{ (last_60_mins["fails_count"] || last_60_mins["fails_count"] === 0) ? last_60_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
               </span>
               <span class="text-muted">
