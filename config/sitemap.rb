@@ -74,7 +74,6 @@ SitemapGenerator::Sitemap.create do
   add '/users/confirmation/new'
   add '/users/unlock/new'
   add '/contact-us'
-  add '/stake-boss'
   add '/api-documentation'
   add '/cookie-policy'
   add '/faq'
