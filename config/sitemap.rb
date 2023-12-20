@@ -44,24 +44,15 @@ SitemapGenerator::Sitemap.create do
         changefreq: 'daily')
   end
 
-  Validator.find_each do |v|
-    add(File.join('validators', v.network, v.account),
-        lastmod: v.updated_at,
-        changefreq: 'hourly')
+  Validator.active.find_each do |v|
     add(validator_path(v.account, network: v.network),
         lastmod: v.updated_at,
         changefreq: 'hourly')
   end
 
-  VoteAccount.includes(:validator).find_each do |va|
+  VoteAccount.active.includes(:validator).find_each do |va|
     add(validator_vote_account_path(vote_account: va.account, account: va.validator.account),
         lastmod: va.updated_at,
-        changefreq: 'daily')
-  end
-
-  ExplorerStakeAccount.find_each do |esa|
-    add(explorer_stake_account_path(esa.stake_pubkey),
-        lastmod: esa.updated_at,
         changefreq: 'daily')
   end
 
