@@ -215,7 +215,7 @@ table, .table {
         width: 29%;
         padding-right: 0;
         @media(max-width: $screen-xl-max) {
-          width: 28%;
+          width: 28.5%;
         }
         @media(max-width: $screen-lg-max) {
           width: 210px;
@@ -229,6 +229,9 @@ table, .table {
           width: 86px;
           text-align: center;
           padding-right: 28px;
+          @media(max-width: $screen-xl-max) {
+            width: 80px;
+          }
           @media(max-width: $screen-lg-max) {
             width: 25px;
             padding-right: 0;
@@ -264,7 +267,7 @@ table, .table {
       }
 
       &-numeric {
-        width: 10%;
+        width: 9.5%;
         @media(max-width: $screen-lg-max) {
           width: 95px;
         }
