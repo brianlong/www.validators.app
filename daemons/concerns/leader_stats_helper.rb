@@ -20,7 +20,7 @@ module LeaderStatsHelper
 
     leaders = leaders_data.map do |leader|
       leader.attributes.merge(
-        avatar_url: leader.avatar.attached? ? Rails.application.routes.url_helpers.url_for(leader.avatar) : nil,
+        avatar_file_url: leader.avatar.attached? ? Rails.application.routes.url_helpers.url_for(leader.avatar) : nil,
       )
     end
 
