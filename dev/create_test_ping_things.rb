@@ -2,29 +2,30 @@
 
 require File.expand_path("../config/environment", __dir__)
 
-counts = [{count: 5000, min_time: 700,   max_time: 4500},
-          {count: 1000, min_time: 4500,  max_time: 15000},
-          {count: 500,  min_time: 15000, max_time: 25000},
-          {count: 50,   min_time: 25000, max_time: 40000},
-          {count: 5,    min_time: 40000, max_time: 100000}]
+counts = [{count: 5000, min_time: 700,   max_time: 4000},
+          {count: 1000, min_time: 4000,  max_time: 12000},
+          {count: 500,  min_time: 12000, max_time: 20000},
+          {count: 50,   min_time: 20000, max_time: 30000},
+          {count: 5,    min_time: 30000, max_time: 100000}]
+
+users = User.all.pluck(:id)
 
 counts.each do |loop|
   loop[:count].times do |n|
     slot_sent = rand(10_000_000..100_000_000)
     p = PingThing.create(
-      user_id: 1,
-      user_id: User.first.id,
-      amount: 1, 
+      user_id: users.sample,
+      amount: 1,
       signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
       response_time: rand(loop[:min_time]..loop[:max_time]),
       transaction_type: "transfer",
       network: "mainnet",
       commitment_level: "confirmed",
-      success: true,
+      success: [true, false].sample,
       application: "web3",
       reported_at: rand(7.days.ago..Time.now),
       slot_sent: slot_sent,
-      slot_landed: slot_sent + rand(100..10_000)
+      slot_landed: slot_sent + rand(1..5)
     )
     if p.valid?
       puts p.inspect
