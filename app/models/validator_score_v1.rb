@@ -317,13 +317,15 @@ class ValidatorScoreV1 < ApplicationRecord
       if with_history
         vs_v1.(
           self,
-          *(ATTRIBUTES_FOR_BUILDER + HISTORY_FIELDS)
+          *(ATTRIBUTES_FOR_BUILDER + HISTORY_FIELDS - [:skipped_after_history])
         )
+        vs_v1.skipped_after_percent (skipped_after_history&.last * 100.0 rescue nil)
       else
         vs_v1.(
           self,
-          *ATTRIBUTES_FOR_BUILDER
+          *ATTRIBUTES_FOR_BUILDER - [:skipped_after_history]
         )
+        vs_v1.skipped_after_percent (skipped_after_history&.last * 100.0 rescue nil)
       end
     end
   end

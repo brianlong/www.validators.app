@@ -15,6 +15,7 @@ module ValidatorsControllerHelper
     validator_history = validator.validator_histories.select(ValidatorHistory::API_FIELDS).last
 
     hash.merge!(validator_score.to_builder(with_history: with_history).attributes!)
+    # hash.merge!({skipped_after_percent: validator_score.skipped_after_history&.last})
     hash.merge!(data_center.to_builder.attributes!) unless data_center.blank?
     hash.merge!(data_center_host.to_builder.attributes!) unless data_center_host.blank?
     hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
