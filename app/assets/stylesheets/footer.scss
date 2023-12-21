@@ -28,6 +28,20 @@ footer {
       color: $grey-light;
       @include font-size-sm;
     }
+
+    &-category {
+      @media(max-width: $screen-md-max) {
+        display: inline;
+      }
+    }
+    &-item {
+      margin-bottom: 15px;
+      @media(max-width: $screen-md-max) {
+        display: inline-block;
+        margin-bottom: 20px;
+        margin-right: 10px;
+      }
+    }
   }
 
   // Networks selector
