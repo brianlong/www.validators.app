@@ -212,3 +212,13 @@ hr {
     display: inline-block;
   }
 }
+
+.col-lg-7 {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  @media(min-width: $screen-lg-min) {
+    width: 14.28%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}

@@ -100,7 +100,7 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
     json_record = json.first
     signature = "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s"
-    
+
     assert_equal 1, json.size
     assert_equal 12, json_record.size
 
@@ -189,17 +189,31 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4, response_to_json(@response.body).size
   end
 
-  test "GET api_v1_ping_things with time_filter returns only records greater than filter" do
-    filter = 5
+  test "GET api_v1_ping_things with filter params returns filtered records" do
     10.times do |n|
-      create(:ping_thing, :testnet, response_time: n)
+      create(:ping_thing, :testnet, response_time: n, success: true)
     end
 
-    get api_v1_ping_things_path(network: "testnet", with_stats: "asd", time_filter: filter), headers: @headers
+    filter = 5
+    user = PingThing.last.user.username
 
+    get api_v1_ping_things_path(network: "testnet", time_filter: filter), headers: @headers
     json_response = response_to_json(@response.body)
     assert_equal 5, json_response.size
     assert_equal [], json_response.select{ |pt| pt["response_time"].to_i < filter }
+
+    PingThing.where(network: "testnet").update_all(success: false)
+    get api_v1_ping_things_path(network: "testnet", success: false), headers: @headers
+    assert_equal 10, response_to_json(@response.body).size
+
+    PingThing.where(network: "testnet").first.update(success: true)
+    PingThing.where(network: "testnet").last.update(success: true)
+    assert_equal 2, PingThing.where(network: "testnet", success: true).count
+    get api_v1_ping_things_path(network: "testnet", success: true, time_filter: filter), headers: @headers
+    assert_equal 1, response_to_json(@response.body).size
+
+    get api_v1_ping_things_path(network: "testnet", posted_by: user, time_filter: filter), headers: @headers
+    assert_equal 1, response_to_json(@response.body).size
   end
 
   test "GET api_v1_ping_things as csv returns success" do

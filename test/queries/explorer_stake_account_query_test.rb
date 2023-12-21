@@ -77,4 +77,13 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal ["test_delegated_vote_account_address_2", "test_delegated_vote_account_address_6"], explorer_stake_accounts.pluck(:delegated_vote_account_address)
     assert_equal 2, explorer_stake_accounts.count
   end
+
+  test "service returns correct amount of records when limit_count presented" do
+    explorer_stake_account = ExplorerStakeAccountQuery.new(
+      network: @network,
+      limit_count: 3
+    ).call[:explorer_stake_accounts]
+
+    assert_equal 3, explorer_stake_account.count
+  end
 end

@@ -95,4 +95,22 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
 
     assert_equal slot_latency, ping_stat.average_slot_latency
   end
+
+  test "#recalculate_stats counts fails count" do
+    6.times do |time|
+      create(
+        :ping_thing,
+        :testnet,
+        reported_at: rand(50.minutes.ago..Time.now),
+        success: time.even?
+      )
+    end
+
+    ping_stat = create(:ping_thing_recent_stat, interval: 60)
+
+    ping_stat.recalculate_stats
+    ping_stat.reload
+
+    assert_equal 3, ping_stat.fails_count
+  end
 end

@@ -6,6 +6,7 @@
 #
 #  id                   :bigint           not null, primary key
 #  average_slot_latency :float(24)
+#  fails_count          :integer
 #  interval             :integer
 #  max                  :float(24)
 #  median               :float(24)
@@ -56,7 +57,8 @@ class PingThingRecentStat < ApplicationRecord
       max: ping_times.max,
       p90: ping_times.first((ping_times.count * 0.9).to_i).last,
       num_of_records: ping_times.count,
-      average_slot_latency: ping_things.average_slot_latency&.round(1)
+      average_slot_latency: ping_things.average_slot_latency&.round(1),
+      fails_count: ping_things.where(success: false).count
     )
   end
   
