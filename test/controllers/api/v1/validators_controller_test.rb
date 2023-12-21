@@ -108,6 +108,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal validator.data_center_host.host, validator_with_all_data["data_center_host"]
     assert_nil validator_with_all_data["admin_warning"]
     assert validator_with_all_data["is_active"]
+    assert_equal 12.3, validator_with_all_data["skipped_after_percent"]
 
     # Vote accounts
     assert_equal "Test Account", validator_with_all_data["vote_account"]
