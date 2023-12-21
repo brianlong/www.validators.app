@@ -13,11 +13,29 @@
   <nav class="container">
     <hr class="footer-separator"/>
 
-    <div class="d-inline-block d-md-flex justify-content-between">
+    <div class="d-inline-block d-lg-flex justify-content-between">
       <div class="footer-category">
-        <div class="footer-item">
-          <div id="network-buttons"></div>
-        </div>
+        <div class="footer-item"><%= link_to 'Validators', validators_path(network: params[:network]) %></div>
+        <div class="footer-item"><%= link_to 'Commission Changes', commission_histories_path(network: params[:network]), "data-turbolinks": "false" %></div>
+        <div class="footer-item"><%= link_to 'Authorities Changes', authorities_changes_path(network: params[:network]) %></div>
+        <div class="footer-item"><%= link_to 'Data Centers', data_centers_url(network: params[:network]) %></div>
+        <div class="footer-item"><%= link_to 'Ping Thing', ping_things_path(network: params[:network]), "data-turbolinks": "false" %></div>
+      </div>
+      <div class="footer-category">
+        <div class="footer-item"><%= link_to "Stake Explorer", explorer_stake_accounts_path(network: params[:network]) %></div>
+        <div class="footer-item"><%= link_to 'Stake Pools', stake_pools_path(network: params[:network]), "data-turbolinks": "false" %></div>
+        <div class="footer-item"><%= link_to 'Sol Prices', sol_prices_path %></div>
+        <div class="footer-item"><%= link_to 'Log Deep Dives', log_deep_dives_index_path %></div>
+      </div>
+      <div class="footer-category">
+        <div class="footer-item"><%= link_to 'API Docs', api_documentation_path %></div>
+        <div class="footer-item"><%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path %></div>
+        <div class="footer-item"><%= link_to t('footer.nav_links.privacy_policy'), privacy_policy_path %></div>
+        <div class="footer-item"><%= link_to t('footer.nav_links.terms_of_use'), terms_of_use_path %></div>
+      </div>
+      <div class="footer-category">
+        <div class="footer-item"><%= link_to t('footer.nav_links.contact_us'), contact_us_path %></div>
+        <div class="footer-item"><%= link_to t('footer.nav_links.opt_out'), new_opt_out_request_path %></div>
         <% if user_signed_in? %>
           <div class="footer-item">
             <%= link_to user_root_path do %>
@@ -35,27 +53,7 @@
         <% end %>
       </div>
       <div class="footer-category">
-        <div class="footer-item"><%= link_to 'Validators', validators_path(network: params[:network]) %></div>
-        <div class="footer-item"><%= link_to 'Commission Changes', commission_histories_path(network: params[:network]), "data-turbolinks": "false" %></div>
-        <div class="footer-item"><%= link_to 'Authorities Changes', authorities_changes_path(network: params[:network]) %></div>
-        <div class="footer-item"><%= link_to 'Ping Thing', ping_things_path(network: params[:network]), "data-turbolinks": "false" %></div>
-      </div>
-      <div class="footer-category">
-        <div class="footer-item"><%= link_to "Stake Explorer", explorer_stake_accounts_path(network: params[:network]) %></div>
-        <div class="footer-item"><%= link_to 'Stake Pools', stake_pools_path(network: params[:network]), "data-turbolinks": "false" %></div>
-        <div class="footer-item"><%= link_to 'Data Centers', data_centers_url(network: params[:network]) %></div>
-        <div class="footer-item"><%= link_to 'Sol Prices', sol_prices_path %></div>
-      </div>
-      <div class="footer-category">
-        <div class="footer-item"><%= link_to 'API Docs', api_documentation_path %></div>
-        <div class="footer-item"><%= link_to 'Log Deep Dives', log_deep_dives_index_path %></div>
-        <div class="footer-item"><%= link_to t('footer.nav_links.contact_us'), contact_us_path %></div>
-        <div class="footer-item"><%= link_to t('footer.nav_links.opt_out'), new_opt_out_request_path %></div>
-      </div>
-      <div class="footer-category">
-        <div class="footer-item"><%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path %></div>
-        <div class="footer-item"><%= link_to t('footer.nav_links.privacy_policy'), privacy_policy_path %></div>
-        <div class="footer-item"><%= link_to t('footer.nav_links.terms_of_use'), terms_of_use_path %></div>
+        <div id="network-buttons"></div>
       </div>
     </div>
   </nav>

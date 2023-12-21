@@ -1,4 +1,5 @@
 <template>
+  <!--
   <div class="dropdown">
     <button :class="dropdown_visibility_class + ' btn btn-lg btn-secondary btn'"
             type="button" @click="toggle_dropdown">
@@ -13,6 +14,16 @@
         </a>
       </li>
     </ul>
+  </div>
+  -->
+  <div>
+    <div v-for="(network_entry, index) in $store.state.networks"
+        :key="network_entry" class="footer-item">
+      <a :class="link_class(network_entry) + ' footer-link'" href="#" @click.prevent="change_network(network_entry)">
+        {{ capitalize(network_entry) }}
+      </a>
+      <span class="d-lg-none ms-2" v-if="index != ($store.state.networks.length - 1)">/</span>
+    </div>
   </div>
 </template>
 
@@ -51,6 +62,15 @@
         }
         window.location.href = this.url
         return true
+      },
+
+      link_class: function(network) {
+        let url = window.location.href
+        if(url.includes(network)) {
+          return 'active';
+        } else if(!url.includes('network=') && network === "mainnet") {
+          return 'active';
+        }
       },
 
       toggle_dropdown: function() {

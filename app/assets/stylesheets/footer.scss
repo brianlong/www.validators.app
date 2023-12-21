@@ -41,6 +41,14 @@ footer {
         margin-bottom: 20px;
         margin-right: 10px;
       }
+      a.footer-link {
+        color: $green;
+        &.active, &:hover {
+          color: $base-color;
+          text-decoration: underline;
+          text-decoration-color: $green;
+        }
+      }
     }
   }
 
