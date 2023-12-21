@@ -74,12 +74,14 @@ class ValidatorScoreV1 < ApplicationRecord
     total_score
     validator_id
     vote_distance_score
+    skipped_after_history
   ].freeze
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
     active_stake
     total_score
     validator_id
+    skipped_after_history
   ].freeze
 
   HISTORY_FIELDS = %i[
