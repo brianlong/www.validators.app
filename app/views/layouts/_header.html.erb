@@ -1,4 +1,3 @@
-<%= javascript_pack_tag 'navigations/network_buttons' %>
 <%= javascript_pack_tag 'navigations/validator_searcher_bar' %>
 <%= javascript_pack_tag 'navigations/validator_searcher_btn' %>
 
@@ -23,7 +22,11 @@
           <li class="nav-item">
             <%= link_to "Getting Started", faq_path, class: 'nav-link', "data-turbolinks": "false" %>
           </li>
-          <div id="network-buttons"></div>
+          <li class="nav-item">
+            <%= link_to "Support Block Logic",
+                        validator_path(network: "mainnet", account: "DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp"),
+                        class: "btn btn-lg btn-secondary", "data-turbolinks": "false" %>
+          </li>
           <div id="validator-searcher-btn"></div>
         </ul>
       </div>

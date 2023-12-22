@@ -1,41 +1,20 @@
 @import "variables";
 
 footer {
-  padding: 40px 0;
+  padding: 30px 0;
   @media(max-width: $screen-sm-max) {
     padding: 30px 0;
   }
 
-  .navbar {
-    padding: 0;
-
-    .navbar-nav {
-      @media(max-width: $screen-md-max) {
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-      .nav-item {
-        padding: 0;
-        margin: 0;
-        .nav-link {
-          color: $link-color;
-          padding-left: 0;
-          padding-right: 24px;
-          &:hover {
-            color: $white;
-          }
-          @media(max-width: $screen-sm-max) {
-            padding: 5px 15px 15px 0;
-          }
-        }
-      }
+  .row {
+    @media(max-width: $screen-md-max) {
     }
   }
 
   .footer {
     &-separator {
-      margin-top: $margin-standard;
-      margin-bottom: 25px;
+      margin-top: 20px;
+      margin-bottom: 35px;
       @media(max-width: $screen-xs-max) {
         margin-bottom: 25px;
         margin-top: 10px;
@@ -48,6 +27,28 @@ footer {
     &-copyright {
       color: $grey-light;
       @include font-size-sm;
+    }
+
+    &-category {
+      @media(max-width: $screen-md-max) {
+        display: inline;
+      }
+    }
+    &-item {
+      margin-bottom: 15px;
+      @media(max-width: $screen-md-max) {
+        display: inline-block;
+        margin-bottom: 20px;
+        margin-right: 10px;
+      }
+      a.footer-link {
+        color: $green;
+        &.active, &:hover {
+          color: $base-color;
+          text-decoration: underline;
+          text-decoration-color: $green;
+        }
+      }
     }
   }
 }
