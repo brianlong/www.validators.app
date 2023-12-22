@@ -28,14 +28,14 @@
         <div class="footer-item"><%= link_to 'Log Deep Dives', log_deep_dives_index_path %></div>
       </div>
       <div class="footer-category">
-        <div class="footer-item"><%= link_to 'API Docs', api_documentation_path %></div>
         <div class="footer-item"><%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path %></div>
         <div class="footer-item"><%= link_to t('footer.nav_links.privacy_policy'), privacy_policy_path %></div>
         <div class="footer-item"><%= link_to t('footer.nav_links.terms_of_use'), terms_of_use_path %></div>
-      </div>
-      <div class="footer-category">
         <div class="footer-item"><%= link_to t('footer.nav_links.contact_us'), contact_us_path %></div>
         <div class="footer-item"><%= link_to t('footer.nav_links.opt_out'), new_opt_out_request_path %></div>
+      </div>
+      <div class="footer-category">
+        <div class="footer-item"><%= link_to 'API Docs', api_documentation_path %></div>
         <% if user_signed_in? %>
           <div class="footer-item">
             <%= link_to user_root_path do %>
