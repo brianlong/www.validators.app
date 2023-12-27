@@ -19,9 +19,7 @@ module LeaderStatsHelper
                             .sort_by{ |v| leaders_accounts.index(v.account) }
 
     leaders = leaders_data.map do |leader|
-      leader.attributes.merge(
-        avatar_file_url: leader.avatar.attached? ? Rails.application.routes.url_helpers.url_for(leader.avatar) : nil,
-      )
+      leader.attributes.merge(avatar_file_url: leader.avatar_file_url)
     end
 
     current_leader = leaders.shift
