@@ -100,8 +100,9 @@ module ValidatorsHelper
                     class: "img-circle-large-private"
       end
     elsif validator.avatar.attached?
+      url = Rails.env.in?(['stage', 'production']) ? validator.avatar.url : validator.avatar
       link_to validator_url(link_params) do
-        image_tag validator.avatar, class: "img-circle-large"
+        image_tag url, class: "img-circle-large"
       end
     else
       link_to validator_url(link_params) do
