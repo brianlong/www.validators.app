@@ -154,7 +154,7 @@ class Validator < ApplicationRecord
   end
 
   def avatar_file_url
-    url = Rails.env.in?(['stage', 'production']) ? avatar.url : avatar
+    url = Rails.env.in?(["stage", "production"]) ? avatar.url : avatar
     polymorphic_url(url) if avatar.attached?
   end
 
