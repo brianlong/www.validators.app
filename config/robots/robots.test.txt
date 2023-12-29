@@ -1,4 +1,4 @@
 User-Agent: *
 Disallow: /
 
-Sitemap: http://www.example.com/sitemap.xml.gz
+Sitemap: http://localhost:3000/sitemap.xml.gz

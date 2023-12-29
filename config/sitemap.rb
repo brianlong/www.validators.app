@@ -3,7 +3,7 @@ host = if Rails.env.production?
        elsif Rails.env.stage?
          "https://stage.validators.app"
        else
-         "http://www.example.com"
+         "http://localhost:3000"
        end
 
 SitemapGenerator::Sitemap.default_host = host
