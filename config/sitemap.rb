@@ -77,10 +77,4 @@ SitemapGenerator::Sitemap.create do
   add '/privacy-policy-california', changefreq: 'yearly'
   add '/privacy-policy', changefreq: 'yearly'
   add '/terms-of-use', changefreq: 'yearly'
-  add '/users/sign_in', changefreq: 'yearly'
-  add '/users/sign_out', changefreq: 'yearly'
-  add '/users/password/new', changefreq: 'yearly'
-  add '/users/sign_up', changefreq: 'yearly'
-  add '/users/confirmation/new', changefreq: 'yearly'
-  add '/users/unlock/new', changefreq: 'yearly'
 end

@@ -1,12 +1,13 @@
 User-Agent: *
 Crawl-delay: 20
-Disallow: /api/
-Disallow: /opt-out-requests/
+Disallow: /api/*
+Disallow: /opt-out-requests
 Disallow: /sidekiq
 Disallow: /contact-requests
 Disallow: /letter_opener
 Disallow: /current-user
 Disallow: /rails/*
 Disallow: /you
+Disallow: /users/*
 
 Sitemap: https://www.validators.app/sitemap.xml.gz
