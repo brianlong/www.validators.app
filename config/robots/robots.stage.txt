@@ -1,4 +1,5 @@
 User-Agent: *
+Crawl-delay: 20
 Disallow: /api/
 Disallow: /opt-out-requests/
 Disallow: /sidekiq
