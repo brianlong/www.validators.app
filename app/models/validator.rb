@@ -154,7 +154,8 @@ class Validator < ApplicationRecord
   end
 
   def avatar_file_url
-    polymorphic_url(avatar) if avatar.attached?
+    return unless avatar.attached?
+    Rails.env.in?(["stage", "production"]) ? avatar.url : polymorphic_url(avatar)
   end
 
   def should_update_avatar_file?
@@ -276,6 +277,10 @@ class Validator < ApplicationRecord
 
   def skipped_slot_score
     score&.skipped_slot_score
+  end
+
+  def skipped_after_percent
+    score&.skipped_after_history&.last
   end
 
   def ping_time_avg

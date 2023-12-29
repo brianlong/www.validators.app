@@ -1,18 +1,18 @@
 <section class="page-header">
-  <h1>My Dashboard</h1>
+  <h1>My Account</h1>
   <div class="d-flex justify-content-between flex-wrap gap-3">
     <div>
       <%= link_to 'Edit My Details', edit_user_registration_url, class: 'btn btn-sm btn-secondary me-2' %>
       <%= button_to 'Cancel My Account', registration_path(@user),
-                    data: { confirm: 'Are you sure? This operation is irreversible.' }, 
+                    data: { confirm: 'Are you sure? This operation is irreversible.' },
                     method: :delete,
                     form_class: "d-inline-block",
                     class: 'btn btn-sm btn-secondary m-0' %>
     </div>
     <div>
-      <%= button_to 'Sign Out', destroy_user_session_path, 
-          method: :delete, 
-          form_class: "d-inline-block", 
+      <%= button_to 'Sign Out', destroy_user_session_path,
+          method: :delete,
+          form_class: "d-inline-block",
           class: 'btn btn-sm btn-tertiary m-0' %>
     </div>
   </div>
@@ -22,7 +22,7 @@
   <div class="col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-content pb-0">
-        <h2 class="card-heading">Personal Data</h2>
+        <h2 class="h4 card-heading">Personal Data</h2>
       </div>
 
       <table class="table table-block-sm mb-0">
@@ -43,7 +43,7 @@
   <div class="col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-content pb-0">
-        <h2 class="card-heading">API</h2>
+        <h2 class="h4 card-heading">API</h2>
       </div>
 
       <table class="table table-block-sm mb-0">
@@ -68,8 +68,8 @@
 <% if @validators.present? %>
   <div class="card mb-4">
     <div class="card-content pb-0">
-      <h2 class="card-heading d-none d-md-block">Favourite Validators (<%= params[:network] %>)</h2>
-      <h2 class="card-heading d-md-none">Fav Validators (<%= params[:network] %>)</h2>
+      <h2 class="h4 card-heading d-none d-md-block">Favourite Validators (<%= params[:network] %>)</h2>
+      <h2 class="h4 card-heading d-md-none">Fav Validators (<%= params[:network] %>)</h2>
     </div>
 
     <%= render 'validators/table',
