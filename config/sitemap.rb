@@ -38,12 +38,6 @@ SitemapGenerator::Sitemap.create do
   #     add article_path(article), :lastmod => article.updated_at
   #   end
 
-  DataCenter.find_each do |dc|
-    add(data_center_path(key: dc.data_center_key.gsub('/', '-slash-')),
-        lastmod: dc.updated_at,
-        changefreq: 'daily')
-  end
-
   Validator.active.find_each do |v|
     add(validator_path(v.account, network: v.network),
         lastmod: v.updated_at,
@@ -51,26 +45,35 @@ SitemapGenerator::Sitemap.create do
   end
 
   VoteAccount.active.includes(:validator).find_each do |va|
-    add(validator_vote_account_path(vote_account: va.account, account: va.validator.account),
+    add(validator_vote_account_path(vote_account: va.account, account: va.validator.account, network: va.network),
         lastmod: va.updated_at,
         changefreq: 'hourly')
   end
 
-  add '/data-centers', changefreq: 'daily'
-  add '/validators', changefreq: 'hourly'
-  add '/trent-mode', changefreq: 'daily'
-  add '/sol-prices', changefreq: 'daily'
+  DataCenter.find_each do |dc|
+    add(data_center_path(key: dc.data_center_key.gsub('/', '-slash-')),
+        lastmod: dc.updated_at,
+        changefreq: 'daily')
+  end
+
+  NETWORKS.each do |network|
+    add "/data-centers?network=#{network}", changefreq: 'daily'
+    add "/validators?network=#{network}", changefreq: 'hourly'
+    add "/trent-mode?network=#{network}", changefreq: 'daily'
+    add "/commission-changes?network=#{network}", changefreq: 'hourly'
+    add "/authorities_changes?network=#{network}", changefreq: 'hourly'
+    add "/ping-thing?network=#{network}", changefreq: 'hourly'
+  end
+
   add '/stake-pools', changefreq: 'daily'
-  add '/commission-changes', changefreq: 'hourly'
-  add '/authorities_changes', changefreq: 'hourly'
   add '/stake-explorer', changefreq: 'daily'
-  add '/ping-thing', changefreq: 'hourly'
+  add '/sol-prices', changefreq: 'daily'
   add '/log-deep-dives', changefreq: 'yearly'
   add '/log-deep-dives/slot-72677728', changefreq: 'yearly'
   add '/contact-us', changefreq: 'yearly'
   add '/api-documentation', changefreq: 'monthly'
-  add '/cookie-policy', changefreq: 'yearly'
   add '/faq', changefreq: 'monthly'
+  add '/cookie-policy', changefreq: 'yearly'
   add '/privacy-policy-california', changefreq: 'yearly'
   add '/privacy-policy', changefreq: 'yearly'
   add '/terms-of-use', changefreq: 'yearly'
