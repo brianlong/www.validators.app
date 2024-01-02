@@ -51,6 +51,10 @@ class PublicController < ApplicationController
     render plain: robots
   end
 
+  def sitemap
+    send_file Rails.public_path.join("sitemap.xml.gz"), type: "text/xml"
+  end
+
   def commission_histories
     if params[:validator_id]
       begin
