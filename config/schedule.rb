@@ -21,7 +21,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-current_release_dir = 'home/deploy/validators.app/current'.freeze
+current_release_dir = '/home/deploy/validators.app/current'.freeze
 
 set :bundle_bin, '/usr/bin/bundle'
 set :ruby_bin, '/usr/bin/ruby'
