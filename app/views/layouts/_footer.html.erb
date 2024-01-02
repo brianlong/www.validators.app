@@ -36,7 +36,11 @@
       </div>
       <div class="footer-category">
         <div class="footer-item"><%= link_to 'API Docs', api_documentation_path %></div>
+        <div class="footer-item"><%= link_to 'FAQ', faq_path %></div>
         <% if user_signed_in? %>
+          <% if current_user.is_admin? %>
+            <div class="footer-item"><%= link_to "Opt Out Requests", opt_out_requests_path %></div>
+          <% end %>
           <div class="footer-item">
             <%= link_to user_root_path do %>
               <i class="fa-solid fa-user me-2"></i> My Account
