@@ -28,6 +28,8 @@ set :templated_config_files, []
 # set :pty, true
 set :pty, false
 
+set :sitemap_roles, :background
+
 # Default value for :linked_files is []
 append :linked_files, 'config/database.yml'
 # Note: Each server contains both keys, but the non-essential key is blank.
@@ -69,6 +71,7 @@ set :whenever_roles, ["cron"]
 namespace :deploy do
   after :restart, 'sidekiq:restart'
   after :restart, 'rake_task:add_stake_pools'
+  after :restart, 'sitemap:create'
   after :restart, 'deamons:restart'
 end
 
