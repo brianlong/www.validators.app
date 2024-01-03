@@ -116,7 +116,7 @@ export default {
         </div>
         
         <span class="d-inline-block d-lg-none small">
-          Skipped Vote&nbsp;%:&nbsp;
+          Vote Credit Distance:&nbsp;
           {{ skipped_vote_percent_string(skipped_vote_percent_val) }}
         </span>
       </div>

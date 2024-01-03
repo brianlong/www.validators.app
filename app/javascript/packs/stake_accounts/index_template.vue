@@ -112,14 +112,12 @@
               </th>
 
               <th class='column-speedometer pe-0'>
-                Skipped Vote
+                Vote Credit <br />Distance
                 <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
-                   title="Skipped vote measures the percent of the time that a leader fails to vote.">
+                   title="Vote Credit Distance measures the percent behind the top vote credit earner.">
                 </i>
-                <br />
-                <small class="text-muted">Dist from leader</small>
               </th>
 
               <th class='column-chart py-3'>
