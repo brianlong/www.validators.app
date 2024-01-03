@@ -21,8 +21,6 @@
 
 # Learn more: http://github.com/javan/whenever
 
-current_release_dir = '/home/deploy/validators.app/current'.freeze
-
 set :bundle_bin, '/usr/bin/bundle'
 set :ruby_bin, '/usr/bin/ruby'
 set :rake_bin, '/usr/bin/rake'
@@ -36,8 +34,6 @@ job_type :ruby_script_sol_prices,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/sol_prices/:task >> :whenever_path/log/:task.log 2>&1'
 job_type :ruby_script_data_centers,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/data_centers_scripts/:task >> :whenever_path/log/:task.log 2>&1'
-job_type :current_release_task,
-         "cd #{current_release_dir} && RAILS_ENV=:environment :bundle_bin exec :task >> #{current_release_dir}/log/whenever.log 2>&1"
 
 # since only one server should be responsible for background scripts and daemons
 # role background should be set on every schedule to limit it to a correct server
@@ -82,11 +78,11 @@ every 1.hour, at: 50, roles: [:background] do
 end
 
 every 1.hour, at: 55, roles: [:background] do
-  current_release_task "rake -s sitemap:refresh"
+  rake "-s sitemap:refresh"
 end
 
 every :sunday, at: '0:54am', roles: [:background] do
-  current_release_task "rake -s sitemap:clean"
+  rake "-s sitemap:clean"
 end
 
 every 1.day, at: '0:15am', roles: [:background] do
