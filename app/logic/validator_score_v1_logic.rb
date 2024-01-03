@@ -239,7 +239,10 @@ module ValidatorScoreV1Logic
       avg_skipped_slot_pct_all = vbh_stats.average_skipped_slot_percent
       med_skipped_slot_pct_all = vbh_stats.median_skipped_slot_percent
 
-      vbh_sql = <<-SQL_END
+      avg_skipped_after_pct_all = vbh_stats.average_skipped_slots_after_percent
+      med_skipped_after_pct_all = vbh_stats.median_skipped_slots_after_percent
+
+        vbh_sql = <<-SQL_END
         SELECT vbh.validator_id,
                vbh.skipped_slot_percent,
                vbh.skipped_slot_percent_moving_average,
@@ -271,7 +274,9 @@ module ValidatorScoreV1Logic
         200,
         p.payload.merge(
           avg_skipped_slot_pct_all: avg_skipped_slot_pct_all,
-          med_skipped_slot_pct_all: med_skipped_slot_pct_all
+          med_skipped_slot_pct_all: med_skipped_slot_pct_all,
+          avg_skipped_after_pct_all: avg_skipped_after_pct_all,
+          med_skipped_after_pct_all: med_skipped_after_pct_all
         )
       )
     rescue StandardError => e
@@ -286,6 +291,8 @@ module ValidatorScoreV1Logic
       p.payload[:validators].each do |validator|
         skipped_slot_percent = \
           validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
+        skipped_after_percent = \
+          validator&.validator_score_v1&.skipped_after_history&.last
 
         # Assign the scores
         validator.validator_score_v1.skipped_slot_score = \
@@ -298,11 +305,22 @@ module ValidatorScoreV1Logic
           else
             0
           end
+
+        validator.validator_score_v1.skipped_after_score = \
+          if skipped_after_percent.nil?
+            0
+          elsif skipped_after_percent <= p.payload[:med_skipped_after_pct_all]
+            2
+          elsif skipped_after_percent <= p.payload[:avg_skipped_after_pct_all]
+            1
+          else
+            0
+          end
       rescue StandardError => e
         Appsignal.send_error(e)
       end
 
-      Pipeline.new(200, p.payload)
+      Pipeline.new(200, p.payload)  
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
     end
