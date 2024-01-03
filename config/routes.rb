@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   root to: 'public#home'
 
   get 'robots.txt', to: 'public#robots'
+  get 'sitemap.xml.gz', to: 'public#sitemap'
 
   get 'asns/:asn',
       to: 'asns#show',
