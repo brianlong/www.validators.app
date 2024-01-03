@@ -49,6 +49,7 @@ class Validator < ApplicationRecord
     www_url
     admin_warning
     jito
+    jito_commission
     stake_pools_list
     is_active
   ].freeze
@@ -321,6 +322,11 @@ class Validator < ApplicationRecord
 
   def private_validator?
     score&.commission == 100 && network == 'mainnet'
+  end
+
+  def jito_maximum_commission?
+    return false unless jito
+    (jito_commission.to_i / 100) <= 10
   end
 
   def api_url
