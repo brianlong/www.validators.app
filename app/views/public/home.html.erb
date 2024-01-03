@@ -8,12 +8,12 @@
 <%= javascript_pack_tag 'sol_prices/sol_price_component' %>
 
 <section class="banner">
-  <h1 class="heading-primary">Solana <span>Validator</span> Metrics</h1>
-  <p class="h2 pb-2 exclamation">
+  <p class="h2 mb-4 exclamation">
     <%= link_to validators_path(network: params[:network]) do %>
       Looking for the&nbsp;best Validator? <span>Click&nbsp;here!</span>
     <% end %>
   </p>
+  <h1 class="heading-primary">Solana <span>Validator</span> Metrics</h1>
 </section>
 
 <% if @network == "mainnet" %>
