@@ -165,7 +165,7 @@
                 </td>
               </tr>
 
-              <tr v-if="validator.stake_pools_list.length > 0 || validator.jito">
+              <tr v-if="validator.stake_pools_list.length > 0 || jito_maximum_commission(validator)">
                 <td><strong>Stake Pools:</strong></td>
                 <td>
                   <span v-for="stake_pool_name in validator.stake_pools_list">
@@ -174,7 +174,7 @@
                          :alt="stake_pool_name"
                          :src="stake_pool_small_logo(stake_pool_name)" />
                   </span>
-                  <img :src="jito_badge" class="img-xxs ms-1" title="Jito validator" v-if="validator.jito">
+                  <img :src="jito_badge" class="img-xxs ms-1" title="Jito validator" v-if="jito_maximum_commission(validator)">
                 </td>
               </tr>
 
@@ -365,9 +365,9 @@
         })
       },
 
-      reload_validator_data(){
+      reload_validator_data() {
         setTimeout( () => {
-          if(this.live){
+          if(this.live) {
             this.get_validator_data()
           }
           this.reload_validator_data()

@@ -51,15 +51,15 @@
       </div>
     </th>
 
+    <th class='column-numeric pe-0'>Skipped After&nbsp;&percnt;</th>
+
     <th class='column-speedometer pe-0'>
-      Skipped Vote
+      Vote Credit <br />Distance
       <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
       </i>
-      <br />
-      <small class="text-muted">Dist from leader</small>
     </th>
 
     <th class='column-chart py-3'>
@@ -176,7 +176,7 @@
                   <% end %>
                 </div>
               <% end %>
-              <% if validator.jito %>
+              <% if validator.jito_maximum_commission? %>
                 <div class="mt-2 mt-lg-0 d-inline-block">
                   <%= link_to validators_path(network: params[:network], jito: params[:jito]) do %>
                     <%= image_tag("jito.svg", class: 'img-xxs me-1', title: "Show Jito validators", alt: "J") %>
@@ -206,6 +206,15 @@
         <% end %>
       </td>
 
+      <!-- Skipped After % -->
+      <td class="column-numeric pb-1 pb-lg-3">
+        <% skipped_after = validator.skipped_after_percent.nil? ? 'N/A' : number_to_percentage(validator.skipped_after_percent.to_f * 100.0, precision: 1) %>
+        <small class="d-inline-block d-lg-none">Skipped After %:&nbsp;</small>
+        <small class="d-inline-block d-lg-none"><%= skipped_after %></small>
+        <span class="d-none d-lg-block"><%= skipped_after %></span>
+      </td>
+
+      <!-- Skipped Vote / Vote Credit Distance -->
       <td class="column-speedometer">
         <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
         <% if skipped_vote_percent %>
@@ -223,7 +232,7 @@
           <span class="d-none d-lg-block text-center text-muted">N/A</span>
         <% end %>
         <small class="d-inline-block d-lg-none">
-          Skipped Vote&nbsp;%:
+          Vote Credit Distance:
           <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
         </small>
       </td>

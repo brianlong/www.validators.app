@@ -98,6 +98,11 @@
     cursor: pointer;
   }
 
+  @media(max-width: $screen-xl-max) {
+    margin-top: -8px;
+    margin-left: 22px;
+  }
+
   @media(max-width: $screen-lg-max) {
     margin: 0;
     position: relative;

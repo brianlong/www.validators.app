@@ -63,7 +63,7 @@ module ValidatorsHelper
       skipped_votes_percent = validator.score.skipped_vote_history[-1]
       return unless skipped_votes_percent
 
-      # Calculate the distance from the best skipped vote and round
+      # Calculate the distance from the best skipped vote (vote credit) and round
       ((batch.best_skipped_vote - skipped_votes_percent.to_f) * 100.0).round(2)
     else
       nil
@@ -100,12 +100,9 @@ module ValidatorsHelper
                     class: "img-circle-large-private"
       end
     elsif validator.avatar.attached?
+      url = Rails.env.in?(["stage", "production"]) ? validator.avatar.url : validator.avatar
       link_to validator_url(link_params) do
-        image_tag validator.avatar, class: "img-circle-large"
-      end
-    elsif validator.avatar_url.present?
-      link_to validator_url(link_params) do
-        sanitize("<img src=\"#{validator.avatar_url}\" class='img-circle-large'")
+        image_tag url, class: "img-circle-large"
       end
     else
       link_to validator_url(link_params) do

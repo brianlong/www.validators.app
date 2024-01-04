@@ -28,6 +28,8 @@ set :templated_config_files, []
 # set :pty, true
 set :pty, false
 
+set :sitemap_roles, :web
+
 # Default value for :linked_files is []
 append :linked_files, 'config/database.yml'
 # Note: Each server contains both keys, but the non-essential key is blank.
@@ -62,13 +64,14 @@ set :passenger_roles, :web
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-# Whenver/crontab config
-# Must contain all roles used in config/schedule.rb
+# Whenver/crontab config. Updates crontab on all servers.
+# Selects cron tasks by roles defined in config/schedule.rb
 set :whenever_roles, ["cron"]
 
 namespace :deploy do
   after :restart, 'sidekiq:restart'
   after :restart, 'rake_task:add_stake_pools'
+  after :restart, 'sitemap:create'
   after :restart, 'deamons:restart'
 end
 
