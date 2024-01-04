@@ -194,6 +194,19 @@
       The&nbsp;moving averages reflect the&nbsp;previous 24-hours, and the&nbsp;spot reading resets with each new epoch.
     </li>
     <li>
+      <strong>Skipped After &percnt;</strong> <br />
+      The &quot;Skipped After&quot; stats show the performance by the leader AFTER the designated node.
+      Poor performance in the &quot;Skipped After&quot; category may indicate that your validator is slow to propagate blocks to the next leader.
+      Slow handoffs from one leader to the next will result in more forks and missed slots by the rest of the cluster.<br />
+      <i class="fa-solid fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator skipped after &percnt; is at, or below,
+      the&nbsp;cluster median.<br />
+      <i class="fa-solid fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;skipped after &percnt; is at, or below,
+      the&nbsp;cluster average.<br />
+      <i class="fa-solid fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator average is higher than
+      the&nbsp;cluster average.<br />
+      The&nbsp;moving averages reflect the&nbsp;previous 24-hours, and the&nbsp;spot reading resets with each new epoch.
+    </li>
+    <li>
       <strong>Published Information</strong><br />
       stakeholders or delegators want to know who is running a&nbsp;node. The&nbsp;Published Information Score measures the&nbsp;contact
       information that the&nbsp;validator has posted to the&nbsp;blockchain using the `solana validator-info` feature.<br />
