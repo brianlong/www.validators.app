@@ -28,7 +28,7 @@ set :templated_config_files, []
 # set :pty, true
 set :pty, false
 
-set :sitemap_roles, :background
+set :sitemap_roles, :web
 
 # Default value for :linked_files is []
 append :linked_files, 'config/database.yml'
