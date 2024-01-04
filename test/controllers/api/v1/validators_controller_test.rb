@@ -500,11 +500,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 45, json_response.keys.size
+    assert_equal 46, json_response.keys.size
 
     # Score
     assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
     assert_equal [5, 4, 3, 2, 1], json_response["vote_distance_history"]
+    assert_equal [0.123], json_response["skipped_after_history"]
     assert_equal [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1], json_response["skipped_slot_history"]
     assert_equal [0.2051], json_response["skipped_slot_moving_average_history"]
     assert_equal [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], json_response["skipped_vote_history"]

@@ -80,7 +80,6 @@ class ValidatorScoreV1 < ApplicationRecord
     active_stake
     total_score
     validator_id
-    skipped_after_history
   ].freeze
 
   HISTORY_FIELDS = %i[
@@ -90,6 +89,7 @@ class ValidatorScoreV1 < ApplicationRecord
     skipped_vote_history
     skipped_slot_moving_average_history
     stake_concentration
+    skipped_after_history
   ].freeze
 
   WITHDRAWER_SCORE_OPTIONS = {
