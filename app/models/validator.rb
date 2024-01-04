@@ -58,6 +58,8 @@ class Validator < ApplicationRecord
 
   DEFAULT_FILTERS = %w(active private delinquent).freeze
 
+  MAXIMUM_JITO_COMMISSION = 1000.freeze
+
   has_many :vote_accounts, dependent: :destroy
   has_many :account_authority_histories, through: :vote_accounts, dependent: :destroy
   has_many :stake_accounts, dependent: :destroy
@@ -89,6 +91,7 @@ class Validator < ApplicationRecord
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
   scope :for_api, -> { select(FIELDS_FOR_API) }
+  scope :jito_maximum_commission, -> { where(jito: true).where("jito_commission <= ?", MAXIMUM_JITO_COMMISSION) }
 
   serialize :stake_pools_list, Array, default: []
 
@@ -326,7 +329,7 @@ class Validator < ApplicationRecord
 
   def jito_maximum_commission?
     return false unless jito
-    (jito_commission.to_i / 100) <= 10
+    jito_commission.to_i <= MAXIMUM_JITO_COMMISSION
   end
 
   def api_url
