@@ -35,8 +35,9 @@ job_type :ruby_script_sol_prices,
 job_type :ruby_script_data_centers,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/data_centers_scripts/:task >> :whenever_path/log/:task.log 2>&1'
 
-# since only one server should be responsible for background scripts and daemons
-# role background should be set on every schedule to limit it to a correct server
+# Make sure you add the tasks to correct server.
+# Use :background role to add task to background server (recommended),
+# or :web role to add the task to web servers (www1, www2).
 
 every 1.hour, at: 0, roles: [:background] do
   runner "AsnLogicWorker.perform_async('network' => 'mainnet')"
@@ -77,11 +78,11 @@ every 1.hour, at: 50, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
-every 1.hour, at: 55, roles: [:background] do
+every 1.hour, at: 55, roles: [:web] do
   rake "-s sitemap:refresh"
 end
 
-every :sunday, at: '0:54am', roles: [:background] do
+every :sunday, at: '0:54am', roles: [:web] do
   rake "-s sitemap:clean"
 end
 
