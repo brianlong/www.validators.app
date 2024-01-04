@@ -54,14 +54,12 @@
     <th class='column-numeric pe-0'>Skipped After&nbsp;&percnt;</th>
 
     <th class='column-speedometer pe-0'>
-      Skipped Vote
+      Vote Credit <br />Distance
       <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
       </i>
-      <br />
-      <small class="text-muted">Dist from leader</small>
     </th>
 
     <th class='column-chart py-3'>
@@ -216,7 +214,7 @@
         <span class="d-none d-lg-block"><%= skipped_after %></span>
       </td>
 
-      <!-- Skipped Vote -->
+      <!-- Skipped Vote / Vote Credit Distance -->
       <td class="column-speedometer">
         <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
         <% if skipped_vote_percent %>
@@ -234,7 +232,7 @@
           <span class="d-none d-lg-block text-center text-muted">N/A</span>
         <% end %>
         <small class="d-inline-block d-lg-none">
-          Skipped Vote&nbsp;%:
+          Vote Credit Distance:
           <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
         </small>
       </td>
