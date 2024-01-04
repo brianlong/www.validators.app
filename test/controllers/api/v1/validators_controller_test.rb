@@ -82,7 +82,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 40, validator_with_all_data.keys.size
+    assert_equal 39, validator_with_all_data.keys.size
 
     # Validator
     assert_equal "testnet", validator_with_all_data["network"]
@@ -108,7 +108,6 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal validator.data_center_host.host, validator_with_all_data["data_center_host"]
     assert_nil validator_with_all_data["admin_warning"]
     assert validator_with_all_data["is_active"]
-    assert_equal 12.3, validator_with_all_data["skipped_after_percent"]
 
     # Vote accounts
     assert_equal "Test Account", validator_with_all_data["vote_account"]
@@ -357,7 +356,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 40, json_response.keys.size
+    assert_equal 39, json_response.keys.size
 
     # Validator
     assert_equal "testnet", json_response["network"]
@@ -501,7 +500,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 46, json_response.keys.size
+    assert_equal 45, json_response.keys.size
 
     # Score
     assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]

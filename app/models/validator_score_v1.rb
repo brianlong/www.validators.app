@@ -74,7 +74,6 @@ class ValidatorScoreV1 < ApplicationRecord
     total_score
     validator_id
     vote_distance_score
-    skipped_after_history
   ].freeze
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
@@ -324,9 +323,8 @@ class ValidatorScoreV1 < ApplicationRecord
       else
         vs_v1.(
           self,
-          *ATTRIBUTES_FOR_BUILDER - [:skipped_after_history]
+          *ATTRIBUTES_FOR_BUILDER
         )
-        vs_v1.skipped_after_percent (skipped_after_history&.last * 100.0 rescue nil)
       end
     end
   end
