@@ -10,14 +10,14 @@
 # background - used for actions that are meant to run on background server,
 #              such as daemons and workers. Use for 167.99.125.221 server only.
 
-# Web server
+# Web server www1
 server(
   '104.131.169.171',
   user: 'deploy',
   roles: %w[web app db cron]
 )
 
-# Second web server
+# Second web server www2
 server(
   '167.172.17.244',
   user: 'deploy',
