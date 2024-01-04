@@ -123,11 +123,17 @@ class ValidatorTest < ActiveSupport::TestCase
     @validator.update(jito: false)
     refute @validator.jito_maximum_commission?
 
+    @validator.update(jito: false, jito_commission: nil)
+    refute @validator.jito_maximum_commission?
+
+    @validator.update(jito: true, jito_commission: nil)
+    assert @validator.jito_maximum_commission?
+
     @validator.update(jito: true, jito_commission: 800)
-    assert true, @validator.jito_maximum_commission?
+    assert @validator.jito_maximum_commission?
 
     @validator.update(jito: true, jito_commission: 1000)
-    assert true, @validator.jito_maximum_commission?
+    assert @validator.jito_maximum_commission?
 
     @validator.update(jito: true, jito_commission: 1100)
     refute @validator.jito_maximum_commission?
