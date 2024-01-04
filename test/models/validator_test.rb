@@ -119,6 +119,26 @@ class ValidatorTest < ActiveSupport::TestCase
     refute create(:validator_score_v1, commission: 99, validator: @validator).validator.private_validator?
   end
 
+  test "#jito_maximum_commission? returns true if validator is jito and jito commission is below or equal 10%" do
+    @validator.update(jito: false)
+    refute @validator.jito_maximum_commission?
+
+    @validator.update(jito: false, jito_commission: nil)
+    refute @validator.jito_maximum_commission?
+
+    @validator.update(jito: true, jito_commission: nil)
+    assert @validator.jito_maximum_commission?
+
+    @validator.update(jito: true, jito_commission: 800)
+    assert @validator.jito_maximum_commission?
+
+    @validator.update(jito: true, jito_commission: 1000)
+    assert @validator.jito_maximum_commission?
+
+    @validator.update(jito: true, jito_commission: 1100)
+    refute @validator.jito_maximum_commission?
+  end
+
   test "validator attributes are correctly stored in db after using utf_8_encode method" do
     special_chars_sentence = "Staking-P◎◎l FREE Validati◎n"
 
