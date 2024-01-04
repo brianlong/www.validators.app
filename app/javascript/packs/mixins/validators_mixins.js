@@ -41,10 +41,16 @@ Vue.mixin({
     avatar_url(validator) {
       if(validator['avatar_file_url']) {
         return validator['avatar_file_url']
-      } else if (validator['avatar_url']) {
-        return validator['avatar_url']
       } else {
         return defaultAvatar
+      }
+    },
+
+    jito_maximum_commission(validator) {
+      if(validator['jito'] && parseInt(validator['jito_commission']) <= 1000) {
+        return true
+      } else {
+        return false
       }
     }
   }

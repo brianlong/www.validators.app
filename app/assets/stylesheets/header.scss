@@ -10,7 +10,7 @@ header {
     img {
       width: 250px;
       @media(max-width: $screen-xs-max) {
-        width: 230px;
+        width: 225px;
       }
     }
   }
@@ -22,6 +22,7 @@ header {
     .btn {
       width: fit-content;
       color: $link-color;
+      height: 49px;
       &:hover {
         color: $background-color;
       }
@@ -78,83 +79,5 @@ header {
       transition: border-color .1s ease-in-out;
     }
     &:focus { outline: none; }
-  }
-
-  .navbar-dropdown {
-    position: relative;
-
-    .btn {
-      &:after {
-        content: '\2193';
-        font-size: 12px;
-        font-weight: bold;
-      }
-      &.open {
-        color: $background-color;
-        background-color: $green;
-        @media(min-width: $screen-lg-min) {
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-        &:after {
-          content: '\2191';
-        }
-      }
-    }
-
-    &-options {
-      background: $background-color;
-      color: $link-color;
-      position: absolute;
-      z-index: 3;
-      width: 100%;
-      margin: 0;
-      padding: 5px 0;
-      border: 2px solid $green;
-      border-bottom-left-radius: 30px;
-      border-bottom-right-radius: 30px;
-      list-style-type: none;
-      text-align: center;
-      display: block;
-      height: 0;
-      max-height: 0;
-      opacity: 0;
-      transition: max-height .2s ease;
-      @media(max-width: $screen-lg-max) {
-        display: none;
-      }
-      @media(max-width: $screen-md-max) {
-        position: relative;
-        transform: none;
-        border: none;
-        text-align: left;
-        background-color: transparent;
-      }
-
-      &.open {
-        display: block;
-        height: auto;
-        max-height: 200px;
-        opacity: 1;
-        transition: max-height .2s ease;
-      }
-    }
-
-    &-item {
-      padding: 0;
-      margin: 0;
-    }
-
-    &-link {
-      display: block;
-      padding: 8px 0;
-      @media(max-width: $screen-md-max) {
-        padding-left: 18px;
-        &:hover {
-          background-color: transparent;
-          color: $link-color-secondary;
-        }
-      }
-    }
   }
 }

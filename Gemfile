@@ -57,7 +57,6 @@ gem 'whenever', require: false
 
 # Use Active Storage variant
 gem 'image_processing'
-#gem 'rmagick'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.16', require: false
@@ -89,6 +88,8 @@ gem 'solana_rpc_ruby'
 gem 'coingecko_ruby'
 
 gem "audited", "~> 5.3.3"
+
+gem 'sitemap_generator', '~> 6.3.0'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

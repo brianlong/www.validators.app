@@ -10,5 +10,8 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'stage.validators.app' }
 
   config.action_cable.url = 'wss://stage.validators.app/cable'
+
   config.active_storage.service = :digitalocean
+
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 end

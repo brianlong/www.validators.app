@@ -90,6 +90,20 @@ body {
     text-decoration: underline;
     text-decoration-color: $green;
   }
+  .exclamation {
+    letter-spacing: 1px;
+    font-family: 'Vujahday Script', cursive;
+    a {
+      color: $green;
+      &:hover {
+        color: $base-color;
+      }
+    }
+    span {
+      text-decoration: underline;
+      text-decoration-color: $base-color;
+    }
+  }
 }
 
 .deep-dive p {

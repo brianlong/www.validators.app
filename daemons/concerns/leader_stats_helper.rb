@@ -12,12 +12,16 @@ module LeaderStatsHelper
     leaders_accounts = client.get_slot_leaders(current_slot, FrontStatsConstants::LEADERS_LIMIT).result
 
     leaders_data = Validator.where(account: leaders_accounts, network: network)
+                            .with_attached_avatar
                             .left_outer_joins(:data_center)
                             .select(fields_for_leader)
                             .limit(3)
                             .sort_by{ |v| leaders_accounts.index(v.account) }
 
-    leaders = leaders_data.map(&:attributes)
+    leaders = leaders_data.map do |leader|
+      leader.attributes.merge(avatar_file_url: leader.avatar_file_url)
+    end
+
     current_leader = leaders.shift
 
     {

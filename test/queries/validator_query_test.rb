@@ -41,7 +41,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal [@mainnet_network], result.pluck(:network).uniq
   end
 
-  test "#call returns only jito validators if jito param is provided" do
+  test "#call returns only jito validators with commission below maximum, if jito param is provided" do
     create_list(
       :validator,
       2,
@@ -55,7 +55,17 @@ class ValidatorQueryTest < ActiveSupport::TestCase
       :with_score,
       :with_data_center_through_validator_ip,
       :mainnet,
-      jito: true
+      jito: true,
+      jito_commission: 800
+    )
+    create_list(
+      :validator,
+      1,
+      :with_score,
+      :with_data_center_through_validator_ip,
+      :mainnet,
+      jito: true,
+      jito_commission: 1100
     )
 
     result = ValidatorQuery.new.call(network: @mainnet_network, query_params: { jito: true })
