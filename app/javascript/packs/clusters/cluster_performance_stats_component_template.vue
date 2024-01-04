@@ -57,7 +57,7 @@
     <div class="col-sm-6 col-lg-3 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <h3 class="h6 card-heading-left">Skipped Vote&nbsp;&percnt;</h3>
+          <h3 class="h6 card-heading-left">Vote Credit&nbsp;&percnt;</h3>
           <small class="text-muted" v-if="!skipped_votes">loading...</small>
 
           <div class="text-muted mb-2" v-if="skipped_votes">
@@ -121,7 +121,7 @@
         skipped_slots: null
       }
     },
-    
+
     channels: {
       FrontStatsChannel: {
         connected() { },
