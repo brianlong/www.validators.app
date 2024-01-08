@@ -230,7 +230,7 @@ module ValidatorScoreV1Logic
     end
   end
 
-  # Get the data for skipped slot %
+  # Get the data for skipped slot % and skipped after %
   def block_history_get
     lambda do |p|
       return p unless p.code == 200
@@ -289,10 +289,8 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       p.payload[:validators].each do |validator|
-        skipped_slot_percent = \
-          validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
-        skipped_after_percent = \
-          validator&.validator_score_v1&.skipped_after_history&.last
+        skipped_slot_percent = validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
+        skipped_after_percent = validator&.validator_score_v1&.skipped_after_history&.last
 
         # Assign the scores
         validator.validator_score_v1.skipped_slot_score = \
@@ -320,7 +318,7 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
-      Pipeline.new(200, p.payload)  
+      Pipeline.new(200, p.payload)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
     end
