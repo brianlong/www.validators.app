@@ -12,7 +12,7 @@ FactoryBot.define do
     root_distance_score { 1 }
     vote_distance_score { 2 }
     skipped_slot_score { 0 }
-    skipped_after_history { nil }
+    skipped_after_history { [0.1230] }
     skipped_after_score { nil }
     software_version { '1.6.7' }
     software_version_score { 2 }
