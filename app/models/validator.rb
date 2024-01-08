@@ -49,6 +49,7 @@ class Validator < ApplicationRecord
     www_url
     admin_warning
     jito
+    jito_commission
     stake_pools_list
     is_active
   ].freeze
@@ -56,6 +57,8 @@ class Validator < ApplicationRecord
   FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
 
   DEFAULT_FILTERS = %w(active private delinquent).freeze
+
+  MAXIMUM_JITO_COMMISSION = 1000.freeze
 
   has_many :vote_accounts, dependent: :destroy
   has_many :account_authority_histories, through: :vote_accounts, dependent: :destroy
@@ -88,6 +91,7 @@ class Validator < ApplicationRecord
   scope :active, -> { where(is_active: true, is_destroyed: false) }
   scope :scorable, -> { where(is_active: true, is_rpc: false, is_destroyed: false) }
   scope :for_api, -> { select(FIELDS_FOR_API) }
+  scope :jito_maximum_commission, -> { where(jito: true).where("jito_commission <= ?", MAXIMUM_JITO_COMMISSION) }
 
   serialize :stake_pools_list, Array, default: []
 
@@ -154,7 +158,8 @@ class Validator < ApplicationRecord
   end
 
   def avatar_file_url
-    polymorphic_url(avatar) if avatar.attached?
+    return unless avatar.attached?
+    Rails.env.in?(["stage", "production"]) ? avatar.url : polymorphic_url(avatar)
   end
 
   def should_update_avatar_file?
@@ -324,6 +329,11 @@ class Validator < ApplicationRecord
 
   def private_validator?
     score&.commission == 100 && network == 'mainnet'
+  end
+
+  def jito_maximum_commission?
+    return false unless jito
+    jito_commission.to_i <= MAXIMUM_JITO_COMMISSION
   end
 
   def api_url

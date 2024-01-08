@@ -200,7 +200,7 @@ table, .table {
         padding-top: 15px;
         padding-bottom: 8px;
         @media(max-width: $screen-lg-max) {
-          width: 25%;
+          width: 22.5%;
           padding-right: 10px;
           padding-left: 10px;
         }
@@ -267,7 +267,7 @@ table, .table {
       }
 
       &-numeric {
-        width: 9.5%;
+        width: 10%;
         @media(max-width: $screen-lg-max) {
           width: 95px;
         }

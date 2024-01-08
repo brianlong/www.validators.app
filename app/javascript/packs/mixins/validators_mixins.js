@@ -44,6 +44,14 @@ Vue.mixin({
       } else {
         return defaultAvatar
       }
+    },
+
+    jito_maximum_commission(validator) {
+      if(validator['jito'] && parseInt(validator['jito_commission']) <= 1000) {
+        return true
+      } else {
+        return false
+      }
     }
   }
 })

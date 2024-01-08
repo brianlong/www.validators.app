@@ -68,7 +68,7 @@ class ValidatorQuery < ApplicationQuery
   end
 
   def filter_by_collaboration(scope, jito)
-    scope = jito ? scope.where(jito: true) : scope
+    scope = jito ? scope.jito_maximum_commission : scope
   end
 
   def filter_by_network(scope, network)

@@ -117,6 +117,6 @@ en:
     root_distance: "Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower."
     scores: "Our score system."
     skipped_slot: "Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate."
-    skipped_vote: "Skipped vote measures the percent of the time that a leader fails to vote."
+    skipped_vote: "Vote Credit Distance measures the percent behind the top vote credit earner."
     total_stake: "Total stake from all validator(s)."
     vote_distance: "Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group."

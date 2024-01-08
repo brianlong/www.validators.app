@@ -1,3 +1,5 @@
+<%= javascript_pack_tag 'navigations/network_buttons' %>
+
 <footer>
   <% if flash[:cookie_notice] %>
     <div class="container">
@@ -8,80 +10,55 @@
     </div>
   <% end %>
 
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <ul class="navbar-nav flex-wrap">
-        <li class="nav-item">
-          <%= link_to 'API Docs', api_documentation_path, class: 'nav-link active' %>
-        </li>
-        <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Validators', validators_path(network: params[:network]), class: 'nav-link' %>
-        </li>
-        <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Data Centers', data_centers_url(network: params[:network]), class: 'nav-link' %>
-        </li>
-        <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Commission Changes', commission_histories_path(network: params[:network]), class: 'nav-link' %>
-        </li>
-        <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Authorities Changes', authorities_changes_path(network: params[:network]), class: 'nav-link' %>
-        </li>
-        <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Stake Pools', stake_pools_path(network: params[:network]), class: 'nav-link' %>
-        </li>
-        <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Ping Thing', ping_things_path(network: params[:network]), class: 'nav-link' %>
-        </li>
-        <li class="nav-item" data-turbolinks="false">
-          <%= link_to 'Sol Prices', sol_prices_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "Stake Explorer", explorer_stake_accounts_path(network: params[:network]), class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Log Deep Dives', log_deep_dives_index_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to t('footer.nav_links.privacy_policy'), privacy_policy_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to t('footer.nav_links.terms_of_use'), terms_of_use_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to t('footer.nav_links.opt_out'), new_opt_out_request_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to t('footer.nav_links.contact_us'), contact_us_path, class: 'nav-link' %>
-        </li>
+  <nav class="container">
+    <hr class="footer-separator"/>
 
-        <% if user_signed_in? && current_user.is_admin? %>
-          <li class="nav-item">
-            <%= link_to t('footer.nav_links.contact_requests'), contact_requests_path, class: 'nav-link' %>
-          </li>
-          <li class="nav-item">
-            <%= link_to t('footer.nav_links.opt_out_requests'), opt_out_requests_path, class: 'nav-link' %>
-          </li>
-        <% end %>
-
+    <div class="d-inline-block d-lg-flex justify-content-between">
+      <div class="footer-category">
+        <div class="footer-item"><%= link_to 'Validators', validators_path(network: params[:network]) %></div>
+        <div class="footer-item"><%= link_to 'Commission Changes', commission_histories_path(network: params[:network]), "data-turbolinks": "false" %></div>
+        <div class="footer-item"><%= link_to 'Authorities Changes', authorities_changes_path(network: params[:network]), "data-turbolinks": "false" %></div>
+        <div class="footer-item"><%= link_to 'Data Centers', data_centers_url(network: params[:network]), "data-turbolinks": "false" %></div>
+        <div class="footer-item"><%= link_to 'Ping Thing', ping_things_path(network: params[:network]), "data-turbolinks": "false" %></div>
+      </div>
+      <div class="footer-category">
+        <div class="footer-item"><%= link_to "Stake Explorer", explorer_stake_accounts_path(network: params[:network]) %></div>
+        <div class="footer-item"><%= link_to 'Stake Pools', stake_pools_path(network: params[:network]), "data-turbolinks": "false" %></div>
+        <div class="footer-item"><%= link_to 'Sol Prices', sol_prices_path, "data-turbolinks": "false" %></div>
+        <div class="footer-item"><%= link_to 'Log Deep Dives', log_deep_dives_index_path %></div>
+      </div>
+      <div class="footer-category">
+        <div class="footer-item"><%= link_to t('footer.nav_links.cookie_policy'), cookie_policy_path %></div>
+        <div class="footer-item"><%= link_to t('footer.nav_links.privacy_policy'), privacy_policy_path %></div>
+        <div class="footer-item"><%= link_to t('footer.nav_links.terms_of_use'), terms_of_use_path %></div>
+        <div class="footer-item"><%= link_to t('footer.nav_links.contact_us'), contact_us_path %></div>
+        <div class="footer-item"><%= link_to t('footer.nav_links.opt_out'), new_opt_out_request_path %></div>
+      </div>
+      <div class="footer-category">
+        <div class="footer-item"><%= link_to 'API Docs', api_documentation_path %></div>
+        <div class="footer-item"><%= link_to 'FAQ', faq_path %></div>
         <% if user_signed_in? %>
-          <li class="nav-item">
-            <%= link_to "My Dashboard", user_root_path, class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "nav-link" %>
-          </li>
+          <% if current_user.is_admin? %>
+            <div class="footer-item"><%= link_to "Opt Out Requests", opt_out_requests_path %></div>
+          <% end %>
+          <div class="footer-item">
+            <%= link_to user_root_path do %>
+              <i class="fa-solid fa-user me-2"></i> My Account
+            <% end %>
+          </div>
+          <div class="footer-item">
+            <%= link_to destroy_user_session_path, method: :delete do %>
+              <i class="fa-solid fa-right-from-bracket me-2"></i> Sign Out
+            <% end %>
+          </div>
         <% else %>
-          <li class="nav-item">
-            <%= link_to 'Log In', new_user_session_path, class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to 'Sign Up', new_user_registration_path, class: "nav-link" %>
-          </li>
+          <div class="footer-item"><%= link_to 'Log In', new_user_session_path %></div>
+          <div class="footer-item"><%= link_to 'Sign Up', new_user_registration_path %></div>
         <% end %>
-      </ul>
+      </div>
+      <div class="footer-category">
+        <div id="network-buttons"></div>
+      </div>
     </div>
   </nav>
 
