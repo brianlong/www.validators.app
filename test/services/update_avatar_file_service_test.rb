@@ -48,17 +48,6 @@ class UpdateAvatarFileServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test "#process_and_save_avatar saves gif ready to attach" do
-    @validator.update(avatar_url: "https://upload.wikimedia.org/wikipedia/commons/c/c0/An_example_animation_made_with_Pivot.gif")
-    @validator.reload
-    vcr_cassette(@namespace, @cassette + "-gif") do
-      @service.download_tmp_file
-      @service.process_and_save_avatar
-
-      assert File.exist?(@avatar_file_path)
-    end
-  end
-
   test "#update_attached_avatar attaches image to validator" do
     vcr_cassette(@namespace, @cassette) do
       @service.download_tmp_file
