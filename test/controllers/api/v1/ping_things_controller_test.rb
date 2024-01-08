@@ -195,7 +195,7 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     end
 
     filter = 5
-    user = PingThing.last.user.username
+    username = PingThing.last.user.username.chop
 
     get api_v1_ping_things_path(network: "testnet", time_filter: filter), headers: @headers
     json_response = response_to_json(@response.body)
@@ -212,7 +212,8 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     get api_v1_ping_things_path(network: "testnet", success: true, time_filter: filter), headers: @headers
     assert_equal 1, response_to_json(@response.body).size
 
-    get api_v1_ping_things_path(network: "testnet", posted_by: user, time_filter: filter), headers: @headers
+    get api_v1_ping_things_path(network: "testnet", posted_by: username, time_filter: filter),
+                                headers: @headers
     assert_equal 1, response_to_json(@response.body).size
   end
 
