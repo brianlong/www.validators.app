@@ -303,6 +303,10 @@ class Validator < ApplicationRecord
     score&.security_report_score
   end
 
+  def skipped_after_score
+    score&.skipped_after_score
+  end
+
   def total_score
     score&.total_score
   end

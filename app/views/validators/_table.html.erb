@@ -51,16 +51,18 @@
       </div>
     </th>
 
-    <th class='column-numeric pe-0'>Skipped After&nbsp;&percnt;</th>
-
-    <th class='column-speedometer pe-0'>
+    <%
+=begin%>
+ <th class='column-speedometer pe-0'>
       Vote Credit <br />Distance
       <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
       </i>
-    </th>
+    </th> 
+<%
+=end%>
 
     <th class='column-chart py-3'>
       Root Distance
@@ -90,6 +92,17 @@
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.skipped_slot') %>">
+      </i>
+      <br />
+      <small class="text-muted">60-Min Chart</small>
+    </th>
+
+    <th class='column-chart py-3'>
+      Skipped After&nbsp;&percnt;
+      <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+         data-bs-toggle="tooltip"
+         data-bs-placement="top"
+         title="<%= t('definitions.skipped_after') %>">
       </i>
       <br />
       <small class="text-muted">60-Min Chart</small>
@@ -206,15 +219,10 @@
         <% end %>
       </td>
 
-      <!-- Skipped After % -->
-      <td class="column-numeric pb-1 pb-lg-3">
-        <% skipped_after = validator.skipped_after_percent.nil? ? 'N/A' : number_to_percentage(validator.skipped_after_percent.to_f * 100.0, precision: 1) %>
-        <small class="d-inline-block d-lg-none">Skipped After %:&nbsp;</small>
-        <small class="d-inline-block d-lg-none"><%= skipped_after %></small>
-        <span class="d-none d-lg-block"><%= skipped_after %></span>
-      </td>
-
       <!-- Skipped Vote / Vote Credit Distance -->
+<%
+=begin%>
+ 
       <td class="column-speedometer">
         <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
         <% if skipped_vote_percent %>
@@ -235,7 +243,10 @@
           Vote Credit Distance:
           <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
         </small>
-      </td>
+      </td>  
+<%
+=end%>
+
 
       <!-- Charts menu -->
       <td class="d-lg-none pt-0">
@@ -322,6 +333,30 @@
                    vector: slot_vector,
                    line_color: line_color,
                    moving_avg_vector: skipped_slots_moving_avg
+        %>
+      </td>
+
+      <!-- SKIPPED AFTER -->
+      <td class="column-chart d-none d-lg-table-cell" id="skipped-after-<%=i%>">
+        <%
+          vl = chart_x_scale(validator.score&.skipped_after_history.to_a.count)
+          line_color = chart_line_color(validator.skipped_after_score)
+          fill_color = chart_fill_color(validator.skipped_after_score)
+          vector = validator.score&.root_distance_history.to_a[-vl..-1]
+        %>
+        <% max_value = vector&.max %>
+        <% if max_value && max_value > Y_SKIPPED_AFTER_MAX %>
+          <div class="chart-top-container">
+            <div class="chart-top-value" style="left: <%= max_value_position(vector) %>">
+              <%= max_value %>
+            </div>
+          </div>
+        <% end %>
+        <%= render 'validators/validator_small_chart',
+                   chart_name: "skipped_after_#{validator.account}",
+                   vector: vector,
+                   line_color: line_color,
+                   fill_color: fill_color
         %>
       </td>
     </tr>

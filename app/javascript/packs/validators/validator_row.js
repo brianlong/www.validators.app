@@ -7,7 +7,7 @@ import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
 import skippedSlotsChart from './charts/skipped_slots_small_chart'
-import skippedVoteSpeedometer from './charts/skipped_vote_speedometer'
+import skippedAfterChart from './charts/skipped_after_chart'
 
 import scores from './components/scores'
 
@@ -31,7 +31,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     'root-distance-chart': rootDistanceChart,
     'vote-distance-chart': voteDistanceChart,
     'skipped-slots-chart': skippedSlotsChart,
-    'skipped-vote-speedometer': skippedVoteSpeedometer,
+    'skipped-after-chart': skippedAfterChart,
     "validator-scores": scores
   },
 
@@ -174,8 +174,6 @@ var ValidatorRow = Vue.component('validatorRow', {
         </div>
       </td>
 
-      <skipped-vote-speedometer :validator="validator" :idx="idx" :batch="batch" />
-
       <!-- Charts menu -->
       <td class="d-lg-none pt-0">
         <div class="row small mb-3">
@@ -202,6 +200,8 @@ var ValidatorRow = Vue.component('validatorRow', {
       <vote-distance-chart :validator="validator" :idx="idx" />
 
       <skipped-slots-chart :validator="validator" :idx="idx" />
+
+      <skipped-after-chart :validator="validator" :idx="idx" />
 
     </tr>
   `

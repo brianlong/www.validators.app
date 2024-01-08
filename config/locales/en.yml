@@ -120,3 +120,4 @@ en:
     skipped_vote: "Vote Credit Distance measures the percent behind the top vote credit earner."
     total_stake: "Total stake from all validator(s)."
     vote_distance: "Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group."
+    skipped_after: "Skipped after measures the percent of the time that a leader fails to produce a block after their allocated slots."
