@@ -16,17 +16,18 @@ export default {
   methods: {},
 
   data() {
-    var root_distance_vl = Math.min.apply(Math, [60, this.validator['skipped_after_history'].length]);
-    var root_distance_vector = this.validator['skipped_after_history'].slice(Math.max(this.validator['skipped_after_history'].length - root_distance_vl, 0));
-    var max_value = Math.max.apply(Math, root_distance_vector);
-    var max_value_position = this.$parent.max_value_position(root_distance_vector);
+    var skipped_after_history_vl = Math.min.apply(Math, [60, this.validator['skipped_after_history'].length]);
+    var skipped_after_history_vector = this.validator['skipped_after_history'].slice(Math.max(this.validator['skipped_after_history'].length - skipped_after_history_vl, 0));
+    skipped_after_history_vector = skipped_after_history_vector.map(function (x) { return x * 100 });
+    var max_value = Math.max.apply(Math, skipped_after_history_vector);
+    var max_value_position = this.$parent.max_value_position(skipped_after_history_vector);
     return {
       max_value: max_value,
       max_value_position: max_value_position,
-      root_distance_chart: {
+      skipped_after_history_chart: {
         line_color: this.$parent.chart_line_color(this.validator['skipped_after_score']),
         fill_color: this.$parent.chart_fill_color(this.validator['skipped_after_score']),
-        vector: root_distance_vector
+        vector: skipped_after_history_vector
       },
     }
   },
@@ -36,15 +37,15 @@ export default {
     new Chart(block_distance_el, {
       type: 'line',
       data: {
-        labels: Array.from(Array(this.root_distance_chart['vector'].length).keys()).reverse(),
+        labels: Array.from(Array(this.skipped_after_history_chart['vector'].length).keys()).reverse(),
         datasets: [
           {
             fill: true,
-            borderColor: this.root_distance_chart['line_color'],
-            backgroundColor: this.root_distance_chart['fill_color'],
+            borderColor: this.skipped_after_history_chart['line_color'],
+            backgroundColor: this.skipped_after_history_chart['fill_color'],
             borderWidth: 1,
             radius: 0,
-            data: this.root_distance_chart['vector'],
+            data: this.skipped_after_history_chart['vector'],
             tension: 0
           }
         ]

@@ -342,7 +342,7 @@
           vl = chart_x_scale(validator.score&.skipped_after_history.to_a.count)
           line_color = chart_line_color(validator.skipped_after_score)
           fill_color = chart_fill_color(validator.skipped_after_score)
-          vector = validator.score&.root_distance_history.to_a[-vl..-1]
+          vector = validator.score&.skipped_after_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
         %>
         <% max_value = vector&.max %>
         <% if max_value && max_value > Y_SKIPPED_AFTER_MAX %>

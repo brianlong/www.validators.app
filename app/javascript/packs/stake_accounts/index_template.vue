@@ -143,6 +143,17 @@
                 <br />
                 <small class="text-muted">60-Min Chart</small>
               </th>
+
+              <th class='column-chart py-3'>
+                Skipped After&nbsp;&percnt;
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="">
+                </i>
+                <br />
+                <small class="text-muted">60-Min Chart</small>
+              </th>
             </tr>
           </thead>
 
