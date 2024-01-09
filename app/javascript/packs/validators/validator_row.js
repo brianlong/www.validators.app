@@ -192,6 +192,11 @@ var ValidatorRow = Vue.component('validatorRow', {
               Skipped <br class="d-xxs-inline-block" />Slots
             </a>
           </div>
+          <div class="col">
+            <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('skipped-after', $event)" href="">
+              Skipped <br class="d-xxs-inline-block" />After
+            </a>
+          </div>
         </div>
       </td>
 
