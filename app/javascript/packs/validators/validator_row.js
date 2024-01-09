@@ -175,7 +175,7 @@ var ValidatorRow = Vue.component('validatorRow', {
       </td>
 
       <!-- Charts menu -->
-      <td class="d-lg-none pt-0">
+      <td class="d-lg-none pt-2">
         <div class="row small mb-3">
           <div class="col pe-0">
             <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('root-distance', $event)" href="">

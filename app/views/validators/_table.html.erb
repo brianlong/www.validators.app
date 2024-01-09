@@ -60,7 +60,7 @@
          data-bs-placement="top"
          title="<%= t('definitions.skipped_vote') %>">
       </i>
-    </th> 
+    </th>
 <%
 =end%>
 
@@ -222,7 +222,6 @@
       <!-- Skipped Vote / Vote Credit Distance -->
 <%
 =begin%>
- 
       <td class="column-speedometer">
         <% skipped_vote_percent = skipped_vote_percent(validator, batch) %>
         <% if skipped_vote_percent %>
@@ -243,13 +242,12 @@
           Vote Credit Distance:
           <%= skipped_vote_percent ? number_to_percentage(skipped_vote_percent, precision: 2) : "N/A" %>
         </small>
-      </td>  
+      </td>
 <%
 =end%>
 
-
       <!-- Charts menu -->
-      <td class="d-lg-none pt-0">
+      <td class="d-lg-none pt-2">
         <div class="row small mb-3">
           <div class="col pe-0">
             <a class="chart-link" data-iterator="<%=i%>" data-bs-target="root-distance" href="">
