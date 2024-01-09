@@ -144,7 +144,6 @@ var ValidatorRow = Vue.component('validatorRow', {
               </small>
             </a>
             <br />
-            <small class="d-inline-block d-lg-none">Scores:&nbsp;</small>
             <validator-scores class="d-inline-block" :score="validator" :account="validator['account']"></validator-scores>
 
             <div class="mt-2 mt-lg-0 small">

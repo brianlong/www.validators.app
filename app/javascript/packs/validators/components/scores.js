@@ -97,8 +97,9 @@ export default {
         <i class="fa-solid fa-minus-circle me-1 text-warning"
            v-if="score.data_center_concentration_score < 0"
            :title="data_center_concentration_score_title()"></i>
+        
+        ({{ score.displayed_total_score }})
       </a>
-      ({{ score.displayed_total_score }})
     </div>
 `
 }
