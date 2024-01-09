@@ -64,5 +64,13 @@ module Stats
 
       skipped_slot_stats.merge(history: skipped_slot_percent_history_moving_average)
     end
+
+    def average_skipped_slots_after_percent
+      relation.average(:skipped_slots_after_percent)
+    end
+  
+    def median_skipped_slots_after_percent
+      array_median(relation.pluck(:skipped_slots_after_percent).compact)
+    end
   end
 end

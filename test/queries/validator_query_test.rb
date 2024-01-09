@@ -139,6 +139,7 @@ class ValidatorQueryTest < ActiveSupport::TestCase
   end
 
   test "#call ignores incorrect or missing admin_warning param" do
+    Validator.destroy_all
     create(:validator, :with_score, :with_admin_warning)
     create_list(:validator, 5, :with_score) # without admin_warning
     all_validators_count = Validator.where(network: @testnet_network).count
@@ -152,7 +153,6 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     result = ValidatorQuery.new.call(network: @testnet_network, query_params: { admin_warning: admin_warning })
 
     assert_equal all_validators_count, result.count
-
   end
 
   test "#call returns results in correct score order" do

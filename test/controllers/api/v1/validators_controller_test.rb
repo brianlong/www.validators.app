@@ -82,7 +82,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 39, validator_with_all_data.keys.size
+    assert_equal 40, validator_with_all_data.keys.size
 
     # Validator
     assert_equal "testnet", validator_with_all_data["network"]
@@ -95,6 +95,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, validator_with_all_data["root_distance_score"]
     assert_equal 2, validator_with_all_data["vote_distance_score"]
     assert_equal 0, validator_with_all_data["skipped_slot_score"]
+    assert_equal 0, validator_with_all_data["skipped_after_score"]
     assert_equal "1.6.7", validator_with_all_data["software_version"]
     assert_equal 2, validator_with_all_data["software_version_score"]
     assert_equal 0, validator_with_all_data["stake_concentration_score"]
@@ -356,7 +357,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 39, json_response.keys.size
+    assert_equal 40, json_response.keys.size
 
     # Validator
     assert_equal "testnet", json_response["network"]
@@ -500,11 +501,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 45, json_response.keys.size
+    assert_equal 47, json_response.keys.size
 
     # Score
     assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
     assert_equal [5, 4, 3, 2, 1], json_response["vote_distance_history"]
+    assert_equal [0.123], json_response["skipped_after_history"]
     assert_equal [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1], json_response["skipped_slot_history"]
     assert_equal [0.2051], json_response["skipped_slot_moving_average_history"]
     assert_equal [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], json_response["skipped_vote_history"]

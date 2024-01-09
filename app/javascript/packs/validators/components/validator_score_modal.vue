@@ -12,7 +12,7 @@
                class="fw-bold" >
               {{ validator.name }}
             </a>
-            total score: {{ score.displayed_total_score }} <span class="text-muted">(max 11)</span>
+            total score: {{ score.displayed_total_score }} <span class="text-muted">(max 13)</span>
           </h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -67,6 +67,21 @@
                 <td class="column-lg small">
                   This score measures the&nbsp;percent of the&nbsp;time that a&nbsp;leader fails to produce a&nbsp;block
                   during their allocated slots.
+                </td>
+              </tr>
+
+              <tr>
+                <td class="column-md fw-bold">Skipped After Score</td>
+                <td class="column-xs text-nowrap">
+                  <i :class="'score-' + parseInt(score.skipped_after_score)"
+                     class="fa-solid fa-circle me-1">
+                  </i>
+                  {{ score.skipped_after_score }}
+                  <small class="d-lg-none text-muted">(2)</small>
+                  <small class="d-none d-lg-inline text-muted">(max 2)</small>
+                </td>
+                <td class="column-lg small">
+                  This score shows the performance by the leader AFTER the designated node.
                 </td>
               </tr>
 
