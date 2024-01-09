@@ -67,6 +67,7 @@ class ValidatorScoreV1 < ApplicationRecord
     root_distance_score
     security_report_score
     skipped_slot_score
+    skipped_after_score
     software_version
     software_version_score
     stake_concentration_score
@@ -89,6 +90,7 @@ class ValidatorScoreV1 < ApplicationRecord
     skipped_vote_history
     skipped_slot_moving_average_history
     stake_concentration
+    skipped_after_history
   ].freeze
 
   WITHDRAWER_SCORE_OPTIONS = {
@@ -168,7 +170,8 @@ class ValidatorScoreV1 < ApplicationRecord
           software_version_score.to_i +
           stake_concentration_score.to_i +
           data_center_concentration_score.to_i +
-          authorized_withdrawer_score.to_i
+          authorized_withdrawer_score.to_i + 
+          skipped_after_score.to_i
       end
   end
 
