@@ -149,7 +149,7 @@
                 <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
-                   title="">
+                   title="Skipped after measures the percent of the time that a leader fails to produce a block after their allocated slots.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
