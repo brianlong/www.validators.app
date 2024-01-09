@@ -73,10 +73,8 @@ class UpdateAvatarFileService
                                .resize_to_limit(*IMAGE_SIZE_LIMIT)
                                .call(destination: @avatar_file)
   rescue ImageProcessing::Error => e
-    if MiniMagick::Image.new(@tmp_file).pages.count > 1
-      # Skips animated gifs processing
-      return
-    end
+    # Skips animated gifs processing
+    return if MiniMagick::Image.new(@tmp_file).pages.count > 1
 
     raise e
   end
