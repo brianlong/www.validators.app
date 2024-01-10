@@ -211,9 +211,24 @@ class PingThingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, PingThing.where(network: "testnet", success: true).count
     get api_v1_ping_things_path(network: "testnet", success: true, time_filter: filter), headers: @headers
     assert_equal 1, response_to_json(@response.body).size
+  end
 
-    get api_v1_ping_things_path(network: "testnet", posted_by: user, time_filter: filter), headers: @headers
-    assert_equal 1, response_to_json(@response.body).size
+  test "GET api_v1_ping_things with posted_by filter returns filtered records" do
+    users = [
+      create(:user, :ping_thing_user, username: "username.fake"),
+      create(:user, :ping_thing_user, username: "username.fake.2"),
+      create(:user, :ping_thing_user, username: "fake.username.fake"),
+      create(:user, :ping_thing_user, username: "username.fake.fake")
+    ]
+
+    users.each { |u| create(:ping_thing, :testnet, user: u) }
+
+    get api_v1_ping_things_path(
+      network: "testnet", posted_by: "username.fake"
+    ), headers: @headers
+    assert_equal 3, response_to_json(@response.body).size
+    assert_equal ["username.fake", "username.fake.2", "username.fake.fake"],
+      response_to_json(@response.body).map { |ping| ping["username"] }.sort
   end
 
   test "GET api_v1_ping_things as csv returns success" do
