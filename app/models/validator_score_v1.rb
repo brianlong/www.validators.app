@@ -170,8 +170,8 @@ class ValidatorScoreV1 < ApplicationRecord
           software_version_score.to_i +
           stake_concentration_score.to_i +
           data_center_concentration_score.to_i +
-          authorized_withdrawer_score.to_i + 
-          skipped_after_score.to_i
+          authorized_withdrawer_score.to_i
+          # + skipped_after_score.to_i
       end
   end
 
@@ -261,7 +261,7 @@ class ValidatorScoreV1 < ApplicationRecord
       self.skipped_after_history = skipped_after_history[-MAX_HISTORY..-1]
     end
   end
-  
+
   def root_distance_history_push(val)
     self.root_distance_history = [] if root_distance_history.nil?
 
