@@ -111,15 +111,6 @@
                 </div>
               </th>
 
-              <th class='column-speedometer pe-0'>
-                Vote Credit <br />Distance
-                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
-                   data-bs-toggle="tooltip"
-                   data-bs-placement="top"
-                   title="Vote Credit Distance measures the percent behind the top vote credit earner.">
-                </i>
-              </th>
-
               <th class='column-chart py-3'>
                 Root Distance
                 <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
@@ -148,6 +139,17 @@
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
                    title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
+                </i>
+                <br />
+                <small class="text-muted">60-Min Chart</small>
+              </th>
+
+              <th class='column-chart py-3'>
+                Skipped After&nbsp;&percnt;
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Skipped after measures the percent of the time that a leader fails to produce a block after their allocated slots.">
                 </i>
                 <br />
                 <small class="text-muted">60-Min Chart</small>
