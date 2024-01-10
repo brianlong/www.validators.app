@@ -69,9 +69,11 @@ export default {
 
         <i :class="score_class(score.skipped_slot_score)"
            :title="skipped_slot_score_title()"></i>
-
+        
+        <!--
         <i :class="score_class(score.skipped_after_score)"
            :title="skipped_after_score_title()"></i>
+        -->
 
         <i :class="score_class(score.published_information_score)"
            :title="published_information_score_title()"></i>
