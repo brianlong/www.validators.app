@@ -80,6 +80,14 @@ module Api
             }
           end
 
+          @skipped_after = @block_histories.map do |block_history|
+            next unless block_history.skipped_slots_after
+            {
+              x: block_history.created_at.strftime("%H:%M"),
+              y: block_history.skipped_slots_after
+            }
+          end
+
           # Grab the vote distances to show on the chart
           @vote_blocks = @val_histories.map do |val_history|
             next unless val_history.vote_distance
@@ -121,6 +129,7 @@ module Api
             score: @score.to_json(methods: [:displayed_total_score]),
             root_blocks: @root_blocks,
             vote_blocks: @vote_blocks,
+            skipped_after: @skipped_after,
             skipped_slots: @data.to_json,
             block_histories: @block_histories,
             block_history_stats: @block_history_stats,
