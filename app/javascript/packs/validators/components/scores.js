@@ -29,6 +29,9 @@ export default {
     skipped_slot_score_title() {
       return "Skipped Slot Score = " + this.score.skipped_slot_score
     },
+    skipped_after_score_title() {
+      return "Skipped After Score = " + this.score.skipped_after_score
+    },
     published_information_score_title() {
       return "Published Information Score = " + this.score.published_information_score
     },
@@ -66,6 +69,11 @@ export default {
 
         <i :class="score_class(score.skipped_slot_score)"
            :title="skipped_slot_score_title()"></i>
+        
+        <!--
+        <i :class="score_class(score.skipped_after_score)"
+           :title="skipped_after_score_title()"></i>
+        -->
 
         <i :class="score_class(score.published_information_score)"
            :title="published_information_score_title()"></i>
@@ -91,8 +99,9 @@ export default {
         <i class="fa-solid fa-minus-circle me-1 text-warning"
            v-if="score.data_center_concentration_score < 0"
            :title="data_center_concentration_score_title()"></i>
+        
+        ({{ score.displayed_total_score }})
       </a>
-      ({{ score.displayed_total_score }})
     </div>
 `
 }

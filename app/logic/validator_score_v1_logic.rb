@@ -230,7 +230,7 @@ module ValidatorScoreV1Logic
     end
   end
 
-  # Get the data for skipped slot %
+  # Get the data for skipped slot % and skipped after %
   def block_history_get
     lambda do |p|
       return p unless p.code == 200
@@ -239,7 +239,10 @@ module ValidatorScoreV1Logic
       avg_skipped_slot_pct_all = vbh_stats.average_skipped_slot_percent
       med_skipped_slot_pct_all = vbh_stats.median_skipped_slot_percent
 
-      vbh_sql = <<-SQL_END
+      avg_skipped_after_pct_all = vbh_stats.average_skipped_slots_after_percent
+      med_skipped_after_pct_all = vbh_stats.median_skipped_slots_after_percent
+
+        vbh_sql = <<-SQL_END
         SELECT vbh.validator_id,
                vbh.skipped_slot_percent,
                vbh.skipped_slot_percent_moving_average,
@@ -271,7 +274,9 @@ module ValidatorScoreV1Logic
         200,
         p.payload.merge(
           avg_skipped_slot_pct_all: avg_skipped_slot_pct_all,
-          med_skipped_slot_pct_all: med_skipped_slot_pct_all
+          med_skipped_slot_pct_all: med_skipped_slot_pct_all,
+          avg_skipped_after_pct_all: avg_skipped_after_pct_all,
+          med_skipped_after_pct_all: med_skipped_after_pct_all
         )
       )
     rescue StandardError => e
@@ -284,8 +289,8 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       p.payload[:validators].each do |validator|
-        skipped_slot_percent = \
-          validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
+        skipped_slot_percent = validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
+        skipped_after_percent = validator&.validator_score_v1&.skipped_after_history&.last
 
         # Assign the scores
         validator.validator_score_v1.skipped_slot_score = \
@@ -294,6 +299,17 @@ module ValidatorScoreV1Logic
           elsif skipped_slot_percent.to_f <= p.payload[:med_skipped_slot_pct_all].to_f
             2
           elsif skipped_slot_percent.to_f <= p.payload[:avg_skipped_slot_pct_all].to_f
+            1
+          else
+            0
+          end
+
+        validator.validator_score_v1.skipped_after_score = \
+          if skipped_after_percent.nil?
+            0
+          elsif skipped_after_percent <= p.payload[:med_skipped_after_pct_all]
+            2
+          elsif skipped_after_percent <= p.payload[:avg_skipped_after_pct_all]
             1
           else
             0

@@ -287,6 +287,10 @@ class Validator < ApplicationRecord
     score&.skipped_after_history&.last
   end
 
+  def skipped_after_score
+    score&.skipped_after_score
+  end
+
   def ping_time_avg
     score&.ping_time_avg
   end
@@ -301,6 +305,10 @@ class Validator < ApplicationRecord
 
   def security_report_score
     score&.security_report_score
+  end
+
+  def skipped_after_score
+    score&.skipped_after_score
   end
 
   def total_score

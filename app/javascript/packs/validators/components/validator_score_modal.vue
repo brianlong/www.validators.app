@@ -70,6 +70,23 @@
                 </td>
               </tr>
 
+              <!--
+              <tr>
+                <td class="column-md fw-bold">Skipped After Score</td>
+                <td class="column-xs text-nowrap">
+                  <i :class="'score-' + parseInt(score.skipped_after_score)"
+                     class="fa-solid fa-circle me-1">
+                  </i>
+                  {{ score.skipped_after_score }}
+                  <small class="d-lg-none text-muted">(2)</small>
+                  <small class="d-none d-lg-inline text-muted">(max 2)</small>
+                </td>
+                <td class="column-lg small">
+                  This score shows the performance by the leader AFTER the designated node.
+                </td>
+              </tr>
+              -->
+
               <tr>
                 <td class="column-md fw-bold">Published Information Score</td>
                 <td class="column-xs text-nowrap">
