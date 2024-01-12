@@ -4,20 +4,21 @@
 #
 # Table name: validator_block_histories
 #
-#  id                                  :bigint           not null, primary key
-#  batch_uuid                          :string(191)
-#  blocks_produced                     :integer
-#  epoch                               :integer
-#  leader_slots                        :integer
-#  network                             :string(191)
-#  skipped_slot_percent                :decimal(10, 4)
-#  skipped_slot_percent_moving_average :decimal(10, 4)
-#  skipped_slots                       :integer
-#  skipped_slots_after                 :integer
-#  skipped_slots_after_percent         :decimal(10, 4)
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
-#  validator_id                        :bigint           not null
+#  id                                        :bigint           not null, primary key
+#  batch_uuid                                :string(191)
+#  blocks_produced                           :integer
+#  epoch                                     :integer
+#  leader_slots                              :integer
+#  network                                   :string(191)
+#  skipped_slot_after_percent_moving_average :decimal(10, 4)
+#  skipped_slot_percent                      :decimal(10, 4)
+#  skipped_slot_percent_moving_average       :decimal(10, 4)
+#  skipped_slots                             :integer
+#  skipped_slots_after                       :integer
+#  skipped_slots_after_percent               :decimal(10, 4)
+#  created_at                                :datetime         not null
+#  updated_at                                :datetime         not null
+#  validator_id                              :bigint           not null
 #
 # Indexes
 #
@@ -48,7 +49,7 @@ class ValidatorBlockHistory < ApplicationRecord
 
   scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
 
-  after_create :set_skipped_slot_percent_moving_average
+  after_create :set_moving_averages
 
   # returns other ValidatorBlockHistory records created within the last 24 hours of `self`
   def previous_24_hours
@@ -57,8 +58,9 @@ class ValidatorBlockHistory < ApplicationRecord
 
   private
 
-  def set_skipped_slot_percent_moving_average
+  def set_moving_averages
     self.skipped_slot_percent_moving_average = previous_24_hours.average(:skipped_slot_percent)
+    self.skipped_slot_after_percent_moving_average = previous_24_hours.average(:skipped_slots_after_percent)
     save
   end
 end
