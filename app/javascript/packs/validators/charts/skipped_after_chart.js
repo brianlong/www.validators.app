@@ -16,20 +16,23 @@ export default {
   methods: {},
 
   data() {
+    console.log(this.validator)
     var skipped_after_vl = Math.min.apply(Math, [60, this.validator['skipped_after_history'].length])
-    var skipped_after_ma = Math.min.apply(Math, [60, this.validator['skipped_slot_after_moving_average_history'].length])
-    var skipped_after_ma_vector = this.validator['skipped_slot_after_moving_average_history'].slice(Math.max(this.validator['skipped_slot_after_moving_average_history'].length - skipped_after_ma, 0))
-    var skipped_after_vector = this.validator['skipped_after_history'].slice(Math.max(this.validator['skipped_slot_history'].length - skipped_after_vl, 0))
+    var skipped_after_ma = Math.min.apply(Math, [60, this.validator['skipped_after_moving_average_history'].length])
+    var skipped_after_ma_vector = this.validator['skipped_after_moving_average_history'].slice(Math.max(this.validator['skipped_after_moving_average_history'].length - skipped_after_ma, 0))
+    var skipped_after_vector = this.validator['skipped_after_history'].slice(Math.max(this.validator['skipped_after_history'].length - skipped_after_vl, 0))
     skipped_after_vector.forEach(function(part, index) {
       this[index] = part * 100;
     }, skipped_after_vector)
     skipped_after_ma_vector.forEach(function(part, index) {
       this[index] = part * 100;
     }, skipped_after_ma_vector)
+
+    var skipped_after_score = 2 // TODO change this after adding the score to the validator API
     return {
       skipped_after_distance_chart: {
-        line_color: this.$parent.chart_line_color(this.validator['skipped_slot_score']),
-        fill_color: this.$parent.chart_fill_color(this.validator['skipped_slot_score']),
+        line_color: this.$parent.chart_line_color(skipped_after_score),
+        fill_color: this.$parent.chart_fill_color(skipped_after_score),
         vector: skipped_after_vector,
         moving_avg_vector: skipped_after_ma_vector
       }
