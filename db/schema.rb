@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_19_093003) do
+ActiveRecord::Schema.define(version: 2024_01_12_111301) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -580,6 +580,7 @@ ActiveRecord::Schema.define(version: 2023_12_19_093003) do
     t.decimal "skipped_slots_after_percent", precision: 10, scale: 4
     t.string "network"
     t.decimal "skipped_slot_percent_moving_average", precision: 10, scale: 4
+    t.decimal "skipped_slot_after_percent_moving_average", precision: 10, scale: 4
     t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
@@ -678,6 +679,7 @@ ActiveRecord::Schema.define(version: 2023_12_19_093003) do
     t.text "skipped_vote_percent_moving_average_history"
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
+    t.text "skipped_after_moving_average_history"
     t.index ["network", "active_stake", "commission", "delinquent"], name: "index_for_asns"
     t.index ["network", "total_score"], name: "index_validator_score_v1s_on_network_and_total_score"
     t.index ["network", "validator_id"], name: "index_validator_score_v1s_on_network_and_validator_id"
