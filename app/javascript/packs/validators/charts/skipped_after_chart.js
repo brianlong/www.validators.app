@@ -16,7 +16,6 @@ export default {
   methods: {},
 
   data() {
-    console.log(this.validator)
     var skipped_after_vl = Math.min.apply(Math, [60, this.validator['skipped_after_history'].length])
     var skipped_after_ma = Math.min.apply(Math, [60, this.validator['skipped_after_moving_average_history'].length])
     var skipped_after_ma_vector = this.validator['skipped_after_moving_average_history'].slice(Math.max(this.validator['skipped_after_moving_average_history'].length - skipped_after_ma, 0))
