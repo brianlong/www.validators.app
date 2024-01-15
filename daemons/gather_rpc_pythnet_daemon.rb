@@ -56,7 +56,7 @@ begin
     ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(common_params)
 
     break if interrupted
-    
+
     sleep(sleep_time) unless Rails.env == 'test'
   rescue SkipAndSleep => e
     break if interrupted
