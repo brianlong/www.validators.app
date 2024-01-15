@@ -12,7 +12,7 @@ trap("INT") { interrupted = true }  unless Rails.env.test?
 class SkipAndSleep < StandardError; end
 
 network = "pythnet"
-sleep_time = 60 # seconds
+sleep_time = 180 # seconds
 
 begin
   loop do
@@ -47,8 +47,8 @@ begin
 
     raise SkipAndSleep, p.code unless p.code == 200
 
-    common_params = { 
-      batch_uuid: p.payload[:batch_uuid], 
+    common_params = {
+      batch_uuid: p.payload[:batch_uuid],
       network: p.payload[:network]
     }.stringify_keys
 
@@ -56,11 +56,13 @@ begin
     ReportSoftwareVersionWorker.set(queue: :high_priority).perform_async(common_params)
 
     break if interrupted
+    
+    sleep(sleep_time) unless Rails.env == 'test'
   rescue SkipAndSleep => e
     break if interrupted
 
     if e.message.in? %w[500 502 503 504]
-      sleep(1.minute)
+      sleep(sleep_time)
     else
       sleep(sleep_time)
     end
