@@ -119,7 +119,7 @@
                    title="Root distance measures the median & average distance in block height between the validator and the tower's highest block. Smaller numbers mean that the validator is near the top of the tower.">
                 </i>
                 <br />
-                <small class="text-muted">60-Min Chart</small>
+                <small class="text-muted">Last 60 Observations</small>
               </th>
 
               <th class='column-chart py-3'>
@@ -130,7 +130,7 @@
                    title="Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group.">
                 </i>
                 <br />
-                <small class="text-muted">60-Min Chart</small>
+                <small class="text-muted">Last 60 Observations</small>
               </th>
 
               <th class='column-chart py-3'>
@@ -141,7 +141,7 @@
                    title="Skipped slot measures the percent of the time that a leader fails to produce a block during their allocated slots. A lower number means that the leader is making blocks at a very high rate.">
                 </i>
                 <br />
-                <small class="text-muted">60-Min Chart</small>
+                <small class="text-muted">Last 60 Observations</small>
               </th>
 
               <th class='column-chart py-3'>
@@ -152,7 +152,7 @@
                    title="Skipped after measures the percent of the time that a leader fails to produce a block after their allocated slots.">
                 </i>
                 <br />
-                <small class="text-muted">60-Min Chart</small>
+                <small class="text-muted">Last 60 Observations</small>
               </th>
             </tr>
           </thead>
