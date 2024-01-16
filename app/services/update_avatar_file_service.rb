@@ -87,9 +87,18 @@ class UpdateAvatarFileService
   end
 
   def purge_files(keep_tmp_files)
-    unless keep_tmp_files
-      File.delete(@tmp_file) if @tmp_file && File.exist?(@tmp_file)
-      File.delete(@avatar_file) if @avatar_file && File.exist?(@avatar_file)
+    [
+      ".png",
+      ".gif",
+      "_tmp.png",
+      "_tmp.gif"
+    ].each do |extention|
+      unless keep_tmp_files
+        Dir[STORAGE_PATH + "/*_#{@validator.network}" + extention].entries.each do |file|
+          File.delete(file)
+          @logger.info("Deleted file: " + file)
+        end
+      end
     end
   end
 end
