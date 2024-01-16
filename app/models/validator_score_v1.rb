@@ -33,6 +33,7 @@
 #  root_distance_score                         :integer
 #  security_report_score                       :integer
 #  skipped_after_history                       :text(65535)
+#  skipped_after_moving_average_history        :text(65535)
 #  skipped_after_score                         :integer
 #  skipped_slot_history                        :text(65535)
 #  skipped_slot_moving_average_history         :text(65535)
@@ -67,7 +68,6 @@ class ValidatorScoreV1 < ApplicationRecord
     root_distance_score
     security_report_score
     skipped_slot_score
-    skipped_after_score
     software_version
     software_version_score
     stake_concentration_score
@@ -75,7 +75,7 @@ class ValidatorScoreV1 < ApplicationRecord
     total_score
     validator_id
     vote_distance_score
-  ].freeze
+  ].freeze # TODO skipped_after_score
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
     active_stake
@@ -89,6 +89,7 @@ class ValidatorScoreV1 < ApplicationRecord
     skipped_slot_history
     skipped_vote_history
     skipped_slot_moving_average_history
+    skipped_after_moving_average_history
     stake_concentration
     skipped_after_history
   ].freeze
@@ -118,6 +119,7 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_vote_history, JSON
   serialize :skipped_vote_percent_moving_average_history, JSON
   serialize :skipped_slot_moving_average_history, JSON
+  serialize :skipped_after_moving_average_history, JSON
 
   delegate :data_center, to: :validator, prefix: true, allow_nil: true
 
@@ -170,8 +172,8 @@ class ValidatorScoreV1 < ApplicationRecord
           software_version_score.to_i +
           stake_concentration_score.to_i +
           data_center_concentration_score.to_i +
-          authorized_withdrawer_score.to_i + 
-          skipped_after_score.to_i
+          authorized_withdrawer_score.to_i
+          # + skipped_after_score.to_i
       end
   end
 
@@ -261,7 +263,7 @@ class ValidatorScoreV1 < ApplicationRecord
       self.skipped_after_history = skipped_after_history[-MAX_HISTORY..-1]
     end
   end
-  
+
   def root_distance_history_push(val)
     self.root_distance_history = [] if root_distance_history.nil?
 
@@ -312,6 +314,16 @@ class ValidatorScoreV1 < ApplicationRecord
 
     if skipped_slot_moving_average_history.length > MAX_HISTORY
       self.skipped_slot_moving_average_history = skipped_slot_moving_average_history[-MAX_HISTORY..-1]
+    end
+  end
+
+  def skipped_after_moving_average_history_push(val)
+    self.skipped_after_moving_average_history = [] if skipped_after_moving_average_history.nil?
+
+    skipped_after_moving_average_history << val
+
+    if skipped_after_moving_average_history.length > MAX_HISTORY
+      self.skipped_after_moving_average_history = skipped_after_moving_average_history[-MAX_HISTORY..-1]
     end
   end
 

@@ -24,6 +24,18 @@ class ValidatorBlockHistoryTest < ActiveSupport::TestCase
     assert_equal(0.375, vbh4.skipped_slot_percent_moving_average)
   end
 
+  test 'after_create, #skipped_slot_after_percent_moving_average is calculated as the moving average for the last 24 hours' do
+    vbh1 = create(:validator_block_history, validator: @validator, skipped_slots_after_percent: 0)
+    vbh2 = create(:validator_block_history, validator: @validator, skipped_slots_after_percent: 0.25)
+    vbh3 = create(:validator_block_history, validator: @validator, skipped_slots_after_percent: 0.5)
+    vbh4 = create(:validator_block_history, validator: @validator, skipped_slots_after_percent: 0.75)
+
+    assert_equal(0, vbh1.skipped_slot_after_percent_moving_average)
+    assert_equal(0.125, vbh2.skipped_slot_after_percent_moving_average)
+    assert_equal(0.25, vbh3.skipped_slot_after_percent_moving_average)
+    assert_equal(0.375, vbh4.skipped_slot_after_percent_moving_average)
+  end
+
   test 'has_one batch relationship works correctly' do
     batch = create(:batch)
     vbhs = create_list(:validator_block_history, 3, batch_uuid: batch.uuid)

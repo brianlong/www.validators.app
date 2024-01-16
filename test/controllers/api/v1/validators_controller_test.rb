@@ -30,7 +30,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     create_list(
       :validator,
       3,
-      :with_score, 
+      :with_score,
       :mainnet,
       :with_data_center_through_validator_ip
     )
@@ -58,9 +58,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validators returns all data" do
     validator = create(
-      :validator, 
+      :validator,
       :with_score,
-      :with_data_center_through_validator_ip, 
+      :with_data_center_through_validator_ip,
       account: "Test Account"
     )
     create(:validator_history,
@@ -82,7 +82,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 40, validator_with_all_data.keys.size
+    assert_equal 39, validator_with_all_data.keys.size
 
     # Validator
     assert_equal "testnet", validator_with_all_data["network"]
@@ -95,7 +95,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, validator_with_all_data["root_distance_score"]
     assert_equal 2, validator_with_all_data["vote_distance_score"]
     assert_equal 0, validator_with_all_data["skipped_slot_score"]
-    assert_equal 0, validator_with_all_data["skipped_after_score"]
+    # assert_equal 0, validator_with_all_data["skipped_after_score"]
     assert_equal "1.6.7", validator_with_all_data["software_version"]
     assert_equal 2, validator_with_all_data["software_version_score"]
     assert_equal 0, validator_with_all_data["stake_concentration_score"]
@@ -174,9 +174,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validators with token and not existing search query returns no data" do
     validator = create(
-      :validator, 
+      :validator,
       :with_score,
-      :with_data_center_through_validator_ip, 
+      :with_data_center_through_validator_ip,
       account: "Test Account"
     )
 
@@ -192,8 +192,8 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validators with token, limit and page passed in returns limited data" do
     create_list(
-      :validator, 
-      10, 
+      :validator,
+      10,
       :with_score,
       :with_data_center_through_validator_ip
     )
@@ -231,7 +231,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   test "GET api_v1_validators with token and page passed in returns limited data" do
     create_list(
       :validator,
-      60, 
+      60,
       :with_score,
       :with_data_center_through_validator_ip
     )
@@ -249,8 +249,8 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validators with token and page passed returns no data when offset is above number of records" do
     create_list(
-      :validator, 
-      10, 
+      :validator,
+      10,
       :with_score,
       :with_data_center_through_validator_ip
     )
@@ -287,14 +287,14 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   #
   test "GET api_v1_validators with token, search query, limit and page passed returns limited data" do
     create(
-      :validator, 
+      :validator,
       :with_score,
       :with_data_center_through_validator_ip,
       name: "search_query"
     )
     create_list(
-      :validator, 
-      5, 
+      :validator,
+      5,
       :with_score,
       :with_data_center_through_validator_ip
     )
@@ -315,7 +315,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validators includes validator without data_center assigned" do
     v = create(
-      :validator, 
+      :validator,
       :with_score,
       name: "I do not have data_center assigned"
     )
@@ -333,9 +333,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validator with token returns all data" do
     validator = create(
-      :validator, 
+      :validator,
       :with_score,
-      :with_data_center_through_validator_ip, 
+      :with_data_center_through_validator_ip,
       account: "Test Account"
     )
     create(:validator_history,
@@ -357,7 +357,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     validator_active_stake = validator.validator_score_v1.active_stake
 
     # Adjust after adding/removing attributes in json builder
-    assert_equal 40, json_response.keys.size
+    assert_equal 39, json_response.keys.size
 
     # Validator
     assert_equal "testnet", json_response["network"]
@@ -405,9 +405,9 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validator with internal param returns all data" do
     validator = create(
-      :validator, 
+      :validator,
       :with_score,
-      :with_data_center_through_validator_ip, 
+      :with_data_center_through_validator_ip,
       account: "Test Account"
     )
     create(:validator_history,
@@ -476,7 +476,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validator with token and with_history=true returns all data with history fields" do
     validator = create(
-      :validator, 
+      :validator,
       :with_score,
       :with_data_center_through_validator_ip,
       account: "Test Account"
@@ -516,7 +516,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validator with token and with empty or other than true param with_history does NOT include history" do
     validator = create(
-      :validator, 
+      :validator,
       :with_score,
       :with_data_center_through_validator_ip,
       account: "Test Account"
@@ -528,12 +528,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
            validator: validator)
     create(:vote_account, validator: validator)
     create(:report, :build_skipped_slot_percent)
-    
+
     required_params = { network: "testnet", account: validator.account }
 
     ### with_history: nil
-    get api_v1_validator_url(required_params), 
-      headers: { "Token" => @user.api_token }, 
+    get api_v1_validator_url(required_params),
+      headers: { "Token" => @user.api_token },
       params: { with_history: nil }
 
     json_response = response_to_json(@response.body)
@@ -554,7 +554,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     end
 
     ### with_history: random string
-    get api_v1_validator_url(required_params), 
+    get api_v1_validator_url(required_params),
       headers: { "Token" => @user.api_token },
       params: { with_history: "string" }
 
@@ -580,12 +580,12 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
   test "GET api_v1_validator as csv with token returns correct results" do
     validator = create(
-      :validator, 
+      :validator,
       :with_score,
-      :with_data_center_through_validator_ip, 
+      :with_data_center_through_validator_ip,
       account: "Test Account"
     )
-    
+
     path = api_v1_validator_url(
       network: "testnet",
       account: validator.account
