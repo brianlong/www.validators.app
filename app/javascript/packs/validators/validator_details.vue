@@ -225,7 +225,7 @@
       <block-history-chart :root_blocks="root_blocks" v-if="root_blocks.length > 0"></block-history-chart>
       <vote-history-chart :vote_blocks="vote_blocks" v-if="vote_blocks.length > 0"></vote-history-chart>
       <skipped-slots-chart :skipped_slots="skipped_slots" v-if="skipped_slots[1]"></skipped-slots-chart>
-      <skipped-after-chart :skipped_after="skipped_after" v-if="skipped_after.length > 0"></skipped-after-chart>
+      <skipped-after-chart :skipped_after="skipped_after" v-if="skipped_after[1]"></skipped-after-chart>
     </div>
 
     <a :href="go_back_link"
@@ -314,6 +314,7 @@
         block_histories: [],
         block_history_stats: [],
         skipped_slots: {},
+        skipped_after: {},
         live: false,
         order: null,
         page: null,
@@ -358,7 +359,7 @@
           ctx.score = JSON.parse(response.data.score)
           ctx.root_blocks = response.data.root_blocks
           ctx.vote_blocks = response.data.vote_blocks
-          ctx.skipped_after = response.data.skipped_after
+          ctx.skipped_after = JSON.parse(response.data.skipped_after)
           ctx.block_histories = response.data.block_histories
           ctx.block_history_stats = response.data.block_history_stats
           ctx.skipped_slots = JSON.parse(response.data.skipped_slots)

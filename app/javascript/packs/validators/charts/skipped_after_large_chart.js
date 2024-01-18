@@ -4,8 +4,8 @@ import chart_variables from './chart_variables'
 export default {
   props: {
     skipped_after: {
-        type: Array,
-        required: true
+      type: Object,
+      required: true
     }
   },
 
@@ -21,18 +21,28 @@ export default {
   },
 
   watch: {
-    'skipped_after': {
+    'skipped_slots': {
       handler: function() {
         this.update_chart()
       }
     }
   },
 
+  computed: {
+    skipped_after_array() {
+      let arr = []
+      for (const [key, value] of Object.entries(this.skipped_after)) {
+        arr.push(value)
+      }
+      return arr
+    }
+  },
+
   methods: {
     labels() {
       let labels = []
-      this.skipped_after.forEach(function(val) {
-        labels.push(val['x'])
+      this.skipped_after_array.forEach(function(val) {
+        labels.push(val['label'])
       })
       return labels
     },
@@ -43,20 +53,37 @@ export default {
       if(this.chart) {
         this.chart.destroy()
       }
+      
+      var skipped_slot_percent_moving_average = this.skipped_after_array.map( (vector_element, index) => (
+        vector_element['skipped_after_percent_moving_average']
+      ))
+      var skipped_slot_percent = this.skipped_after_array.map( (vector_element, index) => (
+        vector_element['skipped_after_percent']
+      ))
+
       this.chart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: this.labels(),
           datasets: [
             {
-              label: ' Skipped Number ',
-              fill: true,
+              label: ' Moving Avg  ',
+              fill: false,
+              borderColor: chart_variables.chart_purple_1,
+              backgroundColor: chart_variables.chart_purple_1_t,
+              borderWidth: 1,
+              radius: 0,
+              data: skipped_slot_percent_moving_average
+            },
+            {
+              label: ' Actual Skipped After Slots  ',
+              fill: false,
               borderColor: chart_variables.chart_purple_2,
               backgroundColor: chart_variables.chart_purple_2_t,
               borderWidth: 1,
+              borderDash: [2, 2],
               radius: 0,
-              data: this.skipped_after,
-              tension: 0
+              data: skipped_slot_percent
             }
           ]
         },
@@ -71,9 +98,10 @@ export default {
                 autoSkip: true,
                 autoSkipPadding: 30
               },
+              grid: { display: false },
               title: {
                 display: true,
-                text: "Previous " + this.skipped_after.length + " Observations",
+                text: "Previous Observations",
                 color: chart_variables.chart_darkgrey
               }
             },
@@ -89,7 +117,7 @@ export default {
               },
               title: {
                 display: true,
-                text: "Dist Behind Leader",
+                text: "Percent",
                 color: chart_variables.chart_darkgrey
               }
             }
@@ -105,7 +133,11 @@ export default {
               padding: 8,
               callbacks: {
                 label: function(tooltipItem) {
-                  return "Distance: " + tooltipItem.raw.y;
+                  if (tooltipItem.datasetIndex == 0) {
+                    return "Moving Avg: " + tooltipItem.raw;
+                  } else if (tooltipItem.datasetIndex == 1) {
+                    return "Actual Skipped Slots: " + tooltipItem.raw;
+                  }
                 },
                 title: function(tooltipItem) {
                   return tooltipItem[0].label + " UTC";
@@ -114,11 +146,11 @@ export default {
             },
             legend: {
               labels: {
+                color: chart_variables.chart_darkgrey,
                 boxWidth: chart_variables.chart_legend_box_size,
                 boxHeight: chart_variables.chart_legend_box_size,
                 usePointStyle: true,
-                padding: 10,
-                color: chart_variables.chart_darkgrey,
+                padding: 5,
                 font: {
                   size: chart_variables.chart_legend_font_size
                 }
@@ -138,6 +170,7 @@ export default {
       });
     }
   },
+
   template: `
     <div class="col-lg-6">
       <div class="card mb-4">
