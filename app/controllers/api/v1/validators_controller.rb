@@ -47,7 +47,8 @@ module Api
           time_from = Time.now - 24.hours
           time_to = Time.now
 
-          @data = {}
+          @skipped_slots = {}
+          @skipped_after = {}
 
           @history_limit = 200
           @block_histories = @validator.validator_block_histories
@@ -101,12 +102,19 @@ module Api
 
             # We want to skip if there is no batch yet for the vbh.
             skipped_slot_all_average = vbh.batch&.skipped_slot_all_average
+
             next unless skipped_slot_all_average
 
-            @data[i] = {
+            @skipped_slots[i] = {
               skipped_slot_percent: (vbh.skipped_slot_percent.to_f * 100.0).round(1),
               skipped_slot_percent_moving_average: (vbh.skipped_slot_percent_moving_average.to_f * 100.0).round(1),
               cluster_skipped_slot_percent_moving_average: (skipped_slot_all_average * 100).round(1),
+              label: vbh.created_at.strftime("%H:%M")
+            }
+
+            @skipped_after[i] = {
+              skipped_after_percent: (vbh.skipped_slots_after_percent.to_f * 100.0).round(1),
+              skipped_after_percent_moving_average: (vbh.skipped_slot_after_percent_moving_average.to_f * 100.0).round(1),
               label: vbh.created_at.strftime("%H:%M")
             }
           end
@@ -121,7 +129,8 @@ module Api
             score: @score.to_json(methods: [:displayed_total_score]),
             root_blocks: @root_blocks,
             vote_blocks: @vote_blocks,
-            skipped_slots: @data.to_json,
+            skipped_after: @skipped_after.to_json,
+            skipped_slots: @skipped_slots.to_json,
             block_histories: @block_histories,
             block_history_stats: @block_history_stats,
             validator_history: @val_history,
