@@ -101,7 +101,7 @@ export default {
               grid: { display: false },
               title: {
                 display: true,
-                text: "Previous Observations",
+                text: "Previous " + this.skipped_after_array.length + " Observations",
                 color: chart_variables.chart_darkgrey
               }
             },
@@ -136,7 +136,7 @@ export default {
                   if (tooltipItem.datasetIndex == 0) {
                     return "Moving Avg: " + tooltipItem.raw;
                   } else if (tooltipItem.datasetIndex == 1) {
-                    return "Actual Skipped Slots: " + tooltipItem.raw;
+                    return "Actual Skipped After Slots: " + tooltipItem.raw;
                   }
                 },
                 title: function(tooltipItem) {
