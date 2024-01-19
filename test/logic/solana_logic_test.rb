@@ -269,17 +269,28 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validators_info_save' do
+  test '#validators_info_save updates persisted validators' do
     #  To skip validators_info_get
     payload = @mainnet_initial_payload.merge(
       validators_info: @validators_info
+    )
+
+    create(
+      :validator,
+      :mainnet,
+      name: 'test_name',
+      keybase_id: 'test_keybase_id',
+      details: 'test_details',
+      avatar_url: 'test_avatar_url',
+      www_url: 'test_www_url',
+      account: '61QB1Evn9E3noQtpJm4auFYyHSXS5FPgqKtPgwJJfEQk'
     )
 
     VCR.use_cassette('validators_info_save') do
       p = Pipeline.new(200, payload)
                   .then(&program_accounts)
                   .then(&validators_info_save)
-      assert_equal 898, Validator.count
+      assert_equal 2, Validator.count
 
       validator = Validator.find_by(account: '61QB1Evn9E3noQtpJm4auFYyHSXS5FPgqKtPgwJJfEQk')
       assert_equal 'Meyerbro', validator.name
@@ -290,17 +301,19 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validators_info_save does not save incorrect attributes' do
+  test '#validators_info_save does not save incorrect attributes' do
     #  To skip validators_info_get
     payload = @mainnet_initial_payload.merge(
       validators_info: @validators_info
     )
 
+    create(:validator, :mainnet, account: '7MTjmteQHhthwwTZhUzsc2dP4NBvGNRqj8jzdqNxHFGE', avatar_url: nil)
+
     VCR.use_cassette('validators_info_save') do
       p = Pipeline.new(200, payload)
                   .then(&program_accounts)
                   .then(&validators_info_save)
-      assert_equal 898, Validator.count
+      assert_equal 2, Validator.count
 
       validator = Validator.find_by(account: '7MTjmteQHhthwwTZhUzsc2dP4NBvGNRqj8jzdqNxHFGE')
       assert_equal 'web34ever', validator.name
