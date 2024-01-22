@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-network = ARGV[0]
-account = ARGV[1]
+@network ||= ARGV[0]
+@account ||= ARGV[1]
 
 # raise "invalid network - #{network}" unless NETWORKS.include? network
 
-validator = Validator.find_by(account: account, network: network)
+validator = Validator.find_by(account: @account, network: @network)
 
-raise "validator not found (#{account})" unless validator
+raise "validator not found (#{@account})" unless validator
 
 puts "found validator with id: #{validator.id}"
 
@@ -29,18 +29,20 @@ ActiveRecord::Base.transaction do
   validator.user_watchlist_elements.delete_all
   validator.delete
 
-  puts "validator_histories deleted"
-  puts "validator_block_histories deleted"
-  puts "account_authority_histories deleted"
-  puts "vote_account_histories deleted"
-  puts "vote_accounts deleted"
-  puts "commission_histories deleted"
-  puts "stake_account_histories deleted"
-  puts "stake_accounts deleted"
-  puts "ips deleted"
-  puts "score deleted"
-  puts "user_watchlist_elements deleted"
-  puts "validator deleted"
+  unless Rails.env.test?
+    puts "validator_histories deleted"
+    puts "validator_block_histories deleted"
+    puts "account_authority_histories deleted"
+    puts "vote_account_histories deleted"
+    puts "vote_accounts deleted"
+    puts "commission_histories deleted"
+    puts "stake_account_histories deleted"
+    puts "stake_accounts deleted"
+    puts "ips deleted"
+    puts "score deleted"
+    puts "user_watchlist_elements deleted"
+    puts "validator deleted"
+  end
 rescue StandardError => e
   puts e.message
 end
