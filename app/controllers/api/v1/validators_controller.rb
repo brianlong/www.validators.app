@@ -104,7 +104,6 @@ module Api
             skipped_slot_all_average = vbh.batch&.skipped_slot_all_average
             skipped_after_all_average = vbh.batch&.skipped_after_all_average
 
-
             next unless skipped_slot_all_average
 
             @skipped_slots[i] = {

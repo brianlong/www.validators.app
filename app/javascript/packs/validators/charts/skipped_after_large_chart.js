@@ -54,14 +54,13 @@ export default {
         this.chart.destroy()
       }
       
-      var skipped_after_percent_moving_average = this.skipped_after_array.map( (vector_element, index) => (
+      let skipped_after_percent_moving_average = this.skipped_after_array.map( (vector_element, index) => (
         vector_element['skipped_after_percent_moving_average']
       ))
-      var skipped_after_percent = this.skipped_after_array.map( (vector_element, index) => (
+      let skipped_after_percent = this.skipped_after_array.map( (vector_element, index) => (
         vector_element['skipped_after_percent']
       ))
-
-      var cluster_skipped_after_percent_moving_average = this.skipped_after_array.map( (vector_element, index) => (
+      let cluster_skipped_after_percent_moving_average = this.skipped_after_array.map( (vector_element, index) => (
         vector_element['cluster_skipped_after_percent_moving_average']
       ))
 
