@@ -102,6 +102,8 @@ module Api
 
             # We want to skip if there is no batch yet for the vbh.
             skipped_slot_all_average = vbh.batch&.skipped_slot_all_average
+            skipped_after_all_average = vbh.batch&.skipped_after_all_average
+
 
             next unless skipped_slot_all_average
 
@@ -115,6 +117,7 @@ module Api
             @skipped_after[i] = {
               skipped_after_percent: (vbh.skipped_slots_after_percent.to_f * 100.0).round(1),
               skipped_after_percent_moving_average: (vbh.skipped_slot_after_percent_moving_average.to_f * 100.0).round(1),
+              cluster_skipped_after_percent_moving_average: (skipped_after_all_average * 100).round(1),
               label: vbh.created_at.strftime("%H:%M")
             }
           end
