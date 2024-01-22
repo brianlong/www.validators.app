@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_12_111301) do
+ActiveRecord::Schema.define(version: 2024_01_19_104342) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 2024_01_12_111301) do
     t.float "skipped_vote_all_median"
     t.float "best_skipped_vote"
     t.float "skipped_slot_all_average", default: 0.0
+    t.float "skipped_after_all_average", default: 0.0
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
