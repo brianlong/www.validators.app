@@ -16,6 +16,7 @@ export default {
   methods: {},
 
   data() {
+    if(!this.validator || this.validator['skipped_after_history'].length == 0) return
     var skipped_after_vl = Math.min.apply(Math, [60, this.validator['skipped_after_history'].length])
     var skipped_after_ma = Math.min.apply(Math, [60, this.validator['skipped_after_moving_average_history'].length])
     var skipped_after_ma_vector = this.validator['skipped_after_moving_average_history'].slice(Math.max(this.validator['skipped_after_moving_average_history'].length - skipped_after_ma, 0))
@@ -39,6 +40,8 @@ export default {
   },
 
   mounted: function () {
+    if(!this.validator || this.validator['skipped_after_history'].length == 0) return
+    console.log(this.validator)
     var skipped_after_el = document.getElementById("spark_line_skipped_after_" + this.validator['account']).getContext('2d');
     new Chart(skipped_after_el, {
       type: 'line',
@@ -93,8 +96,11 @@ export default {
     });
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell" :id="'skipped-slots-' + idx ">
+    <td class="column-chart d-none d-lg-table-cell" :id="'skipped-slots-' + idx " v-if="!validator || validator['skipped_after_history'].length > 0">
       <canvas :id=" 'spark_line_skipped_after_' + validator['account'] "></canvas>
+    </td>
+    <td v-if="validator['skipped_after_history'].length == 0">
+      <span>N/A</span>
     </td>
   `
 }
