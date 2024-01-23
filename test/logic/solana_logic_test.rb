@@ -269,7 +269,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
     end
   end
 
-  test '#validators_info_save updates persisted validators' do
+  test '#validators_info_save updates data for existing validators' do
     #  To skip validators_info_get
     payload = @mainnet_initial_payload.merge(
       validators_info: @validators_info
@@ -278,11 +278,6 @@ class SolanaLogicTest < ActiveSupport::TestCase
     create(
       :validator,
       :mainnet,
-      name: 'test_name',
-      keybase_id: 'test_keybase_id',
-      details: 'test_details',
-      avatar_url: 'test_avatar_url',
-      www_url: 'test_www_url',
       account: '61QB1Evn9E3noQtpJm4auFYyHSXS5FPgqKtPgwJJfEQk'
     )
 
