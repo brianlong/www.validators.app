@@ -4,7 +4,6 @@
       <div class="d-flex flex-wrap flex-column flex-md-row gap-3">
         <div>
           <input name="filter_time"
-                 @keyup.enter="get_filtered_records()"
                  v-model="filter_time"
                  type="number"
                  class="form-control"
@@ -13,7 +12,6 @@
         </div>
         <div>
           <input name="posted_by"
-                 @keyup.enter="get_filtered_records()"
                  v-model="posted_by"
                  type="text"
                  class="form-control"
@@ -21,7 +19,6 @@
         </div>
         <div>
           <select name="success"
-                  @keyup.enter="get_filtered_records()"
                   v-model="success"
                   class="form-select form-control">
             <option value="" selected>Status (all)</option>
