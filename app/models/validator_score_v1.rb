@@ -76,7 +76,7 @@ class ValidatorScoreV1 < ApplicationRecord
     total_score
     validator_id
     vote_distance_score
-  ].freeze # TODO skipped_after_score
+  ].freeze
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
     active_stake
