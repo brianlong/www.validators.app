@@ -44,7 +44,7 @@
 
     <div class="card">
       <div class="table-responsive-lg">
-        <table class='table' v-if="ping_things_for_table.length > 0">
+        <table class='table' v-if="ping_things.length > 0">
           <thead>
           <tr>
             <th class="column-md-sm">Success / Time</th>
@@ -65,7 +65,7 @@
           </thead>
 
           <tbody>
-          <tr v-for="(pt) in ping_things_for_table" :key="pt.id">
+          <tr v-for="(pt) in ping_things" :key="pt.id">
             <td class="text-nowrap">
               <span v-html="success_icon(pt.success)"></span>
               <strong class="text-success h6">{{ pt.response_time.toLocaleString('en-US') }}</strong>&nbsp;ms
@@ -122,7 +122,7 @@
 
     data() {
       return {
-        ping_things_for_table: [],
+        ping_things: [],
         api_url: '/api/v1/ping-thing/' + this.network,
 
         // filters
@@ -143,14 +143,14 @@
         received(data) {
           // TODO
           // if new ping matches active filters
-          //   add record to ping_things_for_table
+          //   add record to ping_things
           // else
           //   don't update
           console.log("new ping thing detected")
           console.log(data)
           if(data["network"] == this.network) {
-            this.ping_things_for_table.unshift(data)
-            this.ping_things_for_table.pop()
+            this.ping_things.unshift(data)
+            this.ping_things.pop()
           }
         },
         disconnected() {},
@@ -197,8 +197,8 @@
       },
 
       get_records() {
-        var ctx = this
-        var filters = {
+        let ctx = this
+        let filters = {
           time_filter: ctx.filter_time,
           posted_by: ctx.posted_by,
           success: ctx.success,
@@ -207,7 +207,7 @@
 
         axios.get(ctx.api_url, { params: filters })
              .then(function(response) {
-               ctx.ping_things_for_table = response.data;
+               ctx.ping_things = response.data;
              })
       },
 
