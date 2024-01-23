@@ -68,6 +68,7 @@ class ValidatorScoreV1 < ApplicationRecord
     root_distance_score
     security_report_score
     skipped_slot_score
+    skipped_after_score
     software_version
     software_version_score
     stake_concentration_score
