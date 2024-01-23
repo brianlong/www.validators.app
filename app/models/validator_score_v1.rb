@@ -173,8 +173,8 @@ class ValidatorScoreV1 < ApplicationRecord
           software_version_score.to_i +
           stake_concentration_score.to_i +
           data_center_concentration_score.to_i +
-          authorized_withdrawer_score.to_i
-          # + skipped_after_score.to_i
+          authorized_withdrawer_score.to_i +
+          skipped_after_score.to_i
       end
   end
 

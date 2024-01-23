@@ -12,7 +12,7 @@
                class="fw-bold" >
               {{ validator.name }}
             </a>
-            total score: {{ score.displayed_total_score }} <span class="text-muted">(max 11)</span>
+            total score: {{ score.displayed_total_score }} <span class="text-muted">(max 13)</span>
           </h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -70,7 +70,6 @@
                 </td>
               </tr>
 
-              <!--
               <tr>
                 <td class="column-md fw-bold">Skipped After Score</td>
                 <td class="column-xs text-nowrap">
@@ -85,7 +84,6 @@
                   This score shows the performance by the leader AFTER the designated node.
                 </td>
               </tr>
-              -->
 
               <tr>
                 <td class="column-md fw-bold">Published Information Score</td>
