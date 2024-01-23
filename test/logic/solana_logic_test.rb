@@ -275,11 +275,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
       validators_info: @validators_info
     )
 
-    create(
-      :validator,
-      :mainnet,
-      account: '61QB1Evn9E3noQtpJm4auFYyHSXS5FPgqKtPgwJJfEQk'
-    )
+    create(:validator, :mainnet, account: '61QB1Evn9E3noQtpJm4auFYyHSXS5FPgqKtPgwJJfEQk')
 
     VCR.use_cassette('validators_info_save') do
       p = Pipeline.new(200, payload)
