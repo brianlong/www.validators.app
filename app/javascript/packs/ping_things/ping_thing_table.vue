@@ -34,9 +34,9 @@
         </button>
       </div>
 
-      <button @click.prevent="reset_filter()"
+      <button @click.prevent="reset_filters()"
               class="btn btn-sm btn-tertiary"
-              v-if="filters_present"
+              v-if="filters_present()"
               style="width: 115px;">
         Reset filters
       </button>
@@ -123,7 +123,6 @@
     data() {
       return {
         ping_things_for_table: [],
-        filters_present: false,
         api_url: '/api/v1/ping-thing/' + this.network,
 
         // filters
@@ -209,16 +208,22 @@
         axios.get(ctx.api_url, { params: filters })
              .then(function(response) {
                ctx.ping_things_for_table = response.data;
-               ctx.filters_present = true
              })
       },
 
-      reset_filter() {
+      reset_filters() {
         this.filter_time = null
         this.posted_by = null
         this.success = ""
-        this.filters_present = false
-        this.ping_things_for_table = []
+        this.get_records()
+      },
+
+      filters_present() {
+        if(this.filter_time || this.posted_by || this.success) {
+          return true
+        } else {
+          return false
+        }
       }
     }
   }
