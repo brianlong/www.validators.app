@@ -38,7 +38,13 @@ module SolanaLogic
         p.payload[:network], p.payload[:batch_uuid]
       ).average_skipped_slot_percent
 
+      average_skipped_after_percent = Stats::ValidatorBlockHistory.new(
+        p.payload[:network], p.payload[:batch_uuid]
+      ).average_skipped_slots_after_percent
+
       batch&.skipped_slot_all_average = average_skipped_slot_percent
+      batch&.skipped_after_all_average = average_skipped_after_percent
+
       ##### /IMPORTANT
       batch&.gathered_at = Time.now # instead of batch.touch if batch
       batch&.save

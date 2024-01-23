@@ -54,11 +54,14 @@ export default {
         this.chart.destroy()
       }
       
-      var skipped_slot_percent_moving_average = this.skipped_after_array.map( (vector_element, index) => (
+      let skipped_after_percent_moving_average = this.skipped_after_array.map( (vector_element, index) => (
         vector_element['skipped_after_percent_moving_average']
       ))
-      var skipped_slot_percent = this.skipped_after_array.map( (vector_element, index) => (
+      let skipped_after_percent = this.skipped_after_array.map( (vector_element, index) => (
         vector_element['skipped_after_percent']
+      ))
+      let cluster_skipped_after_percent_moving_average = this.skipped_after_array.map( (vector_element, index) => (
+        vector_element['cluster_skipped_after_percent_moving_average']
       ))
 
       this.chart = new Chart(ctx, {
@@ -73,7 +76,7 @@ export default {
               backgroundColor: chart_variables.chart_purple_1_t,
               borderWidth: 1,
               radius: 0,
-              data: skipped_slot_percent_moving_average
+              data: skipped_after_percent_moving_average
             },
             {
               label: ' Actual Skipped After Slots  ',
@@ -83,7 +86,16 @@ export default {
               borderWidth: 1,
               borderDash: [2, 2],
               radius: 0,
-              data: skipped_slot_percent
+              data: skipped_after_percent
+            },
+            {
+              label: ' Cluster Avg',
+              fill: false,
+              borderColor: chart_variables.chart_purple_3,
+              backgroundColor: chart_variables.chart_purple_3_t,
+              borderWidth: 1,
+              radius: 0,
+              data: cluster_skipped_after_percent_moving_average
             }
           ]
         },
@@ -137,6 +149,8 @@ export default {
                     return "Moving Avg: " + tooltipItem.raw;
                   } else if (tooltipItem.datasetIndex == 1) {
                     return "Actual Skipped After Slots: " + tooltipItem.raw;
+                  } else {
+                    return "Cluster Avg: " + tooltipItem.raw;
                   }
                 },
                 title: function(tooltipItem) {
