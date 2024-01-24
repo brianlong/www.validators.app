@@ -4,22 +4,53 @@
 
     <stats-bar :network="network"/>
 
-    <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="h4 card-heading">
-          {{ capitalize(network) }} TX Confirmation Time Stats
-        </h2>
-        <stats-chart :network="network"/>
+    <div class="row mb-4">
+      <div class="col-6">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h4 card-heading">
+              {{ capitalize(network) }} TX Confirmation Time Stats
+            </h2>
+            <stats-chart :network="network"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h4 card-heading">
+              TX Time Last Obervations
+            </h2>
+            <bubble-chart :vector="ping_things.slice().reverse()" :network="network"/>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="h4 card-heading">TX Time Last Obervations</h2>
-        <bubble-chart :vector="ping_things.slice().reverse()" :network="network"/>
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <table class="table table-block-sm">
+            <thead>
+              <tr>
+                <th colspan="2">
+                  User
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(pt_array, usr) in ping_things_grouped_by_user" :key="usr">
+                <td>
+                  {{ usr }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
+    {{ ping_things_grouped_by_user }}
     <ping-thing-table :ping_things="ping_things_for_table()" :network="network" />
   </div>
 </template>
@@ -76,9 +107,22 @@
         });
     },
 
-    computed: mapGetters([
-      'network'
-    ]),
+    computed: {
+      ping_things_grouped_by_user: function() {
+        return this.ping_things.reduce(function(acc, obj) {
+          var key = obj.username;
+          if(!acc[key]) {
+            acc[key] = [];
+          }
+          acc[key].push(obj);
+          return acc;
+        }, {});
+      },
+      ...mapGetters([
+        'network'
+      ])
+    }
+,
 
     methods: {
       ping_things_for_table: function() {

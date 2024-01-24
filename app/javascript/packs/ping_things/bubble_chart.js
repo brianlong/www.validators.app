@@ -100,6 +100,13 @@ export default {
     }
   },
   template: `
-    <canvas :id="'ping-thing-bubble-chart'"></canvas>
+    <div>
+      <div class="text-center mb-4">
+        <div class="btn-group">
+
+        </div>
+      </div>
+      <canvas :id="'ping-thing-bubble-chart'"></canvas>
+    </div>
 `
 }
