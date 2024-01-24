@@ -30,7 +30,7 @@
   import statsChart from './stats_chart'
   import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
-  import pingThingTable from './ping_thing_table.vue'
+  import pingThingTable from './ping_thing_table'
   import statsBar from './stats_bar'
   import '../mixins/strings_mixins'
 
