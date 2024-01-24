@@ -124,6 +124,7 @@
       return {
         ping_things: [],
         api_url: '/api/v1/ping-thing/' + this.network,
+        limit: 60,
 
         // filters
         filter_time: null,
@@ -143,7 +144,9 @@
         received(data) {
           if(this.matches_network(data) && this.matches_filters(data)) {
             this.ping_things.unshift(data)
-            this.ping_things.pop()
+            if(this.ping_things.length > this.limit) {
+              this.ping_things.pop()
+            }
           }
         },
         disconnected() {},
@@ -226,7 +229,7 @@
           time_filter: ctx.filter_time,
           posted_by: ctx.posted_by,
           success: ctx.success,
-          limit: 60
+          limit: this.limit
         }
 
         axios.get(ctx.api_url, { params: filters })
