@@ -141,14 +141,7 @@
         connected() {},
         rejected() {},
         received(data) {
-          // TODO
-          // if new ping matches active filters
-          //   add record to ping_things
-          // else
-          //   don't update
-          console.log("new ping thing detected")
-          console.log(data)
-          if(data["network"] == this.network) {
+          if(this.matches_network(data) && this.matches_filters(data)) {
             this.ping_things.unshift(data)
             this.ping_things.pop()
           }
@@ -158,6 +151,37 @@
     },
 
     methods: {
+      matches_network(data) {
+        if(data["network"] == this.network) {
+          return true
+        } else {
+          return false
+        }
+      },
+
+      matches_filters(data) {
+        if(this.filter_time) {
+          let time = parseInt(data["response_time"])
+          if(time < parseInt(this.filter_time)) {
+            return false
+          }
+        }
+        if(this.posted_by) {
+          let username = data["username"]
+          let posted_by_regexp = new RegExp("^" + this.posted_by.toString());
+          if(!posted_by_regexp.test(username)) {
+            return false
+          }
+        }
+        if(this.success) {
+          let success = data["success"].toString()
+          if(success != this.success.toString()) {
+            return false
+          }
+        }
+        return true
+      },
+
       success_icon(success) {
         if(success) {
           return '<i class="fa-solid fa-circle-check text-success me-1"></i>'
