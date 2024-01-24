@@ -103,7 +103,7 @@ export default {
     }
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell text-center" :id="'skipped-slots-' + idx ">
+    <td class="column-chart d-none d-lg-table-cell text-center" :id="'skipped-after-' + idx ">
       <canvas :id=" 'spark_line_skipped_after_' + validator['account'] " v-if="validator && validator['skipped_after_history'] && validator['skipped_after_history'].length > 0"></canvas>
       <span v-else class="text-muted"> N/A </span>
     </td>
