@@ -27,7 +27,7 @@ export default {
       this[index] = part * 100;
     }, skipped_after_ma_vector)
 
-    var skipped_after_score = 2 // TODO change this after adding the score to the validator API
+    var skipped_after_score = this.validator['skipped_after_score']
     return {
       skipped_after_distance_chart: {
         line_color: this.$parent.chart_line_color(skipped_after_score),

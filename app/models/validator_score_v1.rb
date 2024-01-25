@@ -68,6 +68,7 @@ class ValidatorScoreV1 < ApplicationRecord
     root_distance_score
     security_report_score
     skipped_slot_score
+    skipped_after_score
     software_version
     software_version_score
     stake_concentration_score
@@ -75,7 +76,7 @@ class ValidatorScoreV1 < ApplicationRecord
     total_score
     validator_id
     vote_distance_score
-  ].freeze # TODO skipped_after_score
+  ].freeze
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
     active_stake
