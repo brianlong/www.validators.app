@@ -352,7 +352,7 @@
           skipped_slots_moving_avg = validator.score&.skipped_after_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
           slot_vector = validator.score&.skipped_after_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
-          line_color = chart_line_color(2) # TODO: change to validator.skipped_slot_score after adding skipped_after_score to API
+          line_color = chart_line_color(validator.score&.skipped_after_score)
         %>
         <% if slot_vector.count > 0 %>
           <%= render 'validators/validator_skipped_slots_chart',
