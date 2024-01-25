@@ -8,19 +8,22 @@
                  type="number"
                  class="form-control"
                  step="10"
-                 placeholder="Minimum time (ms)">
+                 placeholder="Minimum time (ms)"
+                 v-on:keyup.enter="get_records()">
         </div>
         <div>
           <input name="posted_by"
                  v-model="posted_by"
                  type="text"
                  class="form-control"
-                 placeholder="Posted By">
+                 placeholder="Posted By"
+                 v-on:keyup.enter="get_records()">
         </div>
         <div>
           <select name="success"
                   v-model="success"
-                  class="form-select form-control">
+                  class="form-select form-control"
+                  v-on:keyup.enter="get_records()">
             <option value="" selected>Status (all)</option>
             <option value="true">success</option>
             <option value="false">failure</option>
@@ -65,7 +68,7 @@
           </thead>
 
           <tbody>
-          <tr v-for="(pt) in ping_things" :key="pt.id">
+          <tr v-for="pt in ping_things" :key="pt.id">
             <td class="text-nowrap">
               <span v-html="success_icon(pt.success)"></span>
               <strong class="text-success h6">{{ pt.response_time.toLocaleString('en-US') }}</strong>&nbsp;ms
