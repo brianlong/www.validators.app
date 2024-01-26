@@ -321,6 +321,40 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .skipped_slot_score
   end
 
+  test '#assign_block_history_score returns 0 for skipped_slot_score and skipped_after_score if payload is nil' do
+    mock = Minitest::Mock.new(
+      {
+        average_skipped_slot_percent: nil,
+        median_skipped_slot_percent: nil,
+        average_skipped_slots_after_percent: nil,
+        median_skipped_slots_after_percent: nil
+      }
+    )
+    mock.expect :average_skipped_slot_percent, nil
+    mock.expect :median_skipped_slot_percent, nil
+    mock.expect :average_skipped_slots_after_percent, nil
+    mock.expect :median_skipped_slots_after_percent, nil
+
+    Stats::ValidatorBlockHistory.stub(:new, mock) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&set_this_batch)
+                  .then(&validators_get)
+                  .then(&block_vote_history_get)
+                  .then(&assign_block_and_vote_scores)
+                  .then(&block_history_get)
+                  .then(&assign_block_history_score)
+
+      assert_nil p.payload[:avg_skipped_slot_pct_all]
+      assert_nil p.payload[:med_skipped_slot_pct_all]
+      assert_nil p.payload[:avg_skipped_after_pct_all]
+      assert_nil p.payload[:med_skipped_after_pct_all]
+
+      score = p.payload[:validators].first.validator_score_v1
+      assert_equal 0, score.skipped_slot_score
+      assert_equal 0, score.skipped_after_score
+    end
+  end
+
   test 'assign_software_version_score' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
