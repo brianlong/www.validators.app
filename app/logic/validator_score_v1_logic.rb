@@ -306,6 +306,7 @@ module ValidatorScoreV1Logic
           else
             0
           end
+
         validator.validator_score_v1.skipped_after_score = \
           if skipped_after_avg_percent.nil?
             0
