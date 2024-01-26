@@ -38,7 +38,13 @@ module SolanaLogic
         p.payload[:network], p.payload[:batch_uuid]
       ).average_skipped_slot_percent
 
+      average_skipped_after_percent = Stats::ValidatorBlockHistory.new(
+        p.payload[:network], p.payload[:batch_uuid]
+      ).average_skipped_slots_after_percent
+
       batch&.skipped_slot_all_average = average_skipped_slot_percent
+      batch&.skipped_after_all_average = average_skipped_after_percent
+
       ##### /IMPORTANT
       batch&.gathered_at = Time.now # instead of batch.touch if batch
       batch&.save
@@ -592,10 +598,11 @@ module SolanaLogic
       return p unless p[:code] == 200
 
       p.payload[:validators_info].each do |result|
-        validator = Validator.find_or_create_by(
+        validator = Validator.find_by(
           network: p.payload[:network],
           account: result['identityPubkey']
         )
+        next unless validator
 
         utf_8_name = result['info']['name'].to_s.encode_utf_8.strip
         validator.name = utf_8_name unless utf_8_name.to_s.downcase.include?('script')

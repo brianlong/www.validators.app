@@ -321,7 +321,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                      .skipped_slot_score
   end
 
-  test '#assign_block_history_score returns 0 for skipped_slot_score and skipped_after_score if payload is nil' do
+  test '#assign_block_history_score returns valid skipped_slot_score and skipped_after_score if payload is nil' do
     mock = Minitest::Mock.new(
       {
         average_skipped_slot_percent: nil,
@@ -351,7 +351,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
       score = p.payload[:validators].first.validator_score_v1
       assert_equal 0, score.skipped_slot_score
-      assert_equal 0, score.skipped_after_score
+      assert_equal 2, score.skipped_after_score
     end
   end
 
