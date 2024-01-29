@@ -310,9 +310,9 @@ module ValidatorScoreV1Logic
         validator.validator_score_v1.skipped_after_score = \
           if skipped_after_avg_percent.nil?
             0
-          elsif skipped_after_avg_percent <= p.payload[:med_skipped_after_pct_all]
+          elsif skipped_after_avg_percent.to_f <= p.payload[:med_skipped_after_pct_all].to_f
             2
-          elsif skipped_after_avg_percent <= p.payload[:avg_skipped_after_pct_all]
+          elsif skipped_after_avg_percent.to_f <= p.payload[:avg_skipped_after_pct_all].to_f
             1
           else
             0
