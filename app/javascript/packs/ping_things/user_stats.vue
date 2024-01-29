@@ -1,0 +1,181 @@
+<template>
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <table class="table table-block-sm text-lg-center">
+          <thead>
+            <tr>
+              <th>
+                User<br />
+                <span class="text-muted text-small">5 mins</span><br />
+                <span class="text-muted text-small">60 mins</span>
+              </th>
+              <th>
+                <i class="fa-solid fa-calculator text-success me-2"></i>
+                Entries
+              </th>
+              <th>
+                <i class="fa-solid fa-circle-xmark text-success me-2"></i>
+                Failures
+              </th>
+              <th>
+                <i class="fa-solid fa-down-long text-success me-2"></i>
+                Min
+              </th>
+              <th>
+                <i class="fa-solid fa-divide text-success me-2"></i>
+                Median
+              </th>
+              <th>
+                <i class="fa-solid fa-up-long text-success me-2"></i>
+                P90
+              </th>
+              <th>
+                <i class="fa-solid fa-clock text-success me-2"></i>
+                Latency
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(stats_array, usr) in stats_grouped_by_user" :key="usr">
+              <td>
+                {{ usr }}
+              </td>
+              <td class="text-success">
+                {{ stats_array["5min"]["num_of_records"] ? stats_array["5min"]["num_of_records"] : '0' }}
+                <br />
+                {{ stats_array["60min"]["num_of_records"] ? stats_array["60min"]["num_of_records"] : '0'}}
+              </td>
+              <td class="text-success">
+                {{ stats_array["5min"]["fails_count"] ? stats_array["5min"]["fails_count"] : '0'}}
+                <span class="text-muted">
+                  {{ fails_count_percentage(stats_array["5min"]["fails_count"], stats_array["5min"]["num_of_records"]) }}
+                </span>
+                <br />
+                {{ stats_array["60min"]["fails_count"] ? stats_array["60min"]["fails_count"] : '0'}}
+                <span class="text-muted">
+                  {{ fails_count_percentage(stats_array["60min"]["fails_count"], stats_array["60min"]["num_of_records"]) }}
+                </span>
+              </td>
+              <td class="text-success">
+                {{ stats_array["5min"]["min"] ? stats_array["5min"]["min"] : 'N / A'}}
+                <br />
+                {{ stats_array["60min"]["min"] ? stats_array["60min"]["min"] : 'N / A'}}
+              </td>
+              <td class="text-success">
+                {{ stats_array["5min"]["median"] ? stats_array["5min"]["median"] : 'N / A'}}
+                <br />
+                {{ stats_array["60min"]["median"] ? stats_array["60min"]["median"] : 'N / A'}}
+              </td>
+              <td class="text-success">
+                {{ stats_array["5min"]["p90"] ? stats_array["5min"]["p90"] : 'N / A'}}
+                <br />
+                {{ stats_array["60min"]["p90"] ? stats_array["60min"]["p90"] : 'N / A'}}
+              </td>
+              <td class="text-success">
+                {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"] : 'N / A'}}
+                <br />
+                {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"] : 'N / A'}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import axios from 'axios'
+  import '../mixins/strings_mixins'
+
+  axios.defaults.headers.get["Authorization"] = window.api_authorization
+
+  export default {
+    props: {
+      network: {
+        default: "mainnet"
+      }
+    },
+
+    data () {
+      return {
+        last_5_mins: [],
+        last_60_mins: [],
+        api_url: null
+      }
+    },
+
+    created () {
+      this.api_url = '/api/v1/ping-thing-user-stats/' + this.network
+      var ctx = this
+      axios.get(ctx.api_url)
+           .then(function(response) {
+             console.log(response.data)
+             ctx.last_5_mins = JSON.parse(response.data.last_5_mins) ? JSON.parse(response.data.last_5_mins) : [];
+             ctx.last_60_mins = JSON.parse(response.data.last_60_mins) ? JSON.parse(response.data.last_60_mins) : [];
+           })
+      
+      
+    },
+
+    mounted: function() {
+      this.$cable.subscribe({
+          channel: "PingThingUserStatChannel",
+          room: "public",
+        });
+    },
+
+    computed: {
+      stats_grouped_by_user: function() {
+        let grouped = {}
+        this.last_5_mins.forEach(function(stat) {
+          if(!grouped[stat["username"]]) {
+            grouped[stat["username"]] = {}
+            grouped[stat["username"]]["5min"] = {}
+            grouped[stat["username"]]["60min"] = {}
+          }
+          grouped[stat["username"]]["5min"] = stat
+        })
+        this.last_60_mins.forEach(function(stat) {
+          if(!grouped[stat["username"]]) {
+            grouped[stat["username"]] = {}
+            grouped[stat["username"]]["5min"] = {}
+            grouped[stat["username"]]["60min"] = {}
+          }
+          grouped[stat["username"]]["60min"] = stat
+        })
+        return grouped
+      }
+    },
+
+    channels: {
+      PingThingUserStatChannel: {
+        connected() {},
+        rejected() {},
+        received(data) {
+          data = JSON.parse(data)
+          if(data["network"] == this.network) {
+            console.log(data["interval"])
+            console.log(data["stats"])
+              switch(data["interval"]) {
+                case 5:
+                  this.last_5_mins = data["stats"]
+                  break
+                case 60:
+                  this.last_60_mins = data["stats"]
+                  break
+              }
+          }
+        },
+        disconnected() {},
+      },
+    },
+
+    methods: {
+      fails_count_percentage: function(fails_count, num_of_records) {
+        return fails_count ? '(' + (fails_count / num_of_records * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : ''
+      }
+    }
+  }
+</script>

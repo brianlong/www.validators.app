@@ -3,7 +3,7 @@
     <ping-thing-header />
 
     <stats-bar :network="network"/>
-
+    <user-stats :network="network"/>
     <div class="row mb-4">
       <div class="col-6">
         <div class="card h-100">
@@ -27,30 +27,6 @@
         </div>
       </div>
     </div>
-
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="card">
-          <table class="table table-block-sm">
-            <thead>
-              <tr>
-                <th colspan="2">
-                  User
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(pt_array, usr) in ping_things_grouped_by_user" :key="usr">
-                <td>
-                  {{ usr }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    {{ ping_things_grouped_by_user }}
     <ping-thing-table :ping_things="ping_things_for_table()" :network="network" />
   </div>
 </template>
@@ -63,6 +39,7 @@
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
   import statsBar from './stats_bar'
+  import userStats from './user_stats'
   import '../mixins/strings_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
@@ -112,9 +89,15 @@
         return this.ping_things.reduce(function(acc, obj) {
           var key = obj.username;
           if(!acc[key]) {
-            acc[key] = [];
+            acc[key] = {}
+            acc[key]["5min"] = [];
+            acc[key]["60min"] = [];
           }
-          acc[key].push(obj);
+          if (Moment(obj.reported_at).isAfter(Moment().subtract(5, 'minutes'))) {
+            acc[key]["5min"].push(obj);
+          } else if (Moment(obj.reported_at).isAfter(Moment().subtract(60, 'minutes'))) {
+            acc[key]["60min"].push(obj);
+          }
           return acc;
         }, {});
       },
@@ -139,7 +122,8 @@
       "bubble-chart": bubbleChart,
       "ping-thing-header": pingThingHeader,
       "ping-thing-table": pingThingTable,
-      "stats-bar": statsBar
+      "stats-bar": statsBar,
+      "user-stats": userStats
     }
   }
 
