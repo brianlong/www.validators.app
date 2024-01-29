@@ -38,7 +38,7 @@ class PingThingUserStatsService
   def delete_old_stats
     PingThingUserStat.where(network: @network, interval: @interval)
                      .where('updated_at < ?', @interval.minutes.ago)
-                     .delete_all
+                     .destroy_all
   end
 
   def gather_ping_things
