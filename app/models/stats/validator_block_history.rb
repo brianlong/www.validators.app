@@ -68,9 +68,13 @@ module Stats
     def average_skipped_slots_after_percent
       relation.average(:skipped_slots_after_percent)
     end
-  
+
     def median_skipped_slots_after_percent
       array_median(relation.pluck(:skipped_slots_after_percent).compact)
+    end
+
+    def data_for_validator_skipped_score
+      relation.pluck(:validator_id, :skipped_slot_percent, :skipped_slot_percent_moving_average, :skipped_slot_after_percent_moving_average, :skipped_slots_after_percent)
     end
   end
 end

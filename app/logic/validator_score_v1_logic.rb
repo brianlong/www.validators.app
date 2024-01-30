@@ -179,7 +179,7 @@ module ValidatorScoreV1Logic
                               .at_33_stake
                               .validator
                               .active_stake
-                              
+
       p.payload[:validators].each do |v|
         # Assign the root_distance_score
         avg_root_distance = v.validator_score_v1.avg_root_distance_history(960)
@@ -235,40 +235,33 @@ module ValidatorScoreV1Logic
     lambda do |p|
       return p unless p.code == 200
 
+      # Pull all ValidatorBlockHistories (all validators) for current batch and network
       vbh_stats = Stats::ValidatorBlockHistory.new(p.payload[:network], p.payload[:batch_uuid])
+
+      # Calculate cluster skipped slots stats
       avg_skipped_slot_pct_all = vbh_stats.average_skipped_slot_percent
       med_skipped_slot_pct_all = vbh_stats.median_skipped_slot_percent
-
       avg_skipped_after_pct_all = vbh_stats.average_skipped_slots_after_percent
       med_skipped_after_pct_all = vbh_stats.median_skipped_slots_after_percent
 
-        vbh_sql = <<-SQL_END
-        SELECT vbh.validator_id,
-               vbh.skipped_slot_percent,
-               vbh.skipped_slot_percent_moving_average,
-               vbh.skipped_slot_after_percent_moving_average,
-               vbh.skipped_slots_after_percent
-        FROM validator_block_histories vbh
-        WHERE vbh.network = '#{p.payload[:network]}' AND vbh.batch_uuid = '#{p.payload[:batch_uuid]}'
-      SQL_END
-
-      vbh = ActiveRecord::Base.connection.execute(vbh_sql).to_a
-
+      # Add data to validator score histories
+      vbh = vbh_stats.data_for_validator_skipped_score
       p.payload[:validators].each do |validator|
-        last_validator_block_history_for_validator = vbh.find { |r| r.first == validator.id }
+        validator_block_history = vbh.find { |r| r.first == validator.id }
 
-        next unless last_validator_block_history_for_validator.present?
+        next unless validator_block_history.present?
 
-        skipped_slot_percent = last_validator_block_history_for_validator[1]
-        validator.score.skipped_slot_history_push(skipped_slot_percent.to_f)
-        validator.validator_score_v1.skipped_after_history_push(
-          last_validator_block_history_for_validator[4].to_f
-        )
+        # Add to skipped slots history
+        # validator_block_history[1] - skipped_slot_percent
+        # validator_block_history[4] - skipped_slots_after_percent
+        validator.score.skipped_slot_history_push(validator_block_history[1].to_f)
+        validator.score.skipped_after_history_push(validator_block_history[4].to_f)
 
-        slots_moving_average = last_validator_block_history_for_validator[2]
-        after_moving_average = last_validator_block_history_for_validator[3]
-        validator.score.skipped_slot_moving_average_history_push(slots_moving_average.to_f)
-        validator.score.skipped_after_moving_average_history_push(after_moving_average.to_f)
+        # Add to skipped slots moving average history
+        # validator_block_history[2] - skipped_slot_percent_moving_average
+        # validator_block_history[3] - skipped_slot_after_percent_moving_average
+        validator.score.skipped_slot_moving_average_history_push(validator_block_history[2].to_f)
+        validator.score.skipped_after_moving_average_history_push(validator_block_history[3].to_f)
       rescue StandardError => e
         Appsignal.send_error(e)
       end
