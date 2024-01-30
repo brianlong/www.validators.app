@@ -107,9 +107,10 @@ Rails.application.routes.draw do
   get 'commission-changes/(:validator_id)',
       to: 'public#commission_histories',
       as: 'commission_histories'
-  get 'authorities_changes/(:vote_account_id)',
+  get 'authorities-changes/(:vote_account_id)',
       to: 'public#authorities_changes',
       as: 'authorities_changes'
+  get 'authorities_changes/(:vote_account_id)', to: 'public#authorities_changes'
 
   get 'stake-explorer', to: 'explorer_stake_accounts#index', as: 'explorer_stake_accounts'
   get 'stake-explorer/:stake_pubkey', to: 'explorer_stake_accounts#show', as: 'explorer_stake_account'
