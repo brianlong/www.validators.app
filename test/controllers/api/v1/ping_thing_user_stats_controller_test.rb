@@ -4,10 +4,10 @@ require "test_helper"
 
 class PingThingUserStatsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = create(:user)
+    @user = create(:user, username: "test")
     @headers = { "Token" => @user.api_token }
 
-    @stats = create(:ping_thing_user_stat, user_id: @user.id)
+    @stats = create(:ping_thing_user_stat, user_id: @user.id, username: @user.username)
   end
 
   test "GET api_v1_ping_thing_user_stats without token returns error" do
@@ -24,9 +24,12 @@ class PingThingUserStatsControllerTest < ActionDispatch::IntegrationTest
     ), headers: @headers
     assert_response 200
 
+    expected_response = {
+      @user.username => [@stats.attributes]
+    }.to_json
     resp = JSON.parse(@response.body)
 
     refute resp["last_5_mins"].blank?
-    assert_equal [@stats].to_json, resp["last_5_mins"]
+    assert_equal expected_response, resp["last_5_mins"]
   end
 end
