@@ -320,7 +320,7 @@
       </td>
 
       <!-- SKIPPED SLOTS  -->
-      <td class="column-chart d-none d-lg-table-cell" id="skipped-slots-<%=i%>">
+      <td class="column-chart d-none d-lg-table-cell text-center" id="skipped-slots-<%=i%>">
         <%
           vl = chart_x_scale(validator.score&.skipped_slot_history.to_a.count)
           ma = chart_x_scale(validator.score&.skipped_slot_moving_average_history.to_a.count)
@@ -330,17 +330,21 @@
 
           line_color = chart_line_color(validator.skipped_slot_score)
         %>
-        <%= render 'validators/validator_skipped_slots_chart',
-                   chart_name: "skipped_slots_#{validator.account}",
-                   account: validator.account,
-                   vector: slot_vector,
-                   line_color: line_color,
-                   moving_avg_vector: skipped_slots_moving_avg
-        %>
+        <% if slot_vector.count > 0 %>
+          <%= render 'validators/validator_skipped_slots_chart',
+                    chart_name: "skipped_slots_#{validator.account}",
+                    account: validator.account,
+                    vector: slot_vector,
+                    line_color: line_color,
+                    moving_avg_vector: skipped_slots_moving_avg
+          %>
+        <% else %>
+          <span class="text-muted">N/A</span>
+        <% end %>
       </td>
 
       <!-- SKIPPED AFTER -->
-      <td class="column-chart d-none d-lg-table-cell" id="skipped-after-<%=i%>">
+      <td class="column-chart d-none d-lg-table-cell text-center" id="skipped-after-<%=i%>">
         <%
           vl = chart_x_scale(validator.score&.skipped_after_history.to_a.count)
           ma = chart_x_scale(validator.score&.skipped_after_moving_average_history.to_a.count)
@@ -348,15 +352,19 @@
           skipped_slots_moving_avg = validator.score&.skipped_after_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
           slot_vector = validator.score&.skipped_after_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
 
-          line_color = chart_line_color(2) # TODO: change to validator.skipped_slot_score after adding skipped_after_score to API
+          line_color = chart_line_color(validator.score&.skipped_after_score)
         %>
-        <%= render 'validators/validator_skipped_slots_chart',
-                   chart_name: "skipped_after_#{validator.account}",
-                   account: validator.account,
-                   vector: slot_vector,
-                   line_color: line_color,
-                   moving_avg_vector: skipped_slots_moving_avg
-        %>
+        <% if slot_vector.count > 0 %>
+          <%= render 'validators/validator_skipped_slots_chart',
+                    chart_name: "skipped_after_#{validator.account}",
+                    account: validator.account,
+                    vector: slot_vector,
+                    line_color: line_color,
+                    moving_avg_vector: skipped_slots_moving_avg
+          %>
+        <% else %>
+          <span class="text-muted">N/A</span>
+        <% end %>
       </td>
     </tr>
 

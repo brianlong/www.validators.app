@@ -27,7 +27,8 @@
         </div>
       </div>
     </div>
-    <ping-thing-table :ping_things="ping_things_for_table()" :network="network" />
+
+    <ping-thing-table :network="network" />
   </div>
 </template>
 
@@ -49,7 +50,6 @@
       return {
         ping_things: [],
         page: 1,
-        records_in_table: 60,
         api_url: null
       }
     },
@@ -69,8 +69,8 @@
         rejected() {},
         received(data) {
           if(data["network"] == this.network) {
-              this.ping_things.unshift(data)
-              this.ping_things.pop()
+            this.ping_things.unshift(data)
+            this.ping_things.pop()
           }
         },
         disconnected() {},
@@ -107,15 +107,7 @@
     }
 ,
 
-    methods: {
-      ping_things_for_table: function() {
-        if(this.ping_things.length <= this.records_in_table) {
-          return this.ping_things
-        } else {
-          return this.ping_things.slice(0, this.records_in_table)
-        }
-      }
-    },
+    methods: {},
 
     components: {
       "stats-chart": statsChart,
