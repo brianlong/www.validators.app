@@ -1,5 +1,9 @@
 #frozen_string_literal: true
 
+require File.expand_path('../config/environment', __dir__)
+
+raise "Dev script can't be executed on production" if Rails.env.production?
+
 pt_count = 0
 
 interrupted = false

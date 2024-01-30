@@ -4,6 +4,9 @@
 #
 # ruby dev/show_account_history.rb [ACCOUNT]
 require File.expand_path('../config/environment', __dir__)
+
+raise "Dev script can't be executed on production" if Rails.env.production?
+
 require 'csv'
 
 account = ARGV[0]

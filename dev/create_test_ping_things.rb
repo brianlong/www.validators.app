@@ -2,6 +2,8 @@
 
 require File.expand_path("../config/environment", __dir__)
 
+raise "Dev script can't be executed on production" if Rails.env.production?
+
 counts = [{count: 5000, min_time: 700,   max_time: 4000},
           {count: 1000, min_time: 4000,  max_time: 12000},
           {count: 500,  min_time: 12000, max_time: 20000},
