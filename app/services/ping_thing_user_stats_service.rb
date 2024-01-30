@@ -1,4 +1,5 @@
 class PingThingUserStatsService
+
   def initialize(network: "mainnet", interval: 5)
     @network = network
     @interval = interval
@@ -58,7 +59,7 @@ def broadcast
   data = {
     network: @network,
     interval: @interval,
-    stats: @stats
+    stats: @stats.group_by(&:username)
   }
   ActionCable.server.broadcast("ping_thing_user_stat_channel", data.to_json)
 end

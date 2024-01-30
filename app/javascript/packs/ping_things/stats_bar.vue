@@ -89,7 +89,7 @@
             <div class="col-12 col-lg-7">
               <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures:&nbsp;</span>
               <span class="text-success">
-                {{ (last_60_mins["fails_count"] || last_60_mins["fails_count"] === 0) ? last_60_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
+                {{ fails_count_percentage(last_60_mins["fails_count"], last_60_mins["num_of_records"]) }}
               </span>
               <span class="text-muted">
                 {{ last_60_mins["fails_count"] ? '(' + (last_60_mins["fails_count"] / last_60_mins["num_of_records"] * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : '' }}
@@ -128,6 +128,8 @@
 
 <script>
   import axios from 'axios'
+  import '../mixins/ping_things_mixins'
+
 
   export default {
     props: {

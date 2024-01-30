@@ -88,6 +88,7 @@
 <script>
   import axios from 'axios'
   import '../mixins/strings_mixins'
+  import '../mixins/ping_things_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -100,8 +101,8 @@
 
     data () {
       return {
-        last_5_mins: [],
-        last_60_mins: [],
+        last_5_mins: {},
+        last_60_mins: {},
         api_url: null
       }
     },
@@ -111,9 +112,8 @@
       var ctx = this
       axios.get(ctx.api_url)
            .then(function(response) {
-             console.log(response.data)
-             ctx.last_5_mins = JSON.parse(response.data.last_5_mins) ? JSON.parse(response.data.last_5_mins) : [];
-             ctx.last_60_mins = JSON.parse(response.data.last_60_mins) ? JSON.parse(response.data.last_60_mins) : [];
+             ctx.last_5_mins = JSON.parse(response.data.last_5_mins) ? JSON.parse(response.data.last_5_mins) : {};
+             ctx.last_60_mins = JSON.parse(response.data.last_60_mins) ? JSON.parse(response.data.last_60_mins) : {};
            })
       
       
@@ -129,22 +129,22 @@
     computed: {
       stats_grouped_by_user: function() {
         let grouped = {}
-        this.last_5_mins.forEach(function(stat) {
-          if(!grouped[stat["username"]]) {
-            grouped[stat["username"]] = {}
-            grouped[stat["username"]]["5min"] = {}
-            grouped[stat["username"]]["60min"] = {}
+        let usernames = Object.keys(this.last_5_mins).concat(Object.keys(this.last_60_mins))
+        usernames = [...new Set(usernames)]
+        let ctx = this
+        usernames.forEach(function(name) {
+          grouped[name] = {
+            "5min": {},
+            "60min": {}
           }
-          grouped[stat["username"]]["5min"] = stat
-        })
-        this.last_60_mins.forEach(function(stat) {
-          if(!grouped[stat["username"]]) {
-            grouped[stat["username"]] = {}
-            grouped[stat["username"]]["5min"] = {}
-            grouped[stat["username"]]["60min"] = {}
+          if(ctx.last_5_mins[name]) {
+            grouped[name]["5min"] = ctx.last_5_mins[name].constructor === Array ? ctx.last_5_mins[name][0] : ctx.last_5_mins[name]  
           }
-          grouped[stat["username"]]["60min"] = stat
+          if(ctx.last_60_mins[name]) {
+            grouped[name]["60min"] = ctx.last_60_mins[name].constructor === Array ? ctx.last_60_mins[name][0] : ctx.last_60_mins[name]  
+          }
         })
+        
         return grouped
       }
     },
@@ -156,8 +156,6 @@
         received(data) {
           data = JSON.parse(data)
           if(data["network"] == this.network) {
-            console.log(data["interval"])
-            console.log(data["stats"])
               switch(data["interval"]) {
                 case 5:
                   this.last_5_mins = data["stats"]
@@ -171,11 +169,5 @@
         disconnected() {},
       },
     },
-
-    methods: {
-      fails_count_percentage: function(fails_count, num_of_records) {
-        return fails_count ? '(' + (fails_count / num_of_records * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : ''
-      }
-    }
   }
 </script>

@@ -7,11 +7,12 @@ module Api
         last_5_mins = PingThingUserStat.where(
           network: stats_params[:network],
           interval: 5
-        )
+        ).group_by(&:username)
         last_60_mins = PingThingUserStat.where(
           network: stats_params[:network],
           interval: 60
-        )
+        ).group_by(&:username)
+
 
         render json: {
           last_5_mins: last_5_mins.to_json,
