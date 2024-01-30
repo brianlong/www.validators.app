@@ -35,12 +35,6 @@ class PublicController < ApplicationController
     @title = t('public.privacy_policy.title')
   end
 
-  def sample_chart; end
-
-  def stake_boss
-    @title = t('public.stake_boss.title')
-  end
-
   def contact_us
     @title = t('public.contact_us.title')
   end

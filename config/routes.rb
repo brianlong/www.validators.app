@@ -84,7 +84,6 @@ Rails.application.routes.draw do
 
   # Public Controller
   get 'contact-us', to: 'public#contact_us'
-  get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
   get 'api-documentation',
       to: 'public#api_documentation',
       as: 'api_documentation'
@@ -93,7 +92,6 @@ Rails.application.routes.draw do
   get 'faq', to: 'public#faq'
   get 'privacy-policy-california', to: 'public#privacy_policy_california'
   get 'privacy-policy', to: 'public#privacy_policy'
-  get 'sample-chart', to: 'public#sample_chart'
   get 'terms-of-use', to: 'public#terms_of_use'
   get 'commission-changes/mainnet/(:validator_id)',
       to: redirect( '/commission-changes/%{validator_id}?network=mainnet'),
