@@ -6,40 +6,33 @@
           <table class="table text-center">
             <thead>
               <tr>
-                <th>
+                <th class="column-md px-0">
                   User<br />
-                  <span class="text-muted text-small">5 mins</span><br />
-                  <span class="text-muted text-small">60 mins</span>
+                  <small class="text-muted text-small">5 min / 60 min</small>
                 </th>
-                <th>
-                  <i class="fa-solid fa-calculator text-success mx-3 mx-sm-3 ms-lg-0 me-lg-2"></i>
-                  Entries
+                <th class="column-sm px-0">
+                  <i class="fa-solid fa-calculator text-success me-2"></i>Entries
                 </th>
-                <th>
-                  <i class="fa-solid fa-circle-xmark text-success mx-3 mx-sm-3 ms-lg-0 me-lg-2"></i>
-                  Failures
+                <th class="column-sm px-0">
+                  <i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures
                 </th>
-                <th>
-                  <i class="fa-solid fa-down-long text-success mx-3 mx-sm-3 ms-lg-0 me-lg-2"></i>
-                  Min
+                <th class="column-sm px-0">
+                  <i class="fa-solid fa-down-long text-success me-2"></i>Min
                 </th>
-                <th>
-                  <i class="fa-solid fa-divide text-success mx-3 mx-sm-3 ms-lg-0 me-lg-2"></i>
-                  Median
+                <th class="column-sm px-0">
+                  <i class="fa-solid fa-divide text-success me-2"></i>Median
                 </th>
-                <th>
-                  <i class="fa-solid fa-up-long text-success mx-3 mx-sm-3 ms-lg-0 me-lg-2"></i>
-                  P90
+                <th class="column-sm px-0">
+                  <i class="fa-solid fa-up-long text-success me-2"></i>P90
                 </th>
-                <th>
-                  <i class="fa-solid fa-clock text-success mx-3 mx-sm-3 ms-lg-0 me-lg-2"></i>
-                  Latency
+                <th class="column-sm px-0">
+                  <i class="fa-solid fa-clock text-success me-2"></i>Latency
                 </th>
               </tr>
             </thead>
-            <tbody class="text-nowrap">
+            <tbody>
               <tr v-for="(stats_array, usr) in stats_grouped_by_user" :key="usr">
-                <td>
+                <td class="text-break">
                   {{ usr }}
                 </td>
                 <td class="text-success">
@@ -138,13 +131,13 @@
             "60min": {}
           }
           if(ctx.last_5_mins[name]) {
-            grouped[name]["5min"] = ctx.last_5_mins[name].constructor === Array ? ctx.last_5_mins[name][0] : ctx.last_5_mins[name]  
+            grouped[name]["5min"] = ctx.last_5_mins[name].constructor === Array ? ctx.last_5_mins[name][0] : ctx.last_5_mins[name]
           }
           if(ctx.last_60_mins[name]) {
-            grouped[name]["60min"] = ctx.last_60_mins[name].constructor === Array ? ctx.last_60_mins[name][0] : ctx.last_60_mins[name]  
+            grouped[name]["60min"] = ctx.last_60_mins[name].constructor === Array ? ctx.last_60_mins[name][0] : ctx.last_60_mins[name]
           }
         })
-        
+
         return grouped
       }
     },
