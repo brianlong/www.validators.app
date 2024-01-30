@@ -252,10 +252,14 @@ module ValidatorScoreV1Logic
         next unless validator_block_history.present?
 
         # Add to skipped slots history
+        # validator_block_history[1] - skipped_slot_percent
+        # validator_block_history[4] - skipped_slots_after_percent
         validator.score.skipped_slot_history_push(validator_block_history[1].to_f)
         validator.score.skipped_after_history_push(validator_block_history[4].to_f)
 
         # Add to skipped slots moving average history
+        # validator_block_history[2] - skipped_slot_percent_moving_average
+        # validator_block_history[3] - skipped_slot_after_percent_moving_average
         validator.score.skipped_slot_moving_average_history_push(validator_block_history[2].to_f)
         validator.score.skipped_after_moving_average_history_push(validator_block_history[3].to_f)
       rescue StandardError => e
