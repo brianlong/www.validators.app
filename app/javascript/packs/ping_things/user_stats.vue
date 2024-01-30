@@ -117,8 +117,6 @@
              ctx.last_5_mins = JSON.parse(response.data.last_5_mins) ? JSON.parse(response.data.last_5_mins) : {};
              ctx.last_60_mins = JSON.parse(response.data.last_60_mins) ? JSON.parse(response.data.last_60_mins) : {};
            })
-      
-      
     },
 
     mounted: function() {

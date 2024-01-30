@@ -29,7 +29,6 @@ class PingThingUserStatsControllerTest < ActionDispatch::IntegrationTest
     }.to_json
     resp = JSON.parse(@response.body)
 
-    refute resp["last_5_mins"].blank?
     assert_equal expected_response, resp["last_5_mins"]
   end
 end
