@@ -6,7 +6,7 @@
           <table class="table text-center">
             <thead>
               <tr>
-                <th class="column-md px-0">
+                <th class="column-sm px-0">
                   User<br />
                   <small class="text-muted text-small">5 min / 60 min</small>
                 </th>
@@ -32,7 +32,7 @@
             </thead>
             <tbody>
               <tr v-for="(stats_array, usr) in stats_grouped_by_user" :key="usr">
-                <td class="text-break">
+                <td>
                   {{ usr }}
                 </td>
                 <td class="text-success">
@@ -40,7 +40,7 @@
                   <br />
                   {{ stats_array["60min"]["num_of_records"] ? stats_array["60min"]["num_of_records"] : '0'}}
                 </td>
-                <td class="text-success">
+                <td class="text-success text-nowrap">
                   {{ stats_array["5min"]["fails_count"] ? stats_array["5min"]["fails_count"] : '0'}}
                   <span class="text-muted text-small">
                     {{ fails_count_percentage(stats_array["5min"]["fails_count"], stats_array["5min"]["num_of_records"]) }}
