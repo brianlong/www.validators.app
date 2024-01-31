@@ -3,20 +3,28 @@
     <ping-thing-header />
 
     <stats-bar :network="network"/>
-
-    <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="h4 card-heading">
-          {{ capitalize(network) }} TX Confirmation Time Stats
-        </h2>
-        <stats-chart :network="network"/>
+    <user-stats :network="network"/>
+    <div class="row">
+      <div class="col-md-12 col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h4 card-heading">
+              {{ capitalize(network) }} TX Confirmation Time Stats
+            </h2>
+            <stats-chart :network="network"/>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="card mb-4">
-      <div class="card-content">
-        <h2 class="h4 card-heading">TX Time Last Obervations</h2>
-        <bubble-chart :vector="ping_things.slice().reverse()" :network="network"/>
+      <div class="col-md-12 col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h4 card-heading">
+              TX Time Last Obervations
+            </h2>
+            <bubble-chart :vector="ping_things.slice().reverse()" :network="network"/>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -32,6 +40,7 @@
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
   import statsBar from './stats_bar'
+  import userStats from './user_stats'
   import '../mixins/strings_mixins'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
@@ -75,9 +84,28 @@
         });
     },
 
-    computed: mapGetters([
-      'network'
-    ]),
+    computed: {
+      ping_things_grouped_by_user: function() {
+        return this.ping_things.reduce(function(acc, obj) {
+          var key = obj.username;
+          if(!acc[key]) {
+            acc[key] = {}
+            acc[key]["5min"] = [];
+            acc[key]["60min"] = [];
+          }
+          if (Moment(obj.reported_at).isAfter(Moment().subtract(5, 'minutes'))) {
+            acc[key]["5min"].push(obj);
+          } else if (Moment(obj.reported_at).isAfter(Moment().subtract(60, 'minutes'))) {
+            acc[key]["60min"].push(obj);
+          }
+          return acc;
+        }, {});
+      },
+      ...mapGetters([
+        'network'
+      ])
+    }
+,
 
     methods: {},
 
@@ -86,7 +114,8 @@
       "bubble-chart": bubbleChart,
       "ping-thing-header": pingThingHeader,
       "ping-thing-table": pingThingTable,
-      "stats-bar": statsBar
+      "stats-bar": statsBar,
+      "user-stats": userStats
     }
   }
 

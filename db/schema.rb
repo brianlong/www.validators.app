@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_19_104342) do
+ActiveRecord::Schema.define(version: 2024_01_26_110659) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -365,6 +365,23 @@ ActiveRecord::Schema.define(version: 2024_01_19_104342) do
     t.bigint "transactions_count"
     t.integer "tps"
     t.index ["network", "interval"], name: "index_ping_thing_stats_on_network_and_interval"
+  end
+
+  create_table "ping_thing_user_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.float "average_slot_latency"
+    t.integer "interval"
+    t.float "min"
+    t.float "max"
+    t.float "median"
+    t.float "p90"
+    t.integer "num_of_records"
+    t.string "network"
+    t.bigint "user_id", null: false
+    t.string "username"
+    t.integer "fails_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_ping_thing_user_stats_on_user_id"
   end
 
   create_table "ping_things", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -752,6 +769,7 @@ ActiveRecord::Schema.define(version: 2024_01_19_104342) do
   add_foreign_key "collectors", "users"
   add_foreign_key "commission_histories", "validators"
   add_foreign_key "data_center_stats", "data_centers"
+  add_foreign_key "ping_thing_user_stats", "users"
   add_foreign_key "ping_things", "users"
   add_foreign_key "user_watchlist_elements", "users", on_delete: :cascade
   add_foreign_key "user_watchlist_elements", "validators", on_delete: :cascade
