@@ -3,7 +3,7 @@
     <ping-thing-header />
 
     <stats-bar :network="network"/>
-    <user-stats :network="network"/>
+
     <div class="row">
       <div class="col-md-12 col-lg-6 mb-4">
         <div class="card h-100">
@@ -27,6 +27,8 @@
         </div>
       </div>
     </div>
+
+    <user-stats :network="network"/>
 
     <ping-thing-table :network="network" />
   </div>
