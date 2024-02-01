@@ -10,7 +10,7 @@
                   User<br />
                   <small class="text-muted text-small">5 min / 60 min</small>
                 </th>
-                <th class="column-sm px-0">
+                <th class="column-xs px-0">
                   <i class="fa-solid fa-calculator text-success me-2"></i>Entries
                 </th>
                 <th class="column-sm px-0">
@@ -26,7 +26,7 @@
                   <i class="fa-solid fa-up-long text-success me-2"></i>P90
                 </th>
                 <th class="column-sm px-0">
-                  <i class="fa-solid fa-clock text-success me-2"></i>Latency
+                  <i class="fa-solid fa-clock text-success me-2"></i>Slot Latency
                 </th>
               </tr>
             </thead>
@@ -67,9 +67,9 @@
                   {{ stats_array["60min"]["p90"] ? stats_array["60min"]["p90"].toLocaleString('en-US') + ' ms' : 'N/A'}}
                 </td>
                 <td class="text-success text-nowrap">
-                  {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"].toLocaleString('en-US') + ' ms' : 'N/A'}}
+                  {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"].toLocaleString('en-US') : 'N/A'}}
                   <br />
-                  {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"].toLocaleString('en-US') + ' ms' : 'N/A'}}
+                  {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"].toLocaleString('en-US') : 'N/A'}}
                 </td>
               </tr>
             </tbody>

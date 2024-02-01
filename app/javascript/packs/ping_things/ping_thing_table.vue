@@ -127,7 +127,7 @@
       return {
         ping_things: [],
         api_url: '/api/v1/ping-thing/' + this.network,
-        limit: 60,
+        limit: 30,
 
         // filters
         filter_time: null,
