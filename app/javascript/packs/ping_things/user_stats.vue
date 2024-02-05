@@ -26,7 +26,7 @@
                   <i class="fa-solid fa-up-long text-success me-2"></i>P90
                 </th>
                 <th class="column-sm px-0">
-                  <i class="fa-solid fa-clock text-success me-2"></i>Slot Latency
+                  <i class="fa-solid fa-clock text-success me-2"></i>Latency
                 </th>
               </tr>
             </thead>
@@ -67,9 +67,9 @@
                   {{ stats_array["60min"]["p90"] ? stats_array["60min"]["p90"].toLocaleString('en-US') + ' ms' : 'N/A'}}
                 </td>
                 <td class="text-success text-nowrap">
-                  {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"].toLocaleString('en-US') : 'N/A'}}
+                  {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"].toLocaleString('en-US') + ' slots' : 'N/A'}}
                   <br />
-                  {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"].toLocaleString('en-US') : 'N/A'}}
+                  {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"].toLocaleString('en-US') + ' slots' : 'N/A'}}
                 </td>
               </tr>
             </tbody>
