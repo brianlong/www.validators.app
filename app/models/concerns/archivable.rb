@@ -5,12 +5,13 @@ module Archivable
     Object.const_get(self.name + "Archive")
   end
 
-  def archive_due_to(date_to: , destroy_after_archive: false)
+  def archive_due_to(date_to:, network:, destroy_after_archive: false)
     begin
-      records = where("created_at <= ?", date_to)
-      puts "Archiving #{records.count} records for #{self.name}"
+      records = where(network: network).where("created_at < ?", date_to)
+      puts "Archiving #{records.count} records for #{self.name} (#{network})"
 
-      records.find_each do |record|
+      records.find_each.with_index do |record, idx|
+        print "\r#{idx + 1}/#{records.count}"
         archive = archive_class.find_or_initialize_by(id: record.id)
         record.attributes.each do |attr, value|
           archive.send("#{attr}=", value)
@@ -19,7 +20,7 @@ module Archivable
         record.destroy! if destroy_after_archive
       end
 
-      puts "Archieved #{records.count} records for #{self.name}"
+      puts "...done!"
     rescue NameError => e
       puts e
       raise "Archive class not found for #{self.name}"
