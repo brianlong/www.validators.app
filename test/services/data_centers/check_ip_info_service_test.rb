@@ -116,7 +116,7 @@ module DataCenters
       end
     end
 
-    test ".call returns BlankAutonomousSystemNumberError if ASN is blank" do
+    test ".call returns DataCenters::CheckIpInfoService::BlankAutonomousSystemNumberError if ASN is blank" do
       vcr_cassette(@namespace, "valid_maxmind_request") do
         mock = Minitest::Mock.new({ autonomous_system_number: nil })
         mock.expect :autonomous_system_number, nil

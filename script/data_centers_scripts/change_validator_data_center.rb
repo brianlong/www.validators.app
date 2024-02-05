@@ -13,6 +13,6 @@ end
 
 begin
   DataCenters::ChangeValidatorDataCenter.new(validator_id).call
-rescue BlankAutonomousSystemNumberError
+rescue DataCenters::CheckIpInfoService::BlankAutonomousSystemNumberError
   puts "Blank ASN for data center"
 end

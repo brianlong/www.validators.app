@@ -21,7 +21,7 @@ unknown_validator_ips.each do |validator_ip|
     puts e.backtrace
     puts "Going for next ip"
     next
-  rescue BlankAutonomousSystemNumberError
+  rescue DataCenters::CheckIpInfoService::BlankAutonomousSystemNumberError
     puts "Blank ASN for IP - skipping"
     next
   end
