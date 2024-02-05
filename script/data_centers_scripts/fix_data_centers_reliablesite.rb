@@ -55,6 +55,8 @@ ValidatorIp.joins(:data_center)
       host = nil
     end
 
+    next unless vip.data_center.traits_autonomous_system_number.present?
+
     setup_data_center(vip: vip, host_data: host_data, host: host)
   end
 end

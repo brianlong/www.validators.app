@@ -11,4 +11,8 @@ unless validator_id
   return false
 end
 
-DataCenters::ChangeValidatorDataCenter.new(validator_id).call
+begin
+  DataCenters::ChangeValidatorDataCenter.new(validator_id).call
+rescue BlankAutonomousSystemNumberError
+  puts "Blank ASN for data center"
+end

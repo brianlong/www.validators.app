@@ -41,6 +41,7 @@ ValidatorIp.joins(:data_center)
 
   WEBNX_HOSTS.each do |host_reg, host_data|
     next unless last_webnx_ip&.include?(host_reg)
+    next unless vip.data_center.traits_autonomous_system_number.present?
 
     host = ("H" + last_webnx_ip).strip.split(" ")[1].strip
     setup_data_center(vip: vip, host_data: host_data, host: host)

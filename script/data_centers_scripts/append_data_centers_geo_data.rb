@@ -34,6 +34,9 @@ begin
       puts e.backtrace
       puts 'Going for next ip'
       next
+    rescue BlankAutonomousSystemNumberError
+      puts "Blank ASN for IP - skipping"
+      next
     end
   end
 
