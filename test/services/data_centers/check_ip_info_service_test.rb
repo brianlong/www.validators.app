@@ -18,7 +18,7 @@ module DataCenters
 
     test ".call creates DataCenter and updates validator_ips" do
       assert_difference ["DataCenter.count", "DataCenterHost.count"], 1 do
-        vcr_cassette(@namespace, __method__) do
+        vcr_cassette(@namespace, "valid_maxmind_request") do
           @service.call(ip: "146.59.71.20")
         end
 
@@ -117,7 +117,7 @@ module DataCenters
     end
 
     test ".call returns BlankAutonomousSystemNumberError if ASN is blank" do
-      vcr_cassette(@namespace, __method__) do
+      vcr_cassette(@namespace, "valid_maxmind_request") do
         mock = Minitest::Mock.new({ autonomous_system_number: nil })
         mock.expect :autonomous_system_number, nil
 
