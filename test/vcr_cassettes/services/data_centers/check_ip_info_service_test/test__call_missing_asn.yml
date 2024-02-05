@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://geoip.maxmind.com/geoip/v2.1/insights/146.59.71.20
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Authorization:
+      - "<TOKEN>"
+      Accept:
+      - application/json
+      User-Agent:
+      - MaxMind-GeoIP2-ruby
+      Connection:
+      - Keep-Alive
+      Host:
+      - geoip.maxmind.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 05 Feb 2024 10:33:59 GMT
+      Content-Type:
+      - application/vnd.maxmind.com-insights+json; charset=UTF-8; version=2.1
+      Content-Length:
+      - '1132'
+      Connection:
+      - keep-alive
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 850a7f909d15bf24-WAW
+    body:
+      encoding: UTF-8
+      string: '{"continent":{"code":"EU","geoname_id":6255148,"names":{"en":"Europe","es":"Europa","fr":"Europe","ja":"ヨーロッパ","pt-BR":"Europa","ru":"Европа","zh-CN":"欧洲","de":"Europa"}},"country":{"confidence":99,"is_in_european_union":true,"iso_code":"FR","geoname_id":3017382,"names":{"es":"Francia","fr":"France","ja":"フランス共和国","pt-BR":"França","ru":"Франция","zh-CN":"法国","de":"Frankreich","en":"France"}},"location":{"accuracy_radius":500,"latitude":48.8582,"longitude":2.3387,"time_zone":"Europe/Paris"},"maxmind":{"queries_remaining":2499},"registered_country":{"is_in_european_union":true,"iso_code":"FR","geoname_id":3017382,"names":{"es":"Francia","fr":"France","ja":"フランス共和国","pt-BR":"França","ru":"Франция","zh-CN":"法国","de":"Frankreich","en":"France"}},"traits":{"is_anonymous":true,"is_hosting_provider":true,"user_type":"hosting","autonomous_system_number":16276,"autonomous_system_organization":"OVH
+        SAS","connection_type":"Corporate","domain":"ip-146-59-71.eu","isp":"OVH SAS","organization":"OVH
+        SAS","ip_address":"146.59.71.20","network":"146.59.71.0/25"}}'
+  recorded_at: Mon, 05 Feb 2024 10:33:59 GMT
+recorded_with: VCR 6.0.0

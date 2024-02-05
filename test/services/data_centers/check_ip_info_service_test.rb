@@ -115,6 +115,19 @@ module DataCenters
         end
       end
     end
+
+    test ".call returns BlankAutonomousSystemNumberError if ASN is blank" do
+      vcr_cassette(@namespace, __method__) do
+        mock = Minitest::Mock.new({ autonomous_system_number: nil })
+        mock.expect :autonomous_system_number, nil
+
+        MaxMind::GeoIP2::Record::Traits.stub(:new, mock) do
+          assert_raise ::DataCenters::CheckIpInfoService::BlankAutonomousSystemNumberError do
+            @service.call(ip: "146.59.71.20")
+          end
+        end
+      end
+    end
   end
 end
 
