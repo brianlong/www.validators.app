@@ -8,10 +8,10 @@ module Archivable
   def archive_due_to(date_to:, network:, destroy_after_archive: false)
     begin
       records = where(network: network).where("created_at < ?", date_to)
-      puts "Archiving #{records.count} records for #{self.name} (#{network})"
+      puts_no_test "Archiving #{records.count} records for #{self.name} (#{network})"
 
       records.find_each.with_index do |record, idx|
-        print "\r#{idx + 1}/#{records.count}"
+        print_no_test "\r#{idx + 1}/#{records.count}"
         archive = archive_class.find_or_initialize_by(id: record.id)
         record.attributes.each do |attr, value|
           archive.send("#{attr}=", value)
@@ -20,10 +20,18 @@ module Archivable
         record.destroy! if destroy_after_archive
       end
 
-      puts "...done!"
+      puts_no_test "...done!"
     rescue NameError => e
-      puts e
+      puts_no_test e
       raise "Archive class not found for #{self.name}"
     end
+  end
+
+  def puts_no_test msg
+    puts msg unless Rails.env.test?
+  end
+
+  def print_no_test msg
+    print msg unless Rails.env.test?
   end
 end
