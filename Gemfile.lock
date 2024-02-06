@@ -513,7 +513,7 @@ DEPENDENCIES
   maxmind-geoip2
   mechanize (>= 2.9.1)
   mysql2 (>= 0.5.3)
-  nokogiri (= 1.15.4)
+  nokogiri (= 1.16.2)
   pronto (~> 0.11.2)
   pronto-flay (~> 0.11.1)
   pronto-rubocop (~> 0.11.5)
