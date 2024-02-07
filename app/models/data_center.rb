@@ -88,6 +88,8 @@ class DataCenter < ApplicationRecord
     end
   end
 
+  validates :traits_autonomous_system_number, presence: true
+
   scope :for_api, -> { select(FIELDS_FOR_API) }
 
   scope :by_data_center_key, ->(data_center_keys) do
