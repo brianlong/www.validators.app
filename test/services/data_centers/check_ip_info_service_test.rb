@@ -26,8 +26,8 @@ module DataCenters
         data_center = DataCenter.find_by(
           data_center_key: "16276-FR-Europe/Paris",
           continent_name: "Europe",
-          country_name:"France",
-          traits_isp: "OVH SAS"
+          country_name: "France",
+          traits_isp: "OVH SAS",
         )
 
         assert data_center
@@ -68,7 +68,7 @@ module DataCenters
         city_name: nil,
         location_metro_code: nil,
         location_time_zone: "Europe/Paris",
-        traits_isp: "  "
+        traits_isp: "  ",
       )
       data_host = create(:data_center_host, data_center: data_center, host: nil)
 
@@ -115,19 +115,5 @@ module DataCenters
         end
       end
     end
-
-    test ".call returns DataCenters::CheckIpInfoService::BlankAutonomousSystemNumberError if ASN is blank" do
-      vcr_cassette(@namespace, "valid_maxmind_request") do
-        mock = Minitest::Mock.new({ autonomous_system_number: nil })
-        mock.expect :autonomous_system_number, nil
-
-        MaxMind::GeoIP2::Record::Traits.stub(:new, mock) do
-          assert_raise ::DataCenters::CheckIpInfoService::BlankAutonomousSystemNumberError do
-            @service.call(ip: "146.59.71.20")
-          end
-        end
-      end
-    end
   end
 end
-

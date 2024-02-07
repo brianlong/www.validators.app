@@ -141,4 +141,11 @@ class DataCenterTest < ActiveSupport::TestCase
     assert data_center.created_at.present?
   end
 
+  test 'data center with nil ASN is not saved' do
+    @data_center.traits_autonomous_system_number = nil
+    refute @data_center.valid?
+    assert_raise ActiveRecord::RecordInvalid do
+      @data_center.save!
+    end
+  end
 end

@@ -64,7 +64,6 @@ ValidatorIp.joins(:data_center)
 
     begin
       setup_data_center(vip: vip, host_data: host_data, host: host)
-
       Rails.logger.warn "added IP Override: #{vip} - #{host}"
 
       break
