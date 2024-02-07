@@ -2,8 +2,6 @@
 
 class DataCenters::CheckIpInfoService
 
-  class BlankAutonomousSystemNumberError < StandardError; end
-
   PRIVATE_IP_REGEX = /(^127\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.168\.)/.freeze
 
   def initialize
@@ -18,9 +16,12 @@ class DataCenters::CheckIpInfoService
 
     data_center = set_data_center(max_mind_info)
     fill_blank_values(data_center, max_mind_info)
-    data_center.save!
 
-    update_validator_ips(ip, data_center, max_mind_info)
+    ActiveRecord::Base.transaction do
+      data_center.save!
+
+      update_validator_ips(ip, data_center, max_mind_info)
+    end
   end
 
   def get_max_mind_info(ip)
@@ -49,10 +50,6 @@ class DataCenters::CheckIpInfoService
   end
 
   def set_data_center(max_mind_info)
-    if max_mind_info.traits.autonomous_system_number.blank?
-      raise BlankAutonomousSystemNumberError
-    end
-
     DataCenter.find_or_initialize_by(
       traits_autonomous_system_number: max_mind_info.traits.autonomous_system_number,
       country_iso_code: unified_country_code(max_mind_info.country.iso_code),

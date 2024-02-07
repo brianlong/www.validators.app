@@ -21,8 +21,9 @@ unknown_validator_ips.each do |validator_ip|
     puts e.backtrace
     puts "Going for next ip"
     next
-  rescue DataCenters::CheckIpInfoService::BlankAutonomousSystemNumberError
-    puts "Blank ASN for IP - skipping"
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "#{e.class} - #{e.message}"
+    Appsignal.send_error(e)
     next
   end
 end

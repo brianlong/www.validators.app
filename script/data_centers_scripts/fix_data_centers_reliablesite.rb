@@ -55,8 +55,11 @@ ValidatorIp.joins(:data_center)
       host = nil
     end
 
-    next unless vip.data_center.traits_autonomous_system_number.present?
-
-    setup_data_center(vip: vip, host_data: host_data, host: host)
+    begin
+      setup_data_center(vip: vip, host_data: host_data, host: host)
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.error "#{e.class} - #{e.message}"
+      Appsignal.send_error(e)
+    end
   end
 end
