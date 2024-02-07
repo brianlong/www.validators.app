@@ -16,12 +16,9 @@ class DataCenters::CheckIpInfoService
 
     data_center = set_data_center(max_mind_info)
     fill_blank_values(data_center, max_mind_info)
+    data_center.save!
 
-    ActiveRecord::Base.transaction do
-      data_center.save!
-
-      update_validator_ips(ip, data_center, max_mind_info)
-    end
+    update_validator_ips(ip, data_center, max_mind_info)
   end
 
   def get_max_mind_info(ip)
