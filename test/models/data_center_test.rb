@@ -108,11 +108,11 @@ class DataCenterTest < ActiveSupport::TestCase
   end
 
   test "#to_builder returns correct data" do
-    expected_result = { 
+    expected_result = {
       data_center_key: "12345-DE-Berlin",
-      autonomous_system_number: 12345, 
-      latitude: "51.2993", 
-      longitude: "9.491" 
+      autonomous_system_number: 12345,
+      latitude: "51.2993",
+      longitude: "9.491",
     }.to_json
 
     assert_equal expected_result, @data_center.to_builder.target!
@@ -126,7 +126,7 @@ class DataCenterTest < ActiveSupport::TestCase
        "changes empty strings to nil" do
     data_center = create(:data_center,
                          :berlin,
-                         country_confidence:0,
+                         country_confidence: 0,
                          registered_country_geoname_id: nil,
                          continent_name: "   ",
                          country_iso_code: "  r ",
@@ -136,12 +136,12 @@ class DataCenterTest < ActiveSupport::TestCase
     assert_nil data_center.continent_name
     assert_equal "  r ", data_center.country_iso_code
     assert_nil data_center.registered_country_geoname_id
-    assert_equal 0 ,data_center.country_confidence
-    assert_equal false ,data_center.traits_anonymous
+    assert_equal 0, data_center.country_confidence
+    assert_equal false, data_center.traits_anonymous
     assert data_center.created_at.present?
   end
 
-  test 'data center with nil ASN is not saved' do
+  test "data center with nil ASN is not saved" do
     @data_center.traits_autonomous_system_number = nil
     refute @data_center.valid?
     assert_raise ActiveRecord::RecordInvalid do
