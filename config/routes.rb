@@ -84,7 +84,6 @@ Rails.application.routes.draw do
 
   # Public Controller
   get 'contact-us', to: 'public#contact_us'
-  get 'stake-boss', to: 'public#stake_boss', as: 'stake_boss'
   get 'api-documentation',
       to: 'public#api_documentation',
       as: 'api_documentation'
@@ -93,7 +92,6 @@ Rails.application.routes.draw do
   get 'faq', to: 'public#faq'
   get 'privacy-policy-california', to: 'public#privacy_policy_california'
   get 'privacy-policy', to: 'public#privacy_policy'
-  get 'sample-chart', to: 'public#sample_chart'
   get 'terms-of-use', to: 'public#terms_of_use'
   get 'commission-changes/mainnet/(:validator_id)',
       to: redirect( '/commission-changes/%{validator_id}?network=mainnet'),
@@ -107,9 +105,16 @@ Rails.application.routes.draw do
   get 'commission-changes/(:validator_id)',
       to: 'public#commission_histories',
       as: 'commission_histories'
-  get 'authorities_changes/(:vote_account_id)',
+  get 'authorities-changes/(:vote_account_id)',
       to: 'public#authorities_changes',
       as: 'authorities_changes'
+  get 'authorities_changes/(:vote_account_id)',
+      defaults: { locale: 'en', network: 'mainnet' },
+      to: redirect { |params, _request|
+        vote_account_id = params[:vote_account_id].presence
+        path = vote_account_id ? "/authorities-changes/#{vote_account_id}" : '/authorities-changes'
+        path + "?locale=#{params[:locale]}&network=#{params[:network]}"
+      }
 
   get 'stake-explorer', to: 'explorer_stake_accounts#index', as: 'explorer_stake_accounts'
   get 'stake-explorer/:stake_pubkey', to: 'explorer_stake_accounts#show', as: 'explorer_stake_account'
@@ -178,6 +183,7 @@ Rails.application.routes.draw do
 
       get 'ping-thing-stats/:network', to: 'ping_thing_stats#index', as: 'ping_thing_stats'
       get 'ping-thing-recent-stats/:network', to: 'ping_thing_recent_stats#last', as: 'ping_thing_recent_stats'
+      get 'ping-thing-user-stats/:network', to: 'ping_thing_user_stats#last', as: 'ping_thing_user_stats'
 
       get 'sol-prices', to: 'sol_prices#index', as: 'sol_prices'
 

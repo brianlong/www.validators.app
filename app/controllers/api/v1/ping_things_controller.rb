@@ -20,7 +20,8 @@ module Api
           ping_things = ping_things.where("response_time >= ?", index_params[:time_filter].to_i)
         end
         if index_params[:posted_by]
-          user_ids = User.where("username LIKE ?", index_params[:posted_by].strip).pluck(:id)
+          attr = "#{index_params[:posted_by].strip}%"
+          user_ids = User.where("username LIKE ?", attr).pluck(:id)
           ping_things = ping_things.where(user_id: user_ids)
         end
         if index_params[:success] && boolean_valid?(index_params[:success])
