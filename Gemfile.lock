@@ -274,7 +274,7 @@ GEM
       net-ssh (>= 2.6.5, < 7.0.0)
     net-ssh (6.1.0)
     nio4r (2.7.0)
-    nokogiri (1.15.4)
+    nokogiri (1.15.5)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     octokit (7.2.0)
@@ -513,7 +513,7 @@ DEPENDENCIES
   maxmind-geoip2
   mechanize (>= 2.9.1)
   mysql2 (>= 0.5.3)
-  nokogiri (= 1.16.2)
+  nokogiri (= 1.15.5)
   pronto (~> 0.11.2)
   pronto-flay (~> 0.11.1)
   pronto-rubocop (~> 0.11.5)
