@@ -87,10 +87,10 @@
 
           <div class="text-muted mb-2" v-if="skipped_slots">
             <i class="fa-solid fa-down-long text-purple" aria-hidden="true"></i>
-            {{ skipped_slots_min() }}
+            {{ skipped_slots_min() }}%
             &nbsp;–&nbsp;
             <i class="fa-solid fa-up-long text-purple" aria-hidden="true"></i>
-            {{ skipped_slots_max() }}
+            {{ skipped_slots_max() }}%
           </div>
 
           <div v-if="skipped_slots">
@@ -212,11 +212,11 @@
         return (parseFloat(this.skipped_slots.average) * 100).toFixed(1);
       },
       skipped_slots_min() {
-        const min = parseFloat(this.skipped_slots.min) * 100;
+        const min = (parseFloat(this.skipped_slots.min) * 100).toFixed(2);
         return min > 0 ? min : 0;
       },
       skipped_slots_max() {
-        return parseFloat(this.skipped_slots.max) * 100;
+        return (parseFloat(this.skipped_slots.max) * 100).toFixed(2);
       }
     }
   }

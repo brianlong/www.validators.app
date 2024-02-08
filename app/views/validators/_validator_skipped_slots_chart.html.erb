@@ -1,6 +1,6 @@
-<canvas id="skipped_slots_<%= local_assigns[:account] %>"></canvas>
+<canvas id="<%= local_assigns[:chart_name] %>"></canvas>
 <script type="text/javascript">
-    var ctx = document.getElementById("skipped_slots_<%= local_assigns[:account] %>").getContext('2d');
+    var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
     var chart = new Chart(ctx, {
         type: 'line',
         data: {

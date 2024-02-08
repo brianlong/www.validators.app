@@ -16,79 +16,96 @@ export default {
   methods: {},
 
   data() {
-    var skipped_after_history_vl = Math.min.apply(Math, [60, this.validator['skipped_after_history'].length]);
-    var skipped_after_history_vector = this.validator['skipped_after_history'].slice(Math.max(this.validator['skipped_after_history'].length - skipped_after_history_vl, 0));
-    skipped_after_history_vector = skipped_after_history_vector.map(function (x) { return x * 100 });
-    var max_value = Math.max.apply(Math, skipped_after_history_vector);
-    var max_value_position = this.$parent.max_value_position(skipped_after_history_vector);
-    return {
-      max_value: max_value,
-      max_value_position: max_value_position,
-      skipped_after_history_chart: {
-        line_color: this.$parent.chart_line_color(this.validator['skipped_after_score']),
-        fill_color: this.$parent.chart_fill_color(this.validator['skipped_after_score']),
-        vector: skipped_after_history_vector
-      },
+    if(this.validator && this.validator['skipped_after_history'] && this.validator['skipped_after_history'].length > 0) {
+      var skipped_after_vl = Math.min.apply(Math, [60, this.validator['skipped_after_history'].length])
+      if(this.validator['skipped_after_moving_average_history']){
+        var skipped_after_ma = Math.min.apply(Math, [60, this.validator['skipped_after_moving_average_history'].length])
+        var skipped_after_ma_vector = this.validator['skipped_after_moving_average_history'].slice(Math.max(this.validator['skipped_after_moving_average_history'].length - skipped_after_ma, 0))
+      } else {
+        var skipped_after_ma_vector = []
+      }
+      var skipped_after_vector = this.validator['skipped_after_history'].slice(Math.max(this.validator['skipped_after_history'].length - skipped_after_vl, 0))
+      skipped_after_vector.forEach(function(part, index) {
+        this[index] = part * 100;
+      }, skipped_after_vector)
+      skipped_after_ma_vector.forEach(function(part, index) {
+        this[index] = part * 100;
+      }, skipped_after_ma_vector)
+
+      var skipped_after_score = this.validator['skipped_after_score']
+      return {
+        skipped_after_distance_chart: {
+          line_color: this.$parent.chart_line_color(skipped_after_score),
+          fill_color: this.$parent.chart_fill_color(skipped_after_score),
+          vector: skipped_after_vector,
+          moving_avg_vector: skipped_after_ma_vector
+        }
+      }
+    } else {
+      return {}
     }
   },
 
   mounted: function () {
-    var block_distance_el = document.getElementById("spark_line_skipped_after_" + this.validator['account']).getContext('2d');
-    new Chart(block_distance_el, {
-      type: 'line',
-      data: {
-        labels: Array.from(Array(this.skipped_after_history_chart['vector'].length).keys()).reverse(),
-        datasets: [
-          {
-            fill: true,
-            borderColor: this.skipped_after_history_chart['line_color'],
-            backgroundColor: this.skipped_after_history_chart['fill_color'],
-            borderWidth: 1,
-            radius: 0,
-            data: this.skipped_after_history_chart['vector'],
-            tension: 0
-          }
-        ]
-      },
-      options: {
-        scales: {
-          x: {
-            display: true,
-            ticks: { display: false },
-            grid: { display: false },
-            title: { display: false },
-          },
-          y: {
-            display: true,
-            min: 0,
-            max: chart_variables.chart_y_max,
-            ticks: {
-              color: chart_variables.chart_darkgrey,
-              font: {
-                size: chart_variables.chart_font_size,
-              }
+    if(this.validator && this.validator['skipped_after_history'] && this.validator['skipped_after_history'].length > 0) {
+      var skipped_after_el = document.getElementById("spark_line_skipped_after_" + this.validator['account']).getContext('2d');
+      new Chart(skipped_after_el, {
+        type: 'line',
+        data: {
+          labels: Array.from(Array(this.skipped_after_distance_chart['vector'].length).keys()).reverse(),
+          datasets: [
+            {
+              fill: false,
+              borderColor: this.skipped_after_distance_chart['line_color'],
+              borderWidth: 1,
+              borderDash: [2, 2],
+              radius: 0,
+              data: this.skipped_after_distance_chart['vector'],
+              tension: 0
             },
-            grid: { display: false },
-            title: { display: false }
-          }
+            {
+              fill: false,
+              borderColor: this.skipped_after_distance_chart['line_color'],
+              borderWidth: 1,
+              radius: 0,
+              data: this.skipped_after_distance_chart['moving_avg_vector'],
+              tension: 0
+            }
+          ]
         },
-        plugins: {
-          tooltip: { display: false },
-          legend: { display: false }
-        },
-      }
-    });
+
+        options: {
+          scales: {
+            x: {
+              display: true,
+              ticks: { display: false },
+              grid: { display: false },
+              title: { display: false },
+            },
+            y: {
+              display: true,
+              ticks: {
+                color: chart_variables.chart_darkgrey,
+                font: {
+                  size: chart_variables.chart_font_size,
+                },
+              },
+              grid: { display: false },
+              title: { display: false }
+            }
+          },
+          plugins: {
+            tooltip: { display: false },
+            legend: { display: false }
+          },
+        }
+      });
+    }
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell" :id="'skipped-after-' + idx ">
-      <div class="chart-top-container" v-if="max_value > 20">
-        <div class="chart-top-value"
-             :style="{ left: max_value_position }">
-          {{ max_value }}
-        </div>
-      </div>
-    
-      <canvas :id=" 'spark_line_skipped_after_' + validator['account'] "></canvas>
+    <td class="column-chart d-none d-lg-table-cell text-center" :id="'skipped-after-' + idx ">
+      <canvas :id=" 'spark_line_skipped_after_' + validator['account'] " v-if="validator && validator['skipped_after_history'] && validator['skipped_after_history'].length > 0"></canvas>
+      <span v-else class="text-muted"> N/A </span>
     </td>
   `
 }

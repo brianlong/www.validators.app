@@ -2,6 +2,8 @@
 
 require File.expand_path('../config/environment', __dir__)
 
+raise "Dev script can't be executed on production" if Rails.env.production?
+
 include AsnLogic
 
 network = ARGV[0] || 'mainnet'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This script will attempt to ping all of the other nodes shown in the gossip
 # network and find the ping time from this node to the others. Example to run:
 #
@@ -11,6 +13,10 @@
 # 1,11,21,31,41,51 * * * * /bin/bash -l -c 'cd /home/brianlong/ && /usr/bin/ruby solana_network_stats.rb >> /home/brianlong/solana_network_stats.log 2>&1'
 #
 # Author: Brian Long
+
+require File.expand_path('../config/environment', __dir__)
+
+raise "Dev script can't be executed on production" if Rails.env.production?
 
 require 'csv'
 

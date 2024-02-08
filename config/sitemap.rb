@@ -61,7 +61,7 @@ SitemapGenerator::Sitemap.create do
     add "/validators?network=#{network}", changefreq: 'hourly'
     add "/trent-mode?network=#{network}", changefreq: 'daily'
     add "/commission-changes?network=#{network}", changefreq: 'hourly'
-    add "/authorities_changes?network=#{network}", changefreq: 'hourly'
+    add "/authorities-changes?network=#{network}", changefreq: 'hourly'
     add "/ping-thing?network=#{network}", changefreq: 'hourly'
   end
 

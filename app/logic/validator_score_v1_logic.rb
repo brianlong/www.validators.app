@@ -246,6 +246,7 @@ module ValidatorScoreV1Logic
         SELECT vbh.validator_id,
                vbh.skipped_slot_percent,
                vbh.skipped_slot_percent_moving_average,
+               vbh.skipped_slot_after_percent_moving_average,
                vbh.skipped_slots_after_percent
         FROM validator_block_histories vbh
         WHERE vbh.network = '#{p.payload[:network]}' AND vbh.batch_uuid = '#{p.payload[:batch_uuid]}'
@@ -261,11 +262,13 @@ module ValidatorScoreV1Logic
         skipped_slot_percent = last_validator_block_history_for_validator[1]
         validator.score.skipped_slot_history_push(skipped_slot_percent.to_f)
         validator.validator_score_v1.skipped_after_history_push(
-          last_validator_block_history_for_validator[3].to_f
+          last_validator_block_history_for_validator[4].to_f
         )
 
-        moving_average = last_validator_block_history_for_validator[2]
-        validator.score.skipped_slot_moving_average_history_push(moving_average.to_f)
+        slots_moving_average = last_validator_block_history_for_validator[2]
+        after_moving_average = last_validator_block_history_for_validator[3]
+        validator.score.skipped_slot_moving_average_history_push(slots_moving_average.to_f)
+        validator.score.skipped_after_moving_average_history_push(after_moving_average.to_f)
       rescue StandardError => e
         Appsignal.send_error(e)
       end
@@ -289,27 +292,27 @@ module ValidatorScoreV1Logic
       return p unless p.code == 200
 
       p.payload[:validators].each do |validator|
-        skipped_slot_percent = validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
-        skipped_after_percent = validator&.validator_score_v1&.skipped_after_history&.last
+        skipped_slot_avg_percent = validator&.validator_score_v1&.skipped_slot_moving_average_history&.last
+        skipped_after_avg_percent = validator&.validator_score_v1&.skipped_after_moving_average_history&.last
 
         # Assign the scores
         validator.validator_score_v1.skipped_slot_score = \
-          if skipped_slot_percent.nil?
+          if skipped_slot_avg_percent.nil?
             0
-          elsif skipped_slot_percent.to_f <= p.payload[:med_skipped_slot_pct_all].to_f
+          elsif skipped_slot_avg_percent.to_f <= p.payload[:med_skipped_slot_pct_all].to_f
             2
-          elsif skipped_slot_percent.to_f <= p.payload[:avg_skipped_slot_pct_all].to_f
+          elsif skipped_slot_avg_percent.to_f <= p.payload[:avg_skipped_slot_pct_all].to_f
             1
           else
             0
           end
 
         validator.validator_score_v1.skipped_after_score = \
-          if skipped_after_percent.nil?
+          if skipped_after_avg_percent.nil?
             0
-          elsif skipped_after_percent <= p.payload[:med_skipped_after_pct_all]
+          elsif skipped_after_avg_percent.to_f <= p.payload[:med_skipped_after_pct_all].to_f
             2
-          elsif skipped_after_percent <= p.payload[:avg_skipped_after_pct_all]
+          elsif skipped_after_avg_percent.to_f <= p.payload[:avg_skipped_after_pct_all].to_f
             1
           else
             0
