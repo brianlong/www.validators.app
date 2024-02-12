@@ -41,6 +41,67 @@
   </table>
 </div>
 
+<% if @stake_history.any? %>
+  <div class="row">
+    <div class="col-8 mb-4">
+      <div class="card h-100">
+        <div class="card-content pb-3">
+          <h2 class="h4 card-heading">Stake Stats</h2>
+
+          <%
+            num_of_records = @stake_history.count
+            delegated_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.delegated_stake).round(2) }.reverse
+            active_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.active_stake).round(2) }.reverse
+            epochs = @stake_history.pluck(:epoch).reverse
+          %>
+          <%= render 'vote_accounts/stats_chart',
+                    chart_name: "stake-stats-chart",
+                    line_color: GREEN,
+                    epochs: epochs,
+                    delegated_stake_vector: delegated_stake_vector,
+                    active_stake_vector: active_stake_vector
+          %>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 mb-4">
+      <div class="card h-100">
+        <div class="card-content pb-3">
+          <h2 class="h4 card-heading">Last Epoch</h2>
+        </div>
+        <table class='table table-block-sm mb-0'>
+          <tbody>
+            <tr>
+              <td><strong>Delegated Stake:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_history.last.delegated_stake).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Active Stake:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_history.last.active_stake).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Credits Observed:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_history.last.credits_observed).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Rent Exempt Reserve:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_history.last.rent_exempt_reserve).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Stake Accounts:</strong></td>
+              <td><%= @stake_history.last.delegating_stake_accounts_count %></td>
+            </tr>
+            <tr>
+              <td><strong>Deactivating Stake:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_history.last.deactivating_stake).round(2) %> SOL</td>
+            </tr>
+          </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+
 <% if params[:network] == "mainnet" %>
   <%= render "stake_accounts" %>
 <% end %>

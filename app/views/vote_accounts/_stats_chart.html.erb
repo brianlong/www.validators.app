@@ -1,0 +1,113 @@
+<canvas id="<%= local_assigns[:chart_name] %>"></canvas>
+<script type="text/javascript">
+    var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
+    console.log("<%= local_assigns[:epochs] %>")
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <%= local_assigns[:epochs] %>,
+            datasets: [
+                {
+                    label: ' Active Stake  ',
+                    fill: false,
+                    borderColor: "<%= local_assigns[:line_color] %>",
+                    borderWidth: 1,
+                    borderDash: [2, 2],
+                    radius: 0,
+                    data: <%= local_assigns[:active_stake_vector] %>,
+                    tension: 0
+                },
+                {
+                    label: ' Delegated Stake  ',
+                    fill: false,
+                    borderColor: "<%= local_assigns[:line_color] %>",
+                    borderWidth: 1,
+                    radius: 0,
+                    data: <%= local_assigns[:delegated_stake_vector] %>,
+                    tension: 0
+                }
+            ]
+        },
+
+        options: {
+          scales: {
+            x: {
+              display: true,
+              ticks: {
+                display: true,
+                minRotation: 0,
+                maxRotation: 0,
+                autoSkip: true,
+                autoSkipPadding: 30
+              },
+              grid: { display: false },
+              title: {
+                display: true,
+                text: "Previous <%= local_assigns[:epochs].count %> Epochs",
+                color: "<%= DARK_GREY %>"
+              }
+            },
+            y: {
+              display: true,
+              ticks: {
+                min: 0,
+                padding: 5
+              },
+              grid: {
+                display: true,
+                color: "<%= LIGHT_GREY_TRANSPARENT %>"
+              },
+              title: {
+                display: true,
+                text: "SOL",
+                color: "<%= DARK_GREY %>"
+              }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index',
+          },
+          plugins: {
+            tooltip: {
+              enabled: true,
+              displayColors: false,
+              padding: 8,
+              callbacks: {
+                label: function(tooltipItem) {
+                  if (tooltipItem.datasetIndex == 0) {
+                    return "Active stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
+                  } else {
+                    return "delegated stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
+                  }
+                },
+                title: function(tooltipItem) {
+                  return  "Epoch " + tooltipItem[0].label;
+                },
+              }
+            },
+            legend: {
+              labels: {
+                color: "<%= DARK_GREY %>",
+                boxWidth: 8,
+                boxHeight: 8,
+                usePointStyle: true,
+                padding: 5,
+                font: {
+                  size: 14
+                }
+              },
+            },
+          }
+        },
+        plugins: [{
+          beforeInit(chart) {
+            const originalFit = chart.legend.fit;
+            chart.legend.fit = function fit() {
+              originalFit.bind(chart.legend)();
+              this.height += 12;
+            }
+          },
+        }]
+      });
+</script>
