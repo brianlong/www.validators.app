@@ -21,6 +21,8 @@ if new_epoch_detected?(network, last_epoch)
     demo: false,
     logger: logger
   ).call
+
+  CreateVoteAccountStakeHistoryService.new(network: network, epoch: last_epoch).call
 else
   logger.info("No new epoch detected. Skipping...")
 end
