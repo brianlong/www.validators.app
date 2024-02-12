@@ -39,9 +39,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
+        uses: actions/checkout@v4
 
       - name: Set up Ruby version
         uses: ruby/setup-ruby@v1
@@ -49,12 +47,12 @@ jobs:
           ruby-version: .ruby-version
 
       - name: Set up Node version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
 
       - name: Setup cache key and directory for gems cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
@@ -66,7 +64,7 @@ jobs:
         run: echo "path=$(yarn cache dir)" >> "$GITHUB_OUTPUT"
 
       - name: Setup cache key and directory for node_modules cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.yarn-cache-dir.outputs.path }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
