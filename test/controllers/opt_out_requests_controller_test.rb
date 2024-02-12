@@ -77,6 +77,7 @@ class OptOutRequestsControllerTest < ActionDispatch::IntegrationTest
     @opt_out_params[:opt_out_request][:state] = ''
     assert_no_difference('OptOutRequest.count') do
       post '/opt-out-requests', params: @opt_out_params
+      assert_response :success
       assert_template :new
     end
   end
