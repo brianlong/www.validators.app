@@ -112,7 +112,7 @@ class DataCenterTest < ActiveSupport::TestCase
       data_center_key: "12345-DE-Berlin",
       autonomous_system_number: 12345,
       latitude: "51.2993",
-      longitude: "9.491",
+      longitude: "9.491"
     }.to_json
 
     assert_equal expected_result, @data_center.to_builder.target!

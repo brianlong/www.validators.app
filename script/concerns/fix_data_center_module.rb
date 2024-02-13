@@ -18,20 +18,20 @@ module FixDataCenterModule
   def setup_data_center(vip:, host_data:, host:)
     traits_autonomous_system_number = vip.data_center.traits_autonomous_system_number
 
-    data_center = DataCenter.find_or_create_by!(
+    data_center = DataCenter.find_or_create_by(
       traits_autonomous_system_number: traits_autonomous_system_number,
       traits_autonomous_system_organization: host_data[:aso],
       country_iso_code: host_data[:country_iso_code],
       country_name: host_data[:country_name],
       city_name: host_data[:city_name],
-      data_center_key: host_data[:data_center_key],
+      data_center_key: host_data[:data_center_key]
     ) # that's all the data we have from host_data
 
     data_center_host = DataCenterHost.find_or_create_by(
       host: host,
-      data_center: data_center,
+      data_center: data_center
     )
-
+    
     puts "new host #{host} assigned to vip: #{vip.id} (data_center_host id: #{data_center_host.id})"
 
     vip.update(data_center_host: data_center_host, is_overridden: true)

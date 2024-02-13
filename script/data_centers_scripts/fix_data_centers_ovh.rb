@@ -106,13 +106,7 @@ ValidatorIp.joins(:data_center)
     next unless last_ovh_ip&.include?(host_reg)
 
     host = ('H' + last_ovh_ip).strip.split(' ')[1].strip
-
-    begin
-      setup_data_center(vip: vip, host_data: host_data, host: host)
-    rescue ActiveRecord::RecordInvalid => e
-      Rails.logger.error "#{e.class} - #{e.message}"
-      Appsignal.send_error(e)
-    end
+    setup_data_center(vip: vip, host_data: host_data, host: host)
   end
 end
 

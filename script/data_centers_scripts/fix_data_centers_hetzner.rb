@@ -60,19 +60,12 @@ ValidatorIp.joins(:data_center)
   HETZNER_HOSTS.each do |host_reg, host_data|
     next unless last_hetzner_ip&.include?(host_reg)
 
-    host = ("H" + last_hetzner_ip).strip.split(" ")[1].strip
+    host = ('H' + last_hetzner_ip).strip.split(' ')[1].strip
+    setup_data_center(vip: vip, host_data: host_data, host: host)
+    
+    Rails.logger.warn "added IP Override: #{vip} - #{host}"
 
-    begin
-      setup_data_center(vip: vip, host_data: host_data, host: host)
-      Rails.logger.warn "added IP Override: #{vip} - #{host}"
-
-      break
-    rescue ActiveRecord::RecordInvalid => e
-      Rails.logger.error "#{e.class}: #{e.message}"
-      Appsignal.send_error(e)
-
-      break
-    end
+    break
   end
 end
 

@@ -16,9 +16,8 @@ class DataCenters::CheckIpInfoService
 
     data_center = set_data_center(max_mind_info)
     fill_blank_values(data_center, max_mind_info)
-    data_center.save!
 
-    update_validator_ips(ip, data_center, max_mind_info)
+    update_validator_ips(ip, data_center, max_mind_info) if data_center.save
   end
 
   def get_max_mind_info(ip)
@@ -26,7 +25,7 @@ class DataCenters::CheckIpInfoService
   end
 
   def update_validator_ips(ip, data_center, max_mind_info)
-    data_center_host = DataCenterHost.find_or_create_by!(
+    data_center_host = DataCenterHost.find_or_create_by(
       data_center: data_center,
       host: nil
     )
@@ -37,7 +36,7 @@ class DataCenters::CheckIpInfoService
     )
 
     val_ips.each do |val_ip|
-      val_ip.update!(
+      val_ip.update(
         data_center_host: data_center_host,
         traits_domain: max_mind_info.traits.domain,
         traits_ip_address: max_mind_info.traits.ip_address,

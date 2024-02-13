@@ -34,10 +34,6 @@ begin
       puts e.backtrace
       puts 'Going for next ip'
       next
-    rescue ActiveRecord::RecordInvalid => e
-      Rails.logger.error "#{e.class} - #{e.message}"
-      Appsignal.send_error(e)
-      next
     end
   end
 
