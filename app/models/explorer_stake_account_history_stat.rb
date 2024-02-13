@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: vote_account_stake_histories
+# Table name: explorer_stake_account_history_stats
 #
 #  id                              :bigint           not null, primary key
 #  account_balance                 :bigint
@@ -14,17 +14,6 @@
 #  rent_exempt_reserve             :bigint
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
-#  vote_account_id                 :bigint           not null
 #
-# Indexes
-#
-#  index_vote_account_stake_histories_on_vote_account     (network,epoch,vote_account_id) UNIQUE
-#  index_vote_account_stake_histories_on_vote_account_id  (vote_account_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (vote_account_id => vote_accounts.id)
-#
-class VoteAccountStakeHistory < ApplicationRecord
-  belongs_to :vote_account
+class ExplorerStakeAccountHistoryStat < ApplicationRecord
 end

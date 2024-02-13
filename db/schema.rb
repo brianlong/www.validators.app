@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_08_131452) do
+ActiveRecord::Schema.define(version: 2024_02_12_182046) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -252,6 +252,20 @@ ActiveRecord::Schema.define(version: 2024_02_08_131452) do
     t.bigint "total_active_stake"
     t.index ["epoch"], name: "index_epoch_wall_clocks_on_epoch"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
+  end
+
+  create_table "explorer_stake_account_history_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "epoch"
+    t.bigint "delegated_stake"
+    t.bigint "account_balance"
+    t.bigint "active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.bigint "rent_exempt_reserve"
+    t.string "network"
+    t.integer "delegating_stake_accounts_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "explorer_stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -781,11 +795,11 @@ ActiveRecord::Schema.define(version: 2024_02_08_131452) do
     t.bigint "credits_observed"
     t.bigint "deactivating_stake"
     t.bigint "rent_exempt_reserve"
-    t.integer "network"
+    t.string "network"
     t.integer "delegating_stake_accounts_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "epoch"], name: "index_vote_account_stake_histories_on_network_and_epoch"
+    t.index ["network", "epoch", "vote_account_id"], name: "index_vote_account_stake_histories_on_vote_account", unique: true
     t.index ["vote_account_id"], name: "index_vote_account_stake_histories_on_vote_account_id"
   end
 

@@ -1,7 +1,6 @@
-class CreateVoteAccountStakeHistories < ActiveRecord::Migration[6.1]
+class CreateExplorerStakeAccountHistoryStats < ActiveRecord::Migration[6.1]
   def change
-    create_table :vote_account_stake_histories do |t|
-      t.references :vote_account, null: false, foreign_key: true
+    create_table :explorer_stake_account_history_stats do |t|
       t.integer :epoch
       t.bigint :delegated_stake
       t.bigint :account_balance
@@ -13,7 +12,6 @@ class CreateVoteAccountStakeHistories < ActiveRecord::Migration[6.1]
       t.integer :delegating_stake_accounts_count
 
       t.timestamps
-      t.index %i[network epoch vote_account_id], unique: true, name: "index_vote_account_stake_histories_on_vote_account"
     end
   end
 end

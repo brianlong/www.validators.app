@@ -50,9 +50,9 @@
 
           <%
             num_of_records = @stake_history.count
-            delegated_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.delegated_stake).round(2) }.reverse
-            active_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.active_stake).round(2) }.reverse
-            epochs = @stake_history.pluck(:epoch).reverse
+            delegated_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.delegated_stake).round(2) }
+            active_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.active_stake).round(2) }
+            epochs = @stake_history.pluck(:epoch)
           %>
           <%= render 'vote_accounts/stats_chart',
                     chart_name: "stake-stats-chart",
