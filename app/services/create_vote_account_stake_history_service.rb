@@ -10,7 +10,8 @@ class CreateVoteAccountStakeHistoryService
     active_vote_accounts.each do |vote_account|
       stake_accounts = ExplorerStakeAccount.where(
         delegated_vote_account_address: vote_account.account,
-        network: @network
+        network: @network,
+        epoch: @epoch
       )
       vash = VoteAccountStakeHistory.find_or_initialize_by(epoch: @epoch, vote_account: vote_account, network: @network)
 
