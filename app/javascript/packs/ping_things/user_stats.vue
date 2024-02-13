@@ -10,7 +10,7 @@
                   User<br />
                   <small class="text-muted text-small">5 min / 60 min</small>
                 </th>
-                <th class="column-sm px-0">
+                <th class="column-xs px-0">
                   <i class="fa-solid fa-calculator text-success me-2"></i>Entries
                 </th>
                 <th class="column-sm px-0">
@@ -51,25 +51,25 @@
                     {{ fails_count_percentage(stats_array["60min"]["fails_count"], stats_array["60min"]["num_of_records"]) }}
                   </span>
                 </td>
-                <td class="text-success">
-                  {{ stats_array["5min"]["min"] ? stats_array["5min"]["min"] : 'N/A'}}
+                <td class="text-success text-nowrap">
+                  {{ stats_array["5min"]["min"] ? stats_array["5min"]["min"].toLocaleString('en-US') + ' ms' : 'N/A'}}
                   <br />
-                  {{ stats_array["60min"]["min"] ? stats_array["60min"]["min"] : 'N/A'}}
+                  {{ stats_array["60min"]["min"] ? stats_array["60min"]["min"].toLocaleString('en-US') + ' ms' : 'N/A'}}
                 </td>
-                <td class="text-success">
-                  {{ stats_array["5min"]["median"] ? stats_array["5min"]["median"] : 'N/A'}}
+                <td class="text-success text-nowrap">
+                  {{ stats_array["5min"]["median"] ? stats_array["5min"]["median"].toLocaleString('en-US') + ' ms' : 'N/A'}}
                   <br />
-                  {{ stats_array["60min"]["median"] ? stats_array["60min"]["median"] : 'N/A'}}
+                  {{ stats_array["60min"]["median"] ? stats_array["60min"]["median"].toLocaleString('en-US') + ' ms' : 'N/A'}}
                 </td>
-                <td class="text-success">
-                  {{ stats_array["5min"]["p90"] ? stats_array["5min"]["p90"] : 'N/A'}}
+                <td class="text-success text-nowrap">
+                  {{ stats_array["5min"]["p90"] ? stats_array["5min"]["p90"].toLocaleString('en-US') + ' ms' : 'N/A'}}
                   <br />
-                  {{ stats_array["60min"]["p90"] ? stats_array["60min"]["p90"] : 'N/A'}}
+                  {{ stats_array["60min"]["p90"] ? stats_array["60min"]["p90"].toLocaleString('en-US') + ' ms' : 'N/A'}}
                 </td>
-                <td class="text-success">
-                  {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"] : 'N/A'}}
+                <td class="text-success text-nowrap">
+                  {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"].toLocaleString('en-US') + ' slots' : 'N/A'}}
                   <br />
-                  {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"] : 'N/A'}}
+                  {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"].toLocaleString('en-US') + ' slots' : 'N/A'}}
                 </td>
               </tr>
             </tbody>

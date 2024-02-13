@@ -3,9 +3,9 @@
     <ping-thing-header />
 
     <stats-bar :network="network"/>
-    <user-stats :network="network"/>
+
     <div class="row">
-      <div class="col-md-12 col-lg-6 mb-4">
+      <div class="col-xl-6 mb-4">
         <div class="card h-100">
           <div class="card-content">
             <h2 class="h4 card-heading">
@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div class="col-md-12 col-lg-6 mb-4">
+      <div class="col-xl-6 mb-4">
         <div class="card h-100">
           <div class="card-content">
             <h2 class="h4 card-heading">
@@ -27,6 +27,8 @@
         </div>
       </div>
     </div>
+
+    <user-stats :network="network"/>
 
     <ping-thing-table :network="network" />
   </div>
