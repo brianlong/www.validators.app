@@ -1,3 +1,5 @@
+#frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: vote_account_stake_histories

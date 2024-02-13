@@ -25,6 +25,15 @@ class CreateVoteAccountStakeHistoryService
 
       vash.save
     end
+
+    create_explorer_stake_account_history_stat
+  end
+
+  def active_vote_accounts
+    @active_vote_accounts ||= VoteAccount.where(network: @network, is_active: true)
+  end
+
+  def create_explorer_stake_account_history_stat
     all_stake_accounts = ExplorerStakeAccount.where(network: @network, epoch: @epoch)
 
     ExplorerStakeAccountHistoryStat.create(
@@ -38,9 +47,5 @@ class CreateVoteAccountStakeHistoryService
       rent_exempt_reserve: all_stake_accounts.sum(:rent_exempt_reserve),
       delegating_stake_accounts_count: all_stake_accounts.count
     )
-  end
-
-  def active_vote_accounts
-    @active_vote_accounts ||= VoteAccount.where(network: @network, is_active: true)
   end
 end
