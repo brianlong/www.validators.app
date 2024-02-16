@@ -15,5 +15,9 @@
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
 #
+# Indexes
+#
+#  index_explorer_stake_account_history_stats_on_epoch_and_network  (epoch,network) UNIQUE
+#
 class ExplorerStakeAccountHistoryStat < ApplicationRecord
 end

@@ -42,8 +42,3 @@ class CreateVoteAccountStakeHistoryServiceTest < ActiveSupport::TestCase
     assert_equal 1, esah.delegating_stake_accounts_count
   end
 end
-# Compare this snippet from app/services/create_vote_account_stake_history_service.rb:
-# # frozen_string_literal: true
-# 
-# class CreateVoteAccountStakeHistoryService
-#   def initialize(network: "mainnet", epoch:)

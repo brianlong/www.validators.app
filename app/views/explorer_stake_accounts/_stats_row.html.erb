@@ -4,9 +4,7 @@
       <div class="card h-100">
         <div class="card-content pb-3">
           <h2 class="h4 card-heading">Stake Stats</h2>
-
           <%
-            num_of_records = @stake_history.count
             delegated_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.delegated_stake).round(2) }
             active_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.active_stake).round(2) }
             epochs = @stake_history.pluck(:epoch)

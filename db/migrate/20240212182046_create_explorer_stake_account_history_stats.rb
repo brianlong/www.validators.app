@@ -12,6 +12,8 @@ class CreateExplorerStakeAccountHistoryStats < ActiveRecord::Migration[6.1]
       t.integer :delegating_stake_accounts_count
 
       t.timestamps
+
+      t.index %i[epoch network], unique: true
     end
   end
 end

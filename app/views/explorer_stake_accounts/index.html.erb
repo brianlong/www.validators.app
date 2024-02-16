@@ -12,7 +12,7 @@
       <%= render "stake_accounts/explorer_stake_accounts_filter" %>
     </div>
 
-    <% if @explorer_stake_accounts&.count.to_i > 0 %>
+    <% if @explorer_stake_accounts.present? %>
       <%= render "stake_accounts/explorer_stake_accounts" %>
     <% elsif [params[:withdrawer], params[:staker], params[:vote_account], params[:stake_pubkey]].map(&:present?).any? %>
       <div class="card-footer pt-0 text-center lead">

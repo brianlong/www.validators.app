@@ -1,7 +1,6 @@
 <canvas id="<%= local_assigns[:chart_name] %>"></canvas>
 <script type="text/javascript">
     var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
-    console.log("<%= local_assigns[:epochs] %>")
     var chart = new Chart(ctx, {
         type: 'line',
         data: {
