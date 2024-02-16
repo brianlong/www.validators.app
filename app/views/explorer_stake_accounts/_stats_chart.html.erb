@@ -9,21 +9,22 @@
                 {
                     label: ' Active Stake  ',
                     fill: false,
-                    borderColor: "<%= local_assigns[:line_color] %>",
+                    borderColor: "<%= SPARK_LINE_1 %>",
                     borderWidth: 1,
-                    borderDash: [2, 2],
                     radius: 0,
                     data: <%= local_assigns[:active_stake_vector] %>,
-                    tension: 0
+                    tension: 0,
+                    yAxisID: 'y'
                 },
                 {
-                    label: ' Delegated Stake  ',
+                    label: ' Avg. Active Stake ',
                     fill: false,
-                    borderColor: "<%= local_assigns[:line_color] %>",
+                    borderColor: "<%= SPARK_LINE_2 %>",
                     borderWidth: 1,
                     radius: 0,
-                    data: <%= local_assigns[:delegated_stake_vector] %>,
-                    tension: 0
+                    data: <%= local_assigns[:average_active_stake] %>,
+                    tension: 0,
+                    yAxisID: 'y1'
                 }
             ]
         },
@@ -58,7 +59,22 @@
               },
               title: {
                 display: true,
-                text: "SOL",
+                text: "Active Stake SOL",
+                color: "<%= DARK_GREY %>"
+              }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+
+              // grid line settings
+              grid: {
+                drawOnChartArea: false, // only want the grid lines for one axis to show up
+              },
+              title: {
+                display: true,
+                text: "Avg Active Stake SOL",
                 color: "<%= DARK_GREY %>"
               }
             }
@@ -77,7 +93,7 @@
                   if (tooltipItem.datasetIndex == 0) {
                     return "Active stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
                   } else {
-                    return "delegated stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
+                    return "Avg active stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
                   }
                 },
                 title: function(tooltipItem) {

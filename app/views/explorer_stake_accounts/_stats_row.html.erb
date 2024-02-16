@@ -5,15 +5,18 @@
         <div class="card-content pb-3">
           <h2 class="h4 card-heading">Stake Stats</h2>
           <%
-            delegated_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.delegated_stake).round(2) }
-            active_stake_vector = @stake_history.map { |stake| lamports_to_sol(stake.active_stake).round(2) }
+            average_active_stake = @stake_history.map do |stake| 
+              stake.average_active_stake ? lamports_to_sol(stake.average_active_stake).round(2) : 0
+            end
+            active_stake_vector = @stake_history.map do |stake| 
+              stake.active_stake ? lamports_to_sol(stake.active_stake).round(2) : 0
+            end
             epochs = @stake_history.pluck(:epoch)
           %>
           <%= render 'explorer_stake_accounts/stats_chart',
                     chart_name: "stake-stats-chart",
-                    line_color: GREEN,
                     epochs: epochs,
-                    delegated_stake_vector: delegated_stake_vector,
+                    average_active_stake: average_active_stake,
                     active_stake_vector: active_stake_vector
           %>
         </div>
@@ -33,6 +36,10 @@
             <tr>
               <td><strong>Active Stake:</strong></td>
               <td><%= number_with_delimiter lamports_to_sol(@stake_history.last.active_stake).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Avg. Active Stake:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_history.last.average_active_stake).round(2) %> SOL</td>
             </tr>
             <tr>
               <td><strong>Credits Observed:</strong></td>

@@ -5,6 +5,7 @@ class CreateExplorerStakeAccountHistoryStats < ActiveRecord::Migration[6.1]
       t.bigint :delegated_stake
       t.bigint :account_balance
       t.bigint :active_stake
+      t.float :average_active_stake
       t.bigint :credits_observed
       t.bigint :deactivating_stake
       t.bigint :rent_exempt_reserve

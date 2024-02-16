@@ -17,6 +17,7 @@ class CreateVoteAccountStakeHistoryService
 
       vash.account_balance = stake_accounts.sum(:account_balance)
       vash.active_stake = stake_accounts.sum(:active_stake)
+      vash.average_active_stake = stake_accounts.average(:active_stake)
       vash.credits_observed = stake_accounts.sum(:credits_observed)
       vash.deactivating_stake = stake_accounts.sum(:deactivating_stake)
       vash.delegated_stake = stake_accounts.sum(:delegated_stake)
@@ -41,6 +42,7 @@ class CreateVoteAccountStakeHistoryService
       network: @network,
       account_balance: all_stake_accounts.sum(:account_balance),
       active_stake: all_stake_accounts.sum(:active_stake),
+      average_active_stake: all_stake_accounts.average(:active_stake),
       credits_observed: all_stake_accounts.sum(:credits_observed),
       deactivating_stake: all_stake_accounts.sum(:deactivating_stake),
       delegated_stake: all_stake_accounts.sum(:delegated_stake),

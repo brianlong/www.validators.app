@@ -7,6 +7,7 @@
 #  id                              :bigint           not null, primary key
 #  account_balance                 :bigint
 #  active_stake                    :bigint
+#  average_active_stake            :float(24)
 #  credits_observed                :bigint
 #  deactivating_stake              :bigint
 #  delegated_stake                 :bigint
