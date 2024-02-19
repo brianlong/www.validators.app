@@ -41,7 +41,7 @@ class StakeAccount < ApplicationRecord
   MINIMUM_STAKE = 1_000_000_000.freeze # 1 sol
 
   API_FIELDS = %i[
-    id
+    created_at
     activation_epoch
     delegated_stake
     active_stake
@@ -49,7 +49,6 @@ class StakeAccount < ApplicationRecord
     stake_pubkey
     staker
     withdrawer
-    stake_pool_id
     network
     batch_uuid
   ].freeze
