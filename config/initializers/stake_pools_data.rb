@@ -102,8 +102,8 @@ MAINNET_STAKE_POOLS = {
     authority: "F15nfVkJFAa3H4BaHEb6hQBnmiJZwPYioDiE1yxbc5y4",
     network: "mainnet",
     ticker: "zippysol",
-    small_logo: "jito-logo.svg",
-    large_logo: "jito.png",
+    small_logo: "zippystake-logo.svg",
+    large_logo: "zippystake.png",
     url: "https://www.zippystake.org/",
     manager_fee: 3, #https://docs.zippystake.org/
     withdrawal_fee: 0.1,
