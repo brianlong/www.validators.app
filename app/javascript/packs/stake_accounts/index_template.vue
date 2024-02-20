@@ -8,7 +8,7 @@
             <small class="text-muted">Click on stake pool logo to see pool stats</small>
           </div>
 
-          <div class="row text-center" v-if="!is_loading_stake_pools">
+          <div class="row text-center align-items-center" v-if="!is_loading_stake_pools">
             <a class="col-6 col-xl-4"
                v-for="pool in stake_pools"
                :key="pool.id"
