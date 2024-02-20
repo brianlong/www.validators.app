@@ -24,6 +24,9 @@ import MarinadeLarge from 'marinade.png'
 import SoceanSmall from 'socean-logo.svg'
 import SoceanLarge from 'socean.png'
 
+import ZippyStakeSmall from 'zippystake-logo.svg'
+import ZippyStakeLarge from 'zippystake.png'
+
 const logos = {
   "blazestake": {
     "small_logo": BlazeStakeSmall,
@@ -57,6 +60,10 @@ const logos = {
     "small_logo": SoceanSmall,
     "large_logo": SoceanLarge,
   },
+  "zippystake": {
+    "small_logo": ZippyStakeSmall,
+    "large_logo": ZippyStakeLarge
+  }
 }
 
 Vue.mixin({

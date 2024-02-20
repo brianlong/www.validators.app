@@ -34,7 +34,7 @@ MAINNET_STAKE_POOLS = {
     large_logo: "jpool.png",
     url: "https://jpool.one",
     manager_fee: 0, #https://jpool.one/pool-info
-    withdrawal_fee: 0.05,
+    withdrawal_fee: 0.08,
     deposit_fee: 0,
   },
   lido: {
@@ -96,6 +96,18 @@ MAINNET_STAKE_POOLS = {
     manager_fee: 4, #https://jito-foundation.gitbook.io/jitosol/faqs/general-faqs#fees
     withdrawal_fee: 0.1,
     deposit_fee: 0,
+  },
+  zippystake: {
+    name: "ZippyStake",
+    authority: "F15nfVkJFAa3H4BaHEb6hQBnmiJZwPYioDiE1yxbc5y4",
+    network: "mainnet",
+    ticker: "zippysol",
+    small_logo: "zippystake-logo.svg",
+    large_logo: "zippystake.png",
+    url: "https://www.zippystake.org/",
+    manager_fee: 3, #https://docs.zippystake.org/
+    withdrawal_fee: 0.1,
+    deposit_fee: 0
   }
 }
 
