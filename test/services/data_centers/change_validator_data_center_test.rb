@@ -55,8 +55,7 @@ module DataCenters
       )
 
       vcr_cassette(@vcr_namespace, "empty_data_center") do
-        service = ChangeValidatorDataCenter.new(validator2.id)
-        service.call
+        ChangeValidatorDataCenter.new.call(validator2.id)
 
         validator2.reload
 
@@ -81,8 +80,7 @@ module DataCenters
         assert_equal "Seychelles", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
 
-        service = ChangeValidatorDataCenter.new(@validator.id)
-        service.call
+        ChangeValidatorDataCenter.new.call(@validator.id)
 
         @validator.reload
         @validator_score_v1.reload
@@ -115,8 +113,7 @@ module DataCenters
         assert_equal "Seychelles", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
 
-        service = ChangeValidatorDataCenter.new(@validator.id)
-        service.call
+        ChangeValidatorDataCenter.new.call(@validator.id)
 
         @validator.reload
         @validator_score_v1.reload
@@ -142,8 +139,7 @@ module DataCenters
         assert_equal "Netherlands", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
 
-        service = ChangeValidatorDataCenter.new(@validator.id)
-        service.call
+        ChangeValidatorDataCenter.new.call(@validator.id)
 
         @validator.reload
         @validator_score_v1.reload
@@ -170,8 +166,7 @@ module DataCenters
         assert_equal "Seychelles", @validator.data_center.country_name
         assert_equal 206264, @validator.data_center.traits_autonomous_system_number
 
-        service = ChangeValidatorDataCenter.new(@validator.id)
-        service.call
+        ChangeValidatorDataCenter.new.call(@validator.id)
 
         @validator.reload
 

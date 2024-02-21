@@ -92,7 +92,7 @@ every 1.day, at: '0:15am', roles: [:background] do
 end
 
 every 1.day, at: '1:00am', roles: [:background] do
-  ruby_script 'validators_update_avatar_url.rb'
+  ruby_script 'validators_update_keybase_avatar_url.rb'
 end
 
 every 1.day, at: '2:00am', roles: [:background] do
