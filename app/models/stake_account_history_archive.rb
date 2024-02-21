@@ -1,3 +1,5 @@
+#frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: stake_account_history_archives
