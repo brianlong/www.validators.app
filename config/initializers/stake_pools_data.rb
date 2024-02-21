@@ -9,9 +9,9 @@ MAINNET_STAKE_POOLS = {
     small_logo: "socean-logo.svg",
     large_logo: "socean.png",
     url: "https://www.socean.fi",
-    manager_fee: 2, #https://www.socean.fi/en/ , https://soceanfi.notion.site/FAQ-e0e2b353a44a4c11b53f614f3dc7b730
+    manager_fee: 2, #https://www.socean.fi/en
     withdrawal_fee: 0.03,
-    deposit_fee: 0.0,
+    deposit_fee: 0
   },
   marinade: {
     name: "Marinade",
@@ -23,7 +23,7 @@ MAINNET_STAKE_POOLS = {
     url: "https://marinade.finance",
     manager_fee: 6, #https://docs.marinade.finance/faq/faq
     withdrawal_fee: 0,
-    deposit_fee: 0,
+    deposit_fee: 0
   },
   jpool: {
     name: "Jpool",
@@ -33,9 +33,9 @@ MAINNET_STAKE_POOLS = {
     small_logo: "jpool-logo.svg",
     large_logo: "jpool.png",
     url: "https://jpool.one",
-    manager_fee: 0, #https://jpool.one/pool-info
-    withdrawal_fee: 0.08,
-    deposit_fee: 0,
+    manager_fee: 5, #https://jpool.one/pool-info
+    withdrawal_fee: 0.11,
+    deposit_fee: 0
   },
   lido: {
     name: "Lido",
@@ -45,9 +45,9 @@ MAINNET_STAKE_POOLS = {
     small_logo: "lido-logo.svg",
     large_logo: "lido.png",
     url: "https://lido.fi/solana",
-    manager_fee: 5, #https://solana.lido.fi/
+    manager_fee: 5, #https://solana.lido.fi
     withdrawal_fee: 0,
-    deposit_fee: 0,
+    deposit_fee: 0
   },
   daopool: {
     name: "DAOPool",
@@ -57,9 +57,9 @@ MAINNET_STAKE_POOLS = {
     small_logo: "daopool-logo.png",
     large_logo: "daopool.png",
     url: "https://daopool.monkedao.io",
-    manager_fee: 2,
-    withdrawal_fee: 0,
-    deposit_fee: 0,
+    manager_fee: 2, #https://daopool.io/faq
+    withdrawal_fee: 0.3,
+    deposit_fee: 0
   },
   eversol: {
     name: "Eversol",
@@ -68,10 +68,10 @@ MAINNET_STAKE_POOLS = {
     ticker: "esol",
     small_logo: "eversol-logo.svg",
     large_logo: "eversol.png",
-    url: "https://eversol.one/",
-    manager_fee: 7, #https://docs.eversol.one/extras/faq
+    url: "https://eversol.one",
+    manager_fee: 7,
     withdrawal_fee: 0,
-    deposit_fee: 0,
+    deposit_fee: 0
   },
   blazestake: {
     name: "BlazeStake",
@@ -80,10 +80,10 @@ MAINNET_STAKE_POOLS = {
     ticker: "bsol",
     small_logo: "blazestake-logo.png",
     large_logo: "blazestake.png",
-    url: "https://stake.solblaze.org/",
+    url: "https://stake.solblaze.org",
     manager_fee: 5, #https://stake-docs.solblaze.org/features/fees
     withdrawal_fee: 0.1,
-    deposit_fee: 0,
+    deposit_fee: 0
   },
   jito: {
     name: "Jito",
@@ -92,10 +92,10 @@ MAINNET_STAKE_POOLS = {
     ticker: "jitosol",
     small_logo: "jito-logo.svg",
     large_logo: "jito.png",
-    url: "https://www.jito.network/",
-    manager_fee: 4, #https://jito-foundation.gitbook.io/jitosol/faqs/general-faqs#fees
+    url: "https://www.jito.network",
+    manager_fee: 4, #https://exponential.fi/protocols/72aec1c8-dd85-427d-bb50-5461347ec247
     withdrawal_fee: 0.1,
-    deposit_fee: 0,
+    deposit_fee: 0
   },
   zippystake: {
     name: "ZippyStake",
@@ -104,13 +104,12 @@ MAINNET_STAKE_POOLS = {
     ticker: "zippysol",
     small_logo: "zippystake-logo.svg",
     large_logo: "zippystake.png",
-    url: "https://www.zippystake.org/",
-    manager_fee: 3, #https://docs.zippystake.org/
+    url: "https://www.zippystake.org",
+    manager_fee: 3, #https://docs.zippystake.org
     withdrawal_fee: 0.1,
     deposit_fee: 0
   }
 }
-
 
 TESTNET_STAKE_POOLS = {
   jpool: {
