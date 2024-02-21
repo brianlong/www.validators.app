@@ -13,10 +13,7 @@ module Archivable
       records.find_each.with_index do |record, idx|
         print_no_test "\r#{idx + 1}/#{records.count}"
         archive = archive_class.find_or_initialize_by(id: record.id)
-        record.attributes.each do |attr, value|
-          archive.send("#{attr}=", value)
-        end
-        archive.save!
+        archive.update!(record.attributes)
         record.destroy! if destroy_after_archive
       end
 
@@ -27,11 +24,11 @@ module Archivable
     end
   end
 
-  def puts_no_test msg
+  def puts_no_test(msg)
     puts msg unless Rails.env.test?
   end
 
-  def print_no_test msg
+  def print_no_test(msg)
     print msg unless Rails.env.test?
   end
 end
