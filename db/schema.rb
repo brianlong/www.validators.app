@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_26_110659) do
+ActiveRecord::Schema.define(version: 2024_02_12_182046) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -491,6 +491,30 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.index ["stake_pubkey", "network"], name: "index_stake_account_histories_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_account_histories_on_staker_and_network"
     t.index ["withdrawer", "network"], name: "index_stake_account_histories_on_withdrawer_and_network"
+  end
+
+  create_table "stake_account_history_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "account_balance"
+    t.integer "activation_epoch"
+    t.bigint "active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.integer "deactivation_epoch"
+    t.bigint "delegated_stake"
+    t.string "delegated_vote_account_address"
+    t.bigint "rent_exempt_reserve"
+    t.string "stake_pubkey"
+    t.string "stake_type"
+    t.string "staker"
+    t.string "withdrawer"
+    t.integer "stake_pool_id"
+    t.string "network"
+    t.integer "validator_id"
+    t.string "batch_uuid"
+    t.integer "epoch"
+    t.float "apy"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
