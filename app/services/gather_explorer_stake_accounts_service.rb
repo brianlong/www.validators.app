@@ -19,9 +19,11 @@ class GatherExplorerStakeAccountsService
   def call
     get_stake_accounts
     update_stake_accounts
+    return true
   rescue StandardError => e
     @logger.error(e.message)
     @logger.error(e.backtrace.join("\n"))
+    return false
   end
 
   private

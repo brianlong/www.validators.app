@@ -24,6 +24,10 @@ module ApplicationHelper
     lamports / 1_000_000_000.to_f
   end
 
+  def lamports_to_sol_secure(lamports)
+    lamports ? lamports_to_sol(lamports) : 0
+  end
+
   def lamports_as_formatted_sol(lamports)
     return "0.00" unless lamports.is_a?(Numeric)
 

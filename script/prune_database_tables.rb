@@ -8,7 +8,19 @@ sixty_days_ago = (Date.today - 60.days).to_s(:db)
 verbose = false
 puts sixty_days_ago if verbose
 
-%w[batches epoch_histories ping_time_stats ping_times reports validator_block_histories validator_block_history_stats validator_histories vote_account_histories].each do |table|
+%w[
+  batches
+  epoch_histories
+  ping_time_stats
+  ping_times
+  reports
+  validator_block_histories
+  validator_block_history_stats
+  validator_histories
+  vote_account_histories
+  vote_account_stake_histories
+  explorer_stake_account_history_stats
+].each do |table|
   sql = "DELETE FROM #{table} WHERE created_at < '#{sixty_days_ago}';"
   puts sql if verbose
   ActiveRecord::Base.connection.execute(sql)
