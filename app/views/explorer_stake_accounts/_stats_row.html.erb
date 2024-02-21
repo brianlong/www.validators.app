@@ -51,7 +51,7 @@
             </tr>
             <tr>
               <td><strong>Stake Accounts:</strong></td>
-              <td><%= @stake_histories.last.delegating_stake_accounts_count %></td>
+              <td><%= number_with_delimiter @stake_histories.last.delegating_stake_accounts_count %></td>
             </tr>
             <tr>
               <td><strong>Deactivating Stake:</strong></td>

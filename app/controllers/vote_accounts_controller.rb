@@ -19,7 +19,8 @@ class VoteAccountsController < ApplicationController
     @explorer_stake_accounts_total = @explorer_stake_accounts[:total_count]
     @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
 
-    @stake_histories = @vote_account.vote_account_stake_histories.order(epoch: :asc).limit(40)
+    @stake_histories = []
+    # @stake_histories = @vote_account.vote_account_stake_histories.order(epoch: :asc).limit(40)
   end
 
   private
