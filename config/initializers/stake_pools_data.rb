@@ -69,7 +69,7 @@ MAINNET_STAKE_POOLS = {
     small_logo: "eversol-logo.svg",
     large_logo: "eversol.png",
     url: "https://eversol.one",
-    manager_fee: 7,
+    manager_fee: 7, #https://docs.eversol.one/extras/faq
     withdrawal_fee: 0,
     deposit_fee: 0
   },
@@ -93,8 +93,8 @@ MAINNET_STAKE_POOLS = {
     small_logo: "jito-logo.svg",
     large_logo: "jito.png",
     url: "https://www.jito.network",
-    manager_fee: 4, #https://exponential.fi/protocols/72aec1c8-dd85-427d-bb50-5461347ec247
-    withdrawal_fee: 0.1,
+    manager_fee: 5, #https://jito-foundation.gitbook.io/mev/jito-solana/faqs
+    withdrawal_fee: 0,
     deposit_fee: 0
   },
   zippystake: {
