@@ -254,6 +254,22 @@ ActiveRecord::Schema.define(version: 2024_02_12_182046) do
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
   end
 
+  create_table "explorer_stake_account_history_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "epoch"
+    t.bigint "delegated_stake"
+    t.bigint "account_balance"
+    t.bigint "active_stake"
+    t.float "average_active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.bigint "rent_exempt_reserve"
+    t.string "network"
+    t.integer "delegating_stake_accounts_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["epoch", "network"], name: "index_explorer_stake_account_history_stats_on_epoch_and_network", unique: true
+  end
+
   create_table "explorer_stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "account_balance"
     t.integer "activation_epoch"
@@ -772,6 +788,24 @@ ActiveRecord::Schema.define(version: 2024_02_12_182046) do
     t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"
   end
 
+  create_table "vote_account_stake_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "vote_account_id", null: false
+    t.integer "epoch"
+    t.bigint "delegated_stake"
+    t.bigint "account_balance"
+    t.bigint "active_stake"
+    t.float "average_active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.bigint "rent_exempt_reserve"
+    t.string "network"
+    t.integer "delegating_stake_accounts_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "epoch", "vote_account_id"], name: "index_vote_account_stake_histories_on_vote_account", unique: true
+    t.index ["vote_account_id"], name: "index_vote_account_stake_histories_on_vote_account_id"
+  end
+
   create_table "vote_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "validator_id", null: false
     t.string "account"
@@ -801,5 +835,6 @@ ActiveRecord::Schema.define(version: 2024_02_12_182046) do
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
+  add_foreign_key "vote_account_stake_histories", "vote_accounts"
   add_foreign_key "vote_accounts", "validators"
 end

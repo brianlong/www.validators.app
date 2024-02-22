@@ -19,6 +19,10 @@ class ExplorerStakeAccountsController < ApplicationController
     end
 
     @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
+    @stake_histories = []
+    # @stake_histories = ExplorerStakeAccountHistoryStat.where(network: index_params[:network])
+    #                                                 .order(epoch: :asc)
+    #                                                 .limit(40)
   end
 
   def show
