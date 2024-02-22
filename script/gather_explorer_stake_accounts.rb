@@ -15,7 +15,7 @@ end
 if new_epoch_detected?(network, last_epoch)
   logger.info("New epoch (#{last_epoch}) detected. service started...")
 
-  success = GatherExplorerStakeAccountsService.new(
+  GatherExplorerStakeAccountsService.new(
     network: network,
     config_urls: NETWORK_URLS[network],
     current_epoch: last_epoch,
@@ -23,7 +23,9 @@ if new_epoch_detected?(network, last_epoch)
     logger: logger
   ).call
 
-  CreateVoteAccountStakeHistoryService.new(network: network, epoch: last_epoch).call unless !success
+  if ExplorerStakeAccount.where(network: network, epoch: last_epoch).exists?
+    CreateVoteAccountStakeHistoryService.new(network: network, epoch: last_epoch).call
+  end
 else
   logger.info("No new epoch detected. Skipping...")
 end
