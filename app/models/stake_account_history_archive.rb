@@ -1,6 +1,8 @@
+#frozen_string_literal: true
+
 # == Schema Information
 #
-# Table name: stake_account_histories
+# Table name: stake_account_history_archives
 #
 #  id                             :bigint           not null, primary key
 #  account_balance                :bigint
@@ -25,17 +27,5 @@
 #  stake_pool_id                  :integer
 #  validator_id                   :integer
 #
-# Indexes
-#
-#  index_stake_account_histories_on_stake_pool_id             (stake_pool_id)
-#  index_stake_account_histories_on_stake_pubkey_and_network  (stake_pubkey,network)
-#  index_stake_account_histories_on_staker_and_network        (staker,network)
-#  index_stake_account_histories_on_withdrawer_and_network    (withdrawer,network)
-#
-
-class StakeAccountHistory < ApplicationRecord
-  extend Archivable
-
-  belongs_to :stake_pool, optional: true
-  belongs_to :validator, optional: true
+class StakeAccountHistoryArchive < ApplicationRecord
 end
