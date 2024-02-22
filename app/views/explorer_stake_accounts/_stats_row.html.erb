@@ -5,10 +5,10 @@
         <div class="card-content pb-3">
           <h2 class="h4 card-heading">Stake Stats</h2>
           <%
-            average_active_stake = @stake_histories.map do |stake| 
+            average_active_stake = @stake_histories.map do |stake|
               stake.average_active_stake ? lamports_to_sol(stake.average_active_stake).round(2) : 0
             end
-            active_stake_vector = @stake_histories.map do |stake| 
+            active_stake_vector = @stake_histories.map do |stake|
               stake.active_stake ? lamports_to_sol(stake.active_stake).round(2) : 0
             end
             epochs = @stake_histories.pluck(:epoch)
@@ -59,6 +59,7 @@
             </tr>
           </tbody>
       </table>
+    </div>
     </div>
   </div>
 <% end %>
