@@ -95,7 +95,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'bullet', '~> 7.0'
   gem 'factory_bot_rails'
-  gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
+  gem 'faker' #, git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
   gem 'pronto', '~> 0.11.2'
   gem 'pronto-flay', '~> 0.11.1', require: false
   gem 'pronto-rubocop', '~> 0.11.5', require: false
