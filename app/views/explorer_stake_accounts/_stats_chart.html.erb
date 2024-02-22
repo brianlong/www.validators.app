@@ -10,6 +10,7 @@
                     label: ' Active Stake  ',
                     fill: false,
                     borderColor: "<%= SPARK_LINE_1 %>",
+                    backgroundColor: "<%= SPARK_LINE_1 %>",
                     borderWidth: 1,
                     radius: 0,
                     data: <%= local_assigns[:active_stake_vector] %>,
@@ -17,9 +18,10 @@
                     yAxisID: 'y'
                 },
                 {
-                    label: ' Avg. Active Stake ',
+                    label: ' Avg Active Stake',
                     fill: false,
                     borderColor: "<%= SPARK_LINE_2 %>",
+                    backgroundColor: "<%= SPARK_LINE_2 %>",
                     borderWidth: 1,
                     radius: 0,
                     data: <%= local_assigns[:average_active_stake] %>,
@@ -43,7 +45,7 @@
               grid: { display: false },
               title: {
                 display: true,
-                text: "Previous <%= local_assigns[:epochs].count %> Epochs",
+                text: "Last <%= local_assigns[:epochs].count %> Epochs",
                 color: "<%= DARK_GREY %>"
               }
             },
@@ -67,8 +69,6 @@
               type: 'linear',
               display: true,
               position: 'right',
-
-              // grid line settings
               grid: {
                 drawOnChartArea: false, // only want the grid lines for one axis to show up
               },
@@ -103,11 +103,11 @@
             },
             legend: {
               labels: {
-                color: "<%= DARK_GREY %>",
                 boxWidth: 8,
                 boxHeight: 8,
                 usePointStyle: true,
                 padding: 5,
+                color: "<%= DARK_GREY %>",
                 font: {
                   size: 14
                 }
