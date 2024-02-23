@@ -60,7 +60,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "fma_ruby_on_rails_template_production"
+  # config.active_job.queue_name_prefix = "validators_app_production"
 
   config.action_mailer.perform_caching = false
 
