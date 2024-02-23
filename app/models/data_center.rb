@@ -88,6 +88,10 @@ class DataCenter < ApplicationRecord
     end
   end
 
+  validates :traits_autonomous_system_number, presence: true
+
+  after_validation :send_error_if_invalid
+
   scope :for_api, -> { select(FIELDS_FOR_API) }
 
   scope :by_data_center_key, ->(data_center_keys) do
@@ -114,5 +118,12 @@ class DataCenter < ApplicationRecord
 
   def assign_data_center_key
     self.data_center_key = "#{traits_autonomous_system_number}-#{country_iso_code}-#{city_name || location_time_zone}"
+  end
+
+  def send_error_if_invalid
+    if errors.present?
+      error = ActiveRecord::RecordInvalid.new(self)
+      Appsignal.send_error(error)
+    end
   end
 end

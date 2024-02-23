@@ -5,26 +5,17 @@ module DataCenters
     LOG_PATH = Rails.root.join("log", "change_validator_data_center.log")
     SEPARATOR = "-" * 50
 
-    def initialize(validator_id, max_mind_client: MaxMindClient)
+    def initialize(max_mind_client: MaxMindClient)
       # Service responsible for appending geo data
       @ip_service = DataCenters::CheckIpInfoService.new
 
-      @validator_id = validator_id
-
-      @validator = nil
-      @validator_ip = nil
-      @data_center_host = nil
-      @data_center = nil
-      @data_center_exists = nil
-      @max_mind_results = nil
       @update_score = false
-
       @max_mind_client = max_mind_client
       @logger ||= Logger.new(LOG_PATH)
     end
 
-    def call
-      find_validator
+    def call(validator_id)
+      find_validator(validator_id)
       unless @validator
         log_message(SEPARATOR)
         return false
@@ -45,14 +36,14 @@ module DataCenters
 
     private
 
-    def find_validator
-      @validator = Validator.find_by(id: @validator_id)
+    def find_validator(validator_id)
+      @validator = Validator.find_by(id: validator_id)
 
       if @validator
         log_message("Validator #{@validator.name} (##{@validator.id}) found.")
       else
         log_message(
-          "Validator with id: #{@validator_id} has not been found, script is finished.",
+          "Validator with id: #{validator_id} has not been found, script is finished.",
           type: :error
         )
       end

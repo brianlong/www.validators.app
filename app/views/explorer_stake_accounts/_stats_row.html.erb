@@ -1,0 +1,65 @@
+<% if @stake_histories.any? %>
+  <div class="row">
+    <div class="col-lg-8 mb-4">
+      <div class="card h-100">
+        <div class="card-content pb-3">
+          <h2 class="h4 card-heading">Stake Stats</h2>
+          <%
+            average_active_stake = @stake_histories.map do |stake|
+              stake.average_active_stake ? lamports_to_sol(stake.average_active_stake).round(2) : 0
+            end
+            active_stake_vector = @stake_histories.map do |stake|
+              stake.active_stake ? lamports_to_sol(stake.active_stake).round(2) : 0
+            end
+            epochs = @stake_histories.pluck(:epoch)
+          %>
+          <%= render 'explorer_stake_accounts/stats_chart',
+                    chart_name: "stake-stats-chart",
+                    epochs: epochs,
+                    average_active_stake: average_active_stake,
+                    active_stake_vector: active_stake_vector
+          %>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+      <div class="card h-100">
+        <div class="card-content pb-3">
+          <h2 class="h4 card-heading">Last Epoch</h2>
+        </div>
+        <table class='table table-block mb-0'>
+          <tbody>
+            <tr>
+              <td><strong>Delegated Stake:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.delegated_stake).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Active Stake:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.active_stake).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Avg. Active Stake:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.average_active_stake).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Credits Observed:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.credits_observed).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Rent Exempt Reserve:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.rent_exempt_reserve).round(2) %> SOL</td>
+            </tr>
+            <tr>
+              <td><strong>Stake Accounts:</strong></td>
+              <td><%= number_with_delimiter @stake_histories.last.delegating_stake_accounts_count %></td>
+            </tr>
+            <tr>
+              <td><strong>Deactivating Stake:</strong></td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.deactivating_stake).round(2) %> SOL</td>
+            </tr>
+          </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+<% end %>

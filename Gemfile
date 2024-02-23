@@ -69,7 +69,7 @@ gem 'capistrano-rails', group: :development
 gem 'appsignal'
 
 gem "mechanize", ">= 2.9.1"
-gem 'nokogiri', '1.15.4'
+gem 'nokogiri', '1.15.5'
 
 # Pagination
 gem 'kaminari'
@@ -116,7 +116,7 @@ group :development do
   gem 'annotate'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
-  gem 'puma', '~> 6.4.0'
+  gem 'puma', '~> 6.4.2'
 end
 
 group :test do

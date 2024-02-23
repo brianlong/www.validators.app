@@ -11,10 +11,12 @@ module Archivable
   def archive_due_to(date_to:, network:, destroy_after_archive: false)
     begin
       records = where(network: network).where("created_at < ?", date_to)
-      puts_no_test "Archiving #{records.count} records for #{self.name} (#{network})"
+      total = records.count
+
+      puts_no_test "Archiving #{total} records for #{self.name} (#{network})"
 
       records.find_each.with_index do |record, idx|
-        print_no_test "\r#{number_with_delimiter(idx + 1)}/#{records.count}"
+        print_no_test "\r#{number_with_delimiter(idx + 1)}/#{total}"
         archive = archive_class.find_or_initialize_by(id: record.id)
         archive.update!(record.attributes)
         record.destroy! if destroy_after_archive

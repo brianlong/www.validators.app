@@ -16,7 +16,7 @@ class KeybaseLogicTest < ActiveSupport::TestCase
     VCR.use_cassette('keybase_logic/get_nonexistent_url', record: :new_episodes) do
       keybase_id = "brianlongbrianlong"
       avatar_url = get_validator_avatar(keybase_id)
-      assert_equal nil, avatar_url
+      assert_nil avatar_url
     end # VCR
   end
 end

@@ -5,6 +5,11 @@ require 'stake_logic'
 
 include StakeLogic
 NETWORKS.each do |network|
+  unless StakePool.where(network: network).exists?
+    puts "Skipping #{network}, because there are no StakePools available."
+    next
+  end
+
   payload = {
     config_urls: NETWORK_URLS[network],
     network: network

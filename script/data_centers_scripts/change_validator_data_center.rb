@@ -11,4 +11,4 @@ unless validator_id
   return false
 end
 
-DataCenters::ChangeValidatorDataCenter.new(validator_id).call
+DataCenters::ChangeValidatorDataCenter.new.call(validator_id)

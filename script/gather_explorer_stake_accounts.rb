@@ -14,6 +14,7 @@ end
 # Run this script only if there are no ExplorerStakeAccounts for the last epoch
 if new_epoch_detected?(network, last_epoch)
   logger.info("New epoch (#{last_epoch}) detected. service started...")
+
   GatherExplorerStakeAccountsService.new(
     network: network,
     config_urls: NETWORK_URLS[network],
@@ -21,6 +22,10 @@ if new_epoch_detected?(network, last_epoch)
     demo: false,
     logger: logger
   ).call
+
+  if ExplorerStakeAccount.where(network: network, epoch: last_epoch).exists?
+    CreateVoteAccountStakeHistoryService.new(network: network, epoch: last_epoch).call
+  end
 else
   logger.info("No new epoch detected. Skipping...")
 end
