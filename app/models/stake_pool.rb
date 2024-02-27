@@ -48,8 +48,8 @@ class StakePool < ApplicationRecord
     delinquent_count
   ].freeze
 
-  has_many :stake_accounts
-  has_many :stake_account_histories
+  has_many :stake_accounts, dependent: :destroy
+  has_many :stake_account_histories, dependent: :destroy
 
   def validators_count
     stake_accounts.with_minimum_stake.pluck(:validator_id).compact.uniq.count
