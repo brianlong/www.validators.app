@@ -61,18 +61,6 @@ MAINNET_STAKE_POOLS = {
     withdrawal_fee: 0.3,
     deposit_fee: 0
   },
-  eversol: {
-    name: "Eversol",
-    authority: "C4NeuptywfXuyWB9A7H7g5jHVDE8L6Nj2hS53tA71KPn",
-    network: "mainnet",
-    ticker: "esol",
-    small_logo: "eversol-logo.svg",
-    large_logo: "eversol.png",
-    url: "https://eversol.one",
-    manager_fee: 7, #https://docs.eversol.one/extras/faq
-    withdrawal_fee: 0,
-    deposit_fee: 0
-  },
   blazestake: {
     name: "BlazeStake",
     authority: "6WecYymEARvjG5ZyqkrVQ6YkhPfujNzWpSPwNKXHCbV2",
