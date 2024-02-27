@@ -23,6 +23,8 @@
 #  index_ping_thing_stats_on_network_and_interval  (network,interval)
 #
 class PingThingStat < ApplicationRecord
+  extend Archivable
+
   FIELDS_FOR_API = [
     :interval,
     :max,

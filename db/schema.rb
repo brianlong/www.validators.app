@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_12_182046) do
+ActiveRecord::Schema.define(version: 2024_02_22_124345) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -344,6 +344,23 @@ ActiveRecord::Schema.define(version: 2024_02_12_182046) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "ping_thing_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "amount"
+    t.integer "user_id"
+    t.string "application"
+    t.integer "commitment_level"
+    t.string "network"
+    t.datetime "reported_at"
+    t.integer "response_time"
+    t.string "signature"
+    t.bigint "slot_landed"
+    t.bigint "slot_sent"
+    t.boolean "success"
+    t.string "transaction_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "raw_data"
     t.datetime "created_at", precision: 6, null: false
@@ -365,6 +382,21 @@ ActiveRecord::Schema.define(version: 2024_02_12_182046) do
     t.float "average_slot_latency"
     t.integer "fails_count"
     t.index ["network", "interval"], name: "index_ping_thing_recent_stats_on_network_and_interval"
+  end
+
+  create_table "ping_thing_stat_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "average_slot_latency"
+    t.integer "interval"
+    t.float "max"
+    t.float "median"
+    t.float "min"
+    t.string "network"
+    t.integer "num_of_records"
+    t.datetime "time_from"
+    t.integer "tps"
+    t.bigint "transactions_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "ping_thing_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
