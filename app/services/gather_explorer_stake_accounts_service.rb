@@ -18,7 +18,7 @@ class GatherExplorerStakeAccountsService
 
   def call
     get_stake_accounts
-    update_stake_accounts
+    update_stake_accounts unless @stake_accounts.blank?
   rescue StandardError => e
     @logger.error(e.message)
     @logger.error(e.backtrace.join("\n"))
