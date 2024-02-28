@@ -6,9 +6,6 @@ import BlazeStakeLarge from 'blazestake.png'
 import DAOPoolSmall from 'daopool-logo.png'
 import DAOPoolLarge from 'daopool.png'
 
-import EversolSmall from 'eversol-logo.svg'
-import EversolLarge from 'eversol.png'
-
 import JitoSmall from 'jito-logo.svg'
 import JitoLarge from 'jito.png'
 
@@ -35,10 +32,6 @@ const logos = {
   "daopool": {
     "small_logo": DAOPoolSmall,
     "large_logo": DAOPoolLarge,
-  },
-  "eversol": {
-    "small_logo": EversolSmall,
-    "large_logo": EversolLarge,
   },
   "jito": {
     "small_logo": JitoSmall,
