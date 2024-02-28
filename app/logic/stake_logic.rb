@@ -7,6 +7,24 @@ module StakeLogic
 
   class NoResultsFromSolana < StandardError; end
 
+  def check_current_epoch
+    lambda do |p|
+      return p unless p.code == 200
+
+      current_epoch = EpochWallClock.where(network: p.payload[:network])
+                                    .order(created_at: :desc)
+                                    .first
+                                    .epoch
+      is_new_epoch = !StakeAccount.where(network: p.payload[:network], epoch: current_epoch).exists?
+
+      if is_new_epoch
+        Pipeline.new(200, p.payload.merge(current_epoch: current_epoch))
+      else
+        Pipeline.new(300, p.payload.merge(current_epoch: current_epoch))
+      end
+    end
+  end
+
   def get_last_batch
     lambda do |p|
       return p unless p.code == 200
@@ -61,7 +79,7 @@ module StakeLogic
       account_histories = []
 
       StakeAccount.where.not(
-        batch_uuid: p.payload[:batch].uuid,
+        epoch: p.payload[:current_epoch],
         network: p.payload[:network]
       ).each do |old_stake|
         account_histories.push StakeAccountHistory.new(old_stake.attributes.except("id"))
@@ -83,10 +101,6 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      current_epoch = EpochWallClock.where(network: p.payload[:network])
-                                    .order(created_at: :desc)
-                                    .first
-                                    .epoch
       p.payload[:stake_accounts].each do |acc|
         vote_account = VoteAccount.where(
           network: p.payload[:network],
@@ -114,11 +128,11 @@ module StakeLogic
           withdrawer: acc['withdrawer'],
           batch_uuid: p.payload[:batch].uuid,
           validator_id: validator_id,
-          epoch: current_epoch
+          epoch: p.payload[:current_epoch]
         )
       end
 
-      StakeAccount.where(network: p.payload[:network]).where.not(batch_uuid: p.payload[:batch].uuid).delete_all
+      StakeAccount.where(network: p.payload[:network]).where.not(epoch: p.payload[:current_epoch]).delete_all
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
