@@ -8,4 +8,4 @@ test:
 production:
   adapter: redis
   url: <%= Rails.application.credentials.dig(:redis, :url) %>
-  channel_prefix: fma_ruby_on_rails_template_production
+  channel_prefix: validators_app_production
