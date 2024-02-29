@@ -2,23 +2,23 @@
   <div class="row">
     <div class="col-xl-8 mb-4">
       <div class="card h-100">
-        <div class="card-content pb-3">
-          <h2 class="h4 card-heading">Stake Stats</h2>
-          <%= render 'explorer_stake_accounts/stats_chart',
+        <div class="card-content">
+          <h2 class="h4 card-heading">Active Stake</h2>
+          <%= render 'explorer_stake_accounts/stake_stats_large_chart',
                      chart_name: "stake-stats-chart",
-                     epochs: @data_for_chart[:epochs],
-                     delegated_stake: @data_for_chart[:delegated_stake],
-                     active_stake: @data_for_chart[:active_stake]
+                     epochs: @data_for_charts[:epochs],
+                     vector: @data_for_charts[:active_stake]
           %>
         </div>
       </div>
     </div>
+
     <div class="col-xl-4 mb-4">
       <div class="card h-100">
-        <div class="card-content pb-3">
-          <h2 class="h4 card-heading">Last Epoch</h2>
+        <div class="card-content">
+          <h2 class="h4 card-heading mb-2">Last Epoch</h2>
         </div>
-        <table class='table table-block mb-0'>
+        <table class='table table-block small mb-0'>
           <tbody>
           <tr>
             <td><strong>Stake Accounts:</strong></td>
@@ -49,8 +49,47 @@
               <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.deactivating_stake.to_i).round(2) %> SOL</td>
             </tr>
           </tbody>
-      </table>
+        </table>
+      </div>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4 mb-4">
+      <div class="card h-100">
+        <div class="card-content">
+          <div class="h6 card-heading mb-4">Delegated Stake</div>
+          <%= render 'explorer_stake_accounts/stake_stats_small_chart',
+                     chart_name: "delegated-stake-chart",
+                     epochs: @data_for_charts[:epochs],
+                     vector: @data_for_charts[:delegated_stake]
+          %>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+      <div class="card h-100">
+        <div class="card-content">
+          <div class="h6 card-heading mb-4">Average Active Stake</div>
+          <%= render 'explorer_stake_accounts/stake_stats_small_chart',
+                     chart_name: "average-stake-chart",
+                     epochs: @data_for_charts[:epochs],
+                     vector: @data_for_charts[:average_stake]
+          %>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+      <div class="card h-100">
+        <div class="card-content">
+          <div class="h6 card-heading mb-4">Stake Accounts</div>
+          <%= render 'explorer_stake_accounts/stake_accounts_chart',
+                     chart_name: "stake-accounts-chart",
+                     epochs: @data_for_charts[:epochs],
+                     vector: @data_for_charts[:stake_accounts_count]
+          %>
+        </div>
+      </div>
     </div>
   </div>
 <% end %>
