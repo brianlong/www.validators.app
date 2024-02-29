@@ -18,7 +18,7 @@
                     yAxisID: 'y'
                 },
                 {
-                    label: ' Avg Active Stake',
+                    label: ' Average Active Stake',
                     fill: false,
                     borderColor: "<%= SPARK_LINE_2 %>",
                     backgroundColor: "<%= SPARK_LINE_2 %>",
@@ -93,7 +93,7 @@
                   if (tooltipItem.datasetIndex == 0) {
                     return "Active stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
                   } else {
-                    return "Avg active stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
+                    return "Average active stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
                   }
                 },
                 title: function(tooltipItem) {

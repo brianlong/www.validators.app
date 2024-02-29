@@ -1,6 +1,6 @@
 <% if @stake_histories.any? %>
   <div class="row">
-    <div class="col-lg-8 mb-4">
+    <div class="col-xl-8 mb-4">
       <div class="card h-100">
         <div class="card-content pb-3">
           <h2 class="h4 card-heading">Stake Stats</h2>
@@ -22,13 +22,17 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 mb-4">
+    <div class="col-xl-4 mb-4">
       <div class="card h-100">
         <div class="card-content pb-3">
           <h2 class="h4 card-heading">Last Epoch</h2>
         </div>
         <table class='table table-block mb-0'>
           <tbody>
+          <tr>
+            <td><strong>Stake Accounts:</strong></td>
+            <td><%= number_with_delimiter @stake_histories.last.delegating_stake_accounts_count %></td>
+          </tr>
             <tr>
               <td><strong>Delegated Stake:</strong></td>
               <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.delegated_stake).round(2) %> SOL</td>
@@ -48,10 +52,6 @@
             <tr>
               <td><strong>Rent Exempt Reserve:</strong></td>
               <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.rent_exempt_reserve).round(2) %> SOL</td>
-            </tr>
-            <tr>
-              <td><strong>Stake Accounts:</strong></td>
-              <td><%= number_with_delimiter @stake_histories.last.delegating_stake_accounts_count %></td>
             </tr>
             <tr>
               <td><strong>Deactivating Stake:</strong></td>
