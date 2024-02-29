@@ -23,8 +23,8 @@ class ExplorerStakeAccountsController < ApplicationController
                                                       .order(epoch: :asc)
                                                       .limit(40)
     @data_for_chart = {
-      average_active_stake: @stake_histories.map { |st| helpers.lamports_to_sol(st.average_active_stake.to_i).round(2) },
-      active_stake_vector: @stake_histories.map { |st| helpers.lamports_to_sol(st.active_stake.to_i).round(2) },
+      active_stake: @stake_histories.map { |st| helpers.lamports_to_sol(st.active_stake.to_i).round(2) },
+      delegated_stake: @stake_histories.map { |st| helpers.lamports_to_sol(st.delegated_stake.to_i).round(2) },
       epochs: @stake_histories.pluck(:epoch)
     }
   end

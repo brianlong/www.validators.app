@@ -7,8 +7,8 @@
           <%= render 'explorer_stake_accounts/stats_chart',
                      chart_name: "stake-stats-chart",
                      epochs: @data_for_chart[:epochs],
-                     average_active_stake: @data_for_chart[:average_active_stake],
-                     active_stake_vector: @data_for_chart[:active_stake_vector]
+                     delegated_stake: @data_for_chart[:delegated_stake],
+                     active_stake: @data_for_chart[:active_stake]
           %>
         </div>
       </div>
@@ -26,27 +26,27 @@
           </tr>
             <tr>
               <td><strong>Delegated Stake:</strong></td>
-              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.delegated_stake).round(2) %> SOL</td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.delegated_stake.to_i).round(2) %> SOL</td>
             </tr>
             <tr>
               <td><strong>Active Stake:</strong></td>
-              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.active_stake).round(2) %> SOL</td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.active_stake.to_i).round(2) %> SOL</td>
             </tr>
             <tr>
               <td><strong>Average Active Stake:</strong></td>
-              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.average_active_stake).round(2) %> SOL</td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.average_active_stake.to_i).round(2) %> SOL</td>
             </tr>
             <tr>
               <td><strong>Credits Observed:</strong></td>
-              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.credits_observed).round(2) %> SOL</td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.credits_observed.to_i).round(2) %> SOL</td>
             </tr>
             <tr>
               <td><strong>Rent Exempt Reserve:</strong></td>
-              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.rent_exempt_reserve).round(2) %> SOL</td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.rent_exempt_reserve.to_i).round(2) %> SOL</td>
             </tr>
             <tr>
               <td><strong>Deactivating Stake:</strong></td>
-              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.deactivating_stake).round(2) %> SOL</td>
+              <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.deactivating_stake.to_i).round(2) %> SOL</td>
             </tr>
           </tbody>
       </table>

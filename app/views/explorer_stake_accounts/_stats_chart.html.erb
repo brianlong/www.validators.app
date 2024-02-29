@@ -1,7 +1,13 @@
 <canvas id="<%= local_assigns[:chart_name] %>"></canvas>
 <script type="text/javascript">
-    var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
-    var chart = new Chart(ctx, {
+    let ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
+
+    let min = Math.min.apply(Math, <%= local_assigns[:active_stake] %>) - 70000000
+    let min_y_value = Math.round( (min) / 50000000 ) * 50000000; // round to nearest 50M
+    let max = Math.max.apply(Math, <%= local_assigns[:delegated_stake] %>) + 70000000
+    let max_y_value = Math.round( (max) / 50000000 ) * 50000000; // round to nearest 50M
+
+    let chart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: <%= local_assigns[:epochs] %>,
@@ -13,20 +19,18 @@
                     backgroundColor: "<%= SPARK_LINE_1 %>",
                     borderWidth: 1,
                     radius: 0,
-                    data: <%= local_assigns[:active_stake_vector] %>,
-                    tension: 0,
-                    yAxisID: 'y'
+                    data: <%= local_assigns[:active_stake] %>,
+                    tension: 0
                 },
                 {
-                    label: ' Average Active Stake',
+                    label: ' Delegated Stake',
                     fill: false,
                     borderColor: "<%= SPARK_LINE_2 %>",
                     backgroundColor: "<%= SPARK_LINE_2 %>",
                     borderWidth: 1,
                     radius: 0,
-                    data: <%= local_assigns[:average_active_stake] %>,
-                    tension: 0,
-                    yAxisID: 'y1'
+                    data: <%= local_assigns[:delegated_stake] %>,
+                    tension: 0
                 }
             ]
         },
@@ -51,9 +55,11 @@
             },
             y: {
               display: true,
+              min: min_y_value,
+              max: max_y_value,
+              //min: Math.min( <%= local_assigns[:active_stake] %> ),
               ticks: {
-                min: 0,
-                padding: 5
+                padding: 5,
               },
               grid: {
                 display: true,
@@ -65,19 +71,6 @@
                 color: "<%= DARK_GREY %>"
               }
             },
-            y1: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              grid: {
-                drawOnChartArea: false, // only want the grid lines for one axis to show up
-              },
-              title: {
-                display: true,
-                text: "Avg Active Stake",
-                color: "<%= DARK_GREY %>"
-              }
-            }
           },
           interaction: {
             intersect: false,
@@ -93,7 +86,7 @@
                   if (tooltipItem.datasetIndex == 0) {
                     return "Active stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
                   } else {
-                    return "Average active stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
+                    return "Delegated stake: " + tooltipItem.raw.toLocaleString('en-US') + " SOL";
                   }
                 },
                 title: function(tooltipItem) {
