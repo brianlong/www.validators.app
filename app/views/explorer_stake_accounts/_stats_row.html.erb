@@ -4,20 +4,11 @@
       <div class="card h-100">
         <div class="card-content pb-3">
           <h2 class="h4 card-heading">Stake Stats</h2>
-          <%
-            average_active_stake = @stake_histories.map do |stake|
-              stake.average_active_stake ? lamports_to_sol(stake.average_active_stake).round(2) : 0
-            end
-            active_stake_vector = @stake_histories.map do |stake|
-              stake.active_stake ? lamports_to_sol(stake.active_stake).round(2) : 0
-            end
-            epochs = @stake_histories.pluck(:epoch)
-          %>
           <%= render 'explorer_stake_accounts/stats_chart',
-                    chart_name: "stake-stats-chart",
-                    epochs: epochs,
-                    average_active_stake: average_active_stake,
-                    active_stake_vector: active_stake_vector
+                     chart_name: "stake-stats-chart",
+                     epochs: @data_for_chart[:epochs],
+                     average_active_stake: @data_for_chart[:average_active_stake],
+                     active_stake_vector: @data_for_chart[:active_stake_vector]
           %>
         </div>
       </div>
@@ -42,7 +33,7 @@
               <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.active_stake).round(2) %> SOL</td>
             </tr>
             <tr>
-              <td><strong>Avg. Active Stake:</strong></td>
+              <td><strong>Average Active Stake:</strong></td>
               <td><%= number_with_delimiter lamports_to_sol(@stake_histories.last.average_active_stake).round(2) %> SOL</td>
             </tr>
             <tr>
