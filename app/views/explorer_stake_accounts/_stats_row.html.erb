@@ -4,7 +4,7 @@
       <div class="card h-100">
         <div class="card-content">
           <h2 class="h4 card-heading">Active Stake</h2>
-          <%= render 'explorer_stake_accounts/stake_stats_large_chart',
+          <%= render 'explorer_stake_accounts/active_stake_stats_chart',
                      chart_name: "stake-stats-chart",
                      epochs: @data_for_charts[:epochs],
                      vector: @data_for_charts[:active_stake]
@@ -58,8 +58,8 @@
     <div class="col-lg-4 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <div class="h6 card-heading mb-4">Delegated Stake</div>
-          <%= render 'explorer_stake_accounts/stake_stats_small_chart',
+          <div class="h6 card-heading mb-2">Delegated Stake</div>
+          <%= render 'explorer_stake_accounts/delegated_stake_chart',
                      chart_name: "delegated-stake-chart",
                      epochs: @data_for_charts[:epochs],
                      vector: @data_for_charts[:delegated_stake]
@@ -70,8 +70,8 @@
     <div class="col-lg-4 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <div class="h6 card-heading mb-4">Average Active Stake</div>
-          <%= render 'explorer_stake_accounts/stake_stats_small_chart',
+          <div class="h6 card-heading mb-2">Average Active Stake</div>
+          <%= render 'explorer_stake_accounts/average_stake_chart',
                      chart_name: "average-stake-chart",
                      epochs: @data_for_charts[:epochs],
                      vector: @data_for_charts[:average_stake]
@@ -82,7 +82,7 @@
     <div class="col-lg-4 mb-4">
       <div class="card h-100">
         <div class="card-content">
-          <div class="h6 card-heading mb-4">Stake Accounts</div>
+          <div class="h6 card-heading mb-2">Stake Accounts</div>
           <%= render 'explorer_stake_accounts/stake_accounts_chart',
                      chart_name: "stake-accounts-chart",
                      epochs: @data_for_charts[:epochs],

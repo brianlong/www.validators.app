@@ -8,9 +8,9 @@
             datasets: [
                 {
                     label: '',
-                    fill: false,
+                    fill: true,
                     borderColor: "<%= SPARK_LINE_1 %>",
-                    backgroundColor: "<%= SPARK_LINE_1 %>",
+                    backgroundColor: "<%= SPARK_LINE_1_TRANSPARENT %>",
                     borderWidth: 1,
                     radius: 0,
                     data: <%= local_assigns[:vector] %>,
@@ -34,7 +34,17 @@
                 y: {
                     display: true,
                     ticks: {
-                        padding: 5,
+                        display: true,
+                        padding: 10,
+                        color: '<%= DARK_GREY %>',
+                        font: {
+                            size: 11,
+                        },
+                        callback: function(val, index) {
+                            return Intl.NumberFormat(
+                              "en-GB", { notation: "compact", compactDisplay: "short" }
+                            ).format(val);
+                        },
                     },
                     grid: {
                         display: true,
