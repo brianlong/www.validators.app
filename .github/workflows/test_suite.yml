@@ -86,7 +86,7 @@ jobs:
         run: |
           cp config/database.yml.github-actions config/database.yml
           cp config/cluster.yml.example config/cluster.yml
-          gem install bundler --version 2.1.4
+          gem install bundler --version 2.3.26
           yarn install --check-files --frozen-lockfile
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
