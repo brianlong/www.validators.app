@@ -37,7 +37,9 @@
                       size: 11,
                   },
                   callback: function(val, index) {
-                      let formatted_val = Math.round(val);
+                      let formatted_val = Intl.NumberFormat(
+                          "en-GB", { notation: "compact", compactDisplay: "short" }
+                      ).format( Math.round(val) );
                       return index % 2 === 0 ? formatted_val : '';
                   },
               },
