@@ -54,7 +54,7 @@ every 1.hour, at: 10, roles: [:background] do
   ruby_script 'validators_get_keybase_avatar_url.rb'
 end
 
-every 2.hour, at: 15, roles: [:background] do
+every 1.hour, at: 15, roles: [:background] do
   ruby_script 'gather_stake_accounts.rb'
 end
 
@@ -152,7 +152,7 @@ end
 
 # Production only
 if ENV['RAILS_ENV'] == "production"
-  every 2.hour, at: 35, roles: [:background] do
+  every 1.hour, at: 45, roles: [:background] do
     ruby_script 'gather_explorer_stake_accounts.rb'
   end
 end

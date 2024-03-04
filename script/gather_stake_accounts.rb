@@ -16,9 +16,10 @@ NETWORKS.each do |network|
   }
 
   p = Pipeline.new(200, payload)
+              .then(&check_current_epoch)
               .then(&get_last_batch)
-              .then(&move_current_stakes_to_history)
               .then(&get_stake_accounts)
+              .then(&move_current_stakes_to_history)
               .then(&update_stake_accounts)
               .then(&assign_stake_pools)
               .then(&update_stake_pools)
