@@ -11,10 +11,7 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      current_epoch = EpochWallClock.where(network: p.payload[:network])
-                                    .order(created_at: :desc)
-                                    .first
-                                    .epoch
+      current_epoch = EpochWallClock.by_network(p.payload[:network]).first.epoch
       is_new_epoch = !StakeAccount.where(network: p.payload[:network], epoch: current_epoch).exists?
 
       if is_new_epoch
@@ -199,7 +196,7 @@ module StakeLogic
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
 
-      # Sample account_rewards structure: 
+      # Sample account_rewards structure:
       # { "account_id"=>{
       #   "amount"=>358573846,
       #   "commission"=>8,
@@ -269,7 +266,7 @@ module StakeLogic
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
           # we don't want to include accounts with no stake
-          if stake && stake > 0 
+          if stake && stake > 0
             total_stake += stake
             if sa.apy
               sum = sum + sa.apy * stake
