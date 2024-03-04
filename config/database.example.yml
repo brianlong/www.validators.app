@@ -54,4 +54,4 @@ test:
 #   <<: *default
 #   database: fma_production
 #   username:
-#   password: <%= ENV['FMA_RUBY_ON_RAILS_TEMPLATE_DATABASE_PASSWORD'] %>
+#   password: <%= ENV['VALIDATORS_APP_DATABASE_PASSWORD'] %>

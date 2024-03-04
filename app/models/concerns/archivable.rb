@@ -2,6 +2,7 @@
 
 module Archivable
   extend ActiveSupport::Concern
+  include ActionView::Helpers::NumberHelper
 
   def archive_class
     Object.const_get(self.name + "Archive")
@@ -15,7 +16,7 @@ module Archivable
       puts_no_test "Archiving #{total} records for #{self.name} (#{network})"
 
       records.find_each.with_index do |record, idx|
-        print_no_test "\r#{idx + 1}/#{total}"
+        print_no_test "\r#{number_with_delimiter(idx + 1)}/#{total}"
         archive = archive_class.find_or_initialize_by(id: record.id)
         archive.update!(record.attributes)
         record.destroy! if destroy_after_archive

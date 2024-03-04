@@ -33,6 +33,7 @@
 class PingThing < ApplicationRecord
 
   include ObjectCopier
+  extend Archivable
 
   API_FIELDS = %i[
     application
