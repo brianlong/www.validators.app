@@ -96,7 +96,7 @@ export default {
                 borderColor: "transparent",
                 order: 2,
                 barPercentage: 1.0,
-                categoryPercentage: 0.15,
+                categoryPercentage: 0.35,
                 tension: 0
               },
               {
