@@ -2,6 +2,7 @@
 
 class ExplorerStakeAccountsController < ApplicationController
   include StakeAccountsControllerHelper
+  include ExplorerStakeAccountsControllerHelper
 
   AUDITS_FILTERS = %w[active_stake account_balance credits_observed deactivating_stake delegated_stake rent_exempt_reserve].freeze
   TOP_LIMIT_COUNT = 20
@@ -22,14 +23,7 @@ class ExplorerStakeAccountsController < ApplicationController
     @stake_histories = ExplorerStakeAccountHistoryStat.where(network: index_params[:network])
                                                       .order(epoch: :asc)
                                                       .limit(40)
-    @data_for_charts = {
-      active_stake: @stake_histories.map { |st| helpers.lamports_to_sol(st.active_stake.to_i).round(2) },
-      delegated_stake: @stake_histories.map { |st| helpers.lamports_to_sol(st.delegated_stake.to_i).round(2) },
-      epochs: @stake_histories.pluck(:epoch),
-      average_stake: @stake_histories.map { |st| helpers.lamports_to_sol(st.average_active_stake.to_i).round(2) },
-      deactivating_stake: @stake_histories.map { |st| helpers.lamports_to_sol(st.deactivating_stake.to_i).round(2) },
-      stake_accounts_count: @stake_histories.pluck(:delegating_stake_accounts_count),
-    }
+    @data_for_charts = prepare_data_for_charts(@stake_histories)
   end
 
   def show
