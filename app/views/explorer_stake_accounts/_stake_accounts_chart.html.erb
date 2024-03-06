@@ -1,0 +1,75 @@
+<canvas id="<%= local_assigns[:chart_name] %>"></canvas>
+<script type="text/javascript">
+    var ctx = document.getElementById("<%= local_assigns[:chart_name] %>").getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <%= local_assigns[:epochs] %>,
+            datasets: [
+                {
+                    label: '',
+                    data: <%= local_assigns[:vector] %>,
+                    borderColor: "transparent",
+                    backgroundColor: "<%= SPARK_LINE_2_TRANSPARENT %>",
+                    hoverBackgroundColor: "<%= SPARK_LINE_2 %>",
+                    barPercentage: 1.0,
+                    categoryPercentage: 0.35,
+                    tension: 0
+                },
+            ]
+        },
+
+        options: {
+          scales: {
+            x: {
+              display: true,
+              ticks: { display: false,},
+              grid: { display: false },
+              title: { display: false }
+            },
+            y: {
+              display: true,
+              ticks: {
+                  display: true,
+                  padding: 10,
+                  color: '<%= DARK_GREY %>',
+                  font: {
+                      size: 11,
+                  },
+                  callback: function(val, index) {
+                      let formatted_val = Intl.NumberFormat(
+                          "en-GB", { notation: "compact", compactDisplay: "short" }
+                      ).format(val);
+                      return index % 2 === 0 ? formatted_val : '';
+                  },
+              },
+              grid: {
+                display: true,
+                color: "<%= LIGHT_GREY_TRANSPARENT %>"
+              },
+              title: { display: false }
+            },
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index',
+          },
+          plugins: {
+            tooltip: {
+              enabled: true,
+              displayColors: false,
+              padding: 8,
+              callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.raw.toLocaleString('en-US') + " accounts";
+                },
+                title: function(tooltipItem) {
+                  return  "Epoch " + tooltipItem[0].label;
+                },
+              }
+            },
+            legend: { display: false }
+          }
+        },
+      });
+</script>
