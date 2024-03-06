@@ -28,9 +28,9 @@ class PingThingUserStatsService
         max: ping_times.max,
         p90: ping_times.first((ping_times.count * 0.9).to_i).last,
         num_of_records: ping_times.count,
-        average_slot_latency: user_ping_things.map do |pt| 
-                               pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil
-                             end.compact.average&.round(1),
+        average_slot_latency: user_ping_things.map do |pt|
+                                pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil
+                              end.compact.sort.median&.round(1),
         fails_count: user_ping_things.map(&:success).count(false)
       )
 
