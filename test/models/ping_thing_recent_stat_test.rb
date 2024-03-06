@@ -76,15 +76,14 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     # TODO
   end
 
-  test "#recalculate_stats counts average of slot latency" do
-    slot_latency = 5
-    5.times do |time|
+  test "#recalculate_stats counts median slot latency" do
+    [9,3,2,1,3,3].each do |latency|
       create(
         :ping_thing,
         :testnet,
         reported_at: rand(50.minutes.ago..Time.now),
-        slot_sent: time,
-        slot_landed: time + slot_latency
+        slot_sent: 1,
+        slot_landed: 1 + latency
       )
     end
 
@@ -93,7 +92,7 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     ping_stat.recalculate_stats
     ping_stat.reload
 
-    assert_equal slot_latency, ping_stat.average_slot_latency
+    assert_equal 3, ping_stat.average_slot_latency
   end
 
   test "#recalculate_stats counts fails count" do
