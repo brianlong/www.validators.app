@@ -83,8 +83,7 @@ Deployments are handled by Capistrano. Follow the instructions for Capistrano.
 - To restart application: `cap production deploy:restart`
 
 ## Data Centers
-- To append validator to Data Center of your choice use `append_to_data_center.rb` .
-- To change validator's Data Center with usage of MaxMind service use `change_validator_data_center.rb` service.
+- See instructions on Keybase.
 
 ## Validators Stack
 - ValidatorsApp https://github.com/brianlong/www.validators.app
