@@ -81,7 +81,7 @@ MAINNET_STAKE_POOLS = {
     small_logo: "jito-logo.svg",
     large_logo: "jito.png",
     url: "https://www.jito.network",
-    manager_fee: 5, #https://jito-foundation.gitbook.io/mev/jito-solana/faqs
+    manager_fee: 4, #https://jito-foundation.gitbook.io/mev/jito-solana/faqs
     withdrawal_fee: 0,
     deposit_fee: 0
   },
