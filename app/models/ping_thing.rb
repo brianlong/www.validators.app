@@ -86,6 +86,8 @@ class PingThing < ApplicationRecord
   end
 
   def self.average_slot_latency
-    all.map{ |pt| pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil }.compact.average
+    all.map do |pt|
+      pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil
+    end.compact.sort.median
   end
 end

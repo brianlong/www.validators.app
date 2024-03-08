@@ -24,7 +24,7 @@
         <div class="col-lg-7">
           <i class="fa-solid fa-up-long text-success me-2"></i>P90
         </div>
-        <div class="col-lg-7">
+        <div class="col-lg-7" title="Median Latency">
           <i class="fa-solid fa-clock text-success me-2"></i>Latency
         </div>
       </div>

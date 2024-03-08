@@ -25,7 +25,7 @@
                 <th class="column-sm px-0">
                   <i class="fa-solid fa-up-long text-success me-2"></i>P90
                 </th>
-                <th class="column-sm px-0">
+                <th class="column-sm px-0" title="Median Latency">
                   <i class="fa-solid fa-clock text-success me-2"></i>Latency
                 </th>
               </tr>

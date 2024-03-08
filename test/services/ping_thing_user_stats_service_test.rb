@@ -35,5 +35,6 @@ class PingThingUserStatsServiceTest < ActiveSupport::TestCase
     assert_equal 10, PingThingUserStat.last.num_of_records
     assert_equal @ping_things.pluck(:response_time).compact.sort.median, PingThingUserStat.last.median
     assert_equal @ping_things.pluck(:response_time).compact.sort.min, PingThingUserStat.last.min
+    assert_equal 2, PingThingUserStat.last.average_slot_latency
   end
 end
