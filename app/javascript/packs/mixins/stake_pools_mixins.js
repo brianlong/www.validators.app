@@ -24,6 +24,9 @@ import SoceanLarge from 'socean.png'
 import ZippyStakeSmall from 'zippystake-logo.svg'
 import ZippyStakeLarge from 'zippystake.png'
 
+import EdgevanaStakeSmall from 'edgevana-logo.svg'
+import EdgevanaStakeLarge from 'edgevana.png'
+
 const logos = {
   "blazestake": {
     "small_logo": BlazeStakeSmall,
@@ -56,6 +59,10 @@ const logos = {
   "zippystake": {
     "small_logo": ZippyStakeSmall,
     "large_logo": ZippyStakeLarge
+  },
+  "edgevana": {
+    "small_logo": EdgevanaStakeSmall,
+    "large_logo": EdgevanaStakeLarge
   }
 }
 
