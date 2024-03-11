@@ -96,6 +96,18 @@ MAINNET_STAKE_POOLS = {
     manager_fee: 3, #https://docs.zippystake.org
     withdrawal_fee: 0.1,
     deposit_fee: 0
+  },
+  edgevana: {
+    name: "Edgevana",
+    authority: "FZEaZMmrRC3PDPFMzqooKLS2JjoyVkKNd2MkHjr7Xvyq",
+    network: "mainnet",
+    ticker: "edgesol",
+    small_logo: "edgevana-logo.svg",
+    large_logo: "edgevana.png",
+    url: "https://stake.edgevana.com/",
+    manager_fee: 1, #https://www.edgevana.com/edgesol-user-agreement
+    withdrawal_fee: 0.1,
+    deposit_fee: 0
   }
 }
 
