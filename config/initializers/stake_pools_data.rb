@@ -105,7 +105,7 @@ MAINNET_STAKE_POOLS = {
     small_logo: "edgevana-logo.svg",
     large_logo: "edgevana.png",
     url: "https://stake.edgevana.com/",
-    manager_fee: 1, #https://www.edgevana.com/edgesol-user-agreement
+    manager_fee: 1, #https://docs.stake.edgevana.com/docs/pool-and-token-info/fees
     withdrawal_fee: 0.1,
     deposit_fee: 0
   }
