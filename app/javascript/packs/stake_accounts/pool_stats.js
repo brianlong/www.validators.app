@@ -8,7 +8,8 @@ const DELEGATION_STRATEGY_URLS = {
   "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds",
   "BlazeStake": "https://stake-docs.solblaze.org/protocol/delegation-strategy",
   "Jito": "https://jito-foundation.gitbook.io/jitosol/jitosol-liquid-staking/stake-delegation",
-  "ZippyStake": "https://docs.zippystake.org/delegation-strategy"
+  "ZippyStake": "https://docs.zippystake.org/delegation-strategy",
+  "Edgevana": "https://docs.stake.edgevana.com/docs/validators/delegation-strategy-algorithm"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {
