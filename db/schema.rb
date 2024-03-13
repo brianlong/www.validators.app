@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_22_124345) do
+ActiveRecord::Schema.define(version: 2024_03_08_093154) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -106,6 +106,17 @@ ActiveRecord::Schema.define(version: 2024_02_22_124345) do
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
+  end
+
+  create_table "blockchain_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "leader"
+    t.string "network"
+    t.integer "epoch"
+    t.boolean "has_block"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "epoch", "leader"], name: "index_blockchain_slots_on_network_and_epoch_and_leader"
   end
 
   create_table "cluster_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

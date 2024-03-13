@@ -34,6 +34,8 @@ job_type :ruby_script_sol_prices,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/sol_prices/:task >> :whenever_path/log/:task.log 2>&1'
 job_type :ruby_script_data_centers,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/data_centers_scripts/:task >> :whenever_path/log/:task.log 2>&1'
+job_type :ruby_script_blockchain,
+         'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/blockchain/:task >> :whenever_path/log/:task.log 2>&1'
 
 # Make sure you add the tasks to correct server.
 # Use :background role to add task to background server (recommended),
@@ -119,6 +121,10 @@ end
 
 every 1.day, at: '3:40am', roles: [:background] do
   ruby_script 'update_validator_stake_pools_list.rb'
+end
+
+every 1.day, at: '5:00am', roles: [:background] do
+  ruby_script_blockchain 'get_leaders_schedule.rb'
 end
 
 every 7.days, at: '4:00am', roles: [:background] do
