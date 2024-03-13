@@ -32,7 +32,9 @@ class PingThingRecentStat < ApplicationRecord
     :network,
     :num_of_records,
     :p90,
-    :average_slot_latency
+    :min_slot_latency,
+    :average_slot_latency,
+    :p90_slot_latency
   ].freeze
 
   INTERVALS = [5, 60].freeze #minutes

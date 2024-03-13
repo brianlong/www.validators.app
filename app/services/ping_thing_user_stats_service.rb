@@ -21,7 +21,7 @@ class PingThingUserStatsService
         interval: @interval,
         network: @network
       )
-      slot_latency_stats = PingThing.slot_latency_stats(records: user_ping_things).first
+      slot_latency_stats = PingThing.slot_latency_stats(records: user_ping_things)
       pts.update(
         username: username,
         median: ping_times.median,
