@@ -124,7 +124,7 @@ every 1.day, at: '3:40am', roles: [:background] do
 end
 
 every 1.day, at: '5:00am', roles: [:background] do
-  ruby_script_blockchain 'get_leader_schedule.rb'
+  ruby_script_blockchain 'get_leaders_schedule.rb'
 end
 
 every 7.days, at: '4:00am', roles: [:background] do

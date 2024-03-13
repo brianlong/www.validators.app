@@ -8,7 +8,7 @@ class GetLeaderScheduleServiceTest < ActiveSupport::TestCase
   setup do
     @epoch = 586
     @network = "mainnet"
-    @mainnet_url = 'https://api.mainnet-beta.solana.com'
+    @mainnet_url = "https://api.mainnet-beta.solana.com"
     @json_data = {
       "epoch": 586,
       "leaderScheduleEntries": [

@@ -8,7 +8,6 @@ NETWORKS.each do |network|
     epochs_to_get = [current_epoch, current_epoch + 1]
 
     epochs_to_get.each do |epoch|
-      puts "starting #{network} epoch #{epoch}"
       Blockchain::GetLeaderScheduleService.new(network, epoch).call
     end
   end
