@@ -23,7 +23,7 @@ class CreatePingThingStatsService
         tps = if previous_stat&.transactions_count&.positive? && transactions_count.positive?
           # time diff in seconds
           time_diff = DateTime.now.to_f - previous_stat.created_at.to_f
-          
+
           (transactions_count - previous_stat.transactions_count) / time_diff rescue nil
         else
           previous_stat&.tps
@@ -43,7 +43,7 @@ class CreatePingThingStatsService
           max: resp_times.max,
           time_from: @time_to - interval.minutes,
           num_of_records: ping_things.count,
-          average_slot_latency: ping_things.average_slot_latency,
+          average_slot_latency: ping_things.slot_latency_stats[:median],
           transactions_count: transactions_count || tps * (DateTime.now.to_f - previous_stat.created_at.to_f),
           tps: tps
         )

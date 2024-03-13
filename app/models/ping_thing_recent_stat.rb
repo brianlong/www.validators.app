@@ -52,6 +52,7 @@ class PingThingRecentStat < ApplicationRecord
     )
 
     ping_times = ping_things.pluck(:response_time).compact.sort
+    slot_latency_stats = ping_things.slot_latency_stats
 
     self.update(
       median: ping_times.median,
@@ -59,11 +60,13 @@ class PingThingRecentStat < ApplicationRecord
       max: ping_times.max,
       p90: ping_times.first((ping_times.count * 0.9).to_i).last,
       num_of_records: ping_times.count,
-      average_slot_latency: ping_things.average_slot_latency&.round(1),
+      min_slot_latency: slot_latency_stats[:min],
+      average_slot_latency: slot_latency_stats[:median],
+      p90_slot_latency: slot_latency_stats[:p90],
       fails_count: ping_things.where(success: false).count
     )
   end
-  
+
   def to_builder
     Jbuilder.new do |ping_thing_recent_stat|
       ping_thing_recent_stat.(

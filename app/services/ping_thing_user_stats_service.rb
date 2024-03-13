@@ -21,6 +21,7 @@ class PingThingUserStatsService
         interval: @interval,
         network: @network
       )
+      slot_latency_stats = PingThing.slot_latency_stats(records: user_ping_things).first
       pts.update(
         username: username,
         median: ping_times.median,
@@ -28,9 +29,9 @@ class PingThingUserStatsService
         max: ping_times.max,
         p90: ping_times.first((ping_times.count * 0.9).to_i).last,
         num_of_records: ping_times.count,
-        average_slot_latency: user_ping_things.map do |pt|
-                                pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil
-                              end.compact.sort.median&.round(1),
+        min_slot_latency: slot_latency_stats[:min],
+        average_slot_latency: slot_latency_stats[:median],
+        p90_slot_latency: slot_latency_stats[:p90],
         fails_count: user_ping_things.map(&:success).count(false)
       )
 

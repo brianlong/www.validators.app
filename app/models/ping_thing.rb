@@ -85,9 +85,15 @@ class PingThing < ApplicationRecord
     ActionCable.server.broadcast("ping_thing_channel", hash)
   end
 
-  def self.average_slot_latency
-    all.map do |pt|
+  def self.slot_latency_stats(records: nil)
+    all = records || self.all
+    latencies = all.map do |pt|
       pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil
-    end.compact.sort.median
+    end.compact.sort
+    {
+      min: latencies.min,
+      median: latencies.median,
+      p90: latencies.first((latencies.count * 0.9).to_i).last
+    }
   end
 end
