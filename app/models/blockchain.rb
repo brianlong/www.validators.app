@@ -1,5 +1,5 @@
 module Blockchain
   def self.table_name_prefix
-    'blockchain_'
+    "blockchain_"
   end
 end
