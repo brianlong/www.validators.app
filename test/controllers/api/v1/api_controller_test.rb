@@ -16,8 +16,6 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
       password: "password"
     }
     @user = User.create(@user_params)
-
-    Validator.destroy_all
   end
 
   test "When reaching the api \

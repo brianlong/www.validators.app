@@ -16,8 +16,6 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       password: "password"
     }
     @user = User.create(@user_params)
-
-    Validator.destroy_all
   end
 
   test "GET api_v1_validators with token returns only validators from chosen network with scores" do

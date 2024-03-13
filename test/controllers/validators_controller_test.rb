@@ -50,15 +50,11 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index returns 200 if there are no validators" do
-    Validator.destroy_all
-
     get validators_path(network: "testnet")
     assert_response :success
   end
 
   test "trent_mode returns 200 if there are no validators" do
-    Validator.destroy_all
-
     get trent_mode_path(network: "testnet")
     assert_response :success
   end
