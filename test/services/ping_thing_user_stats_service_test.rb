@@ -26,6 +26,9 @@ class PingThingUserStatsServiceTest < ActiveSupport::TestCase
   end
 
   test "#call saves correct records" do
+    @ping_things.first.update(slot_landed: 124)
+    @ping_things.last(2).each { |pt| pt.update slot_landed: 126 }
+
     PingThingUserStatsService.new(network: @network, interval: 5).call
 
     assert_equal 1, PingThingUserStat.count
@@ -35,6 +38,8 @@ class PingThingUserStatsServiceTest < ActiveSupport::TestCase
     assert_equal 10, PingThingUserStat.last.num_of_records
     assert_equal @ping_things.pluck(:response_time).compact.sort.median, PingThingUserStat.last.median
     assert_equal @ping_things.pluck(:response_time).compact.sort.min, PingThingUserStat.last.min
+    assert_equal 1, PingThingUserStat.last.min_slot_latency
     assert_equal 2, PingThingUserStat.last.average_slot_latency
+    assert_equal 3, PingThingUserStat.last.p90_slot_latency
   end
 end
