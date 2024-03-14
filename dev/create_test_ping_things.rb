@@ -27,7 +27,7 @@ counts.each do |loop|
       application: "web3",
       reported_at: rand(7.days.ago..Time.now),
       slot_sent: slot_sent,
-      slot_landed: slot_sent + rand(2..7)
+      slot_landed: slot_sent + rand(1..12)
     )
     if p.valid?
       puts p.inspect

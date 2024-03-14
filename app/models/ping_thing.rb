@@ -93,7 +93,7 @@ class PingThing < ApplicationRecord
     {
       min: latencies.min,
       median: latencies.median,
-      p90: latencies.first((latencies.count * 0.9).to_i).last
+      p90: latencies.first((latencies.count * 0.9).round).last
     }
   end
 end
