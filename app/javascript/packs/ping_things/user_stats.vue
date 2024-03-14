@@ -16,11 +16,11 @@
                 <th class="column-sm px-0">
                   <i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures
                 </th>
-                <th class="column-lg px-0" colspan="3">
+                <th class="column-xl px-0" colspan="3">
                   <i class="fa-solid fa-down-long text-success me-2"></i>Time (ms)<br />
                   <small class="text-muted text-small">min / median / p90</small>
                 </th>
-                <th class="column-lg px-0" colspan="3">
+                <th class="column-md px-0" colspan="3">
                   <i class="fa-solid fa-clock text-success me-2"></i>Latency (slots)<br />
                   <small class="text-muted text-small">min / median / p90</small>
                 </th>
@@ -47,7 +47,7 @@
                     {{ fails_count_percentage(stats_array["60min"]["fails_count"], stats_array["60min"]["num_of_records"]) }}
                   </span>
                 </td>
-                <td class="text-success text-nowrap ps-4">
+                <td class="text-success-darker text-nowrap ps-5">
                   {{ stats_array["5min"]["min"] ? stats_array["5min"]["min"].toLocaleString('en-US') : 'N/A'}}
                   <br />
                   {{ stats_array["60min"]["min"] ? stats_array["60min"]["min"].toLocaleString('en-US') : 'N/A'}}
@@ -57,23 +57,23 @@
                   <br />
                   {{ stats_array["60min"]["median"] ? stats_array["60min"]["median"].toLocaleString('en-US') : 'N/A'}}
                 </td>
-                <td class="text-success text-nowrap pe-4">
+                <td class="text-success-darker text-nowrap pe-5">
                   {{ stats_array["5min"]["p90"] ? stats_array["5min"]["p90"].toLocaleString('en-US') : 'N/A'}}
                   <br />
                   {{ stats_array["60min"]["p90"] ? stats_array["60min"]["p90"].toLocaleString('en-US') : 'N/A'}}
                 </td>
 
-                <td class="text-success text-nowrap ps-4">
+                <td class="text-success-darker text-nowrap ps-4 ps-lg-5">
                   {{ stats_array["5min"]["min_slot_latency"] ? stats_array["5min"]["min_slot_latency"].toLocaleString('en-US') : 'N/A'}}
                   <br />
                   {{ stats_array["60min"]["min_slot_latency"] ? stats_array["60min"]["min_slot_latency"].toLocaleString('en-US') : 'N/A'}}
                 </td>
-                <td class="text-success text-nowrap px-0">
+                <td class="text-success text-nowrap ps-0 ps-xl-1 pe-0">
                   {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"].toLocaleString('en-US') : 'N/A'}}
                   <br />
                   {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"].toLocaleString('en-US') : 'N/A'}}
                 </td>
-                <td class="text-success text-nowrap pe-4">
+                <td class="text-success-darker text-nowrap pe-4 pe-lg-5">
                   {{ stats_array["5min"]["p90_slot_latency"] ? stats_array["5min"]["p90_slot_latency"].toLocaleString('en-US') : 'N/A'}}
                   <br />
                   {{ stats_array["60min"]["p90_slot_latency"] ? stats_array["60min"]["p90_slot_latency"].toLocaleString('en-US') : 'N/A'}}

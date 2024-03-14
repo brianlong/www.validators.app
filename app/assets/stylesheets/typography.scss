@@ -17,6 +17,9 @@ p {
   &-success {
     color: $green !important;
   }
+  &-success-darker {
+    color: darken($green, 12%);
+  }
   &-purple {
     color: $purple;
   }
