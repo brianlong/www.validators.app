@@ -22,7 +22,7 @@
             <i class="fa-solid fa-clock text-success me-2"></i>Time (ms)<br />
             <small class="text-muted text-small">min / median / p90</small>
           </th>
-          <th class="column-md px-0" colspan="3">
+          <th class="column-lg px-0" colspan="3">
             <i class="fa-solid fa-stopwatch text-success me-2"></i>Slot Latency<br />
             <small class="text-muted text-small">min / median / p90</small>
           </th>

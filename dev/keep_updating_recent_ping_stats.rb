@@ -8,8 +8,8 @@ interrupted = false
 trap('INT') { interrupted = true }  unless Rails.env.test?
 
 loop do
-  PingThingRecentStatsWorker.perform_async('mainnet')
-  PingThingUserStatsWorker.perform_async('mainnet')
+  PingThingRecentStatsWorker.perform_async("mainnet")
+  PingThingUserStatsWorker.perform_async("mainnet")
   break if interrupted
   sleep(60)
 end
