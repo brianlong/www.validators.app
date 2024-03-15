@@ -162,7 +162,6 @@ class SolanaLogicTest < ActiveSupport::TestCase
   end
 
   test "validator_history_update with stubbed validators" do
-    ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
     json_data = {
@@ -194,7 +193,6 @@ class SolanaLogicTest < ActiveSupport::TestCase
   end
 
   test "validator_history_update returns no validator from blacklist" do
-    ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
     json_data = File.read("#{Rails.root}/test/json/validators_from_blacklist.json")
@@ -213,7 +211,6 @@ class SolanaLogicTest < ActiveSupport::TestCase
   end
 
   test "validator_history_update with validator_histories without validator relations" do
-    ValidatorHistory.delete_all
     assert_equal 0, ValidatorHistory.count
 
     json_data = File.read("#{Rails.root}/test/json/validators.json")

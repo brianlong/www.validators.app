@@ -42,7 +42,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
 
     assert_response 200
-    assert_equal 3, json.size
+    assert_equal 4, json.size
     assert_equal "testnet", json.first["network"]
 
     # Mainnet
@@ -78,7 +78,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
     validator_with_all_data = json.select { |j| j["account"] == "Test Account" }.first
     validator_active_stake = validator.validator_score_v1.active_stake
-    assert_equal 1, json.size
+    assert_equal 2, json.size
 
     # Adjust after adding/removing attributes in json builder
     assert_equal 40, validator_with_all_data.keys.size
@@ -167,7 +167,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
 
     json = response_to_json(@response.body)
 
-    assert_equal 1, json.size
+    assert_equal 2, json.size
     assert_equal search_query, json.first["name"]
   end
 
@@ -325,7 +325,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
     json = response_to_json(@response.body)
 
-    assert_equal 1, json.size
+    assert_equal 2, json.size
     assert_nil v.data_center
     assert_equal v.name, json.first["name"]
   end
@@ -618,7 +618,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/csv", response.content_type
     csv = CSV.parse response.body # Let raise if invalid CSV
     assert csv
-    assert_equal csv.size, 11
+    assert_equal 12, csv.size
 
     headers = index_csv_headers(nil)
     assert_equal csv.first, headers

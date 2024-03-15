@@ -126,8 +126,6 @@ module Stats
     end
 
     test 'average of skipped vote percent moving average calculated correctly' do
-      ::VoteAccountHistory.delete_all
-
       create(:vote_account_history, batch_uuid: '1-2-3', vote_account: @vote_account)
         .update(skipped_vote_percent_moving_average: 0.1)
       create(:vote_account_history, batch_uuid: '1-2-3', vote_account: @vote_account)
@@ -145,13 +143,9 @@ module Stats
 
       assert_equal 0.35, average1
       assert_equal 0.2, average2
-
-      ::VoteAccountHistory.delete_all
     end
 
     test 'median of skipped vote percent moving average calculated correctly' do
-      ::VoteAccountHistory.delete_all
-
       create(:vote_account_history, batch_uuid: '1-2-3', vote_account: @vote_account)
         .update(skipped_vote_percent_moving_average: 0.1)
       create(:vote_account_history, batch_uuid: '1-2-3', vote_account: @vote_account)
@@ -170,8 +164,6 @@ module Stats
 
       assert_equal 0.4, median1
       assert_equal 0.2, median2
-
-      ::VoteAccountHistory.delete_all
     end
   end
 end
