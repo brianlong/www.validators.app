@@ -9,7 +9,7 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   include ResponseHelper
   include ValidatorsControllerHelper
 
-  def setup
+  setup do
     @user_params = {
       username: "test",
       email: "test@test.com",
@@ -32,6 +32,8 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :mainnet,
       :with_data_center_through_validator_ip
     )
+
+    puts "Validator count: #{Validator.count}" 
 
     # Testnet
     get api_v1_validators_url(network: "testnet"),
@@ -76,7 +78,6 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
     json = response_to_json(@response.body)
     validator_with_all_data = json.select { |j| j["account"] == "Test Account" }.first
     validator_active_stake = validator.validator_score_v1.active_stake
-
     assert_equal 1, json.size
 
     # Adjust after adding/removing attributes in json builder

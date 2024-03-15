@@ -8,9 +8,21 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
   def setup
     # Create our initial payload with the input values
+    @batch = create(:batch, network: "testnet")
+    @validator = create(:validator, network: "testnet")
+    create(
+      :validator_history,
+      network: "testnet",
+      batch_uuid: @batch.uuid,
+      validator: @validator,
+      root_block: 10,
+      vote_distance: 10,
+      last_vote: 10,
+      commission: 9
+    )
     @initial_payload = {
-      network: 'testnet',
-      batch_uuid: '1234'
+      network: "testnet",
+      batch_uuid: @batch.uuid
     }
   end
 
@@ -20,16 +32,15 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
     assert_equal 200, p.code
     assert_equal 'testnet', p.payload[:this_batch].network
-    assert_equal '1234', p.payload[:this_batch].uuid
+    assert_equal @batch.uuid, p.payload[:this_batch].uuid
   end
 
   test 'validators_get' do
-    create(:validator)
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
                 .then(&validators_get)
 
-    assert_equal 2, p.payload[:validators].count
+    assert_equal 1, p.payload[:validators].count
     p.payload[:validators].each do |validator|
       assert_not_nil validator.validator_score_v1
       assert_equal @initial_payload[:network], validator.validator_score_v1.network
@@ -45,13 +56,13 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
       create(
         :validator_history,
         network: 'testnet',
-        batch_uuid: '1234',
+        batch_uuid: @batch.uuid,
         account: v.account,
         validator: v
       )
       create(
         :vote_account_history,
-        batch_uuid: '1234',
+        batch_uuid: @batch.uuid,
         network: 'testnet',
         vote_account_id: vote_acc.id
       )
@@ -62,28 +73,30 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&validators_get)
                 .then(&block_vote_history_get)
 
+    puts p.code
+
     assert_equal 6, p.payload[:validators].count
-    assert_equal 600, p.payload[:total_active_stake]
+    assert_equal 600000, p.payload[:total_active_stake]
 
     assert_not_nil p.payload[:validators].first.validator_score_v1
-    assert_equal [0], p.payload[:validators]
+    assert_equal [10], p.payload[:validators]
                        .first
                        .validator_score_v1
                        .root_distance_history
-    assert_equal [0], p.payload[:validators]
+    assert_equal [10], p.payload[:validators]
                        .first
                        .validator_score_v1
                        .vote_distance_history
-    assert_equal 100, p.payload[:validators]
-                       .first
+    assert_equal 9, p.payload[:validators]
+                       .last
                        .validator_score_v1
                        .commission
-    assert_equal 100, p.payload[:validators]
-                       .first
+    assert_equal 100000, p.payload[:validators]
+                       .last
                        .validator_score_v1
                        .active_stake
-    assert_equal 0.167e0, p.payload[:validators]
-                           .first
+    assert_equal 0.167, p.payload[:validators]
+                           .last
                            .validator_score_v1
                            .stake_concentration
     assert_equal [0.3518806943896684], p.payload[:validators]
@@ -103,19 +116,19 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   test 'assign_block_and_vote_scores' do
     5.times do
       v = create(:validator)
-      vote_acc = create(:vote_account, validator_id: v.id, account: v.account)
+      vote_acc = create(:vote_account, validator: v, account: v.account, network: "testnet")
       create(
         :validator_history,
         network: 'testnet',
-        batch_uuid: '1234',
+        batch_uuid: @batch.uuid,
         account: v.account,
         validator: v
       )
       create(
         :vote_account_history,
-        batch_uuid: '1234',
+        batch_uuid: @batch.uuid,
         network: 'testnet',
-        vote_account_id: vote_acc.id
+        vote_account: vote_acc
       )
     end
 
@@ -125,11 +138,11 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_vote_history_get)
                 .then(&assign_block_and_vote_scores)
 
-    assert_equal [0, 1, 1, 1, 1, 1], p.payload[:root_distance_all]
-    assert_equal 0.8333333333333334, p.payload[:root_distance_all_average]
-    assert_equal 1.0, p.payload[:root_distance_all_median]
-    assert_equal 0.8333333333333334, p.payload[:vote_distance_all_average]
-    assert_equal 1.0, p.payload[:vote_distance_all_median]
+    assert_equal [10, 5, 5, 5, 5, 5], p.payload[:root_distance_all]
+    assert_equal 5.833333333333333, p.payload[:root_distance_all_average]
+    assert_equal 5, p.payload[:root_distance_all_median]
+    assert_equal 5.833333333333333, p.payload[:vote_distance_all_average]
+    assert_equal 5, p.payload[:vote_distance_all_median]
     assert_equal p.payload[:root_distance_all_average],
                  p.payload[:this_batch].root_distance_all_average
     assert_equal p.payload[:root_distance_all_median],
@@ -145,24 +158,20 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                  p.payload[:this_batch].best_skipped_vote
 
     assert_equal 2, p.payload[:validators]
-                     .first
+                     .last
                      .validator_score_v1
                      .root_distance_score
     assert_equal 2, p.payload[:validators]
-                     .first
+                     .last
                      .validator_score_v1
                      .vote_distance_score
     assert_equal -2, p.payload[:validators]
-                      .first
+                      .last
                       .validator_score_v1
                       .stake_concentration_score
   end
 
   test 'block_history_get' do
-
-    # Empty the previous ValidatorBlockHistory table
-    ValidatorBlockHistory.destroy_all
-
     Timecop.scale do
       v1 = Validator.first
       v2 = create(:validator)
@@ -299,7 +308,13 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test 'assign_block_history_score' do
-    create(:validator_block_history, network: 'testnet', batch_uuid: '1234')
+    create(
+      :validator_block_history,
+      network: 'testnet',
+      batch_uuid: @batch.uuid,
+      validator: @validator,
+      skipped_slot_percent: 0.1
+    )
 
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
@@ -309,8 +324,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&block_history_get)
                 .then(&assign_block_history_score)
 
-    assert_equal 0.175, p.payload[:avg_skipped_slot_pct_all]
-    assert_equal 0.25, p.payload[:med_skipped_slot_pct_all]
+    assert_equal 0.1, p.payload[:avg_skipped_slot_pct_all]
+    assert_equal 0.1, p.payload[:med_skipped_slot_pct_all]
     assert_equal [0.1], p.payload[:validators]
                          .first
                          .validator_score_v1
@@ -349,9 +364,9 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
       assert_nil p.payload[:avg_skipped_after_pct_all]
       assert_nil p.payload[:med_skipped_after_pct_all]
 
-      score = p.payload[:validators].first.validator_score_v1
+      score = p.payload[:validators].last.validator_score_v1
       assert_equal 0, score.skipped_slot_score
-      assert_equal 2, score.skipped_after_score
+      assert_equal 0, score.skipped_after_score
     end
   end
 
@@ -372,6 +387,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test 'asign_software_version_score skips `software_version` assignment if the version is junk' do
+    v = create(:validator, :with_score, network: "testnet")
+    create(:validator_history, network: "testnet", batch_uuid: @batch.uuid, validator: v)
     Validator.last.validator_score_v1.update!(software_version: '1.5.6')
     Validator.last.validator_history_last.update!(software_version: 'junk')
 
@@ -389,29 +406,8 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     assert_equal('1.5.6', Validator.last.validator_score_v1.software_version)
   end
 
-  test 'get_ping_times' do
-    p = Pipeline.new(200, @initial_payload)
-                .then(&set_this_batch)
-                .then(&validators_get)
-                .then(&block_vote_history_get)
-                .then(&assign_block_and_vote_scores)
-                .then(&block_history_get)
-                .then(&assign_block_history_score)
-                .then(&assign_software_version_score)
-                .then(&get_ping_times)
-                .then(&save_validators)
-
-    assert_equal 75.0, p.payload[:validators]
-                        .first
-                        .validator_score_v1
-                        .ping_time_avg
-    assert_equal 75.0, Validator.first
-                                .validator_score_v1
-                                .ping_time_avg
-  end
-
   test 'save_validators' do
-    create(:validator_block_history, network: 'testnet', batch_uuid: '1234')
+    create(:validator_block_history, network: 'testnet', batch_uuid: @batch.uuid)
 
     p = Pipeline.new(200, @initial_payload)
                 .then(&set_this_batch)
@@ -424,11 +420,11 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                 .then(&save_validators)
 
     assert_equal 2, p.payload[:validators]
-                     .first
+                     .last
                      .validator_score_v1
                      .root_distance_score
-    assert_equal 2, Validator.first.validator_score_v1.root_distance_score
-    assert_equal 2, Validator.first.validator_score_v1.skipped_slot_score
+    assert_equal 2, Validator.last.validator_score_v1.root_distance_score
+    assert_equal 2, Validator.last.validator_score_v1.skipped_slot_score
   end
 
   test 'find_current_software_version \

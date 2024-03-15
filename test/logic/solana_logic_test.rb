@@ -281,7 +281,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, payload)
                   .then(&program_accounts)
                   .then(&validators_info_save)
-      assert_equal 2, Validator.count
+      assert_equal 1, Validator.count
 
       validator = Validator.find_by(account: '61QB1Evn9E3noQtpJm4auFYyHSXS5FPgqKtPgwJJfEQk')
       assert_equal 'Meyerbro', validator.name
@@ -304,7 +304,7 @@ class SolanaLogicTest < ActiveSupport::TestCase
       p = Pipeline.new(200, payload)
                   .then(&program_accounts)
                   .then(&validators_info_save)
-      assert_equal 2, Validator.count
+      assert_equal 1, Validator.count
 
       validator = Validator.find_by(account: '7MTjmteQHhthwwTZhUzsc2dP4NBvGNRqj8jzdqNxHFGE')
       assert_equal 'web34ever', validator.name
