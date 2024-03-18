@@ -8,7 +8,7 @@ module Stats
     def setup
       super
 
-      network = 'testnet'
+      network = "testnet"
       batch_uuid = create(:batch).uuid
 
       @val = create(:validator, network: network)
@@ -126,19 +126,19 @@ module Stats
     end
 
     test 'average of skipped vote percent moving average calculated correctly' do
-      create(:vote_account_history, batch_uuid: '1-2-3', vote_account: @vote_account)
+      create(:vote_account_history, batch_uuid: "1-2-3-4", vote_account: @vote_account)
         .update(skipped_vote_percent_moving_average: 0.1)
-      create(:vote_account_history, batch_uuid: '1-2-3', vote_account: @vote_account)
+      create(:vote_account_history, batch_uuid: "1-2-3-4", vote_account: @vote_account)
         .update(skipped_vote_percent_moving_average: 0.2)
-      create(:vote_account_history, batch_uuid: '1-2-3', vote_account: @vote_account)
+      create(:vote_account_history, batch_uuid: "1-2-3-4", vote_account: @vote_account)
         .update(skipped_vote_percent_moving_average: 0.3)
-      create(:vote_account_history, batch_uuid: '1234', vote_account: @vote_account)
+      create(:vote_account_history, batch_uuid: "1234", vote_account: @vote_account)
         .update(skipped_vote_percent_moving_average: 0.3)
-      create(:vote_account_history, batch_uuid: '1234', vote_account: @vote_account)
+      create(:vote_account_history, batch_uuid: "1234", vote_account: @vote_account)
         .update(skipped_vote_percent_moving_average: 0.4)
-      average1 = Stats::VoteAccountHistory.new('testnet', '1234')
+      average1 = Stats::VoteAccountHistory.new("testnet", "1234")
                                           .average_skipped_vote_percent_moving_average
-      average2 = Stats::VoteAccountHistory.new('testnet', '1-2-3')
+      average2 = Stats::VoteAccountHistory.new("testnet", "1-2-3-4")
                                           .average_skipped_vote_percent_moving_average
 
       assert_equal 0.35, average1
