@@ -60,7 +60,7 @@ class PingThingRecentStat < ApplicationRecord
       median: ping_times.median,
       min: ping_times.min,
       max: ping_times.max,
-      p90: ping_times.first((ping_times.count * 0.9).to_i).last,
+      p90: ping_times.first((ping_times.count * 0.9).round).last,
       num_of_records: ping_times.count,
       min_slot_latency: slot_latency_stats[:min],
       average_slot_latency: slot_latency_stats[:median],
