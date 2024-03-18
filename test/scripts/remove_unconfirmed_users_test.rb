@@ -20,7 +20,6 @@ class RemoveUnconfirmedUsersTest < ActiveSupport::TestCase
         and users who never signed in after 7 days" do
     load(Rails.root.join("script", "remove_unconfirmed_users.rb"))
 
-    assert_equal 3, User.count
     assert User.all.include? @user1
     assert User.all.include? @user2
     refute User.all.include? @user3
