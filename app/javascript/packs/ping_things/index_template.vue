@@ -9,7 +9,7 @@
         <div class="card h-100">
           <div class="card-content">
             <h2 class="h4 card-heading">
-              {{ capitalize(network) }} TX Confirmation Time Stats
+              TX Confirmation Time Stats
             </h2>
             <stats-chart :network="network"/>
           </div>

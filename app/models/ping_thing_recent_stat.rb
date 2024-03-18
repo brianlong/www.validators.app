@@ -11,9 +11,11 @@
 #  max                  :float(24)
 #  median               :float(24)
 #  min                  :float(24)
+#  min_slot_latency     :integer
 #  network              :string(191)
 #  num_of_records       :integer
 #  p90                  :float(24)
+#  p90_slot_latency     :integer
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #
@@ -30,7 +32,9 @@ class PingThingRecentStat < ApplicationRecord
     :network,
     :num_of_records,
     :p90,
-    :average_slot_latency
+    :min_slot_latency,
+    :average_slot_latency,
+    :p90_slot_latency
   ].freeze
 
   INTERVALS = [5, 60].freeze #minutes
@@ -50,18 +54,21 @@ class PingThingRecentStat < ApplicationRecord
     )
 
     ping_times = ping_things.pluck(:response_time).compact.sort
+    slot_latency_stats = ping_things.slot_latency_stats
 
     self.update(
       median: ping_times.median,
       min: ping_times.min,
       max: ping_times.max,
-      p90: ping_times.first((ping_times.count * 0.9).to_i).last,
+      p90: ping_times.first((ping_times.count * 0.9).round).last,
       num_of_records: ping_times.count,
-      average_slot_latency: ping_things.average_slot_latency&.round(1),
+      min_slot_latency: slot_latency_stats[:min],
+      average_slot_latency: slot_latency_stats[:median],
+      p90_slot_latency: slot_latency_stats[:p90],
       fails_count: ping_things.where(success: false).count
     )
   end
-  
+
   def to_builder
     Jbuilder.new do |ping_thing_recent_stat|
       ping_thing_recent_stat.(

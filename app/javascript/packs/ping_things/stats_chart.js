@@ -191,7 +191,7 @@ export default {
                       var min = tooltipItem.raw[1] ? tooltipItem.raw[1].toLocaleString('en-US') : "-";
                       var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : "-";
                       var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : "-";
-                      return ["Min: " + min + " ms, Max: " + max + " ms", "Average slot latency: " + slot_lat + " slots"];
+                      return ["Min: " + min + " ms, Max: " + max + " ms", "Slot latency: " + slot_lat + " slots"];
                     } else if (tooltipItem.datasetIndex == 2) {
                       return "TPS: " + tooltipItem.raw.toLocaleString('en-US');
                     } else {
