@@ -42,9 +42,10 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     ping_stat.recalculate_stats
     ping_stat.reload
 
-    assert_equal 5000, ping_stat.max
     assert_equal 1000, ping_stat.min
     assert_equal 3000, ping_stat.median
+    assert_equal 5000, ping_stat.p90
+    assert_equal 5000, ping_stat.max
     assert_equal 5, ping_stat.num_of_records
   end
 
@@ -71,12 +72,12 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     assert_equal required_keys, ping_stat.to_builder.attributes!.keys
   end
 
-  test "creating new record brodcasts message" do
+  test "creating new record broadcasts message" do
     skip
     # TODO
   end
 
-  test "#recalculate_stats counts median slot latency" do
+  test "#recalculate_stats counts slot latency stats" do
     [9,3,2,1,3,4].each do |latency|
       create(
         :ping_thing,
