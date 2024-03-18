@@ -121,10 +121,16 @@
 
     computed: {
       stats_grouped_by_user: function() {
-        let grouped = {}
-        let usernames = Object.keys(this.last_5_mins).concat(Object.keys(this.last_60_mins))
-        usernames = [...new Set(usernames)]
         let ctx = this
+
+        // set order: lowest 60min average_slot_latency to highest
+        let keys = Object.keys(ctx.last_60_mins);
+        let usernames = keys.sort(function(a, b) {
+          return ctx.last_60_mins[a][0]["average_slot_latency"] - ctx.last_60_mins[b][0]["average_slot_latency"]
+        })
+
+        // group last_60_mins and last_5_mins hashes by username
+        let grouped = {}
         usernames.forEach(function(name) {
           grouped[name] = {
             "5min": {},
