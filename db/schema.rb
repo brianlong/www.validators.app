@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_08_093154) do
+ActiveRecord::Schema.define(version: 2024_03_13_120335) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -392,6 +392,8 @@ ActiveRecord::Schema.define(version: 2024_03_08_093154) do
     t.datetime "updated_at", precision: 6, null: false
     t.float "average_slot_latency"
     t.integer "fails_count"
+    t.integer "min_slot_latency"
+    t.integer "p90_slot_latency"
     t.index ["network", "interval"], name: "index_ping_thing_recent_stats_on_network_and_interval"
   end
 
@@ -440,6 +442,8 @@ ActiveRecord::Schema.define(version: 2024_03_08_093154) do
     t.integer "fails_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "min_slot_latency"
+    t.integer "p90_slot_latency"
     t.index ["user_id"], name: "index_ping_thing_user_stats_on_user_id"
   end
 
