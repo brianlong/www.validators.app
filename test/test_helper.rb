@@ -5,7 +5,7 @@ require_relative '../config/environment'
 require 'rails/test_help'
 require 'faker'
 require 'minitest/mock'
-require 'database_cleaner/active_record'
+require "database_cleaner/active_record"
 
 Dir[Rails.root.join('test/support/**/*')].sort.each { |f| require f }
 
