@@ -26,13 +26,22 @@ VCR.configure do |config|
   end
 end
 
-DatabaseCleaner.strategy = :transaction
+DatabaseCleaner.strategy = :truncation
 
 module AroundEachTest
   def before_setup
     super
-    DatabaseCleaner.clean 
-    DatabaseCleaner.start    
+    DatabaseCleaner.start
+  end
+
+  # def after_teardown
+  #   super
+  #   DatabaseCleaner.clean
+  # end
+
+  def after_test
+    super
+    DatabaseCleaner.clean
   end
 end
 

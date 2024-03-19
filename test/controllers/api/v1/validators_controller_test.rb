@@ -10,21 +10,26 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
   include ValidatorsControllerHelper
 
   setup do
+    puts "validators count before: #{Validator.count}"
     @user_params = {
       username: "test",
       email: "test@test.com",
       password: "password"
     }
     @user = User.create(@user_params)
+    puts "validators count after setup: #{Validator.count}"
   end
 
   test "GET api_v1_validators with token returns only validators from chosen network with scores" do
+    puts "validators count begin test: #{Validator.count}"
+
     create_list(
       :validator,
       3,
       :with_score,
       :with_data_center_through_validator_ip
     )
+    puts "validators count after create_list 1: #{Validator.count}"
     create_list(
       :validator,
       3,
@@ -32,16 +37,21 @@ class ValidatorsControllerTest < ActionDispatch::IntegrationTest
       :mainnet,
       :with_data_center_through_validator_ip
     )
+    puts "validators count after create_list 2: #{Validator.count}"
 
-    puts "Validator count: #{Validator.count}" 
 
     # Testnet
     get api_v1_validators_url(network: "testnet"),
         headers: { "Token" => @user.api_token }
+    puts "validators count after get: #{Validator.count}"
 
     json = response_to_json(@response.body)
+    puts "validators count after json: #{Validator.count}"
 
     assert_response 200
+    puts "validators count after first assert: #{Validator.count}"
+    puts json
+
     assert_equal 4, json.size
     assert_equal "testnet", json.first["network"]
 
