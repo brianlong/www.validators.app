@@ -36,7 +36,7 @@ class PingThingUserStatsServiceTest < ActiveSupport::TestCase
   end
 
   test "#call calculated correct stats" do
-    @ping_things.second.update(slot_landed: 123, response_time: 10)
+    @ping_things.first.update(slot_landed: 123, response_time: 10)
     @ping_things.last(4).each { |pt| pt.update slot_landed: 126, response_time: 3 }
 
     PingThingUserStatsService.new(network: @network, interval: 5).call
