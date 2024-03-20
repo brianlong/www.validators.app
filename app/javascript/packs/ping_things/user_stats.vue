@@ -48,35 +48,35 @@
                   </span>
                 </td>
                 <td class="text-success-darker text-nowrap ps-5">
-                  {{ stats_array["5min"]["min"] ? stats_array["5min"]["min"].toLocaleString('en-US') : 'N/A'}}
+                  {{ stats_array["5min"]["min"] ? stats_array["5min"]["min"].toLocaleString('en-US') : 'N/A' }}
                   <br />
-                  {{ stats_array["60min"]["min"] ? stats_array["60min"]["min"].toLocaleString('en-US') : 'N/A'}}
+                  {{ stats_array["60min"]["min"] ? stats_array["60min"]["min"].toLocaleString('en-US') : 'N/A' }}
                 </td>
                 <td class="text-success text-nowrap px-0">
-                  {{ stats_array["5min"]["median"] ? stats_array["5min"]["median"].toLocaleString('en-US') : 'N/A'}}
+                  {{ stats_array["5min"]["median"] ? stats_array["5min"]["median"].toLocaleString('en-US') : 'N/A' }}
                   <br />
-                  {{ stats_array["60min"]["median"] ? stats_array["60min"]["median"].toLocaleString('en-US') : 'N/A'}}
+                  {{ stats_array["60min"]["median"] ? stats_array["60min"]["median"].toLocaleString('en-US') : 'N/A' }}
                 </td>
                 <td class="text-success-darker text-nowrap pe-5">
-                  {{ stats_array["5min"]["p90"] ? stats_array["5min"]["p90"].toLocaleString('en-US') : 'N/A'}}
+                  {{ stats_array["5min"]["p90"] ? stats_array["5min"]["p90"].toLocaleString('en-US') : 'N/A' }}
                   <br />
-                  {{ stats_array["60min"]["p90"] ? stats_array["60min"]["p90"].toLocaleString('en-US') : 'N/A'}}
+                  {{ stats_array["60min"]["p90"] ? stats_array["60min"]["p90"].toLocaleString('en-US') : 'N/A' }}
                 </td>
 
                 <td class="text-success-darker text-nowrap ps-4 ps-lg-5">
-                  {{ stats_array["5min"]["min_slot_latency"] ? stats_array["5min"]["min_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["5min"]["min_slot_latency"], 'slot') : 'N/A'}}
+                  {{ (typeof stats_array["5min"]["min_slot_latency"] !== 'undefined') ? stats_array["5min"]["min_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["5min"]["min_slot_latency"], 'slot') : 'N/A' }}
                   <br />
-                  {{ stats_array["60min"]["min_slot_latency"] ? stats_array["60min"]["min_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["60min"]["min_slot_latency"], 'slot') : 'N/A'}}
+                  {{ (typeof stats_array["60min"]["min_slot_latency"] !== 'undefined') ? stats_array["60min"]["min_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["60min"]["min_slot_latency"], 'slot') : 'N/A' }}
                 </td>
                 <td class="text-success text-nowrap ps-0 ps-xl-1 pe-0">
-                  {{ stats_array["5min"]["average_slot_latency"] ? stats_array["5min"]["average_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["5min"]["average_slot_latency"] , 'slot') : 'N/A'}}
+                  {{ (typeof stats_array["5min"]["average_slot_latency"] !== 'undefined') ? stats_array["5min"]["average_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["5min"]["average_slot_latency"] , 'slot') : 'N/A' }}
                   <br />
-                  {{ stats_array["60min"]["average_slot_latency"] ? stats_array["60min"]["average_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["60min"]["average_slot_latency"] , 'slot') : 'N/A'}}
+                  {{ (typeof stats_array["60min"]["average_slot_latency"] !== 'undefined') ? stats_array["60min"]["average_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["60min"]["average_slot_latency"] , 'slot') : 'N/A' }}
                 </td>
                 <td class="text-success-darker text-nowrap pe-4 pe-lg-5">
-                  {{ stats_array["5min"]["p90_slot_latency"] ? stats_array["5min"]["p90_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["5min"]["p90_slot_latency"], 'slot') : 'N/A'}}
+                  {{ (typeof stats_array["5min"]["p90_slot_latency"] !== 'undefined') ? stats_array["5min"]["p90_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["5min"]["p90_slot_latency"], 'slot') : 'N/A' }}
                   <br />
-                  {{ stats_array["60min"]["p90_slot_latency"] ? stats_array["60min"]["p90_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["60min"]["p90_slot_latency"], 'slot') : 'N/A'}}
+                  {{ (typeof stats_array["60min"]["p90_slot_latency"] !== 'undefined') ? stats_array["60min"]["p90_slot_latency"].toLocaleString('en-US') + pluralize(stats_array["60min"]["p90_slot_latency"], 'slot') : 'N/A' }}
                 </td>
               </tr>
             </tbody>
