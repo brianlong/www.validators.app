@@ -51,13 +51,13 @@
           </td>
 
           <td class="text-success-darker text-nowrap ps-4 ps-lg-5">
-            {{ last_5_mins["min_slot_latency"] ? last_5_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["min_slot_latency"], 'slot') : 'N / A' }}
+            {{ (typeof last_5_mins["min_slot_latency"] !== 'undefined') ? last_5_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["min_slot_latency"], 'slot') : 'N / A' }}
           </td>
           <td class="text-success text-nowrap ps-0 ps-xl-1 pe-0">
-            {{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["average_slot_latency"], 'slot') : 'N / A' }}
+            {{ (typeof last_5_mins["average_slot_latency"] !== 'undefined') ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["average_slot_latency"], 'slot') : 'N / A' }}
           </td>
           <td class="text-success-darker text-nowrap pe-4 pe-lg-5">
-            {{ last_5_mins["p90_slot_latency"] ? last_5_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["p90_slot_latency"], 'slot') : 'N / A' }}
+            {{ (typeof last_5_mins["p90_slot_latency"] !== 'undefined') ? last_5_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["p90_slot_latency"], 'slot') : 'N / A' }}
           </td>
         </tr>
         <tr>
@@ -82,13 +82,13 @@
           </td>
 
           <td class="text-success-darker text-nowrap ps-4 ps-lg-5">
-            {{ last_60_mins["min_slot_latency"] ? last_60_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["min_slot_latency"], 'slot') : 'N / A' }}
+            {{ (typeof last_60_mins["min_slot_latency"] !== 'undefined') ? last_60_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["min_slot_latency"], 'slot') : 'N / A' }}
           </td>
           <td class="text-success text-nowrap ps-0 ps-xl-1 pe-0">
-            {{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["average_slot_latency"], 'slot') : 'N / A' }}
+            {{ (typeof last_60_mins["average_slot_latency"] !== 'undefined') ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["average_slot_latency"], 'slot') : 'N / A' }}
           </td>
           <td class="text-success-darker text-nowrap pe-4 pe-lg-5">
-            {{ last_60_mins["p90_slot_latency"] ? last_60_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["p90_slot_latency"], 'slot') : 'N / A' }}
+            {{ (typeof last_60_mins["p90_slot_latency"] !== 'undefined') ? last_60_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["p90_slot_latency"], 'slot') : 'N / A' }}
           </td>
         </tr>
         </tbody>
