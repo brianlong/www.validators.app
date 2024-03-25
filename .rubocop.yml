@@ -166,3 +166,86 @@ Style/RedundantArgument:
 # good:  foo = bar if condition
 Style/RedundantSelfAssignmentBranch:
   Enabled: true
+
+Rails:
+  Enabled: true
+  DocumentationBaseURL: https://docs.rubocop.org/rubocop-rails
+
+# bad: (will not add an index): add_column :table, :column, :integer, index: true
+# good:
+#   add_column :table, :column, :integer
+#   add_index :table, :column
+Rails/AddColumnIndex:
+  Enabled: true
+
+# bad: User.find_by_id!(id)
+# bad: User.find_by!(id: id)
+# good: User.find(id)
+Rails/FindById:
+  Enabled: true
+
+# bad: class User < ActionMailer::Base
+# good: class UserMailer < ActionMailer::Base
+Rails/MailerName:
+  Enabled: true
+
+# bad: User.where('name != ?', 'Gabe')
+# good: User.where.not(name: 'Gabe')
+Rails/WhereNot:
+  Enabled: true
+
+# Looks for associations that have been defined multiple times in the same file
+Rails/DuplicateAssociation:
+  Enabled: true
+
+# bad:
+#   scope :visible, -> { where(visible: true) }
+#   scope :hidden, -> { where(visible: true) }
+Rails/DuplicateScope:
+  Enabled: true
+
+# bad: Time.current - 1.minute
+# good: 1.minute.ago
+Rails/DurationArithmetic:
+  Enabled: true
+
+# Makes sure that migration class name matches the file name
+# good: db/migrate/X_create_users.rb -> class CreateUsers < ActiveRecord::Migration
+Rails/MigrationClassName:
+  Enabled: true
+
+# Checks the migration for which timestamps are not included when creating a new table
+Rails/CreateTableWithTimestamps:
+  Enabled: true
+
+# bad: add_column :users, :save
+# good: add_column :users, :saved
+Rails/DangerousColumnNames:
+  Enabled: true
+
+# bad: Rails.env == 'production'
+# bad, always returns false: Rails.env == :test
+# good: Rails.env.production?
+Rails/EnvironmentComparison:
+  Enabled: true
+
+# bad: link_to 'Click here', url, target: '_blank'
+# good: link_to 'Click here', url, target: '_blank', rel: 'noopener'
+Rails/LinkToBlank:
+  Enabled: true
+
+# bad: 3.day.ago
+# good: 3.days.ago
+Rails/PluralizationGrammar:
+  Enabled: true
+
+# bad: foo.try!(:bar)
+# good: foo&.bar
+Rails/SafeNavigation:
+  Enabled: true
+
+# Uniqueness validation should have a unique index on the database column.
+# bad - if the schema does not have a unique index
+# good - if the schema has a unique index
+Rails/UniqueValidationWithoutIndex:
+  Enabled: true
