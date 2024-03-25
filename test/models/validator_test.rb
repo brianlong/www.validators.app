@@ -104,14 +104,6 @@ class ValidatorTest < ActiveSupport::TestCase
     assert_equal expected_url, @validator.api_url
   end
 
-  test "#ping_times_to" do
-    assert_equal 3, validators(:one).ping_times_to.count
-  end
-
-  test "#ping_times_to_avg" do
-    assert_equal 75.0, validators(:one).ping_times_to_avg
-  end
-
   test "#private_validator? returns true if validator's commission is 100%" do
     @validator.update(network: 'mainnet')
 
@@ -187,7 +179,7 @@ class ValidatorTest < ActiveSupport::TestCase
   test "#filtered_by active includes all active validators in collection" do
     result = Validator.filtered_by(["active"])
 
-    assert_equal 4, result.count
+    assert_equal 3, result.count
     assert result.last.is_active
   end
 

@@ -2,34 +2,27 @@ require 'test_helper'
 
 class VoteAccountHistoryQueryTest < ActiveSupport::TestCase
   def setup
-    super
-
-    network = 'testnet'
+    network = "testnet"
     batch_uuid = create(:batch).uuid
-
+    v = create(:validator, network: network)
+    va = create(:vote_account, network: network, validator: v)
     @vote_account_histories = [
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-                                    slot_index_current: 1, credits_current: 140),
+                                    slot_index_current: 1, credits_current: 140, vote_account: va),
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-                                    slot_index_current: 2, credits_current: 120),
+                                    slot_index_current: 2, credits_current: 120, vote_account: va),
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-                                    slot_index_current: 4, credits_current: 100),
+                                    slot_index_current: 4, credits_current: 100, vote_account: va),
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-                                    slot_index_current: 8, credits_current: 80),
+                                    slot_index_current: 8, credits_current: 80, vote_account: va),
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-                                    slot_index_current: 16, credits_current: 60),
+                                    slot_index_current: 16, credits_current: 60, vote_account: va),
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-                                    slot_index_current: 32, credits_current: 40),
-      create(:vote_account_history, slot_index_current: 64, credits_current: 220)
+                                    slot_index_current: 32, credits_current: 40, vote_account: va),
+      create(:vote_account_history, slot_index_current: 64, credits_current: 220, vote_account: va)
     ]
 
     @vahq = VoteAccountHistoryQuery.new(network, batch_uuid)
-  end
-
-  def teardown
-    super
-
-    @vote_account_histories.each(&:destroy)
   end
 
   test 'for_batch' do
