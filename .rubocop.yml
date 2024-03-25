@@ -239,11 +239,6 @@ Rails/LinkToBlank:
 Rails/PluralizationGrammar:
   Enabled: true
 
-# bad: foo.try!(:bar)
-# good: foo&.bar
-Rails/SafeNavigation:
-  Enabled: true
-
 # Uniqueness validation should have a unique index on the database column.
 # bad - if the schema does not have a unique index
 # good - if the schema has a unique index
