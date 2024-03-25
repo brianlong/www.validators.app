@@ -47,7 +47,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
   end
 
   test "block_vote_history_get" do
-    # create enough records to confirm via logs we don"t have an N+1 query when
+    # create enough records to confirm via logs we don't have an N+1 query when
     # getting ValidatorHistory for all accounts for this batch
     5.times do
       v = create(:validator)

@@ -34,11 +34,6 @@ module AroundEachTest
     DatabaseCleaner.start
   end
 
-  # def after_teardown
-  #   super
-  #   DatabaseCleaner.clean
-  # end
-
   def after_test
     super
     DatabaseCleaner.clean

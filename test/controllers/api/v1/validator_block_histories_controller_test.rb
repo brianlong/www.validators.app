@@ -6,7 +6,7 @@ require "rack/test"
 
 module Api
   module V1
-    class ValidatorsControllerTest < ActionDispatch::IntegrationTest
+    class ValidatorBlockHistoriesControllerTest < ActionDispatch::IntegrationTest
       include ResponseHelper
     
       setup do
