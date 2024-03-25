@@ -101,6 +101,7 @@ group :development, :test do
   gem 'pronto-rubocop', '~> 0.11.5', require: false
   gem 'pry', '~> 0.14.2'
   gem 'rubocop', '~> 1.62', require: false
+  gem 'rubocop-rails', '~> 2.24', require: false
   gem 'letter_opener_web'
 end
 
