@@ -120,14 +120,6 @@ Style/SingleLineBlockParams:
 Lint/ShadowingOuterLocalVariable:
   Enabled: false
 
-# good:
-# foo :bar,
-#     :baz,
-#     key: value
-# https://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Layout/ArgumentAlignment
-Layout/ArgumentAlignment:
-  Enabled: true
-
 # Empty line after attr_accessor, attr_reader, attr_writer
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
