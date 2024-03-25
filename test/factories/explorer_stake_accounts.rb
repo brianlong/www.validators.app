@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :explorer_stake_account do
     account_balance { 1234 }

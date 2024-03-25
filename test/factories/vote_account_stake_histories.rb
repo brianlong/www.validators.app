@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 FactoryBot.define do
   factory :vote_account_stake_history do
