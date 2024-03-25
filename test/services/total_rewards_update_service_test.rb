@@ -15,8 +15,6 @@ class TotalRewardsUpdateServiceTest < ActiveSupport::TestCase
   end
 
   test "#total_rewards_from_stake_accounts returns correct result" do
-    EpochWallClock.delete_all
-
     cluster_stat = create(:cluster_stat, network: @network)
     epoch = create(:epoch_wall_clock, epoch: 407, network: @network, starting_slot: 1, ending_slot: 2)
 
@@ -28,8 +26,6 @@ class TotalRewardsUpdateServiceTest < ActiveSupport::TestCase
   end
 
   test "#total_rewards_from_vote_accounts returns correct result" do
-    EpochWallClock.delete_all
-
     cluster_stat = create(:cluster_stat, network: @network)
     epoch = create(:epoch_wall_clock, epoch: 407, network: @network, starting_slot: 1, ending_slot: 2)
 

@@ -4,9 +4,6 @@ require "test_helper"
 
 class ArchivableTest < ActiveSupport::TestCase
   setup do
-    StakeAccountHistory.delete_all
-    StakeAccountHistoryArchive.delete_all
-
     10.times do |t|
       create(:stake_account_history, network: "testnet", created_at: t.days.ago)
     end

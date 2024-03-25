@@ -5,6 +5,7 @@ require_relative '../config/environment'
 require 'rails/test_help'
 require 'faker'
 require 'minitest/mock'
+require "database_cleaner/active_record"
 
 Dir[Rails.root.join('test/support/**/*')].sort.each { |f| require f }
 
@@ -25,6 +26,20 @@ VCR.configure do |config|
   end
 end
 
+DatabaseCleaner.strategy = :truncation
+
+module AroundEachTest
+  def before_setup
+    super
+    DatabaseCleaner.start
+  end
+
+  def after_test
+    super
+    DatabaseCleaner.clean
+  end
+end
+
 class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
   # parallelize(workers: :number_of_processors)
@@ -35,4 +50,6 @@ class ActiveSupport::TestCase
 
   include FactoryBot::Syntax::Methods
   # Add more helper methods to be used by all tests here...
+
+  include AroundEachTest
 end

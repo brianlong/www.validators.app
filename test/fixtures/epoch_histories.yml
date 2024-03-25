@@ -1,8 +1,0 @@
-one:
-  id: 1
-  network: 'testnet'
-  batch_uuid: '1234'
-  epoch: 1
-  current_slot: 1
-  slot_index: 1
-  slots_in_epoch: 100
