@@ -8,7 +8,8 @@ AllCops:
     - 'tmp/**/*'
     - 'log/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
+  TargetRailsVersion: 6.1
   DisabledByDefault: true
 
 Style/Encoding:
@@ -16,13 +17,23 @@ Style/Encoding:
 
 Style/FrozenStringLiteralComment:
   AutoCorrect: true
+  EnforcedStyle: always_true
+  Details: 'Add `# frozen_string_literal: true` to the top of the file.'
 
+# bad: hash.keys.each { |k| p k }
+# good: hash.each_key { |k| p k }
 Style/HashEachMethods:
   Enabled: true
 
+# transform_keys is simpler & faster
+# bad: { a: 1, b: 2 }.map { |k, v| [k.to_s, v] }.to_h
+# good: { a: 1, b: 2 }.transform_keys { |k| k.to_s }
 Style/HashTransformKeys:
   Enabled: true
 
+# transform_values is simpler & faster
+# bad: { a: 1, b: 2 }.map { |k, v| [k, v * v] }.to_h
+# good: { a: 1, b: 2 }.transform_values { |v| v * v }
 Style/HashTransformValues:
   Enabled: true
 
@@ -30,6 +41,8 @@ Style/PerlBackrefs:
   Enabled: true
   AutoCorrect: false
 
+# bad: CONST = [1, 2, 3]
+# good: CONST = [1, 2, 3].freeze
 Style/MutableConstant:
   Enabled: true
   AutoCorrect: false
@@ -40,7 +53,7 @@ Lint/AmbiguousBlockAssociation:
     - 'test/**/*.rb'
 
 Metrics/BlockLength:
-  Max: 30
+  Max: 40
   Enabled: true
   Exclude:
     - 'Rakefile'
@@ -49,37 +62,38 @@ Metrics/BlockLength:
 
 Metrics/ModuleLength:
   Enabled: true
-  Max: 500
+  Max: 550
   Exclude:
     - 'test/**/*.rb'
 
 Layout/LineLength:
   Enabled: true
-  Max: 120
+  Max: 200
   Exclude:
     - 'Gemfile'
 
 Metrics/ClassLength:
   Enabled: true
-  Max: 500
+  Max: 600
 
 Metrics/CyclomaticComplexity:
   Enabled: true
-  Max: 15
+  Max: 18
 
 Metrics/MethodLength:
   Enabled: true
-  Max: 30
+  Max: 50
   Exclude:
     - 'test/**/*.rb'
 
 Metrics/AbcSize:
   Enabled: true
-  Max: 25
+  Max: 40
   Exclude:
     - 'test/**/*.rb'
 
-# Mixing the styles looks just silly.
+# bad: {:a => 1, :b => 2}
+# good: {a: 1, b: 2}
 Style/HashSyntax:
   Enabled: true
   EnforcedStyle: ruby19_no_mixed_keys
@@ -87,11 +101,12 @@ Style/HashSyntax:
 Style/CollectionMethods:
   Enabled: true
   PreferredMethods:
-    # inject seems more common in the community.
+    # inject seems more common in the community
     reduce: inject
+    # bad: items.collect
+    # good: items.map
     collect: map
 
-# Enforcing the names of variables? To single letter ones? Just no.
 Style/SingleLineBlockParams:
   Enabled: false
 
@@ -102,3 +117,52 @@ Style/SingleLineBlockParams:
 # because the method is too long.
 Lint/ShadowingOuterLocalVariable:
   Enabled: false
+
+# good:
+# foo :bar,
+#     :baz,
+#     key: value
+# https://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Layout/ArgumentAlignment
+Layout/ArgumentAlignment:
+  Enabled: true
+
+# Empty line after attr_accessor, attr_reader, attr_writer
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+# bad: raise Exception, 'Error message here'
+# good: raise StandardError, 'Error message here'
+Lint/RaiseException:
+  Enabled: true
+
+# bad: collection [index_or_key]
+# good: collection[index_or_key]
+Layout/SpaceBeforeBrackets:
+  Enabled: true
+
+# bad: items.each { |item| }
+# good: items.each { |item| puts item }
+Lint/EmptyBlock:
+  Enabled: true
+
+# bad: Hash[key1, value1, key2, value2]
+# good: { key1 => value1, key2 => value2 }
+Style/HashConversion:
+  Enabled: true
+
+# Avoid negated conditions when can be simplified
+# bad:  !x ? do_something : do_something_else
+# good:  x ? do_something_else : do_something
+Style/NegatedIfElseCondition:
+  Enabled: true
+
+# Check for a redundant argument passed to certain methods, eg.:
+# bad:  array.join('')
+# good  array.join
+Style/RedundantArgument:
+  Enabled: true
+
+# bad:  foo = condition ? bar : foo
+# good:  foo = bar if condition
+Style/RedundantSelfAssignmentBranch:
+  Enabled: true
