@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :validator_block_history_stat do
-    batch_uuid { SecureRandom.uuid }
+    batch_uuid { "123" }
     epoch { 1 }
     start_slot { 1 }
     end_slot { 10 }

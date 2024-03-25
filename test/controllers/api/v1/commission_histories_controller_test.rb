@@ -21,7 +21,7 @@ module Api
 
         create(:commission_history, validator: val1)
         create(:commission_history, validator: val2, created_at: 2.days.ago)
-        create(:commission_history, validator: val3, created_at: 32.day.ago)
+        create(:commission_history, validator: val3, created_at: 32.days.ago)
       end
 
       test 'When reaching the commission changes api \
