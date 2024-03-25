@@ -1,3 +1,5 @@
+require: rubocop-rails
+
 AllCops:
   Exclude:
     - 'db/**/*'
@@ -166,10 +168,6 @@ Style/RedundantArgument:
 # good:  foo = bar if condition
 Style/RedundantSelfAssignmentBranch:
   Enabled: true
-
-Rails:
-  Enabled: true
-  DocumentationBaseURL: https://docs.rubocop.org/rubocop-rails
 
 # bad: (will not add an index): add_column :table, :column, :integer, index: true
 # good:
