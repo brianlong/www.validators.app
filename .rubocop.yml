@@ -70,7 +70,7 @@ Metrics/ModuleLength:
 
 Layout/LineLength:
   Enabled: true
-  Max: 200
+  Max: 120
   Exclude:
     - 'Gemfile'
 
