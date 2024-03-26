@@ -1,6 +1,6 @@
-require "test_helper"
-
 # frozen_string_literal: true
+
+require "test_helper"
 
 class PingThingTest < ActiveSupport::TestCase
   include ActionCable::TestHelper
@@ -91,19 +91,19 @@ class PingThingTest < ActiveSupport::TestCase
     PingThing.commitment_levels.each_key do |key|
       pt.commitment_level = key
       assert pt.valid?
-      assert_equal key, pt.commitment_level 
+      assert_equal key, pt.commitment_level
     end
 
     PingThing.commitment_levels.each_value do |value|
       pt.commitment_level = value
       assert pt.valid?
-      assert_equal PingThing.commitment_levels.keys[value], pt.commitment_level 
+      assert_equal PingThing.commitment_levels.keys[value], pt.commitment_level
     end
   end
 
   test "commitment_level raise argument error when wrong level is being assigned" do
     pt = build(:ping_thing, user_id: @user.id)
-    
+
     # string instead of integer
     assert_raise ArgumentError do
       pt.commitment_level = "0"
@@ -122,7 +122,7 @@ class PingThingTest < ActiveSupport::TestCase
 
   test "commitment_level allows nils" do
     pt = build(:ping_thing, user_id: @user.id, commitment_level: nil)
-    
+
     assert_nil pt.commitment_level
     assert pt.valid?
   end

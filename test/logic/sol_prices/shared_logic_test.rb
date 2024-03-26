@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 # CoinGeckoLogicTest
@@ -17,10 +18,10 @@ class SolPrices::SharedLogicTest < ActiveSupport::TestCase
     @datetime = DateTime.current.beginning_of_day - 2.days
 
     @price_example = {
-      :exchange=>1,
-      :currency=>0,
-      :volume=>571066472.04745,
-      :datetime_from_exchange=>@datetime
+      exchange: 1,
+      currency: 0,
+      volume: 571066472.04745,
+      datetime_from_exchange: @datetime
     }
 
     setup_epochs

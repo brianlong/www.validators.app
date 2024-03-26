@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :opt_out_request do
     name { Faker::Name.name[0..15] }

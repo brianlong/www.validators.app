@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class AsnControllerTest < ActionDispatch::IntegrationTest
@@ -6,7 +8,7 @@ class AsnControllerTest < ActionDispatch::IntegrationTest
     data_center_host = create(:data_center_host, data_center: @data_center)
     validator = create(:validator)
     @validator_ip = create(:validator_ip, :active, validator: validator, data_center_host: data_center_host)
-    
+
     vs = create(:validator_score_v1, validator: validator, network: "testnet")
   end
 

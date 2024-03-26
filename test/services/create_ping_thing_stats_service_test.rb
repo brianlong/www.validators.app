@@ -49,7 +49,7 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
         serv.call
       end
     end
-    
+
     assert_equal 24, PingThingStat.where(interval: PingThingStat::INTERVALS[0]).count
     assert_equal 8, PingThingStat.where(interval: PingThingStat::INTERVALS[1]).count
     assert_equal 2, PingThingStat.where(interval: PingThingStat::INTERVALS[2]).count
@@ -62,9 +62,9 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
 
   test "CreatePingThingStatsService does not return error when slot fields are empty" do
     PingThing.update_all(slot_sent: nil, slot_landed: nil)
-    
+
     assert_nothing_raised do
-      serv = CreatePingThingStatsService.new(time_to: 1.minutes.ago, network: @network)
+      serv = CreatePingThingStatsService.new(time_to: 1.minute.ago, network: @network)
       serv.stub(:get_transactions_count, 100) do
         serv.call
       end
@@ -79,7 +79,7 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
         serv.call
       end
     end
-    
+
     stat = PingThingStat.where(interval: PingThingStat::INTERVALS[3]).last
     assert_equal 24, stat.interval
     assert_equal 1, stat.min
@@ -112,7 +112,7 @@ class CreatePingThingStatsServiceTest < ActiveSupport::TestCase
         serv.call
       end
     end
-    
+
     stat = PingThingStat.where(interval: PingThingStat::INTERVALS[3]).last
     assert_equal slot_latency, stat.average_slot_latency
   end
