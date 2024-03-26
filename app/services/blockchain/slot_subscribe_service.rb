@@ -9,7 +9,7 @@ MAX_RETRIES = 10
 module Blockchain
   class SlotSubscribeService
 
-    def initialize(network: "mainnet", rpc_url: )
+    def initialize(network: "mainnet", rpc_url:)
       @network = network
       @rpc_url = rpc_url.chomp("/")
       @retires = 0
@@ -24,9 +24,10 @@ module Blockchain
         ws = Faye::WebSocket::Client.new(ws_url, nil)
       
         EM::PeriodicTimer.new(KEEPALIVE_TIME) do
+          @logger.info("ping...")
           while !ws.ping
             @retries += 1
-      
+
             unless @retries <= MAX_RETRIES
               @logger.error("Max retries (#{MAX_RETRIES}) reached, closing connection")
               ws.close
