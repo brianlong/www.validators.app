@@ -14,6 +14,8 @@ gem 'bundler', '>= 2.1'
 gem 'json', '>= 2.3.0'
 
 gem 'websocket-extensions', '>= 0.1.5'
+gem 'faye-websocket', '~> 0.11.3'
+gem 'eventmachine', '~> 1.2', '>= 1.2.0.1'
 
 gem 'actionview', '>= 6.0.3.1'
 
