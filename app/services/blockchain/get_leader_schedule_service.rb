@@ -24,8 +24,7 @@ module Blockchain
               network: @network,
               epoch: @epoch,
               slot_number: entry["slot"],
-              leader: entry["leader"],
-              has_block: false
+              leader: entry["leader"]
             )
           end
           @logger.info("Leader schedule for epoch #{@epoch} on #{@network} saved")

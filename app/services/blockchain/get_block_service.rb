@@ -17,13 +17,25 @@ module Blockchain
         :get_block,
         params: [@slot_number, {}]
       )
-      block = {
-        height: block["blockHeight"],
-        block_time: block["blockTime"],
-        hash: block["blockhash"],
-        parent_slot: block["parentSlot"]
-      }
-      Block.create!(block)
+      puts block["blockHeight"]
+      puts block["blockTime"]
+      puts block["blockhash"]
+      puts block["parentSlot"]
+      
+      Blockchain::Block.create(
+        height: block["blockHeight"].to_i,
+        block_time: block["blockTime"].to_i,
+        blockhash: block["blockhash"],
+        parent_slot: block["parentSlot"].to_i,
+        slot_number: @slot_number
+      )
+      update_slot_status
+    end
+
+    def update_slot_status
+      puts "updating slot status"
+      slot = Slot.find_by(slot_number: @slot_number, network: @network)
+      slot&.has_block!
     end
   end
 end

@@ -3,9 +3,9 @@ class CreateBlockchainBlocks < ActiveRecord::Migration[6.1]
     create_table :blockchain_blocks do |t|
       t.bigint :height
       t.bigint :block_time
-      t.string :hash
+      t.string :blockhash
       t.bigint :parent_slot
-
+      t.bigint :slot_number
       t.timestamps
     end
   end
