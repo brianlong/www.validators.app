@@ -29,6 +29,7 @@ class GetLeaderScheduleServiceTest < ActiveSupport::TestCase
       assert_equal 126, Blockchain::Slot.last.slot_number
       assert_equal @network, Blockchain::Slot.last.network
       assert_equal @epoch, Blockchain::Slot.last.epoch
+      assert_equal "initialized", Blockchain::Slot.last.status
     end
   end
 

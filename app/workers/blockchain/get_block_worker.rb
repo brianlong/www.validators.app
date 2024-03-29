@@ -3,7 +3,7 @@
 module Blockchain
   class GetBlockWorker
     include Sidekiq::Worker
-    include AsnLogic
+    sidekiq_options retry: 0, dead: false
 
     def perform(args = {})
       network = args["network"]

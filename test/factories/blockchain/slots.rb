@@ -6,6 +6,6 @@ FactoryBot.define do
     leader { "account_1" }
     network { "mainnet" }
     epoch { 586 }
-    has_block { false }
+    status { "initialized" }
   end
 end

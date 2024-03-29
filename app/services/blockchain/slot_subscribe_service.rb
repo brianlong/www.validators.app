@@ -22,7 +22,8 @@ module Blockchain
       event_machine = EM.run {
         @retries = 0
         ws = Faye::WebSocket::Client.new(ws_url, nil)
-      
+        
+        # ping to test the connection
         connection_test = EM::PeriodicTimer.new(KEEPALIVE_TIME) do
           @logger.info("ping...")
           while !ws&.ping
@@ -30,6 +31,8 @@ module Blockchain
 
             unless @retries <= MAX_RETRIES
               @logger.error("Max retries (#{MAX_RETRIES}) reached, closing connection")
+
+              # close the connection and stop the event machine
               ws&.close
               EventMachine::stop_event_loop
             end
@@ -49,6 +52,12 @@ module Blockchain
           @retries = 0
           data = JSON.parse(event.data)["params"]
           @logger.info("Received message: #{data}")
+          if data && data["result"]
+            @logger.info("Received message: #{data["result"]["slot"]}")
+
+            # delay to make sure the block is available
+            Blockchain::GetBlockWorker.set(queue: "blockchain").perform_in(20.seconds, {"network" => @network, "slot_number" => data["result"]["slot"]})
+          end
         end
       
         ws.on :close do |event|
@@ -65,6 +74,7 @@ module Blockchain
       }
     end
 
+    # make sure the format is ws://example.com:8900
     def ws_url
       if @ws_url
         @ws_url
