@@ -4,12 +4,12 @@ require "faye/websocket"
 require 'eventmachine'
 
 KEEPALIVE_TIME = 5
-MAX_RETRIES = 10
+MAX_RETRIES = 5
 
 module Blockchain
   class SlotSubscribeService
 
-    def initialize(network: "mainnet", rpc_url: )
+    def initialize(network: "mainnet", rpc_url:)
       @network = network
       @rpc_url = rpc_url.chomp("/")
       @retires = 0
@@ -19,18 +19,19 @@ module Blockchain
     end
 
     def call
-      EM.run {
+      event_machine = EM.run {
         @retries = 0
         ws = Faye::WebSocket::Client.new(ws_url, nil)
       
-        EM::PeriodicTimer.new(KEEPALIVE_TIME) do
-          while !ws.ping
+        connection_test = EM::PeriodicTimer.new(KEEPALIVE_TIME) do
+          @logger.info("ping...")
+          while !ws&.ping
             @retries += 1
-      
+
             unless @retries <= MAX_RETRIES
               @logger.error("Max retries (#{MAX_RETRIES}) reached, closing connection")
-              ws.close
-              break
+              ws&.close
+              EventMachine::stop_event_loop
             end
       
             @logger.error("Ping failed, retrying in #{@retries} seconds...")
@@ -52,6 +53,10 @@ module Blockchain
       
         ws.on :close do |event|
           @logger.info("Closed connection to #{ws_url}")
+          @logger.info("Code: #{event.code}, Reason: #{event.reason}")
+
+          ws = nil
+          EventMachine::stop_event_loop
         end
       
         ws.on :error do |event|
