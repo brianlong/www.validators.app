@@ -57,7 +57,7 @@ begin
 
     break if interrupted
 
-    sleep(sleep_time) unless Rails.env == 'test'
+    sleep(sleep_time) unless Rails.env.test?
   rescue SkipAndSleep => e
     break if interrupted
 
