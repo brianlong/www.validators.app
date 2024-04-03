@@ -108,16 +108,6 @@ ActiveRecord::Schema.define(version: 2024_04_03_104942) do
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
   end
 
-  create_table "blockchain_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "height"
-    t.bigint "block_time"
-    t.string "blockhash"
-    t.bigint "parent_slot"
-    t.bigint "slot_number"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "blockchain_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
     t.string "leader"
