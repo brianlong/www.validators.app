@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_13_120335) do
+ActiveRecord::Schema.define(version: 2024_04_03_104942) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -108,15 +108,27 @@ ActiveRecord::Schema.define(version: 2024_03_13_120335) do
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
   end
 
+  create_table "blockchain_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "height"
+    t.bigint "block_time"
+    t.string "blockhash"
+    t.bigint "parent_slot"
+    t.bigint "slot_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "blockchain_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
     t.string "leader"
     t.string "network"
     t.integer "epoch"
-    t.boolean "has_block"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status", default: 0
     t.index ["network", "epoch", "leader"], name: "index_blockchain_slots_on_network_and_epoch_and_leader"
+    t.index ["network", "slot_number"], name: "index_blockchain_slots_on_network_and_slot_number"
+    t.index ["network", "status", "epoch"], name: "index_blockchain_slots_on_network_and_status_and_epoch"
   end
 
   create_table "cluster_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -748,6 +760,7 @@ ActiveRecord::Schema.define(version: 2024_03_13_120335) do
     t.string "traits_network"
     t.boolean "is_active", default: false
     t.index ["data_center_host_id"], name: "index_validator_ips_on_data_center_host_id"
+    t.index ["is_active", "address"], name: "index_validator_ips_on_is_active_and_address"
     t.index ["is_active"], name: "index_validator_ips_on_is_active"
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
   end

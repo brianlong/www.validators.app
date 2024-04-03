@@ -7,8 +7,11 @@ class GossipNodeQuery
     @network = network
     @query_fields = query_fields
     @query = GossipNode.select(query_fields)
-                       .left_outer_joins(:validator)
-                       .left_outer_joins(:data_center)
+                       .joins(
+                         "LEFT OUTER JOIN validators
+                          ON validators.account = gossip_nodes.account
+                          AND validators.network = gossip_nodes.network"
+                       ).left_outer_joins(:data_center)
                        .where(network: @network)
                        .active
   end
