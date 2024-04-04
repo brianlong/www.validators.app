@@ -150,7 +150,6 @@
             grouped[name]["60min"] = ctx.last_60_mins[name].constructor === Array ? ctx.last_60_mins[name][0] : ctx.last_60_mins[name]
           }
         })
-        console.log(grouped)
         return grouped
       }
     },
