@@ -99,12 +99,15 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
   end
 
   test "#recalculate_stats counts fails count" do
+    usr = create(:user)
+
     6.times do |time|
       create(
         :ping_thing,
         :testnet,
         reported_at: rand(50.minutes.ago..Time.now),
-        success: time.even?
+        success: time.even?,
+        user: usr
       )
     end
 
@@ -114,5 +117,27 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     ping_stat.reload
 
     assert_equal 3, ping_stat.fails_count
+  end
+
+  test "#recalculate_stats does not include users with 100% fails count" do
+    usr1 = create(:user)
+    usr2 = create(:user)
+    
+    10.times do |time|
+      create(
+        :ping_thing,
+        :testnet,
+        reported_at: rand(50.minutes.ago..Time.now),
+        success: time.even?,
+        user: time.even? ? usr1 : usr2
+      )
+    end
+
+    ping_stat = create(:ping_thing_recent_stat, interval: 60)
+
+    ping_stat.recalculate_stats
+    ping_stat.reload
+
+    assert_equal 0, ping_stat.fails_count
   end
 end

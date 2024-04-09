@@ -25,7 +25,7 @@ counts.each do |loop|
       commitment_level: "confirmed",
       success: [true, false].sample,
       application: "web3",
-      reported_at: rand(7.days.ago..Time.now),
+      reported_at: rand(5.minutes.ago..Time.now),
       slot_sent: slot_sent,
       slot_landed: slot_sent + rand(1..12)
     )
