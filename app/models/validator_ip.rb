@@ -21,6 +21,7 @@
 #
 #  index_validator_ips_on_data_center_host_id                   (data_center_host_id)
 #  index_validator_ips_on_is_active                             (is_active)
+#  index_validator_ips_on_is_active_and_address                 (is_active,address)
 #  index_validator_ips_on_validator_id_and_version_and_address  (validator_id,version,address) UNIQUE
 #
 # Foreign Keys
