@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require File.expand_path('../config/environment', __dir__)
+
 require "csv"
 
 columns = %w[user_id amount signature response_time transaction_type network commitment_level success application reported_at slot_sent slot_landed]
