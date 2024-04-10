@@ -22,10 +22,10 @@ puts "done"
 
 total_batches = PingThingArchive.count / 500_000
 
-puts "generating ping_thing_archive_*.csv (total batches: #{total_batches})"
+puts "generating ping_thing_archive_*.csv (total batches: #{total_batches + 1})"
 PingThingArchive.find_in_batches(batch_size: 500_000).with_index do |pta_batch, batch_index|
-  file_archive = "#{file_archive_root}_#{batch_index}.csv"
-  print "\r#{batch_index + 1} / #{total}"
+  file_archive = "#{file_archive_root}_#{batch_index + 1}.csv"
+  print "\r#{batch_index + 1} / #{total_batches + 1}"
 
   CSV.open(file_archive, "w") do |csv|
     csv << columns
