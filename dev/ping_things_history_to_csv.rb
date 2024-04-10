@@ -8,6 +8,7 @@ columns = %w[user_id amount signature response_time transaction_type network com
 file_recent = "#{Rails.root}/tmp/ping_thing_recent.csv"
 file_archive_root = "#{Rails.root}/tmp/ping_thing_archive"
 
+puts "generating ping_thing_recent.csv"
 CSV.open(file_recent, "w") do |csv|
   csv << columns
 
@@ -17,11 +18,14 @@ CSV.open(file_recent, "w") do |csv|
     csv << columns.map { |col| pt.send(col) }
   end
 end
+puts "done"
 
 total_batches = PingThingArchive.count / 500_000
+
+puts "generating ping_thing_archive_*.csv (total batches: #{total_batches})"
 PingThingArchive.find_in_batches(batch_size: 500_000).with_index do |pta_batch, batch_index|
   file_archive = "#{file_archive_root}_#{batch_index}.csv"
-  print "\r#{index + 1} / #{total}"
+  print "\r#{batch_index + 1} / #{total}"
 
   CSV.open(file_archive, "w") do |csv|
     csv << columns
