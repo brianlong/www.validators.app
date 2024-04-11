@@ -10,7 +10,7 @@ interrupted = false
 trap("INT") { interrupted = true }  unless Rails.env.test?
 
 network = "pythnet"
-sleep_time = Rails.env.stage? ? 30 : 15 # seconds
+sleep_time = 15 # seconds
 
 class SkipAndSleep < StandardError; end
 
