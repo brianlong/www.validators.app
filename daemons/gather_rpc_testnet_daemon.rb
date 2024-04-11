@@ -12,7 +12,7 @@ trap('INT') { interrupted = true }  unless Rails.env.test?
 class SkipAndSleep < StandardError; end
 
 network = 'testnet'
-sleep_time = Rails.env.stage? ? 180 : 60 # seconds
+sleep_time = 60 # seconds
 
 begin
   loop do
@@ -48,8 +48,6 @@ begin
     ReportSoftwareVersionWorker.perform_async(common_params)
 
     break if interrupted
-
-    sleep(sleep_time) if Rails.env.stage?
   rescue SkipAndSleep => e
     break if interrupted
 
