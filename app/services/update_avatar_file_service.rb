@@ -85,15 +85,16 @@ class UpdateAvatarFileService
   def process_image_file
     if @tmp_file.end_with?(".svg")
       # Do not convert SVG files
-      FileUtils.cp(@tmp_file, "#{@avatar_file_path}.svg")
-      return @avatar_file = "#{@avatar_file_path}.svg"
+      @avatar_file = "#{@avatar_file_path}.svg"
+      FileUtils.cp(@tmp_file, @avatar_file)
+      return @avatar_file
+    else
+      @avatar_file = "#{@avatar_file_path}.png"
+      ImageProcessing::MiniMagick.source(@tmp_file)
+                                 .convert("png")
+                                 .resize_to_limit(*IMAGE_SIZE_LIMIT)
+                                 .call(destination: @avatar_file)
     end
-
-    @avatar_file = ImageProcessing::MiniMagick.source(@tmp_file)
-                                              .convert("png")
-                                              .resize_to_limit(*IMAGE_SIZE_LIMIT)
-                                              .call(destination: "#{@avatar_file_path}.png")
-    @avatar_file = "#{@avatar_file_path}.png"
   rescue ImageProcessing::Error => e
     # Skips animated gifs processing
     return if MiniMagick::Image.new(@tmp_file).pages.count > 1
