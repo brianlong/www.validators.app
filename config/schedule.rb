@@ -146,6 +146,10 @@ every 1.minute, roles: [:background] do
   runner "PingThingUserStatsWorker.perform_async('pythnet')"
 end
 
+every 30.minutes, roles: [:background] do
+  ruby_script_blockchain "check_error_slots.rb"
+end
+
 if environment == 'production'
   every 1.day, at: '1:00am', roles: [:background] do
     ruby_script 'prune_database_tables.rb'

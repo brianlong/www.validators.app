@@ -16,7 +16,7 @@ module Blockchain
         params: [@slot_number, {}]
       )
       if block[:error]
-        update_slot_status(has_block: "request_error")
+        update_slot_status(status: "request_error")
       else
         Blockchain::Block.create(
           height: block["blockHeight"].to_i,
@@ -30,9 +30,21 @@ module Blockchain
     end
 
     # available statuses: has_block, request_error, no_block, initialized
-    def update_slot_status(has_block: "has_block")
+    def update_slot_status(status: "has_block")
       slot = Slot.find_by(slot_number: @slot_number, network: @network)
-      slot.update(status: has_block)
+      case status
+      when "has_block"
+        slot.update(status: "has_block")
+      when "request_error"
+        # if slot status was previously request_error, this means it has no block
+        if slot.status == "request_error"
+          slot.update(status: "no_block")
+        else
+          slot.update(status: "request_error")
+        end
+      else
+        slot.update(status: status)
+      end
     end
 
     # solana client request with changed error handling
