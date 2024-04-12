@@ -8,7 +8,7 @@ STORAGE_PATH = Rails.root.join("tmp").to_s.freeze
 IMAGE_SIZE_LIMIT = [320, 320].freeze
 LOG_PATH = Rails.root.join("log", "update_avatar_file_service.log").to_s.freeze
 
-IMAGE_TYPES = %w[image/png image/gif image/jpeg image/webp image/avif image/svg+xml image/bmp]
+IMAGE_TYPES = %w[image/png image/gif image/jpeg image/webp image/avif image/svg+xml image/bmp].freeze
 
 class UpdateAvatarFileService
   def initialize(validator)
@@ -57,7 +57,7 @@ class UpdateAvatarFileService
   end
 
   def set_tmp_file_path(file_type)
-    extension = file_type.split("/").last&.split("+")&.first
+    extension = file_type.split(";").first&.split("/")&.last&.split("+")&.first
     STORAGE_PATH + "/" + @validator.avatar_tmp_file_name + "." + extension
   end
 
