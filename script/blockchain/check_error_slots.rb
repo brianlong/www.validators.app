@@ -2,11 +2,12 @@
 
 require File.expand_path('../../config/environment', __dir__)
 
-NETWORKS.each do |network|
-  Blockchain::Slot.where(network: network, status: "response_error")
-                  .where("created_at < ?", 30.minutes.ago)
-                  .each do |slot|
+DELAY = 30.minutes
 
-    Blockchain::GetBlockService.new(network, slot.slot_number).call
+NETWORKS.each do |network|
+  Blockchain::Slot.where(network: network, status: "request_error")
+                  .where("created_at < ?", DELAY.ago)
+                  .each do |slot|
+    Blockchain::GetBlockWorker.set(queue: "blockchain").perform_async({"network" => network, "slot_number" => slot.slot_number})
   end
 end
