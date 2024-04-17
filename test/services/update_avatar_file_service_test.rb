@@ -15,8 +15,8 @@ class UpdateAvatarFileServiceTest < ActiveSupport::TestCase
       avatar_url: "https://s3.amazonaws.com/keybase_processed_uploads/3af995d21a8fe4cec4d6e83104f87205_360_360.jpg"
     )
     @service = UpdateAvatarFileService.new(@validator)
-    @tmp_file_path = Rails.root.join("tmp", @validator.avatar_tmp_file_name)
-    @avatar_file_path = Rails.root.join("tmp", @validator.avatar_file_name)
+    @tmp_file_path = Rails.root.join("tmp", "#{@validator.avatar_tmp_file_name}.jpeg")
+    @avatar_file_path = Rails.root.join("tmp", "#{@validator.avatar_file_name}.png")
   end
 
   def teardown
@@ -30,6 +30,24 @@ class UpdateAvatarFileServiceTest < ActiveSupport::TestCase
       assert File.exist?(@tmp_file_path)
       File.delete(@tmp_file_path)
     end
+  end
+
+  test "#download_tmp_file doesnt download original file if type is different than image" do
+    vcr_cassette(@namespace, @cassette + "-html") do
+      @validator.update(avatar_url: "https://example.com")
+      @service = UpdateAvatarFileService.new(@validator)
+      refute @service.download_tmp_file
+      refute File.exist?(Rails.root.join("tmp", "#{@validator.avatar_tmp_file_name}.html"))
+    end
+  end
+
+  test "#set_tmp_file_path sets correct temporary file path" do
+    path = Rails.root.join("tmp", @validator.avatar_tmp_file_name)
+    assert_equal "#{path}.jpeg", @service.set_tmp_file_path("image/jpeg")
+    assert_equal "#{path}.png", @service.set_tmp_file_path("image/png")
+    assert_equal "#{path}.webp", @service.set_tmp_file_path("image/webp")
+    assert_equal "#{path}.bmp", @service.set_tmp_file_path("image/bmp")
+    assert_equal "#{path}.svg", @service.set_tmp_file_path("image/svg+xml")
   end
 
   test "#tmp_file_md5 matches correct image hash" do

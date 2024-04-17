@@ -13,5 +13,8 @@ Rails.application.configure do
 
   config.active_storage.service = :digitalocean
 
+  # ActiveStorage SVG are served as binary files by default
+  config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
+
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 end
