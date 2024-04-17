@@ -16,7 +16,7 @@
             <i class="fa-solid fa-calculator text-success me-2"></i>Entries
           </th>
           <th class="column-sm px-0">
-            <i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures
+            <i class="fa-solid fa-circle-xmark text-success me-2"></i>Errors
           </th>
           <th class="column-xl px-0" colspan="3">
             <i class="fa-solid fa-clock text-success me-2"></i>Time (ms)<br />
