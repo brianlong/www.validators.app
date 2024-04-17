@@ -14,7 +14,7 @@
     "@rails/activestorage": "^6.1.7",
     "@rails/ujs": "^6.1.7",
     "@rails/webpacker": "5.4.0",
-    "@solana/web3.js": "^1.63.1",
+    "@solana/web3.js": "^1.91.3",
     "@vue/composition-api": "^1.7.1",
     "actioncable-vue": "^2.5.1",
     "axios": "^1.6.2",
