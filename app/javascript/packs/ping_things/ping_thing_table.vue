@@ -26,7 +26,7 @@
                   v-on:keyup.enter="get_records()">
             <option value="" selected>Status (all)</option>
             <option value="true">success</option>
-            <option value="false">failure</option>
+            <option value="false">error</option>
           </select>
         </div>
 
