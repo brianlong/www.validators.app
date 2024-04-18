@@ -15,7 +15,7 @@ module Api
 
       def validate_api_token
         logger ||= Logger.new("#{Rails.root}/log/headers.log")
-        logger.info request.headers.to_h.keys
+        logger.info request.headers.to_h
         logger.info "Remote IP: " + request.remote_ip.to_s
         logger.info "Origin header: " + request.headers['origin'].to_s
         logger.info "Origin: " + request.origin.to_s
