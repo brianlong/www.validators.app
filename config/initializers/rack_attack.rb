@@ -7,7 +7,7 @@ class Rack::Attack
     "/api/v1/ping-thing-stats"
   ].freeze
 
-  API_LOW_LIMIT = 15
+  API_LOW_LIMIT = 20
   API_HIGH_LIMIT = 40
   LIMIT_RESET_PERIOD = 5.minute
 
