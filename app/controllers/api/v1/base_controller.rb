@@ -14,6 +14,14 @@ module Api
       before_action :validate_api_token
 
       def validate_api_token
+        logger ||= Logger.new("#{Rails.root}/log/user_headers_logger.log")
+        country = request.env["HTTP_CF_IPCOUNTRY"].to_s
+        logger.info "HTTP_CF_IPCOUNTRY: " + country
+        # if country == "NLD"
+        #   logger.info "Remote IP: " + request.remote_ip
+        # end
+        logger.info "---"
+
         return true \
           if request.headers['Authorization'] && request.headers['Authorization'] == Rails.application.credentials.api_authorization
 
