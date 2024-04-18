@@ -14,14 +14,21 @@ module Api
       before_action :validate_api_token
 
       def validate_api_token
-        return true \
-          if request.headers['Authorization'] && request.headers['Authorization'] == Rails.application.credentials.api_authorization
+        logger ||= Logger.new("#{Rails.root}/log/headers.log")
+        logger.info request.headers.to_h.keys
+        logger.info "Remote IP: " + request.remote_ip.to_s
+        logger.info "Origin header: " + request.headers['origin'].to_s
+        logger.info "Origin: " + request.origin.to_s
+        logger.info "Host: " + request.host.to_s
+        logger.info "---"
+
+        return true if ['localhost', "https://www.validators.app", "https://stage.validators.app"].include? request.host
+        return true if request.headers['Authorization'] && request.headers['Authorization'] == Rails.application.credentials.api_authorization
 
         allowed_domains = Rails.application.credentials.cors_domain_whitelist
-        unless allowed_domains&.include? request.headers['origin'] # Rails.application.credentials.cors_domain_whitelist
-          return unauthenticated! \
-            if User.where(api_token: request.headers['Token']).first.nil?
-        end
+        return true if allowed_domains&.include? request.headers['origin']
+
+        return unauthenticated! unless User.find_by(api_token: request.headers['Token'])
 
         true
       end
