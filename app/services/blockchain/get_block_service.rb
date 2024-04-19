@@ -59,8 +59,6 @@ module Blockchain
         vote_txs = @block["transactions"].select do |tx| 
           tx["transaction"]["message"]["accountKeys"].include?("Vote111111111111111111111111111111111111111")
         end
-        puts vote_txs.count
-        puts vote_txs.last
         vote_txs.each do |tx|
           Blockchain::Transaction.create(
             account_key_1: tx["transaction"]["message"]["accountKeys"][0],
