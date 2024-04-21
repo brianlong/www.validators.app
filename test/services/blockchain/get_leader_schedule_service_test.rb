@@ -13,10 +13,10 @@ module Blockchain
       @json_data = {
         "epoch": 586,
         "leaderScheduleEntries": [
-          {"slot": "123", "leader": "validator_account_1"},
-          {"slot": "124", "leader": "validator_account_2"},
-          {"slot": "125", "leader": "validator_account_3"},
-          {"slot": "126", "leader": "validator_account_4"}
+          { "slot": "123", "leader": "validator_account_1" },
+          { "slot": "124", "leader": "validator_account_2" },
+          { "slot": "125", "leader": "validator_account_3" },
+          { "slot": "126", "leader": "validator_account_4" }
         ]
       }.to_json
     end

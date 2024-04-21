@@ -43,7 +43,7 @@ module Blockchain
         return response unless response.blank?
       rescue SolanaRpcRuby::ApiError => e
         puts e.message
-        return {error: e.message}
+        return { error: e.message }
       end
     end
   end
