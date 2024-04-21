@@ -32,8 +32,12 @@
 /config/credentials/stage.key
 /config/credentials/test.key
 /config/credentials/*.key
+
+# Ignore configuration files
 /config/sidekiq.yml
+/config/sidekiq_blockchain.yml
 /config/appsignal.yml
+/config/cluster.yml
 
 /public/packs
 /public/packs-test
@@ -41,7 +45,5 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
-
-/config/cluster.yml
 
 /dev/instructions.md
