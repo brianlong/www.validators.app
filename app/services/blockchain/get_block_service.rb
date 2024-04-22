@@ -25,12 +25,12 @@ module Blockchain
           parent_slot: block["parentSlot"].to_i,
           slot_number: @slot_number
         )
-        update_slot_status
+        update_slot_status(status: "has_block")
       end
     end
 
     # available statuses: has_block, request_error, no_block, initialized
-    def update_slot_status(status: "has_block")
+    def update_slot_status(status: )
       slot = Slot.find_by(slot_number: @slot_number, network: @network)
       case status
       when "has_block"
