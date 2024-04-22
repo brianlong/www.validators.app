@@ -40,12 +40,20 @@ module Blockchain
     test "#update_slot_status updates slot status" do
       assert_equal "initialized", @slot.status
 
-      Blockchain::GetBlockService.new(@network, @slot_number, @config_urls).update_slot_status
+      Blockchain::GetBlockService.new(@network, @slot_number, @config_urls).update_slot_status(status: "has_block")
       assert_equal "has_block", @slot.reload.status
 
       Blockchain::GetBlockService.new(@network, @slot_number, @config_urls)
-                                 .update_slot_status(has_block: "request_error")
+                                 .update_slot_status(status: "request_error")
       assert_equal "request_error", @slot.reload.status
+    end
+
+    test "#update_slot_status updates slot status to no_block when request_error" do
+      @slot.update(status: "request_error")
+      @slot.reload
+      Blockchain::GetBlockService.new(@network, @slot_number, @config_urls)
+                                 .update_slot_status(status: "request_error")
+      assert_equal "no_block", @slot.reload.status
     end
   end
 end
