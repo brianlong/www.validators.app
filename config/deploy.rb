@@ -82,7 +82,14 @@ namespace :sidekiq do
     on roles :app do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :stop, :sidekiq, :sidekiq_blockchain
+          execute :systemctl, '--user', :stop, :sidekiq
+        end
+      end
+    end
+    on roles :background do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :sidekiq_blockchain
         end
       end
     end
@@ -93,7 +100,14 @@ namespace :sidekiq do
     on roles :app do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :start, :sidekiq, :sidekiq_blockchain
+          execute :systemctl, '--user', :start, :sidekiq
+        end
+      end
+    end
+    on roles :background do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :sidekiq_blockchain
         end
       end
     end
@@ -104,7 +118,14 @@ namespace :sidekiq do
     on roles :app do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :restart, :sidekiq, :sidekiq_blockchain
+          execute :systemctl, '--user', :restart, :sidekiq
+        end
+      end
+    end
+    on roles :background do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :restart, :sidekiq_blockchain
         end
       end
     end
