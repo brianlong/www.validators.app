@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :blockchain_transaction, class: 'Blockchain::Transaction' do
     slot_number { "" }
