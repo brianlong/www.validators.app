@@ -146,7 +146,7 @@ every 1.minute, roles: [:background] do
   runner "PingThingUserStatsWorker.perform_async('pythnet')"
 end
 
-every 30.minutes, roles: [:background] do
+every 90.minutes, roles: [:background] do
   ruby_script_blockchain "check_error_slots.rb"
 end
 

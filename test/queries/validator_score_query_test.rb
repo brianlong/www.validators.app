@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 # Query Objects for searching for ValidatorHistory relations and objects
@@ -15,7 +17,7 @@ class ValidatorScoreQueryTest < ActiveSupport::TestCase
 
     @validators.map do |validator|
       create(
-        :validator_history, 
+        :validator_history,
         batch_uuid: batch_uuid,
         account: validator.account,
         root_block: 2,

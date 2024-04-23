@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class SortedDataCenterTest < ActiveSupport::TestCase
@@ -11,13 +13,13 @@ class SortedDataCenterTest < ActiveSupport::TestCase
     data_center_frankfurt = create(:data_center, :frankfurt)
 
     3.times do
-      ip_address = Faker::Internet.ip_v4_address 
+      ip_address = Faker::Internet.ip_v4_address
       validator = create(:validator)
       data_center_host = create(:data_center_host, data_center: data_center_china)
       validator_ip = create(
         :validator_ip,
         :active,
-        address: ip_address, 
+        address: ip_address,
         validator: validator,
         data_center_host: data_center_host
       )
@@ -40,7 +42,7 @@ class SortedDataCenterTest < ActiveSupport::TestCase
       validator_ip = create(
         :validator_ip,
         :active,
-        address: ip_address, 
+        address: ip_address,
         validator: validator,
         data_center_host: data_center_host
       )
@@ -64,7 +66,7 @@ class SortedDataCenterTest < ActiveSupport::TestCase
       validator_ip = create(
         :validator_ip,
         :active,
-        address: ip_address, 
+        address: ip_address,
         validator: validator,
         data_center_host: data_center_host
       )
@@ -88,7 +90,7 @@ class SortedDataCenterTest < ActiveSupport::TestCase
       validator_ip = create(
         :validator_ip,
         :active,
-        address: ip_address, 
+        address: ip_address,
         validator: validator,
         data_center_host: data_center_host
       )

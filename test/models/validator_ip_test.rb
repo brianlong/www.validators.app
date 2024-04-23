@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ValidatorIpTest < ActiveSupport::TestCase
@@ -42,16 +44,16 @@ class ValidatorIpTest < ActiveSupport::TestCase
   test "#relationship belongs_to data_center_host_for_api"\
        "and returns data_center_host specified fields" do
     assert_equal @data_center_host, @vip.data_center_host_for_api
-    assert_equal DataCenterHost::FIELDS_FOR_API.map(&:to_s), 
+    assert_equal DataCenterHost::FIELDS_FOR_API.map(&:to_s),
                  @vip.data_center_host_for_api.attributes.keys
   end
- 
+
   test "#set_is_active updates validator_ips of validator to false"\
        "and set is_active on the modified one" do
     vips = create_list(
       :validator_ip,
       5,
-      validator: @validator, 
+      validator: @validator,
       data_center_host_id: @data_center_host.id
     )
 
@@ -81,7 +83,7 @@ class ValidatorIpTest < ActiveSupport::TestCase
   end
 
   test "scope active_for_api returns active validator_ips with specified fields" do
-    assert_equal ValidatorIp::FIELDS_FOR_API.map(&:to_s), 
+    assert_equal ValidatorIp::FIELDS_FOR_API.map(&:to_s),
                  ValidatorIp.active_for_api.first.attributes.keys
   end
 end

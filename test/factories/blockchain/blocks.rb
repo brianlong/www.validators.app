@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :blockchain_block, class: 'Blockchain::Block' do
     height { "123" }

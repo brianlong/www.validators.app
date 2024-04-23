@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class StakeLogicEmptyResponsesTest < ActiveSupport::TestCase
@@ -13,6 +15,7 @@ class StakeLogicEmptyResponsesTest < ActiveSupport::TestCase
   end
 
   setup do
+    create(:batch)
     @initial_payload = {
       # config_urls: Rails.application.credentials.solana[:testnet_urls],
       config_urls: [

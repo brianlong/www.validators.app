@@ -1,6 +1,0 @@
-one:
-  id: 1
-  validator_id: 1
-  network: testnet
-  # root_distance_history:
-  # vote_distance_history:

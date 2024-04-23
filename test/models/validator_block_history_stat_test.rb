@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ValidatorBlockHistoryStatTest < ActiveSupport::TestCase
   test 'previous_24_hours scopes results to only ones created within the last 24 hours' do
     Timecop.freeze do
-      ValidatorBlockHistoryStat.delete_all
       create(:validator_block_history_stat, created_at: 25.hours.ago, network: 'mainnet')
       vbhs1 = create(:validator_block_history_stat, created_at: 24.hours.ago, network: 'mainnet')
       vbhs2 = create(:validator_block_history_stat, created_at: 1.minute.ago, network: 'mainnet')
@@ -15,7 +16,6 @@ class ValidatorBlockHistoryStatTest < ActiveSupport::TestCase
   end
 
   test 'after_create, #skipped_slot_percent_moving_average is calculated as the moving average for the last 24 hours' do
-    ValidatorBlockHistoryStat.delete_all
     vbhs1 = create(
       :validator_block_history_stat,
       total_slots: 100,

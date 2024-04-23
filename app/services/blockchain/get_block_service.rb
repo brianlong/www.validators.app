@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 module Blockchain
   class GetBlockService
@@ -22,12 +22,12 @@ module Blockchain
       else
         save_block
         process_transactions
-        update_slot_status
+        update_slot_status(status: "has_block")
       end
     end
 
     # available statuses: has_block, request_error, no_block, initialized
-    def update_slot_status(status: "has_block")
+    def update_slot_status(status:)
       slot = Slot.find_by(slot_number: @slot_number, network: @network)
       case status
       when "has_block"
@@ -82,7 +82,7 @@ module Blockchain
         return response unless response.blank?
       rescue SolanaRpcRuby::ApiError => e
         puts e.message
-        return {error: e.message}
+        return { error: e.message }
       end
     end
   end

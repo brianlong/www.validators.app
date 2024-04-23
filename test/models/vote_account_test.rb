@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 require "test_helper"
 require "sidekiq/testing"
@@ -6,6 +6,8 @@ require "sidekiq/testing"
 
 class VoteAccountTest < ActiveSupport::TestCase
   test "scope for_api returs vote_accounts specified fields" do
+    v = create(:validator)
+    va = create(:vote_account, validator: v)
     assert_equal VoteAccount::FIELDS_FOR_API.map(&:to_s), VoteAccount.for_api.first.attributes.keys
   end
 

@@ -5,7 +5,7 @@ require "test_helper"
 class GossipNodeLogicTest < ActiveSupport::TestCase
   include GossipNodeLogic
 
-  GOSSIP_KEYS = ["ipAddress", "identityPubkey", "gossipPort", "tpuPort", "version"]
+  GOSSIP_KEYS = ["ipAddress", "identityPubkey", "gossipPort", "tpuPort", "version"].freeze
 
   setup do
     @mainnet_url = "https://api.mainnet-beta.solana.com"

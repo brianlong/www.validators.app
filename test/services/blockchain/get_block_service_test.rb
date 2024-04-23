@@ -76,7 +76,7 @@ module Blockchain
 
     test "#call updates slot status to request_error when error occurs" do
       block_service = Blockchain::GetBlockService.new(@network, @slot_number, @config_urls)
-      block_service.stub(:solana_client_request, {error: "solana error"}) do
+      block_service.stub(:solana_client_request, { error: "solana error" }) do
         block_service.call
       end
       assert_equal 0, Blockchain::Block.count
@@ -86,7 +86,7 @@ module Blockchain
     test "#update_slot_status updates slot status" do
       assert_equal "initialized", @slot.status
 
-      Blockchain::GetBlockService.new(@network, @slot_number, @config_urls).update_slot_status
+      Blockchain::GetBlockService.new(@network, @slot_number, @config_urls).update_slot_status(status: "has_block")
       assert_equal "has_block", @slot.reload.status
 
       Blockchain::GetBlockService.new(@network, @slot_number, @config_urls)

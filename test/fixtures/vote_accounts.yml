@@ -1,5 +1,0 @@
-one:
-  id: 1
-  validator_id: 1
-  account: '1234'
-  network: 'testnet'

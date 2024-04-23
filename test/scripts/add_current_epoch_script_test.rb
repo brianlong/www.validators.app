@@ -4,8 +4,6 @@ require 'test_helper'
 
 class AddCurrentEpochScriptTest < ActiveSupport::TestCase
   test 'script when no current epoch should add epoch to db' do
-    EpochWallClock.delete_all
-
     VCR.use_cassette(
       'add_current_epoch_script/no_previous_epochs',
       record: :new_episodes

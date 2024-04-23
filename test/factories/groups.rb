@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :group do
-    
+    network { "testnet" }
   end
 end

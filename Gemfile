@@ -98,12 +98,13 @@ group :development, :test do
   gem 'bullet', '~> 7.0'
   gem 'factory_bot_rails'
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
+  gem 'pry', '~> 0.14.2'
+  gem 'letter_opener_web'
   gem 'pronto', '~> 0.11.2'
   gem 'pronto-flay', '~> 0.11.1', require: false
   gem 'pronto-rubocop', '~> 0.11.5', require: false
-  gem 'pry', '~> 0.14.2'
-  gem 'rubocop', '~> 1.18', require: false
-  gem 'letter_opener_web'
+  gem 'rubocop', '~> 1.62', require: false
+  gem 'rubocop-rails', '~> 2.24', require: false
 end
 
 group :development do
@@ -132,6 +133,7 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
   gem 'webmock'
+  gem 'database_cleaner-active_record'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

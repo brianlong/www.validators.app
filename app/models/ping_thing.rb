@@ -88,7 +88,8 @@ class PingThing < ApplicationRecord
   def self.slot_latency_stats(records: nil)
     all = records || self.all
     latencies = all.map do |pt|
-      pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil
+      next unless pt.slot_landed && pt.slot_sent
+      pt.slot_landed.to_i >= pt.slot_sent.to_i ? pt.slot_landed - pt.slot_sent : nil
     end.compact.sort
     {
       min: latencies.min,

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class CommissionHistoryQueryTest < ActiveSupport::TestCase
@@ -32,7 +34,7 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
         should include results from correct validators' do
     result = CommissionHistoryQuery.new(
       network: 'testnet',
-      time_from: 371.day.ago,
+      time_from: 371.days.ago,
       time_to: DateTime.now
     ).by_query('acc2')
 

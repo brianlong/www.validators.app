@@ -2,9 +2,10 @@
 
 require File.expand_path('../../config/environment', __dir__)
 
-DELAY = 30.minutes
+DELAY = 90.minutes
 
-NETWORKS.each do |network|
+networks = Rails.env.stage? ? ["mainnet"] : NETWORKS
+networks.each do |network|
   Blockchain::Slot.where(network: network, status: "request_error")
                   .where("created_at < ?", DELAY.ago)
                   .each do |slot|
