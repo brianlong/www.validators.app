@@ -13,6 +13,8 @@ class PingThingUserStatsService
     gather_ping_things
     delete_old_stats
     pt_by_user.each do |user_id, user_ping_things|
+      next if user_ping_things.map(&:success).count(true) == 0
+      
       ping_times = user_ping_things.pluck(:response_time).compact.sort
       username = User.find(user_id).username
 
