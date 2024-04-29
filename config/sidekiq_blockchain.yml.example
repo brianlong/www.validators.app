@@ -1,0 +1,9 @@
+---
+:daemon: false
+# :verbose: true
+# :concurrency: 5
+# :timeout: 30
+development:
+  :concurrency: 4
+:queues:
+  - blockchain

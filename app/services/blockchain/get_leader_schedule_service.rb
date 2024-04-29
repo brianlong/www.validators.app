@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 module Blockchain
   class GetLeaderScheduleService
@@ -14,29 +14,26 @@ module Blockchain
     end
 
     def call
-      if !Blockchain::Slot.where(network: @network, epoch: @epoch).exists?
+      if Blockchain::Slot.where(network: @network, epoch: @epoch).exists?
+        @logger.info("Leader schedule for epoch #{@epoch} on #{@network} already exists")
+      else
         @logger.info("Fetching leader schedule for epoch #{@epoch} on #{@network}")
         response = cli_request("leader-schedule --epoch #{@epoch}", @config_urls)
-        begin
-          schedule = response["leaderScheduleEntries"]
-          schedule.each do |entry|
-            Blockchain::Slot.create(
-              network: @network,
-              epoch: @epoch,
-              slot_number: entry["slot"],
-              leader: entry["leader"],
-              has_block: false
-            )
-          end
-          @logger.info("Leader schedule for epoch #{@epoch} on #{@network} saved")
-        rescue StandardError => e
-          @logger.error("Error saving leader schedule for epoch #{@epoch} on #{@network}: #{e.message}")
-          Appsignal.send_error(e)
-          return
+        schedule = response["leaderScheduleEntries"]
+        schedule.each do |entry|
+          Blockchain::Slot.create(
+            network: @network,
+            epoch: @epoch,
+            slot_number: entry["slot"],
+            leader: entry["leader"]
+          )
         end
-      else
-        @logger.info("Leader schedule for epoch #{@epoch} on #{@network} already exists")
+        @logger.info("Leader schedule for epoch #{@epoch} on #{@network} saved")
       end
+    rescue StandardError => e
+      @logger.error("Error saving leader schedule for epoch #{@epoch} on #{@network}: #{e.message}")
+      Appsignal.send_error(e)
+      return
     end
   end
 end

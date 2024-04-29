@@ -37,6 +37,7 @@ append :linked_files, 'config/credentials/production.key'
 append :linked_files, 'config/credentials/stage.key'
 append :linked_files, 'config/appsignal.yml'
 append :linked_files, 'config/sidekiq.yml'
+append :linked_files, 'config/sidekiq_blockchain.yml'
 append :linked_files, 'config/cluster.yml'
 
 # Default value for linked_dirs is []
@@ -85,6 +86,13 @@ namespace :sidekiq do
         end
       end
     end
+    on roles :background do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :sidekiq_blockchain
+        end
+      end
+    end
   end
 
   desc 'Start sidekiq'
@@ -96,6 +104,13 @@ namespace :sidekiq do
         end
       end
     end
+    on roles :background do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :sidekiq_blockchain
+        end
+      end
+    end
   end
 
   desc 'Restart sidekiq'
@@ -104,6 +119,13 @@ namespace :sidekiq do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :sidekiq
+        end
+      end
+    end
+    on roles :background do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :restart, :sidekiq_blockchain
         end
       end
     end
@@ -128,6 +150,15 @@ namespace :deamons do
           execute :systemctl, '--user', :start, :leader_stats_mainnet_update
           execute :systemctl, '--user', :start, :leader_stats_testnet_update
           execute :systemctl, '--user', :start, :leader_stats_pythnet_update
+          execute :systemctl, '--user', :start, :slot_subscribe_mainnet
+        end
+      end
+    end
+    on roles :background_production do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :slot_subscribe_testnet
+          #execute :systemctl, '--user', :start, :slot_subscribe_pythnet
         end
       end
     end
@@ -150,6 +181,15 @@ namespace :deamons do
           execute :systemctl, '--user', :stop, :leader_stats_mainnet_update
           execute :systemctl, '--user', :stop, :leader_stats_testnet_update
           execute :systemctl, '--user', :stop, :leader_stats_pythnet_update
+          execute :systemctl, '--user', :stop, :slot_subscribe_mainnet
+        end
+      end
+    end
+    on roles :background_production do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :slot_subscribe_testnet
+          execute :systemctl, '--user', :stop, :slot_subscribe_pythnet
         end
       end
     end
@@ -172,6 +212,15 @@ namespace :deamons do
           execute :systemctl, '--user', :restart, :leader_stats_mainnet_update
           execute :systemctl, '--user', :restart, :leader_stats_testnet_update
           execute :systemctl, '--user', :restart, :leader_stats_pythnet_update
+          execute :systemctl, '--user', :restart, :slot_subscribe_mainnet
+        end
+      end
+    end
+    on roles :background_production do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :restart, :slot_subscribe_testnet
+          #execute :systemctl, '--user', :restart, :slot_subscribe_pythnet
         end
       end
     end
