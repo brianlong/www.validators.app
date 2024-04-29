@@ -61,4 +61,11 @@ class PingThingUserStatsServiceTest < ActiveSupport::TestCase
     assert_equal 2, PingThingUserStat.last.average_slot_latency
     assert_equal 2, PingThingUserStat.last.p90_slot_latency
   end
+
+  test "#call does not save stats if no successful pings" do
+    @ping_things.each { |pt| pt.update success: false }
+
+    PingThingUserStatsService.new(network: @network, interval: 5).call
+    assert_equal 0, PingThingUserStat.count
+  end
 end
