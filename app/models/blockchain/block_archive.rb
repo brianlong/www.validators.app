@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 # == Schema Information
 #
-# Table name: blockchain_blocks
+# Table name: blockchain_block_archives
 #
 #  id          :bigint           not null, primary key
 #  block_time  :bigint
@@ -13,6 +11,5 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-class Blockchain::Block < ApplicationRecord
-  extend Archivable
+class Blockchain::BlockArchive < ApplicationRecord
 end

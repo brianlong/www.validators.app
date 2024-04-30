@@ -25,6 +25,8 @@
 #  fk_rails_...  (block_id => blockchain_blocks.id)
 #
 class Blockchain::Transaction < ApplicationRecord
+  extend Archivable
+  
   serialize :pre_balances, JSON
   serialize :post_balances, JSON
 end
