@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2024_04_29_084420) do
-=======
-ActiveRecord::Schema.define(version: 2024_04_03_104942) do
->>>>>>> master
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -160,6 +156,7 @@ ActiveRecord::Schema.define(version: 2024_04_03_104942) do
     t.index ["network", "slot_number"], name: "index_blockchain_slots_on_network_and_slot_number"
     t.index ["network", "status", "epoch"], name: "index_blockchain_slots_on_network_and_status_and_epoch"
 <<<<<<< HEAD
+<<<<<<< HEAD
   end
 
   create_table "blockchain_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -173,6 +170,8 @@ ActiveRecord::Schema.define(version: 2024_04_03_104942) do
     t.integer "block_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+=======
+>>>>>>> 187231219-process-vote-transactions
   end
 
   create_table "blockchain_transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -187,8 +186,11 @@ ActiveRecord::Schema.define(version: 2024_04_03_104942) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["block_id"], name: "index_blockchain_transactions_on_block_id"
+<<<<<<< HEAD
 =======
 >>>>>>> master
+=======
+>>>>>>> 187231219-process-vote-transactions
   end
 
   create_table "cluster_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
