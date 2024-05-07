@@ -28,7 +28,7 @@ server(
 server(
   '167.99.125.221',
   user: 'deploy',
-  roles: %w[app background cron]
+  roles: %w[app background background_production cron]
 )
 
 # server-based syntax

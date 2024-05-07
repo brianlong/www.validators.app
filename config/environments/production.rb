@@ -40,6 +40,9 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :digitalocean
 
+  # ActiveStorage SVG are served as binary files by default
+  config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
+
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'

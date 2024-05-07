@@ -8,6 +8,8 @@ STORAGE_PATH = Rails.root.join("tmp").to_s.freeze
 IMAGE_SIZE_LIMIT = [320, 320].freeze
 LOG_PATH = Rails.root.join("log", "update_avatar_file_service.log").to_s.freeze
 
+IMAGE_TYPES = %w[image/png image/gif image/jpeg image/webp image/avif image/svg+xml image/bmp].freeze
+
 class UpdateAvatarFileService
   def initialize(validator)
     @validator = validator
@@ -36,14 +38,27 @@ class UpdateAvatarFileService
 
   def download_tmp_file
     download = URI.open(@validator.avatar_url)
-    @tmp_file = STORAGE_PATH + "/" + @validator.avatar_tmp_file_name
+    file_type = download.meta["content-type"].to_s
+
+    if file_type.in?(IMAGE_TYPES)
+      @tmp_file = set_tmp_file_path(file_type)
+    else
+      @logger.error("Error downloading file for #{@validator.account}: incorrect file type #{file_type}")
+      return false
+    end
+
     if IO.copy_stream(download, @tmp_file).positive?
-      @logger.info("Downloaded file: " + @tmp_file)
+      @logger.info("Downloaded file: #{@tmp_file}")
       @tmp_file
     else
-      @logger.error("Error downloading file: " + @tmp_file)
+      @logger.error("Error downloading file for #{@validator.account}: #{@tmp_file}")
       nil
     end
+  end
+
+  def set_tmp_file_path(file_type)
+    extension = file_type.split(";").first&.split("/")&.last&.split("+")&.first
+    STORAGE_PATH + "/" + @validator.avatar_tmp_file_name + "." + extension
   end
 
   def tmp_file_md5
@@ -51,7 +66,7 @@ class UpdateAvatarFileService
   end
 
   def process_and_save_avatar
-    @avatar_file = STORAGE_PATH + "/" + @validator.avatar_file_name
+    @avatar_file_path = STORAGE_PATH + "/" + @validator.avatar_file_name
     begin
       process_image_file
     rescue => e
@@ -68,10 +83,18 @@ class UpdateAvatarFileService
   end
 
   def process_image_file
-    ImageProcessing::MiniMagick.source(@tmp_file)
-                               .convert("png")
-                               .resize_to_limit(*IMAGE_SIZE_LIMIT)
-                               .call(destination: @avatar_file)
+    if @tmp_file.end_with?(".svg")
+      # Do not convert SVG files
+      @avatar_file = "#{@avatar_file_path}.svg"
+      FileUtils.cp(@tmp_file, @avatar_file)
+      return @avatar_file
+    else
+      @avatar_file = "#{@avatar_file_path}.png"
+      ImageProcessing::MiniMagick.source(@tmp_file)
+                                 .convert("png")
+                                 .resize_to_limit(*IMAGE_SIZE_LIMIT)
+                                 .call(destination: @avatar_file)
+    end
   rescue ImageProcessing::Error => e
     # Skips animated gifs processing
     return if MiniMagick::Image.new(@tmp_file).pages.count > 1
@@ -87,17 +110,10 @@ class UpdateAvatarFileService
   end
 
   def purge_files(keep_tmp_files)
-    [
-      ".png",
-      ".gif",
-      "_tmp.png",
-      "_tmp.gif"
-    ].each do |extention|
-      unless keep_tmp_files
-        Dir[STORAGE_PATH + "/*_#{@validator.network}" + extention].entries.each do |file|
-          File.delete(file)
-          @logger.info("Deleted file: " + file)
-        end
+    unless keep_tmp_files
+      Dir[STORAGE_PATH + "/*_#{@validator.network}*"].entries.each do |file|
+        File.delete(file)
+        @logger.info("Deleted file: " + file)
       end
     end
   end

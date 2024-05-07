@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2024_04_29_084420) do
+=======
+ActiveRecord::Schema.define(version: 2024_04_03_104942) do
+>>>>>>> master
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -108,6 +112,7 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
   end
 
+<<<<<<< HEAD
   create_table "blockchain_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "height"
     t.bigint "block_time"
@@ -118,6 +123,8 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+=======
+>>>>>>> master
   create_table "blockchain_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "height"
     t.bigint "block_time"
@@ -128,6 +135,7 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+<<<<<<< HEAD
   create_table "blockchain_slot_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
     t.string "leader"
@@ -138,6 +146,8 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+=======
+>>>>>>> master
   create_table "blockchain_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
     t.string "leader"
@@ -149,6 +159,7 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.index ["network", "epoch", "leader"], name: "index_blockchain_slots_on_network_and_epoch_and_leader"
     t.index ["network", "slot_number"], name: "index_blockchain_slots_on_network_and_slot_number"
     t.index ["network", "status", "epoch"], name: "index_blockchain_slots_on_network_and_status_and_epoch"
+<<<<<<< HEAD
   end
 
   create_table "blockchain_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -176,6 +187,8 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["block_id"], name: "index_blockchain_transactions_on_block_id"
+=======
+>>>>>>> master
   end
 
   create_table "cluster_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

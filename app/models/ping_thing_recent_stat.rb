@@ -52,7 +52,8 @@ class PingThingRecentStat < ApplicationRecord
       interval.minutes.ago,
       Time.now
     )
-
+    success_user_ids = ping_things.where(success: true).pluck(:user_id).uniq
+    ping_things = ping_things.where(user_id: success_user_ids)
     ping_times = ping_things.pluck(:response_time).compact.sort
     slot_latency_stats = ping_things.slot_latency_stats
 
