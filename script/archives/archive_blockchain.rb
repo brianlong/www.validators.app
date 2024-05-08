@@ -3,20 +3,26 @@
 require File.expand_path('../../config/environment', __dir__)
 
 EPOCHS_KEPT = 6
+EPOCHS_BACK = 10
 
 NETWORKS.each do |network|
   current_epoch = EpochWallClock.where(network: network).order(epoch: :desc)&.first
   next unless current_epoch
-  Blockchain::Slot.where(network: network)
-                  .where("epoch < ?", current_epoch.epoch - EPOCHS_KEPT)
-                  .find_each do |slot|
+  target_epoch = current_epoch&.epoch - EPOCHS_KEPT
 
-    Blockchain::Transaction.where(slot_number: slot.slot_number).find_each do |transaction|
-      Blockchain::Transaction.archive(transaction, destroy_after_archive: true)
+  ((target_epoch - EPOCHS_BACK)...target_epoch).each do |epoch_to_clear|
+    if Blockchain::Slot.where(network: network, epoch: epoch_to_clear).exists?
+      Blockchain::Transaction.where(network: network, epoch: epoch_to_clear).find_in_batches(batch_size: 100) do |batch|
+        Blockchain::Transaction.archive_batch(batch, destroy_after_archive: true)
+      end
+
+      Blockchain::Block.where(network: network, epoch: epoch_to_clear).find_in_batches(batch_size: 100) do |batch|
+        Blockchain::Block.archive_batch(batch, destroy_after_archive: true)
+      end
+
+      Blockchain::Slot.where(network: network, epoch: epoch_to_clear).find_in_batches(batch_size: 100) do |batch|
+        Blockchain::Slot.archive_batch(batch, destroy_after_archive: true)
+      end
     end
-    Blockchain::Block.where(slot_number: slot.slot_number).find_each do |block|
-      Blockchain::Block.archive(block, destroy_after_archive: true)
-    end
-    Blockchain::Slot.archive(slot, destroy_after_archive: true)
   end
 end

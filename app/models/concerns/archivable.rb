@@ -54,6 +54,15 @@ module Archivable
     record.destroy! if destroy_after_archive
   end
 
+  def archive_batch(records, destroy_after_archive: false)
+    begin
+      archive_class.create(records.map(&:attributes))
+      self.where(id: records.map(&:id)).destroy_all if destroy_after_archive
+    rescue ActiveRecord::RecordNotUnique => e
+      puts_no_test e
+    end
+  end
+
   def puts_no_test(msg)
     puts msg unless Rails.env.test?
   end
