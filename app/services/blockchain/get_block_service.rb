@@ -61,19 +61,24 @@ module Blockchain
         vote_txs = @block["transactions"].select do |tx| 
           tx["transaction"]["message"]["accountKeys"].include?("Vote111111111111111111111111111111111111111")
         end
-        vote_txs.each do |tx|
-          Blockchain::Transaction.create(
-            account_key_1: tx["transaction"]["message"]["accountKeys"][0],
-            account_key_2: tx["transaction"]["message"]["accountKeys"][1],
-            account_key_3: tx["transaction"]["message"]["accountKeys"][2],
-            fee: tx["meta"]["fee"],
-            post_balances: tx["meta"]["postBalances"],
-            pre_balances: tx["meta"]["preBalances"],
-            slot_number: @slot_number,
-            block_id: @saved_block.id,
-            network: @network,
-            epoch: @slot.epoch
-          )
+        vote_txs.in_groups_of(50) do |group|
+          batch = group.compact.map do |tx|
+            {
+              account_key_1: tx["transaction"]["message"]["accountKeys"][0],
+              account_key_2: tx["transaction"]["message"]["accountKeys"][1],
+              account_key_3: tx["transaction"]["message"]["accountKeys"][2],
+              fee: tx["meta"]["fee"],
+              post_balances: tx["meta"]["postBalances"],
+              pre_balances: tx["meta"]["preBalances"],
+              slot_number: @slot_number,
+              block_id: @saved_block.id,
+              network: @network,
+              epoch: @slot.epoch,
+              created_at: Time.now,
+              updated_at: Time.now
+            }
+          end
+          Blockchain::Transaction.insert_all(batch) if batch.any?
         end
       end
     end
