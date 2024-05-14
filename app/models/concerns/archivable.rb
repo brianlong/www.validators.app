@@ -36,8 +36,8 @@ module Archivable
 
       puts_no_test "Archiving #{total} records for #{self.name} (#{network})"
 
-      records.find_each.with_index do |record, idx|
-        print_no_test "\r#{number_with_delimiter(idx + 1)}/#{total}"
+      records.find_each.with_index(1) do |record, idx|
+        print_no_test "\r#{number_with_delimiter(idx)}/#{total}"
         archive(record, destroy_after_archive: destroy_after_archive)
       end
 
