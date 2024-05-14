@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_16_075327) do
+ActiveRecord::Schema.define(version: 2024_04_29_084420) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -108,12 +108,32 @@ ActiveRecord::Schema.define(version: 2024_04_16_075327) do
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
   end
 
+  create_table "blockchain_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "height"
+    t.bigint "block_time"
+    t.string "blockhash"
+    t.bigint "parent_slot"
+    t.bigint "slot_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "blockchain_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "height"
     t.bigint "block_time"
     t.string "blockhash"
     t.bigint "parent_slot"
     t.bigint "slot_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_slot_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "leader"
+    t.string "network"
+    t.integer "epoch"
+    t.integer "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -129,6 +149,19 @@ ActiveRecord::Schema.define(version: 2024_04_16_075327) do
     t.index ["network", "epoch", "leader"], name: "index_blockchain_slots_on_network_and_epoch_and_leader"
     t.index ["network", "slot_number"], name: "index_blockchain_slots_on_network_and_slot_number"
     t.index ["network", "status", "epoch"], name: "index_blockchain_slots_on_network_and_status_and_epoch"
+  end
+
+  create_table "blockchain_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.bigint "fee"
+    t.text "pre_balances"
+    t.text "post_balances"
+    t.string "account_key_1"
+    t.string "account_key_2"
+    t.string "account_key_3"
+    t.integer "block_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "blockchain_transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

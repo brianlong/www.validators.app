@@ -20,5 +20,7 @@
 #  index_blockchain_slots_on_network_and_status_and_epoch  (network,status,epoch)
 #
 class Blockchain::Slot < ApplicationRecord
+  extend Archivable
+
   enum status: { initialized: 0, has_block: 1, no_block: 2, request_error: 3 }
 end
