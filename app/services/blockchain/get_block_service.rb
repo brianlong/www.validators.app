@@ -7,30 +7,27 @@ module Blockchain
       @network = network
       @slot_number = slot_number
       @config_urls = config_urls || Rails.application.credentials.solana["#{network}_urls".to_sym]
+      @block = {}
+      @saved_block = nil
     end
 
     def call
-      block = solana_client_request(
+      @block = solana_client_request(
         @config_urls,
         :get_block,
         params: [@slot_number, {}]
       )
-      if block[:error]
+      if @block[:error]
         update_slot_status(status: "request_error")
       else
-        Blockchain::Block.create(
-          height: block["blockHeight"].to_i,
-          block_time: block["blockTime"].to_i,
-          blockhash: block["blockhash"],
-          parent_slot: block["parentSlot"].to_i,
-          slot_number: @slot_number
-        )
+        save_block
+        process_transactions
         update_slot_status(status: "has_block")
       end
     end
 
     # available statuses: has_block, request_error, no_block, initialized
-    def update_slot_status(status: )
+    def update_slot_status(status:)
       slot = Slot.find_by(slot_number: @slot_number, network: @network)
       case status
       when "has_block"
@@ -44,6 +41,36 @@ module Blockchain
         end
       else
         slot.update(status: status)
+      end
+    end
+
+    def save_block
+      @saved_block = Blockchain::Block.create(
+        height: @block["blockHeight"].to_i,
+        block_time: @block["blockTime"].to_i,
+        blockhash: @block["blockhash"],
+        parent_slot: @block["parentSlot"].to_i,
+        slot_number: @slot_number
+      )
+    end
+
+    def process_transactions
+      if @block["transactions"]
+        vote_txs = @block["transactions"].select do |tx| 
+          tx["transaction"]["message"]["accountKeys"].include?("Vote111111111111111111111111111111111111111")
+        end
+        vote_txs.each do |tx|
+          Blockchain::Transaction.create(
+            account_key_1: tx["transaction"]["message"]["accountKeys"][0],
+            account_key_2: tx["transaction"]["message"]["accountKeys"][1],
+            account_key_3: tx["transaction"]["message"]["accountKeys"][2],
+            fee: tx["meta"]["fee"],
+            post_balances: tx["meta"]["postBalances"],
+            pre_balances: tx["meta"]["preBalances"],
+            slot_number: @slot_number,
+            block_id: @saved_block.id
+          )
+        end
       end
     end
 
