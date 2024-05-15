@@ -6,7 +6,7 @@ EPOCHS_KEPT = 6
 EPOCHS_BACK = 10
 
 NETWORKS.each do |network|
-  current_epoch = EpochWallClock.where(network: network).order(epoch: :desc)&.first
+  current_epoch = EpochWallClock.where(network: network).order(epoch: :desc).first
   next unless current_epoch
   target_epoch = current_epoch&.epoch - EPOCHS_KEPT
 
