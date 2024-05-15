@@ -9,6 +9,7 @@ module Blockchain
       @config_urls = config_urls || Rails.application.credentials.solana["#{network}_urls".to_sym]
       @block = {}
       @saved_block = nil
+      @slot = Slot.find_by(slot_number: @slot_number, network: @network)
     end
 
     def call
@@ -28,19 +29,18 @@ module Blockchain
 
     # available statuses: has_block, request_error, no_block, initialized
     def update_slot_status(status:)
-      slot = Slot.find_by(slot_number: @slot_number, network: @network)
       case status
       when "has_block"
-        slot.update(status: "has_block")
+        @slot.update(status: "has_block")
       when "request_error"
         # if slot status was previously request_error, this means it has no block
-        if slot.status == "request_error"
-          slot.update(status: "no_block")
+        if @slot.status == "request_error"
+          @slot.update(status: "no_block")
         else
-          slot.update(status: "request_error")
+          @slot.update(status: "request_error")
         end
       else
-        slot.update(status: status)
+        @slot.update(status: status)
       end
     end
 
@@ -50,7 +50,9 @@ module Blockchain
         block_time: @block["blockTime"].to_i,
         blockhash: @block["blockhash"],
         parent_slot: @block["parentSlot"].to_i,
-        slot_number: @slot_number
+        slot_number: @slot_number,
+        network: @network,
+        epoch: @slot.epoch
       )
     end
 
@@ -68,7 +70,9 @@ module Blockchain
             post_balances: tx["meta"]["postBalances"],
             pre_balances: tx["meta"]["preBalances"],
             slot_number: @slot_number,
-            block_id: @saved_block.id
+            block_id: @saved_block.id,
+            network: @network,
+            epoch: @slot.epoch
           )
         end
       end

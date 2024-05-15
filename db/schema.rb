@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_29_084420) do
+ActiveRecord::Schema.define(version: 2024_05_07_112211) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -116,6 +116,8 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.bigint "slot_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
+    t.integer "epoch"
   end
 
   create_table "blockchain_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -126,6 +128,8 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.bigint "slot_number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
+    t.integer "epoch"
   end
 
   create_table "blockchain_slot_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -162,6 +166,8 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.integer "block_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
+    t.integer "epoch"
   end
 
   create_table "blockchain_transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -175,6 +181,8 @@ ActiveRecord::Schema.define(version: 2024_04_29_084420) do
     t.bigint "block_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "network"
+    t.integer "epoch"
     t.index ["block_id"], name: "index_blockchain_transactions_on_block_id"
   end
 

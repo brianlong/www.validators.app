@@ -6,7 +6,9 @@
 #  account_key_1 :string(191)
 #  account_key_2 :string(191)
 #  account_key_3 :string(191)
+#  epoch         :integer
 #  fee           :bigint
+#  network       :string(191)
 #  post_balances :text(65535)
 #  pre_balances  :text(65535)
 #  slot_number   :bigint
