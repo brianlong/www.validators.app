@@ -19,6 +19,9 @@ module Blockchain
         params: [@slot_number, {}]
       )
       if @block[:error]
+        if @block[:error].include?("429")
+          Appsignal.send_error(StandardError.new("Rate limit exceeded"), @block.to_s)
+        end
         update_slot_status(status: "request_error")
       else
         save_block
