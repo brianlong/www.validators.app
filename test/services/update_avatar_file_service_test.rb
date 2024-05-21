@@ -101,7 +101,10 @@ class UpdateAvatarFileServiceTest < ActiveSupport::TestCase
     vcr_cassette(@namespace, @cassette + "-gif") do
       assert_nothing_raised do
         @service.download_tmp_file
+        @service.process_and_save_avatar
         @service.process_image_file
+
+        @service.purge_files(false)
       end
     end
   end

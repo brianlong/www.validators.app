@@ -158,7 +158,7 @@ namespace :deamons do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :start, :slot_subscribe_testnet
-          #execute :systemctl, '--user', :start, :slot_subscribe_pythnet
+          execute :systemctl, '--user', :start, :slot_subscribe_pythnet
         end
       end
     end
@@ -220,7 +220,7 @@ namespace :deamons do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :slot_subscribe_testnet
-          #execute :systemctl, '--user', :restart, :slot_subscribe_pythnet
+          execute :systemctl, '--user', :restart, :slot_subscribe_pythnet
         end
       end
     end
