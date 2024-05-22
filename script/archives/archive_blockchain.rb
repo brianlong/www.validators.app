@@ -21,8 +21,11 @@ NETWORKS.each do |network|
         puts "Archiving #{transaction_batch.count} transactions, #{block_batch.count} blocks, and #{batch.count} slots for epoch #{epoch_to_clear} (#{network})"
         
         Blockchain::Transaction.archive_batch(transaction_batch, destroy_after_archive: true) unless transaction_batch.empty?
+        puts "Archived transactions"
         Blockchain::Block.archive_batch(block_batch, destroy_after_archive: true) unless block_batch.empty?
+        puts "Archived blocks"
         Blockchain::Slot.archive_batch(batch, destroy_after_archive: true) unless batch.empty?
+        puts "Archived slots"
       end
     end
   end
