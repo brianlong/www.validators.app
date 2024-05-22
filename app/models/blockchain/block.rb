@@ -15,6 +15,10 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
+# Indexes
+#
+#  index_blockchain_blocks_on_network_and_slot_number  (network,slot_number)
+#
 class Blockchain::Block < ApplicationRecord
   extend Archivable
 end
