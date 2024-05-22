@@ -56,11 +56,8 @@ module Archivable
 
   def archive_batch(records, destroy_after_archive: false)
     begin
-      puts_no_test "Archiving #{records.count} records for #{self.name}"
       archive_class.insert_all(records.compact.map(&:attributes))
-      puts_no_test "Archived #{records.count} records for #{self.name}"
-      self.where(id: records.map(&:id)).destroy_all if destroy_after_archive
-      puts_no_test "Destroyed #{records.count} records for #{self.name}"
+      self.where(id: records.map(&:id)).delete_all if destroy_after_archive
     rescue ActiveRecord::RecordNotUnique => e
       puts_no_test e
     end
