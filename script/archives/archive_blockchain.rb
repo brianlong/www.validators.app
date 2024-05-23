@@ -2,7 +2,7 @@
 
 require File.expand_path('../../config/environment', __dir__)
 
-EPOCHS_KEPT = 6
+EPOCHS_KEPT = 2
 EPOCHS_BACK = 10
 
 NETWORKS.each do |network|
