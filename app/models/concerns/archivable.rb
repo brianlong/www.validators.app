@@ -58,9 +58,10 @@ module Archivable
     begin
       archive_class.insert_all(records.compact.map(&:attributes))
       if destroy_after_archive
-        records.compact.map(&:id).in_groups_of(1000, false) do |ids|
+        Parallel.map(records.compact.map(&:id).in_groups_of(100, false), in_threads: 5) do |ids|
           sql = "DELETE FROM #{self.table_name} WHERE id IN (?)"
           self.connection.execute(self.send(:sanitize_sql_array, [sql, ids]))
+          puts "Deleted #{ids.count} by worker: #{Parallel.worker_number}"
         end
       end
     rescue ActiveRecord::RecordNotUnique => e
