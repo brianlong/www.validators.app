@@ -20,7 +20,7 @@ module Blockchain
       )
       if @block[:error]
         if @block[:error].include?("429")
-          Appsignal.send_error( StandardError.new(@block[:error].to_s) )
+          Appsignal.send_error( StandardError.new(@block[:error]) )
         end
         update_slot_status(status: "request_error")
       else
