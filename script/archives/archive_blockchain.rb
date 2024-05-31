@@ -12,7 +12,7 @@ NETWORKS.each do |network|
 
   ((target_epoch - EPOCHS_BACK)...target_epoch).each do |epoch_to_clear|
     if Blockchain::Slot.where(network: network, epoch: epoch_to_clear).exists?
-      Parallel.each(Blockchain::Slot.where(network: network, epoch: epoch_to_clear).find_in_batches(batch_size: 50), in_threads: 2) do |batch|
+      Parallel.each(Blockchain::Slot.where(network: network, epoch: epoch_to_clear).find_in_batches(batch_size: 50), in_processes: 3) do |batch|
         start_time = Time.now
         slot_numbers = batch.map(&:slot_number)
 
