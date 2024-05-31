@@ -58,8 +58,10 @@ module Archivable
     begin
       archive_class.insert_all(records.compact.map(&:attributes))
       if destroy_after_archive
-        records.each { |record| self.delete(record.id) }
-        # self.where(id: records.map(&:id)).delete_all
+        records.compact.map(&:id).in_groups_of(300, false) do |ids|
+          sql = "DELETE FROM #{self.table_name} WHERE id IN (?)"
+          self.connection.execute(self.send(:sanitize_sql_array, [sql, ids]))
+        end
       end
     rescue ActiveRecord::RecordNotUnique => e
       puts_no_test e
