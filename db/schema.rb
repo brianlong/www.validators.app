@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_03_104942) do
+ActiveRecord::Schema.define(version: 2024_06_05_145101) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -759,6 +759,7 @@ ActiveRecord::Schema.define(version: 2024_04_03_104942) do
     t.string "traits_ip_address"
     t.string "traits_network"
     t.boolean "is_active", default: false
+    t.boolean "is_muted", default: false
     t.index ["data_center_host_id"], name: "index_validator_ips_on_data_center_host_id"
     t.index ["is_active", "address"], name: "index_validator_ips_on_is_active_and_address"
     t.index ["is_active"], name: "index_validator_ips_on_is_active"
