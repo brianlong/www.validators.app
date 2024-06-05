@@ -19,7 +19,7 @@ class DataCenters::CheckIpInfoService
 
     max_mind_info = get_max_mind_info(ip)
 
-    raise MissingAsnError if max_mind_info.traits&.autonomous_system_number&.blank?
+    raise MissingAsnError if max_mind_info.traits.autonomous_system_number.blank?
 
     data_center = set_data_center(max_mind_info)
 
@@ -32,7 +32,7 @@ class DataCenters::CheckIpInfoService
     Appsignal.send_error(e)
   rescue MissingAsnError => e
     @logger.info("MissingAsnError: missing ASN for #{ip}")
-    # mute_validator_ips(ip)
+    mute_validator_ips(ip)
     Appsignal.send_error(e)
   rescue StandardError => e
     @logger.info("Error for #{ip}: #{e.message}")
