@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://geoip.maxmind.com/geoip/v2.1/insights/743.123.46.21
+    uri: https://geoip.maxmind.com/geoip/v2.1/insights/243.84.161.29
     body:
       encoding: UTF-8
       string: ''
@@ -23,22 +23,24 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Wed, 19 Oct 2022 11:40:36 GMT
+      - Wed, 05 Jun 2024 19:05:38 GMT
       Content-Type:
       - application/vnd.maxmind.com-error+json; charset=UTF-8; version=2.1
       Content-Length:
-      - '92'
+      - '124'
       Connection:
       - keep-alive
       Cf-Cache-Status:
       - DYNAMIC
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
       Server:
       - cloudflare
       Cf-Ray:
-      - 75c93d690f0f5012-WAW
+      - 88f26f70fec8bf29-WAW
     body:
       encoding: UTF-8
-      string: '{"code":"IP_ADDRESS_INVALID","error":"The value ''743.123.46.21'' is
-        not a valid IP address."}'
-  recorded_at: Wed, 19 Oct 2022 11:40:36 GMT
+      string: '{"code":"IP_ADDRESS_RESERVED","error":"The IP address ''243.84.161.29''
+        is a reserved IP address (private, multicast, etc.)."}'
+  recorded_at: Wed, 05 Jun 2024 19:05:38 GMT
 recorded_with: VCR 6.0.0

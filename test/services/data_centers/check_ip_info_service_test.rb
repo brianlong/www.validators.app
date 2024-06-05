@@ -97,24 +97,42 @@ module DataCenters
       end
     end
 
-    test ".call doesn't do anything when ip is private" do
-      assert_no_difference ["DataCenter.count", "DataCenterHost.count"] do
-        assert_equal :skip, @service.call(ip: "10.255.20.255")
-        assert_equal :skip, @service.call(ip: "10.10.20.255")
-        assert_equal :skip, @service.call(ip: "172.16.1.0")
-        assert_equal :skip, @service.call(ip: "192.168.1.12")
+    test ".call ddoesn't create data center or host, and updates is_muted attribute, when ip is private" do
+      ["10.255.20.255", "10.10.20.255", "172.16.1.0", "192.168.1.12"].each do |ip|
+        validator_ip = create(:validator_ip, :active, address: ip)
+        assert_equal validator_ip.is_muted, false
+
+        assert_no_difference ["DataCenter.count", "DataCenterHost.count"] do
+          assert_equal :skip, @service.call(ip: ip)
+        end
+        assert_equal validator_ip.reload.is_muted, true
       end
     end
 
-    test ".call doesn't do anything for invalid ip_address" do
-      assert_no_difference ["DataCenter.count", "DataCenterHost.count"] do
-        vcr_cassette(@namespace, __method__) do
-          assert_raise(MaxMind::GeoIP2::AddressInvalidError) do
-            @service.call(ip: "743.123.46.21")
+    test ".call doesn't create data center or host, and updates is_muted attribute, when ASN is empty" do
+      ["16.82.185.159", "140.5.57.160"].each do |ip|
+        validator_ip = create(:validator_ip, :active, address: ip)
+        assert_equal validator_ip.is_muted, false
+
+        assert_no_difference ["DataCenter.count", "DataCenterHost.count"] do
+          vcr_cassette(@namespace, __method__) do
+            @service.call(ip: ip)
           end
         end
+        assert_equal validator_ip.reload.is_muted, true
       end
+    end
+
+    test ".call doesn't create data center or host, and updates is_muted attribute, when ip is invalid" do
+      validator_ip = create(:validator_ip, :active, address: "243.84.161.29")
+      assert_equal validator_ip.reload.is_muted, false
+
+      assert_no_difference ["DataCenter.count", "DataCenterHost.count"] do
+        vcr_cassette(@namespace, __method__) do
+          @service.call(ip: validator_ip.address)
+        end
+      end
+      assert_equal validator_ip.reload.is_muted, true
     end
   end
 end
-
