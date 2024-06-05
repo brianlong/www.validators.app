@@ -1,23 +1,42 @@
 # frozen_string_literal: true
 
 class DataCenters::CheckIpInfoService
+  class MissingAsnError < StandardError; end
 
   PRIVATE_IP_REGEX = /(^127\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.168\.)/.freeze
 
   def initialize
     @client ||= MaxMindClient.new
+    @logger = Logger.new("#{Rails.root}/log/check_ip_info_service.log")
   end
 
   def call(ip:)
     # Skip private IPs
-    return :skip if !ip || ip.match?(PRIVATE_IP_REGEX)
+    if !ip || ip.match?(PRIVATE_IP_REGEX)
+      mute_validator_ips(ip)
+      return :skip
+    end
 
     max_mind_info = get_max_mind_info(ip)
 
+    raise MissingAsnError if max_mind_info.traits&.autonomous_system_number&.blank?
+
     data_center = set_data_center(max_mind_info)
+
     fill_blank_values(data_center, max_mind_info)
 
     update_validator_ips(ip, data_center, max_mind_info) if data_center.save
+  rescue MaxMind::GeoIP2::AddressReservedError => e
+    @logger.info("MaxMind::GeoIP2::AddressReservedError: error for #{ip}")
+    mute_validator_ips(ip)
+    Appsignal.send_error(e)
+  rescue MissingAsnError => e
+    @logger.info("MissingAsnError: missing ASN for #{ip}")
+    # mute_validator_ips(ip)
+    Appsignal.send_error(e)
+  rescue StandardError => e
+    @logger.info("Error for #{ip}: #{e.message}")
+    Appsignal.send_error(e)
   end
 
   def get_max_mind_info(ip)
@@ -108,5 +127,11 @@ class DataCenters::CheckIpInfoService
 
   def unified_country(country)
     ["great britain", "england"].include?(country&.downcase) ? "United Kingdom" : country
+  end
+
+  def mute_validator_ips(ip)
+    ValidatorIp.where(is_active: true, address: ip).each do |val_ip|
+      val_ip.update(is_muted: true)
+    end
   end
 end
