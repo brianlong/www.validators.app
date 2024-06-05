@@ -112,7 +112,7 @@ every 1.day, at: '3:00am', roles: [:background] do
 end
 
 every 1.day, at: '3:10am', roles: [:background] do
-  ruby_script_data_centers 'check_unknown_data_centers_for_updates.rb'
+  # ruby_script_data_centers 'check_unknown_data_centers_for_updates.rb'
 end
 
 every 1.day, at: '3:35am', roles: [:background] do
