@@ -97,7 +97,7 @@ module DataCenters
       end
     end
 
-    test ".call ddoesn't create data center or host, and updates is_muted attribute, when ip is private" do
+    test ".call doesn't create data center or host, and updates is_muted attribute, when ip is private" do
       ["10.255.20.255", "10.10.20.255", "172.16.1.0", "192.168.1.12"].each do |ip|
         validator_ip = create(:validator_ip, :active, address: ip)
         assert_equal validator_ip.is_muted, false
