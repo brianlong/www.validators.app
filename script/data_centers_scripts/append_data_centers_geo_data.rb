@@ -19,12 +19,14 @@ begin
   sql = "SELECT DISTINCT address
          FROM validator_ips v
          WHERE v.is_active = true
+         AND v.is_muted = false
          AND v.data_center_host_id IS NULL"
 
   sql = "#{sql} LIMIT 10" if Rails.env == 'development'
 
   ValidatorIp.connection.execute(sql).each do |missing_ip|
     puts missing_ip[0].inspect if verbose
+
     begin
       result = ip_service.call(ip: missing_ip[0])
       puts "Private IP - skipping" if result == :skip
@@ -51,7 +53,7 @@ begin
 
     vs1.network = validator.network
     vs1.ip_address = ip
-    
+
     vs1.save
   end
 

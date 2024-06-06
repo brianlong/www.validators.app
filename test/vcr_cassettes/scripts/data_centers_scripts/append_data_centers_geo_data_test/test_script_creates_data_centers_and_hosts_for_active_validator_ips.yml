@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://geoip.maxmind.com/geoip/v2.1/insights/192.69.220.150
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Authorization:
+      - "<TOKEN>"
+      Accept:
+      - application/json
+      User-Agent:
+      - MaxMind-GeoIP2-ruby
+      Connection:
+      - Keep-Alive
+      Host:
+      - geoip.maxmind.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 06 Jun 2024 10:33:59 GMT
+      Content-Type:
+      - application/vnd.maxmind.com-insights+json; charset=UTF-8; version=2.1
+      Content-Length:
+      - '1118'
+      Connection:
+      - keep-alive
+      Cf-Cache-Status:
+      - DYNAMIC
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 88f7bf55a9d13522-WAW
+    body:
+      encoding: UTF-8
+      string: '{"continent":{"code":"NA","geoname_id":6255149,"names":{"es":"Norteamérica","fr":"Amérique
+        du Nord","ja":"北アメリカ","pt-BR":"América do Norte","ru":"Северная Америка","zh-CN":"北美洲","de":"Nordamerika","en":"North
+        America"}},"country":{"confidence":99,"iso_code":"US","geoname_id":6252001,"names":{"ru":"США","zh-CN":"美国","de":"USA","en":"United
+        States","es":"Estados Unidos","fr":"États Unis","ja":"アメリカ","pt-BR":"EUA"}},"location":{"accuracy_radius":1000,"latitude":37.751,"longitude":-97.822,"time_zone":"America/Chicago"},"maxmind":{"queries_remaining":8932},"registered_country":{"iso_code":"US","geoname_id":6252001,"names":{"zh-CN":"美国","de":"USA","en":"United
+        States","es":"Estados Unidos","fr":"États Unis","ja":"アメリカ","pt-BR":"EUA","ru":"США"}},"traits":{"is_anonymous":true,"is_hosting_provider":true,"user_type":"hosting","autonomous_system_number":18450,"autonomous_system_organization":"WEBNX","connection_type":"Corporate","domain":"webnx.com","isp":"WebNX","organization":"WebNX","ip_address":"192.69.220.150","network":"192.69.220.128/26"}}'
+  recorded_at: Thu, 06 Jun 2024 10:33:59 GMT
+recorded_with: VCR 6.0.0
