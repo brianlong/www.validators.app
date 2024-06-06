@@ -1,0 +1,96 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://geoip.maxmind.com/geoip/v2.1/insights/16.82.185.159
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Authorization:
+      - "<TOKEN>"
+      Accept:
+      - application/json
+      User-Agent:
+      - MaxMind-GeoIP2-ruby
+      Connection:
+      - Keep-Alive
+      Host:
+      - geoip.maxmind.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 05 Jun 2024 19:04:17 GMT
+      Content-Type:
+      - application/vnd.maxmind.com-insights+json; charset=UTF-8; version=2.1
+      Content-Length:
+      - '900'
+      Connection:
+      - keep-alive
+      Cf-Cache-Status:
+      - DYNAMIC
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 88f26d757f8a354b-WAW
+    body:
+      encoding: UTF-8
+      string: '{"continent":{"code":"NA","geoname_id":6255149,"names":{"en":"North
+        America","es":"Norteamérica","fr":"Amérique du Nord","ja":"北アメリカ","pt-BR":"América
+        do Norte","ru":"Северная Америка","zh-CN":"北美洲","de":"Nordamerika"}},"country":{"confidence":99,"iso_code":"US","geoname_id":6252001,"names":{"ja":"アメリカ","pt-BR":"EUA","ru":"США","zh-CN":"美国","de":"USA","en":"United
+        States","es":"Estados Unidos","fr":"États Unis"}},"location":{"accuracy_radius":1000,"latitude":37.751,"longitude":-97.822,"time_zone":"America/Chicago"},"maxmind":{"queries_remaining":8938},"registered_country":{"iso_code":"US","geoname_id":6252001,"names":{"en":"United
+        States","es":"Estados Unidos","fr":"États Unis","ja":"アメリカ","pt-BR":"EUA","ru":"США","zh-CN":"美国","de":"USA"}},"traits":{"user_count":1,"ip_address":"16.82.185.159","network":"16.82.185.159/32"}}'
+  recorded_at: Wed, 05 Jun 2024 19:04:17 GMT
+- request:
+    method: get
+    uri: https://geoip.maxmind.com/geoip/v2.1/insights/140.5.57.160
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Authorization:
+      - "<TOKEN>"
+      Accept:
+      - application/json
+      User-Agent:
+      - MaxMind-GeoIP2-ruby
+      Connection:
+      - Keep-Alive
+      Host:
+      - geoip.maxmind.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 05 Jun 2024 19:04:21 GMT
+      Content-Type:
+      - application/vnd.maxmind.com-insights+json; charset=UTF-8; version=2.1
+      Content-Length:
+      - '898'
+      Connection:
+      - keep-alive
+      Cf-Cache-Status:
+      - DYNAMIC
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 88f26d8f3da2354b-WAW
+    body:
+      encoding: UTF-8
+      string: '{"continent":{"code":"NA","geoname_id":6255149,"names":{"pt-BR":"América
+        do Norte","ru":"Северная Америка","zh-CN":"北美洲","de":"Nordamerika","en":"North
+        America","es":"Norteamérica","fr":"Amérique du Nord","ja":"北アメリカ"}},"country":{"confidence":99,"iso_code":"US","geoname_id":6252001,"names":{"es":"Estados
+        Unidos","fr":"États Unis","ja":"アメリカ","pt-BR":"EUA","ru":"США","zh-CN":"美国","de":"USA","en":"United
+        States"}},"location":{"accuracy_radius":1000,"latitude":37.751,"longitude":-97.822,"time_zone":"America/Chicago"},"maxmind":{"queries_remaining":8938},"registered_country":{"iso_code":"US","geoname_id":6252001,"names":{"zh-CN":"美国","de":"USA","en":"United
+        States","es":"Estados Unidos","fr":"États Unis","ja":"アメリカ","pt-BR":"EUA","ru":"США"}},"traits":{"user_count":1,"ip_address":"140.5.57.160","network":"140.5.57.160/32"}}'
+  recorded_at: Wed, 05 Jun 2024 19:04:21 GMT
+recorded_with: VCR 6.0.0

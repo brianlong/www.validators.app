@@ -10,6 +10,10 @@ FactoryBot.define do
       is_active { true }
     end
 
+    trait :muted do
+      is_muted { true }
+    end
+
     trait :with_data_center do
       data_center_host
     end
