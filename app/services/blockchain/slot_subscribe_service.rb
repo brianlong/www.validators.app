@@ -56,7 +56,7 @@ module Blockchain
             @logger.info("Received message: #{data["result"]["slot"]}")
 
             # delay to make sure the block is available
-            Blockchain::GetBlockWorker.set(queue: "blockchain").perform_in(20.seconds, {"network" => @network, "slot_number" => data["result"]["slot"]})
+            Blockchain::GetBlockWorker.set(queue: "blockchain_#{@network}").perform_in(20.seconds, {"network" => @network, "slot_number" => data["result"]["slot"]})
           end
         end
 

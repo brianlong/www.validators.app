@@ -9,6 +9,6 @@ networks.each do |network|
   Blockchain::Slot.where(network: network, status: "request_error")
                   .where("created_at < ?", DELAY.ago)
                   .each do |slot|
-    Blockchain::GetBlockWorker.set(queue: "blockchain").perform_async({"network" => network, "slot_number" => slot.slot_number})
+    Blockchain::GetBlockWorker.set(queue: "blockchain_#{network}").perform_async({"network" => network, "slot_number" => slot.slot_number})
   end
 end

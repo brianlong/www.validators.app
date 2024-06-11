@@ -72,6 +72,7 @@ gem 'appsignal'
 
 gem "mechanize", ">= 2.10"
 gem 'nokogiri', '1.15.6'
+gem 'parallel'
 
 # Pagination
 gem 'kaminari'
