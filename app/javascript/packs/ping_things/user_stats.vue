@@ -130,10 +130,10 @@
       stats_grouped_by_user: function() {
         let ctx = this
 
-        // set order: lowest 60min average_slot_latency to highest
+        // set order: from highest 60min num_of_records to lowest
         let keys = Object.keys(ctx.last_60_mins);
         let usernames = keys.sort(function(a, b) {
-          return ctx.last_60_mins[a][0]["average_slot_latency"] - ctx.last_60_mins[b][0]["average_slot_latency"]
+          return ctx.last_60_mins[b][0]["num_of_records"] - ctx.last_60_mins[a][0]["num_of_records"]
         })
 
         // group last_60_mins and last_5_mins hashes by username
