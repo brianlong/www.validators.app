@@ -9,23 +9,25 @@ pt_count = 0
 interrupted = false
 trap('INT') { interrupted = true }  unless Rails.env.test?
 
+users = User.all.pluck(:id)
+
 loop do
   pt_count += 1
 
   slot_sent = rand(10_000_000..100_000_000)
   pt = PingThing.create(
-    user_id: User.first.id,
+    user_id: users.sample,
     amount: 1,
     signature: SecureRandom.hex(32),
     response_time: rand(700..5_000),
     transaction_type: "transfer",
     network: "mainnet",
     commitment_level: "confirmed",
-    success: true,
+    success: [true, false].sample,
     application: "web3",
     reported_at: Time.now,
     slot_sent: slot_sent,
-    slot_landed: slot_sent + rand(100..10_000)
+    slot_landed: slot_sent + rand(0..12)
   )
 
   if pt_count == 120
