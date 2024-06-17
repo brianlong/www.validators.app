@@ -21,6 +21,24 @@
 #
 class Blockchain::Slot < ApplicationRecord
   extend Archivable
+  self.abstract_class = true
 
-  enum status: { initialized: 0, has_block: 1, no_block: 2, request_error: 3 }
+  class << self
+    def network(network)
+      raise ArgumentError, 'Invalid network' unless %w[mainnet testnet pythnet].include?(network)
+
+      case network
+      when 'mainnet'
+        Blockchain::MainnetSlot
+      when 'testnet'
+        Blockchain::TestnetSlot
+      when 'pythnet'
+        Blockchain::PythnetSlot
+      end
+    end
+
+    def count
+      self.name == 'Blockchain::Slot' ? Blockchain::MainnetSlot.count + Blockchain::TestnetSlot.count + Blockchain::PythnetSlot.count : super
+    end
+  end
 end

@@ -9,7 +9,7 @@ module Blockchain
       @config_urls = config_urls || Rails.application.credentials.solana["#{network}_urls".to_sym]
       @block = {}
       @saved_block = nil
-      @slot = Slot.find_by(slot_number: @slot_number, network: @network)
+      @slot = Slot.network(@network).find_by(slot_number: @slot_number)
     end
 
     def call
