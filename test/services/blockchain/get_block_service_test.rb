@@ -62,7 +62,7 @@ module Blockchain
         ]
       }
 
-      @slot = create(:blockchain_slot, network: @network, slot_number: @slot_number)
+      @slot = create(:testnet_slot, slot_number: @slot_number)
     end
 
     test "#call creates new blockchain::block" do

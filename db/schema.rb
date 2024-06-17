@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_05_145101) do
+ActiveRecord::Schema.define(version: 2024_06_11_091917) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -133,6 +133,26 @@ ActiveRecord::Schema.define(version: 2024_06_05_145101) do
     t.index ["network", "slot_number"], name: "index_blockchain_blocks_on_network_and_slot_number"
   end
 
+  create_table "blockchain_mainnet_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "leader"
+    t.integer "epoch"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["epoch", "leader"], name: "index_blockchain_mainnet_slots_on_epoch_and_leader"
+  end
+
+  create_table "blockchain_pythnet_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "leader"
+    t.integer "epoch"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["epoch", "leader"], name: "index_blockchain_pythnet_slots_on_epoch_and_leader"
+  end
+
   create_table "blockchain_slot_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
     t.string "leader"
@@ -143,17 +163,14 @@ ActiveRecord::Schema.define(version: 2024_06_05_145101) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "blockchain_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "blockchain_testnet_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
     t.string "leader"
-    t.string "network"
     t.integer "epoch"
+    t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "status", default: 0
-    t.index ["network", "epoch", "leader"], name: "index_blockchain_slots_on_network_and_epoch_and_leader"
-    t.index ["network", "slot_number"], name: "index_blockchain_slots_on_network_and_slot_number"
-    t.index ["network", "status", "epoch"], name: "index_blockchain_slots_on_network_and_status_and_epoch"
+    t.index ["epoch", "leader"], name: "index_blockchain_testnet_slots_on_epoch_and_leader"
   end
 
   create_table "blockchain_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
