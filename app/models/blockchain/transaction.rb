@@ -16,19 +16,30 @@
 #  slot_number   :bigint
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  block_id      :bigint           not null
-#
-# Indexes
-#
-#  index_blockchain_transactions_on_block_id  (block_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (block_id => blockchain_blocks.id)
 #
 class Blockchain::Transaction < ApplicationRecord
   extend Archivable
+  self.abstract_class = true
   
   serialize :pre_balances, JSON
   serialize :post_balances, JSON
+
+  class << self
+    def network(network)
+      raise ArgumentError, 'Invalid network' unless %w[mainnet testnet pythnet].include?(network)
+
+      case network
+      when 'mainnet'
+        Blockchain::MainnetTransaction
+      when 'testnet'
+        Blockchain::TestnetTransaction
+      when 'pythnet'
+        Blockchain::PythnetTransaction
+      end
+    end
+
+    def count
+      self.name == 'Blockchain::Transaction' ? Blockchain::MainnetTransaction.count + Blockchain::TestnetTransaction.count + Blockchain::PythnetTransaction.count : super
+    end
+  end
 end
