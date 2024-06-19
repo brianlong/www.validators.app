@@ -109,14 +109,14 @@ module Blockchain
       end
 
       assert_equal 1, Blockchain::Transaction.count
-      assert_equal "CoreZU3NjoVQKcx7wTPty13BmQhrJUjhvS6Hdjq6nbYx", Blockchain::Transaction.last.account_key_1
-      assert_equal "6DVFiYKvmPRvYjins4LtRSiEm81CswtP5yHTpgPdtrgK", Blockchain::Transaction.last.account_key_2
-      assert_equal "Vote111111111111111111111111111111111111111", Blockchain::Transaction.last.account_key_3
-      assert_equal 5000, Blockchain::Transaction.last.fee
-      assert_equal [2254765266, 27074400, 1], Blockchain::Transaction.last.pre_balances
-      assert_equal [2254760266, 27074400, 1], Blockchain::Transaction.last.post_balances
-      assert_equal 5000, Blockchain::Transaction.last.fee
-      assert_equal Blockchain::Block.last.id, Blockchain::Transaction.last.block_id
+      assert_equal "CoreZU3NjoVQKcx7wTPty13BmQhrJUjhvS6Hdjq6nbYx", Blockchain::Transaction.network(@network).last.account_key_1
+      assert_equal "6DVFiYKvmPRvYjins4LtRSiEm81CswtP5yHTpgPdtrgK", Blockchain::Transaction.network(@network).last.account_key_2
+      assert_equal "Vote111111111111111111111111111111111111111", Blockchain::Transaction.network(@network).last.account_key_3
+      assert_equal 5000, Blockchain::Transaction.network(@network).last.fee
+      assert_equal [2254765266, 27074400, 1], Blockchain::Transaction.network(@network).last.pre_balances
+      assert_equal [2254760266, 27074400, 1], Blockchain::Transaction.network(@network).last.post_balances
+      assert_equal 5000, Blockchain::Transaction.network(@network).last.fee
+      assert_equal Blockchain::Block.network(@network).last.id, Blockchain::Transaction.network(@network).last.block_id
     end
 
     test "#process_transactions does not create new blockchain::transaction when no vote transactions" do

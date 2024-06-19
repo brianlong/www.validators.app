@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
-# Table name: blockchain_slot_archives
+# Table name: blockchain_mainnet_slot_archives
 #
 #  id          :bigint           not null, primary key
 #  epoch       :integer
 #  leader      :string(191)
-#  network     :string(191)
 #  slot_number :bigint
-#  status      :integer
+#  status      :integer          default(0)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-class Blockchain::SlotArchive < ApplicationRecord
+class Blockchain::MainnetSlotArchive < ApplicationRecord
 end
