@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: blockchain_pythnet_blocks
+# Table name: blockchain_testnet_block_archives
 #
 #  id          :bigint           not null, primary key
 #  block_time  :bigint
@@ -14,9 +14,5 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-# Indexes
-#
-#  index_blockchain_pythnet_blocks_on_slot_number  (slot_number)
-#
-class Blockchain::PythnetBlock < Blockchain::Block
+class Blockchain::TestnetBlockArchive < ApplicationRecord
 end
