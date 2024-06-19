@@ -9,6 +9,7 @@ FactoryBot.define do
     account_key_1 { "MyString" }
     account_key_2 { "MyString" }
     account_key_3 { "MyString" }
+    block { create(:mainnet_block) }
   end
 
   factory :testnet_transaction, class: Blockchain::TestnetTransaction do
@@ -19,6 +20,7 @@ FactoryBot.define do
     account_key_1 { "MyString" }
     account_key_2 { "MyString" }
     account_key_3 { "MyString" }
+    block { create(:testnet_block) }
   end
 
   factory :pythnet_transaction, class: Blockchain::PythnetTransaction do
@@ -29,5 +31,6 @@ FactoryBot.define do
     account_key_1 { "MyString" }
     account_key_2 { "MyString" }
     account_key_3 { "MyString" }
+    block { create(:pythnet_block) }
   end
 end
