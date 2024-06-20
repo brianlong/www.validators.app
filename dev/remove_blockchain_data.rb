@@ -2,7 +2,7 @@
 
 require File.expand_path('../config/environment', __dir__)
 
-Blockchain::MainnetTransaction.find_in_batches(batch_size: 500_000).with_index do |batch, index|
+Blockchain::Transaction.find_in_batches(batch_size: 500_000).with_index do |batch, index|
   puts "Transactions: deleted #{index * 500_000}"
   Blockchain::Transaction.where("id < ?", batch.last.id).delete_all
 end
