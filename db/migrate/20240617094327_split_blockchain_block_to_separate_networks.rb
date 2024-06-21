@@ -1,7 +1,7 @@
 class SplitBlockchainBlockToSeparateNetworks < ActiveRecord::Migration[6.1]
   def change
     remove_reference :blockchain_transactions, :block, null: false, foreign_key: { to_table: :blockchain_blocks }
-    drop_table :blockchain_blocks
+    drop_table :blockchain_blocks, if_exists: true
 
     create_table :blockchain_mainnet_blocks do |t|
       t.bigint :slot_number

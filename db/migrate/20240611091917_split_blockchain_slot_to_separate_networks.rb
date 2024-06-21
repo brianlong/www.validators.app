@@ -1,6 +1,6 @@
 class SplitBlockchainSlotToSeparateNetworks < ActiveRecord::Migration[6.1]
   def change
-    drop_table :blockchain_slots
+    drop_table :blockchain_slots, if_exists: true
 
     create_table :blockchain_mainnet_slots do |t|
       t.bigint :slot_number
