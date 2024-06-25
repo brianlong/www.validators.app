@@ -6,7 +6,7 @@ DELAY = 90.minutes
 
 networks = Rails.env.stage? ? ["mainnet"] : NETWORKS
 networks.each do |network|
-  Blockchain::Slot.where(network: network, status: "request_error")
+  Blockchain::Slot.network(network).where(status: "request_error")
                   .where("created_at < ?", DELAY.ago)
                   .each do |slot|
     Blockchain::GetBlockWorker.set(queue: "blockchain_#{network}").perform_async({"network" => network, "slot_number" => slot.slot_number})

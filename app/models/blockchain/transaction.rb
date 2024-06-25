@@ -26,7 +26,7 @@ class Blockchain::Transaction < ApplicationRecord
 
   class << self
     def network(network)
-      raise ArgumentError, 'Invalid network' unless %w[mainnet testnet pythnet].include?(network)
+      raise ArgumentError, 'Invalid network' unless NETWORKS.include?(network)
 
       case network
       when 'mainnet'
