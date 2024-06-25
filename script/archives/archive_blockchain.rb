@@ -12,17 +12,22 @@ NETWORKS.each do |network|
 
   ((target_epoch - EPOCHS_BACK)..target_epoch).each do |epoch_to_clear|
     if Blockchain::Slot.network(network).where(epoch: epoch_to_clear).exists?
-      Parallel.each(Blockchain::Slot.network(network).where(epoch: epoch_to_clear).find_in_batches(batch_size: 100), in_threads: 3) do |batch|
+      Blockchain::Slot.network(network).where(epoch: epoch_to_clear).find_in_batches(batch_size: 100) do |batch|
         start_time = Time.now
         slot_numbers = batch.map(&:slot_number)
 
         block_batch = Blockchain::Block.network(network).where(slot_number: slot_numbers).to_a
         transaction_batch = Blockchain::Transaction.network(network).where(block_id: block_batch.map(&:id)).to_a
 
-        puts "Archiving #{transaction_batch.count} transactions in thread #{Parallel.worker_number}"
-        
-        Blockchain::Transaction.network(network).archive_batch(transaction_batch, destroy_after_archive: true) unless transaction_batch.empty?
-        puts "Archived thread #{Parallel.worker_number} in #{Time.now - start_time} seconds"
+        if transaction_batch.any?
+          puts "Archiving #{transaction_batch.count} transactions for epoch #{epoch_to_clear} (#{network})"
+          Blockchain::Transaction.network(network).archive_batch(transaction_batch, destroy_after_archive: false)
+          puts "saved in #{Time.now - start_time} seconds"
+          start_time = Time.now
+          puts "deleting #{transaction_batch.count} transactions for epoch #{epoch_to_clear} (#{network})"
+          Blockchain::Transaction.network(network).where("id <= ?", transaction_batch.last.id).delete_all
+          puts "deleted in #{Time.now - start_time} seconds"
+        end
       end
 
       Parallel.each(Blockchain::Slot.network(network).where(epoch: epoch_to_clear).find_in_batches(batch_size: 50), in_threads: 3) do |batch|
