@@ -37,7 +37,6 @@ NETWORKS.each do |network|
           puts "Deleting #{transactions_to_delete} transactions"
           delete_transactions_upto(network, last_tx_id)
           transactions_to_delete = 0
-          break
         end
       end
       delete_transactions_upto(network, last_tx_id) if transactions_to_delete.positive?
