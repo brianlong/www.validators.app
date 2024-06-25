@@ -18,7 +18,7 @@ counts.each do |loop|
     p = PingThing.create(
       user_id: users.sample,
       amount: 1,
-      signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjsdfsasdfasdfasdfasdfasdfdflkhasdlkhflkasjdhf6Rw#{n}",
+      signature: SecureRandom.hex(32),
       response_time: rand(loop[:min_time]..loop[:max_time]),
       transaction_type: "transfer",
       network: "mainnet",
@@ -27,7 +27,7 @@ counts.each do |loop|
       application: "web3",
       reported_at: rand(5.minutes.ago..Time.now),
       slot_sent: slot_sent,
-      slot_landed: slot_sent + rand(1..12)
+      slot_landed: slot_sent + rand(0..12)
     )
     if p.valid?
       puts p.inspect

@@ -14,6 +14,8 @@ gem 'bundler', '>= 2.1'
 gem 'json', '>= 2.3.0'
 
 gem 'websocket-extensions', '>= 0.1.5'
+gem 'faye-websocket', '~> 0.11.3'
+gem 'eventmachine', '~> 1.2', '>= 1.2.0.1'
 
 gem 'actionview', '>= 6.0.3.1'
 
@@ -21,7 +23,7 @@ gem 'actionview', '>= 6.0.3.1'
 gem 'rails', '~> 6.1'
 
 # Use mysql as the database for Active Record
-gem 'mysql2', '>= 0.5.3'
+gem 'mysql2', '>= 0.5.6'
 
 # Use Passenger as the app server
 # gem 'passenger'
@@ -36,13 +38,13 @@ gem 'webpacker', '~> 5.4'
 gem 'turbolinks', '~> 5'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
+gem 'jbuilder', '~> 2.11'
 
 # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4.8.1'
 
 # This is for the free version of Sidekiq.
-gem 'sidekiq', ' ~> 7.1'
+gem 'sidekiq', ' ~> 7.2'
 
 # Use this for SideKiq Pro if you have our production keys
 # source 'https://gems.contribsys.com/' do
@@ -59,7 +61,7 @@ gem 'whenever', require: false
 gem 'image_processing'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.16', require: false
+gem 'bootsnap', '>= 1.18', require: false
 
 # Capistrano
 gem 'capistrano-passenger', '>= 0.2.1'
@@ -68,8 +70,9 @@ gem 'capistrano-rails', group: :development
 # AppSignal
 gem 'appsignal'
 
-gem "mechanize", ">= 2.9.1"
-gem 'nokogiri', '1.15.5'
+gem "mechanize", ">= 2.10"
+gem 'nokogiri', '1.15.6'
+gem 'parallel'
 
 # Pagination
 gem 'kaminari'
@@ -87,13 +90,13 @@ gem 'solana_rpc_ruby'
 # Ruby client for CoinGecko
 gem 'coingecko_ruby'
 
-gem "audited", "~> 5.3.3"
+gem "audited", "~> 5.6"
 
 gem 'sitemap_generator', '~> 6.3.0'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'bullet', '~> 7.0'
+  gem 'bullet', '~> 7.1'
   gem 'factory_bot_rails'
   gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
   gem 'pry', '~> 0.14.2'
@@ -101,7 +104,7 @@ group :development, :test do
   gem 'pronto', '~> 0.11.2'
   gem 'pronto-flay', '~> 0.11.1', require: false
   gem 'pronto-rubocop', '~> 0.11.5', require: false
-  gem 'rubocop', '~> 1.62', require: false
+  gem 'rubocop', '~> 1.63.3', require: false
   gem 'rubocop-rails', '~> 2.24', require: false
 end
 
@@ -113,7 +116,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen', '~> 2.1.0'
   gem 'annotate'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'

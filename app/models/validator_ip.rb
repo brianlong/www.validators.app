@@ -7,6 +7,7 @@
 #  id                  :bigint           not null, primary key
 #  address             :string(191)
 #  is_active           :boolean          default(FALSE)
+#  is_muted            :boolean          default(FALSE)
 #  is_overridden       :boolean          default(FALSE)
 #  traits_domain       :string(191)
 #  traits_ip_address   :string(191)
