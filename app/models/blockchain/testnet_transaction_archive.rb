@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
-# Table name: blockchain_transaction_archives
+# Table name: blockchain_testnet_transaction_archives
 #
 #  id            :bigint           not null, primary key
 #  account_key_1 :string(191)
@@ -8,13 +10,12 @@
 #  account_key_3 :string(191)
 #  epoch         :integer
 #  fee           :bigint
-#  network       :string(191)
 #  post_balances :text(65535)
 #  pre_balances  :text(65535)
 #  slot_number   :bigint
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  block_id      :integer
+#  block_id      :bigint
 #
-class Blockchain::TransactionArchive < ApplicationRecord
+class Blockchain::TestnetTransactionArchive < ApplicationRecord
 end

@@ -14,15 +14,16 @@ module Blockchain
     end
 
     def call
-      if Blockchain::Slot.where(network: @network, epoch: @epoch).exists?
+      puts Blockchain::Slot.network(@network)
+
+      if Blockchain::Slot.network(@network).where(epoch: @epoch).exists?
         @logger.info("Leader schedule for epoch #{@epoch} on #{@network} already exists")
       else
         @logger.info("Fetching leader schedule for epoch #{@epoch} on #{@network}")
         response = cli_request("leader-schedule --epoch #{@epoch}", @config_urls)
         schedule = response["leaderScheduleEntries"]
         schedule.each do |entry|
-          Blockchain::Slot.create(
-            network: @network,
+          Blockchain::Slot.network(@network).create(
             epoch: @epoch,
             slot_number: entry["slot"],
             leader: entry["leader"]
