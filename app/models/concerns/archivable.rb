@@ -56,7 +56,7 @@ module Archivable
 
   def archive_batch(records, destroy_after_archive: false)
     begin
-      archive_class.insert_all(records.compact.map(&:attributes))
+      archive_class.upsert_all(records.compact.map(&:attributes))
       if destroy_after_archive
         records.compact.map(&:id).in_groups_of(300, false) do |ids|
           sql = "DELETE FROM #{self.table_name} WHERE id IN (?)"
