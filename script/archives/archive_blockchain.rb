@@ -12,7 +12,7 @@ NETWORKS.each do |network|
 
   ((target_epoch - EPOCHS_BACK)..target_epoch).each do |epoch_to_clear|
     if Blockchain::Slot.network(network).where(epoch: epoch_to_clear).exists?
-      Blockchain::Slot.network(network).where(epoch: epoch_to_clear).find_in_batches(batch_size: 100) do |batch|
+      Blockchain::Slot.network(network).where(epoch: epoch_to_clear).find_in_batches(batch_size: 50) do |batch|
         start_time = Time.now
         slot_numbers = batch.map(&:slot_number)
 
@@ -25,7 +25,7 @@ NETWORKS.each do |network|
           puts "saved in #{Time.now - start_time} seconds"
           start_time = Time.now
           puts "deleting #{transaction_batch.count} transactions for epoch #{epoch_to_clear} (#{network})"
-          Blockchain::Transaction.network(network).where("id BETWEEN ? AND ?", transaction_batch.first.id, transaction_batch.last.id).delete_all
+          Blockchain::Transaction.network(network).where("id IN (?)", transaction_batch.map(&:id)).delete_all
           puts "deleted in #{Time.now - start_time} seconds"
         end
       end
