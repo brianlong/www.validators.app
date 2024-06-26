@@ -25,7 +25,7 @@ NETWORKS.each do |network|
           puts "saved in #{Time.now - start_time} seconds"
           start_time = Time.now
           puts "deleting #{transaction_batch.count} transactions for epoch #{epoch_to_clear} (#{network})"
-          Blockchain::Transaction.network(network).where("id <= ?", transaction_batch.last.id).delete_all
+          Blockchain::Transaction.network(network).where("id BETWEEN ? AND ?", transaction_batch.first.id, transaction_batch.last.id).delete_all
           puts "deleted in #{Time.now - start_time} seconds"
         end
       end
