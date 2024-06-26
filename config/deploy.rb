@@ -150,7 +150,7 @@ namespace :deamons do
           execute :systemctl, '--user', :start, :leader_stats_mainnet_update
           execute :systemctl, '--user', :start, :leader_stats_testnet_update
           execute :systemctl, '--user', :start, :leader_stats_pythnet_update
-          execute :systemctl, '--user', :start, :slot_subscribe_mainnet
+          # execute :systemctl, '--user', :start, :slot_subscribe_mainnet
         end
       end
     end
@@ -212,7 +212,7 @@ namespace :deamons do
           execute :systemctl, '--user', :restart, :leader_stats_mainnet_update
           execute :systemctl, '--user', :restart, :leader_stats_testnet_update
           execute :systemctl, '--user', :restart, :leader_stats_pythnet_update
-          execute :systemctl, '--user', :restart, :slot_subscribe_mainnet
+          # execute :systemctl, '--user', :restart, :slot_subscribe_mainnet
         end
       end
     end
