@@ -5,6 +5,22 @@ require File.expand_path('../../config/environment', __dir__)
 EPOCHS_KEPT = 0
 EPOCHS_BACK = 10
 
+def group_ids ids
+  arrays = []
+  ids.each do |id|
+    if arrays.empty?
+      arrays << [id]
+    else
+      if id == arrays.last.last + 1
+        arrays.last << id
+      else
+        arrays << [id]
+      end
+    end
+  end
+  arrays
+end
+
 NETWORKS.each do |network|
   current_epoch = EpochWallClock.where(network: network).order(epoch: :desc).first
   next unless current_epoch
@@ -25,7 +41,10 @@ NETWORKS.each do |network|
           puts "saved in #{Time.now - start_time} seconds"
           start_time = Time.now
           puts "deleting #{transaction_batch.count} transactions for epoch #{epoch_to_clear} (#{network})"
-          Blockchain::Transaction.network(network).where("id IN (?)", transaction_batch.map(&:id)).delete_all
+          group_ids(transaction_batch.map(&:id)).each do |ids|
+            puts ids
+            Blockchain::Transaction.network(network).where("id BETWEEN ? AND ?", ids.first, ids.last).delete_all
+          end
           puts "deleted in #{Time.now - start_time} seconds"
         end
       end
