@@ -46,7 +46,7 @@ NETWORKS.each do |network|
           end
           puts "thread #{Parallel.worker_number}: deleted in #{Time.now - start_time} seconds"
         end
-
+        
         puts "Archiving #{block_batch.count} blocks, and #{batch.count} slots for epoch #{epoch_to_clear} (#{network}) in thread #{Parallel.worker_number}"
 
         Blockchain::Block.network(network).archive_batch(block_batch, destroy_after_archive: true) unless block_batch.empty?
