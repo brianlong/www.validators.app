@@ -17,19 +17,20 @@ NETWORKS.each do |network|
         puts "Deleting #{batch.count} slots for #{network}"
         Blockchain::Slot.network(network).where("id BETWEEN ? AND ?", batch.first.id, batch.last.id).delete_all
     end
+end
 
-    Blockchain::TransactionArchive.network(network).find_in_batches(batch_size: 1_000_00) do |batch|
-        puts "Deleting #{batch.count} transaction archives for #{network}"
-        Blockchain::TransactionArchive.network(network).where("id BETWEEN ? AND ?", batch.first.id, batch.last.id).delete_all
-    end
 
-    Blockchain::BlockArchive.network(network).find_in_batches(batch_size: 1_000_00) do |batch|
-        puts "Deleting #{batch.count} block archives for #{network}"
-        Blockchain::BlockArchive.network(network).where("id BETWEEN ? AND ?", batch.first.id, batch.last.id).delete_all
-    end
+Blockchain::MainnetTransactionArchive.find_in_batches(batch_size: 1_000_00) do |batch|
+    puts "Deleting #{batch.count} transaction archives for #{network}"
+    Blockchain::MainnetTransactionArchive.where("id BETWEEN ? AND ?", batch.first.id, batch.last.id).delete_all
+end
 
-    Blockchain::SlotArchive.network(network).find_in_batches(batch_size: 1_000_00) do |batch|
-        puts "Deleting #{batch.count} slot archives for #{network}"
-        Blockchain::SlotArchive.network(network).where("id BETWEEN ? AND ?", batch.first.id, batch.last.id).delete_all
-    end
+Blockchain::MainnetBlockArchive.find_in_batches(batch_size: 1_000_00) do |batch|
+    puts "Deleting #{batch.count} block archives for #{network}"
+    Blockchain::MainnetBlockArchive.where("id BETWEEN ? AND ?", batch.first.id, batch.last.id).delete_all
+end
+
+Blockchain::MainnetSlotArchive.find_in_batches(batch_size: 1_000_00) do |batch|
+    puts "Deleting #{batch.count} slot archives for #{network}"
+    Blockchain::MainnetSlotArchive.where("id BETWEEN ? AND ?", batch.first.id, batch.last.id).delete_all
 end
