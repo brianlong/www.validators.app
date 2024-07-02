@@ -2,7 +2,7 @@
 
 require File.expand_path('../../config/environment', __dir__)
 
-EPOCHS_KEPT = 2
+EPOCHS_KEPT = 1
 EPOCHS_BACK = 10
 NETWORK = "mainnet"
 
@@ -32,7 +32,7 @@ loop do
   ((target_epoch - EPOCHS_BACK)...target_epoch).each do |epoch_to_clear|
     if Blockchain::Slot.network(NETWORK).where(epoch: epoch_to_clear).exists?
       begin
-        Parallel.each(Blockchain::Slot.network(NETWORK).where(epoch: epoch_to_clear).find_in_batches(batch_size: 100), in_processess: 3) do |batch|
+        Parallel.each(Blockchain::Slot.network(NETWORK).where(epoch: epoch_to_clear).find_in_batches(batch_size: 100), in_processes: 3) do |batch|
           start_time = Time.now
 
           slot_numbers = batch.map(&:slot_number)
@@ -48,8 +48,8 @@ loop do
           
           Blockchain::Block.network(NETWORK).archive_batch(block_batch, archive: ARCHIVE, destroy_after_archive: true) unless block_batch.empty?
           Blockchain::Slot.network(NETWORK).archive_batch(batch, archive: ARCHIVE, destroy_after_archive: true) unless batch.empty?
-          puts "Archived #{block_batch.count} blocks, and #{batch.count} slots for epoch #{epoch_to_clear} (#{NETWORK}) \
-                in thread #{Parallel.worker_number} in #{Time.now - start_time} seconds"
+          puts "Archived #{block_batch.count} blocks, #{batch.count} slots, #{transaction_batch.count} transactions for epoch #{epoch_to_clear} (#{NETWORK}) \
+          in thread #{Parallel.worker_number} in #{Time.now - start_time} seconds"
         end
       rescue Parallel::DeadWorker
         puts "DeadWorker error, retrying in 5 seconds"
