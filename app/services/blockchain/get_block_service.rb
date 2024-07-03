@@ -9,7 +9,7 @@ module Blockchain
       @config_urls = config_urls || Rails.application.credentials.solana["#{network}_urls".to_sym]
       @block = {}
       @saved_block = nil
-      @slot = Slot.find_by(slot_number: @slot_number, network: @network)
+      @slot = Slot.network(@network).find_by(slot_number: @slot_number)
     end
 
     def call
@@ -48,13 +48,12 @@ module Blockchain
     end
 
     def save_block
-      @saved_block = Blockchain::Block.create(
+      @saved_block = Blockchain::Block.network(@network).create(
         height: @block["blockHeight"].to_i,
         block_time: @block["blockTime"].to_i,
         blockhash: @block["blockhash"],
         parent_slot: @block["parentSlot"].to_i,
         slot_number: @slot_number,
-        network: @network,
         epoch: @slot.epoch
       )
     end
@@ -75,13 +74,12 @@ module Blockchain
               pre_balances: tx["meta"]["preBalances"],
               slot_number: @slot_number,
               block_id: @saved_block.id,
-              network: @network,
               epoch: @slot.epoch,
               created_at: Time.now,
               updated_at: Time.now
             }
           end
-          Blockchain::Transaction.insert_all(batch) if batch.any?
+          Blockchain::Transaction.network(@network).insert_all(batch) if batch.any?
         end
       end
     end

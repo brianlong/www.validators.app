@@ -1,17 +1,22 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
-# Table name: blockchain_block_archives
+# Table name: blockchain_pythnet_blocks
 #
 #  id          :bigint           not null, primary key
 #  block_time  :bigint
 #  blockhash   :string(191)
 #  epoch       :integer
-#  height      :bigint
-#  network     :string(191)
+#  height      :integer
 #  parent_slot :bigint
 #  slot_number :bigint
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-class Blockchain::BlockArchive < ApplicationRecord
+# Indexes
+#
+#  index_blockchain_pythnet_blocks_on_slot_number  (slot_number)
+#
+class Blockchain::PythnetBlock < Blockchain::Block
 end
