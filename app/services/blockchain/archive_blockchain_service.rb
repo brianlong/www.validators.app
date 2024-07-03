@@ -15,7 +15,7 @@ module Blockchain
       if Blockchain::Slot.network(@network).where(epoch: @epoch_to_clear).exists?
         begin
           Parallel.each(
-            Blockchain::Slot.network(@network).where(epoch: epoch_to_clear).find_in_batches(batch_size: 100),
+            Blockchain::Slot.network(@network).where(epoch: @epoch_to_clear).find_in_batches(batch_size: 100),
             in_processes: @processes
           ) do |batch|
 
@@ -39,7 +39,7 @@ module Blockchain
               Archived #{block_batch.count} blocks,
               #{batch.count} slots,
               #{transaction_batch.count} transactions 
-              for epoch #{epoch_to_clear} (#{@network}) \
+              for epoch #{@epoch_to_clear} (#{@network}) \
               in thread #{Parallel.worker_number} in #{Time.now - start_time} seconds"
             STRING
           end
