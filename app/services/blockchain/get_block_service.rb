@@ -63,7 +63,7 @@ module Blockchain
         vote_txs = @block["transactions"].select do |tx| 
           tx["transaction"]["message"]["accountKeys"].include?("Vote111111111111111111111111111111111111111")
         end
-        vote_txs.in_groups_of(50) do |group|
+        vote_txs.in_groups_of(1000) do |group|
           batch = group.compact.map do |tx|
             {
               account_key_1: tx["transaction"]["message"]["accountKeys"][0],
