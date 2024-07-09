@@ -122,6 +122,7 @@ Rails.application.routes.draw do
   post 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get 'saw_cookie_notice', to: 'public#saw_cookie_notice'
   get "ping-thing", to: "ping_things#index", as: "ping_things"
+  get "ping-thing/donate", to: "ping_things#donate", as: "ping_thing_donate"
   get "current-user", to: "users#current_user_info"
 
   ### API
