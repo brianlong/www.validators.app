@@ -76,5 +76,9 @@
       "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
     ],
     "testEnvironment": "jsdom"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "IE 11"
+  ]
 }
