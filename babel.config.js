@@ -64,6 +64,12 @@ module.exports = function(api) {
         {
           async: false
         }
+      ],
+      [
+        "@babel/plugin-transform-private-methods",
+        {
+          loose: false
+        }
       ]
     ].filter(Boolean)
   }
