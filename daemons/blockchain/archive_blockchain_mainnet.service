@@ -6,7 +6,7 @@ After=syslog.target network.target
 Type=simple
 WorkingDirectory=/home/deploy/validators.app/current/
 
-ExecStart=/usr/bin/bundle exec /usr/bin/ruby daemons/blockchain/archive_blockchain_mainnet_daemon.rb
+ExecStart=/usr/bin/bundle exec /usr/bin/ruby daemons/blockchain/archive_blockchain_mainnet_daemon.rb mainnet
 
 UMask=0002
 

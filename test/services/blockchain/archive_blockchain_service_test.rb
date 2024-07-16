@@ -16,13 +16,4 @@ class Blockchain::ArchiveBlockchainServiceTest < ActiveSupport::TestCase
     end
   end
 
-  # test "#call archives blocks, slots and transactions only for a given epoch" do
-  #   service = Blockchain::ArchiveBlockchainService.new(archive: true, network: @network, epoch: 1, processes: 1)
-  #   service.call
-
-  #   assert_equal 1, Blockchain::Block.network(@network).archived.count
-  #   assert_equal 1, Blockchain::Slot.network(@network).archived.count
-  #   assert_equal 1, Blockchain::Transaction.network(@network).archived.count
-  # end
-
 end
