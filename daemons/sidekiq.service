@@ -1,0 +1,44 @@
+[Unit]
+Description=sidekiq sidekiq service
+After=syslog.target network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/deploy/validators.app/current/
+
+ExecStart=/usr/bin/bundle exec sidekiq --environment production --config /home/deploy/validators.app/current/config/sidekiq.yml
+ExecReload=/usr/bin/kill -TSTP $MAINPID
+
+#User=deploy
+#Group=deploy
+UMask=0002
+
+# Greatly reduce Ruby memory fragmentation and heap usage
+# https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/
+Environment=MALLOC_ARENA_MAX=2 
+Environment=LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+Environment=RAILS_ENV=production
+Environment=SIDEKIQ_MAX_RSS=2000
+
+# if we crash, restart
+RestartSec=1
+Restart=always
+
+# output goes to /var/log/syslog
+StandardOutput=syslog
+StandardError=syslog
+
+# Memory management
+MemoryAccounting=yes
+MemoryHigh=3G
+MemoryMax=4G
+
+# Limits
+LimitNOFILE=infinity
+LimitMEMLOCK=infinity
+
+# This will default to "bundler" if we don't specify it
+SyslogIdentifier=sidekiq
+
+[Install]
+WantedBy=default.target
