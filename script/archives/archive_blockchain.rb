@@ -5,7 +5,7 @@ require File.expand_path('../../config/environment', __dir__)
 EPOCHS_KEPT = 1
 EPOCHS_BACK = 10
 
-ARCHIVE = true
+ARCHIVE = false
 
 def group_ids ids
   arrays = []
@@ -39,7 +39,7 @@ NETWORKS.each do |network|
 
         if transaction_batch.any?
           puts "thread #{Parallel.worker_number}: Archiving #{transaction_batch.count} transactions for epoch #{epoch_to_clear} (#{network})"
-          Blockchain::Transaction.network(network).archive_batch(transaction_batch, archive: ARCHIVE, destroy_after_archive: false)
+          Blockchain::Transaction.network(network).archive_batch(transaction_batch, archive: ARCHIVE, destroy_after_archive: true)
           puts "thread #{Parallel.worker_number}: saved in #{Time.now - start_time} seconds"
           start_time = Time.now
           puts "thread #{Parallel.worker_number}: deleting #{transaction_batch.count} transactions for epoch #{epoch_to_clear} (#{network})"
@@ -48,7 +48,7 @@ NETWORKS.each do |network|
           end
           puts "thread #{Parallel.worker_number}: deleted in #{Time.now - start_time} seconds"
         end
-        
+
         puts "Archiving #{block_batch.count} blocks, and #{batch.count} slots for epoch #{epoch_to_clear} (#{network}) in thread #{Parallel.worker_number}"
 
         Blockchain::Block.network(network).archive_batch(block_batch, archive: ARCHIVE, destroy_after_archive: true) unless block_batch.empty?

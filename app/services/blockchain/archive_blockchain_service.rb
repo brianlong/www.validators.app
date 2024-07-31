@@ -20,18 +20,18 @@ module Blockchain
           ) do |batch|
 
             start_time = Time.now
-  
+
             slot_numbers = batch.map(&:slot_number)
             block_batch = Blockchain::Block.network(@network).where(slot_number: slot_numbers).to_a
             transaction_batch = Blockchain::Transaction.network(@network).where(block_id: block_batch.map(&:id)).to_a
-  
+
             if transaction_batch.any?
-              Blockchain::Transaction.network(@network).archive_batch(transaction_batch, archive: true, destroy_after_archive: false)
+              Blockchain::Transaction.network(@network).archive_batch(transaction_batch, archive: @archive, destroy_after_archive: true)
               group_ids(transaction_batch.map(&:id)).each do |ids|
                 Blockchain::Transaction.network(@network).where("id BETWEEN ? AND ?", ids.first, ids.last).delete_all
               end
             end
-            
+
             Blockchain::Block.network(@network).archive_batch(block_batch, archive: @archive, destroy_after_archive: true) unless block_batch.empty?
             Blockchain::Slot.network(@network).archive_batch(batch, archive: @archive, destroy_after_archive: true) unless batch.empty?
 

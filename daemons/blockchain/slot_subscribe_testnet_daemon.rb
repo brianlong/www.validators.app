@@ -2,7 +2,7 @@
 
 require_relative "../../config/environment"
 
-SLEEP_TIME = 1 #seconds
+SLEEP_TIME = 1 # second
 
 loop do
   begin
