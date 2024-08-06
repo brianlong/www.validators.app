@@ -38,10 +38,13 @@ module Gatherers
       @retry_count += 1
       retry if @retry_count < 3
     rescue StandardError => e
-      Appsignal.send_error(e)
       sleep 5
       @retry_count += 1
-      retry if @retry_count < 3
+      if @retry_count < 3
+        retry
+      else
+        raise e
+      end
     end
 
     private
