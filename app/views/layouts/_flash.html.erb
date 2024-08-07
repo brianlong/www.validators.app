@@ -1,6 +1,6 @@
 <div>
   <% flash.each do |type, msg| %>
-    <% next if flash_message_is_cookie_info(msg) %>
+    <% next if flash_message_is_cookie_info(msg) || type == "timedout" %>
     <div class="alert <%= bootstrap_class_for_flash(type) %> alert-dismissible fade show" role="alert">
       <%= msg.to_s.html_safe %>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
