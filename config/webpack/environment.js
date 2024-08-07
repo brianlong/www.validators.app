@@ -12,6 +12,15 @@ const resolver = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
     }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto"
+      }
+    ]
   }
 }
 environment.config.merge(resolver)

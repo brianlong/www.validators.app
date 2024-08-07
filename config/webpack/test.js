@@ -1,28 +1,5 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
-var path = require('path');
-var webpack = require('webpack');
+const environment = require('./environment')
 
-module.exports = {
-  entry: [
-    'babel-polyfill',
-    './app-js/main',
-  ],
-  output: {
-    path: __dirname + '/app/assets/javascripts',
-    filename: 'app-js.js'
-  },
-  module: {
-    loaders: [
-      {
-        include: path.join(__dirname, 'app-js'),
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015']
-        }
-      }
-    ]
-  },
-  "transform": {
-    "^.+\\.[t|j]sx?$": "babel-jest"
-  },
-};
+module.exports = environment.toWebpackConfig()
