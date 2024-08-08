@@ -11,8 +11,10 @@ jobs:
           fetch-depth: 0
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
       - name: Setup pronto
-        run: gem install 'faraday-net_http:3.0.2' 'faraday:2.8.1' pronto pronto-rubocop rubocop rubocop-rails
+        run: gem install 'multi_xml:0.6.0' 'faraday-net_http:3.0.2' 'faraday:2.7.12' 'public_suffix:5.0.4' 'pronto:0.11.2' 'pronto-rubocop:0.11.5' 'rubocop:1.63.3' 'rubocop-rails:2.24.1'
       - name: Run Pronto
         env:
           PRONTO_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
