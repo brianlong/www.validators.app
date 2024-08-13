@@ -9,12 +9,14 @@ module ValidatorsControllerHelper
 
     validator_score = with_history ? validator.validator_score_v1 : validator.validator_score_v1_for_api
 
-    data_center = validator.validator_ip_active_for_api&.data_center_host_for_api&.data_center_for_api
-    data_center_host = validator.validator_ip_active_for_api&.data_center_host_for_api
+    validator_ip = validator.validator_ip_active_for_api
+    data_center = validator_ip&.data_center_host_for_api&.data_center_for_api
+    data_center_host = validator_ip&.data_center_host_for_api
     vote_account = validator.vote_accounts_for_api.last
     validator_history = validator.validator_histories.select(ValidatorHistory::API_FIELDS).last
 
     hash.merge!(validator_score.to_builder(with_history: with_history).attributes!)
+    hash.merge!(ip: validator_ip.address) unless validator_ip.blank?
     hash.merge!(data_center.to_builder.attributes!) unless data_center.blank?
     hash.merge!(data_center_host.to_builder.attributes!) unless data_center_host.blank?
     hash.merge!(vote_account.to_builder.attributes!) unless vote_account.blank?
