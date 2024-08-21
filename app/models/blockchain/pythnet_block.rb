@@ -19,4 +19,5 @@
 #  index_blockchain_pythnet_blocks_on_slot_number  (slot_number)
 #
 class Blockchain::PythnetBlock < Blockchain::Block
+    has_many :transactions, class_name: "Blockchain::PythnetTransaction", foreign_key: "block_id"
 end

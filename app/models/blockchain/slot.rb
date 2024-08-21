@@ -4,6 +4,8 @@ class Blockchain::Slot < ApplicationRecord
   extend Archivable
   self.abstract_class = true
 
+  connects_to database: { writing: :blockchain, reading: :blockchain }
+
   class << self
     def network(network)
       raise ArgumentError, 'Invalid network' unless NETWORKS.include?(network)

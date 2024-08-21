@@ -18,4 +18,6 @@
 #  block_id      :bigint
 #
 class Blockchain::TestnetTransactionArchive < ApplicationRecord
+    connects_to database: { writing: :blockchain, reading: :blockchain }
+    # connects_to database: { writing: Rails.env.stage? ? nil : :blockchain, reading: :blockchain }
 end
