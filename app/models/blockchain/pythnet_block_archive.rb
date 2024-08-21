@@ -14,7 +14,5 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-class Blockchain::PythnetBlockArchive < ApplicationRecord
-    connects_to database: { writing: :blockchain, reading: :blockchain }
-    # connects_to database: { writing: Rails.env.stage? ? nil : :blockchain, reading: :blockchain }
+class Blockchain::PythnetBlockArchive < Blockchain::Archive
 end

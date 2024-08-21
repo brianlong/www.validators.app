@@ -17,7 +17,5 @@
 #  updated_at    :datetime         not null
 #  block_id      :bigint
 #
-class Blockchain::PythnetTransactionArchive < ApplicationRecord
-    connects_to database: { writing: :blockchain, reading: :blockchain }
-    # connects_to database: { writing: Rails.env.stage? ? nil : :blockchain, reading: :blockchain }
+class Blockchain::PythnetTransactionArchive < Blockchain::Archive
 end

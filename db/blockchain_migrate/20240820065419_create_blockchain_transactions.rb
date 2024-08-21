@@ -10,7 +10,7 @@ class CreateBlockchainTransactions < ActiveRecord::Migration[6.1]
       t.string :account_key_3
       t.integer :epoch
 
-      t.references :block, foreign_key: { to_table: :blockchain_mainnet_blocks }
+      t.references :block, foreign_key: { to_table: :blockchain_mainnet_blocks }, null: true
 
       t.timestamps
     end
@@ -25,7 +25,7 @@ class CreateBlockchainTransactions < ActiveRecord::Migration[6.1]
       t.string :account_key_3
       t.integer :epoch
 
-      t.references :block, foreign_key: { to_table: :blockchain_testnet_blocks }
+      t.references :block, foreign_key: { to_table: :blockchain_testnet_blocks }, null: true
 
       t.timestamps
     end
@@ -40,7 +40,7 @@ class CreateBlockchainTransactions < ActiveRecord::Migration[6.1]
       t.string :account_key_3
       t.integer :epoch
       
-      t.references :block, foreign_key: { to_table: :blockchain_pythnet_blocks }
+      t.references :block, foreign_key: { to_table: :blockchain_pythnet_blocks }, null: true
 
       t.timestamps
     end
