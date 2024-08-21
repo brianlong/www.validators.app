@@ -133,6 +133,10 @@ module ValidatorScoreV1Logic
       )
 
       Pipeline.new(200, p.payload.merge(total_active_stake: total_active_stake))
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from block_vote_history_get', e)
     end
@@ -225,6 +229,10 @@ module ValidatorScoreV1Logic
                           vote_distance_all_average: vote_distance_all_average,
                           vote_distance_all_median: vote_distance_all_median
                         ))
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_block_and_vote_scores', e)
     end
@@ -282,6 +290,10 @@ module ValidatorScoreV1Logic
           med_skipped_after_pct_all: med_skipped_after_pct_all
         )
       )
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from block_history_get', e)
     end
@@ -322,6 +334,10 @@ module ValidatorScoreV1Logic
       end
 
       Pipeline.new(200, p.payload)
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_block_history_score', e)
     end
@@ -375,6 +391,10 @@ module ValidatorScoreV1Logic
       end
 
       Pipeline.new(200, p.payload)
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from assign_software_version_score', e)
     end
@@ -411,6 +431,10 @@ module ValidatorScoreV1Logic
       end
 
       Pipeline.new(200, p.payload)
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from save_validators', e)
     end

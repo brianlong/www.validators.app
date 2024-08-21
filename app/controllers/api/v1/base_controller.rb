@@ -24,6 +24,9 @@ module Api
         end
 
         true
+      rescue ActiveRecord::ConnectionNotEstablished => e
+        Appsignal.send_error(e)
+        render json: { 'error' => 'Database connection error. Please try again in a few minutes.' }, status: 500
       end
 
       # Return a 401 if the user is not authenticated.
