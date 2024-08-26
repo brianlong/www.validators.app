@@ -21,10 +21,6 @@
 #
 #  index_blockchain_mainnet_transactions_on_block_id  (block_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (block_id => blockchain_mainnet_blocks.id)
-#
 class Blockchain::MainnetTransaction < Blockchain::Transaction
-    belongs_to :block, class_name: 'Blockchain::MainnetBlock', foreign_key: 'block_id'
+    belongs_to :block, class_name: 'Blockchain::MainnetBlock', foreign_key: 'block_id', validate: false, optional: true
 end

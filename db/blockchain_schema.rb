@@ -225,7 +225,4 @@ ActiveRecord::Schema.define(version: 2024_08_20_073753) do
     t.index ["block_id"], name: "index_blockchain_testnet_transactions_on_block_id"
   end
 
-  add_foreign_key "blockchain_mainnet_transactions", "blockchain_mainnet_blocks", column: "block_id"
-  add_foreign_key "blockchain_pythnet_transactions", "blockchain_pythnet_blocks", column: "block_id"
-  add_foreign_key "blockchain_testnet_transactions", "blockchain_testnet_blocks", column: "block_id"
 end
