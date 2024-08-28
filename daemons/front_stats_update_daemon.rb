@@ -65,6 +65,9 @@ loop do
     
     broadcast_software_versions(@software_versions)
     ActionCable.server.broadcast("front_stats_channel", parsed_response)
+    PingThingUserStatsWorker.perform_async('mainnet')
+    PingThingUserStatsWorker.perform_async('testnet')
+    PingThingUserStatsWorker.perform_async('pythnet')
 
     sleep(sleep_time)
   rescue => e
