@@ -24,8 +24,6 @@ class ProcessPingThingsService
           "reported_at" => ping_thing.reported_at,
           "network" => ping_thing.network
         })
-      else
-        puts ping_thing.errors.full_messages
       end
 
       raw.delete
