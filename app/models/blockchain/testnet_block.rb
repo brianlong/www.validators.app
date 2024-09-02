@@ -19,4 +19,5 @@
 #  index_blockchain_testnet_blocks_on_slot_number  (slot_number)
 #
 class Blockchain::TestnetBlock < Blockchain::Block
+    has_many :transactions, class_name: "Blockchain::TestnetTransaction", foreign_key: "block_id"
 end

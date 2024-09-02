@@ -19,7 +19,7 @@ class Blockchain::TransactionTest < ActiveSupport::TestCase
     create(:mainnet_transaction)
     create_list(:testnet_transaction, 2)
     create_list(:pythnet_transaction, 3)
-
+    
     assert_equal Blockchain::Transaction.count, 6
   end
 end

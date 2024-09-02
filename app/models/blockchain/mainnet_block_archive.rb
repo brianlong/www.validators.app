@@ -14,5 +14,5 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-class Blockchain::MainnetBlockArchive < ApplicationRecord
+class Blockchain::MainnetBlockArchive < Blockchain::Archive
 end

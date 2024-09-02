@@ -3,6 +3,8 @@
 class Blockchain::Transaction < ApplicationRecord
   extend Archivable
   self.abstract_class = true
+
+  connects_to database: { writing: :blockchain, reading: :blockchain }
   
   serialize :pre_balances, JSON
   serialize :post_balances, JSON
