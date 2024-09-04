@@ -9,16 +9,15 @@
     </div>
 
     <p>
-      We use this Ping Thing to&nbsp;show recent transaction confirmation times on the&nbsp;Solana blockchain.
-      The&nbsp;<a href='https://www.blocklogic.net' target='_blank'>Block Logic Validator</a> plus several other
-      validators are sending simple transfer transactions every 15&nbsp;seconds and the&nbsp;confirmation times appear
-      below. You can use these pings as a&nbsp;gauge of&nbsp;cluster performance.
+      We use this Ping Thing to show recent transaction confirmation times on the Solana blockchain. All confirmation times &amp; slot latencies are measured end-to-end using our JS <a href='https://github.com/Block-Logic/ping-thing-client' target='_blank'>Ping Thing Client</a> to send pings from data centers. You can use these pings as a gauge of latency to the leader.
     </p>
 
     <p>
-      All data is available for download from our <a href="/api-documentation">REST&nbsp;API</a>. App developers, you can
-      also upload your own TX&nbsp;confirmation times. Any Solana application or transaction type is allowed. Use this
-      tool to&nbsp;show recent confirmation times to&nbsp;your users. See GitHub for our reference <a href='https://github.com/Block-Logic/ping-thing-client' target='_blank'>Ping Thing Client</a>.
+      Be aware that your ability to land transactions in a timely manner depends heavily on your TX quality (CU budget &amp; Priority Fees). If your TXs stats are significantly higher than ours, check your CU budget &amp; Priority Fees!
+    </p>
+
+    <p>
+      All data is available for download from our <a href="/api-documentation">REST API</a>. You can also upload your own pings and compare your latencies to ours. See GitHub for our reference <a href='https://github.com/Block-Logic/ping-thing-client' target='_blank'>Ping Thing Client</a>. 
     </p>
   </section>
 </template>
