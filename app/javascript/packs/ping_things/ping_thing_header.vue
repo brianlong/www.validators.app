@@ -13,6 +13,14 @@
     </p>
 
     <p>
+      Confirmation times are measured in milliseconds between sending the transaction and receiving a confirmation from the RPC server. Lower values are better.
+    </p>
+
+    <p>
+      Slot Latency is the number of leader slots elapsed between sending the transaction and inclusion in a block. We listen for the "first shred received" message from the Leader to determine the current slot when sending. The goal is to see the transaction land on-chain in the same slot. Zero is a perfect slot latency score.
+    </p>
+
+    <p>
       Be aware that your ability to land transactions in a timely manner depends heavily on your TX quality (CU budget &amp; Priority Fees). If your TXs stats are significantly higher than ours, check your CU budget &amp; Priority Fees!
     </p>
 
