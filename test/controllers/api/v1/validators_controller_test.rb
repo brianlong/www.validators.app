@@ -80,13 +80,14 @@ module Api
         assert_equal 1, json.size
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 40, validator_with_all_data.keys.size
+        assert_equal 41, validator_with_all_data.keys.size
 
         # Validator
         assert_equal "testnet", validator_with_all_data["network"]
         assert_equal "john doe", validator_with_all_data["name"]
         assert_equal "johndoe", validator_with_all_data["keybase_id"]
         assert_equal "http://www.avatar_url.com", validator_with_all_data["avatar_url"]
+        assert_equal validator.validator_ip_active_for_api.address, validator_with_all_data["ip"]
 
         # Score
         assert_equal 7, validator_with_all_data["total_score"]
@@ -355,13 +356,14 @@ module Api
         validator_active_stake = validator.validator_score_v1.active_stake
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 40, json_response.keys.size
+        assert_equal 41, json_response.keys.size
 
         # Validator
         assert_equal "testnet", json_response["network"]
         assert_equal "john doe", json_response["name"]
         assert_equal "johndoe", json_response["keybase_id"]
         assert_equal "http://www.avatar_url.com", json_response["avatar_url"]
+        assert_equal validator.validator_ip_active_for_api.address, json_response["ip"]
 
         # Score
         assert_equal 7, json_response["total_score"]
@@ -499,7 +501,7 @@ module Api
         validator_active_stake = validator.validator_score_v1.active_stake
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 48, json_response.keys.size
+        assert_equal 49, json_response.keys.size
 
         # Score
         assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]

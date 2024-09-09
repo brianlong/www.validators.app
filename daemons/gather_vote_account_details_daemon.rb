@@ -18,6 +18,9 @@ begin
     else
       sleep(10.seconds)
     end
+  rescue ActiveRecord::ConnectionNotEstablished => e
+    Appsignal.send_error(e)
+    break
   end
 rescue StandardError => e
   puts "#{e.class}\n#{e.message}"

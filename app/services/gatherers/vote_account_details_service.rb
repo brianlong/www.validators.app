@@ -10,10 +10,11 @@ module Gatherers
       @always_update = always_update
       @network = network
       @config_urls = config_urls
+      @retry_count = 0
     end
 
     def call
-      VoteAccount.where(network: @network).find_each do |vacc|
+      VoteAccount.where(network: @network).find_each(batch_size: 200) do |vacc|
         vote_account_details = get_vote_account_details(vacc.account)
 
         if vote_account_details.blank? || vote_account_details["validatorIdentity"].blank?
@@ -34,11 +35,16 @@ module Gatherers
       end
     rescue ActiveRecord::LockWaitTimeout => e
       sleep 5
-      retry
+      @retry_count += 1
+      retry if @retry_count < 3
     rescue StandardError => e
-      Appsignal.send_error(e)
       sleep 5
-      retry
+      @retry_count += 1
+      if @retry_count < 3
+        retry
+      else
+        raise e
+      end
     end
 
     private

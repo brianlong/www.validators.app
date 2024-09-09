@@ -26,4 +26,25 @@ class ArchivableTest < ActiveSupport::TestCase
     assert_equal 6, StakeAccountHistoryArchive.where(network: "testnet").count
     assert_equal 10, StakeAccountHistory.where(network: "testnet").count
   end
+
+  test "archive_batch archives the correct records and destroys originals" do
+    StakeAccountHistory.archive_batch(StakeAccountHistory.where(network: "testnet").to_a, archive: true, destroy_after_archive: true)
+
+    assert_equal 10, StakeAccountHistoryArchive.where(network: "testnet").count
+    assert_equal 0, StakeAccountHistory.where(network: "testnet").count
+  end
+
+  test "#archive_batch does not destroy originals by default" do
+    StakeAccountHistory.archive_batch(StakeAccountHistory.where(network: "testnet").to_a, archive: true)
+
+    assert_equal 10, StakeAccountHistoryArchive.where(network: "testnet").count
+    assert_equal 10, StakeAccountHistory.where(network: "testnet").count
+  end
+
+  test "#archive_batch does not archive when archive is false, but can delete files" do
+    StakeAccountHistory.archive_batch(StakeAccountHistory.where(network: "testnet").to_a, archive: false, destroy_after_archive: true)
+
+    assert_equal 0, StakeAccountHistoryArchive.where(network: "testnet").count
+    assert_equal 0, StakeAccountHistory.where(network: "testnet").count
+  end
 end

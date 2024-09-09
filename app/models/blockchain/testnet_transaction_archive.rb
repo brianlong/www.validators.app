@@ -17,5 +17,5 @@
 #  updated_at    :datetime         not null
 #  block_id      :bigint
 #
-class Blockchain::TestnetTransactionArchive < ApplicationRecord
+class Blockchain::TestnetTransactionArchive < Blockchain::Archive
 end

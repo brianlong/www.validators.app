@@ -2,7 +2,7 @@
   <div>
     <section class="page-header">
       <div class='page-header-name'>
-        <div class="img-circle-medium-private" v-if="is_private(validator)">
+        <div class="img-circle-medium-private" v-if="should_hide_avatar(validator)">
           <span class='fas fa-users-slash' title="Private Validator"></span>
         </div>
         <img :src="avatar_url(validator)" class='img-circle-medium' v-else />
@@ -380,6 +380,10 @@
 
       is_private() {
         return this.score.commission == 100
+      },
+
+      should_hide_avatar(validator) {
+        return this.is_private(validator) && validator.network == 'mainnet'
       },
 
       is_delinquent() {

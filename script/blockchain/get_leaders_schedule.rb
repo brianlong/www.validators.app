@@ -2,8 +2,9 @@
 
 require File.expand_path('../../config/environment', __dir__)
 
-networks = Rails.env.stage? ? ["mainnet"] : NETWORKS
-networks.each do |network|
+return if Rails.env.stage?
+
+["mainnet"].each do |network|
   current_epoch = EpochWallClock.by_network(network).first&.epoch
   if current_epoch
     epochs_to_get = [current_epoch, current_epoch + 1]

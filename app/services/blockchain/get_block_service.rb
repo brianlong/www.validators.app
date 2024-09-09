@@ -25,8 +25,12 @@ module Blockchain
         update_slot_status(status: "request_error")
       else
         save_block
-        process_transactions
-        update_slot_status(status: "has_block")
+        if process_transactions
+          update_slot_status(status: "has_block")
+        else
+          # if transaction processing failed, destroy block and let it be processed again later
+          destroy_block
+        end
       end
     end
 
@@ -58,6 +62,11 @@ module Blockchain
       )
     end
 
+    def destroy_block
+      @saved_block.transactions.destroy_all
+      @saved_block.destroy
+    end
+
     def process_transactions
       if @block["transactions"]
         vote_txs = @block["transactions"].select do |tx| 
@@ -79,9 +88,16 @@ module Blockchain
               updated_at: Time.now
             }
           end
-          Blockchain::Transaction.network(@network).insert_all(batch) if batch.any?
+          if batch.any?
+            begin
+              Blockchain::Transaction.network(@network).insert_all(batch)
+            rescue ActiveRecord::ConnectionTimeoutError, ActiveRecord::Deadlocked, ActiveRecord::LockWaitTimeout
+              return false
+            end
+          end
         end
       end
+      true
     end
 
     # solana client request with changed error handling

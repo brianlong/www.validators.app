@@ -4,7 +4,6 @@ require "test_helper"
 
 module Blockchain
   class GetBlockServiceTest < ActiveSupport::TestCase
-
     setup do
       @network = "testnet"
       @slot_number = 12345

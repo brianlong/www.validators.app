@@ -566,6 +566,10 @@ module SolanaLogic
       end
 
       Pipeline.new(200, p.payload)
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(
         500,
@@ -669,6 +673,10 @@ module SolanaLogic
       end
 
       Pipeline.new(200, p.payload)
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      Appsignal.send_error(e)
+      puts "#{e.class}\n#{e.message}"
+      exit(500)
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from check_epoch', e)
     end

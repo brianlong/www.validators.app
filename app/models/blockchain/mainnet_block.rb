@@ -19,4 +19,5 @@
 #  index_blockchain_mainnet_blocks_on_slot_number  (slot_number)
 #
 class Blockchain::MainnetBlock < Blockchain::Block
+    has_many :transactions, class_name: "Blockchain::MainnetTransaction", foreign_key: "block_id"
 end
