@@ -544,7 +544,7 @@ DEPENDENCIES
   recaptcha
   redis (~> 4.8.1)
   rubocop (~> 1.63.3)
-  rubocop-rails (~> 2.24)
+  rubocop-rails (~> 2.24.1)
   sass-rails (>= 6)
   selenium-webdriver
   sidekiq (~> 7.2)

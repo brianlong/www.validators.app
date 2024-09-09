@@ -105,7 +105,7 @@ group :development, :test do
   gem 'pronto-flay', '~> 0.11.1', require: false
   gem 'pronto-rubocop', '~> 0.11.5', require: false
   gem 'rubocop', '~> 1.63.3', require: false
-  gem 'rubocop-rails', '~> 2.24', require: false
+  gem 'rubocop-rails', '~> 2.24.1', require: false
 end
 
 group :development do
