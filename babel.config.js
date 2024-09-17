@@ -39,10 +39,8 @@ module.exports = function(api) {
     plugins: [
       'babel-plugin-macros',
       '@babel/plugin-syntax-dynamic-import',
-      '@babel/plugin-proposal-private-methods',
       isTestEnv && 'babel-plugin-dynamic-import-node',
       '@babel/plugin-transform-destructuring',
-      '@babel/plugin-transform-for-of',
       [
         '@babel/plugin-proposal-class-properties',
         {
@@ -65,6 +63,12 @@ module.exports = function(api) {
         '@babel/plugin-transform-regenerator',
         {
           async: false
+        }
+      ],
+      [
+        "@babel/plugin-transform-private-methods",
+        {
+          loose: false
         }
       ]
     ].filter(Boolean)

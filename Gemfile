@@ -32,7 +32,7 @@ gem 'mysql2', '>= 0.5.6'
 gem 'sass-rails', '>= 6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.4'
+gem 'webpacker', '~> 5.4.4'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
@@ -105,7 +105,7 @@ group :development, :test do
   gem 'pronto-flay', '~> 0.11.1', require: false
   gem 'pronto-rubocop', '~> 0.11.5', require: false
   gem 'rubocop', '~> 1.63.3', require: false
-  gem 'rubocop-rails', '~> 2.24', require: false
+  gem 'rubocop-rails', '~> 2.24.1', require: false
 end
 
 group :development do
