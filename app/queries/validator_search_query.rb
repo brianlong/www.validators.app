@@ -14,6 +14,7 @@ class ValidatorSearchQuery
   end
 
   def search(query)
+    query = query.strip
     vacs = VoteAccount.where("account LIKE ?", "#{query}%").pluck(:validator_id)
     @relation.where(
       "validators.name like :name_query or

@@ -285,4 +285,20 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal 10, result.count
     assert_equal [true, false], result.pluck(:is_active).uniq
   end
+
+  test "#call ignores whitespaces in query" do
+    query = " test_name "
+
+    create(
+      :validator,
+      :with_score,
+      :with_data_center_through_validator_ip,
+      account: "test_account",
+      name: "test_name"
+    )
+
+    result = ValidatorQuery.new.call(network: @testnet_network, query_params: { query: query })
+
+    assert_equal 1, result.count
+  end
 end
