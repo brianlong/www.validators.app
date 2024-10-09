@@ -10,7 +10,6 @@ module FixDataCenterModule
       # furthest ovh ip from traceroute
       last_ovh_ip = line
     end
-
     last_ovh_ip
   end
 
