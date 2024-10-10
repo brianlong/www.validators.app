@@ -29,7 +29,21 @@ WEBNX_HOSTS = {
     data_center_key: "18450-US-Ogden",
     aso: ASO
   },
+  "ZYO.zip.zayo" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "Ogden",
+    data_center_key: "18450-US-Ogden",
+    aso: ASO
+  },
   "saltlakecity1.level3" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "Ogden",
+    data_center_key: "18450-US-Ogden",
+    aso: ASO
+  },
+  "SaltLakeCity1.level3" => {
     country_iso_code: "US",
     country_name: "United States",
     city_name: "Ogden",
@@ -59,7 +73,7 @@ WEBNX_HOSTS = {
   }
 }
 
-HOST_REGEX = /(tier-four|ip4|ip|zyo\.zip|lsanca07|saltlakecity1)\.(demarc|gtt|nyinternet|zayo|us|level3|twelve99-cust).+/
+HOST_REGEX = /(tier-four|ip4|ip|zyo\.zip|ZYO.zip|lsanca07|saltlakecity1|SaltLakeCity1)\.(demarc|gtt|nyinternet|zayo|us|level3|twelve99-cust).+/
 
 ValidatorIp.joins(:data_center, :validator)
            .where("validator_ips.is_active = ? AND is_overridden = ? AND data_centers.traits_autonomous_system_number = ? AND validators.is_active = ?", true, false, 18_450, true)
