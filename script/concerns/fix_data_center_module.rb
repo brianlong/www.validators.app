@@ -5,6 +5,7 @@ module FixDataCenterModule
     traceroute = `traceroute -m #{hops_number} #{ip}`.split("\n")
     last_ovh_ip = nil
     traceroute.each do |line|
+      puts line
       next unless line.match?(reg)
 
       # furthest ovh ip from traceroute
