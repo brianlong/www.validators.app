@@ -15,7 +15,49 @@ WEBNX_HOSTS = {
     data_center_key: "18450-US-Ogden",
     aso: ASO
   },
+  "ip.twelve99-cust" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "Ogden",
+    data_center_key: "18450-US-Ogden",
+    aso: ASO
+  },
+  "zyo.zip.zayo" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "Ogden",
+    data_center_key: "18450-US-Ogden",
+    aso: ASO
+  },
+  "ZYO.zip.zayo" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "Ogden",
+    data_center_key: "18450-US-Ogden",
+    aso: ASO
+  },
+  "saltlakecity1.level3" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "Ogden",
+    data_center_key: "18450-US-Ogden",
+    aso: ASO
+  },
+  "SaltLakeCity1.Level3" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "Ogden",
+    data_center_key: "18450-US-Ogden",
+    aso: ASO
+  },
   "ip4.gtt.net" => {
+    country_iso_code: "US",
+    country_name: "United States",
+    city_name: "Los Angeles",
+    data_center_key: "18450-US-Los Angeles",
+    aso: ASO
+  },
+  "lsanca07.us" => {
     country_iso_code: "US",
     country_name: "United States",
     city_name: "Los Angeles",
@@ -31,12 +73,11 @@ WEBNX_HOSTS = {
   }
 }
 
-HOST_REGEX = /(tier-four|ip4|static)\.(demarc|gtt|nyinternet).+/
+HOST_REGEX = /(tier-four|ip4|ip|zyo\.zip|ZYO.zip|lsanca07|saltlakecity1|SaltLakeCity1)\.(demarc|gtt|nyinternet|zayo|us|level3|Level3|twelve99-cust).+/
 
-ValidatorIp.joins(:data_center)
-           .where("is_active = ? AND is_overridden = ? AND data_centers.traits_autonomous_system_number = ?", true, false, 18_450)
+ValidatorIp.joins(:data_center, :validator)
+           .where("validator_ips.is_active = ? AND is_overridden = ? AND data_centers.traits_autonomous_system_number = ? AND validators.is_active = ?", true, false, 18_450, true)
            .each do |vip|
-
   last_webnx_ip = get_matching_traceroute(ip: vip.address, reg: HOST_REGEX)
 
   WEBNX_HOSTS.each do |host_reg, host_data|
