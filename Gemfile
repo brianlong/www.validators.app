@@ -45,6 +45,7 @@ gem 'redis', '~> 4.8.1'
 
 # This is for the free version of Sidekiq.
 gem 'sidekiq', ' ~> 7.2'
+gem 'sidekiq-unique-jobs', '~> 8.0.10'
 
 # Use this for SideKiq Pro if you have our production keys
 # source 'https://gems.contribsys.com/' do
