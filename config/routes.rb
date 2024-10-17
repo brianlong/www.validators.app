@@ -77,6 +77,7 @@ Rails.application.routes.draw do
 
   # Only admins can see the Sidekiq Dashboard
   authenticate :user, ->(u) { u.is_admin? } do
+    require 'sidekiq_unique_jobs/web'
     mount Sidekiq::Web => '/sidekiq'
   end
 
