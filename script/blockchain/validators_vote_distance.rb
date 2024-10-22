@@ -19,7 +19,7 @@ v_csv = CSV.read("#{Rails.root}/tmp/validator_votes.csv")
 
 v_csv.each do |row|
   validator = Validator.find_by(account: row[0])
-  if validator && validator.score
+  if validator && validator.score && validator.score.stake_concentration
     row[2] = (validator.score.stake_concentration * 100).round(3).to_s + "%"
   end
 end
