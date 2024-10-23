@@ -2,11 +2,13 @@ EPOCH = 686
 
 validators_active_blocks = {}
 
-Blockchain::MainnetBlock.where(epoch: EPOCH).each do |block|
-  puts "Processing block #{block.slot_number}"
-  block.transactions.each do |tx|
-    validators_active_blocks[tx.account_key_1] = validators_active_blocks[tx.account_key_1] ? validators_active_blocks[tx.account_key_1].push(block.slot_number) : [block.slot_number]
-  end
+Blockchain::MainnetBlock.where(epoch: EPOCH).find_in_batches(batch_size: 100) do |batch|
+    batch.each do |block|
+        puts "Processing block #{block.slot_number}"
+        block.transactions.each do |tx|
+            validators_active_blocks[tx.account_key_1] = validators_active_blocks[tx.account_key_1] ? validators_active_blocks[tx.account_key_1].push(block.slot_number) : [block.slot_number]
+        end
+    end
 end
 
 validators_gaps = {}
