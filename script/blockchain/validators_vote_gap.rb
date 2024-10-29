@@ -1,4 +1,4 @@
-EPOCH = 684
+EPOCH = 689
 
 validators_active_blocks = {}
 validators_data = {}
@@ -18,7 +18,7 @@ end
 
 validators_gaps = {}
 validators_active_blocks.map do |k, v|
-    validator_rewards = Validator.find_by(account: k).vote_account_active.vote_account_histories.last.credits_current rescue nil
+    validator_rewards = Validator.find_by(account: k).validator_histories.where(epoch: EPOCH).last.credits rescue nil
     validators_data[k] = {
         vote_count: validators_data[k][:vote_count],
         gap: v.each_cons(2).map { |a, b| b - a }.max,
