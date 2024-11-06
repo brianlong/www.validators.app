@@ -67,6 +67,10 @@ loop do
     ActionCable.server.broadcast("front_stats_channel", parsed_response)
 
     sleep(sleep_time)
+  rescue ActiveRecord::ConnectionNotEstablished => e
+    Appsignal.send_error(e)
+    puts "#{e.class}\n#{e.message}"
+    exit(500)
   rescue => e
     puts e
     puts e.backtrace
