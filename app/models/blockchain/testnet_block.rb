@@ -16,6 +16,7 @@
 #
 # Indexes
 #
+#  index_blockchain_testnet_blocks_on_blockhash    (blockhash)
 #  index_blockchain_testnet_blocks_on_slot_number  (slot_number)
 #
 class Blockchain::TestnetBlock < Blockchain::Block
