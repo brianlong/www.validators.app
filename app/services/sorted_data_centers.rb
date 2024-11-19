@@ -1,8 +1,8 @@
 class SortedDataCenters
-  def initialize(sort_by:, network:, secondary_sort: 'stake')
+  def initialize(sort_by:, network:, secondary_sort: :stake)
     @sort_by = sort_by
     @network = network
-    @secondary_sort = secondary_sort
+    @secondary_sort = secondary_sort ? secondary_sort : :stake
 
     select_statement = [
       "data_centers.data_center_key",
@@ -50,7 +50,7 @@ class SortedDataCenters
 
   def call
     @sort_by == 'data_center' ? sort_by_data_centers : sort_by_asn
-    if @secondary_sort == 'stake'
+    if @secondary_sort.to_sym == :stake
       @results = @results.sort_by { |_k, v| -v[:active_stake_from_active_validators] }
     else
       @results = @results.sort_by { |_k, v| -v[:count] }

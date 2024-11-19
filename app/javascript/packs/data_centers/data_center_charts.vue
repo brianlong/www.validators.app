@@ -8,7 +8,7 @@
               <pie-chart
                   :data_center_stats="data_centers['dc_by_country']"
                   :chart_title="'Data Centers by Country'"
-                  :chart_by="chart_by"
+                  :chart_by="chart_by_or_default()"
                   v-if="data_centers['dc_by_country']"></pie-chart>
           </div>
         </div>
@@ -66,6 +66,12 @@
 
     components: {
       pieChart
+    },
+
+    methods: {
+      chart_by_or_default() {
+        return this.chart_by === 'count' ? 'count' : 'stake';
+      }
     }
   }
 </script>
