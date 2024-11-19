@@ -7,7 +7,7 @@ class DataCentersController < ApplicationController
     @secondary_sort = index_params[:chart_by] == 'count' ? 'count' : 'stake'
     @results = SortedDataCenters.new(
       sort_by: @sort_by,
-      secondary_sort: @chart_by,
+      secondary_sort: @secondary_sort,
       network: params[:network]
     ).call
 

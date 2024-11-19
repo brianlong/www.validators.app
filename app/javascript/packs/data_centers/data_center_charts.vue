@@ -22,7 +22,7 @@
             <pie-chart
                 :data_center_stats="data_centers['dc_by_organization']"
                 :chart_title="'Data Centers by Organization'"
-                :chart_by="chart_by"
+                :chart_by="chart_by_or_default()"
                 v-if="data_centers['dc_by_organization']"></pie-chart>
           </div>
         </div>
