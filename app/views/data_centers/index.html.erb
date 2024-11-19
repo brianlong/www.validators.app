@@ -20,11 +20,11 @@
   </div>
 
   <div class="btn-group btn-group-toggle me-2" aria-label="filter">
-    <%= link_to "stake",
+    <%= link_to "Sort by stake",
                 data_centers_url(network: params[:network], sort_by: params[:sort_by], secondary_sort: :stake),
                 class: "btn btn-sm #{[nil, 'stake'].include?(params[:secondary_sort]) ? 'btn-primary' : 'btn-secondary'}",
                 data: { turbolinks: false } %>
-    <%= link_to "count",
+    <%= link_to "Sort by count",
                 data_centers_url(network: params[:network], sort_by: params[:sort_by], secondary_sort: :count),
                 class: "btn btn-sm #{params[:secondary_sort] == 'count' ? 'btn-primary' : 'btn-secondary'}",
                 data: { turbolinks: false } %>
