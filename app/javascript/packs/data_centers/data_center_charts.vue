@@ -8,6 +8,7 @@
               <pie-chart
                   :data_center_stats="data_centers['dc_by_country']"
                   :chart_title="'Data Centers by Country'"
+                  :chart_by="chart_by"
                   v-if="data_centers['dc_by_country']"></pie-chart>
           </div>
         </div>
@@ -21,6 +22,7 @@
             <pie-chart
                 :data_center_stats="data_centers['dc_by_organization']"
                 :chart_title="'Data Centers by Organization'"
+                :chart_by="chart_by"
                 v-if="data_centers['dc_by_organization']"></pie-chart>
           </div>
         </div>
@@ -37,14 +39,22 @@
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
+    props:{
+      chart_by: {
+        type: String,
+        required: false,
+        default: 'stake'
+      }
+    },
+
     data() {
       return {
-        data_centers: []
+        data_centers: [],
       }
     },
 
     created() {
-      axios.get('/api/v1/data-center-stats/' + this.network)
+      axios.get('/api/v1/data-center-stats/' + this.network + '?secondary_sort=' + this.chart_by)
            .then(response => {
              this.data_centers = response.data;
            })

@@ -68,16 +68,20 @@ module Api
         dc_by_country = DataCenterStat.where(network: dc_params[:network])
                                       .joins(:data_center)
                                       .group(:country_name)
-                                      .sum(:active_validators_count)
-                                      .sort_by { |k, v| v}
-                                      .reverse
 
         dc_by_organization = DataCenterStat.where(network: dc_params[:network])
                                            .joins(:data_center)
                                            .group(:traits_organization)
-                                           .sum(:active_validators_count)
-                                           .sort_by { |k, v| v}
-                                           .reverse
+
+        if dc_params[:secondary_sort] == "count"
+          dc_by_country = dc_by_country.sum(:active_validators_count)
+          dc_by_organization = dc_by_organization.sum(:active_validators_count)
+        else
+          dc_by_country = dc_by_country.sum(:active_validators_stake)
+          dc_by_organization = dc_by_organization.sum(:active_validators_stake)
+        end
+        dc_by_country = dc_by_country.sort_by { |k, v| v}.reverse
+        dc_by_organization = dc_by_organization.sort_by { |k, v| v}.reverse
 
         render json: {
           dc_by_country: dc_by_country,
@@ -88,7 +92,7 @@ module Api
       private
 
       def dc_params
-        params.permit(:network, :show_gossip_nodes)
+        params.permit(:network, :show_gossip_nodes, :secondary_sort)
       end
     end
   end

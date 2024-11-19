@@ -6,15 +6,28 @@
     <span class="text-muted">(<%= @results[:results].count %>)</span>
   </h1>
 
-  <div id="data-center-charts-component"></div>
+  <div id="data-center-charts-component" chart_by=<%= params[:secondary_sort]%>></div>
 
   <div class="btn-group btn-group-toggle me-2" aria-label="filter">
     <%= link_to "Data Center",
-                data_centers_url(network: params[:network], sort_by: :data_center),
-                class: "btn btn-sm #{[nil, 'data_center'].include?(@sort_by) ? 'btn-primary' : 'btn-secondary'}" %>
+                data_centers_url(network: params[:network], sort_by: :data_center, secondary_sort: params[:secondary_sort]),
+                class: "btn btn-sm #{[nil, 'data_center'].include?(@sort_by) ? 'btn-primary' : 'btn-secondary'}",
+                data: { turbolinks: false } %>
     <%= link_to "ASN",
-                data_centers_url(network: params[:network], sort_by: :asn),
-                class: "btn btn-sm #{@sort_by == 'asn' ? 'btn-primary' : 'btn-secondary'}" %>
+                data_centers_url(network: params[:network], sort_by: :asn, secondary_sort: params[:secondary_sort]),
+                class: "btn btn-sm #{@sort_by == 'asn' ? 'btn-primary' : 'btn-secondary'}",
+                data: { turbolinks: false } %>
+  </div>
+
+  <div class="btn-group btn-group-toggle me-2" aria-label="filter">
+    <%= link_to "stake",
+                data_centers_url(network: params[:network], sort_by: params[:sort_by], secondary_sort: :stake),
+                class: "btn btn-sm #{[nil, 'stake'].include?(params[:secondary_sort]) ? 'btn-primary' : 'btn-secondary'}",
+                data: { turbolinks: false } %>
+    <%= link_to "count",
+                data_centers_url(network: params[:network], sort_by: params[:sort_by], secondary_sort: :count),
+                class: "btn btn-sm #{params[:secondary_sort] == 'count' ? 'btn-primary' : 'btn-secondary'}",
+                data: { turbolinks: false } %>
   </div>
 </section>
 

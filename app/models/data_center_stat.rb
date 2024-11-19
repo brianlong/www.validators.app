@@ -7,6 +7,7 @@
 #  id                        :bigint           not null, primary key
 #  active_gossip_nodes_count :integer
 #  active_validators_count   :integer
+#  active_validators_stake   :float(24)        default(0.0)
 #  gossip_nodes_count        :integer
 #  network                   :string(191)
 #  validators_count          :integer
