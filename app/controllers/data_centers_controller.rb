@@ -4,7 +4,7 @@ class DataCentersController < ApplicationController
   # index_params[:sort_by]
   def index
     @sort_by = index_params[:sort_by] == 'asn' ? 'asn' : 'data_center'
-    @secondary_sort = index_params[:chart_by] == 'count' ? 'count' : 'stake'
+    @secondary_sort = index_params[:secondary_sort] == 'count' ? 'count' : 'stake'
     @results = SortedDataCenters.new(
       sort_by: @sort_by,
       secondary_sort: @secondary_sort,
