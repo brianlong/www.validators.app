@@ -1,5 +1,6 @@
 import Chart from 'chart.js/auto'
 import chart_variables from '../validators/charts/chart_variables'
+import '../mixins/numbers_mixins'
 
 export default {
   props: {
@@ -10,6 +11,11 @@ export default {
     chart_title: {
         type: String,
         required: true
+    },
+    chart_by: {
+        type: String,
+        required: false,
+        default: 'stake'
     }
   },
 
@@ -38,8 +44,13 @@ export default {
   methods: {
     labels() {
       let labels = []
+      let ctx = this
       this.data_center_stats_for_chart.forEach(function(val) {
-        labels.push(val[0] + ' (' + val[1] + ') ')
+        let label_value = val[1]
+        if(ctx.chart_by == 'stake') {
+          label_value = ctx.lamports_to_sol(val[1]).toFixed(2) + " SOL"
+        }
+        labels.push(val[0] + ' (' + label_value + ') ')
       })
       return labels
     },
