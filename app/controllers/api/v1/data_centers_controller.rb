@@ -64,6 +64,14 @@ module Api
         }, status: :ok
       end
 
+      def index_for_map
+        data_centers = DataCenter.select(:data_center_key, :location_latitude, :location_longitude)
+                                 .where.not(data_center_key: "0--Unknown")
+        render json: {
+          data_centers: data_centers
+        }, status: :ok
+      end
+
       def data_center_stats
         dc_by_country = DataCenterStat.where(network: dc_params[:network])
                                       .joins(:data_center)
