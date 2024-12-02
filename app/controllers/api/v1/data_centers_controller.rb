@@ -65,7 +65,7 @@ module Api
       end
 
       def index_for_map
-        data_centers = DataCenter.select(:data_center_key, :location_latitude, :location_longitude)
+        data_centers = DataCenter.joins(:data_center_stats)
                                  .where.not(data_center_key: "0--Unknown")
         render json: {
           data_centers: data_centers
