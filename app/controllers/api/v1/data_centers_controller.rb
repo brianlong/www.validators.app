@@ -65,8 +65,13 @@ module Api
       end
 
       def index_for_map
-        data_centers = DataCenter.joins(:data_center_stats)
+        data_centers = DataCenter.select(:traits_organization, :data_center_key, :location_latitude, :location_longitude, :active_validators_count, :active_validators_stake, :traits_autonomous_system_number)
+                                 .joins(:data_center_stats)
+                                 .where("data_center_stats.network = ?", map_params[:network])
                                  .where.not(data_center_key: "0--Unknown")
+        # if map_params[:asn_search].present?
+        #   data_centers = data_centers.where("data_centers.traits_autonomous_system_number = ?", map_params[:asn_search])
+        # end
         render json: {
           data_centers: data_centers
         }, status: :ok
@@ -97,6 +102,10 @@ module Api
 
       def dc_params
         params.permit(:network, :show_gossip_nodes)
+      end
+
+      def map_params
+        params.permit(:network, :asn_search)
       end
     end
   end

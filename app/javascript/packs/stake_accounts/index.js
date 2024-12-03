@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render(createElement) {
       return createElement(IndexTemplate);
     },
+    
     component: {
       'StakeAccountRow': StakeAccountRow,
       'StakePoolStats': StakePoolStats,

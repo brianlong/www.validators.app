@@ -1,18 +1,19 @@
 <template>
   <div class="container">
-    <!-- <div id="floating-panel">
-      <button id="toggle-heatmap">Toggle Heatmap</button>
-      <button id="change-gradient">Change gradient</button>
-      <button id="change-radius">Change radius</button>
-      <button id="change-opacity">Change opacity</button>
-    </div> -->
-    <div id="map"></div>
+    <div id="floating-panel">
+      <button id="toggle-heatmap" class="btn btn-xs btn-secondary" v-on:click="toggleHeatmap()">Toggle Heatmap</button>
+      <button id="toggle-markers" class="btn btn-xs btn-secondary" v-on:click="toggleMarkers()">Toggle Markers</button>
+      <input id="search-asn" v-model="asn_search" placeholder="search by asn"></input>
+    </div>
+    <div id="map" class="mt-2"></div>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
   import { mapGetters } from 'vuex';
+  import '../mixins/numbers_mixins'
+  import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -27,7 +28,11 @@
       return {
         data_centers: [],
         heat_points: [],
-        map: null
+        map: null,
+        heatmap: null,
+        asn_search: null,
+        markerClusterer: null,
+        markers_visible: true
       }
     },
 
@@ -36,9 +41,38 @@
         this.add_markers();
     },
 
-    computed: mapGetters([
-      'network'
-    ]),
+    computed: {
+      ...mapGetters([
+        'network'
+      ]),
+      marker_list: function() {
+        if(this.markers_visible) {
+          return this.data_centers.map(data_center => data_center.marker);
+        } else {
+          return [];
+        }
+      }
+    },
+
+    watch: {
+      asn_search: function(new_asn, old_asn) {
+        if(new_asn.length > 4) {
+          this.data_centers.forEach(data_center => {
+            if (data_center.traits_autonomous_system_number == new_asn) {
+              data_center.marker.map = this.map;
+            } else {
+              data_center.marker.map = null;
+            }
+            this.markerClusterer.clearMarkers();
+          });
+        } else {
+          this.data_centers.forEach(data_center => {
+            data_center.marker.map = this.map;
+          });
+          this.set_up_clusterer(this.marker_list, this.map);
+        }
+      }
+    },
 
     methods: {
       initMap: async function() {
@@ -54,36 +88,123 @@
         },
 
         add_markers: async function() {
-          const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+          const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
           const infoWindow = new google.maps.InfoWindow();
-          axios.get('/api/v1/data-centers-for-map')
+          axios.get('/api/v1/data-centers-for-map?network=' + this.network)
                .then(response => {
                  this.data_centers = response.data['data_centers'];
                  this.data_centers.forEach(data_center => {
                     let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
                     this.heat_points.push(new google.maps.LatLng(position['lat'], position['lng']));
                     let map = this.map;
-                    const marker = new AdvancedMarkerElement({
+
+                    data_center.marker = new AdvancedMarkerElement({
                       position,
-                      map,
-                      title: data_center.data_center_key,
-                      // content: pin.element,
+                      title: data_center.traits_organization,
+                      content: this.buildContent(data_center),
                       gmpClickable: true,
                     });
 
-                    marker.addListener("click", ({ domEvent, latLng }) => {
-                      const { target } = domEvent;
-
-                      infoWindow.close();
-                      infoWindow.setContent(marker.title);
-                      infoWindow.open(marker.map, marker);
+                    data_center.marker.addListener("click", () => {
+                      this.toggleHighlight(data_center.marker, data_center);
                     });
                 });
-          const heatmap = new google.maps.visualization.HeatmapLayer({
-            data: this.heat_points,
-            map: this.map,
+
+                this.heatmap = new google.maps.visualization.HeatmapLayer({
+                  data: this.heat_points,
+                  map: this.map,
+                });
+
+                this.set_up_clusterer(this.marker_list, this.map);
           });
+        },
+
+        set_up_clusterer: function(marker_list, map) {
+          this.markerClusterer && this.markerClusterer.clearMarkers();
+          this.markerClusterer = new MarkerClusterer( { 
+            map: map,
+            markers: marker_list,
+            renderer: {
+              render: ({ markers, _position: position }) => {
+                const count = markers.length;
+
+                const svg = window.btoa(`
+                <svg fill="#17132a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+                  <circle cx="120" cy="120" opacity=".6" r="70" />
+                  <circle cx="120" cy="120" opacity=".3" r="90" />
+                  <circle cx="120" cy="120" opacity=".2" r="110" />
+                  <circle cx="120" cy="120" opacity=".1" r="130" />
+                </svg>`);
+                return new google.maps.Marker({
+                  position,
+                  icon: {
+                    url: `data:image/svg+xml;base64,${svg}`,
+                    scaledSize: new google.maps.Size(45, 45),
+                  },
+                  label: {
+                    text: String(count),
+                    color: "rgba(255,255,255,0.9)",
+                    fontSize: "12px",
+                  },
+                  zIndex: count,
+                });
+              }
+            }
           });
+        },
+
+        toggleHighlight: function(marker, data_center) {
+          if (marker.content.classList.contains("highlight")) {
+            marker.content.classList.remove("highlight");
+            marker.zIndex = null;
+          } else {
+            marker.content.classList.add("highlight");
+            marker.zIndex = 1;
+          }
+        },
+
+        buildContent: function(data_center) {
+          const content = document.createElement("div");
+          content.classList.add("data-center");
+          content.innerHTML = `
+            <div class="icon">
+                <i class="fa-solid fa-database" aria-hidden="true"></i>
+            </div>
+            <div class="data-center-details">
+                <p class="h4">${data_center.traits_organization}</p>
+                <div class="mb-1">
+                  <span>${data_center.data_center_key}</span>
+                  <span class="text-muted">(${data_center.traits_autonomous_system_number})</span>
+                </div>
+                <div class="mb-1">
+                  <span class="me-1">active stake: ${this.lamports_to_sol(data_center.active_validators_stake)} SOL</span>
+                </div>
+                <div class="mb-1">
+                  <span class="me-1">active validators: ${data_center.active_validators_count}</span>
+                </div>
+            </div>
+            `;
+          return content;
+        },
+
+        toggleHeatmap: function() {
+          this.heatmap.setMap(this.heatmap.getMap() ? null : this.map);
+        },
+
+        toggleMarkers: function() {
+          if(this.markers_visible) {
+            this.asn_search = null;
+            this.markers_visible = false;
+            this.data_centers.forEach(data_center => {
+              data_center.marker.map = null;
+            });
+          } else {
+            this.markers_visible = true;
+            this.data_centers.forEach(data_center => {
+              data_center.marker.map = this.map;
+            });
+          }
+          this.set_up_clusterer(this.marker_list, this.map);
         }
     }
   }

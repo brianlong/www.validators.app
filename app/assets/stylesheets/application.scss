@@ -30,6 +30,7 @@
 @import "carousels";
 @import "map";
 @import "modals";
+@import "data_center_map";
 
 html {
   overflow-x: hidden;
@@ -48,35 +49,6 @@ body {
   &.modal-open {
     padding-right: 0 !important;
   }
-}
-
-#map {
-  height: 600px; /* The height is 400 pixels */
-  width: 100%; /* The width is the width of the web page */
-}
-
-#floating-panel {
-  position: absolute;
-  top: 10px;
-  left: 25%;
-  z-index: 5;
-  background-color: #fff;
-  padding: 5px;
-  border: 1px solid #999;
-  text-align: center;
-  font-family: "Roboto", "sans-serif";
-  line-height: 30px;
-  padding-left: 10px;
-}
-
-#floating-panel {
-  background-color: #fff;
-  border: 1px solid #999;
-  left: 25%;
-  padding: 5px;
-  position: absolute;
-  top: 10px;
-  z-index: 5;
 }
 
 .background-color {
