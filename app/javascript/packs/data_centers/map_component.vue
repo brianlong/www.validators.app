@@ -93,6 +93,7 @@
           axios.get('/api/v1/data-centers-for-map?network=' + this.network)
                .then(response => {
                  this.data_centers = response.data['data_centers'];
+                 this.data_centers = this.data_centers.filter(data_center => data_center.location_latitude && data_center.location_longitude);
                  this.data_centers.forEach(data_center => {
                     let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
                     this.heat_points.push(new google.maps.LatLng(position['lat'], position['lng']));
