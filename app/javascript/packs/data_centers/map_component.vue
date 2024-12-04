@@ -1,9 +1,13 @@
 <template>
   <div class="container">
-    <div id="floating-panel">
-      <button id="toggle-heatmap" class="btn btn-xs btn-secondary" v-on:click="toggleHeatmap()">Toggle Heatmap</button>
-      <button id="toggle-markers" class="btn btn-xs btn-secondary" v-on:click="toggleMarkers()">Toggle Markers</button>
-      <input id="search-asn" v-model="asn_search" placeholder="search by asn"></input>
+    <div id="floating-panel" class="row">
+      <div class="col-2">
+        <input id="search-asn" class="form-control" v-model="asn_search" placeholder="search by asn"></input>
+      </div>
+      <div class="col-10">
+        <button id="toggle-heatmap" class="btn btn-xs btn-secondary float-end" v-on:click="toggleHeatmap()">Toggle Heatmap</button>
+        <button id="toggle-markers" class="btn btn-xs btn-secondary float-end" v-on:click="toggleMarkers()">Toggle Markers</button>
+      </div>
     </div>
     <div id="map" class="mt-2"></div>
   </div>
@@ -14,6 +18,7 @@
   import { mapGetters } from 'vuex';
   import '../mixins/numbers_mixins'
   import { MarkerClusterer } from "@googlemaps/markerclusterer";
+import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -151,7 +156,12 @@
                   zIndex: count,
                 });
               }
-            }
+            },
+            // onClusterClick: function(event, cluster, map) {
+            //   console.log("Cluster click event", event);
+            //   console.log("Cluster click cluster", cluster);
+            //   console.log("Cluster click map", map);
+            // }
           });
         },
 
