@@ -115,6 +115,7 @@
                   data: this.heat_points,
                   map: this.map,
                 });
+                this.heatmap.set("radius", 40);
 
                 this.set_up_clusterer(this.marker_list, this.map);
           });
@@ -172,7 +173,7 @@
                 <i class="fa-solid fa-database" aria-hidden="true"></i>
             </div>
             <div class="data-center-details">
-                <p class="h4">${data_center.traits_organization}</p>
+                <p class="h5">${data_center.traits_organization}</p>
                 <div class="mb-1">
                   <span>${data_center.data_center_key}</span>
                   <span class="text-muted">(${data_center.traits_autonomous_system_number})</span>
