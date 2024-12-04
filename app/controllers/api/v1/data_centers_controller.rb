@@ -68,6 +68,7 @@ module Api
         data_centers = DataCenter.select(:traits_organization, :data_center_key, :location_latitude, :location_longitude, :active_validators_count, :active_validators_stake, :traits_autonomous_system_number)
                                  .joins(:data_center_stats)
                                  .where("data_center_stats.network = ?", map_params[:network])
+                                 .where("data_center_stats.active_validators_count > 0")
                                  .where.not(data_center_key: "0--Unknown")
         # if map_params[:asn_search].present?
         #   data_centers = data_centers.where("data_centers.traits_autonomous_system_number = ?", map_params[:asn_search])
