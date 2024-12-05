@@ -5,7 +5,11 @@
         <input id="search-asn" class="form-control" v-model="asn_search" placeholder="search by asn"></input>
       </div>
       <div class="col-10">
-        <button id="toggle-heatmap" class="btn btn-xs btn-secondary float-end" v-on:click="toggleHeatmap()">Toggle Heatmap</button>
+        <div class="btn-group float-end ms-2">
+          <button id="toggle-heatmap" class="btn btn-xs btn-secondary" :class="heatmap_type == 'off' ? 'active' : null" v-on:click="toggleHeatmap('off')">Heatmap Off</button>
+          <button id="toggle-heatmap_type" class="btn btn-xs btn-secondary" :class="heatmap_type == 'stake' ? 'active' : null" v-on:click="toggleHeatmap('stake')">Stake</button>
+          <button id="toggle-heatmap_type" class="btn btn-xs btn-secondary" :class="heatmap_type == 'validators' ? 'active' : null" v-on:click="toggleHeatmap('validators')">Validators</button>
+        </div>
         <button id="toggle-markers" class="btn btn-xs btn-secondary float-end" v-on:click="toggleMarkers()">Toggle Markers</button>
       </div>
     </div>
@@ -37,7 +41,8 @@ import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
         heatmap: null,
         asn_search: null,
         markerClusterer: null,
-        markers_visible: true
+        markers_visible: true,
+        heatmap_type: 'stake'
       }
     },
 
@@ -166,6 +171,32 @@ import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
           });
         },
 
+        build_stake_heatmap: function() {
+          this.heat_points = [];
+          this.data_centers.forEach(data_center => {
+            let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
+            this.heat_points.push({
+              location: new google.maps.LatLng(position['lat'], position['lng']),
+              weight: Math.ceil(this.lamports_to_sol(data_center.active_validators_stake) / 10)
+            })
+          });
+          this.heatmap.setData(this.heat_points);
+          this.heatmap.setMap(this.map);
+        },
+
+        build_validators_count_heatmap: function() {
+          this.heat_points = [];
+          this.data_centers.forEach(data_center => {
+            let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
+            this.heat_points.push({
+              location: new google.maps.LatLng(position['lat'], position['lng']),
+              weight: data_center.active_validators_count
+            })
+          });
+          this.heatmap.setData(this.heat_points);
+          this.heatmap.setMap(this.map);
+        },
+
         toggleHighlight: function(marker, data_center) {
           if (marker.content.classList.contains("highlight")) {
             marker.content.classList.remove("highlight");
@@ -200,8 +231,15 @@ import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
           return content;
         },
 
-        toggleHeatmap: function() {
-          this.heatmap.setMap(this.heatmap.getMap() ? null : this.map);
+        toggleHeatmap: function(h_type) {
+          this.heatmap_type = h_type;
+          if(h_type == 'stake') {
+            this.build_stake_heatmap();
+          } else if(h_type == 'validators') {
+            this.build_validators_count_heatmap();
+          } else {
+            this.heatmap.setMap(null);
+          }
         },
 
         toggleMarkers: function() {
