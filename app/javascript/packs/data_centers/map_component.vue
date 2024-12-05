@@ -103,7 +103,7 @@ import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
                     let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
                     this.heat_points.push({
                       location: new google.maps.LatLng(position['lat'], position['lng']),
-                      weight: Math.ceil(this.lamports_to_sol(data_center.active_validators_stake))
+                      weight: Math.ceil(this.lamports_to_sol(data_center.active_validators_stake) / 10)
                     })
 
                     data_center.marker = new AdvancedMarkerElement({
@@ -117,7 +117,6 @@ import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
                       this.toggleHighlight(data_center.marker, data_center);
                     });
                 });
-                console.log(this.heat_points);
                 this.heatmap = new google.maps.visualization.HeatmapLayer({
                   data: this.heat_points,
                   map: this.map,
