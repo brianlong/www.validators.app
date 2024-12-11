@@ -22,7 +22,7 @@
   import { mapGetters } from 'vuex';
   import '../mixins/numbers_mixins'
   import { MarkerClusterer } from "@googlemaps/markerclusterer";
-import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
+  import { h } from 'vue'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -102,8 +102,11 @@ import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
           const infoWindow = new google.maps.InfoWindow();
           axios.get('/api/v1/data-centers-for-map?network=' + this.network)
                .then(response => {
-                 this.data_centers = response.data['data_centers'];
-                 this.data_centers = this.data_centers.filter(data_center => data_center.location_latitude && data_center.location_longitude);
+                let valid_data_centers = response.data['data_centers'].filter(data_center => data_center.location_latitude && data_center.location_longitude);
+                valid_data_centers.forEach(data_center => {
+                  let checked_data_center = this.test_unique_data_center(data_center);
+                  this.data_centers.push(checked_data_center);
+                })
                  this.data_centers.forEach(data_center => {
                     let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
                     this.heat_points.push({
@@ -130,6 +133,20 @@ import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
 
                 this.set_up_clusterer(this.marker_list, this.map);
           });
+        },
+        
+        test_unique_data_center: function(data_center, lv = 0) {
+          lv = lv + 1;
+          if (this.data_centers.length == 0) {
+            return data_center;
+          }
+          this.data_centers.forEach(data_center_added => {
+            if(data_center_added.location_latitude == data_center.location_latitude && data_center_added.location_longitude == data_center.location_longitude) {
+              data_center.location_longitude = parseFloat(data_center.location_longitude) + 0.0003;
+              return this.test_unique_data_center(data_center, lv);
+            }
+          });
+          return data_center;
         },
 
         set_up_clusterer: function(marker_list, map) {
@@ -162,12 +179,7 @@ import { defaultOnClusterClickHandler } from '@googlemaps/markerclusterer';
                   zIndex: count,
                 });
               }
-            },
-            // onClusterClick: function(event, cluster, map) {
-            //   console.log("Cluster click event", event);
-            //   console.log("Cluster click cluster", cluster);
-            //   console.log("Cluster click map", map);
-            // }
+            }
           });
         },
 
