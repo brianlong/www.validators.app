@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'map/index'
+  get 'map' , to: 'map#index', as: 'map'
   mount ActionCable.server => '/cable'
 
   # Default root path

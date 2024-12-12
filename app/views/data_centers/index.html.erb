@@ -16,6 +16,9 @@
                 data_centers_url(network: params[:network], sort_by: :asn),
                 class: "btn btn-sm #{@sort_by == 'asn' ? 'btn-primary' : 'btn-secondary'}" %>
   </div>
+  <div class="text-end float-end mt-2 me-2">
+    <%= link_to 'see data centers on a map', map_path, data: { turbolinks: false }%>
+  </div>
 </section>
 
 <div class="card mb-4">
