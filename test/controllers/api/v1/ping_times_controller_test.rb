@@ -47,12 +47,15 @@ module Api
           payload: { 'test_key' => 'test_value' }.to_json
         }
         # Post the payload
-        post api_v1_collector_url,
-              headers: { 'Token' => @user.api_token },
-              params: valid_payload 
-        assert_response 202
-        json = response_to_json(@response.body)
-        assert_equal 'Accepted', json['status']
+        assert_difference("Collector.count") do
+          post api_v1_collector_url,
+                headers: { 'Token' => @user.api_token },
+                params: valid_payload
+          assert_response 202
+          json = response_to_json(@response.body)
+          assert_equal 'Accepted', json['status']
+        end
+
         # Verify that the record was saved successfully
         collector = Collector.last
         assert_equal 'ping', collector.payload_type
