@@ -55,6 +55,23 @@
 
 <hr />
 
+<h2 class="h4" id="collector">Collector</h2>
+<p>
+  Endpoint to gather ping times from participating validators.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"payload_type": "ping_time",  "payload_version": 1, "payload": [{"network":"testnet","from_account":"ABCD","from_ip":"123.123.123.123","to_account":"IJKL","to_ip":"10.10.10.10","min_ms":1.881,"avg_ms":2.238,"max_ms":3.428,"mdev":1.597}]"}' <%= @api_path %>/collector</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`payload_type=string`</strong> = ping_time</p>
+<p><strong class="text-muted">`payload_version=NN`</strong> = 1</p>
+<p><strong class="text-muted">`payload=string(json)`</strong> json containing array with all ping details (see example above).</p>
+
+<h3 class="h6">Response:</h3>
+<pre>{"status":"Accepted"}</pre>
+
+<hr />
+
 <h2 class="h4" id="ping-times">Ping Times</h2>
 <p>
   The ping-times endpoint will return recent ping times as reported by the participating validators. By default, the most recent 1,000 ping times will be returned. 
