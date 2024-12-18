@@ -2,8 +2,8 @@ module Api
   module V1
       class PingTimesController < BaseController
         def ping_times
-          limit = params[:limit] || 1000
-          render json: PingTime.where(network: params[:network])
+          limit = ping_time_params[:limit] || 1000
+          render json: PingTime.where(network: ping_time_params[:network])
                                .order('created_at desc')
                                .limit(limit).to_json, status: 200
         rescue ActionController::ParameterMissing
@@ -38,6 +38,13 @@ module Api
             :payload_type,
             :payload_version,
             :payload
+          )
+        end
+
+        def ping_time_params
+          params.permit(
+            :network,
+            :limit
           )
         end
       end

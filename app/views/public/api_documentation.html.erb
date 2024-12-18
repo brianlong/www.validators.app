@@ -13,6 +13,7 @@
 <ul class="list-large list-no-bullets">
   <li><a href="#auhentication">Authentication</a></li>
   <li><a href="#ping">Server Ping</a></li>
+  <li><a href="#ping-times">Ping Times</a></li>
   <li><a href="#validators-list">Validators List</a></li>
   <li><a href="#validator-detail">Validator Details</a></li>
   <li><a href="#validator-block">Validator Block Production History</a></li>
@@ -52,6 +53,41 @@
 <h3 class="h6">Response:</h3>
 <pre>{"answer":"pong"}</pre>
 
+<hr />
+
+<h2 class="h4" id="ping-times">Ping Times</h2>
+<p>
+  The ping-times endpoint will return recent ping times as reported by the participating validators. By default, the most recent 1,000 ping times will be returned. 
+  You can include a `limit` parameter to request more or fewer ping times. In the examples below, replace `:network` with 'testnet' or 'mainnet' as desired.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-times/:network.json'</pre>
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 1_000.</p>
+
+<h3 class="h6">Response:</h3>
+<p>An Array of ping times.</p>
+<pre>
+[
+  {
+    "id":614598,
+    "batch_uuid":"baf5c581-7ca3-471f-9a86-17a4f3c904a3",
+    "network":"testnet",
+    "from_account":"71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B",
+    "from_ip":"165.227.100.142",
+    "to_account":"HrTZp96AjUbgxFyaJUcWPLe93441D4TuEN1hC14TNTuJ",
+    "to_ip":"95.217.226.153",
+    "min_ms":"101.706",
+    "avg_ms":"101.778",
+    "max_ms":"101.872",
+    "mdev":"0.396",
+    "observed_at":"2020-06-19T12:54:50.000Z",
+    "created_at":"2020-06-19T12:54:50.559Z",
+    "updated_at":"2020-06-19T12:54:50.559Z"
+  },
+  ...
+]
+</pre>
 
 <hr />
 

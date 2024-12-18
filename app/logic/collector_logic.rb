@@ -37,7 +37,6 @@ module CollectorLogic
     lambda do |p|
       return p unless p[:code] == 200
 
-      puts p[:payload][:collector].payload
       batch_uuid = SecureRandom.uuid
       ping_times = JSON.parse(p[:payload][:collector].payload)
 
