@@ -1,19 +1,18 @@
 <template>
   <div class="container">
-    <div id="floating-panel" class="row">
-      <div class="col-2">
-        <input id="search-asn" class="form-control" v-model="asn_search" placeholder="search by asn"></input>
-      </div>
-      <div class="col-10">
-        <div class="btn-group float-end ms-2">
-          <button id="toggle-heatmap" class="btn btn-xs btn-secondary" :class="heatmap_type == 'off' ? 'active' : null" v-on:click="toggleHeatmap('off')">Heatmap Off</button>
-          <button id="toggle-heatmap_type" class="btn btn-xs btn-secondary" :class="heatmap_type == 'stake' ? 'active' : null" v-on:click="toggleHeatmap('stake')">Stake</button>
-          <button id="toggle-heatmap_type" class="btn btn-xs btn-secondary" :class="heatmap_type == 'validators' ? 'active' : null" v-on:click="toggleHeatmap('validators')">Validators</button>
+    <div id="floating-panel" class="d-flex justify-content-between flex-wrap gap-3 mb-1 mb-sm-4">
+      <input id="search-asn" class="form-control" style="width: 180px;" v-model="asn_search" placeholder="Search by ASN"></input>
+      <div>
+        <div class="btn-group me-2 mb-3 mb-sm-0">
+          <button id="toggle-heatmap" class="btn btn-sm btn-secondary" :class="heatmap_type == 'off' ? 'active' : null" v-on:click="toggleHeatmap('off')">Heatmap Off</button>
+          <button id="toggle-heatmap_type" class="btn btn-sm btn-secondary" :class="heatmap_type == 'stake' ? 'active' : null" v-on:click="toggleHeatmap('stake')">Stake</button>
+          <button id="toggle-heatmap_type" class="btn btn-sm btn-secondary" :class="heatmap_type == 'validators' ? 'active' : null" v-on:click="toggleHeatmap('validators')">Validators</button>
         </div>
-        <button id="toggle-markers" class="btn btn-xs btn-secondary float-end" v-on:click="toggleMarkers()">Toggle Markers</button>
+        <button id="toggle-markers" class="btn btn-sm btn-secondary mb-3 mb-sm-0" v-on:click="toggleMarkers()">Toggle Markers</button>
       </div>
     </div>
-    <div id="map" class="mt-2"></div>
+
+    <div id="map"></div>
   </div>
 </template>
 
@@ -134,7 +133,7 @@
                 this.set_up_clusterer(this.marker_list, this.map);
           });
         },
-        
+
         test_unique_data_center: function(data_center, lv = 0) {
           lv = lv + 1;
           if (this.data_centers.length == 0) {
@@ -151,7 +150,7 @@
 
         set_up_clusterer: function(marker_list, map) {
           this.markerClusterer && this.markerClusterer.clearMarkers();
-          this.markerClusterer = new MarkerClusterer( { 
+          this.markerClusterer = new MarkerClusterer( {
             map: map,
             markers: marker_list,
             renderer: {
