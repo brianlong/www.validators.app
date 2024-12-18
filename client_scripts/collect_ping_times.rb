@@ -136,12 +136,9 @@ module CollectorLogic
         )
         request.body = JSON.generate(
           {
-            collector:
-              {
-                payload_type: 'ping_times',
-                payload_version: 1,
-                payload: JSON.generate(merged_results)
-              }
+            payload_type: 'ping_times',
+            payload_version: 1,
+            payload: JSON.generate(merged_results)
           }
         )
         http.request(request)
