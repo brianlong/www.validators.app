@@ -14,14 +14,17 @@ module Api
         end
 
         def collector
+          params[:payload] = params[:payload]&.to_json
           @collector = ::Collector.new(
             collector_params.merge(
               user_id: User.where(api_token: request.headers['Token']).first.id,
               ip_address: request.remote_ip
             )
           )
+
           if @collector.save
             CollectorWorker.perform_async({"collector_id" => @collector.id})
+
             render json: { 'status' => 'Accepted' }, status: 202
           else
             render json: { 'status' => 'Bad Request' }, status: 400
