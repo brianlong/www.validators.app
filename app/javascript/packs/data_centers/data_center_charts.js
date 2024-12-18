@@ -10,7 +10,11 @@ document.addEventListener('turbolinks:load', () => {
     el: '#data-center-charts-component',
     store,
     render(createElement) {
-      return createElement(DataCenterCharts)
+      return createElement(DataCenterCharts, {
+        props: {
+          chart_by: this.$el.attributes.chart_by ? this.$el.attributes.chart_by.value : null
+        }
+      })
     }
   })
 })

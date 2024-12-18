@@ -289,11 +289,6 @@
       title: 'Delegate SOL to this validator on BlazeStake',
       name: 'Liquid Stake through BlazeStake',
       excluded_countries: ['GB']
-    },
-    marinade: {
-      title: 'Delegate SOL to this validator on Marinade',
-      name: 'Direct Stake with Marinade',
-      excluded_countries: ['GB']
     }
   }
 

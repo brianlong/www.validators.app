@@ -17,6 +17,26 @@ module Api
           active_gossip_nodes_count: 1,
           active_validators_count: 1
         )
+
+        data_center2 = create(:data_center, :frankfurt)
+        create(
+          :data_center_stat,
+          data_center: data_center2,
+          network: @network,
+          active_gossip_nodes_count: 13,
+          active_validators_count: 2,
+          active_validators_stake: 100
+        )
+    
+        data_center3 = create(:data_center, :china)
+        create(
+          :data_center_stat,
+          data_center: data_center3,
+          network: @network,
+          active_gossip_nodes_count: 8,
+          active_validators_count: 5,
+          active_validators_stake: 200
+        )
     
         @user = create(:user)
         @headers = { "Token" => @user.api_token }
@@ -59,8 +79,8 @@ module Api
     
         assert_response 200
         assert_equal 1, resp.keys.count
-        assert_equal 3, resp["data_centers_groups"].values.last["active_gossip_nodes_count"]
-        assert_equal 3, resp["data_centers_groups"].values.last["active_validators_count"]
+        assert_equal 8, resp["data_centers_groups"].values.last["active_gossip_nodes_count"]
+        assert_equal 5, resp["data_centers_groups"].values.last["active_validators_count"]
       end
     
       test "#data_centers_with_nodes response does not include data_centers with 0 validators and 0 nodes" do
@@ -78,8 +98,8 @@ module Api
     
         assert_response 200
         assert_equal 1, resp.keys.count
-        assert_equal 1, resp["data_centers_groups"].values.last["active_gossip_nodes_count"]
-        assert_equal 1, resp["data_centers_groups"].values.last["active_validators_count"]
+        assert_equal 8, resp["data_centers_groups"].values.last["active_gossip_nodes_count"]
+        assert_equal 5, resp["data_centers_groups"].values.last["active_validators_count"]
       end
     
       test "#data_centers_with_nodes response does not include unknown data center" do
@@ -112,26 +132,21 @@ module Api
         assert_equal expected_response, response_to_json(@response.body)
       end
     
-      test "#data_center_stats returns stats by country and organization" do
-        data_center2 = create(:data_center, :frankfurt)
-        data_center_stats2 = create(
-          :data_center_stat,
-          data_center: data_center2,
-          network: @network,
-          active_gossip_nodes_count: 13,
-          active_validators_count: 2
-        )
+      test "#data_center_stats returns stats by country and organization summed by stake" do
+
     
-        data_center3 = create(:data_center, :china)
-        data_center_stats3 = create(
-          :data_center_stat,
-          data_center: data_center3,
-          network: @network,
-          active_gossip_nodes_count: 8,
-          active_validators_count: 5
-        )
-    
-        get api_v1_data_center_stats_url(network: @network), headers: @headers
+        get api_v1_data_center_stats_url(network: @network, secondary_sort: :count), headers: @headers
+        resp = JSON.parse(@response.body)
+        
+        assert_response 200
+        assert_equal ["China", 5], resp["dc_by_country"][0]
+        assert_equal ["Germany", 3], resp["dc_by_country"][1]
+        assert_equal ["Chinese Organisation", 5], resp["dc_by_organization"][0]
+        assert_equal ["Germany Organisation", 3], resp["dc_by_organization"][1]
+      end
+
+      test "#data_center_stats returns stats by country and organization summed by count" do
+        get api_v1_data_center_stats_url(network: @network, secondary_sort: :count), headers: @headers
         resp = JSON.parse(@response.body)
         
         assert_response 200

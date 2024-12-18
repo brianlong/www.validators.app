@@ -4,8 +4,10 @@ class DataCentersController < ApplicationController
   # index_params[:sort_by]
   def index
     @sort_by = index_params[:sort_by] == 'asn' ? 'asn' : 'data_center'
+    @secondary_sort = index_params[:secondary_sort] == 'count' ? 'count' : 'stake'
     @results = SortedDataCenters.new(
-      sort_by: @sort_by, 
+      sort_by: @sort_by,
+      secondary_sort: @secondary_sort,
       network: params[:network]
     ).call
 
@@ -47,7 +49,7 @@ class DataCentersController < ApplicationController
   private
 
   def index_params
-    params.permit(:network, :sort_by)
+    params.permit(:network, :sort_by, :secondary_sort)
   end
 
   def show_params

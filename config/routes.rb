@@ -62,7 +62,9 @@ Rails.application.routes.draw do
   # Stake Pools
   get 'stake-pools', to: 'stake_accounts#index'
 
-  devise_for :users
+  devise_for :users,  controllers: {
+    sessions: 'sessions'
+  }
 
   # Free Sidekiq
   if Gem.loaded_specs.key? 'sidekiq'
