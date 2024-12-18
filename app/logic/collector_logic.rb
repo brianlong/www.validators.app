@@ -10,7 +10,6 @@ module CollectorLogic
   def ping_times_guard
     lambda do |p|
       return p unless p[:code] == 200
-
       collector = Collector.find(p[:payload][:collector_id])
 
       # Guards
@@ -136,7 +135,8 @@ module CollectorLogic
           overall_max_time: p[:payload][:ping_time_stats][:overall_max_time],
           overall_average_time: \
             p[:payload][:ping_time_stats][:overall_average_time],
-          observed_at: p[:payload][:ping_time_stats][:observed_at]
+          observed_at: p[:payload][:ping_time_stats][:observed_at],
+          network: p[:payload][:ping_times].last['network']
         )
 
         # destroy the collector

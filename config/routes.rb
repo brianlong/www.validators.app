@@ -134,9 +134,8 @@ Rails.application.routes.draw do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
 
-      # TODO to remove - endpoint no longer in use
-      # api_v1_collector POST /api/v1/collector
-      post 'collector', to: 'api#collector'
+      # api_v1_collector POST /api/v1/ping_times/collector(.:format)
+      post 'collector', to: 'ping_times#collector', as: 'collector'
 
       # api_v1_validators GET /api/v1/validators/:network
       get 'validators/:network',
@@ -176,7 +175,7 @@ Rails.application.routes.draw do
 
       # TODO to remove - endpoint no longer in use
       # api_v1_ping_times GET /api/v1/ping_times
-      get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
+      get 'ping-times/:network', to: 'ping_times#ping_times', as: 'ping_times'
 
       # POST /api/v1/ping-thing/
       post 'ping-thing/:network', to: 'ping_things#create', as: 'ping_thing'
