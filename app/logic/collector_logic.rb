@@ -3,6 +3,7 @@
 # CollectorLogic
 module CollectorLogic
   include PipelineLogic
+  REQUIRED_PAYLOAD_FIELDS = %w[network avg_ms min_ms max_ms from_account to_account from_ip to_ip].freeze
 
   # guard_ping_times will check the collector payload type & version
   #
@@ -21,6 +22,10 @@ module CollectorLogic
       end
       if collector.payload_version != 1
         return Pipeline.new(400, p[:payload], 'Wrong payload_version')
+      end
+
+      REQUIRED_PAYLOAD_FIELDS.each do |field|
+        return Pipeline.new(400, p[:payload], "No payload field: #{field}") unless collector.payload =~ /#{field}/
       end
 
       # Pass the collector object with the payload for subsquent steps

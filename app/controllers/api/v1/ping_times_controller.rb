@@ -2,7 +2,7 @@ module Api
   module V1
       class PingTimesController < BaseController
         def ping_times
-          limit = ping_time_params[:limit] || 1000
+          limit = [(ping_time_params[:limit] || 1000).to_i, 9999].min
           render json: PingTime.where(network: ping_time_params[:network])
                                .order('created_at desc')
                                .limit(limit).to_json, status: 200
@@ -17,8 +17,7 @@ module Api
           params[:payload] = params[:payload]&.to_json
           @collector = ::Collector.new(
             collector_params.merge(
-              user_id: User.where(api_token: request.headers['Token']).first.id,
-              ip_address: request.remote_ip
+              user_id: User.where(api_token: request.headers['Token']).first.id
             )
           )
 
