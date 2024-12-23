@@ -24,9 +24,11 @@ module CollectorLogic
         return Pipeline.new(400, p[:payload], 'Wrong payload_version')
       end
 
-      REQUIRED_PAYLOAD_FIELDS.each do |field|
-        return Pipeline.new(400, p[:payload], "No payload field: #{field}") unless collector.payload =~ /#{field}/
+      fields_count = REQUIRED_PAYLOAD_FIELDS.map do |field|
+        collector.payload.scan(/#{field}/).size
       end
+
+      return Pipeline.new(400, p[:payload], "Invalid payload fields count") unless !0.in?(fields_count) && fields_count.uniq.count == 1
 
       # Pass the collector object with the payload for subsquent steps
       return Pipeline.new(200, p[:payload].merge(collector: collector))

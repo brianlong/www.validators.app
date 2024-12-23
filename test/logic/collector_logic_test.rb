@@ -50,6 +50,6 @@ class CollectorLogicTest < ActiveSupport::TestCase
                       .then(&ping_times_guard)
 
     assert_equal 400, result.code
-    assert result.message.include?('No payload field')
+    assert result.message.include?('Invalid payload fields count')
   end
 end
