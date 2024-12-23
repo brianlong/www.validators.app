@@ -62,6 +62,63 @@ module Api
         assert_equal 1, collector.payload_version
         assert_equal '{"test_key":"test_value"}', collector.payload
       end
+
+      # ping time stats
+      test 'GET api_v1_ping_time_stats without token should get error' do
+        get api_v1_ping_time_stats_path(network: 'testnet')
+        assert_response 401
+        expected_response = { 'error' => 'Unauthorized' }
+        assert_equal expected_response, response_to_json(@response.body)
+      end
+
+      test 'GET api_v1_ping_time_stats with valid token should succeed' do
+        create_list(:ping_time_stat, 10, network: 'testnet')
+        get api_v1_ping_time_stats_path(network: 'testnet'),
+            headers: { 'Token' => @user.api_token }
+        assert_response 200
+        json = response_to_json(@response.body)
+        assert_equal 10, json.size
+      end
+
+      test 'GET api_v1_ping_time_stats with limit should return limited results' do
+        create_list(:ping_time_stat, 10, network: 'testnet')
+        get api_v1_ping_time_stats_path(network: 'testnet', limit: 5),
+            headers: { 'Token' => @user.api_token }
+        assert_response 200
+        json = response_to_json(@response.body)
+        assert_equal 5, json.size
+      end
+
+      # ping times
+      test 'GET api_v1_ping_times with valid token should succeed' do
+        create_list(:ping_time, 10, network: 'testnet')
+
+        get api_v1_ping_times_path(network: 'testnet'),
+            headers: { 'Token' => @user.api_token }
+        assert_response 200
+        json = response_to_json(@response.body)
+        assert_equal 10, json.size
+      end
+
+      test 'GET api_v1_ping_times with limit should return limited results' do
+        create_list(:ping_time, 10, network: 'testnet')
+
+        get api_v1_ping_times_path(network: 'testnet', limit: 5),
+            headers: { 'Token' => @user.api_token }
+        assert_response 200
+        json = response_to_json(@response.body)
+        assert_equal 5, json.size
+      end
+
+      test 'GET api_v1_ping_times with invalid limit should return limited results' do
+        create_list(:ping_time, 10, network: 'testnet')
+
+        get api_v1_ping_times_path(network: 'testnet', limit: 100_000),
+            headers: { 'Token' => @user.api_token }
+        assert_response 200
+        json = response_to_json(@response.body)
+        assert_equal 10, json.size
+      end
     end
   end
 end

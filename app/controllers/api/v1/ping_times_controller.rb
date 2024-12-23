@@ -13,6 +13,14 @@ module Api
           render json: { 'status' => e.message }, status: 500
         end
 
+        def ping_time_stats
+          limit = [(ping_time_params[:limit] || 100).to_i, 9999].min
+
+          render json: PingTimeStat.where(network: ping_time_params[:network])
+                                   .order('created_at desc')
+                                   .limit(limit).to_json, status: 200
+        end
+
         def collector
           params[:payload] = params[:payload]&.to_json
           @collector = ::Collector.new(
