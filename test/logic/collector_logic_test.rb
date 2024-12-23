@@ -41,4 +41,15 @@ class CollectorLogicTest < ActiveSupport::TestCase
     assert_equal 3.428, ping_time_stat.overall_max_time
     assert_equal 1.738, ping_time_stat.overall_average_time
   end
+
+  test '#ping_times_guard returns 400 if there are some fields missing in pipeline' do
+    @collector.update!(payload: { ping_times: nil }.to_json)
+
+    payload = { collector_id: @collector.id }
+    result = Pipeline.new(200, payload)
+                      .then(&ping_times_guard)
+
+    assert_equal 400, result.code
+    assert result.message.include?('Invalid payload fields count')
+  end
 end

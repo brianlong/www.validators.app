@@ -10,28 +10,10 @@ module Api
       include CollectorLogic
       include ActionController::ImplicitRender
 
-      # POST api/v1/collector
-      def collector
-        render json: { 'status' => 'Method Gone' }, status: 410
-      end
-
       # This is a simple endpoint to test API connections.
       # GET api/v1/ping => { 'answer' => 'pong' }
       def ping
         render json: { 'answer' => 'pong' }, status: 200
-      end
-
-      def ping_times
-        render json: { 'status' => 'Method Gone' }, status: 410
-      end
-
-      # Filter params for the Collector
-      def collector_params
-        params.require(:collector).permit(
-          :payload_type,
-          :payload_version,
-          :payload
-        )
       end
     end
   end

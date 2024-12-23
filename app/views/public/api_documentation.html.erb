@@ -66,7 +66,7 @@
 <p><strong class="text-muted">`payload_type=string`</strong> = ping_times</p>
 <p><strong class="text-muted">`payload_version=NN`</strong> = 1</p>
 <p><strong class="text-muted">`payload=string(json)`</strong> json containing array with all ping details (see example above).</p>
-All options listed above are required.
+<p>Reqired payload fields: <%= CollectorLogic::REQUIRED_PAYLOAD_FIELDS.join(", ")%></p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"Accepted"}</pre>
@@ -81,7 +81,7 @@ All options listed above are required.
 <h3 class="h6">Request:</h3>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-times/:network.json'</pre>
 <h3 class="h6">Parameter Options:</h3>
-<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 1_000.</p>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 1_000 (max 9_999).</p>
 
 <h3 class="h6">Response:</h3>
 <p>An Array of ping times.</p>
