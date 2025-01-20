@@ -8,6 +8,7 @@
 #  amount           :bigint
 #  application      :string(191)
 #  commitment_level :integer
+#  fee              :bigint
 #  network          :string(191)
 #  reported_at      :datetime
 #  response_time    :integer
@@ -47,6 +48,7 @@ class PingThing < ApplicationRecord
     slot_sent
     slot_landed
     reported_at
+    fee
   ].freeze
 
   API_USER_FIELDS = %i[

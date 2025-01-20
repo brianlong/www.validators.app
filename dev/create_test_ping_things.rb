@@ -10,6 +10,8 @@ counts = [{count: 5000, min_time: 700,   max_time: 4000},
           {count: 50,   min_time: 20000, max_time: 30000},
           {count: 5,    min_time: 30000, max_time: 100000}]
 
+fees = [0, 100_000, 200_000, 300_000, 400_000, 500_000, 600_000, 700_000, 800_000, 900_000, 1_000_000]
+
 users = User.all.pluck(:id)
 
 counts.each do |loop|
@@ -27,7 +29,8 @@ counts.each do |loop|
       application: "web3",
       reported_at: rand(5.minutes.ago..Time.now),
       slot_sent: slot_sent,
-      slot_landed: slot_sent + rand(0..12)
+      slot_landed: slot_sent + rand(0..12),
+      fee: fees[rand(0...fees.length)]
     )
     if p.valid?
       puts p.inspect

@@ -15,6 +15,8 @@ class PingThingRaw < ApplicationRecord
 
   validate :raw_data_size
 
+  OPTIONAL_PARAMS = %i[amount application commitment_level success transaction_type fee slot_sent slot_landed].freeze
+
   def attributes_from_raw
     params = JSON.parse(raw_data).symbolize_keys
     reported_at = params[:reported_at].to_datetime rescue DateTime.now
@@ -29,15 +31,10 @@ class PingThingRaw < ApplicationRecord
 
     # optional params
     optional_params = {}
-    optional_params[:amount] = params[:amount].to_i if params[:amount].present?
-    optional_params[:application] = params[:application] if params[:application].present?
-    optional_params[:commitment_level] = params[:commitment_level] if params[:commitment_level].present?
-    optional_params[:success] = params[:success] if params[:success].present? || params[:success] == false
-    optional_params[:transaction_type] = params[:transaction_type] if params[:transaction_type].present?
-    optional_params[:slot_sent] = params[:slot_sent].to_i \
-      if params[:slot_sent].present? && slot_valid?(params[:slot_sent])
-    optional_params[:slot_landed] = params[:slot_landed].to_i \
-      if params[:slot_landed].present? && slot_valid?(params[:slot_landed])
+    OPTIONAL_PARAMS.each do |opt_param|
+      next if [:slot_sent, :slot_landed].include?(opt_param) && !slot_valid?(params[opt_param])
+      optional_params[opt_param] = params[opt_param] if params[opt_param].present?
+    end
 
     required_params.merge(optional_params)
   end

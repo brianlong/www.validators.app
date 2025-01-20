@@ -50,7 +50,10 @@
         <table class='table' v-if="ping_things.length > 0">
           <thead>
           <tr>
-            <th class="column-md-sm">Success / Time</th>
+            <th class="column-md-sm">
+              Success / Time<br />
+              <span class="small text-muted">Fee</span>
+            </th>
             <th class="column-lg">
               Reported&nbsp;At<br />
               <span class="small text-muted">Signature</span>
@@ -72,6 +75,8 @@
             <td class="text-nowrap">
               <span v-html="success_icon(pt.success)"></span>
               <strong class="text-success h6">{{ pt.response_time.toLocaleString('en-US') }}</strong>&nbsp;ms
+              <br />
+              <span class="text-muted small">{{ pt.fee.toLocaleString('en-US', {minimumFractionDigits: 0}) }} lamport</span><br />
             </td>
             <td class="small">
               {{ date_time_with_timezone(pt.reported_at) }}<br />
