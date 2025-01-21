@@ -47,7 +47,7 @@ class PingThingRaw < ApplicationRecord
 
   def raw_data_size
     errors.add :base, "Provided data length is not valid" \
-      unless raw_data.size.between? 20, 350
+      unless raw_data.size.between? 20, 370
   end
 
   def slot_valid?(slot)

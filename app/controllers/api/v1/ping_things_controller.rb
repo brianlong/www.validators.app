@@ -109,7 +109,8 @@ module Api
           :transaction_type,
           :reported_at,
           :slot_sent,
-          :slot_landed
+          :slot_landed,
+          :fee
         )
       end
 
@@ -125,7 +126,8 @@ module Api
             :transaction_type,
             :reported_at,
             :slot_sent,
-            :slot_landed
+            :slot_landed,
+            :fee
             ]
           )
 
