@@ -76,7 +76,7 @@
               <span v-html="success_icon(pt.success)"></span>
               <strong class="text-success h6">{{ pt.response_time.toLocaleString('en-US') }}</strong>&nbsp;ms
               <br />
-              <span class="text-muted small">{{ pt.fee.toLocaleString('en-US', {minimumFractionDigits: 0}) }} lamport</span><br />
+              <span class="text-muted small">{{ formatted_fee(pt) }}</span><br />
             </td>
             <td class="small">
               {{ date_time_with_timezone(pt.reported_at) }}<br />
@@ -191,6 +191,14 @@
           }
         }
         return true
+      },
+
+      formatted_fee(pt) {
+        if(pt.fee) {
+          return pt.fee.toLocaleString('en-US') + " lamports"
+        } else {
+          return " - "
+        }
       },
 
       success_icon(success) {
