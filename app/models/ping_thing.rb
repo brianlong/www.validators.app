@@ -10,6 +10,7 @@
 #  commitment_level :integer
 #  fee              :bigint
 #  network          :string(191)
+#  region           :string(191)
 #  reported_at      :datetime
 #  response_time    :integer
 #  signature        :string(191)

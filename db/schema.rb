@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_17_122357) do
+ActiveRecord::Schema.define(version: 2025_01_27_090451) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -464,6 +464,20 @@ ActiveRecord::Schema.define(version: 2025_01_17_122357) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "ping_thing_fee_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "network"
+    t.float "fee"
+    t.float "average_time"
+    t.float "median_time"
+    t.float "p90_time"
+    t.float "min_time"
+    t.float "min_slot_latency"
+    t.float "median_slot_latency"
+    t.float "p90_slot_latency"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "raw_data"
     t.datetime "created_at", precision: 6, null: false
@@ -555,6 +569,7 @@ ActiveRecord::Schema.define(version: 2025_01_17_122357) do
     t.bigint "slot_sent"
     t.bigint "slot_landed"
     t.bigint "fee"
+    t.string "region"
     t.index ["network"], name: "index_ping_things_on_network"
     t.index ["reported_at", "network"], name: "index_ping_things_on_reported_at_and_network"
     t.index ["user_id"], name: "index_ping_things_on_user_id"
