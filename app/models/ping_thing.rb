@@ -4,23 +4,24 @@
 #
 # Table name: ping_things
 #
-#  id               :bigint           not null, primary key
-#  amount           :bigint
-#  application      :string(191)
-#  commitment_level :integer
-#  fee              :bigint
-#  network          :string(191)
-#  region           :string(191)
-#  reported_at      :datetime
-#  response_time    :integer
-#  signature        :string(191)
-#  slot_landed      :bigint
-#  slot_sent        :bigint
-#  success          :boolean          default(TRUE)
-#  transaction_type :string(191)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  user_id          :bigint           not null
+#  id                          :bigint           not null, primary key
+#  amount                      :bigint
+#  application                 :string(191)
+#  commitment_level            :integer
+#  network                     :string(191)
+#  pinger_region               :string(191)
+#  priority_fee_micro_lamports :float(24)
+#  priority_fee_precentile     :integer
+#  reported_at                 :datetime
+#  response_time               :integer
+#  signature                   :string(191)
+#  slot_landed                 :bigint
+#  slot_sent                   :bigint
+#  success                     :boolean          default(TRUE)
+#  transaction_type            :string(191)
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  user_id                     :bigint           not null
 #
 # Indexes
 #
@@ -50,6 +51,7 @@ class PingThing < ApplicationRecord
     slot_landed
     reported_at
     fee
+    region
   ].freeze
 
   API_USER_FIELDS = %i[
@@ -98,6 +100,16 @@ class PingThing < ApplicationRecord
       min: latencies.min,
       median: latencies.median,
       p90: latencies.first((latencies.count * 0.9).round).last
+    }
+  end
+
+  def self.time_stats(records: nil)
+    all = records || self.all
+    times = all.map(&:response_time).sort
+    {
+      min: times.min,
+      median: times.median,
+      p90: times.first((times.count * 0.9).round).last
     }
   end
 end

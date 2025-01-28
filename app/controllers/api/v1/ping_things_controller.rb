@@ -110,7 +110,8 @@ module Api
           :reported_at,
           :slot_sent,
           :slot_landed,
-          :fee
+          :fee,
+          :region
         )
       end
 
@@ -127,7 +128,8 @@ module Api
             :reported_at,
             :slot_sent,
             :slot_landed,
-            :fee
+            :fee,
+            :region
             ]
           )
 

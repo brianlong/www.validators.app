@@ -15,7 +15,7 @@ class PingThingRaw < ApplicationRecord
 
   validate :raw_data_size
 
-  OPTIONAL_PARAMS = %i[amount application commitment_level success transaction_type fee slot_sent slot_landed].freeze
+  OPTIONAL_PARAMS = %i[amount application commitment_level success transaction_type fee slot_sent slot_landed region].freeze
 
   def attributes_from_raw
     params = JSON.parse(raw_data).symbolize_keys

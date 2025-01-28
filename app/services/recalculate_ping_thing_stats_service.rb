@@ -9,9 +9,6 @@ class RecalculatePingThingStatsService
   def call
     stats = PingThingStat.by_network(@network).between_time_range(@reported_at)
     stats.each(&:recalculate)
-
-    fee_stats = PingThingFeeStat.by_network(@network).between_time_range(@reported_at)
-    fee_stats.each(&:recalculate)
   end
 end
 
