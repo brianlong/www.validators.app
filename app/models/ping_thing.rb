@@ -50,8 +50,9 @@ class PingThing < ApplicationRecord
     slot_sent
     slot_landed
     reported_at
-    fee
-    region
+    pinger_region
+    priority_fee_micro_lamports
+    priority_fee_percentile
   ].freeze
 
   API_USER_FIELDS = %i[
