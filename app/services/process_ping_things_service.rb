@@ -17,7 +17,6 @@ class ProcessPingThingsService
         created_at: raw.created_at
       )
       ping_thing = PingThing.new(params)
-      puts ping_thing.inspect
 
       # create sidekiq job to update stats if it's not a latest data
       if ping_thing.save && raw.should_recalculate_stats_after_processing?

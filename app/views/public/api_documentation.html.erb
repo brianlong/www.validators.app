@@ -545,7 +545,7 @@
 <p>The Ping Thing Post endpoint allows you to push information about transaction times.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}' <%= @api_path %>/ping-thing/:network.json</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12", "priority_fee_percentile": "NN", "priority_fee_micro_lamports": "NN", "pinger_region": "reg"}' <%= @api_path %>/ping-thing/:network.json</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
@@ -563,6 +563,9 @@
 </p>
 <p><strong class="text-muted">`slot_sent: NN`</strong> Number of slot in which transaction has been started.</p>
 <p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
+<p><strong class="text-muted">`priority_fee_percentile: NN`</strong> Percentile of priority fee.</p>
+<p><strong class="text-muted">`priority_fee_micro_lamports: NN`</strong> Priority fee in micro lamports.</p>
+<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 3 letter symbol.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>
@@ -573,7 +576,7 @@
 <p>The Ping Thing Batch endpoint allows you to push multiple transaction informations at once.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}, { ... }, ...]}' <%= @api_path %>/ping-thing-batch/:network.json</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12", "priority_fee_percentile": "NN", "priority_fee_micro_lamports": "NN", "pinger_region": "reg"}, { ... }, ...]}' <%= @api_path %>/ping-thing-batch/:network.json</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
@@ -591,6 +594,9 @@
 </p>
 <p><strong class="text-muted">`slot_sent: NN`</strong> Number of slot in which transaction has been started.</p>
 <p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
+<p><strong class="text-muted">`priority_fee_percentile: NN`</strong> Percentile of priority fee.</p>
+<p><strong class="text-muted">`priority_fee_micro_lamports: NN`</strong> Priority fee in micro lamports.</p>
+<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 3 letter symbol.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>

@@ -13,7 +13,7 @@
 #  p90_time                            :float(24)
 #  pinger_region                       :string(191)
 #  priority_fee_micro_lamports_average :float(24)
-#  priority_fee_precentile             :integer
+#  priority_fee_percentile             :integer
 #  created_at                          :datetime         not null
 #  updated_at                          :datetime         not null
 #

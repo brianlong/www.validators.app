@@ -11,7 +11,7 @@
 #  network                     :string(191)
 #  pinger_region               :string(191)
 #  priority_fee_micro_lamports :float(24)
-#  priority_fee_precentile     :integer
+#  priority_fee_percentile     :integer
 #  reported_at                 :datetime
 #  response_time               :integer
 #  signature                   :string(191)

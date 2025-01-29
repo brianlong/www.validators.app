@@ -12,7 +12,13 @@ FactoryBot.define do
         signature: SecureRandom.hex(46),
         success: true,
         time: rand(1..1000),
-        transaction_type: "transfer"
+        transaction_type: "transfer",
+        reported_at: Time.now,
+        priority_fee_micro_lamports: 5000,
+        priority_fee_percentile: 50,
+        pinger_region: "us-west",
+        slot_sent: 100,
+        slot_landed: 200
       }.to_json
     }
 
@@ -25,7 +31,10 @@ FactoryBot.define do
           signature: SecureRandom.hex(46),
           success: true,
           time: rand(1..1000),
-          transaction_type: "transfer"
+          transaction_type: "transfer",
+          priority_fee_micro_lamports: 5000,
+          priority_fee_percentile: 50,
+          pinger_region: "us-west"
         }.to_json
       }
     end

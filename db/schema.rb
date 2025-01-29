@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_18_131225) do
+ActiveRecord::Schema.define(version: 2025_01_28_075827) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -464,6 +464,22 @@ ActiveRecord::Schema.define(version: 2024_11_18_131225) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "ping_thing_fee_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "network"
+    t.integer "priority_fee_percentile"
+    t.float "priority_fee_micro_lamports_average"
+    t.string "pinger_region"
+    t.float "average_time"
+    t.float "median_time"
+    t.float "p90_time"
+    t.float "min_time"
+    t.float "min_slot_latency"
+    t.float "median_slot_latency"
+    t.float "p90_slot_latency"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "raw_data"
     t.datetime "created_at", precision: 6, null: false
@@ -554,6 +570,9 @@ ActiveRecord::Schema.define(version: 2024_11_18_131225) do
     t.datetime "reported_at"
     t.bigint "slot_sent"
     t.bigint "slot_landed"
+    t.float "priority_fee_micro_lamports"
+    t.integer "priority_fee_percentile"
+    t.string "pinger_region"
     t.index ["network"], name: "index_ping_things_on_network"
     t.index ["reported_at", "network"], name: "index_ping_things_on_reported_at_and_network"
     t.index ["user_id"], name: "index_ping_things_on_user_id"

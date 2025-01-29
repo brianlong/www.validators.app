@@ -6,11 +6,12 @@ class PingThingFeeStatsService
 
   def call
     ping_things = PingThing.where(network: @network).where('reported_at > ?', PingThingFeeStat::INTERVAL.ago)
-    puts ping_things.count
+
     ping_things.pluck(:priority_fee_percentile).compact.uniq.each do |fee|
       ping_things_by_fee = ping_things.where(priority_fee_percentile: fee)
       ping_things_by_fee.pluck(:pinger_region).compact.uniq.each do |region|
         ping_things_by_fee_and_region = ping_things_by_fee.where(pinger_region: region)
+        
         next if PingThingFeeStat.where('created_at > ?', PingThingFeeStat::INTERVAL.ago - 5.minutes).where(priority_fee_percentile: fee, network: @network, pinger_region: region).exists?
 
         slot_latency_stats = PingThing.slot_latency_stats(records: ping_things_by_fee_and_region)

@@ -16,7 +16,13 @@ module Api
           signature: "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s",
           success: "true",
           time: "234",
-          transaction_type: "transfer"
+          transaction_type: "transfer",
+          reported_at: "2025-01-28T07:58:27.000Z",
+          slot_sent: "123",
+          slot_landed: "125",
+          priority_fee_micro_lamports: "1234",
+          priority_fee_percentile: "50",
+          pinger_region: "us-west"
         }
         @headers = { "Token" => @user.api_token }
       end
@@ -104,7 +110,7 @@ module Api
         signature = "5zxrAiJcBkAHpDtY4d3hf8YVgKjENpjUUEYYYH2cCbRozo8BiyTe6c7WtBqp6Rw2bkz7b5Vxkbi9avR7BV9J1a6s"
 
         assert_equal 1, json.size
-        assert_equal 12, json_record.size
+        assert_equal 15, json_record.size
 
         assert_equal "Mango",                         json_record["application"]
         assert_equal "processed",                     json_record["commitment_level"]
@@ -117,6 +123,9 @@ module Api
         assert_equal ping_thing_time.user.username,   json_record["username"]
         assert_equal 123,                             json_record["slot_sent"]
         assert_equal 125,                             json_record["slot_landed"]
+        assert_equal 1234,                            json_record["priority_fee_micro_lamports"]
+        assert_equal 50,                              json_record["priority_fee_percentile"]
+        assert_equal "us-west",                       json_record["pinger_region"]
       end
 
       test "GET api_v1_ping_things with limit present returns pings for chosen limit" do

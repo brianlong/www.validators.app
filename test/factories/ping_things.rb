@@ -13,6 +13,9 @@ FactoryBot.define do
     user { create(:user, :ping_thing_user, :confirmed) }
     slot_sent { 123 }
     slot_landed { 125 }
+    priority_fee_micro_lamports { 1234 }
+    priority_fee_percentile { 50 }
+    pinger_region { "us-west" }
 
     trait :processed do
       commitment_level { 0 }
