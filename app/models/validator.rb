@@ -363,6 +363,8 @@ class Validator < ApplicationRecord
         :updated_at,
         :admin_warning,
         :jito,
+        :jito_commission,
+        :stake_pools_list,
         :is_active
       )
     end
