@@ -200,7 +200,7 @@
 
       formatted_fee(pt) {
         if(pt.priority_fee_percentile) {
-          return "p" + pt.priority_fee_percentile.toLocaleString('en-US')
+          return "p" + pt.priority_fee_percentile
         } else {
           return " - "
         }

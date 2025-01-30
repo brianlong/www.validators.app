@@ -10,7 +10,8 @@ counts = [{count: 5000, min_time: 700,   max_time: 4000},
           {count: 50,   min_time: 20000, max_time: 30000},
           {count: 5,    min_time: 30000, max_time: 100000}]
 
-fees = [0, 100_000, 200_000, 300_000, 400_000, 500_000, 600_000, 700_000, 800_000, 900_000, 1_000_000]
+fees = [0, 30, 50, 75, 99]
+regions = %w(eu gb us ca)
 
 users = User.all.pluck(:id)
 
@@ -30,7 +31,9 @@ counts.each do |loop|
       reported_at: rand(5.minutes.ago..Time.now),
       slot_sent: slot_sent,
       slot_landed: slot_sent + rand(0..12),
-      fee: fees[rand(0...fees.length)]
+      priority_fee_percentile: fees[rand(0...fees.length)],
+      priority_fee_micro_lamports: rand(1000..10000),
+      pinger_region: regions[rand(0...regions.length)]
     )
     if p.valid?
       puts p.inspect
