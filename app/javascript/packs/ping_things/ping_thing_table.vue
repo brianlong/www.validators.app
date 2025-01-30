@@ -52,7 +52,7 @@
           <tr>
             <th class="column-md-sm">
               Success / Time<br />
-              <span class="small text-muted">Fee</span>
+              <span class="small text-muted">Priority Fee Percentile</span>
             </th>
             <th class="column-lg">
               Reported&nbsp;At<br />
@@ -66,7 +66,11 @@
               <span class="text-muted">Slot Sent</span><br />
               <span class="text-muted">Slot Landed</span> (Latency)
             </th>
-            <th class="column-xs">Posted&nbsp;By</th>
+            <th class="column-xs">
+              Posted&nbsp;By<br />
+              <span class="small text-muted">Pinger Region</span>
+            </th>
+            
           </tr>
           </thead>
 
@@ -101,7 +105,8 @@
               <span class="text-muted">{{ pt.slot_landed }}</span> ({{ slot_latency(pt.slot_sent, pt.slot_landed) }})
             </td>
             <td>
-              <a href="" title="Filter by this sender" @click.prevent="filter_by_posted_by(pt.username)">{{ pt.username }}</a>
+              <a href="" title="Filter by this sender" @click.prevent="filter_by_posted_by(pt.username)">{{ pt.username }}</a><br />
+              <span class="text-muted small">{{ pt.pinger_region }}</span>
             </td>
           </tr>
           </tbody>
@@ -194,8 +199,8 @@
       },
 
       formatted_fee(pt) {
-        if(pt.fee) {
-          return pt.fee.toLocaleString('en-US') + " lamports"
+        if(pt.priority_fee_percentile) {
+          return "p" + pt.priority_fee_percentile.toLocaleString('en-US')
         } else {
           return " - "
         }
