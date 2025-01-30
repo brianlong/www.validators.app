@@ -15,6 +15,7 @@ class PingThingRaw < ApplicationRecord
 
   validate :raw_data_size
 
+  #TODO this method needs to be refactored
   def attributes_from_raw
     params = JSON.parse(raw_data).symbolize_keys
     reported_at = params[:reported_at].to_datetime rescue DateTime.now

@@ -56,7 +56,7 @@ every 1.hour, at: 10, roles: [:background] do
   ruby_script 'validators_get_keybase_avatar_url.rb'
 end
 
-every 1.hour, at: 11, roles: [:background] do ##!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+every 1.hour, at: 11, roles: [:background] do
   runner "PingThingFeeStatsWorker.perform_async()"
 end
 
