@@ -140,7 +140,7 @@ module Api
             geo_country: set_geo_country
           }
         else
-          @validator = ValidatorQuery.new.call_single_validator(
+          @validator = ValidatorQuery.new(api: true).call_single_validator(
             network: validator_params["network"],
             account: validator_params["account"]
           )
