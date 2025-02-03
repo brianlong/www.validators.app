@@ -67,8 +67,8 @@
               <span class="text-muted">Slot Landed</span> (Latency)
             </th>
             <th class="column-xs">
-              Posted&nbsp;By<br />
-              <span class="small text-muted">Region</span>
+              Posted&nbsp;By
+              <div class="small text-muted">Region</div>
             </th>
 
           </tr>
@@ -104,8 +104,8 @@
               <span class="text-muted">{{ pt.slot_landed }}</span> ({{ slot_latency(pt.slot_sent, pt.slot_landed) }})
             </td>
             <td>
-              <a href="" title="Filter by this sender" @click.prevent="filter_by_posted_by(pt.username)">{{ pt.username }}</a><br />
-              <span class="text-muted small" v-if="pt.pinger_region">{{ pt.pinger_region }}</span>
+              <a href="" title="Filter by this sender" @click.prevent="filter_by_posted_by(pt.username)">{{ pt.username }}</a>
+              <div class="text-muted small" v-if="pt.pinger_region">{{ pt.pinger_region.toUpperCase() }}</div>
             </td>
           </tr>
           </tbody>
