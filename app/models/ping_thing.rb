@@ -59,6 +59,17 @@ class PingThing < ApplicationRecord
     username
   ].freeze
 
+  PINGER_REGIONS = %w[
+    pit
+    nyc
+    ams
+    lon
+    dub
+    fra
+    sgp
+    tyo
+  ].freeze
+
   belongs_to :user
 
   enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
@@ -67,6 +78,7 @@ class PingThing < ApplicationRecord
   validates_length_of :application, maximum: 80, allow_blank: true
   validates :network, inclusion: { in: NETWORKS }
   validates :signature, length: { in: 64..128 }
+  validates :pinger_region, inclusion: { in: PINGER_REGIONS }, allow_blank: true
 
   scope :for_reported_at_range_and_network, -> (network, from, to) {
     where(network: network, reported_at: (from..to))

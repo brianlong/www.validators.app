@@ -22,7 +22,7 @@ module Api
           slot_landed: "125",
           priority_fee_micro_lamports: "1234",
           priority_fee_percentile: "50",
-          pinger_region: "us-west"
+          pinger_region: "nyc"
         }
         @headers = { "Token" => @user.api_token }
       end
@@ -125,7 +125,7 @@ module Api
         assert_equal 125,                             json_record["slot_landed"]
         assert_equal 1234,                            json_record["priority_fee_micro_lamports"]
         assert_equal 50,                              json_record["priority_fee_percentile"]
-        assert_equal "us-west",                       json_record["pinger_region"]
+        assert_equal "lon",                           json_record["pinger_region"]
       end
 
       test "GET api_v1_ping_things with limit present returns pings for chosen limit" do

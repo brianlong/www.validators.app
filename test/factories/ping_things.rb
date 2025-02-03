@@ -15,7 +15,7 @@ FactoryBot.define do
     slot_landed { 125 }
     priority_fee_micro_lamports { 1234 }
     priority_fee_percentile { 50 }
-    pinger_region { "us-west" }
+    pinger_region { "lon" }
 
     trait :processed do
       commitment_level { 0 }

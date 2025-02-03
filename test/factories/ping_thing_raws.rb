@@ -16,7 +16,7 @@ FactoryBot.define do
         reported_at: Time.now,
         priority_fee_micro_lamports: 5000,
         priority_fee_percentile: 50,
-        pinger_region: "us-west",
+        pinger_region: "lon",
         slot_sent: 100,
         slot_landed: 200
       }.to_json
@@ -34,7 +34,7 @@ FactoryBot.define do
           transaction_type: "transfer",
           priority_fee_micro_lamports: 5000,
           priority_fee_percentile: 50,
-          pinger_region: "us-west"
+          pinger_region: "lon"
         }.to_json
       }
     end
