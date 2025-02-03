@@ -185,6 +185,7 @@ Rails.application.routes.draw do
       # GET /api/v1/ping-thing/
       get 'ping-thing/:network', to: 'ping_things#index', as: 'ping_things'
 
+      get 'ping-thing-fee-stats/:network', to: 'ping_thing_fee_stats#index', as: 'ping_thing_fee_stats'
       get 'ping-thing-stats/:network', to: 'ping_thing_stats#index', as: 'ping_thing_stats'
       get 'ping-thing-recent-stats/:network', to: 'ping_thing_recent_stats#last', as: 'ping_thing_recent_stats'
       get 'ping-thing-user-stats/:network', to: 'ping_thing_user_stats#last', as: 'ping_thing_user_stats'

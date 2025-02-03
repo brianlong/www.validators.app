@@ -26,6 +26,17 @@
           </div>
         </div>
       </div>
+
+      <div class="col-xl-6 mb-4">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h4 card-heading">
+              Priority Fee Stats
+            </h2>
+            <fee-stats-chart :network="network"/>
+          </div>
+        </div>
+      </div>
     </div>
 
     <user-stats :network="network"/>
@@ -38,6 +49,7 @@
   import axios from 'axios'
   import { mapGetters } from 'vuex'
   import statsChart from './stats_chart'
+  import feeStatsChart from './fee_stats_chart'
   import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
@@ -117,7 +129,8 @@
       "ping-thing-header": pingThingHeader,
       "ping-thing-table": pingThingTable,
       "stats-bar": statsBar,
-      "user-stats": userStats
+      "user-stats": userStats,
+      "fee-stats-chart": feeStatsChart
     }
   }
 
