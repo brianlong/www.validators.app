@@ -31,9 +31,9 @@ counts.each do |loop|
       reported_at: rand(5.minutes.ago..Time.now),
       slot_sent: slot_sent,
       slot_landed: slot_sent + rand(0..12),
-      priority_fee_percentile: fees[rand(0...fees.length)],
+      priority_fee_percentile: fees.sample,
       priority_fee_micro_lamports: rand(1000..10000),
-      pinger_region: regions[rand(0...regions.length)]
+      pinger_region: PingThing::PINGER_REGIONS.sample
     )
     if p.valid?
       puts p.inspect

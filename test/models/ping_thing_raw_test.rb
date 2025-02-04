@@ -20,7 +20,7 @@ class PingThingRawTest < ActiveSupport::TestCase
     )
 
     params = ping_thing_raw.attributes_from_raw
-    puts params
+
     assert params[:amount].is_a? Integer
     assert params[:response_time].is_a? Integer
     assert_equal raw_data[:amount].to_i, params[:amount]

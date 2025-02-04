@@ -79,6 +79,8 @@ class PingThing < ApplicationRecord
   validates :network, inclusion: { in: NETWORKS }
   validates :signature, length: { in: 64..128 }
   validates :pinger_region, inclusion: { in: PINGER_REGIONS }, allow_blank: true
+  validates :priority_fee_percentile, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_blank: true
+  validates :priority_fee_micro_lamports, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
   scope :for_reported_at_range_and_network, -> (network, from, to) {
     where(network: network, reported_at: (from..to))
