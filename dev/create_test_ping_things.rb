@@ -10,6 +10,9 @@ counts = [{count: 5000, min_time: 700,   max_time: 4000},
           {count: 50,   min_time: 20000, max_time: 30000},
           {count: 5,    min_time: 30000, max_time: 100000}]
 
+fees = [0, 30, 50, 75, 99]
+regions = %w(pit nyc ams lon dub fra)
+
 users = User.all.pluck(:id)
 
 counts.each do |loop|
@@ -27,7 +30,10 @@ counts.each do |loop|
       application: "web3",
       reported_at: rand(5.minutes.ago..Time.now),
       slot_sent: slot_sent,
-      slot_landed: slot_sent + rand(0..12)
+      slot_landed: slot_sent + rand(0..12),
+      priority_fee_percentile: fees.sample,
+      priority_fee_micro_lamports: rand(1000..10000),
+      pinger_region: PingThing::PINGER_REGIONS.sample
     )
     if p.valid?
       puts p.inspect

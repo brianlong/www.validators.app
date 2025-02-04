@@ -15,6 +15,7 @@ class PingThingRaw < ApplicationRecord
 
   validate :raw_data_size
 
+  #TODO this method needs to be refactored
   def attributes_from_raw
     params = JSON.parse(raw_data).symbolize_keys
     reported_at = params[:reported_at].to_datetime rescue DateTime.now
@@ -38,6 +39,11 @@ class PingThingRaw < ApplicationRecord
       if params[:slot_sent].present? && slot_valid?(params[:slot_sent])
     optional_params[:slot_landed] = params[:slot_landed].to_i \
       if params[:slot_landed].present? && slot_valid?(params[:slot_landed])
+    optional_params[:priority_fee_micro_lamports] = params[:priority_fee_micro_lamports].to_i \
+      if params[:priority_fee_micro_lamports].present?
+    optional_params[:priority_fee_percentile] = params[:priority_fee_percentile].to_i \
+      if params[:priority_fee_percentile].present?
+    optional_params[:pinger_region] = params[:pinger_region] if params[:pinger_region].present?
 
     required_params.merge(optional_params)
   end
@@ -50,10 +56,10 @@ class PingThingRaw < ApplicationRecord
 
   def raw_data_size
     errors.add :base, "Provided data length is not valid" \
-      unless raw_data.size.between? 20, 350
+      unless raw_data.size.between? 20, 420
   end
 
   def slot_valid?(slot)
-    slot&.to_i > 0
+    slot.to_i > 0
   end
 end
