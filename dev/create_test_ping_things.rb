@@ -11,7 +11,7 @@ counts = [{count: 5000, min_time: 700,   max_time: 4000},
           {count: 5,    min_time: 30000, max_time: 100000}]
 
 fees = [0, 30, 50, 75, 99]
-regions = %w(eu gb us ca)
+regions = %w(pit nyc ams lon dub fra)
 
 users = User.all.pluck(:id)
 
