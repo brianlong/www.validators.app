@@ -99,7 +99,8 @@ jobs:
           DATABASE_USERNAME: root
           DATABASE_PASSWORD: password
         run: |
-          bundle exec rails db:prepare
+          bundle exec rails db:create
+          bundle exec rails db:migrate
 
       - name: Run rails tests
         env:
