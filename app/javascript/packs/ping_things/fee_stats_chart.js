@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Chart from 'chart.js/auto';
 import chart_variables from '../validators/charts/chart_variables'
+import { computed } from 'vue';
 
 var moment = require('moment');
 
@@ -16,8 +17,12 @@ export default {
     return {
       ping_thing_stats: null,
       chart: null,
-      interval: 1
+      selected_region: null
     }
+  },
+
+  mounted: function() {
+    
   },
 
   created: function() {
@@ -30,25 +35,45 @@ export default {
       axios.get("/api/v1/ping-thing-fee-stats/" + this.network + ".json", { params: { } })
            .then(function(response) {
              ctx.ping_thing_stats = response.data;
+             ctx.selected_region = ctx.ping_regions()[0]
+             console.log(ctx.ping_thing_stats)
              ctx.update_chart()
            })
     },
 
-    update_chart: function() {
-      if( !this.ping_thing_stats.length == 0 ) {
-        var line_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['median']) )
-        var variation_data = this.ping_thing_stats.map( (vector_element, index) => (
-          [vector_element['max'], vector_element['min'], vector_element['average_slot_latency']]
-        ))
-        var tps_data = this.ping_thing_stats.map( (vector_element, index) => (vector_element['tps']) )
+    ping_regions: function() {
+      if (this.ping_thing_stats) {
+        return Object.keys(this.ping_thing_stats)
+      } else {
+        return []
+      }
+    },
 
-        var labels = this.ping_thing_stats.map( (vector_element) => {
-          if(this.interval > 24) {
-            return moment(new Date(vector_element["time_from"])).utc().format('HH:mm (ddd)')
-          } else {
-            return moment(new Date(vector_element["time_from"])).utc().format('HH:mm')
-          }
+    select_region: function(region) {
+      this.selected_region = region
+      this.update_chart()
+    },
+
+    update_chart: function() {
+      if( this.ping_thing_stats[this.selected_region] && this.selected_region) {
+        var data_lines = []
+        var line_colors = [chart_variables.chart_green_speedometer, chart_variables.chart_green, chart_variables.chart_blue, chart_variables.chart_purple_3, chart_variables.chart_purple_2, chart_variables.chart_purple_1]
+        Object.keys(this.ping_thing_stats[this.selected_region]).map( (fee, index) => {
+          data_lines.push(
+            {
+              type: 'line',
+              data: this.ping_thing_stats[this.selected_region][fee].map( (vector_element) => ({y: vector_element['median_time'], x: moment(new Date(vector_element["created_at"])).utc().format('HH:mm')}) ),
+              label: "P" + fee,
+              backgroundColor: line_colors[index],
+              borderColor: line_colors[index],
+              borderWidth: 1,
+            }
+          )
         })
+
+        // var labels = this.ping_thing_stats[this.selected_region][30].map( (vector_element) => {
+        //   return moment(new Date(vector_element["created_at"])).utc().format('HH:mm')
+        // })
 
         if(this.chart) {
           this.chart.destroy()
@@ -57,40 +82,8 @@ export default {
         Chart.defaults.scale.display = false
         this.chart = new Chart(ctx, {
           data: {
-            labels: labels,
-            datasets: [
-              {
-                type: 'bar',
-                label: ' Variation',
-                data: variation_data,
-                backgroundColor: chart_variables.chart_purple_2_t,
-                hoverBackgroundColor: chart_variables.chart_purple_2_m,
-                borderColor: "transparent",
-                order: 2,
-                barPercentage: 1.0,
-                categoryPercentage: 0.35,
-                tension: 0
-              },
-              {
-                type: 'line',
-                label: ' Median  ',
-                data: line_data,
-                backgroundColor: chart_variables.chart_green,
-                borderColor: "transparent",
-                borderWidth: 1,
-                order: 1,
-                radius: 3,
-                tension: 0
-              },
-              {
-                type: 'line',
-                label: ' TPS  ',
-                data: tps_data,
-                backgroundColor: chart_variables.chart_blue,
-                yAxisID: 'yTPS',
-                borderColor: chart_variables.chart_blue_t
-              }
-            ]
+            // labels: labels,
+            datasets: data_lines
           },
           options: {
             animations: {
@@ -128,93 +121,70 @@ export default {
                   color: chart_variables.chart_darkgrey,
                   padding: 5
                 }
-              },
-              yTPS: {
-                display: true,
-                min: 0,
-                grid: { display: false },
-                position: 'right',
-                ticks: {
-                  padding: 10,
-                  callback: function(value) {
-                    return value.toLocaleString('en-US')
-                  }
-                },
-                title: {
-                  display: true,
-                  text: 'Number of Transactions',
-                  color: chart_variables.chart_darkgrey,
-                  padding: 5
-                }
               }
             },
             interaction: {
               intersect: false,
               mode: 'index',
             },
-            plugins: {
-              tooltip: {
-                enabled: true,
-                displayColors: false,
-                padding: 8,
-                callbacks: {
-                  label: function(tooltipItem) {
-                    if (tooltipItem.datasetIndex == 0) {
-                      var min = tooltipItem.raw[1] ? tooltipItem.raw[1].toLocaleString('en-US') : "-";
-                      var max = tooltipItem.raw[0] ? tooltipItem.raw[0].toLocaleString('en-US') : "-";
-                      var slot_lat = tooltipItem.raw[2] ? tooltipItem.raw[2].toLocaleString('en-US') : "-";
-                      return ["Min: " + min + " ms, Max: " + max + " ms", "Slot latency: " + slot_lat + " slots"];
-                    } else if (tooltipItem.datasetIndex == 2) {
-                      return "TPS: " + tooltipItem.raw.toLocaleString('en-US');
-                    } else {
-                      return "Median: " + tooltipItem.raw.toLocaleString('en-US') + " ms";
-                    }
-                  },
-                  title: function(tooltipItem) {
-                    return null;
-                  },
-                }
-              },
-              legend: {
-                labels: {
-                  boxWidth: chart_variables.chart_legend_box_size,
-                  boxHeight: chart_variables.chart_legend_box_size,
-                  usePointStyle: true,
-                  padding: 10,
-                  color: chart_variables.chart_darkgrey,
-                  font: {
-                    size: chart_variables.chart_legend_font_size
-                  }
-                },
-              },
-            },
-          },
-          plugins: [{
-            beforeInit(chart) {
-              const originalFit = chart.legend.fit;
-              chart.legend.fit = function fit() {
-                originalFit.bind(chart.legend)();
-                this.height += 15;
-              }
-            }
-          }]
+          }
         });
       }
     }
   },
   template: `
     <div>
-      <div class="text-center mb-4">
-        <div class="btn-group">
-          <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 1}" @click.prevent="set_interval(1)">1h</a>
-          <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 3}" @click.prevent="set_interval(3)">3h</a>
-          <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 12}" @click.prevent="set_interval(12)">12h</a>
-          <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 24}" @click.prevent="set_interval(24)">24h</a>
-          <a class="btn btn-sm btn-secondary nav-link" :class="{active: interval == 168}" @click.prevent="set_interval(168)">7d</a>
+      <div class="col-xl-12 mb-4">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h4 card-heading">
+              Priority Fee Stats
+            </h2>
+            <div class="text-center mb-4">
+              <div class="btn-group">
+                <a v-for="region in ping_regions()" class="btn btn-sm btn-secondary nav-link" :class="{active: selected_region == region}" @click.prevent="select_region(region)">{{ region }}</a>
+              </div>
+            </div>
+            <canvas :id="'ping-thing-fee-chart'"></canvas>
+          </div>
         </div>
       </div>
-      {{ ping_thing_stats }}
-      <canvas :id="'ping-thing-fee-chart'"></canvas>
+      <div class="col-xl-12 mb-4">
+        <div class="card">
+          <div class="card-heading">
+            <h2 class="h4 mt-4 card-heading">Last 1 Hour by Fee</h2>
+          </div>
+          <div class="table-responsive">
+            <div class="h-100">
+              <table class="table text-center">
+                <thead>
+                  <tr>
+                    <th>Fee Percentile</th>
+                    <th>Min Time (ms)</th>
+                    <th>Median Time (ms)</th>
+                    <th>P90 Time (ms)</th>
+                    <th>Median Slot Latency</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template v-for="region in ping_regions()">
+                    <tr>
+                      <th colspan="5"> {{ region }} </th>
+                    </tr>
+                    <tr v-for="fee in Object.keys(ping_thing_stats[region])">
+                      <td>{{ fee }}</td>
+                      <td class="text-success">{{ ping_thing_stats[region][fee][ping_thing_stats[region][fee].length - 1]['min_time'] }}</td>
+                      <td class="text-success">{{ ping_thing_stats[region][fee][ping_thing_stats[region][fee].length - 1]['median_time'] }}</td>
+                      <td class="text-success">{{ ping_thing_stats[region][fee][ping_thing_stats[region][fee].length - 1]['p90_time'] }}</td>
+                      <td class="text-success">{{ ping_thing_stats[region][fee][ping_thing_stats[region][fee].length - 1]['median_slot_latency'] }}</td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 `
 }

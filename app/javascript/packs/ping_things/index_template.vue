@@ -27,18 +27,8 @@
         </div>
       </div>
 
-      <div class="col-xl-6 mb-4">
-        <div class="card h-100">
-          <div class="card-content">
-            <h2 class="h4 card-heading">
-              Priority Fee Stats
-            </h2>
-            <fee-stats-chart :network="network"/>
-          </div>
-        </div>
-      </div>
+      <fee-stats-chart :network="network"/>
     </div>
-
     <user-stats :network="network"/>
 
     <ping-thing-table :network="network" />

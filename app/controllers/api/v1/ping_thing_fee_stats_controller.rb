@@ -8,15 +8,16 @@ module Api
       def index
         stats = PingThingFeeStat.where(
           network: stats_params[:network],
-        ).where(
+        )
+        .where(
           "created_at >= ?", Time.zone.now - CREATED_AT_LIMIT.hours
         )
 
         results = {}
-        stats.pluck(:priority_fee_percentile).uniq.each do |fee|
-          results[fee] = {}
-          stats.where(priority_fee_percentile: fee).pluck(:pinger_region).uniq.each do |region|
-            results[fee][region] = stats.where(priority_fee_percentile: fee, pinger_region: region).as_json
+        stats.pluck(:pinger_region).uniq.each do |region|
+          results[region] = {}
+          stats.where(pinger_region: region).pluck(:priority_fee_percentile).uniq.each do |fee|
+            results[region][fee] = stats.where(priority_fee_percentile: fee, pinger_region: region).as_json
           end
         end
 

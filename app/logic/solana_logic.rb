@@ -74,7 +74,7 @@ module SolanaLogic
         slot_index: epoch_json['slotIndex'],
         slots_in_epoch: epoch_json['slotsInEpoch']
       )
-
+      puts epoch_json
       Pipeline.new(200, p.payload.merge(
                           epoch: epoch.epoch,
                           epoch_slot_index: epoch.slot_index
