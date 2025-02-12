@@ -134,8 +134,9 @@ every 1.day, at: '5:00am', roles: [:background] do
 end
 
 every 1.day, at: '5:10am', roles: [:background] do
-  ruby_script_archives 'archive_ping_thing_stat.rb'
-  ruby_script_archives 'archive_ping_thing.rb'
+  # true at the end is for destroy_after_archive
+  ruby_script_archives 'archive_ping_thing_stat.rb true'
+  ruby_script_archives 'archive_ping_thing.rb true'
 end
 
 every 7.days, at: '4:00am', roles: [:background] do
