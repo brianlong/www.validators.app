@@ -26,6 +26,7 @@ set :ruby_bin, '/usr/bin/ruby'
 set :rake_bin, '/usr/bin/rake'
 set :environment, (ENV['RAILS_ENV'] || @environment).to_s
 set :whenever_path, Whenever.path
+set :destroy_after_archive, true
 
 set :output, File.join(Whenever.path, 'log', 'whenever.log')
 job_type :ruby_script,
@@ -37,7 +38,7 @@ job_type :ruby_script_data_centers,
 job_type :ruby_script_blockchain,
          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/blockchain/:task >> :whenever_path/log/:task.log 2>&1'
 job_type :ruby_script_archives,
-          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/archives/:task >> :whenever_path/log/:task.log 2>&1'
+          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/archives/:task :destroy_after_archive >> :whenever_path/log/:task.log 2>&1'
 
 # Make sure you add the tasks to correct server.
 # Use :background role to add task to background server (recommended),
@@ -134,9 +135,8 @@ every 1.day, at: '5:00am', roles: [:background] do
 end
 
 every 1.day, at: '5:10am', roles: [:background] do
-  # true at the end is for destroy_after_archive
-  ruby_script_archives 'archive_ping_thing_stat.rb true'
-  ruby_script_archives 'archive_ping_thing.rb true'
+  ruby_script_archives 'archive_ping_thing_stat.rb'
+  ruby_script_archives 'archive_ping_thing.rb'
 end
 
 every 7.days, at: '4:00am', roles: [:background] do
