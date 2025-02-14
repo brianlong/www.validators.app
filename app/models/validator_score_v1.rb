@@ -40,6 +40,7 @@
 #  skipped_slot_score                          :integer
 #  skipped_vote_history                        :text(65535)
 #  skipped_vote_percent_moving_average_history :text(65535)
+#  software_kind                               :integer          default(0)
 #  software_version                            :string(191)
 #  software_version_score                      :integer
 #  stake_concentration                         :decimal(10, 3)
@@ -103,6 +104,8 @@ class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
+
+  enum software_kind: { solana: 0, firedancer: 1 }
 
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?

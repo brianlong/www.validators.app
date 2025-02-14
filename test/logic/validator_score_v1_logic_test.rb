@@ -475,6 +475,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
       "1.6.7"=>209919552719104317,
       "1.5.19"=>17288992031757525,
       "unknown"=>10483084971314635,
+      "0.202.101123"=>16015248337068090,
       nil=>6422600362200
     }
     total_stake = 23769805232343223
@@ -485,5 +486,24 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
     )
 
     assert_equal "1.6.7", current_software_version
+  end
+
+  test "find_current_software_version \
+    when there firebase is a leading version" do
+    software_versions = {
+      "1.6.7"=>209919552719104317,
+      "1.5.19"=>17288992031757525,
+      "unknown"=>10483084971314635,
+      "0.202.101123"=>360152483370680900,
+      nil=>6422600362200
+    }
+    total_stake = software_versions.values.sum
+
+    current_software_version = find_current_software_version(
+      software_versions: software_versions,
+      total_stake: total_stake
+    )
+
+    assert_equal "0.202.101123", current_software_version
   end
 end
