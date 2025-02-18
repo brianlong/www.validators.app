@@ -390,8 +390,6 @@ module ValidatorScoreV1Logic
         software_versions: software_versions
       )
 
-      puts current_software_versions
-
       p.payload[:this_batch].update(software_version: current_software_versions["solana"], other_software_versions: current_software_versions)
 
       p.payload[:validators].each do |validator|
