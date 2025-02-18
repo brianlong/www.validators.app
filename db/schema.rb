@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2025_02_17_094325) do
 
+
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
     t.string "authorized_withdrawer_after"

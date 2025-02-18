@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: ping_thing_fee_stats
+# Table name: ping_thing_fee_stat_archives
 #
 #  id                                  :bigint           not null, primary key
 #  average_time                        :float(24)
@@ -17,8 +17,5 @@
 #  created_at                          :datetime         not null
 #  updated_at                          :datetime         not null
 #
-class PingThingFeeStat < ApplicationRecord
-  extend Archivable
-  
-  INTERVAL = 1.hour
+class PingThingFeeStatArchive < ApplicationRecord
 end
