@@ -352,8 +352,7 @@ module ValidatorScoreV1Logic
         network: p.payload[:network],
         batch_uuid: p.payload[:batch_uuid]
       ).to_a
-
-      software_versions = Hash.new(0)
+      software_versions = {}
 
       p.payload[:validators].each do |validator|
         vah = last_validator_histories.find { |vh| vh.account == validator.account }
@@ -370,9 +369,16 @@ module ValidatorScoreV1Logic
         this_software_version = validator.validator_score_v1.software_version
 
         # Gather software_version stat
-        if validator.validator_score_v1.active_stake
-          software_versions[this_software_version] += \
-            validator.validator_score_v1.active_stake
+        if validator.validator_score_v1.active_stake && vah&.software_version.present?
+          kind = ValidatorSoftwareVersion.software_version_kind(vah.software_version)
+          if !software_versions[kind]
+            software_versions[kind] = Hash.new(0)
+            software_versions[kind]["total_stake"] = 0
+            software_versions[kind][this_software_version] = 0
+          end
+
+          software_versions[kind][this_software_version] += validator.validator_score_v1.active_stake
+          software_versions[kind]["total_stake"] += validator.validator_score_v1.active_stake
         end
 
       rescue StandardError => e
@@ -380,15 +386,16 @@ module ValidatorScoreV1Logic
       end
 
       # Calculate current version by stake
-      current_software_version = find_current_software_version(
-        software_versions: software_versions,
-        total_stake: p.payload[:total_active_stake]
+      current_software_versions = find_current_software_version(
+        software_versions: software_versions
       )
 
-      p.payload[:this_batch].update(software_version: current_software_version)
+      puts current_software_versions
+
+      p.payload[:this_batch].update(software_version: current_software_versions["solana"], other_software_versions: current_software_versions)
 
       p.payload[:validators].each do |validator|
-        validator.validator_score_v1.assign_software_version_score(current_software_version)
+        validator.validator_score_v1.assign_software_version_score(current_software_versions)
       end
 
       Pipeline.new(200, p.payload)
@@ -441,25 +448,34 @@ module ValidatorScoreV1Logic
     end
   end
 
-  def find_current_software_version(software_versions:, total_stake:)
-    software_versions.each do |version, stake|
-      software_versions[version] = ((stake / total_stake.to_f) * 100.0)
+  def find_current_software_version(software_versions:)
+    result = {}
+    software_versions.each do |kind, software_version|
+      total_stake = software_version.delete("total_stake")
+      software_version.each do |version, stake|
+        software_versions[kind][version] = ((stake / total_stake.to_f) * 100.0)
+      end
+  
+      software_versions[kind] = software_versions[kind].select { |ver, _| ver&.match /\d+\.\d+\.\d+\z/ }
     end
+    software_versions.each do |kind, software_version|
+      if software_versions[kind].empty?
+        result[kind] = 'unknown'
+      else
+        software_versions_sorted = \
+          software_versions[kind].sort_by { |k, _v| Gem::Version.new(k) }.reverse
 
-    software_versions = software_versions.select { |ver, _| ver&.match /\d+\.\d+\.\d+\z/ }
+        cumulative_sum = 0
 
-    if software_versions.empty?
-      'unknown'
-    else
-      software_versions_sorted = \
-        software_versions.sort_by { |k, _v| Gem::Version.new(k) }.reverse
-
-      cumulative_sum = 0
-
-      software_versions_sorted.each do |ver, weight|
-        cumulative_sum += weight
-        return ver if cumulative_sum >= 66
+        software_versions_sorted.each do |ver, weight|
+          cumulative_sum += weight
+          if cumulative_sum >= 66
+            result[kind] = ver
+            break
+          end
+        end
       end
     end
+    result
   end
 end

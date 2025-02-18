@@ -40,7 +40,7 @@
 #  skipped_slot_score                          :integer
 #  skipped_vote_history                        :text(65535)
 #  skipped_vote_percent_moving_average_history :text(65535)
-#  software_kind                               :integer          default(0)
+#  software_kind                               :integer          default("solana")
 #  software_version                            :string(191)
 #  software_version_score                      :integer
 #  stake_concentration                         :decimal(10, 3)
@@ -157,7 +157,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def calculate_total_score
     # Assign special scores before calculating the total score
-    best_sv = Batch.last_scored(network)&.software_version
+    best_sv = Batch.last_scored(network)&.other_software_versions
     assign_published_information_score
     assign_software_version_score(best_sv)
     assign_security_report_score
@@ -192,13 +192,15 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   # Evaluate the software version and assign a score
-  def assign_software_version_score(best_version)
+  def assign_software_version_score(best_versions)
     if software_version.blank?
       self.software_version_score = 0
       return
     end
 
-    return unless ValidatorSoftwareVersion.valid_software_version?(software_version)
+    return unless ValidatorSoftwareVersion.valid_software_version?(software_version) && best_versions
+
+    best_version = best_versions[ValidatorSoftwareVersion.software_version_kind(software_version)]
 
     version = ValidatorSoftwareVersion.new(
       number: software_version,
