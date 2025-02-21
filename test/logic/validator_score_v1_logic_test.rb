@@ -385,7 +385,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
   test "asign_software_version_score skips `software_version` assignment if the version is junk" do
     v = create(:validator, :with_score, network: "testnet")
-    create(:validator_history, batch_uuid: @batch.uuid, validator: v)
+    create(:validator_history, batch_uuid: @batch.uuid, validator: v, network: "testnet", account: v.account)
     Validator.last.validator_score_v1.update!(software_version: "1.5.6")
     Validator.last.validator_history_last.update!(software_version: "junk")
 
@@ -428,62 +428,99 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
         when most stake is over 66% \
         should return version with most stake" do
     software_versions = {
-      "1.6.7"=>279919552719104317,
-      "1.5.19"=>10288992031757525,
-      "1.6.6"=>10483084971314635,
-      "1.6.8"=>26015248337068090,
-      "1.6.4"=>246312332755,
-      "1.6.9"=>997717120,
-      nil=>6422600362200
+      "solana" => {
+        "1.6.7"=>279919552719104317,
+        "1.5.19"=>10288992031757525,
+        "1.6.6"=>10483084971314635,
+        "1.6.8"=>26015248337068090,
+        "1.6.4"=>246312332755,
+        "1.6.9"=>997717120,
+        nil=>6422600362200,
+        "total_stake"=>326713653288250133
+      }
     }
-    total_stake = 326713653288250133
 
     current_software_version = find_current_software_version(
-      software_versions: software_versions,
-      total_stake: total_stake
+      software_versions: software_versions
     )
 
-    assert_equal "1.6.7", current_software_version
+    assert_equal "1.6.7", current_software_version["solana"]
   end
 
   test "find_current_software_version \
     when most stake is under 66% \
     should return version earlier than one with most stake" do
-      software_versions = {
+    software_versions = {
+      "solana" => {
         "1.6.7"=>209919552719104317,
         "1.5.19"=>17288992031757525,
         "1.6.6"=>10483084971314635,
         "1.6.8"=>26015248337068090,
         "1.6.4"=>246312332755,
         "1.6.9"=>997717120,
-        nil=>6422600362200
+        nil=>6422600362200,
+        "total_stake"=>326713653288250133
       }
-    total_stake = 326713653288250133
+    }
 
     current_software_version = find_current_software_version(
-      software_versions: software_versions,
-      total_stake: total_stake
+      software_versions: software_versions
     )
 
-    assert_equal "1.6.7", current_software_version
+    assert_equal "1.6.7", current_software_version["solana"]
   end
 
   test "find_current_software_version \
     when there are unexpected versions \
     should return correct version" do
-    software_versions = {
-      "1.6.7"=>209919552719104317,
-      "1.5.19"=>17288992031757525,
-      "unknown"=>10483084971314635,
-      nil=>6422600362200
+      software_versions = {
+        "solana" => {
+          "1.6.7"=>209919552719104317,
+          "1.5.19"=>17288992031757525,
+          "unknown"=>10483084971314635,
+          nil=>6422600362200,
+          "total_stake"=>23769805232343223
+      }
     }
-    total_stake = 23769805232343223
 
     current_software_version = find_current_software_version(
-      software_versions: software_versions,
-      total_stake: total_stake
+      software_versions: software_versions
     )
 
-    assert_equal "1.6.7", current_software_version
+    assert_equal "1.6.7", current_software_version["solana"]
+  end
+
+  test "find_current_software_version \
+    when there are multiple software kinds
+    should return correct versions for each kind" do
+    software_versions = {
+      "solana" => {
+        "1.6.7"=>279919552719104317,
+        "1.5.19"=>10288992031757525,
+        "1.6.6"=>10483084971314635,
+        "1.6.8"=>26015248337068090,
+        "1.6.4"=>246312332755,
+        "1.6.9"=>997717120,
+        nil=>6422600362200,
+        "total_stake"=>326713653288250133
+      },
+      "firedancer" => {
+        "0.202.20111"=>279919552719104317,
+        "0.202.20112"=>10288992031757525,
+        "0.202.20113"=>10483084971314635,
+        "0.202.20114"=>26015248337068090,
+        "0.202.20115"=>246312332755,
+        "0.202.20116"=>997717120,
+        nil=>6422600362200,
+        "total_stake"=>326713653288250133
+      }
+    }
+    
+    current_software_version = find_current_software_version(
+      software_versions: software_versions
+    )
+
+    assert_equal "1.6.7", current_software_version["solana"]
+    assert_equal "0.202.20111", current_software_version["firedancer"]
   end
 end
