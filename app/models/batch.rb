@@ -13,6 +13,7 @@
 #  best_skipped_vote         :float(24)
 #  gathered_at               :datetime
 #  network                   :string(191)
+#  other_software_versions   :text(65535)
 #  root_distance_all_average :float(24)
 #  root_distance_all_median  :integer
 #  scored_at                 :datetime

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_28_075827) do
+ActiveRecord::Schema.define(version: 2025_02_25_102458) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 2025_01_28_075827) do
     t.float "best_skipped_vote"
     t.float "skipped_slot_all_average", default: 0.0
     t.float "skipped_after_all_average", default: 0.0
+    t.text "other_software_versions"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
@@ -460,6 +461,25 @@ ActiveRecord::Schema.define(version: 2025_01_28_075827) do
     t.bigint "slot_sent"
     t.boolean "success"
     t.string "transaction_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.float "priority_fee_micro_lamports"
+    t.integer "priority_fee_percentile"
+    t.string "pinger_region"
+  end
+
+  create_table "ping_thing_fee_stat_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "network"
+    t.integer "priority_fee_percentile"
+    t.float "priority_fee_micro_lamports_average"
+    t.string "pinger_region"
+    t.float "average_time"
+    t.float "median_time"
+    t.float "p90_time"
+    t.float "min_time"
+    t.float "min_slot_latency"
+    t.float "median_slot_latency"
+    t.float "p90_slot_latency"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -898,6 +918,9 @@ ActiveRecord::Schema.define(version: 2025_01_28_075827) do
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
     t.text "skipped_after_moving_average_history"
+    t.integer "software_kind", default: 0
+    t.text "vote_latency_history"
+    t.integer "vote_latency_score"
     t.index ["network", "active_stake", "commission", "delinquent"], name: "index_for_asns"
     t.index ["network", "total_score"], name: "index_validator_score_v1s_on_network_and_total_score"
     t.index ["network", "validator_id"], name: "index_validator_score_v1s_on_network_and_validator_id"
