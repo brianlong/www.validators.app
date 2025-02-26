@@ -18,7 +18,7 @@ class ExplorerStakeAccountQuery
     explorer_stake_accounts = ExplorerStakeAccount.where(
       network: @network,
       epoch: current_epoch
-    )
+    ).where("active_stake > ?", 0)
 
     if current_epoch && explorer_stake_accounts.count < MIN_ACCOUNTS_NUMBER
       explorer_stake_accounts = ExplorerStakeAccount.where(
