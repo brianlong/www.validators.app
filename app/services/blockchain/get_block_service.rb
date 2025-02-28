@@ -83,6 +83,7 @@ module Blockchain
               pre_balances: tx["meta"]["preBalances"],
               slot_number: @slot_number,
               block_id: @saved_block.id,
+              recent_blockhash: tx["transaction"]["message"]["recentBlockhash"],
               epoch: @slot.epoch,
               created_at: Time.now,
               updated_at: Time.now
