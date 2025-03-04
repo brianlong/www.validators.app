@@ -77,16 +77,16 @@ namespace :deploy do
 end
 
 namespace :sidekiq do
-  desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
+  desc 'Stop sidekiq (put unfinished tasks back to Redis)'
   task :stop do
-    on roles :app do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :stop, :sidekiq
         end
       end
     end
-    on roles :background do
+    on roles :sidekiq_blockchain do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :stop, :sidekiq_blockchain
@@ -97,14 +97,14 @@ namespace :sidekiq do
 
   desc 'Start sidekiq'
   task :start do
-    on roles :app do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :start, :sidekiq
         end
       end
     end
-    on roles :background do
+    on roles :sidekiq_blockchain do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :start, :sidekiq_blockchain
@@ -115,14 +115,14 @@ namespace :sidekiq do
 
   desc 'Restart sidekiq'
   task :restart do
-    on roles :app do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :sidekiq
         end
       end
     end
-    on roles :background do
+    on roles :sidekiq_blockchain do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :sidekiq_blockchain
