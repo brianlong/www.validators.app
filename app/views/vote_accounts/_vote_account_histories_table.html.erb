@@ -28,12 +28,12 @@
           <%= number_with_delimiter vote.slot_index_current %>
         </td>
         <td class='text-end'>
-          <%= number_with_delimiter(vote.slot_index_current.to_i - vote.credits_current.to_i) %>
+          <%= number_with_delimiter(vote.slot_index_current.to_i * 8 - (vote.credits_current.to_i) / 2) %>
         </td>
         <td class='text-end'>
           <%=
             number_to_percentage(
-              ((vote.slot_index_current.to_i - vote.credits_current.to_i)/vote.slot_index_current.to_f)*100.0,
+              vote.skipped_vote_percent*100.0,
               precision: 2
             )
           %>

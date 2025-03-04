@@ -96,11 +96,11 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                            .last
                            .validator_score_v1
                            .stake_concentration
-    assert_equal [0.3518806943896684], p.payload[:validators]
+    assert_equal [0.9594924757058465], p.payload[:validators]
                                         .last
                                         .validator_score_v1
                                         .skipped_vote_history
-    assert_equal [0.3519e0], p.payload[:validators]
+    assert_equal [0.9595e0], p.payload[:validators]
                               .last
                               .validator_score_v1
                               .skipped_vote_percent_moving_average_history
@@ -151,7 +151,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
     assert_equal 0.0, 
                  p.payload[:this_batch].skipped_vote_all_median
-    assert_equal 0.3518806943896684, 
+    assert_equal 0.9594924757058465, 
                  p.payload[:this_batch].best_skipped_vote
 
     assert_equal 2, p.payload[:validators]
