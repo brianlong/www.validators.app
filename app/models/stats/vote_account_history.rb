@@ -15,7 +15,7 @@ module Stats
   class VoteAccountHistory < ApplicationStats
     def initialize(network, batch_uuid)
       super
-
+      @network = network
       @relation = VoteAccountHistoryQuery.new(network, batch_uuid)
                                          .for_batch
     end
@@ -65,7 +65,11 @@ module Stats
 
     def skipped_vote_percent_best
       if slot_index_current&.is_a?(Numeric) && slot_index_current.positive? && credits_current_max&.is_a?(Numeric)
-        max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
+        if @network == "pythnet"
+          max_credits = slot_index_current
+        else
+          max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
+        end
         @skipped_vote_percent_best ||=
           (max_credits - credits_current_max) / max_credits.to_f
       else

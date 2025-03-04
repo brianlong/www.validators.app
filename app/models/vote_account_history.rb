@@ -46,7 +46,11 @@ class VoteAccountHistory < ApplicationRecord
 
   def skipped_vote_percent
     if slot_index_current.to_f.positive?
-      max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
+      if network == "pythnet"
+        max_credits = slot_index_current
+      else
+        max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
+      end
       return ((max_credits - (credits_current.to_i))/max_credits.to_f)
     end
 
