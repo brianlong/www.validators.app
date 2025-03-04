@@ -68,6 +68,10 @@ class PingThing < ApplicationRecord
     fra
     sgp
     tyo
+    us
+    eu
+    ap
+    test
   ].freeze
 
   belongs_to :user
