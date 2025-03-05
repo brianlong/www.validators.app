@@ -168,7 +168,7 @@ Rails.application.routes.draw do
 
       get 'block-votes/:network/:block_hash',
             to: 'vote#block_details',
-            as: 'block_details'
+            as: 'block_votes'
 
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
