@@ -161,6 +161,15 @@ Rails.application.routes.draw do
           to: 'validator_block_histories#show',
           as: 'validator_block_history_old'
 
+      # Blockchain
+      get 'last-blocks/:network',
+            to: 'vote#block_list',
+            as: 'last_blocks'
+
+      get 'block-votes/:network/:block_hash',
+            to: 'vote#block_details',
+            as: 'block_details'
+
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
 
