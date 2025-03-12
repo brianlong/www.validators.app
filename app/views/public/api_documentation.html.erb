@@ -30,6 +30,8 @@
   <li><a href="#sol-prices">Sol Prices</a></li>
   <li><a href="#gossip-nodes">Gossip Nodes</a></li>
   <li><a href="#account-authorities">Authorities Changes</a></li>
+  <li><a href="#last-blocks">Last Blocks</a></li>
+  <li><a href="#block-votes">Block Votes</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#limits">Requests Limits</a></li>
   <li><a href="#notes">Notes</a></li>
@@ -803,6 +805,80 @@
   }
 ]
 
+</pre>
+
+<hr />
+
+<h2 class="h4" id="last-blocks">Last Blocks</h2>
+<p>Last Blocks endpoint will return the last blocks for a given network.</p>
+
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/last-blocks/:network.json'</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 100.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/last-blocks/:network.json?limit=10'</pre>
+
+<h3 class="h6">Response:</h3>
+<pre>
+[
+  {
+    "block_time": 1740480207,
+    "blockhash": "DYrEknEkgEvKC1nRaT2cyGVFDhszHn51F88zf6NmBJfs",
+    "epoch": 747,
+    "height": 301248247,
+    "parent_slot": 322981103,
+    "slot_number": 322981104
+  },
+  ...
+]
+</pre>
+
+<hr />
+
+<h2 class="h4" id="block-votes">Block Votes</h2>
+<p>Block Votes endpoint will return votes for a given block.</p>
+
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/block-votes/:network/:block_hash.json'</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 100.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/block-votes/:network/:block_hash.json?limit=10'</pre>
+<p><strong class="text-muted">`page=NN`</strong> will return the results from provided page, defaults to 1.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/block-votes/:network/:block_hash.json?limit=50&page=1'</pre>
+
+<h3 class="h6">Response:</h3>
+<pre>
+{
+  "block_time": 1740480207,
+  "blockhash": "DN8iqbSo1BLxJBSRZSyTE1DjeA1GpJowmmQk4WPCJnLF",
+  "epoch": 747,
+  "height": 301248246,
+  "parent_slot": 322981102,
+  "slot_number": 322981103,
+  "transactions": [
+    {
+      "slot_number": 322981103,
+      "fee": 5000,
+      "account_key_1": "ATd7yhK41qadD5V9eiq7UXQtRf5pidaR6fyKbYtKkbvz",
+      "account_key_2": "8oGhRavfRf13fBdp257nitq8VVgXhRAZxR9fR5Q4oKhH",
+      "account_key_3": "Vote111111111111111111111111111111111111111",
+      "epoch": 747,
+      "pre_balances": [
+        11486323078,
+        7530954819,
+        1
+      ],
+      "post_balances": [
+        11486318078,
+        7530954819,
+        1
+      ]
+    },
+    ...
+  ]
+}
 </pre>
 
 <hr />
