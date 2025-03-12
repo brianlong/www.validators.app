@@ -16,4 +16,9 @@ NETWORKS.each do |network|
     network: network,
     destroy_after_archive: destroy_after_archive
   )
+  PingThingFeeStat.archive_due_to(
+    date_to: ARCHIVE_TIME[network.to_sym],
+    network: network,
+    destroy_after_archive: destroy_after_archive
+  )
 end

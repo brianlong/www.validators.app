@@ -36,6 +36,8 @@
 class Batch < ApplicationRecord
   before_create :create_uuid
 
+  serialize :other_software_versions, JSON
+
   def self.last_scored(network)
     where('network = ? and scored_at IS NOT NULL', network).last
   end
