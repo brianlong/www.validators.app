@@ -20,7 +20,7 @@ module Blockchain
       puts "Time taken to set vote latency score: #{end_time - start_time} seconds"
     end
 
-    # get all blocks fromt last hour that are not processed
+    # get all blocks from the last hour that are not processed
     def get_blocks
       puts "searching #{@network} blocks"
       @blocks = Blockchain::Block.network(@network).where("created_at > ? AND processed IS FALSE", 3.hours.ago)
@@ -28,7 +28,7 @@ module Blockchain
 
     def fill_validators_latencies
       @blocks.each do |block|
-        @blockcs_distances = {} # reset block distances for each block
+        @blocks_distances = {} # reset block distances for each block
         block.transactions.each do |transaction|
           val = transaction.account_key_1
           block_distance = get_block_distance(transaction.recent_blockhash, block.slot_number)
@@ -47,13 +47,13 @@ module Blockchain
     end
 
     def get_block_distance(blockhash, current_slot_number)
-      return @blockcs_distances[blockhash] if @blockcs_distances[blockhash].present?
+      return @blocks_distances[blockhash] if @blocks_distances[blockhash].present?
 
       block = Blockchain::Block.network(@network).find_by(blockhash: blockhash)
       raise NoBlocksError if block.blank?
       block_slot_number = block.slot_number
       block_distance = current_slot_number - block_slot_number
-      @blockcs_distances[blockhash] = block_distance
+      @blocks_distances[blockhash] = block_distance
     end
 
     def set_average_latencies_for_validators
