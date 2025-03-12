@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_02_25_094130) do
+ActiveRecord::Schema.define(version: 2025_03_12_104611) do
 
   create_table "blockchain_mainnet_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2025_02_25_094130) do
     t.bigint "block_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "processed", default: false
   end
 
   create_table "blockchain_mainnet_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(version: 2025_02_25_094130) do
     t.bigint "block_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "recent_blockhash"
   end
 
   create_table "blockchain_mainnet_transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -95,6 +97,7 @@ ActiveRecord::Schema.define(version: 2025_02_25_094130) do
     t.bigint "block_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "processed", default: false
   end
 
   create_table "blockchain_pythnet_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -142,6 +145,7 @@ ActiveRecord::Schema.define(version: 2025_02_25_094130) do
     t.bigint "block_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "recent_blockhash"
   end
 
   create_table "blockchain_pythnet_transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -169,6 +173,7 @@ ActiveRecord::Schema.define(version: 2025_02_25_094130) do
     t.bigint "block_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "processed", default: false
   end
 
   create_table "blockchain_testnet_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -216,6 +221,7 @@ ActiveRecord::Schema.define(version: 2025_02_25_094130) do
     t.bigint "block_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "recent_blockhash"
   end
 
   create_table "blockchain_testnet_transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
