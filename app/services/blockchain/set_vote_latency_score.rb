@@ -22,6 +22,7 @@ module Blockchain
 
     # get all blocks fromt last hour that are not processed
     def get_blocks
+      puts "searching #{@network} blocks"
       @blocks = Blockchain::Block.network(@network).where("created_at > ? AND processed IS FALSE", 3.hours.ago)
     end
 
@@ -42,6 +43,7 @@ module Blockchain
           next
         end
       end
+      @blocks.update_all(processed: true)
     end
 
     def get_block_distance(blockhash, current_slot_number)

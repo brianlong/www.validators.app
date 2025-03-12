@@ -51,6 +51,7 @@ begin
     }.stringify_keys
 
     ClusterStatsWorker.set(queue: :high_priority).perform_async(stat_params)
+    # Blockchain::VoteLatencyScoreWorker.set(queue: :blockchain).perform_async(stat_params)
 
     break if interrupted
   rescue SkipAndSleep
