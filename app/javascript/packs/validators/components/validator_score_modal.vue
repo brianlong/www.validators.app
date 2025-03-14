@@ -70,22 +70,20 @@
                 </td>
               </tr>
 
-              <!--
               <tr>
-                <td class="column-md fw-bold">Skipped After Score</td>
+                <td class="column-md fw-bold">Vote Latency Score</td>
                 <td class="column-xs text-nowrap">
-                  <i :class="'score-' + parseInt(score.skipped_after_score)"
+                  <i :class="'score-' + parseInt(score.vote_latency_score)"
                      class="fa-solid fa-circle me-1">
                   </i>
-                  {{ score.skipped_after_score }}
+                  {{ score.skipped_slot_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
                 </td>
                 <td class="column-lg small">
-                  This score shows the performance by the leader AFTER the designated node.
+                  This score measures the&nbsp;number of slots&nbsp;it takes for validator to &nbsp;vote.
                 </td>
               </tr>
-              -->
 
               <tr>
                 <td class="column-md fw-bold">Published Information Score</td>
