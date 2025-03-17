@@ -252,6 +252,10 @@ class Validator < ApplicationRecord
     score&.stake_concentration_score || 0
   end
 
+  def vote_latency_score
+    score&.vote_latency_score || 0
+  end
+
   def software_version
     score&.software_version
   end

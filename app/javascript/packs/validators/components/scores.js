@@ -55,6 +55,9 @@ export default {
     },
     prepare_modal() {
       this.$root.$emit('set_modal_account', this.account);
+    },
+    vote_latency_score_title() {
+      return "Vote Latency Score = " + this.score.vote_latency_score
     }
   },
 
@@ -70,10 +73,8 @@ export default {
         <i :class="score_class(score.skipped_slot_score)"
            :title="skipped_slot_score_title()"></i>
         
-        <!--
-        <i :class="score_class(score.skipped_after_score)"
-           :title="skipped_after_score_title()"></i>
-        -->
+        <i :class="score_class(score.vote_latency_score)"
+           :title="vote_latency_score_title()"></i>
 
         <i :class="score_class(score.published_information_score)"
            :title="published_information_score_title()"></i>
