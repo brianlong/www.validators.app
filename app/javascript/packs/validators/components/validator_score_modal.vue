@@ -12,7 +12,7 @@
                class="fw-bold" >
               {{ validator.name }}
             </a>
-            total score: {{ score.displayed_total_score }} <span class="text-muted">(max 11)</span>
+            total score: {{ score.displayed_total_score }} <span class="text-muted">(max 13)</span>
           </h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -76,7 +76,7 @@
                   <i :class="'score-' + parseInt(score.vote_latency_score)"
                      class="fa-solid fa-circle me-1">
                   </i>
-                  {{ score.skipped_slot_score }}
+                  {{ score.vote_latency_score }}
                   <small class="d-lg-none text-muted">(2)</small>
                   <small class="d-none d-lg-inline text-muted">(max 2)</small>
                 </td>
