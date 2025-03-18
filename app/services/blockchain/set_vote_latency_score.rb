@@ -27,7 +27,9 @@ module Blockchain
     def fill_validators_latencies
       @blocks.each_with_index do |block, index|
         puts "block: #{index} of #{@blocks.size}"
+        puts "transactions: #{block.transactions.size}"
         @blocks_distances = {} # reset block distances for each block
+        start_tx_time = Time.now
         block.transactions.each do |transaction|
           val = transaction.account_key_1
           block_distance = get_block_distance(transaction.recent_blockhash, block.slot_number)
@@ -40,8 +42,10 @@ module Blockchain
         rescue NoBlocksError
           next
         end
+        end_tx_time = Time.now
+        puts "block #{index} took #{end_tx_time - start_tx_time} seconds"
+        block.update(processed: true)
       end
-      @blocks.update_all(processed: true)
     end
 
     def get_block_distance(blockhash, current_slot_number)
@@ -51,6 +55,7 @@ module Blockchain
       raise NoBlocksError if block.blank?
       block_slot_number = block.slot_number
       block_distance = current_slot_number - block_slot_number
+      puts "adding blockhash: #{blockhash} with distance: #{block_distance}"
       @blocks_distances[blockhash] = block_distance
     end
 
