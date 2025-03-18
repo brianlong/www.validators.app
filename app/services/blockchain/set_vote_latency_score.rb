@@ -21,11 +21,12 @@ module Blockchain
 
     # get all blocks from the last hour that are not processed
     def get_blocks
-      @blocks = Blockchain::Block.network(@network).where("created_at > ? AND processed IS FALSE", 30.minutes.ago)
+      @blocks = Blockchain::Block.network(@network).where("created_at > ? AND processed IS FALSE", 15.minutes.ago)
     end
 
     def fill_validators_latencies
-      @blocks.each do |block|
+      @blocks.each_with_index do |block, index|
+        puts "block: #{index} of #{@blocks.size}"
         @blocks_distances = {} # reset block distances for each block
         block.transactions.each do |transaction|
           val = transaction.account_key_1
