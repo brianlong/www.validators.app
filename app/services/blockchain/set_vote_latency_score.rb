@@ -21,7 +21,7 @@ module Blockchain
 
     # get all blocks from the last hour that are not processed
     def get_blocks
-      @blocks = Blockchain::Block.network(@network).where("created_at > ? AND processed IS FALSE", 3.hours.ago)
+      @blocks = Blockchain::Block.network(@network).where("created_at > ? AND processed IS FALSE", 30.minutes.ago)
     end
 
     def fill_validators_latencies
@@ -66,8 +66,8 @@ module Blockchain
         next if v.blank?
         v.score.vote_latency_history_push(avg_latency)
         v.score.save
+        # v.vote_account.vote_account_histories.last.update(vote_latency_average: avg_latency) rescue next
       end
     end
-
   end
 end
