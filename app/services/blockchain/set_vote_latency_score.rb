@@ -50,14 +50,12 @@ module Blockchain
     end
 
     def get_block_distance(blockhash, current_slot_number)
-      puts "getting block distance for blockhash: #{blockhash}, current_slot_number: #{current_slot_number}"
       return @blocks_distances[blockhash] if @blocks_distances[blockhash].present?
 
       block = Blockchain::Block.network(@network).find_by(blockhash: blockhash)
       raise NoBlocksError if block.blank?
       block_slot_number = block.slot_number
       block_distance = current_slot_number - block_slot_number
-      puts "adding blockhash: #{blockhash} with distance: #{block_distance}"
       @blocks_distances[blockhash] = block_distance
     end
 
