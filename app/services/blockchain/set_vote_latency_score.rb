@@ -17,6 +17,7 @@ module Blockchain
       set_average_latencies_for_validators
       save_vote_latency
       end_time = Time.now
+      puts "Total time: #{end_time - start_time} seconds"
     end
 
     # get all blocks from the last hour that are not processed
@@ -39,8 +40,7 @@ module Blockchain
           else
             @validators_latencies[val] = [block_distance]
           end
-        rescue NoBlocksError => e
-          puts "No blocks found: #{transaction.recent_blockhash}"
+        rescue NoBlocksError
           next
         end
         end_tx_time = Time.now
