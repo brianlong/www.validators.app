@@ -39,7 +39,8 @@ module Blockchain
           else
             @validators_latencies[val] = [block_distance]
           end
-        rescue NoBlocksError
+        rescue NoBlocksError => e
+          puts "No blocks found: #{transaction.recent_blockhash}"
           next
         end
         end_tx_time = Time.now
@@ -49,6 +50,7 @@ module Blockchain
     end
 
     def get_block_distance(blockhash, current_slot_number)
+      puts "getting block distance for blockhash: #{blockhash}, current_slot_number: #{current_slot_number}"
       return @blocks_distances[blockhash] if @blocks_distances[blockhash].present?
 
       block = Blockchain::Block.network(@network).find_by(blockhash: blockhash)
