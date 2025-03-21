@@ -5,7 +5,7 @@ module Blockchain
 
     def initialize(network)
       @network = network
-      @blockcs_distances = {}
+      @blocks_slot_numbers = {}
       @blocks = nil
       @validators_latencies = {}
     end
@@ -25,7 +25,7 @@ module Blockchain
 
     def fill_validators_latencies
       @blocks.each_with_index do |block, index|
-        @blocks_distances = {} # reset block distances for each block
+        @blocks_slot_numbers[block.blockhash] = block.slot_number
         block.transactions.each do |transaction|
           val = transaction.account_key_1
           block_distance = get_block_distance(transaction.recent_blockhash, block.slot_number)
@@ -43,13 +43,14 @@ module Blockchain
     end
 
     def get_block_distance(blockhash, current_slot_number)
-      return @blocks_distances[blockhash] if @blocks_distances[blockhash].present?
-
-      block = Blockchain::Block.network(@network).find_by(blockhash: blockhash)
-      raise NoBlocksError if block.blank?
-      block_slot_number = block.slot_number
-      block_distance = current_slot_number - block_slot_number
-      @blocks_distances[blockhash] = block_distance
+      if @blocks_slot_numbers[blockhash].present?
+        current_slot_number - @blocks_slot_numbers[blockhash]
+      else
+        block = Blockchain::Block.network(@network).find_by(blockhash: blockhash)
+        raise NoBlocksError if block.blank?
+        @blocks_slot_numbers[block.blockhash] = block.slot_number
+        current_slot_number - block.slot_number
+      end
     end
 
     def set_average_latencies_for_validators
