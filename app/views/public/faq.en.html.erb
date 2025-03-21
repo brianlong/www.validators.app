@@ -194,6 +194,14 @@
       The&nbsp;moving averages reflect the&nbsp;previous 24-hours, and the&nbsp;spot reading resets with each new epoch.
     </li>
     <li>
+      <strong>Vote Latency </strong> <br />
+      For this metric, we track the&nbsp; average number of slots it takes for validator to vote for a block.<br />
+      <i class="fa-solid fa-circle score-2 me-1"></i> (2 points) means that the&nbsp;validator has the average below 2 slots.<br />
+      <i class="fa-solid fa-circle score-1 me-1"></i> (1 point) means that the&nbsp;validator has the average between 2 and 3 slots.<br />
+      <i class="fa-solid fa-circle score-0 me-1"></i> (0 points) means that the&nbsp;validator has the average above 3 slots.<br />
+      The&nbsp;moving averages reflect the&nbsp;previous 24-hours, and the&nbsp;spot reading resets with each new epoch.
+    </li>
+    <li>
       <strong>Skipped After &percnt;</strong> <br />
       The Skipped After stats show the performance by the leader AFTER the designated node.
       Poor performance in the Skipped After category may indicate that your validator is slow to propagate blocks to the next leader.
@@ -284,8 +292,9 @@
   </ol>
 
   <p>
-    The&nbsp;maximum score is currently eleven (11) points:
+    The&nbsp;maximum score is currently eleven (13) points:
     <small class="text-nowrap">
+      <i class="fa-solid fa-circle score-2"></i>
       <i class="fa-solid fa-circle score-2"></i>
       <i class="fa-solid fa-circle score-2"></i>
       <i class="fa-solid fa-circle score-2"></i>
