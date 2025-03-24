@@ -17,6 +17,7 @@
 #
 # Indexes
 #
+#  index_blockchain_testnet_blocks_on_blockhash                 (blockhash)
 #  index_blockchain_testnet_blocks_on_created_at_and_processed  (created_at,processed)
 #  index_blockchain_testnet_blocks_on_slot_number               (slot_number)
 #
