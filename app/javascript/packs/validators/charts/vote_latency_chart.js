@@ -50,7 +50,7 @@ export default {
           labels: this.labels(),
           datasets: [
             {
-              label: ' Vote Diff ',
+              label: ' Average Latency ',
               fill: true,
               borderColor: chart_variables.chart_purple_2,
               backgroundColor: chart_variables.chart_purple_2_t,

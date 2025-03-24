@@ -5,18 +5,17 @@ module Blockchain
 
     def initialize(network)
       @network = network
-      @blockcs_distances = {}
+      @blocks_slot_numbers = {}
       @blocks = nil
       @validators_latencies = {}
     end
 
     def call
-      start_time = Time.now
       @blocks = get_blocks
       fill_validators_latencies
       set_average_latencies_for_validators
       save_vote_latency
-      end_time = Time.now
+
     end
 
     # get all blocks from the last hour that are not processed
@@ -26,10 +25,7 @@ module Blockchain
 
     def fill_validators_latencies
       @blocks.each_with_index do |block, index|
-        puts "block: #{index} of #{@blocks.size}"
-        puts "transactions: #{block.transactions.size}"
-        @blocks_distances = {} # reset block distances for each block
-        start_tx_time = Time.now
+        @blocks_slot_numbers[block.blockhash] = block.slot_number
         block.transactions.each do |transaction|
           val = transaction.account_key_1
           block_distance = get_block_distance(transaction.recent_blockhash, block.slot_number)
@@ -42,21 +38,19 @@ module Blockchain
         rescue NoBlocksError
           next
         end
-        end_tx_time = Time.now
-        puts "block #{index} took #{end_tx_time - start_tx_time} seconds"
         block.update(processed: true)
       end
     end
 
     def get_block_distance(blockhash, current_slot_number)
-      return @blocks_distances[blockhash] if @blocks_distances[blockhash].present?
-
-      block = Blockchain::Block.network(@network).find_by(blockhash: blockhash)
-      raise NoBlocksError if block.blank?
-      block_slot_number = block.slot_number
-      block_distance = current_slot_number - block_slot_number
-      puts "adding blockhash: #{blockhash} with distance: #{block_distance}"
-      @blocks_distances[blockhash] = block_distance
+      if @blocks_slot_numbers[blockhash].present?
+        current_slot_number - @blocks_slot_numbers[blockhash]
+      else
+        block = Blockchain::Block.network(@network).find_by(blockhash: blockhash)
+        raise NoBlocksError if block.blank?
+        @blocks_slot_numbers[block.blockhash] = block.slot_number
+        current_slot_number - block.slot_number
+      end
     end
 
     def set_average_latencies_for_validators
@@ -72,7 +66,7 @@ module Blockchain
         next if v.blank?
         v.score.vote_latency_history_push(avg_latency)
         v.score.save
-        v.vote_account.vote_account_histories.last.update(vote_latency_average: avg_latency) rescue next
+        v.vote_account_active.vote_account_histories.last.update(vote_latency_average: avg_latency) rescue next
       end
     end
   end
