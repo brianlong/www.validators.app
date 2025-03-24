@@ -66,7 +66,7 @@ module Blockchain
         next if v.blank?
         v.score.vote_latency_history_push(avg_latency)
         v.score.save
-        # v.vote_account.vote_account_histories.last.update(vote_latency_average: avg_latency) rescue next
+        v.vote_account_active.vote_account_histories.last.update(vote_latency_average: avg_latency) rescue next
       end
     end
   end
