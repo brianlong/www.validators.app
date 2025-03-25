@@ -78,6 +78,7 @@ module Blockchain
               account_key_1: tx["transaction"]["message"]["accountKeys"][0],
               account_key_2: tx["transaction"]["message"]["accountKeys"][1],
               account_key_3: tx["transaction"]["message"]["accountKeys"][2],
+              recent_blockhash: tx["transaction"]["message"]["recentBlockhash"],
               fee: tx["meta"]["fee"],
               post_balances: tx["meta"]["postBalances"],
               pre_balances: tx["meta"]["preBalances"],
