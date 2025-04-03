@@ -22,7 +22,7 @@ module Api::V1
           transactions = block.transactions.page(vote_params[:page]).per(limit)
           json_result = block.to_builder.attributes!
           json_result[:transactions] = transactions.map { |tx| tx.to_builder.attributes! }
-          
+
           respond_to do |format|
             format.json { render json: json_result, status: :ok }
           end
