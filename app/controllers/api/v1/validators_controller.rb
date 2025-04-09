@@ -71,11 +71,11 @@ module Api
             to: time_to,
             limit: @history_limit
           )
-          @vote_account_histories = @validator.vote_account_active&.vote_account_histories.where(
+          @vote_account_histories = @validator.vote_account_active&.vote_account_histories&.where(
             created_at: time_from..time_to
           )
 
-          @vote_latencies = @vote_account_histories.map do |vah|
+          @vote_latencies = @vote_account_histories&.map do |vah|
             next unless vah.vote_latency_average
             {
               x: vah.created_at.strftime("%H:%M"),

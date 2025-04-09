@@ -366,7 +366,6 @@
           ctx.vote_latencies = JSON.parse(response.data.vote_latencies)
           ctx.is_loading_validator = false
         })
-        console.log(this.vote_latencies)
       },
 
       reload_validator_data() {
