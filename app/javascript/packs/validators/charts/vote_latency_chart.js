@@ -90,7 +90,7 @@ export default {
               },
               title: {
                 display: true,
-                text: "Dist Behind Leader",
+                text: "Slots",
                 color: chart_variables.chart_darkgrey
               }
             }
@@ -106,7 +106,7 @@ export default {
               padding: 8,
               callbacks: {
                 label: function(tooltipItem) {
-                  return "Distance: " + tooltipItem.raw.y;
+                  return "Average Slots: " + tooltipItem.raw.y;
                 },
                 title: function(tooltipItem) {
                   return tooltipItem[0].label + " UTC";
