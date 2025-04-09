@@ -51,7 +51,7 @@ begin
     }.stringify_keys
 
     ClusterStatsWorker.set(queue: :high_priority).perform_async(stat_params)
-    # Blockchain::VoteLatencyScoreWorker.set(queue: :blockchain).perform_async(stat_params)
+    # Blockchain::VoteLatencyScoreWorker.set(queue: "blockchain_#{_p.payload[:network]}").perform_async({"network" => _p.payload[:network]}) unless Rails.env.production?
 
     break if interrupted
   rescue SkipAndSleep

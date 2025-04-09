@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Blockchain
   class SetVoteLatencyScore
 
@@ -15,7 +17,6 @@ module Blockchain
       fill_validators_latencies
       set_average_latencies_for_validators
       save_vote_latency
-
     end
 
     # get all blocks from the last hour that are not processed
@@ -64,6 +65,7 @@ module Blockchain
       @validators_latencies.each do |validator, avg_latency|
         v = Validator.find_by(account: validator, network: @network)
         next if v.blank?
+        
         v.score.vote_latency_history_push(avg_latency)
         v.score.save
         # v.vote_account.vote_account_histories.last.update(vote_latency_average: avg_latency) rescue next

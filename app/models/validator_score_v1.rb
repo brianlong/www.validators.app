@@ -251,13 +251,11 @@ class ValidatorScoreV1 < ApplicationRecord
   def assign_vote_latency_score
     return 0 if vote_latency_history.blank?
 
-    if vote_latency_history.last < 2
-      self.vote_latency_score = 2
-    elsif vote_latency_history.last >= 2 && vote_latency_history.last <= 3
-      self.vote_latency_score = 1
-    else
-      self.vote_latency_score = 0
-    end
+    self.vote_latency_score = case vote_latency_history.last
+                              when 0...2 then 2
+                              when 2..3 then 1
+                              else 0
+                              end
   end
 
   def avg_root_distance_history(period = nil)
