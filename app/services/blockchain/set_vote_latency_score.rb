@@ -62,11 +62,14 @@ module Blockchain
 
     def save_vote_latency
       @validators_latencies.each do |validator, avg_latency|
+        puts "saving latency for validator #{validator} with latency #{avg_latency}"
         v = Validator.find_by(account: validator, network: @network)
         next if v.blank?
         v.score.vote_latency_history_push(avg_latency)
-        v.score.save
+        puts v.score.save
         v.vote_account_active.vote_account_histories.last.update(vote_latency_average: avg_latency) rescue next
+        puts v.vote_account_active.vote_account_histories.last.vote_latency_average.last rescue next
+        puts "saved"
       end
     end
   end
