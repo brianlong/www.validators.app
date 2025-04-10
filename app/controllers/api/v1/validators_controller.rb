@@ -71,6 +71,17 @@ module Api
             to: time_to,
             limit: @history_limit
           )
+          @vote_account_histories = @validator.vote_account_active&.vote_account_histories&.where(
+            created_at: time_from..time_to
+          )
+
+          @vote_latencies = @vote_account_histories&.map do |vah|
+            next unless vah.vote_latency_average
+            {
+              x: vah.created_at.strftime("%H:%M"),
+              y: vah.vote_latency_average
+            }
+          end&.compact
 
           # Grab the root distances to show on the chart
           @root_blocks = @val_histories.map do |val_history|
@@ -137,7 +148,8 @@ module Api
             block_history_stats: @block_history_stats,
             validator_history: @val_history,
             validator_score_details: validator_score_attrs(@validator),
-            geo_country: set_geo_country
+            geo_country: set_geo_country,
+            vote_latencies: @vote_latencies.to_json
           }
         else
           @validator = ValidatorQuery.new(api: true).call_single_validator(
