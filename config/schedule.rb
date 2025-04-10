@@ -44,11 +44,11 @@ job_type :ruby_script_archives,
 # Use :background role to add task to background server (recommended),
 # or :web role to add the task to web servers (www1, www2).
 
-every 1.hour, at: 0, roles: [:background] do
+every 2.hours, at: 0, roles: [:background] do
   runner "AsnLogicWorker.perform_async('network' => 'mainnet')"
 end
 
-every 1.hour, at: 5, roles: [:background] do
+every 3.hours, at: 5, roles: [:background] do
   runner "AsnLogicWorker.perform_async('network' => 'testnet')"
   runner "AsnLogicWorker.perform_async('network' => 'pythnet')"
   ruby_script_data_centers "check_hetzner_admin_warning.rb"
@@ -143,10 +143,6 @@ every 7.days, at: '4:00am', roles: [:background] do
   ruby_script 'validators_update_avatar_files.rb'
 end
 
-every 20.minutes, roles: [:background] do
-  runner "ValidatorCheckActiveWorker.perform_async"
-end
-
 every 1.minute, roles: [:background] do
   ruby_script "add_current_epoch.rb"
   runner "PingThingStatsWorker.set(queue: :high_priority).perform_async"
@@ -156,6 +152,10 @@ every 1.minute, roles: [:background] do
   runner "PingThingUserStatsWorker.perform_async('mainnet')"
   runner "PingThingUserStatsWorker.perform_async('testnet')"
   runner "PingThingUserStatsWorker.perform_async('pythnet')"
+end
+
+every 45.minutes, roles: [:background] do
+  runner "ValidatorCheckActiveWorker.perform_async"
 end
 
 every 90.minutes, roles: [:background] do
