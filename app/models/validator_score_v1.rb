@@ -76,6 +76,7 @@ class ValidatorScoreV1 < ApplicationRecord
     software_version_score
     stake_concentration_score
     consensus_mods_score
+    vote_latency_score
     total_score
     validator_id
     vote_distance_score
