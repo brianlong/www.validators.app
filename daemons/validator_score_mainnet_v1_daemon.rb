@@ -51,8 +51,7 @@ begin
     }.stringify_keys
 
     ClusterStatsWorker.set(queue: :high_priority).perform_async(stat_params)
-    #TODO change to stage
-    Blockchain::VoteLatencyScoreWorker.set(queue: "blockchain_#{_p.payload[:network]}").perform_async({"network" => _p.payload[:network]}) unless Rails.env.production?
+    Blockchain::VoteLatencyScoreWorker.set(queue: "blockchain_#{_p.payload[:network]}").perform_async({"network" => _p.payload[:network]}) unless Rails.env.stage?
 
     break if interrupted
   rescue SkipAndSleep
