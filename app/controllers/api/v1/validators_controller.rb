@@ -81,7 +81,7 @@ module Api
               x: vah.created_at.strftime("%H:%M"),
               y: vah.vote_latency_average
             }
-          end.compact
+          end&.compact
 
           # Grab the root distances to show on the chart
           @root_blocks = @val_histories.map do |val_history|
