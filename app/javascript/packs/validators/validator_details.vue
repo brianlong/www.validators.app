@@ -226,6 +226,7 @@
       <vote-history-chart :vote_blocks="vote_blocks" v-if="vote_blocks.length > 0"></vote-history-chart>
       <skipped-slots-chart :skipped_slots="skipped_slots" v-if="skipped_slots[1]"></skipped-slots-chart>
       <skipped-after-chart :skipped_after="skipped_after" v-if="skipped_after[1]"></skipped-after-chart>
+      <vote-latency-chart :vote_latencies="vote_latencies" v-if="vote_latencies.length > 0"></vote-latency-chart>
     </div>
 
     <a :href="go_back_link"
@@ -262,6 +263,7 @@
   import voteHistoryChart from './charts/vote_history_chart'
   import skippedSlotsChart from './charts/skipped_slots_large_chart'
   import skippedAfterChart from './charts/skipped_after_large_chart'
+  import voteLatencyChart from './charts/vote_latency_chart'
   import blockHistoryTable from './components/block_history_table'
   import validatorScoreModal from "./components/validator_score_modal"
   import axios from 'axios';
@@ -319,6 +321,7 @@
         jito_badge: jitoBadge,
         is_loading_validator: true,
         validator_score_details_attrs: {},
+        vote_latencies: {},
         reload_time: 1000 * 60 * 3 // 3 minutes
       }
     },
@@ -360,6 +363,7 @@
           ctx.skipped_slots = JSON.parse(response.data.skipped_slots)
           ctx.validator_history = response.data.validator_history
           ctx.geo_country = response.data.geo_country
+          ctx.vote_latencies = JSON.parse(response.data.vote_latencies)
           ctx.is_loading_validator = false
         })
       },
@@ -461,7 +465,8 @@
       "skipped-slots-chart": skippedSlotsChart,
       "block-history-table": blockHistoryTable,
       "validator-score-modal": validatorScoreModal,
-      "skipped-after-chart": skippedAfterChart
+      "skipped-after-chart": skippedAfterChart,
+      "vote-latency-chart": voteLatencyChart
     }
   }
 </script>

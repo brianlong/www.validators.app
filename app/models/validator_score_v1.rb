@@ -48,6 +48,8 @@
 #  total_score                                 :integer
 #  vote_distance_history                       :text(65535)
 #  vote_distance_score                         :integer
+#  vote_latency_history                        :text(65535)
+#  vote_latency_score                          :integer
 #  created_at                                  :datetime         not null
 #  updated_at                                  :datetime         not null
 #  validator_id                                :bigint
@@ -74,6 +76,7 @@ class ValidatorScoreV1 < ApplicationRecord
     software_version_score
     stake_concentration_score
     consensus_mods_score
+    vote_latency_score
     total_score
     validator_id
     vote_distance_score
@@ -94,6 +97,7 @@ class ValidatorScoreV1 < ApplicationRecord
     skipped_after_moving_average_history
     stake_concentration
     skipped_after_history
+    vote_latency_history
   ].freeze
 
   WITHDRAWER_SCORE_OPTIONS = {
@@ -124,6 +128,7 @@ class ValidatorScoreV1 < ApplicationRecord
   serialize :skipped_vote_percent_moving_average_history, JSON
   serialize :skipped_slot_moving_average_history, JSON
   serialize :skipped_after_moving_average_history, JSON
+  serialize :vote_latency_history, JSON
 
   delegate :data_center, to: :validator, prefix: true, allow_nil: true
 
@@ -162,6 +167,7 @@ class ValidatorScoreV1 < ApplicationRecord
     assign_software_version_score(best_sv)
     assign_security_report_score
     assign_consensus_mods_score
+    assign_vote_latency_score
 
     self.total_score =
       if validator.private_validator? || validator.admin_warning
@@ -176,8 +182,8 @@ class ValidatorScoreV1 < ApplicationRecord
           software_version_score.to_i +
           stake_concentration_score.to_i +
           data_center_concentration_score.to_i +
-          authorized_withdrawer_score.to_i
-          # + skipped_after_score.to_i
+          authorized_withdrawer_score.to_i +
+          vote_latency_score.to_i
       end
   end
 
@@ -241,6 +247,16 @@ class ValidatorScoreV1 < ApplicationRecord
   # Assign -2 if consensus_mods value is true
   def assign_consensus_mods_score
     self.consensus_mods_score = validator.consensus_mods ? -2 : 0
+  end
+
+  def assign_vote_latency_score
+    return 0 if vote_latency_history.blank?
+
+    self.vote_latency_score = case vote_latency_history.last
+                              when 0...2 then 2
+                              when 2..3 then 1
+                              else 0
+                              end
   end
 
   def avg_root_distance_history(period = nil)
@@ -330,6 +346,14 @@ class ValidatorScoreV1 < ApplicationRecord
 
     if skipped_after_moving_average_history.length > MAX_HISTORY
       self.skipped_after_moving_average_history = skipped_after_moving_average_history[-MAX_HISTORY..-1]
+    end
+  end
+
+  def vote_latency_history_push(val)
+    self.vote_latency_history = [] if vote_latency_history.nil?
+    vote_latency_history << val
+    if vote_latency_history.length > MAX_HISTORY
+      self.vote_latency_history = vote_latency_history[-MAX_HISTORY..-1]
     end
   end
 
