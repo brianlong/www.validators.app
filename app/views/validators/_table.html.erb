@@ -98,11 +98,11 @@
     </th>
 
     <th class='column-chart py-3'>
-      Skipped After&nbsp;&percnt;
+      Vote Latency
       <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
-         title="<%= t('definitions.skipped_after') %>">
+         title="<%= t('definitions.vote_latency') %>">
       </i>
       <br />
       <small class="text-muted">Last 60 Observations</small>
@@ -271,8 +271,8 @@
             </a>
           </div>
           <div class="col">
-            <a class="chart-link" data-iterator="<%=i%>" data-bs-target="skipped-after" href="">
-              Skipped <br class="d-xxs-inline-block" />After
+            <a class="chart-link" data-iterator="<%=i%>" data-bs-target="vote-latency" href="">
+              Vote <br class="d-xxs-inline-block" />Latency
             </a>
           </div>
         </div>
@@ -298,7 +298,8 @@
                    chart_name: "block_distance_#{validator.account}",
                    vector: vector,
                    line_color: line_color,
-                   fill_color: fill_color
+                   fill_color: fill_color,
+                    max_y: Y_ROOT_DISTANCE_MAX
         %>
       </td>
 
@@ -322,7 +323,8 @@
                    chart_name: "vote_distance_#{validator.account}",
                    vector: vote_vector,
                    line_color: line_color,
-                   fill_color: fill_color
+                   fill_color: fill_color,
+                    max_y: Y_VOTE_DISTANCE_MAX
         %>
       </td>
 
@@ -350,28 +352,28 @@
         <% end %>
       </td>
 
-      <!-- SKIPPED AFTER -->
-      <td class="column-chart d-none d-lg-table-cell text-center" id="skipped-after-<%=i%>">
+      <td class="column-chart d-none d-lg-table-cell" id=vote-latency-<%=i%>>
         <%
-          vl = chart_x_scale(validator.score&.skipped_after_history.to_a.count)
-          ma = chart_x_scale(validator.score&.skipped_after_moving_average_history.to_a.count)
-
-          skipped_slots_moving_avg = validator.score&.skipped_after_moving_average_history.to_a[-ma..-1]&.map { |v| (v.to_f*100.0).round(1) }
-          slot_vector = validator.score&.skipped_after_history.to_a[-vl..-1].map { |v| (v.to_f*100.0).round(1) }
-
-          line_color = chart_line_color(validator.score&.skipped_after_score)
+          vl = chart_x_scale(validator.score&.vote_latency_history.to_a.count)
+          line_color = chart_line_color(validator.vote_latency_score)
+          fill_color = chart_fill_color(validator.vote_latency_score)
+          vote_vector = validator.score&.vote_latency_history.to_a[-vl..-1]
         %>
-        <% if slot_vector.count > 0 %>
-          <%= render 'validators/validator_skipped_slots_chart',
-                    chart_name: "skipped_after_#{validator.account}",
-                    account: validator.account,
-                    vector: slot_vector,
-                    line_color: line_color,
-                    moving_avg_vector: skipped_slots_moving_avg
-          %>
-        <% else %>
-          <span class="text-muted">N/A</span>
+        <% max_value = vote_vector&.max %>
+        <% if max_value && max_value > Y_VOTE_LATENCY_MAX %>
+          <div class="chart-top-container">
+            <div class="chart-top-value" style="left: <%= max_value_position(vote_vector) %>">
+              <%= max_value %>
+            </div>
+          </div>
         <% end %>
+        <%= render 'validators/validator_small_chart',
+                   chart_name: "vote_latency_#{validator.account}",
+                   vector: vote_vector,
+                   line_color: line_color,
+                   fill_color: fill_color,
+                   max_y: Y_VOTE_LATENCY_MAX
+        %>
       </td>
     </tr>
 
