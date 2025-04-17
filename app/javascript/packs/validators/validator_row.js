@@ -31,7 +31,6 @@ var ValidatorRow = Vue.component('validatorRow', {
     'root-distance-chart': rootDistanceChart,
     'vote-distance-chart': voteDistanceChart,
     'skipped-slots-chart': skippedSlotsChart,
-    'skipped-after-chart': skippedAfterChart,
     'vote-latency-chart': voteLatencyChart,
     "validator-scores": scores
   },

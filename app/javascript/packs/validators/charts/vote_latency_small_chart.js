@@ -80,7 +80,8 @@ export default {
                 },
               },
               grid: { display: false },
-              title: { display: false }
+              title: { display: false },
+              max: 3
             }
           },
           plugins: {
