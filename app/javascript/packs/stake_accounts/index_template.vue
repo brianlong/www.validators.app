@@ -149,7 +149,7 @@
                 <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
-                   title="Slot latency shows the average number of slots a validator needs to confirm a block. A lower number means that the validator is confirming blocks at a very high rate.">
+                   title="Vote latency shows the average number of slots a validator needs to confirm a block. A lower number means that the validator is confirming blocks at a very high rate.">
                 </i>
                 <br />
                 <small class="text-muted">Last 60 Observations</small>

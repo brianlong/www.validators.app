@@ -193,7 +193,7 @@ var ValidatorRow = Vue.component('validatorRow', {
           </div>
           <div class="col">
             <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('vote-latency', $event)" href="">
-              Slot <br class="d-xxs-inline-block" />Latency
+              Vote <br class="d-xxs-inline-block" />Latency
             </a>
           </div>
         </div>
