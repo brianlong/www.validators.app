@@ -16,19 +16,24 @@ export default {
   methods: {},
 
   data() {
-    var vote_latency_vl = Math.min.apply(Math, [60, this.validator['vote_latency_history'].length]);
-    var vote_latency_vector = this.validator['vote_latency_history'].slice(Math.max(this.validator['vote_latency_history'].length - vote_latency_vl, 0));
-    var max_value = Math.max.apply(Math, vote_latency_vector);
-    var max_value_position = this.$parent.max_value_position(vote_latency_vector);
-    return {
-      max_value: max_value,
-      max_value_position: max_value_position,
-      y_root_distance_max: 3,
-      vote_latency_chart: {
-        line_color: this.$parent.chart_line_color(this.validator['vote_latency_score']),
-        fill_color: this.$parent.chart_fill_color(this.validator['vote_latency_score']),
-        vector: vote_latency_vector
-      },
+    if(this.validator && this.validator['vote_latency_history'] && this.validator['vote_latency_history'].length > 0) {
+      var vote_latency_vl = Math.min.apply(Math, [60, this.validator['vote_latency_history'].length]);
+      var vote_latency_vector = this.validator['vote_latency_history'].slice(Math.max(this.validator['vote_latency_history'].length - vote_latency_vl, 0));
+      var max_value = Math.max.apply(Math, vote_latency_vector);
+      var max_value_position = this.$parent.max_value_position(vote_latency_vector);
+      return {
+        max_value: max_value,
+        max_value_position: max_value_position,
+        y_root_distance_max: 3,
+        vote_latency_chart: {
+          line_color: this.$parent.chart_line_color(this.validator['vote_latency_score']),
+          fill_color: this.$parent.chart_fill_color(this.validator['vote_latency_score']),
+          vector: vote_latency_vector
+        },
+      }
+    }
+    else {
+      return {}
     }
   },
 
@@ -88,7 +93,8 @@ export default {
         </div>
       </div>
       
-      <canvas :id=" 'spark_line_vote_latency_' + validator['account'] "></canvas>
+      <canvas :id=" 'spark_line_vote_latency_' + validator['account'] " v-if="validator && validator['vote_latency_history'] && validator['vote_latency_history'].length > 0"></canvas>
+      <span v-else class="text-muted"> N/A </span>
     </td>
   `
 }
