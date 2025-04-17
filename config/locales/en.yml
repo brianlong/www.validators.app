@@ -119,3 +119,4 @@ en:
     total_stake: "Total stake from all validator(s)."
     vote_distance: "Vote distance is very similar to the Root Distance. Lower numbers mean that the node is voting near the front of the group."
     skipped_after: "Skipped after measures the percent of the time that a leader fails to produce a block after their allocated slots."
+    slot_latency: "Slot latency shows the average number of slots a validator needs to confirm a block. A lower number means that the validator is confirming blocks at a very high rate."
