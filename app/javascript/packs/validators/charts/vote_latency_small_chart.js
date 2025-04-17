@@ -45,7 +45,7 @@ export default {
 
   mounted: function () {
     if(this.validator && this.validator['vote_latency_history'] && this.validator['vote_latency_history'].length > 0) {
-      var skipped_slots_el = document.getElementById("spark_line_skipped_slots_" + this.validator['account']).getContext('2d');
+      var skipped_slots_el = document.getElementById("vote_latency_small_" + this.validator['account']).getContext('2d');
       new Chart(skipped_slots_el, {
         type: 'line',
         data: {
@@ -94,7 +94,7 @@ export default {
   },
   template: `
     <td class="column-chart d-none d-lg-table-cell text-center" :id="'skipped-slots-' + idx ">
-      <canvas :id=" 'vote_latency_small' + validator['account'] " v-if="validator && validator['vote_latency_history'] && validator['vote_latency_history'].length > 0"></canvas>
+      <canvas :id=" 'vote_latency_small_' + validator['account'] " v-if="validator && validator['vote_latency_history'] && validator['vote_latency_history'].length > 0"></canvas>
       <span v-else class="text-muted"> N/A </span>
     </td>
   `
