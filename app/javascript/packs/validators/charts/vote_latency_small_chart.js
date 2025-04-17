@@ -81,7 +81,8 @@ export default {
               },
               grid: { display: false },
               title: { display: false },
-              max: 3
+              max: 3,
+              min: 0,
             }
           },
           plugins: {
