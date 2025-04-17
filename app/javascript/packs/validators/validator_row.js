@@ -7,7 +7,7 @@ import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
 import voteDistanceChart from './charts/vote_distance_chart'
 import skippedSlotsChart from './charts/skipped_slots_small_chart'
-import skippedAfterChart from './charts/skipped_after_chart'
+import voteLatencyChart from './charts/vote_latency_small_chart'
 
 import scores from './components/scores'
 
@@ -32,6 +32,7 @@ var ValidatorRow = Vue.component('validatorRow', {
     'vote-distance-chart': voteDistanceChart,
     'skipped-slots-chart': skippedSlotsChart,
     'skipped-after-chart': skippedAfterChart,
+    'vote-latency-chart': voteLatencyChart,
     "validator-scores": scores
   },
 
@@ -192,8 +193,8 @@ var ValidatorRow = Vue.component('validatorRow', {
             </a>
           </div>
           <div class="col">
-            <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('skipped-after', $event)" href="">
-              Skipped <br class="d-xxs-inline-block" />After
+            <a class="chart-link" :data-iterator="idx" @click.prevent="display_chart('vote-latency', $event)" href="">
+              Slot <br class="d-xxs-inline-block" />Latency
             </a>
           </div>
         </div>
@@ -205,7 +206,7 @@ var ValidatorRow = Vue.component('validatorRow', {
 
       <skipped-slots-chart :validator="validator" :idx="idx" />
 
-      <skipped-after-chart :validator="validator" :idx="idx" />
+      <vote-latency-chart :validator="validator" :idx="idx" />
 
     </tr>
   `
