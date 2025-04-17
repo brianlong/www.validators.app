@@ -23,7 +23,7 @@ export default {
     return {
       max_value: max_value,
       max_value_position: max_value_position,
-      y_root_distance_max: 20,
+      y_root_distance_max: 3,
       vote_latency_chart: {
         line_color: this.$parent.chart_line_color(this.validator['vote_latency_score']),
         fill_color: this.$parent.chart_fill_color(this.validator['vote_latency_score']),
@@ -80,7 +80,7 @@ export default {
     });
   },
   template: `
-    <td class="column-chart d-none d-lg-table-cell" :id="'vote-distance-' + idx ">
+    <td class="column-chart d-none d-lg-table-cell" :id="'vote-latency-' + idx ">
       <div class="chart-top-container" v-if="max_value > 20">
         <div class="chart-top-value"
              :style="{ left: max_value_position }">
