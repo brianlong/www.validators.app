@@ -86,7 +86,7 @@ export default {
   },
   template: `
     <td class="column-chart d-none d-lg-table-cell" :id="'vote-latency-' + idx ">
-      <div class="chart-top-container" v-if="max_value > 20">
+      <div class="chart-top-container" v-if="validator && validator['vote_latency_history'] && validator['vote_latency_history'].length > 0 && max_value > 20">
         <div class="chart-top-value"
              :style="{ left: max_value_position }">
           {{ max_value }}
