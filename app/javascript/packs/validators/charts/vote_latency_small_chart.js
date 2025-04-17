@@ -94,7 +94,7 @@ export default {
   },
   template: `
     <td class="column-chart d-none d-lg-table-cell text-center" :id="'skipped-slots-' + idx ">
-      <canvas :id=" 'spark_line_skipped_slots_' + validator['account'] " v-if="validator && validator['vote_latency_history'] && validator['vote_latency_history'].length > 0"></canvas>
+      <canvas :id=" 'vote_latency_small' + validator['account'] " v-if="validator && validator['vote_latency_history'] && validator['vote_latency_history'].length > 0"></canvas>
       <span v-else class="text-muted"> N/A </span>
     </td>
   `
