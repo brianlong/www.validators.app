@@ -115,7 +115,7 @@ MAINNET_STAKE_POOLS = {
     network: "mainnet",
     ticker: "aerosol",
     small_logo: "aero-logo.svg",
-    large_logo: "aero.svg",
+    large_logo: "aero.png",
     url: "https://aeropool.io",
     manager_fee: 5,
     withdrawal_fee: 0.1,

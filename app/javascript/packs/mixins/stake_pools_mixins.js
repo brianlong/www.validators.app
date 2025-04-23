@@ -28,7 +28,7 @@ import EdgevanaStakeSmall from 'edgevana-logo.svg'
 import EdgevanaStakeLarge from 'edgevana.png'
 
 import AeroSmall from 'aero-logo.svg'
-import AeroLarge from 'aero.svg'
+import AeroLarge from 'aero.png'
 
 const logos = {
   "blazestake": {
