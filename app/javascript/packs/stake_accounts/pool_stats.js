@@ -11,6 +11,7 @@ const DELEGATION_STRATEGY_URLS = {
   "ZippyStake": "https://docs.zippystake.org/delegation-strategy",
   "Edgevana": "https://docs.stake.edgevana.com/docs/validators/delegation-strategy-algorithm",
   "Aero": "https://www.aeropool.io/delegation"
+}
 
 var StakePoolStats = Vue.component('StakePoolStats', {
   props: {
