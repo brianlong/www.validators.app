@@ -9,7 +9,8 @@ const DELEGATION_STRATEGY_URLS = {
   "BlazeStake": "https://stake-docs.solblaze.org/protocol/delegation-strategy",
   "Jito": "https://jito-foundation.gitbook.io/jitosol/jitosol-liquid-staking/stake-delegation",
   "ZippyStake": "https://docs.zippystake.org/delegation-strategy",
-  "Edgevana": "https://docs.stake.edgevana.com/docs/validators/delegation-strategy-algorithm"
+  "Edgevana": "https://docs.stake.edgevana.com/docs/validators/delegation-strategy-algorithm",
+  "Aero": "https://www.aeropool.io/delegation"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {

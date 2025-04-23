@@ -108,6 +108,18 @@ MAINNET_STAKE_POOLS = {
     manager_fee: 1, #https://docs.stake.edgevana.com/docs/pool-and-token-info/fees
     withdrawal_fee: 0.1,
     deposit_fee: 0
+  },
+  aero: {
+    name: "Aero",
+    authority: "AKJt3m2xJ6ANda9adBGqb5BMrheKJSwxyCfYkLuZNmjn",
+    network: "mainnet",
+    ticker: "aerosol",
+    small_logo: "aero-logo.svg",
+    large_logo: "aero.png",
+    url: "https://aeropool.io",
+    manager_fee: 5,
+    withdrawal_fee: 0.1,
+    deposit_fee: 0.1
   }
 }
 
