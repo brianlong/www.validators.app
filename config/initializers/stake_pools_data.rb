@@ -117,7 +117,7 @@ MAINNET_STAKE_POOLS = {
     small_logo: "aero-logo.svg",
     large_logo: "aero.png",
     url: "https://aeropool.io",
-    manger_fee: 5,
+    manager_fee: 5,
     withdrawal_fee: 0.1,
     deposit_fee: 0.1
   }
