@@ -27,6 +27,9 @@ import ZippyStakeLarge from 'zippystake.png'
 import EdgevanaStakeSmall from 'edgevana-logo.svg'
 import EdgevanaStakeLarge from 'edgevana.png'
 
+import AeroSmall from 'aero-logo.svg'
+import AeroLarge from 'aero.png'
+
 const logos = {
   "blazestake": {
     "small_logo": BlazeStakeSmall,
@@ -63,7 +66,11 @@ const logos = {
   "edgevana": {
     "small_logo": EdgevanaStakeSmall,
     "large_logo": EdgevanaStakeLarge
-  }
+  },
+  "aero": {
+    "small_logo": AeroSmall,
+    "large_logo": AeroLarge
+  },
 }
 
 Vue.mixin({
