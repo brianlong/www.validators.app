@@ -20,7 +20,7 @@
         <div class="card h-100">
           <div class="card-content">
             <h2 class="h4 card-heading">
-              TX Time Last Obervations
+              TX Time Last Observations
             </h2>
             <bubble-chart :vector="ping_things.slice().reverse()" :network="network"/>
           </div>
