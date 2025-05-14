@@ -39,14 +39,14 @@
           <br />
           <% if show_ip_and_gateway %>
             IP & Gateway
-          <% else %>
-            Active Stake <small class="text-muted">(% of total)</small>
-            <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
-               data-bs-toggle="tooltip"
-               data-bs-placement="top"
-               title="<%= t('definitions.active_stake') %>">
-            </i>
+            <br />
           <% end %>
+          Active Stake <small class="text-muted">(% of total)</small>
+          <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="<%= t('definitions.active_stake') %>">
+          </i>
         </div>
       </div>
     </th>
@@ -150,28 +150,21 @@
                   <%= data_center_host %>
                 <% end %>
               </div>
-              <div class="small text-muted">
+            <% end %>
+            <div class="mt-2 mt-lg-0 small">
+              <div class="d-lg-inline-block">
+                <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
+                <span class="me-2">
+                <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
+                  <span class="text-muted">(<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)</span>
+              </span>
+              </div>
+              <div class="d-lg-inline-block">
                 <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
                 <span class="d-none d-lg-inline-block">V:&nbsp;</span>
                 <%= validator.score&.software_version %>
               </div>
-            <% else %>
-              <div class="mt-2 mt-lg-0 small">
-                <div class="d-lg-inline-block">
-                  <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-                  <span class="me-2">
-                  <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
-                    <span class="text-muted">(<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)</span>
-                </span>
-                </div>
-                <div class="d-lg-inline-block">
-                  <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
-                  <span class="d-none d-lg-inline-block">V:&nbsp;</span>
-                  <%= validator.score&.software_version %>
-                </div>
-              </div>
-            <% end %>
-
+            </div>
             <div>
               <% if validator.stake_pools_list.present? %>
                 <div class="mt-2 mt-lg-0 me-1 d-inline-block">
