@@ -40,6 +40,9 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :digitalocean
 
+  # ActiveStorage SVG are served as binary files by default
+  config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
+
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
@@ -60,7 +63,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "fma_ruby_on_rails_template_production"
+  # config.active_job.queue_name_prefix = "validators_app_production"
 
   config.action_mailer.perform_caching = false
 

@@ -5,15 +5,21 @@ require 'stake_logic'
 
 include StakeLogic
 NETWORKS.each do |network|
+  unless StakePool.where(network: network).exists?
+    puts "Skipping #{network}, because there are no StakePools available."
+    next
+  end
+
   payload = {
     config_urls: NETWORK_URLS[network],
     network: network
   }
 
   p = Pipeline.new(200, payload)
+              .then(&check_current_epoch)
               .then(&get_last_batch)
-              .then(&move_current_stakes_to_history)
               .then(&get_stake_accounts)
+              .then(&move_current_stakes_to_history)
               .then(&update_stake_accounts)
               .then(&assign_stake_pools)
               .then(&update_stake_pools)

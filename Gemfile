@@ -11,14 +11,17 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Gem::LoadError : "ed25519 is not part of the bundle. Add it to your Gemfile."
 
 gem 'bundler', '>= 2.3.26'
-gem 'json', '>= 2.7.1'
+gem 'json', '~> 2.9.1'
 
 gem 'websocket-extensions', '>= 0.1.5'
+gem 'faye-websocket', '~> 0.12.0'
+gem 'eventmachine', '~> 1.2.7'
 
 gem 'actionview', '>= 6.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1'
+gem 'rack', '= 2.2.8'
 
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.5.6'
@@ -30,7 +33,7 @@ gem 'mysql2', '>= 0.5.6'
 gem 'sass-rails', '>= 6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.4'
+gem 'webpacker', '~> 5.4.4'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
@@ -42,7 +45,8 @@ gem 'jbuilder', '~> 2.11'
 gem 'redis', '~> 4.8.1'
 
 # This is for the free version of Sidekiq.
-gem 'sidekiq', ' ~> 7.1'
+gem 'sidekiq', ' ~> 7.2'
+gem 'sidekiq-unique-jobs', '~> 8.0.10'
 
 # Use this for SideKiq Pro if you have our production keys
 # source 'https://gems.contribsys.com/' do
@@ -56,7 +60,7 @@ gem 'whenever', require: false
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Active Storage variant
-gem 'image_processing'
+gem 'image_processing', '~> 1.14'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.18', require: false
@@ -66,28 +70,29 @@ gem 'capistrano-passenger', '>= 0.2.1'
 gem 'capistrano-rails', group: :development
 
 # AppSignal
-gem 'appsignal'
+gem 'appsignal', '~> 4.5'
 
 gem "mechanize", ">= 2.10"
 gem 'nokogiri', '1.16.2'
+gem 'parallel', '~> 1.27'
 
 # Pagination
-gem 'kaminari'
+gem 'kaminari', '~> 1.2.2'
 
 # MaxMind
-gem 'dnsruby'
-gem 'maxmind-geoip2'
+gem 'dnsruby', '~> 1.72.4'
+gem 'maxmind-geoip2', '~> 1.3.0'
 
 # use rack-cors for cross-origin api queries
-gem 'rack-cors'
+gem 'rack-cors', '~> 1.1.1'
 
 # Ruby client for Solana
 gem 'solana_rpc_ruby'
 
 # Ruby client for CoinGecko
-gem 'coingecko_ruby'
+gem 'coingecko_ruby', '~> 0.4.2'
 
-gem "audited", "~> 5.4.3"
+gem "audited", "~> 5.8"
 
 gem 'sitemap_generator', '~> 6.3.0'
 
@@ -99,7 +104,7 @@ gem 'sitemap_generator', '~> 6.3.0'
 # configure in production.
 #
 # User data encryption
-gem 'attr_encrypted', '>= 4.0'
+gem 'attr_encrypted', '>= 4.2'
 
 # Or use this for Vault. NOTE: Use this version of the gem until
 # https://github.com/hashicorp/vault-rails/pull/76 is merged:
@@ -111,33 +116,34 @@ gem 'attr_encrypted', '>= 4.0'
 gem 'aws-sdk-s3', require: false
 
 # Authentication
-gem 'devise'
-gem 'devise-i18n'
+gem 'devise', '~> 4.9'
+gem 'devise-i18n', '~> 1.13'
 
 # https://github.com/ambethia/recaptcha
-gem 'recaptcha'
+gem 'recaptcha', '~> 5.19'
 
 # User browser detection
-gem 'browser'
+gem 'browser', '~> 5.3'
 
 # PDFs creator
-gem 'wkhtmltopdf-binary'
-gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary', '~> 0.12.6'
+gem 'wicked_pdf', '~> 2.8.2'
 
 # Requests limiter
-gem 'rack-attack'
+gem 'rack-attack', '~> 6.6.1'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'bullet', '~> 7.0'
+  gem 'bullet', '~> 7.1'
   gem 'factory_bot_rails'
-  gem 'faker' #, git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
+  gem 'faker'
+  gem 'pry', '~> 0.14.2'
+  gem 'letter_opener_web'
   gem 'pronto', '~> 0.11.2'
   gem 'pronto-flay', '~> 0.11.1', require: false
   gem 'pronto-rubocop', '~> 0.11.5', require: false
-  gem 'pry', '~> 0.14.2'
-  gem 'rubocop', '~> 1.18', require: false
-  gem 'letter_opener_web'
+  gem 'rubocop', '~> 1.63.3', require: false
+  gem 'rubocop-rails', '~> 2.24.1', require: false
 end
 
 group :development do
@@ -147,8 +153,8 @@ group :development do
   gem 'web-console', '>= 4.2.1'
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring', '~> 4.2.1'
+  gem 'spring-watcher-listen', '~> 2.1.0'
   gem 'annotate'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
@@ -166,4 +172,5 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
   gem 'webmock'
+  gem 'database_cleaner-active_record'
 end

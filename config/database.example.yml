@@ -21,15 +21,25 @@ default: &default
   # socket: /var/run/mysqld/mysqld.sock
 
 development:
-  <<: *default
-  database: validators_development
+  primary:
+    <<: *default
+    database: validators_development
+  blockchain:
+    <<: *default
+    database: validators_blockchain_development
+    migrations_paths: db/blockchain_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: validators_test
+  primary:
+    <<: *default
+    database: validators_test
+  blockchain:
+    <<: *default
+    database: validators_blockchain_test
+    migrations_paths: db/blockchain_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -54,4 +64,4 @@ test:
 #   <<: *default
 #   database: fma_production
 #   username:
-#   password: <%= ENV['FMA_RUBY_ON_RAILS_TEMPLATE_DATABASE_PASSWORD'] %>
+#   password: <%= ENV['VALIDATORS_APP_DATABASE_PASSWORD'] %>

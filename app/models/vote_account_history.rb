@@ -19,6 +19,7 @@
 #  skipped_vote_percent_moving_average :decimal(10, 4)
 #  slot_index_current                  :integer
 #  software_version                    :string(191)
+#  vote_latency_average                :float(24)
 #  created_at                          :datetime         not null
 #  updated_at                          :datetime         not null
 #  vote_account_id                     :bigint           not null
@@ -46,7 +47,12 @@ class VoteAccountHistory < ApplicationRecord
 
   def skipped_vote_percent
     if slot_index_current.to_f.positive?
-      return ((slot_index_current.to_i - credits_current.to_i)/slot_index_current.to_f)
+      if network == "pythnet"
+        max_credits = slot_index_current
+      else
+        max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
+      end
+      return ((max_credits - (credits_current.to_i))/max_credits.to_f)
     end
 
     0

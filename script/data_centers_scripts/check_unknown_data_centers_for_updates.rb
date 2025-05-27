@@ -7,13 +7,16 @@ if unknown_data_center.blank?
   return
 end
 
-unknown_validator_ips = unknown_data_center.validator_ips
+unknown_ips = unknown_data_center.validator_ips
+                                 .where(is_active: true, is_muted: false)
+                                 .pluck(:address)
+                                 .uniq
 ip_service = DataCenters::CheckIpInfoService.new
 
-unknown_validator_ips.each do |validator_ip|
-  puts validator_ip.address
+unknown_ips.each do |ip|
+  puts ip
   begin
-    result = ip_service.call(ip: validator_ip.address)
+    result = ip_service.call(ip: ip)
     puts "Private IP - skipping" if result == :skip
   rescue MaxMind::GeoIP2::Error => e
     puts "\nMaxMindError:"

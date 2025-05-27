@@ -2,6 +2,7 @@
 
 class ExplorerStakeAccountsController < ApplicationController
   include StakeAccountsControllerHelper
+  include ExplorerStakeAccountsControllerHelper
 
   AUDITS_FILTERS = %w[active_stake account_balance credits_observed deactivating_stake delegated_stake rent_exempt_reserve].freeze
   TOP_LIMIT_COUNT = 20
@@ -19,6 +20,10 @@ class ExplorerStakeAccountsController < ApplicationController
     end
 
     @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
+    @stake_histories = ExplorerStakeAccountHistoryStat.where(network: index_params[:network])
+                                                      .order(epoch: :asc)
+                                                      .last(40)
+    @data_for_charts = prepare_data_for_charts(@stake_histories)
   end
 
   def show

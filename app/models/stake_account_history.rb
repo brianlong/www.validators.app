@@ -34,6 +34,8 @@
 #
 
 class StakeAccountHistory < ApplicationRecord
+  extend Archivable
+
   belongs_to :stake_pool, optional: true
   belongs_to :validator, optional: true
 end

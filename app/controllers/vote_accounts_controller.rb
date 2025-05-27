@@ -2,6 +2,7 @@
 
 class VoteAccountsController < ApplicationController
   include StakeAccountsControllerHelper
+  include ExplorerStakeAccountsControllerHelper
 
   before_action :set_validator, only: %i[show]
   before_action :set_vote_account, only: %i[show]
@@ -18,6 +19,9 @@ class VoteAccountsController < ApplicationController
     @explorer_stake_accounts, @stake_accounts = get_explorer_stake_accounts(params: va_params)
     @explorer_stake_accounts_total = @explorer_stake_accounts[:total_count]
     @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
+
+    @stake_histories = @vote_account.vote_account_stake_histories.order(epoch: :asc).last(40)
+    @data_for_charts = prepare_data_for_charts(@stake_histories)
   end
 
   private

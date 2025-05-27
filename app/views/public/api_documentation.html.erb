@@ -13,6 +13,8 @@
 <ul class="list-large list-no-bullets">
   <li><a href="#auhentication">Authentication</a></li>
   <li><a href="#ping">Server Ping</a></li>
+  <li><a href="#ping-times">Ping Times</a></li>
+  <li><a href="#ping-time-stats">Ping Time Stats</a></li>
   <li><a href="#validators-list">Validators List</a></li>
   <li><a href="#validator-detail">Validator Details</a></li>
   <li><a href="#validator-block">Validator Block Production History</a></li>
@@ -28,6 +30,8 @@
   <li><a href="#sol-prices">Sol Prices</a></li>
   <li><a href="#gossip-nodes">Gossip Nodes</a></li>
   <li><a href="#account-authorities">Authorities Changes</a></li>
+  <li><a href="#last-blocks">Last Blocks</a></li>
+  <li><a href="#block-votes">Block Votes</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#limits">Requests Limits</a></li>
   <li><a href="#notes">Notes</a></li>
@@ -52,6 +56,88 @@
 <h3 class="h6">Response:</h3>
 <pre>{"answer":"pong"}</pre>
 
+<hr />
+
+<h2 class="h4" id="collector">Ping Times Collector</h2>
+<p>
+  Collector endpoint is used to gather ping times from participating validators.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"payload_type": "ping_times",  "payload_version": 1, "payload": [{"network":"testnet","from_account":"ABCD","from_ip":"123.123.123.123","to_account":"IJKL","to_ip":"10.10.10.10","min_ms":1.881,"avg_ms":2.238,"max_ms":3.428,"mdev":1.597}] }' <%= @api_path %>/collector</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`payload_type=string`</strong> = ping_times</p>
+<p><strong class="text-muted">`payload_version=NN`</strong> = 1</p>
+<p><strong class="text-muted">`payload=string(json)`</strong> json containing array with all ping details (see example above).</p>
+<p>Reqired payload fields: <%= CollectorLogic::REQUIRED_PAYLOAD_FIELDS.join(", ")%></p>
+
+<h3 class="h6">Response:</h3>
+<pre>{"status":"Accepted"}</pre>
+
+<hr />
+
+<h2 class="h4" id="ping-times">Ping Times</h2>
+<p>
+  The ping-times endpoint will return recent ping times as reported by the participating validators. By default, the most recent 1,000 ping times will be returned.
+  You can include a `limit` parameter to request more or fewer ping times. In the examples below, replace `:network` with 'testnet' or 'mainnet' as desired.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-times/:network.json'</pre>
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 1_000 (max 9_999).</p>
+
+<h3 class="h6">Response:</h3>
+<p>An Array of ping times.</p>
+<pre>
+[
+  {
+    "id":614598,
+    "batch_uuid":"baf5c581-7ca3-471f-9a86-17a4f3c904a3",
+    "network":"testnet",
+    "from_account":"71bhKKL89U3dNHzuZVZ7KarqV6XtHEgjXjvJTsguD11B",
+    "from_ip":"165.227.100.142",
+    "to_account":"HrTZp96AjUbgxFyaJUcWPLe93441D4TuEN1hC14TNTuJ",
+    "to_ip":"95.217.226.153",
+    "min_ms":"101.706",
+    "avg_ms":"101.778",
+    "max_ms":"101.872",
+    "mdev":"0.396",
+    "observed_at":"2020-06-19T12:54:50.000Z",
+    "created_at":"2020-06-19T12:54:50.559Z",
+    "updated_at":"2020-06-19T12:54:50.559Z"
+  },
+  ...
+]
+</pre>
+
+<hr />
+
+<h2 class="h4" id="ping-time-stats">Ping Time Stats</h2>
+<p>
+  The ping-time-stats endpoint will return overall stats for the ping times as reported by the participating validators. By default the most recent 100 ping time stats will be used.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/ping-time-stats/:network.json'</pre>
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 100 (max 9_999).</p>
+
+<h3 class="h6">Response:</h3>
+<p>An Array of ping time stats.</p>
+<pre>
+[
+  {
+    "batch_uuid": "baf5c581-7ca3-471f-9a86-17a4f3c904a3",
+    "overall_min_time": 101.778,
+    "overall_max_time": 101.872,
+    "overall_average_time": 101.803,
+    "observed_at": "2024-12-18 10:34:06.984608000 +0000",
+    "created_at": "2024-12-18 10:34:26.984608000 +0000",
+    "updated_at": "2024-12-18 10:34:26.984608000 +0000",
+    "network": "testnet"
+  },
+  ...
+]
+</pre>
 
 <hr />
 
@@ -93,36 +179,40 @@
     "avatar_url":"www.avatar_url.com",
     "created_at":"2020-05-24T19:07:38.222Z",
     "updated_at":"2020-05-24T19:07:38.222Z",
-    "total_score":10,
+    "admin_warning":"This validator has open RPC ports",
+    "jito":true,
+    "jito_commission":200,
+    "stake_pools_list":["Jito", "Marinade"],
+    "is_active":true,
+    "active_stake":100000,
+    "authorized_withdrawer_score":0,
+    "commission":10,
+    "data_center_concentration_score":0,
+    "delinquent":false,
+    "published_information_score":0,
     "root_distance_score:2,
-    "vote_distance_score":2,
+    "security_report_score":0,
     "skipped_slot_score":2,
     "skipped_after_score":2,
     "software_version":"1.2.3 devbuild",
     "software_version_score":2,
     "stake_concentration_score":0,
     "consensus_mods_score":0,
-    "data_center_concentration_score":0,
-    "published_information_score":0,
-    "security_report_score":0,
-    "admin_warning":"This validator has open RPC ports",
-    "jito":false,
-    "active_stake":100000,
-    "commission":10,
-    "delinquent":false,
+    "total_score":10,
+    "vote_distance_score":2,
+    "ip": 123.123.123.123,
     "data_center_key":"24940-FI-Helsinki",
-    "data_center_host":"host-name",
     "autonomous_system_number":24940,
     "latitude": "48.8582",
     "longitude": "2.3387",
+    "data_center_host":"host-name",
     "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
     "epoch_credits": 263538,
+    "epoch":668,
     "skipped_slots":664,
     "skipped_slot_percent":"0.5155",
     "ping_time":"205.703",
     "url":"<%= @api_path %>/validators/testnet/12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX.json",
-    "stake_pools_list":["Jito", "Marinade"],
-    "is_active": true
   },
   ...
 ]
@@ -159,34 +249,40 @@
   "avatar_url":"www.avatar_url.com",
   "created_at":"2020-05-24T19:07:38.222Z",
   "updated_at":"2020-05-24T19:07:38.222Z",
-  "total_score":10,
+  "admin_warning":"This validator has open RPC ports",
+  "jito":true,
+  "jito_commission":200,
+  "stake_pools_list":["Jito", "Marinade"],
+  "is_active":true,
+  "active_stake":100000,
+  "authorized_withdrawer_score":0,
+  "commission":10,
+  "data_center_concentration_score":0,
+  "delinquent":false,
+  "published_information_score":0,
   "root_distance_score:2,
-  "vote_distance_score":2,
+  "security_report_score":0,
   "skipped_slot_score":2,
   "skipped_after_score":2,
-  "software_version":"1.2.3 devbuild",
+  "software_version":"1.2.3",
   "software_version_score":2,
   "stake_concentration_score":0,
   "consensus_mods_score":0,
-  "data_center_concentration_score":0,
-  "published_information_score":0,
-  "security_report_score":0,
-  "admin_warning":"This validator has open RPC ports",
-  "active_stake":100000,
-  "commission":10,
-  "delinquent":false,
+  "total_score":10,
+  "vote_distance_score":2,
+  "ip": 123.123.123.123,
   "data_center_key":"24940-FI-Helsinki",
-  "data_center_host":"host-name",
   "autonomous_system_number":24940,
   "latitude": "48.8582",
   "longitude": "2.3387",
+  "data_center_host":"host-name",
   "vote_account":"123JiW1rwJ4JM5BxYqFkBi6wQJ52pt6qUH88JDqrtU9i",
   "epoch_credits": 263538,
+  "epoch":668,
   "skipped_slots":664,
   "skipped_slot_percent":"0.5155",
   "ping_time":"205.703",
   "url":"<%= @api_path %>/validators/testnet/12345j84ecQEKUvQ7gYMKxKwKF6PbYXxXxxXXXXXxXXX.json",
-  "stake_pools_list":["Jito", "Marinade"]
 }
 </pre>
 
@@ -459,7 +555,7 @@
 <p>The Ping Thing Post endpoint allows you to push information about transaction times.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}' <%= @api_path %>/ping-thing/:network.json</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"application": "mango",  "commitment_level": "finalized", "signature": "signature", "success": true, "time": "NN", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12", "priority_fee_percentile": "NN", "priority_fee_micro_lamports": "NN", "pinger_region": "reg"}' <%= @api_path %>/ping-thing/:network.json</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
@@ -477,6 +573,9 @@
 </p>
 <p><strong class="text-muted">`slot_sent: NN`</strong> Number of slot in which transaction has been started.</p>
 <p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
+<p><strong class="text-muted">`priority_fee_percentile: NN`</strong> Percentile of priority fee. Must be a number between 0 and 100.</p>
+<p><strong class="text-muted">`priority_fee_micro_lamports: NN`</strong> Priority fee in micro lamports.</p>
+<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 3 letter symbol.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>
@@ -487,7 +586,7 @@
 <p>The Ping Thing Batch endpoint allows you to push multiple transaction informations at once.</p>
 
 <h3 class="h6">Request:</h3>
-<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12"}, { ... }, ...]}' <%= @api_path %>/ping-thing-batch/:network.json</pre>
+<pre>curl -X POST -H "Token: secret-api-token" -H "Content-Type: application/json" -d '{"transactions": [{"time": "NN", "signature": "signature", "transaction_type": "transfer", "slot_sent": "NN", "slot_landed": "NN", "reported_at": "2021-07-01T11:02:12", "priority_fee_percentile": "NN", "priority_fee_micro_lamports": "NN", "pinger_region": "reg"}, { ... }, ...]}' <%= @api_path %>/ping-thing-batch/:network.json</pre>
 
 <h3 class="h6">Parameter Options:</h3>
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
@@ -505,6 +604,9 @@
 </p>
 <p><strong class="text-muted">`slot_sent: NN`</strong> Number of slot in which transaction has been started.</p>
 <p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
+<p><strong class="text-muted">`priority_fee_percentile: NN`</strong> Percentile of priority fee.</p>
+<p><strong class="text-muted">`priority_fee_micro_lamports: NN`</strong> Priority fee in micro lamports.</p>
+<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 3 letter symbol.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>
@@ -541,12 +643,15 @@
     "created_at": "2022-02-10T13:37:42.097Z",
     "network": "testnet",
     "response_time": 396,
-    "signature": "0d7f418e4d1a3f80dc8a266cd867f766b73d9c80feea36524dfd074068bdef9221e356c192ac6ac71b71404d",
+    "signature": "01234567891a3f80dc8a266cd867f766b73d9c80feea36524dfd074068bdef9221e356c192ac6ac71b71404d",
     "success": true,
     "transaction_type": "transfer",
     "slot_sent": 120,
     "slot_landed": 123,
-    "reported_at": "2022-02-10T13:31:55.000Z"
+    "reported_at": "2022-02-10T13:31:55.000Z",
+    "pinger_region": "nyc",
+    "priority_fee_micro_lamports": 1000,
+    "priority_fee_percentile": 90,
     "username": "sample_user"
   },
   ...
@@ -700,6 +805,80 @@
   }
 ]
 
+</pre>
+
+<hr />
+
+<h2 class="h4" id="last-blocks">Last Blocks</h2>
+<p>Last Blocks endpoint will return the last blocks for a given network.</p>
+
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/last-blocks/:network.json'</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 100.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/last-blocks/:network.json?limit=10'</pre>
+
+<h3 class="h6">Response:</h3>
+<pre>
+[
+  {
+    "block_time": 1740480207,
+    "blockhash": "DYrEknEkgEvKC1nRaT2cyGVFDhszHn51F88zf6NmBJfs",
+    "epoch": 747,
+    "height": 301248247,
+    "parent_slot": 322981103,
+    "slot_number": 322981104
+  },
+  ...
+]
+</pre>
+
+<hr />
+
+<h2 class="h4" id="block-votes">Block Votes</h2>
+<p>Block Votes endpoint will return votes for a given block.</p>
+
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/block-votes/:network/:block_hash.json'</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 100.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/block-votes/:network/:block_hash.json?limit=10'</pre>
+<p><strong class="text-muted">`page=NN`</strong> will return the results from provided page, defaults to 1.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/block-votes/:network/:block_hash.json?limit=50&page=1'</pre>
+
+<h3 class="h6">Response:</h3>
+<pre>
+{
+  "block_time": 1740480207,
+  "blockhash": "DN8iqbSo1BLxJBSRZSyTE1DjeA1GpJowmmQk4WPCJnLF",
+  "epoch": 747,
+  "height": 301248246,
+  "parent_slot": 322981102,
+  "slot_number": 322981103,
+  "transactions": [
+    {
+      "slot_number": 322981103,
+      "fee": 5000,
+      "account_key_1": "ATd7yhK41qadD5V9eiq7UXQtRf5pidaR6fyKbYtKkbvz",
+      "account_key_2": "8oGhRavfRf13fBdp257nitq8VVgXhRAZxR9fR5Q4oKhH",
+      "account_key_3": "Vote111111111111111111111111111111111111111",
+      "epoch": 747,
+      "pre_balances": [
+        11486323078,
+        7530954819,
+        1
+      ],
+      "post_balances": [
+        11486318078,
+        7530954819,
+        1
+      ]
+    },
+    ...
+  ]
+}
 </pre>
 
 <hr />

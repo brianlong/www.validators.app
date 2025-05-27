@@ -30,6 +30,7 @@
 @import "carousels";
 @import "map";
 @import "modals";
+@import "data_center_map";
 
 html {
   overflow-x: hidden;
@@ -213,11 +214,11 @@ hr {
   }
 }
 
-.col-lg-7 {
+.col-lg-5 {
   margin-top: 3px;
   margin-bottom: 3px;
   @media(min-width: $screen-lg-min) {
-    width: 14.28%;
+    width: 20%;
     margin-top: 5px;
     margin-bottom: 5px;
   }

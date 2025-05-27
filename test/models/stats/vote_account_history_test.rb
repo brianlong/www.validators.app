@@ -8,23 +8,25 @@ module Stats
     def setup
       super
 
-      network = 'testnet'
+      network = "testnet"
       batch_uuid = create(:batch).uuid
 
+      @val = create(:validator, network: network)
+      @vote_account = create(:vote_account, validator: @val, network: network)
       @vote_account_histories = [
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 1, credits_current: 140),
+               slot_index_current: 1, credits_current: 140, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 2, credits_current: 120),
+               slot_index_current: 2, credits_current: 120, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 4, credits_current: 100),
+               slot_index_current: 4, credits_current: 100, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 8, credits_current: 80),
+               slot_index_current: 8, credits_current: 80, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 16, credits_current: 60),
+               slot_index_current: 16, credits_current: 60, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 32, credits_current: 40),
-        create(:vote_account_history, slot_index_current: 64, credits_current: 220)
+               slot_index_current: 32, credits_current: 40, vote_account: @vote_account),
+        create(:vote_account_history, slot_index_current: 64, credits_current: 220, vote_account: @vote_account),
       ]
 
       @vahq = Stats::VoteAccountHistory.new(network, batch_uuid)
@@ -82,84 +84,86 @@ module Stats
     end
 
     test 'skipped_vote_percent_best' do
+      max_credits = @vah_slot_index_current.max * 8 + (@vah_slot_index_current.max - 1) * 8
       expected =
-        (@vah_slot_index_current.max - @vah_credit_current.max) /
-          @vah_slot_index_current.max.to_f
+        (max_credits - (@vah_credit_current.max)) / max_credits.to_f
       assert_equal expected, @vahq.skipped_vote_percent_best
     end
 
     test 'top_skipped_vote_percent' do
-      expected = [-139.0, -99.0, -74.0, -57.75, -46.75, -39.0]
+      expected = [-0.165e2, -0.1025e2, -0.70952e1, -0.52381e1, -0.40389e1, -0.32123e1]
       assert_equal expected, @vahq.top_skipped_vote_percent.map(&:first)
     end
 
     test 'skipped_votes_stats' do
       expected = {
-        min: -139.0, max: -0.25, median: -9.0, average: -39.0, best: -3.375
+        :min=>-16.5, :max=>0.9206349206349206, :median=>0.3333333333333333, :average=>-3.212280252602833, :best=>0.7222222222222222
       }
       assert_equal expected, @vahq.skipped_votes_stats
     end
 
     test 'skipped_votes_stats with history' do
       expected = {
-        min: -139.0, max: -0.25, median: -9.0, average: -39.0, best: -3.375,
-        history: [-139.0, -59.0, -24.0, -9.0, -2.75, -0.25]
+        :min=>-16.5, :max=>0.9206349206349206, :median=>0.3333333333333333, :average=>-3.212280252602833, :best=>0.7222222222222222, :history=>[-16.5, -4.0, -0.7857142857142857, 0.3333333333333333, 0.7580645161290323, 0.9206349206349206]
       }
       assert_equal expected, @vahq.skipped_votes_stats(with_history: true)
     end
 
     test 'skipped_vote_moving_average_stats' do
       expected = {
-        min: -0.139e3, max: -0.39e2, median: -0.5775e2, average: -0.7591666667e2
+        :min=>-0.165e2, :max=>-0.32123e1, :median=>-0.52381e1, :average=>-0.772241667e1
       }
       assert_equal expected, @vahq.skipped_vote_moving_average_stats
     end
 
     test 'skipped_vote_moving_average_stats with history' do
       expected = {
-        min: -0.139e3, max: -0.39e2, median: -0.5775e2, average: -0.7591666667e2
+        :min=>-0.165e2, :max=>-0.32123e1, :median=>-0.52381e1, :average=>-0.772241667e1
       }
-      expected_history = [-139.0, -99.0, -74.0, -57.75, -46.75, -39.0]
+      expected_history = [-0.165e2, -0.1025e2, -0.70952e1, -0.52381e1, -0.40389e1, -0.32123e1]
       assert_equal expected, @vahq.skipped_vote_moving_average_stats(with_history: false)
       assert_equal expected_history, @vahq.skipped_vote_moving_average_stats(with_history: true)[:history].map(&:first)
     end
 
     test 'average of skipped vote percent moving average calculated correctly' do
-      ::VoteAccountHistory.delete_all
-
-      create(:vote_account_history, batch_uuid: '1-2-3').update(skipped_vote_percent_moving_average: 0.1)
-      create(:vote_account_history, batch_uuid: '1-2-3').update(skipped_vote_percent_moving_average: 0.2)
-      create(:vote_account_history, batch_uuid: '1-2-3').update(skipped_vote_percent_moving_average: 0.3)
-      create(:vote_account_history, batch_uuid: '1234').update(skipped_vote_percent_moving_average: 0.3)
-      create(:vote_account_history, batch_uuid: '1234').update(skipped_vote_percent_moving_average: 0.4)
-      average1 = Stats::VoteAccountHistory.new('testnet', '1234')
+      create(:vote_account_history, batch_uuid: "1-2-3-4", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.1)
+      create(:vote_account_history, batch_uuid: "1-2-3-4", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.2)
+      create(:vote_account_history, batch_uuid: "1-2-3-4", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.3)
+      create(:vote_account_history, batch_uuid: "1234", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.3)
+      create(:vote_account_history, batch_uuid: "1234", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.4)
+      average1 = Stats::VoteAccountHistory.new("testnet", "1234")
                                           .average_skipped_vote_percent_moving_average
-      average2 = Stats::VoteAccountHistory.new('testnet', '1-2-3')
+      average2 = Stats::VoteAccountHistory.new("testnet", "1-2-3-4")
                                           .average_skipped_vote_percent_moving_average
 
       assert_equal 0.35, average1
       assert_equal 0.2, average2
-
-      ::VoteAccountHistory.delete_all
     end
 
-    test 'median of skipped vote percent moving average calculated correctly' do
-      ::VoteAccountHistory.delete_all
+    test "median of skipped vote percent moving average calculated correctly" do
+      create(:vote_account_history, batch_uuid: "1-2-3", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.1)
+      create(:vote_account_history, batch_uuid: "1-2-3", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.2)
+      create(:vote_account_history, batch_uuid: "1-2-3", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.3)
+      create(:vote_account_history, batch_uuid: "1234", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.3)
+      create(:vote_account_history, batch_uuid: "1234", vote_account: @vote_account)
+        .update(skipped_vote_percent_moving_average: 0.4)
 
-      create(:vote_account_history, batch_uuid: '1-2-3').update(skipped_vote_percent_moving_average: 0.1)
-      create(:vote_account_history, batch_uuid: '1-2-3').update(skipped_vote_percent_moving_average: 0.2)
-      create(:vote_account_history, batch_uuid: '1-2-3').update(skipped_vote_percent_moving_average: 0.3)
-      create(:vote_account_history, batch_uuid: '1234').update(skipped_vote_percent_moving_average: 0.3)
-      create(:vote_account_history, batch_uuid: '1234').update(skipped_vote_percent_moving_average: 0.4)
-      median1 = Stats::VoteAccountHistory.new('testnet', '1234')
+      median1 = Stats::VoteAccountHistory.new("testnet", "1234")
                                          .median_skipped_vote_percent_moving_average
-      median2 = Stats::VoteAccountHistory.new('testnet', '1-2-3')
+      median2 = Stats::VoteAccountHistory.new("testnet", "1-2-3")
                                          .median_skipped_vote_percent_moving_average
 
       assert_equal 0.4, median1
       assert_equal 0.2, median2
-
-      ::VoteAccountHistory.delete_all
     end
   end
 end

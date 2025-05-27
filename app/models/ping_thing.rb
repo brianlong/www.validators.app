@@ -4,21 +4,24 @@
 #
 # Table name: ping_things
 #
-#  id               :bigint           not null, primary key
-#  amount           :bigint
-#  application      :string(191)
-#  commitment_level :integer
-#  network          :string(191)
-#  reported_at      :datetime
-#  response_time    :integer
-#  signature        :string(191)
-#  slot_landed      :bigint
-#  slot_sent        :bigint
-#  success          :boolean          default(TRUE)
-#  transaction_type :string(191)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  user_id          :bigint           not null
+#  id                          :bigint           not null, primary key
+#  amount                      :bigint
+#  application                 :string(191)
+#  commitment_level            :integer
+#  network                     :string(191)
+#  pinger_region               :string(191)
+#  priority_fee_micro_lamports :float(24)
+#  priority_fee_percentile     :integer
+#  reported_at                 :datetime
+#  response_time               :integer
+#  signature                   :string(191)
+#  slot_landed                 :bigint
+#  slot_sent                   :bigint
+#  success                     :boolean          default(TRUE)
+#  transaction_type            :string(191)
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  user_id                     :bigint           not null
 #
 # Indexes
 #
@@ -33,6 +36,7 @@
 class PingThing < ApplicationRecord
 
   include ObjectCopier
+  extend Archivable
 
   API_FIELDS = %i[
     application
@@ -46,10 +50,28 @@ class PingThing < ApplicationRecord
     slot_sent
     slot_landed
     reported_at
+    pinger_region
+    priority_fee_micro_lamports
+    priority_fee_percentile
   ].freeze
 
   API_USER_FIELDS = %i[
     username
+  ].freeze
+
+  PINGER_REGIONS = %w[
+    pit
+    nyc
+    ams
+    lon
+    dub
+    fra
+    sgp
+    tyo
+    us
+    eu
+    ap
+    test
   ].freeze
 
   belongs_to :user
@@ -60,6 +82,9 @@ class PingThing < ApplicationRecord
   validates_length_of :application, maximum: 80, allow_blank: true
   validates :network, inclusion: { in: NETWORKS }
   validates :signature, length: { in: 64..128 }
+  validates :pinger_region, inclusion: { in: PINGER_REGIONS }, allow_blank: true
+  validates :priority_fee_percentile, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_blank: true
+  validates :priority_fee_micro_lamports, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
   scope :for_reported_at_range_and_network, -> (network, from, to) {
     where(network: network, reported_at: (from..to))
@@ -84,7 +109,26 @@ class PingThing < ApplicationRecord
     ActionCable.server.broadcast("ping_thing_channel", hash)
   end
 
-  def self.average_slot_latency
-    all.map{ |pt| pt.slot_landed && pt.slot_sent ? pt.slot_landed - pt.slot_sent : nil }.compact.average
+  def self.slot_latency_stats(records: nil)
+    all = records || self.all
+    latencies = all.map do |pt|
+      next unless pt.slot_landed && pt.slot_sent
+      pt.slot_landed.to_i >= pt.slot_sent.to_i ? pt.slot_landed - pt.slot_sent : nil
+    end.compact.sort
+    {
+      min: latencies.min,
+      median: latencies.median,
+      p90: latencies.first((latencies.count * 0.9).round).last
+    }
+  end
+
+  def self.time_stats(records: nil)
+    all = records || self.all
+    times = all.map(&:response_time).sort
+    {
+      min: times.min,
+      median: times.median,
+      p90: times.first((times.count * 0.9).round).last
+    }
   end
 end

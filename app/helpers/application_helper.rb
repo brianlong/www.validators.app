@@ -21,7 +21,7 @@ module ApplicationHelper
   end
 
   def lamports_to_sol(lamports)
-    lamports / 1_000_000_000.to_f
+    lamports.to_f / 1_000_000_000.to_f
   end
 
   def lamports_as_formatted_sol(lamports)

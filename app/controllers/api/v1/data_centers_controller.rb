@@ -64,20 +64,38 @@ module Api
         }, status: :ok
       end
 
+      def index_for_map
+        data_centers = DataCenter.select(:traits_organization, :data_center_key, :location_latitude, :location_longitude, :active_validators_count, :active_validators_stake, :traits_autonomous_system_number)
+                                 .joins(:data_center_stats)
+                                 .where("data_center_stats.network = ?", map_params[:network])
+                                 .where("data_center_stats.active_validators_count > 0")
+                                 .where.not(data_center_key: "0--Unknown")
+        # if map_params[:asn_search].present?
+        #   data_centers = data_centers.where("data_centers.traits_autonomous_system_number = ?", map_params[:asn_search])
+        # end
+        render json: {
+          data_centers: data_centers
+        }, status: :ok
+      end
+
       def data_center_stats
         dc_by_country = DataCenterStat.where(network: dc_params[:network])
                                       .joins(:data_center)
                                       .group(:country_name)
-                                      .sum(:active_validators_count)
-                                      .sort_by { |k, v| v}
-                                      .reverse
 
         dc_by_organization = DataCenterStat.where(network: dc_params[:network])
                                            .joins(:data_center)
                                            .group(:traits_organization)
-                                           .sum(:active_validators_count)
-                                           .sort_by { |k, v| v}
-                                           .reverse
+
+        if dc_params[:secondary_sort] == "count"
+          dc_by_country = dc_by_country.sum(:active_validators_count)
+          dc_by_organization = dc_by_organization.sum(:active_validators_count)
+        else
+          dc_by_country = dc_by_country.sum(:active_validators_stake)
+          dc_by_organization = dc_by_organization.sum(:active_validators_stake)
+        end
+        dc_by_country = dc_by_country.sort_by { |k, v| v}.reverse
+        dc_by_organization = dc_by_organization.sort_by { |k, v| v}.reverse
 
         render json: {
           dc_by_country: dc_by_country,
@@ -88,7 +106,11 @@ module Api
       private
 
       def dc_params
-        params.permit(:network, :show_gossip_nodes)
+        params.permit(:network, :show_gossip_nodes, :secondary_sort)
+      end
+
+      def map_params
+        params.permit(:network, :asn_search)
       end
     end
   end

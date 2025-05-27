@@ -26,7 +26,7 @@
                   v-on:keyup.enter="get_records()">
             <option value="" selected>Status (all)</option>
             <option value="true">success</option>
-            <option value="false">failure</option>
+            <option value="false">error</option>
           </select>
         </div>
 
@@ -50,7 +50,10 @@
         <table class='table' v-if="ping_things.length > 0">
           <thead>
           <tr>
-            <th class="column-md-sm">Success / Time</th>
+            <th class="column-md-sm">
+              Success / Time
+              <div class="small text-muted">Priority Fee</div>
+            </th>
             <th class="column-lg">
               Reported&nbsp;At<br />
               <span class="small text-muted">Signature</span>
@@ -63,7 +66,11 @@
               <span class="text-muted">Slot Sent</span><br />
               <span class="text-muted">Slot Landed</span> (Latency)
             </th>
-            <th class="column-xs">Posted&nbsp;By</th>
+            <th class="column-xs">
+              Posted&nbsp;By
+              <div class="small text-muted">Region</div>
+            </th>
+
           </tr>
           </thead>
 
@@ -72,6 +79,7 @@
             <td class="text-nowrap">
               <span v-html="success_icon(pt.success)"></span>
               <strong class="text-success h6">{{ pt.response_time.toLocaleString('en-US') }}</strong>&nbsp;ms
+              <div class="text-muted small">{{ formatted_fee(pt) }}</div>
             </td>
             <td class="small">
               {{ date_time_with_timezone(pt.reported_at) }}<br />
@@ -97,6 +105,7 @@
             </td>
             <td>
               <a href="" title="Filter by this sender" @click.prevent="filter_by_posted_by(pt.username)">{{ pt.username }}</a>
+              <div class="text-muted small" v-if="pt.pinger_region">{{ pt.pinger_region.toUpperCase() }}</div>
             </td>
           </tr>
           </tbody>
@@ -186,6 +195,14 @@
           }
         }
         return true
+      },
+
+      formatted_fee(pt) {
+        if(pt.priority_fee_percentile) {
+          return "p" + pt.priority_fee_percentile
+        } else {
+          return ""
+        }
       },
 
       success_icon(success) {

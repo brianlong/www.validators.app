@@ -42,9 +42,10 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     ping_stat.recalculate_stats
     ping_stat.reload
 
-    assert_equal 5000, ping_stat.max
     assert_equal 1000, ping_stat.min
     assert_equal 3000, ping_stat.median
+    assert_equal 5000, ping_stat.p90
+    assert_equal 5000, ping_stat.max
     assert_equal 5, ping_stat.num_of_records
   end
 
@@ -71,20 +72,19 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     assert_equal required_keys, ping_stat.to_builder.attributes!.keys
   end
 
-  test "creating new record brodcasts message" do
+  test "creating new record broadcasts message" do
     skip
     # TODO
   end
 
-  test "#recalculate_stats counts average of slot latency" do
-    slot_latency = 5
-    5.times do |time|
+  test "#recalculate_stats counts slot latency stats" do
+    [9,3,2,1,3,4].each do |latency|
       create(
         :ping_thing,
         :testnet,
         reported_at: rand(50.minutes.ago..Time.now),
-        slot_sent: time,
-        slot_landed: time + slot_latency
+        slot_sent: 1,
+        slot_landed: 1 + latency
       )
     end
 
@@ -93,16 +93,21 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     ping_stat.recalculate_stats
     ping_stat.reload
 
-    assert_equal slot_latency, ping_stat.average_slot_latency
+    assert_equal 1, ping_stat.min_slot_latency
+    assert_equal 3, ping_stat.average_slot_latency
+    assert_equal 4, ping_stat.p90_slot_latency
   end
 
   test "#recalculate_stats counts fails count" do
+    usr = create(:user)
+
     6.times do |time|
       create(
         :ping_thing,
         :testnet,
         reported_at: rand(50.minutes.ago..Time.now),
-        success: time.even?
+        success: time.even?,
+        user: usr
       )
     end
 
@@ -112,5 +117,27 @@ class PingThingRecentStatTest < ActiveSupport::TestCase
     ping_stat.reload
 
     assert_equal 3, ping_stat.fails_count
+  end
+
+  test "#recalculate_stats does not include users with 100% fails count" do
+    usr1 = create(:user)
+    usr2 = create(:user)
+    
+    10.times do |time|
+      create(
+        :ping_thing,
+        :testnet,
+        reported_at: rand(50.minutes.ago..Time.now),
+        success: time.even?,
+        user: time.even? ? usr1 : usr2
+      )
+    end
+
+    ping_stat = create(:ping_thing_recent_stat, interval: 60)
+
+    ping_stat.recalculate_stats
+    ping_stat.reload
+
+    assert_equal 0, ping_stat.fails_count
   end
 end

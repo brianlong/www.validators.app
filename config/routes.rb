@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'map' , to: 'map#index', as: 'map'
   mount ActionCable.server => '/cable'
 
   # Default root path
@@ -61,7 +62,9 @@ Rails.application.routes.draw do
   # Stake Pools
   get 'stake-pools', to: 'stake_accounts#index'
 
-  devise_for :users
+  devise_for :users,  controllers: {
+    sessions: 'sessions'
+  }
 
   # Free Sidekiq
   if Gem.loaded_specs.key? 'sidekiq'
@@ -77,6 +80,7 @@ Rails.application.routes.draw do
 
   # Only admins can see the Sidekiq Dashboard
   authenticate :user, ->(u) { u.is_admin? } do
+    require 'sidekiq_unique_jobs/web'
     mount Sidekiq::Web => '/sidekiq'
   end
 
@@ -130,9 +134,8 @@ Rails.application.routes.draw do
       # api_v1_ping GET /api/v1/ping(.:format)
       get 'ping', to: 'api#ping'
 
-      # TODO to remove - endpoint no longer in use
-      # api_v1_collector POST /api/v1/collector
-      post 'collector', to: 'api#collector'
+      # api_v1_collector POST /api/v1/ping_times/collector(.:format)
+      post 'collector', to: 'ping_times#collector', as: 'collector'
 
       # api_v1_validators GET /api/v1/validators/:network
       get 'validators/:network',
@@ -158,6 +161,15 @@ Rails.application.routes.draw do
           to: 'validator_block_histories#show',
           as: 'validator_block_history_old'
 
+      # Blockchain
+      get 'last-blocks/:network',
+            to: 'vote#block_list',
+            as: 'last_blocks'
+
+      get 'block-votes/:network/:block_hash',
+            to: 'vote#block_details',
+            as: 'block_votes'
+
       # Epoch Wall Clock
       get 'epochs/:network', to: 'epochs#index', as: 'epoch_index'
 
@@ -172,7 +184,8 @@ Rails.application.routes.draw do
 
       # TODO to remove - endpoint no longer in use
       # api_v1_ping_times GET /api/v1/ping_times
-      get 'ping-times/:network', to: 'api#ping_times', as: 'ping_times'
+      get 'ping-times/:network', to: 'ping_times#ping_times', as: 'ping_times'
+      get 'ping-time-stats/:network', to: 'ping_times#ping_time_stats', as: 'ping_time_stats'
 
       # POST /api/v1/ping-thing/
       post 'ping-thing/:network', to: 'ping_things#create', as: 'ping_thing'
@@ -192,6 +205,7 @@ Rails.application.routes.draw do
       get "gossip-nodes/:network", to: "gossip_nodes#index", as: "gossip_nodes"
 
       get "data-centers-with-nodes/:network", to: "data_centers#index_with_nodes", as: "data_centers_with_nodes"
+      get "data-centers-for-map", to: "data_centers#index_for_map", as: "data_centers_for_map"
       get "data-center-stats/:network", to: "data_centers#data_center_stats", as: "data_center_stats"
 
       get "account-authorities/:network", to: "account_authority#index", as: "account_authorities"

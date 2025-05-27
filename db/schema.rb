@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_26_110659) do
+ActiveRecord::Schema.define(version: 2025_03_18_090707) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -103,9 +103,112 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.float "best_skipped_vote"
     t.float "skipped_slot_all_average", default: 0.0
     t.float "skipped_after_all_average", default: 0.0
+    t.text "other_software_versions"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
+  end
+
+  create_table "blockchain_mainnet_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "blockhash"
+    t.integer "epoch"
+    t.integer "height"
+    t.bigint "parent_slot"
+    t.bigint "block_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_mainnet_slot_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "leader"
+    t.integer "epoch"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_mainnet_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.bigint "fee"
+    t.text "pre_balances"
+    t.text "post_balances"
+    t.string "account_key_1"
+    t.string "account_key_2"
+    t.string "account_key_3"
+    t.integer "epoch"
+    t.bigint "block_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_pythnet_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "blockhash"
+    t.integer "epoch"
+    t.integer "height"
+    t.bigint "parent_slot"
+    t.bigint "block_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_pythnet_slot_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "leader"
+    t.integer "epoch"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_pythnet_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.bigint "fee"
+    t.text "pre_balances"
+    t.text "post_balances"
+    t.string "account_key_1"
+    t.string "account_key_2"
+    t.string "account_key_3"
+    t.integer "epoch"
+    t.bigint "block_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_testnet_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "blockhash"
+    t.integer "epoch"
+    t.integer "height"
+    t.bigint "parent_slot"
+    t.bigint "block_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_testnet_slot_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.string "leader"
+    t.integer "epoch"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "blockchain_testnet_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number"
+    t.bigint "fee"
+    t.text "pre_balances"
+    t.text "post_balances"
+    t.string "account_key_1"
+    t.string "account_key_2"
+    t.string "account_key_3"
+    t.integer "epoch"
+    t.bigint "block_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "cluster_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -183,6 +286,7 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "active_validators_count"
     t.integer "active_gossip_nodes_count"
+    t.float "active_validators_stake", default: 0.0
     t.index ["data_center_id"], name: "index_data_center_stats_on_data_center_id"
     t.index ["network", "data_center_id"], name: "index_data_center_stats_on_network_and_data_center_id", unique: true
   end
@@ -252,6 +356,22 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.bigint "total_active_stake"
     t.index ["epoch"], name: "index_epoch_wall_clocks_on_epoch"
     t.index ["network", "epoch"], name: "index_epoch_wall_clocks_on_network_and_epoch", unique: true
+  end
+
+  create_table "explorer_stake_account_history_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "epoch"
+    t.bigint "delegated_stake"
+    t.bigint "account_balance"
+    t.bigint "active_stake"
+    t.float "average_active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.bigint "rent_exempt_reserve"
+    t.string "network"
+    t.integer "delegating_stake_accounts_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["epoch", "network"], name: "index_explorer_stake_account_history_stats_on_epoch_and_network", unique: true
   end
 
   create_table "explorer_stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -328,6 +448,58 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "ping_thing_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "amount"
+    t.integer "user_id"
+    t.string "application"
+    t.integer "commitment_level"
+    t.string "network"
+    t.datetime "reported_at"
+    t.integer "response_time"
+    t.string "signature"
+    t.bigint "slot_landed"
+    t.bigint "slot_sent"
+    t.boolean "success"
+    t.string "transaction_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.float "priority_fee_micro_lamports"
+    t.integer "priority_fee_percentile"
+    t.string "pinger_region"
+  end
+
+  create_table "ping_thing_fee_stat_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "network"
+    t.integer "priority_fee_percentile"
+    t.float "priority_fee_micro_lamports_average"
+    t.string "pinger_region"
+    t.float "average_time"
+    t.float "median_time"
+    t.float "p90_time"
+    t.float "min_time"
+    t.float "min_slot_latency"
+    t.float "median_slot_latency"
+    t.float "p90_slot_latency"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "ping_thing_fee_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "network"
+    t.integer "priority_fee_percentile"
+    t.float "priority_fee_micro_lamports_average"
+    t.string "pinger_region"
+    t.float "average_time"
+    t.float "median_time"
+    t.float "p90_time"
+    t.float "min_time"
+    t.float "min_slot_latency"
+    t.float "median_slot_latency"
+    t.float "p90_slot_latency"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ping_thing_raws", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "raw_data"
     t.datetime "created_at", precision: 6, null: false
@@ -348,7 +520,24 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.datetime "updated_at", precision: 6, null: false
     t.float "average_slot_latency"
     t.integer "fails_count"
+    t.integer "min_slot_latency"
+    t.integer "p90_slot_latency"
     t.index ["network", "interval"], name: "index_ping_thing_recent_stats_on_network_and_interval"
+  end
+
+  create_table "ping_thing_stat_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "average_slot_latency"
+    t.integer "interval"
+    t.float "max"
+    t.float "median"
+    t.float "min"
+    t.string "network"
+    t.integer "num_of_records"
+    t.datetime "time_from"
+    t.integer "tps"
+    t.bigint "transactions_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "ping_thing_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -381,6 +570,8 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.integer "fails_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "min_slot_latency"
+    t.integer "p90_slot_latency"
     t.index ["user_id"], name: "index_ping_thing_user_stats_on_user_id"
   end
 
@@ -399,6 +590,9 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.datetime "reported_at"
     t.bigint "slot_sent"
     t.bigint "slot_landed"
+    t.float "priority_fee_micro_lamports"
+    t.integer "priority_fee_percentile"
+    t.string "pinger_region"
     t.index ["network"], name: "index_ping_things_on_network"
     t.index ["reported_at", "network"], name: "index_ping_things_on_reported_at_and_network"
     t.index ["user_id"], name: "index_ping_things_on_user_id"
@@ -491,6 +685,30 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.index ["stake_pubkey", "network"], name: "index_stake_account_histories_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_account_histories_on_staker_and_network"
     t.index ["withdrawer", "network"], name: "index_stake_account_histories_on_withdrawer_and_network"
+  end
+
+  create_table "stake_account_history_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "account_balance"
+    t.integer "activation_epoch"
+    t.bigint "active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.integer "deactivation_epoch"
+    t.bigint "delegated_stake"
+    t.string "delegated_vote_account_address"
+    t.bigint "rent_exempt_reserve"
+    t.string "stake_pubkey"
+    t.string "stake_type"
+    t.string "staker"
+    t.string "withdrawer"
+    t.integer "stake_pool_id"
+    t.string "network"
+    t.integer "validator_id"
+    t.string "batch_uuid"
+    t.integer "epoch"
+    t.float "apy"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -660,7 +878,9 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.string "traits_ip_address"
     t.string "traits_network"
     t.boolean "is_active", default: false
+    t.boolean "is_muted", default: false
     t.index ["data_center_host_id"], name: "index_validator_ips_on_data_center_host_id"
+    t.index ["is_active", "address"], name: "index_validator_ips_on_is_active_and_address"
     t.index ["is_active"], name: "index_validator_ips_on_is_active"
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
   end
@@ -698,6 +918,9 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
     t.text "skipped_after_moving_average_history"
+    t.integer "software_kind", default: 0
+    t.text "vote_latency_history"
+    t.integer "vote_latency_score"
     t.index ["network", "active_stake", "commission", "delinquent"], name: "index_for_asns"
     t.index ["network", "total_score"], name: "index_validator_score_v1s_on_network_and_total_score"
     t.index ["network", "validator_id"], name: "index_validator_score_v1s_on_network_and_validator_id"
@@ -743,9 +966,28 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
     t.bigint "credits_current"
     t.integer "slot_index_current"
     t.decimal "skipped_vote_percent_moving_average", precision: 10, scale: 4
+    t.float "vote_latency_average"
     t.index ["network", "batch_uuid"], name: "index_vote_account_histories_on_network_and_batch_uuid"
     t.index ["vote_account_id", "created_at"], name: "index_vote_account_histories_on_vote_account_id_and_created_at"
     t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"
+  end
+
+  create_table "vote_account_stake_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "vote_account_id", null: false
+    t.integer "epoch"
+    t.bigint "delegated_stake"
+    t.bigint "account_balance"
+    t.bigint "active_stake"
+    t.float "average_active_stake"
+    t.bigint "credits_observed"
+    t.bigint "deactivating_stake"
+    t.bigint "rent_exempt_reserve"
+    t.string "network"
+    t.integer "delegating_stake_accounts_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["network", "epoch", "vote_account_id"], name: "index_vote_account_stake_histories_on_vote_account", unique: true
+    t.index ["vote_account_id"], name: "index_vote_account_stake_histories_on_vote_account_id"
   end
 
   create_table "vote_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -777,5 +1019,6 @@ ActiveRecord::Schema.define(version: 2024_01_26_110659) do
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
+  add_foreign_key "vote_account_stake_histories", "vote_accounts"
   add_foreign_key "vote_accounts", "validators"
 end

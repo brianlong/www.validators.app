@@ -7,6 +7,21 @@ module StakeLogic
 
   class NoResultsFromSolana < StandardError; end
 
+  def check_current_epoch
+    lambda do |p|
+      return p unless p.code == 200
+
+      current_epoch = EpochWallClock.by_network(p.payload[:network]).first.epoch
+      is_new_epoch = !StakeAccount.where(network: p.payload[:network], epoch: current_epoch).exists?
+
+      if is_new_epoch
+        Pipeline.new(200, p.payload.merge(current_epoch: current_epoch))
+      else
+        Pipeline.new(300, p.payload.merge(current_epoch: current_epoch))
+      end
+    end
+  end
+
   def get_last_batch
     lambda do |p|
       return p unless p.code == 200
@@ -61,7 +76,7 @@ module StakeLogic
       account_histories = []
 
       StakeAccount.where.not(
-        batch_uuid: p.payload[:batch].uuid,
+        epoch: p.payload[:current_epoch],
         network: p.payload[:network]
       ).each do |old_stake|
         account_histories.push StakeAccountHistory.new(old_stake.attributes.except("id"))
@@ -83,10 +98,6 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
-      current_epoch = EpochWallClock.where(network: p.payload[:network])
-                                    .order(created_at: :desc)
-                                    .first
-                                    .epoch
       p.payload[:stake_accounts].each do |acc|
         vote_account = VoteAccount.where(
           network: p.payload[:network],
@@ -114,11 +125,11 @@ module StakeLogic
           withdrawer: acc['withdrawer'],
           batch_uuid: p.payload[:batch].uuid,
           validator_id: validator_id,
-          epoch: current_epoch
+          epoch: p.payload[:current_epoch]
         )
       end
 
-      StakeAccount.where(network: p.payload[:network]).where.not(batch_uuid: p.payload[:batch].uuid).delete_all
+      StakeAccount.where(network: p.payload[:network]).where.not(epoch: p.payload[:current_epoch]).delete_all
 
       Pipeline.new(200, p.payload)
     rescue StandardError => e
@@ -185,7 +196,7 @@ module StakeLogic
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]
       end
 
-      # Sample account_rewards structure: 
+      # Sample account_rewards structure:
       # { "account_id"=>{
       #   "amount"=>358573846,
       #   "commission"=>8,
@@ -255,7 +266,7 @@ module StakeLogic
         weighted_apy_sum = pool.stake_accounts.inject(0) do |sum, sa|
           stake = history_accounts.select{ |h| h&.stake_pubkey == sa.stake_pubkey }.first&.active_stake
           # we don't want to include accounts with no stake
-          if stake && stake > 0 
+          if stake && stake > 0
             total_stake += stake
             if sa.apy
               sum = sum + sa.apy * stake

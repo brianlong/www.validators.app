@@ -1,6 +1,9 @@
 <%= javascript_pack_tag 'account_authority_histories/index.js' %>
 
-<h1 class="page-header"><%= params[:network].capitalize %> Vote Account</h1>
+<div class="page-header">
+  <h1><%= params[:network].capitalize %> Vote Account</h1>
+  <h2 class="h4 word-break"><%= @vote_account.account %></h2>
+</div>
 
 <div class="card">
   <div class="card-content pb-0">
@@ -8,14 +11,6 @@
   </div>
   <table class='table table-block-sm mb-0'>
     <tbody>
-    <tr>
-      <td><strong>Network:</strong></td>
-      <td><%= params[:network] %></td>
-    </tr>
-    <tr>
-      <td><strong>Vote Account:</strong></td>
-      <td><%= @vote_account.account %></td>
-    </tr>
     <tr>
       <td><strong>Identity Account:</strong></td>
       <td>
@@ -40,6 +35,8 @@
     </tbody>
   </table>
 </div>
+
+<%= render "explorer_stake_accounts/stats_row" %>
 
 <% if params[:network] == "mainnet" %>
   <%= render "stake_accounts" %>

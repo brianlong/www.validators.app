@@ -1,127 +1,98 @@
 <template>
   <div class="card mb-4">
-    <div class="card-content">
-      <div class="card-heading" v-if="titleVisible" data-turbolinks="false">
+    <div class="card-content pb-0" v-if="titleVisible" data-turbolinks="false">
+      <div class="text-center mb-3">
         <h2 class="h5 mb-2">Recent TX Confirmation Time&nbsp;Stats</h2>
         <a class="small" :href="pt_url">See details on the Ping Thing page</a>
       </div>
+    </div>
 
-      <!-- stats manu -->
-      <div class="row text-center d-none d-lg-flex">
-        <div class="col-lg-7 fw-bold">Stats</div>
-        <div class="col-lg-7">
-          <i class="fa-solid fa-calculator text-success me-2"></i>Entries
-        </div>
-        <div class="col-lg-7">
-          <i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures
-        </div>
-        <div class="col-lg-7">
-          <i class="fa-solid fa-down-long text-success me-2"></i>Min
-        </div>
-        <div class="col-lg-7">
-          <i class="fa-solid fa-divide text-success me-2"></i>Median
-        </div>
-        <div class="col-lg-7">
-          <i class="fa-solid fa-up-long text-success me-2"></i>P90
-        </div>
-        <div class="col-lg-7">
-          <i class="fa-solid fa-clock text-success me-2"></i>Latency
-        </div>
-      </div>
+    <div class="table-responsive-lg">
+      <table class="table text-center">
+        <thead>
+        <tr>
+          <th class="column-sm px-0">Stats</th>
+          <th class="column-xs px-0">
+            <i class="fa-solid fa-calculator text-success me-2"></i>Entries
+          </th>
+          <th class="column-sm px-0">
+            <i class="fa-solid fa-circle-xmark text-success me-2"></i>Errors
+          </th>
+          <th class="column-xl px-0" colspan="3">
+            <i class="fa-solid fa-clock text-success me-2"></i>Time (ms)<br />
+            <small class="text-muted text-small">min / median / p90</small>
+          </th>
+          <th class="column-lg px-0" colspan="3">
+            <i class="fa-solid fa-stopwatch text-success me-2"></i>Slot Latency<br />
+            <small class="text-muted text-small">min / median / p90</small>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="fw-bold">5&nbsp;min</td>
+          <td class="text-success">
+            {{ (last_5_mins["num_of_records"] || last_5_mins["num_of_records"] === 0) ? last_5_mins["num_of_records"].toLocaleString('en-US') : '0' }}
+          </td>
+          <td class="text-success text-nowrap">
+            {{ (last_5_mins["fails_count"] || last_5_mins["fails_count"] === 0) ? last_5_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
+            <span class="text-muted text-small">
+              {{ fails_count_percentage(last_5_mins["fails_count"], last_5_mins["num_of_records"]) }}
+            </span>
+          </td>
+          <td class="text-success-darker text-nowrap ps-5">
+            {{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString('en-US') : 'N / A' }}
+          </td>
+          <td class="text-success text-nowrap px-0">
+            {{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString('en-US') : 'N / A' }}
+          </td>
+          <td class="text-success-darker text-nowrap pe-5">
+            {{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString('en-US') : 'N / A' }}
+          </td>
 
-      <div class="row text-lg-center">
-        <!-- stats 5 minutes -->
-        <div class="col-sm-6 col-lg-12">
-          <div class="row mb-3 mb-sm-0">
-            <div class="col-12 col-lg-7 fw-bold">5 min</div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;</span>
-              <span class="text-success">
-                {{ (last_5_mins["num_of_records"] || last_5_mins["num_of_records"] === 0) ? last_5_mins["num_of_records"].toLocaleString('en-US') : '0' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures:&nbsp;</span>
-              <span class="text-success">
-                {{ (last_5_mins["fails_count"] || last_5_mins["fails_count"] === 0) ? last_5_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
-              </span>
-              <span class="text-muted">
-                {{ last_5_mins["fails_count"] ? '(' + (last_5_mins["fails_count"] / last_5_mins["num_of_records"] * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : '' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-down-long text-success me-2"></i>Min:&nbsp;</span>
-              <span class="text-success">
-                {{ last_5_mins["min"] ? last_5_mins["min"].toLocaleString('en-US') + ' ms' : 'N / A' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-divide text-success me-2"></i>Median:&nbsp;</span>
-              <span class="text-success">
-                {{ last_5_mins["median"] ? last_5_mins["median"].toLocaleString('en-US') + ' ms' : 'N / A' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-up-long text-success me-2"></i>P90:&nbsp;</span>
-              <span class="text-success">
-                {{ last_5_mins["p90"] ? last_5_mins["p90"].toLocaleString('en-US') + ' ms' : 'N / A' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-clock text-success me-2"></i>Latency:&nbsp;</span>
-              <span class="text-success">
-                {{ last_5_mins["average_slot_latency"] ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}
-              </span>
-            </div>
-          </div>
-        </div>
+          <td class="text-success-darker text-nowrap ps-4 ps-lg-5">
+            {{ (typeof last_5_mins["min_slot_latency"] !== 'undefined') ? last_5_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["min_slot_latency"], 'slot') : 'N / A' }}
+          </td>
+          <td class="text-success text-nowrap ps-0 ps-xl-1 pe-0">
+            {{ (typeof last_5_mins["average_slot_latency"] !== 'undefined') ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["average_slot_latency"], 'slot') : 'N / A' }}
+          </td>
+          <td class="text-success-darker text-nowrap pe-4 pe-lg-5">
+            {{ (typeof last_5_mins["p90_slot_latency"] !== 'undefined') ? last_5_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["p90_slot_latency"], 'slot') : 'N / A' }}
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-bold">1&nbsp;hour</td>
+          <td class="text-success">
+            {{ (last_60_mins["num_of_records"] || last_60_mins["num_of_records"] === 0) ? last_60_mins["num_of_records"].toLocaleString('en-US') : '0' }}
+          </td>
+          <td class="text-success text-nowrap">
+            {{ (last_60_mins["fails_count"] || last_60_mins["fails_count"] === 0) ? last_60_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
+            <span class="text-muted text-small">
+              {{ fails_count_percentage(last_60_mins["fails_count"], last_60_mins["num_of_records"]) }}
+            </span>
+          </td>
+          <td class="text-success-darker text-nowrap ps-5">
+            {{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString('en-US') : 'N / A' }}
+          </td>
+          <td class="text-success text-nowrap px-0">
+            {{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString('en-US') : 'N / A' }}
+          </td>
+          <td class="text-success-darker text-nowrap pe-5">
+            {{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString('en-US') : 'N / A' }}
+          </td>
 
-        <!-- stats 1 hour -->
-        <div class="col-sm-6 col-lg-12">
-          <div class="row">
-            <div class="col-12 col-lg-7 fw-bold">1 hour</div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-calculator text-success me-2"></i>Entries:&nbsp;</span>
-              <span class="text-success">
-                {{ (last_60_mins["num_of_records"] || last_60_mins["num_of_records"] === 0) ? last_60_mins["num_of_records"].toLocaleString('en-US') : '0' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-circle-xmark text-success me-2"></i>Failures:&nbsp;</span>
-              <span class="text-success">
-                {{ (last_60_mins["fails_count"] || last_60_mins["fails_count"] === 0) ? last_60_mins["fails_count"].toLocaleString('en-US') : 'N / A' }}
-              </span>
-              <span class="text-muted">
-                {{ fails_count_percentage(last_60_mins["fails_count"], last_60_mins["num_of_records"]) }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-down-long text-success me-2"></i>Min:&nbsp;</span>
-              <span class="text-success">
-                {{ last_60_mins["min"] ? last_60_mins["min"].toLocaleString('en-US') + ' ms' : 'N / A' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-divide text-success me-2"></i>Median:&nbsp;</span>
-              <span class="text-success">
-                {{ last_60_mins["median"] ? last_60_mins["median"].toLocaleString('en-US') + ' ms' : 'N / A' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-up-long text-success me-2"></i>P90:&nbsp;</span>
-              <span class="text-success">
-                {{ last_60_mins["p90"] ? last_60_mins["p90"].toLocaleString('en-US') + ' ms' : 'N / A' }}
-              </span>
-            </div>
-            <div class="col-12 col-lg-7">
-              <span class="d-lg-none"><i class="fa-solid fa-clock text-success me-2"></i>Latency:&nbsp;</span>
-              <span class="text-success">
-                {{ last_60_mins["average_slot_latency"] ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + ' slots' : 'N / A' }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+          <td class="text-success-darker text-nowrap ps-4 ps-lg-5">
+            {{ (typeof last_60_mins["min_slot_latency"] !== 'undefined') ? last_60_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["min_slot_latency"], 'slot') : 'N / A' }}
+          </td>
+          <td class="text-success text-nowrap ps-0 ps-xl-1 pe-0">
+            {{ (typeof last_60_mins["average_slot_latency"] !== 'undefined') ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["average_slot_latency"], 'slot') : 'N / A' }}
+          </td>
+          <td class="text-success-darker text-nowrap pe-4 pe-lg-5">
+            {{ (typeof last_60_mins["p90_slot_latency"] !== 'undefined') ? last_60_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["p90_slot_latency"], 'slot') : 'N / A' }}
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -129,7 +100,7 @@
 <script>
   import axios from 'axios'
   import '../mixins/ping_things_mixins'
-
+  import '../mixins/strings_mixins'
 
   export default {
     props: {

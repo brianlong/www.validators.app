@@ -109,7 +109,10 @@ module Api
           :transaction_type,
           :reported_at,
           :slot_sent,
-          :slot_landed
+          :slot_landed,
+          :priority_fee_micro_lamports,
+          :priority_fee_percentile,
+          :pinger_region
         )
       end
 
@@ -125,7 +128,10 @@ module Api
             :transaction_type,
             :reported_at,
             :slot_sent,
-            :slot_landed
+            :slot_landed,
+            :priority_fee_micro_lamports,
+            :priority_fee_percentile,
+            :pinger_region
             ]
           )
 

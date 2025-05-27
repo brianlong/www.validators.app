@@ -6,10 +6,11 @@ const DELEGATION_STRATEGY_URLS = {
   "Marinade": "https://docs.marinade.finance/marinade-protocol/validators",
   "Lido": "https://solana.foundation/stake-pools",
   "Socean": "https://docs.socean.fi/faq#how-does-socean-delegate-my-funds",
-  "Eversol": "https://docs.eversol.one/litepaper/delegation-strategy",
   "BlazeStake": "https://stake-docs.solblaze.org/protocol/delegation-strategy",
   "Jito": "https://jito-foundation.gitbook.io/jitosol/jitosol-liquid-staking/stake-delegation",
-  "ZippyStake": "https://docs.zippystake.org/delegation-strategy"
+  "ZippyStake": "https://docs.zippystake.org/delegation-strategy",
+  "Edgevana": "https://docs.stake.edgevana.com/docs/validators/delegation-strategy-algorithm",
+  "Aero": "https://www.aeropool.io/delegation"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {

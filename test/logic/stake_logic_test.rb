@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 # StakeLogicTest
@@ -23,6 +25,29 @@ class StakeLogicTest < ActiveSupport::TestCase
     @json_data = file_fixture("stake_accounts.json").read
   end
 
+  test "check_current_epoch \
+        when there is no recent stake account \
+        should return 200" do
+    p = Pipeline.new(200, @initial_payload)
+                .then(&check_current_epoch)
+
+    assert_equal 200, p.code
+    assert_equal @current_epoch.epoch, p.payload[:current_epoch]
+  end
+
+  test "check_current_epoch \
+        when there is recent stake account \
+        should return 300" do
+
+    create(:stake_account, epoch: @current_epoch.epoch)
+
+    p = Pipeline.new(200, @initial_payload)
+                .then(&check_current_epoch)
+
+    assert_equal 300, p.code
+    assert_equal @current_epoch.epoch, p.payload[:current_epoch]
+  end
+
   test 'get_last_batch' do
     p = Pipeline.new(200, @initial_payload)
                 .then(&get_last_batch)
@@ -30,8 +55,8 @@ class StakeLogicTest < ActiveSupport::TestCase
     assert p[:payload][:batch].uuid.include?('-')
   end
 
-  test 'move_current_stakes_to_history' do
-    create(:stake_account, batch_uuid: 'old-batch')
+  test "move_current_stakes_to_history" do
+    create(:stake_account, batch_uuid: "old-batch", epoch: @current_epoch.epoch)
 
     SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
       p = Pipeline.new(200, @initial_payload)
@@ -281,7 +306,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy_for_accounts)
-    
+
     acc.reload
     assert_equal 200, p.code
     assert_nil acc.apy
@@ -324,7 +349,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy_for_pools)
-    
+
     acc.reload
     assert_equal 200, p.code
     assert_equal 12.5502, stake_pool.average_apy
@@ -371,7 +396,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy_for_pools)
-    
+
     acc.reload
     assert_equal 200, p.code
     assert_equal 12.5502, stake_pool.average_apy
@@ -416,7 +441,7 @@ class StakeLogicTest < ActiveSupport::TestCase
     )
     p = Pipeline.new(200, @initial_payload)
                 .then(&calculate_apy_for_pools)
-    
+
     acc.reload
     assert_equal 200, p.code
     assert_nil stake_pool.average_apy

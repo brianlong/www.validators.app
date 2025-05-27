@@ -252,6 +252,10 @@ class Validator < ApplicationRecord
     score&.stake_concentration_score || 0
   end
 
+  def vote_latency_score
+    score&.vote_latency_score || 0
+  end
+
   def software_version
     score&.software_version
   end
@@ -363,6 +367,8 @@ class Validator < ApplicationRecord
         :updated_at,
         :admin_warning,
         :jito,
+        :jito_commission,
+        :stake_pools_list,
         :is_active
       )
     end

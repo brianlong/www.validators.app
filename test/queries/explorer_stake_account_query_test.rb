@@ -18,7 +18,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     end
   end
 
-  test "ExplorerStakeAccountQueryTest returns correct record by stake pubkey" do
+  test "ExplorerStakeAccountQuery returns correct record by stake pubkey" do
     explorer_stake_account = ExplorerStakeAccountQuery.new(
       stake_pubkey: "test_stake_pubkey_1",
       network: @network
@@ -28,7 +28,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal 1, explorer_stake_account.count
   end
 
-  test "ExplorerStakeAccountQueryTest returns correct record by staker" do
+  test "ExplorerStakeAccountQuery returns correct record by staker" do
     explorer_stake_account = ExplorerStakeAccountQuery.new(
       staker: "test_staker_2",
       network: @network
@@ -38,7 +38,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal 1, explorer_stake_account.count
   end
 
-  test "ExplorerStakeAccountQueryTest returns correct record by withdrawer" do
+  test "ExplorerStakeAccountQuery returns correct record by withdrawer" do
     explorer_stake_account = ExplorerStakeAccountQuery.new(
       withdrawer: "test_withdrawer_3",
       network: @network
@@ -48,7 +48,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal 1, explorer_stake_account.count
   end
 
-  test "ExplorerStakeAccountQueryTest returns correct record by delegated_vote_account_address" do
+  test "ExplorerStakeAccountQuery returns correct record by delegated_vote_account_address" do
     explorer_stake_account = ExplorerStakeAccountQuery.new(
       vote_account: "test_delegated_vote_account_address_4",
       network: @network
@@ -58,7 +58,7 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal 1, explorer_stake_account.count
   end
 
-  test "ExplorerStakeAccountQueryTest returns multiple correct records given multiple attributes" do
+  test "ExplorerStakeAccountQuery returns multiple correct records given multiple attributes" do
     create(
       :explorer_stake_account,
       network: @network,
@@ -78,12 +78,34 @@ class ExplorerStakeAccountQueryTest < ActiveSupport::TestCase
     assert_equal 2, explorer_stake_accounts.count
   end
 
-  test "service returns correct amount of records when limit_count presented" do
+  test "ExplorerStakeAccountQuery returns correct amount of records when limit_count presented" do
     explorer_stake_account = ExplorerStakeAccountQuery.new(
       network: @network,
       limit_count: 3
     ).call[:explorer_stake_accounts]
 
     assert_equal 3, explorer_stake_account.count
+  end
+
+  test "ExplorerStakeAccountQuery returns only records with positive active_stake" do
+    empty_stake_account = create(
+      :explorer_stake_account,
+      network: @network,
+      staker: "test_staker_2",
+      withdrawer: "test_withdrawer_2",
+      stake_pubkey: "test_stake_pubkey_2",
+      delegated_vote_account_address: "test_delegated_vote_account_address_2",
+      active_stake: 0,
+      epoch: @epoch.epoch
+    )
+
+    explorer_stake_account = ExplorerStakeAccountQuery.new(
+      stake_pubkey: "test_stake_pubkey_2",
+      network: @network
+    ).call[:explorer_stake_accounts]
+
+    assert_equal 1, explorer_stake_account.count
+    assert_not_equal empty_stake_account, explorer_stake_account.first
+    assert explorer_stake_account.first.active_stake > 0
   end
 end

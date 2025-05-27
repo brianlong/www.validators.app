@@ -3,6 +3,7 @@
 # CollectorLogic
 module CollectorLogic
   include PipelineLogic
+  REQUIRED_PAYLOAD_FIELDS = %w[network avg_ms min_ms max_ms from_account to_account from_ip to_ip].freeze
 
   # guard_ping_times will check the collector payload type & version
   #
@@ -10,7 +11,6 @@ module CollectorLogic
   def ping_times_guard
     lambda do |p|
       return p unless p[:code] == 200
-
       collector = Collector.find(p[:payload][:collector_id])
 
       # Guards
@@ -23,6 +23,12 @@ module CollectorLogic
       if collector.payload_version != 1
         return Pipeline.new(400, p[:payload], 'Wrong payload_version')
       end
+
+      fields_count = REQUIRED_PAYLOAD_FIELDS.map do |field|
+        collector.payload.scan(/#{field}/).size
+      end
+
+      return Pipeline.new(400, p[:payload], "Invalid payload fields count") unless !0.in?(fields_count) && fields_count.uniq.count == 1
 
       # Pass the collector object with the payload for subsquent steps
       return Pipeline.new(200, p[:payload].merge(collector: collector))
@@ -136,7 +142,8 @@ module CollectorLogic
           overall_max_time: p[:payload][:ping_time_stats][:overall_max_time],
           overall_average_time: \
             p[:payload][:ping_time_stats][:overall_average_time],
-          observed_at: p[:payload][:ping_time_stats][:observed_at]
+          observed_at: p[:payload][:ping_time_stats][:observed_at],
+          network: p[:payload][:ping_times].last['network']
         )
 
         # destroy the collector

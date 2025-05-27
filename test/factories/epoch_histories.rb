@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :epoch_history do
     batch_uuid { "MyString" }

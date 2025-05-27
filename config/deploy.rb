@@ -37,6 +37,7 @@ append :linked_files, 'config/credentials/production.key'
 append :linked_files, 'config/credentials/stage.key'
 append :linked_files, 'config/appsignal.yml'
 append :linked_files, 'config/sidekiq.yml'
+append :linked_files, 'config/sidekiq_blockchain.yml'
 append :linked_files, 'config/cluster.yml'
 
 # Default value for linked_dirs is []
@@ -76,12 +77,19 @@ namespace :deploy do
 end
 
 namespace :sidekiq do
-  desc 'Stop sidekiq (graceful shutdown within timeout, put unfinished tasks back to Redis)'
+  desc 'Stop sidekiq (put unfinished tasks back to Redis)'
   task :stop do
-    on roles :app do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :stop, :sidekiq
+        end
+      end
+    end
+    on roles :sidekiq_blockchain do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :sidekiq_blockchain
         end
       end
     end
@@ -89,10 +97,17 @@ namespace :sidekiq do
 
   desc 'Start sidekiq'
   task :start do
-    on roles :app do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :start, :sidekiq
+        end
+      end
+    end
+    on roles :sidekiq_blockchain do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :sidekiq_blockchain
         end
       end
     end
@@ -100,10 +115,17 @@ namespace :sidekiq do
 
   desc 'Restart sidekiq'
   task :restart do
-    on roles :app do
+    on roles :background do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :systemctl, '--user', :restart, :sidekiq
+        end
+      end
+    end
+    on roles :sidekiq_blockchain do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :restart, :sidekiq_blockchain
         end
       end
     end
@@ -131,6 +153,18 @@ namespace :deamons do
         end
       end
     end
+    on roles :background_production do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :start, :slot_subscribe_mainnet
+          # execute :systemctl, '--user', :start, :slot_subscribe_testnet
+          # execute :systemctl, '--user', :start, :slot_subscribe_pythnet
+          execute :systemctl, '--user', :start, :archive_blockchain_mainnet
+          # execute :systemctl, '--user', :start, :archive_blockchain_testnet
+          # execute :systemctl, '--user', :start, :archive_blockchain_pythnet
+        end
+      end
+    end
   end
 
   desc 'Stop background'
@@ -153,6 +187,18 @@ namespace :deamons do
         end
       end
     end
+    on roles :background_production do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :stop, :slot_subscribe_mainnet
+          # execute :systemctl, '--user', :stop, :slot_subscribe_testnet
+          # execute :systemctl, '--user', :stop, :slot_subscribe_pythnet
+          execute :systemctl, '--user', :stop, :archive_blockchain_mainnet
+          # execute :systemctl, '--user', :stop, :archive_blockchain_testnet
+          # execute :systemctl, '--user', :stop, :archive_blockchain_pythnet
+        end
+      end
+    end
   end
 
   desc 'Restart background'
@@ -172,6 +218,18 @@ namespace :deamons do
           execute :systemctl, '--user', :restart, :leader_stats_mainnet_update
           execute :systemctl, '--user', :restart, :leader_stats_testnet_update
           execute :systemctl, '--user', :restart, :leader_stats_pythnet_update
+        end
+      end
+    end
+    on roles :background_production do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :systemctl, '--user', :restart, :slot_subscribe_mainnet
+          # execute :systemctl, '--user', :restart, :slot_subscribe_testnet
+          # execute :systemctl, '--user', :restart, :slot_subscribe_pythnet
+          execute :systemctl, '--user', :restart, :archive_blockchain_mainnet
+          # execute :systemctl, '--user', :restart, :archive_blockchain_testnet
+          # execute :systemctl, '--user', :restart, :archive_blockchain_pythnet
         end
       end
     end

@@ -1,0 +1,11 @@
+---
+:daemon: false
+# :verbose: true
+# :concurrency: 5
+# :timeout: 30
+development:
+  :concurrency: 9
+:queues:
+  - [blockchain_mainnet, 1]
+  - [blockchain_testnet, 1]
+  - [blockchain_pythnet, 1]

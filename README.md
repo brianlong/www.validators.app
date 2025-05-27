@@ -34,13 +34,14 @@ To enable copying records to staging database set copy_records_to_stage in crede
 https://docs.solana.com/cli/install-solana-cli-tools
 
 ### Installation
-`sh -c "$(curl -sSfL https://release.solana.com/v<version>/install)"`
-
-### Upgrade
-`solana-install init <version>`
+```
+wget https://raw.githubusercontent.com/anza-xyz/agave/v<version>/install/agave-install-init.sh
+bash agave-install-init.sh v2.0.15
+solana --version
+```
 
 ### Check current version
-`solana -V`
+`solana -V` or `solana --version`
 
 ## Attribute Encryption
 Attribute encryption on models is required for any attribute that contains personal information or other sensitive 
@@ -83,8 +84,7 @@ Deployments are handled by Capistrano. Follow the instructions for Capistrano.
 - To restart application: `cap production deploy:restart`
 
 ## Data Centers
-- To append validator to Data Center of your choice use `append_to_data_center.rb` .
-- To change validator's Data Center with usage of MaxMind service use `change_validator_data_center.rb` service.
+- See instructions on Keybase.
 
 ## Validators Stack
 - ValidatorsApp https://github.com/brianlong/www.validators.app
