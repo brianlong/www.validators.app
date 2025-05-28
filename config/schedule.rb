@@ -127,6 +127,10 @@ every 1.day, at: '3:35am', roles: [:background] do
 end
 
 every 1.day, at: '3:40am', roles: [:background] do
+  ruby_script 'update_doublezero_validators.rb'
+end
+
+every 1.day, at: '3:45am', roles: [:background] do
   ruby_script 'update_validator_stake_pools_list.rb'
 end
 
