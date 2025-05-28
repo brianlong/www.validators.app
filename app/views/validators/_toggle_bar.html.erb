@@ -1,4 +1,4 @@
-<div class="d-flex flex-column-reverse flex-lg-row">
+<div class="d-flex flex-column-reverse flex-xl-row">
   <div class="flex-fill small text-muted pt-1">
     Score updated at <%= @batch&.scored_at || 'N/A' %> <br class="d-md-none" />
     in batch <%= @batch&.uuid || 'N/A' %>
@@ -17,6 +17,20 @@
                   )
       %>
       <p class="small text-muted toggle-label">JITO</p>
+    </div>
+
+    <div class="toggle-container">
+      <% jito_link_class = "fa-solid toggle fa-toggle-" + (params[:is_dz] == "true" ? "on" : "off") %>
+      <%= link_to raw("<i class=\"#{jito_link_class}\"></i>"),
+                  url_for(
+                    order: params[:order],
+                    page: params[:page],
+                    network: params[:network],
+                    refresh: params[:refresh],
+                    is_dz: params[:is_dz] == "true" ? "false" : "true"
+                  )
+      %>
+      <p class="small text-muted toggle-label">DOUBLEZERO</p>
     </div>
 
     <div class="toggle-container">
