@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 require File.expand_path('../config/environment', __dir__)
-require 'uri'
-require 'net/http'
-
-uri = URI("https://kobe.mainnet.jito.network/api/v1/validators")
-response = Net::HTTP.get_response(uri)
 
 DOUBLEZERO_IPS = [
   '15.235.228.93', '64.130.49.117', '45.250.255.163', '38.97.60.51', '69.67.151.19', '45.63.111.115', '45.77.142.108', '81.16.184.251',
