@@ -40,7 +40,7 @@
 #  skipped_slot_score                          :integer
 #  skipped_vote_history                        :text(65535)
 #  skipped_vote_percent_moving_average_history :text(65535)
-#  software_kind                               :integer          default("solana")
+#  software_client                             :integer          default(0)
 #  software_version                            :string(191)
 #  software_version_score                      :integer
 #  stake_concentration                         :decimal(10, 3)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_03_18_090707) do
+ActiveRecord::Schema.define(version: 2025_05_28_074412) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -918,7 +918,7 @@ ActiveRecord::Schema.define(version: 2025_03_18_090707) do
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
     t.text "skipped_after_moving_average_history"
-    t.integer "software_kind", default: 0
+    t.integer "software_client", default: 0
     t.text "vote_latency_history"
     t.integer "vote_latency_score"
     t.index ["network", "active_stake", "commission", "delinquent"], name: "index_for_asns"
