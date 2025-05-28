@@ -13,21 +13,23 @@
                     page: params[:page],
                     network: params[:network],
                     refresh: params[:refresh],
-                    jito: params[:jito] == "true" ? "false" : "true"
+                    jito: params[:jito] == "true" ? "false" : "true",
+                    q: params[:q]
                   )
       %>
       <p class="small text-muted toggle-label">JITO</p>
     </div>
 
     <div class="toggle-container">
-      <% jito_link_class = "fa-solid toggle fa-toggle-" + (params[:is_dz] == "true" ? "on" : "off") %>
-      <%= link_to raw("<i class=\"#{jito_link_class}\"></i>"),
+      <% doublezero_class = "fa-solid toggle fa-toggle-" + (params[:is_dz] == "true" ? "on" : "off") %>
+      <%= link_to raw("<i class=\"#{doublezero_class}\"></i>"),
                   url_for(
                     order: params[:order],
                     page: params[:page],
                     network: params[:network],
                     refresh: params[:refresh],
-                    is_dz: params[:is_dz] == "true" ? "false" : "true"
+                    is_dz: params[:is_dz] == "true" ? "false" : "true",
+                    q: params[:q]
                   )
       %>
       <p class="small text-muted toggle-label">DOUBLEZERO</p>
