@@ -167,6 +167,16 @@
               </div>
             </div>
             <div>
+              <% if validator.score.software_client == "firedancer" %>
+                <div class="mt-2 mt-lg-0 d-none d-lg-inline-block">
+                  <%= link_to validators_path(network: params[:network], q: validator.score.software_version) do %>
+                    <%= image_tag("firedancer.svg", class: 'img-xs me-1', title: "Show Firedancer validators", alt: "F") %>
+                  <% end %>
+                </div>
+              <% elsif validator.score.software_client == "agave" %>
+                <!-- TODO puts agave logo here -->
+              <% end %>
+
               <% if validator.stake_pools_list.present? %>
                 <div class="mt-2 mt-lg-0 me-1 d-inline-block">
                   <small class="d-inline-block d-lg-none">Pools:&nbsp;</small>
@@ -198,13 +208,6 @@
                         <%= image_tag("doublezero.svg", class: 'img-xxs me-1', title: "Show DoubleZero validators", alt: "DZ") %>
                       <% end %>
                     </div>
-                  <% end %>
-                </div>
-              <% end %>
-              <% if validator.score.software_client == "firedancer" %>
-                <div class="mt-2 mt-lg-0 d-inline-block">
-                  <%= link_to validators_path(network: params[:network], q: validator.score.software_version) do %>
-                    <%= image_tag("firedancer.svg", class: 'img-xs me-1', title: "Show Firedancer validators", alt: "F") %>
                   <% end %>
                 </div>
               <% end %>
