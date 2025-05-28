@@ -80,7 +80,7 @@ module Api
         assert_equal 1, json.size
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 45, validator_with_all_data.keys.size
+        assert_equal 46, validator_with_all_data.keys.size
 
         # Validator
         assert_equal "testnet", validator_with_all_data["network"]
@@ -357,7 +357,7 @@ module Api
         validator_active_stake = validator.validator_score_v1.active_stake
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 45, json_response.keys.size
+        assert_equal 46, json_response.keys.size
 
         # Validator
         assert_equal "testnet", json_response["network"]
@@ -503,7 +503,7 @@ module Api
         validator_active_stake = validator.validator_score_v1.active_stake
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 54, json_response.keys.size
+        assert_equal 55, json_response.keys.size
 
         # Score
         assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
