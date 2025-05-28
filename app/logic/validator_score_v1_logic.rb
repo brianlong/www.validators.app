@@ -362,7 +362,7 @@ module ValidatorScoreV1Logic
         end
         # This means we skip the software version for non-voting nodes.
         if vah&.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
-          validator.validator_score_v1.software_kind = ValidatorSoftwareVersion.software_version_kind(vah.software_version)
+          validator.validator_score_v1.software_client = ValidatorSoftwareVersion.software_version_kind(vah.software_version)
           validator.validator_score_v1.software_version = vah.software_version
         end
 

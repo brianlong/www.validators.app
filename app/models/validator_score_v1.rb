@@ -80,6 +80,7 @@ class ValidatorScoreV1 < ApplicationRecord
     total_score
     validator_id
     vote_distance_score
+    software_client
   ].freeze
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
@@ -109,7 +110,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
 
-  enum software_kind: { solana: 0, firedancer: 1 }
+  enum software_client: { agave: 0, firedancer: 1 }
 
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?
