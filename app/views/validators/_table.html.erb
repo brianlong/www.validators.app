@@ -197,14 +197,14 @@
                   <small class="d-inline-block d-lg-none">Associations:&nbsp;</small>
                   <% if validator.jito_maximum_commission? %>
                     <div class="mt-2 mt-lg-0 d-inline-block">
-                      <%= link_to validators_path(network: params[:network], jito: params[:jito]) do %>
+                      <%= link_to validators_path(network: params[:network], jito: true, page: 1) do %>
                         <%= image_tag("jito.svg", class: 'img-xxs me-1', title: "Show Jito validators", alt: "J") %>
                       <% end %>
                     </div>
                   <% end %>
                   <% if validator.is_dz %>
                     <div class="mt-2 mt-lg-0 d-inline-block">
-                      <%= link_to validators_path(network: params[:network], is_dz: params[:is_dz]) do %>
+                      <%= link_to validators_path(network: params[:network], is_dz: true, page: 1) do %>
                         <%= image_tag("doublezero.svg", class: 'img-xs', title: "Show DoubleZero validators", alt: "DZ") %>
                       <% end %>
                     </div>
