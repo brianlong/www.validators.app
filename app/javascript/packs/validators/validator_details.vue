@@ -169,7 +169,7 @@
                 <td><strong>Associations:</strong></td>
                 <td>
                   <img :src="jito_badge" class="img-xxs me-1" title="Jito validator" v-if="jito_maximum_commission(validator)">
-                  <img :src="double_zero_badge" class="img-xxs me-1" title="DoubleZero validator" v-if="validator.is_dz">
+                  <img :src="double_zero_badge" class="img-xs" title="DoubleZero validator" v-if="validator.is_dz">
                 </td>
               </tr>
 
