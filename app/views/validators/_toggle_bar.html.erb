@@ -10,7 +10,7 @@
       <%= link_to raw("<i class=\"#{jito_link_class}\"></i>"),
                   url_for(
                     order: params[:order],
-                    page: params[:page],
+                    page: 1,
                     network: params[:network],
                     refresh: params[:refresh],
                     jito: params[:jito] == "true" ? "false" : "true",
@@ -25,7 +25,7 @@
       <%= link_to raw("<i class=\"#{doublezero_class}\"></i>"),
                   url_for(
                     order: params[:order],
-                    page: params[:page],
+                    page: 1,
                     network: params[:network],
                     refresh: params[:refresh],
                     is_dz: params[:is_dz] == "true" ? "false" : "true",
