@@ -9,6 +9,7 @@ FactoryBot.define do
     security_report_url { 'http://www.example.com' }
     avatar_url { 'http://www.avatar_url.com' }
     consensus_mods { false }
+    is_dz { false }
 
     trait :with_score do
       after(:create) do |validator|

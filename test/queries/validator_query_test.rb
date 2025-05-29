@@ -96,6 +96,20 @@ class ValidatorQueryTest < ActiveSupport::TestCase
     assert_equal 5, result.count
   end
 
+  test "#call returns only doublezero validators, if is_dz param is provided" do
+    create_list(:validator, 2, :with_score, :with_data_center_through_validator_ip, :mainnet)
+    create_list(:validator, 3, :with_score, :with_data_center_through_validator_ip, :mainnet, is_dz: true)
+
+    result = ValidatorQuery.new.call(network: @mainnet_network, query_params: { is_dz: true })
+
+    assert_equal 3, result.count
+    assert_equal [true], result.pluck(:is_dz).uniq
+
+    result = ValidatorQuery.new.call(network: @mainnet_network, query_params: { is_dz: false })
+
+    assert_equal 5, result.count
+  end
+
   test "#call returns only matching results when query is provided" do
     query = "test_account"
 

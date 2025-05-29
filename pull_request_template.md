@@ -4,9 +4,6 @@
 #### How should this be manually tested?
 - List the testing steps here
 
-#### What are the relevant tickets?
-- URL to the PivotalTracker ticket
-
 #### Task completed checklist:
 - [] Is there appropriate test coverage?
 - [] Did I take into consideration possible security vulnerabilities?

@@ -30,7 +30,8 @@ class ValidatorsController < ApplicationController
       query_params: {
         query: validators_params[:q],
         admin_warning: validators_params[:admin_warning],
-        jito: validators_params[:jito] == "true"
+        jito: validators_params[:jito] == "true",
+        is_dz: validators_params[:is_dz] == "true",
       }
     )
 
@@ -101,6 +102,6 @@ class ValidatorsController < ApplicationController
   end
 
   def validators_params
-    params.permit(:watchlist, :network, :q, :page, :order, :admin_warning, :jito)
+    params.permit(:watchlist, :network, :q, :page, :order, :admin_warning, :jito, :is_dz)
   end
 end

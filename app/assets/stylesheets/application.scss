@@ -186,7 +186,7 @@ hr {
   margin-left: 17px;
   margin-top: -1px;
   color: darken($link-color, 5%);
-  @media(max-width: $screen-md-max) {
+  @media(max-width: $screen-lg-max) {
     margin-left: 0;
   }
   &-container {
@@ -200,7 +200,7 @@ hr {
   &-label {
     display: inline-block;
     padding-left: 55px;
-    @media(max-width: $screen-md-max) {
+    @media(max-width: $screen-lg-max) {
       padding-left: 38px;
       padding-right: 15px;
     }
