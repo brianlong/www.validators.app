@@ -18,7 +18,7 @@ class CreateClusterStatsService
       validator_history_stats.total_active_stake if \
       validator_history_stats.total_active_stake && \
       validator_history_stats.total_active_stake > 0
-    fields_for_update[:software_versions] = Batch.last_scored(@network).other_software_versions
+    fields_for_update[:software_versions] = Batch.last_scored(@network).software_versions
     fields_for_update[:validator_count] = validators_total if validators_total && validators_total > 0
     fields_for_update[:nodes_count] = nodes_total if nodes_total && nodes_total > 0
     fields_for_update[:root_distance] = \

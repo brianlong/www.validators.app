@@ -6,7 +6,7 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"
     @software_versions = { "agave" => "2.0.21", "firedancer" => "0.503.20214" }
-    @batch = create(:batch, network: @network, software_version: "2.0.21", other_software_versions: @software_versions)
+    @batch = create(:batch, network: @network, software_version: "2.0.21", software_versions: @software_versions)
   end
 
   test "#call creates new ClusterStat with correct data if there's no cluster stats for given network" do

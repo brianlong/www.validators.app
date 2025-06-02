@@ -175,8 +175,8 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
 
   test 'assign_software_version_score scores 1 points for correct versions' do
     current_version = '1.5.4'
-    other_software_versions = { "agave" => current_version }
-    create(:batch, software_version: current_version, other_software_versions: other_software_versions)
+    software_versions = { "agave" => current_version }
+    create(:batch, software_version: current_version, software_versions: software_versions)
     
     score1 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.3')
     score2 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.1')
@@ -190,8 +190,8 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
 
   test 'assign_software_version_score scores 0 points for correct versions' do
     current_version = '1.5.4'
-    other_software_versions = { "agave" => current_version }
-    create(:batch, software_version: current_version, other_software_versions: other_software_versions)
+    software_versions = { "agave" => current_version }
+    create(:batch, software_version: current_version, software_versions: software_versions)
 
     @validator_score_v1.update(network: 'testnet', software_version: '1.4.4')
     @validator_score_v1.assign_software_version_score(current_version)
