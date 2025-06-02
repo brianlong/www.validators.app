@@ -12,7 +12,7 @@
 #  root_distance      :json
 #  skipped_slots      :json
 #  skipped_votes      :json
-#  software_version   :string(191)
+#  software_versions  :json
 #  total_active_stake :bigint
 #  validator_count    :integer
 #  vote_distance      :json

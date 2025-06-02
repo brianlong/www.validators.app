@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_05_28_154426) do
+ActiveRecord::Schema.define(version: 2025_06_02_101636) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -222,7 +222,7 @@ ActiveRecord::Schema.define(version: 2025_05_28_154426) do
     t.json "skipped_votes"
     t.integer "validator_count"
     t.integer "nodes_count"
-    t.string "software_version"
+    t.json "software_versions"
     t.float "roi"
     t.float "epoch_duration"
     t.index ["network"], name: "index_cluster_stat_on_network"
