@@ -35,7 +35,7 @@ class ValidatorSoftwareVersion < ::Gem::Version
     if version_arr.count == 3 && version_arr[1] >= 100 && version_arr[2] > 100
       "firedancer"
     else
-      "solana"
+      "agave"
     end
   end
 end
