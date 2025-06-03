@@ -3,7 +3,7 @@ This is code repository for Validators.app.
 https://www.validators.app/
 
 ## System dependencies
-  - Ruby 3.4 (see `.ruby-version` file)
+  - Ruby 3 (see `.ruby-version` file)
   - Rails 6.1+
   - MySQL 8
   - Redis 7+

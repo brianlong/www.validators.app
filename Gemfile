@@ -10,7 +10,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # See https://github.com/net-ssh/net-ssh/issues/565 for more information
 # Gem::LoadError : "ed25519 is not part of the bundle. Add it to your Gemfile."
 
-gem 'bundler', '>= 2.3.26'
+gem 'bundler', '>= 2.3.27'
 gem 'json', '~> 2.9.1'
 
 gem 'websocket-extensions', '>= 0.1.5'
@@ -132,8 +132,6 @@ gem 'wicked_pdf', '~> 2.8.2'
 
 # Requests limiter
 gem 'rack-attack', '~> 6.6.1'
-
-gem 'mutex_m', '~> 0.3.0'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
