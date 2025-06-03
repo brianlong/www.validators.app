@@ -10,7 +10,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # See https://github.com/net-ssh/net-ssh/issues/565 for more information
 # Gem::LoadError : "ed25519 is not part of the bundle. Add it to your Gemfile."
 
-gem 'bundler', '>= 2.3.26'
+gem 'bundler', '>= 2.3.27'
 gem 'json', '~> 2.9.1'
 
 gem 'websocket-extensions', '>= 0.1.5'
