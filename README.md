@@ -3,11 +3,11 @@ This is code repository for Validators.app.
 https://www.validators.app/
 
 ## System dependencies
-  - Ruby 2.7.5 (as denoted in the `.ruby-version` file)
+  - Ruby 3.4 (see `.ruby-version` file)
   - Rails 6.1+
   - MySQL 8
-  - Redis 6+
-  - Node 16.14+
+  - Redis 7+
+  - Node 20+
   - Solana CLI (see instruction below)
 
 ## Configuration Notes
