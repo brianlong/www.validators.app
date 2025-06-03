@@ -14,6 +14,7 @@
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
 #  is_destroyed        :boolean          default(FALSE)
+#  is_dz               :boolean          default(FALSE)
 #  is_rpc              :boolean          default(FALSE)
 #  jito                :boolean          default(FALSE)
 #  jito_commission     :integer
@@ -52,6 +53,7 @@ class Validator < ApplicationRecord
     jito_commission
     stake_pools_list
     is_active
+    is_dz
   ].freeze
 
   FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze
@@ -369,7 +371,8 @@ class Validator < ApplicationRecord
         :jito,
         :jito_commission,
         :stake_pools_list,
-        :is_active
+        :is_active,
+        :is_dz
       )
     end
   end

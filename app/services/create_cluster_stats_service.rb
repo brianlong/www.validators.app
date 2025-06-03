@@ -9,7 +9,6 @@ class CreateClusterStatsService
   def call
     validators_total = Validator.where(network: @network).active.count
     nodes_total = GossipNode.where(network: @network).active.not_staked.count
-    dominant_software_version = Batch.last_scored(@network).software_version
 
     network_stat = ClusterStat.find_or_create_by(network: @network)
 
@@ -19,7 +18,7 @@ class CreateClusterStatsService
       validator_history_stats.total_active_stake if \
       validator_history_stats.total_active_stake && \
       validator_history_stats.total_active_stake > 0
-    fields_for_update[:software_version] = dominant_software_version if dominant_software_version
+    fields_for_update[:software_versions] = Batch.last_scored(@network).software_versions
     fields_for_update[:validator_count] = validators_total if validators_total && validators_total > 0
     fields_for_update[:nodes_count] = nodes_total if nodes_total && nodes_total > 0
     fields_for_update[:root_distance] = \

@@ -13,6 +13,7 @@
                           network: params[:network],
                           refresh: params[:refresh],
                           jito: params[:jito],
+                          is_dz: params[:is_dz],
                           watchlist: params[:watchlist] ? nil : true) do %>
               <i class="<%= params[:watchlist] ? 'fa-solid' : 'fa-regular' %> fa-star text-warning"
                  data-bs-toggle="tooltip"
@@ -163,11 +164,26 @@
                 <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
                 <span class="d-none d-lg-inline-block">V:&nbsp;</span>
                 <%= validator.score&.software_version %>
+                <span class="d-inline-block d-lg-none">&nbsp;(<%= validator.score&.software_client %>)</span>
               </div>
             </div>
             <div>
+              <% if validator.score.software_client == "firedancer" %>
+                <div class="mt-2 mt-lg-0 d-none d-lg-inline-block">
+                  <%= link_to validators_path(network: params[:network], q: validator.score.software_version) do %>
+                    <%= image_tag("firedancer.svg", class: 'img-xs me-1', title: "Show Firedancer validators", alt: "F") %>
+                  <% end %>
+                </div>
+              <% elsif validator.score.software_client == "agave" %>
+                <div class="mt-2 mt-lg-0 d-none d-lg-inline-block">
+                  <%= link_to validators_path(network: params[:network], q: validator.score.software_version) do %>
+                    <%= image_tag("agave.svg", class: 'img-xs me-1', title: "Show Agave validators", alt: "A") %>
+                  <% end %>
+                </div>
+              <% end %>
+
               <% if validator.stake_pools_list.present? %>
-                <div class="mt-2 mt-lg-0 me-1 d-inline-block">
+                <div class="mt-2 mt-lg-0 d-inline-block">
                   <small class="d-inline-block d-lg-none">Pools:&nbsp;</small>
                   <%= link_to stake_pools_path(network: params[:network]), target: "_blank" do %>
                     <% stake_pool_logos(validator.stake_pools_list).each do |logo| %>
@@ -181,17 +197,22 @@
                   <% end %>
                 </div>
               <% end %>
-              <% if validator.jito_maximum_commission? %>
-                <div class="mt-2 mt-lg-0 d-inline-block">
-                  <%= link_to validators_path(network: params[:network], jito: params[:jito]) do %>
-                    <%= image_tag("jito.svg", class: 'img-xxs me-1', title: "Show Jito validators", alt: "J") %>
+              <% if validator.jito_maximum_commission? || validator.is_dz %>
+                <div class="d-lg-inline-block">
+                  <small class="d-inline-block d-lg-none">Associations:&nbsp;</small>
+                  <% if validator.jito_maximum_commission? %>
+                    <div class="mt-2 mt-lg-0 d-inline-block">
+                      <%= link_to validators_path(network: params[:network], jito: true, page: 1) do %>
+                        <%= image_tag("jito.svg", class: 'img-xxs me-1', title: "Show Jito validators", alt: "J") %>
+                      <% end %>
+                    </div>
                   <% end %>
-                </div>
-              <% end %>
-              <% if validator.score.software_kind == "firedancer" %>
-                <div class="mt-2 mt-lg-0 d-inline-block">
-                  <%= link_to validators_path(network: params[:network], q: validator.score.software_version) do %>
-                    <%= image_tag("firedancer.svg", class: 'img-xs me-1', title: "Show Firedancer validators", alt: "F") %>
+                  <% if validator.is_dz %>
+                    <div class="mt-2 mt-lg-0 d-inline-block">
+                      <%= link_to validators_path(network: params[:network], is_dz: true, page: 1) do %>
+                        <%= image_tag("doublezero.svg", class: 'img-xs', title: "Show DoubleZero validators", alt: "DZ") %>
+                      <% end %>
+                    </div>
                   <% end %>
                 </div>
               <% end %>

@@ -30,6 +30,6 @@ FactoryBot.define do
     network { 'mainnet' }
     skipped_slot_moving_average_history { [0.2051] }
     skipped_vote_percent_moving_average_history { nil }
-    software_kind { 'solana' }
+    software_client { 'agave' }
   end
 end

@@ -40,7 +40,7 @@
 #  skipped_slot_score                          :integer
 #  skipped_vote_history                        :text(65535)
 #  skipped_vote_percent_moving_average_history :text(65535)
-#  software_kind                               :integer          default("solana")
+#  software_client                             :integer          default(0)
 #  software_version                            :string(191)
 #  software_version_score                      :integer
 #  stake_concentration                         :decimal(10, 3)
@@ -80,6 +80,7 @@ class ValidatorScoreV1 < ApplicationRecord
     total_score
     validator_id
     vote_distance_score
+    software_client
   ].freeze
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
@@ -109,7 +110,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
 
-  enum software_kind: { solana: 0, firedancer: 1 }
+  enum software_client: { agave: 0, firedancer: 1 }
 
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?
@@ -162,7 +163,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
   def calculate_total_score
     # Assign special scores before calculating the total score
-    best_sv = Batch.last_scored(network)&.other_software_versions
+    best_sv = Batch.last_scored(network)&.software_versions
     assign_published_information_score
     assign_software_version_score(best_sv)
     assign_security_report_score
@@ -206,7 +207,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
     return unless ValidatorSoftwareVersion.valid_software_version?(software_version) && best_versions
 
-    best_version = best_versions[ValidatorSoftwareVersion.software_version_kind(software_version)]
+    best_version = best_versions[ValidatorSoftwareVersion.software_version_client(software_version)]
 
     version = ValidatorSoftwareVersion.new(
       number: software_version,
