@@ -5,8 +5,8 @@ require "test_helper"
 class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"
-    @software_version =  "1.1.1"
-    @batch = create(:batch, network: @network, software_version: @software_version)
+    @software_versions = { "agave" => "2.0.21", "firedancer" => "0.503.20214" }
+    @batch = create(:batch, network: @network, software_version: "2.0.21", software_versions: @software_versions)
   end
 
   test "#call creates new ClusterStat with correct data if there's no cluster stats for given network" do
@@ -30,34 +30,14 @@ class CreateClusterStatsServiceTest < ActiveSupport::TestCase
       create(:validator, network: @network)
     end
 
-    create(
-      :epoch_wall_clock,
-      created_at: 5.days.ago,
-      network: @network,
-      epoch: 1,
-      total_rewards: 100,
-      total_active_stake: 1000
-    )
-    create(
-      :epoch_wall_clock,
-      created_at: 2.5.days.ago,
-      network: @network,
-      epoch: 2,
-      total_rewards: 100,
-      total_active_stake: 1000
-    )
-    create(
-      :epoch_wall_clock,
-      network: @network,
-      epoch: 3,
-      total_rewards: 100,
-      total_active_stake: 1000
-    )
+    create(:epoch_wall_clock, created_at: 5.days.ago, network: @network, epoch: 1, total_rewards: 100, total_active_stake: 1000)
+    create(:epoch_wall_clock, created_at: 2.5.days.ago, network: @network, epoch: 2, total_rewards: 100, total_active_stake: 1000)
+    create(:epoch_wall_clock, network: @network, epoch: 3, total_rewards: 100, total_active_stake: 1000)
     
     CreateClusterStatsService.new(network: @network, batch_uuid: @batch.uuid).call
     stat = ClusterStat.where(network: @network).last
 
-    assert_equal @software_version, stat.software_version
+    assert_equal @software_versions, stat.software_versions
     assert_equal 5, stat.validator_count
     assert_equal 5, stat.nodes_count
     assert_equal 1460.97, stat.roi
