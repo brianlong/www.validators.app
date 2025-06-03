@@ -9,6 +9,7 @@ https://www.validators.app/
   - Redis 7+
   - Node 20+
   - Solana CLI (see instruction below)
+  - ImageMagick
 
 ## Configuration Notes
 - Ask someone in charge about the development `master.key`

@@ -41,6 +41,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install libraries
+        run: |
+          sudo apt install imagemagick libvips
+
       - name: Set up Ruby version
         uses: ruby/setup-ruby@v1
         with:
