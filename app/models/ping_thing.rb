@@ -80,7 +80,7 @@ class PingThing < ApplicationRecord
 
   validates_presence_of :user_id, :response_time, :signature, :network
   validates_length_of :application, maximum: 80, allow_blank: true
-  validates :network, inclusion: { in: NETWORKS }
+  validates :network, inclusion: { in: NETWORKS_FOR_PING_THING }
   validates :signature, length: { in: 64..128 }
   validates :pinger_region, inclusion: { in: PINGER_REGIONS }, allow_blank: true
   validates :priority_fee_percentile, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_blank: true
