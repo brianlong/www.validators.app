@@ -6,3 +6,5 @@ NETWORK_URLS = {
   testnet: Rails.application.credentials.solana[:testnet_urls],
   pythnet: Rails.application.credentials.solana[:pythnet_urls]
 }.stringify_keys.freeze
+
+NETWORKS_FOR_PING_THING = %w[mainnet testnet pythnet anzamain].freeze
