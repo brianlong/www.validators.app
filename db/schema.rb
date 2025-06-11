@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_03_18_090707) do
+ActiveRecord::Schema.define(version: 2025_06_11_121753) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -635,6 +635,20 @@ ActiveRecord::Schema.define(version: 2025_03_18_090707) do
     t.index ["network", "to_ip", "from_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_from_ip_and_created_at"
   end
 
+  create_table "policies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "url"
+    t.string "mint"
+    t.boolean "kind"
+    t.boolean "strategy"
+    t.boolean "executable"
+    t.string "owner"
+    t.bigint "lamports"
+    t.bigint "rent_epoch"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "network"
     t.string "name"
@@ -885,6 +899,15 @@ ActiveRecord::Schema.define(version: 2025_03_18_090707) do
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
   end
 
+  create_table "validator_policies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "policy_id", null: false
+    t.bigint "validator_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["policy_id"], name: "index_validator_policies_on_policy_id"
+    t.index ["validator_id"], name: "index_validator_policies_on_validator_id"
+  end
+
   create_table "validator_score_v1s", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "validator_id"
     t.integer "total_score"
@@ -918,7 +941,7 @@ ActiveRecord::Schema.define(version: 2025_03_18_090707) do
     t.integer "authorized_withdrawer_score"
     t.integer "consensus_mods_score", default: 0
     t.text "skipped_after_moving_average_history"
-    t.integer "software_kind", default: 0
+    t.integer "software_client", default: 0
     t.text "vote_latency_history"
     t.integer "vote_latency_score"
     t.index ["network", "active_stake", "commission", "delinquent"], name: "index_for_asns"
@@ -1018,6 +1041,8 @@ ActiveRecord::Schema.define(version: 2025_03_18_090707) do
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"
+  add_foreign_key "validator_policies", "policies"
+  add_foreign_key "validator_policies", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
   add_foreign_key "vote_account_stake_histories", "vote_accounts"
   add_foreign_key "vote_accounts", "validators"
