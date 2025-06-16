@@ -184,6 +184,7 @@
     "jito_commission":200,
     "stake_pools_list":["Jito", "Marinade"],
     "is_active":true,
+    "is_dz":false,
     "active_stake":100000,
     "authorized_withdrawer_score":0,
     "commission":10,
@@ -200,6 +201,7 @@
     "consensus_mods_score":0,
     "total_score":10,
     "vote_distance_score":2,
+    "software_client": "agave",
     "ip": 123.123.123.123,
     "data_center_key":"24940-FI-Helsinki",
     "autonomous_system_number":24940,
@@ -254,6 +256,7 @@
   "jito_commission":200,
   "stake_pools_list":["Jito", "Marinade"],
   "is_active":true,
+  "is_dz":false,
   "active_stake":100000,
   "authorized_withdrawer_score":0,
   "commission":10,
@@ -270,6 +273,7 @@
   "consensus_mods_score":0,
   "total_score":10,
   "vote_distance_score":2,
+  "software_client": "agave",
   "ip": 123.123.123.123,
   "data_center_key":"24940-FI-Helsinki",
   "autonomous_system_number":24940,
@@ -561,7 +565,7 @@
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
 <p><strong class="text-muted">`commitment_level: string`</strong> Possible values: 'processed' OR 'confirmed' OR 'finalized'.</p>
 <p><strong class="text-muted">`signature: string`</strong> Transaction signature.</p>
-<p><strong class="text-muted">`reported_at: %year-%month-%dayT%hour:%minute:%second`</strong> Transaction creation time.</p>
+<p><strong class="text-muted">`reported_at: %year-%month-%dayT%hour:%minute:%second`</strong> Optional. Transaction creation time.</p>
 <p>
   <strong class="text-muted">`success: boolean`</strong> Optional, true or false, default true, if empty success will
   be set to true. Only false value sets `success` field to false.
@@ -575,7 +579,7 @@
 <p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
 <p><strong class="text-muted">`priority_fee_percentile: NN`</strong> Percentile of priority fee. Must be a number between 0 and 100.</p>
 <p><strong class="text-muted">`priority_fee_micro_lamports: NN`</strong> Priority fee in micro lamports.</p>
-<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 3 letter symbol.</p>
+<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 2-3 letter symbol. Available regions are: <%= PingThing::PINGER_REGIONS.join(', ') %>.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>
@@ -592,7 +596,7 @@
 <p><strong class="text-muted">`application: string`</strong> Application type.</p>
 <p><strong class="text-muted">`commitment_level: string`</strong> Possible values: 'processed' OR 'confirmed' OR 'finalized'.</p>
 <p><strong class="text-muted">`signature: string`</strong> Transaction signature.</p>
-<p><strong class="text-muted">`reported_at: %year-%month-%dayT%hour:%minute:%second`</strong> Transaction creation time.</p>
+<p><strong class="text-muted">`reported_at: %year-%month-%dayT%hour:%minute:%second`</strong> Optional. Transaction creation time.</p>
 <p>
   <strong class="text-muted">`success: boolean`</strong> Optional, true or false, default true, if empty success will
   be set to true. Only false value sets `success` field to false.
@@ -606,7 +610,7 @@
 <p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
 <p><strong class="text-muted">`priority_fee_percentile: NN`</strong> Percentile of priority fee.</p>
 <p><strong class="text-muted">`priority_fee_micro_lamports: NN`</strong> Priority fee in micro lamports.</p>
-<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 3 letter symbol.</p>
+<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 2-3 letter symbol. Available regions are: <%= PingThing::PINGER_REGIONS.join(', ') %>.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>

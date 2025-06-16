@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(version: 2025_06_11_121753) do
     t.float "best_skipped_vote"
     t.float "skipped_slot_all_average", default: 0.0
     t.float "skipped_after_all_average", default: 0.0
-    t.text "other_software_versions"
+    t.text "software_versions"
     t.index ["network", "created_at"], name: "index_batches_on_network_and_created_at"
     t.index ["network", "scored_at"], name: "index_batches_on_network_and_scored_at"
     t.index ["network", "uuid"], name: "index_batches_on_network_and_uuid"
@@ -222,7 +222,7 @@ ActiveRecord::Schema.define(version: 2025_06_11_121753) do
     t.json "skipped_votes"
     t.integer "validator_count"
     t.integer "nodes_count"
-    t.string "software_version"
+    t.json "software_versions"
     t.float "roi"
     t.float "epoch_duration"
     t.index ["network"], name: "index_cluster_stat_on_network"
@@ -973,6 +973,7 @@ ActiveRecord::Schema.define(version: 2025_06_11_121753) do
     t.text "stake_pools_list"
     t.integer "jito_commission"
     t.string "avatar_hash"
+    t.boolean "is_dz", default: false
     t.index ["network", "account"], name: "index_validators_on_network_and_account", unique: true
     t.index ["network", "is_active", "is_destroyed", "is_rpc"], name: "index_validators_on_network_is_active_is_destroyed_is_rpc"
   end

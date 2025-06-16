@@ -97,6 +97,11 @@
                 </td>
               </tr>
 
+              <tr v-if="validator.keybase_id">
+                <td class="column-lg"><strong>Keybase:</strong></td>
+                <td>{{ validator.keybase_id }}</td>
+              </tr>
+
               <tr>
                 <td><strong>Creation Date:</strong></td>
                 <td>
@@ -120,11 +125,6 @@
 
           <table class="table table-block-sm mb-0" v-if="!is_loading_validator">
             <tbody>
-              <tr>
-                <td class="column-lg"><strong>Keybase:</strong></td>
-                <td>{{ validator.keybase_id }}</td>
-              </tr>
-
               <tr>
                 <td><strong>Website:</strong></td>
                 <td class="small">{{ validator.www_url }}</td>
@@ -165,7 +165,15 @@
                 </td>
               </tr>
 
-              <tr v-if="validator.stake_pools_list.length > 0 || jito_maximum_commission(validator)">
+              <tr v-if="validator.is_dz || jito_maximum_commission(validator)">
+                <td><strong>Associations:</strong></td>
+                <td>
+                  <img :src="jito_badge" class="img-xxs me-1" title="Jito validator" v-if="jito_maximum_commission(validator)">
+                  <img :src="double_zero_badge" class="img-xs" title="DoubleZero validator" v-if="validator.is_dz">
+                </td>
+              </tr>
+
+              <tr v-if="validator.stake_pools_list.length > 0">
                 <td><strong>Stake Pools:</strong></td>
                 <td>
                   <span v-for="stake_pool_name in validator.stake_pools_list">
@@ -174,7 +182,6 @@
                          :alt="stake_pool_name"
                          :src="stake_pool_small_logo(stake_pool_name)" />
                   </span>
-                  <img :src="jito_badge" class="img-xxs ms-1" title="Jito validator" v-if="jito_maximum_commission(validator)">
                 </td>
               </tr>
 
@@ -269,6 +276,7 @@
   import axios from 'axios';
   import loadingImage from 'loading.gif'
   import jitoBadge from 'jito.svg'
+  import doubleZeroBadge from 'doublezero.svg'
   import '../mixins/numbers_mixins'
   import '../mixins/dates_mixins'
   import '../mixins/stake_pools_mixins'
@@ -319,6 +327,7 @@
         validator_history: {},
         loading_image: loadingImage,
         jito_badge: jitoBadge,
+        double_zero_badge: doubleZeroBadge,
         is_loading_validator: true,
         validator_score_details_attrs: {},
         vote_latencies: {},

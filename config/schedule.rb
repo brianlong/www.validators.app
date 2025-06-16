@@ -127,6 +127,10 @@ every 1.day, at: '3:35am', roles: [:background] do
 end
 
 every 1.day, at: '3:40am', roles: [:background] do
+  ruby_script 'update_doublezero_validators.rb'
+end
+
+every 1.day, at: '3:45am', roles: [:background] do
   ruby_script 'update_validator_stake_pools_list.rb'
 end
 
@@ -149,9 +153,11 @@ every 1.minute, roles: [:background] do
   runner "PingThingRecentStatsWorker.perform_async('mainnet')"
   runner "PingThingRecentStatsWorker.perform_async('testnet')"
   runner "PingThingRecentStatsWorker.perform_async('pythnet')"
+  runner "PingThingRecentStatsWorker.perform_async('anzamain')"
   runner "PingThingUserStatsWorker.perform_async('mainnet')"
   runner "PingThingUserStatsWorker.perform_async('testnet')"
   runner "PingThingUserStatsWorker.perform_async('pythnet')"
+  runner "PingThingUserStatsWorker.perform_async('anzamain')"
 end
 
 every 45.minutes, roles: [:background] do

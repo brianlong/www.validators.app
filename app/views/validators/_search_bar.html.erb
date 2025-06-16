@@ -6,12 +6,13 @@
             placeholder: 'Validator name, account or data center',
             class: 'form-control',
             value: params[:q],
-            required: true,
             autofocus: true
       ) %>
       <%= hidden_field_tag(:network, params[:network]) %>
       <%= hidden_field_tag(:order, params[:order]) %>
       <%= hidden_field_tag(:refresh, params[:refresh]) %>
+      <%= hidden_field_tag(:jito, params[:jito]) %>
+      <%= hidden_field_tag(:is_dz, params[:is_dz]) %>
       <%= submit_tag("Search", class: 'btn btn-sm btn-primary') %>
     </div>
   </div>

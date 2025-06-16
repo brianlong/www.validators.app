@@ -22,11 +22,12 @@ class ValidatorQuery < ApplicationQuery
         admin_warning: nil,
         query: nil,
         jito: false,
+        is_dz: false,
         active_only: true
       }
     )
     scope = @default_scope.preload(:validator_score_v1_for_api)
-    scope = filter_by_collaboration(scope, query_params[:jito])
+    scope = filter_by_collaboration(scope, query_params[:jito], query_params[:is_dz])
     scope = filter_by_network(scope, network)
     scope = search_by(scope, query_params[:query]) if query_params[:query]
     scope = filter_by_admin_warning(scope, query_params[:admin_warning])
@@ -67,8 +68,9 @@ class ValidatorQuery < ApplicationQuery
     scope
   end
 
-  def filter_by_collaboration(scope, jito)
+  def filter_by_collaboration(scope, jito, is_dz)
     scope = jito ? scope.jito_maximum_commission : scope
+    scope = is_dz ? scope.where(is_dz: true) : scope
   end
 
   def filter_by_network(scope, network)

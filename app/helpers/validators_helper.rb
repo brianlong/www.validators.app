@@ -51,12 +51,6 @@ module ValidatorsHelper
     number_to_percentage((active_stake / total_stake.to_f) * 100.0, precision: 2)
   end
 
-  def current_software_version(batch, network)
-    return CLUSTER_VERSION[network] if batch&.software_version.blank?
-
-    batch&.software_version
-  end
-
   def skipped_vote_percent(validator, batch)
     if validator.score&.skipped_vote_history && batch.best_skipped_vote
       # Get the last skipped_vote data from history

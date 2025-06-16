@@ -13,7 +13,6 @@
 #  best_skipped_vote         :float(24)
 #  gathered_at               :datetime
 #  network                   :string(191)
-#  other_software_versions   :text(65535)
 #  root_distance_all_average :float(24)
 #  root_distance_all_median  :integer
 #  scored_at                 :datetime
@@ -21,6 +20,7 @@
 #  skipped_slot_all_average  :float(24)        default(0.0)
 #  skipped_vote_all_median   :float(24)
 #  software_version          :string(191)
+#  software_versions         :text(65535)
 #  uuid                      :string(191)
 #  vote_distance_all_average :float(24)
 #  vote_distance_all_median  :integer
@@ -36,7 +36,7 @@
 class Batch < ApplicationRecord
   before_create :create_uuid
 
-  serialize :other_software_versions, JSON
+  serialize :software_versions, JSON
 
   def self.last_scored(network)
     where('network = ? and scored_at IS NOT NULL', network).last
