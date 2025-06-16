@@ -3,7 +3,7 @@
 require File.expand_path('../config/environment', __dir__)
 
 log_path = Rails.root.join('log', 'update_policies.log')
-logger = Rails.logger.new(log_path)
+logger = Logger.new(log_path)
 timestamp = Time.now.utc.strftime('%Y%m%d%H%M')
 
 fork { exec('node', './get_policies.js', timestamp) }
@@ -17,29 +17,36 @@ if $?.success?
   json = Rails.root.join('storage', 'policies', "decoded_policies_#{timestamp}.json").read
   policies = JSON.parse(json)
 
-  # policies.each do |policy|
-  #   Policy.find_or_create_by(
-  #     mint: policy['mint']
-  #   ).update(
-  #     name: policy['name'],
-  #     owner: policy['owner'],
-  #     url: policy['url'],
-  #     lamports: policy['lamports'],
-  #     rent_epoch: policy['rent_epoch'],
-  #     kind: policy["data"]['kind'],
-  #     strategy: policy["data"]['strategy'],
-  #     executable: policy['executable']
-  #   )
+  policies.each do |policy|
+    puts policy
+    puts "- - - -"
+    db_policy = Policy.find_or_create_by(
+      pubkey: policy['pubkey'],
+      network: "mainnet",
+    )
+    db_policy.update(
+      owner: policy['owner'],
+      lamports: policy['lamports'],
+      rent_epoch: policy['rent_epoch'],
+      kind: policy["data"]['kind'],
+      strategy: policy["data"]['strategy'],
+      executable: policy['executable']
+    )
 
-  #   policy["data"]["identities"].each do |identity|
-  #     validator = Validator.where(account: identity).first
-  #     if validator
-  #       PolicyValidator.find_or_create_by(policy: policy, validator: validator)
-  #     end
-  #   end
-  #   logger.info("Policy updated or created: #{policy['mint']}")
-  # end
-  
+    policy["data"]["identities"].each do |identity|
+      validator = Validator.where(account: identity).first
+      if validator
+        ValidatorPolicy.find_or_create_by(
+          policy_id: db_policy.id,
+          validator_id: validator.id
+        )
+      else
+        logger.warn("Validator not found for identity: #{identity}")
+      end
+    end
+    logger.info("Policy updated or created: #{policy['pubkey']}")
+  end
+
 else
   logger.error("Failed to update policies. Node process exited with status: #{$?.exitstatus}")
 end

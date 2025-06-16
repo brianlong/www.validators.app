@@ -57,7 +57,15 @@ connection.getParsedProgramAccounts(yellowstoneProgramId, {
       tmp_identities.push(address);
     }
     decoded.data.identities = tmp_identities;
-    decoded_policies.push(decoded);
+    result = {
+      pubkey: policy.pubkey,
+      data: decoded.data,
+      executable: policy.account.executable,
+      owner: policy.account.owner.toBase58(),
+      lamports: policy.account.lamports,
+      rent_epoch: policy.account.rentEpoch
+    };
+    decoded_policies.push(result);
   });
 
   let decoded_policies_json = JSON.stringify(decoded_policies, null, 2);

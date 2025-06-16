@@ -636,17 +636,20 @@ ActiveRecord::Schema.define(version: 2025_06_11_121753) do
   end
 
   create_table "policies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "pubkey", null: false
     t.string "name"
     t.string "url"
     t.string "mint"
+    t.string "network"
     t.boolean "kind"
     t.boolean "strategy"
     t.boolean "executable"
     t.string "owner"
     t.bigint "lamports"
-    t.bigint "rent_epoch"
+    t.string "rent_epoch"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["pubkey"], name: "index_policies_on_pubkey", unique: true
   end
 
   create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
