@@ -210,8 +210,8 @@ module SolanaLogic
           'gossip_ip_port' => hash['gossip'],
           'rpc_ip_port' => hash['rpc'],
           'tpu_ip_port' => hash['tpu'],
-          'version' => hash['version'].match(/^[a-zA-z0-9.]+ /).to_s.strip,
-          'client' => hash['version'].match(/client:[a-zA-Z]+/).to_s.gsub('client:', '')
+          'version' => hash['version']&.match(/^[a-zA-z0-9.]+ /)&.to_s&.strip,
+          'client' => hash['version']&.match(/client:[a-zA-Z]+/)&.to_s&.gsub('client:', '')
         }
       end
 
