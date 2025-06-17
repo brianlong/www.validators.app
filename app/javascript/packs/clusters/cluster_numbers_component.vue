@@ -7,12 +7,12 @@
 
         <div class="mb-2" v-if="software_versions">
           <div class="text-muted me-1">Software Versions:</div>
-          <div class="d-inline-block" v-if="software_versions['agave']">
-            <strong class="text-success">{{ software_versions['agave'] }}</strong>&nbsp;
+          <div class="d-inline-block" v-if="software_versions['Agave']">
+            <strong class="text-success">{{ software_versions['Agave'] }}</strong>&nbsp;
             <img :src="agave_icon" class="img-xxs" title="Agave" alt="A" style="margin-top: -4px;">
           </div>
-          <div class="d-inline-block" v-if="software_versions['firedancer']">
-            <strong class="ms-3 text-success">{{ software_versions['firedancer'] }}</strong>
+          <div class="d-inline-block" v-if="software_versions['Firedancer']">
+            <strong class="ms-3 text-success">{{ software_versions['Firedancer'] }}</strong>
             <img :src="firedancer_icon" class="img-xs" title="Firedancer" alt="F" style="margin-top: -3px; margin-left: 3px">
           </div>
         </div>
