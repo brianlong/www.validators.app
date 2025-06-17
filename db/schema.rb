@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_06_02_182454) do
+ActiveRecord::Schema.define(version: 2025_06_17_152911) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -859,6 +859,7 @@ ActiveRecord::Schema.define(version: 2025_06_02_182454) do
     t.bigint "vote_distance", unsigned: true
     t.integer "epoch"
     t.integer "validator_id"
+    t.string "software_client"
     t.index ["account", "created_at", "active_stake"], name: "acceptable_stake_by_account_index"
     t.index ["account", "delinquent", "created_at"], name: "delinquent_by_account_index"
     t.index ["network", "account", "id"], name: "index_validator_histories_on_network_and_account_and_id"
@@ -968,6 +969,7 @@ ActiveRecord::Schema.define(version: 2025_06_02_182454) do
     t.integer "slot_index_current"
     t.decimal "skipped_vote_percent_moving_average", precision: 10, scale: 4
     t.float "vote_latency_average"
+    t.string "software_client"
     t.index ["network", "batch_uuid"], name: "index_vote_account_histories_on_network_and_batch_uuid"
     t.index ["vote_account_id", "created_at"], name: "index_vote_account_histories_on_vote_account_id_and_created_at"
     t.index ["vote_account_id"], name: "index_vote_account_histories_on_vote_account_id"
