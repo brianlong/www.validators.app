@@ -390,7 +390,7 @@ module ValidatorScoreV1Logic
         software_versions: software_versions
       )
 
-      p.payload[:this_batch].update(software_version: current_software_versions["agave"], software_versions: current_software_versions)
+      p.payload[:this_batch].update(software_version: current_software_versions["Agave"], software_versions: current_software_versions)
 
       p.payload[:validators].each do |validator|
         validator.validator_score_v1.assign_software_version_score(current_software_versions)
