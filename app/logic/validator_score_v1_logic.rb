@@ -364,6 +364,8 @@ module ValidatorScoreV1Logic
         if vah&.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
           validator.validator_score_v1.software_client = vah.software_client
           validator.validator_score_v1.software_version = vah.software_version
+        else
+          validator.validator_score_v1.software_client = 'Unknown'
         end
 
         this_software_version = validator.validator_score_v1.software_version
@@ -385,7 +387,7 @@ module ValidatorScoreV1Logic
         Appsignal.send_error(e)
       end
 
-      # Calculate current version by stake
+      # Calculate current versions by stake
       current_software_versions = find_current_software_version(
         software_versions: software_versions
       )
@@ -456,12 +458,14 @@ module ValidatorScoreV1Logic
   
       software_versions[kind] = software_versions[kind].select { |ver, _| ver&.match /\d+\.\d+\.\d+\z/ }
     end
+
     software_versions.each do |kind, software_version|
+      next if kind.nil?
+
       if software_versions[kind].empty?
-        result[kind] = 'unknown'
+        result[kind] = 'Unknown'
       else
-        software_versions_sorted = \
-          software_versions[kind].sort_by { |k, _v| Gem::Version.new(k) }.reverse
+        software_versions_sorted = software_versions[kind].sort_by { |k, _v| Gem::Version.new(k) }.reverse
 
         cumulative_sum = 0
 
