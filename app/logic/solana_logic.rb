@@ -415,7 +415,7 @@ module SolanaLogic
           slot_index_current: p.payload[:epoch_slot_index],
           activated_stake: v['activated_stake'],
           software_version: v['version'],
-          software_client: v['client']
+          software_client: (v['client'] || 'Unknown')
         )
 
         # Find or create the validator IP address
