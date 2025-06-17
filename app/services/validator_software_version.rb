@@ -29,13 +29,4 @@ class ValidatorSoftwareVersion < ::Gem::Version
   def self.valid_software_version?(number)
     Gem::Version.correct? number
   end
-
-  def self.software_version_client(version)
-    version_arr = version.split('.').map(&:to_i)
-    if version_arr.count == 3 && version_arr[1] >= 100 && version_arr[2] > 100
-      "firedancer"
-    else
-      "agave"
-    end
-  end
 end
