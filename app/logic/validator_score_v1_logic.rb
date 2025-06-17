@@ -362,7 +362,7 @@ module ValidatorScoreV1Logic
         end
         # This means we skip the software version for non-voting nodes.
         if vah&.software_version.present? && ValidatorSoftwareVersion.valid_software_version?(vah.software_version)
-          validator.validator_score_v1.software_client = ValidatorSoftwareVersion.software_version_client(vah.software_version)
+          validator.validator_score_v1.software_client = vah.software_client
           validator.validator_score_v1.software_version = vah.software_version
         end
 
@@ -370,7 +370,7 @@ module ValidatorScoreV1Logic
 
         # Gather software_version stat
         if validator.validator_score_v1.active_stake && vah&.software_version.present?
-          kind = ValidatorSoftwareVersion.software_version_client(vah.software_version)
+          kind = vah.software_client
           if !software_versions[kind]
             software_versions[kind] = Hash.new(0)
             software_versions[kind]["total_stake"] = 0
