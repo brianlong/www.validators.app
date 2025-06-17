@@ -35,14 +35,11 @@ if $?.success?
 
     policy["data"]["identities"].each do |identity|
       validator = Validator.where(account: identity).first
-      if validator
-        ValidatorPolicy.find_or_create_by(
-          policy_id: db_policy.id,
-          validator_id: validator.id
-        )
-      else
-        logger.warn("Validator not found for identity: #{identity}")
-      end
+      PolicyIdentity.find_or_create_by(
+        policy_id: db_policy.id,
+        validator_id: validator&.id,
+        account: identity
+      )
     end
     logger.info("Policy updated or created: #{policy['pubkey']}")
   end

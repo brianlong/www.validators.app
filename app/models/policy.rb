@@ -22,6 +22,6 @@
 #  index_policies_on_pubkey  (pubkey) UNIQUE
 #
 class Policy < ApplicationRecord
-  has_many :validator_policies, dependent: :destroy
-  has_many :validators, through: :validator_policies
+  has_many :policy_identities, dependent: :destroy
+  has_many :validators, through: :policy_identities
 end

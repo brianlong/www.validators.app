@@ -652,6 +652,16 @@ ActiveRecord::Schema.define(version: 2025_06_11_121753) do
     t.index ["pubkey"], name: "index_policies_on_pubkey", unique: true
   end
 
+  create_table "policy_identities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "policy_id", null: false
+    t.bigint "validator_id"
+    t.string "account"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["policy_id"], name: "index_policy_identities_on_policy_id"
+    t.index ["validator_id"], name: "index_policy_identities_on_validator_id"
+  end
+
   create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "network"
     t.string "name"
@@ -902,15 +912,6 @@ ActiveRecord::Schema.define(version: 2025_06_11_121753) do
     t.index ["validator_id", "version", "address"], name: "index_validator_ips_on_validator_id_and_version_and_address", unique: true
   end
 
-  create_table "validator_policies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "policy_id", null: false
-    t.bigint "validator_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["policy_id"], name: "index_validator_policies_on_policy_id"
-    t.index ["validator_id"], name: "index_validator_policies_on_validator_id"
-  end
-
   create_table "validator_score_v1s", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "validator_id"
     t.integer "total_score"
@@ -1040,13 +1041,13 @@ ActiveRecord::Schema.define(version: 2025_06_11_121753) do
   add_foreign_key "data_center_stats", "data_centers"
   add_foreign_key "ping_thing_user_stats", "users"
   add_foreign_key "ping_things", "users"
+  add_foreign_key "policy_identities", "policies"
+  add_foreign_key "policy_identities", "validators"
   add_foreign_key "user_watchlist_elements", "users", on_delete: :cascade
   add_foreign_key "user_watchlist_elements", "validators", on_delete: :cascade
   add_foreign_key "validator_block_histories", "validators"
   add_foreign_key "validator_ips", "data_center_hosts"
   add_foreign_key "validator_ips", "validators"
-  add_foreign_key "validator_policies", "policies"
-  add_foreign_key "validator_policies", "validators"
   add_foreign_key "vote_account_histories", "vote_accounts"
   add_foreign_key "vote_account_stake_histories", "vote_accounts"
   add_foreign_key "vote_accounts", "validators"
