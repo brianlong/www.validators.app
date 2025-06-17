@@ -372,7 +372,7 @@ module ValidatorScoreV1Logic
 
         # Gather software_version stat
         if validator.validator_score_v1.active_stake && vah&.software_version.present?
-          kind = vah.software_client
+          kind = ValidatorSoftwareVersion.software_version_client(vah.software_version)
           if !software_versions[kind]
             software_versions[kind] = Hash.new(0)
             software_versions[kind]["total_stake"] = 0

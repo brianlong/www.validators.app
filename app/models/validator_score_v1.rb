@@ -205,7 +205,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
     return unless ValidatorSoftwareVersion.valid_software_version?(software_version) && best_versions
 
-    best_version = best_versions[software_client]
+    best_version = best_versions[ValidatorSoftwareVersion.software_version_client(software_version)]
 
     version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network, best_version: best_version)
 
