@@ -18,6 +18,7 @@
 #  root_slot                           :bigint
 #  skipped_vote_percent_moving_average :decimal(10, 4)
 #  slot_index_current                  :integer
+#  software_client                     :string(191)
 #  software_version                    :string(191)
 #  vote_latency_average                :float(24)
 #  created_at                          :datetime         not null

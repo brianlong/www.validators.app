@@ -20,6 +20,7 @@
 #  root_block       :bigint           unsigned
 #  root_distance    :bigint           unsigned
 #  slot_skip_rate   :float(24)        unsigned
+#  software_client  :string(191)
 #  software_version :string(191)
 #  vote_account     :string(191)
 #  vote_distance    :bigint           unsigned

@@ -40,7 +40,7 @@
 #  skipped_slot_score                          :integer
 #  skipped_vote_history                        :text(65535)
 #  skipped_vote_percent_moving_average_history :text(65535)
-#  software_client                             :integer          default(0)
+#  software_client                             :string(191)
 #  software_version                            :string(191)
 #  software_version_score                      :integer
 #  stake_concentration                         :decimal(10, 3)
@@ -109,8 +109,6 @@ class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
-
-  enum software_client: { agave: 0, firedancer: 1 }
 
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?
@@ -209,11 +207,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
     best_version = best_versions[ValidatorSoftwareVersion.software_version_client(software_version)]
 
-    version = ValidatorSoftwareVersion.new(
-      number: software_version,
-      network: validator.network,
-      best_version: best_version
-    )
+    version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network, best_version: best_version)
 
     self.software_version_score = \
       if version.running_latest_or_newer?
