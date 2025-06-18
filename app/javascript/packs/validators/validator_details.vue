@@ -80,6 +80,7 @@
                 <td><strong>Software:</strong></td>
                 <td>
                   {{ score.software_version }}
+                  <span v-if="score.software_client">({{ score.software_client }})</span>
                 </td>
               </tr>
 
