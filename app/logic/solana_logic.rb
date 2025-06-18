@@ -206,15 +206,30 @@ module SolanaLogic
       validators_json.each do |hash|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
 
+        version = hash['version']&.match(/^[a-zA-z0-9.]+ /)&.to_s&.strip
         client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '').sub(')', '')
         client == 'Unknown(4)' ? client = 'Paladin' : client
+
+        clients_mapping = {
+          'SolanaLabs': 0,
+          'JitoLabs': 1,
+          'Firedancer': 2,
+          'Agave': 3,
+          'Paladin': 4
+        }
+        client_id = if client&.match(/^Unknown/)
+                      client.gsub('Unknown', '').gsub('(', '').gsub(')', '').to_i
+                    else
+                      clients_mapping[client.to_sym]
+                    end
 
         validators[hash['pubkey']] = {
           'gossip_ip_port' => hash['gossip'],
           'rpc_ip_port' => hash['rpc'],
           'tpu_ip_port' => hash['tpu'],
-          'version' => hash['version']&.match(/^[a-zA-z0-9.]+ /)&.to_s&.strip,
-          'client' => client
+          'version' => version,
+          'client' => client,
+          'client_id' => client_id
         }
       end
 
