@@ -143,6 +143,7 @@ module SolanaLogic
               active_stake: validator["activatedStake"],
               software_version: (p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('version') || validator['version']),
               software_client: (p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('client') || 'Unknown'),
+              software_client_id: p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('client_id'),
               delinquent: validator["delinquent"],
               slot_skip_rate: validator["skipRate"],
               root_distance: max_root_height - validator["rootSlot"].to_i,
@@ -169,6 +170,7 @@ module SolanaLogic
             active_stake: validator["activatedStake"],
             software_version: (p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('version') || validator['version']),
             software_client: (p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('client') || 'Unknown'),
+            software_client_id: p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('client_id'),
             delinquent: validator["delinquent"],
             slot_skip_rate: validator["skipRate"],
             root_distance: max_root_height - validator["rootSlot"].to_i,
@@ -433,7 +435,8 @@ module SolanaLogic
           slot_index_current: p.payload[:epoch_slot_index],
           activated_stake: v['activated_stake'],
           software_version: v['version'],
-          software_client: (v['client'] || 'Unknown')
+          software_client: (v['client'] || 'Unknown'),
+          software_client_id: v['client_id']
         )
 
         # Find or create the validator IP address
