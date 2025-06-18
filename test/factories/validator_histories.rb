@@ -17,6 +17,7 @@ FactoryBot.define do
     slot_skip_rate { 1.5 }
     software_version { '1.1.1' }
     software_client { 'Agave' }
+    software_client_id { 3 }
     validator
   end
 end

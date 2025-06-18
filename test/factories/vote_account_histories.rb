@@ -7,6 +7,7 @@ FactoryBot.define do
     batch_uuid { '1-2-3' }
     software_version { '1.1.1' }
     software_client { 'Agave' }
+    software_client_id { 3 }
     last_vote { 1 }
     activated_stake { 1000000000 }
     credits { 1 }
