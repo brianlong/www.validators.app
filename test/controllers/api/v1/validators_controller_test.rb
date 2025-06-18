@@ -80,7 +80,7 @@ module Api
         assert_equal 1, json.size
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 46, validator_with_all_data.keys.size
+        assert_equal 47, validator_with_all_data.keys.size
 
         # Validator
         assert_equal "testnet", validator_with_all_data["network"]
@@ -109,6 +109,7 @@ module Api
         assert_nil validator_with_all_data["admin_warning"]
         assert validator_with_all_data["is_active"]
         assert_equal "Agave", validator_with_all_data["software_client"]
+        assert_equal 3, validator_with_all_data["software_client_id"]
 
         # Vote accounts
         assert_equal "Test Account", validator_with_all_data["vote_account"]
@@ -357,7 +358,7 @@ module Api
         validator_active_stake = validator.validator_score_v1.active_stake
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 46, json_response.keys.size
+        assert_equal 47, json_response.keys.size
 
         # Validator
         assert_equal "testnet", json_response["network"]
@@ -383,6 +384,7 @@ module Api
         assert_equal false, json_response["delinquent"]
         assert_equal validator.data_center_host.host, json_response["data_center_host"]
         assert_equal "Agave", json_response["software_client"]
+        assert_equal 3, json_response["software_client_id"]
 
         # Vote accounts
         assert_equal "Test Account", json_response["vote_account"]
@@ -503,7 +505,7 @@ module Api
         validator_active_stake = validator.validator_score_v1.active_stake
 
         # Adjust after adding/removing attributes in json builder
-        assert_equal 55, json_response.keys.size
+        assert_equal 56, json_response.keys.size
 
         # Score
         assert_equal [1, 2, 3, 4, 5], json_response["root_distance_history"]
@@ -515,6 +517,7 @@ module Api
         assert_equal "0.001", json_response["stake_concentration"]
         assert_equal "1.6.7", json_response["software_version"]
         assert_equal "Agave", json_response["software_client"]
+        assert_equal 3, json_response["software_client_id"]
       end
 
       test "GET api_v1_validator with token and with empty or other than true param with_history does NOT include history" do

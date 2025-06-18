@@ -4,29 +4,30 @@
 #
 # Table name: validator_histories
 #
-#  id               :bigint           not null, primary key
-#  account          :string(191)
-#  active_stake     :bigint           unsigned
-#  batch_uuid       :string(191)
-#  commission       :decimal(10, )    unsigned
-#  credits          :bigint           unsigned
-#  delinquent       :boolean          default(FALSE)
-#  epoch            :integer
-#  epoch_credits    :integer          unsigned
-#  last_vote        :bigint           unsigned
-#  max_root_height  :bigint           unsigned
-#  max_vote_height  :bigint           unsigned
-#  network          :string(191)
-#  root_block       :bigint           unsigned
-#  root_distance    :bigint           unsigned
-#  slot_skip_rate   :float(24)        unsigned
-#  software_client  :string(191)
-#  software_version :string(191)
-#  vote_account     :string(191)
-#  vote_distance    :bigint           unsigned
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  validator_id     :integer
+#  id                 :bigint           not null, primary key
+#  account            :string(191)
+#  active_stake       :bigint           unsigned
+#  batch_uuid         :string(191)
+#  commission         :decimal(10, )    unsigned
+#  credits            :bigint           unsigned
+#  delinquent         :boolean          default(FALSE)
+#  epoch              :integer
+#  epoch_credits      :integer          unsigned
+#  last_vote          :bigint           unsigned
+#  max_root_height    :bigint           unsigned
+#  max_vote_height    :bigint           unsigned
+#  network            :string(191)
+#  root_block         :bigint           unsigned
+#  root_distance      :bigint           unsigned
+#  slot_skip_rate     :float(24)        unsigned
+#  software_client    :string(191)
+#  software_version   :string(191)
+#  vote_account       :string(191)
+#  vote_distance      :bigint           unsigned
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  software_client_id :integer
+#  validator_id       :integer
 #
 # Indexes
 #
