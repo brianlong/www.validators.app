@@ -82,6 +82,7 @@ class ValidatorScoreV1 < ApplicationRecord
     validator_id
     vote_distance_score
     software_client
+    software_client_id
   ].freeze
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
