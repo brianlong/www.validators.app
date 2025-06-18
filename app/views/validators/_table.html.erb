@@ -174,7 +174,7 @@
                     <%= image_tag("firedancer.svg", class: 'img-xs me-1', title: "Show Firedancer validators", alt: "F") %>
                   <% end %>
                 </div>
-              <% elsif validator.score.software_client == "Agave" || validator.score.software_client == "JitoLabs" %>
+              <% elsif validator.score.software_client == "Agave" || validator.score.software_client == "JitoLabs" || validator.score.software_client == "Paladin" %>
                 <div class="mt-2 mt-lg-0 d-none d-lg-inline-block">
                   <%= link_to validators_path(network: params[:network], q: validator.score.software_version) do %>
                     <%= image_tag("agave.svg", class: 'img-xs me-1', title: "Show Agave validators", alt: "A") %>
