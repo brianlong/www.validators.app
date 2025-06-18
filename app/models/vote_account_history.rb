@@ -23,6 +23,7 @@
 #  vote_latency_average                :float(24)
 #  created_at                          :datetime         not null
 #  updated_at                          :datetime         not null
+#  software_client_id                  :integer
 #  vote_account_id                     :bigint           not null
 #
 # Indexes

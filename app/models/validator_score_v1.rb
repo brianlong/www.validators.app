@@ -52,6 +52,7 @@
 #  vote_latency_score                          :integer
 #  created_at                                  :datetime         not null
 #  updated_at                                  :datetime         not null
+#  software_client_id                          :integer
 #  validator_id                                :bigint
 #
 # Indexes
