@@ -18,6 +18,8 @@
     "@rails/webpacker": "5.4.4",
     "@solana/web3.js": "^1.63.2",
     "@solana/kit": "^2.1.1",
+    "@solana/spl-token-metadata": "^0.1.6",
+    "@solana/spl-token": "^0.4.2",
     "@vue/composition-api": "^1.7.1",
     "actioncable-vue": "^2.5.1",
     "axios": "^1.7.4",
