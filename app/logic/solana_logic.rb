@@ -220,9 +220,9 @@ module SolanaLogic
           'Paladin': 4
         }
         client_id = if client&.match(/^Unknown/)
-                      client.gsub('Unknown', '').gsub('(', '').gsub(')', '').to_i
+                      client.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
                     else
-                      clients_mapping[client.to_sym]
+                      clients_mapping[client&.to_sym]
                     end
 
         validators[hash['pubkey']] = {
