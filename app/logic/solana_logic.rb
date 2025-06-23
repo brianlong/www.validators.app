@@ -209,7 +209,7 @@ module SolanaLogic
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
 
         version = hash['version']&.match(/^[a-zA-z0-9.]+ /)&.to_s&.strip
-        client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '').sub(')', '')
+        client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
         client == 'Unknown(4)' ? client = 'Paladin' : client
 
         clients_mapping = {
