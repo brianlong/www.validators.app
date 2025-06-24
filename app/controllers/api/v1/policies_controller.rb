@@ -2,12 +2,19 @@ module Api
   module V1
     class PoliciesController < BaseController
       def index
-        limit = [(policy_params[:limit] || 1000).to_i, 9999].min
-        policies = Policy.where(network: policy_params[:network])
-                           .order('created_at desc')
-                           .limit(limit)
+        result = PolicyQuery.new(
+          network: policy_params[:network] || 'mainnet',
+          limit: policy_params[:limit],
+          query: policy_params[:query],
+          page: policy_params[:page] || 1
+        ).call
 
-        render json: policies.map{ |policy| policy.to_builder.attributes! }, status: 200
+        response = {
+          policies: result[:policies].map { |policy| policy.to_builder.attributes! },
+          total_count: result[:total_count]
+        }
+
+        render json: response, status: 200
       rescue ActionController::ParameterMissing
         render json: { 'status' => 'Parameter Missing' }, status: 400
       rescue StandardError => e
@@ -16,14 +23,22 @@ module Api
       end
 
       def show
+        limit = [policy_params[:limit].to_i || 2, 9999].min
+        page = (policy_params[:page] || 1).to_i
+
         policy = Policy.find_by(pubkey: params[:pubkey], network: policy_params[:network])
-        validators = policy&.validators
-        other_identities = policy&.non_validators
+
+        total_validators = policy&.validators
+        validators = policy&.validators&.limit(limit)&.offset((page - 1) * limit)
+        total_other_identities = policy&.non_validators
+        other_identities = policy&.non_validators&.limit(limit)&.offset((page - 1) * limit)
 
         if policy
           policy_data = policy.to_builder.attributes!
           policy_data['validators'] = validators.map(&:account) if validators
+          policy_data['total_validators'] = total_validators.count if total_validators
           policy_data['other_identities'] = other_identities.map(&:account) if other_identities
+          policy_data['total_other_identities'] = total_other_identities.count if total_other_identities
 
           render json: policy_data.to_json, status: 200
         else
@@ -41,7 +56,9 @@ module Api
       def policy_params
         params.permit(
           :network,
-          :limit
+          :limit,
+          :query,
+          :page
         )
       end
 

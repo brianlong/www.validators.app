@@ -3,8 +3,11 @@ import PolicyTemplate from './policy_template'
 import ValidatorRow from '../validators/validator_row'
 import TurbolinksAdapter from 'vue-turbolinks';
 import store from "../stores/main_store.js";
+import { PaginationPlugin } from "bootstrap-vue";
+import { BPagination } from "bootstrap-vue";
 
 Vue.use(TurbolinksAdapter);
+Vue.use(PaginationPlugin);
 
 document.addEventListener('turbolinks:load', () => {
   const policy = new Vue({
@@ -20,6 +23,7 @@ document.addEventListener('turbolinks:load', () => {
 
     components: {
       "ValidatorRow": ValidatorRow,
+      'BPagination': BPagination
     }
   })
 })

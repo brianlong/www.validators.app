@@ -155,8 +155,13 @@
           </tbody>
         </table>
       </div>
-      <div class="col-12">
-
+      <div class="justify-content-end d-flex">
+        <b-pagination
+          v-model="page"
+          :total-rows="total_count"
+          :per-page="limit"
+          first-text="« First"
+          last-text="Last »" />
       </div>
     </div>
   </div>
@@ -180,6 +185,9 @@
         policy: {},
         validators: [],
         show_validators: true,
+        page: 1,
+        total_count: 0,
+        limit: 25
       }
     },
 
@@ -189,12 +197,13 @@
 
     methods: {
       get_policy: function() {
-        let policy_url = "/api/v1/policies/mainnet/" + this.pubkey
+        let policy_url = "/api/v1/policies/mainnet/" + this.pubkey + "?page=" + this.page + "&limit=" + this.limit;
         var ctx = this
         axios.get(policy_url)
           .then(function (response) {
             ctx.policy = response.data;
-            console.log(ctx.policy)
+
+            ctx.total_count = ctx.show_validators ? ctx.policy.total_validators : ctx.policy.total_other_identities;
             ctx.get_validators();
           })
           .catch(function (error) {
@@ -203,6 +212,7 @@
       },
 
       get_validators: function() {
+        this.validators = [];
         if (!this.policy || !this.policy.validators) {
           return [];
         }
@@ -213,6 +223,16 @@
                  ctx.validators.push(response.data);
                })
         })
+      }
+    },
+
+    watch: {
+      page: function() {
+        this.get_policy();
+      },
+
+      show_validators: function() {
+        this.total_count = this.show_validators ? this.policy.total_validators : this.policy.total_other_identities;
       }
     }
   }
