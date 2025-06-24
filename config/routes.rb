@@ -129,7 +129,7 @@ Rails.application.routes.draw do
   get "current-user", to: "users#current_user_info"
 
   # policies
-  get 'yellowstone-shield', to: 'policies#index'
+  get 'yellowstone-shield', to: 'policies#index', as: 'policies_index'
   get 'yellowstone-shield/(:pubkey)', to: 'policies#show'
 
   ### API

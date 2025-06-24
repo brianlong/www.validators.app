@@ -5,11 +5,11 @@
       <p class="lead">
         Yellowstone Shield is a Solana program that manages on-chain allowlists and blocklists of identities. 
         An identity can be any addressable account in Solana, such as a validator, wallet, or program. 
-        This program allows transaction senders, like Agave STS, Helius' Atlas, Mango's lite-rpc, Jito's blockEngine, and Triton's Jet, 
+        This program allows transaction senders, like Triton's Jet, Agave STS, Helius' Atlas, Jito's blockEngine
         to effectively control transaction forwarding policies.</p>
     </section>
-    <div class="col-12 mb-3">
-      <div class="d-flex col-6 offset-6">
+    <div class="col-12 mb-4">
+      <div class="d-flex col-lg-6 offset-lg-6">
         <div class="input-group">
           <input
             v-model="searchQuery"
@@ -23,24 +23,26 @@
     </div>
     <div class="col-12">
       <div class="card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Policy Name</th>
-              <th>pubkey</th>
-              <th>owner</th>
-              <th>identities count</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="policy in policies" :key="policy.policy_id">
-              <td>{{ policy.policy_name }}</td>
-              <td><a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false">{{ policy.pubkey }}</a></td>
-              <td>{{ policy.owner }}</td>
-              <td>{{ policy.identities_count }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive-lg">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Policy Name</th>
+                <th>pubkey</th>
+                <th>owner</th>
+                <th>identities count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="policy in policies" :key="policy.policy_id">
+                <td>{{ policy.policy_name }}</td>
+                <td><a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false">{{ policy.pubkey }}</a></td>
+                <td>{{ policy.owner }}</td>
+                <td>{{ policy.identities_count }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="d-flex justify-content-end mt-3">
         <p v-if="total_count === 0">No policies found.</p>
