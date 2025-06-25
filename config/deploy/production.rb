@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+set :rails_env, :production
+
 append :linked_files, 'config/credentials/production.key'
 
 # 'www.validators.app',

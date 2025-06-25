@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+set :rails_env, :stage
+
 append :linked_files, 'config/credentials/stage.key'
 
 server(
