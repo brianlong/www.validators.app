@@ -13,6 +13,7 @@
 #  pubkey     :string(191)      not null
 #  rent_epoch :string(191)
 #  strategy   :boolean
+#  symbol     :string(191)
 #  url        :string(191)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

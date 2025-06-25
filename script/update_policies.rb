@@ -32,7 +32,8 @@ if $?.success?
       executable: policy['executable'],
       name: policy['token_metadata'] ? policy['token_metadata']['name'] : nil,
       url: policy['token_metadata'] ? policy['token_metadata']['uri'] : nil,
-      mint: policy['token_metadata'] ? policy['token_metadata']['mint'] : nil
+      mint: policy['token_metadata'] ? policy['token_metadata']['mint'] : nil,
+      symbol: policy['token_metadata'] ? policy['token_metadata']['symbol'] : nil
     )
 
     policy["data"]["identities"].each do |identity|
