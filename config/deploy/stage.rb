@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+append :linked_files, 'config/credentials/stage.key'
+
 server(
   '64.225.7.18',
   user: 'deploy',
