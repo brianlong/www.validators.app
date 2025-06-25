@@ -4,7 +4,7 @@ class PingThingStatsWorker
   include Sidekiq::Worker
 
   def perform
-    NETWORKS.each do |network|
+    NETWORKS_FOR_PING_THING.each do |network|
       CreatePingThingStatsService.new(network: network).call
     end
   end

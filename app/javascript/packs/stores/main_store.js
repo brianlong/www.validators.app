@@ -23,6 +23,8 @@ const getters = {
         return state.pythnet_url
       case 'testnet':
         return state.testnet_url
+      case 'anzamain':
+        return state.mainnet_url
     }
   },
 
@@ -31,6 +33,8 @@ const getters = {
       return 'pythnet'
     } else if (location.href.match(/network=testnet/)) {
       return 'testnet'
+    } else if (location.href.match(/network=anzamain/)) {
+      return 'anzamain'
     } else {
       return 'mainnet'
     }

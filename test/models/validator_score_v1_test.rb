@@ -175,7 +175,7 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
 
   test 'assign_software_version_score scores 1 points for correct versions' do
     current_version = '1.5.4'
-    software_versions = { "agave" => current_version }
+    software_versions = { "Agave" => current_version }
     create(:batch, software_version: current_version, software_versions: software_versions)
     
     score1 = create(:validator_score_v1, network: 'testnet', software_version: '1.5.3')
