@@ -66,10 +66,6 @@ gem 'image_processing', '~> 1.14'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.18', require: false
 
-# Capistrano
-gem 'capistrano-passenger', '>= 0.2.1'
-gem 'capistrano-rails', group: :development
-
 # AppSignal
 gem 'appsignal', '~> 4.5'
 
@@ -145,6 +141,11 @@ group :development, :test do
   gem 'pronto-rubocop', '~> 0.11.5', require: false
   gem 'rubocop', '~> 1.63.3', require: false
   gem 'rubocop-rails', '~> 2.24.1', require: false
+
+  # Capistrano
+  gem 'capistrano', '~> 3.17.3', require: false
+  gem 'capistrano-passenger', '~> 0.2.1', require: false
+  gem 'capistrano-rails', '~> 1.7', require: false
 end
 
 group :development do
