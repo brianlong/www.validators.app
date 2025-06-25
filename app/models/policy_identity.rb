@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: validator_policies
+# Table name: policy_identities
 #
 #  id           :bigint           not null, primary key
 #  account      :string(191)
@@ -11,8 +11,8 @@
 #
 # Indexes
 #
-#  index_validator_policies_on_policy_id     (policy_id)
-#  index_validator_policies_on_validator_id  (validator_id)
+#  index_policy_identities_on_policy_id     (policy_id)
+#  index_policy_identities_on_validator_id  (validator_id)
 #
 # Foreign Keys
 #

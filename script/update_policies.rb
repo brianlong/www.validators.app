@@ -18,8 +18,7 @@ if $?.success?
   policies = JSON.parse(json)
 
   policies.each do |policy|
-    puts policy
-    puts "- - - -"
+
     db_policy = Policy.find_or_create_by(
       pubkey: policy['pubkey'],
       network: "mainnet",
@@ -30,7 +29,10 @@ if $?.success?
       rent_epoch: policy['rent_epoch'],
       kind: policy["data"]['kind'],
       strategy: policy["data"]['strategy'],
-      executable: policy['executable']
+      executable: policy['executable'],
+      name: policy['token_metadata'] ? policy['token_metadata']['name'] : nil,
+      url: policy['token_metadata'] ? policy['token_metadata']['uri'] : nil,
+      mint: policy['token_metadata'] ? policy['token_metadata']['mint'] : nil
     )
 
     policy["data"]["identities"].each do |identity|

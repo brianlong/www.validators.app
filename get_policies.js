@@ -1,17 +1,21 @@
 // Description: This script fetches and decodes policies from the Yellowstone program on Solana.
 
-import 'dotenv/config';
-import fs from 'fs';
-import * as solanaWeb3 from '@solana/web3.js';
-import {
+require('dotenv/config');
+const fs = require('fs');
+const solanaWeb3 = require('@solana/web3.js');
+const {
   decodeAccount,
   fixDecoderSize,
   getStructDecoder,
   getU8Decoder,
   getAddressDecoder,
   getBytesDecoder
-} from '@solana/kit';
-import {getTokenMetadata} from '@solana/spl-token';
+} = require('@solana/kit');
+const {
+  getTokenMetadata,
+  TOKEN_2022_PROGRAM_ID,
+  getMint
+} = require('@solana/spl-token');
 
 const config = {
   solanaUrl: process.env.SOLANA_URL,
@@ -23,7 +27,7 @@ var timestamp = process.argv.slice(2);
 var yellowstoneProgramId = new solanaWeb3.PublicKey(config.yellowstoneProgramId);
 var address_decoder = getAddressDecoder();
 
-function getPolicyDecoder() {
+function getPolicyWithMintDecoder() {
   return getStructDecoder([
     ['kind', getU8Decoder()],
     ['strategy', getU8Decoder()],
@@ -34,11 +38,28 @@ function getPolicyDecoder() {
   ]);
 }
 
-function decodePolicy(encodedAccount) {
-  return decodeAccount(
-    encodedAccount,
-    getPolicyDecoder()
-  );
+function getPolicyWithoutMintDecoder() {
+  return getStructDecoder([
+    ['kind', getU8Decoder()],
+    ['strategy', getU8Decoder()],
+    ['nonce', getU8Decoder()],
+    ['identitiesLen', fixDecoderSize(getU8Decoder(), 4)],
+    ['identities', getBytesDecoder(), { size: 1 }],
+  ]);
+}
+
+function decodePolicy(encodedAccount, mint = true) {
+  if (mint) {
+    return decodeAccount(
+      encodedAccount,
+      getPolicyWithMintDecoder()
+    );
+  } else {
+    return decodeAccount(
+      encodedAccount,
+      getPolicyWithoutMintDecoder()
+    );
+  }
 }
 
 async function getPolicyTokenMetadata(mintAddress) {
@@ -47,7 +68,6 @@ async function getPolicyTokenMetadata(mintAddress) {
     const metadata = await getTokenMetadata(connection, mintPubkey);
     return metadata;
   } catch (e) {
-    console.error('Error fetching token metadata:', e);
     return null;
   }
 }
@@ -58,7 +78,17 @@ connection.getParsedProgramAccounts(yellowstoneProgramId, {
   let decoded_policies = []
 
   for (const policy of policies) {
-    const decoded = decodePolicy(policy.account);
+    let decoded = decodePolicy(policy.account);
+
+    // Pobierz metadane tokena dla mint
+    let token_metadata = null;
+    if (decoded.data.mint) {
+      token_metadata = await getPolicyTokenMetadata(decoded.data.mint);
+      if (token_metadata === null) {
+        decoded = decodePolicy(policy.account, false);
+      }
+    }
+
     let tmp_identities = [];
     for (let i = 0; i < decoded.data.identities.length; i+=32) {
       if (i + 32 > decoded.data.identities.length) {
@@ -69,17 +99,6 @@ connection.getParsedProgramAccounts(yellowstoneProgramId, {
       tmp_identities.push(address);
     }
     decoded.data.identities = tmp_identities;
-
-    // Pobierz metadane tokena dla mint
-    let token_metadata = null;
-    if (decoded.data.mint) {
-      try {
-        token_metadata = await getPolicyTokenMetadata(decoded.data.mint);
-      } catch (e) {
-        console.log('Error fetching token metadata:', e);
-        token_metadata = null;
-      }
-    }
 
     const result = {
       pubkey: policy.pubkey,
