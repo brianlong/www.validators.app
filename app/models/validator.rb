@@ -265,6 +265,14 @@ class Validator < ApplicationRecord
     score&.software_version
   end
 
+  def software_client
+    score&.software_client
+  end
+
+  def software_client_id
+    score&.software_client_id
+  end
+
   def tower_blocks_behind_leader
     score&.root_distance_history&.last
   end

@@ -52,6 +52,7 @@
 #  vote_latency_score                          :integer
 #  created_at                                  :datetime         not null
 #  updated_at                                  :datetime         not null
+#  software_client_id                          :integer
 #  validator_id                                :bigint
 #
 # Indexes
@@ -81,6 +82,7 @@ class ValidatorScoreV1 < ApplicationRecord
     validator_id
     vote_distance_score
     software_client
+    software_client_id
   ].freeze
 
   FIELDS_FOR_VALIDATORS_INDEX_WEB = %i[
@@ -109,8 +111,6 @@ class ValidatorScoreV1 < ApplicationRecord
   MAX_HISTORY = 2_880
 
   ATTRIBUTES_FOR_BUILDER = (FIELDS_FOR_API - [:validator_id]).freeze
-
-  enum software_client: { agave: 0, firedancer: 1 }
 
   # Touch the related validator to increment the updated_at attribute
   after_save :create_commission_history, :if => :saved_change_to_commission?
@@ -209,11 +209,7 @@ class ValidatorScoreV1 < ApplicationRecord
 
     best_version = best_versions[ValidatorSoftwareVersion.software_version_client(software_version)]
 
-    version = ValidatorSoftwareVersion.new(
-      number: software_version,
-      network: validator.network,
-      best_version: best_version
-    )
+    version = ValidatorSoftwareVersion.new(number: software_version, network: validator.network, best_version: best_version)
 
     self.software_version_score = \
       if version.running_latest_or_newer?

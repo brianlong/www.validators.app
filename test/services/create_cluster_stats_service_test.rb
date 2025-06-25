@@ -5,7 +5,7 @@ require "test_helper"
 class CreateClusterStatsServiceTest < ActiveSupport::TestCase
   def setup
     @network = "mainnet"
-    @software_versions = { "agave" => "2.0.21", "firedancer" => "0.503.20214" }
+    @software_versions = { "Agave" => "2.0.21", "Firedancer" => "0.503.20214" }
     @batch = create(:batch, network: @network, software_version: "2.0.21", software_versions: @software_versions)
   end
 
