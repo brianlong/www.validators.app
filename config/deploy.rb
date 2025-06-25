@@ -50,7 +50,8 @@ namespace :deploy do
   after :restart, 'sidekiq:restart'
   after :restart, 'rake_task:add_stake_pools'
   after :restart, 'sitemap:create'
-  after :restart, 'deamons:restart'
+  # TODO uncomment after testing
+  # after :restart, 'deamons:restart'
 end
 
 namespace :sidekiq do
