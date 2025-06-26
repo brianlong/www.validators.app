@@ -141,9 +141,9 @@ module SolanaLogic
               epoch_credits: validator["epochCredits"],
               epoch: p.payload[:epoch],
               active_stake: validator["activatedStake"],
-              software_version: (p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('version') || validator['version']),
-              software_client: (p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('client') || 'Unknown'),
-              software_client_id: p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('client_id'),
+              software_version: (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('version') || validator['version']),
+              software_client: (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client') || 'Unknown'),
+              software_client_id: p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client_id'),
               delinquent: validator["delinquent"],
               slot_skip_rate: validator["skipRate"],
               root_distance: max_root_height - validator["rootSlot"].to_i,
@@ -168,9 +168,9 @@ module SolanaLogic
             epoch_credits: validator["epochCredits"],
             epoch: p.payload[:epoch],
             active_stake: validator["activatedStake"],
-            software_version: (p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('version') || validator['version']),
-            software_client: (p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('client') || 'Unknown'),
-            software_client_id: p.payload[:validators]&.fetch(validator["identityPubkey"])&.fetch('client_id'),
+            software_version: (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('version') || validator['version']),
+            software_client: (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client') || 'Unknown'),
+            software_client_id: p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client_id'),
             delinquent: validator["delinquent"],
             slot_skip_rate: validator["skipRate"],
             root_distance: max_root_height - validator["rootSlot"].to_i,
@@ -208,7 +208,7 @@ module SolanaLogic
       validators_json.each do |hash|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
 
-        version = hash['version']&.match(/^[a-zA-z0-9.]+ /)&.to_s&.strip
+        version = hash['version']&.match(/^[a-zA-z0-9.]+/)&.to_s&.strip
         client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
         client == 'Unknown(4)' ? client = 'Paladin' : client
 
@@ -220,7 +220,7 @@ module SolanaLogic
           'Paladin': 4
         }
         client_id = if client&.match(/^Unknown/)
-                      client.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
+                      client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
                     else
                       clients_mapping[client&.to_sym]
                     end
