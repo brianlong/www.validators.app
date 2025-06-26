@@ -32,6 +32,8 @@
   <li><a href="#account-authorities">Authorities Changes</a></li>
   <li><a href="#last-blocks">Last Blocks</a></li>
   <li><a href="#block-votes">Block Votes</a></li>
+  <li><a href="#policies-index">Yellowstone Shield Policies</a></li>
+  <li><a href="#policies-show">Yellowstone Shield Policy Details</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#limits">Requests Limits</a></li>
   <li><a href="#notes">Notes</a></li>
@@ -622,7 +624,7 @@
 <h2 class="h4" id="ping-thing-list">Ping Thing List</h2>
 <p>
   This Ping Thing List endpoint will return a list of pings for the requested network. In the example below,
-  replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  replace `:network` with either 'testnet' 'mainnet' or 'pythnet' as desired.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -733,7 +735,7 @@
 
 <hr />
 
-<h2 class="h4" id="gossip-nodes">Gossip Nodes</h2>
+<h2 class="h4" id="gossip-nodes">Gossip Nodes</a></h2>
 <p>Gossip Nodes endpoint will return all nodes visible in Gossip, including RPC nodes, with basic information & geo coordinates for mapping.</p>
 
 <h3 class="h6">Request:</h3>
@@ -842,7 +844,7 @@
 
 <hr />
 
-<h2 class="h4" id="block-votes">Block Votes</h2>
+<h2 class="h4" id="block-votes">Block Votes</a></h2>
 <p>Block Votes endpoint will return votes for a given block.</p>
 
 <h3 class="h6">Request:</h3>
@@ -884,6 +886,82 @@
     },
     ...
   ]
+}
+</pre>
+
+<hr />
+
+<h2 class="h4" id="policies-index">Yellowstone Shield Policies</h2>
+<p>
+  The Yellowstone Shield Policies endpoint returns a list of all available policies. You can filter policies by search query.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/policies.json'</pre>
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`q=string`</strong> Optional. Filter policies by name, description, or policy key.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/account-authorities/:network.json?q=8LXyNpkdnCKCCaUWBku1wD2B1HHaZ41FRgFEN6jNmytv'</pre>
+<p><strong class="text-muted">`page=integer`</strong> Optional. Page number for paginated results (default: 1).</p>
+<p><strong class="text-muted">`limit=integer`</strong> Optional. Number of results per page (default: 25, max: 9999).</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/policies.json?page=2&limit=25'</pre>
+<h3 class="h6">Response:</h3>
+<p>An array of policy objects.</p>
+<pre>
+{
+  "policies": [
+    {
+      "pubkey": "8LXyNpkdnCKCCaUWBku1wD2B1HHaZ41FRgFEN6jNmytv",
+      "owner": "b1ockYL7X6sGtJzueDbxRVBEEPN4YeqoLW276R3MX8W",
+      "lamports": 24547920,
+      "rent_epoch": "18446744073709552000",
+      "kind": false,
+      "strategy": false,
+      "executable": false,
+      "network": "mainnet",
+      "url": null,
+      "mint": null,
+      "name": null,
+      "identities_count": 106
+    },
+    ...
+  ],
+  "total_count": 100
+}
+
+</pre>
+
+<hr />
+
+<h2 class="h4" id="policies-show">Yellowstone Shield Policy Details</h2>
+<p>
+  The Yellowstone Shield Policy Details endpoint returns detailed information for a single policy by its pubkey.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/policies/:pubkey.json'</pre>
+<p>Replace <code>:pubkey</code> with the policy's public key.</p>
+<h3 class="h6">Response:</h3>
+<pre>
+{
+  "pubkey": "8LXyNpkdnCKCCaUWBku1wD2B1HHaZ41FRgFEN6jNmytv",
+  "owner": "b1ockYL7X6sGtJzueDbxRVBEEPN4YeqoLW276R3MX8W",
+  "lamports": 24547920,
+  "rent_epoch": "18446744073709552000",
+  "kind": false,
+  "strategy": false,
+  "executable": false,
+  "network": "mainnet",
+  "url": "policy-url",
+  "mint": "mint-address",
+  "name": "Policy Name",
+  "identities_count": 106,
+  "identities": [
+    "8LXyNpkdnCKCCaUWBku1wD2B1HHaZ41FRgFEN6jNmytv",
+    ...
+  ],
+  validators: [
+    "DDnAqxJVFo2GVTujibHt5cjevHMSE9bo8HJaydHoshdp",
+    ...
+  ],
+  total_validators: 12
 }
 </pre>
 
