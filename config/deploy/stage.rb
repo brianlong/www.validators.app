@@ -1,5 +1,11 @@
+# frozen_string_literal: true
+
+set :rails_env, :stage
+
+append :linked_files, 'config/credentials/stage.key'
+
 server(
-  '68.183.157.115',
+  '64.225.7.18',
   user: 'deploy',
   roles: %w{web app db background sidekiq_blockchain cron}
 )
