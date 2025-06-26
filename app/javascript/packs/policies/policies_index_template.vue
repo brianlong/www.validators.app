@@ -35,7 +35,7 @@
             </thead>
             <tbody>
               <tr v-for="policy in policies" :key="policy.policy_id">
-                <td>{{ policy.policy_name }}</td>
+                <td>{{ policy.name }}</td>
                 <td><a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false">{{ policy.pubkey }}</a></td>
                 <td>{{ policy.owner }}</td>
                 <td>{{ policy.identities_count }}</td>

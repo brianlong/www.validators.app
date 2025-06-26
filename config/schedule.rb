@@ -91,6 +91,10 @@ every 1.hour, at: 55, roles: [:web] do
   rake "-s sitemap:refresh"
 end
 
+every 1.hour, at: 56, roles: [:background] do
+  ruby_script 'update_policies.rb'
+end
+
 every :sunday, at: '0:54am', roles: [:web] do
   rake "-s sitemap:clean"
 end

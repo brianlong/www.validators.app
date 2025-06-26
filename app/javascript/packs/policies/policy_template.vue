@@ -17,11 +17,11 @@
             <tbody>
               <tr>
                 <th>Owner</th>
-                <td>{{ policy.owner || 'Unknown' }}</td>
+                <td class="small word-break">{{ policy.owner || 'Unknown' }}</td>
               </tr>
               <tr>
                 <th>Mint</th>
-                <td>{{ policy.mint || 'Unknown' }}</td>
+                <td class="small word-break">{{ policy.mint || 'Unknown' }}</td>
               </tr>
               <tr>
                 <th>Kind</th>
@@ -46,7 +46,7 @@
           <table class="table table-block-sm mb-0">
             <tbody>
               <tr>
-                <th>Validators / Other</th>
+                <th class="column-lg">Validators / Other</th>
                 <td>{{ policy.validators ? policy.validators.length : 0 }} / {{ policy.other_identities ? policy.other_identities.length : 0 }}</td>
               </tr>
               <tr>
@@ -55,7 +55,7 @@
               </tr>
               <tr>
                 <th>Url</th>
-                <td>{{ policy.url || 'Unknown' }}</td>
+                <td class="small word-break"><a :href="policy.url">{{ policy.url || 'Unknown' }}</a></td>
               </tr>
               <tr>
                 <th>Lamports</th>

@@ -112,7 +112,6 @@ connection.getParsedProgramAccounts(yellowstoneProgramId, {
     decoded_policies.push(result);
   }
 
-  console.log("Decoded policies:", decoded_policies);
   let decoded_policies_json = JSON.stringify(decoded_policies, null, 2);
   fs.writeFileSync('./storage/policies/decoded_policies_' + timestamp + '.json', decoded_policies_json);
 }).catch(err => {
