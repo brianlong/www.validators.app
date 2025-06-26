@@ -24,4 +24,30 @@
 class Policy < ApplicationRecord
   has_many :policy_identities, dependent: :destroy
   has_many :validators, through: :policy_identities
+  validates :pubkey, presence: true, uniqueness: true
+
+  FIELDS_FOR_API = %i[
+    pubkey
+    owner
+    lamports
+    rent_epoch
+    kind
+    strategy
+    executable
+    network
+    url
+    mint
+    name
+  ].freeze
+
+  def to_builder
+    Jbuilder.new do |json|
+      json.extract! self, *FIELDS_FOR_API
+      json.identities_count policy_identities.count
+    end
+  end
+
+  def non_validators
+    policy_identities.where(validator_id: nil)
+  end
 end

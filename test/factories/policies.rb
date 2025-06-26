@@ -1,13 +1,14 @@
 FactoryBot.define do
   factory :policy do
-    name { "MyString" }
-    url { "MyString" }
-    mint { "MyString" }
-    kind { false }
+    pubkey { 'testpubkey123' }
+    mint { 'testpubkey123' }
+    name { 'Insurance Policy' }
+    owner { 'owner1' }
+    kind { true }
     strategy { false }
     executable { false }
-    owner { "MyString" }
-    lamports { "" }
-    rent_epoch { "" }
+    url { 'MyString' }
+    lamports { '' }
+    rent_epoch { '' }
   end
 end

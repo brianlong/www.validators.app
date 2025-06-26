@@ -128,6 +128,10 @@ Rails.application.routes.draw do
   get "ping-thing", to: "ping_things#index", as: "ping_things"
   get "current-user", to: "users#current_user_info"
 
+  # policies
+  get 'yellowstone-shield', to: 'policies#index', as: 'policies_index'
+  get 'yellowstone-shield/(:pubkey)', to: 'policies#show'
+
   ### API
   namespace :api do
     namespace :v1, defaults: { format: :json } do
@@ -211,6 +215,9 @@ Rails.application.routes.draw do
       get "account-authorities/:network", to: "account_authority#index", as: "account_authorities"
 
       get "stake-explorer/:network", to: "explorer_stake_accounts#index", as: "explorer_stake_accounts"
+
+      get "policies/:network", to: "policies#index", as: "policies"
+      get "policies/:network/:pubkey", to: "policies#show", as: "policy"  
     end
   end
 end
