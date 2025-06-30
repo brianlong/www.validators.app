@@ -42,7 +42,7 @@ import JagLarge from 'jagpool.png'
 import DynosolSmall from 'dynosol-logo.png'
 import DynosolLarge from 'dynosol.png'
 
-import DefinitySmall from 'definsol.png'
+import DefinitySmall from 'definsol-logo.png'
 import DefinityLarge from 'definsol.png'
 
 const logos = {

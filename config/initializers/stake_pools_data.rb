@@ -138,7 +138,7 @@ MAINNET_STAKE_POOLS = {
     authority: "5ugu8RogBq5ZdfGt4hKxKotRBkndiV1ndsqWCf7PBmST",
     network: "mainnet",
     ticker: "definsol",
-    small_logo: "definsol.png",
+    small_logo: "definsol-logo.png",
     large_logo: "definsol.png",
     url: "https://www.definity.finance/",
     manager_fee: 5,
