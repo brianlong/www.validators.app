@@ -144,7 +144,47 @@ MAINNET_STAKE_POOLS = {
     manager_fee: 5,
     withdrawal_fee: 0.1,
     deposit_fee: 0
-  }
+  },
+  socean: {
+    # name: "Socean",
+    # authority: "AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck",
+    # network: "mainnet",
+    # ticker: "scnsol",
+    # small_logo: "socean-logo.svg",
+    # large_logo: "socean.png",
+    # url: "https://www.socean.fi",
+    # manager_fee: 2, #https://www.socean.fi/en
+    # withdrawal_fee: 0.03,
+    # deposit_fee: 0,
+    deleted: true
+  },
+  lido: {
+    # name: "Lido",
+    # authority: "W1ZQRwUfSkDKy2oefRBUWph82Vr2zg9txWMA8RQazN5",
+    # network: "mainnet",
+    # ticker: "stsol",
+    # small_logo: "lido-logo.svg",
+    # large_logo: "lido.png",
+    # url: "https://lido.fi/solana",
+    # manager_fee: 5, #https://solana.lido.fi
+    # withdrawal_fee: 0,
+    # deposit_fee: 0,
+    deleted: true
+  },
+  zippystake: {
+    # name: "ZippyStake",
+    # authority: "F15nfVkJFAa3H4BaHEb6hQBnmiJZwPYioDiE1yxbc5y4",
+    # network: "mainnet",
+    # ticker: "zippysol",
+    # small_logo: "zippystake-logo.svg",
+    # large_logo: "zippystake.png",
+    # url: "https://www.zippystake.org",
+    # manager_fee: 3, #https://docs.zippystake.org
+    # withdrawal_fee: 0.1,
+    # deposit_fee: 0
+    deleted: true
+  },
+
 }
 
 TESTNET_STAKE_POOLS = {

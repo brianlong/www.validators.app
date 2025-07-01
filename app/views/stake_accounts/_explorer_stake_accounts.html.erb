@@ -49,13 +49,15 @@
           </td>
           <td class="text-center">
             <% if stake_acc = @stake_accounts.find_by(stake_pubkey: e_stake_acc.stake_pubkey) %>
-              <% logo = stake_pool_logos([stake_acc.stake_pool.name])&.first %>
-              <%= link_to stake_pools_path, data: { turbolinks: false } do%>
-                <%= image_tag(logo[:image],
-                              class: 'img-xs',
-                              title: logo[:name] + " stake pool",
-                              alt: logo[:name])
-                %>
+              <% logo = stake_pool_logos([stake_acc.stake_pool&.name])&.first %>
+              <% if logo %>
+                <%= link_to stake_pools_path, data: { turbolinks: false } do%>
+                  <%= image_tag(logo[:image],
+                                class: 'img-xs',
+                                title: logo[:name] + " stake pool",
+                                alt: logo[:name])
+                  %>
+                <% end %>
               <% end %>
             <% end %>
           </td>
