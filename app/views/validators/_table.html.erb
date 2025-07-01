@@ -187,6 +187,7 @@
                   <small class="d-inline-block d-lg-none">Pools:&nbsp;</small>
                   <%= link_to stake_pools_path(network: params[:network]), target: "_blank" do %>
                     <% stake_pool_logos(validator.stake_pools_list).each do |logo| %>
+                      <% next unless logo %>
                       <%= image_tag(
                             logo[:image],
                             class: 'img-xs me-1',
