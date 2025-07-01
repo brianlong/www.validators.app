@@ -50,7 +50,7 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
             <th class="column-sm">ROD</th>
             <th class="column-md">
               Avg Score<br />
-              <small class="text-muted">Maximum: 11</small>
+              <small class="text-muted">Maximum: 13</small>
             </th>
           </tr>
           </thead>
