@@ -8,51 +8,56 @@
         This program allows transaction senders, like Triton's Jet, Agave STS, Helius' Atlas, Jito's blockEngine
         to effectively control transaction forwarding policies.</p>
     </section>
-    <div class="col-12 mb-4">
-      <div class="d-flex col-lg-6 offset-lg-6">
-        <div class="input-group">
-          <input
-            v-model="searchQuery"
-            type="text"
-            class="form-control"
-            placeholder="Search policies by name, pubkey or validator identity..."
-          />
-          <button type="button" class="btn btn-primary btn-sm" @click="filterPolicies">Search</button>
-        </div>
+
+    <div class="search-row d-flex justify-content-between flex-wrap gap-3 mb-4">
+      <div class="input-group">
+        <input v-model="searchQuery"
+               type="text"
+               class="form-control"
+               placeholder="Policy name, pubkey or validator identity"/>
+        <button type="button" class="btn btn-primary btn-sm" @click="filterPolicies">Search</button>
+      </div>
+      <a href="#" class="btn btn-sm btn-tertiary">Reset filters</a>
+    </div>
+
+    <div class="card">
+      <div class="table-responsive-lg">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="column-md">Policy Name</th>
+              <th class="column-xl">Pubkey</th>
+              <th class="column-xl">Owner</th>
+              <th class="column-xs">Strategy</th>
+              <th class="column-xs">Identities Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="policy in policies" :key="policy.policy_id">
+              <td>{{ policy.name }}</td>
+              <td class="word-break small">
+                <a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false">{{ policy.pubkey }}</a>
+              </td>
+              <td class="word-break small">{{ policy.owner }}</td>
+              <td>
+                <span v-if="policy.strategy" class="text-success">Allow</span>
+                <span v-else class="text-danger">Deny</span>
+              </td>
+              <td>{{ policy.identities_count }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div class="col-12">
-      <div class="card">
-        <div class="table-responsive-lg">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Policy Name</th>
-                <th>pubkey</th>
-                <th>owner</th>
-                <th>identities count</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="policy in policies" :key="policy.policy_id">
-                <td>{{ policy.name }}</td>
-                <td><a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false">{{ policy.pubkey }}</a></td>
-                <td>{{ policy.owner }}</td>
-                <td>{{ policy.identities_count }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="d-flex justify-content-end mt-3">
-        <p v-if="total_count === 0">No policies found.</p>
-        <b-pagination
-          v-model="page"
-          :total-rows="total_count"
-          :per-page="25"
-          first-text="« First"
-          last-text="Last »" />
-      </div>
+
+    <div>
+      <p v-if="total_count === 0">No policies found.</p>
+      <b-pagination
+        v-model="page"
+        :total-rows="total_count"
+        :per-page="25"
+        first-text="« First"
+        last-text="Last »" />
     </div>
   </div>
 </template>

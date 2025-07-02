@@ -105,3 +105,9 @@ input[type=submit] {
     width: 290px;
   }
 }
+
+.search-row {
+  @media(min-width: $screen-lg-min) {
+    .input-group { width: calc(100% - 127px); }
+  }
+}
