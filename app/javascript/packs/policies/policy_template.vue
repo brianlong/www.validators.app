@@ -5,8 +5,9 @@
       <h2 class="text-muted h5">
         <span>{{ policy.pubkey }}</span>
       </h2>
-      <p class="lead">{{ policy.description || 'No description available.' }}</p>
+      <p class="lead">{{ policy.description }}</p>
     </section>
+
     <div class="row">
       <div class="col-lg-6 mb-4">
         <div class="card h-100">
@@ -16,19 +17,19 @@
           <table class="table table-block-sm mb-0">
             <tbody>
               <tr>
-                <th>Owner</th>
+                <td><strong>Owner:</strong></td>
                 <td class="small word-break">{{ policy.owner || 'Unknown' }}</td>
               </tr>
               <tr>
-                <th>Mint</th>
+                <td><strong>Mint:</strong></td>
                 <td class="small word-break">{{ policy.mint || 'Unknown' }}</td>
               </tr>
               <tr>
-                <th>Kind</th>
+                <td><strong>Kind:</strong></td>
                 <td>{{ policy.kind }}</td>
               </tr>
               <tr>
-                <th>Strategy</th>
+                <td><strong>Strategy:</strong></td>
                 <td>
                   <span v-if="policy.strategy" class="text-success">Allow</span>
                   <span v-else class="text-danger">Deny</span>
@@ -46,19 +47,19 @@
           <table class="table table-block-sm mb-0">
             <tbody>
               <tr>
-                <th class="column-lg">Validators / Other</th>
+                <td class="column-xl"><strong>Validators / Other:</strong></td>
                 <td>{{ policy.validators ? policy.validators.length : 0 }} / {{ policy.other_identities ? policy.other_identities.length : 0 }}</td>
               </tr>
               <tr>
-                <th>Rent Epoch</th>
+                <td><strong>Rent Epoch:</strong></td>
                 <td>{{ policy.rent_epoch || 'Unknown' }}</td>
               </tr>
               <tr>
-                <th>Url</th>
+                <td><strong>URL:</strong></td>
                 <td class="small word-break"><a :href="policy.url">{{ policy.url || 'Unknown' }}</a></td>
               </tr>
               <tr>
-                <th>Lamports</th>
+                <td><strong>Lamports:</strong></td>
                 <td>
                   {{ policy.lamports || 0 }}
                 </td>
@@ -73,8 +74,8 @@
       <div class="card">
         <div class="card-header">
           <div class="btn-group btn-group-toggle switch-button mt-2">
-            <span class="btn btn-secondary btn-sm" @click="show_validators = true" :class="{ active: show_validators }">validators</span>
-            <span class="btn btn-secondary btn-sm" @click="show_validators = false" :class="{ active: !show_validators }">other identities</span>
+            <span class="btn btn-secondary btn-sm" @click="show_validators = true" :class="{ active: show_validators }">Validators</span>
+            <span class="btn btn-secondary btn-sm" @click="show_validators = false" :class="{ active: !show_validators }">Other identities</span>
           </div>
         </div>
         <table class="table table-block-sm validators-table" v-if="policy && policy.validators && policy.validators.length && show_validators">
