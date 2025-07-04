@@ -64,6 +64,8 @@
 
 <script>
   import axios from 'axios'
+  import { mapGetters } from 'vuex'
+
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -83,7 +85,7 @@
 
     methods: {
       get_policies: function() {
-        let policies_url = "/api/v1/policies/mainnet?query=" + encodeURIComponent(this.searchQuery) + "&page=" + this.page + "&limit=25";
+        let policies_url = "/api/v1/policies/" + this.network + "?query=" + encodeURIComponent(this.searchQuery) + "&page=" + this.page + "&limit=25";
         var ctx = this
         axios.get(policies_url)
           .then(function (response) {
@@ -98,6 +100,12 @@
       filterPolicies() {
         this.get_policies();
       }
+    },
+
+    computed: {
+      ...mapGetters([
+        'network'
+      ])
     },
 
     watch: {

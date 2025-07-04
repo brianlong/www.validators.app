@@ -48,7 +48,7 @@
             <tbody>
               <tr>
                 <td class="column-xl"><strong>Validators / Other:</strong></td>
-                <td>{{ policy.validators ? policy.validators.length : 0 }} / {{ policy.other_identities ? policy.other_identities.length : 0 }}</td>
+                <td>{{ policy.total_validators ? policy.total_validators : 0 }} / {{ policy.total_other_identities ? policy.total_other_identities : 0 }}</td>
               </tr>
               <tr>
                 <td><strong>Rent Epoch:</strong></td>
@@ -176,6 +176,7 @@
 
 <script>
   import axios from 'axios'
+  import { mapGetters } from 'vuex'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -204,7 +205,7 @@
 
     methods: {
       get_policy: function() {
-        let policy_url = "/api/v1/policies/mainnet/" + this.pubkey + "?page=" + this.page + "&limit=" + this.limit;
+        let policy_url = "/api/v1/policies/" + this.network + "/" + this.pubkey + "?page=" + this.page + "&limit=" + this.limit;
         var ctx = this
         axios.get(policy_url)
           .then(function (response) {
@@ -231,6 +232,12 @@
                })
         })
       }
+    },
+
+    computed: {
+      ...mapGetters([
+        'network'
+      ])
     },
 
     watch: {
