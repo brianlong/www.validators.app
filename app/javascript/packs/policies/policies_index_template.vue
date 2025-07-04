@@ -20,7 +20,7 @@
       <a href="#" class="btn btn-sm btn-tertiary">Reset filters</a>
     </div>
 
-    <div class="card">
+    <div class="card" v-if="total_count > 0">
       <div class="table-responsive-lg">
         <table class="table">
           <thead>
@@ -50,14 +50,17 @@
       </div>
     </div>
 
-    <div>
-      <p v-if="total_count === 0">No policies found.</p>
+    <div v-if="total_count > 0">
       <b-pagination
         v-model="page"
         :total-rows="total_count"
         :per-page="25"
         first-text="« First"
         last-text="Last »" />
+    </div>
+
+    <div class="card" v-if="total_count === 0">
+      <div class="card-content">No policies found.</div>
     </div>
   </div>
 </template>
