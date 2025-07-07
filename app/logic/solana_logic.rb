@@ -209,8 +209,6 @@ module SolanaLogic
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? hash["pubkey"]
 
         version = hash['version']&.match(/^[a-zA-z0-9.]+/)&.to_s&.strip
-        client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
-        client == 'Unknown(4)' ? client = 'Paladin' : client
 
         clients_mapping = {
           'SolanaLabs': 0,
@@ -219,11 +217,21 @@ module SolanaLogic
           'Agave': 3,
           'Paladin': 4
         }
-        client_id = if client&.match(/^Unknown/)
-                      client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
-                    else
-                      clients_mapping[client&.to_sym]
-                    end
+
+        if hash['clientId']
+          # if client ID present, map client name
+          client_id = hash['clientId'].to_i
+          client = (clients_mapping.key(client_id) || 'Unknown').to_s
+        else
+          # if client name present, map client ID
+          client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
+          client == 'Unknown(4)' ? client = 'Paladin' : client
+          client_id = if client&.match(/^Unknown/)
+                        client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
+                      else
+                        clients_mapping[client&.to_sym]
+                      end
+        end
 
         validators[hash['pubkey']] = {
           'gossip_ip_port' => hash['gossip'],
