@@ -62,7 +62,7 @@
           <tbody>
             <tr v-for="policy in policies" :key="policy.policy_id">
               <td class="d-flex">
-                <div class="d-none d-lg-flex me-4">
+                <div class="d-none d-lg-flex flex-column justify-content-center me-4">
                   <img :src="policy.image" class='img-circle-large' v-if="policy.image" />
                   <img src="https://uploader.irys.xyz/Hhdy76nXVpNBCg1pVLtpctaZXbpnSufWggbyiMFUoCTh" class='img-circle-large' v-else />
                 </div>
