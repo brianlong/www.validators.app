@@ -4,7 +4,7 @@
 #
 #  id         :bigint           not null, primary key
 #  executable :boolean
-#  kind       :boolean
+#  kind       :integer
 #  lamports   :bigint
 #  mint       :string(191)
 #  name       :string(191)
@@ -20,12 +20,19 @@
 #
 # Indexes
 #
-#  index_policies_on_pubkey  (pubkey) UNIQUE
+#  index_policies_on_network_and_kind  (network,kind)
+#  index_policies_on_pubkey            (pubkey) UNIQUE
 #
 class Policy < ApplicationRecord
   has_many :policy_identities, dependent: :destroy
   has_many :validators, through: :policy_identities
+
   validates :pubkey, presence: true, uniqueness: true
+
+  enum kind: { v1: 0, v2: 1 }
+
+  #default_scope { where(kind: :v2) }
+  scope :v2, -> { where(kind: :v2) }
 
   FIELDS_FOR_API = %i[
     pubkey

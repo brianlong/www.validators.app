@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_06_25_082632) do
+ActiveRecord::Schema.define(version: 2025_07_08_161447) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -641,7 +641,7 @@ ActiveRecord::Schema.define(version: 2025_06_25_082632) do
     t.string "url"
     t.string "mint"
     t.string "network"
-    t.boolean "kind"
+    t.integer "kind"
     t.boolean "strategy"
     t.boolean "executable"
     t.string "owner"
@@ -650,6 +650,7 @@ ActiveRecord::Schema.define(version: 2025_06_25_082632) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "symbol"
+    t.index ["network", "kind"], name: "index_policies_on_network_and_kind"
     t.index ["pubkey"], name: "index_policies_on_pubkey", unique: true
   end
 
