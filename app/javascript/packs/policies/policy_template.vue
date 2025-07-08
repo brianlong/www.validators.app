@@ -50,10 +50,6 @@
                 <td><strong>URL:</strong></td>
                 <td class="small word-break"><a :href="policy.url">{{ policy.url || 'Unknown' }}</a></td>
               </tr>
-              <tr>
-                <td><strong>Kind:</strong></td>
-                <td>{{ policy.kind }}</td>
-              </tr>
             </tbody>
           </table>
         </div>

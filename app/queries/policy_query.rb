@@ -1,7 +1,8 @@
 class PolicyQuery
-  def initialize(network: "mainnet", limit: 1000, query: nil, page: 1)
+  def initialize(network: "mainnet", kind: :v2, limit: 1000, query: nil, page: 1)
     @page = page.to_i
     @network = network
+    @kind = kind
     @limit = [(limit || 1000).to_i, 9999].min
     @query = query
     @total_count = 0
@@ -20,7 +21,7 @@ class PolicyQuery
   end
 
   def policies_query
-    policies = Policy.where(network: @network)
+    policies = Policy.where(network: @network, kind: @kind)
     if @query.blank?
       @total_count = policies.count
       policies = policies.limit(@limit).offset((@page - 1) * @limit)

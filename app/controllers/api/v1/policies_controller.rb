@@ -4,6 +4,7 @@ module Api
       def index
         result = PolicyQuery.new(
           network: policy_params[:network] || 'mainnet',
+          kind: :v2,
           limit: policy_params[:limit],
           query: policy_params[:query],
           page: policy_params[:page] || 1
