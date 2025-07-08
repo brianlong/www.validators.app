@@ -25,25 +25,62 @@
         <table class="table">
           <thead>
             <tr>
-              <th class="column-md">Policy Name</th>
-              <th class="column-xl">Pubkey</th>
-              <th class="column-xl">Owner</th>
-              <th class="column-xs">Strategy</th>
-              <th class="column-xs">Identities Count</th>
+              <th class="column-xl">
+                Policy Name and Pubkey
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Onchain address of the program.">
+                </i>
+              </th>
+              <th class="column-xl">
+                Owner
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Address of the lists creator.">
+                </i>
+              </th>
+              <th class="column-sm text-center text-nowrap">
+                Strategy
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Allow or deny.">
+                </i>
+              </th>
+              <th class="column-xs text-center">
+                Count
+                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   title="Number of validators.">
+                </i>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="policy in policies" :key="policy.policy_id">
-              <td>{{ policy.name }}</td>
-              <td class="word-break small">
-                <a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false">{{ policy.pubkey }}</a>
+              <td class="d-flex">
+                <div class="d-none d-lg-flex me-4">
+                  <img :src="policy.image" class='img-circle-large' v-if="policy.image" />
+                  <img src="https://uploader.irys.xyz/Hhdy76nXVpNBCg1pVLtpctaZXbpnSufWggbyiMFUoCTh" class='img-circle-large' v-else />
+                </div>
+                <div class="d-flex flex-column justify-content-center">
+                  <a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false" class="column-info-link no-watchlist fw-bold">
+                    {{ policy.name }} <span v-if="policy.symbol">({{ policy.symbol }})</span>
+                  </a>
+                  <div class="word-break mt-1 small">
+                    <a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false">{{ policy.pubkey }}</a>
+                  </div>
+                </div>
               </td>
               <td class="word-break small">{{ policy.owner }}</td>
-              <td>
+              <td class="text-center">
                 <span v-if="policy.strategy" class="text-success">Allow</span>
                 <span v-else class="text-danger">Deny</span>
               </td>
-              <td>{{ policy.identities_count }}</td>
+              <td class="text-center">{{ policy.identities_count }}</td>
             </tr>
           </tbody>
         </table>

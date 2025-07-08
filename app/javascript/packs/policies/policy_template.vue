@@ -1,12 +1,23 @@
 <template>
   <div>
     <section class="page-header">
-      <h1>{{ policy.name || 'Unknown Policy' }}</h1>
-      <h2 class="text-muted h5">
-        <span>{{ policy.pubkey }}</span>
-      </h2>
+      <div class='page-header-name'>
+        <img :src="policy.image" class='img-circle-medium' v-if="policy.image" />
+        <img src="https://uploader.irys.xyz/Hhdy76nXVpNBCg1pVLtpctaZXbpnSufWggbyiMFUoCTh" class='img-circle-medium' v-else />
+        <div class="img-circle-medium-private" v-else>
+          <span class='fas fa-users-slash' title="Private Validator"></span>
+        </div>
+
+        <h1>
+          {{ policy.name || 'Unknown Policy' }}
+          <span v-if="policy.symbol">({{ policy.symbol }})</span>
+        </h1>
+      </div>
+
+      <h2 class="word-break text-muted h5">{{ policy.pubkey }}</h2>
       <p class="lead">{{ policy.description }}</p>
     </section>
+
 
     <div class="row">
       <div class="col-lg-6 mb-4">
@@ -49,6 +60,10 @@
               <tr>
                 <td><strong>URL:</strong></td>
                 <td class="small word-break"><a :href="policy.url">{{ policy.url || 'Unknown' }}</a></td>
+              </tr>
+              <tr>
+                <td><strong>Additional attributes:</strong></td>
+                <td><span v-if="policy.additional_metadata && policy.additional_metadata.length > 0">{{ policy.additional_metadata }}</span></td>
               </tr>
             </tbody>
           </table>
