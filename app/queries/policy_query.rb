@@ -1,9 +1,9 @@
 class PolicyQuery
-  def initialize(network: "mainnet", kind: :v2, limit: 1000, query: nil, page: 1)
+  def initialize(network: "mainnet", kind: :v2, limit: 25, query: nil, page: 1)
     @page = page.to_i
     @network = network
     @kind = kind
-    @limit = [(limit || 1000).to_i, 9999].min
+    @limit = [(limit || 25).to_i, 9999].min
     @query = query
     @total_count = 0
   end
