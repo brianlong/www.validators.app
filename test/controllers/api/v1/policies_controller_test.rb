@@ -14,21 +14,33 @@ class Api::V1::PoliciesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     json = JSON.parse(response.body)
     assert json['policies'].is_a?(Array)
+    assert_equal 1, json['policies'].size
+    assert_equal json["total_count"], json['policies'].size
   end
 
   test 'should filter policies by query' do
-    get api_v1_policies_url('mainnet', format: :json, q: 'insurance'), headers: @headers
+    get api_v1_policies_url('mainnet', format: :json, query: 'insurance'), headers: @headers
     assert_response :success
     json = JSON.parse(response.body)
     assert json['policies'].is_a?(Array)
-    # Optionally, check that all returned policies match the query
+    assert_equal 1, json['policies'].size
+    assert_equal json["total_count"], json['policies'].size
+    assert_equal @policy.pubkey, json['policies'].first['pubkey']
+
+    get api_v1_policies_url('mainnet', format: :json, query: 'invalid'), headers: @headers
+    assert_response :success
+    json = JSON.parse(response.body)
+    assert_equal 0, json['policies'].size
   end
 
   test 'should paginate policies' do
-    get api_v1_policies_url('mainnet', format: :json, page: 2, limit: 1), headers: @headers
+    create_list(:policy, 5)
+    get api_v1_policies_url('mainnet', format: :json, page: 1, limit: 2), headers: @headers
     assert_response :success
     json = JSON.parse(response.body)
     assert json['policies'].is_a?(Array)
+    json = JSON.parse(response.body)
+    assert_equal 2, json['policies'].size
   end
 
   test 'should show policy by pubkey' do
