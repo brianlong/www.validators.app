@@ -25,10 +25,6 @@
                 <td class="small word-break">{{ policy.mint || 'Unknown' }}</td>
               </tr>
               <tr>
-                <td><strong>Kind:</strong></td>
-                <td>{{ policy.kind }}</td>
-              </tr>
-              <tr>
                 <td><strong>Strategy:</strong></td>
                 <td>
                   <span v-if="policy.strategy" class="text-success">Allow</span>
@@ -51,18 +47,12 @@
                 <td>{{ policy.total_validators ? policy.total_validators : 0 }} / {{ policy.total_other_identities ? policy.total_other_identities : 0 }}</td>
               </tr>
               <tr>
-                <td><strong>Rent Epoch:</strong></td>
-                <td>{{ policy.rent_epoch || 'Unknown' }}</td>
-              </tr>
-              <tr>
                 <td><strong>URL:</strong></td>
                 <td class="small word-break"><a :href="policy.url">{{ policy.url || 'Unknown' }}</a></td>
               </tr>
               <tr>
-                <td><strong>Lamports:</strong></td>
-                <td>
-                  {{ policy.lamports || 0 }}
-                </td>
+                <td><strong>Kind:</strong></td>
+                <td>{{ policy.kind }}</td>
               </tr>
             </tbody>
           </table>

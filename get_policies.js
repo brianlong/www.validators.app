@@ -80,7 +80,7 @@ connection.getParsedProgramAccounts(yellowstoneProgramId, {
   for (const policy of policies) {
     let decoded = decodePolicy(policy.account);
 
-    // Pobierz metadane tokena dla mint
+    // get token metadata for mint
     let token_metadata = null;
     if (decoded.data.mint) {
       token_metadata = await getPolicyTokenMetadata(decoded.data.mint);
