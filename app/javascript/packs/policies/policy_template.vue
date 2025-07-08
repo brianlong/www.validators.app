@@ -38,7 +38,7 @@
               <tr>
                 <td><strong>Strategy:</strong></td>
                 <td>
-                  <span v-if="policy.strategy" class="text-success">Allow</span>
+                  <span v-if="policy.strategy == 'Allow'" class="text-success">Allow</span>
                   <span v-else class="text-danger">Deny</span>
                 </td>
               </tr>

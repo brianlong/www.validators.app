@@ -11,7 +11,10 @@ module Api
         ).call
 
         response = {
-          policies: result[:policies].map { |policy| policy.to_builder.attributes! },
+          policies: result[:policies].map { |policy|
+            strategy_humanized = policy.strategy ? 'Allow' : 'Deny'
+            policy.to_builder.attributes!.merge!("strategy"=>strategy_humanized)
+          },
           total_count: result[:total_count]
         }
 
@@ -36,6 +39,7 @@ module Api
         
         if policy
           policy_data = policy.to_builder.attributes!
+          policy_data['strategy'] = policy.strategy ? 'Allow' : 'Deny'
           policy_data['validators'] = validators.map(&:account) if validators
           policy_data['total_validators'] = total_validators.count if total_validators
           policy_data['other_identities'] = other_identities.map(&:account) if other_identities
