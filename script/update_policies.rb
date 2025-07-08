@@ -4,10 +4,12 @@ require File.expand_path('../config/environment', __dir__)
 
 require 'uri'
 require 'net/http'
+require 'fileutils'
 
 log_path = Rails.root.join('log', 'update_policies.log')
 logger = Logger.new(log_path)
 timestamp = Time.now.utc.strftime('%Y%m%d%H%M')
+FileUtils.mkdir_p(Rails.root.join('storage', 'policies'))
 
 fork { exec('node', './get_policies.js', timestamp) }
 
