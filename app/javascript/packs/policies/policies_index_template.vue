@@ -33,28 +33,20 @@
                    title="Onchain address of the program.">
                 </i>
               </th>
-              <th class="column-xl">
-                Owner
-                <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
-                   data-bs-toggle="tooltip"
-                   data-bs-placement="top"
-                   title="Address of the lists creator.">
-                </i>
-              </th>
               <th class="column-sm text-center text-nowrap">
                 Strategy
                 <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
-                   title="Allow or deny.">
+                   title="Allow or Deny.">
                 </i>
               </th>
               <th class="column-xs text-center">
-                Count
+                Identities Count
                 <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
                    data-bs-toggle="tooltip"
                    data-bs-placement="top"
-                   title="Number of validators.">
+                   title="Number of validators and other identities.">
                 </i>
               </th>
             </tr>
@@ -62,7 +54,7 @@
           <tbody>
             <tr v-for="policy in policies" :key="policy.policy_id">
               <td class="d-flex">
-                <div class="d-none d-lg-flex flex-column justify-content-center me-4">
+                <div class="d-none d-lg-flex flex-column justify-content-center m-2 me-5">
                   <img :src="policy.image" class='img-circle-large' v-if="policy.image" />
                   <img src="https://uploader.irys.xyz/Hhdy76nXVpNBCg1pVLtpctaZXbpnSufWggbyiMFUoCTh" class='img-circle-large' v-else />
                 </div>
@@ -75,7 +67,6 @@
                   </div>
                 </div>
               </td>
-              <td class="word-break small">{{ policy.owner }}</td>
               <td class="text-center">
                 <span v-if="policy.strategy == 'Allow'" class="text-success">Allow</span>
                 <span v-else class="text-danger">Deny</span>
