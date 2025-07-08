@@ -237,7 +237,7 @@ class ValidatorScoreV1 < ApplicationRecord
   # Assign one point if the validator has provided a security_report_url
   # Assign 0 if consensus_mods value is true
   def assign_security_report_score
-    return self.security_report_score = 0 if validator.consensus_mods
+    return self.security_report_score = 0 if validator.consensus_mods || self.authorized_withdrawer_score == WITHDRAWER_SCORE_OPTIONS[:negative]
     self.security_report_score = validator.security_report_url.blank? ? 0 : 1
   end
 
