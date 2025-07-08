@@ -40,11 +40,7 @@ class Policy < ApplicationRecord
   FIELDS_FOR_API = %i[
     pubkey
     owner
-    lamports
-    rent_epoch
-    kind
     strategy
-    executable
     network
     url
     mint
