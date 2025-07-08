@@ -2,6 +2,9 @@
 
 require File.expand_path('../config/environment', __dir__)
 
+require 'uri'
+require 'net/http'
+
 log_path = Rails.root.join('log', 'update_policies.log')
 logger = Logger.new(log_path)
 timestamp = Time.now.utc.strftime('%Y%m%d%H%M')
@@ -23,6 +26,23 @@ if $?.success?
       pubkey: policy['pubkey'],
       network: "mainnet",
     )
+    metadata = {}
+    if policy['token_metadata'] && policy['token_metadata']['uri']
+      uri = URI(policy['token_metadata']['uri'])
+      Timeout.timeout(10) do
+        response = Net::HTTP.get_response(uri)
+        if response.code == '302'
+          uri = URI(response.header['Location'])
+          response = Net::HTTP.get_response(uri)
+          if response.code == '200'
+            metadata = JSON.parse(response.body)
+          end
+        elsif response.code == '200'
+          metadata = JSON.parse(response.body)
+        end
+      end
+
+    end
     db_policy.update(
       owner: policy['owner'],
       lamports: policy['lamports'],
@@ -33,7 +53,10 @@ if $?.success?
       name: policy['token_metadata'] ? policy['token_metadata']['name'] : nil,
       url: policy['token_metadata'] ? policy['token_metadata']['uri'] : nil,
       mint: policy['token_metadata'] ? policy['token_metadata']['mint'] : nil,
-      symbol: policy['token_metadata'] ? policy['token_metadata']['symbol'] : nil
+      symbol: policy['token_metadata'] ? policy['token_metadata']['symbol'] : nil,
+      image: metadata["image"],
+      description: metadata["description"] || policy['token_metadata']&.dig('symbol'),
+      additional_metadata: policy['token_metadata'] ? policy['token_metadata']['additionalMetadata'] : nil,
     )
 
     policy["data"]["identities"].each do |identity|
