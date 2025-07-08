@@ -58,7 +58,7 @@
                 <td>{{ policy.total_validators ? policy.total_validators : 0 }} / {{ policy.total_other_identities ? policy.total_other_identities : 0 }}</td>
               </tr>
               <tr>
-                <td><strong>URL:</strong></td>
+                <td><strong>Metadata URL:</strong></td>
                 <td class="small word-break"><a :href="policy.url">{{ policy.url || 'Unknown' }}</a></td>
               </tr>
               <tr>
