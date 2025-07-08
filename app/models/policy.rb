@@ -2,21 +2,24 @@
 #
 # Table name: policies
 #
-#  id         :bigint           not null, primary key
-#  executable :boolean
-#  kind       :integer
-#  lamports   :bigint
-#  mint       :string(191)
-#  name       :string(191)
-#  network    :string(191)
-#  owner      :string(191)
-#  pubkey     :string(191)      not null
-#  rent_epoch :string(191)
-#  strategy   :boolean
-#  symbol     :string(191)
-#  url        :string(191)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                  :bigint           not null, primary key
+#  additional_metadata :json
+#  description         :text(65535)
+#  executable          :boolean
+#  image               :string(191)
+#  kind                :integer
+#  lamports            :bigint
+#  mint                :string(191)
+#  name                :string(191)
+#  network             :string(191)
+#  owner               :string(191)
+#  pubkey              :string(191)      not null
+#  rent_epoch          :string(191)
+#  strategy            :boolean
+#  symbol              :string(191)
+#  url                 :string(191)
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #
 # Indexes
 #
@@ -46,6 +49,10 @@ class Policy < ApplicationRecord
     url
     mint
     name
+    symbol
+    description
+    image
+    additional_metadata
   ].freeze
 
   def to_builder
