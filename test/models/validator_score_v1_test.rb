@@ -128,6 +128,16 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
     assert_equal 0, @validator_score_v1.security_report_score
   end
 
+    test 'assign_security_report_score assigns 0 if validators withdrawer matches identity ' do
+    @validator.score.update_attribute(
+      :authorized_withdrawer_score, ValidatorScoreV1::WITHDRAWER_SCORE_OPTIONS[:negative]
+    )
+    @validator_score_v1.calculate_total_score
+
+    assert_equal 0, @validator_score_v1.assign_security_report_score
+    assert_equal 0, @validator_score_v1.security_report_score
+  end
+
   test 'assign_consensus_mods_score assigns 0 by default' do
     assert_equal 0, @validator_score_v1.consensus_mods_score
   end

@@ -2,6 +2,7 @@
 
 def update_stake_pools(stake_pools)
   stake_pools.each do |key, data|
+    next if data[:name].blank? || data[:authority].blank? || data[:deleted]
     StakePool.find_or_initialize_by(
       name: data[:name],
       network: data[:network]
@@ -14,6 +15,7 @@ end
 
 def update_stake_pools_fees(stake_pools)
   stake_pools.each do |key, data|
+    next if data[:name].blank? || data[:network].blank? || data[:deleted]
     stake_pool = StakePool.find_by(
       name: data[:name],
       network: data[:network]

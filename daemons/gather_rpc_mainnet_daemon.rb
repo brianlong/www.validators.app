@@ -12,7 +12,7 @@ trap('INT') { interrupted = true }  unless Rails.env.test?
 class SkipAndSleep < StandardError; end
 
 network = 'mainnet'
-sleep_time = Rails.env.stage? ? 60 : 15 # seconds
+sleep_time = Rails.env.stage? ? 90 : 15 # seconds
 
 begin
   loop do

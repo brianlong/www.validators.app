@@ -30,6 +30,21 @@ import EdgevanaStakeLarge from 'edgevana.png'
 import AeroSmall from 'aero-logo.svg'
 import AeroLarge from 'aero.png'
 
+import VaultSmall from 'vault-logo.png'
+import VaultLarge from 'vault.png'
+
+import XshinSmall from 'xshin-logo.png'
+import XshinLarge from 'xshin.png'
+
+import JagSmall from 'jagpool-logo.png'
+import JagLarge from 'jagpool.png'
+
+import DynosolSmall from 'dynosol-logo.png'
+import DynosolLarge from 'dynosol.png'
+
+import DefinitySmall from 'definsol-logo.png'
+import DefinityLarge from 'definsol.png'
+
 const logos = {
   "blazestake": {
     "small_logo": BlazeStakeSmall,
@@ -71,6 +86,26 @@ const logos = {
     "small_logo": AeroSmall,
     "large_logo": AeroLarge
   },
+  "vault": {
+    "small_logo": VaultSmall,
+    "large_logo": VaultLarge
+  },
+  "xshin": {
+    "small_logo": XshinSmall,
+    "large_logo": XshinLarge
+  },
+  "jagpool": {
+    "small_logo": JagSmall,
+    "large_logo": JagLarge
+  },
+  "dynosol": {
+    "small_logo": DynosolSmall,
+    "large_logo": DynosolLarge
+  },
+  "definity": {
+    "small_logo": DefinitySmall,
+    "large_logo": DefinityLarge
+  }
 }
 
 Vue.mixin({
