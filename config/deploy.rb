@@ -66,7 +66,7 @@ set :passenger_roles, :web
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-# Whenver/crontab config. Updates crontab on all servers.
+# Whenever/crontab config. Updates crontab on all servers with this role.
 # Selects cron tasks by roles defined in config/schedule.rb
 set :whenever_roles, ["cron"]
 

@@ -42,7 +42,7 @@ job_type :ruby_script_archives,
 
 # Make sure you add the tasks to correct server.
 # Use :background role to add task to background server (recommended),
-# or :web role to add the task to web servers (www1, www2).
+# or :www1 or :www2 role to add the task to web servers.
 
 every 2.hours, at: 0, roles: [:background] do
   runner "AsnLogicWorker.perform_async('network' => 'mainnet')"
@@ -87,15 +87,15 @@ every 1.hour, at: 50, roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
-every 1.hour, at: 55, roles: [:web] do
+every 1.hour, at: 55, roles: [:www1, :www2] do
   rake "-s sitemap:refresh"
 end
 
-every 1.hour, at: 56, roles: [:background] do
+every 1.hour, at: 56, roles: [:www1] do
   ruby_script 'update_policies.rb'
 end
 
-every :sunday, at: '0:54am', roles: [:web] do
+every :sunday, at: '0:54am', roles: [:www1, :www2] do
   rake "-s sitemap:clean"
 end
 
