@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_06_18_162730) do
+ActiveRecord::Schema.define(version: 2025_07_08_172704) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -635,6 +635,38 @@ ActiveRecord::Schema.define(version: 2025_06_18_162730) do
     t.index ["network", "to_ip", "from_ip", "created_at"], name: "index_ping_times_on_network_and_to_ip_and_from_ip_and_created_at"
   end
 
+  create_table "policies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "pubkey", null: false
+    t.string "name"
+    t.string "url"
+    t.string "mint"
+    t.string "network"
+    t.integer "kind"
+    t.boolean "strategy"
+    t.boolean "executable"
+    t.string "owner"
+    t.bigint "lamports"
+    t.string "rent_epoch"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "symbol"
+    t.string "image"
+    t.text "description"
+    t.json "additional_metadata"
+    t.index ["network", "kind"], name: "index_policies_on_network_and_kind"
+    t.index ["pubkey"], name: "index_policies_on_pubkey", unique: true
+  end
+
+  create_table "policy_identities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "policy_id", null: false
+    t.bigint "validator_id"
+    t.string "account"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["policy_id"], name: "index_policy_identities_on_policy_id"
+    t.index ["validator_id"], name: "index_policy_identities_on_validator_id"
+  end
+
   create_table "reports", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "network"
     t.string "name"
@@ -1019,6 +1051,8 @@ ActiveRecord::Schema.define(version: 2025_06_18_162730) do
   add_foreign_key "data_center_stats", "data_centers"
   add_foreign_key "ping_thing_user_stats", "users"
   add_foreign_key "ping_things", "users"
+  add_foreign_key "policy_identities", "policies"
+  add_foreign_key "policy_identities", "validators"
   add_foreign_key "user_watchlist_elements", "users", on_delete: :cascade
   add_foreign_key "user_watchlist_elements", "validators", on_delete: :cascade
   add_foreign_key "validator_block_histories", "validators"
