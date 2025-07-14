@@ -11,48 +11,34 @@ https://www.validators.app/
   - Solana CLI (see instruction below)
 
 ## Configuration Notes
-- Ask someone in charge about the development `master.key`
-- To edit credentials run `EDITOR=vim rails credentials:edit`.
-  To open in a different editor, e.g. in atom, use `EDITOR="atom --wait" rails credentials:edit`
+- Download credentials (master.key, test.key and .env) from Keybase
+- To edit credentials run `EDITOR=vim rails credentials:edit`.  
+  To open in a different editor, e.g. in nano, use `EDITOR=nano rails credentials:edit`
 - Copy `config/cluster.yml.example` to `config/cluster.yml`
-- Copy `config/database.yml.example` to `config/database.yml` and edit to reflect the proper database name, user name 
-  and other settings.
+- Copy `config/database.example.yml` to `config/database.yml` and edit to reflect the proper database name, user name and other settings.
 - Developers using Mac OS will need to `brew install shared-mime-info` before `bundle install`
-- Copy `config/sidekiq.yml.example` to `config/sidekiq.yml`. This repo is configured for the free version of Sidekiq. Review the Gemfile and config/routes.rb files 
-  if you are using Sidekiq Pro.
+- Copy `config/sidekiq.yml.example` to `config/sidekiq.yml`, and `config/sidekiq_blockchain.yml.example` to `config/sidekiq_blockchain.yml`.  
+  This repo is configured for the free version of Sidekiq. Review the Gemfile and config/routes.rb files if you are using Sidekiq Pro.
 
 ## Database 
 - Make sure you have `database.yml` with correct settings.
-- run `rake db:setup` to create and migrate the database from schema (db/schema.rb).
-- run `rake db:seed` for basic data generation. 
-- Then follow instructions in `database_instructions` on Keybase.
+- run `rails db:create` and `rails db:migrate` to create and migrate the database.
+- run `rails db:seed` for basic data generation. 
+- Then follow instructions in `database_instructions` on Keybase for more advanced data population.
 
-### Copying data to staging
+### Copying data from prod to staging
 To enable copying records to staging database set copy_records_to_stage in credentials file to true.
 
 ## Solana CLI
-https://docs.solana.com/cli/install-solana-cli-tools
-
-### Installation
-```
-wget https://raw.githubusercontent.com/anza-xyz/agave/v<version>/install/agave-install-init.sh
-bash agave-install-init.sh v2.0.15
-solana --version
-```
+https://docs.solana.com/cli/install-solana-cli-tools  
+Follow the instructions for your OS. Make sure `solana --version` returns correct CLI version.
 
 ### Check current version
 `solana -V` or `solana --version`
 
 ## Attribute Encryption
 Attribute encryption on models is required for any attribute that contains personal information or other sensitive 
-data. The default solution is the attr_encrypted gem. A more secure alternative is Vault.
-
-### Vault
-Vault is an optional component to this project. We mostly are using its Encryption As A Service feature. This 
-functionality is wrapped by the vault-rails gem.  
-In the test and development modes you do not need an actual Vault server running. The gem will intercept and perform 
-all encryption that would normally by done by the Vault encryption server.  
-To use Vault, search the project for 'vault' and read the comments.
+data. The default solution is the attr_encrypted gem. Encryption key is stored in rails credentials.
 
 ## Captcha
 Visit https://developers.google.com/recaptcha/intro to see how to use reCAPTCHA. You'll need to register your 
