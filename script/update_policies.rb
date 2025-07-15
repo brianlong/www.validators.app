@@ -6,8 +6,6 @@ require 'uri'
 require 'net/http'
 require 'fileutils'
 
-
-
 log_path = Rails.root.join('log', 'update_policies.log')
 logger = Logger.new(log_path)
 timestamp = Time.now.utc.strftime('%Y%m%d%H%M')
