@@ -18,8 +18,8 @@ const {
 } = require('@solana/spl-token');
 
 const config = {
-  solanaUrl: process.env.SOLANA_URL,
-  yellowstoneProgramId: process.env.YELLOWSTONE_PROGRAM_ID
+  solanaUrl: process.env.SOLANA_MAINNET_URL,
+  yellowstoneProgramId: process.env.YELLOWSTONE_MAINNET_PROGRAM_ID
 };
 
 const connection = new solanaWeb3.Connection(config.solanaUrl, "confirmed");
