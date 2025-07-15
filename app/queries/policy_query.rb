@@ -28,6 +28,7 @@ class PolicyQuery
     else
       policies = policies.where("
       name LIKE ? OR 
+      symbol LIKE ? OR
       pubkey LIKE ? OR 
       owner LIKE ? OR
       id IN (?)", "%#{@query}%", "%#{@query}%", "%#{@query}%", identities_ids)
