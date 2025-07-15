@@ -56,7 +56,7 @@
               <td class="d-flex">
                 <div class="d-none d-lg-flex flex-column justify-content-center m-2 me-5">
                   <img :src="policy.image" class='img-circle-large' v-if="policy.image" />
-                  <img src="https://uploader.irys.xyz/Hhdy76nXVpNBCg1pVLtpctaZXbpnSufWggbyiMFUoCTh" class='img-circle-large' v-else />
+                    <img :src="logo_default" class='img-circle-large' v-else />
                 </div>
                 <div class="d-flex flex-column justify-content-center">
                   <a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false" class="column-info-link no-watchlist fw-bold">
@@ -96,6 +96,7 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
+  import logoDefault from 'shield_default.png'
 
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
@@ -107,6 +108,7 @@
         searchQuery: '',
         page: 1,
         total_count: 0,
+        logo_default: logoDefault
       }
     },
 
