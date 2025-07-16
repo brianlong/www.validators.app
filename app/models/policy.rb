@@ -37,6 +37,7 @@ class Policy < ApplicationRecord
 
   #default_scope { where(kind: :v2) }
   scope :v2, -> { where(kind: :v2) }
+  scope :visible, -> { where(hidden: false) }
 
   FIELDS_FOR_API = %i[
     pubkey
@@ -61,9 +62,5 @@ class Policy < ApplicationRecord
 
   def non_validators
     policy_identities.where(validator_id: nil)
-  end
-
-  def self.visible
-    where(hidden: false)
   end
 end
