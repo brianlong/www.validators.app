@@ -75,7 +75,9 @@ class UpdatePoliciesService
         return JSON.parse(response.body) if response.code == '200'
       end
     rescue StandardError => e
-      Rails.logger.error("Error fetching metadata from #{uri}: #{e.message}")
+      @logger.error("Error fetching metadata from #{uri}: #{e.message}")
+      Appsignal.send_error(e)
+      {}
     end
     {}
   end
