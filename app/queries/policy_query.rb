@@ -28,9 +28,10 @@ class PolicyQuery
     else
       policies = policies.where("
       name LIKE ? OR 
+      symbol LIKE ? OR
       pubkey LIKE ? OR 
       owner LIKE ? OR
-      id IN (?)", "%#{@query}%", "%#{@query}%", "%#{@query}%", identities_ids)
+      id IN (?)", "%#{@query}%", "%#{@query}%", "%#{@query}%", "%#{@query}%", identities_ids)
       @total_count = policies.count
       policies = policies.limit(@limit).offset((@page - 1) * @limit)
     end

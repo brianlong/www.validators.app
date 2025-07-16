@@ -3,7 +3,7 @@
     <section class="page-header">
       <div class='page-header-name'>
         <img :src="policy.image" class='img-circle-medium' v-if="policy.image" />
-        <img src="https://uploader.irys.xyz/Hhdy76nXVpNBCg1pVLtpctaZXbpnSufWggbyiMFUoCTh" class='img-circle-medium' v-else />
+        <img :src="logo_default" class='img-circle-medium' v-else />
         <div class="img-circle-medium-private" v-else>
           <span class='fas fa-users-slash' title="Private Validator"></span>
         </div>
@@ -178,6 +178,7 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
+  import logoDefault from 'policy_logo_default.png'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -196,7 +197,8 @@
         show_validators: true,
         page: 1,
         total_count: 0,
-        limit: 25
+        limit: 25,
+        logo_default: logoDefault
       }
     },
 
