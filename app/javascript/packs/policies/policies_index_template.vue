@@ -96,7 +96,7 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
-  import logoDefault from 'shield_default.png'
+  import logoDefault from 'policy_logo_default.png'
 
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
