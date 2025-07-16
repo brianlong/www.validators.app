@@ -6,6 +6,7 @@
 #  additional_metadata :json
 #  description         :text(65535)
 #  executable          :boolean
+#  hidden              :boolean          default(FALSE), not null
 #  image               :string(191)
 #  kind                :integer
 #  lamports            :bigint
@@ -60,5 +61,9 @@ class Policy < ApplicationRecord
 
   def non_validators
     policy_identities.where(validator_id: nil)
+  end
+
+  def self.visible
+    where(hidden: false)
   end
 end

@@ -21,7 +21,7 @@ class PolicyQuery
   end
 
   def policies_query
-    policies = Policy.where(network: @network, kind: @kind)
+    policies = Policy.where(network: @network, kind: @kind).visible
     if @query.blank?
       @total_count = policies.count
       policies = policies.limit(@limit).offset((@page - 1) * @limit)
