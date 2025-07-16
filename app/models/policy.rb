@@ -6,6 +6,7 @@
 #  additional_metadata :json
 #  description         :text(65535)
 #  executable          :boolean
+#  hidden              :boolean          default(FALSE), not null
 #  image               :string(191)
 #  kind                :integer
 #  lamports            :bigint
@@ -36,6 +37,7 @@ class Policy < ApplicationRecord
 
   #default_scope { where(kind: :v2) }
   scope :v2, -> { where(kind: :v2) }
+  scope :visible, -> { where(hidden: false) }
 
   FIELDS_FOR_API = %i[
     pubkey
