@@ -6,7 +6,13 @@
         Yellowstone Shield is a Solana program that manages on-chain allowlists and blocklists of identities. 
         An identity can be any addressable account in Solana, such as a validator, wallet, or program. 
         This program allows transaction senders, like Triton's Jet, Agave STS, Helius' Atlas, Jito's blockEngine
-        to effectively control transaction forwarding policies.</p>
+        to effectively control transaction forwarding policies.
+      </p>
+      <p class="lead">
+        The Shield program is open-source and permissionless. Anyone can create or read Shield policies.
+        See <a href="https://github.com/rpcpool/yellowstone-shield ">https://github.com/rpcpool/yellowstone-shield</a>
+        for more details.
+      </p>
     </section>
 
     <div class="search-row d-flex justify-content-between flex-wrap gap-3 mb-4">
