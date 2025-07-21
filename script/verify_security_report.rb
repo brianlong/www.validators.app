@@ -19,7 +19,7 @@ Validator.where.not(security_report_url: [nil, '']).find_each do |validator|
     else
       logger.info("OK for #{validator.account} (#{url})")
     end
-  rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT, Net::OpenTimeout, Net::ReadTimeout, URI::InvalidURIError => e
+  rescue SocketError, Errno::ECONNREFUSED, URI::InvalidURIError => e
     logger.info("REMOVED (unreachable): #{validator.account} | #{url} | #{e.class} #{e.message}")
     validator.update(security_report_url: nil)
   rescue StandardError => e
