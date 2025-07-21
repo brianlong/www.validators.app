@@ -19,7 +19,10 @@ Validator.where.not(security_report_url: [nil, '']).find_each do |validator|
     else
       logger.info("OK for #{validator.account} (#{url})")
     end
-  rescue => e
-    logger.error("Error for #{validator.account} (#{url}): #{e.class} #{e.message}")
+  rescue SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT, Net::OpenTimeout, Net::ReadTimeout, URI::InvalidURIError => e
+    logger.info("REMOVED (unreachable): #{validator.account} | #{url} | #{e.class} #{e.message}")
+    validator.update(security_report_url: nil)
+  rescue StandardError => e
+    logger.error("UNEXPECTED ERROR for #{validator.account} | #{url} | #{e.class} #{e.message}")
   end
 end
