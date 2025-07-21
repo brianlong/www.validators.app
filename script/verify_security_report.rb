@@ -12,7 +12,6 @@ Validator.where.not(security_report_url: [nil, '']).find_each do |validator|
   begin
     uri = URI.parse(url)
     response = Net::HTTP.get_response(uri)
-    puts response.code.to_i
     if response.code.to_i == 404
       logger.info("REMOVED: #{validator.account} | #{url}")
       validator.update(security_report_url: nil)
