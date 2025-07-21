@@ -151,6 +151,10 @@ every 7.days, at: '4:00am', roles: [:background] do
   ruby_script 'validators_update_avatar_files.rb'
 end
 
+every 7.days, at: '7:00am', roles: [:background] do
+  ruby_script 'verify_security_report.rb'
+end
+
 every 1.minute, roles: [:background] do
   ruby_script "add_current_epoch.rb"
   runner "PingThingStatsWorker.set(queue: :high_priority).perform_async"
