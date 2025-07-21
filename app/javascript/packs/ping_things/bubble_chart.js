@@ -28,6 +28,10 @@ export default {
   },
 
   methods: {
+      link_from_signature(signature) {
+        return "https://explorer.solana.com/tx/" + signature
+      },
+
     update_chart: function() {
       if(this.chart) {
         this.chart.destroy()
@@ -38,7 +42,11 @@ export default {
         data: {
           datasets: [
             {
-              data: this.vector.map( (vector_element, index) => ({ x: index, y: vector_element['response_time'], z: 1 }) ),
+              data: this.vector.map( (vector_element, index) => ({ 
+                x: index, 
+                y: vector_element['response_time'], 
+                z: 1, 
+                signature: vector_element['signature'] }) ),
               borderColor: chart_variables.chart_purple_2,
               backgroundColor: chart_variables.chart_purple_2_t,
               borderWidth: 1,
@@ -49,6 +57,16 @@ export default {
         },
 
         options: {
+          onClick: (event, elements) => {
+            if (elements && elements.length > 0) {
+              const chart = elements[0].element.$context.chart;
+              const datasetIndex = elements[0].datasetIndex;
+              const index = elements[0].index;
+              const signature = chart.data.datasets[datasetIndex].data[index].signature;
+              const url = this.link_from_signature(signature);
+              window.open(url, '_blank');
+            }
+          },
           scales: {
             x: {
               display: true,
