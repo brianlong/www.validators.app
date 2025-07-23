@@ -28,8 +28,8 @@
           <table class="table table-block-sm mb-0">
             <tbody>
               <tr>
-                <td><strong>Owner:</strong></td>
-                <td class="small word-break">{{ policy.owner || 'Unknown' }}</td>
+                <td><strong>Token Holder:</strong></td>
+                <td class="small word-break">{{ token_holder }}</td>
               </tr>
               <tr>
                 <td><strong>Mint:</strong></td>
@@ -213,7 +213,7 @@
         axios.get(policy_url)
           .then(function (response) {
             ctx.policy = response.data;
-
+            console.log("Policy response:", ctx.policy);
             ctx.total_count = ctx.show_validators ? ctx.policy.total_validators : ctx.policy.total_other_identities;
             ctx.get_validators();
           })
@@ -240,7 +240,11 @@
     computed: {
       ...mapGetters([
         'network'
-      ])
+      ]),
+
+      token_holder() {
+        return this.policy && this.policy.token_holders && this.policy.token_holders.length > 0 ? this.policy.token_holders[0] : 'Unknown';
+      }
     },
 
     watch: {
