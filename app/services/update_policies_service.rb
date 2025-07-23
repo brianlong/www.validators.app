@@ -36,6 +36,7 @@ class UpdatePoliciesService
         image: metadata["image"],
         description: metadata["description"] || policy['token_metadata']&.dig('description'),
         additional_metadata: policy['token_metadata'] ? policy['token_metadata']['additionalMetadata'] : nil,
+        token_holders: policy['token_holders'] || []
       )
 
       update_policy_identities(db_policy, policy["data"]["identities"])

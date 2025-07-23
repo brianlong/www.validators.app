@@ -18,6 +18,7 @@
 #  rent_epoch          :string(191)
 #  strategy            :boolean
 #  symbol              :string(191)
+#  token_holders       :text(65535)
 #  url                 :string(191)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -28,6 +29,8 @@
 #  index_policies_on_pubkey            (pubkey) UNIQUE
 #
 class Policy < ApplicationRecord
+  serialize :token_holders, JSON
+
   has_many :policy_identities, dependent: :destroy
   has_many :validators, through: :policy_identities
 
@@ -41,7 +44,6 @@ class Policy < ApplicationRecord
 
   FIELDS_FOR_API = %i[
     pubkey
-    owner
     strategy
     network
     url
@@ -51,6 +53,7 @@ class Policy < ApplicationRecord
     description
     image
     additional_metadata
+    token_holders
   ].freeze
 
   def to_builder

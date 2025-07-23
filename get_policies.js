@@ -72,6 +72,20 @@ async function getPolicyTokenMetadata(mintAddress) {
   }
 }
 
+async function getTokenHolders(mintAddress) {
+  const mintPubkey = new solanaWeb3.PublicKey(mintAddress);
+  const tokenAccounts = await connection.getTokenLargestAccounts(mintPubkey);
+  const holders = [];
+  for (const acc of tokenAccounts.value) {
+    if (acc.amount && acc.amount !== '0') {
+      const accountInfo = await connection.getParsedAccountInfo(acc.address);
+      const owner = accountInfo.value?.data?.parsed?.info?.owner;
+      if (owner) holders.push(owner);
+    }
+  }
+  return holders;
+}
+
 connection.getParsedProgramAccounts(yellowstoneProgramId, {
   encoding: "jsonParsed"
 }).then(async policies => {
@@ -82,10 +96,14 @@ connection.getParsedProgramAccounts(yellowstoneProgramId, {
 
     // get token metadata for mint
     let token_metadata = null;
+    let token_holders = [];
     if (decoded.data.mint) {
       token_metadata = await getPolicyTokenMetadata(decoded.data.mint);
       if (token_metadata === null) {
         decoded = decodePolicy(policy.account, false);
+      } else {
+        // get authorities (wallets holding the token)
+        token_holders = await getTokenHolders(decoded.data.mint);
       }
     }
 
@@ -107,7 +125,8 @@ connection.getParsedProgramAccounts(yellowstoneProgramId, {
       owner: policy.account.owner.toBase58(),
       lamports: policy.account.lamports,
       rent_epoch: policy.account.rentEpoch,
-      token_metadata: token_metadata
+      token_metadata: token_metadata,
+      token_holders: token_holders
     };
     decoded_policies.push(result);
   }
