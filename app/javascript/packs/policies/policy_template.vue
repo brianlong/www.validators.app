@@ -213,7 +213,6 @@
         axios.get(policy_url)
           .then(function (response) {
             ctx.policy = response.data;
-            console.log("Policy response:", ctx.policy);
             ctx.total_count = ctx.show_validators ? ctx.policy.total_validators : ctx.policy.total_other_identities;
             ctx.get_validators();
           })
