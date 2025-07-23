@@ -44,7 +44,6 @@ class Policy < ApplicationRecord
 
   FIELDS_FOR_API = %i[
     pubkey
-    owner
     strategy
     network
     url
