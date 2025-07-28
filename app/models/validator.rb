@@ -173,7 +173,7 @@ class Validator < ApplicationRecord
   end
 
   def update_avatar_file
-    UpdateAvatarFileWorker.set(queue: :low_priority)
+    UpdateImageFileWorker.set(queue: :low_priority)
                           .perform_async({validator_id: id}.stringify_keys) unless avatar_url.nil?
   end
 

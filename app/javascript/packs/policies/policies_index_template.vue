@@ -61,8 +61,8 @@
             <tr v-for="policy in policies" :key="policy.policy_id">
               <td class="d-flex">
                 <div class="d-none d-lg-flex flex-column justify-content-center m-2 me-5">
-                  <img :src="policy.image" class='img-circle-large' v-if="policy.image" />
-                    <img :src="logo_default" class='img-circle-large' v-else />
+                  <img :src="policy.attached_image_url" class='img-circle-large' v-if="policy.attached_image_url" />
+                  <img :src="logo_default" class='img-circle-large' v-else />
                 </div>
                 <div class="d-flex flex-column justify-content-center">
                   <a :href="`/yellowstone-shield/` + policy.pubkey" data-turbolinks="false" class="column-info-link no-watchlist fw-bold">
