@@ -33,13 +33,15 @@ class UpdatePoliciesService
         url: policy['token_metadata'] ? policy['token_metadata']['uri'] : nil,
         mint: policy['token_metadata'] ? policy['token_metadata']['mint'] : nil,
         symbol: policy['token_metadata'] ? policy['token_metadata']['symbol'] : nil,
-        image: metadata["image"],
+        image_url: metadata["image"],
         description: metadata["description"] || policy['token_metadata']&.dig('description'),
         additional_metadata: policy['token_metadata'] ? policy['token_metadata']['additionalMetadata'] : nil,
         token_holders: policy['token_holders'] || []
       )
 
       update_policy_identities(db_policy, policy["data"]["identities"])
+
+      UpdateImageFileService.new(db_policy, :image).call(keep_tmp_files: true) if db_policy.image_url.present?
     end
   end
 

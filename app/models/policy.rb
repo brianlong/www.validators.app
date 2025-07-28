@@ -54,7 +54,6 @@ class Policy < ApplicationRecord
     name
     symbol
     description
-    image
     additional_metadata
     token_holders
   ].freeze
