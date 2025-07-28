@@ -12,7 +12,7 @@ FactoryBot.define do
     rent_epoch { '' }
     additional_metadata { [] }
     description { 'Policy Description' }
-    image { '' }
+    image_url { '' }
     network { "mainnet" }
     symbol { 'ABC' }
   end

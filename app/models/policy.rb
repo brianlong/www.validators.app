@@ -7,7 +7,8 @@
 #  description         :text(65535)
 #  executable          :boolean
 #  hidden              :boolean          default(FALSE), not null
-#  image               :string(191)
+#  image_hash          :string(191)
+#  image_url           :string(191)
 #  kind                :integer
 #  lamports            :bigint
 #  mint                :string(191)
@@ -29,6 +30,8 @@
 #  index_policies_on_pubkey            (pubkey) UNIQUE
 #
 class Policy < ApplicationRecord
+  include ImageAttachment
+  
   serialize :token_holders, JSON
 
   has_many :policy_identities, dependent: :destroy
