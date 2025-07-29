@@ -129,6 +129,10 @@ module SolanaLogic
       existing_validators(validators_cli["validators"], p.payload[:network]).each do |validator|
         next if Rails.application.config.validator_blacklist[p.payload[:network]].include? validator["identityPubkey"]
 
+        software_version = (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('version') || validator['version'])
+        software_client = (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client') || 'Unknown')
+        software_client_id = p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client_id')
+
         if existing_history = validator_histories[validator["identityPubkey"]]
           if existing_history.last_vote < validator["lastVote"]
             existing_history.update(
@@ -141,9 +145,9 @@ module SolanaLogic
               epoch_credits: validator["epochCredits"],
               epoch: p.payload[:epoch],
               active_stake: validator["activatedStake"],
-              software_version: (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('version') || validator['version']),
-              software_client: (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client') || 'Unknown'),
-              software_client_id: p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client_id'),
+              software_version: software_version,
+              software_client: software_client,
+              software_client_id: software_client_id,
               delinquent: validator["delinquent"],
               slot_skip_rate: validator["skipRate"],
               root_distance: max_root_height - validator["rootSlot"].to_i,
@@ -168,9 +172,9 @@ module SolanaLogic
             epoch_credits: validator["epochCredits"],
             epoch: p.payload[:epoch],
             active_stake: validator["activatedStake"],
-            software_version: (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('version') || validator['version']),
-            software_client: (p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client') || 'Unknown'),
-            software_client_id: p.payload[:validators]&.dig(validator["identityPubkey"])&.dig('client_id'),
+            software_version: software_version,
+            software_client: software_client,
+            software_client_id: software_client_id,
             delinquent: validator["delinquent"],
             slot_skip_rate: validator["skipRate"],
             root_distance: max_root_height - validator["rootSlot"].to_i,
@@ -442,9 +446,9 @@ module SolanaLogic
           credits_current: v['credits_current'],
           slot_index_current: p.payload[:epoch_slot_index],
           activated_stake: v['activated_stake'],
-          software_version: v['version'],
-          software_client: (v['client'] || 'Unknown'),
-          software_client_id: v['client_id']
+          software_version: v['version'] || validator.software_version,
+          software_client: (v['client'] || validator.software_client || 'Unknown'),
+          software_client_id: v['client_id'] || validator.software_client_id
         )
 
         # Find or create the validator IP address
