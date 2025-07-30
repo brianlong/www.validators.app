@@ -59,21 +59,6 @@ class PingThing < ApplicationRecord
     username
   ].freeze
 
-  PINGER_REGIONS = %w[
-    pit
-    nyc
-    ams
-    lon
-    dub
-    fra
-    sgp
-    tyo
-    us
-    eu
-    ap
-    test
-  ].freeze
-
   belongs_to :user
 
   enum commitment_level: { processed: 0, confirmed: 1, finalized: 2 }
@@ -82,7 +67,7 @@ class PingThing < ApplicationRecord
   validates_length_of :application, maximum: 80, allow_blank: true
   validates :network, inclusion: { in: NETWORKS_FOR_PING_THING }
   validates :signature, length: { in: 64..128 }
-  validates :pinger_region, format: { with: /\A[a-zA-Z0-9]{0,8}\z/ }
+  validates :pinger_region, format: { with: /\A[a-zA-Z0-9 ]{0,20}\z/ }
   validates :priority_fee_percentile, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_blank: true
   validates :priority_fee_micro_lamports, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
