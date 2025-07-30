@@ -365,4 +365,88 @@ class SolanaLogicTest < ActiveSupport::TestCase
       assert_equal 898, p.payload[:validators_info].size
     end
   end
+
+  test "validators_save creates VoteAccountHistory with correct attributes" do
+    network = "testnet"
+    batch_uuid = SecureRandom.uuid
+    payload = {
+      code: 200,
+      payload: {
+        network: network,
+        batch_uuid: batch_uuid,
+        epoch_slot_index: 1,
+        validators_reduced: {
+          "A" => {
+            "vote_account" => "VA1",
+            "commission" => 5,
+            "last_vote" => 123,
+            "credits" => 456,
+            "credits_current" => 10,
+            "activated_stake" => 789,
+            "gossip_ip_port" => "1.2.3.4:8001",
+            "version" => "1.17.15",
+            "client" => "solana-validator"
+          }
+        }
+      }
+    }
+    result = validators_save.call(Pipeline.new(200, payload[:payload]))
+    assert_equal 200, result[:code]
+    validator = Validator.find_by(network: network, account: "A")
+    assert validator.present?
+    vote_account = validator.vote_accounts.find_by(account: "VA1")
+    assert vote_account.present?
+    history = vote_account.vote_account_histories.find_by(batch_uuid: batch_uuid)
+    assert history.present?
+    assert_equal 5, history.commission
+    assert_equal 123, history.last_vote
+    assert_equal 456, history.credits
+    assert_equal 10, history.credits_current
+    assert_equal 789, history.activated_stake
+    assert_equal "1.17.15", history.software_version
+    assert_equal "solana-validator", history.software_client
+  end
+
+  test "validators_save uses software_version and software_client from validator_score_v1 if payload values are nil" do
+    network = "testnet"
+    batch_uuid = SecureRandom.uuid
+    validator = Validator.create!(network: network, account: "A")
+    score = validator.create_validator_score_v1!(software_version: "3.1.4", software_client: "ScoreClient")
+    payload = {
+      code: 200,
+      payload: {
+        network: network,
+        batch_uuid: batch_uuid,
+        epoch_slot_index: 1,
+        validators_reduced: {
+          "A" => {
+            "vote_account" => "VA1",
+            "commission" => 5,
+            "last_vote" => 123,
+            "credits" => 456,
+            "credits_current" => 10,
+            "activated_stake" => 789,
+            "gossip_ip_port" => "1.2.3.4:8001",
+            "version" => nil,
+            "client" => nil
+          }
+        }
+      }
+    }
+    result = validators_save.call(Pipeline.new(200, payload[:payload]))
+    assert_equal 200, result[:code]
+    validator = Validator.find_by(network: network, account: "A")
+    assert validator.present?
+    vote_account = validator.vote_accounts.find_by(account: "VA1")
+    assert vote_account.present?
+    history = vote_account.vote_account_histories.find_by(batch_uuid: batch_uuid)
+    assert history.present?
+    assert_equal 5, history.commission
+    assert_equal 123, history.last_vote
+    assert_equal 456, history.credits
+    assert_equal 10, history.credits_current
+    assert_equal 789, history.activated_stake
+    assert_equal "3.1.4", history.software_version
+    assert_equal "ScoreClient", history.software_client
+  end
 end
