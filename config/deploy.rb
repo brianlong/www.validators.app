@@ -147,10 +147,12 @@ namespace :deploy do
   after :updating, 'opscomplete:ruby:ensure' # installs Ruby version specified in .ruby-version
   after :updating, 'opscomplete:nodejs:ensure' # installs nodejs specified in .nvmrc
 
+  after :restart, 'solana:trust'
+
   after :restart, 'rake_task:add_stake_pools'
   after :restart, 'sitemap:create'
 
   # TODO uncomment after testing
   # restart sidekiq and daemons
-  # after 'deploy:published', 'opscomplete:supervisor:restart_procs'
+  # after :restart, 'opscomplete:supervisor:restart_procs'
 end
