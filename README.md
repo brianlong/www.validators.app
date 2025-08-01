@@ -39,11 +39,15 @@ Follow the instructions for your OS. Make sure `solana --version` returns correc
 Attribute encryption on models is required for any attribute that contains personal information or other sensitive 
 data. The default solution is the attr_encrypted gem. Encryption key is stored in rails credentials.
 
+
 ## Captcha
 Visit https://developers.google.com/recaptcha/intro to see how to use reCAPTCHA. You'll need to register your 
 website at https://www.google.com/recaptcha/admin/, choose captcha type, and you'll get site_key and secret_key. 
 Put them in the credentials.  
 For development, you will find sample keys in config/credentials.yml.enc.
+
+## Run server
+Run server by calling `./bin/dev`. It starts rails server and sidekiq.
 
 ## Tests
 How to run the test suite:
