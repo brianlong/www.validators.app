@@ -12,9 +12,9 @@ append :linked_files, 'config/credentials/production.key'
 # cron - updates crontab. Specific jobs can be assigned to any server (www1, www2 or background - see schedule.rb file).
 #        This role is designed to update the crontab only. In the future, think about dropping it and using app role instead.
 # background - used for actions that are meant to run only on background server,
-#              such as daemons and sidekiq workers. Use for background server only.
+#              such as daemons. Use for background server only.
 # background_production - used for actions/scripts that we only want to run on production background server.
-# sidekiq_blockchain - used for managing second sidekiq instance (see sidekiq_blockchain.yml)
+# sidekiq, sidekiq_blockchain - used for managing sidekiq instances
 
 # Web server www1
 server(
@@ -34,5 +34,5 @@ server(
 server(
   '167.99.125.221',
   user: 'deploy',
-  roles: %w[app background background_production cron sidekiq_blockchain]
+  roles: %w[app background background_production cron sidekiq sidekiq_blockchain]
 )

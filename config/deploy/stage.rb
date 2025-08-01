@@ -7,5 +7,5 @@ append :linked_files, 'config/credentials/stage.key'
 server(
   '64.225.7.18',
   user: 'deploy',
-  roles: %w{web app db background www1 sidekiq_blockchain cron}
+  roles: %w{web app db background www1 sidekiq sidekiq_blockchain cron}
 )

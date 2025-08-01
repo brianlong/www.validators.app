@@ -23,7 +23,7 @@ set :sitemap_roles, :web
 
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push(
-  'config/database.yml', 'config/appsignal.yml', 'config/cluster.yml', '.env'
+  'config/database.yml', 'config/appsignal.yml', 'config/cluster.yml', 'config/sidekiq.yml', '.env'
 )
 
 # Default value for linked_dirs is []
@@ -47,47 +47,45 @@ set :passenger_roles, :web
 set :whenever_roles, ["cron"]
 
 namespace :deploy do
-  after :restart, 'sidekiq:restart'
+  after :starting, 'sidekiq:quiet' # quiets Sidekiq
+
   after :restart, 'rake_task:add_stake_pools'
   after :restart, 'sitemap:create'
+  after :restart, 'sidekiq:restart'
   # TODO uncomment after testing
   # after :restart, 'deamons:restart'
 end
 
 namespace :sidekiq do
-  desc 'Stop sidekiq (put unfinished tasks back to Redis)'
-  task :stop do
-    on roles :background do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :stop, :sidekiq
-        end
-      end
+  desc 'Quiet sidekiq'
+  task :quiet do
+    # Sidekiq will stop fetching new jobs, see: https://github.com/mperham/sidekiq/wiki/Signals#tstp
+    on roles :sidekiq do
+      invoke!('opscomplete:supervisor:signal_procs', 'TSTP', 'sidekiq')
     end
     on roles :sidekiq_blockchain do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :stop, :sidekiq_blockchain
-        end
-      end
+      invoke!('opscomplete:supervisor:signal_procs', 'TSTP', 'sidekiq_blockchain')
     end
   end
 
-  desc 'Start sidekiq'
-  task :start do
-    on roles :background do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :start, :sidekiq
-        end
-      end
+  desc 'Stop sidekiq'
+  task :stop do
+    # Sidekiq will terminate and push back to Redis any jobs that don't finish within the configure timeout.
+    on roles :sidekiq do
+      execute :supervisor_stop_procs, "sidekiq"
     end
     on roles :sidekiq_blockchain do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :start, :sidekiq_blockchain
-        end
-      end
+      execute :supervisor_stop_procs, "sidekiq_blockchain"
+    end
+  end
+
+  desc 'Restart sidekiq'
+  task :restart do
+    on roles(:sidekiq), in: :sequence, wait: 5 do
+      execute :supervisor_restart_procs, "sidekiq"
+    end
+    on roles(:sidekiq_blockchain), in: :sequence, wait: 5 do
+      execute :supervisor_restart_procs, "sidekiq_blockchain"
     end
   end
 
