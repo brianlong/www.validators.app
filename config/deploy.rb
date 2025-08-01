@@ -37,18 +37,8 @@ set :passenger_roles, :web
 # Selects cron tasks by roles defined in config/schedule.rb
 set :whenever_roles, ["cron"]
 
-namespace :deploy do
-  after :starting, 'sidekiq:quiet' # quiets Sidekiq
-
-  after :updating, 'opscomplete:ruby:ensure' # installs Ruby version specified in .ruby-version
-  after :updating, 'opscomplete:nodejs:ensure' # installs nodejs specified in .nvmrc
-
-  after :restart, 'rake_task:add_stake_pools'
-  after :restart, 'sitemap:create'
-  after :restart, 'sidekiq:restart'
-  # TODO uncomment after testing
-  # after :restart, 'deamons:restart'
-end
+# Use Procfile and supervisor on all servers with the app role.
+set :procfile_role, :app
 
 namespace :sidekiq do
   desc 'Quiet sidekiq'
@@ -82,126 +72,20 @@ namespace :sidekiq do
       execute :supervisor_restart_procs, "sidekiq_blockchain"
     end
   end
-
-  desc 'Restart sidekiq'
-  task :restart do
-    on roles :background do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :restart, :sidekiq
-        end
-      end
-    end
-    on roles :sidekiq_blockchain do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :restart, :sidekiq_blockchain
-        end
-      end
-    end
-  end
 end
 
-namespace :deamons do
-  desc 'Start background'
-  task :start do
-    on roles :background do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :start, :validator_score_mainnet_v1
-          execute :systemctl, '--user', :start, :validator_score_testnet_v1
-          execute :systemctl, '--user', :start, :validator_score_pythnet_v1
-          execute :systemctl, '--user', :start, :gather_rpc_mainnet
-          execute :systemctl, '--user', :start, :gather_rpc_testnet
-          execute :systemctl, '--user', :start, :gather_rpc_pythnet
-          execute :systemctl, '--user', :start, :gather_vote_account_details
-          execute :systemctl, '--user', :start, :process_ping_thing
-          execute :systemctl, '--user', :start, :front_stats_update
-          execute :systemctl, '--user', :start, :leader_stats_mainnet_update
-          execute :systemctl, '--user', :start, :leader_stats_testnet_update
-          execute :systemctl, '--user', :start, :leader_stats_pythnet_update
-        end
-      end
-    end
-    on roles :background_production do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :start, :slot_subscribe_mainnet
-          # execute :systemctl, '--user', :start, :slot_subscribe_testnet
-          # execute :systemctl, '--user', :start, :slot_subscribe_pythnet
-          execute :systemctl, '--user', :start, :archive_blockchain_mainnet
-          # execute :systemctl, '--user', :start, :archive_blockchain_testnet
-          # execute :systemctl, '--user', :start, :archive_blockchain_pythnet
-        end
-      end
-    end
-  end
-
-  desc 'Stop background'
+namespace :daemons do
+  desc 'Stop background daemons'
   task :stop do
     on roles :background do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :stop, :validator_score_mainnet_v1
-          execute :systemctl, '--user', :stop, :validator_score_testnet_v1
-          execute :systemctl, '--user', :stop, :validator_score_pythnet_v1
-          execute :systemctl, '--user', :stop, :gather_rpc_mainnet
-          execute :systemctl, '--user', :stop, :gather_rpc_testnet
-          execute :systemctl, '--user', :stop, :gather_rpc_pythnet
-          execute :systemctl, '--user', :stop, :gather_vote_account_details
-          execute :systemctl, '--user', :stop, :process_ping_thing
-          execute :systemctl, '--user', :stop, :front_stats_update
-          execute :systemctl, '--user', :stop, :leader_stats_mainnet_update
-          execute :systemctl, '--user', :stop, :leader_stats_testnet_update
-          execute :systemctl, '--user', :stop, :leader_stats_pythnet_update
-        end
-      end
-    end
-    on roles :background_production do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :stop, :slot_subscribe_mainnet
-          # execute :systemctl, '--user', :stop, :slot_subscribe_testnet
-          # execute :systemctl, '--user', :stop, :slot_subscribe_pythnet
-          execute :systemctl, '--user', :stop, :archive_blockchain_mainnet
-          # execute :systemctl, '--user', :stop, :archive_blockchain_testnet
-          # execute :systemctl, '--user', :stop, :archive_blockchain_pythnet
-        end
-      end
+      execute :supervisor_stop_procs
     end
   end
 
-  desc 'Restart background'
+  desc 'Restart background daemons'
   task :restart do
     on roles :background do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :restart, :validator_score_mainnet_v1
-          execute :systemctl, '--user', :restart, :validator_score_testnet_v1
-          execute :systemctl, '--user', :restart, :validator_score_pythnet_v1
-          execute :systemctl, '--user', :restart, :gather_rpc_mainnet
-          execute :systemctl, '--user', :restart, :gather_rpc_testnet
-          execute :systemctl, '--user', :restart, :gather_rpc_pythnet
-          execute :systemctl, '--user', :restart, :gather_vote_account_details
-          execute :systemctl, '--user', :restart, :process_ping_thing
-          execute :systemctl, '--user', :restart, :front_stats_update
-          execute :systemctl, '--user', :restart, :leader_stats_mainnet_update
-          execute :systemctl, '--user', :restart, :leader_stats_testnet_update
-          execute :systemctl, '--user', :restart, :leader_stats_pythnet_update
-        end
-      end
-    end
-    on roles :background_production do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :systemctl, '--user', :restart, :slot_subscribe_mainnet
-          # execute :systemctl, '--user', :restart, :slot_subscribe_testnet
-          # execute :systemctl, '--user', :restart, :slot_subscribe_pythnet
-          execute :systemctl, '--user', :restart, :archive_blockchain_mainnet
-          # execute :systemctl, '--user', :restart, :archive_blockchain_testnet
-          # execute :systemctl, '--user', :restart, :archive_blockchain_pythnet
-        end
-      end
+      execute :supervisor_restart_procs
     end
   end
 end
@@ -228,4 +112,18 @@ namespace :rake_task do
       end
     end
   end
+end
+
+namespace :deploy do
+  after :starting, 'sidekiq:quiet' # quiets Sidekiq
+
+  after :updating, 'opscomplete:ruby:ensure' # installs Ruby version specified in .ruby-version
+  after :updating, 'opscomplete:nodejs:ensure' # installs nodejs specified in .nvmrc
+
+  after :restart, 'rake_task:add_stake_pools'
+  after :restart, 'sitemap:create'
+
+  # TODO uncomment after testing
+  # restart sidekiq and daemons
+  # after 'deploy:published', 'opscomplete:supervisor:restart_procs'
 end

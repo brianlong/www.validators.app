@@ -9,5 +9,6 @@ append :linked_files, 'config/credentials/stage.key'
 server(
   'app01-stage.blocklogic.validators.app',
   user: 'deploy-validators_s',
-  roles: %w{web app db background www1 sidekiq sidekiq_blockchain cron}
+  roles: %w{web app db background www1 sidekiq sidekiq_blockchain cron},
+  procfile: "Procfile.stage"
 )

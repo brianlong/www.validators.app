@@ -13,28 +13,29 @@ append :linked_files, 'config/credentials/production.key'
 # db - runs migrations; define only for one server
 # cron - updates crontab. Specific jobs can be assigned to any server (www1, www2 or background - see schedule.rb file).
 #        This role is designed to update the crontab only. In the future, think about dropping it and using app role instead.
-# background - used for actions that are meant to run only on background server,
-#              such as daemons. Use for background server only.
-# background_production - used for actions/scripts that we only want to run on production background server.
+# background - used for actions that are meant to run only on background server (daemons amd cron scripts).
 # sidekiq, sidekiq_blockchain - used for managing sidekiq instances
 
 # Web server www1
 server(
   'app01-prod.blocklogic.validators.app',
   user: 'deploy-validators_p',
-  roles: %w[web app db www1 cron sidekiq_blockchain]
+  roles: %w[web app db www1 cron sidekiq_blockchain],
+  procfile: "Procfile.prod_web"
 )
 
 # Second web server www2
 server(
   'app02-prod.blocklogic.validators.app',
   user: 'deploy-validators_p',
-  roles: %w[web app www2 cron sidekiq_blockchain]
+  roles: %w[web app www2 cron sidekiq_blockchain],
+  procfile: "Procfile.prod_web"
 )
 
 # Background server
 server(
   'background01-prod.blocklogic.validators.app',
   user: 'deploy-validators_p',
-  roles: %w[app background background_production cron sidekiq sidekiq_blockchain]
+  roles: %w[app background cron sidekiq sidekiq_blockchain],
+  procfile: "Procfile.prod_background"
 )
