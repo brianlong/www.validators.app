@@ -49,6 +49,9 @@ set :whenever_roles, ["cron"]
 namespace :deploy do
   after :starting, 'sidekiq:quiet' # quiets Sidekiq
 
+  after :updating, 'opscomplete:ruby:ensure' # installs Ruby version specified in .ruby-version
+  after :updating, 'opscomplete:nodejs:ensure' # installs nodejs specified in .nvmrc
+
   after :restart, 'rake_task:add_stake_pools'
   after :restart, 'sitemap:create'
   after :restart, 'sidekiq:restart'
