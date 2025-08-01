@@ -4,10 +4,10 @@
 # :concurrency: 5
 # :timeout: 30
 development:
-  :concurrency: 2
+  :concurrency: 1
 stage:
-  :concurrency: 2
+  :concurrency: 1
 production:
-  :concurrency: 2
+  :concurrency: 1
 :queues:
   - web

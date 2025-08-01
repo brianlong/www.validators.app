@@ -1,0 +1,2 @@
+sidekiq_web: bundle exec sidekiq --config config/sidekiq_web.yml
+sidekiq_blockchain: bundle exec sidekiq --config config/sidekiq_blockchain.yml
