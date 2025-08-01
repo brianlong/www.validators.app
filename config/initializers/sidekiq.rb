@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+redis_uri = ENV['REDIS_URL'] || Rails.application.credentials.dig(:redis, :url)
+
 Sidekiq.configure_server do |config|
   config.redis = {
-    url: Rails.application.credentials.dig(:redis, :url)
+    url: redis_uri
   }
   config.client_middleware do |chain|
     chain.add SidekiqUniqueJobs::Middleware::Client
@@ -17,7 +19,7 @@ end
 
 Sidekiq.configure_client do |config|
   config.redis = {
-    url: Rails.application.credentials.dig(:redis, :url)
+    url: redis_uri
   }
 
   config.client_middleware do |chain|

@@ -5,6 +5,10 @@
 # :timeout: 30
 development:
   :concurrency: 4
+stage:
+  :concurrency: 4
+production:
+  :concurrency: 6
 :queues:
   - high_priority
   - default

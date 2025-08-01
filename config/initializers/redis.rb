@@ -1,3 +1,4 @@
 # frozen_string_literal: true
 
-$redis = Redis.new(url: Rails.application.credentials.dig(:redis, :url))
+redis_uri = ENV['REDIS_URL'] || Rails.application.credentials.dig(:redis, :url)
+$redis = Redis.new(url: redis_uri)

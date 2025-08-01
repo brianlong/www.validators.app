@@ -34,8 +34,6 @@
 /config/credentials/*.key
 
 # Ignore configuration files
-/config/sidekiq.yml
-/config/sidekiq_blockchain.yml
 /config/appsignal.yml
 /config/cluster.yml
 

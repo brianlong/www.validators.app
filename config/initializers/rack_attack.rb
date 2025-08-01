@@ -1,5 +1,6 @@
 class Rack::Attack
-  Rack::Attack.cache.store = Redis.new(url: Rails.application.credentials.dig(:redis, :rack_attack))
+  redis_uri = ENV['REDIS_URL_RACKATTACK'] || ENV['REDIS_URL'] || Rails.application.credentials.dig(:redis, :rack_attack)
+  Rack::Attack.cache.store = Redis.new(url: redis_uri)
 
   API_ENDPOINTS_WITH_HIGH_LIMIT = [
     "/api/v1/commission-changes",

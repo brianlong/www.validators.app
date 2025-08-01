@@ -21,24 +21,16 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :bundle_bin, '/usr/bin/bundle'
-set :ruby_bin, '/usr/bin/ruby'
-set :rake_bin, '/usr/bin/rake'
 set :environment, (ENV['RAILS_ENV'] || @environment).to_s
 set :whenever_path, Whenever.path
 set :destroy_after_archive, true
-
 set :output, File.join(Whenever.path, 'log', 'whenever.log')
-job_type :ruby_script,
-         'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/:task >> :whenever_path/log/:task.log 2>&1'
-job_type :ruby_script_sol_prices,
-         'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/sol_prices/:task >> :whenever_path/log/:task.log 2>&1'
-job_type :ruby_script_data_centers,
-         'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/data_centers_scripts/:task >> :whenever_path/log/:task.log 2>&1'
-job_type :ruby_script_blockchain,
-         'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/blockchain/:task >> :whenever_path/log/:task.log 2>&1'
-job_type :ruby_script_archives,
-          'cd :path && RAILS_ENV=:environment :bundle_bin exec :ruby_bin script/archives/:task :destroy_after_archive >> :whenever_path/log/:task.log 2>&1'
+
+job_type :ruby_script, 'cd :path && RAILS_ENV=:environment bundle exec ruby script/:task >> :whenever_path/log/:task.log 2>&1'
+job_type :ruby_script_sol_prices, 'cd :path && RAILS_ENV=:environment bundle exec ruby script/sol_prices/:task >> :whenever_path/log/:task.log 2>&1'
+job_type :ruby_script_data_centers, 'cd :path && RAILS_ENV=:environment bundle exec ruby script/data_centers_scripts/:task >> :whenever_path/log/:task.log 2>&1'
+job_type :ruby_script_blockchain, 'cd :path && RAILS_ENV=:environment bundle exec ruby script/blockchain/:task >> :whenever_path/log/:task.log 2>&1'
+job_type :ruby_script_archives, 'cd :path && RAILS_ENV=:environment bundle exec ruby script/archives/:task :destroy_after_archive >> :whenever_path/log/:task.log 2>&1'
 
 # Make sure you add the tasks to correct server.
 # Use :background role to add task to background server (recommended),
@@ -67,8 +59,10 @@ every 1.hour, at: 15, roles: [:background] do
   ruby_script 'gather_stake_accounts.rb'
 end
 
-every 1.hour, at: 30, roles: [:background] do
-  ruby_script_data_centers 'append_data_centers_geo_data.rb'
+if ENV['RAILS_ENV'] == "production"
+  every 1.hour, at: 30, roles: [:background] do
+    ruby_script_data_centers 'append_data_centers_geo_data.rb'
+  end
 end
 
 every 1.hour, at: 35, roles: [:background] do
