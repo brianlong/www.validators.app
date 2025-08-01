@@ -32,6 +32,8 @@
   <li><a href="#account-authorities">Authorities Changes</a></li>
   <li><a href="#last-blocks">Last Blocks</a></li>
   <li><a href="#block-votes">Block Votes</a></li>
+  <li><a href="#policies-index">Yellowstone Shield Policies</a></li>
+  <li><a href="#policies-show">Yellowstone Shield Policy Details</a></li>
   <li><a href="#error-codes">Error Codes</a></li>
   <li><a href="#limits">Requests Limits</a></li>
   <li><a href="#notes">Notes</a></li>
@@ -581,7 +583,7 @@
 <p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
 <p><strong class="text-muted">`priority_fee_percentile: NN`</strong> Percentile of priority fee. Must be a number between 0 and 100.</p>
 <p><strong class="text-muted">`priority_fee_micro_lamports: NN`</strong> Priority fee in micro lamports.</p>
-<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 2-3 letter symbol. Available regions are: <%= PingThing::PINGER_REGIONS.join(', ') %>.</p>
+<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a several letter symbol, letters and numbers are allowed.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>
@@ -612,7 +614,7 @@
 <p><strong class="text-muted">`slot_landed: NN`</strong> Number of slot in which transaction has been finished.</p>
 <p><strong class="text-muted">`priority_fee_percentile: NN`</strong> Percentile of priority fee.</p>
 <p><strong class="text-muted">`priority_fee_micro_lamports: NN`</strong> Priority fee in micro lamports.</p>
-<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a 2-3 letter symbol. Available regions are: <%= PingThing::PINGER_REGIONS.join(', ') %>.</p>
+<p><strong class="text-muted">`pinger_region: string`</strong> Region of the pinger as a several letter symbol, letters and numbers are allowed.</p>
 
 <h3 class="h6">Response:</h3>
 <pre>{"status":"created"}</pre>
@@ -842,7 +844,7 @@
 
 <hr />
 
-<h2 class="h4" id="block-votes">Block Votes</h2>
+<h2 class="h4" id="block-votes">Block Votes</a></h2>
 <p>Block Votes endpoint will return votes for a given block.</p>
 
 <h3 class="h6">Request:</h3>
@@ -882,6 +884,82 @@
         1
       ]
     },
+    ...
+  ]
+}
+</pre>
+
+<hr />
+
+<h2 class="h4" id="policies-index">Yellowstone Shield Policies</h2>
+<p>
+  The Yellowstone Shield Policies endpoint returns a list of all available policies. In the example below, replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/policies/:network.json'</pre>
+<h3 class="h6">Parameter Options:</h3>
+<p><strong class="text-muted">`query=string`</strong> Optional. Filter policies by name, pubkey, or validator identity.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/policies/:network.json?query=9M69sfTJHjTDY62crfDTWrezoTWvSxg1jdeLXSufZHty'</pre>
+<p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1. Can be combined with limit param.</p>
+<p><strong class="text-muted">`limit=NN`</strong> will limit the results to NN entries, defaults to 25.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/policies.json?page=2&limit=25'</pre>
+<h3 class="h6">Response:</h3>
+<p>An array of policy objects.</p>
+<pre>
+{
+  "policies": [
+    {
+      "pubkey": "9M69sfTJHjTDY62crfDTWrezoTWvSxg1jdeLXSufZHty",
+      "owner": "b1ockYL7X6sGtJzueDbxRVBEEPN4YeqoLW276R3MX8W",
+      "strategy": "Allow",
+      "executable": false,
+      "network": "mainnet",
+      "url": "https://gateway.irys.xyz/CdxWAuxk483JsqJdbE8cSKkZEMTJ1EKpDsUWmqGTaFu8",
+      "mint": "Dj5iQS3Ms4TSheDZaLTcNNSmayNmeJe26athqiKTUeh3",
+      "name": "Top 25 Validators by Stake",
+      "symbol": "TV25",
+      "description":"A Yellowstone Shield policy of the top 25 validators by stake.",
+      "image":"https://gateway.irys.xyz/Hhdy76nXVpNBCg1pVLtpctaZXbpnSufWggbyiMFUoCTh",
+      "additional_metadata":[],
+      "identities_count": 25
+    },
+    ...
+  ],
+  "total_count": 25
+}
+
+</pre>
+
+<hr />
+
+<h2 class="h4" id="policies-show">Yellowstone Shield Policy Details</h2>
+<p>
+  The Yellowstone Shield Policy Details endpoint returns detailed information for a single policy by its pubkey.
+</p>
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/policies/:network/:pubkey.json'</pre>
+<p>Replace <code>:pubkey</code> with the policy's public key.</p>
+<h3 class="h6">Response:</h3>
+<pre>
+{
+  "pubkey": "9M69sfTJHjTDY62crfDTWrezoTWvSxg1jdeLXSufZHty",
+  "owner": "b1ockYL7X6sGtJzueDbxRVBEEPN4YeqoLW276R3MX8W",
+  "strategy": "Allow",
+  "network": "mainnet",
+  "url": "https://gateway.irys.xyz/CdxWAuxk483JsqJdbE8cSKkZEMTJ1EKpDsUWmqGTaFu8",
+  "mint": "Dj5iQS3Ms4TSheDZaLTcNNSmayNmeJe26athqiKTUeh3",
+  "name": "Top 25 Validators by Stake",
+  "description": "A Yellowstone Shield policy of the top 25 validators by stake.",
+  "image":"https://gateway.irys.xyz/Hhdy76nXVpNBCg1pVLtpctaZXbpnSufWggbyiMFUoCTh",
+  "additional_metadata": [],
+  "identities_count": 25,
+  "validators": [
+    "HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU",
+    ...
+  ],
+  total_validators: 25,
+  "other_identities": [
+    "DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy",
     ...
   ]
 }

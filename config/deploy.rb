@@ -39,6 +39,7 @@ append :linked_files, 'config/appsignal.yml'
 append :linked_files, 'config/sidekiq.yml'
 append :linked_files, 'config/sidekiq_blockchain.yml'
 append :linked_files, 'config/cluster.yml'
+append :linked_files, '.env'
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system'
@@ -65,7 +66,7 @@ set :passenger_roles, :web
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-# Whenver/crontab config. Updates crontab on all servers.
+# Whenever/crontab config. Updates crontab on all servers with this role.
 # Selects cron tasks by roles defined in config/schedule.rb
 set :whenever_roles, ["cron"]
 
