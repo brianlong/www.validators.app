@@ -20,21 +20,21 @@ append :linked_files, 'config/credentials/production.key'
 
 # Web server www1
 server(
-  '104.131.169.171',
-  user: 'deploy',
+  'app01-prod.blocklogic.validators.app',
+  user: 'deploy-validators_p',
   roles: %w[web app db www1 cron sidekiq_blockchain]
 )
 
 # Second web server www2
 server(
-  '167.172.17.244',
-  user: 'deploy',
+  'app02-prod.blocklogic.validators.app',
+  user: 'deploy-validators_p',
   roles: %w[web app www2 cron sidekiq_blockchain]
 )
 
 # Background server
 server(
-  '167.99.125.221',
-  user: 'deploy',
+  'background01-prod.blocklogic.validators.app',
+  user: 'deploy-validators_p',
   roles: %w[app background background_production cron sidekiq sidekiq_blockchain]
 )

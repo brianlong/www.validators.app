@@ -7,7 +7,7 @@ set :deploy_to, "/var/www/validators_p"
 append :linked_files, 'config/credentials/stage.key'
 
 server(
-  '64.225.7.18',
-  user: 'deploy',
+  'app01-stage.blocklogic.validators.app',
+  user: 'deploy-validators_s',
   roles: %w{web app db background www1 sidekiq sidekiq_blockchain cron}
 )
