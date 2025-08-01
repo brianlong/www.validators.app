@@ -59,8 +59,10 @@ every 1.hour, at: 15, roles: [:background] do
   ruby_script 'gather_stake_accounts.rb'
 end
 
-every 1.hour, at: 30, roles: [:background] do
-  ruby_script_data_centers 'append_data_centers_geo_data.rb'
+if ENV['RAILS_ENV'] == "production"
+  every 1.hour, at: 30, roles: [:background] do
+    ruby_script_data_centers 'append_data_centers_geo_data.rb'
+  end
 end
 
 every 1.hour, at: 35, roles: [:background] do
