@@ -10,7 +10,6 @@
     "@babel/plugin-transform-regenerator": "^7.24.7",
     "@babel/plugin-transform-runtime": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
-    "@fortawesome/fontawesome-free": "^7.0.0",
     "@googlemaps/markerclusterer": "^2.5.3",
     "@rails/actioncable": "^6.1.7",
     "@rails/activestorage": "^6.1.7",
