@@ -146,6 +146,7 @@ group :development, :test do
   gem 'capistrano', '~> 3.17.3', require: false
   gem 'capistrano-passenger', '~> 0.2.1', require: false
   gem 'capistrano-rails', '~> 1.7', require: false
+  gem 'capistrano-opscomplete', '~> 1.2', require: false
 end
 
 group :development do
