@@ -23,7 +23,7 @@ set :sitemap_roles, :web
 
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push(
-  'config/database.yml', 'config/appsignal.yml', 'config/sidekiq.yml', 'config/sidekiq_blockchain.yml', 'config/cluster.yml', '.env'
+  'config/database.yml', 'config/appsignal.yml', 'config/cluster.yml', '.env'
 )
 
 # Default value for linked_dirs is []

@@ -1,0 +1,13 @@
+---
+:daemon: false
+# :verbose: true
+# :concurrency: 5
+# :timeout: 30
+development:
+  :concurrency: 2
+stage:
+  :concurrency: 2
+production:
+  :concurrency: 2
+:queues:
+  - web

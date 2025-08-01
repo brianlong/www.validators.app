@@ -18,8 +18,6 @@ https://www.validators.app/
 - Copy `config/cluster.yml.example` to `config/cluster.yml`
 - Copy `config/database.example.yml` to `config/database.yml` and edit to reflect the proper database name, user name and other settings.
 - Developers using Mac OS will need to `brew install shared-mime-info` before `bundle install`
-- Copy `config/sidekiq.yml.example` to `config/sidekiq.yml`, and `config/sidekiq_blockchain.yml.example` to `config/sidekiq_blockchain.yml`.  
-  This repo is configured for the free version of Sidekiq. Review the Gemfile and config/routes.rb files if you are using Sidekiq Pro.
 
 ## Database 
 - Make sure you have `database.yml` with correct settings.
