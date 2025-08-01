@@ -1,0 +1,2 @@
+[tools]
+"ubi:anza-xyz/agave" = { version = "2.2.20", matching = "solana-release", extract_all = "true", bin_path = "bin" }
