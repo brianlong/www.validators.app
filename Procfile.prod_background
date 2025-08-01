@@ -1,4 +1,4 @@
-sidekiq_background: bundle exec sidekiq --config config/sidekiq_background.yml
+sidekiq: bundle exec sidekiq --config config/sidekiq.yml
 sidekiq_blockchain: bundle exec sidekiq --config config/sidekiq_blockchain.yml
 archive_blockchain_mainnet: bundle exec ruby daemons/blockchain/archive_blockchain_daemon.rb mainnet
 front_stats_update: bundle exec ruby daemons/front_stats_update_daemon.rb
