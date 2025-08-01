@@ -1,0 +1,14 @@
+sidekiq: bundle exec sidekiq --config config/sidekiq.yml
+sidekiq_blockchain: bundle exec sidekiq --config config/sidekiq_blockchain.yml
+front_stats_update: bundle exec ruby daemons/front_stats_update_daemon.rb
+gather_rpc_mainnet: bundle exec ruby daemons/gather_rpc_mainnet_daemon.rb
+gather_rpc_pythnet: bundle exec ruby daemons/gather_rpc_pythnet_daemon.rb
+gather_rpc_testnet: bundle exec ruby daemons/gather_rpc_testnet_daemon.rb
+gather_vote_account_details: bundle exec ruby daemons/gather_vote_account_details_daemon.rb
+leader_stats_mainnet_update: bundle exec ruby daemons/leader_stats_mainnet_update_daemon.rb
+leader_stats_testnet_update: bundle exec ruby daemons/leader_stats_testnet_update_daemon.rb
+leader_stats_pythnet_update: bundle exec ruby daemons/leader_stats_pythnet_update_daemon.rb
+process_ping_thing: bundle exec ruby daemons/process_ping_thing_daemon.rb
+validator_score_mainnet_v1: bundle exec ruby daemons/validator_score_mainnet_v1_daemon.rb
+validator_score_pythnet_v1: bundle exec ruby daemons/validator_score_pythnet_v1_daemon.rb
+validator_score_testnet_v1: bundle exec ruby daemons/validator_score_testnet_v1_daemon.rb

@@ -18,8 +18,6 @@ https://www.validators.app/
 - Copy `config/cluster.yml.example` to `config/cluster.yml`
 - Copy `config/database.example.yml` to `config/database.yml` and edit to reflect the proper database name, user name and other settings.
 - Developers using Mac OS will need to `brew install shared-mime-info` before `bundle install`
-- Copy `config/sidekiq.yml.example` to `config/sidekiq.yml`, and `config/sidekiq_blockchain.yml.example` to `config/sidekiq_blockchain.yml`.  
-  This repo is configured for the free version of Sidekiq. Review the Gemfile and config/routes.rb files if you are using Sidekiq Pro.
 
 ## Database 
 - Make sure you have `database.yml` with correct settings.
@@ -41,11 +39,15 @@ Follow the instructions for your OS. Make sure `solana --version` returns correc
 Attribute encryption on models is required for any attribute that contains personal information or other sensitive 
 data. The default solution is the attr_encrypted gem. Encryption key is stored in rails credentials.
 
+
 ## Captcha
 Visit https://developers.google.com/recaptcha/intro to see how to use reCAPTCHA. You'll need to register your 
 website at https://www.google.com/recaptcha/admin/, choose captcha type, and you'll get site_key and secret_key. 
 Put them in the credentials.  
 For development, you will find sample keys in config/credentials.yml.enc.
+
+## Run server
+Run server by calling `./bin/dev`. It starts rails server and sidekiq.
 
 ## Tests
 How to run the test suite:
