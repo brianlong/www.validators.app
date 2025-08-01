@@ -6,10 +6,11 @@ https://www.validators.app/
   - Ruby 3 (see `.ruby-version` file)
   - Rails 6.1+
   - MySQL 8
-  - Redis 7+
+  - Redis/Valkey 7+
   - Node 20+
   - Solana CLI (see instruction below)
   - ImageMagick
+  - Object Storage
 
 ## Configuration Notes
 - Download credentials (master.key, test.key and .env) from Keybase
@@ -39,7 +40,6 @@ Follow the instructions for your OS. Make sure `solana --version` returns correc
 Attribute encryption on models is required for any attribute that contains personal information or other sensitive 
 data. The default solution is the attr_encrypted gem. Encryption key is stored in rails credentials.
 
-
 ## Captcha
 Visit https://developers.google.com/recaptcha/intro to see how to use reCAPTCHA. You'll need to register your 
 website at https://www.google.com/recaptcha/admin/, choose captcha type, and you'll get site_key and secret_key. 
@@ -67,13 +67,11 @@ To encrypt the file: `gpg -c --output config/credentials/test_key.gpg config/cre
 To decrypt and encrypt the file you need a passphrase, please ask your team leader about it.
 
 ## Deployment
-Deployments are handled by Capistrano. Follow the instructions for Capistrano.
-- To deploy run: `cap production deploy`.
-- To rollback to the previous version: `cap production deploy:rollback ROLLBACK_RELEASE=2022XXXXXXXX`
-- To restart application: `cap production deploy:restart`
+Deployments are handled by Capistrano. 
+Follow the instructions on Keybase in deployment_instructions.md.
 
 ## Data Centers
-- See instructions on Keybase.
+- See instructions on Keybase in data_center_override_instruction.md.
 
 ## Validators Stack
 - ValidatorsApp https://github.com/brianlong/www.validators.app
