@@ -99,6 +99,22 @@ namespace :solana do
       end
     end
   end
+
+  task :trust do
+    on roles(:app), in: :sequence do
+      within release_path do
+        execute :mise, "trust"
+      end
+    end
+  end
+
+  task :list_available_versions do
+    on roles(:app), in: :sequence do
+      within release_path do
+        execute :mise, "ls-remote", "ubi:anza-xyz/agave"
+      end
+    end
+  end
 end
 
 namespace :rake_task do
