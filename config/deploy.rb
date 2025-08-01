@@ -90,6 +90,17 @@ namespace :daemons do
   end
 end
 
+namespace :solana do
+  desc 'Install solana-cli'
+  task :install do
+    on roles(:app), in: :sequence do
+      within release_path do
+        execute :mise, "install"
+      end
+    end
+  end
+end
+
 namespace :rake_task do
   desc 'Add Stake Pools'
   task :add_stake_pools do
