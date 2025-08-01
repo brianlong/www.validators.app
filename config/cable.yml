@@ -5,7 +5,12 @@ development:
 test:
   adapter: test
 
+stage:
+  adapter: redis
+  url: <%= ENV["REDIS_URL"] %>
+  channel_prefix: validators_app_stage
+
 production:
   adapter: redis
-  url: <%= Rails.application.credentials.dig(:redis, :url) %>
+  url: <%= ENV["REDIS_URL"] %>
   channel_prefix: validators_app_production
