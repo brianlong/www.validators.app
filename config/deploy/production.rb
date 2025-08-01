@@ -2,6 +2,8 @@
 
 set :rails_env, :production
 
+set :deploy_to, "/var/www/validators_p"
+
 append :linked_files, 'config/credentials/production.key'
 
 # 'www.validators.app',

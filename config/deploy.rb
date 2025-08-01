@@ -12,9 +12,6 @@ set :user, 'deploy'
 # Default branch is :master
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
-# Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/deploy/#{fetch(:application)}"
-
 set :migration_role, :db
 
 set :templated_config_files, []
@@ -29,13 +26,7 @@ set :linked_files, fetch(:linked_files, []).push(
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system'
 
-set :bundle_dir, '/home/deploy/gems'
-set :default_env, {
-  'GEM_HOME' => '/home/deploy/gems',
-  'GEM_PATH' => '/home/deploy/gems'
-}
-
-set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH' }
+#set :passenger_environment_variables, { path: '/usr/sbin/passenger-status:$PATH' }
 
 set :passenger_roles, :web
 
