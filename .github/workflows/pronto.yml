@@ -3,7 +3,7 @@ on: [pull_request]
 
 jobs:
   pronto:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -14,7 +14,7 @@ jobs:
         with:
           ruby-version: .ruby-version
       - name: Setup pronto
-        run: gem install 'activesupport:6.1.7.3' 'multi_xml:0.6.0' 'faraday-net_http:3.0.2' 'faraday:2.7.12' 'public_suffix:5.0.4' 'pronto:0.11.2' 'pronto-rubocop:0.11.5' 'rubocop:1.63.3' 'rubocop-rails:2.24.1'
+        run: gem install 'activesupport:6.1.7.10' 'multi_xml:0.7.1' 'faraday-net_http:3.4.0' 'faraday:2.13.1' 'public_suffix:6.0.2' 'pronto:0.11.2' 'pronto-rubocop:0.11.6' 'rubocop:1.63.5' 'rubocop-rails:2.24.1'
       - name: Run Pronto
         env:
           PRONTO_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
