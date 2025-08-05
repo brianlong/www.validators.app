@@ -133,9 +133,10 @@ every 1.day, at: '3:45am', roles: [:background] do
   ruby_script 'update_validator_stake_pools_list.rb'
 end
 
-every 1.day, at: '5:00am', roles: [:background] do
-  ruby_script_blockchain 'get_leaders_schedule.rb'
-end
+# TODO - uncomment after migration
+# every 1.day, at: '5:00am', roles: [:background] do
+#   ruby_script_blockchain 'get_leaders_schedule.rb'
+# end
 
 every 1.day, at: '5:10am', roles: [:background] do
   ruby_script_archives 'archive_ping_thing_stat.rb'
@@ -167,9 +168,10 @@ every 45.minutes, roles: [:background] do
   runner "ValidatorCheckActiveWorker.perform_async"
 end
 
-every 90.minutes, roles: [:background] do
-  ruby_script_blockchain "check_error_slots.rb"
-end
+# TODO - uncomment after migration
+# every 90.minutes, roles: [:background] do
+#   ruby_script_blockchain "check_error_slots.rb"
+# end
 
 if environment == 'production'
   every 1.day, at: '1:00am', roles: [:background] do
