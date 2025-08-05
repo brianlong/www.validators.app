@@ -146,8 +146,7 @@ namespace :deploy do
 
   after :updating, 'opscomplete:ruby:ensure' # installs Ruby version specified in .ruby-version
   after :updating, 'opscomplete:nodejs:ensure' # installs nodejs specified in .nvmrc
-
-  after :restart, 'solana:trust'
+  after :updating, 'solana:trust'
 
   after :restart, 'rake_task:add_stake_pools'
   after :restart, 'sitemap:create'
