@@ -19,7 +19,8 @@ require 'capistrano/passenger'
 
 require "capistrano/opscomplete"
 
-require 'whenever/capistrano'
+# TODO uncomment after testing
+# require 'whenever/capistrano'
 
 require 'capistrano/sitemap_generator'
 
