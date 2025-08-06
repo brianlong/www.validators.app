@@ -32,6 +32,8 @@ To enable copying records to staging database set copy_records_to_stage in crede
 ## Solana CLI
 https://docs.solana.com/cli/install-solana-cli-tools  
 Follow the instructions for your OS. Make sure `solana --version` returns correct CLI version.
+### On production/staging servers
+See keybase file for instructions.
 
 ### Check current version
 `solana -V` or `solana --version`
