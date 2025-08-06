@@ -59,12 +59,11 @@ every 1.hour, at: 15, roles: [:background] do
   ruby_script 'gather_stake_accounts.rb'
 end
 
-# TODO - uncomment after migration
-# if ENV['RAILS_ENV'] == "production"
-#   every 1.hour, at: 30, roles: [:background] do
-#     ruby_script_data_centers 'append_data_centers_geo_data.rb'
-#   end
-# end
+if ENV['RAILS_ENV'] == "production"
+  every 1.hour, at: 30, roles: [:background] do
+    ruby_script_data_centers 'append_data_centers_geo_data.rb'
+  end
+end
 
 every 1.hour, at: 35, roles: [:background] do
   ruby_script_data_centers 'assign_data_center_scores.rb'
@@ -133,10 +132,9 @@ every 1.day, at: '3:45am', roles: [:background] do
   ruby_script 'update_validator_stake_pools_list.rb'
 end
 
-# TODO - uncomment after migration
-# every 1.day, at: '5:00am', roles: [:background] do
-#   ruby_script_blockchain 'get_leaders_schedule.rb'
-# end
+every 1.day, at: '5:00am', roles: [:background] do
+  ruby_script_blockchain 'get_leaders_schedule.rb'
+end
 
 every 1.day, at: '5:10am', roles: [:background] do
   ruby_script_archives 'archive_ping_thing_stat.rb'
@@ -168,10 +166,9 @@ every 45.minutes, roles: [:background] do
   runner "ValidatorCheckActiveWorker.perform_async"
 end
 
-# TODO - uncomment after migration
-# every 90.minutes, roles: [:background] do
-#   ruby_script_blockchain "check_error_slots.rb"
-# end
+every 90.minutes, roles: [:background] do
+  ruby_script_blockchain "check_error_slots.rb"
+end
 
 if environment == 'production'
   every 1.day, at: '1:00am', roles: [:background] do

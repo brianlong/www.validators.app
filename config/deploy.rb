@@ -152,6 +152,5 @@ namespace :deploy do
   after :restart, 'sitemap:create'
 
   # restart sidekiq and daemons
-  # TODO uncomment after testing
-  # after :restart, 'opscomplete:supervisor:restart_procs'
+  after :restart, 'opscomplete:supervisor:restart_procs'
 end
