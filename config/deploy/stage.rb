@@ -1,5 +1,14 @@
+# frozen_string_literal: true
+
+set :rails_env, :stage
+
+set :deploy_to, "/var/www/validators_s"
+
+append :linked_files, 'config/credentials/stage.key'
+
 server(
-  '68.183.157.115',
-  user: 'deploy',
-  roles: %w{web app db background www1 sidekiq_blockchain cron}
+  'app01-stage.blocklogic.validators.app',
+  user: 'deploy-validators_s',
+  roles: %w{web app db background www1 sidekiq sidekiq_blockchain cron},
+  procfile: "Procfile.stage"
 )

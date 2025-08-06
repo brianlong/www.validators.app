@@ -1,0 +1,3 @@
+web: bin/rails server -p 3000
+sidekiq: bundle exec sidekiq --config config/sidekiq.yml
+sidekiq_blockchain: bundle exec sidekiq --config config/sidekiq_blockchain.yml

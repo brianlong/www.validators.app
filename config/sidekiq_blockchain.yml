@@ -4,8 +4,13 @@
 # :concurrency: 5
 # :timeout: 30
 development:
-  :concurrency: 9
+  :concurrency: 2
+stage:
+  :concurrency: 2
+production:
+  :concurrency: 4
 :queues:
   - [blockchain_mainnet, 1]
   - [blockchain_testnet, 1]
   - [blockchain_pythnet, 1]
+  - [blockchain, 1]
