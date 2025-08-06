@@ -169,7 +169,7 @@ gem 'browser'
 
 # PDFs creator
 gem 'wkhtmltopdf-binary'
-gem 'wicked_pdf'
+gem 'wicked_pdf', '~> 2.8', '>= 2.8.2'
 
 # Requests limiter
 gem 'rack-attack'
