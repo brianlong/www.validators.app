@@ -124,7 +124,7 @@ gem 'browser', '~> 5.3'
 
 # PDFs creator
 gem 'wkhtmltopdf-binary', '~> 0.12.6'
-gem 'wicked_pdf', '~> 2.8.2'
+gem 'wicked_pdf', '~> 2.8', '>= 2.8.2'
 
 # Requests limiter
 gem 'rack-attack', '~> 6.6.1'
