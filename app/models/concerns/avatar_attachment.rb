@@ -3,6 +3,8 @@
 module AvatarAttachment
   extend ActiveSupport::Concern
 
+  IMAGE_TYPES = %w[image/png image/gif image/jpeg image/webp image/avif image/svg+xml image/bmp].freeze
+
   included do
     has_one_attached :avatar
     validate :avatar_type
