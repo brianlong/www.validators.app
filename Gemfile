@@ -10,17 +10,19 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # See https://github.com/net-ssh/net-ssh/issues/565 for more information
 # Gem::LoadError : "ed25519 is not part of the bundle. Add it to your Gemfile."
 
-gem 'bundler', '>= 2.1'
-gem 'json', '>= 2.3.0'
+gem 'bundler', '>= 2.3.27'
+gem 'json', '~> 2.9.1'
 
 gem 'websocket-extensions', '>= 0.1.5'
-gem 'faye-websocket', '~> 0.11.3'
-gem 'eventmachine', '~> 1.2', '>= 1.2.0.1'
+gem 'faye-websocket', '~> 0.12.0'
+gem 'eventmachine', '~> 1.2.7'
 
-gem 'actionview', '>= 6.0.3.1'
+gem 'actionview', '>= 6.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1'
+gem 'rack', '= 2.2.8'
+gem 'concurrent-ruby', '= 1.3.4'
 
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.5.6'
@@ -59,47 +61,79 @@ gem 'whenever', require: false
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Active Storage variant
-gem 'image_processing'
+gem 'image_processing', '~> 1.14'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.18', require: false
 
-# Capistrano
-gem 'capistrano-passenger', '>= 0.2.1'
-gem 'capistrano-rails', group: :development
-
 # AppSignal
-gem 'appsignal'
+gem 'appsignal', '~> 4.5'
 
 gem "mechanize", ">= 2.10"
-gem 'nokogiri', '1.15.6'
-gem 'parallel'
+gem 'nokogiri', '1.16.2'
+gem 'parallel', '~> 1.27'
 
 # Pagination
-gem 'kaminari'
+gem 'kaminari', '~> 1.2.2'
 
 # MaxMind
-gem 'dnsruby'
-gem 'maxmind-geoip2'
+gem 'dnsruby', '~> 1.72.4'
+gem 'maxmind-geoip2', '~> 1.3.0'
 
 # use rack-cors for cross-origin api queries
-gem 'rack-cors'
+gem 'rack-cors', '~> 1.1.1'
 
 # Ruby client for Solana
 gem 'solana_rpc_ruby'
 
 # Ruby client for CoinGecko
-gem 'coingecko_ruby'
+gem 'coingecko_ruby', '~> 0.4.2'
 
-gem "audited", "~> 5.6"
+gem "audited", "~> 5.8"
 
 gem 'sitemap_generator', '~> 6.3.0'
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+# gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
+# NOTE: This template allows you to choose between encryption with the
+# `attr_encrypted` gem or Vault. Vault is more secure but is harder to
+# configure in production.
+#
+# User data encryption
+gem 'attr_encrypted', '>= 4.2'
+
+# Or use this for Vault. NOTE: Use this version of the gem until
+# https://github.com/hashicorp/vault-rails/pull/76 is merged:
+# gem 'vault-rails',
+#     git: 'https://github.com/madding/vault-rails.git',
+#     branch: 'fix-dirty-changed-attributes'
+
+# Assets storage
+gem 'aws-sdk-s3', require: false
+
+# Authentication
+gem 'devise', '~> 4.9'
+gem 'devise-i18n', '~> 1.13'
+
+# https://github.com/ambethia/recaptcha
+gem 'recaptcha', '~> 5.19'
+
+# User browser detection
+gem 'browser', '~> 5.3'
+
+# PDFs creator
+gem 'wkhtmltopdf-binary', '~> 0.12.6'
+gem 'wicked_pdf', '~> 2.8', '>= 2.8.2'
+
+# Requests limiter
+gem 'rack-attack', '~> 6.6.1'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'bullet', '~> 7.1'
   gem 'factory_bot_rails'
-  gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
+  gem 'faker'
   gem 'pry', '~> 0.14.2'
   gem 'letter_opener_web'
   gem 'pronto', '~> 0.11.2'
@@ -107,6 +141,12 @@ group :development, :test do
   gem 'pronto-rubocop', '~> 0.11.5', require: false
   gem 'rubocop', '~> 1.63.3', require: false
   gem 'rubocop-rails', '~> 2.24.1', require: false
+
+  # Capistrano
+  gem 'capistrano', '~> 3.17.3', require: false
+  gem 'capistrano-passenger', '~> 0.2.1', require: false
+  gem 'capistrano-rails', '~> 1.7', require: false
+  gem 'capistrano-opscomplete', '~> 1.2', require: false
 end
 
 group :development do
@@ -116,7 +156,7 @@ group :development do
   gem 'web-console', '>= 4.2.1'
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
-  gem 'spring'
+  gem 'spring', '~> 4.2.1'
   gem 'spring-watcher-listen', '~> 2.1.0'
   gem 'annotate'
   gem 'ed25519'
@@ -137,39 +177,3 @@ group :test do
   gem 'webmock'
   gem 'database_cleaner-active_record'
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-# gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-
-# NOTE: This template allows you to choose between encryption with the
-# `attr_encrypted` gem or Vault. Vault is more secure but is harder to
-# configure in production.
-#
-# User data encryption
-gem 'attr_encrypted', '>= 4.0'
-
-# Or use this for Vault. NOTE: Use this version of the gem until
-# https://github.com/hashicorp/vault-rails/pull/76 is merged:
-# gem 'vault-rails',
-#     git: 'https://github.com/madding/vault-rails.git',
-#     branch: 'fix-dirty-changed-attributes'
-
-# Assets storage
-gem 'aws-sdk-s3', require: false
-
-# Authentication
-gem 'devise'
-gem 'devise-i18n'
-
-# https://github.com/ambethia/recaptcha
-gem 'recaptcha'
-
-# User browser detection
-gem 'browser'
-
-# PDFs creator
-gem 'wkhtmltopdf-binary'
-gem 'wicked_pdf'
-
-# Requests limiter
-gem 'rack-attack'

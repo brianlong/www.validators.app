@@ -3,12 +3,14 @@ This is code repository for Validators.app.
 https://www.validators.app/
 
 ## System dependencies
-  - Ruby 2.7.5 (as denoted in the `.ruby-version` file)
+  - Ruby 3 (see `.ruby-version` file)
   - Rails 6.1+
   - MySQL 8
-  - Redis 6+
-  - Node 16.14+
+  - Redis/Valkey 7+
+  - Node 20+
   - Solana CLI (see instruction below)
+  - ImageMagick
+  - Object Storage
 
 ## Configuration Notes
 - Download credentials (master.key, test.key and .env) from Keybase
@@ -17,8 +19,6 @@ https://www.validators.app/
 - Copy `config/cluster.yml.example` to `config/cluster.yml`
 - Copy `config/database.example.yml` to `config/database.yml` and edit to reflect the proper database name, user name and other settings.
 - Developers using Mac OS will need to `brew install shared-mime-info` before `bundle install`
-- Copy `config/sidekiq.yml.example` to `config/sidekiq.yml`, and `config/sidekiq_blockchain.yml.example` to `config/sidekiq_blockchain.yml`.  
-  This repo is configured for the free version of Sidekiq. Review the Gemfile and config/routes.rb files if you are using Sidekiq Pro.
 
 ## Database 
 - Make sure you have `database.yml` with correct settings.
@@ -32,6 +32,8 @@ To enable copying records to staging database set copy_records_to_stage in crede
 ## Solana CLI
 https://docs.solana.com/cli/install-solana-cli-tools  
 Follow the instructions for your OS. Make sure `solana --version` returns correct CLI version.
+### On production/staging servers
+See keybase file for instructions.
 
 ### Check current version
 `solana -V` or `solana --version`
@@ -45,6 +47,9 @@ Visit https://developers.google.com/recaptcha/intro to see how to use reCAPTCHA.
 website at https://www.google.com/recaptcha/admin/, choose captcha type, and you'll get site_key and secret_key. 
 Put them in the credentials.  
 For development, you will find sample keys in config/credentials.yml.enc.
+
+## Run server
+Run server by calling `./bin/dev`. It starts rails server and sidekiq.
 
 ## Tests
 How to run the test suite:
@@ -64,13 +69,11 @@ To encrypt the file: `gpg -c --output config/credentials/test_key.gpg config/cre
 To decrypt and encrypt the file you need a passphrase, please ask your team leader about it.
 
 ## Deployment
-Deployments are handled by Capistrano. Follow the instructions for Capistrano.
-- To deploy run: `cap production deploy`.
-- To rollback to the previous version: `cap production deploy:rollback ROLLBACK_RELEASE=2022XXXXXXXX`
-- To restart application: `cap production deploy:restart`
+Deployments are handled by Capistrano. 
+Follow the instructions on Keybase in deployment_instructions.md.
 
 ## Data Centers
-- See instructions on Keybase.
+- See instructions on Keybase in data_center_override_instruction.md.
 
 ## Validators Stack
 - ValidatorsApp https://github.com/brianlong/www.validators.app

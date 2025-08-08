@@ -33,7 +33,7 @@ counts.each do |loop|
       slot_landed: slot_sent + rand(0..12),
       priority_fee_percentile: fees.sample,
       priority_fee_micro_lamports: rand(1000..10000),
-      pinger_region: PingThing::PINGER_REGIONS.sample
+      pinger_region: 'us'
     )
     if p.valid?
       puts p.inspect

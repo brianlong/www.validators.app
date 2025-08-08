@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   around_action :switch_locale
   before_action :check_if_saw_cookie_notice
   before_action :set_network
+  before_action :set_footer_variables
 
   def switch_locale(&action)
     locale = params[:locale] || I18n.default_locale
@@ -32,6 +33,12 @@ class ApplicationController < ActionController::Base
     return if NETWORKS.include?(params[:network])
 
     params[:network] = "mainnet"
+  end
+
+  def set_footer_variables
+    @dates = "2019"
+    @dates += "-#{Date.today.year}" if Date.today.year > 2019
+    @host_name = Socket.gethostname ? "#{Socket.gethostname}.validators.app" : "www.validators.app"
   end
 
   protected
