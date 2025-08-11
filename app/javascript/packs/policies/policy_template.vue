@@ -2,7 +2,7 @@
   <div>
     <section class="page-header">
       <div class='page-header-name'>
-        <img :src="policy.image" class='img-circle-medium' v-if="policy.image" />
+        <img :src="policy.attached_image_url" class='img-circle-medium' v-if="policy.attached_image_url" />
         <img :src="logo_default" class='img-circle-medium' v-else />
         <div class="img-circle-medium-private" v-else>
           <span class='fas fa-users-slash' title="Private Validator"></span>

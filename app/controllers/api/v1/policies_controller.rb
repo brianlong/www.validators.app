@@ -13,7 +13,10 @@ module Api
         response = {
           policies: result[:policies].map { |policy|
             strategy_humanized = policy.strategy ? 'Allow' : 'Deny'
-            policy.to_builder.attributes!.merge!("strategy"=>strategy_humanized)
+            policy.to_builder.attributes!.merge!(
+              "strategy"=>strategy_humanized,
+              "attached_image_url" => policy.image.attached? ? url_for(policy.image) : nil
+            )
           },
           total_count: result[:total_count]
         }
@@ -44,6 +47,7 @@ module Api
           policy_data['total_validators'] = total_validators.count if total_validators
           policy_data['other_identities'] = other_identities.map(&:account) if other_identities
           policy_data['total_other_identities'] = total_other_identities.count if total_other_identities
+          policy_data['attached_image_url'] = policy.image.attached? ? url_for(policy.image) : nil
 
           render json: policy_data.to_json, status: 200
         else
