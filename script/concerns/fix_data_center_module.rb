@@ -9,12 +9,10 @@ module FixDataCenterModule
     return nil unless traceroute["report"] && traceroute["report"]["hubs"]
     
     traceroute["report"]["hubs"].each do |line|
-      puts line
-      puts line["host"]
       next unless line["host"].match?(reg)
 
       # furthest ovh ip from traceroute
-      last_ovh_ip = line
+      last_ovh_ip = line["host"]
     end
     last_ovh_ip
   end

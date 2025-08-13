@@ -47,7 +47,7 @@ ValidatorIp.joins(:data_center)
 
     next unless last_reliablesite_ip&.match?(regexp)
 
-    host = last_reliablesite_ip.strip.split(' ').select { |ip| ip.match?(regexp) }.last
+    host = last_reliablesite_ip
 
     # traceroute sometimes reach NY and it got lost in the internal NY network,
     # we can assume it's New York data center, but the host can't be retrieved
