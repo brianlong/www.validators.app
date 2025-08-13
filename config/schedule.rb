@@ -69,15 +69,15 @@ every 1.hour, at: 35, roles: [:background] do
   ruby_script_data_centers 'assign_data_center_scores.rb'
 end
 
-every 1.hour, at: 40, roles: [:background] do
+every 1.day, at: '6:00am', roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_hetzner.rb'
 end
 
-every 1.hour, at: 45, roles: [:background] do
+every 1.day, at: '8:00am', roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_ovh.rb'
 end
 
-every 1.hour, at: 50, roles: [:background] do
+every 1.day, at: '10:00am', roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 

@@ -2,14 +2,17 @@ module FixDataCenterModule
   # look for the data center host record
   # returns line from traceroute or nil
   def get_matching_traceroute(ip:, reg:, hops_number: 20)
-    traceroute = `traceroute -m #{hops_number} #{ip}`.split("\n")
+    traceroute = `mtr -m #{hops_number} #{ip} --json`
+    traceroute = JSON.parse(traceroute)
     last_ovh_ip = nil
-    traceroute.each do |line|
-      puts line
-      next unless line.match?(reg)
+
+    return nil unless traceroute["report"] && traceroute["report"]["hubs"]
+    
+    traceroute["report"]["hubs"].each do |line|
+      next unless line["host"].match?(reg)
 
       # furthest ovh ip from traceroute
-      last_ovh_ip = line
+      last_ovh_ip = line["host"]
     end
     last_ovh_ip
   end
