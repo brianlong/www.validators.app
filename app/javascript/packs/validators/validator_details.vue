@@ -11,7 +11,7 @@
         <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
       </div>
 
-      <div class="d-flex justify-content-between flex-wrap gap-3">
+      <div class="d-flex justify-content-between flex-wrap gap-3" v-if="display_staking_info(validator)">
         <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
           <a :href="generate_stake_url(stake[0], validator)"
              :title="stake[1].title"
@@ -408,7 +408,8 @@
       },
 
       display_staking_info(validator) {
-        return !this.is_private() && validator.is_active && this.validator.vote_account_active
+        return false;
+        //return !this.is_private() && validator.is_active && this.validator.vote_account_active
       },
 
       commission_class() {
