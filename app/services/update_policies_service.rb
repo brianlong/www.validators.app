@@ -40,8 +40,11 @@ class UpdatePoliciesService
       )
 
       update_policy_identities(db_policy, policy["data"]["identities"])
-
-      UpdateImageFileService.new(db_policy, :image).call(keep_tmp_files: true) if db_policy.image_url.present?
+      begin
+        UpdateImageFileService.new(db_policy, :image).call(keep_tmp_files: true) if db_policy.image_url.present?
+      rescue OpenURI::HTTPError, OpenSSL::SSL::SSLError, Net::OpenTimeout, SocketError => e
+        @logger.error("Error updating image for policy #{db_policy.pubkey}: #{e.message}")
+      end
     end
   end
 
