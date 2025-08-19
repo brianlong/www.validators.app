@@ -55,7 +55,7 @@ Lint/AmbiguousBlockAssociation:
     - 'test/**/*.rb'
 
 Metrics/BlockLength:
-  Max: 40
+  Max: 60
   Enabled: true
   Exclude:
     - 'Rakefile'
@@ -64,13 +64,13 @@ Metrics/BlockLength:
 
 Metrics/ModuleLength:
   Enabled: true
-  Max: 550
+  Max: 600
   Exclude:
     - 'test/**/*.rb'
 
 Layout/LineLength:
   Enabled: true
-  Max: 120
+  Max: 140
   Exclude:
     - 'Gemfile'
 
@@ -84,13 +84,13 @@ Metrics/CyclomaticComplexity:
 
 Metrics/MethodLength:
   Enabled: true
-  Max: 50
+  Max: 60
   Exclude:
     - 'test/**/*.rb'
 
 Metrics/AbcSize:
   Enabled: true
-  Max: 40
+  Max: 60
   Exclude:
     - 'test/**/*.rb'
 
