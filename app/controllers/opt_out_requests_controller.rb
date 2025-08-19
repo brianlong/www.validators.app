@@ -34,8 +34,12 @@ class OptOutRequestsController < ApplicationController
         }
       )
     )
-    if verify_recaptcha(model: @opt_out_request) && @opt_out_request.save
-      ContactRequestMailer.new_opt_out_request_notice(@opt_out_request.id).deliver_now unless browser.bot?
+
+    if browser.bot? && !Rails.env.test?
+      flash[:error] = 'Bots are not allowed on this page.'
+      render :new
+    elsif verify_recaptcha(model: @opt_out_request) && @opt_out_request.valid? && @opt_out_request.save
+      #ContactRequestMailer.new_opt_out_request_notice(@opt_out_request.id).deliver_now
       redirect_to thank_you_opt_out_requests_path
     else
       render :new
