@@ -72,8 +72,8 @@ class Validator < ApplicationRecord
   has_many :commission_histories, dependent: :destroy
   has_many :validator_histories, dependent: :nullify
   
-  has_many :validator_policies, dependent: :destroy
-  has_many :policies, through: :validator_policies
+  has_many :policy_identities, dependent: :destroy
+  has_many :policies, through: :policy_identities
 
   has_many :user_watchlist_elements, dependent: :destroy
   has_many :watchers, through: :user_watchlist_elements, source: :user

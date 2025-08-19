@@ -223,4 +223,15 @@ class ValidatorTest < ActiveSupport::TestCase
     create(:commission_history, validator: @validator, created_at: 370.days.ago)
     refute @validator.commission_histories_exist
   end
+
+  test "deleting validator also deletes associated PolicyIdentity" do
+    validator = create(:validator)
+    policy_identity = create(:policy_identity, validator: validator)
+
+    assert PolicyIdentity.exists?(policy_identity.id)
+
+    validator.destroy
+
+    refute PolicyIdentity.exists?(policy_identity.id)
+  end
 end
