@@ -39,7 +39,7 @@ class OptOutRequestsController < ApplicationController
       flash[:error] = 'Bots are not allowed on this page.'
       render :new
     elsif verify_hcaptcha(model: @opt_out_request) && @opt_out_request.save
-      #ContactRequestMailer.new_opt_out_request_notice(@opt_out_request.id).deliver_now
+      ContactRequestMailer.new_opt_out_request_notice(@opt_out_request.id).deliver_now
       redirect_to thank_you_opt_out_requests_path
     else
       render :new
