@@ -40,8 +40,12 @@
       <%= f.text_field :postal_code, class: 'form-control', required: true, placeholder: 'Postal Code' %>
     </div>
   </div>
-  <div class="mb-3 recaptcha">
-    <%= recaptcha_tags %>
+  <div class="mb-3 captcha-container">
+    <div class="captcha">
+      <div class="captcha-content">
+        <%= hcaptcha_tags %>
+      </div>
+    </div>
   </div>
   <%= submit_tag 'Submit', class: 'btn btn-md btn-primary' %>
 <% end %>
