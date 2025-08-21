@@ -97,12 +97,22 @@ input[type=submit] {
   }
 }
 
-.recaptcha {
-  border-radius: $border-radius;
-  width: 302px;
+.captcha {
+  width: 299px;
+  height: 73px;
   overflow: hidden;
-  @media(max-width: $screen-xs-max) {
-    width: 290px;
+  &-container {
+    background-color: rgb(51, 51, 51);
+    padding: 2px;
+    border-radius: $border-radius;
+    width: 306px;
+    height: 81px;
+    overflow: hidden;
+    &:hover { background-color: rgb(34, 34, 34) }
+  }
+  &-content {
+    margin-left: -1px;
+    margin-top: -1px;
   }
 }
 

@@ -118,6 +118,7 @@ gem 'devise-i18n', '~> 1.13'
 
 # https://github.com/ambethia/recaptcha
 gem 'recaptcha', '~> 5.19'
+gem 'hcaptcha', '~> 7.1'
 
 # User browser detection
 gem 'browser', '~> 5.3'

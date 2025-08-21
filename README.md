@@ -43,9 +43,7 @@ Attribute encryption on models is required for any attribute that contains perso
 data. The default solution is the attr_encrypted gem. Encryption key is stored in rails credentials.
 
 ## Captcha
-Visit https://developers.google.com/recaptcha/intro to see how to use reCAPTCHA. You'll need to register your 
-website at https://www.google.com/recaptcha/admin/, choose captcha type, and you'll get site_key and secret_key. 
-Put them in the credentials.  
+Set up hCaptcha account at https://www.hcaptcha.com/ and get your site key and secret key. Put them in the credentials file.
 For development, you will find sample keys in config/credentials.yml.enc.
 
 ## Run server

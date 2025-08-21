@@ -200,6 +200,8 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.2.0)
+    hcaptcha (7.1.0)
+      json
     http (5.2.0)
       addressable (~> 2.8)
       base64 (~> 0.1)
@@ -583,6 +585,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   faye-websocket (~> 0.12.0)
+  hcaptcha (~> 7.1)
   image_processing (~> 1.14)
   jbuilder (~> 2.11)
   json (~> 2.9.1)

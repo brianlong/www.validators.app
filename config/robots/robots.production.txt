@@ -2,6 +2,7 @@ User-Agent: *
 Crawl-delay: 30
 Disallow: /api/*
 Disallow: /opt-out-requests
+Disallow: /opt-out-requests/*
 Disallow: /sidekiq
 Disallow: /contact-requests
 Disallow: /letter_opener
