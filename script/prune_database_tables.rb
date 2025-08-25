@@ -5,7 +5,7 @@ require File.expand_path('../config/environment', __dir__)
 
 sixty_days_ago = (Date.today - 60.days).to_s(:db)
 
-verbose = false
+verbose = true
 puts sixty_days_ago if verbose
 
 %w[
@@ -27,6 +27,7 @@ puts sixty_days_ago if verbose
 end
 
 # Remove old validators that are not active after 60 days
+puts "Removing old inactive validators" if verbose
 ValidatorScoreV1.where("active_stake = 0 and created_at < '#{sixty_days_ago}'")
                 .each do |score|
                   puts "#{score.validator.account} (#{score.network})" \
@@ -40,6 +41,7 @@ ValidatorScoreV1.where("active_stake = 0 and created_at < '#{sixty_days_ago}'")
                   score.validator&.destroy
                 end
 
+puts "Removing old inactive validators with NULL stake" if verbose
 ValidatorScoreV1.where("active_stake IS NULL and created_at < '#{sixty_days_ago}'")
                 .each do |score|
                   puts "#{score.validator.account} (#{score.network})" \
@@ -52,6 +54,6 @@ ValidatorScoreV1.where("active_stake IS NULL and created_at < '#{sixty_days_ago}
                   # score.validator.vote_accounts
                   score.validator&.destroy
                 end
-
+puts "Removing old inactive Audited records" if verbose
 # remove old audit records (from explorer stake accounts)
 Audited::Audit.where("created_at < ?", sixty_days_ago).destroy_all
