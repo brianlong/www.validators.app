@@ -95,7 +95,24 @@ namespace :solana do
   task :install do
     on roles(:app), in: :sequence do
       within release_path do
-        execute :mise, "install"
+        if ENV['RUST_VERSION'].nil? || ENV['SOLANA_VERSION'].nil?
+          puts "Please provide RUST_VERSION and SOLANA_VERSION variables"
+          exit
+        end
+        execute :mise, "trust"
+        execute :mise, "install --jobs=1 rust cargo:solana-cli"
+        execute :mise, "use -g rust@#{ENV['RUST_VERSION']} cargo:solana-cli@#{ENV['SOLANA_VERSION']}"
+        execute "solana --version"
+      end
+    end
+  end
+
+  desc 'Check solana-cli version'
+  task :check_version do
+    on roles(:app), in: :sequence do
+      within release_path do
+        execute "rustc --version"
+        execute "solana --version"
       end
     end
   end
@@ -104,14 +121,6 @@ namespace :solana do
     on roles(:app), in: :sequence do
       within release_path do
         execute :mise, "trust"
-      end
-    end
-  end
-
-  task :list_available_versions do
-    on roles(:app), in: :sequence do
-      within release_path do
-        execute :mise, "ls-remote", "ubi:anza-xyz/agave"
       end
     end
   end
