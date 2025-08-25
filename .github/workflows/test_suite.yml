@@ -43,6 +43,7 @@ jobs:
 
       - name: Install libraries
         run: |
+          sudo apt-get update
           sudo apt install libpng-dev libjpeg-dev libtiff-dev
           sudo apt install imagemagick libvips
 
