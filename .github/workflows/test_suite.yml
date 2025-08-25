@@ -43,7 +43,8 @@ jobs:
 
       - name: Install libraries
         run: |
-          sudo apt install build-essential imagemagick libvips
+          sudo apt install libpng-dev libjpeg-dev libtiff-dev
+          sudo apt install imagemagick libvips
 
       - name: Set up Ruby version
         uses: ruby/setup-ruby@v1
