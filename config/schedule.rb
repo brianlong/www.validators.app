@@ -98,7 +98,7 @@ every 1.day, at: '0:15am', roles: [:background] do
   ruby_script_data_centers 'append_to_unknown_data_center.rb'
 end
 
-every 1.day, at: '1:00am', roles: [:background] do
+every 1.day, at: '1:30am', roles: [:background] do
   ruby_script 'validators_update_keybase_avatar_url.rb'
 end
 
