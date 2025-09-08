@@ -19,14 +19,6 @@
                 {{ block_height ? block_height.toLocaleString('en-US', {maximumFractionDigits: 0}) : null }}
               </strong>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 mb-4">
-        <div class="card h-100">
-          <div class="card-content">
-            <h2 class="h5 card-heading-left">Epoch Progress</h2>
 
             <div class="d-flex justify-content-between gap-3">
               <div>
@@ -42,6 +34,27 @@
           </div>
         </div>
       </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-content">
+            <h2 class="h5 card-heading-left">Epochs History</h2>
+
+            <canvas id="epoch-duration-bar-chart" width="600" height="220"></canvas>
+            <!-- <div class="d-flex justify-content-between gap-3">
+              <div>
+                <span class="text-muted me-1">Current Epoch:</span>
+                <strong class="text-success">{{ epoch_number }}</strong>
+              </div>
+              <div>{{ complete_percent }}%</div>
+            </div>
+
+            <div class="img-line-graph mt-3">
+              <div class="img-line-graph-fill" :style="{ width: epoch_graph_position }"></div>
+            </div> -->
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +62,11 @@
 <script>
   import * as web3 from "@solana/web3.js"
   import { mapGetters } from 'vuex'
+  import axios from 'axios'
+  import Chart from 'chart.js/auto';
+  import chart_variables from '../validators/charts/chart_variables'
+
+  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
     data() {
@@ -59,7 +77,9 @@
         slot_height: null,
         epoch_number: null,
         complete_percent: null,
-        epoch_graph_position: null
+        epoch_graph_position: null,
+        epoch_history: null,
+        _epochDurationChart: null
       }
     },
 
@@ -70,11 +90,18 @@
     mounted() {
       this.get_epoch_info()
       this.get_1_sec_data()
+      this.get_epoch_history()
     },
 
     computed: mapGetters([
-      'web3_url'
+      'web3_url', 'network'
     ]),
+
+    watch: {
+      epoch_history(newVal) {
+        this.renderEpochDurationChart()
+      }
+    },
 
     methods: {
       get_epoch_info: function() {
@@ -95,6 +122,92 @@
           ctx.get_epoch_info()
           ctx.get_1_sec_data()
         }, ctx.gather_interval * 1000)
+      },
+
+      get_epoch_history: function() {
+        var ctx = this
+        let api_url = '/api/v1/epochs/' + this.network
+        axios.get(api_url)
+        .then(function (resp) {
+          let epochs = resp.data['epochs'].sort((a, b) => a.epoch - b.epoch)
+          for (let i = 0; i < epochs.length - 1; i++) {
+            epochs[i].ends_at = epochs[i + 1].created_at
+            // Oblicz czas trwania w pełnych minutach, zaokrąglając w dół
+            const start = new Date(epochs[i].created_at)
+            const end = new Date(epochs[i].ends_at)
+            epochs[i].duration_minutes = Math.floor((end - start) / (1000 * 60))
+          }
+          // Ostatni epoch nie ma następnego, więc usuwamy go z tablicy
+          if (epochs.length > 0) {
+            epochs.pop()
+          }
+          // Użyj tylko ostatnich 15 epochów
+          const lastEpochs = epochs.slice(-15)
+          ctx.epoch_history = lastEpochs
+          console.log(ctx.epoch_history)
+        })
+      },
+
+      renderEpochDurationChart() {
+        if (!this.epoch_history || this.epoch_history.length === 0) return
+        const ctx = document.getElementById('epoch-duration-bar-chart').getContext('2d')
+        if (this._epochDurationChart) {
+          this._epochDurationChart.destroy()
+        }
+        this._epochDurationChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: this.epoch_history.map(e => e.epoch),
+            datasets: [{
+              label: 'Czas trwania epochy (minuty)',
+              data: this.epoch_history.map(e => e.duration_minutes),
+              backgroundColor: chart_variables.chart_purple_3_t,
+              borderColor: chart_variables.chart_purple_3_t,
+              borderWidth: 1,
+              barPercentage: 0.5, // zwęża słupki
+              categoryPercentage: 0.5, // zwęża odstępy między słupkami
+              borderRadius: 8 // zaokrąglenie końców słupków
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                displayColors: false, // ukryj kwadrat z kolorem słupka
+                callbacks: {
+                  title: () => '', // usuwa tytuł tooltips
+                  label: (context) => {
+                    const epoch = this.epoch_history[context.dataIndex]
+                    const durationHours = epoch.duration_minutes ? (epoch.duration_minutes / 60).toFixed(2) : '—'
+                    const createdAt = epoch.created_at ? new Date(epoch.created_at).toLocaleString() : '—'
+                    const endsAt = epoch.ends_at ? new Date(epoch.ends_at).toLocaleString() : '—'
+                    return [
+                      `Epoch: ${epoch.epoch}`,
+                      `Duration: ${durationHours} h`,
+                      `Start: ${createdAt}`,
+                      `End: ${endsAt}`
+                    ]
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { 
+                // title: { display: true, text: 'Epoch' }, 
+                ticks: { display: false },
+                grid: { display: false }
+              },
+              y: { 
+                // title: { display: true, text: 'Minuty' }, 
+                beginAtZero: true,
+                min: 2400,
+                ticks: { display: false, stepSize: 120 },
+                grid: { display: true, color: chart_variables.chart_grid_color, lineWidth: 1, drawTicks: false } 
+              }
+            }
+          }
+        })
       }
     }
   }
