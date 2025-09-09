@@ -3,7 +3,11 @@
 require File.expand_path('../config/environment', __dir__)
 
 logger = Logger.new('log/update_doublezero_validators.log')
-file_path = Rails.root.join('storage', 'doublezero_users.txt')
+file_path = if Rails.env.test?
+              Rails.root.join('test', 'fixtures', 'files', 'doublezero_users.txt')
+            else
+              Rails.root.join('storage', 'doublezero_users.txt')
+            end
 
 doublezero_ips = []
 doublezero_validators_ids = []

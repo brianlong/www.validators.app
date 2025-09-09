@@ -6,9 +6,12 @@ class UpdateDoublezeroValidatorsTest < ActiveSupport::TestCase
   setup do
     @network = "mainnet"
     @validator = create(:validator, network: @network)
-    create(:validator_ip, validator: @validator, is_active: true, address: '144.168.36.130')
+    create(:validator_ip, validator: @validator, is_active: true, address: '185.167.205.3')
 
     @validator2 = create(:validator, network: @network)
+    create(:validator_ip, validator: @validator, is_active: true, address: '111.111.111.111')
+
+    @validator3 = create(:validator, network: @network, is_dz: true)
     create(:validator_ip, validator: @validator, is_active: true, address: '123.123.123.123')
   end
 
@@ -18,6 +21,7 @@ class UpdateDoublezeroValidatorsTest < ActiveSupport::TestCase
 
       assert @validator.reload.is_dz
       refute @validator2.reload.is_dz
+      refute @validator3.reload.is_dz
     end
   end
 end
