@@ -39,19 +39,7 @@
         <div class="card h-100">
           <div class="card-content">
             <h2 class="h5 card-heading-left">Epochs History</h2>
-
             <canvas id="epoch-duration-bar-chart" width="600" height="220"></canvas>
-            <!-- <div class="d-flex justify-content-between gap-3">
-              <div>
-                <span class="text-muted me-1">Current Epoch:</span>
-                <strong class="text-success">{{ epoch_number }}</strong>
-              </div>
-              <div>{{ complete_percent }}%</div>
-            </div>
-
-            <div class="img-line-graph mt-3">
-              <div class="img-line-graph-fill" :style="{ width: epoch_graph_position }"></div>
-            </div> -->
           </div>
         </div>
       </div>
@@ -132,17 +120,14 @@
           let epochs = resp.data['epochs'].sort((a, b) => a.epoch - b.epoch)
           for (let i = 0; i < epochs.length - 1; i++) {
             epochs[i].ends_at = epochs[i + 1].created_at
-            // Oblicz czas trwania w pełnych minutach, zaokrąglając w dół
             const start = new Date(epochs[i].created_at)
             const end = new Date(epochs[i].ends_at)
             epochs[i].duration_minutes = Math.floor((end - start) / (1000 * 60))
           }
-          // Ostatni epoch nie ma następnego, więc usuwamy go z tablicy
           if (epochs.length > 0) {
             epochs.pop()
           }
-          // Użyj tylko ostatnich 15 epochów
-          const lastEpochs = epochs.slice(-15)
+          const lastEpochs = epochs.slice(-20)
           ctx.epoch_history = lastEpochs
           console.log(ctx.epoch_history)
         })
@@ -154,6 +139,9 @@
         if (this._epochDurationChart) {
           this._epochDurationChart.destroy()
         }
+        const minDuration = Math.min(...this.epoch_history.map(e => e.duration_minutes))
+        const yMin = Math.max(0, minDuration - 120)
+        console.log('yMin:', yMin)
         this._epochDurationChart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -164,9 +152,9 @@
               backgroundColor: chart_variables.chart_purple_3_t,
               borderColor: chart_variables.chart_purple_3_t,
               borderWidth: 1,
-              barPercentage: 0.5, // zwęża słupki
-              categoryPercentage: 0.5, // zwęża odstępy między słupkami
-              borderRadius: 8 // zaokrąglenie końców słupków
+              barPercentage: 0.5,
+              categoryPercentage: 0.5,
+              borderRadius: 8
             }]
           },
           options: {
@@ -174,17 +162,22 @@
             plugins: {
               legend: { display: false },
               tooltip: {
-                displayColors: false, // ukryj kwadrat z kolorem słupka
+                displayColors: false,
                 callbacks: {
-                  title: () => '', // usuwa tytuł tooltips
+                  title: () => '',
                   label: (context) => {
                     const epoch = this.epoch_history[context.dataIndex]
-                    const durationHours = epoch.duration_minutes ? (epoch.duration_minutes / 60).toFixed(2) : '—'
+                    let durationStr = '—'
+                    if (epoch.duration_minutes && !isNaN(epoch.duration_minutes)) {
+                      const hours = Math.floor(epoch.duration_minutes / 60)
+                      const minutes = epoch.duration_minutes % 60
+                      durationStr = `${hours}h ${minutes}m`
+                    }
                     const createdAt = epoch.created_at ? new Date(epoch.created_at).toLocaleString() : '—'
                     const endsAt = epoch.ends_at ? new Date(epoch.ends_at).toLocaleString() : '—'
                     return [
                       `Epoch: ${epoch.epoch}`,
-                      `Duration: ${durationHours} h`,
+                      `Duration: ${durationStr}`,
                       `Start: ${createdAt}`,
                       `End: ${endsAt}`
                     ]
@@ -194,15 +187,13 @@
             },
             scales: {
               x: { 
-                // title: { display: true, text: 'Epoch' }, 
                 ticks: { display: false },
                 grid: { display: false }
               },
               y: { 
-                // title: { display: true, text: 'Minuty' }, 
                 beginAtZero: true,
-                min: 2400,
-                ticks: { display: false, stepSize: 120 },
+                min: yMin,
+                ticks: { display: false, stepSize: 60 },
                 grid: { display: true, color: chart_variables.chart_grid_color, lineWidth: 1, drawTicks: false } 
               }
             }
