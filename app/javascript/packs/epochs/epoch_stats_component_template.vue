@@ -129,7 +129,6 @@
           }
           const lastEpochs = epochs.slice(-20)
           ctx.epoch_history = lastEpochs
-          console.log(ctx.epoch_history)
         })
       },
 
@@ -141,7 +140,6 @@
         }
         const minDuration = Math.min(...this.epoch_history.map(e => e.duration_minutes))
         const yMin = Math.max(0, minDuration - 120)
-        console.log('yMin:', yMin)
         this._epochDurationChart = new Chart(ctx, {
           type: 'bar',
           data: {
