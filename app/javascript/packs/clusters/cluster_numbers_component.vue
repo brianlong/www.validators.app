@@ -5,7 +5,7 @@
         <h2 class="h5 card-heading-left">Cluster</h2>
         <div class="text-muted" v-if="!software_versions">loading...</div>
 
-        <div class="mb-2" v-if="software_versions">
+        <div class="mb-3" v-if="software_versions">
           <div class="text-muted me-1">Software Versions:</div>
           <div class="d-inline-block" v-if="software_versions['Agave']">
             <strong class="text-success">{{ software_versions['Agave'] }}</strong>&nbsp;

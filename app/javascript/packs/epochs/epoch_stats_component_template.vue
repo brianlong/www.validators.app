@@ -13,7 +13,7 @@
               </strong>
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
               <span class="text-muted me-1">Block Height:</span>
               <strong class="text-success">
                 {{ block_height ? block_height.toLocaleString('en-US', {maximumFractionDigits: 0}) : null }}
