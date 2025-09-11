@@ -30,7 +30,7 @@ module Api
       end
 
       def show
-        limit = [(policy_params[:limit] || 25).to_i, 9999].min
+        limit = [(policy_params[:limit] || 5000).to_i, 9999].min
         page = (policy_params[:page] || 1).to_i
 
         policy = Policy.find_by(pubkey: params[:pubkey], network: policy_params[:network])
