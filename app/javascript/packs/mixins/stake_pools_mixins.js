@@ -33,8 +33,8 @@ import AeroLarge from 'aero.png'
 import VaultSmall from 'vault-logo.png'
 import VaultLarge from 'vault.png'
 
-import XshinSmall from 'xshin-logo.png'
-import XshinLarge from 'xshin.png'
+import ShinobiSmall from 'shinobi-logo.png'
+import ShinobiLarge from 'shinobi.png'
 
 import JagSmall from 'jagpool-logo.png'
 import JagLarge from 'jagpool.png'
@@ -90,9 +90,9 @@ const logos = {
     "small_logo": VaultSmall,
     "large_logo": VaultLarge
   },
-  "xshin": {
-    "small_logo": XshinSmall,
-    "large_logo": XshinLarge
+  "shinobi": {
+    "small_logo": ShinobiSmall,
+    "large_logo": ShinobiLarge
   },
   "jagpool": {
     "small_logo": JagSmall,
