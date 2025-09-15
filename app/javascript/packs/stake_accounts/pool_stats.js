@@ -10,7 +10,12 @@ const DELEGATION_STRATEGY_URLS = {
   "Jito": "https://jito-foundation.gitbook.io/jitosol/jitosol-liquid-staking/stake-delegation",
   "ZippyStake": "https://docs.zippystake.org/delegation-strategy",
   "Edgevana": "https://docs.stake.edgevana.com/docs/validators/delegation-strategy-algorithm",
-  "Aero": "https://www.aeropool.io/delegation"
+  "Aero": "https://www.aeropool.io/delegation",
+  "JagPool": "https://docs.jagpool.xyz/DELEGATION-STRATEGY/Delegation-Criteria",
+  "DynoSol": "https://docs.dynosol.io/Criteria-Eligibility-for-validators-1eaddc395103805aabb2c5410bfe8065",
+  "Definity": "https://www.definity.finance/staking-strategy",
+  "Vault": "https://docs.thevault.finance/validators/delegation-strategy",
+  "Shinobi": "https://xshin.fi/#Strategy"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {

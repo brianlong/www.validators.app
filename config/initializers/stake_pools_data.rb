@@ -85,13 +85,13 @@ MAINNET_STAKE_POOLS = {
     withdrawal_fee: 0.1,
     deposit_fee: 0.1
   },
-  xshin: {
-    name: "xshin",
+  shinobi: {
+    name: "Shinobi",
     authority: "EpH4ZKSeViL5qAHA9QANYVHxdmuzbUH2T79f32DmSCaM",
     network: "mainnet",
     ticker: "xshin",
-    small_logo: "xshin-logo.png",
-    large_logo: "xshin.png",
+    small_logo: "shinobi-logo.png",
+    large_logo: "shinobi.png",
     url: "https://xshin.fi/",
     manager_fee: 4,
     withdrawal_fee: 0.03,
