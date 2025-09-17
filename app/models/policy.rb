@@ -66,6 +66,6 @@ class Policy < ApplicationRecord
   end
 
   def non_validators
-    policy_identities.where(validator_id: nil)
+    policy_identities.where(validator_id: nil).visible
   end
 end

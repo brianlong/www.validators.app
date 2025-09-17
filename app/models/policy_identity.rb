@@ -20,8 +20,13 @@
 #  fk_rails_...  (validator_id => validators.id)
 #
 class PolicyIdentity < ApplicationRecord
+  ACCOUNT_BLACKLIST = [
+    "11111111111111111111111111111111", # Phantom wallet
+  ].freeze
+  
   belongs_to :policy
   belongs_to :validator, optional: true
 
   scope :is_validator, -> { where.not(validator_id: nil) }
+  scope :visible, -> { where.not(account: ACCOUNT_BLACKLIST) }
 end
