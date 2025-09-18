@@ -9,6 +9,26 @@ class Api::V1::PoliciesControllerTest < ActionDispatch::IntegrationTest
     @policy = FactoryBot.create(:policy)
   end
 
+  test 'should not include blacklisted PolicyIdentity in identities_count and other_identities' do
+    pubkey = @policy.pubkey
+    p1 = FactoryBot.create(:policy_identity, policy: @policy, validator: nil, account: 'A1')
+    p2 = FactoryBot.create(:policy_identity, policy: @policy, validator: nil, account: PolicyIdentity::ACCOUNT_BLACKLIST.first)
+    validator = FactoryBot.create(:validator, network: @policy.network)
+    p3 = FactoryBot.create(:policy_identity, policy: @policy, validator: validator, account: 'A2')
+
+    get api_v1_policy_url('mainnet', pubkey: pubkey, format: :json), headers: @headers
+    assert_response :success
+    json = JSON.parse(response.body)
+    assert_equal 1, json['total_other_identities']
+    assert_equal ['A1'], json['other_identities']
+
+    get api_v1_policies_url('mainnet', format: :json), headers: @headers
+    assert_response :success
+    json = JSON.parse(response.body)
+    identities_count = json['policies'].first['identities_count']
+    assert_equal 2, identities_count
+  end
+
   test 'should get index' do
     get api_v1_policies_url('mainnet', format: :json), headers: @headers
     assert_response :success
