@@ -61,7 +61,7 @@ class Policy < ApplicationRecord
   def to_builder
     Jbuilder.new do |json|
       json.extract! self, *FIELDS_FOR_API
-      json.identities_count policy_identities.count
+      json.identities_count policy_identities.visible.count
     end
   end
 
