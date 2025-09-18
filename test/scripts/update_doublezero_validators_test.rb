@@ -5,10 +5,16 @@ require "test_helper"
 class UpdateDoublezeroValidatorsTest < ActiveSupport::TestCase
   setup do
     @network = "mainnet"
+
     @validator = create(:validator, network: @network)
-    create(:validator_ip, validator: @validator, is_active: true, address: '144.168.36.130')
+    create(:validator_ip, validator: @validator, is_active: true, address: '3.65.206.72')
+
+    @validator1 = create(:validator, network: @network, account: 'NLMSHTjmSiRxGJPs3uaqtsFBC2dTGYwK41U18Nmw5kH')
 
     @validator2 = create(:validator, network: @network)
+    create(:validator_ip, validator: @validator, is_active: true, address: '111.111.111.111')
+
+    @validator3 = create(:validator, network: @network, is_dz: true)
     create(:validator_ip, validator: @validator, is_active: true, address: '123.123.123.123')
   end
 
@@ -17,7 +23,9 @@ class UpdateDoublezeroValidatorsTest < ActiveSupport::TestCase
       load(Rails.root.join("script", "update_doublezero_validators.rb"))
 
       assert @validator.reload.is_dz
+      assert @validator1.reload.is_dz
       refute @validator2.reload.is_dz
+      refute @validator3.reload.is_dz
     end
   end
 end
