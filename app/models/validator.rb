@@ -11,6 +11,7 @@
 #  avatar_url          :string(191)
 #  consensus_mods      :boolean          default(FALSE)
 #  details             :string(191)
+#  doublezero_type     :integer          default(0)
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
 #  is_destroyed        :boolean          default(FALSE)
@@ -37,6 +38,8 @@ class Validator < ApplicationRecord
   include AvatarAttachment
   include Rails.application.routes.url_helpers
 
+  enum doublezero_type: { default: 0, legacy: 1 }
+
   FIELDS_FOR_API = %i[
     account
     avatar_url
@@ -54,6 +57,7 @@ class Validator < ApplicationRecord
     stake_pools_list
     is_active
     is_dz
+    doublezero_type
   ].freeze
 
   FIELDS_FOR_GOSSIP_NODES = FIELDS_FOR_API.reject { |f| %i[account created_at updated_at network].include? f }.freeze

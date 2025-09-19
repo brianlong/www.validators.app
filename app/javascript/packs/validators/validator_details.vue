@@ -170,7 +170,8 @@
                 <td><strong>Associations:</strong></td>
                 <td>
                   <img :src="jito_badge" class="img-xxs me-1" title="Jito validator" v-if="jito_maximum_commission(validator)">
-                  <img :src="double_zero_badge" class="img-xs" title="DoubleZero validator" v-if="validator.is_dz">
+                  <img :src="double_zero_badge" class="img-xs" title="DoubleZero validator" v-if="validator.is_dz && validator.doublezero_type != 'legacy'">
+                  <img :src="double_zero_legacy_badge" class="img-xs" title="DoubleZero Legacy validator" v-if="validator.is_dz && validator.doublezero_type == 'legacy'">
                 </td>
               </tr>
 
@@ -278,6 +279,7 @@
   import loadingImage from 'loading.gif'
   import jitoBadge from 'jito.svg'
   import doubleZeroBadge from 'doublezero.svg'
+  import doubleZeroLegacyBadge from 'doublezero_legacy.svg'
   import '../mixins/numbers_mixins'
   import '../mixins/dates_mixins'
   import '../mixins/stake_pools_mixins'
@@ -329,6 +331,7 @@
         loading_image: loadingImage,
         jito_badge: jitoBadge,
         double_zero_badge: doubleZeroBadge,
+        double_zero_legacy_badge: doubleZeroLegacyBadge,
         is_loading_validator: true,
         validator_score_details_attrs: {},
         vote_latencies: {},
