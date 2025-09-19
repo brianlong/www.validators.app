@@ -211,7 +211,11 @@
                   <% if validator.is_dz %>
                     <div class="mt-2 mt-lg-0 d-inline-block">
                       <%= link_to validators_path(network: params[:network], is_dz: true, page: 1) do %>
-                        <%= image_tag("doublezero.svg", class: 'img-xs', title: "Show DoubleZero validators", alt: "DZ") %>
+                        <% if validator&.doublezero_type == "legacy" %>
+                          <%= image_tag("doublezero_legacy.svg", class: 'img-xs', title: "Show DoubleZero Legacy validators", alt: "DZ") %>
+                        <% else %>
+                          <%= image_tag("doublezero.svg", class: 'img-xs', title: "Show DoubleZero Legacy validators", alt: "DZ") %>
+                        <% end %>
                       <% end %>
                     </div>
                   <% end %>
