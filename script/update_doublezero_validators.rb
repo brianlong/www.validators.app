@@ -21,7 +21,11 @@ logger.info("Starting script...")
 unless Rails.env.test? || Rails.env.development?
   # Remove old file if exists and create a new one
   File.delete(file_path) if File.exist?(file_path)
-  fork { exec("doublezero user list > #{file_path}") }
+
+  fork { exec("doublezero user list --env testnet >> #{file_path}") }
+  Process.wait
+
+  fork { exec("doublezero user list --env mainnet-beta >> #{file_path}") }
   Process.wait
 end
 

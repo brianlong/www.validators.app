@@ -16,6 +16,9 @@ class UpdateDoublezeroValidatorsTest < ActiveSupport::TestCase
 
     @validator3 = create(:validator, network: @network, is_dz: true)
     create(:validator_ip, validator: @validator, is_active: true, address: '123.123.123.123')
+
+    @validator4 = create(:validator, network: @network)
+    create(:validator_ip, validator: @validator4, is_active: true, address: '155.138.217.197')
   end
 
   test "script updates correct validators" do
@@ -26,6 +29,7 @@ class UpdateDoublezeroValidatorsTest < ActiveSupport::TestCase
       assert @validator1.reload.is_dz
       refute @validator2.reload.is_dz
       refute @validator3.reload.is_dz
+      assert @validator4.reload.is_dz
     end
   end
 end
