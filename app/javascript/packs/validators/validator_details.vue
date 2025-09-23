@@ -11,7 +11,7 @@
         <h1 class="word-break" v-else>{{ name_or_account(validator) }}</h1>
       </div>
 
-      <div class="d-flex justify-content-between flex-wrap gap-3" v-if="display_staking_info(validator)">
+      <div class="d-flex justify-content-between flex-wrap gap-3" v-if="display_warnings(validator)">
         <div class="d-flex flex-wrap gap-3" v-if="display_staking_info(validator)">
           <a :href="generate_stake_url(stake[0], validator)"
              :title="stake[1].title"
@@ -25,7 +25,7 @@
 
         <div class="d-flex flex-wrap gap-3">
           <div class="btn btn-sm btn-danger" title="Validator has 100% commission." v-if="is_private(validator)">private</div>
-          <div class="btn btn-sm btn-danger" title="Validator is delinquent." v-if="is_delinquent()">delinquent</div>
+          <div class="btn btn-sm btn-danger" title="Validator is delinquent." v-if="is_delinquent(validator)">delinquent</div>
           <div class="btn btn-sm btn-danger" title="Validator is inactive." v-if="!is_active()">inactive</div>
 
           <a href="/faq#admin-warning" :title="validator.admin_warning" v-if="validator.admin_warning">
@@ -413,6 +413,10 @@
       display_staking_info(validator) {
         return false;
         //return !this.is_private() && validator.is_active && this.validator.vote_account_active
+      },
+
+      display_warnings(validator) {
+        return this.is_private(validator) || this.is_delinquent(validator) || !this.is_active(validator) || this.validator.admin_warning || (this.score.authorized_withdrawer_score == -2) || (this.score.consensus_mods_score == -2)
       },
 
       commission_class() {
