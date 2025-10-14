@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   before_action :set_network
   before_action :set_footer_variables
 
+  rescue_from ActionController::UnknownFormat, with: :handle_unknown_format
+
   def switch_locale(&action)
     locale = params[:locale] || I18n.default_locale
     I18n.with_locale(locale, &action)
@@ -55,5 +57,15 @@ class ApplicationController < ActionController::Base
 
   def render_404
     render file: Rails.root.join('public/404.html'), layout: nil, status: 404
+  end
+
+  private
+
+  def handle_unknown_format
+    respond_to do |format|
+      format.json { render json: { error: 'Format not supported' }, status: :not_acceptable }
+      format.html { render_404 }
+      format.any { head :not_acceptable }
+    end
   end
 end
