@@ -274,7 +274,7 @@
   import skippedAfterChart from './charts/skipped_after_large_chart'
   import voteLatencyChart from './charts/vote_latency_chart'
   import blockHistoryTable from './components/block_history_table'
-  import validatorScoreModal from "./components/validator_score_modal"
+  import validatorScoreModal from "./components/validator_score_modal.vue"
   import axios from 'axios';
   import loadingImage from 'loading.gif'
   import jitoBadge from 'jito.svg'

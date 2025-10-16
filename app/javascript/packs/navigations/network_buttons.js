@@ -2,8 +2,10 @@ import Vue from 'vue/dist/vue.esm'
 import NetworkButtonsTemplate from './network_buttons_template'
 import TurbolinksAdapter from 'vue-turbolinks';
 import store from "../stores/main_store.js";
+import { BootstrapVue } from 'bootstrap-vue';
 
 Vue.use(TurbolinksAdapter);
+Vue.use(BootstrapVue);
 
 Vue.directive('click-outside', {
   bind: function (el, binding, vnode) {

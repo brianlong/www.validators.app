@@ -3,8 +3,10 @@ import TurbolinksAdapter from 'vue-turbolinks';
 import ValidatorDetails from './validator_details.vue';
 import store from "../stores/main_store.js";
 import ActionCableVue from "actioncable-vue";
+import { BootstrapVue } from 'bootstrap-vue';
 
 Vue.use(TurbolinksAdapter);
+Vue.use(BootstrapVue);
 Vue.use(ActionCableVue, {
   debug: true,
   debugLevel: "error",
