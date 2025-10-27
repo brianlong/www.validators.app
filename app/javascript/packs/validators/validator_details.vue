@@ -266,7 +266,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
   import scores from './components/scores'
   import blockHistoryChart from './charts/block_history_chart'
   import voteHistoryChart from './charts/vote_history_chart'
@@ -276,16 +275,11 @@
   import blockHistoryTable from './components/block_history_table'
   import validatorScoreModal from "./components/validator_score_modal.vue"
   import axios from 'axios';
-  import loadingImage from 'loading.gif'
-  import jitoBadge from 'jito.svg'
-  import doubleZeroBadge from 'doublezero.svg'
-  import doubleZeroLegacyBadge from 'doublezero_legacy.svg'
-  import '../mixins/numbers_mixins'
-  import '../mixins/dates_mixins'
-  import '../mixins/stake_pools_mixins'
-  import '../mixins/validators_mixins'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization;
+  // Use direct asset paths to avoid hashing issues
+  const loadingImage = '/assets/loading.gif'
+  const jitoBadge = '/assets/jito.svg'
+  const doubleZeroBadge = '/assets/doublezero.svg'
+  const doubleZeroLegacyBadge = '/assets/doublezero_legacy.svg'
 
   const STAKE_DELEGATIONS = {
     solstake: {
@@ -356,14 +350,16 @@
       go_back_link() {
         return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
       },
-      ...mapGetters([
-        'network'
-      ])
+      network() {
+        return this.$store && this.$store.getters ? this.$store.getters.network : 'mainnet'
+      }
     },
 
     methods: {
       get_validator_data(){
         let ctx = this
+        
+        // Simple request without custom headers for now
         axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
           ctx.validator = JSON.parse(response.data.validator)
           ctx.validator_score_details_attrs = JSON.parse(response.data.validator_score_details)

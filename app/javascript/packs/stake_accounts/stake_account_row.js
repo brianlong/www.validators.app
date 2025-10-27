@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import axios from 'axios'
 
 var StakeAccountRow = Vue.component('StakeAccountRow', {

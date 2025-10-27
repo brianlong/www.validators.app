@@ -89,10 +89,6 @@
 
 <script>
   import axios from 'axios'
-  import '../mixins/strings_mixins'
-  import '../mixins/ping_things_mixins'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
     props: {

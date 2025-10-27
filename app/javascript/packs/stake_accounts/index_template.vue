@@ -287,13 +287,11 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex';
-  import loadingImage from 'loading.gif'
+  const loadingImage = '/assets/loading.gif'
 
-  import validatorScoreModal from "../validators/components/validator_score_modal"
+  import validatorScoreModal from "../validators/components/validator_score_modal.vue"
 
   import debounce from 'lodash/debounce'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   const NUMBER_OF_EPOCHS = 6
 

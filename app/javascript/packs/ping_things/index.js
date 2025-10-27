@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import IndexTemplate from './index_template'
 import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";

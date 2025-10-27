@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import ValidatorsMapComponentTemplate from './validators_map.vue'
 import ValidatorsMapDataCenterDetailsComponent from './validators_map_data_center_details'
 import ValidatorsMapLeadersComponent from "./validators_map_leaders";

@@ -197,7 +197,6 @@
 <script>
   import { mapGetters } from 'vuex'
   import axios from 'axios';
-  axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
     props: {

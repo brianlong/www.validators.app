@@ -77,6 +77,26 @@ const entryPoints = [
     out: 'account_authority_histories/index'
   },
   {
+    in: 'app/javascript/packs/stake_accounts/index.js',
+    out: 'stake_accounts/index'
+  },
+  {
+    in: 'app/javascript/packs/commission_histories/index.js',
+    out: 'commission_histories/index'
+  },
+  {
+    in: 'app/javascript/packs/ping_things/index.js',
+    out: 'ping_things/index'
+  },
+  {
+    in: 'app/javascript/packs/policies/policy.js',
+    out: 'policies/policy'
+  },
+  {
+    in: 'app/javascript/packs/policies/policies_index.js',
+    out: 'policies/policies_index'
+  },
+  {
     in: 'app/javascript/packs/validators/components/validator_score_modal.js',
     out: 'validators/components/validator_score_modal'
   }

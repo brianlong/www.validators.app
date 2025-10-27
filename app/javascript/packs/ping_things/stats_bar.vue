@@ -99,8 +99,6 @@
 
 <script>
   import axios from 'axios'
-  import '../mixins/ping_things_mixins'
-  import '../mixins/strings_mixins'
 
   export default {
     props: {

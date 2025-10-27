@@ -41,11 +41,8 @@
   import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
-  import statsBar from './stats_bar'
+  import statsBar from './stats_bar.vue'
   import userStats from './user_stats'
-  import '../mixins/strings_mixins'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
     data () {

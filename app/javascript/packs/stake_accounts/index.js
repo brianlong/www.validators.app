@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import '../mixins/stake_pools_mixins';
 
 import IndexTemplate from './index_template'

@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import SoftwareVersionsTemplate from './software_versions_template'
 import TurbolinksAdapter from 'vue-turbolinks';
 import ActionCableVue from "actioncable-vue";

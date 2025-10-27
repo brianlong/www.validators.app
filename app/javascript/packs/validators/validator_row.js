@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import '../mixins/stake_pools_mixins'
 import '../mixins/numbers_mixins'
 import '../mixins/validators_mixins'

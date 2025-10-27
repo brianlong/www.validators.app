@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import SolPricesComponentTemplate from './sol_price_component_template'
 import TurbolinksAdapter from 'vue-turbolinks';
 import ActionCableVue from "actioncable-vue";

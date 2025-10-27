@@ -36,8 +36,6 @@
 <script>
   import axios from 'axios';
 
-  axios.defaults.headers.get["Authorization"] = window.api_authorization;
-
   const filter_by_days_options = [7, 30, 60, 90];
 
   export default {

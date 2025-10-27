@@ -43,7 +43,6 @@
 <script>
   import * as web3 from "@solana/web3.js";
   import { mapGetters } from 'vuex'
-  import '../mixins/numbers_mixins'
 
   export default {
     data() {

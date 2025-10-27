@@ -1,12 +1,10 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import StatsBar from './stats_bar.vue'
 import TurbolinksAdapter from 'vue-turbolinks';
 import axios from 'axios'
 import ActionCableVue from "actioncable-vue";
 
 Vue.use(TurbolinksAdapter);
-
-axios.defaults.headers.get["Authorization"] = window.api_authorization
 
 Vue.use(ActionCableVue, {
   debug: true,

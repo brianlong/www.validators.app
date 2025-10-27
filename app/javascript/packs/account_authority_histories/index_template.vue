@@ -76,12 +76,7 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
-  import loadingImage from 'loading.gif'
-  import '../mixins/dates_mixins'
-  import '../mixins/arrays_mixins'
-  import '../mixins/validators_mixins'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
+  const loadingImage = '/assets/loading.gif'
 
   const PER_SIZE = 20
 

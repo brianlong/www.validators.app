@@ -54,8 +54,6 @@
   import Chart from 'chart.js/auto';
   import chart_variables from '../validators/charts/chart_variables'
 
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
-
   export default {
     data() {
       return {

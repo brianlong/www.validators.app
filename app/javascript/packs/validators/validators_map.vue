@@ -68,9 +68,6 @@
   import debounce from 'lodash/debounce';
   import axios from 'axios';
   import { mapGetters } from 'vuex';
-  import '../mixins/validators_mixins';
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
     data() {

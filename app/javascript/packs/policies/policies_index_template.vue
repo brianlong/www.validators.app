@@ -105,8 +105,6 @@
   import logoDefault from 'policy_logo_default.png'
 
 
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
-
   export default {
     data() {
       return {

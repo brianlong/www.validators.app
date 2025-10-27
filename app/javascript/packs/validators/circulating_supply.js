@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import TurbolinksAdapter from 'vue-turbolinks';
 import CirculatingSupply from './circulating_supply.vue';
 import store from "../stores/main_store.js";

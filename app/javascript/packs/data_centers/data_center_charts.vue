@@ -36,8 +36,6 @@
   import { mapGetters } from 'vuex';
   import pieChart from './pie_chart.js'
 
-  axios.defaults.headers.get["Authorization"] = window.api_authorization;
-
   export default {
     props:{
       chart_by: {

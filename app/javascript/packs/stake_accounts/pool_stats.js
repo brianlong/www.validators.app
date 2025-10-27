@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 
 const DELEGATION_STRATEGY_URLS = {
   "DAOPool": "https://monkedao.medium.com/daosol-the-next-step-in-decentralizing-solana-7519e3b2bded",

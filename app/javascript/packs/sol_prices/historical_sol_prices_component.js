@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import HistoricalSolPricesComponentTemplate from './historical_sol_prices_component_template'
 import TurbolinksAdapter from 'vue-turbolinks';
 

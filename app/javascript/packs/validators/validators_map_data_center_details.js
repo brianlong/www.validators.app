@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 
 var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetails', {
   props: {

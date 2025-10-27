@@ -119,10 +119,7 @@
 </template>
 
 <script>
-  import '../mixins/dates_mixins'
   import axios from 'axios'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
     props: {

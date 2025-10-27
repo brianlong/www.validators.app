@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import TurbolinksAdapter from 'vue-turbolinks';
 import MapComponent from './map_component.vue';
 import store from "../stores/main_store.js";
