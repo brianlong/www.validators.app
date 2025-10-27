@@ -2,9 +2,7 @@
   <div>
     <ping-thing-header />
 
-    <stats-bar :network="network"/>
-
-    <div class="row">
+    <stats-bar :network="network" />   <div class="row">
       <div class="col-xl-6 mb-4">
         <div class="card h-100">
           <div class="card-content">
@@ -77,10 +75,10 @@
     },
 
     mounted: function() {
-      this.$cable.subscribe({
-          channel: "PingThingChannel",
-          room: "public",
-        });
+      // this.$cable.subscribe({
+      //     channel: "PingThingChannel",
+      //     room: "public",
+      //   });
     },
 
     computed: {

@@ -132,6 +132,7 @@
 
     channels: {
       PingThingRecentStatChannel: {
+        room: "public",
         connected() {},
         rejected() {},
         received(data) {
@@ -152,10 +153,10 @@
     },
 
     mounted: function() {
-      this.$cable.subscribe({
-          channel: "PingThingRecentStatChannel",
-          room: "public",
-        });
+      // this.$cable.subscribe({
+      //     channel: "PingThingRecentStatChannel",
+      //     room: "public",
+      //   });
     }
   }
 </script>

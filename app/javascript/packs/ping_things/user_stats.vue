@@ -116,10 +116,10 @@
     },
 
     mounted: function() {
-      this.$cable.subscribe({
-          channel: "PingThingUserStatChannel",
-          room: "public",
-        });
+      // this.$cable.subscribe({
+      //     channel: "PingThingUserStatChannel",
+      //     room: "public",
+      //   });
     },
 
     computed: {

@@ -1,7 +1,7 @@
 import Vue from '../shared/vue_setup'
-import '../mixins/validators_mixins';
 
-var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
+var ValidatorsMapLeaders = {
+    name: 'ValidatorsMapLeaders',
     props: {
         current_leader: {
             type: Object,
@@ -50,6 +50,6 @@ var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
       </div>
     </div>
   `
-})
+}
 
 export default ValidatorsMapLeaders

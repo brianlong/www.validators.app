@@ -1,6 +1,7 @@
 import Vue from '../shared/vue_setup'
 
-var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetails', {
+var ValidatorsMapDataCenterDetails = {
+  name: 'ValidatorsMapDataCenterDetails',
   props: {
     data_centers_group: {
       type: Object,
@@ -48,6 +49,6 @@ var ValidatorsMapDataCenterDetails = Vue.component('ValidatorsMapDataCenterDetai
       </div>
     </div>
   `
-})
+}
 
 export default ValidatorsMapDataCenterDetails

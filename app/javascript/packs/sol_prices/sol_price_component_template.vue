@@ -51,6 +51,7 @@
 
     channels: {
       FrontStatsChannel: {
+        room: "public",
         connected() {},
         rejected() {},
         received(data) {
@@ -63,10 +64,10 @@
     },
 
     mounted: function() {
-      this.$cable.subscribe({
-          channel: "FrontStatsChannel",
-          room: "public",
-        });
+      // this.$cable.subscribe({
+      //     channel: "FrontStatsChannel",
+      //     room: "public",
+      //   });
     },
   }
 </script>

@@ -51,10 +51,10 @@
     ]),
 
     mounted: function() {
-      this.$cable.subscribe({
-          channel: "FrontStatsChannel",
-          room: "public",
-        });
+      // this.$cable.subscribe({
+      //     channel: "FrontStatsChannel",
+      //     room: "public",
+      //   });
     },
 
     channels: {

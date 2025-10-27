@@ -29,12 +29,21 @@
     </section>
 
     <section class="map-legend">
-      <validators-map-leaders :current_leader="current_leader"
-                              :next_leaders="next_leaders" />
+      <!-- <validators-map-leaders :current_leader="current_leader"
+                              :next_leaders="next_leaders" /> -->
+      <div class="map-legend-col">
+        <div class="small text-muted mb-2">Current Leader</div>
+        <div class="small" v-if="!current_leader">loading...</div>
+        <div v-if="current_leader">{{ current_leader.account || 'N/A' }}</div>
+      </div>
 
       <div class="map-legend-col text-sm-end">
-        <validators-map-data-center-details :data_centers_group="selected_data_centers_group"
-                                            v-if="selected_data_centers_group" />
+        <!-- <validators-map-data-center-details :data_centers_group="selected_data_centers_group"
+                                            v-if="selected_data_centers_group" /> -->
+        <div v-if="selected_data_centers_group">
+          <div class="small text-muted mb-2">Data Center Details</div>
+          <div class="small">{{ selected_data_centers_group.identifier || 'N/A' }}</div>
+        </div>
 
         <div class="d-flex flex-wrap gap-3">
           <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
@@ -96,10 +105,10 @@
     },
 
     mounted() {
-      this.$cable.subscribe({
-        channel: 'LeadersChannel',
-        room: "public"
-      });
+      // this.$cable.subscribe({
+      //   channel: 'LeadersChannel',
+      //   room: "public"
+      // });
     },
 
     computed: {
@@ -113,6 +122,7 @@
 
     channels: {
       LeadersChannel: {
+        room: "public",
         connected() { },
         rejected() { },
         received(data) {

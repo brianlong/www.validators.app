@@ -137,11 +137,11 @@
       }
     },
 
-    mounted() {
-      this.$cable.subscribe({
-        channel: 'FrontStatsChannel',
-        room: "public"
-      });
+    mounted: function() {
+      // this.$cable.subscribe({
+      //     channel: "ClusterStatsChannel",
+      //     room: "public",
+      //   });
     },
 
     computed: mapGetters([

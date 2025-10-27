@@ -4,11 +4,32 @@ import { BootstrapVue } from 'bootstrap-vue'
 // import 'bootstrap-vue/dist/bootstrap-vue.css' - moved to Rails CSS
 import store from '../stores/main_store.js'
 import axios from 'axios'
+import ActionCableVue from "actioncable-vue";
 var moment = require('moment')
 
 // Configure Vue
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
+
+// Configure ActionCable globally - only once
+if (!Vue._actioncable_vue_installed) {
+  Vue.use(ActionCableVue, {
+    debug: false,
+    debugLevel: "error", 
+    connectionUrl: "/cable",
+    connectImmediately: false,
+  });
+  Vue._actioncable_vue_installed = true;
+  
+  // Connect to ActionCable once globally after DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    if (!window._actioncable_connected && Vue.prototype.$cable) {
+      Vue.prototype.$cable.connection.connect();
+      window._actioncable_connected = true;
+      console.log('ActionCable connected');
+    }
+  });
+}
 
 // Ensure globalStore is available
 if (!window.globalStore) {
@@ -187,6 +208,11 @@ Vue.mixin({
         "definity": "/assets/definsol.png"
       }
       return logos[stake_pool.toLowerCase()] || ""
+    },
+
+    // From ping_things_mixins.js
+    fails_count_percentage: function(fails_count, num_of_records) {
+      return fails_count ? '(' + (fails_count / num_of_records * 100).toLocaleString('en-US', {maximumFractionDigits: 1}) + '%)' : ''
     }
   }
 })

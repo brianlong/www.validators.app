@@ -124,10 +124,10 @@
     },
 
     mounted: function() {
-      this.$cable.subscribe({
-        channel: "SoftwareVersionsChannel",
-        room: "public",
-      });
+      // this.$cable.subscribe({
+      //   channel: "SoftwareVersionsChannel",
+      //   room: "public",
+      // });
     },
 
     computed: {
