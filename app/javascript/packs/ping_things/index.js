@@ -4,6 +4,7 @@ import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";
 import ActionCableVue from "actioncable-vue";
 import store from "../stores/main_store.js";
+import "../mixins/ping_things_mixins";
 
 Vue.component('BPagination', BPagination)
 Vue.use(PaginationPlugin);

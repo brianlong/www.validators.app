@@ -3,6 +3,7 @@ import StatsBar from './stats_bar.vue'
 import TurbolinksAdapter from 'vue-turbolinks';
 import axios from 'axios'
 import ActionCableVue from "actioncable-vue";
+import "../mixins/ping_things_mixins";
 
 Vue.use(TurbolinksAdapter);
 
