@@ -122,27 +122,27 @@
       }
     },
 
-    channels: {
-      FrontStatsChannel: {
-        room: "public",
-        connected() { },
-        rejected() { },
-        received(data) {
-          const cluster_stat = data.cluster_stats[this.network];
-          this.root_distance = cluster_stat.root_distance;
-          this.vote_distance = cluster_stat.vote_distance;
-          this.skipped_votes = cluster_stat.skipped_votes;
-          this.skipped_slots = cluster_stat.skipped_slots;
-        },
-        disconnected() { }
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "FrontStatsChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            const cluster_stat = data.cluster_stats[this.network];
+            this.root_distance = cluster_stat.root_distance;
+            this.vote_distance = cluster_stat.vote_distance;
+            this.skipped_votes = cluster_stat.skipped_votes;
+            this.skipped_slots = cluster_stat.skipped_slots;
+          }
+        });
       }
     },
 
-    mounted: function() {
-      // this.$cable.subscribe({
-      //     channel: "ClusterStatsChannel",
-      //     room: "public",
-      //   });
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
 
     computed: mapGetters([

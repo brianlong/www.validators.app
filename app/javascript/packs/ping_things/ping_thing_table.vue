@@ -146,21 +146,28 @@
       this.get_records()
     },
 
-    channels: {
-      PingThingChannel: {
-        room: "public",
-        connected() {},
-        rejected() {},
-        received(data) {
-          if(this.matches_network(data) && this.matches_filters(data)) {
-            this.ping_things.unshift(data)
-            if(this.ping_things.length > this.limit) {
-              this.ping_things.pop()
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "PingThingChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            if(this.matches_network(data) && this.matches_filters(data)) {
+              this.ping_things.unshift(data)
+              if(this.ping_things.length > this.limit) {
+                this.ping_things.pop()
+              }
             }
           }
-        },
-        disconnected() {},
-      },
+        });
+      }
+    },
+
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
 
     methods: {

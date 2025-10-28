@@ -168,26 +168,32 @@
     },
 
     mounted: function() {
-      // Temporarily disabled ActionCable to debug stack overflow
-      /*
-      this.$cable.subscribe({
-        channel: "PingThingUserStatChannel",
-        room: "public",
-        received: (data) => {
-          data = JSON.parse(data)
-          if(data["network"] == this.network) {
-              switch(data["interval"]) {
-                case 5:
-                  this.last_5_mins = data["stats"]
-                  break
-                case 60:
-                  this.last_60_mins = data["stats"]
-                  break
-              }
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "PingThingUserStatChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            data = JSON.parse(data)
+            if(data["network"] == this.network) {
+                switch(data["interval"]) {
+                  case 5:
+                    this.last_5_mins = data["stats"]
+                    break
+                  case 60:
+                    this.last_60_mins = data["stats"]
+                    break
+                }
+            }
           }
-        }
-      });
-      */
+        });
+      }
+    },
+
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
   }
 </script>

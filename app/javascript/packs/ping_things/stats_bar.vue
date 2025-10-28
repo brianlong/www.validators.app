@@ -131,26 +131,32 @@
     },
 
     mounted: function() {
-      // Temporarily disabled ActionCable to debug stack overflow
-      /*
-      this.$cable.subscribe({
-        channel: "PingThingRecentStatChannel",
-        room: "public",
-        received: (data) => {
-          data = JSON.parse(data)
-          if(data["network"] == this.network) {
-              switch(data["interval"]) {
-                case 5:
-                  this.last_5_mins = data
-                  break
-                case 60:
-                  this.last_60_mins = data
-                  break
-              }
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "PingThingRecentStatChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            data = JSON.parse(data)
+            if(data["network"] == this.network) {
+                switch(data["interval"]) {
+                  case 5:
+                    this.last_5_mins = data
+                    break
+                  case 60:
+                    this.last_60_mins = data
+                    break
+                }
+            }
           }
-        }
-      });
-      */
+        });
+      }
+    },
+
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     }
   }
 </script>

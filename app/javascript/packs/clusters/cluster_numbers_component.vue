@@ -51,24 +51,24 @@
     ]),
 
     mounted: function() {
-      // this.$cable.subscribe({
-      //     channel: "FrontStatsChannel",
-      //     room: "public",
-      //   });
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "FrontStatsChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            this.validators_count = data.cluster_stats[this.network].validator_count
+            this.nodes_count = data.cluster_stats[this.network].nodes_count
+            this.software_versions = data.cluster_stats[this.network].software_versions
+          }
+        });
+      }
     },
 
-    channels: {
-      FrontStatsChannel: {
-        room: "public",
-        connected() {},
-        rejected() {},
-        received(data) {
-          this.validators_count = data.cluster_stats[this.network].validator_count
-          this.nodes_count = data.cluster_stats[this.network].nodes_count
-          this.software_versions = data.cluster_stats[this.network].software_versions
-        },
-        disconnected() {},
-      },
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
   }
 </script>

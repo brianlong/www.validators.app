@@ -20,21 +20,28 @@ export default {
     }
   },
 
-  channels: {
-    PingThingStatChannel: {
-      room: "public",
-      connected() {},
-      rejected() {},
-      received(data) {
-        var new_stat = JSON.parse(data)
-        if(new_stat["interval"] == this.interval && new_stat["network"] == this.network) {
-          this.ping_thing_stats.push(new_stat)
-          this.ping_thing_stats.shift()
-          this.update_chart()
+  mounted: function() {
+    if (window.ActionCableConnection) {
+      this.subscription = window.ActionCableConnection.subscriptions.create({
+        channel: "PingThingStatChannel",
+        room: "public"
+      }, {
+        received: (data) => {
+          var new_stat = JSON.parse(data)
+          if(new_stat["interval"] == this.interval && new_stat["network"] == this.network) {
+            this.ping_thing_stats.push(new_stat)
+            this.ping_thing_stats.shift()
+            this.update_chart()
+          }
         }
-      },
-      disconnected() {},
-    },
+      });
+    }
+  },
+
+  beforeDestroy: function() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   },
 
   created: function() {

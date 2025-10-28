@@ -60,26 +60,26 @@
            })
     },
 
-    channels: {
-      PingThingChannel: {
-        room: "public",
-        connected() {},
-        rejected() {},
-        received(data) {
-          if(data["network"] == this.network) {
-            this.ping_things.unshift(data)
-            this.ping_things.pop()
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "PingThingChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            if(data["network"] == this.network) {
+              this.ping_things.unshift(data)
+              this.ping_things.pop()
+            }
           }
-        },
-        disconnected() {},
-      },
+        });
+      }
     },
 
-    mounted: function() {
-      // this.$cable.subscribe({
-      //     channel: "PingThingChannel",
-      //     room: "public",
-      //   });
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
 
     computed: {

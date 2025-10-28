@@ -105,10 +105,20 @@
     },
 
     mounted() {
-      // this.$cable.subscribe({
-      //   channel: 'LeadersChannel',
-      //   room: "public"
-      // });
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "LeadersChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            data = data[this.network];
+            if(data) {
+              this.current_leader = data.current_leader;
+              this.next_leaders = data.next_leaders;
+            }
+          }
+        });
+      }
     },
 
     computed: {
@@ -120,19 +130,9 @@
       ])
     },
 
-    channels: {
-      LeadersChannel: {
-        room: "public",
-        connected() { },
-        rejected() { },
-        received(data) {
-          data = data[this.network];
-          if(data) {
-            this.current_leader = data.current_leader;
-            this.next_leaders = data.next_leaders;
-          }
-        },
-        disconnected() { }
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
       }
     },
 

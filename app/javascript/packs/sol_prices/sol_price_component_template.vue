@@ -49,25 +49,25 @@
 
     methods: {},
 
-    channels: {
-      FrontStatsChannel: {
-        room: "public",
-        connected() {},
-        rejected() {},
-        received(data) {
-          this.price = Number(data.solana.usd).toFixed(2)
-          this.change_24h = Number(data.solana.usd_24h_change).toFixed(2)
-          this.volume_24h = Number(data.solana.usd_24h_vol).toLocaleString('en-US', { maximumFractionDigits: 0 })
-        },
-        disconnected() {},
-      },
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "FrontStatsChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            this.price = Number(data.solana.usd).toFixed(2)
+            this.change_24h = Number(data.solana.usd_24h_change).toFixed(2)
+            this.volume_24h = Number(data.solana.usd_24h_vol).toLocaleString('en-US', { maximumFractionDigits: 0 })
+          }
+        });
+      }
     },
 
-    mounted: function() {
-      // this.$cable.subscribe({
-      //     channel: "FrontStatsChannel",
-      //     room: "public",
-      //   });
-    },
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
+    }
   }
 </script>
