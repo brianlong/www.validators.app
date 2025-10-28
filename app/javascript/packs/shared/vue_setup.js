@@ -51,7 +51,7 @@ Vue.mixin({
       if(validator['avatar_file_url']) {
         return validator['avatar_file_url']
       } else {
-        return '/assets/default-avatar.png'
+        return window.default_avatar_url || '/assets/default-avatar.png'
       }
     },
 
