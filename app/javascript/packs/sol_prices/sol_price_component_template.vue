@@ -56,9 +56,11 @@
           room: "public"
         }, {
           received: (data) => {
-            this.price = Number(data.solana.usd).toFixed(2)
-            this.change_24h = Number(data.solana.usd_24h_change).toFixed(2)
-            this.volume_24h = Number(data.solana.usd_24h_vol).toLocaleString('en-US', { maximumFractionDigits: 0 })
+            if (data && data.solana) {
+              this.price = Number(data.solana.usd).toFixed(2)
+              this.change_24h = Number(data.solana.usd_24h_change).toFixed(2)
+              this.volume_24h = Number(data.solana.usd_24h_vol).toLocaleString('en-US', { maximumFractionDigits: 0 })
+            }
           }
         });
       }

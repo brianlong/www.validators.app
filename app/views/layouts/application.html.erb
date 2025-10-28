@@ -34,6 +34,8 @@
       window.api_authorization='<%= Rails.application.credentials.api_authorization %>'
       window.google_maps_api_key='<%= Rails.application.credentials.google_maps_api_key %>'
       window.default_avatar_url='<%= asset_path('default-avatar.png') %>'
+      window.agave_icon_url='<%= asset_path('agave.svg') %>'
+      window.firedancer_icon_url='<%= asset_path('firedancer.svg') %>'
     </script>
 
     <% if content_for? :for_head %>

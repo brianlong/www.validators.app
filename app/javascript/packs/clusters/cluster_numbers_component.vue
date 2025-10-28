@@ -31,8 +31,6 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import agaveIcon from 'agave.svg'
-  import firedancerIcon from 'firedancer.svg'
 
   export default {
     data() {
@@ -41,8 +39,8 @@
         validators_count: null,
         nodes_count: null,
         software_versions: null,
-        agave_icon: agaveIcon,
-        firedancer_icon: firedancerIcon
+        agave_icon: window.agave_icon_url || '/assets/agave.svg',
+        firedancer_icon: window.firedancer_icon_url || '/assets/firedancer.svg'
       }
     },
 
