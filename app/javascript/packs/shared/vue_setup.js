@@ -17,18 +17,9 @@ if (!Vue._actioncable_vue_installed) {
     debug: false,
     debugLevel: "error", 
     connectionUrl: "/cable",
-    connectImmediately: false,
+    connectImmediately: true,
   });
   Vue._actioncable_vue_installed = true;
-  
-  // Connect to ActionCable once globally after DOM is ready
-  document.addEventListener('DOMContentLoaded', function() {
-    if (!window._actioncable_connected && Vue.prototype.$cable) {
-      Vue.prototype.$cable.connection.connect();
-      window._actioncable_connected = true;
-      console.log('ActionCable connected');
-    }
-  });
 }
 
 // Ensure globalStore is available
