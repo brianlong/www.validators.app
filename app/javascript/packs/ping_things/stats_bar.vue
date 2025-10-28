@@ -130,12 +130,11 @@
            })
     },
 
-    channels: {
-      PingThingRecentStatChannel: {
+    mounted: function() {
+      this.$cable.subscribe({
+        channel: "PingThingRecentStatChannel",
         room: "public",
-        connected() {},
-        rejected() {},
-        received(data) {
+        received: (data) => {
           data = JSON.parse(data)
           if(data["network"] == this.network) {
               switch(data["interval"]) {
@@ -147,9 +146,8 @@
                   break
               }
           }
-        },
-        disconnected() {},
-      },
+        }
+      });
     }
   }
 </script>

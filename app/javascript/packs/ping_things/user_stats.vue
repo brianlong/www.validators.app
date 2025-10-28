@@ -115,13 +115,6 @@
            })
     },
 
-    mounted: function() {
-      // this.$cable.subscribe({
-      //     channel: "PingThingUserStatChannel",
-      //     room: "public",
-      //   });
-    },
-
     computed: {
       stats_grouped_by_user: function() {
         let ctx = this
@@ -156,12 +149,11 @@
       },
     },
 
-    channels: {
-      PingThingUserStatChannel: {
+    mounted: function() {
+      this.$cable.subscribe({
+        channel: "PingThingUserStatChannel",
         room: "public",
-        connected() {},
-        rejected() {},
-        received(data) {
+        received: (data) => {
           data = JSON.parse(data)
           if(data["network"] == this.network) {
               switch(data["interval"]) {
@@ -173,9 +165,8 @@
                   break
               }
           }
-        },
-        disconnected() {},
-      },
+        }
+      });
     },
   }
 </script>

@@ -17,7 +17,7 @@ if (!Vue._actioncable_vue_installed) {
     debug: false,
     debugLevel: "error", 
     connectionUrl: "/cable",
-    connectImmediately: true,
+    connectImmediately: false,
   });
   Vue._actioncable_vue_installed = true;
 }
