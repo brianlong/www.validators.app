@@ -124,6 +124,7 @@
 
     channels: {
       FrontStatsChannel: {
+        room: "public",
         connected() { },
         rejected() { },
         received(data) {

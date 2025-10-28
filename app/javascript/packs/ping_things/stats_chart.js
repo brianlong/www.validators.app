@@ -22,6 +22,7 @@ export default {
 
   channels: {
     PingThingStatChannel: {
+      room: "public",
       connected() {},
       rejected() {},
       received(data) {
@@ -38,13 +39,6 @@ export default {
 
   created: function() {
     this.load_chart_data()
-  },
-
-  mounted: function() {
-    this.$cable.subscribe({
-      channel: "PingThingStatChannel",
-      room: "public",
-    });
   },
 
   methods: {

@@ -109,6 +109,7 @@
 
     channels: {
       SoftwareVersionsChannel: {
+        room: "public",
         connected() {},
         rejected() {},
         received(data) {

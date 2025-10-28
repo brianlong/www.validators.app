@@ -150,13 +150,6 @@
         },
         disconnected() {},
       },
-    },
-
-    mounted: function() {
-      // this.$cable.subscribe({
-      //     channel: "PingThingRecentStatChannel",
-      //     room: "public",
-      //   });
     }
   }
 </script>

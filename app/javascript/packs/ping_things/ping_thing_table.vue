@@ -148,6 +148,7 @@
 
     channels: {
       PingThingChannel: {
+        room: "public",
         connected() {},
         rejected() {},
         received(data) {
