@@ -17,6 +17,7 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
 
     create(:commission_history, validator: val1)
     create(:commission_history, validator: val2, created_at: 370.days.ago)
+    create(:commission_history, validator: val2, created_at: 6.years.ago)
   end
 
   test 'commission_history_query \
@@ -25,8 +26,8 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
       network: 'testnet',
     ).all_records
 
-    assert_equal 1, result.size
-    assert_equal 'acc1', result.last.account
+    assert_equal 2, result.size
+    assert_equal 'acc2', result.last.account
   end
 
   test 'commission_history_query \

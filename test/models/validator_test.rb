@@ -217,10 +217,10 @@ class ValidatorTest < ActiveSupport::TestCase
     assert @validator.commission_histories_exist
   end
 
-  test "#commission_histories_exist returns false if there are no commission changes or older than 60 days" do
+  test "#commission_histories_exist returns false if there are no commission changes or older than time range" do
     refute @validator.commission_histories_exist
 
-    create(:commission_history, validator: @validator, created_at: 370.days.ago)
+    create(:commission_history, validator: @validator, created_at: 6.years.ago)
     refute @validator.commission_histories_exist
   end
 
