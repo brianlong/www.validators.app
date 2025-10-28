@@ -18,6 +18,13 @@ ActiveStorage.start()
 
 console.log("Rails, Turbolinks, and ActiveStorage started")
 
+// Setup ActionCable globally - available for all entry points
+const ActionCable = require('@rails/actioncable')
+if (!window.ActionCableConnection) {
+  window.ActionCableConnection = ActionCable.createConsumer('/cable')
+  console.log('Native ActionCable connected')
+}
+
 // Import and setup global Vuex store
 import Vue from 'vue/dist/vue.esm'
 import Vuex from 'vuex'

@@ -108,18 +108,28 @@
     },
 
     mounted: function() {
-      this.$cable.subscribe({
-        channel: "SoftwareVersionsChannel",
-        room: "public",
-        received: (data) => {
-          var sw_formatted = {}
-          data[this.network].forEach(v => {
-            sw_formatted[Object.keys(v)[0]] = v[Object.keys(v)[0]]
-          })
-          this.software_versions = sw_formatted
-          this.is_loading = false
-        }
-      });
+      // Use native Rails ActionCable instead of actioncable-vue
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "SoftwareVersionsChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            var sw_formatted = {}
+            data[this.network].forEach(v => {
+              sw_formatted[Object.keys(v)[0]] = v[Object.keys(v)[0]]
+            })
+            this.software_versions = sw_formatted
+            this.is_loading = false
+          }
+        });
+      }
+    },
+
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
 
     computed: {

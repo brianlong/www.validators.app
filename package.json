@@ -20,7 +20,7 @@
     "@solana/spl-token-metadata": "^0.1.6",
     "@solana/web3.js": "^1.63.2",
     "@vue/composition-api": "^1.7.1",
-    "actioncable-vue": "^2.5.1",
+    "actioncable-vue": "2.4.0",
     "axios": "^1.7.4",
     "babel-loader": "^8.3.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -37,7 +37,6 @@
     "vue-loader": "^15.9.8",
     "vue-pagination-2": "^3.0.91",
     "vue-turbolinks": "^2.2.2",
-    "vue-websocket": "^0.2.3",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

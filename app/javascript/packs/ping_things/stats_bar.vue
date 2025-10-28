@@ -131,6 +131,8 @@
     },
 
     mounted: function() {
+      // Temporarily disabled ActionCable to debug stack overflow
+      /*
       this.$cable.subscribe({
         channel: "PingThingRecentStatChannel",
         room: "public",
@@ -148,6 +150,7 @@
           }
         }
       });
+      */
     }
   }
 </script>

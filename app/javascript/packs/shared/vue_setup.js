@@ -4,23 +4,11 @@ import { BootstrapVue } from 'bootstrap-vue'
 // import 'bootstrap-vue/dist/bootstrap-vue.css' - moved to Rails CSS
 import store from '../stores/main_store.js'
 import axios from 'axios'
-import ActionCableVue from "actioncable-vue";
 var moment = require('moment')
 
 // Configure Vue
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
-
-// Configure ActionCable globally - only once
-if (!Vue._actioncable_vue_installed) {
-  Vue.use(ActionCableVue, {
-    debug: false,
-    debugLevel: "error", 
-    connectionUrl: "/cable",
-    connectImmediately: false,
-  });
-  Vue._actioncable_vue_installed = true;
-}
 
 // Ensure globalStore is available
 if (!window.globalStore) {

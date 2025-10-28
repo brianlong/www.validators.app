@@ -3,7 +3,25 @@
     <div class="col-12">
       <div class="card">
         <div class="table-responsive-lg">
-          <table class="table text-center">
+          <table class=    mounted: function() {
+      this.$cable.subscribe({
+        channel: "PingThingUserStatChannel",
+        room: "public",
+        received: (data) => {
+          data = JSON.parse(data)
+          if(data["network"] == this.network) {
+              switch(data["interval"]) {
+                case 5:
+                  this.last_5_mins = data["stats"]
+                  break
+                case 60:
+                  this.last_60_mins = data["stats"]
+                  break
+              }
+          }
+        }
+      });
+    },>
             <thead>
               <tr>
                 <th class="column-sm px-0">
@@ -150,6 +168,8 @@
     },
 
     mounted: function() {
+      // Temporarily disabled ActionCable to debug stack overflow
+      /*
       this.$cable.subscribe({
         channel: "PingThingUserStatChannel",
         room: "public",
@@ -167,6 +187,7 @@
           }
         }
       });
+      */
     },
   }
 </script>
