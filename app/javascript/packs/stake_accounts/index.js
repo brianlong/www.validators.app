@@ -11,6 +11,10 @@ import { BPagination } from "bootstrap-vue";
 import store from "../stores/main_store.js";
 
 Vue.component('BPagination', BPagination)
+Vue.component('StakeAccountRow', StakeAccountRow)
+Vue.component('StakePoolStats', StakePoolStats)
+Vue.component('StakePoolsOverview', StakePoolsOverview)
+Vue.component('ValidatorRow', ValidatorRow)
 Vue.use(PaginationPlugin);
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,14 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     store,
     render(createElement) {
       return createElement(IndexTemplate);
-    },
-    
-    component: {
-      'StakeAccountRow': StakeAccountRow,
-      'StakePoolStats': StakePoolStats,
-      'StakePoolsOverview': StakePoolsOverview,
-      'ValidatorRow': ValidatorRow,
-      'BPagination': BPagination,
     }
   })
 })
