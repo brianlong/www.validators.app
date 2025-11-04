@@ -14,7 +14,7 @@ module ValidatorsApp
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
-    config.autoloader = :classic
+    config.autoloader = :zeitwerk
 
     # Load blacklist of validators from config/validator_blacklist.yml
     config.validator_blacklist = config_for(:validator_blacklist)

@@ -4,8 +4,8 @@ require 'test_helper'
 
 # CoinGeckoLogicTest
 class SolPrices::CoinGeckoLogicTest < ActiveSupport::TestCase
-  include CoinGeckoLogic
-  include SharedLogic
+  include SolPrices::CoinGeckoLogic
+  include SolPrices::SharedLogic
   include VcrHelper
 
   def setup
