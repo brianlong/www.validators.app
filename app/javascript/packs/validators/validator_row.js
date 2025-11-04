@@ -11,7 +11,7 @@ import voteLatencyChart from './charts/vote_latency_small_chart'
 
 import scores from './components/scores'
 
-var ValidatorRow = Vue.component('validatorRow', {
+const ValidatorRow = {
   props: {
     validator: {
       type: Object,
@@ -209,6 +209,6 @@ var ValidatorRow = Vue.component('validatorRow', {
 
     </tr>
   `
-})
+}
 
 export default ValidatorRow

@@ -18,7 +18,7 @@ const DELEGATION_STRATEGY_URLS = {
   "Shinobi": "https://xshin.fi/#Strategy"
 }
 
-var StakePoolStats = Vue.component('StakePoolStats', {
+const StakePoolStats = {
   props: {
     pool: {
       type: Object,
@@ -137,6 +137,6 @@ var StakePoolStats = Vue.component('StakePoolStats', {
       </div>
     </div>
   `
-})
+}
 
 export default StakePoolStats

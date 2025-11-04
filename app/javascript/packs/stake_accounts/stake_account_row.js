@@ -1,7 +1,7 @@
 import Vue from '../shared/vue_setup'
 import axios from 'axios'
 
-var StakeAccountRow = Vue.component('StakeAccountRow', {
+const StakeAccountRow = {
   props: {
     stake_accounts: {
       type: Object,
@@ -129,6 +129,6 @@ var StakeAccountRow = Vue.component('StakeAccountRow', {
       </tr>
     </tbody>
   `
-})
+}
 
 export default StakeAccountRow
