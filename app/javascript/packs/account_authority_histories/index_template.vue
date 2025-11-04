@@ -76,7 +76,7 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex'
-  const loadingImage = '/assets/loading.gif'
+  const loadingImage = window.loading_gif_url || '/assets/loading.gif'
 
   const PER_SIZE = 20
 

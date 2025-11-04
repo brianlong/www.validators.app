@@ -276,7 +276,7 @@
   import validatorScoreModal from "./components/validator_score_modal.vue"
   import axios from 'axios';
   // Use direct asset paths to avoid hashing issues
-  const loadingImage = '/assets/loading.gif'
+  const loadingImage = window.loading_gif_url || '/assets/loading.gif'
   const jitoBadge = '/assets/jito.svg'
   const doubleZeroBadge = '/assets/doublezero.svg'
   const doubleZeroLegacyBadge = '/assets/doublezero_legacy.svg'

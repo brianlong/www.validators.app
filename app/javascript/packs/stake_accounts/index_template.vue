@@ -287,7 +287,7 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex';
-  const loadingImage = '/assets/loading.gif'
+  const loadingImage = window.loading_gif_url || '/assets/loading.gif'
 
   import validatorScoreModal from "../validators/components/validator_score_modal.vue"
 

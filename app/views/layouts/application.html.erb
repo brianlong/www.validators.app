@@ -36,6 +36,40 @@
       window.default_avatar_url='<%= asset_path('default-avatar.png') %>'
       window.agave_icon_url='<%= asset_path('agave.svg') %>'
       window.firedancer_icon_url='<%= asset_path('firedancer.svg') %>'
+      window.loading_gif_url='<%= asset_path('loading.gif') %>'
+      
+      // Global asset path helper function
+      window.asset_path_helper = function(filename) {
+        // Generate asset paths with Rails digest hashes
+        const assetMap = {
+          'loading.gif': '<%= asset_path('loading.gif') %>',
+          'marinade-logo.svg': '<%= asset_path('marinade-logo.svg') %>',
+          'marinade.png': '<%= asset_path('marinade.png') %>',
+          'jpool-logo.svg': '<%= asset_path('jpool-logo.svg') %>',
+          'jpool.png': '<%= asset_path('jpool.png') %>',
+          'daopool-logo.png': '<%= asset_path('daopool-logo.png') %>',
+          'daopool.png': '<%= asset_path('daopool.png') %>',
+          'blazestake-logo.png': '<%= asset_path('blazestake-logo.png') %>',
+          'blazestake.png': '<%= asset_path('blazestake.png') %>',
+          'jito-logo.svg': '<%= asset_path('jito-logo.svg') %>',
+          'jito.png': '<%= asset_path('jito.png') %>',
+          'edgevana-logo.svg': '<%= asset_path('edgevana-logo.svg') %>',
+          'edgevana.png': '<%= asset_path('edgevana.png') %>',
+          'aero-logo.svg': '<%= asset_path('aero-logo.svg') %>',
+          'aero.png': '<%= asset_path('aero.png') %>',
+          'shinobi-logo.png': '<%= asset_path('shinobi-logo.png') %>',
+          'shinobi.png': '<%= asset_path('shinobi.png') %>',
+          'vault-logo.png': '<%= asset_path('vault-logo.png') %>',
+          'vault.png': '<%= asset_path('vault.png') %>',
+          'jagpool-logo.png': '<%= asset_path('jagpool-logo.png') %>',
+          'jagpool.png': '<%= asset_path('jagpool.png') %>',
+          'dynosol-logo.png': '<%= asset_path('dynosol-logo.png') %>',
+          'dynosol.png': '<%= asset_path('dynosol.png') %>',
+          'definsol-logo.png': '<%= asset_path('definsol-logo.png') %>',
+          'definsol.png': '<%= asset_path('definsol.png') %>'
+        };
+        return assetMap[filename] || '/assets/' + filename;
+      };
     </script>
 
     <% if content_for? :for_head %>
