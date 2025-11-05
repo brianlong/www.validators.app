@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from 'vue'
 import Vuex from 'vuex'
 import { BootstrapVue } from 'bootstrap-vue'
 // import 'bootstrap-vue/dist/bootstrap-vue.css' - moved to Rails CSS
@@ -239,5 +239,8 @@ Vue.mixin({
     }
   }
 })
+
+// Make Vue globally available
+window.Vue = Vue
 
 export default Vue

@@ -10,21 +10,27 @@ import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";
 import store from "../stores/main_store.js";
 
-Vue.component('BPagination', BPagination)
-console.log('Registering StakeAccountRow:', StakeAccountRow)
-Vue.component('StakeAccountRow', StakeAccountRow)
-console.log('Registering StakePoolStats:', StakePoolStats)
-Vue.component('StakePoolStats', StakePoolStats)
-console.log('Registering StakePoolsOverview:', StakePoolsOverview)
-Vue.component('StakePoolsOverview', StakePoolsOverview)
-console.log('Registering ValidatorRow:', ValidatorRow)
-Vue.component('ValidatorRow', ValidatorRow)
-Vue.use(PaginationPlugin);
+// Use global Vue instance if available, fallback to imported Vue
+const VueInstance = window.Vue || Vue
+
+VueInstance.component('BPagination', BPagination)
+VueInstance.component('stake-account-row', StakeAccountRow)
+VueInstance.component('stake-pool-stats', StakePoolStats)
+VueInstance.component('stake-pools-overview', StakePoolsOverview)
+VueInstance.component('validator-row', ValidatorRow)
+VueInstance.use(PaginationPlugin);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const stake_account_index = new Vue({
+  const stake_account_index = new VueInstance({
     el: '#stake-accounts-index-vue',
     store,
+    components: {
+      'stake-account-row': StakeAccountRow,
+      'stake-pool-stats': StakePoolStats,
+      'stake-pools-overview': StakePoolsOverview,
+      'validator-row': ValidatorRow,
+      'BPagination': BPagination
+    },
     render(createElement) {
       return createElement(IndexTemplate);
     }

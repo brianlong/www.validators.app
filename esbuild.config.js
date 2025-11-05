@@ -117,7 +117,8 @@ const buildOptions = {
   target: ['es2017'],
   publicPath: '/assets',
   alias: {
-    'vue/dist/vue.esm': path.resolve(__dirname, 'node_modules/vue/dist/vue.esm.js')
+    'vue/dist/vue.esm': path.resolve(__dirname, 'node_modules/vue/dist/vue.esm.js'),
+    'vue': path.resolve(__dirname, 'node_modules/vue/dist/vue.esm.js')
   },
   resolveExtensions: ['.js', '.ts', '.jsx', '.tsx', '.vue'],
   plugins: [
