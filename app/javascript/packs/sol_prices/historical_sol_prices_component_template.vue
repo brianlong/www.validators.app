@@ -35,6 +35,8 @@
 
 <script>
   import axios from 'axios';
+  import Chart from 'chart.js/auto';
+  import chart_variables from '../validators/charts/chart_variables';
 
   const filter_by_days_options = [7, 30, 60, 90];
 
@@ -47,7 +49,9 @@
     },
 
     created() {
-      this.draw_chart();
+      this.$nextTick(() => {
+        this.draw_chart();
+      });
     },
 
     methods: {
@@ -58,15 +62,19 @@
       select_filter_by_days(days) {
         this.days = days;
 
-        this.draw_chart();
+        this.$nextTick(() => {
+          this.draw_chart();
+        });
       },
 
       recreate_chart_skeleton() {
         const chartCoinGeckoContent = document.getElementById('coinGeckoChartContent');
         const chartCoinGecko = document.getElementById('coinGeckoChart');
 
-        chartCoinGeckoContent.remove();
-        chartCoinGecko.innerHTML = "<canvas id='coinGeckoChartContent'</canvas>";
+        if (chartCoinGeckoContent && chartCoinGecko) {
+          chartCoinGeckoContent.remove();
+          chartCoinGecko.innerHTML = "<canvas id='coinGeckoChartContent'></canvas>";
+        }
       },
 
       draw_chart() {
@@ -76,8 +84,71 @@
         axios.get(url, { params: { filtering: this.days } })
           .then(response => {
             ctx.recreate_chart_skeleton();
-            drawChart(response.data);
+            ctx.drawChartWithData(response.data);
           })
+      },
+
+      drawChartWithData(data) {
+        const chartCoinGecko = document.getElementById('coinGeckoChartContent');
+
+        if (chartCoinGecko == null) {
+          return null;
+        }
+
+        const ctx = chartCoinGecko.getContext('2d');
+
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            datasets: [{
+              data: data,
+              fill: false,
+              tension: 0.1,
+              borderColor: chart_variables.chart_purple_3,
+              backgroundColor: chart_variables.chart_purple_3,
+              borderWidth: 1,
+            }]
+          },
+          options: {
+            scales: {
+              x: {
+                ticks: {
+                  minRotation: 0,
+                  maxRotation: 0,
+                  autoSkip: true,
+                  autoSkipPadding: 50
+                },
+                grid: { display: false },
+              },
+              y: {
+                display: true,
+                ticks: {
+                  padding: 10,
+                  callback: function(value) {
+                    return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                  }
+                },
+                grid: { display: false },
+                title: { display: false },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                intersect: false,
+                mode: 'index',
+                displayColors: false,
+                padding: 8,
+                callbacks: {
+                  label(tooltipItem) {
+                    let price = tooltipItem.raw.y.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                    return `SOL Price: ` + price;
+                  },
+                }
+              }
+            }
+          },
+        });
       }
     }
   }
