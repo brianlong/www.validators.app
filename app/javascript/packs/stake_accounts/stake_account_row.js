@@ -2,6 +2,7 @@ import Vue from '../shared/vue_setup'
 import axios from 'axios'
 
 const StakeAccountRow = {
+  name: 'StakeAccountRow',
   props: {
     stake_accounts: {
       type: Object,

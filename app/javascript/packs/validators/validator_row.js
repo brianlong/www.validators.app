@@ -12,6 +12,7 @@ import voteLatencyChart from './charts/vote_latency_small_chart'
 import scores from './components/scores'
 
 const ValidatorRow = {
+  name: 'ValidatorRow',
   props: {
     validator: {
       type: Object,

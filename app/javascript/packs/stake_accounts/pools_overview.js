@@ -1,6 +1,7 @@
 import Vue from '../shared/vue_setup'
 
 const StakePoolsOverview = {
+  name: 'StakePoolsOverview',
   props: {
     stake_pools: {
       type: Array,

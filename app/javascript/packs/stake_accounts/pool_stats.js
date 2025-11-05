@@ -19,6 +19,7 @@ const DELEGATION_STRATEGY_URLS = {
 }
 
 const StakePoolStats = {
+  name: 'StakePoolStats',
   props: {
     pool: {
       type: Object,

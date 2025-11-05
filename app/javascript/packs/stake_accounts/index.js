@@ -11,9 +11,13 @@ import { BPagination } from "bootstrap-vue";
 import store from "../stores/main_store.js";
 
 Vue.component('BPagination', BPagination)
+console.log('Registering StakeAccountRow:', StakeAccountRow)
 Vue.component('StakeAccountRow', StakeAccountRow)
+console.log('Registering StakePoolStats:', StakePoolStats)
 Vue.component('StakePoolStats', StakePoolStats)
+console.log('Registering StakePoolsOverview:', StakePoolsOverview)
 Vue.component('StakePoolsOverview', StakePoolsOverview)
+console.log('Registering ValidatorRow:', ValidatorRow)
 Vue.component('ValidatorRow', ValidatorRow)
 Vue.use(PaginationPlugin);
 
