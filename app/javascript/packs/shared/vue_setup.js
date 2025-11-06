@@ -1,23 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { BootstrapVue } from 'bootstrap-vue'
-// import 'bootstrap-vue/dist/bootstrap-vue.css' - moved to Rails CSS
 import store from '../stores/main_store.js'
 import axios from 'axios'
 var moment = require('moment')
 
-// Configure Vue
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
 
-// Ensure globalStore is available
 if (!window.globalStore) {
   window.globalStore = store
 }
 
-// Setup axios authorization interceptor globally
 axios.interceptors.request.use(function (config) {
-  // Only add authorization header if it's a valid string
   if (window.api_authorization && typeof window.api_authorization === 'string') {
     config.headers.Authorization = window.api_authorization;
   }
@@ -26,10 +21,6 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 
-// Define all mixins directly with our Vue instance
-// Use direct asset paths instead of imports to avoid hashing issues in development
-
-// All mixins in one place to ensure they're registered with our Vue instance
 Vue.mixin({
   methods: {
     // From strings_mixins.js
@@ -240,7 +231,6 @@ Vue.mixin({
   }
 })
 
-// Make Vue globally available
 window.Vue = Vue
 
 export default Vue

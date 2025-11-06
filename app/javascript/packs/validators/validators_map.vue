@@ -29,21 +29,12 @@
     </section>
 
     <section class="map-legend">
-      <!-- <validators-map-leaders :current_leader="current_leader"
-                              :next_leaders="next_leaders" /> -->
-      <div class="map-legend-col">
-        <div class="small text-muted mb-2">Current Leader</div>
-        <div class="small" v-if="!current_leader">loading...</div>
-        <div v-if="current_leader">{{ current_leader.account || 'N/A' }}</div>
-      </div>
+      <validators-map-leaders :current_leader="current_leader"
+                              :next_leaders="next_leaders" />
 
       <div class="map-legend-col text-sm-end">
-        <!-- <validators-map-data-center-details :data_centers_group="selected_data_centers_group"
-                                            v-if="selected_data_centers_group" /> -->
-        <div v-if="selected_data_centers_group">
-          <div class="small text-muted mb-2">Data Center Details</div>
-          <div class="small">{{ selected_data_centers_group.identifier || 'N/A' }}</div>
-        </div>
+        <validators-map-data-center-details :data_centers_group="selected_data_centers_group"
+                                            v-if="selected_data_centers_group" />
 
         <div class="d-flex flex-wrap gap-3">
           <div class="btn-group btn-group-toggle switch-button" v-if="show_gossip_nodes">
@@ -77,8 +68,15 @@
   import debounce from 'lodash/debounce';
   import axios from 'axios';
   import { mapGetters } from 'vuex';
+  import ValidatorsMapLeaders from './validators_map_leaders';
+  import ValidatorsMapDataCenterDetails from './validators_map_data_center_details';
 
   export default {
+    components: {
+      'validators-map-leaders': ValidatorsMapLeaders,
+      'validators-map-data-center-details': ValidatorsMapDataCenterDetails
+    },
+
     data() {
       return {
         api_url: null,

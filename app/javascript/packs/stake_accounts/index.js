@@ -10,7 +10,6 @@ import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";
 import store from "../stores/main_store.js";
 
-// Use global Vue instance if available, fallback to imported Vue
 const VueInstance = window.Vue || Vue
 
 VueInstance.component('BPagination', BPagination)

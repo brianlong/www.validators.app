@@ -1,6 +1,5 @@
 import Vue from 'vue';
 
-// Stake pools configuration matching Rails initializer
 const STAKE_POOLS_CONFIG = {
   "marinade": {
     small_logo: "marinade-logo.svg",
@@ -64,13 +63,10 @@ const STAKE_POOLS_CONFIG = {
   }
 }
 
-// Helper function to get asset path with Rails hash
 function getAssetPath(filename) {
-  // Try to use window asset helpers if available
   if (window.asset_path_helper) {
     return window.asset_path_helper(filename);
   }
-  // Fallback to basic path (works in development)
   return `/assets/${filename}`;
 }
 

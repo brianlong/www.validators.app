@@ -3,6 +3,9 @@
 
 console.log("Application.js loaded successfully!")
 
+// Import application configuration
+import './packs/shared/app_config'
+
 // Import Turbolinks and start it  
 import Turbolinks from "turbolinks"
 if (!window.Turbolinks) {

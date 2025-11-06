@@ -3,25 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="table-responsive-lg">
-          <table class=    mounted: function() {
-      this.$cable.subscribe({
-        channel: "PingThingUserStatChannel",
-        room: "public",
-        received: (data) => {
-          data = JSON.parse(data)
-          if(data["network"] == this.network) {
-              switch(data["interval"]) {
-                case 5:
-                  this.last_5_mins = data["stats"]
-                  break
-                case 60:
-                  this.last_60_mins = data["stats"]
-                  break
-              }
-          }
-        }
-      });
-    },>
+          <table class="table table-sm">
             <thead>
               <tr>
                 <th class="column-sm px-0">
@@ -165,6 +147,21 @@
       attribute_valid: function(attr) {
         return (typeof attr !== 'undefined' && attr !== null)
       },
+
+      fails_count_percentage: function(fails_count, total_count) {
+        if (!fails_count || !total_count || total_count === 0) {
+          return '(0%)'
+        }
+        const percentage = ((fails_count / total_count) * 100).toFixed(1)
+        return `(${percentage}%)`
+      },
+
+      pluralize: function(count, word) {
+        if (count === 1) {
+          return ` ${word}`
+        }
+        return ` ${word}s`
+      }
     },
 
     mounted: function() {

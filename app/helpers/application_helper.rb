@@ -58,4 +58,53 @@ module ApplicationHelper
     return value_in_percents unless (value < 0)
     100 - value_in_percents
   end
+
+  def frontend_config
+    {
+      api_authorization: Rails.application.credentials.api_authorization,
+      google_maps_api_key: Rails.application.credentials.google_maps_api_key,
+      assets: asset_paths_config
+    }
+  end
+
+  private
+
+  def asset_paths_config
+    {
+      'default-avatar.png' => asset_path('default-avatar.png'),
+      'agave.svg' => asset_path('agave.svg'),
+      'firedancer.svg' => asset_path('firedancer.svg'),
+      'loading.gif' => asset_path('loading.gif'),
+      'marinade-logo.svg' => asset_path('marinade-logo.svg'),
+      'marinade.png' => asset_path('marinade.png'),
+      'jpool-logo.svg' => asset_path('jpool-logo.svg'),
+      'jpool.png' => asset_path('jpool.png'),
+      'daopool-logo.png' => asset_path('daopool-logo.png'),
+      'daopool.png' => asset_path('daopool.png'),
+      'blazestake-logo.png' => asset_path('blazestake-logo.png'),
+      'blazestake.png' => asset_path('blazestake.png'),
+      'jito-logo.svg' => asset_path('jito-logo.svg'),
+      'jito.png' => asset_path('jito.png'),
+      'edgevana-logo.svg' => asset_path('edgevana-logo.svg'),
+      'edgevana.png' => asset_path('edgevana.png'),
+      'aero-logo.svg' => asset_path('aero-logo.svg'),
+      'aero.png' => asset_path('aero.png'),
+      'shinobi-logo.png' => asset_path('shinobi-logo.png'),
+      'shinobi.png' => asset_path('shinobi.png'),
+      'vault-logo.png' => asset_path('vault-logo.png'),
+      'vault.png' => asset_path('vault.png'),
+      'jagpool-logo.png' => asset_path('jagpool-logo.png'),
+      'jagpool.png' => asset_path('jagpool.png'),
+      'dynosol-logo.png' => asset_path('dynosol-logo.png'),
+      'dynosol.png' => asset_path('dynosol.png'),
+      'definsol-logo.png' => asset_path('definsol-logo.png'),
+      'definsol.png' => asset_path('definsol.png'),
+      'lido-logo.svg' => asset_path('lido-logo.svg'),
+      'lido.png' => asset_path('lido.png'),
+      'socean-logo.svg' => asset_path('socean-logo.svg'),
+      'socean.png' => asset_path('socean.png'),
+      'zippystake-logo.svg' => asset_path('zippystake-logo.svg'),
+      'zippystake.png' => asset_path('zippystake.png')
+    }
+  end
 end

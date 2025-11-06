@@ -108,7 +108,6 @@
     },
 
     mounted: function() {
-      // Use native Rails ActionCable instead of actioncable-vue
       if (window.ActionCableConnection) {
         this.subscription = window.ActionCableConnection.subscriptions.create({
           channel: "SoftwareVersionsChannel",

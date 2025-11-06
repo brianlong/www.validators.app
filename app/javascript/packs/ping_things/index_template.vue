@@ -2,7 +2,8 @@
   <div>
     <ping-thing-header />
 
-    <stats-bar :network="network" />   <div class="row">
+    <stats-bar :network="network" />
+     <div class="row">
       <div class="col-xl-6 mb-4">
         <div class="card h-100">
           <div class="card-content">
@@ -40,7 +41,7 @@
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
   import statsBar from './stats_bar.vue'
-  import userStats from './user_stats'
+  import userStats from './user_stats.vue'
 
   export default {
     data () {
