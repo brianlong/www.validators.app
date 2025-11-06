@@ -5,11 +5,13 @@ var ValidatorsMapLeaders = {
     props: {
         current_leader: {
             type: Object,
-            required: true
+            required: false,
+            default: null
         },
         next_leaders: {
             type: Array,
-            required: true
+            required: false,
+            default: () => []
         },
     },
 
