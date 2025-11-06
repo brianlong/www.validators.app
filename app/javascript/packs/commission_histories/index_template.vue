@@ -46,8 +46,13 @@
 <script>
   import axios from 'axios'
   import { mapGetters } from 'vuex';
+  import CommissionHistoryRow from './commission_history_row';
 
   export default {
+    components: {
+      'commission-history-row': CommissionHistoryRow
+    },
+
     props: ['query'],
     data () {
       return {
