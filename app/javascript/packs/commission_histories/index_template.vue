@@ -1,5 +1,55 @@
 <template>
-  <div class="card mb-4">
+  <div>
+    <!-- Search Field above card -->
+    <div class="mb-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex gap-2 align-items-center justify-content-between">
+            <div class="d-flex gap-2 align-items-center flex-grow-1">
+              <input
+                type="text"
+                ref="searchInput"
+                v-model="search_query"
+                @keyup.enter="perform_search"
+                @input="debounced_search"
+                class="form-control flex-grow-1"
+                placeholder="Search by validator name or account..."
+                :disabled="loading"
+              />
+              <button 
+                class="btn btn-sm" 
+                :class="commission_change_filter === 'increase' ? 'btn-primary' : 'btn-outline-primary'"
+                type="button" 
+                @click="filter_by_increase"
+                :disabled="loading"
+                title="Show only commission increases">
+                <i class="fa-solid fa-up-long text-danger"></i>
+              </button>
+              <button 
+                class="btn btn-sm" 
+                :class="commission_change_filter === 'decrease' ? 'btn-primary' : 'btn-outline-primary'"
+                type="button" 
+                @click="filter_by_decrease"
+                :disabled="loading"
+                title="Show only commission decreases">
+                <i class="fa-solid fa-down-long text-success"></i>
+              </button>
+            </div>
+            <button 
+              class="btn btn-sm btn-tertiary" 
+              type="button" 
+              @click="clear_search"
+              :disabled="loading"
+              v-if="search_query || commission_change_filter"
+              title="Clear all filters">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
     <div class="table-responsive-lg">
       <table class='table'>
         <thead>
@@ -21,7 +71,17 @@
           </tr>
         </thead>
         <tbody>
-          <commission-history-row @filter_by_query="filter_by_query" v-for="ch in commission_histories" :key="ch.id" :comm_history="ch">
+          <tr v-if="loading">
+            <td colspan="5" class="text-center">
+              <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+            </td>
+          </tr>
+          <commission-history-row 
+            v-else
+            @filter_by_query="filter_by_query" 
+            v-for="ch in commission_histories" 
+            :key="ch.id" 
+            :comm_history="ch">
           </commission-history-row>
         </tbody>
       </table>
@@ -41,6 +101,7 @@
          class='btn btn-sm btn-tertiary'>Reset filters</a>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -58,7 +119,11 @@
         total_count: 0,
         sort_by: 'created_at_desc',
         api_url: null,
-        account_name: this.query
+        account_name: this.query,
+        search_query: this.query || '',
+        loading: false,
+        search_timeout: null,
+        commission_change_filter: null // 'increase', 'decrease', or null
       }
     },
 
@@ -98,12 +163,28 @@
       },
       account_name: function() {
         var ctx = this
-        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + 1 + '&query=' + ctx.account_name
+        var url = ctx.build_api_url();
 
         axios.get(url)
              .then(function (response) {
                 ctx.commission_histories = response.data.commission_histories;
                 ctx.total_count = response.data.total_count;
+                ctx.loading = false;
+                // Restore focus after search completes
+                ctx.$nextTick(() => {
+                  if (ctx.$refs.searchInput && ctx.search_query) {
+                    ctx.$refs.searchInput.focus();
+                  }
+                });
+              })
+             .catch(function() {
+                ctx.loading = false;
+                // Restore focus after error
+                ctx.$nextTick(() => {
+                  if (ctx.$refs.searchInput && ctx.search_query) {
+                    ctx.$refs.searchInput.focus();
+                  }
+                });
               })
       }
     },
@@ -114,6 +195,7 @@
 
     methods: {
       paginate: function() {
+        this.loading = true;
         var ctx = this
         var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
 
@@ -122,9 +204,25 @@
         }
 
         axios.get(url)
-             .then(response => (
-               ctx.commission_histories = response.data.commission_histories
-             ))
+             .then(response => {
+               ctx.commission_histories = response.data.commission_histories;
+               ctx.loading = false;
+               // Restore focus after data loads if search was performed
+               ctx.$nextTick(() => {
+                 if (ctx.$refs.searchInput && ctx.search_query) {
+                   ctx.$refs.searchInput.focus();
+                 }
+               });
+             })
+             .catch(() => {
+               ctx.loading = false;
+               // Restore focus after error if search was performed
+               ctx.$nextTick(() => {
+                 if (ctx.$refs.searchInput && ctx.search_query) {
+                   ctx.$refs.searchInput.focus();
+                 }
+               });
+             });
       },
       sort_by_epoch: function() {
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
@@ -140,6 +238,8 @@
       },
       reset_filters: function() {
         this.account_name = '';
+        this.search_query = '';
+        this.commission_change_filter = null;
       },
       resetFilterVisibility: function() {
         // This checks if there is a account id in the link.
@@ -157,6 +257,82 @@
         } else {
           return false
         }
+      },
+      debounced_search: function() {
+        // Clear previous timeout
+        if (this.search_timeout) {
+          clearTimeout(this.search_timeout);
+        }
+        
+        // Set new timeout for 500ms delay
+        this.search_timeout = setTimeout(() => {
+          this.perform_search();
+        }, 500);
+      },
+      perform_search: function() {
+        this.loading = true;
+        this.page = 1; // Reset to first page on new search
+        this.account_name = this.search_query;
+        // Loading will be set to false in the watch for account_name
+      },
+      clear_search: function() {
+        this.search_query = '';
+        this.account_name = '';
+        this.commission_change_filter = null;
+        // Restore focus after clearing
+        this.$nextTick(() => {
+          if (this.$refs.searchInput) {
+            this.$refs.searchInput.focus();
+          }
+        });
+      },
+      filter_by_increase: function() {
+        if (this.commission_change_filter === 'increase') {
+          // If already filtering by increase, clear the filter
+          this.commission_change_filter = null;
+        } else {
+          this.commission_change_filter = 'increase';
+        }
+        this.refresh_data();
+      },
+      filter_by_decrease: function() {
+        if (this.commission_change_filter === 'decrease') {
+          // If already filtering by decrease, clear the filter
+          this.commission_change_filter = null;
+        } else {
+          this.commission_change_filter = 'decrease';
+        }
+        this.refresh_data();
+      },
+      refresh_data: function() {
+        this.loading = true;
+        this.page = 1;
+        // Trigger data refresh by updating account_name or calling API directly
+        var ctx = this;
+        var url = ctx.build_api_url();
+        
+        axios.get(url)
+             .then(function (response) {
+               ctx.commission_histories = response.data.commission_histories;
+               ctx.total_count = response.data.total_count;
+               ctx.loading = false;
+             })
+             .catch(function() {
+               ctx.loading = false;
+             });
+      },
+      build_api_url: function() {
+        var url = this.api_url + 'sort_by=' + this.sort_by + '&page=' + this.page;
+        
+        if (this.account_name) {
+          url += '&query=' + this.account_name;
+        }
+        
+        if (this.commission_change_filter) {
+          url += '&change_type=' + this.commission_change_filter;
+        }
+        
+        return url;
       }
     }
   }

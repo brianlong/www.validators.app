@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class CommissionHistoryQuery
-  TIME_RANGE_AGO = 5.years.ago.freeze
-
   CH_FIELDS = %w[
     created_at
     commission_before
@@ -23,20 +21,21 @@ class CommissionHistoryQuery
 
   def initialize(options)
     @network = options.fetch(:network, 'testnet')
-    @time_from = options.fetch(:time_from, TIME_RANGE_AGO) || TIME_RANGE_AGO
+    @time_from = options.fetch(:time_from, nil)
     @time_to = options.fetch(:time_to, DateTime.now) || DateTime.now
-    @time_range = @time_from..@time_to
+    @time_range = @time_from ? (@time_from..@time_to) : nil
     @sort_by = options.fetch(:sort_by, 'timestamp_desc') || 'timestamp_desc'
+    @page = options.fetch(:page, 1)
+    @per = options.fetch(:per, 25)
+    @change_type = options.fetch(:change_type, nil)
   end
 
   def all_records
     commission_histories = CommissionHistory.joins(:validator)
                                             .select(query_fields)
-                                            .where(
-                                              network: @network,
-                                              created_at: @time_range
-                                            )
-    sorted(commission_histories)
+                                            .where(build_where_conditions)
+    commission_histories = apply_change_type_filter(commission_histories)
+    apply_pagination(sorted(commission_histories))
   end
 
   def by_query(query = nil)
@@ -44,23 +43,63 @@ class CommissionHistoryQuery
 
     commission_histories = CommissionHistory.joins(:validator)
                                             .select(query_fields)
-                                            .where(
-                                              network: @network,
-                                              created_at: @time_range,
-                                              validator_id: validators_ids
-                                            )
-    sorted(commission_histories)
+                                            .where(build_where_conditions(validator_id: validators_ids))
+    commission_histories = apply_change_type_filter(commission_histories)                                        
+    apply_pagination(sorted(commission_histories))
+  end
+
+  def total_count(query = nil)
+    if query
+      unpaginated_records_with_query(query).size
+    else
+      unpaginated_records.size
+    end
+  end
+
+  def unpaginated_records
+    commission_histories = CommissionHistory.joins(:validator)
+                                            .select(query_fields)
+                                            .where(build_where_conditions)
+    apply_change_type_filter(commission_histories)
+  end
+
+  def unpaginated_records_with_query(query)
+    validators_ids = matching_validators(query).pluck(:id)
+    
+    commission_histories = CommissionHistory.joins(:validator)
+                                            .select(query_fields)
+                                            .where(build_where_conditions(validator_id: validators_ids))
+    apply_change_type_filter(commission_histories)
   end
 
   def exists_for_validator?(validator_id)
-    CommissionHistory.where(
-      network: @network,
-      created_at: @time_range,
-      validator_id: validator_id
-    ).exists?
+    CommissionHistory.where(build_where_conditions(validator_id: validator_id)).exists?
   end
 
   private
+
+  def build_where_conditions(additional_conditions = {})
+    conditions = { network: @network }
+    conditions[:created_at] = @time_range if @time_range
+    conditions.merge(additional_conditions)
+  end
+
+  def apply_change_type_filter(relation)
+    return relation unless @change_type
+    
+    case @change_type
+    when 'increase'
+      relation.where('commission_after > commission_before')
+    when 'decrease'
+      relation.where('commission_after < commission_before')
+    else
+      relation
+    end
+  end
+
+  def apply_pagination(commission_histories)
+    commission_histories.page(@page).per(@per)
+  end
 
   def sorted(commission_histories)
     case @sort_by

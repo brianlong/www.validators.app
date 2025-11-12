@@ -43,7 +43,8 @@ module Api
 
         assert_response 200
         json = response_to_json(@response.body)
-        assert_equal 2, json.size
+        assert_equal 3, json['commission_histories'].size
+        assert_equal 3, json['total_count']
       end
 
       test 'When reaching the commission changes api \
@@ -57,7 +58,7 @@ module Api
         assert_equal "text/csv", response.content_type
         csv = CSV.parse response.body # Let raise if invalid CSV
         assert csv
-        assert_equal csv.size, 4
+        assert_equal csv.size, 4  # headers + 3 records
 
         headers = (
           CommissionHistory::API_FIELDS +
