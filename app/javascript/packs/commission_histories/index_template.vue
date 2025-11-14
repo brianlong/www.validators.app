@@ -1,48 +1,48 @@
 <template>
   <div>
     <!-- Search Field above card -->
-    <div class="mb-4">
+    <div class="mb-3">
       <div class="row">
-        <div class="col-12">
-          <div class="d-flex gap-2 align-items-center justify-content-between">
-            <div class="d-flex gap-2 align-items-center flex-grow-1">
-              <input
-                type="text"
-                ref="searchInput"
-                v-model="search_query"
-                @keyup.enter="perform_search"
-                @input="debounced_search"
-                class="form-control flex-grow-1"
-                placeholder="Search by validator name or account..."
-                :disabled="loading"
-              />
-              <button 
-                class="btn btn-sm" 
-                :class="commission_change_filter === 'increase' ? 'btn-primary' : 'btn-outline-primary'"
-                type="button" 
-                @click="filter_by_increase"
-                :disabled="loading"
-                title="Show only commission increases">
-                <i class="fa-solid fa-up-long text-danger"></i>
-              </button>
-              <button 
-                class="btn btn-sm" 
-                :class="commission_change_filter === 'decrease' ? 'btn-primary' : 'btn-outline-primary'"
-                type="button" 
-                @click="filter_by_decrease"
-                :disabled="loading"
-                title="Show only commission decreases">
-                <i class="fa-solid fa-down-long text-success"></i>
-              </button>
-            </div>
+        <div class="col-12 col-md-6 pe-md-3 mb-md-3">
+          <form @submit.prevent>
+            <input
+              type="text"
+              ref="searchInput"
+              v-model="search_query"
+              @keydown.enter.prevent
+              @input="debounced_search"
+              class="form-control"
+              placeholder="Search by validator name or account..."
+              :disabled="loading"
+            />
+          </form>
+        </div>
+        <div class="col-12 col-md-6 mt-3 mt-md-0 ps-md-0">
+          <div class="d-flex gap-3 align-items-center justify-content-start">
             <button 
-              class="btn btn-sm btn-tertiary" 
+              class="btn btn-sm btn-secondary"
+              type="button" 
+              @click="filter_by_increase"
+              :disabled="loading"
+              title="Show only commission increases">
+              <i class="fa-solid fa-up-long text-danger"></i>
+            </button>
+            <button 
+              class="btn btn-sm btn-secondary"
+              type="button" 
+              @click="filter_by_decrease"
+              :disabled="loading"
+              title="Show only commission decreases">
+              <i class="fa-solid fa-down-long text-success"></i>
+            </button>
+            <button 
+              class="btn btn-sm btn-tertiary ms-auto" 
               type="button" 
               @click="clear_search"
               :disabled="loading"
               v-if="search_query || commission_change_filter"
               title="Clear all filters">
-              Reset
+              Reset filters
             </button>
           </div>
         </div>
@@ -85,20 +85,6 @@
           </commission-history-row>
         </tbody>
       </table>
-    </div>
-
-    <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
-      <b-pagination
-          v-model="page"
-          :total-rows="total_count"
-          :per-page="25"
-          first-text="« First"
-          last-text="Last »" />
-      <a href='#'
-         @click.prevent="reset_filters"
-         :style="{display: resetFilterVisibility() ? '' : 'none'}"
-         id='reset-filters'
-         class='btn btn-sm btn-tertiary'>Reset filters</a>
     </div>
   </div>
 </div>
@@ -270,7 +256,10 @@
         }, 500);
       },
       perform_search: function() {
-        this.loading = true;
+        // Only set loading if we actually have a search query or if we're clearing it
+        if (this.search_query !== this.account_name) {
+          this.loading = true;
+        }
         this.page = 1; // Reset to first page on new search
         this.account_name = this.search_query;
         // Loading will be set to false in the watch for account_name
