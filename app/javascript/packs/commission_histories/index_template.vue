@@ -40,7 +40,7 @@
           type="button"
           @click="clear_search"
           :disabled="loading"
-          v-if="this.resetFilterVisibility()"
+          v-if="this.check_reset_filter_visibility()"
           title="Clear all filters">
         Reset filters
       </button>
@@ -162,14 +162,14 @@
         this.search_query = query;
         this.get_data();
       },
-      resetFilterVisibility: function() {
-        if (this.search_query || this.commission_change_filter || this.checkAccountNamePresence()) {
+      check_reset_filter_visibility: function() {
+        if (this.search_query || this.commission_change_filter || this.check_account_name_presence()) {
           return true
         } else {
           return false
         }
       },
-      checkAccountNamePresence: function() {
+      check_account_name_presence: function() {
         if (this.account_name !== '' && this.account_name != undefined && this.account_name != null) {
           return true
         } else {
@@ -256,7 +256,7 @@
       build_api_url: function() {
         var url = this.api_url + 'sort_by=' + this.sort_by + '&page=' + this.page;
 
-        if (this.account_name) {
+        if (this.check_account_name_presence()) {
           url = url + '&query=' + this.account_name
         }
         
