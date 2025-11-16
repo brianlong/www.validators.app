@@ -125,7 +125,7 @@
         this.api_url = '/api/v1/commission-changes/' + this.network + '?'
       }
       var ctx = this
-      var url = ctx.api_url + 'sort_by=' + ctx.sort_by
+      var url = this.build_api_url();
 
       axios.get(url)
       .then(function (response) {
@@ -135,49 +135,9 @@
     },
 
     watch: {
-      sort_by: function() {
-        var ctx = this
-        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
-
-        if (ctx.checkAccountNamePresence())  {
-          url = url + '&query=' + ctx.account_name
-        }
-
-        axios.get(url)
-             .then(function (response) {
-               ctx.commission_histories = response.data.commission_histories;
-               ctx.total_count = response.data.total_count;
-             })
-      },
       page: function() {
-        this.paginate()
+        this.get_data();
       },
-      account_name: function() {
-        var ctx = this
-        var url = ctx.build_api_url();
-
-        axios.get(url)
-             .then(function (response) {
-                ctx.commission_histories = response.data.commission_histories;
-                ctx.total_count = response.data.total_count;
-                ctx.loading = false;
-                // Restore focus after search completes
-                ctx.$nextTick(() => {
-                  if (ctx.$refs.searchInput && ctx.search_query) {
-                    ctx.$refs.searchInput.focus();
-                  }
-                });
-              })
-             .catch(function() {
-                ctx.loading = false;
-                // Restore focus after error
-                ctx.$nextTick(() => {
-                  if (ctx.$refs.searchInput && ctx.search_query) {
-                    ctx.$refs.searchInput.focus();
-                  }
-                });
-              })
-      }
     },
 
     computed: mapGetters([
@@ -187,12 +147,8 @@
     methods: {
       paginate: function() {
         this.loading = true;
-        var ctx = this
-        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
-
-        if (ctx.checkAccountNamePresence())  {
-          url = url + '&query=' + ctx.account_name
-        }
+        var ctx = this;
+        var url = this.build_api_url();
 
         axios.get(url)
              .then(response => {
@@ -216,17 +172,21 @@
              });
       },
       sort_by_epoch: function() {
-        this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
+        this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc';
+        this.get_data();
       },
       sort_by_timestamp: function() {
-        this.sort_by = this.sort_by == 'timestamp_asc' ? 'timestamp_desc' : 'timestamp_asc'
+        this.sort_by = this.sort_by == 'timestamp_asc' ? 'timestamp_desc' : 'timestamp_asc';
+        this.get_data();
       },
       sort_by_validator: function() {
-        this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc'
+        this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc';
+        this.get_data();
       },
       filter_by_query: function(query) {
         this.account_name = query;
         this.search_query = query;
+        this.get_data();
       },
       resetFilterVisibility: function() {
         if (this.search_query || this.commission_change_filter || this.checkAccountNamePresence()) {
@@ -258,20 +218,22 @@
         if (this.search_query !== this.account_name) {
           this.loading = true;
         }
-        this.page = 1; // Reset to first page on new search
+        this.page = 1;
         this.account_name = this.search_query;
-        // Loading will be set to false in the watch for account_name
+        this.get_data();
       },
       clear_search: function() {
         this.search_query = '';
-        this.account_name = '';
         this.commission_change_filter = null;
+        this.account_name = '';
+        this.page = 1;
         // Restore focus after clearing
         this.$nextTick(() => {
           if (this.$refs.searchInput) {
             this.$refs.searchInput.focus();
           }
         });
+        this.get_data();
       },
       filter_by_increase: function() {
         if (this.commission_change_filter === 'increase') {
@@ -280,7 +242,7 @@
         } else {
           this.commission_change_filter = 'increase';
         }
-        this.refresh_data();
+        this.get_data();
       },
       filter_by_decrease: function() {
         if (this.commission_change_filter === 'decrease') {
@@ -289,14 +251,12 @@
         } else {
           this.commission_change_filter = 'decrease';
         }
-        this.refresh_data();
+        this.get_data();
       },
-      refresh_data: function() {
+      get_data: function() {
         this.loading = true;
-        this.page = 1;
-        // Trigger data refresh by updating account_name or calling API directly
         var ctx = this;
-        var url = ctx.build_api_url();
+        var url = this.build_api_url();
         
         axios.get(url)
              .then(function (response) {
@@ -310,9 +270,9 @@
       },
       build_api_url: function() {
         var url = this.api_url + 'sort_by=' + this.sort_by + '&page=' + this.page;
-        
+
         if (this.account_name) {
-          url += '&query=' + this.account_name;
+          url = url + '&query=' + this.account_name
         }
         
         if (this.commission_change_filter) {
