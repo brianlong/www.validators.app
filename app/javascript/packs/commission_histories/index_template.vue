@@ -1,52 +1,49 @@
 <template>
   <div>
     <!-- Search Field above card -->
-    <div class="mb-3">
-      <div class="row">
-        <div class="col-12 col-md-6 pe-md-3 mb-md-3">
-          <form @submit.prevent>
-            <input
+    <div class="d-flex justify-content-between flex-wrap flex-column flex-md-row gap-3 mb-4">
+      <div class="d-flex flex-wrap flex-column flex-sm-row gap-3">
+        <form @submit.prevent>
+          <input
               type="text"
               ref="searchInput"
               v-model="search_query"
               @keydown.enter.prevent
               @input="debounced_search"
               class="form-control"
+              style="min-width: 330px"
               placeholder="Search by validator name or account..."
               :disabled="loading"
-            />
-          </form>
-        </div>
-        <div class="col-12 col-md-6 mt-3 mt-md-0 ps-md-0">
-          <div class="d-flex gap-3 align-items-center justify-content-start">
-            <button
-              :class="commission_change_filter === 'increase' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary'"
-              type="button" 
+          />
+        </form>
+        <div class="d-flex gap-3">
+          <button
+              :class="commission_change_filter === 'increase' ? 'btn btn-sm btn-primary w-50' : 'btn btn-sm btn-secondary w-50'"
+              type="button"
               @click="filter_by_increase"
               :disabled="loading"
               title="Show only commission increases">
-              <i class="fa-solid fa-up-long text-danger"></i>
-            </button>
-            <button
-              :class="commission_change_filter === 'decrease' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary'"
-              type="button" 
+            <i class="fa-solid fa-up-long text-danger"></i>
+          </button>
+          <button
+              :class="commission_change_filter === 'decrease' ? 'btn btn-sm btn-primary w-50' : 'btn btn-sm btn-secondary w-50'"
+              type="button"
               @click="filter_by_decrease"
               :disabled="loading"
               title="Show only commission decreases">
-              <i class="fa-solid fa-down-long"></i>
-            </button>
-            <button 
-              class="btn btn-sm btn-tertiary ms-auto" 
-              type="button" 
-              @click="clear_search"
-              :disabled="loading"
-              v-if="search_query || commission_change_filter"
-              title="Clear all filters">
-              Reset filters
-            </button>
-          </div>
+            <i class="fa-solid fa-down-long"></i>
+          </button>
         </div>
       </div>
+      <button
+          class="btn btn-sm btn-tertiary"
+          type="button"
+          @click="clear_search"
+          :disabled="loading"
+          v-if="search_query || commission_change_filter"
+          title="Clear all filters">
+        Reset filters
+      </button>
     </div>
 
     <div class="card mb-4">
