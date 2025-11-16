@@ -40,7 +40,7 @@
           type="button"
           @click="clear_search"
           :disabled="loading"
-          v-if="search_query || commission_change_filter || this.checkAccountNamePresence()"
+          v-if="this.resetFilterVisibility()"
           title="Clear all filters">
         Reset filters
       </button>
@@ -227,16 +227,8 @@
       filter_by_query: function(query) {
         this.account_name = query;
       },
-      reset_filters: function() {
-        this.account_name = '';
-        this.search_query = '';
-        this.commission_change_filter = null;
-      },
       resetFilterVisibility: function() {
-        // This checks if there is a account id in the link.
-        var props_query = this.$options.propsData['query']
-
-        if (this.checkAccountNamePresence() && props_query == null) {
+        if (this.search_query || this.commission_change_filter || this.checkAccountNamePresence()) {
           return true
         } else {
           return false
