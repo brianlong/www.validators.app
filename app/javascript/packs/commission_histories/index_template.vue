@@ -75,7 +75,7 @@
           </tr>
           <commission-history-row 
             v-else
-            @filter_by_query="filter_by_query" 
+            @filter_by_query="filter_by_query"
             v-for="ch in commission_histories" 
             :key="ch.id" 
             :comm_history="ch">
@@ -226,6 +226,7 @@
       },
       filter_by_query: function(query) {
         this.account_name = query;
+        this.search_query = query;
       },
       resetFilterVisibility: function() {
         if (this.search_query || this.commission_change_filter || this.checkAccountNamePresence()) {
