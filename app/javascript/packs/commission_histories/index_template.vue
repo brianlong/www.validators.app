@@ -40,7 +40,7 @@
           type="button"
           @click="clear_search"
           :disabled="loading"
-          v-if="search_query || commission_change_filter"
+          v-if="search_query || commission_change_filter || this.checkAccountNamePresence()"
           title="Clear all filters">
         Reset filters
       </button>
@@ -83,6 +83,14 @@
         </tbody>
       </table>
     </div>
+      <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
+        <b-pagination
+          v-model="page"
+          :total-rows="total_count"
+          :per-page="25"
+          first-text="« First"
+          last-text="Last »" />
+      </div>
   </div>
 </div>
 </template>
