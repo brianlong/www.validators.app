@@ -145,32 +145,6 @@
     ]),
 
     methods: {
-      paginate: function() {
-        this.loading = true;
-        var ctx = this;
-        var url = this.build_api_url();
-
-        axios.get(url)
-             .then(response => {
-               ctx.commission_histories = response.data.commission_histories;
-               ctx.loading = false;
-               // Restore focus after data loads if search was performed
-               ctx.$nextTick(() => {
-                 if (ctx.$refs.searchInput && ctx.search_query) {
-                   ctx.$refs.searchInput.focus();
-                 }
-               });
-             })
-             .catch(() => {
-               ctx.loading = false;
-               // Restore focus after error if search was performed
-               ctx.$nextTick(() => {
-                 if (ctx.$refs.searchInput && ctx.search_query) {
-                   ctx.$refs.searchInput.focus();
-                 }
-               });
-             });
-      },
       sort_by_epoch: function() {
         this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc';
         this.get_data();
@@ -218,21 +192,21 @@
         if (this.search_query !== this.account_name) {
           this.loading = true;
         }
-        this.page = 1;
         this.account_name = this.search_query;
+        this.page = 1;
         this.get_data();
       },
       clear_search: function() {
         this.search_query = '';
         this.commission_change_filter = null;
         this.account_name = '';
-        this.page = 1;
         // Restore focus after clearing
         this.$nextTick(() => {
           if (this.$refs.searchInput) {
             this.$refs.searchInput.focus();
           }
         });
+        this.page = 1;
         this.get_data();
       },
       filter_by_increase: function() {
@@ -263,9 +237,20 @@
                ctx.commission_histories = response.data.commission_histories;
                ctx.total_count = response.data.total_count;
                ctx.loading = false;
+               // Restore focus after data loads if search was performed
+               ctx.$nextTick(() => {
+                 if (ctx.$refs.searchInput && ctx.search_query) {
+                   ctx.$refs.searchInput.focus();
+                 }
+               });
              })
              .catch(function() {
                ctx.loading = false;
+               ctx.$nextTick(() => {
+                 if (ctx.$refs.searchInput && ctx.search_query) {
+                   ctx.$refs.searchInput.focus();
+                 }
+               });
              });
       },
       build_api_url: function() {
