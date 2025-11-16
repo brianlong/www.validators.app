@@ -63,8 +63,7 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
     ).all_records
 
     assert_equal 2, result.size
-    
-    # Verify all results are increases (commission_after > commission_before)
+
     result.each do |record|
       assert record.commission_after > record.commission_before,
              "Expected commission increase but got #{record.commission_before} -> #{record.commission_after}"
@@ -79,8 +78,7 @@ class CommissionHistoryQueryTest < ActiveSupport::TestCase
     ).all_records
 
     assert_equal 2, result.size
-    
-    # Verify all results are decreases (commission_after < commission_before)
+
     result.each do |record|
       assert record.commission_after < record.commission_before,
              "Expected commission decrease but got #{record.commission_before} -> #{record.commission_after}"
