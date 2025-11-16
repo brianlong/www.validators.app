@@ -124,8 +124,8 @@
       } else {
         this.api_url = '/api/v1/commission-changes/' + this.network + '?'
       }
-      var ctx = this
-      var url = this.build_api_url();
+      let ctx = this
+      let url = this.build_api_url();
 
       axios.get(url)
       .then(function (response) {
@@ -229,8 +229,8 @@
       },
       get_data: function() {
         this.loading = true;
-        var ctx = this;
-        var url = this.build_api_url();
+        let ctx = this;
+        let url = this.build_api_url();
         
         axios.get(url)
              .then(function (response) {
@@ -254,7 +254,7 @@
              });
       },
       build_api_url: function() {
-        var url = this.api_url + 'sort_by=' + this.sort_by + '&page=' + this.page;
+        let url = this.api_url + 'sort_by=' + this.sort_by + '&page=' + this.page;
 
         if (this.check_account_name_presence()) {
           url = url + '&query=' + this.account_name
