@@ -89,9 +89,9 @@ class CommissionHistoryQuery
     
     case @change_type
     when 'increase'
-      relation.where('commission_after > commission_before')
+      relation.where('COALESCE(commission_after, 0) > COALESCE(commission_before, 0)')
     when 'decrease'
-      relation.where('commission_after < commission_before')
+      relation.where('COALESCE(commission_after, 0) < COALESCE(commission_before, 0)')
     else
       relation
     end
