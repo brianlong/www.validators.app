@@ -19,21 +19,21 @@
         </div>
         <div class="col-12 col-md-6 mt-3 mt-md-0 ps-md-0">
           <div class="d-flex gap-3 align-items-center justify-content-start">
-            <button 
-              class="btn btn-sm btn-secondary"
+            <button
+              :class="commission_change_filter === 'increase' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary'"
               type="button" 
               @click="filter_by_increase"
               :disabled="loading"
               title="Show only commission increases">
               <i class="fa-solid fa-up-long text-danger"></i>
             </button>
-            <button 
-              class="btn btn-sm btn-secondary"
+            <button
+              :class="commission_change_filter === 'decrease' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary'"
               type="button" 
               @click="filter_by_decrease"
               :disabled="loading"
               title="Show only commission decreases">
-              <i class="fa-solid fa-down-long text-success"></i>
+              <i class="fa-solid fa-down-long"></i>
             </button>
             <button 
               class="btn btn-sm btn-tertiary ms-auto" 
