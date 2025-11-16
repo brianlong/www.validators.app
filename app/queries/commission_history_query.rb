@@ -20,14 +20,14 @@ class CommissionHistoryQuery
   ].freeze
 
   def initialize(options)
-    @network = options.fetch(:network, 'testnet')
-    @time_from = options.fetch(:time_from, nil)
-    @time_to = options.fetch(:time_to, DateTime.now) || DateTime.now
+    @network = options[:network] || 'testnet'
+    @time_from = options[:time_from] || nil
+    @time_to = options[:time_to] || DateTime.now
     @time_range = @time_from ? (@time_from..@time_to) : nil
-    @sort_by = options.fetch(:sort_by, 'timestamp_desc') || 'timestamp_desc'
-    @page = options.fetch(:page, 1)
-    @per = options.fetch(:per, 25)
-    @change_type = options.fetch(:change_type, nil)
+    @sort_by = options[:sort_by] || 'timestamp_desc'
+    @page = options[:page] || 1
+    @per = options[:per] || 25
+    @change_type = options[:change_type] || nil
   end
 
   def all_records
