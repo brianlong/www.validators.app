@@ -217,9 +217,11 @@ module SolanaLogic
         clients_mapping = {
           'SolanaLabs': 0,
           'JitoLabs': 1,
-          'Firedancer': 2,
+          'Frankendancer': 2,
           'Agave': 3,
-          'Paladin': 4
+          'AgavePaladin': 4,
+          'Firedancer': 5,
+          'AgaveBam': 6
         }
 
         if hash['clientId']
