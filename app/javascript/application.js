@@ -3,6 +3,9 @@
 
 console.log("Application.js loaded successfully!")
 
+// Import Bootstrap JS only (CSS handled by Rails Asset Pipeline)
+import 'bootstrap'
+
 // Import application configuration
 import './packs/shared/app_config'
 
@@ -64,7 +67,7 @@ axios.interceptors.request.use(function (config) {
 // import moment from "moment"
 
 // Import src files
-// import './src/sol_prices_charts'
-// import './src/watch_buttons' 
+import './src/sol_prices_charts'
+import './src/watch_buttons' 
 import './src/chart_links'
-// import './src/score_modal_trigger'
+import './src/score_modal_trigger'

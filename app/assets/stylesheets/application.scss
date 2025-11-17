@@ -14,7 +14,8 @@
 
 
 @import "@fortawesome/fontawesome-free/css/all.css";
-@import "bootstrap-vue/dist/bootstrap-vue.css";
+@import "bootstrap/scss/bootstrap";
+// @import "bootstrap-vue/dist/bootstrap-vue.css"; // Wyłączony - konflikt z Bootstrap 5
 @import "variables";
 @import "typography";
 @import "buttons";
@@ -33,6 +34,45 @@
 @import "map";
 @import "modals";
 @import "data_center_map";
+
+// Override Bootstrap 5 CSS custom properties to match our design
+:root {
+  // Base colors
+  --bs-body-color: #{$base-color};
+  --bs-body-bg: transparent;
+  --bs-emphasis-color: #{$base-color};
+  --bs-secondary-color: #{rgba($base-color, 0.75)};
+  
+  // Table colors
+  --bs-table-color: #{$base-color};
+  --bs-table-bg: #{$table-background-color};
+  --bs-table-striped-bg: #{$table-background-color-secondary};
+  --bs-table-accent-bg: transparent;
+  
+  // Form colors
+  --bs-form-control-bg: white;
+  --bs-form-control-color: #{$background-color};
+  --bs-form-control-border-color: #{rgba($table-border-color, 0.3)};
+  
+  // Button close colors
+  --bs-btn-close-color: #{$base-color};
+  --bs-btn-close-opacity: 0.9;
+  --bs-btn-close-hover-opacity: 1;
+  --bs-btn-close-filter: invert(1);
+  
+  // Link colors  
+  --bs-link-color: #{$link-color};
+  --bs-link-hover-color: #{$link-color-secondary};
+  
+  // Navigation colors
+  --bs-navbar-color: #{$base-color};
+  --bs-navbar-hover-color: #{$link-color};
+  --bs-navbar-active-color: #{$green};
+  
+  // Border colors
+  --bs-border-color: #{$table-border-color};
+  --bs-border-color-translucent: #{rgba($table-border-color, 0.5)};
+}
 
 html {
   overflow-x: hidden;
