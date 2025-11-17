@@ -245,8 +245,9 @@ class Validator < ApplicationRecord
   end
 
   def commission_histories_exist
-    CommissionHistoryQuery.new(network: network)
-                          .exists_for_validator?(id)
+    CommissionHistoryQuery.new(
+      network: network
+    ).exists_for_validator?(id)
   end
 
   def active_stake

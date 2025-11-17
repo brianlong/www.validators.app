@@ -153,9 +153,9 @@ end
 namespace :deploy do
   after :starting, 'sidekiq:quiet' # quiets Sidekiq
 
+  after :updating, 'solana:trust'
   after :updating, 'opscomplete:ruby:ensure' # installs Ruby version specified in .ruby-version
   after :updating, 'opscomplete:nodejs:ensure' # installs nodejs specified in .nvmrc
-  after :updating, 'solana:trust'
 
   after :restart, 'rake_task:add_stake_pools'
   after :restart, 'sitemap:create'

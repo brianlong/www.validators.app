@@ -217,9 +217,11 @@ module SolanaLogic
         clients_mapping = {
           'SolanaLabs': 0,
           'JitoLabs': 1,
-          'Firedancer': 2,
+          'Frankendancer': 2,
           'Agave': 3,
-          'Paladin': 4
+          'AgavePaladin': 4,
+          'Firedancer': 5,
+          'AgaveBam': 6
         }
 
         if hash['clientId']
@@ -229,7 +231,7 @@ module SolanaLogic
         else
           # if client name present, map client ID
           client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
-          client == 'Unknown(4)' ? client = 'Paladin' : client
+          client == 'Unknown(4)' ? client = 'AgavePaladin' : client
           client_id = if client&.match(/^Unknown/)
                         client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
                       else

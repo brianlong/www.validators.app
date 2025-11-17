@@ -1,5 +1,7 @@
 #frozen_string_literal: true
 
+require File.expand_path('../config/environment', __dir__)
+
 require "digest/md5"
 require "open-uri"
 
