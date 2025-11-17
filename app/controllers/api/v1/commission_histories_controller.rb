@@ -10,7 +10,10 @@ module Api
           network: index_params[:network],
           time_to: index_params[:date_to],
           time_from: index_params[:date_from],
-          sort_by: index_params[:sort_by]
+          sort_by: index_params[:sort_by],
+          page: index_params[:page],
+          per: index_params[:per],
+          change_type: index_params[:change_type]
         )
 
         commission_histories = if index_params[:query]
@@ -19,9 +22,8 @@ module Api
           ch_query.all_records
         end
 
-        total_count = commission_histories.size
-        commission_histories = commission_histories.page(index_params[:page])
-                                                   .per(index_params[:per])
+        total_count = ch_query.total_count(index_params[:query])
+        
         respond_to do |format|
           format.json do
             render json: {
@@ -50,7 +52,7 @@ module Api
       end
 
       def index_params
-        params.permit(:date_from, :date_to, :network, :query, :page, :per, :sort_by)
+        params.permit(:date_from, :date_to, :network, :query, :page, :per, :sort_by, :change_type)
       end
     end
   end
