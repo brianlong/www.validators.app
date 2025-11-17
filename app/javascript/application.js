@@ -18,6 +18,10 @@ if (!window.Turbolinks) {
   console.log("Turbolinks already loaded, skipping")
 }
 
+// Import Rails UJS for handling method: :delete and other Rails helpers
+import Rails from "@rails/ujs"
+Rails.start()
+
 // Import Active Storage and start it
 import * as ActiveStorage from "@rails/activestorage"
 ActiveStorage.start()
