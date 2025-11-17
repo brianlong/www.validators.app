@@ -63,8 +63,8 @@ axios.interceptors.request.use(function (config) {
 // Import moment
 // import moment from "moment"
 
-// Import src files (commenting out for now)
+// Import src files
 // import './src/sol_prices_charts'
 // import './src/watch_buttons' 
-// import './src/chart_links'
+import './src/chart_links'
 // import './src/score_modal_trigger'
