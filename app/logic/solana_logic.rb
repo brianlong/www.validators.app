@@ -231,7 +231,7 @@ module SolanaLogic
         else
           # if client name present, map client ID
           client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
-          client == 'Unknown(4)' ? client = 'Paladin' : client
+          client == 'Unknown(4)' ? client = 'AgavePaladin' : client
           client_id = if client&.match(/^Unknown/)
                         client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
                       else
