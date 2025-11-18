@@ -217,11 +217,13 @@ class ValidatorTest < ActiveSupport::TestCase
     assert @validator.commission_histories_exist
   end
 
-  test "#commission_histories_exist returns false if there are no commission changes or older than 60 days" do
+  test "#commission_histories_exist returns false if there are no commission changes" do
     refute @validator.commission_histories_exist
+  end
 
-    create(:commission_history, validator: @validator, created_at: 370.days.ago)
-    refute @validator.commission_histories_exist
+  test "#commission_histories_exist returns true even for old commission changes" do
+    create(:commission_history, validator: @validator, created_at: 6.years.ago)
+    assert @validator.commission_histories_exist
   end
 
   test "deleting validator also deletes associated PolicyIdentity" do

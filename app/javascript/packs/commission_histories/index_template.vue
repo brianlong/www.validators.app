@@ -1,5 +1,52 @@
 <template>
-  <div class="card mb-4">
+  <div>
+    <!-- Search Field above card -->
+    <div class="d-flex justify-content-between flex-wrap flex-column flex-md-row gap-3 mb-4">
+      <div class="d-flex flex-wrap flex-column flex-sm-row gap-3">
+        <form @submit.prevent>
+          <input
+              type="text"
+              ref="searchInput"
+              v-model="search_query"
+              @keydown.enter.prevent
+              @input="debounced_search"
+              class="form-control"
+              style="min-width: 330px"
+              placeholder="Search by validator name or account..."
+              :disabled="loading"
+          />
+        </form>
+        <div class="d-flex gap-3">
+          <button
+              :class="commission_change_filter === 'increase' ? 'btn btn-sm btn-primary w-50' : 'btn btn-sm btn-secondary w-50'"
+              type="button"
+              @click="filter_by_increase"
+              :disabled="loading"
+              title="Show only commission increases">
+            <i class="fa-solid fa-up-long text-danger"></i>
+          </button>
+          <button
+              :class="commission_change_filter === 'decrease' ? 'btn btn-sm btn-primary w-50' : 'btn btn-sm btn-secondary w-50'"
+              type="button"
+              @click="filter_by_decrease"
+              :disabled="loading"
+              title="Show only commission decreases">
+            <i class="fa-solid fa-down-long"></i>
+          </button>
+        </div>
+      </div>
+      <button
+          class="btn btn-sm btn-tertiary"
+          type="button"
+          @click="clear_search"
+          :disabled="loading"
+          v-if="this.check_reset_filter_visibility()"
+          title="Clear all filters">
+        Reset filters
+      </button>
+    </div>
+
+    <div class="card mb-4">
     <div class="table-responsive-lg">
       <table class='table'>
         <thead>
@@ -21,26 +68,31 @@
           </tr>
         </thead>
         <tbody>
-          <commission-history-row @filter_by_query="filter_by_query" v-for="ch in commission_histories" :key="ch.id" :comm_history="ch">
+          <tr v-if="loading">
+            <td colspan="5" class="text-center">
+              <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+            </td>
+          </tr>
+          <commission-history-row 
+            v-else
+            @filter_by_query="filter_by_query"
+            v-for="ch in commission_histories" 
+            :key="ch.id" 
+            :comm_history="ch">
           </commission-history-row>
         </tbody>
       </table>
     </div>
-
-    <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
-      <b-pagination
+      <div class="card-footer d-flex justify-content-between flex-wrap gap-2">
+        <b-pagination
           v-model="page"
           :total-rows="total_count"
           :per-page="25"
           first-text="« First"
           last-text="Last »" />
-      <a href='#'
-         @click.prevent="reset_filters"
-         :style="{display: resetFilterVisibility() ? '' : 'none'}"
-         id='reset-filters'
-         class='btn btn-sm btn-tertiary'>Reset filters</a>
-    </div>
+      </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -61,7 +113,11 @@
         total_count: 0,
         sort_by: 'created_at_desc',
         api_url: null,
-        account_name: this.query
+        account_name: this.query,
+        search_query: this.query || '',
+        loading: false,
+        search_timeout: null,
+        commission_change_filter: null // 'increase', 'decrease', or null
       }
     },
 
@@ -71,8 +127,8 @@
       } else {
         this.api_url = '/api/v1/commission-changes/' + this.network + '?'
       }
-      var ctx = this
-      var url = ctx.api_url + 'sort_by=' + ctx.sort_by
+      let ctx = this
+      let url = this.build_api_url();
 
       axios.get(url)
       .then(function (response) {
@@ -82,33 +138,9 @@
     },
 
     watch: {
-      sort_by: function() {
-        var ctx = this
-        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
-
-        if (ctx.checkAccountNamePresence())  {
-          url = url + '&query=' + ctx.account_name
-        }
-
-        axios.get(url)
-             .then(function (response) {
-               ctx.commission_histories = response.data.commission_histories;
-               ctx.total_count = response.data.total_count;
-             })
-      },
       page: function() {
-        this.paginate()
+        this.get_data();
       },
-      account_name: function() {
-        var ctx = this
-        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + 1 + '&query=' + ctx.account_name
-
-        axios.get(url)
-             .then(function (response) {
-                ctx.commission_histories = response.data.commission_histories;
-                ctx.total_count = response.data.total_count;
-              })
-      }
     },
 
     computed: mapGetters([
@@ -116,50 +148,126 @@
     ]),
 
     methods: {
-      paginate: function() {
-        var ctx = this
-        var url = ctx.api_url + 'sort_by=' + ctx.sort_by + '&page=' + ctx.page
-
-        if (ctx.checkAccountNamePresence())  {
-          url = url + '&query=' + ctx.account_name
-        }
-
-        axios.get(url)
-             .then(response => (
-               ctx.commission_histories = response.data.commission_histories
-             ))
-      },
       sort_by_epoch: function() {
-        this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc'
+        this.sort_by = this.sort_by == 'epoch_desc' ? 'epoch_asc' : 'epoch_desc';
+        this.get_data();
       },
       sort_by_timestamp: function() {
-        this.sort_by = this.sort_by == 'timestamp_asc' ? 'timestamp_desc' : 'timestamp_asc'
+        this.sort_by = this.sort_by == 'timestamp_asc' ? 'timestamp_desc' : 'timestamp_asc';
+        this.get_data();
       },
       sort_by_validator: function() {
-        this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc'
+        this.sort_by = this.sort_by == 'validator_desc' ? 'validator_asc' : 'validator_desc';
+        this.get_data();
       },
       filter_by_query: function(query) {
         this.account_name = query;
+        this.search_query = query;
+        this.get_data();
       },
-      reset_filters: function() {
-        this.account_name = '';
-      },
-      resetFilterVisibility: function() {
-        // This checks if there is a account id in the link.
-        var props_query = this.$options.propsData['query']
-
-        if (this.checkAccountNamePresence() && props_query == null) {
+      check_reset_filter_visibility: function() {
+        if (this.search_query || this.commission_change_filter || this.check_account_name_presence()) {
           return true
         } else {
           return false
         }
       },
-      checkAccountNamePresence: function() {
+      check_account_name_presence: function() {
         if (this.account_name !== '' && this.account_name != undefined && this.account_name != null) {
           return true
         } else {
           return false
         }
+      },
+      debounced_search: function() {
+        // Clear previous timeout
+        if (this.search_timeout) {
+          clearTimeout(this.search_timeout);
+        }
+        
+        // Set new timeout for 500ms delay
+        this.search_timeout = setTimeout(() => {
+          this.perform_search();
+        }, 500);
+      },
+      perform_search: function() {
+        // Only set loading if we actually have a search query or if we're clearing it
+        if (this.search_query !== this.account_name) {
+          this.loading = true;
+        }
+        this.account_name = this.search_query;
+        this.page = 1;
+        this.get_data();
+      },
+      clear_search: function() {
+        this.search_query = '';
+        this.commission_change_filter = null;
+        this.account_name = '';
+        // Restore focus after clearing
+        this.$nextTick(() => {
+          if (this.$refs.searchInput) {
+            this.$refs.searchInput.focus();
+          }
+        });
+        this.page = 1;
+        this.get_data();
+      },
+      filter_by_increase: function() {
+        if (this.commission_change_filter === 'increase') {
+          // If already filtering by increase, clear the filter
+          this.commission_change_filter = null;
+        } else {
+          this.commission_change_filter = 'increase';
+        }
+        this.get_data();
+      },
+      filter_by_decrease: function() {
+        if (this.commission_change_filter === 'decrease') {
+          // If already filtering by decrease, clear the filter
+          this.commission_change_filter = null;
+        } else {
+          this.commission_change_filter = 'decrease';
+        }
+        this.get_data();
+      },
+      get_data: function() {
+        this.loading = true;
+        let ctx = this;
+        let url = this.build_api_url();
+        
+        axios.get(url)
+             .then(function (response) {
+               ctx.commission_histories = response.data.commission_histories;
+               ctx.total_count = response.data.total_count;
+               ctx.loading = false;
+               // Restore focus after data loads if search was performed
+               ctx.$nextTick(() => {
+                 if (ctx.$refs.searchInput && ctx.search_query) {
+                   ctx.$refs.searchInput.focus();
+                 }
+               });
+             })
+             .catch(function() {
+               ctx.loading = false;
+               ctx.$nextTick(() => {
+                 if (ctx.$refs.searchInput && ctx.search_query) {
+                   ctx.$refs.searchInput.focus();
+                 }
+               });
+             });
+      },
+      build_api_url: function() {
+        let url = this.api_url + 'sort_by=' + this.sort_by + '&page=' + this.page;
+
+        if (this.check_account_name_presence()) {
+          url = url + '&query=' + this.account_name
+        }
+        
+        if (this.commission_change_filter) {
+          url += '&change_type=' + this.commission_change_filter;
+        }
+        
+        return url;
       }
     }
   }
