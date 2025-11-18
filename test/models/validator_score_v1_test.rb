@@ -200,11 +200,11 @@ class ValidatorScoreV1Test < ActiveSupport::TestCase
 
   test 'assign_software_version_score scores 0 points for correct versions' do
     current_version = '1.5.4'
-    software_versions = { "agave" => current_version }
+    software_versions = { "Agave" => current_version }
     create(:batch, software_version: current_version, software_versions: software_versions)
 
     @validator_score_v1.update(network: 'testnet', software_version: '1.4.4')
-    @validator_score_v1.assign_software_version_score(current_version)
+    @validator_score_v1.assign_software_version_score(software_versions)
 
     assert_equal 0, @validator_score_v1.reload.software_version_score
   end
