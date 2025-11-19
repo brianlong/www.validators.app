@@ -275,9 +275,9 @@
   import blockHistoryTable from './components/block_history_table'
   import validatorScoreModal from "./components/validator_score_modal.vue"
   const loadingImage = window.loading_gif_url || '/assets/loading.gif'
-  const jitoBadge = '/assets/jito.svg'
-  const doubleZeroBadge = '/assets/doublezero.svg'
-  const doubleZeroLegacyBadge = '/assets/doublezero_legacy.svg'
+  const jitoBadge = window.jito_svg_url || '/assets/jito.svg'
+  const doubleZeroBadge = window.doublezero_svg_url || '/assets/doublezero.svg'
+  const doubleZeroLegacyBadge = window.doublezero_legacy_svg_url || '/assets/doublezero_legacy.svg'
 
   const STAKE_DELEGATIONS = {
     solstake: {

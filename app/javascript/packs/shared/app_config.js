@@ -21,6 +21,9 @@ class AppConfig {
     window.agave_icon_url = this.getAssetPath('agave.svg');
     window.firedancer_icon_url = this.getAssetPath('firedancer.svg');
     window.loading_gif_url = this.getAssetPath('loading.gif');
+    window.jito_svg_url = this.getAssetPath('jito.svg');
+    window.doublezero_svg_url = this.getAssetPath('doublezero.svg');
+    window.doublezero_legacy_svg_url = this.getAssetPath('doublezero_legacy.svg');
     
     // Provide global asset path helper for backward compatibility
     window.asset_path_helper = (filename) => this.getAssetPath(filename);
