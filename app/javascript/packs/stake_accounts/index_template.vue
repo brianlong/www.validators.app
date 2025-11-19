@@ -286,7 +286,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  const loadingImage = window.loading_gif_url || '/assets/loading.gif'
 
   import validatorScoreModal from "../validators/components/validator_score_modal.vue"
   import stakePoolsOverview from "./pools_overview.js"
@@ -315,7 +314,7 @@
         selected_pool: null,
         batch: null,
         current_epoch: null,
-        loading_image: loadingImage,
+        loading_image: window.loading_gif_url || '/assets/loading.gif',
         seed: Math.floor(Math.random() * 1000),
         is_stake_below_minimum_visible: true,
         is_loading_stake_account_records: false,

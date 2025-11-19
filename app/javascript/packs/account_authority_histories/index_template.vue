@@ -75,7 +75,6 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  const loadingImage = window.loading_gif_url || '/assets/loading.gif'
 
   const PER_SIZE = 20
 
@@ -96,7 +95,7 @@
       return {
         histories: [],
         is_loading: true,
-        loading_image: loadingImage,
+        loading_image: window.loading_gif_url || '/assets/loading.gif',
         page: 1,
         total_count: 0
       }
