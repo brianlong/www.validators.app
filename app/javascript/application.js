@@ -3,11 +3,28 @@
 
 console.log("Application.js loaded successfully!")
 
+// Import jQuery from npm and make it globally available
+import $ from 'jquery'
+window.$ = window.jQuery = $
+
 // Import Bootstrap JS only (CSS handled by Rails Asset Pipeline)
 import 'bootstrap'
 
-// Import application configuration
+// Import application configuration and initialize it synchronously
 import './packs/shared/app_config'
+
+// Initialize config data immediately if available
+const configElement = document.getElementById('app-config-data');
+if (configElement) {
+  try {
+    const configData = JSON.parse(configElement.textContent);
+    // Set up global variables immediately
+    window.api_authorization = configData.api_authorization;
+    window.google_maps_api_key = configData.google_maps_api_key;
+  } catch (error) {
+    console.error('Failed to parse app configuration:', error);
+  }
+}
 
 // Import Turbolinks and start it  
 import Turbolinks from "turbolinks"
@@ -39,7 +56,10 @@ if (!window.ActionCableConnection) {
 import Vue from 'vue/dist/vue.esm'
 import Vuex from 'vuex'
 import store from "./packs/stores/main_store.js"
-import axios from 'axios'
+import configuredAxios from "./packs/shared/configured_axios"
+
+// Make configured axios globally available (with authorization)
+window.axios = configuredAxios
 
 Vue.use(Vuex)
 window.globalStore = store
@@ -52,17 +72,6 @@ import "./packs/mixins/stake_pools_mixins"
 import "./packs/mixins/strings_mixins"
 import "./packs/mixins/ping_things_mixins"
 import "./packs/mixins/arrays_mixins"
-
-// Setup axios authorization interceptor globally
-axios.interceptors.request.use(function (config) {
-  // Only add authorization header if it's a valid string
-  if (window.api_authorization && typeof window.api_authorization === 'string') {
-    config.headers.Authorization = window.api_authorization;
-  }
-  return config;
-}, function (error) {
-  return Promise.reject(error);
-});
 
 // Import channels (if they exist)
 // import "./channels"

@@ -285,7 +285,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex';
   const loadingImage = window.loading_gif_url || '/assets/loading.gif'
 
@@ -341,7 +340,7 @@
         }
       }
 
-      axios.get(ctx.stake_accounts_api_url, stake_accounts_query_params)
+      window.axios.get(ctx.stake_accounts_api_url, stake_accounts_query_params)
            .then(function (response) {
              ctx.stake_accounts = response.data.stake_accounts
              ctx.total_count = response.data.total_count;
@@ -350,7 +349,7 @@
              ctx.batch = response.data.batch
            })
 
-      axios.get(ctx.stake_pools_api_url)
+      window.axios.get(ctx.stake_pools_api_url)
            .then(function (response) {
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.is_loading_stake_pools = false
@@ -414,7 +413,7 @@
           }
         }
 
-        axios.get(ctx.stake_accounts_api_url, query_params)
+        window.axios.get(ctx.stake_accounts_api_url, query_params)
           .then(function (response) {
             ctx.stake_accounts = response.data.stake_accounts;
             ctx.total_count = response.data.total_count;
