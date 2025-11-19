@@ -50,17 +50,4 @@ class AppConfig {
 // Create and export singleton instance
 const appConfig = new AppConfig();
 
-// Auto-initialize if config is available in the DOM
-document.addEventListener('DOMContentLoaded', () => {
-  const configElement = document.getElementById('app-config-data');
-  if (configElement) {
-    try {
-      const configData = JSON.parse(configElement.textContent);
-      appConfig.init(configData);
-    } catch (error) {
-      console.error('Failed to parse app configuration:', error);
-    }
-  }
-});
-
 export default appConfig;

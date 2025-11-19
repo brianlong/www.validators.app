@@ -5,19 +5,16 @@ import $ from 'jquery'
 window.$ = window.jQuery = $
 
 import 'bootstrap'
-import './packs/shared/app_config'
+import AppConfig from './packs/shared/app_config'
 
 const configElement = document.getElementById('app-config-data');
 if (configElement) {
   try {
     const configData = JSON.parse(configElement.textContent);
-    // Ensure api_authorization is a string
-    if (typeof configData.api_authorization === 'string') {
-      window.api_authorization = configData.api_authorization;
-    }
-    if (typeof configData.google_maps_api_key === 'string') {
-      window.google_maps_api_key = configData.google_maps_api_key;
-    }
+    
+    // Initialize AppConfig with the data from Rails
+    AppConfig.init(configData);
+    
   } catch (error) {
     console.error('Failed to parse app configuration:', error);
   }

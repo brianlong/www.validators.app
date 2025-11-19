@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import defaultAvatar from 'default-avatar.png'
 
 Vue.mixin({
   methods: {
@@ -42,7 +41,7 @@ Vue.mixin({
       if(validator['avatar_file_url']) {
         return validator['avatar_file_url']
       } else {
-        return defaultAvatar
+        return window.default_avatar_url || '/assets/default-avatar.png'
       }
     },
 
