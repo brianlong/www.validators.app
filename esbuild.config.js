@@ -2,7 +2,6 @@ const esbuild = require('esbuild')
 const path = require('path')
 const vuePlugin = require('esbuild-vue')
 
-// Entry points - dodajemy stopniowo Vue komponenty
 const entryPoints = [
   {
     in: 'app/javascript/application.js',
@@ -149,7 +148,6 @@ const buildOptions = {
 }
 
 if (isDev) {
-  // W trybie development używamy context z watch
   esbuild.context(buildOptions).then(ctx => {
     ctx.watch()
     console.log('👀 Watching for changes...')
@@ -158,7 +156,6 @@ if (isDev) {
     process.exit(1)
   })
 } else {
-  // W trybie production robimy jednorazowy build
   esbuild.build(buildOptions).catch((e) => {
     console.error(e)
     process.exit(1)

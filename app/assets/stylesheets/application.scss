@@ -15,7 +15,6 @@
 
 @import "@fortawesome/fontawesome-free/css/all.css";
 @import "bootstrap/scss/bootstrap";
-// @import "bootstrap-vue/dist/bootstrap-vue.css"; // Wyłączony - konflikt z Bootstrap 5
 @import "variables";
 @import "typography";
 @import "buttons";
@@ -35,7 +34,6 @@
 @import "modals";
 @import "data_center_map";
 
-// Override Bootstrap 5 CSS custom properties to match our design
 :root {
   // Base colors
   --bs-body-color: #{$base-color};

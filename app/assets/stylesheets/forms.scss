@@ -8,14 +8,14 @@
   border-radius: $border-radius;
   height: 36px;
   padding-left: 18px;
-  color: $background-color; // ciemny tekst na białym tle
+  color: $background-color;
   background-color: white;
   transition: .1s ease;
   &:focus {
     outline: none;
     border-color: transparent;
     box-shadow: 0 0 0 3px $green-transparent;
-    color: $background-color; // ciemny tekst przy focus
+    color: $background-color;
     background-color: white;
     transition: .1s ease;
   }
