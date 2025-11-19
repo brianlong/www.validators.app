@@ -289,6 +289,8 @@
   const loadingImage = window.loading_gif_url || '/assets/loading.gif'
 
   import validatorScoreModal from "../validators/components/validator_score_modal.vue"
+  import stakePoolsOverview from "./pools_overview.js"
+  import stakePoolStats from "./pool_stats.js"
 
   import debounce from 'lodash/debounce'
 
@@ -322,7 +324,9 @@
     },
 
     components: {
-      'validator-score-modal': validatorScoreModal
+      'validator-score-modal': validatorScoreModal,
+      'stake-pools-overview': stakePoolsOverview,
+      'stake-pool-stats': stakePoolStats
     },
 
     created () {

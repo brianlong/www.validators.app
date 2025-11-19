@@ -8,17 +8,10 @@ import { PaginationPlugin } from "bootstrap-vue";
 import { BPagination } from "bootstrap-vue";
 import store from "../stores/main_store.js";
 
-const VueInstance = window.Vue || Vue
-
-VueInstance.component('BPagination', BPagination)
-VueInstance.component('stake-account-row', StakeAccountRow)
-VueInstance.component('stake-pool-stats', StakePoolStats)
-VueInstance.component('stake-pools-overview', StakePoolsOverview)
-VueInstance.component('validator-row', ValidatorRow)
-VueInstance.use(PaginationPlugin);
+Vue.use(PaginationPlugin);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const stake_account_index = new VueInstance({
+  const stake_account_index = new Vue({
     el: '#stake-accounts-index-vue',
     store,
     components: {

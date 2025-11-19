@@ -19,9 +19,6 @@ Vue.use(BootstrapVue)
 if (!window.globalStore) {
   window.globalStore = store
 }
-
-// All methods from mixins are now available globally via imported mixins above
-
 window.Vue = Vue
 
 export default Vue
