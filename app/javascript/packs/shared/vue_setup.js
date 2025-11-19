@@ -4,6 +4,11 @@ import { BootstrapVue } from 'bootstrap-vue'
 import store from '../stores/main_store.js'
 var moment = require('moment')
 
+// Disable Vue development mode warnings in console
+Vue.config.productionTip = false
+Vue.config.devtools = false
+Vue.config.silent = true
+
 // Import all mixins to register their methods globally
 import '../mixins/validators_mixins'
 import '../mixins/numbers_mixins'
