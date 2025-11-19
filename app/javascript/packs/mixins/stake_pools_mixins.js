@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-const STAKE_POOLS_CONFIG = {
+export const STAKE_POOLS_CONFIG = {
   "marinade": {
     small_logo: "marinade-logo.svg",
     large_logo: "marinade.png"
@@ -63,7 +63,7 @@ const STAKE_POOLS_CONFIG = {
   }
 }
 
-function getAssetPath(filename) {
+export function getAssetPath(filename) {
   if (window.asset_path_helper) {
     return window.asset_path_helper(filename);
   }

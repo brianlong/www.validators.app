@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import { BootstrapVue } from 'bootstrap-vue'
 import store from '../stores/main_store.js'
 import axios from 'axios'
+import { STAKE_POOLS_CONFIG, getAssetPath } from '../mixins/stake_pools_mixins'
 var moment = require('moment')
 
 Vue.use(Vuex)
@@ -137,91 +138,15 @@ Vue.mixin({
         a.every((val, index) => val === b[index]);
     },
 
-    // Stake pools helpers (using window.asset_path_helper)
+    // Stake pools helpers (using STAKE_POOLS_CONFIG from mixins)
     stake_pool_small_logo(stake_pool) {
-      if (window.asset_path_helper) {
-        const logoMap = {
-          "blazestake": "blazestake-logo.png",
-          "daopool": "daopool-logo.png", 
-          "jito": "jito-logo.svg",
-          "jpool": "jpool-logo.svg",
-          "lido": "lido-logo.svg",
-          "marinade": "marinade-logo.svg",
-          "socean": "socean-logo.svg",
-          "zippystake": "zippystake-logo.svg",
-          "edgevana": "edgevana-logo.svg",
-          "aero": "aero-logo.svg",
-          "vault": "vault-logo.png",
-          "shinobi": "shinobi-logo.png",
-          "jagpool": "jagpool-logo.png", 
-          "dynosol": "dynosol-logo.png",
-          "definity": "definsol-logo.png"
-        };
-        const filename = logoMap[stake_pool.toLowerCase()];
-        return filename ? window.asset_path_helper(filename) : "";
-      }
-      // Fallback for development
-      const logos = {
-        "blazestake": "/assets/blazestake-logo.png",
-        "daopool": "/assets/daopool-logo.png", 
-        "jito": "/assets/jito-logo.svg",
-        "jpool": "/assets/jpool-logo.svg",
-        "lido": "/assets/lido-logo.svg",
-        "marinade": "/assets/marinade-logo.svg",
-        "socean": "/assets/socean-logo.svg",
-        "zippystake": "/assets/zippystake-logo.svg",
-        "edgevana": "/assets/edgevana-logo.svg",
-        "aero": "/assets/aero-logo.svg",
-        "vault": "/assets/vault-logo.png",
-        "shinobi": "/assets/shinobi-logo.png",
-        "jagpool": "/assets/jagpool-logo.png", 
-        "dynosol": "/assets/dynosol-logo.png",
-        "definity": "/assets/definsol-logo.png"
-      }
-      return logos[stake_pool.toLowerCase()] || ""
+      const config = STAKE_POOLS_CONFIG[stake_pool.toLowerCase()];
+      return config ? getAssetPath(config.small_logo) : "";
     },
 
     stake_pool_large_logo(stake_pool) {
-      if (window.asset_path_helper) {
-        const logoMap = {
-          "blazestake": "blazestake.png",
-          "daopool": "daopool.png",
-          "jito": "jito.png", 
-          "jpool": "jpool.png",
-          "lido": "lido.png",
-          "marinade": "marinade.png",
-          "socean": "socean.png", 
-          "zippystake": "zippystake.png",
-          "edgevana": "edgevana.png",
-          "aero": "aero.png",
-          "vault": "vault.png",
-          "shinobi": "shinobi.png",
-          "jagpool": "jagpool.png",
-          "dynosol": "dynosol.png",
-          "definity": "definsol.png"
-        };
-        const filename = logoMap[stake_pool.toLowerCase()];
-        return filename ? window.asset_path_helper(filename) : "";
-      }
-      // Fallback for development
-      const logos = {
-        "blazestake": "/assets/blazestake.png",
-        "daopool": "/assets/daopool.png",
-        "jito": "/assets/jito.png", 
-        "jpool": "/assets/jpool.png",
-        "lido": "/assets/lido.png",
-        "marinade": "/assets/marinade.png",
-        "socean": "/assets/socean.png", 
-        "zippystake": "/assets/zippystake.png",
-        "edgevana": "/assets/edgevana.png",
-        "aero": "/assets/aero.png",
-        "vault": "/assets/vault.png",
-        "shinobi": "/assets/shinobi.png",
-        "jagpool": "/assets/jagpool.png",
-        "dynosol": "/assets/dynosol.png",
-        "definity": "/assets/definsol.png"
-      }
-      return logos[stake_pool.toLowerCase()] || ""
+      const config = STAKE_POOLS_CONFIG[stake_pool.toLowerCase()];
+      return config ? getAssetPath(config.large_logo) : "";
     },
 
     // From ping_things_mixins.js
