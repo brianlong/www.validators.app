@@ -1,6 +1,5 @@
 import Chart from 'chart.js/auto'
 import chart_variables from '../validators/charts/chart_variables'
-import '../mixins/numbers_mixins'
 
 export default {
   props: {

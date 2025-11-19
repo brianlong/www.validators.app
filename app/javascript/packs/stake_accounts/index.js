@@ -1,6 +1,4 @@
 import Vue from '../shared/vue_setup'
-import '../mixins/stake_pools_mixins';
-
 import IndexTemplate from './index_template'
 import StakeAccountRow from './stake_account_row'
 import ValidatorRow from '../validators/validator_row'

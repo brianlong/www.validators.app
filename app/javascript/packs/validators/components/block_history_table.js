@@ -1,5 +1,3 @@
-import '../../mixins/dates_mixins'
-
 export default {
   props: {
     block_histories: {

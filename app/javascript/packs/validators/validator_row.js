@@ -1,7 +1,4 @@
 import Vue from '../shared/vue_setup'
-import '../mixins/stake_pools_mixins'
-import '../mixins/numbers_mixins'
-import '../mixins/validators_mixins'
 
 import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
