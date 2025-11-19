@@ -88,7 +88,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
 
   export default {
     props: {
@@ -108,7 +107,7 @@
     created () {
       this.api_url = '/api/v1/ping-thing-user-stats/' + this.network
       var ctx = this
-      axios.get(ctx.api_url)
+      window.axios.get(ctx.api_url)
            .then(function(response) {
              ctx.last_5_mins = JSON.parse(response.data.last_5_mins) ? JSON.parse(response.data.last_5_mins) : {};
              ctx.last_60_mins = JSON.parse(response.data.last_60_mins) ? JSON.parse(response.data.last_60_mins) : {};

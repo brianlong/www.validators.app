@@ -119,7 +119,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
 
   export default {
     props: {
@@ -257,7 +256,7 @@
           limit: this.limit
         }
 
-        axios.get(ctx.api_url, { params: filters })
+        window.axios.get(ctx.api_url, { params: filters })
              .then(function(response) {
                ctx.ping_things = response.data;
              })

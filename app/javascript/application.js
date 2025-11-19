@@ -64,15 +64,6 @@ window.axios = configuredAxios
 Vue.use(Vuex)
 window.globalStore = store
 
-// Import mixins globally
-import "./packs/mixins/validators_mixins"
-import "./packs/mixins/numbers_mixins"
-import "./packs/mixins/dates_mixins"
-import "./packs/mixins/stake_pools_mixins"
-import "./packs/mixins/strings_mixins"
-import "./packs/mixins/ping_things_mixins"
-import "./packs/mixins/arrays_mixins"
-
 // Import channels (if they exist)
 // import "./channels"
 

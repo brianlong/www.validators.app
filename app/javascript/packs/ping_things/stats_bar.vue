@@ -98,7 +98,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
 
   export default {
     props: {
@@ -123,7 +122,7 @@
 
     created () {
       var ctx = this
-      axios.get(ctx.api_url)
+      window.axios.get(ctx.api_url)
            .then(function(response) {
              ctx.last_5_mins = response.data.last_5_mins ? response.data.last_5_mins : {};
              ctx.last_60_mins = response.data.last_60_mins ? response.data.last_60_mins : {};

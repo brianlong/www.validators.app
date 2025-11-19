@@ -17,7 +17,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import { mapGetters } from 'vuex';
   import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
@@ -95,7 +94,7 @@
         add_markers: async function() {
           const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
           const infoWindow = new google.maps.InfoWindow();
-          axios.get('/api/v1/data-centers-for-map?network=' + this.network)
+          window.axios.get('/api/v1/data-centers-for-map?network=' + this.network)
                .then(response => {
                 let valid_data_centers = response.data['data_centers'].filter(data_center => data_center.location_latitude && data_center.location_longitude);
                 valid_data_centers.forEach(data_center => {

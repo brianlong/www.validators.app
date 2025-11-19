@@ -1,7 +1,6 @@
 import Vue from '../shared/vue_setup'
 import StatsBar from './stats_bar.vue'
 import TurbolinksAdapter from 'vue-turbolinks';
-import axios from 'axios'
 // import ActionCableVue from "actioncable-vue";
 
 Vue.use(TurbolinksAdapter);

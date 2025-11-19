@@ -196,7 +196,6 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import axios from 'axios';
 
   export default {
     props: {
@@ -230,7 +229,7 @@
       update_account(account) {
         this.account = account
         let ctx = this
-        axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
+        window.axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
           ctx.validator = JSON.parse(response.data.validator)
           ctx.score = JSON.parse(response.data.score)
         })

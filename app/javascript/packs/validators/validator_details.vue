@@ -274,7 +274,6 @@
   import voteLatencyChart from './charts/vote_latency_chart'
   import blockHistoryTable from './components/block_history_table'
   import validatorScoreModal from "./components/validator_score_modal.vue"
-  import axios from 'axios';
   const loadingImage = window.loading_gif_url || '/assets/loading.gif'
   const jitoBadge = '/assets/jito.svg'
   const doubleZeroBadge = '/assets/doublezero.svg'
@@ -358,7 +357,7 @@
       get_validator_data(){
         let ctx = this
         
-        axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
+        window.axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
           ctx.validator = JSON.parse(response.data.validator)
           ctx.validator_score_details_attrs = JSON.parse(response.data.validator_score_details)
           ctx.score = JSON.parse(response.data.score)

@@ -66,7 +66,6 @@
 
 <script>
   import debounce from 'lodash/debounce';
-  import axios from 'axios';
   import { mapGetters } from 'vuex';
   import ValidatorsMapLeaders from './validators_map_leaders';
   import ValidatorsMapDataCenterDetails from './validators_map_data_center_details';
@@ -97,7 +96,7 @@
           }
         }
 
-      axios.get(this.api_url, query_params).then(function (response) {
+      window.axios.get(this.api_url, query_params).then(function (response) {
         ctx.data_centers_groups = response.data.data_centers_groups;
       })
     },
@@ -205,7 +204,7 @@
             show_gossip_nodes: this.show_gossip_nodes
           }
         }
-        axios.get(ctx.api_url, query_params).then(function (response) {
+        window.axios.get(ctx.api_url, query_params).then(function (response) {
           ctx.data_centers_groups = response.data.data_centers_groups;
         })
       }, 2000),

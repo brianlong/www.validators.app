@@ -34,7 +34,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex'
   import statsChart from './stats_chart'
   import bubbleChart from './bubble_chart'
@@ -55,7 +54,7 @@
     created () {
       this.api_url = '/api/v1/ping-thing/' + this.network
       var ctx = this
-      axios.get(ctx.api_url)
+      window.axios.get(ctx.api_url)
            .then(function(response) {
              ctx.ping_things = response.data;
            })

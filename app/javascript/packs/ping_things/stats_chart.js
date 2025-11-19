@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Chart from 'chart.js/auto';
 import chart_variables from '../validators/charts/chart_variables'
 
@@ -56,7 +55,7 @@ export default {
 
     load_chart_data: function() {
       var ctx = this
-      axios.get("/api/v1/ping-thing-stats/" + this.network, { params: { interval: this.interval } })
+      window.axios.get("/api/v1/ping-thing-stats/" + this.network, { params: { interval: this.interval } })
            .then(function(response) {
              ctx.ping_thing_stats = response.data;
              ctx.update_chart()
