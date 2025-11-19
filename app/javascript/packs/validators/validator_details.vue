@@ -274,10 +274,6 @@
   import voteLatencyChart from './charts/vote_latency_chart'
   import blockHistoryTable from './components/block_history_table'
   import validatorScoreModal from "./components/validator_score_modal.vue"
-  const loadingImage = window.loading_gif_url || '/assets/loading.gif'
-  const jitoBadge = window.jito_svg_url || '/assets/jito.svg'
-  const doubleZeroBadge = window.doublezero_svg_url || '/assets/doublezero.svg'
-  const doubleZeroLegacyBadge = window.doublezero_legacy_svg_url || '/assets/doublezero_legacy.svg'
 
   const STAKE_DELEGATIONS = {
     solstake: {
@@ -320,10 +316,10 @@
         page: null,
         geo_country: null,
         validator_history: {},
-        loading_image: loadingImage,
-        jito_badge: jitoBadge,
-        double_zero_badge: doubleZeroBadge,
-        double_zero_legacy_badge: doubleZeroLegacyBadge,
+        loading_image: window.loading_gif_url || '/assets/loading.gif',
+        jito_badge: window.jito_svg_url || '/assets/jito.svg',
+        double_zero_badge: window.doublezero_svg_url || '/assets/doublezero.svg',
+        double_zero_legacy_badge: window.doublezero_legacy_svg_url || '/assets/doublezero_legacy.svg',
         is_loading_validator: true,
         validator_score_details_attrs: {},
         vote_latencies: {},

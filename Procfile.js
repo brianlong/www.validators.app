@@ -1,1 +1,0 @@
-js: npm run build
