@@ -176,7 +176,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex'
   import logoDefault from 'policy_logo_default.png'
   import ValidatorRow from '../validators/validator_row'
@@ -212,7 +211,7 @@
       get_policy: function() {
         let policy_url = "/api/v1/policies/" + this.network + "/" + this.pubkey + "?page=" + this.page + "&limit=" + this.limit;
         var ctx = this
-        axios.get(policy_url)
+        window.axios.get(policy_url)
           .then(function (response) {
             ctx.policy = response.data || {};
             if (ctx.policy.total_validators !== undefined || ctx.policy.total_other_identities !== undefined) {
@@ -232,7 +231,7 @@
         }
         this.policy.validators.map((validator, idx) => {
           let ctx = this;
-          axios.get('/api/v1/validators/mainnet/' + validator + '?with_history=true')
+          window.axios.get('/api/v1/validators/mainnet/' + validator + '?with_history=true')
                .then(function (response) {
                  ctx.validators.push(response.data);
                })

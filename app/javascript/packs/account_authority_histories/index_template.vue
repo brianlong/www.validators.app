@@ -74,7 +74,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex'
   const loadingImage = window.loading_gif_url || '/assets/loading.gif'
 

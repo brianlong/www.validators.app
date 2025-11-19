@@ -50,7 +50,6 @@
 <script>
   import * as web3 from "@solana/web3.js"
   import { mapGetters } from 'vuex'
-  import axios from 'axios'
   import Chart from 'chart.js/auto';
   import chart_variables from '../validators/charts/chart_variables'
 
@@ -113,7 +112,7 @@
       get_epoch_history: function() {
         var ctx = this
         let api_url = '/api/v1/epochs/' + this.network
-        axios.get(api_url)
+        window.axios.get(api_url)
         .then(function (resp) {
           let epochs = resp.data['epochs'].sort((a, b) => a.epoch - b.epoch)
           for (let i = 0; i < epochs.length - 1; i++) {

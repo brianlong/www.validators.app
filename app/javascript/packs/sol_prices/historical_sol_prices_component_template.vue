@@ -34,7 +34,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import Chart from 'chart.js/auto';
   import chart_variables from '../validators/charts/chart_variables';
 
@@ -81,7 +80,7 @@
         const ctx = this;
         const url = "/api/v1/sol-prices";
 
-        axios.get(url, { params: { filtering: this.days } })
+        window.axios.get(url, { params: { filtering: this.days } })
           .then(response => {
             ctx.recreate_chart_skeleton();
             ctx.drawChartWithData(response.data);
