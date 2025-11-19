@@ -11,8 +11,12 @@ class AppConfig {
     this.assets = configData.assets || {};
     
     // Make config globally accessible for backward compatibility
-    window.api_authorization = this.config.api_authorization;
-    window.google_maps_api_key = this.config.google_maps_api_key;
+    if (typeof this.config.api_authorization === 'string') {
+      window.api_authorization = this.config.api_authorization;
+    }
+    if (typeof this.config.google_maps_api_key === 'string') {
+      window.google_maps_api_key = this.config.google_maps_api_key;
+    }
     window.default_avatar_url = this.getAssetPath('default-avatar.png');
     window.agave_icon_url = this.getAssetPath('agave.svg');
     window.firedancer_icon_url = this.getAssetPath('firedancer.svg');

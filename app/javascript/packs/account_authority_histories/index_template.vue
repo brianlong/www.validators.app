@@ -143,7 +143,7 @@
 
       send_request() {
         const ctx = this
-        axios.get(ctx.account_authorities_path())
+        window.axios.get(ctx.account_authorities_path())
              .then(response => {
                ctx.histories = response.data.authority_changes
                ctx.total_count = response.data.total_count

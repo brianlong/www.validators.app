@@ -11,8 +11,13 @@ const configElement = document.getElementById('app-config-data');
 if (configElement) {
   try {
     const configData = JSON.parse(configElement.textContent);
-    window.api_authorization = configData.api_authorization;
-    window.google_maps_api_key = configData.google_maps_api_key;
+    // Ensure api_authorization is a string
+    if (typeof configData.api_authorization === 'string') {
+      window.api_authorization = configData.api_authorization;
+    }
+    if (typeof configData.google_maps_api_key === 'string') {
+      window.google_maps_api_key = configData.google_maps_api_key;
+    }
   } catch (error) {
     console.error('Failed to parse app configuration:', error);
   }
