@@ -1,11 +1,11 @@
-<%= javascript_pack_tag 'validators/validators_map.js' %>
-<%= javascript_pack_tag 'transactions/transactions_stats_component' %>
-<%= javascript_pack_tag 'epochs/epoch_stats_component' %>
-<%= javascript_pack_tag 'validators/circulating_supply.js' %>
-<%= javascript_pack_tag 'software_versions/software_versions_component.js' %>
-<%= javascript_pack_tag 'clusters/cluster_numbers_component.js' %>
-<%= javascript_pack_tag 'clusters/cluster_performance_stats_component.js' %>
-<%= javascript_pack_tag 'sol_prices/sol_price_component' %>
+<%= javascript_include_tag 'validators/validators_map', defer: true %>
+<%= javascript_include_tag 'transactions/transactions_stats_component', defer: true %>
+<%= javascript_include_tag 'epochs/epoch_stats_component', defer: true %>
+<%= javascript_include_tag 'validators/circulating_supply', defer: true %>
+<%= javascript_include_tag 'software_versions/software_versions_component', defer: true %>
+<%= javascript_include_tag 'clusters/cluster_numbers_component', defer: true %>
+<%= javascript_include_tag 'clusters/cluster_performance_stats_component', defer: true %>
+<%= javascript_include_tag 'sol_prices/sol_price_component', defer: true %>
 
 <section class="banner">
   <p class="h2 mb-4 exclamation">

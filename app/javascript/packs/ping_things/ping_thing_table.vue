@@ -119,10 +119,6 @@
 </template>
 
 <script>
-  import '../mixins/dates_mixins'
-  import axios from 'axios'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
     props: {
@@ -149,20 +145,28 @@
       this.get_records()
     },
 
-    channels: {
-      PingThingChannel: {
-        connected() {},
-        rejected() {},
-        received(data) {
-          if(this.matches_network(data) && this.matches_filters(data)) {
-            this.ping_things.unshift(data)
-            if(this.ping_things.length > this.limit) {
-              this.ping_things.pop()
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "PingThingChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            if(this.matches_network(data) && this.matches_filters(data)) {
+              this.ping_things.unshift(data)
+              if(this.ping_things.length > this.limit) {
+                this.ping_things.pop()
+              }
             }
           }
-        },
-        disconnected() {},
-      },
+        });
+      }
+    },
+
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
 
     methods: {
@@ -252,7 +256,7 @@
           limit: this.limit
         }
 
-        axios.get(ctx.api_url, { params: filters })
+        window.axios.get(ctx.api_url, { params: filters })
              .then(function(response) {
                ctx.ping_things = response.data;
              })

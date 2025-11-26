@@ -2,9 +2,8 @@
   <div>
     <ping-thing-header />
 
-    <stats-bar :network="network"/>
-
-    <div class="row">
+    <stats-bar :network="network" />
+     <div class="row">
       <div class="col-xl-6 mb-4">
         <div class="card h-100">
           <div class="card-content">
@@ -35,17 +34,13 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex'
   import statsChart from './stats_chart'
   import bubbleChart from './bubble_chart'
   import pingThingHeader from './ping_thing_header'
   import pingThingTable from './ping_thing_table'
-  import statsBar from './stats_bar'
-  import userStats from './user_stats'
-  import '../mixins/strings_mixins'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
+  import statsBar from './stats_bar.vue'
+  import userStats from './user_stats.vue'
 
   export default {
     data () {
@@ -59,31 +54,32 @@
     created () {
       this.api_url = '/api/v1/ping-thing/' + this.network
       var ctx = this
-      axios.get(ctx.api_url)
+      window.axios.get(ctx.api_url)
            .then(function(response) {
              ctx.ping_things = response.data;
            })
     },
 
-    channels: {
-      PingThingChannel: {
-        connected() {},
-        rejected() {},
-        received(data) {
-          if(data["network"] == this.network) {
-            this.ping_things.unshift(data)
-            this.ping_things.pop()
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "PingThingChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            if(data["network"] == this.network) {
+              this.ping_things.unshift(data)
+              this.ping_things.pop()
+            }
           }
-        },
-        disconnected() {},
-      },
+        });
+      }
     },
 
-    mounted: function() {
-      this.$cable.subscribe({
-          channel: "PingThingChannel",
-          room: "public",
-        });
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
 
     computed: {

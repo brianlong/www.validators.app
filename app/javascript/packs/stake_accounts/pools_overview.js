@@ -1,6 +1,7 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 
-var StakePoolsOverview = Vue.component('StakePoolsOverview', {
+const StakePoolsOverview = {
+  name: 'StakePoolsOverview',
   props: {
     stake_pools: {
       type: Array,
@@ -87,6 +88,6 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
       </div>
     </div>
   `
-})
+}
 
 export default StakePoolsOverview

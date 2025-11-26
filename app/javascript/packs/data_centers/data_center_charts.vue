@@ -32,11 +32,8 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import { mapGetters } from 'vuex';
   import pieChart from './pie_chart.js'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   export default {
     props:{
@@ -54,7 +51,7 @@
     },
 
     created() {
-      axios.get('/api/v1/data-center-stats/' + this.network + '?secondary_sort=' + this.chart_by)
+      window.axios.get('/api/v1/data-center-stats/' + this.network + '?secondary_sort=' + this.chart_by)
            .then(response => {
              this.data_centers = response.data;
            })

@@ -2,13 +2,15 @@ import Vue from 'vue/dist/vue.esm'
 import { shallowMount } from '@vue/test-utils'
 import IndexTemplate from '../../../app/javascript/packs/commission_histories/index_template'
 import { BPagination } from "bootstrap-vue";
-import axios from 'axios';
 import store from "../../../app/javascript/packs/stores/main_store.js";
 
-jest.mock('axios');
+// Mock window.axios instead of imported axios
+const mockAxios = {
+  get: jest.fn()
+};
 
 var mock_commission_changes = function() {
-  axios.get.mockResolvedValue({
+  mockAxios.get.mockResolvedValue({
     data: [
       {
         commission_histories: {
@@ -22,6 +24,12 @@ var mock_commission_changes = function() {
 }
 
 describe('index_template', ()=> {
+  beforeEach(() => {
+    // Setup window.axios for tests
+    global.window = global.window || {};
+    window.axios = mockAxios;
+  });
+
   it('has correct params without query', ()=>{
     Vue.component('BPagination', BPagination)
     mock_commission_changes()
