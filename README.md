@@ -16,7 +16,6 @@ https://www.validators.app/
 - Download credentials (master.key, test.key and .env) from Keybase
 - To edit credentials run `EDITOR=vim rails credentials:edit`.  
   To open in a different editor, e.g. in nano, use `EDITOR=nano rails credentials:edit`
-- Copy `config/cluster.yml.example` to `config/cluster.yml`
 - Copy `config/database.example.yml` to `config/database.yml` and edit to reflect the proper database name, user name and other settings.
 - Developers using Mac OS will need to `brew install shared-mime-info` before `bundle install`
 
