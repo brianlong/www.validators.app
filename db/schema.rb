@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_10_29_152050) do
+ActiveRecord::Schema.define(version: 2025_12_02_104016) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -716,6 +716,7 @@ ActiveRecord::Schema.define(version: 2025_10_29_152050) do
     t.string "batch_uuid"
     t.integer "epoch"
     t.float "apy"
+    t.index ["epoch"], name: "index_stake_account_histories_on_epoch"
     t.index ["stake_pool_id"], name: "index_stake_account_histories_on_stake_pool_id"
     t.index ["stake_pubkey", "network"], name: "index_stake_account_histories_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_account_histories_on_staker_and_network"

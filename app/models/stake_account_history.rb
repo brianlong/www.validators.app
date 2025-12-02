@@ -27,6 +27,7 @@
 #
 # Indexes
 #
+#  index_stake_account_histories_on_epoch                     (epoch)
 #  index_stake_account_histories_on_stake_pool_id             (stake_pool_id)
 #  index_stake_account_histories_on_stake_pubkey_and_network  (stake_pubkey,network)
 #  index_stake_account_histories_on_staker_and_network        (staker,network)

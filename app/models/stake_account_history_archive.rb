@@ -27,5 +27,10 @@
 #  stake_pool_id                  :integer
 #  validator_id                   :integer
 #
+# Indexes
+#
+#  index_stake_account_history_archives_on_epoch                   (epoch)
+#  index_stake_account_history_archives_on_withdrawer_and_network  (withdrawer,network)
+#
 class StakeAccountHistoryArchive < ApplicationRecord
 end
