@@ -39,4 +39,9 @@ class StakeAccountHistory < ApplicationRecord
 
   belongs_to :stake_pool, optional: true
   belongs_to :validator, optional: true
+
+  scope :filter_by_account, ->(account) { where('stake_pubkey LIKE ?', "#{account}%") }
+  scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
+  scope :filter_by_withdrawer, ->(withdrawer) { where('withdrawer LIKE ?', "#{withdrawer}%") }
+  scope :filter_by_pool, ->(pool_id) { where('stake_pool_id LIKE ?', "#{pool_id}%") }
 end
