@@ -27,6 +27,7 @@
 #
 # Indexes
 #
+#  index_stake_account_histories_on_epoch                     (epoch)
 #  index_stake_account_histories_on_stake_pool_id             (stake_pool_id)
 #  index_stake_account_histories_on_stake_pubkey_and_network  (stake_pubkey,network)
 #  index_stake_account_histories_on_staker_and_network        (staker,network)
@@ -38,4 +39,9 @@ class StakeAccountHistory < ApplicationRecord
 
   belongs_to :stake_pool, optional: true
   belongs_to :validator, optional: true
+
+  scope :filter_by_account, ->(account) { where('stake_pubkey LIKE ?', "#{account}%") }
+  scope :filter_by_staker, ->(staker) { where('staker LIKE ?', "#{staker}%") }
+  scope :filter_by_withdrawer, ->(withdrawer) { where('withdrawer LIKE ?', "#{withdrawer}%") }
+  scope :filter_by_pool, ->(pool_id) { where('stake_pool_id LIKE ?', "#{pool_id}%") }
 end

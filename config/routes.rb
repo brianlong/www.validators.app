@@ -183,6 +183,9 @@ Rails.application.routes.draw do
       # GET /api/v1/stake-accounts/:network
       get 'stake-accounts/:network', to: 'stake_accounts#index', as: 'stake_accounts_index'
 
+      # GET /api/v1/stake-account-histories/:network/:epoch
+      get 'stake-account-histories/:network/:epoch', to: 'stake_account_histories#index', as: 'stake_account_histories_index'
+
       # GET /api/v1/stake-pools/:network
       get 'stake-pools/:network', to: 'stake_pools#index', as: 'stake_pools_index'
 

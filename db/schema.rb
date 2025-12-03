@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_09_09_065444) do
+ActiveRecord::Schema.define(version: 2025_12_02_104016) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -716,6 +716,7 @@ ActiveRecord::Schema.define(version: 2025_09_09_065444) do
     t.string "batch_uuid"
     t.integer "epoch"
     t.float "apy"
+    t.index ["epoch"], name: "index_stake_account_histories_on_epoch"
     t.index ["stake_pool_id"], name: "index_stake_account_histories_on_stake_pool_id"
     t.index ["stake_pubkey", "network"], name: "index_stake_account_histories_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_stake_account_histories_on_staker_and_network"
@@ -744,6 +745,8 @@ ActiveRecord::Schema.define(version: 2025_09_09_065444) do
     t.float "apy"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["epoch"], name: "index_stake_account_history_archives_on_epoch"
+    t.index ["withdrawer", "network"], name: "index_stake_account_history_archives_on_withdrawer_and_network"
   end
 
   create_table "stake_accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
