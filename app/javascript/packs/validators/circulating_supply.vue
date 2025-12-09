@@ -43,7 +43,6 @@
 <script>
   import * as web3 from "@solana/web3.js";
   import { mapGetters } from 'vuex'
-  import '../mixins/numbers_mixins'
 
   export default {
     data() {
@@ -64,28 +63,30 @@
     },
 
     mounted: function() {
-      this.$cable.subscribe({
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
           channel: "FrontStatsChannel",
-          room: "public",
+          room: "public"
+        }, {
+          received: (data) => {
+            const stake = data.cluster_stats[this.network].total_active_stake;
+            this.total_active_stake = this.lamports_to_sol(stake).toLocaleString('en-US', { maximumFractionDigits: 0 });
+            this.gross_yield = data.cluster_stats[this.network].roi.toLocaleString('en-US', { maximumFractionDigits: 2 });
+          }
         });
+      }
+    },
+
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
 
     computed: mapGetters([
       'web3_url',
       'network'
     ]),
-    channels: {
-      FrontStatsChannel: {
-        connected() {},
-        rejected() {},
-        received(data) {
-          const stake = data.cluster_stats[this.network].total_active_stake;
-          this.total_active_stake = this.lamports_to_sol(stake).toLocaleString('en-US', { maximumFractionDigits: 0 });
-          this.gross_yield = data.cluster_stats[this.network].roi.toLocaleString('en-US', { maximumFractionDigits: 2 });
-        },
-        disconnected() {},
-      },
-    },
 
     methods: {
       update_circulating_supply() {

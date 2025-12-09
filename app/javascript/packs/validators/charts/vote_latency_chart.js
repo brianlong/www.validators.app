@@ -17,7 +17,9 @@ export default {
   },
 
   mounted() {
-    this.update_chart()
+    this.$nextTick(() => {
+      this.update_chart()
+    })
   },
 
   watch: {
@@ -38,7 +40,14 @@ export default {
     },
 
     update_chart() {
-      var ctx = document.getElementById("vote-latency-history").getContext('2d');
+      var canvas = document.getElementById("vote-latency-history");
+      
+      if (!canvas) {
+        console.warn('Canvas element "vote-latency-history" not found');
+        return;
+      }
+      
+      var ctx = canvas.getContext('2d');
 
       if(this.chart) {
         this.chart.destroy()

@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 
 const DELEGATION_STRATEGY_URLS = {
   "DAOPool": "https://monkedao.medium.com/daosol-the-next-step-in-decentralizing-solana-7519e3b2bded",
@@ -18,7 +18,8 @@ const DELEGATION_STRATEGY_URLS = {
   "Shinobi": "https://xshin.fi/#Strategy"
 }
 
-var StakePoolStats = Vue.component('StakePoolStats', {
+const StakePoolStats = {
+  name: 'StakePoolStats',
   props: {
     pool: {
       type: Object,
@@ -137,6 +138,6 @@ var StakePoolStats = Vue.component('StakePoolStats', {
       </div>
     </div>
   `
-})
+}
 
 export default StakePoolStats

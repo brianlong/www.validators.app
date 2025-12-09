@@ -19,6 +19,9 @@ module ValidatorsApp
     # Load blacklist of validators from config/validator_blacklist.yml
     config.validator_blacklist = config_for(:validator_blacklist)
     
+    # Add built assets path for jsbundling-rails
+    config.assets.paths << Rails.root.join("app/assets/builds")
+    
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

@@ -1,4 +1,4 @@
-<%= javascript_pack_tag 'validators/components/validator_score_modal.js' %>
+<%= javascript_include_tag 'validators/components/validator_score_modal' %>
 
 <table class='table table-block-sm validators-table'>
   <thead>
@@ -188,12 +188,10 @@
                   <%= link_to stake_pools_path(network: params[:network]), target: "_blank" do %>
                     <% stake_pool_logos(validator.stake_pools_list).each do |logo| %>
                       <% next unless logo && logo[:image] && logo[:name] %>
-                      <%= image_tag(
-                            logo[:image],
-                            class: 'img-xs me-1',
-                            title: logo[:name] + " stake pool",
-                            alt: logo[:name])
-                      %>
+                      <img src="<%= logo[:image] %>"
+                           class="img-xs me-1"
+                           title="<%= logo[:name] %> stake pool"
+                           alt="<%= logo[:name] %>" />
                     <% end %>
                   <% end %>
                 </div>
@@ -323,7 +321,7 @@
       </td>
 
       <!-- VOTE DISTANCE -->
-      <td class="column-chart d-none d-lg-table-cell" id=vote-distance-<%=i%>>
+      <td class="column-chart d-none d-lg-table-cell" id="vote-distance-<%=i%>">
         <%
           vl = chart_x_scale(validator.score&.vote_distance_history.to_a.count)
           line_color = chart_line_color(validator.vote_distance_score)
@@ -371,7 +369,7 @@
         <% end %>
       </td>
 
-      <td class="column-chart d-none d-lg-table-cell" id=vote-latency-<%=i%>>
+      <td class="column-chart d-none d-lg-table-cell" id="vote-latency-<%=i%>">
         <%
           vl = chart_x_scale(validator.score&.vote_latency_history.to_a.count)
           line_color = chart_line_color(validator.vote_latency_score)

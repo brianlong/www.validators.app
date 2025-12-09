@@ -96,12 +96,14 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex';
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
+  import CommissionHistoryRow from './commission_history_row';
 
   export default {
+    components: {
+      'commission-history-row': CommissionHistoryRow
+    },
+
     props: ['query'],
     data () {
       return {
@@ -127,7 +129,7 @@
       let ctx = this
       let url = this.build_api_url();
 
-      axios.get(url)
+      window.axios.get(url)
       .then(function (response) {
         ctx.commission_histories = response.data.commission_histories;
         ctx.total_count = response.data.total_count;
@@ -232,7 +234,7 @@
         let ctx = this;
         let url = this.build_api_url();
         
-        axios.get(url)
+        window.axios.get(url)
              .then(function (response) {
                ctx.commission_histories = response.data.commission_histories;
                ctx.total_count = response.data.total_count;

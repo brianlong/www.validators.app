@@ -66,13 +66,16 @@
 
 <script>
   import debounce from 'lodash/debounce';
-  import axios from 'axios';
   import { mapGetters } from 'vuex';
-  import '../mixins/validators_mixins';
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization;
+  import ValidatorsMapLeaders from './validators_map_leaders';
+  import ValidatorsMapDataCenterDetails from './validators_map_data_center_details';
 
   export default {
+    components: {
+      'validators-map-leaders': ValidatorsMapLeaders,
+      'validators-map-data-center-details': ValidatorsMapDataCenterDetails
+    },
+
     data() {
       return {
         api_url: null,
@@ -93,16 +96,26 @@
           }
         }
 
-      axios.get(this.api_url, query_params).then(function (response) {
+      window.axios.get(this.api_url, query_params).then(function (response) {
         ctx.data_centers_groups = response.data.data_centers_groups;
       })
     },
 
     mounted() {
-      this.$cable.subscribe({
-        channel: 'LeadersChannel',
-        room: "public"
-      });
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "LeadersChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            data = data[this.network];
+            if(data) {
+              this.current_leader = data.current_leader;
+              this.next_leaders = data.next_leaders;
+            }
+          }
+        });
+      }
     },
 
     computed: {
@@ -114,18 +127,9 @@
       ])
     },
 
-    channels: {
-      LeadersChannel: {
-        connected() { },
-        rejected() { },
-        received(data) {
-          data = data[this.network];
-          if(data) {
-            this.current_leader = data.current_leader;
-            this.next_leaders = data.next_leaders;
-          }
-        },
-        disconnected() { }
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
       }
     },
 
@@ -200,7 +204,7 @@
             show_gossip_nodes: this.show_gossip_nodes
           }
         }
-        axios.get(ctx.api_url, query_params).then(function (response) {
+        window.axios.get(ctx.api_url, query_params).then(function (response) {
           ctx.data_centers_groups = response.data.data_centers_groups;
         })
       }, 2000),
