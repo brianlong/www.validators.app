@@ -22,6 +22,7 @@
   <li><a href="#commission-change-index">Commission Changes</a></li>
   <li><a href="#stake-pools">Stake Pools</a></li>
   <li><a href="#stake-accounts">Stake Pools Stake Accounts</a></li>
+  <li><a href="#stake-account-histories">Stake Pools Stake Account Histories</a></li>
   <li><a href="#stake-explorer">Stake Explorer</a></li>
   <li><a href="#ping-thing">Ping Thing Post</a></li>
   <li><a href="#ping-thing-batch">Ping Thing Batch</a></li>
@@ -450,8 +451,8 @@
 
 <h2 class="h4" id="stake-accounts">Stake Pools Stake Accounts</h2>
 <p>
-  The Stake Accounts endpoint will return all the stake accounts delegated to stake pools grouped by vote accounts. Replace `:network`
-  with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  The Stake Accounts endpoint will return all the stake accounts delegated to stake pools.
+  Replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -477,27 +478,78 @@
 {
   "stake_accounts": [
     {
-      "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp": [
-        {
-          "created_at": "2021-11-17T15:53:25.266Z",
-          "activation_epoch": 232,
-          "active_stake": 2000001000000,
-          "delegated_stake": 2000001000000,
-          "network": "testnet",
-          "delegated_vote_account_address": "5HNvXiPTUKPtPxz1Y4cUj9BMDbhupi5Bd6mp7AqJhSGN",
-          "id": 16,
-          "stake_pubkey": "5eJuknGqijkJJzR3Yt35Kr71WrHqDivEhtSeSm3tTYCy",
-          "batch_uuid": "4aac4a2c-3312-4189-9433-d535d1908754",
-          "stake_pool_id": 5,
-          "staker": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
-          "withdrawer": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
-          "pool_name": "Jpool",
-          "validator_name": "linap",
-          "validator_account": "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp"
-        }
-      ]
+      "created_at": "2021-11-17T15:53:25.266Z",
+      "activation_epoch": 232,
+      "active_stake": 2000001000000,
+      "delegated_stake": 2000001000000,
+      "network": "testnet",
+      "delegated_vote_account_address": "5HNvXiPTUKPtPxz1Y4cUj9BMDbhupi5Bd6mp7AqJhSGN",
+      "id": 16,
+      "stake_pubkey": "5eJuknGqijkJJzR3Yt35Kr71WrHqDivEhtSeSm3tTYCy",
+      "batch_uuid": "4aac4a2c-3312-4189-9433-d535d1908754",
+      "stake_pool_id": 5,
+      "staker": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+      "withdrawer": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+      "pool_name": "Jpool",
+      "validator_name": "linap",
+      "validator_account": "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp",
+      "validator_active_stake": 100000000
     },
-  ...
+    ...
+  ],
+   "total_count": 2915,
+   "current_epoch": 888
+}
+</pre>
+
+<hr />
+
+<h2 class="h4" id="stake-account-histories">Stake Pools Stake Account Histories</h2>
+<p>
+  The Stake Account Histories endpoint will return historical stake accounts delegated to stake pools, for given epoch.<br />
+  Replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  Replace `:epoch` with desired historical epoch number.
+</p>
+
+<h3 class="h6">Request:</h3>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-account-histories/:network/:epoch.json'</pre>
+
+<h3 class="h6">Parameter Options:</h3>
+<p>
+  <strong class="text-muted">`filter_[account|staker|withdrawer|pool]=`</strong> filters by chosen value. You can find values on <%= link_to 'stake pools page', stake_pools_path %>.
+</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-account-histories/:network/:epoch.json?filter_pool=Aero'</pre>
+<p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 1_000 (max 9_999).</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-account-histories/:network/:epoch.json?per=50'</pre>
+<p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1.</p>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-account-histories/:network/:epoch.json?page=1'</pre>
+
+<h3 class="h6">Response:</h3>
+<pre>
+{
+  "stake_accounts": [
+    {
+      "created_at": "2021-11-17T15:53:25.266Z",
+      "activation_epoch": 232,
+      "active_stake": 2000001000000,
+      "delegated_stake": 2000001000000,
+      "network": "testnet",
+      "delegated_vote_account_address": "5HNvXiPTUKPtPxz1Y4cUj9BMDbhupi5Bd6mp7AqJhSGN",
+      "id": 16,
+      "stake_pubkey": "5eJuknGqijkJJzR3Yt35Kr71WrHqDivEhtSeSm3tTYCy",
+      "batch_uuid": "4aac4a2c-3312-4189-9433-d535d1908754",
+      "stake_pool_id": 5,
+      "staker": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+      "withdrawer": "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+      "pool_name": "Jpool",
+      "validator_name": "linap",
+      "validator_account": "3X6FsQ8awkcU4iXTF82T4RtnTJx9LTY5D3dHK6zDE1Tp",
+      "validator_active_stake": 100000000
+    },
+    ...
+  ],
+  "total_count": 240,
+  "epoch": 864
 }
 </pre>
 
