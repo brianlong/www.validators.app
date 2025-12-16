@@ -582,7 +582,7 @@ DEPENDENCIES
   hcaptcha (~> 7.1)
   image_processing (~> 1.14)
   jbuilder (~> 2.11)
-  jsbundling-rails
+  jsbundling-rails (~> 1.3)
   json (~> 2.9.1)
   kaminari (~> 1.2.2)
   letter_opener_web
