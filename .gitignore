@@ -35,7 +35,6 @@
 
 # Ignore configuration files
 /config/appsignal.yml
-/config/cluster.yml
 
 /public/packs
 /public/packs-test
