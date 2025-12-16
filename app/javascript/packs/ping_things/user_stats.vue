@@ -147,14 +147,6 @@
         return (typeof attr !== 'undefined' && attr !== null)
       },
 
-      fails_count_percentage: function(fails_count, total_count) {
-        if (!fails_count || !total_count || total_count === 0) {
-          return '(0%)'
-        }
-        const percentage = ((fails_count / total_count) * 100).toFixed(1)
-        return `(${percentage}%)`
-      },
-
       pluralize: function(count, word) {
         if (count === 1) {
           return ` ${word}`
