@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="table-responsive-lg">
-          <table class="table table-sm">
+          <table class="table text-center">
             <thead>
               <tr>
                 <th class="column-sm px-0">
