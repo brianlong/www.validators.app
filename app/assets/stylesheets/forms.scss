@@ -11,6 +11,9 @@
   color: $background-color;
   background-color: white;
   transition: .1s ease;
+  &::placeholder {
+    color: darken($base-color, 30%);
+  }
   &:focus {
     outline: none;
     border-color: transparent;
