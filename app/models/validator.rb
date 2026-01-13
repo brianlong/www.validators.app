@@ -11,7 +11,7 @@
 #  avatar_url          :string(191)
 #  consensus_mods      :boolean          default(FALSE)
 #  details             :string(191)
-#  doublezero_type     :integer          default(0)
+#  doublezero_type     :integer          default("default")
 #  info_pub_key        :string(191)
 #  is_active           :boolean          default(TRUE)
 #  is_destroyed        :boolean          default(FALSE)
