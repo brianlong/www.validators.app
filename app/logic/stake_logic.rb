@@ -99,12 +99,16 @@ module StakeLogic
       return p unless p.code == 200
 
       p.payload[:stake_accounts].each do |acc|
-        vote_account = VoteAccount.where(
-          network: p.payload[:network],
-          account: acc['delegatedVoteAccountAddress']
-        ).order(is_active: :desc).first
+        vote_account = VoteAccount.joins(:validator)
+          .where(
+            network: p.payload[:network],
+            account: acc['delegatedVoteAccountAddress'],
+            validators: { is_active: true }
+          )
+          .order(id: :desc)
+          .first
 
-        validator_id = vote_account ? vote_account.validator.id : nil
+        validator_id = vote_account&.validator_id
 
         StakeAccount.find_or_initialize_by(
           stake_pubkey: acc['stakePubkey'],
