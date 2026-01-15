@@ -119,6 +119,50 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
+  test "update_stake_accounts selects latest vote account with active validator" do
+    authority = "H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b"
+    network = "testnet"
+    create(:stake_pool, authority: authority, network: network)
+
+    inactive_validator = create(:validator, account: "inactive_validator", network: network, is_active: false)
+    create(
+      :vote_account,
+      network: network,
+      account: "4tFDvWiZgF5yM4UAtnQ6TZcPwFQeLNc2tA4iEjQPZGGL",
+      validator: inactive_validator
+    )
+
+    older_active_validator = create(:validator, account: "older_active", network: network, is_active: true)
+    older_vote_account = create(
+      :vote_account,
+      network: network,
+      account: "4tFDvWiZgF5yM4UAtnQ6TZcPwFQeLNc2tA4iEjQPZGGL",
+      validator: older_active_validator,
+      created_at: 2.days.ago
+    )
+
+    newer_active_validator = create(:validator, account: "newer_active", network: network, is_active: true)
+    newer_vote_account = create(
+      :vote_account,
+      network: network,
+      account: "4tFDvWiZgF5yM4UAtnQ6TZcPwFQeLNc2tA4iEjQPZGGL",
+      validator: newer_active_validator,
+      created_at: 1.day.ago
+    )
+
+    SolanaCliService.stub(:request, @json_data, ['stakes', @testnet_url]) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_last_batch)
+                  .then(&get_stake_accounts)
+                  .then(&update_stake_accounts)
+
+      sa_with_val = StakeAccount.where.not(validator_id: nil).first
+
+      assert_equal newer_active_validator.id, sa_with_val.validator_id
+      assert sa_with_val.validator.is_active
+    end
+  end
+
   test 'assign_stake_pools' do
     authority = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
     stake_pool = create(
