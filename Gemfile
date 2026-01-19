@@ -130,6 +130,8 @@ gem 'wicked_pdf', '~> 2.8', '>= 2.8.2'
 # Requests limiter
 gem 'rack-attack', '~> 6.6.1'
 
+gem 'openssl', '~> 4.0'
+
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'bullet', '~> 7.1'
