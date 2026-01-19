@@ -46,7 +46,7 @@ Set up hCaptcha account at https://www.hcaptcha.com/ and get your site key and s
 For development, you will find sample keys in config/credentials.yml.enc.
 
 ## Run server
-Run server by calling `./bin/dev`. It starts rails server and sidekiq.
+Run server by calling `./bin/dev`. It bundles assets, starts rails server at default port and runs sidekiq.
 
 ## Tests
 How to run the test suite:

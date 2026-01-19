@@ -6,7 +6,7 @@
     <div v-else>
       <div v-if="histories.length" class="card mb-4">
         <div class="card-content pb-0" v-if="!standalone">
-          <h2 class="h2 card-heading">Authorities Changes</h2>
+          <h2 class="h4 card-heading">Authorities Changes</h2>
         </div>
 
         <div class="table-responsive-lg">

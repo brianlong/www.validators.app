@@ -61,8 +61,6 @@ module ApplicationHelper
 
   def frontend_config
     {
-      api_authorization: Rails.application.credentials.api_authorization,
-      google_maps_api_key: Rails.application.credentials.google_maps_api_key,
       assets: asset_paths_config
     }
   end

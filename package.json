@@ -64,9 +64,9 @@
   "scripts": {
     "type": "module",
     "test": "jest",
-    "build": "node esbuild.config.js",
+    "build": "NODE_ENV=production node esbuild.config.js",
     "build:dev": "NODE_ENV=development node esbuild.config.js",
-    "build:production": "NODE_ENV=production node esbuild.config.js"
+    "build:test": "NODE_ENV=test node esbuild.config.js"
   },
   "jest": {
     "roots": [

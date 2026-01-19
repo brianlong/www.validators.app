@@ -103,15 +103,13 @@ const entryPoints = [
 
 console.log('Building entry points:', entryPoints.map(ep => ep.out))
 
-const isProduction = process.env.NODE_ENV === 'production'
 const isDev = process.env.NODE_ENV === 'development'
 
 const buildOptions = {
   entryPoints: entryPoints,
   bundle: true,
   outdir: 'app/assets/builds',
-  sourcemap: !isProduction,
-  minify: isProduction,
+  sourcemap: isDev,
   format: 'esm',
   target: ['es2017'],
   publicPath: '/assets',
