@@ -206,6 +206,15 @@
                   <validator-scores :score="score" :account="validator.account"></validator-scores>
                 </td>
               </tr>
+
+              <tr>
+                <td>
+                  <strong>Ibrl Score:</strong>
+                </td>
+                <td>
+                  {{ score.ibrl_score ? score.ibrl_score.toFixed(2) : 'N/A' }} (<a href="https://ibrl.wtf/" target="_blank">see details</a>)
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

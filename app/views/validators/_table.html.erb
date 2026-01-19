@@ -138,6 +138,12 @@
 
             <%= render 'validators/scores', validator: validator %>
             <br />
+            <% if validator.score.ibrl_score %>
+              <div class="small">
+                ibrl score: 
+                <span class="text-muted"><%= validator.score.ibrl_score.round(2) %></span>
+              </div>
+            <% end %>
 
             <% if show_ip_and_gateway %>
               <div class="small text-muted">
