@@ -97,7 +97,7 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Build JavaScript assets
-        run: bin/rails javascript:build
+        run: yarn build
 
       - name: Create DB
         env:

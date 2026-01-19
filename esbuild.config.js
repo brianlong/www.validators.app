@@ -103,15 +103,13 @@ const entryPoints = [
 
 console.log('Building entry points:', entryPoints.map(ep => ep.out))
 
-const isProduction = process.env.NODE_ENV === 'production'
-const isDev = process.env.NODE_ENV === 'development'
+const isWatch = process.argv.includes('--watch')
 
 const buildOptions = {
   entryPoints: entryPoints,
   bundle: true,
   outdir: 'app/assets/builds',
-  sourcemap: !isProduction,
-  minify: isProduction,
+  sourcemap: isWatch,
   format: 'esm',
   target: ['es2017'],
   publicPath: '/assets',
@@ -143,14 +141,13 @@ const buildOptions = {
     '.svg': 'file'
   },
   define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
     '__VUE_PROD_DEVTOOLS__': 'false',
     '__VUE_OPTIONS_API__': 'true',
     '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': 'false'
   }
 }
 
-if (isDev) {
+if (isWatch) {
   esbuild.context(buildOptions).then(ctx => {
     ctx.watch()
     console.log('👀 Watching for changes...')
