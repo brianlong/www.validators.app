@@ -145,6 +145,18 @@ MAINNET_STAKE_POOLS = {
     withdrawal_fee: 0.1,
     deposit_fee: 0
   },
+  doublezero: {
+    name: "DoubleZero",
+    authority: "4cpnpiwgBfUgELVwNYiecwGti45YHSH3R72CPkFTiwJt",
+    network: "mainnet",
+    ticker: "dzsol",
+    small_logo: "doublezero.svg",
+    large_logo: "doublezero_lg.svg",
+    url: "https://doublezero.finance/",
+    manager_fee: 5,
+    withdrawal_fee: 0,
+    deposit_fee: 0
+  },
   socean: {
     # name: "Socean",
     # authority: "AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck",
