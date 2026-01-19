@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import ValidatorSearcherBtnTemplate from './validator_searcher_btn_template.vue'
 import TurbolinksAdapter from 'vue-turbolinks'
 

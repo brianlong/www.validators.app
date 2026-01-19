@@ -74,14 +74,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex'
-  import loadingImage from 'loading.gif'
-  import '../mixins/dates_mixins'
-  import '../mixins/arrays_mixins'
-  import '../mixins/validators_mixins'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   const PER_SIZE = 20
 
@@ -102,7 +95,7 @@
       return {
         histories: [],
         is_loading: true,
-        loading_image: loadingImage,
+        loading_image: window.loading_gif_url || '/assets/loading.gif',
         page: 1,
         total_count: 0
       }
@@ -148,7 +141,7 @@
 
       send_request() {
         const ctx = this
-        axios.get(ctx.account_authorities_path())
+        window.axios.get(ctx.account_authorities_path())
              .then(response => {
                ctx.histories = response.data.authority_changes
                ctx.total_count = response.data.total_count

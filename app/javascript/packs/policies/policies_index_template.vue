@@ -100,12 +100,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex'
   import logoDefault from 'policy_logo_default.png'
 
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
     data() {
@@ -126,7 +123,7 @@
       get_policies: function() {
         let policies_url = "/api/v1/policies/" + this.network + "?query=" + encodeURIComponent(this.searchQuery) + "&page=" + this.page + "&limit=25";
         var ctx = this
-        axios.get(policies_url)
+        window.axios.get(policies_url)
           .then(function (response) {
             console.log("Policies response:", response.data);
             ctx.policies = response.data['policies'] || [];

@@ -1,15 +1,17 @@
-import Vue from 'vue/dist/vue.esm'
-import '../mixins/validators_mixins';
+import Vue from '../shared/vue_setup'
 
-var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
+var ValidatorsMapLeaders = {
+    name: 'ValidatorsMapLeaders',
     props: {
         current_leader: {
             type: Object,
-            required: true
+            required: false,
+            default: null
         },
         next_leaders: {
             type: Array,
-            required: true
+            required: false,
+            default: () => []
         },
     },
 
@@ -50,6 +52,6 @@ var ValidatorsMapLeaders = Vue.component('ValidatorsMapLeaders', {
       </div>
     </div>
   `
-})
+}
 
 export default ValidatorsMapLeaders

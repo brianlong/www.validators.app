@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 document.addEventListener("turbolinks:load", function() {
   document.querySelectorAll(".watch-button").forEach(element => {
     element.addEventListener("click", function() {
@@ -8,12 +6,12 @@ document.addEventListener("turbolinks:load", function() {
       if (!btn.disabled) {
         btn.disabled = true; // prevents from double clicks on the button
 
-        axios.get("/current-user").then(function (response) {
+        window.axios.get("/current-user").then(function (response) {
           let api_token = response.data.api_token;
           let url = "/api/v1/update-watchlist/" + btn.dataset.network;
           let validator_data = { account: btn.dataset.account };
 
-          axios.post(url, validator_data, {
+          window.axios.post(url, validator_data, {
             headers: {
               "Token": api_token,
               "Content-Type": "application/json"

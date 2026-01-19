@@ -9,12 +9,17 @@
   height: 36px;
   padding-left: 18px;
   color: $background-color;
+  background-color: white;
   transition: .1s ease;
+  &::placeholder {
+    color: darken($base-color, 30%);
+  }
   &:focus {
     outline: none;
     border-color: transparent;
     box-shadow: 0 0 0 3px $green-transparent;
     color: $background-color;
+    background-color: white;
     transition: .1s ease;
   }
 }
@@ -44,7 +49,6 @@ input[type=submit] {
 }
 
 .field_with_errors {
-  label {}
   .form-control {
     box-shadow: 0 0 0 3px $red-transparent;
   }

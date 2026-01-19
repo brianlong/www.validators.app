@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Chart from 'chart.js/auto';
 import chart_variables from '../validators/charts/chart_variables'
 
@@ -20,31 +19,32 @@ export default {
     }
   },
 
-  channels: {
-    PingThingStatChannel: {
-      connected() {},
-      rejected() {},
-      received(data) {
-        var new_stat = JSON.parse(data)
-        if(new_stat["interval"] == this.interval && new_stat["network"] == this.network) {
-          this.ping_thing_stats.push(new_stat)
-          this.ping_thing_stats.shift()
-          this.update_chart()
+  mounted: function() {
+    if (window.ActionCableConnection) {
+      this.subscription = window.ActionCableConnection.subscriptions.create({
+        channel: "PingThingStatChannel",
+        room: "public"
+      }, {
+        received: (data) => {
+          var new_stat = JSON.parse(data)
+          if(new_stat["interval"] == this.interval && new_stat["network"] == this.network) {
+            this.ping_thing_stats.push(new_stat)
+            this.ping_thing_stats.shift()
+            this.update_chart()
+          }
         }
-      },
-      disconnected() {},
-    },
+      });
+    }
+  },
+
+  beforeDestroy: function() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   },
 
   created: function() {
     this.load_chart_data()
-  },
-
-  mounted: function() {
-    this.$cable.subscribe({
-      channel: "PingThingStatChannel",
-      room: "public",
-    });
   },
 
   methods: {
@@ -55,7 +55,7 @@ export default {
 
     load_chart_data: function() {
       var ctx = this
-      axios.get("/api/v1/ping-thing-stats/" + this.network, { params: { interval: this.interval } })
+      window.axios.get("/api/v1/ping-thing-stats/" + this.network, { params: { interval: this.interval } })
            .then(function(response) {
              ctx.ping_thing_stats = response.data;
              ctx.update_chart()

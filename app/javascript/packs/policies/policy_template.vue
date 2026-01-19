@@ -153,7 +153,7 @@
         </tbody>
       </table>
 
-      <div class="card-content" v-if="policy && !policy.validators.length && show_validators">No validators.</div>
+      <div class="card-content" v-if="policy && policy.validators && !policy.validators.length && show_validators">No validators.</div>
 
       <table class="table" v-if="policy && policy.other_identities && policy.other_identities.length && !show_validators">
         <tbody>
@@ -163,7 +163,7 @@
         </tbody>
       </table>
 
-      <div class="card-content" v-if="policy && !policy.other_identities.length && !show_validators">No other identities.</div>
+      <div class="card-content" v-if="policy && policy.other_identities && !policy.other_identities.length && !show_validators">No other identities.</div>
     </div>
 
     <b-pagination v-model="page"
@@ -176,13 +176,14 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex'
   import logoDefault from 'policy_logo_default.png'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
+  import ValidatorRow from '../validators/validator_row'
 
   export default {
+    components: {
+      ValidatorRow
+    },
     props: {
       pubkey: {
         type: String,
@@ -210,10 +211,12 @@
       get_policy: function() {
         let policy_url = "/api/v1/policies/" + this.network + "/" + this.pubkey + "?page=" + this.page + "&limit=" + this.limit;
         var ctx = this
-        axios.get(policy_url)
+        window.axios.get(policy_url)
           .then(function (response) {
-            ctx.policy = response.data;
-            ctx.total_count = ctx.show_validators ? ctx.policy.total_validators : ctx.policy.total_other_identities;
+            ctx.policy = response.data || {};
+            if (ctx.policy.total_validators !== undefined || ctx.policy.total_other_identities !== undefined) {
+              ctx.total_count = ctx.show_validators ? ctx.policy.total_validators : ctx.policy.total_other_identities;
+            }
             ctx.get_validators();
           })
           .catch(function (error) {
@@ -228,7 +231,7 @@
         }
         this.policy.validators.map((validator, idx) => {
           let ctx = this;
-          axios.get('/api/v1/validators/mainnet/' + validator + '?with_history=true')
+          window.axios.get('/api/v1/validators/mainnet/' + validator + '?with_history=true')
                .then(function (response) {
                  ctx.validators.push(response.data);
                })
@@ -252,7 +255,9 @@
       },
 
       show_validators: function() {
-        this.total_count = this.show_validators ? this.policy.total_validators : this.policy.total_other_identities;
+        if (this.policy && (this.policy.total_validators !== undefined || this.policy.total_other_identities !== undefined)) {
+          this.total_count = this.show_validators ? this.policy.total_validators : this.policy.total_other_identities;
+        }
       }
     }
   }

@@ -88,11 +88,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import '../mixins/strings_mixins'
-  import '../mixins/ping_things_mixins'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
     props: {
@@ -112,18 +107,11 @@
     created () {
       this.api_url = '/api/v1/ping-thing-user-stats/' + this.network
       var ctx = this
-      axios.get(ctx.api_url)
+      window.axios.get(ctx.api_url)
            .then(function(response) {
              ctx.last_5_mins = JSON.parse(response.data.last_5_mins) ? JSON.parse(response.data.last_5_mins) : {};
              ctx.last_60_mins = JSON.parse(response.data.last_60_mins) ? JSON.parse(response.data.last_60_mins) : {};
            })
-    },
-
-    mounted: function() {
-      this.$cable.subscribe({
-          channel: "PingThingUserStatChannel",
-          room: "public",
-        });
     },
 
     computed: {
@@ -158,27 +146,42 @@
       attribute_valid: function(attr) {
         return (typeof attr !== 'undefined' && attr !== null)
       },
+
+      pluralize: function(count, word) {
+        if (count === 1) {
+          return ` ${word}`
+        }
+        return ` ${word}s`
+      }
     },
 
-    channels: {
-      PingThingUserStatChannel: {
-        connected() {},
-        rejected() {},
-        received(data) {
-          data = JSON.parse(data)
-          if(data["network"] == this.network) {
-              switch(data["interval"]) {
-                case 5:
-                  this.last_5_mins = data["stats"]
-                  break
-                case 60:
-                  this.last_60_mins = data["stats"]
-                  break
-              }
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "PingThingUserStatChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            data = JSON.parse(data)
+            if(data["network"] == this.network) {
+                switch(data["interval"]) {
+                  case 5:
+                    this.last_5_mins = data["stats"]
+                    break
+                  case 60:
+                    this.last_60_mins = data["stats"]
+                    break
+                }
+            }
           }
-        },
-        disconnected() {},
-      },
+        });
+      }
+    },
+
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
   }
 </script>

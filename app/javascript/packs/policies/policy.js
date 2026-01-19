@@ -1,4 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from '../shared/vue_setup'
 import PolicyTemplate from './policy_template'
 import ValidatorRow from '../validators/validator_row'
 import TurbolinksAdapter from 'vue-turbolinks';

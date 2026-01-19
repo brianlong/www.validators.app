@@ -38,8 +38,16 @@ export default {
   },
 
   mounted: function () {
-    var vote_latency_el = document.getElementById("spark_line_vote_latency_" + this.validator['account']).getContext('2d');
-    new Chart(vote_latency_el, {
+    this.$nextTick(() => {
+      var canvas = document.getElementById("spark_line_vote_latency_" + this.validator['account']);
+      
+      if (!canvas) {
+        console.warn('Canvas element "spark_line_vote_latency_' + this.validator['account'] + '" not found');
+        return;
+      }
+      
+      var vote_latency_el = canvas.getContext('2d');
+      new Chart(vote_latency_el, {
       type: 'line',
       data: {
         labels: Array.from(Array(this.vote_latency_chart['vector'].length).keys()).reverse(),
@@ -83,6 +91,7 @@ export default {
         },
       }
     });
+    })
   },
   template: `
     <td class="column-chart d-none d-lg-table-cell" :id="'vote-latency-' + idx ">

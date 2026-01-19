@@ -266,7 +266,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
   import scores from './components/scores'
   import blockHistoryChart from './charts/block_history_chart'
   import voteHistoryChart from './charts/vote_history_chart'
@@ -274,18 +273,7 @@
   import skippedAfterChart from './charts/skipped_after_large_chart'
   import voteLatencyChart from './charts/vote_latency_chart'
   import blockHistoryTable from './components/block_history_table'
-  import validatorScoreModal from "./components/validator_score_modal"
-  import axios from 'axios';
-  import loadingImage from 'loading.gif'
-  import jitoBadge from 'jito.svg'
-  import doubleZeroBadge from 'doublezero.svg'
-  import doubleZeroLegacyBadge from 'doublezero_legacy.svg'
-  import '../mixins/numbers_mixins'
-  import '../mixins/dates_mixins'
-  import '../mixins/stake_pools_mixins'
-  import '../mixins/validators_mixins'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization;
+  import validatorScoreModal from "./components/validator_score_modal.vue"
 
   const STAKE_DELEGATIONS = {
     solstake: {
@@ -328,10 +316,10 @@
         page: null,
         geo_country: null,
         validator_history: {},
-        loading_image: loadingImage,
-        jito_badge: jitoBadge,
-        double_zero_badge: doubleZeroBadge,
-        double_zero_legacy_badge: doubleZeroLegacyBadge,
+        loading_image: window.loading_gif_url || '/assets/loading.gif',
+        jito_badge: window.jito_svg_url || '/assets/jito.svg',
+        double_zero_badge: window.doublezero_svg_url || '/assets/doublezero.svg',
+        double_zero_legacy_badge: window.doublezero_legacy_svg_url || '/assets/doublezero_legacy.svg',
         is_loading_validator: true,
         validator_score_details_attrs: {},
         vote_latencies: {},
@@ -356,15 +344,16 @@
       go_back_link() {
         return '/validators?network=' + this.validator.network + '&order=' + this.order + '&page=' + this.page
       },
-      ...mapGetters([
-        'network'
-      ])
+      network() {
+        return this.$store && this.$store.getters ? this.$store.getters.network : 'mainnet'
+      }
     },
 
     methods: {
       get_validator_data(){
         let ctx = this
-        axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
+        
+        window.axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
           ctx.validator = JSON.parse(response.data.validator)
           ctx.validator_score_details_attrs = JSON.parse(response.data.validator_score_details)
           ctx.score = JSON.parse(response.data.score)

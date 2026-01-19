@@ -31,8 +31,6 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import agaveIcon from 'agave.svg'
-  import firedancerIcon from 'firedancer.svg'
 
   export default {
     data() {
@@ -41,8 +39,8 @@
         validators_count: null,
         nodes_count: null,
         software_versions: null,
-        agave_icon: agaveIcon,
-        firedancer_icon: firedancerIcon
+        agave_icon: window.agave_icon_url || '/assets/agave.svg',
+        firedancer_icon: window.firedancer_icon_url || '/assets/firedancer.svg'
       }
     },
 
@@ -51,23 +49,24 @@
     ]),
 
     mounted: function() {
-      this.$cable.subscribe({
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
           channel: "FrontStatsChannel",
-          room: "public",
+          room: "public"
+        }, {
+          received: (data) => {
+            this.validators_count = data.cluster_stats[this.network].validator_count
+            this.nodes_count = data.cluster_stats[this.network].nodes_count
+            this.software_versions = data.cluster_stats[this.network].software_versions
+          }
         });
+      }
     },
 
-    channels: {
-      FrontStatsChannel: {
-        connected() {},
-        rejected() {},
-        received(data) {
-          this.validators_count = data.cluster_stats[this.network].validator_count
-          this.nodes_count = data.cluster_stats[this.network].nodes_count
-          this.software_versions = data.cluster_stats[this.network].software_versions
-        },
-        disconnected() {},
-      },
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
   }
 </script>

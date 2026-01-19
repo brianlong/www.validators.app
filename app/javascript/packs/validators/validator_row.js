@@ -1,7 +1,4 @@
-import Vue from 'vue/dist/vue.esm'
-import '../mixins/stake_pools_mixins'
-import '../mixins/numbers_mixins'
-import '../mixins/validators_mixins'
+import Vue from '../shared/vue_setup'
 
 import chart_variables from './charts/chart_variables'
 import rootDistanceChart from './charts/root_distance_chart'
@@ -11,7 +8,8 @@ import voteLatencyChart from './charts/vote_latency_small_chart'
 
 import scores from './components/scores'
 
-var ValidatorRow = Vue.component('validatorRow', {
+const ValidatorRow = {
+  name: 'ValidatorRow',
   props: {
     validator: {
       type: Object,
@@ -209,6 +207,6 @@ var ValidatorRow = Vue.component('validatorRow', {
 
     </tr>
   `
-})
+}
 
 export default ValidatorRow

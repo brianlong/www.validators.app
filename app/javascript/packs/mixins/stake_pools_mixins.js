@@ -1,120 +1,84 @@
 import Vue from 'vue';
 
-import BlazeStakeSmall from 'blazestake-logo.png'
-import BlazeStakeLarge from 'blazestake.png'
-
-import DAOPoolSmall from 'daopool-logo.png'
-import DAOPoolLarge from 'daopool.png'
-
-import JitoSmall from 'jito-logo.svg'
-import JitoLarge from 'jito.png'
-
-import JpoolSmall from 'jpool-logo.svg'
-import JpoolLarge from 'jpool.png'
-
-import LidoSmall from 'lido-logo.svg'
-import LidoLarge from 'lido.png'
-
-import MarinadeSmall from 'marinade-logo.svg'
-import MarinadeLarge from 'marinade.png'
-
-import SoceanSmall from 'socean-logo.svg'
-import SoceanLarge from 'socean.png'
-
-import ZippyStakeSmall from 'zippystake-logo.svg'
-import ZippyStakeLarge from 'zippystake.png'
-
-import EdgevanaStakeSmall from 'edgevana-logo.svg'
-import EdgevanaStakeLarge from 'edgevana.png'
-
-import AeroSmall from 'aero-logo.svg'
-import AeroLarge from 'aero.png'
-
-import VaultSmall from 'vault-logo.png'
-import VaultLarge from 'vault.png'
-
-import ShinobiSmall from 'shinobi-logo.png'
-import ShinobiLarge from 'shinobi.png'
-
-import JagSmall from 'jagpool-logo.png'
-import JagLarge from 'jagpool.png'
-
-import DynosolSmall from 'dynosol-logo.png'
-import DynosolLarge from 'dynosol.png'
-
-import DefinitySmall from 'definsol-logo.png'
-import DefinityLarge from 'definsol.png'
-
-const logos = {
-  "blazestake": {
-    "small_logo": BlazeStakeSmall,
-    "large_logo": BlazeStakeLarge,
-  },
-  "daopool": {
-    "small_logo": DAOPoolSmall,
-    "large_logo": DAOPoolLarge,
-  },
-  "jito": {
-    "small_logo": JitoSmall,
-    "large_logo": JitoLarge,
+export const STAKE_POOLS_CONFIG = {
+  "marinade": {
+    small_logo: "marinade-logo.svg",
+    large_logo: "marinade.png"
   },
   "jpool": {
-    "small_logo": JpoolSmall,
-    "large_logo": JpoolLarge,
+    small_logo: "jpool-logo.svg",
+    large_logo: "jpool.png"
   },
-  "lido": {
-    "small_logo": LidoSmall,
-    "large_logo": LidoLarge,
+  "daopool": {
+    small_logo: "daopool-logo.png",
+    large_logo: "daopool.png"
   },
-  "marinade": {
-    "small_logo": MarinadeSmall,
-    "large_logo": MarinadeLarge,
+  "blazestake": {
+    small_logo: "blazestake-logo.png",
+    large_logo: "blazestake.png"
   },
-  "socean": {
-    "small_logo": SoceanSmall,
-    "large_logo": SoceanLarge,
-  },
-  "zippystake": {
-    "small_logo": ZippyStakeSmall,
-    "large_logo": ZippyStakeLarge
+  "jito": {
+    small_logo: "jito-logo.svg",
+    large_logo: "jito.png"
   },
   "edgevana": {
-    "small_logo": EdgevanaStakeSmall,
-    "large_logo": EdgevanaStakeLarge
+    small_logo: "edgevana-logo.svg",
+    large_logo: "edgevana.png"
   },
   "aero": {
-    "small_logo": AeroSmall,
-    "large_logo": AeroLarge
-  },
-  "vault": {
-    "small_logo": VaultSmall,
-    "large_logo": VaultLarge
+    small_logo: "aero-logo.svg",
+    large_logo: "aero.png"
   },
   "shinobi": {
-    "small_logo": ShinobiSmall,
-    "large_logo": ShinobiLarge
+    small_logo: "shinobi-logo.png",
+    large_logo: "shinobi.png"
+  },
+  "vault": {
+    small_logo: "vault-logo.png",
+    large_logo: "vault.png"
+  },
+  "socean": {
+    small_logo: "socean-logo.svg",
+    large_logo: "socean.png"
+  },
+  "lido": {
+    small_logo: "lido-logo.svg",
+    large_logo: "lido.png"
+  },
+  "zippystake": {
+    small_logo: "zippystake-logo.svg",
+    large_logo: "zippystake.png"
   },
   "jagpool": {
-    "small_logo": JagSmall,
-    "large_logo": JagLarge
+    small_logo: "jagpool-logo.png",
+    large_logo: "jagpool.png"
   },
   "dynosol": {
-    "small_logo": DynosolSmall,
-    "large_logo": DynosolLarge
+    small_logo: "dynosol-logo.png",
+    large_logo: "dynosol.png"
   },
   "definity": {
-    "small_logo": DefinitySmall,
-    "large_logo": DefinityLarge
+    small_logo: "definsol-logo.png",
+    large_logo: "definsol.png"
   }
+}
+
+export function getAssetPath(filename) {
+  if (window.asset_path_helper) {
+    return window.asset_path_helper(filename);
+  }
+  return `/assets/${filename}`;
 }
 
 Vue.mixin({
   methods: {
     stake_pool_small_logo(stake_pool) {
-      return logos[stake_pool.toLowerCase()]["small_logo"];
+      const config = STAKE_POOLS_CONFIG[stake_pool.toLowerCase()];
+      return config ? getAssetPath(config.small_logo) : null;
     },
     stake_pool_large_logo(stake_pool) {
-      return logos[stake_pool.toLowerCase()]["large_logo"];
+      const config = STAKE_POOLS_CONFIG[stake_pool.toLowerCase()];
+      return config ? getAssetPath(config.large_logo) : null;
     },
   }
 });

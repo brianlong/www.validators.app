@@ -51,13 +51,13 @@
           </td>
 
           <td class="text-success-darker text-nowrap ps-4 ps-lg-5">
-            {{ (typeof last_5_mins["min_slot_latency"] !== 'undefined') ? last_5_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["min_slot_latency"], 'slot') : 'N / A' }}
+            {{ (last_5_mins["min_slot_latency"] !== null && typeof last_5_mins["min_slot_latency"] !== 'undefined') ? last_5_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["min_slot_latency"], 'slot') : 'N / A' }}
           </td>
           <td class="text-success text-nowrap ps-0 ps-xl-1 pe-0">
-            {{ (typeof last_5_mins["average_slot_latency"] !== 'undefined') ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["average_slot_latency"], 'slot') : 'N / A' }}
+            {{ (last_5_mins["average_slot_latency"] !== null && typeof last_5_mins["average_slot_latency"] !== 'undefined') ? last_5_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["average_slot_latency"], 'slot') : 'N / A' }}
           </td>
           <td class="text-success-darker text-nowrap pe-4 pe-lg-5">
-            {{ (typeof last_5_mins["p90_slot_latency"] !== 'undefined') ? last_5_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["p90_slot_latency"], 'slot') : 'N / A' }}
+            {{ (last_5_mins["p90_slot_latency"] !== null && typeof last_5_mins["p90_slot_latency"] !== 'undefined') ? last_5_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_5_mins["p90_slot_latency"], 'slot') : 'N / A' }}
           </td>
         </tr>
         <tr>
@@ -82,13 +82,13 @@
           </td>
 
           <td class="text-success-darker text-nowrap ps-4 ps-lg-5">
-            {{ (typeof last_60_mins["min_slot_latency"] !== 'undefined') ? last_60_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["min_slot_latency"], 'slot') : 'N / A' }}
+            {{ (last_60_mins["min_slot_latency"] !== null && typeof last_60_mins["min_slot_latency"] !== 'undefined') ? last_60_mins["min_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["min_slot_latency"], 'slot') : 'N / A' }}
           </td>
           <td class="text-success text-nowrap ps-0 ps-xl-1 pe-0">
-            {{ (typeof last_60_mins["average_slot_latency"] !== 'undefined') ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["average_slot_latency"], 'slot') : 'N / A' }}
+            {{ (last_60_mins["average_slot_latency"] !== null && typeof last_60_mins["average_slot_latency"] !== 'undefined') ? last_60_mins["average_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["average_slot_latency"], 'slot') : 'N / A' }}
           </td>
           <td class="text-success-darker text-nowrap pe-4 pe-lg-5">
-            {{ (typeof last_60_mins["p90_slot_latency"] !== 'undefined') ? last_60_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["p90_slot_latency"], 'slot') : 'N / A' }}
+            {{ (last_60_mins["p90_slot_latency"] !== null && typeof last_60_mins["p90_slot_latency"] !== 'undefined') ? last_60_mins["p90_slot_latency"].toLocaleString('en-US', {maximumFractionDigits: 1}) + pluralize(last_60_mins["p90_slot_latency"], 'slot') : 'N / A' }}
           </td>
         </tr>
         </tbody>
@@ -98,9 +98,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import '../mixins/ping_things_mixins'
-  import '../mixins/strings_mixins'
 
   export default {
     props: {
@@ -125,39 +122,40 @@
 
     created () {
       var ctx = this
-      axios.get(ctx.api_url)
+      window.axios.get(ctx.api_url)
            .then(function(response) {
              ctx.last_5_mins = response.data.last_5_mins ? response.data.last_5_mins : {};
              ctx.last_60_mins = response.data.last_60_mins ? response.data.last_60_mins : {};
            })
     },
 
-    channels: {
-      PingThingRecentStatChannel: {
-        connected() {},
-        rejected() {},
-        received(data) {
-          data = JSON.parse(data)
-          if(data["network"] == this.network) {
-              switch(data["interval"]) {
-                case 5:
-                  this.last_5_mins = data
-                  break
-                case 60:
-                  this.last_60_mins = data
-                  break
-              }
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "PingThingRecentStatChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            data = JSON.parse(data)
+            if(data["network"] == this.network) {
+                switch(data["interval"]) {
+                  case 5:
+                    this.last_5_mins = data
+                    break
+                  case 60:
+                    this.last_60_mins = data
+                    break
+                }
+            }
           }
-        },
-        disconnected() {},
-      },
+        });
+      }
     },
 
-    mounted: function() {
-      this.$cable.subscribe({
-          channel: "PingThingRecentStatChannel",
-          room: "public",
-        });
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     }
   }
 </script>

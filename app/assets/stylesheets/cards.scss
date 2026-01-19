@@ -31,4 +31,8 @@
     position: absolute;
     margin-top: -20px;
   }
+
+  [class*=table-responsive-] {
+    margin-bottom: 0;
+}
 }

@@ -285,15 +285,13 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapGetters } from 'vuex';
-  import loadingImage from 'loading.gif'
 
-  import validatorScoreModal from "../validators/components/validator_score_modal"
+  import validatorScoreModal from "../validators/components/validator_score_modal.vue"
+  import stakePoolsOverview from "./pools_overview.js"
+  import stakePoolStats from "./pool_stats.js"
 
   import debounce from 'lodash/debounce'
-
-  axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   const NUMBER_OF_EPOCHS = 6
 
@@ -316,7 +314,7 @@
         selected_pool: null,
         batch: null,
         current_epoch: null,
-        loading_image: loadingImage,
+        loading_image: window.loading_gif_url || '/assets/loading.gif',
         seed: Math.floor(Math.random() * 1000),
         is_stake_below_minimum_visible: true,
         is_loading_stake_account_records: false,
@@ -325,7 +323,9 @@
     },
 
     components: {
-      'validator-score-modal': validatorScoreModal
+      'validator-score-modal': validatorScoreModal,
+      'stake-pools-overview': stakePoolsOverview,
+      'stake-pool-stats': stakePoolStats
     },
 
     created () {
@@ -343,7 +343,7 @@
         }
       }
 
-      axios.get(ctx.stake_accounts_api_url, stake_accounts_query_params)
+      window.axios.get(ctx.stake_accounts_api_url, stake_accounts_query_params)
            .then(function (response) {
              ctx.stake_accounts = response.data.stake_accounts
              ctx.total_count = response.data.total_count;
@@ -352,7 +352,7 @@
              ctx.batch = response.data.batch
            })
 
-      axios.get(ctx.stake_pools_api_url)
+      window.axios.get(ctx.stake_pools_api_url)
            .then(function (response) {
              ctx.stake_pools = response.data.stake_pools.sort((a, b) => 0.5 - Math.random());
              ctx.is_loading_stake_pools = false
@@ -416,7 +416,7 @@
           }
         }
 
-        axios.get(ctx.stake_accounts_api_url, query_params)
+        window.axios.get(ctx.stake_accounts_api_url, query_params)
           .then(function (response) {
             ctx.stake_accounts = response.data.stake_accounts;
             ctx.total_count = response.data.total_count;

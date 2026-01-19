@@ -107,27 +107,28 @@
       }
     },
 
-    channels: {
-      SoftwareVersionsChannel: {
-        connected() {},
-        rejected() {},
-        received(data) {
-          var sw_formatted = {}
-          data[this.network].forEach(v => {
-            sw_formatted[Object.keys(v)[0]] = v[Object.keys(v)[0]]
-          })
-          this.software_versions = sw_formatted
-          this.is_loading = false
-        },
-        disconnected() {},
-      },
+    mounted: function() {
+      if (window.ActionCableConnection) {
+        this.subscription = window.ActionCableConnection.subscriptions.create({
+          channel: "SoftwareVersionsChannel",
+          room: "public"
+        }, {
+          received: (data) => {
+            var sw_formatted = {}
+            data[this.network].forEach(v => {
+              sw_formatted[Object.keys(v)[0]] = v[Object.keys(v)[0]]
+            })
+            this.software_versions = sw_formatted
+            this.is_loading = false
+          }
+        });
+      }
     },
 
-    mounted: function() {
-      this.$cable.subscribe({
-        channel: "SoftwareVersionsChannel",
-        room: "public",
-      });
+    beforeDestroy: function() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     },
 
     computed: {
