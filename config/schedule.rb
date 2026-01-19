@@ -81,6 +81,10 @@ every 1.day, at: '10:00am', roles: [:background] do
   ruby_script_data_centers 'fix_data_centers_webnx.rb'
 end
 
+every 1.day, at: '12:00pm', roles: [:background] do
+  ruby_script 'ibrl_score.rb'
+end
+
 every 1.hour, at: 55, roles: [:www1, :www2] do
   rake "-s sitemap:refresh"
 end
