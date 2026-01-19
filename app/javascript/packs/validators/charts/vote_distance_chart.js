@@ -73,7 +73,7 @@ export default {
           }
         },
         plugins: {
-          tooltip: { display: false },
+          tooltip: { enabled: false },
           legend: { display: false }
         },
       }
