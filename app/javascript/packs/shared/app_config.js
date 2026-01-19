@@ -30,16 +30,6 @@ class AppConfig {
   getAssetPath(filename) {
     return this.assets[filename] || `/assets/${filename}`;
   }
-
-  // Get API authorization token
-  getApiAuth() {
-    return this.config?.api_authorization;
-  }
-
-  // Get all asset paths
-  getAssetPaths() {
-    return this.assets;
-  }
 }
 
 // Create and export singleton instance
