@@ -27,6 +27,9 @@
     <script type="application/json" id="app-config-data">
       <%= raw frontend_config.to_json %>
     </script>
+    <script>
+      window.google_maps_api_key='<%= Rails.application.credentials.google_maps_api_key %>'
+    </script>
 
     <% if content_for? :for_head %>
       <%= yield :for_head %>
