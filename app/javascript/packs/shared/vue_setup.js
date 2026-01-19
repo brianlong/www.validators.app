@@ -10,13 +10,13 @@ Vue.config.devtools = false
 Vue.config.silent = true
 
 // Import all mixins to register their methods globally
-import '../mixins/validators_mixins'
-import '../mixins/numbers_mixins'
+import '../mixins/arrays_mixins'
 import '../mixins/dates_mixins'
+import '../mixins/numbers_mixins'
+import '../mixins/ping_things_mixins'
 import '../mixins/stake_pools_mixins'
 import '../mixins/strings_mixins'
-import '../mixins/ping_things_mixins'
-import '../mixins/arrays_mixins'
+import '../mixins/validators_mixins'
 
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
