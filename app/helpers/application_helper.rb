@@ -61,7 +61,6 @@ module ApplicationHelper
 
   def frontend_config
     {
-      api_authorization: Rails.application.credentials.api_authorization,
       assets: asset_paths_config
     }
   end

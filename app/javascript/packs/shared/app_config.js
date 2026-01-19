@@ -9,11 +9,7 @@ class AppConfig {
   init(configData) {
     this.config = configData;
     this.assets = configData.assets || {};
-    
-    // Make config globally accessible for backward compatibility
-    if (typeof this.config.api_authorization === 'string') {
-      window.api_authorization = this.config.api_authorization;
-    }
+
     window.default_avatar_url = this.getAssetPath('default-avatar.png');
     window.agave_icon_url = this.getAssetPath('agave.svg');
     window.firedancer_icon_url = this.getAssetPath('firedancer.svg');
