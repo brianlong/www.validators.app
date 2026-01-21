@@ -17,15 +17,12 @@ if response.is_a?(Net::HTTPSuccess)
     exit
   end
 
-  # Zbierz wszystkie identities z API
   identities = json_data['data'].map { |d| d['identity'] }
 
-  # Jedno zapytanie do bazy - pobierz wszystkie validators wraz z ich scores
   validators = Validator.where(account: identities, network: network)
                         .includes(:validator_score_v1)
                         .index_by(&:account)
 
-  # Przygotuj updates w transakcji
   ValidatorScoreV1.transaction do
     json_data['data'].each do |validator_data|
       identity = validator_data['identity']
