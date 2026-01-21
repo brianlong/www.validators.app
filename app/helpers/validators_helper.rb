@@ -29,6 +29,16 @@ module ValidatorsHelper
     LIGHT_GREY_TRANSPARENT
   end
 
+  def irbl_score_class(number)
+    if number >= 80
+      "text-success"
+    elsif number >= 50
+      "text-blue"
+    else
+      "text-grey"
+    end
+  end
+
   def chart_x_scale(count)
     [X_SCALE_MAX, count].min
   end

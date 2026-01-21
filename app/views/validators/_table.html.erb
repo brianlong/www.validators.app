@@ -140,7 +140,7 @@
             <br />
             <% if validator.score.ibrl_score && false %>
               <div class="small">
-                ibrl score: 
+                IBRL score:
                 <span class="text-muted"><%= validator.score.ibrl_score.round(2) %></span>
               </div>
             <% end %>
@@ -174,9 +174,9 @@
               </div>
               <% if validator.score.ibrl_score %>
                 <div class="d-lg-inline-block">
-                    <span class="d-inline-block d-lg-none">Ibrl Score:&nbsp;</span>
-                    <span class="d-none d-lg-inline-block">Ibrl:&nbsp;</span>
-                    <span class="text-muted"><%= validator.score.ibrl_score.round(2) %></span>
+                    <span class="d-inline-block d-lg-none">IBRL Score:&nbsp;</span>
+                    <span class="d-none d-lg-inline-block">IBRL:&nbsp;</span>
+                    <span class="<%= irbl_score_class(validator.score.ibrl_score.to_i) %>"><%= validator.score.ibrl_score.round(2) %></span>
                 </div>
               <% end %>
             </div>
