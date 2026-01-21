@@ -152,7 +152,7 @@ MAINNET_STAKE_POOLS = {
     ticker: "dzsol",
     small_logo: "doublezero.svg",
     large_logo: "doublezero_lg.svg",
-    url: "https://doublezero.finance/",
+    url: "https://doublezero.xyz/staking",
     manager_fee: 5,
     withdrawal_fee: 0,
     deposit_fee: 0
