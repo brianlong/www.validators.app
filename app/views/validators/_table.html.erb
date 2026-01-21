@@ -138,6 +138,12 @@
 
             <%= render 'validators/scores', validator: validator %>
             <br />
+            <% if validator.score.ibrl_score && false %>
+              <div class="small">
+                IBRL score:
+                <span class="text-muted"><%= validator.score.ibrl_score.round(2) %></span>
+              </div>
+            <% end %>
 
             <% if show_ip_and_gateway %>
               <div class="small text-muted">
@@ -153,19 +159,26 @@
               </div>
             <% end %>
             <div class="mt-2 mt-lg-0 small">
-              <div class="d-lg-inline-block">
+              <div class="d-lg-inline-block me-1">
                 <span class="d-inline-block d-lg-none">Active Stake:&nbsp;</span>
-                <span class="me-2">
+                <span>
                 <%= number_with_delimiter lamports_to_sol(validator.active_stake).round(0) %>
                   <span class="text-muted">(<%= number_to_percentage(validator.stake_concentration.to_f * 100.0, precision: 1) %>)</span>
               </span>
               </div>
-              <div class="d-lg-inline-block">
+              <div class="d-lg-inline-block me-1">
                 <span class="d-inline-block d-lg-none">Software Version:&nbsp;</span>
                 <span class="d-none d-lg-inline-block">V:&nbsp;</span>
-                <%= validator.score&.software_version %>
+                <span class="text-muted"><%= validator.score&.software_version %></span>&nbsp;
                 <span class="d-inline-block d-lg-none">&nbsp;(<%= validator.score&.software_client %>)</span>
               </div>
+              <% if validator.score.ibrl_score %>
+                <div class="d-lg-inline-block">
+                    <span class="d-inline-block d-lg-none">IBRL Score:&nbsp;</span>
+                    <span class="d-none d-lg-inline-block">IBRL:&nbsp;</span>
+                    <span class="<%= irbl_score_class(validator.score.ibrl_score.to_i) %>"><%= validator.score.ibrl_score.round(2) %></span>
+                </div>
+              <% end %>
             </div>
             <div>
               <% if validator.score.software_client == "Firedancer" || validator.score.software_client == "Frankendancer" %>

@@ -25,6 +25,7 @@
 #  data_center_concentration                   :decimal(10, 3)
 #  data_center_concentration_score             :integer
 #  delinquent                                  :boolean
+#  ibrl_score                                  :float(24)
 #  ip_address                                  :string(191)
 #  network                                     :string(191)
 #  ping_time_avg                               :decimal(10, 3)

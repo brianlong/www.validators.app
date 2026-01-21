@@ -206,6 +206,16 @@
                   <validator-scores :score="score" :account="validator.account"></validator-scores>
                 </td>
               </tr>
+
+              <tr v-if="score.ibrl_score">
+                <td>
+                  <strong>IBRL Score:</strong>
+                </td>
+                <td>
+                  <span :class="ibrl_score_class(score.ibrl_score)">{{ score.ibrl_score ? score.ibrl_score.toFixed(2) : 'N/A' }}</span>
+                  <small><a href="https://ibrl.wtf/" target="_blank">(See details on ibrl.wtf)</a></small>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -362,7 +372,7 @@
     },
 
     methods: {
-      get_validator_data(){
+      get_validator_data() {
         let ctx = this
         axios.get("/api/v1/validators/" + this.network + "/" + this.account + "?internal=true").then(function (response) {
           ctx.validator = JSON.parse(response.data.validator)
@@ -473,6 +483,18 @@
         }
         return delegations.map(stake => [stake[0], stake[1]])
                           .sort((a, b) => 0.5 - Math.random())
+      },
+
+      ibrl_score_class(number) {
+        if(typeof number !== 'number' || isNaN(number)) {
+          return 'text-grey'
+        } else if(number >= 80) {
+          return 'text-success'
+        } else if(number >= 50) {
+          return 'text-blue'
+        } else {
+          return 'text-grey'
+        }
       }
     },
 

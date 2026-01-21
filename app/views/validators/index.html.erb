@@ -25,6 +25,9 @@
         Score updated at <%= @batch&.scored_at || 'N/A' %> <br class="d-md-none"/>
         in batch <%= @batch&.uuid || 'N/A' %>
       </p>
+      <p class="small text-muted">
+        IBRL score provided by <a href="https://ibrl.wtf/" target="_blank">ibrl.wtf</a>.
+      </p>
       <%= paginate @validators %>
     </div>
   </div>
