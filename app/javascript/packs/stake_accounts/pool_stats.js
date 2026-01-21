@@ -15,7 +15,8 @@ const DELEGATION_STRATEGY_URLS = {
   "DynoSol": "https://docs.dynosol.io/Criteria-Eligibility-for-validators-1eaddc395103805aabb2c5410bfe8065",
   "Definity": "https://www.definity.finance/staking-strategy",
   "Vault": "https://docs.thevault.finance/validators/delegation-strategy",
-  "Shinobi": "https://xshin.fi/#Strategy"
+  "Shinobi": "https://xshin.fi/#Strategy",
+  "DoubleZero": "https://doublezero.xyz/dzdp"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {

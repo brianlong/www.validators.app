@@ -45,6 +45,9 @@ import DynosolLarge from 'dynosol.png'
 import DefinitySmall from 'definsol-logo.png'
 import DefinityLarge from 'definsol.png'
 
+import DoublezeroSmall from 'doublezero.svg'
+import DoublezeroLarge from 'doublezero_lg.svg'
+
 const logos = {
   "blazestake": {
     "small_logo": BlazeStakeSmall,
@@ -105,6 +108,10 @@ const logos = {
   "definity": {
     "small_logo": DefinitySmall,
     "large_logo": DefinityLarge
+  },
+  "doublezero": {
+    "small_logo": DoublezeroSmall,
+    "large_logo": DoublezeroLarge
   }
 }
 
