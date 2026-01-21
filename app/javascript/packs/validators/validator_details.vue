@@ -212,7 +212,8 @@
                   <strong>Ibrl Score:</strong>
                 </td>
                 <td>
-                  {{ score.ibrl_score ? score.ibrl_score.toFixed(2) : 'N/A' }} (<a href="https://ibrl.wtf/" target="_blank">see details</a>)
+                  {{ score.ibrl_score ? score.ibrl_score.toFixed(2) : 'N/A' }}
+                  <small>(<a href="https://ibrl.wtf/" target="_blank">see details on ibrl.wtf</a>)</small>
                 </td>
               </tr>
             </tbody>
