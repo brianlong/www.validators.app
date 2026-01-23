@@ -3,9 +3,10 @@
 require File.expand_path('../config/environment', __dir__)
 require 'uri'
 require 'net/http'
+require 'net/protocol'
 
-RETRY_MAX = 5
-SLEEP_TIME = 10
+RETRY_MAX = 5 unless defined?(RETRY_MAX)
+SLEEP_TIME = 10 unless defined?(SLEEP_TIME)
 
 retry_count = 0
 network = ARGV[0] || 'mainnet'
@@ -14,11 +15,13 @@ begin
   uri = URI("https://explorer.bam.dev/api/v1/ibrl_validators")
   response = Net::HTTP.get_response(uri)
 
-  raise "Failed to fetch data from API. Status: #{response.code}" unless response.is_a?(Net::HTTPSuccess)
+  unless response.is_a?(Net::HTTPSuccess)
+    raise Net::HTTPError.new("Failed to fetch data from API. Status: #{response.code}", response)
+  end
 
   json_data = JSON.parse(response.body)
   
-  exit if json_data['data'].nil?
+  raise "No data returned from API" if json_data['data'].nil?
 
   identities = json_data['data'].reject { |d| d['ibrl_score'] == 0 }.map { |d| d['identity'] }
 
@@ -42,7 +45,7 @@ begin
       validator.validator_score_v1.update_column(:ibrl_score, ibrl_score)
     end
   end
-rescue => e
+rescue Net::HTTPError, Net::OpenTimeout, Net::ReadTimeout, SocketError, Errno::ECONNREFUSED => e
   retry_count += 1
   if retry_count < RETRY_MAX
     sleep(SLEEP_TIME)
