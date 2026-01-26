@@ -3,21 +3,29 @@
 require File.expand_path('../config/environment', __dir__)
 require 'uri'
 require 'net/http'
+require 'net/protocol'
 
+RETRY_MAX = 5 unless defined?(RETRY_MAX)
+SLEEP_TIME = 10 unless defined?(SLEEP_TIME)
+
+retry_count = 0
 network = ARGV[0] || 'mainnet'
 
-uri = URI("https://explorer.bam.dev/api/v1/ibrl_validators")
-response = Net::HTTP.get_response(uri)
+begin
+  uri = URI("https://explorer.bam.dev/api/v1/ibrl_validators")
+  response = Net::HTTP.get_response(uri)
 
-if response.is_a?(Net::HTTPSuccess)
-  json_data = JSON.parse(response.body)
-  
-  if json_data['data'].nil?
-    puts "No data returned from API"
-    exit
+  unless response.is_a?(Net::HTTPSuccess)
+    raise Net::HTTPError.new("Failed to fetch data from API. Status: #{response.code}", response)
   end
 
-  identities = json_data['data'].map { |d| d['identity'] }
+  json_data = JSON.parse(response.body)
+  
+  raise "No data returned from API" if json_data['data'].nil?
+
+  identities = json_data['data'].reject { |d| d['ibrl_score'] == 0 }.map { |d| d['identity'] }
+
+  raise "No validators with non-zero ibrl_score found" if identities.empty?
 
   validators = Validator.where(account: identities, network: network)
                         .includes(:validator_score_v1)
@@ -37,7 +45,10 @@ if response.is_a?(Net::HTTPSuccess)
       validator.validator_score_v1.update_column(:ibrl_score, ibrl_score)
     end
   end
-
-else
-  puts "Failed to fetch data from API. Status: #{response.code}"
+rescue Net::HTTPError, Net::OpenTimeout, Net::ReadTimeout, SocketError, Errno::ECONNREFUSED => e
+  retry_count += 1
+  if retry_count < RETRY_MAX
+    sleep(SLEEP_TIME)
+    retry
+  end
 end
