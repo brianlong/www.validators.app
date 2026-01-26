@@ -370,4 +370,14 @@ class ValidatorScoreV1 < ApplicationRecord
       end
     end
   end
+
+  def software_client_family
+    if software_client.in? %w[Firedancer Frankendancer]
+      "Firedancer"
+    elsif software_client.in? %w[Agave AgavePaladin AgaveBam JitoLabs Harmonic]
+      "Agave"
+    else
+      nil
+    end
+  end
 end
