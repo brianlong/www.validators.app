@@ -51,3 +51,6 @@ solana_cli_update_instruction.md
 data_center_override_instruction.md
 database_instructions.md
 deployment_instructions.md
+
+.github/copilot-instructions.md
+.github/instructions
