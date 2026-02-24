@@ -222,6 +222,7 @@ module SolanaLogic
           'AgavePaladin': 4,
           'Firedancer': 5,
           'AgaveBam': 6,
+          'Rakurai': 8,
           'HarmonicAgave': 10,
           'HarmonicFrankendancer': 11
         }
