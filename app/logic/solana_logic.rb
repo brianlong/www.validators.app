@@ -222,7 +222,9 @@ module SolanaLogic
           'AgavePaladin': 4,
           'Firedancer': 5,
           'AgaveBam': 6,
-          'Harmonic': 10
+          'Rakurai': 8,
+          'HarmonicAgave': 10,
+          'HarmonicFrankendancer': 11
         }
 
         if hash['clientId']
