@@ -16,7 +16,7 @@ module Blockchain
       @block = solana_client_request(
         @config_urls,
         :get_block,
-        params: [@slot_number, {}]
+        params: [@slot_number, { encoding: "jsonParsed", maxSupportedTransactionVersion: 0 }]
       )
       if @block[:error]
         if @block[:error].include?("429")
@@ -70,15 +70,20 @@ module Blockchain
     def process_transactions
       if @block["transactions"]
         vote_txs = @block["transactions"].select do |tx| 
-          tx["transaction"]["message"]["accountKeys"].include?("Vote111111111111111111111111111111111111111")
+          tx.dig("transaction", "message", "accountKeys")&.any? { |key| 
+            key.is_a?(Hash) ? key["pubkey"] == "Vote111111111111111111111111111111111111111" : key == "Vote111111111111111111111111111111111111111"
+          }
         end
         vote_txs.in_groups_of(1000) do |group|
           batch = group.compact.map do |tx|
+            message = tx["transaction"]["message"]
+            account_keys = extract_account_keys(message)
+            voted_slot = extract_voted_slot(message)
             {
-              account_key_1: tx["transaction"]["message"]["accountKeys"][0],
-              account_key_2: tx["transaction"]["message"]["accountKeys"][1],
-              account_key_3: tx["transaction"]["message"]["accountKeys"][2],
-              recent_blockhash: tx["transaction"]["message"]["recentBlockhash"],
+              account_key_1: account_keys[0],
+              account_key_2: account_keys[1],
+              account_key_3: account_keys[2],
+              recent_blockhash: voted_slot.to_s,
               fee: tx["meta"]["fee"],
               post_balances: tx["meta"]["postBalances"],
               pre_balances: tx["meta"]["preBalances"],
@@ -111,6 +116,48 @@ module Blockchain
         puts e.message
         return { error: e.message }
       end
+    end
+
+    # Extract account keys from message (handles both legacy and jsonParsed formats)
+    def extract_account_keys(message)
+      account_keys = message["accountKeys"]
+      if account_keys.first.is_a?(Hash)
+        account_keys.map { |key| key["pubkey"] }
+      else
+        account_keys
+      end
+    end
+
+    # Extract voted slot from vote instruction
+    # Vote instructions contain the slot(s) being voted on
+    # Supports both "vote" and "towersync" instruction types
+    def extract_voted_slot(message)
+      instructions = message["instructions"]
+      return nil unless instructions
+
+      instructions.each do |instruction|
+        if instruction.is_a?(Hash) && instruction["parsed"]
+          parsed = instruction["parsed"]
+
+          if parsed["type"] == "vote" && parsed["info"]
+            votes = parsed["info"]["votes"]
+            return votes.last["slot"] if votes&.any?
+          end
+          
+          if parsed["type"] == "towersync" && parsed["info"]
+            tower_sync_data = parsed["info"]["towerSync"]
+            if tower_sync_data.is_a?(Hash) && tower_sync_data["lockouts"]
+              lockouts = tower_sync_data["lockouts"]
+              if lockouts.is_a?(Array) && lockouts.any?
+                voted_slot = lockouts.last["slot"]
+                return voted_slot
+              end
+            end
+          end
+        end
+      end
+      
+      nil
     end
   end
 end
