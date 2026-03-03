@@ -15,7 +15,7 @@ module Blockchain
     end
 
     test "#call sets vote latency score for validators" do
-      create(:mainnet_transaction, account_key_1: @account, recent_blockhash: "blockhash_0", block: Blockchain::MainnetBlock.last)
+      create(:mainnet_transaction, account_key_1: @account, recent_blockhash: "0", block: Blockchain::MainnetBlock.last)
       Blockchain::SetVoteLatencyScore.new(@network).call
 
       assert_equal 0, @validator.score.reload.vote_latency_score
@@ -25,10 +25,10 @@ module Blockchain
 
     test "#call sets correct score while there are multiple transactions" do
       5.times do 
-        create(:mainnet_transaction, account_key_1: @account, recent_blockhash: "blockhash_2", block: Blockchain::MainnetBlock.last)
+        create(:mainnet_transaction, account_key_1: @account, recent_blockhash: "2", block: Blockchain::MainnetBlock.last)
       end
       5.times do
-        create(:mainnet_transaction, account_key_1: @account, recent_blockhash: "blockhash_3", block: Blockchain::MainnetBlock.last)
+        create(:mainnet_transaction, account_key_1: @account, recent_blockhash: "3", block: Blockchain::MainnetBlock.last)
       end
       Blockchain::SetVoteLatencyScore.new(@network).call
 
@@ -38,7 +38,7 @@ module Blockchain
     end
 
     test "#call pushes to vote_latency_history up to maximum" do
-      create(:mainnet_transaction, account_key_1: @account, recent_blockhash: "blockhash_0", block: Blockchain::MainnetBlock.last)
+      create(:mainnet_transaction, account_key_1: @account, recent_blockhash: "0", block: Blockchain::MainnetBlock.last)
       @validator.score.update(vote_latency_history: (0..ValidatorScoreV1::MAX_HISTORY).to_a)
       Blockchain::SetVoteLatencyScore.new(@network).call
 

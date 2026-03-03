@@ -248,7 +248,10 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   def assign_vote_latency_score
-    return 0 if vote_latency_history.blank?
+    if vote_latency_history.blank?
+      self.vote_latency_score = 0
+      return
+    end
 
     self.vote_latency_score = case vote_latency_history.last
                               when 0...2 then 2
@@ -348,11 +351,10 @@ class ValidatorScoreV1 < ApplicationRecord
   end
 
   def vote_latency_history_push(val)
-    self.vote_latency_history = [] if vote_latency_history.nil?
-    vote_latency_history << val
-    if vote_latency_history.length > MAX_HISTORY
-      self.vote_latency_history = vote_latency_history[-MAX_HISTORY..-1]
-    end
+    arr = vote_latency_history || []
+    arr << val
+    arr = arr[-MAX_HISTORY..-1] if arr.length > MAX_HISTORY
+    self.vote_latency_history = arr
   end
 
   def to_builder(with_history: false)

@@ -37,9 +37,9 @@ module Blockchain
             "transaction"=>{
               "message"=>{
                 "accountKeys"=>[
-                  "CoreZU3NjoVQKcx7wTPty13BmQhrJUjhvS6Hdjq6nbYx",
-                  "6DVFiYKvmPRvYjins4LtRSiEm81CswtP5yHTpgPdtrgK",
-                  "Vote111111111111111111111111111111111111111"
+                  {"pubkey" => "CoreZU3NjoVQKcx7wTPty13BmQhrJUjhvS6Hdjq6nbYx", "signer" => true, "writable" => true},
+                  {"pubkey" => "6DVFiYKvmPRvYjins4LtRSiEm81CswtP5yHTpgPdtrgK", "signer" => false, "writable" => true},
+                  {"pubkey" => "Vote111111111111111111111111111111111111111", "signer" => false, "writable" => false}
                 ],
                 "header"=>{
                   "numReadonlySignedAccounts"=>0,
@@ -47,10 +47,20 @@ module Blockchain
                   "numRequiredSignatures"=>1
                 },
                 "instructions"=>[{
-                  "accounts"=>[1, 0],
-                  "data"=>"Fk63Pwf7bG7e5VsmGZkX4EdTXaMZT4wt2EUK1ud5gddWehs5wk93y6ziWydGnqXJq2kdBiRDgk1g5G1ofZQMuBn4mQ8fCQYuuJzgt3BR76hRG2zLDZHJazv7gjhMNxoUY2vnxbzL1bTjFxgZ6JxMjSs9odrwts",
-                  "programIdIndex"=>2,
-                  "stackHeight"=>nil
+                  "parsed" => {
+                    "type" => "vote",
+                    "info" => {
+                      "voteAccount" => "6DVFiYKvmPRvYjins4LtRSiEm81CswtP5yHTpgPdtrgK",
+                      "voteAuthority" => "CoreZU3NjoVQKcx7wTPty13BmQhrJUjhvS6Hdjq6nbYx",
+                      "votes" => [
+                        {"slot" => 12340, "confirmationCount" => 5},
+                        {"slot" => 12341, "confirmationCount" => 4},
+                        {"slot" => 12342, "confirmationCount" => 3}
+                      ]
+                    }
+                  },
+                  "program" => "vote",
+                  "programId" => "Vote111111111111111111111111111111111111111"
                 }],
                 "recentBlockhash"=>"4W2iKcjsuTfxEzovgt3LfALUPGNxscFrhtjN4mVurw6L"
               },
@@ -108,18 +118,19 @@ module Blockchain
       end
 
       assert_equal 1, Blockchain::Transaction.count
-      assert_equal "CoreZU3NjoVQKcx7wTPty13BmQhrJUjhvS6Hdjq6nbYx", Blockchain::Transaction.network(@network).last.account_key_1
-      assert_equal "6DVFiYKvmPRvYjins4LtRSiEm81CswtP5yHTpgPdtrgK", Blockchain::Transaction.network(@network).last.account_key_2
-      assert_equal "Vote111111111111111111111111111111111111111", Blockchain::Transaction.network(@network).last.account_key_3
-      assert_equal 5000, Blockchain::Transaction.network(@network).last.fee
-      assert_equal [2254765266, 27074400, 1], Blockchain::Transaction.network(@network).last.pre_balances
-      assert_equal [2254760266, 27074400, 1], Blockchain::Transaction.network(@network).last.post_balances
-      assert_equal 5000, Blockchain::Transaction.network(@network).last.fee
-      assert_equal Blockchain::Block.network(@network).last.id, Blockchain::Transaction.network(@network).last.block_id
+      transaction = Blockchain::Transaction.network(@network).last
+      assert_equal "CoreZU3NjoVQKcx7wTPty13BmQhrJUjhvS6Hdjq6nbYx", transaction.account_key_1
+      assert_equal "6DVFiYKvmPRvYjins4LtRSiEm81CswtP5yHTpgPdtrgK", transaction.account_key_2
+      assert_equal "Vote111111111111111111111111111111111111111", transaction.account_key_3
+      assert_equal 5000, transaction.fee
+      assert_equal [2254765266, 27074400, 1], transaction.pre_balances
+      assert_equal [2254760266, 27074400, 1], transaction.post_balances
+      assert_equal "12342", transaction.recent_blockhash  # voted_slot stored as string
+      assert_equal Blockchain::Block.network(@network).last.id, transaction.block_id
     end
 
     test "#process_transactions does not create new blockchain::transaction when no vote transactions" do
-      @block["transactions"][0]["transaction"]["message"]["accountKeys"][2] = "Vote111111111111111111111111111111111111112"
+      @block["transactions"][0]["transaction"]["message"]["accountKeys"][2]["pubkey"] = "Vote111111111111111111111111111111111111112"
       block_service = Blockchain::GetBlockService.new(@network, @slot_number, @config_urls)
       block_service.stub(:solana_client_request, @block) do
         block_service.call
