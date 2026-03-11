@@ -48,6 +48,9 @@ import DefinityLarge from 'definsol.png'
 import DoublezeroSmall from 'doublezero.svg'
 import DoublezeroLarge from 'doublezero_lg.svg'
 
+import SolStrategiesSmall from 'solstrategies-logo.svg'
+import SolStrategiesLarge from 'solstrategies.svg'
+
 const logos = {
   "blazestake": {
     "small_logo": BlazeStakeSmall,
@@ -112,6 +115,10 @@ const logos = {
   "doublezero": {
     "small_logo": DoublezeroSmall,
     "large_logo": DoublezeroLarge
+  },
+  "solstrategies": {
+    "small_logo": SolStrategiesSmall,
+    "large_logo": SolStrategiesLarge
   }
 }
 
