@@ -134,5 +134,59 @@ module DataCenters
       end
       assert_equal validator_ip.reload.is_muted, true
     end
+
+    test ".call uses autonomous_system_organization as fallback for blank traits_isp and traits_organization" do
+      validator_ip = create(:validator_ip, :active, address: "1.2.3.4")
+      
+      # Mock MaxMind response with blank isp and organization
+      mock_traits = OpenStruct.new(
+        autonomous_system_number: 12345,
+        autonomous_system_organization: "Fallback ASO Name",
+        isp: nil,
+        organization: "",
+        anonymous?: false,
+        hosting_provider?: true,
+        user_type: "hosting",
+        domain: nil,
+        ip_address: "1.2.3.4",
+        network: "1.2.3.0/24"
+      )
+      mock_continent = OpenStruct.new(code: "EU", geoname_id: 6255148, name: "Europe")
+      mock_country = OpenStruct.new(iso_code: "DE", geoname_id: 2921044, name: "Germany", confidence: 99)
+      mock_registered_country = OpenStruct.new(iso_code: "DE", geoname_id: 2921044, name: "Germany")
+      mock_city = OpenStruct.new(name: "Berlin", confidence: 80, geoname_id: 2950159)
+      mock_location = OpenStruct.new(
+        time_zone: "Europe/Berlin",
+        latitude: 52.5200,
+        longitude: 13.4050,
+        metro_code: nil,
+        accuracy_radius: 10,
+        average_income: nil,
+        population_density: nil
+      )
+      mock_postal = OpenStruct.new(code: "10115", confidence: 20)
+      
+      mock_maxmind_info = OpenStruct.new(
+        traits: mock_traits,
+        continent: mock_continent,
+        country: mock_country,
+        registered_country: mock_registered_country,
+        city: mock_city,
+        location: mock_location,
+        postal: mock_postal,
+        most_specific_subdivision: nil
+      )
+
+      @service.stub :get_max_mind_info, mock_maxmind_info do
+        assert_difference "DataCenter.count", 1 do
+          @service.call(ip: "1.2.3.4")
+        end
+
+        data_center = DataCenter.last
+        assert_equal "Fallback ASO Name", data_center.traits_isp
+        assert_equal "Fallback ASO Name", data_center.traits_organization
+        assert_equal "Fallback ASO Name", data_center.traits_autonomous_system_organization
+      end
+    end
   end
 end
