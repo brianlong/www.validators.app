@@ -32,6 +32,22 @@ server(
   procfile: "Procfile.prod_web"
 )
 
+# New first web server www1
+server(
+  'app03-prod.blocklogic.validators.app',
+  user: 'deploy-validators_p',
+  roles: %w[web app www1 cron sidekiq_blockchain],
+  procfile: "Procfile.prod_web"
+)
+
+# New second web server www2
+server(
+  'app04-prod.blocklogic.validators.app',
+  user: 'deploy-validators_p',
+  roles: %w[web app www2 cron sidekiq_blockchain],
+  procfile: "Procfile.prod_web"
+)
+
 # Background server
 server(
   'background01-prod.blocklogic.validators.app',
