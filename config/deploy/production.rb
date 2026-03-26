@@ -16,23 +16,7 @@ append :linked_files, 'config/credentials/production.key'
 # background - used for actions that are meant to run only on background server (daemons amd cron scripts).
 # sidekiq, sidekiq_blockchain - used for managing sidekiq instances
 
-# Web server www1
-server(
-  'app01-prod.blocklogic.validators.app',
-  user: 'deploy-validators_p',
-  roles: %w[web app db www1 cron sidekiq_blockchain],
-  procfile: "Procfile.prod_web"
-)
-
-# Second web server www2
-server(
-  'app02-prod.blocklogic.validators.app',
-  user: 'deploy-validators_p',
-  roles: %w[web app www2 cron sidekiq_blockchain],
-  procfile: "Procfile.prod_web"
-)
-
-# New first web server www1
+# First web server www1
 server(
   'app03-prod.blocklogic.validators.app',
   user: 'deploy-validators_p',
@@ -40,7 +24,7 @@ server(
   procfile: "Procfile.prod_web"
 )
 
-# New second web server www2
+# Second web server www2
 server(
   'app04-prod.blocklogic.validators.app',
   user: 'deploy-validators_p',
