@@ -163,6 +163,7 @@ group :development do
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
   gem 'puma', '~> 6.4.2'
+  gem 'openssl', '~> 4.0' # can be removed after upgrading Ruby
 end
 
 group :test do
