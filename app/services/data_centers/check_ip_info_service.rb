@@ -110,8 +110,12 @@ class DataCenters::CheckIpInfoService
       unless max_mind_info.location.population_density.blank?
     data_center.postal_code = max_mind_info.postal.code unless max_mind_info.postal.code.blank?
     data_center.postal_confidence = max_mind_info.postal.confidence unless max_mind_info.postal.confidence.blank?
-    data_center.traits_isp = max_mind_info.traits.isp unless max_mind_info.traits.isp.blank?
-    data_center.traits_organization = max_mind_info.traits.organization unless max_mind_info.traits.organization.blank?
+    
+    isp_value = max_mind_info.traits.isp.presence || max_mind_info.traits.autonomous_system_organization
+    data_center.traits_isp = isp_value unless isp_value.blank?
+    
+    org_value = max_mind_info.traits.organization.presence || max_mind_info.traits.autonomous_system_organization
+    data_center.traits_organization = org_value unless org_value.blank?
 
     unless max_mind_info.most_specific_subdivision.nil?
       data_center.subdivision_confidence ||= max_mind_info.most_specific_subdivision.confidence
