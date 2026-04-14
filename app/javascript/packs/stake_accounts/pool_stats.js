@@ -16,7 +16,8 @@ const DELEGATION_STRATEGY_URLS = {
   "Definity": "https://www.definity.finance/staking-strategy",
   "Vault": "https://docs.thevault.finance/validators/delegation-strategy",
   "Shinobi": "https://xshin.fi/#Strategy",
-  "DoubleZero": "https://doublezero.xyz/dzdp"
+  "DoubleZero": "https://doublezero.xyz/dzdp",
+  "SolStrategies": "https://support.solstrategies.io/stke-stake-pool/delegation-strategy"
 }
 
 var StakePoolStats = Vue.component('StakePoolStats', {

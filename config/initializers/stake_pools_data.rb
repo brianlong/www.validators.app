@@ -157,6 +157,18 @@ MAINNET_STAKE_POOLS = {
     withdrawal_fee: 0,
     deposit_fee: 0
   },
+  solstrategies: {
+    name: "SolStrategies",
+    authority: "5vzKiHVuZNx1XQWQZQEcuqKaq4nfDp6LhuSvowQK2ayd",
+    network: "mainnet",
+    ticker: "stkesol",
+    small_logo: "solstrategies-logo.svg",
+    large_logo: "solstrategies.svg",
+    url: "https://solstrategies.io/",
+    manager_fee: 5,
+    withdrawal_fee: 0.1,
+    deposit_fee: 0
+  },
   socean: {
     # name: "Socean",
     # authority: "AzZRvyyMHBm8EHEksWxq4ozFL7JxLMydCDMGhqM6BVck",
