@@ -240,10 +240,11 @@ module SolanaLogic
           end
 
           client == 'Unknown(4)' ? client = 'AgavePaladin' : client
-          client == 'Unknown(5)' ? client = 'AgaveBam' : client
-          client == 'Unknown(6)' ? client = 'Firedancer' : client
+          client == 'Unknown(5)' ? client = 'Firedancer' : client
+          client == 'Unknown(6)' ? client = 'AgaveBam' : client
           client == 'Unknown(8)' ? client = 'Rakurai' : client
           client == 'Unknown(10)' ? client = 'HarmonicAgave' : client
+          client == 'Unknown(11)' ? client = 'HarmonicFrankendancer' : client
 
           client_id = if client&.match(/^Unknown/)
                         client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
