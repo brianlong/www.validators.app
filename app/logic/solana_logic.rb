@@ -238,7 +238,13 @@ module SolanaLogic
           else
             client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
           end
+
           client == 'Unknown(4)' ? client = 'AgavePaladin' : client
+          client == 'Unknown(5)' ? client = 'AgaveBam' : client
+          client == 'Unknown(6)' ? client = 'Firedancer' : client
+          client == 'Unknown(8)' ? client = 'Rakurai' : client
+          client == 'Unknown(10)' ? client = 'HarmonicAgave' : client
+
           client_id = if client&.match(/^Unknown/)
                         client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
                       else
