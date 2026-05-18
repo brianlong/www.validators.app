@@ -227,13 +227,17 @@ module SolanaLogic
           'HarmonicFrankendancer': 11
         }
 
-        if hash['clientId']
-          # if client ID present, map client name
-          client_id = hash['clientId'].to_i
+        if hash['clientId'] && hash['clientId'].is_a?(Integer)
+          # if client ID is number, map client name
+          client_id = hash['clientId']
           client = (clients_mapping.key(client_id) || 'Unknown').to_s
         else
-          # if client name present, map client ID
-          client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
+          # if client ID is string or client name present, map client ID
+          if hash['clientId'].is_a?(String)
+            client = hash['clientId']
+          else
+            client = hash['version']&.match(/client:[a-zA-Z0-9()]+/)&.to_s&.gsub('client:', '')&.sub(')', '')
+          end
           client == 'Unknown(4)' ? client = 'AgavePaladin' : client
           client_id = if client&.match(/^Unknown/)
                         client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
