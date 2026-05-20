@@ -222,9 +222,13 @@ module SolanaLogic
           'AgavePaladin': 4,
           'Firedancer': 5,
           'AgaveBam': 6,
+          'Sig': 7,
           'Rakurai': 8,
+          'HarmonicFiredancer': 9,
           'HarmonicAgave': 10,
-          'HarmonicFrankendancer': 11
+          'HarmonicFrankendancer': 11,
+          'FireBam': 12,
+          'Raiku': 13,
         }
 
         if hash['clientId'] && hash['clientId'].is_a?(Integer)
@@ -242,9 +246,13 @@ module SolanaLogic
           client == 'Unknown(4)' ? client = 'AgavePaladin' : client
           client == 'Unknown(5)' ? client = 'Firedancer' : client
           client == 'Unknown(6)' ? client = 'AgaveBam' : client
+          client == 'Unknown(7)' ? client = 'Sig' : client
           client == 'Unknown(8)' ? client = 'Rakurai' : client
+          client == 'Unknown(9)' ? client = 'HarmonicFiredancer' : client
           client == 'Unknown(10)' ? client = 'HarmonicAgave' : client
           client == 'Unknown(11)' ? client = 'HarmonicFrankendancer' : client
+          client == 'Unknown(12)' ? client = 'FireBam' : client
+          client == 'Unknown(13)' ? client = 'Raiku' : client
 
           client_id = if client&.match(/^Unknown/)
                         client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
