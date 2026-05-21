@@ -31,19 +31,17 @@ begin
                         .includes(:validator_score_v1)
                         .index_by(&:account)
 
-  ValidatorScoreV1.transaction do
-    json_data['data'].each do |validator_data|
-      identity = validator_data['identity']
-      ibrl_score = validator_data['ibrl_score']
+  score_map = json_data['data'].each_with_object({}) { |d, h| h[d['identity']] = d['ibrl_score'] }
 
-      validator = validators[identity]
+  ids_and_scores = validators.filter_map do |account, validator|
+    next unless validator.validator_score_v1
+    [validator.validator_score_v1.id, score_map[account].to_f]
+  end
 
-      if validator.nil? || validator.validator_score_v1.nil?
-        next
-      end
-
-      validator.validator_score_v1.update_column(:ibrl_score, ibrl_score)
-    end
+  if ids_and_scores.any?
+    case_sql = ids_and_scores.map { |id, score| "WHEN #{id} THEN #{score}" }.join(" ")
+    ValidatorScoreV1.where(id: ids_and_scores.map(&:first))
+                    .update_all("ibrl_score = CASE id #{case_sql} END")
   end
 rescue Net::HTTPError, Net::OpenTimeout, Net::ReadTimeout, SocketError, Errno::ECONNREFUSED => e
   retry_count += 1
