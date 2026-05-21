@@ -213,7 +213,9 @@
                 </td>
                 <td>
                   <span :class="ibrl_score_class(score.ibrl_score)">{{ score.ibrl_score ? score.ibrl_score.toFixed(2) : 'N/A' }}</span>
-                  <small><a href="https://ibrl.wtf/" target="_blank">(See details on ibrl.wtf)</a></small>
+                  <small v-if="this.validator.network == 'mainnet'">
+                    <a v-bind:href="'https://ibrl.wtf/validator/'+ validator.account" target="_blank">(See details on ibrl.wtf)</a>
+                  </small>
                 </td>
               </tr>
             </tbody>
