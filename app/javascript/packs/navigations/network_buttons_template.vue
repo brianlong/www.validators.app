@@ -33,7 +33,7 @@
       change_network: function(target_network) {
         this.url = window.location.href
         if(this.url.includes('network=')) {
-          this.url = this.url.replace(/network=(mainnet|testnet|pythnet)/, "network=" + target_network)
+          this.url = this.url.replace(/network=(mainnet|testnet|pythnet|alpenglow-community)/, "network=" + target_network)
         } else {
           this.url = this.url + '?network=' + target_network
         }

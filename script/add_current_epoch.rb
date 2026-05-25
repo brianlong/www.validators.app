@@ -10,12 +10,11 @@ def solana_rpc_client(network)
 end
 
 NETWORKS.each do |network|
-  slots_in_epoch = 432000
-
   # number of slots to search for a confirmed block
   block_search_count = 100
 
   last_epoch = solana_rpc_client(network).get_epoch_info.result
+  slots_in_epoch = last_epoch['slotsInEpoch'] || 432000
 
   last_epoch_start_slot = last_epoch['absoluteSlot'] - last_epoch['slotIndex']
 

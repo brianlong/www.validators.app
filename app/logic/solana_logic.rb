@@ -394,9 +394,13 @@ module SolanaLogic
       # epochCredits History of how many credits earned by the end of each
       # epoch, as an array of arrays containing: [epoch, credits,
       # previousCredits]
+      # Alpenglow inserts a u64::MAX sentinel separating pre/post-Alpenglow
+      # credits — filter it out before reading the last real entry.
+      epoch_credits_sentinel = 18446744073709551615
       vote_accounts_json.each do |hash|
-        credits_total = hash['epochCredits'][-1][1].to_i rescue 0
-        credits_previous = hash['epochCredits'][-1][2].to_i rescue 0
+        epoch_credits = (hash['epochCredits'] || []).reject { |e| e[0].to_i == epoch_credits_sentinel }
+        credits_total = epoch_credits[-1][1].to_i rescue 0
+        credits_previous = epoch_credits[-1][2].to_i rescue 0
         credits_current = credits_total - credits_previous
         vote_accounts[hash['nodePubkey']] = {
           'vote_account' => hash['votePubkey'],

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_01_13_064444) do
+ActiveRecord::Schema.define(version: 2026_05_22_000000) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -889,7 +889,7 @@ ActiveRecord::Schema.define(version: 2026_01_13_064444) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "software_version"
-    t.integer "epoch_credits", unsigned: true
+    t.bigint "epoch_credits", unsigned: true
     t.float "slot_skip_rate", unsigned: true
     t.bigint "max_root_height", unsigned: true
     t.bigint "root_distance", unsigned: true

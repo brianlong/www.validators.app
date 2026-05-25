@@ -43,6 +43,7 @@ end
 every 3.hours, at: 5, roles: [:background] do
   runner "AsnLogicWorker.perform_async('network' => 'testnet')"
   runner "AsnLogicWorker.perform_async('network' => 'pythnet')"
+  runner "AsnLogicWorker.perform_async('network' => 'alpenglow-community')"
   ruby_script_data_centers "check_hetzner_admin_warning.rb"
 end
 
@@ -118,6 +119,7 @@ every 1.day, at: '3:00am', roles: [:background] do
   runner "DataCenterStatsWorker.perform_async('mainnet')"
   runner "DataCenterStatsWorker.perform_async('testnet')"
   runner "DataCenterStatsWorker.perform_async('pythnet')"
+  runner "DataCenterStatsWorker.perform_async('alpenglow-community')"
 end
 
 every 1.day, at: '3:10am', roles: [:background] do
