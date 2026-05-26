@@ -21,12 +21,13 @@ begin
       network: network
     }
 
-    # program_accounts (getProgramAccounts) is unavailable on Alpenglow (returns 503),
-    # so skip it along with find_invalid_configs and remove_invalid_configs.
     p = Pipeline.new(200, payload)
                 .then(&batch_set)
                 .then(&epoch_get)
                 .then(&validators_get)
+                .then(&program_accounts)
+                .then(&find_invalid_configs)
+                .then(&remove_invalid_configs)
                 .then(&vote_accounts_get)
                 .then(&reduce_validator_vote_accounts)
                 .then(&validators_save)
