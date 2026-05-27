@@ -398,7 +398,7 @@ module SolanaLogic
       # credits — filter it out before reading the last real entry.
       epoch_credits_sentinel = 18446744073709551615
       vote_accounts_json.each do |hash|
-        epoch_credits = (hash['epochCredits'] || []).reject { |e| e[0].to_i == epoch_credits_sentinel }
+        epoch_credits = (hash['epochCredits'] || []).reject { |e| e.any? { |v| v.to_i == epoch_credits_sentinel } }
         credits_total = epoch_credits[-1][1].to_i rescue 0
         credits_previous = epoch_credits[-1][2].to_i rescue 0
         credits_current = credits_total - credits_previous
