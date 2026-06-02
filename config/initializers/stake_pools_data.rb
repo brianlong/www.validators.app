@@ -73,14 +73,14 @@ MAINNET_STAKE_POOLS = {
     withdrawal_fee: 0.1,
     deposit_fee: 0
   },
-  aero: {
-    name: "Aero",
+  phase: {
+    name: "Phase",
     authority: "AKJt3m2xJ6ANda9adBGqb5BMrheKJSwxyCfYkLuZNmjn",
     network: "mainnet",
-    ticker: "aerosol",
-    small_logo: "aero-logo.svg",
-    large_logo: "aero.png",
-    url: "https://aeropool.io",
+    ticker: "pdsol",
+    small_logo: "phase-logo.svg",
+    large_logo: "phase-lg.svg",
+    url: "https://phase.cc/delegation",
     manager_fee: 5,
     withdrawal_fee: 0.1,
     deposit_fee: 0.1

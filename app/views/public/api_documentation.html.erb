@@ -518,7 +518,7 @@
 <p>
   <strong class="text-muted">`filter_[account|staker|withdrawer|pool]=`</strong> filters by chosen value. You can find values on <%= link_to 'stake pools page', stake_pools_path %>.
 </p>
-<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-account-histories/:network/:epoch.json?filter_pool=Aero'</pre>
+<pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-account-histories/:network/:epoch.json?filter_pool=Phase'</pre>
 <p><strong class="text-muted">`per=NN`</strong> will limit the results to NN entries per page, defaults to 1_000 (max 9_999).</p>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/stake-account-histories/:network/:epoch.json?per=50'</pre>
 <p><strong class="text-muted">`page=NN`</strong> will return the results from passed page, defaults to 1.</p>
