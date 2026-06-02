@@ -6,7 +6,7 @@ sp = StakePool.find_by!(name: "Aero", network: "mainnet")
 
 sp.update!(
   name: "Phase",
-  ticker: "phase"
+  ticker: "pdsol"
 )
 
 puts "StakePool renamed: Aero -> Phase (id: #{sp.id})"
