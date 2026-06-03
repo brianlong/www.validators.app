@@ -27,8 +27,8 @@ import ZippyStakeLarge from 'zippystake.png'
 import EdgevanaStakeSmall from 'edgevana-logo.svg'
 import EdgevanaStakeLarge from 'edgevana.png'
 
-import AeroSmall from 'aero-logo.svg'
-import AeroLarge from 'aero.png'
+import PhaseSmall from 'phase-logo.svg'
+import PhaseLarge from 'phase-lg.svg'
 
 import VaultSmall from 'vault-logo.png'
 import VaultLarge from 'vault.png'
@@ -88,9 +88,9 @@ const logos = {
     "small_logo": EdgevanaStakeSmall,
     "large_logo": EdgevanaStakeLarge
   },
-  "aero": {
-    "small_logo": AeroSmall,
-    "large_logo": AeroLarge
+  "phase": {
+    "small_logo": PhaseSmall,
+    "large_logo": PhaseLarge
   },
   "vault": {
     "small_logo": VaultSmall,
