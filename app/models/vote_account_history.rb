@@ -48,7 +48,7 @@ class VoteAccountHistory < ApplicationRecord
   end
 
   def skipped_vote_percent
-    return 0 if network == "alpenglow-community"
+    return nil if network == "alpenglow-community"
 
     if slot_index_current.to_f.positive?
       if network == "pythnet"
