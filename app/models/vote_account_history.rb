@@ -48,7 +48,10 @@ class VoteAccountHistory < ApplicationRecord
   end
 
   def skipped_vote_percent
-    return nil if network == "alpenglow-community"
+    if network == "alpenglow-community"
+      max_credits = self.class.where(network: network, batch_uuid: batch_uuid).maximum(:credits_current).to_f
+      return max_credits > 0 ? (max_credits - credits_current.to_i) / max_credits : nil
+    end
 
     if slot_index_current.to_f.positive?
       if network == "pythnet"
