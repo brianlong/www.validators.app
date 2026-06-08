@@ -44,7 +44,7 @@ NETWORKS.each do |network|
     next
   end
 
-  next unless block_time
+  next if block_time.blank?
   
   last_epoch_start_datetime = DateTime.strptime(block_time, "%s")
 
