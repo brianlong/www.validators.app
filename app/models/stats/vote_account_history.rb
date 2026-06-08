@@ -65,7 +65,7 @@ module Stats
 
     def skipped_vote_percent_best
       if @network == "alpenglow-community"
-        max_credits = slot_index_current.to_f * 1024 + (slot_index_current - 1) * 1024
+        max_credits = slot_index_current.to_f * 2^23 + (slot_index_current - 1) * 2^23
         return max_credits > 0 ? (max_credits - credits_current_max) / max_credits : nil
       end
 
