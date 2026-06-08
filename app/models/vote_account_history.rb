@@ -54,7 +54,7 @@ class VoteAccountHistory < ApplicationRecord
       if network == "pythnet"
         max_credits = slot_index_current
       elsif network == "alpenglow-community"
-        max_credits = slot_index_current.to_f * 256 + (slot_index_current - 1) * 256
+        max_credits = slot_index_current.to_f * 1024 + (slot_index_current - 1) * 1024
         return max_credits > 0 ? (max_credits - credits_current.to_i) / max_credits : nil
       else
         max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
