@@ -64,21 +64,16 @@ module Stats
     end
 
     def skipped_vote_percent_best
-      if @network == "alpenglow-community"
-        max_credits = slot_index_current.to_f * 17_839_148
-        return max_credits > 0 ? (max_credits - credits_current_max) / max_credits : nil
-      end
+      return nil unless slot_index_current&.is_a?(Numeric) && slot_index_current.positive? && credits_current_max&.is_a?(Numeric)
 
-      if slot_index_current&.is_a?(Numeric) && slot_index_current.positive? && credits_current_max&.is_a?(Numeric)
-        if @network == "pythnet"
-          max_credits = slot_index_current
-        else
-          max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
-        end
-        @skipped_vote_percent_best ||=
-          (max_credits - credits_current_max) / max_credits.to_f
+      if @network == "alpenglow-community"
+        credits_current_max > 0 ? 0.0 : nil
+      elsif @network == "pythnet"
+        max_credits = slot_index_current
+        @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
       else
-        nil
+        max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
+        @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
       end
     end
 
