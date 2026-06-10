@@ -8,22 +8,22 @@ class ExplorerStakeAccountsController < ApplicationController
   TOP_LIMIT_COUNT = 20
 
   def index
-    if index_params[:staker].present? || \
-       index_params[:withdrawer].present? || \
-       index_params[:vote_account].present? || \
-       index_params[:stake_pubkey].present?
-      @explorer_stake_accounts, @stake_accounts = get_explorer_stake_accounts(params: index_params)
-    else
-      @explorer_stake_accounts, @stake_accounts = get_explorer_stake_accounts(
-        params: index_params, limit_count: TOP_LIMIT_COUNT
-      )
-    end
-
-    @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
-    @stake_histories = ExplorerStakeAccountHistoryStat.where(network: index_params[:network])
-                                                      .order(epoch: :asc)
-                                                      .last(40)
-    @data_for_charts = prepare_data_for_charts(@stake_histories)
+    # if index_params[:staker].present? || \
+    #    index_params[:withdrawer].present? || \
+    #    index_params[:vote_account].present? || \
+    #    index_params[:stake_pubkey].present?
+    #   @explorer_stake_accounts, @stake_accounts = get_explorer_stake_accounts(params: index_params)
+    # else
+    #   @explorer_stake_accounts, @stake_accounts = get_explorer_stake_accounts(
+    #     params: index_params, limit_count: TOP_LIMIT_COUNT
+    #   )
+    # end
+    #
+    # @explorer_stake_accounts = @explorer_stake_accounts[:explorer_stake_accounts]
+    # @stake_histories = ExplorerStakeAccountHistoryStat.where(network: index_params[:network])
+    #                                                   .order(epoch: :asc)
+    #                                                   .last(40)
+    # @data_for_charts = prepare_data_for_charts(@stake_histories)
   end
 
   def show

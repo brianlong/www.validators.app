@@ -4,23 +4,23 @@
   </h1>
 </section>
 
-<%= render "explorer_stake_accounts/stats_row" %>
+<%#= render "explorer_stake_accounts/stats_row" %>
 
 <div class="col-12">
   <div class="card">
     <div class="card-content">
-      <%= render "stake_accounts/explorer_stake_accounts_filter" %>
+      <%#= render "stake_accounts/explorer_stake_accounts_filter" %>
     </div>
 
     <% if @explorer_stake_accounts.present? %>
-      <%= render "stake_accounts/explorer_stake_accounts" %>
+      <%#= render "stake_accounts/explorer_stake_accounts" %>
     <% elsif [params[:withdrawer], params[:staker], params[:vote_account], params[:stake_pubkey]].map(&:present?).any? %>
       <div class="card-footer pt-0 text-center lead">
-        No results for given criteria.
+        Temporarily unavailable.
       </div>
     <% else %>
       <div class="card-footer pt-0 text-center lead">
-        Use the filters above to see Stake Accounts.
+        Temporarily unavailable.
       </div>
     <% end %>
   </div>
