@@ -70,16 +70,25 @@ class UpdatePoliciesService
     end
   end
 
+  def fetch_with_headers(uri)
+    req = Net::HTTP::Get.new(uri)
+    req['Accept'] = 'application/json'
+    Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { |http| http.request(req) }
+  end
+
   def get_metadata(uri)
     begin
       Timeout.timeout(10) do
-        response = Net::HTTP.get_response(uri)
+        response = fetch_with_headers(uri)
         if response.code == '302'
           uri = URI(response.header['Location'])
-          response = Net::HTTP.get_response(uri)
+          response = fetch_with_headers(uri)
         end
         return JSON.parse(response.body) if response.code == '200'
       end
+    rescue JSON::ParserError => e
+      @logger.error("Invalid JSON metadata from #{uri}: #{e.message}")
+      {}
     rescue StandardError => e
       @logger.error("Error fetching metadata from #{uri}: #{e.message}")
       Appsignal.send_error(e)
