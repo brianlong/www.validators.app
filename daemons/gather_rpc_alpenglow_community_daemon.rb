@@ -55,7 +55,7 @@ begin
     break if interrupted
 
     if e.message.in? %w[500 502 503 504]
-      sleep(2.minute)
+      sleep(2.minutes)
     else
       sleep(sleep_time)
     end
