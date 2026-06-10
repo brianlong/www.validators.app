@@ -12,7 +12,7 @@
 #  credits            :bigint           unsigned
 #  delinquent         :boolean          default(FALSE)
 #  epoch              :integer
-#  epoch_credits      :integer          unsigned
+#  epoch_credits      :bigint           unsigned
 #  last_vote          :bigint           unsigned
 #  max_root_height    :bigint           unsigned
 #  max_vote_height    :bigint           unsigned

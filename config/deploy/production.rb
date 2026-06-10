@@ -36,6 +36,6 @@ server(
 server(
   'background01-prod.blocklogic.validators.app',
   user: 'deploy-validators_p',
-  roles: %w[app background cron sidekiq sidekiq_blockchain],
+  roles: %w[app background db cron sidekiq sidekiq_blockchain],
   procfile: "Procfile.prod_background"
 )

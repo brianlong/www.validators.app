@@ -12,11 +12,9 @@ update_stats_time = 60 # seconds
 @coin_gecko_response = {}
 
 def get_latest_cluster_stats
-  {
-    mainnet: ClusterStat.by_network("mainnet").last&.attributes,
-    testnet: ClusterStat.by_network("testnet").last&.attributes,
-    pythnet: ClusterStat.by_network("pythnet").last&.attributes
-  }
+  NETWORKS.each_with_object({}) do |network, hash|
+    hash[network.to_sym] = ClusterStat.by_network(network).last&.attributes
+  end
 end
 
 def fetch_db_sol_price
