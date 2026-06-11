@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_05_22_000000) do
+ActiveRecord::Schema.define(version: 2026_06_11_000000) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -393,7 +393,7 @@ ActiveRecord::Schema.define(version: 2026_05_22_000000) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["delegated_vote_account_address", "network"], name: "index_explorer_stake_accounts_for_vote_account"
-    t.index ["epoch", "network"], name: "index_explorer_stake_accounts_on_epoch_and_network"
+    t.index ["network", "epoch", "active_stake"], name: "index_explorer_stake_accounts_on_network_epoch_active_stake"
     t.index ["stake_pubkey", "network"], name: "index_explorer_stake_accounts_on_stake_pubkey_and_network"
     t.index ["staker", "network"], name: "index_explorer_stake_accounts_on_staker_and_network"
     t.index ["withdrawer", "network"], name: "index_explorer_stake_accounts_on_withdrawer_and_network"
