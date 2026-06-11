@@ -9,7 +9,7 @@ module Api
 
       def index
         explorer_params[:per] = [(explorer_params[:per] || 25).to_i, 999].min
-        @explorer_stake_accounts = get_explorer_stake_accounts(params: explorer_params)[0]
+        @explorer_stake_accounts = get_explorer_stake_accounts(params: explorer_params, with_count: true)[0]
         
         @explorer_stake_accounts = @explorer_stake_accounts.as_json(except: :id)
         respond_to do |format|
