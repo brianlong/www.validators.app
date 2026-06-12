@@ -10,8 +10,8 @@ class AddCurrentEpochScriptTest < ActiveSupport::TestCase
     ) do
       load(Rails.root.join('script', 'add_current_epoch.rb'))
 
-      assert_equal 3, EpochWallClock.count
-      assert_equal 385, EpochWallClock.last.epoch
+      assert_equal 4, EpochWallClock.count
+      assert_equal 971, EpochWallClock.last.epoch
       assert_equal 432000, EpochWallClock.last.slots_in_epoch
       assert_nil EpochWallClock.last.ending_slot
     end
