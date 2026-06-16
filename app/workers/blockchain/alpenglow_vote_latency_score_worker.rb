@@ -3,7 +3,7 @@
 module Blockchain
   class AlpenglowVoteLatencyScoreWorker
     include Sidekiq::Worker
-    sidekiq_options retry: 0, dead: false, lock: :until_executed
+    sidekiq_options retry: 0, dead: false, lock: :until_executed, queue: :default
 
     def perform(args = {})
       network = args["network"]
