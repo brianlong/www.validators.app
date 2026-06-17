@@ -23,11 +23,11 @@
 #
 # Indexes
 #
-#  index_explorer_stake_accounts_for_vote_account             (delegated_vote_account_address,network)
-#  index_explorer_stake_accounts_on_epoch_and_network         (epoch,network)
-#  index_explorer_stake_accounts_on_stake_pubkey_and_network  (stake_pubkey,network)
-#  index_explorer_stake_accounts_on_staker_and_network        (staker,network)
-#  index_explorer_stake_accounts_on_withdrawer_and_network    (withdrawer,network)
+#  index_explorer_stake_accounts_for_vote_account               (delegated_vote_account_address,network)
+#  index_explorer_stake_accounts_on_network_epoch_active_stake  (network,epoch,active_stake)
+#  index_explorer_stake_accounts_on_stake_pubkey_and_network    (stake_pubkey,network)
+#  index_explorer_stake_accounts_on_staker_and_network          (staker,network)
+#  index_explorer_stake_accounts_on_withdrawer_and_network      (withdrawer,network)
 #
 class ExplorerStakeAccount < ApplicationRecord
   audited except: [:created_at, :updated_at, :epoch]
