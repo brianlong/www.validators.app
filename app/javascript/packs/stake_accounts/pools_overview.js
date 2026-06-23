@@ -48,6 +48,9 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
               <small class="text-muted">Avg Validators Fee</small>
             </th>
             <th class="column-sm">ROD</th>
+            <th class="column-sm">
+              GDI
+            </th>
             <th class="column-md">
               Avg Score<br />
               <small class="text-muted">Maximum: 13</small>
@@ -77,6 +80,9 @@ var StakePoolsOverview = Vue.component('StakePoolsOverview', {
             </td>
             <td>
               {{ pool.average_apy ? pool.average_apy.toFixed(2) + '%' : 'N / A' }}
+            </td>
+            <td>
+              {{ pool.gdi_score ? pool.gdi_score.toFixed(2) : 'N / A' }}
             </td>
             <td>
               {{ pool.average_score || 'N / A' }}

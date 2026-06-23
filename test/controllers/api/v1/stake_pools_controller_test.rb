@@ -46,7 +46,7 @@ module Api
         json_response = response_to_json(@response.body)
     
         assert_equal 2, json_response["stake_pools"].size
-        assert_equal 18, json_response["stake_pools"].first.keys.size
+        assert_equal StakePool::API_FIELDS.size, json_response["stake_pools"].first.keys.size
       end
     
       test "request with network with no stake pools should return empty array" do

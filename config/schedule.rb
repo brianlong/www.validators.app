@@ -84,6 +84,7 @@ end
 
 every 1.day, at: '12:00pm', roles: [:background] do
   ruby_script 'ibrl_score.rb'
+  ruby_script 'gdi_score.rb'
 end
 
 every 1.hour, at: 55, roles: [:www1, :www2] do
