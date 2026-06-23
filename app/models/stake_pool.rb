@@ -12,6 +12,7 @@
 #  average_validators_commission :float(24)
 #  delinquent_count              :integer
 #  deposit_fee                   :float(24)
+#  gdi_score                     :float(24)
 #  manager_fee                   :float(24)
 #  name                          :string(191)
 #  network                       :string(191)
@@ -33,6 +34,7 @@ class StakePool < ApplicationRecord
     average_apy
     average_lifetime
     average_score
+    gdi_score
     average_skipped_slots
     average_uptime
     average_validators_commission

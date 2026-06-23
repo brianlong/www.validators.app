@@ -130,6 +130,10 @@ var StakePoolStats = Vue.component('StakePoolStats', {
               <span class="text-muted">Avg Uptime:&nbsp;</span>
               <strong class="text-success">{{ pool.average_uptime ? pool.average_uptime.toFixed(1) + ' days': 0 }}</strong>
             </div>
+            <div>
+              <span class="text-muted">GDI:&nbsp;</span>
+              <strong class="text-success">{{ pool.gdi_score ? pool.gdi_score.toFixed(2) : 'N / A' }}</strong>
+            </div>
             <div class="">
               <span class="text-muted">Avg Score:&nbsp;</span>
               <strong class="text-success">{{ pool.average_score || 'N / A' }}</strong>

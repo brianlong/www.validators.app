@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_06_11_000000) do
+ActiveRecord::Schema.define(version: 2026_06_19_000000) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -795,6 +795,7 @@ ActiveRecord::Schema.define(version: 2026_06_11_000000) do
     t.float "deposit_fee"
     t.float "average_apy"
     t.integer "delinquent_count"
+    t.float "gdi_score"
     t.index ["network"], name: "index_stake_pools_on_network"
   end
 
