@@ -5,10 +5,6 @@ class DataCenters::CheckIpInfoService
 
   PRIVATE_IP_REGEX = /(^127\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^192\.168\.)/.freeze
 
-  # MaxMind sometimes returns incorrect or inconsistent organization names for these ASNs.
-  # Helius (399460) and Butterfly Research (3402) registered their own ISP names on
-  # TeraSwitch's network infrastructure. ASN 20326 is TeraSwitch's own ASN but appears
-  # under several slightly different names in MaxMind.
   ASN_ORG_OVERRIDES = {
     399460 => "TeraSwitch",
     3402   => "TeraSwitch",
