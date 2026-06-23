@@ -272,13 +272,12 @@
 
       <h3 class="h5">GDI</h3>
       <p>
-        <strong>Governance Decentralization Index</strong> — measures how well a stake pool distributes
-        stake across independent data centers, ASNs, and geographic regions. A higher GDI indicates
-        greater decentralization. See
+        <strong>Governance Decentralization Index</strong> — measures how effectively a stake pool's stake is distributed
+        across independent data centers, ASNs, and geographic regions. A higher GDI indicates greater decentralization. See
         <a href="https://gdindex.app/methodology" target="_blank">full GDI methodology</a>.
       </p>
-      <p class="mb-5">
-        <small class="text-muted">GDI provided by <a href="https://gdindex.app/" target="_blank">gdindex.app</a>.</small>
+      <p class="mb-5 text-muted">
+        GDI provided by <a href="https://gdindex.app/" target="_blank">gdindex.app</a>.
       </p>
 
       <h3 class="h5">Avg Score</h3>
