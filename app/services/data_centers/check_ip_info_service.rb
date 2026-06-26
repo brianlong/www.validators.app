@@ -119,7 +119,7 @@ class DataCenters::CheckIpInfoService
     
     isp_value = max_mind_info.traits.isp.presence || max_mind_info.traits.autonomous_system_organization
     data_center.traits_isp = isp_value unless isp_value.blank?
-    
+
     org_value = max_mind_info.traits.organization.presence || max_mind_info.traits.autonomous_system_organization
     org_value = ASN_ORG_OVERRIDES.fetch(max_mind_info.traits.autonomous_system_number.to_i, org_value)
     data_center.traits_organization = org_value unless org_value.blank?
