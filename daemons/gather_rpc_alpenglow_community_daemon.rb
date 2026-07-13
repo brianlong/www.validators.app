@@ -12,7 +12,7 @@ trap('INT') { interrupted = true } unless Rails.env.test?
 class SkipAndSleep < StandardError; end
 
 network = 'alpenglow-community'
-sleep_time = Rails.env.stage? ? 180 : 60 # seconds
+sleep_time = Rails.env.stage? ? 360 : 180 # seconds
 
 begin
   loop do
@@ -50,7 +50,7 @@ begin
 
     break if interrupted
 
-    sleep(sleep_time) if Rails.env.stage?
+    sleep(sleep_time) unless Rails.env.test?
   rescue SkipAndSleep => e
     break if interrupted
 
