@@ -71,7 +71,7 @@ module Stats
         @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
       elsif @network == "alpenglow-community"
         max_credits = slot_index_current * 32 * (54_000 + 6_600)
-        return nil if credits_current_max > max_credits
+        return nil if credits_current_max > max_credits * 2
         @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
       else
         max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
