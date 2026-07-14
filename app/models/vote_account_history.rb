@@ -55,7 +55,7 @@ class VoteAccountHistory < ApplicationRecord
         max_credits = slot_index_current
       elsif network == "alpenglow-community"
         max_credits = slot_index_current * 32 * 54_000
-        return nil if credits_current.to_i > max_credits * 2
+        return nil if credits_current.to_i >= max_credits
       else
         max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
       end
