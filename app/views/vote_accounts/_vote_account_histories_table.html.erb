@@ -32,10 +32,7 @@
         </td>
         <td class='text-end'>
           <%=
-            number_to_percentage(
-              vote.skipped_vote_percent*100.0,
-              precision: 2
-            )
+            vote.skipped_vote_percent ? number_to_percentage(vote.skipped_vote_percent * 100.0, precision: 2) : "—"
           %>
         </td>
         <td>
