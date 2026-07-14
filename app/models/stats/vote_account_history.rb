@@ -52,7 +52,7 @@ module Stats
     end
 
     def vote_account_history_skipped
-      @vote_account_history_skipped ||= relation.map(&:skipped_vote_percent)
+      @vote_account_history_skipped ||= relation.map(&:skipped_vote_percent).compact
     end
 
     def credits_current_max
