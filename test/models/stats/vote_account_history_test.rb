@@ -145,6 +145,32 @@ module Stats
       assert_equal 0.2, average2
     end
 
+    test 'skipped_vote_percent_best for alpenglow-community returns min of stake-normalized percents' do
+      network = 'alpenglow-community'
+      batch_uuid = create(:batch).uuid
+      val1 = create(:validator, network: network)
+      val2 = create(:validator, network: network)
+      va1 = create(:vote_account, validator: val1, network: network)
+      va2 = create(:vote_account, validator: val2, network: network)
+
+      # Validator 1: max = 100 * 32 * 2.0 = 6400, skipped = (6400-5000)/6400 = 0.21875
+      create(:vote_account_history, network: network, batch_uuid: batch_uuid,
+             vote_account: va1, slot_index_current: 100,
+             activated_stake: 2_000_000_000, credits_current: 5_000)
+      # Validator 2: max = 100 * 32 * 2.0 = 6400, skipped = (6400-6000)/6400 = 0.0625
+      create(:vote_account_history, network: network, batch_uuid: batch_uuid,
+             vote_account: va2, slot_index_current: 100,
+             activated_stake: 2_000_000_000, credits_current: 6_000)
+
+      stats = Stats::VoteAccountHistory.new(network, batch_uuid)
+      assert_in_delta 0.0625, stats.skipped_vote_percent_best, 0.000001
+    end
+
+    test 'skipped_vote_percent_best for alpenglow-community returns nil when no records' do
+      stats = Stats::VoteAccountHistory.new('alpenglow-community', 'no-such-batch')
+      assert_nil stats.skipped_vote_percent_best
+    end
+
     test "median of skipped vote percent moving average calculated correctly" do
       create(:vote_account_history, batch_uuid: "1-2-3", vote_account: @vote_account)
         .update(skipped_vote_percent_moving_average: 0.1)

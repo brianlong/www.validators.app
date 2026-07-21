@@ -48,11 +48,16 @@ class VoteAccountHistory < ApplicationRecord
   end
 
   def skipped_vote_percent
-    return 0 if network == "alpenglow-community"
+
 
     if slot_index_current.to_f.positive?
       if network == "pythnet"
         max_credits = slot_index_current
+      elsif network == "alpenglow-community"
+        return nil if activated_stake.to_i <= 0
+        max_credits = slot_index_current * 32.0 * (activated_stake.to_f / 1_000_000_000)
+        result = (max_credits - credits_current.to_i) / max_credits
+        return [result, 0.0].max
       else
         max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
       end
@@ -67,7 +72,7 @@ class VoteAccountHistory < ApplicationRecord
   def set_skipped_vote_percent_moving_average
     previous_24_hours_set = previous_24_hours.to_a
     skipped_vote_percent_average =
-      previous_24_hours_set.map(&:skipped_vote_percent).average
+      previous_24_hours_set.map(&:skipped_vote_percent).compact.average
 
     self.skipped_vote_percent_moving_average = skipped_vote_percent_average
 

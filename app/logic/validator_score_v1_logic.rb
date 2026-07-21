@@ -96,7 +96,9 @@ module ValidatorScoreV1Logic
         vote_h = vote_histories.find { |vote_history| vote_history.vote_account.validator_id == validator.id }
         if vote_h
           validator.score.skipped_vote_history_push(vote_h.skipped_vote_percent)
-          skipped_vote_all.push(((best_skipped_vote - vote_h.skipped_vote_percent) * 100).round(2))
+          if best_skipped_vote && vote_h.skipped_vote_percent
+            skipped_vote_all.push(((best_skipped_vote - vote_h.skipped_vote_percent) * 100).round(2))
+          end
           validator.score.skipped_vote_percent_moving_average_history_push(vote_h.skipped_vote_percent_moving_average)
         else
           validator.score.skipped_vote_history_push(nil)

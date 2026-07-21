@@ -52,7 +52,7 @@ module Stats
     end
 
     def vote_account_history_skipped
-      @vote_account_history_skipped ||= relation.map(&:skipped_vote_percent)
+      @vote_account_history_skipped ||= relation.map(&:skipped_vote_percent).compact
     end
 
     def credits_current_max
@@ -64,16 +64,19 @@ module Stats
     end
 
     def skipped_vote_percent_best
-      if slot_index_current&.is_a?(Numeric) && slot_index_current.positive? && credits_current_max&.is_a?(Numeric)
-        if @network == "pythnet"
-          max_credits = slot_index_current
-        else
-          max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
-        end
-        @skipped_vote_percent_best ||=
-          (max_credits - credits_current_max) / max_credits.to_f
+      if @network == "alpenglow-community"
+        return nil if vote_account_history_skipped.empty?
+        return @skipped_vote_percent_best ||= vote_account_history_skipped.min
+      end
+
+      return nil unless slot_index_current&.is_a?(Numeric) && slot_index_current.positive? && credits_current_max&.is_a?(Numeric)
+
+      if @network == "pythnet"
+        max_credits = slot_index_current
+        @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
       else
-        nil
+        max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
+        @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
       end
     end
 
