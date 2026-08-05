@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_06_19_000000) do
+ActiveRecord::Schema.define(version: 2026_08_05_111119) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -287,6 +287,8 @@ ActiveRecord::Schema.define(version: 2026_06_19_000000) do
     t.integer "active_validators_count"
     t.integer "active_gossip_nodes_count"
     t.float "active_validators_stake", default: 0.0
+    t.json "root_distance"
+    t.json "vote_distance"
     t.index ["data_center_id"], name: "index_data_center_stats_on_data_center_id"
     t.index ["network", "data_center_id"], name: "index_data_center_stats_on_network_and_data_center_id", unique: true
   end

@@ -10,7 +10,9 @@
 #  active_validators_stake   :float(24)        default(0.0)
 #  gossip_nodes_count        :integer
 #  network                   :string(191)
+#  root_distance             :json
 #  validators_count          :integer
+#  vote_distance             :json
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  data_center_id            :bigint           not null
