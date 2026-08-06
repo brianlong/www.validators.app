@@ -22,12 +22,13 @@
 
   <th class="column-md text-nowrap">
     Population
-    <small class="text-muted">(<%= @results[:total_population] %>)</small>
     <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
        data-bs-toggle="tooltip"
        data-bs-placement="top"
        title="<%= t('definitions.population_asn') %>">
     </i>
+    <br />
+    <small class="text-muted">(<%= @results[:total_population] %>)</small>
   </th>
 
   <th class="column-lg">
@@ -60,13 +61,14 @@
   <th class="column-xl">
     <div class="text-nowrap">
       Active Stake
-      <small class="text-muted">
-        (<%= number_with_delimiter lamports_to_sol(@results[:total_active_stake_from_active_validators]).round(0) %>)
-      </small>
       <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"
          data-bs-toggle="tooltip"
          data-bs-placement="top"
          title="<%= t('definitions.active_stake') %>"></i>
+      <br />
+      <small class="text-muted">
+        (<%= number_with_delimiter lamports_to_sol(@results[:total_active_stake_from_active_validators]).round(0) %>)
+      </small>
     </div>
   </th>
 
@@ -78,9 +80,6 @@
          data-bs-placement="top"
          title="<%= t('definitions.root_distance') %>"></i>
     </div>
-  </th>
-
-  <th class="column-md">
     <div class="text-nowrap">
       Avg Vote Distance
       <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"

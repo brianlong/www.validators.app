@@ -63,9 +63,7 @@
 
     <td>
       <%= format_distance(@distance_stats.average_root_distance_for(asn_data[:data_centers])) %>
-    </td>
-
-    <td>
+      <br />
       <%= format_distance(@distance_stats.average_vote_distance_for(asn_data[:data_centers])) %>
     </td>
   </tr>
