@@ -127,5 +127,21 @@ module DataCenters
       assert_equal 5, stats.root_distance["average"]
       assert_equal 6, stats.vote_distance["average"]
     end
+
+    test "#call excludes delinquent validators from root_distance and vote_distance" do
+      host = @data_center.data_center_hosts.first
+      delinquent_validator = create(:validator, network: @network, is_active: false)
+      create(:validator_ip, :active, data_center_host: host, validator: delinquent_validator)
+
+      batch = create(:batch, network: @network)
+      create(:validator_history, network: @network, batch_uuid: batch.uuid, validator: @validator, root_distance: 10, vote_distance: 20, delinquent: false)
+      create(:validator_history, network: @network, batch_uuid: batch.uuid, validator: delinquent_validator, root_distance: 1000, vote_distance: 2000, delinquent: true)
+
+      DataCenters::FillDataCenterStats.new(network: @network).call
+
+      stats = @data_center.data_center_stats.by_network(@network)
+      assert_equal 10, stats.root_distance["average"]
+      assert_equal 20, stats.vote_distance["average"]
+    end
   end
 end

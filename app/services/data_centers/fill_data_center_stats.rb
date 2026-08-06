@@ -41,6 +41,7 @@ class DataCenters::FillDataCenterStats
     return {} unless @batch_uuid
 
     ValidatorHistory.for_batch(@network, @batch_uuid)
+                    .where(delinquent: false)
                     .joins(validator: :data_center)
                     .pluck("data_centers.id", :root_distance, :vote_distance)
                     .group_by { |data_center_id, _root_distance, _vote_distance| data_center_id }
