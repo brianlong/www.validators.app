@@ -117,10 +117,10 @@ every 1.day, at: '2:20am', roles: [:background] do
 end
 
 every 1.day, at: '3:00am', roles: [:background] do
-  runner "DataCenterStatsWorker.perform_async('mainnet')"
-  runner "DataCenterStatsWorker.perform_async('testnet')"
-  runner "DataCenterStatsWorker.perform_async('pythnet')"
-  runner "DataCenterStatsWorker.perform_async('alpenglow-community')"
+  runner "DataCenterStatsWorker.perform_async({'network' => 'mainnet'})"
+  runner "DataCenterStatsWorker.perform_async({'network' => 'testnet'})"
+  runner "DataCenterStatsWorker.perform_async({'network' => 'pythnet'})"
+  runner "DataCenterStatsWorker.perform_async({'network' => 'alpenglow-community'})"
 end
 
 every 1.day, at: '3:10am', roles: [:background] do

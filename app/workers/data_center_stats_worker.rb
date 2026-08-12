@@ -2,8 +2,9 @@
 
 class DataCenterStatsWorker
   include Sidekiq::Worker
+  sidekiq_options retry: 1, dead: false
 
-  def perform(network)
-    DataCenters::FillDataCenterStats.new(network: network).call
+  def perform(args = {})
+    DataCenters::FillDataCenterStats.new(network: args["network"], batch_uuid: args["batch_uuid"]).call
   end
 end

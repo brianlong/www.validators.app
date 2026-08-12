@@ -43,5 +43,11 @@
         (<%= percent_of_total_stake(dc_data[:active_stake_from_active_validators], @results[:total_stake]) %>)
       </small>
     </td>
+
+    <td>
+      <%= format_distance(@distance_stats.average_root_distance_for(dc_key)) %>
+      <br />
+      <%= format_distance(@distance_stats.average_vote_distance_for(dc_key)) %>
+    </td>
   </tr>
 <% end %>

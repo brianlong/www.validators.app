@@ -10,6 +10,7 @@ class DataCentersController < ApplicationController
       secondary_sort: @secondary_sort,
       network: params[:network]
     ).call
+    @distance_stats = DataCenterDistanceStats.new(params[:network])
 
     if @sort_by == 'asn'
       @asn_stat = AsnStat.where(network: params[:network])

@@ -19,6 +19,10 @@ module DataCentersHelper
     (dividend.to_f / divisor.to_f * 100).round(2)
   end
 
+  def format_distance(value)
+    value ? value.round(2) : "-"
+  end
+
   def link_to_toggle_private(type:, url_params:)
     case type
     when :data_center

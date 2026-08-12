@@ -148,13 +148,13 @@ module Api
       test "#data_center_stats returns stats by country and organization summed by count" do
         get api_v1_data_center_stats_url(network: @network, secondary_sort: :count), headers: @headers
         resp = JSON.parse(@response.body)
-        
+
         assert_response 200
         assert_equal ["China", 5], resp["dc_by_country"][0]
         assert_equal ["Germany", 3], resp["dc_by_country"][1]
         assert_equal ["Chinese Organisation", 5], resp["dc_by_organization"][0]
         assert_equal ["Germany Organisation", 3], resp["dc_by_organization"][1]
       end
-    end    
+    end
   end
 end
