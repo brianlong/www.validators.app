@@ -31,6 +31,8 @@ class ExplorerStakeAccountsController < ApplicationController
       stake_pubkey: params[:stake_pubkey],
       network: params[:network]
     )
+    return render_404 if @explorer_stake_account.nil?
+
     @stake_account = StakeAccount.find_by(stake_pubkey: params[:stake_pubkey])
     @vote_account = VoteAccount.find_by(
       account: @explorer_stake_account.delegated_vote_account_address,
