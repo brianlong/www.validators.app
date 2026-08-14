@@ -47,7 +47,6 @@ begin
     }.stringify_keys
 
     ClusterStatsWorker.set(queue: :high_priority).perform_async(stat_params)
-    DataCenterStatsWorker.perform_async(stat_params)
     Blockchain::AlpenglowVoteLatencyScoreWorker.perform_async({"network" => _p.payload[:network]})
 
     break if interrupted

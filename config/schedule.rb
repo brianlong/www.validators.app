@@ -116,7 +116,7 @@ every 1.day, at: '2:20am', roles: [:background] do
   ruby_script 'update_gossip_nodes.rb'
 end
 
-every 1.day, at: '3:00am', roles: [:background] do
+every 1.hour, at: 40, roles: [:background] do
   runner "DataCenterStatsWorker.perform_async({'network' => 'mainnet'})"
   runner "DataCenterStatsWorker.perform_async({'network' => 'testnet'})"
   runner "DataCenterStatsWorker.perform_async({'network' => 'pythnet'})"
