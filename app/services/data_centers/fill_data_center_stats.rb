@@ -7,21 +7,20 @@ class DataCenters::FillDataCenterStats
   end
 
   def call
+    validators_counts = validators_counts_by_data_center_id
+    active_validators_counts = active_validators_counts_by_data_center_id
+    active_validators_stakes = active_validators_stakes_by_data_center_id
+    nodes_counts = nodes_counts_by_data_center_id(active: false)
+    active_nodes_counts = nodes_counts_by_data_center_id(active: true)
     distances = distances_by_data_center_id
 
-    DataCenter.includes(:validators, :gossip_nodes).all.each do |dc|
-      validators_count = dc.validators.where(network: @network).size
-      active_validators_stake = dc.validators.joins(:validator_score_v1).where(network: @network).active.sum(:active_stake)
-      active_validators_count = dc.validators.where(network: @network).active.size
-      nodes_count = dc.gossip_nodes.where(network: @network, staked: false).size
-      active_nodes_count = dc.gossip_nodes.where(network: @network, staked: false).active.size
-
+    DataCenter.find_each do |dc|
       stats = dc.data_center_stats.find_or_create_by(network: @network)
-      stats.validators_count = validators_count
-      stats.active_validators_stake = active_validators_stake
-      stats.active_validators_count = active_validators_count
-      stats.gossip_nodes_count = nodes_count
-      stats.active_gossip_nodes_count = active_nodes_count
+      stats.validators_count = validators_counts[dc.id] || 0
+      stats.active_validators_stake = active_validators_stakes[dc.id] || 0
+      stats.active_validators_count = active_validators_counts[dc.id] || 0
+      stats.gossip_nodes_count = nodes_counts[dc.id] || 0
+      stats.active_gossip_nodes_count = active_nodes_counts[dc.id] || 0
 
       if @batch_uuid
         dc_distances = distances[dc.id] || []
@@ -34,6 +33,37 @@ class DataCenters::FillDataCenterStats
   end
 
   private
+
+  # Grouped queries below replace what used to be ~6 queries per DataCenter
+  # (one query total per metric, instead of one per DataCenter).
+  def validators_counts_by_data_center_id
+    Validator.joins(:data_center)
+             .where(network: @network)
+             .group("data_centers.id")
+             .count
+  end
+
+  def active_validators_counts_by_data_center_id
+    Validator.joins(:data_center)
+             .where(network: @network)
+             .active
+             .group("data_centers.id")
+             .count
+  end
+
+  def active_validators_stakes_by_data_center_id
+    Validator.joins(:data_center, :validator_score_v1)
+             .where(network: @network)
+             .active
+             .group("data_centers.id")
+             .sum(:active_stake)
+  end
+
+  def nodes_counts_by_data_center_id(active:)
+    scope = GossipNode.joins(:data_center_host).where(network: @network, staked: false)
+    scope = scope.active if active
+    scope.group("data_center_hosts.data_center_id").count
+  end
 
   # One query for the whole network+batch: [data_center_id, root_distance, vote_distance]
   # grouped by data_center_id, so we avoid an extra pair of queries per data center.
