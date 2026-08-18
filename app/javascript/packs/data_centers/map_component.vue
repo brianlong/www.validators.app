@@ -123,6 +123,15 @@
                 });
                 this.deckOverlay = new GoogleMapsOverlay({
                   layers: [this.build_heatmap_layer()],
+                  // HeatmapLayer's GPU aggregation needs more than one paint
+                  // pass to finish (weights get aggregated into a texture on
+                  // one frame, then composited into the visible heatmap on a
+                  // later one). Without a continuous render loop, only a
+                  // single frame runs per interaction, so a toggle's result
+                  // doesn't actually appear until *another* redraw is
+                  // triggered — e.g. the next click. _animate keeps deck.gl
+                  // rendering every frame so aggregation reliably finishes.
+                  _animate: true,
                 });
                 this.deckOverlay.setMap(this.map);
 
@@ -216,6 +225,15 @@
             this.deckOverlay.setProps({ layers: [] });
           } else {
             this.deckOverlay.setProps({ layers: [this.build_heatmap_layer()] });
+          }
+          // setProps alone updates deck.gl's internal layer list but doesn't
+          // reliably force an immediate repaint of the overlay canvas here —
+          // the new layers only actually show up whenever some unrelated
+          // redraw happens to fire next (e.g. the following click), making
+          // every toggle look like it's one click behind. Forcing a redraw
+          // explicitly makes the change paint immediately.
+          if (this.deckOverlay._deck) {
+            this.deckOverlay._deck.redraw(true);
           }
         },
 
