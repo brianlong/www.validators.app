@@ -22,6 +22,8 @@
   import '../mixins/numbers_mixins'
   import { MarkerClusterer } from "@googlemaps/markerclusterer";
   import { h } from 'vue'
+  import { GoogleMapsOverlay } from '@deck.gl/google-maps';
+  import { HeatmapLayer } from '@deck.gl/aggregation-layers';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -35,6 +37,8 @@
       return {
         data_centers: [],
         map: null,
+        deckOverlay: null,
+        heatmap_layer_seq: 0,
         asn_search: null,
         markerClusterer: null,
         markers_visible: true,
@@ -116,14 +120,11 @@
                     data_center.marker.addListener("click", () => {
                       this.toggleHighlight(data_center.marker, data_center);
                     });
-
-                    data_center.heat_marker = new google.maps.Marker({
-                      position,
-                      clickable: false,
-                      zIndex: 0,
-                    });
                 });
-                this.update_heatmap();
+                this.deckOverlay = new GoogleMapsOverlay({
+                  layers: [this.build_heatmap_layer()],
+                });
+                this.deckOverlay.setMap(this.map);
 
                 this.set_up_clusterer(this.marker_list, this.map);
           });
@@ -185,41 +186,37 @@
           }
         },
 
-        heat_glow_icon: function(intensity) {
-          const size = Math.round(50 + intensity * 80);
-          const center = size / 2;
-          const svg = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
-              <defs>
-                <radialGradient id="g" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="rgba(255,80,20,${0.5 + intensity * 0.4})" />
-                  <stop offset="55%" stop-color="rgba(255,190,20,${0.25 + intensity * 0.35})" />
-                  <stop offset="100%" stop-color="rgba(255,220,20,0)" />
-                </radialGradient>
-              </defs>
-              <circle cx="${center}" cy="${center}" r="${center}" fill="url(#g)" />
-            </svg>`;
-          return {
-            url: `data:image/svg+xml;base64,${window.btoa(svg)}`,
-            scaledSize: new google.maps.Size(size, size),
-            anchor: new google.maps.Point(center, center),
-          };
+        heat_points: function() {
+          return this.data_centers.map(data_center => ({
+            position: [parseFloat(data_center.location_longitude), parseFloat(data_center.location_latitude)],
+            weight: this.heatmap_weight(data_center),
+          }));
+        },
+
+        build_heatmap_layer: function() {
+          // deck.gl matches layers between updates by `id` and, on a match,
+          // patches the existing layer's GPU aggregation state in place
+          // instead of tearing it down and reinitializing it. That in-place
+          // update path is what leaves the multi-pass heatmap aggregation
+          // stuck after a few Stake/Validators toggles. Giving every rebuild
+          // a fresh id forces deck.gl to fully finalize the old layer and
+          // initialize a new one, which keeps the GPU state clean.
+          this.heatmap_layer_seq += 1;
+          return new HeatmapLayer({
+            id: `heatmap-layer-${this.heatmap_layer_seq}`,
+            data: this.heat_points(),
+            getPosition: d => d.position,
+            getWeight: d => d.weight,
+            radiusPixels: 55,
+          });
         },
 
         update_heatmap: function() {
           if (this.heatmap_type == 'off') {
-            this.data_centers.forEach(data_center => data_center.heat_marker.setMap(null));
-            return;
+            this.deckOverlay.setProps({ layers: [] });
+          } else {
+            this.deckOverlay.setProps({ layers: [this.build_heatmap_layer()] });
           }
-
-          const weights = this.data_centers.map(data_center => this.heatmap_weight(data_center));
-          const max_weight = Math.max(...weights, 1);
-
-          this.data_centers.forEach((data_center, index) => {
-            const intensity = Math.max(0.1, weights[index] / max_weight);
-            data_center.heat_marker.setIcon(this.heat_glow_icon(intensity));
-            data_center.heat_marker.setMap(this.map);
-          });
         },
 
         toggleHighlight: function(marker, data_center) {
