@@ -208,6 +208,17 @@
             getPosition: d => d.position,
             getWeight: d => d.weight,
             radiusPixels: 55,
+            // Bias the gradient toward red: deck.gl's default colorRange
+            // spends most of its stops on yellow/orange, so only the single
+            // hottest spot ever reaches red. This range reaches red sooner.
+            colorRange: [
+              [255, 237, 160, 60],
+              [254, 178, 76, 120],
+              [252, 78, 42, 180],
+              [227, 26, 28, 220],
+              [189, 0, 38, 255],
+              [128, 0, 38, 255],
+            ],
           });
         },
 
