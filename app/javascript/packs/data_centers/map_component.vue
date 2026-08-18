@@ -188,7 +188,7 @@
             data: this.heat_points,
             getPosition: d => d.position,
             getWeight: d => d.weight,
-            radiusPixels: 40,
+            radiusPixels: 55,
           });
         },
 
