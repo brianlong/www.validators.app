@@ -22,8 +22,6 @@
   import '../mixins/numbers_mixins'
   import { MarkerClusterer } from "@googlemaps/markerclusterer";
   import { h } from 'vue'
-  import { GoogleMapsOverlay } from '@deck.gl/google-maps';
-  import { HeatmapLayer } from '@deck.gl/aggregation-layers';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -36,9 +34,7 @@
     data() {
       return {
         data_centers: [],
-        heat_points: [],
         map: null,
-        deckOverlay: null,
         asn_search: null,
         markerClusterer: null,
         markers_visible: true,
@@ -109,10 +105,6 @@
                 })
                  this.data_centers.forEach(data_center => {
                     let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
-                    this.heat_points.push({
-                      position: [position['lng'], position['lat']],
-                      weight: Math.ceil(this.lamports_to_sol(data_center.active_validators_stake) / 10)
-                    })
 
                     data_center.marker = new AdvancedMarkerElement({
                       position,
@@ -124,11 +116,14 @@
                     data_center.marker.addListener("click", () => {
                       this.toggleHighlight(data_center.marker, data_center);
                     });
+
+                    data_center.heat_marker = new google.maps.Marker({
+                      position,
+                      clickable: false,
+                      zIndex: 0,
+                    });
                 });
-                this.deckOverlay = new GoogleMapsOverlay({
-                  layers: [this.build_heatmap_layer()],
-                });
-                this.deckOverlay.setMap(this.map);
+                this.update_heatmap();
 
                 this.set_up_clusterer(this.marker_list, this.map);
           });
@@ -182,42 +177,49 @@
           });
         },
 
-        build_heatmap_layer: function() {
-          return new HeatmapLayer({
-            id: 'heatmap-layer',
-            data: this.heat_points,
-            getPosition: d => d.position,
-            getWeight: d => d.weight,
-            radiusPixels: 55,
-          });
+        heatmap_weight: function(data_center) {
+          if (this.heatmap_type == 'validators') {
+            return data_center.active_validators_count;
+          } else {
+            return Math.ceil(this.lamports_to_sol(data_center.active_validators_stake) / 10);
+          }
         },
 
-        update_heatmap_layer: function() {
-          this.deckOverlay.setProps({ layers: [this.build_heatmap_layer()] });
+        heat_glow_icon: function(intensity) {
+          const size = Math.round(50 + intensity * 80);
+          const center = size / 2;
+          const svg = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+              <defs>
+                <radialGradient id="g" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="rgba(255,80,20,${0.5 + intensity * 0.4})" />
+                  <stop offset="55%" stop-color="rgba(255,190,20,${0.25 + intensity * 0.35})" />
+                  <stop offset="100%" stop-color="rgba(255,220,20,0)" />
+                </radialGradient>
+              </defs>
+              <circle cx="${center}" cy="${center}" r="${center}" fill="url(#g)" />
+            </svg>`;
+          return {
+            url: `data:image/svg+xml;base64,${window.btoa(svg)}`,
+            scaledSize: new google.maps.Size(size, size),
+            anchor: new google.maps.Point(center, center),
+          };
         },
 
-        build_stake_heatmap: function() {
-          this.heat_points = [];
-          this.data_centers.forEach(data_center => {
-            let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
-            this.heat_points.push({
-              position: [position['lng'], position['lat']],
-              weight: Math.ceil(this.lamports_to_sol(data_center.active_validators_stake) / 10)
-            })
-          });
-          this.update_heatmap_layer();
-        },
+        update_heatmap: function() {
+          if (this.heatmap_type == 'off') {
+            this.data_centers.forEach(data_center => data_center.heat_marker.setMap(null));
+            return;
+          }
 
-        build_validators_count_heatmap: function() {
-          this.heat_points = [];
-          this.data_centers.forEach(data_center => {
-            let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
-            this.heat_points.push({
-              position: [position['lng'], position['lat']],
-              weight: data_center.active_validators_count
-            })
+          const weights = this.data_centers.map(data_center => this.heatmap_weight(data_center));
+          const max_weight = Math.max(...weights, 1);
+
+          this.data_centers.forEach((data_center, index) => {
+            const intensity = Math.max(0.1, weights[index] / max_weight);
+            data_center.heat_marker.setIcon(this.heat_glow_icon(intensity));
+            data_center.heat_marker.setMap(this.map);
           });
-          this.update_heatmap_layer();
         },
 
         toggleHighlight: function(marker, data_center) {
@@ -256,13 +258,7 @@
 
         toggleHeatmap: function(h_type) {
           this.heatmap_type = h_type;
-          if(h_type == 'stake') {
-            this.build_stake_heatmap();
-          } else if(h_type == 'validators') {
-            this.build_validators_count_heatmap();
-          } else {
-            this.deckOverlay.setProps({ layers: [] });
-          }
+          this.update_heatmap();
         },
 
         toggleMarkers: function() {
