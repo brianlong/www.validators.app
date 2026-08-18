@@ -207,18 +207,7 @@
             data: this.heat_points(),
             getPosition: d => d.position,
             getWeight: d => d.weight,
-            radiusPixels: 55,
-            // Bias the gradient toward red: deck.gl's default colorRange
-            // spends most of its stops on yellow/orange, so only the single
-            // hottest spot ever reaches red. This range reaches red sooner.
-            colorRange: [
-              [255, 246, 169, 100],
-              [254, 197, 97, 160],
-              [253, 128, 59, 200],
-              [240, 83, 44, 225],
-              [214, 29, 35, 245],
-              [158, 0, 38, 255],
-            ],
+            radiusPixels: 65,
           });
         },
 
