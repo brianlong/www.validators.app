@@ -41,26 +41,33 @@ export function createHeatmapOverlay(map, cfg) {
     cfg.container = container;
   };
 
-  // AdvancedMarkerElement (individual data center pins) and classic
-  // google.maps.Marker (the numbered cluster badges from set_up_clusterer's
-  // renderer, identified by their base64 SVG icon) each render into their
-  // own internal Google pane, nested several levels inside the map div —
-  // neither is a plain sibling the way a simple DOM node would be, and
-  // neither shares a stacking context with a plain sibling of their pane's
-  // ancestor. z-index or DOM order at the map-div level can't beat either:
-  // a sibling of that ancestor always paints as a single unit, regardless of
-  // z-index values *inside* it. So instead of guessing where in the tree
-  // "above tiles, below markers" is, this finds the actual pane(s) Google
-  // renders each marker type into (by walking up from a real marker element
-  // already in the DOM to the first ancestor that's roughly map-sized — the
-  // marker-specific wrapper, not some tiny per-marker box), and inserts the
-  // heatmap container as the first child of whichever pane comes first in
-  // the document — being inside it also sits below any later sibling pane
-  // (like the other marker type's), not just below the markers inside the
-  // chosen pane itself.
-  HeatmapOverlay.prototype.findPaneFor = function(selector) {
+  // AdvancedMarkerElement renders into its own internal Google pane, nested
+  // several levels inside the map div — it isn't a plain sibling the way a
+  // simple DOM node would be, and it doesn't share a stacking context with
+  // one either. Neither z-index nor DOM order at the map-div level can beat
+  // it: a sibling of that pane's ancestor always paints as a single unit,
+  // regardless of z-index values *inside* that ancestor. So instead of
+  // guessing where in the tree "above tiles, below markers" is, this finds
+  // the actual pane Google renders markers into (by walking up from a real
+  // marker element already in the DOM to the first ancestor that's roughly
+  // map-sized) and inserts the heatmap container as its first child.
+  //
+  // This used to also look for a separate pane for the numbered cluster
+  // badges (classic google.maps.Marker, from set_up_clusterer's renderer),
+  // keyed off their display:table-cell label wrapper, and inserted into
+  // whichever of the two panes came first in the document. In production
+  // that walk-up stopped too early, at a per-marker wrapper that happened to
+  // pass the "roughly map-sized" check (it carries an inline z-index that
+  // looks instance-specific, e.g. `z-index: 103`, not a shared pane's) — and
+  // that wrapper sat *below* the base tile layer. The map's tiles fade in
+  // over about a second on load, so the heatmap was briefly visible through
+  // them and then completely hidden once they reached full opacity. The
+  // AdvancedMarkerElement pane alone doesn't have this problem, so cluster
+  // badges being visible over the heatmap is a smaller, separate issue to
+  // solve without touching this.
+  HeatmapOverlay.prototype.findMarkerPane = function() {
     const mapDiv = this.getMap().getDiv();
-    const markerEl = mapDiv.querySelector(selector);
+    const markerEl = mapDiv.querySelector('gmp-advanced-marker');
     if (!markerEl) {
       return null;
     }
@@ -75,24 +82,6 @@ export function createHeatmapOverlay(map, cfg) {
       el = el.parentElement;
     }
     return null;
-  };
-
-  HeatmapOverlay.prototype.findMarkerPane = function() {
-    const advancedPane = this.findPaneFor('gmp-advanced-marker');
-    // The cluster badges (classic google.maps.Marker with a text label, from
-    // set_up_clusterer's renderer) don't render their label text as a plain
-    // <img> — Google centers it with a display:table/table-cell pair, which
-    // is a much more stable thing to key off of than trying to match the
-    // marker's own icon rendering (which turned out not to be a real <img>
-    // element at all in production).
-    const clusterPane = this.findPaneFor('div[style*="display: table-cell"]');
-
-    if (advancedPane && clusterPane && advancedPane !== clusterPane) {
-      const position = advancedPane.compareDocumentPosition(clusterPane);
-      return (position & Node.DOCUMENT_POSITION_FOLLOWING) ? advancedPane : clusterPane;
-    }
-
-    return advancedPane || clusterPane;
   };
 
   // The pane markers live in may be transformed/offset relative to the map
@@ -154,6 +143,19 @@ export function createHeatmapOverlay(map, cfg) {
     });
     this.detachObserver.observe(this.getMap().getDiv(), { childList: true, subtree: true });
 
+    // Belt and braces on top of the observer above: whatever the exact
+    // mechanism turns out to be — detached container, a pane that resets
+    // size, a canvas that loses its drawn content — periodically reasserting
+    // placement, position, and redrawing the current data self-corrects it
+    // within a couple of seconds without needing to chase down the precise
+    // cause, which has proven to differ between environments.
+    this.healInterval = setInterval(() => {
+      if (!this.container.isConnected) {
+        this.placeInMarkerPane();
+      }
+      this.update();
+    }, 2000);
+
     if (!this.heatmap) {
       this.heatmap = h337.create(this.cfg);
     }
@@ -161,6 +163,10 @@ export function createHeatmapOverlay(map, cfg) {
   };
 
   HeatmapOverlay.prototype.onRemove = function() {
+    if (this.healInterval) {
+      clearInterval(this.healInterval);
+      this.healInterval = null;
+    }
     if (this.detachObserver) {
       this.detachObserver.disconnect();
       this.detachObserver = null;

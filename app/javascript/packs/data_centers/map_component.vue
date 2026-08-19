@@ -177,17 +177,32 @@
                   <circle cx="120" cy="120" opacity=".2" r="110" />
                   <circle cx="120" cy="120" opacity=".1" r="130" />
                 </svg>`);
-                return new google.maps.Marker({
+
+                // AdvancedMarkerElement instead of the classic google.maps.Marker
+                // used here previously: classic Markers render into a different
+                // internal Google pane that sits below the heatmap overlay (which
+                // is positioned relative to AdvancedMarkerElement's pane), so
+                // cluster badges were getting hidden behind the heatmap. Advanced
+                // Markers use the same pane individual data center pins already
+                // render into correctly.
+                const content = document.createElement('div');
+                content.style.cssText = `
+                  width: 45px;
+                  height: 45px;
+                  background-image: url('data:image/svg+xml;base64,${svg}');
+                  background-size: contain;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: rgba(255,255,255,0.9);
+                  font-size: 12px;
+                  font-family: Roboto, Arial, sans-serif;
+                `;
+                content.textContent = String(count);
+
+                return new google.maps.marker.AdvancedMarkerElement({
                   position,
-                  icon: {
-                    url: `data:image/svg+xml;base64,${svg}`,
-                    scaledSize: new google.maps.Size(45, 45),
-                  },
-                  label: {
-                    text: String(count),
-                    color: "rgba(255,255,255,0.9)",
-                    fontSize: "12px",
-                  },
+                  content,
                   zIndex: count,
                 });
               }
