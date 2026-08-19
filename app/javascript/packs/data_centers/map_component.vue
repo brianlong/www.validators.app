@@ -113,12 +113,24 @@
                       title: data_center.traits_organization,
                       content: this.buildContent(data_center),
                       gmpClickable: true,
+                      // Forces markers above the heatmap overlay's canvas
+                      // regardless of DOM order or the heatmap container's
+                      // own z-index — those depend on assumptions about
+                      // Google's internal pane structure that didn't hold up
+                      // in production.
+                      zIndex: 1,
                     });
 
                     data_center.marker.addListener("click", () => {
                       this.toggleHighlight(data_center.marker, data_center);
                     });
                 });
+                // Markers need to already be attached to the map (and in the
+                // DOM) before the heatmap overlay is created below: it looks
+                // for an existing marker to find the right Google-internal
+                // pane to render inside, so it stacks under markers.
+                this.set_up_clusterer(this.marker_list, this.map);
+
                 this.heatmapOverlay = createHeatmapOverlay(this.map, {
                   radius: 40,
                   maxOpacity: 0.85,
@@ -132,8 +144,6 @@
                   },
                 });
                 this.update_heatmap();
-
-                this.set_up_clusterer(this.marker_list, this.map);
           });
         },
 
