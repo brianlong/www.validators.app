@@ -34,7 +34,7 @@ export function createHeatmapOverlay(map, cfg) {
     const container = document.createElement('div');
     this.width = mapDiv.clientWidth;
     this.height = mapDiv.clientHeight;
-    container.style.cssText = `position:absolute;top:0;left:0;width:${this.width}px;height:${this.height}px;pointer-events:none;`;
+    container.style.cssText = `position:absolute;top:0;left:0;width:${this.width}px;height:${this.height}px;pointer-events:none;z-index:0;`;
     this.container = container;
     this.data = [];
     this.max = 1;
@@ -46,6 +46,10 @@ export function createHeatmapOverlay(map, cfg) {
     // getPanes()'s layers: those panes pan with the map using the DivPixel
     // coordinate system, which would double up with the ContainerPixel
     // coordinates used below.
+    //
+    // z-index: 0 on the container (set in initialize()) keeps this below
+    // Google's own marker/control panes without having to guess where in
+    // the DOM Google's base tile layer ends and the marker panes begin.
     this.getMap().getDiv().appendChild(this.container);
     this.boundsListener = google.maps.event.addListener(this.getMap(), 'bounds_changed', () => this.update());
     if (!this.heatmap) {
