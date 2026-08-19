@@ -22,8 +22,7 @@
   import '../mixins/numbers_mixins'
   import { MarkerClusterer } from "@googlemaps/markerclusterer";
   import { h } from 'vue'
-  import { GoogleMapsOverlay } from '@deck.gl/google-maps';
-  import { HeatmapLayer } from '@deck.gl/aggregation-layers';
+  import { createHeatmapOverlay } from './heatmap_overlay';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
@@ -37,8 +36,7 @@
       return {
         data_centers: [],
         map: null,
-        deckOverlay: null,
-        heatmap_layer_seq: 0,
+        heatmapOverlay: null,
         asn_search: null,
         markerClusterer: null,
         markers_visible: true,
@@ -121,19 +119,18 @@
                       this.toggleHighlight(data_center.marker, data_center);
                     });
                 });
-                this.deckOverlay = new GoogleMapsOverlay({
-                  layers: [this.build_heatmap_layer()],
-                  // HeatmapLayer's GPU aggregation needs more than one paint
-                  // pass to finish (weights get aggregated into a texture on
-                  // one frame, then composited into the visible heatmap on a
-                  // later one). Without a continuous render loop, only a
-                  // single frame runs per interaction, so a toggle's result
-                  // doesn't actually appear until *another* redraw is
-                  // triggered — e.g. the next click. _animate keeps deck.gl
-                  // rendering every frame so aggregation reliably finishes.
-                  _animate: true,
+                this.heatmapOverlay = createHeatmapOverlay(this.map, {
+                  radius: 65,
+                  maxOpacity: 0.85,
+                  gradient: {
+                    0.3: '#ffeda0',
+                    0.5: '#feb24c',
+                    0.7: '#fc4e2a',
+                    0.9: '#e31a1c',
+                    1.0: '#b10026',
+                  },
                 });
-                this.deckOverlay.setMap(this.map);
+                this.update_heatmap();
 
                 this.set_up_clusterer(this.marker_list, this.map);
           });
@@ -197,44 +194,21 @@
 
         heat_points: function() {
           return this.data_centers.map(data_center => ({
-            position: [parseFloat(data_center.location_longitude), parseFloat(data_center.location_latitude)],
-            weight: this.heatmap_weight(data_center),
+            lat: parseFloat(data_center.location_latitude),
+            lng: parseFloat(data_center.location_longitude),
+            value: this.heatmap_weight(data_center),
           }));
-        },
-
-        build_heatmap_layer: function() {
-          // deck.gl matches layers between updates by `id` and, on a match,
-          // patches the existing layer's GPU aggregation state in place
-          // instead of tearing it down and reinitializing it. That in-place
-          // update path is what leaves the multi-pass heatmap aggregation
-          // stuck after a few Stake/Validators toggles. Giving every rebuild
-          // a fresh id forces deck.gl to fully finalize the old layer and
-          // initialize a new one, which keeps the GPU state clean.
-          this.heatmap_layer_seq += 1;
-          return new HeatmapLayer({
-            id: `heatmap-layer-${this.heatmap_layer_seq}`,
-            data: this.heat_points(),
-            getPosition: d => d.position,
-            getWeight: d => d.weight,
-            radiusPixels: 65,
-          });
         },
 
         update_heatmap: function() {
           if (this.heatmap_type == 'off') {
-            this.deckOverlay.setProps({ layers: [] });
-          } else {
-            this.deckOverlay.setProps({ layers: [this.build_heatmap_layer()] });
+            this.heatmapOverlay.setData([], 1);
+            return;
           }
-          // setProps alone updates deck.gl's internal layer list but doesn't
-          // reliably force an immediate repaint of the overlay canvas here —
-          // the new layers only actually show up whenever some unrelated
-          // redraw happens to fire next (e.g. the following click), making
-          // every toggle look like it's one click behind. Forcing a redraw
-          // explicitly makes the change paint immediately.
-          if (this.deckOverlay._deck) {
-            this.deckOverlay._deck.redraw(true);
-          }
+
+          const points = this.heat_points();
+          const max_weight = Math.max(...points.map(p => p.value), 1);
+          this.heatmapOverlay.setData(points, max_weight);
         },
 
         toggleHighlight: function(marker, data_center) {
