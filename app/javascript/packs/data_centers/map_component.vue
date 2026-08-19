@@ -120,7 +120,7 @@
                     });
                 });
                 this.heatmapOverlay = createHeatmapOverlay(this.map, {
-                  radius: 50,
+                  radius: 40,
                   maxOpacity: 0.85,
                   minOpacity: 0.05,
                   gradient: {
