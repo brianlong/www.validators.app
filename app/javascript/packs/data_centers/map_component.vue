@@ -240,10 +240,15 @@
         toggleHighlight: function(marker, data_center) {
           if (marker.content.classList.contains("highlight")) {
             marker.content.classList.remove("highlight");
-            marker.zIndex = null;
+            marker.zIndex = 1;
           } else {
             marker.content.classList.add("highlight");
-            marker.zIndex = 1;
+            // Cluster badges are AdvancedMarkerElements too now, with
+            // zIndex set to their marker count — which can be much higher
+            // than a plain marker's zIndex: 1, so a big nearby cluster was
+            // rendering over an expanded card instead of being hidden
+            // behind it. This just needs to always win.
+            marker.zIndex = 1000000;
           }
         },
 
