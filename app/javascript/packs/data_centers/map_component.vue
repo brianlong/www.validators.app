@@ -221,15 +221,17 @@
         heat_points: function() {
           // Raw stake/validator-count weights span several orders of
           // magnitude (a handful of validators vs. a data center with
-          // millions of SOL staked), so on a linear scale small data centers
-          // barely register any color/opacity next to the largest ones.
-          // Taking the square root compresses that range, giving smaller
-          // values a bigger share of the gradient instead of clustering
-          // near zero.
+          // millions of SOL staked), so on a linear scale (exponent 1) small
+          // data centers barely register any color/opacity next to the
+          // largest ones. Exponents below 1 compress that range, giving
+          // smaller values a bigger share of the gradient — lower means more
+          // compression, with 0.5 being a square root. This sits between
+          // that and linear.
+          const exponent = 0.7;
           return this.data_centers.map(data_center => ({
             lat: parseFloat(data_center.location_latitude),
             lng: parseFloat(data_center.location_longitude),
-            value: Math.sqrt(this.heatmap_weight(data_center)),
+            value: Math.pow(this.heatmap_weight(data_center), exponent),
           }));
         },
 
