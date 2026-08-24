@@ -39,10 +39,6 @@ namespace :add_stake_pools do
   task testnet: :environment do
     update_stake_pools(TESTNET_STAKE_POOLS)
   end
-
-  task pythnet: :environment do
-    update_stake_pools(PYTHNET_STAKE_POOLS)
-  end
 end
 
 # Run the following task if @manager_fees changes
@@ -55,9 +51,5 @@ namespace :update_fees_in_stake_pools do
 
   task testnet: :environment do
     update_stake_pools_fees(TESTNET_STAKE_POOLS)
-  end
-
-  task pythnet: :environment do
-    update_stake_pools_fees(PYTHNET_STAKE_POOLS)
   end
 end

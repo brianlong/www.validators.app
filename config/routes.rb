@@ -42,7 +42,6 @@ Rails.application.routes.draw do
 
   get 'validators/mainnet/:account', to: redirect('/validators/%{account}?network=mainnet')
   get 'validators/testnet/:account', to: redirect('/validators/%{account}?network=testnet')
-  get 'validators/pythnet/:account', to: redirect('/validators/%{account}?network=pythnet')
 
   get 'validators/:account', to: 'validators#show', as: 'validator'
 
@@ -102,9 +101,6 @@ Rails.application.routes.draw do
       defaults: { validator_id: nil }
   get 'commission-changes/testnet/(:validator_id)',
       to: redirect( '/commission-changes/%{validator_id}?network=testnet'),
-      defaults: { validator_id: nil }
-  get 'commission-changes/pythnet/(:validator_id)',
-      to: redirect( '/commission-changes/%{validator_id}?network=pythnet'),
       defaults: { validator_id: nil }
   get 'commission-changes/(:validator_id)',
       to: 'public#commission_histories',

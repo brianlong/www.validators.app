@@ -23,14 +23,4 @@ FactoryBot.define do
     block { create(:testnet_block) }
   end
 
-  factory :pythnet_transaction, class: Blockchain::PythnetTransaction do
-    slot_number { "" }
-    fee { "" }
-    pre_balances { "" }
-    post_balances { "" }
-    account_key_1 { "MyString" }
-    account_key_2 { "MyString" }
-    account_key_3 { "MyString" }
-    block { create(:pythnet_block) }
-  end
 end

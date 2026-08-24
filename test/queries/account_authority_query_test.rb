@@ -20,7 +20,7 @@ class AccountAuthorityQueryTest < ActiveSupport::TestCase
       create(:vote_account, network: @network, authorized_voters: { "test_voter_key" => "test_voter_value" })
     end
 
-    create(:vote_account, network: "pythnet", authorized_voters: { "test_voter_key" => "test_voter_value" })
+    create(:vote_account, network: "mainnet", authorized_voters: { "test_voter_key" => "test_voter_value" })
   end
 
   test "#call provides results from the given network" do

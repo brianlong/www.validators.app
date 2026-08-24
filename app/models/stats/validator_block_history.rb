@@ -5,7 +5,7 @@ module Stats
   # ValidatorBlockHistory set of stats scoped to certain batch.
   #
   # Usage: stats = Stats::ValidatorBlockHistory.new(network, batch_uuid)
-  #            # network    - 'testnet', 'mainnet' or 'pythnet' atm
+  #            # network    - 'testnet', 'mainnet' or 'alpenglow-community' atm
   #            # batch_uuid - batch in which look for
   #        stats.average_skipped_slot_percent
   #        stats.scorable_average_skipped_slot_percent

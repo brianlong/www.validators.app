@@ -147,7 +147,7 @@
 <h2 class="h4" id="validators-list">Validators List</h2>
 <p>
   The Validators List endpoint will return a list of validators for the requested network. In the example below,
-  replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  replace `:network` with either 'testnet' or 'mainnet' as desired.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -229,7 +229,7 @@
 <h2 class="h4" id="validator-detail">Validator Details</h2>
 <p>
   The Validator Details endpoint will return a single validator for the requested network and account. In the example
-  below, replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired. Replace `:account` with the desired account ID.
+  below, replace `:network` with either 'testnet' or 'mainnet' as desired. Replace `:account` with the desired account ID.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -300,7 +300,7 @@
 <h2 class="h4" id="validator-block">Validator Block Production History</h2>
 <p>
   The Validator Block History endpoint will return a history of block production stats for the requested network
-  and account. In the example below, replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired. Replace `:account`
+  and account. In the example below, replace `:network` with either 'testnet' or 'mainnet' as desired. Replace `:account`
   with the desired account ID. You can also include a `limit` parameter to request more or fewer datapoints.
 </p>
 
@@ -326,7 +326,7 @@
 <hr />
 
 <h2 class="h4" id="epoch-index">Epochs</h2>
-<p>The Epochs endpoint will return all epoch data. Replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired. </p>
+<p>The Epochs endpoint will return all epoch data. Replace `:network` with either 'testnet' or 'mainnet' as desired. </p>
 
 <h3 class="h6">Request:</h3>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/epochs/:network.json'</pre>
@@ -361,7 +361,7 @@
 <h2 class="h4" id="commission-change-index">Commission Changes</h2>
 <p>
   The Commission Changes endpoint will return all the changes in commission for a given period of time.
-  Replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  Replace `:network` with either 'testnet' or 'mainnet' as desired.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -411,8 +411,8 @@
 
 <h2 class="h4" id="stake-pools">Stake Pools</h2>
 <p>
-  The Stake Pools endpoint will return all the stake pools. Replace `:network` with either 'testnet',
-  'mainnet' or 'pythnet' as desired.
+  The Stake Pools endpoint will return all the stake pools. Replace `:network` with either 'testnet'
+  or 'mainnet' as desired.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -453,7 +453,7 @@
 <h2 class="h4" id="stake-accounts">Stake Pools Stake Accounts</h2>
 <p>
   The Stake Accounts endpoint will return all the stake accounts delegated to stake pools.
-  Replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  Replace `:network` with either 'testnet' or 'mainnet' as desired.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -508,7 +508,7 @@
 <h2 class="h4" id="stake-account-histories">Stake Pools Stake Account Histories</h2>
 <p>
   The Stake Account Histories endpoint will return historical stake accounts delegated to stake pools, for given epoch.<br />
-  Replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  Replace `:network` with either 'testnet' or 'mainnet' as desired.
   Replace `:epoch` with desired historical epoch number.
 </p>
 
@@ -677,7 +677,7 @@
 <h2 class="h4" id="ping-thing-list">Ping Thing List</h2>
 <p>
   This Ping Thing List endpoint will return a list of pings for the requested network. In the example below,
-  replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  replace `:network` with either 'testnet' or 'mainnet' as desired.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -724,7 +724,7 @@
 <h2 class="h4" id="ping-thing-stats">Ping Thing Stats</h2>
 <p>
   This Ping Thing Stats endpoint will return a ping thing stats. In the example below,
-  replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  replace `:network` with either 'testnet' or 'mainnet' as desired.
 </p>
 
 <h3 class="h6">Request:</h3>
@@ -946,7 +946,7 @@
 
 <h2 class="h4" id="policies-index">Yellowstone Shield Policies</h2>
 <p>
-  The Yellowstone Shield Policies endpoint returns a list of all available policies. In the example below, replace `:network` with either 'testnet', 'mainnet' or 'pythnet' as desired.
+  The Yellowstone Shield Policies endpoint returns a list of all available policies. In the example below, replace `:network` with either 'testnet' or 'mainnet' as desired.
 </p>
 <h3 class="h6">Request:</h3>
 <pre>curl -H "Token: secret-api-token" '<%= @api_path %>/policies/:network.json'</pre>

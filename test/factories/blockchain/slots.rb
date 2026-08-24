@@ -15,10 +15,4 @@ FactoryBot.define do
     status { "initialized" }
   end
 
-  factory :pythnet_slot, class: Blockchain::PythnetSlot do
-    slot_number { 123 }
-    leader { "account_1" }
-    epoch { 586 }
-    status { "initialized" }
-  end
 end
