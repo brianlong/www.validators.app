@@ -113,11 +113,6 @@
                       title: data_center.traits_organization,
                       content: this.buildContent(data_center),
                       gmpClickable: true,
-                      // Forces markers above the heatmap overlay's canvas
-                      // regardless of DOM order or the heatmap container's
-                      // own z-index — those depend on assumptions about
-                      // Google's internal pane structure that didn't hold up
-                      // in production.
                       zIndex: 1,
                     });
 
@@ -125,10 +120,6 @@
                       this.toggleHighlight(data_center.marker, data_center);
                     });
                 });
-                // Markers need to already be attached to the map (and in the
-                // DOM) before the heatmap overlay is created below: it looks
-                // for an existing marker to find the right Google-internal
-                // pane to render inside, so it stacks under markers.
                 this.set_up_clusterer(this.marker_list, this.map);
 
                 this.heatmapOverlay = createHeatmapOverlay(this.map, {
@@ -178,13 +169,6 @@
                   <circle cx="120" cy="120" opacity=".1" r="130" />
                 </svg>`);
 
-                // AdvancedMarkerElement instead of the classic google.maps.Marker
-                // used here previously: classic Markers render into a different
-                // internal Google pane that sits below the heatmap overlay (which
-                // is positioned relative to AdvancedMarkerElement's pane), so
-                // cluster badges were getting hidden behind the heatmap. Advanced
-                // Markers use the same pane individual data center pins already
-                // render into correctly.
                 const content = document.createElement('div');
                 content.style.cssText = `
                   width: 45px;
@@ -219,14 +203,6 @@
         },
 
         heat_points: function() {
-          // Raw stake/validator-count weights span several orders of
-          // magnitude (a handful of validators vs. a data center with
-          // millions of SOL staked), so on a linear scale (exponent 1) small
-          // data centers barely register any color/opacity next to the
-          // largest ones. Exponents below 1 compress that range, giving
-          // smaller values a bigger share of the gradient — lower means more
-          // compression, with 0.5 being a square root. This sits between
-          // that and linear.
           const exponent = 0.7;
           return this.data_centers.map(data_center => ({
             lat: parseFloat(data_center.location_latitude),
@@ -252,11 +228,6 @@
             marker.zIndex = 1;
           } else {
             marker.content.classList.add("highlight");
-            // Cluster badges are AdvancedMarkerElements too now, with
-            // zIndex set to their marker count — which can be much higher
-            // than a plain marker's zIndex: 1, so a big nearby cluster was
-            // rendering over an expanded card instead of being hidden
-            // behind it. This just needs to always win.
             marker.zIndex = 1000000;
           }
         },
