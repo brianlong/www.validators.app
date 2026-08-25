@@ -12,5 +12,4 @@ production:
 :queues:
   - [blockchain_mainnet, 1]
   - [blockchain_testnet, 1]
-  - [blockchain_pythnet, 1]
   - [blockchain, 1]

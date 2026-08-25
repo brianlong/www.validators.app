@@ -15,13 +15,11 @@ class Blockchain::Slot < ApplicationRecord
         Blockchain::MainnetSlot
       when 'testnet'
         Blockchain::TestnetSlot
-      when 'pythnet'
-        Blockchain::PythnetSlot
       end
     end
 
     def count
-      self.name == 'Blockchain::Slot' ? Blockchain::MainnetSlot.count + Blockchain::TestnetSlot.count + Blockchain::PythnetSlot.count : super
+      self.name == 'Blockchain::Slot' ? Blockchain::MainnetSlot.count + Blockchain::TestnetSlot.count : super
     end
   end
 end

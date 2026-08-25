@@ -24,13 +24,11 @@ class Blockchain::Block < ApplicationRecord
         Blockchain::MainnetBlock
       when 'testnet'
         Blockchain::TestnetBlock
-      when 'pythnet'
-        Blockchain::PythnetBlock
       end
     end
 
     def count
-      self.name == 'Blockchain::Block' ? Blockchain::MainnetBlock.count + Blockchain::TestnetBlock.count + Blockchain::PythnetBlock.count : super
+      self.name == 'Blockchain::Block' ? Blockchain::MainnetBlock.count + Blockchain::TestnetBlock.count : super
     end
 
   end

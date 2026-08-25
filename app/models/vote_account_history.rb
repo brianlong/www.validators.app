@@ -51,9 +51,7 @@ class VoteAccountHistory < ApplicationRecord
 
 
     if slot_index_current.to_f.positive?
-      if network == "pythnet"
-        max_credits = slot_index_current
-      elsif network == "alpenglow-community"
+      if network == "alpenglow-community"
         return nil if activated_stake.to_i <= 0
         max_credits = slot_index_current * 32.0 * (activated_stake.to_f / 1_000_000_000)
         result = (max_credits - credits_current.to_i) / max_credits

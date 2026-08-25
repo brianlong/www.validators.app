@@ -35,7 +35,7 @@ class SolanaRpcClientTest < ActiveSupport::TestCase
       # returns same client when same network used again
       assert_equal rpc_client.network_client("mainnet"), mainnet
       # returns different client when different network used
-      refute rpc_client.network_client("pythnet") == mainnet
+      refute rpc_client.network_client("testnet") == mainnet
     end
   end
 
