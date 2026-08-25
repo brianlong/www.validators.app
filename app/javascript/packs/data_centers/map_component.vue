@@ -22,12 +22,12 @@
   import '../mixins/numbers_mixins'
   import { MarkerClusterer } from "@googlemaps/markerclusterer";
   import { h } from 'vue'
+  import { createHeatmapOverlay } from './heatmap_overlay';
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization;
 
   (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
     key: window.google_maps_api_key,
-    libraries: "visualization",
     v: "weekly",
   });
 
@@ -35,9 +35,8 @@
     data() {
       return {
         data_centers: [],
-        heat_points: [],
         map: null,
-        heatmap: null,
+        heatmapOverlay: null,
         asn_search: null,
         markerClusterer: null,
         markers_visible: true,
@@ -108,29 +107,34 @@
                 })
                  this.data_centers.forEach(data_center => {
                     let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
-                    this.heat_points.push({
-                      location: new google.maps.LatLng(position['lat'], position['lng']),
-                      weight: Math.ceil(this.lamports_to_sol(data_center.active_validators_stake) / 10)
-                    })
 
                     data_center.marker = new AdvancedMarkerElement({
                       position,
                       title: data_center.traits_organization,
                       content: this.buildContent(data_center),
                       gmpClickable: true,
+                      zIndex: 1,
                     });
 
                     data_center.marker.addListener("click", () => {
                       this.toggleHighlight(data_center.marker, data_center);
                     });
                 });
-                this.heatmap = new google.maps.visualization.HeatmapLayer({
-                  data: this.heat_points,
-                  map: this.map,
-                });
-                this.heatmap.set("radius", 40);
-
                 this.set_up_clusterer(this.marker_list, this.map);
+
+                this.heatmapOverlay = createHeatmapOverlay(this.map, {
+                  radius: 40,
+                  maxOpacity: 0.85,
+                  minOpacity: 0.05,
+                  gradient: {
+                    0.3: '#ffeda0',
+                    0.5: '#feb24c',
+                    0.7: '#fc4e2a',
+                    0.9: '#e31a1c',
+                    1.0: '#b10026',
+                  },
+                });
+                this.update_heatmap();
           });
         },
 
@@ -164,17 +168,25 @@
                   <circle cx="120" cy="120" opacity=".2" r="110" />
                   <circle cx="120" cy="120" opacity=".1" r="130" />
                 </svg>`);
-                return new google.maps.Marker({
+
+                const content = document.createElement('div');
+                content.style.cssText = `
+                  width: 45px;
+                  height: 45px;
+                  background-image: url('data:image/svg+xml;base64,${svg}');
+                  background-size: contain;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: rgba(255,255,255,0.9);
+                  font-size: 12px;
+                  font-family: Roboto, Arial, sans-serif;
+                `;
+                content.textContent = String(count);
+
+                return new google.maps.marker.AdvancedMarkerElement({
                   position,
-                  icon: {
-                    url: `data:image/svg+xml;base64,${svg}`,
-                    scaledSize: new google.maps.Size(45, 45),
-                  },
-                  label: {
-                    text: String(count),
-                    color: "rgba(255,255,255,0.9)",
-                    fontSize: "12px",
-                  },
+                  content,
                   zIndex: count,
                 });
               }
@@ -182,39 +194,41 @@
           });
         },
 
-        build_stake_heatmap: function() {
-          this.heat_points = [];
-          this.data_centers.forEach(data_center => {
-            let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
-            this.heat_points.push({
-              location: new google.maps.LatLng(position['lat'], position['lng']),
-              weight: Math.ceil(this.lamports_to_sol(data_center.active_validators_stake) / 10)
-            })
-          });
-          this.heatmap.setData(this.heat_points);
-          this.heatmap.setMap(this.map);
+        heatmap_weight: function(data_center) {
+          if (this.heatmap_type == 'validators') {
+            return data_center.active_validators_count;
+          } else {
+            return Math.ceil(this.lamports_to_sol(data_center.active_validators_stake) / 10);
+          }
         },
 
-        build_validators_count_heatmap: function() {
-          this.heat_points = [];
-          this.data_centers.forEach(data_center => {
-            let position = { lat: parseFloat(data_center.location_latitude), lng: parseFloat(data_center.location_longitude) };
-            this.heat_points.push({
-              location: new google.maps.LatLng(position['lat'], position['lng']),
-              weight: data_center.active_validators_count
-            })
-          });
-          this.heatmap.setData(this.heat_points);
-          this.heatmap.setMap(this.map);
+        heat_points: function() {
+          const exponent = 0.7;
+          return this.data_centers.map(data_center => ({
+            lat: parseFloat(data_center.location_latitude),
+            lng: parseFloat(data_center.location_longitude),
+            value: Math.pow(this.heatmap_weight(data_center), exponent),
+          }));
+        },
+
+        update_heatmap: function() {
+          if (this.heatmap_type == 'off') {
+            this.heatmapOverlay.setData([], 1);
+            return;
+          }
+
+          const points = this.heat_points();
+          const max_weight = Math.max(...points.map(p => p.value), 1);
+          this.heatmapOverlay.setData(points, max_weight);
         },
 
         toggleHighlight: function(marker, data_center) {
           if (marker.content.classList.contains("highlight")) {
             marker.content.classList.remove("highlight");
-            marker.zIndex = null;
+            marker.zIndex = 1;
           } else {
             marker.content.classList.add("highlight");
-            marker.zIndex = 1;
+            marker.zIndex = 1000000;
           }
         },
 
@@ -244,13 +258,7 @@
 
         toggleHeatmap: function(h_type) {
           this.heatmap_type = h_type;
-          if(h_type == 'stake') {
-            this.build_stake_heatmap();
-          } else if(h_type == 'validators') {
-            this.build_validators_count_heatmap();
-          } else {
-            this.heatmap.setMap(null);
-          }
+          this.update_heatmap();
         },
 
         toggleMarkers: function() {

@@ -9,7 +9,7 @@
     </div>
 
     <p>
-      We use this Ping Thing to show recent transaction confirmation times on the Solana blockchain. All confirmation times &amp; slot latencies are measured end-to-end using our JS <a href='https://github.com/Block-Logic/ping-thing-client' target='_blank'>Ping Thing Client</a> to send pings from data centers. You can use these pings as a gauge of latency to the leader.
+      We use this Ping Thing to show recent transaction confirmation times on the Solana blockchain. All confirmation times &amp; slot latencies are measured end-to-end using our Rust <a href='https://github.com/rpcpool/ping-thing-client' target='_blank'>Ping Thing Client</a> to send pings from data centers. You can use these pings as a gauge of latency to the leader.
     </p>
 
     <p>
@@ -25,7 +25,7 @@
     </p>
 
     <p>
-      All data is available for download from our <a href="/api-documentation">REST API</a>. You can also upload your own pings and compare your latencies to ours. See GitHub for our reference <a href='https://github.com/Block-Logic/ping-thing-client' target='_blank'>Ping Thing Client</a>. 
+      All data is available for download from our <a href="/api-documentation">REST API</a>. You can also upload your own pings and compare your latencies to ours. See GitHub for our reference <a href='https://github.com/rpcpool/ping-thing-client' target='_blank'>Ping Thing Client</a>.
     </p>
   </section>
 </template>
