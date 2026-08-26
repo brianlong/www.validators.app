@@ -16,6 +16,10 @@ class Blockchain::LeaderStatsUpdateWorkerTest < ActiveSupport::TestCase
 
     @test_accounts.each { |account| create(:validator, network: "testnet", account: account) }
     @vcr_namespace = File.join("workers", "blockchain", "leader_stats_update_worker_test")
+
+    # the worker's uniqueness lock is scoped to network only, so a leftover
+    # lock from a previous run would make perform_async a silent no-op here
+    SidekiqUniqueJobs::Digests.new.delete_by_pattern("*")
   end
 
   test "perform broadcasts leaders for the network" do
