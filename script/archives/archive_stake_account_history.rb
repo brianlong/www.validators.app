@@ -7,7 +7,6 @@ destroy_after_archive = ARGV[0]&.in?(["true", "false"]) ? ARGV[0] == "true" : fa
 ARCHIVE_TIME = {
   mainnet: 2.months.ago,
   testnet: 2.months.ago,
-  pythnet: 2.months.ago,
 }.freeze
 
 NETWORKS.each do |network|

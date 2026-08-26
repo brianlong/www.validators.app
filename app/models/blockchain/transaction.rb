@@ -29,13 +29,11 @@ class Blockchain::Transaction < ApplicationRecord
         Blockchain::MainnetTransaction
       when 'testnet'
         Blockchain::TestnetTransaction
-      when 'pythnet'
-        Blockchain::PythnetTransaction
       end
     end
 
     def count
-      self.name == 'Blockchain::Transaction' ? Blockchain::MainnetTransaction.count + Blockchain::TestnetTransaction.count + Blockchain::PythnetTransaction.count : super
+      self.name == 'Blockchain::Transaction' ? Blockchain::MainnetTransaction.count + Blockchain::TestnetTransaction.count : super
     end
   end
 

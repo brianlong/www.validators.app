@@ -222,5 +222,3 @@ TESTNET_STAKE_POOLS = {
     url: "https://jpool.one",
   }
 }
-
-PYTHNET_STAKE_POOLS = {}

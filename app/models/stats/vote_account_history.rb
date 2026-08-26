@@ -5,7 +5,7 @@ module Stats
   # VoteAccountHistory set of stats scoped to certain batch.
   #
   # Usage: stats = Stats::VoteAccountHistory.new(network, batch_uuid)
-  #            # network    - 'testnet', 'mainnet' or 'pythnet' atm
+  #            # network    - 'testnet', 'mainnet' or 'alpenglow-community' atm
   #            # batch_uuid - batch in which look for
   #        stats.average_skipped_vote_percent
   #        stats.median_skipped_vote_percent
@@ -71,13 +71,8 @@ module Stats
 
       return nil unless slot_index_current&.is_a?(Numeric) && slot_index_current.positive? && credits_current_max&.is_a?(Numeric)
 
-      if @network == "pythnet"
-        max_credits = slot_index_current
-        @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
-      else
-        max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
-        @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
-      end
+      max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
+      @skipped_vote_percent_best ||= (max_credits - credits_current_max) / max_credits.to_f
     end
 
     def top_skipped_vote_percent

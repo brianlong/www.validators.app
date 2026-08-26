@@ -8,7 +8,7 @@ class SolanaRpcClient
   # Usage:
   # client  = SolanaRpcClient.new(cluster: 'custom_cluster') # your custom cluster
   # mainnet = SolanaRpcClient.new.network_client('mainnet') # uses cluster specific for a passed network.
-  #           network_client method can receive 'mainnet','testnet' or 'pythnet' network name
+  #           network_client method can receive 'mainnet','testnet' or 'alpenglow-community' network name
   #
   # mainnet.cluster # returns currently used cluster
   # mainnet.id # returns request id
