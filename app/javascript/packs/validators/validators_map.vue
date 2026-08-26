@@ -1,7 +1,7 @@
 <template>
   <div class="card map mb-4">
-    <div class="map-slot-time" v-if="displayed_slot_time_ms" title="Average time per slot, based on the last 1000 slots">
-      {{ displayed_slot_time_ms }}ms/slot
+    <div class="map-slot-time" v-if="displayed_slot_time_ms" title="Average time per slot, based on the last 100 slots">
+      {{ displayed_slot_time_ms }} ms/slot
     </div>
 
     <section class="map-background">
@@ -147,7 +147,7 @@
             let now = Date.now();
             if(this.last_leader_update_at) {
               this.slot_times.push(now - this.last_leader_update_at);
-              if(this.slot_times.length > 1000) {
+              if(this.slot_times.length > 100) {
                 this.slot_times.shift();
               }
             }
