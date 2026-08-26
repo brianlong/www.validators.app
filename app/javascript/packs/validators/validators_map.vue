@@ -1,7 +1,7 @@
 <template>
   <div class="card map mb-4">
-    <div class="map-slot-time" v-if="avg_slot_time_ms" title="Average time per slot, based on the last 10 slots">
-      ~{{ avg_slot_time_ms }}ms/slot
+    <div class="map-slot-time" v-if="displayed_slot_time_ms" title="Average time per slot, based on the last 30 slots">
+      ~{{ displayed_slot_time_ms }}ms/slot
     </div>
 
     <section class="map-background">
@@ -87,6 +87,8 @@
         next_leaders: [],
         slot_times: [],
         last_leader_update_at: null,
+        displayed_slot_time_ms: null,
+        slot_time_display_interval: null,
       }
     },
 
@@ -109,6 +111,14 @@
         channel: 'LeadersChannel',
         room: "public"
       });
+
+      this.slot_time_display_interval = setInterval(() => {
+        this.displayed_slot_time_ms = this.avg_slot_time_ms;
+      }, 1000);
+    },
+
+    beforeDestroy() {
+      clearInterval(this.slot_time_display_interval);
     },
 
     computed: {
@@ -137,7 +147,7 @@
             let now = Date.now();
             if(this.last_leader_update_at) {
               this.slot_times.push(now - this.last_leader_update_at);
-              if(this.slot_times.length > 10) {
+              if(this.slot_times.length > 30) {
                 this.slot_times.shift();
               }
             }
