@@ -8,11 +8,21 @@ seven_days_ago = (Date.today - 7.days).to_s(:db)
 verbose = false
 puts seven_days_ago if verbose
 
-%w[batches epoch_histories ping_time_stats ping_times reports
-   validator_block_histories validator_block_history_stats validator_histories vote_account_histories].each do |table|
-  sql = "DELETE FROM #{table} WHERE created_at < '#{seven_days_ago}';"
-  puts sql if verbose
-  ActiveRecord::Base.connection.execute(sql)
+[
+  Batch,
+  EpochHistory,
+  PingTimeStat,
+  PingTime,
+  Report,
+  ValidatorBlockHistory,
+  ValidatorBlockHistoryStat,
+  ValidatorHistory,
+  VoteAccountHistory
+].each do |klass|
+  puts "DELETE FROM #{klass.table_name} WHERE created_at < '#{seven_days_ago}'" if verbose
+  klass.where("created_at < ?", seven_days_ago).in_batches(of: 1000) do |batch|
+    batch.delete_all
+  end
 end
 
 # Remove old validators that are not active after 30 days
