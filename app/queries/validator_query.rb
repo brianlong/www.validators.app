@@ -58,7 +58,7 @@ class ValidatorQuery < ApplicationQuery
   def default_web_scope(watchlist_user)
     scope = Validator.select(validator_fields, validator_score_v1_fields_for_validators_index_web)
                      .joins(:validator_score_v1_for_web)
-                     .includes(:validator_score_v1)
+                     .includes(:validator_score_v1, :watchers, :data_center_host)
 
     if watchlist_user
       watched_validators_ids = User.find(watchlist_user).watched_validators.pluck(:validator_id)
