@@ -22,6 +22,7 @@
 #
 # Indexes
 #
+#  index_validator_block_histories_on_created_at                   (created_at)
 #  index_validator_block_histories_on_network_and_batch_uuid       (network,batch_uuid)
 #  index_validator_block_histories_on_validator_id_and_created_at  (validator_id,created_at)
 #  index_validator_block_histories_on_validator_id_and_epoch       (validator_id,epoch)
