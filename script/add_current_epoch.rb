@@ -24,8 +24,8 @@ NETWORKS.each do |network|
   block_time = nil
   block_search_count.times do |b_diff|
     slot = last_epoch_start_slot + b_diff
-    
-    get_block_result = solana_rpc_client(network).get_block(slot).result
+
+    get_block_result = solana_rpc_client(network).get_block(slot, max_supported_transaction_version: 1).result
 
     confirmed_start_block = slot unless get_block_result&.blank?
     next unless confirmed_start_block
@@ -63,7 +63,7 @@ NETWORKS.each do |network|
   block_search_count.times do |b_diff|
     slot = last_epoch_start_slot - 1 - b_diff
 
-    get_block_result = solana_rpc_client(network).get_block(slot).result
+    get_block_result = solana_rpc_client(network).get_block(slot, max_supported_transaction_version: 1).result
 
     confirmed_end_block = slot unless get_block_result&.blank?
 
