@@ -113,6 +113,19 @@ $green-purple-point: rgba(70, 121, 130, .95);
     }
   }
 
+  &-slot-time {
+    position: absolute;
+    z-index: 2;
+    top: $padding-standard;
+    right: $padding-standard;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, .45);
+    color: $white;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
   &-legend {
     position: absolute;
     z-index: 0;

@@ -1,5 +1,9 @@
 <template>
   <div class="card map mb-4">
+    <div class="map-slot-time" v-if="displayed_slot_time_ms" title="Average time per slot, based on the last 100 slots">
+      {{ displayed_slot_time_ms }} ms/slot
+    </div>
+
     <section class="map-background">
       <div class="map-points">
         <div v-for="dc_group in data_centers_groups"
@@ -81,6 +85,10 @@
         show_gossip_nodes: false,
         current_leader: null,
         next_leaders: [],
+        slot_times: [],
+        last_leader_update_at: null,
+        displayed_slot_time_ms: null,
+        slot_time_display_interval: null,
       }
     },
 
@@ -103,11 +111,26 @@
         channel: 'LeadersChannel',
         room: "public"
       });
+
+      this.slot_time_display_interval = setInterval(() => {
+        this.displayed_slot_time_ms = this.avg_slot_time_ms;
+      }, 1000);
+    },
+
+    beforeDestroy() {
+      clearInterval(this.slot_time_display_interval);
     },
 
     computed: {
       is_leader_valid() {
         return this.current_leader && this.current_leader.location_latitude && this.current_leader.location_longitude
+      },
+      avg_slot_time_ms() {
+        if(this.slot_times.length === 0) {
+          return null;
+        }
+        let sum = this.slot_times.reduce((total, time) => total + time, 0);
+        return Math.round(sum / this.slot_times.length);
       },
       ...mapGetters([
         'network'
@@ -121,6 +144,15 @@
         received(data) {
           data = data[this.network];
           if(data) {
+            let now = Date.now();
+            if(this.last_leader_update_at) {
+              this.slot_times.push(now - this.last_leader_update_at);
+              if(this.slot_times.length > 100) {
+                this.slot_times.shift();
+              }
+            }
+            this.last_leader_update_at = now;
+
             this.current_leader = data.current_leader;
             this.next_leaders = data.next_leaders;
           }
