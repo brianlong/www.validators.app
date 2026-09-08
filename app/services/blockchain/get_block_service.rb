@@ -16,7 +16,7 @@ module Blockchain
       @block = solana_client_request(
         @config_urls,
         :get_block,
-        params: [@slot_number, { encoding: "jsonParsed", maxSupportedTransactionVersion: 0 }]
+        params: [@slot_number, { encoding: "jsonParsed", maxSupportedTransactionVersion: 1 }]
       )
       if @block[:error]
         if @block[:error].include?("429")

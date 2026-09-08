@@ -29,7 +29,7 @@ NETWORKS.each do |network|
       puts block_offset
 
       slot = slot_set + block_offset
-      get_block_result = solana_rpc_client(network).get_block(slot).result
+      get_block_result = solana_rpc_client(network).get_block(slot, max_supported_transaction_version: 1).result
 
       confirmed_start_block = slot unless get_block_result&.blank?
 
@@ -48,7 +48,7 @@ NETWORKS.each do |network|
     confirmed_end_block = nil
     100.times do |block_offset|
       slot = slot_set + slots_in_epoch - block_offset
-      get_block_result = solana_rpc_client(network).get_block(slot).result
+      get_block_result = solana_rpc_client(network).get_block(slot, max_supported_transaction_version: 1).result
       
       confirmed_end_block = slot unless get_block_result&.blank?
 
