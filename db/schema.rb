@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_02_000000) do
+ActiveRecord::Schema.define(version: 2026_09_02_010000) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -824,6 +824,7 @@ ActiveRecord::Schema.define(version: 2026_09_02_000000) do
     t.string "network"
     t.decimal "skipped_slot_percent_moving_average", precision: 10, scale: 4
     t.decimal "skipped_slot_after_percent_moving_average", precision: 10, scale: 4
+    t.index ["created_at"], name: "index_validator_block_histories_on_created_at"
     t.index ["network", "batch_uuid"], name: "index_validator_block_histories_on_network_and_batch_uuid"
     t.index ["validator_id", "created_at"], name: "index_validator_block_histories_on_validator_id_and_created_at"
     t.index ["validator_id", "epoch"], name: "index_validator_block_histories_on_validator_id_and_epoch"
