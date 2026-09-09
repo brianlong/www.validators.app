@@ -53,10 +53,18 @@ module Blockchain
           data = JSON.parse(event.data)["params"]
           @logger.info("Received message: #{data}")
           if data && data["result"]
-            @logger.info("Received message: #{data["result"]["slot"]}")
+            slot_number = data["result"]["slot"]
+            @logger.info("Received message: #{slot_number}")
 
-            # delay to make sure the block is available
-            Blockchain::GetBlockWorker.set(queue: "blockchain_#{@network}").perform_in(20.seconds, {"network" => @network, "slot_number" => data["result"]["slot"]})
+            args = {"network" => @network, "slot_number" => slot_number}
+
+            # stage shares the blockchain DB with production, so only production may archive blocks
+            unless Rails.env.stage?
+              # delay to make sure the block is available
+              Blockchain::GetBlockWorker.set(queue: "blockchain_#{@network}").perform_in(20.seconds, args)
+            end
+
+            Blockchain::LeaderStatsUpdateWorker.set(queue: "blockchain_#{@network}").perform_async(args)
           end
         end
 

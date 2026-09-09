@@ -143,40 +143,6 @@ ActiveRecord::Schema.define(version: 2026_09_02_010000) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "blockchain_pythnet_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "slot_number"
-    t.string "blockhash"
-    t.integer "epoch"
-    t.integer "height"
-    t.bigint "parent_slot"
-    t.bigint "block_time"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "blockchain_pythnet_slot_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "slot_number"
-    t.string "leader"
-    t.integer "epoch"
-    t.integer "status", default: 0
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "blockchain_pythnet_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "slot_number"
-    t.bigint "fee"
-    t.text "pre_balances"
-    t.text "post_balances"
-    t.string "account_key_1"
-    t.string "account_key_2"
-    t.string "account_key_3"
-    t.integer "epoch"
-    t.bigint "block_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "blockchain_testnet_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
     t.string "blockhash"
