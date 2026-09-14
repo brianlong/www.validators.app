@@ -9,7 +9,7 @@ module Api
         limit = [(index_params[:per] || 1000).to_i, 9999].min
         stake_accounts = base_query.all_records.where.not(validator_id: nil)
         @stake_accounts = stake_accounts.page(page).per(limit)
-        @total_count ||= stake_accounts.length
+        @total_count ||= stake_accounts.count(:all)
 
         respond_to do |format|
           format.json do

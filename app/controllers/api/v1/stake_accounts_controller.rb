@@ -8,7 +8,7 @@ module Api
         page = index_params[:page].to_i <= 0 ? 1 : index_params[:page].to_i
 
         @stake_accounts = get_correct_records(stake_accounts, page)
-        @total_count ||= stake_accounts.length
+        @total_count ||= stake_accounts.count(:all)
         @current_epoch = EpochWallClock.where(network: index_params[:network]).last&.epoch
 
         if index_params[:with_batch]

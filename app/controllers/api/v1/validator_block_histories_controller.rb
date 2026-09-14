@@ -10,7 +10,7 @@ module Api
 
         raise ValidatorNotFound if @validator.nil?
 
-        @limit = block_params[:limit] || 9999
+        @limit = [(block_params[:limit] || 9999).to_i, 9999].min
 
         @block_history = @validator.validator_block_histories
                                    .order("id desc")

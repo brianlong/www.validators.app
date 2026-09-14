@@ -12,11 +12,12 @@ class PingThingUserStatsService
   def call
     gather_ping_things
     delete_old_stats
+    usernames_by_id = User.where(id: pt_by_user.keys).pluck(:id, :username).to_h
     pt_by_user.each do |user_id, user_ping_things|
       next if user_ping_things.map(&:success).count(true) == 0
-      
+
       ping_times = user_ping_things.pluck(:response_time).compact.sort
-      username = User.find(user_id).username
+      username = usernames_by_id[user_id]
 
       pts = PingThingUserStat.find_or_create_by(
         user_id: user_id,
