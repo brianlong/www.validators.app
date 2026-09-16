@@ -14,8 +14,9 @@
 #
 # Indexes
 #
-#  index_blockchain_testnet_slots_on_epoch_and_leader  (epoch,leader)
-#  index_blockchain_testnet_slots_on_slot_number       (slot_number)
+#  index_blockchain_testnet_slots_on_epoch_and_leader       (epoch,leader)
+#  index_blockchain_testnet_slots_on_slot_number            (slot_number)
+#  index_blockchain_testnet_slots_on_status_and_created_at  (status,created_at)
 #
 class Blockchain::TestnetSlot < Blockchain::Slot
     enum status: { initialized: 0, has_block: 1, no_block: 2, request_error: 3 }
