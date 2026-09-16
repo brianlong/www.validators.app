@@ -15,6 +15,7 @@
 # Indexes
 #
 #  index_blockchain_mainnet_slots_on_epoch_and_leader  (epoch,leader)
+#  index_blockchain_mainnet_slots_on_slot_number       (slot_number)
 #
 class Blockchain::MainnetSlot < Blockchain::Slot
     enum status: { initialized: 0, has_block: 1, no_block: 2, request_error: 3 }
