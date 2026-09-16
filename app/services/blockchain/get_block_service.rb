@@ -30,6 +30,7 @@ module Blockchain
         else
           # if transaction processing failed, destroy block and let it be processed again later
           destroy_block
+          update_slot_status(status: "request_error")
         end
       end
     end
