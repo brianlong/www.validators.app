@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_02_000000) do
+ActiveRecord::Schema.define(version: 2026_09_16_102802) do
 
   create_table "blockchain_mainnet_block_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number"
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 2026_09_02_000000) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["epoch", "leader"], name: "index_blockchain_mainnet_slots_on_epoch_and_leader"
+    t.index ["slot_number"], name: "index_blockchain_mainnet_slots_on_slot_number"
+    t.index ["status", "created_at"], name: "index_blockchain_mainnet_slots_on_status_and_created_at"
   end
 
   create_table "blockchain_mainnet_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -133,6 +135,8 @@ ActiveRecord::Schema.define(version: 2026_09_02_000000) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["epoch", "leader"], name: "index_blockchain_testnet_slots_on_epoch_and_leader"
+    t.index ["slot_number"], name: "index_blockchain_testnet_slots_on_slot_number"
+    t.index ["status", "created_at"], name: "index_blockchain_testnet_slots_on_status_and_created_at"
   end
 
   create_table "blockchain_testnet_transaction_archives", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
