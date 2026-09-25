@@ -31,6 +31,8 @@ module SolanaLogic
   # We can also set some attributes ie. skipped_slot_all_average.
   def batch_touch
     lambda do |p|
+      return p unless p[:code] == 200
+
       batch = Batch.where(uuid: p.payload[:batch_uuid], network: p.payload[:network]).first
 
       # IMPORTANT: Do not use this values on index page, it's only for show.

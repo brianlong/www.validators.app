@@ -8,7 +8,8 @@ loop do
   begin
     Blockchain::SlotSubscribeService.new(
       network: "testnet",
-      rpc_url: Rails.application.credentials.solana[:testnet_urls][0]
+      rpc_url: Rails.application.credentials.solana[:testnet_urls][0],
+      fetch_blocks: false
     ).call
   rescue => e
     puts e

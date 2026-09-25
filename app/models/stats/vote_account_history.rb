@@ -64,7 +64,7 @@ module Stats
     end
 
     def skipped_vote_percent_best
-      if @network == "alpenglow-community"
+      if @network.in?(ALPENGLOW_NETWORKS)
         return nil if vote_account_history_skipped.empty?
         return @skipped_vote_percent_best ||= vote_account_history_skipped.min
       end
