@@ -9,8 +9,29 @@ class VoteAccountHistoryTest < ActiveSupport::TestCase
   end
 
   test 'skipped_vote_percent' do
-    create(:vote_account_history, vote_account: @va)
+    create(:vote_account_history, vote_account: @va, network: 'mainnet')
     assert_equal 0.9594924757058465, VoteAccountHistory.last.skipped_vote_percent
+  end
+
+  test 'skipped_vote_percent for testnet uses stake-normalized formula' do
+    vah = create(:vote_account_history, vote_account: @va,
+                 network: 'testnet',
+                 slot_index_current: 100,
+                 activated_stake: 2_000_000_000,
+                 credits_current: 5_000)
+    assert_in_delta 0.21875, vah.skipped_vote_percent, 0.000001
+  end
+
+  test 'skipped_vote_percent for testnet stays in range with alpenglow sized credits' do
+    vah = create(:vote_account_history, vote_account: @va,
+                 network: 'testnet',
+                 slot_index_current: 201_616,
+                 activated_stake: 44_834_804_995_633_717,
+                 credits_current: 18_787_464_805_954)
+    assert_operator vah.skipped_vote_percent, :>=, 0.0
+    assert_operator vah.skipped_vote_percent, :<=, 1.0
+    assert_operator vah.reload.skipped_vote_percent_moving_average, :>=, 0.0
+    assert_operator vah.skipped_vote_percent_moving_average, :<=, 1.0
   end
 
   test 'previous_24_hours' do

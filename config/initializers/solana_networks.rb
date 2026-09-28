@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 NETWORKS = %w[mainnet testnet alpenglow-community].freeze
+ALPENGLOW_NETWORKS = %w[testnet alpenglow-community].freeze
 NETWORK_URLS = {
   mainnet: Rails.application.credentials.solana[:mainnet_urls],
   testnet: Rails.application.credentials.solana[:testnet_urls],

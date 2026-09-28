@@ -51,7 +51,7 @@ class VoteAccountHistory < ApplicationRecord
 
 
     if slot_index_current.to_f.positive?
-      if network == "alpenglow-community"
+      if network.in?(ALPENGLOW_NETWORKS)
         return nil if activated_stake.to_i <= 0
         max_credits = slot_index_current * 32.0 * (activated_stake.to_f / 1_000_000_000)
         result = (max_credits - credits_current.to_i) / max_credits

@@ -75,6 +75,19 @@ module Blockchain
       assert_equal [2.0], @validator2.score.reload.vote_latency_history
     end
 
+    test "#call saves vote latency history for testnet validators" do
+      testnet_validator = create(:validator, :with_score, network: "testnet", account: "node1")
+
+      service = SetAlpenglowVoteLatencyScore.new("testnet")
+      service.stub(:fetch_vote_accounts, @vote_accounts_response) do
+        service.call
+      end
+
+      assert_equal Rails.application.credentials.solana[:testnet_urls], service.instance_variable_get(:@config_urls)
+      assert_equal [0.0], testnet_validator.score.reload.vote_latency_history
+      assert_nil @validator1.score.reload.vote_latency_history
+    end
+
     test "#call does nothing when fetch_vote_accounts returns blank" do
       service = SetAlpenglowVoteLatencyScore.new(@network)
       service.stub(:fetch_vote_accounts, nil) do

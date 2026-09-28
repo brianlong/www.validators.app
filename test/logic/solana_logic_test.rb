@@ -90,6 +90,19 @@ class SolanaLogicTest < ActiveSupport::TestCase
     assert_equal batch.skipped_slot_all_average, 5
   end
 
+  test 'batch_touch does not mark batch as gathered after failed step' do
+    p = Pipeline.new(200, @testnet_initial_payload)
+                .then(&batch_set)
+    batch = Batch.where(uuid: p[:payload][:batch_uuid]).first
+
+    failed = Pipeline.new(500, p[:payload], 'Error from validators_save')
+                     .then(&batch_touch)
+
+    assert_equal 500, failed.code
+    assert_equal 'Error from validators_save', failed.message
+    assert_nil batch.reload.gathered_at
+  end
+
   test 'epoch_get' do
     VCR.use_cassette('epoch_get') do
       # Show that the pipeline runs & the expected values are not empty.
