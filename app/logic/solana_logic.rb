@@ -227,8 +227,9 @@ module SolanaLogic
           'HarmonicFiredancer': 9,
           'HarmonicAgave': 10,
           'HarmonicFrankendancer': 11,
-          'FireBam': 12,
+          'FireBAM': 12,
           'Raiku': 13,
+          'FrankenBAM': 14,
         }
 
         if hash['clientId'] && hash['clientId'].is_a?(Integer)
@@ -251,8 +252,9 @@ module SolanaLogic
           client == 'Unknown(9)' ? client = 'HarmonicFiredancer' : client
           client == 'Unknown(10)' ? client = 'HarmonicAgave' : client
           client == 'Unknown(11)' ? client = 'HarmonicFrankendancer' : client
-          client == 'Unknown(12)' ? client = 'FireBam' : client
+          client == 'Unknown(12)' ? client = 'FireBAM' : client
           client == 'Unknown(13)' ? client = 'Raiku' : client
+          client == 'Unknown(14)' ? client = 'FrankenBAM' : client
 
           client_id = if client&.match(/^Unknown/)
                         client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i
