@@ -199,6 +199,21 @@ GEM
       terminal-table (>= 1.5.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (4.33.6-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.33.6-x86_64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
+    googleapis-common-protos-types (1.22.0)
+      google-protobuf (~> 4.26)
+    grpc (1.80.0-arm64-darwin)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.80.0-x86_64-linux-gnu)
+      google-protobuf (>= 3.25, < 5.0)
+      googleapis-common-protos-types (~> 1.0)
+    grpc-tools (1.80.0)
     hashdiff (1.2.0)
     hcaptcha (7.1.0)
       json
@@ -586,6 +601,8 @@ DEPENDENCIES
   factory_bot_rails
   faker
   faye-websocket (~> 0.12.0)
+  grpc (~> 1.80.0)
+  grpc-tools (~> 1.80.0)
   hcaptcha (~> 7.1)
   image_processing (~> 1.14)
   jbuilder (~> 2.11)
