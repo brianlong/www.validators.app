@@ -74,8 +74,16 @@ module Blockchain
     test "#call decodes skip reward certificate" do
       result = decode("skip")
 
-      assert_equal({ slot: 10_007_799, bitmap_length: 82, ranks: [81] }, result[:skip_reward_cert])
+      assert_equal({ slot: 10_007_799, bitmap_length: 82, ranks: [81] }, result[:skip_reward_cert].except(:signers))
       refute_includes result[:notar_reward_cert][:ranks], 81
+    end
+
+    test "#call returns raw signer bytes that decode back to the same ranks" do
+      cert = decode("slow")[:block_final_cert]
+      signers = cert[:notar_aggregate][:signers]
+
+      assert_equal Encoding::ASCII_8BIT, signers.encoding
+      assert_equal cert[:notar_aggregate].except(:signers), Blockchain::AlpenglowFooterDecoder.decode_signers(signers)
     end
 
     test "#call returns nil for missing certificates" do

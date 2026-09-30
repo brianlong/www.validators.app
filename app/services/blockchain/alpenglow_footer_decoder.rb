@@ -57,65 +57,73 @@ module Blockchain
       slot = reader.u64
       block_id = reader.read_hash
       reader.skip(BLS_SIGNATURE_SIZE)
-      signers = decode_signer_store(reader.take(reader.short_u16))
+      signer_data = signers(reader.take(reader.short_u16))
       reader.ensure_consumed!
 
-      { slot: slot, block_id: block_id }.merge(signers)
+      { slot: slot, block_id: block_id }.merge(signer_data)
     end
 
     def decode_skip_reward_cert(bytes)
       reader = ByteReader.new(bytes)
       slot = reader.u64
       reader.skip(BLS_SIGNATURE_SIZE)
-      signers = decode_signer_store(reader.take(reader.short_u16))
+      signer_data = signers(reader.take(reader.short_u16))
       reader.ensure_consumed!
 
-      { slot: slot }.merge(signers)
+      { slot: slot }.merge(signer_data)
     end
 
     def read_votes_aggregate(reader)
       reader.skip(BLS_SIGNATURE_SIZE)
-      decode_signer_store(reader.take(reader.u16))
+      signers(reader.take(reader.u16))
     end
 
-    def decode_signer_store(bytes)
-      raise DecodeError, "signer store too short" if bytes.bytesize < 3
-
-      version = bytes.getbyte(0)
-      bits = bytes.byteslice(1, 2).unpack1("S<")
-      data = bytes.byteslice(3..).bytes
-
-      case version
-      when SIGNER_STORE_BASE2 then decode_base2(data, bits)
-      when SIGNER_STORE_BASE3 then decode_base3(data, bits)
-      else raise DecodeError, "unknown signer store version #{version}"
-      end
+    def signers(bytes)
+      self.class.decode_signers(bytes).merge(signers: bytes)
     end
 
-    def decode_base2(data, bits)
-      raise DecodeError, "invalid base2 payload size" unless data.size == (bits + 7) / 8
+    class << self
+      def decode_signers(bytes)
+        raise DecodeError, "signer store too short" if bytes.nil? || bytes.bytesize < 3
 
-      ranks = (0...bits).select { |i| data[i / 8][i % 8] == 1 }
-      { bitmap_length: bits, ranks: ranks }
-    end
+        version = bytes.getbyte(0)
+        bits = bytes.byteslice(1, 2).unpack1("S<")
+        data = bytes.byteslice(3..).bytes
 
-    def decode_base3(data, bits)
-      expected_size = (bits + BASE3_SYMBOLS_PER_BYTE - 1) / BASE3_SYMBOLS_PER_BYTE
-      raise DecodeError, "invalid base3 payload size" unless data.size == expected_size
-
-      ranks = []
-      fallback_ranks = []
-      data.each_with_index do |byte, chunk_index|
-        first = chunk_index * BASE3_SYMBOLS_PER_BYTE
-        (first...[first + BASE3_SYMBOLS_PER_BYTE, bits].min).each do |i|
-          case byte % 3
-          when 1 then ranks << i
-          when 2 then fallback_ranks << i
-          end
-          byte /= 3
+        case version
+        when SIGNER_STORE_BASE2 then decode_base2(data, bits)
+        when SIGNER_STORE_BASE3 then decode_base3(data, bits)
+        else raise DecodeError, "unknown signer store version #{version}"
         end
       end
-      { bitmap_length: bits, ranks: ranks, fallback_ranks: fallback_ranks }
+
+      private
+
+      def decode_base2(data, bits)
+        raise DecodeError, "invalid base2 payload size" unless data.size == (bits + 7) / 8
+
+        ranks = (0...bits).select { |i| data[i / 8][i % 8] == 1 }
+        { bitmap_length: bits, ranks: ranks }
+      end
+
+      def decode_base3(data, bits)
+        expected_size = (bits + BASE3_SYMBOLS_PER_BYTE - 1) / BASE3_SYMBOLS_PER_BYTE
+        raise DecodeError, "invalid base3 payload size" unless data.size == expected_size
+
+        ranks = []
+        fallback_ranks = []
+        data.each_with_index do |byte, chunk_index|
+          first = chunk_index * BASE3_SYMBOLS_PER_BYTE
+          (first...[first + BASE3_SYMBOLS_PER_BYTE, bits].min).each do |i|
+            case byte % 3
+            when 1 then ranks << i
+            when 2 then fallback_ranks << i
+            end
+            byte /= 3
+          end
+        end
+        { bitmap_length: bits, ranks: ranks, fallback_ranks: fallback_ranks }
+      end
     end
 
     class ByteReader
