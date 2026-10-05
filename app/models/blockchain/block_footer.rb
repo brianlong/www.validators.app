@@ -4,7 +4,8 @@ class Blockchain::BlockFooter < ApplicationRecord
   self.abstract_class = true
 
   NETWORK_CLASSES = {
-    "alpenglow-community" => "Blockchain::AlpenglowCommunityBlockFooter"
+    "alpenglow-community" => "Blockchain::AlpenglowCommunityBlockFooter",
+    "testnet" => "Blockchain::TestnetBlockFooter"
   }.freeze
 
   connects_to database: { writing: :blockchain, reading: :blockchain }

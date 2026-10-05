@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_30_120000) do
+ActiveRecord::Schema.define(version: 2026_10_05_090000) do
 
   create_table "blockchain_alpenglow_community_block_footers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "slot_number", null: false
@@ -125,6 +125,30 @@ ActiveRecord::Schema.define(version: 2026_09_30_120000) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "processed", default: false
+  end
+
+  create_table "blockchain_testnet_block_footers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "slot_number", null: false
+    t.integer "epoch", null: false
+    t.string "leader"
+    t.bigint "bank_id"
+    t.binary "bank_hash", limit: 32
+    t.bigint "block_producer_time_nanos"
+    t.string "block_user_agent"
+    t.bigint "final_cert_slot"
+    t.integer "finalization"
+    t.binary "final_signers", limit: 2048
+    t.binary "final_notar_signers", limit: 2048
+    t.bigint "notar_reward_slot"
+    t.binary "notar_reward_signers", limit: 2048
+    t.bigint "skip_reward_slot"
+    t.binary "skip_reward_signers", limit: 2048
+    t.boolean "processed", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_at"], name: "index_testnet_block_footers_on_created_at"
+    t.index ["processed", "slot_number"], name: "index_testnet_block_footers_on_processed_slot"
+    t.index ["slot_number"], name: "index_testnet_block_footers_on_slot_number", unique: true
   end
 
   create_table "blockchain_testnet_blocks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

@@ -1,0 +1,20 @@
+<%= javascript_pack_tag 'alpenglow/cluster_stats_component' %>
+
+<section class="page-header">
+  <h1>Alpenglow Stats <small class="text-muted"><%= params[:network].titleize %></small></h1>
+  <p class="text-muted mb-4">
+    Consensus statistics based on Alpenglow block footers. Finalization data comes from the
+    certificates included by block leaders.
+  </p>
+</section>
+
+<div id="alpenglow-cluster-stats-component"></div>
+
+<h2 class="h4 mb-3">Validators</h2>
+<div class="card mb-4">
+  <div class="card-content">
+    <p class="mb-0 text-muted">
+      Validator rankings based on Alpenglow voting and leader statistics are coming soon.
+    </p>
+  </div>
+</div>
