@@ -4,7 +4,7 @@ require "test_helper"
 require "geyser_pb"
 
 module Blockchain
-  class AlpenglowFooterSaveServiceTest < ActiveSupport::TestCase
+  class BlockFooterSaveServiceTest < ActiveSupport::TestCase
     setup do
       @network = "alpenglow-community"
       @epoch_schedule = Blockchain::EpochSchedule.new(
@@ -16,7 +16,7 @@ module Blockchain
         end
       end.new({ 10_007_782 => "LeaderIdentity" })
       @footers = JSON.parse(file_fixture("alpenglow_footers.json").read).transform_values do |data|
-        Blockchain::AlpenglowFooterDecoder.new(
+        Blockchain::BlockFooterDecoder.new(
           Geyser::SubscribeUpdateBlockFooter.new(
             slot: data["slot"],
             bank_id: 7,
@@ -36,7 +36,7 @@ module Blockchain
     end
 
     def save(footers)
-      Blockchain::AlpenglowFooterSaveService.new(
+      Blockchain::BlockFooterSaveService.new(
         network: @network,
         footers: footers,
         epoch_schedule: @epoch_schedule,
@@ -61,18 +61,16 @@ module Blockchain
       refute footer.processed
     end
 
-    test "#call stores signer bitmaps that decode to the original ranks" do
+    test "#call stores raw signer bitmaps from the decoder" do
       save(@footers.values)
 
       footer = Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 10_007_782)
-      final_cert = @footers["slow"][:block_final_cert]
+      decoded = @footers["slow"]
 
-      assert_equal final_cert[:final_aggregate][:ranks],
-                   Blockchain::AlpenglowFooterDecoder.decode_signers(footer.final_signers)[:ranks]
-      assert_equal final_cert[:notar_aggregate][:ranks],
-                   Blockchain::AlpenglowFooterDecoder.decode_signers(footer.final_notar_signers)[:ranks]
-      assert_equal @footers["slow"][:notar_reward_cert][:ranks],
-                   Blockchain::AlpenglowFooterDecoder.decode_signers(footer.notar_reward_signers)[:ranks]
+      assert_equal decoded[:block_final_cert][:final_signers], footer.final_signers
+      assert_equal decoded[:block_final_cert][:notar_signers], footer.final_notar_signers
+      assert_equal decoded[:notar_reward_cert][:signers], footer.notar_reward_signers
+      assert_equal 65, Blockchain::SignerStore.decode(footer.final_signers)[:ranks].size
     end
 
     test "#call saves fast finalization and skip reward" do
@@ -82,7 +80,7 @@ module Blockchain
       assert footer.fast?
       assert_nil footer.final_notar_signers
       assert_equal 10_007_799, footer.skip_reward_slot
-      assert_equal [81], Blockchain::AlpenglowFooterDecoder.decode_signers(footer.skip_reward_signers)[:ranks]
+      assert_equal [81], Blockchain::SignerStore.decode(footer.skip_reward_signers)[:ranks]
     end
 
     test "#call upserts footers for already saved slots without resetting processed" do

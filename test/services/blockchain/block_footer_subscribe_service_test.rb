@@ -4,7 +4,7 @@ require "test_helper"
 require "geyser_services_pb"
 
 module Blockchain
-  class AlpenglowFooterSubscribeServiceTest < ActiveSupport::TestCase
+  class BlockFooterSubscribeServiceTest < ActiveSupport::TestCase
     class FakeOperation
       attr_reader :status, :sent_requests
 
@@ -58,7 +58,7 @@ module Blockchain
         Geyser::SubscribeUpdate.new(block_footer: footer),
         Geyser::SubscribeUpdate.new(ping: Geyser::SubscribeUpdatePing.new)
       ]
-      @service = Blockchain::AlpenglowFooterSubscribeService.new(
+      @service = Blockchain::BlockFooterSubscribeService.new(
         network: "alpenglow-community", grpc_url: "localhost:443", token: "token"
       )
     end

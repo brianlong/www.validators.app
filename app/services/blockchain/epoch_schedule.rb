@@ -6,6 +6,13 @@ module Blockchain
 
     attr_reader :slots_per_epoch, :first_normal_epoch, :first_normal_slot
 
+    def self.fetch(network)
+      schedule = Blockchain::JsonRpcRequest.new(NETWORK_URLS[network]).call("getEpochSchedule")
+      raise "Epoch schedule unavailable for #{network}" if schedule.nil?
+
+      new(schedule)
+    end
+
     def initialize(schedule)
       @slots_per_epoch = schedule.fetch("slotsPerEpoch")
       @first_normal_epoch = schedule.fetch("firstNormalEpoch")

@@ -229,6 +229,46 @@ module Blockchain
       assert Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 100).processed
     end
 
+    test "#call assigns leader stats to the vote account from finalized ranks instead of the active one" do
+      other_vote_account = create(:vote_account, validator: @leader_a, network: @network, account: "VoteA2")
+      @leader_a.set_active_vote_account(other_vote_account)
+      AlpenglowEpochRank.create!(
+        network: @network, epoch: 10, rank: 0, vote_account: "VoteA", validator_identity: "LeaderA",
+        bls_pubkey: "blsA", stake: 100, finalized: true
+      )
+      footer(100, leader: "LeaderA")
+      add_tail(101)
+
+      call_service
+
+      assert_equal 1, stat_for(@vote_account_a).leader_slots
+      assert_nil stat_for(other_vote_account)
+    end
+
+    test "#call falls back to the active vote account when the epoch has no finalized ranks" do
+      other_vote_account = create(:vote_account, validator: @leader_a, network: @network, account: "VoteA2")
+      @leader_a.set_active_vote_account(other_vote_account)
+      footer(100, leader: "LeaderA")
+      add_tail(101)
+
+      call_service
+
+      assert_equal 1, stat_for(other_vote_account).leader_slots
+    end
+
+    test "#call stops waiting for ranks that stay unfinalized too long and skips their votes" do
+      finalize_ranks(1, %w[VoteA VoteB], finalized: false)
+      old_footer = footer(1008, leader: "LeaderA", epoch: 1, notar_reward_slot: 1000, notar_reward_signers: bitmap([0]))
+      old_footer.update_columns(created_at: 31.minutes.ago)
+      add_tail(1009)
+
+      assert_equal 1, call_service
+
+      assert old_footer.reload.processed
+      stat_a = stat_for(@vote_account_a, epoch: 1)
+      assert_equal [1, 0, 0], [stat_a.leader_slots, stat_a.notar_reward_slots, stat_a.notar_votes]
+    end
+
     test "#call returns 0 when there is nothing to process" do
       assert_equal 0, call_service
     end

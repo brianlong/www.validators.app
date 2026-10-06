@@ -10,7 +10,7 @@ module Blockchain
       @epoch_schedule = Blockchain::EpochSchedule.new(
         "slotsPerEpoch" => 8, "firstNormalEpoch" => 0, "firstNormalSlot" => 0
       )
-      @leader_schedule = Blockchain::LeaderSchedule.new(rpc_url: @rpc_url, epoch_schedule: @epoch_schedule)
+      @leader_schedule = Blockchain::LeaderSchedule.new(rpc_urls: [@rpc_url], epoch_schedule: @epoch_schedule)
     end
 
     def stub_leader_schedule(first_slot, result)

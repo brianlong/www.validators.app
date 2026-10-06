@@ -2,8 +2,6 @@
 
 module Blockchain
   class AlpenglowEpochRanksService
-    include SolanaRequestsLogic
-
     ACCOUNTS_BATCH_SIZE = 100
     BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
@@ -11,12 +9,12 @@ module Blockchain
 
     def initialize(network:, config_urls: nil)
       @network = network
-      @config_urls = config_urls || Rails.application.credentials.solana["#{network.tr('-', '_')}_urls".to_sym]
+      @rpc = Blockchain::JsonRpcRequest.new(config_urls || NETWORK_URLS[network])
       @logger = Logger.new(LOG_PATH)
     end
 
     def call
-      current_epoch = rpc_request(:get_epoch_info)&.dig("epoch")
+      current_epoch = @rpc.call("getEpochInfo")&.dig("epoch")
       return if current_epoch.nil?
 
       build_provisional_ranks(current_epoch + 1)
@@ -28,7 +26,7 @@ module Blockchain
     def build_provisional_ranks(epoch)
       return if AlpenglowEpochRank.where(network: @network, epoch: epoch).exists?
 
-      candidates = sort(staked_candidates)
+      candidates = sort_by_stake(staked_candidates)
       return if candidates.empty?
 
       save_ranks(epoch, candidates, finalized: false)
@@ -46,7 +44,7 @@ module Blockchain
         row.attributes.symbolize_keys.slice(:vote_account, :validator_identity, :bls_pubkey, :stake)
            .merge(bls_bytes: base58_decode(row.bls_pubkey))
       end
-      ranked = sort(deduplicate(candidates))
+      ranked = sort_by_stake(deduplicate(candidates))
 
       AlpenglowEpochRank.transaction do
         AlpenglowEpochRank.where(network: @network, epoch: epoch).delete_all
@@ -70,7 +68,7 @@ module Blockchain
     end
 
     def staked_candidates
-      vote_accounts = rpc_request(:get_vote_accounts)
+      vote_accounts = @rpc.call("getVoteAccounts")
       return [] if vote_accounts.blank?
 
       staked = vote_accounts.values_at("current", "delinquent").flatten.compact.select { |va| va["activatedStake"].to_i.positive? }
@@ -97,12 +95,12 @@ module Blockchain
       candidates.select { |c| bls_counts[c[:bls_bytes]] == 1 && identity_counts[c[:validator_identity]] == 1 }
     end
 
-    def sort(candidates)
+    def sort_by_stake(candidates)
       candidates.sort { |a, b| [b[:stake], a[:bls_bytes]] <=> [a[:stake], b[:bls_bytes]] }
     end
 
     def epoch_vote_accounts
-      result = raw_rpc_request("getVoteAccounts", [{ keepUnstakedDelinquents: true }])
+      result = @rpc.call("getVoteAccounts", [{ keepUnstakedDelinquents: true }])
       return nil unless result.is_a?(Hash)
 
       result.values_at("current", "delinquent").flatten.compact
@@ -113,30 +111,13 @@ module Blockchain
 
     def fetch_bls_pubkeys(vote_accounts)
       vote_accounts.each_slice(ACCOUNTS_BATCH_SIZE).each_with_object({}) do |batch, bls_pubkeys|
-        accounts = rpc_request(:get_multiple_accounts, params: [batch, { encoding: "jsonParsed" }])
+        accounts = @rpc.call("getMultipleAccounts", [batch, { encoding: "jsonParsed" }])
         raise "Failed to fetch vote accounts data" if accounts.nil?
 
         accounts["value"].zip(batch).each do |account, vote_account|
           bls_pubkeys[vote_account] = account&.dig("data", "parsed", "info", "blsPubkeyCompressed")
         end
       end
-    end
-
-    def rpc_request(method, params: nil)
-      response = solana_client_request(@config_urls, method, params: params)
-      response.is_a?(Hash) ? response : nil
-    end
-
-    def raw_rpc_request(method, params)
-      body = { jsonrpc: "2.0", id: 1, method: method, params: params }.to_json
-      @config_urls.each do |url|
-        response = SolanaRpcRuby::ApiClient.new(url).call_api(body: body, http_method: :post)
-        result = JSON.parse(response.body)["result"]
-        return result unless result.nil?
-      rescue SolanaRpcRuby::ApiError, JSON::ParserError => e
-        @logger.error("#{method} failed on #{@network}: #{e.message}")
-      end
-      nil
     end
 
     def base58_decode(value)

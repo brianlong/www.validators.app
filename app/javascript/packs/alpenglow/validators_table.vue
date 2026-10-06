@@ -61,6 +61,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import axios from 'axios'
+  import { format_stake, format_percent, format_decimal } from './formatters'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -163,18 +164,9 @@
         return account ? account.substring(0, 6) + '…' + account.substring(account.length - 4) : 'N/A'
       },
 
-      format_stake(lamports) {
-        if (lamports === null || lamports === undefined) return 'N/A'
-        return Math.round(lamports / 1000000000).toLocaleString('en-US')
-      },
-
-      format_percent(value) {
-        return value === null || value === undefined ? 'N/A' : value.toFixed(1) + '%'
-      },
-
-      format_decimal(value) {
-        return value === null || value === undefined ? 'N/A' : value.toFixed(2)
-      }
+      format_stake,
+      format_percent,
+      format_decimal
     }
   }
 </script>

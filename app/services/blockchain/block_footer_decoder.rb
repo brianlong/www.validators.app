@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
 module Blockchain
-  class AlpenglowFooterDecoder
+  class BlockFooterDecoder
     class DecodeError < StandardError; end
 
     BLS_SIGNATURE_SIZE = 96
     HASH_SIZE = 32
-    SIGNER_STORE_BASE2 = 0
-    SIGNER_STORE_BASE3 = 1
-    BASE3_SYMBOLS_PER_BYTE = 5
 
     def initialize(footer)
       @footer = footer
@@ -18,7 +15,7 @@ module Blockchain
       {
         slot: @footer.slot,
         bank_id: @footer.bank_id,
-        bank_hash: @footer.bank_hash.unpack1("H*"),
+        bank_hash: @footer.bank_hash.b,
         block_producer_time_nanos: @footer.block_producer_time_nanos,
         block_user_agent: @footer.block_user_agent.to_s.dup.force_encoding(Encoding::UTF_8).scrub,
         block_final_cert: decode_optional(@footer.block_final_cert) { |bytes| decode_block_final_cert(bytes) },
@@ -39,16 +36,16 @@ module Blockchain
       reader = ByteReader.new(bytes)
       slot = reader.u64
       block_id = reader.read_hash
-      final_aggregate = read_votes_aggregate(reader)
-      notar_aggregate = reader.u8 == 1 ? read_votes_aggregate(reader) : nil
+      final_signers = read_votes_aggregate(reader)
+      notar_signers = reader.u8 == 1 ? read_votes_aggregate(reader) : nil
       reader.ensure_consumed!
 
       {
         slot: slot,
         block_id: block_id,
-        finalization: notar_aggregate ? "slow" : "fast",
-        final_aggregate: final_aggregate,
-        notar_aggregate: notar_aggregate
+        finalization: notar_signers ? "slow" : "fast",
+        final_signers: final_signers,
+        notar_signers: notar_signers
       }
     end
 
@@ -57,73 +54,31 @@ module Blockchain
       slot = reader.u64
       block_id = reader.read_hash
       reader.skip(BLS_SIGNATURE_SIZE)
-      signer_data = signers(reader.take(reader.short_u16))
+      signers = validated_signers(reader.take(reader.short_u16))
       reader.ensure_consumed!
 
-      { slot: slot, block_id: block_id }.merge(signer_data)
+      { slot: slot, block_id: block_id, signers: signers }
     end
 
     def decode_skip_reward_cert(bytes)
       reader = ByteReader.new(bytes)
       slot = reader.u64
       reader.skip(BLS_SIGNATURE_SIZE)
-      signer_data = signers(reader.take(reader.short_u16))
+      signers = validated_signers(reader.take(reader.short_u16))
       reader.ensure_consumed!
 
-      { slot: slot }.merge(signer_data)
+      { slot: slot, signers: signers }
     end
 
     def read_votes_aggregate(reader)
       reader.skip(BLS_SIGNATURE_SIZE)
-      signers(reader.take(reader.u16))
+      validated_signers(reader.take(reader.u16))
     end
 
-    def signers(bytes)
-      self.class.decode_signers(bytes).merge(signers: bytes)
-    end
-
-    class << self
-      def decode_signers(bytes)
-        raise DecodeError, "signer store too short" if bytes.nil? || bytes.bytesize < 3
-
-        version = bytes.getbyte(0)
-        bits = bytes.byteslice(1, 2).unpack1("S<")
-        data = bytes.byteslice(3..).bytes
-
-        case version
-        when SIGNER_STORE_BASE2 then decode_base2(data, bits)
-        when SIGNER_STORE_BASE3 then decode_base3(data, bits)
-        else raise DecodeError, "unknown signer store version #{version}"
-        end
-      end
-
-      private
-
-      def decode_base2(data, bits)
-        raise DecodeError, "invalid base2 payload size" unless data.size == (bits + 7) / 8
-
-        ranks = (0...bits).select { |i| data[i / 8][i % 8] == 1 }
-        { bitmap_length: bits, ranks: ranks }
-      end
-
-      def decode_base3(data, bits)
-        expected_size = (bits + BASE3_SYMBOLS_PER_BYTE - 1) / BASE3_SYMBOLS_PER_BYTE
-        raise DecodeError, "invalid base3 payload size" unless data.size == expected_size
-
-        ranks = []
-        fallback_ranks = []
-        data.each_with_index do |byte, chunk_index|
-          first = chunk_index * BASE3_SYMBOLS_PER_BYTE
-          (first...[first + BASE3_SYMBOLS_PER_BYTE, bits].min).each do |i|
-            case byte % 3
-            when 1 then ranks << i
-            when 2 then fallback_ranks << i
-            end
-            byte /= 3
-          end
-        end
-        { bitmap_length: bits, ranks: ranks, fallback_ranks: fallback_ranks }
-      end
+    def validated_signers(bytes)
+      Blockchain::SignerStore.validate!(bytes)
+    rescue Blockchain::SignerStore::DecodeError => e
+      raise DecodeError, e.message
     end
 
     class ByteReader

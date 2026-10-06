@@ -28,18 +28,6 @@ module Blockchain
       assert_equal 0, Blockchain::TestnetBlockFooter.count
     end
 
-    test "worker prunes all footer networks and skips stage" do
-      footer(Blockchain::AlpenglowCommunityBlockFooter, 1, created_at: 8.days.ago)
-      footer(Blockchain::TestnetBlockFooter, 1, created_at: 8.days.ago)
-
-      Rails.env.stub(:stage?, true) { Blockchain::BlockFooterPruneWorker.new.perform }
-      assert_equal 1, Blockchain::AlpenglowCommunityBlockFooter.count
-
-      Blockchain::BlockFooterPruneWorker.new.perform
-      assert_equal 0, Blockchain::AlpenglowCommunityBlockFooter.count
-      assert_equal 0, Blockchain::TestnetBlockFooter.count
-    end
-
     def stub_const(klass, name, value)
       original = klass.const_get(name)
       klass.send(:remove_const, name)

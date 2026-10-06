@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 module Blockchain
-  class AlpenglowFooterSubscribeService
+  class BlockFooterSubscribeService
     PING_ID = 1
     KEEPALIVE_TIME_MS = 30_000
     REQUEST_POLL_INTERVAL = 0.2 # seconds
 
-    def initialize(network: "alpenglow-community", grpc_url:, token:)
+    def initialize(network:, grpc_url:, token:)
       require "geyser_services_pb"
       @network = network
       @grpc_url = grpc_url
       @token = token
-      log_path = Rails.root.join("log", "alpenglow_footer_subscribe_service_#{@network}.log")
+      log_path = Rails.root.join("log", "block_footer_subscribe_service_#{@network}.log")
       @logger = Logger.new(log_path)
     end
 
@@ -44,8 +44,8 @@ module Blockchain
     private
 
     def handle_footer(footer)
-      yield Blockchain::AlpenglowFooterDecoder.new(footer).call
-    rescue Blockchain::AlpenglowFooterDecoder::DecodeError => e
+      yield Blockchain::BlockFooterDecoder.new(footer).call
+    rescue Blockchain::BlockFooterDecoder::DecodeError => e
       @logger.error("Failed to decode footer for slot #{footer.slot}: #{e.message}")
     end
 

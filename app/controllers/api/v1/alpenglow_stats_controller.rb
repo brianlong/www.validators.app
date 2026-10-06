@@ -12,7 +12,7 @@ module Api
       end
 
       def validators
-        epoch = AlpenglowClusterStatsQuery.new(network: stats_params[:network], epoch: stats_params[:epoch]).selected_epoch
+        epoch = AlpenglowValidatorEpochStat.resolve_epoch(stats_params[:network], stats_params[:epoch])
         return render(json: { epoch: nil, total_count: 0, validators: [] }, status: :ok) if epoch.nil?
 
         result = AlpenglowValidatorStatsQuery.new(

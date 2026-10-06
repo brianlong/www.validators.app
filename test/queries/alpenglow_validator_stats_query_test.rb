@@ -72,6 +72,12 @@ class AlpenglowValidatorStatsQueryTest < ActiveSupport::TestCase
     assert_equal %w[Vote2 Vote3], result[:validators].map { |v| v[:vote_account] }
   end
 
+  test "#call reports missing user agent the same way as cluster stats" do
+    stat("VoteA", leader_slots: 1)
+
+    assert_equal ["Not reported", nil], query[:validators].first.values_at(:client, :version)
+  end
+
   test "#call uses stake only from finalized ranks" do
     stat("VoteA", stake: 100, finalized: false)
 

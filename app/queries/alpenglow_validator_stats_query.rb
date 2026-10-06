@@ -54,11 +54,11 @@ class AlpenglowValidatorStatsQuery
   end
 
   def ranks_join
-    ActiveRecord::Base.sanitize_sql_array([<<~SQL.squish, true])
+    <<~SQL.squish
       LEFT JOIN alpenglow_epoch_ranks ON alpenglow_epoch_ranks.network = #{STATS_TABLE}.network
         AND alpenglow_epoch_ranks.epoch = #{STATS_TABLE}.epoch
         AND alpenglow_epoch_ranks.vote_account = vote_accounts.account
-        AND alpenglow_epoch_ranks.finalized = ?
+        AND alpenglow_epoch_ranks.finalized = TRUE
     SQL
   end
 
@@ -91,7 +91,7 @@ class AlpenglowValidatorStatsQuery
       skip_votes: record.skip_votes,
       divergent_skip_votes: record.divergent_skip_votes,
       leader_slots: record.leader_slots,
-      client: record.last_block_user_agent && Blockchain::AlpenglowUserAgent.client(record.last_block_user_agent),
+      client: Blockchain::AlpenglowUserAgent.client(record.last_block_user_agent),
       version: Blockchain::AlpenglowUserAgent.version(record.last_block_user_agent)
     }.merge(METRICS.keys.to_h { |name| [name.to_sym, record[name]&.to_f] })
   end

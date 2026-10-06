@@ -1,20 +1,17 @@
 # frozen_string_literal: true
 
 class AlpenglowClusterStatsQuery
-  RECENT_EPOCHS = 10
-
   def initialize(network:, epoch: nil)
     @network = network
     @epoch = epoch
   end
 
   def epochs
-    @epochs ||= scope.distinct.order(epoch: :desc).limit(RECENT_EPOCHS).pluck(:epoch)
+    @epochs ||= AlpenglowValidatorEpochStat.recent_epochs(@network)
   end
 
   def selected_epoch
-    requested = @epoch.to_i if @epoch.present?
-    epochs.include?(requested) ? requested : epochs.first
+    @selected_epoch ||= AlpenglowValidatorEpochStat.resolve_epoch(@network, @epoch)
   end
 
   def call
@@ -50,7 +47,7 @@ class AlpenglowClusterStatsQuery
   private
 
   def scope
-    AlpenglowValidatorEpochStat.where(network: @network)
+    AlpenglowValidatorEpochStat.for_network(@network)
   end
 
   def percent(part, total)

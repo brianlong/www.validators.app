@@ -6,8 +6,8 @@ module BlockFooterDaemonHelper
   FLUSH_INTERVAL = 20 # seconds
 
   def run_block_footer_daemon(network)
-    rpc_url = Rails.application.credentials.solana["#{network.tr('-', '_')}_urls".to_sym][0]
-    rpc_uri = URI(rpc_url)
+    rpc_urls = NETWORK_URLS[network]
+    rpc_uri = URI(rpc_urls.first)
 
     loop do
       footers = []
@@ -15,13 +15,11 @@ module BlockFooterDaemonHelper
       leader_schedule = nil
 
       begin
-        epoch_schedule = Blockchain::EpochSchedule.new(
-          SolanaRpcClient.new(cluster: rpc_url).client.get_epoch_schedule.result
-        )
-        leader_schedule = Blockchain::LeaderSchedule.new(rpc_url: rpc_url, epoch_schedule: epoch_schedule)
+        epoch_schedule = Blockchain::EpochSchedule.fetch(network)
+        leader_schedule = Blockchain::LeaderSchedule.new(rpc_urls: rpc_urls, epoch_schedule: epoch_schedule)
         flushed_at = Time.current
 
-        Blockchain::AlpenglowFooterSubscribeService.new(
+        Blockchain::BlockFooterSubscribeService.new(
           network: network,
           grpc_url: "#{rpc_uri.host}:#{rpc_uri.port}",
           token: rpc_uri.path.delete("/")
@@ -47,7 +45,7 @@ module BlockFooterDaemonHelper
   def flush_footers(network, footers, epoch_schedule, leader_schedule)
     return if footers.empty?
 
-    saved = Blockchain::AlpenglowFooterSaveService.new(
+    saved = Blockchain::BlockFooterSaveService.new(
       network: network,
       footers: footers,
       epoch_schedule: epoch_schedule,

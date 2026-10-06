@@ -27,4 +27,18 @@ class AlpenglowEpochRank < ApplicationRecord
 
   scope :for_epoch, ->(network, epoch) { where(network: network, epoch: epoch).order(:rank) }
   scope :finalized, -> { where(finalized: true) }
+
+  RETENTION = 30.days
+  PRUNE_BATCH_SIZE = 10_000
+
+  def self.prune(before: RETENTION.ago)
+    deleted = 0
+    loop do
+      ids = where("created_at < ?", before).limit(PRUNE_BATCH_SIZE).pluck(:id)
+      break if ids.empty?
+
+      deleted += where(id: ids).delete_all
+    end
+    deleted
+  end
 end

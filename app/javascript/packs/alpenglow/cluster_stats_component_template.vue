@@ -129,6 +129,7 @@
   import { mapGetters } from 'vuex'
   import axios from 'axios'
   import ValidatorsTable from './validators_table'
+  import { format_percent, format_decimal, format_number } from './formatters'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
@@ -203,17 +204,9 @@
         this.get_stats()
       },
 
-      format_percent(value) {
-        return value === null || value === undefined ? 'N/A' : value.toFixed(1) + '%'
-      },
-
-      format_decimal(value) {
-        return value === null || value === undefined ? 'N/A' : value.toFixed(2)
-      },
-
-      format_number(value) {
-        return value === null || value === undefined ? 'N/A' : value.toLocaleString('en-US')
-      },
+      format_percent,
+      format_decimal,
+      format_number,
 
       time_ago(timestamp) {
         const minutes = Math.max(0, Math.floor((this.now - new Date(timestamp).getTime()) / 60000))

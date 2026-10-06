@@ -34,9 +34,23 @@
 #  index_alpenglow_validator_epoch_stats_on_validator_id_and_epoch  (validator_id,epoch)
 #
 class AlpenglowValidatorEpochStat < ApplicationRecord
+  RECENT_EPOCHS = 10
+
   belongs_to :vote_account
   belongs_to :validator
 
   validates :network, inclusion: { in: NETWORKS }
   validates :epoch, presence: true
+
+  scope :for_network, ->(network) { where(network: network) }
+
+  def self.recent_epochs(network, limit: RECENT_EPOCHS)
+    for_network(network).distinct.order(epoch: :desc).limit(limit).pluck(:epoch)
+  end
+
+  def self.resolve_epoch(network, requested = nil)
+    return requested.to_i if requested.present? && for_network(network).exists?(epoch: requested.to_i)
+
+    for_network(network).maximum(:epoch)
+  end
 end

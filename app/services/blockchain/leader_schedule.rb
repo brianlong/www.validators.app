@@ -5,8 +5,8 @@ module Blockchain
     RETRY_INTERVAL = 60 # seconds
     CACHED_EPOCHS = 3
 
-    def initialize(rpc_url:, epoch_schedule:)
-      @rpc_url = rpc_url
+    def initialize(rpc_urls:, epoch_schedule:)
+      @rpc = Blockchain::JsonRpcRequest.new(rpc_urls)
       @epoch_schedule = epoch_schedule
       @schedules = {}
       @failed_at = {}
@@ -35,17 +35,12 @@ module Blockchain
     end
 
     def fetch(epoch)
-      body = { jsonrpc: "2.0", id: 1, method: "getLeaderSchedule", params: [@epoch_schedule.first_slot_in_epoch(epoch)] }
-      response = SolanaRpcRuby::ApiClient.new(@rpc_url).call_api(body: body.to_json, http_method: :post)
-      leaders = JSON.parse(response.body)["result"]
+      leaders = @rpc.call("getLeaderSchedule", [@epoch_schedule.first_slot_in_epoch(epoch)])
       return nil if leaders.blank?
 
       leaders.each_with_object(Array.new(leaders.values.sum(&:size))) do |(identity, indexes), schedule|
         indexes.each { |index| schedule[index] = identity }
       end
-    rescue SolanaRpcRuby::ApiError, JSON::ParserError => e
-      Rails.logger.error("Failed to fetch leader schedule for epoch #{epoch}: #{e.message}")
-      nil
     end
   end
 end

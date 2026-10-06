@@ -170,7 +170,7 @@ every 1.minute, roles: [:background] do
 end
 
 every 1.day, at: '3:55am', roles: [:background] do
-  runner "Blockchain::BlockFooterPruneWorker.perform_async"
+  runner "Blockchain::AlpenglowPruneWorker.perform_async"
 end
 
 every 45.minutes, roles: [:background] do
