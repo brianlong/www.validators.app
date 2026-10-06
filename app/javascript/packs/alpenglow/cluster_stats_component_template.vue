@@ -118,6 +118,9 @@
           </table>
         </div>
       </div>
+
+      <h2 class="h4 mb-3">Validators</h2>
+      <validators-table :epoch="stats.epoch" :refreshed_at="now" />
     </div>
   </div>
 </template>
@@ -125,10 +128,15 @@
 <script>
   import { mapGetters } from 'vuex'
   import axios from 'axios'
+  import ValidatorsTable from './validators_table'
 
   axios.defaults.headers.get["Authorization"] = window.api_authorization
 
   export default {
+    components: {
+      'validators-table': ValidatorsTable
+    },
+
     data() {
       return {
         refresh_interval: 60, // Seconds

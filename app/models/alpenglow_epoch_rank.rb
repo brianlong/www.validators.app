@@ -7,6 +7,7 @@
 #  id                 :bigint           not null, primary key
 #  bls_pubkey         :string(191)      not null
 #  epoch              :integer          not null
+#  finalized          :boolean          default(FALSE), not null
 #  network            :string(191)      not null
 #  rank               :integer          not null
 #  stake              :bigint           not null
@@ -25,4 +26,5 @@ class AlpenglowEpochRank < ApplicationRecord
   validates :epoch, :rank, :vote_account, :validator_identity, :bls_pubkey, :stake, presence: true
 
   scope :for_epoch, ->(network, epoch) { where(network: network, epoch: epoch).order(:rank) }
+  scope :finalized, -> { where(finalized: true) }
 end

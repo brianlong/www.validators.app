@@ -164,8 +164,9 @@ every 1.minute, roles: [:background] do
   runner "PingThingUserStatsWorker.perform_async('testnet')"
   runner "PingThingUserStatsWorker.perform_async('anzamain')"
   runner "Blockchain::AlpenglowEpochRanksWorker.perform_async('network' => 'alpenglow-community')"
-  runner "Blockchain::AlpenglowLeaderStatsWorker.perform_async('network' => 'alpenglow-community')"
-  runner "Blockchain::AlpenglowLeaderStatsWorker.perform_async('network' => 'testnet')"
+  runner "Blockchain::AlpenglowEpochRanksWorker.perform_async('network' => 'testnet')"
+  runner "Blockchain::AlpenglowEpochStatsWorker.perform_async('network' => 'alpenglow-community')"
+  runner "Blockchain::AlpenglowEpochStatsWorker.perform_async('network' => 'testnet')"
 end
 
 every 1.day, at: '3:55am', roles: [:background] do

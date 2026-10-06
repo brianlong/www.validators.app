@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_09_30_120200) do
+ActiveRecord::Schema.define(version: 2026_10_05_130000) do
 
   create_table "account_authority_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "authorized_withdrawer_before"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2026_09_30_120200) do
     t.bigint "stake", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "finalized", default: false, null: false
     t.index ["network", "epoch", "rank"], name: "index_alpenglow_epoch_ranks_on_network_and_epoch_and_rank", unique: true
     t.index ["network", "epoch", "vote_account"], name: "index_alpenglow_epoch_ranks_on_network_epoch_vote_account", unique: true
   end

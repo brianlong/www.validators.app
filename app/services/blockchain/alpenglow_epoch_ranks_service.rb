@@ -19,25 +19,57 @@ module Blockchain
       current_epoch = rpc_request(:get_epoch_info)&.dig("epoch")
       return if current_epoch.nil?
 
-      epoch = current_epoch + 1
-      return if AlpenglowEpochRank.where(network: @network, epoch: epoch).exists?
-
-      ranked = rank(candidates)
-      return if ranked.empty?
-
-      now = Time.current
-      AlpenglowEpochRank.insert_all(
-        ranked.each_with_index.map do |candidate, rank|
-          candidate.except(:bls_bytes).merge(network: @network, epoch: epoch, rank: rank, created_at: now, updated_at: now)
-        end
-      )
-      @logger.info("Saved #{ranked.size} ranks for epoch #{epoch} on #{@network}")
-      ranked.size
+      build_provisional_ranks(current_epoch + 1)
+      finalize_ranks(current_epoch)
     end
 
     private
 
-    def candidates
+    def build_provisional_ranks(epoch)
+      return if AlpenglowEpochRank.where(network: @network, epoch: epoch).exists?
+
+      candidates = sort(staked_candidates)
+      return if candidates.empty?
+
+      save_ranks(epoch, candidates, finalized: false)
+      @logger.info("Saved #{candidates.size} provisional ranks for epoch #{epoch} on #{@network}")
+    end
+
+    def finalize_ranks(epoch)
+      provisional = AlpenglowEpochRank.where(network: @network, epoch: epoch, finalized: false).order(:rank).to_a
+      return if provisional.empty?
+
+      members = epoch_vote_accounts
+      return if members.nil?
+
+      candidates = provisional.select { |row| members.include?(row.vote_account) }.map do |row|
+        row.attributes.symbolize_keys.slice(:vote_account, :validator_identity, :bls_pubkey, :stake)
+           .merge(bls_bytes: base58_decode(row.bls_pubkey))
+      end
+      ranked = sort(deduplicate(candidates))
+
+      AlpenglowEpochRank.transaction do
+        AlpenglowEpochRank.where(network: @network, epoch: epoch).delete_all
+        save_ranks(epoch, ranked, finalized: true)
+      end
+      @logger.info(
+        "Finalized #{ranked.size} ranks for epoch #{epoch} on #{@network} " \
+        "(#{provisional.size - ranked.size} removed)"
+      )
+    end
+
+    def save_ranks(epoch, candidates, finalized:)
+      now = Time.current
+      AlpenglowEpochRank.insert_all(
+        candidates.each_with_index.map do |candidate, rank|
+          candidate.except(:bls_bytes).merge(
+            network: @network, epoch: epoch, rank: rank, finalized: finalized, created_at: now, updated_at: now
+          )
+        end
+      )
+    end
+
+    def staked_candidates
       vote_accounts = rpc_request(:get_vote_accounts)
       return [] if vote_accounts.blank?
 
@@ -58,13 +90,25 @@ module Blockchain
       end
     end
 
-    def rank(candidates)
+    def deduplicate(candidates)
       bls_counts = candidates.map { |c| c[:bls_bytes] }.tally
       identity_counts = candidates.map { |c| c[:validator_identity] }.tally
 
-      candidates
-        .select { |c| bls_counts[c[:bls_bytes]] == 1 && identity_counts[c[:validator_identity]] == 1 }
-        .sort { |a, b| [b[:stake], a[:bls_bytes]] <=> [a[:stake], b[:bls_bytes]] }
+      candidates.select { |c| bls_counts[c[:bls_bytes]] == 1 && identity_counts[c[:validator_identity]] == 1 }
+    end
+
+    def sort(candidates)
+      candidates.sort { |a, b| [b[:stake], a[:bls_bytes]] <=> [a[:stake], b[:bls_bytes]] }
+    end
+
+    def epoch_vote_accounts
+      result = raw_rpc_request("getVoteAccounts", [{ keepUnstakedDelinquents: true }])
+      return nil unless result.is_a?(Hash)
+
+      result.values_at("current", "delinquent").flatten.compact
+            .select { |va| va["epochVoteAccount"] }
+            .map { |va| va["votePubkey"] }
+            .to_set
     end
 
     def fetch_bls_pubkeys(vote_accounts)
@@ -81,6 +125,18 @@ module Blockchain
     def rpc_request(method, params: nil)
       response = solana_client_request(@config_urls, method, params: params)
       response.is_a?(Hash) ? response : nil
+    end
+
+    def raw_rpc_request(method, params)
+      body = { jsonrpc: "2.0", id: 1, method: method, params: params }.to_json
+      @config_urls.each do |url|
+        response = SolanaRpcRuby::ApiClient.new(url).call_api(body: body, http_method: :post)
+        result = JSON.parse(response.body)["result"]
+        return result unless result.nil?
+      rescue SolanaRpcRuby::ApiError, JSON::ParserError => e
+        @logger.error("#{method} failed on #{@network}: #{e.message}")
+      end
+      nil
     end
 
     def base58_decode(value)

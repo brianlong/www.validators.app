@@ -221,6 +221,7 @@ Rails.application.routes.draw do
       get "policies/:network/:pubkey", to: "policies#show", as: "policy"
 
       get "alpenglow-cluster-stats/:network", to: "alpenglow_stats#cluster", as: "alpenglow_cluster_stats"
+      get "alpenglow-validator-stats/:network", to: "alpenglow_stats#validators", as: "alpenglow_validator_stats"
     end
   end
 end

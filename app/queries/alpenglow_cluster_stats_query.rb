@@ -2,7 +2,6 @@
 
 class AlpenglowClusterStatsQuery
   RECENT_EPOCHS = 10
-  NOT_REPORTED = "Not reported"
 
   def initialize(network:, epoch: nil)
     @network = network
@@ -60,7 +59,7 @@ class AlpenglowClusterStatsQuery
 
   def clients(rows, total_slots)
     rows.where("leader_slots > 0").pluck(:last_block_user_agent, :leader_slots)
-        .group_by { |user_agent, _| client_name(user_agent) }
+        .group_by { |user_agent, _| Blockchain::AlpenglowUserAgent.client(user_agent) }
         .map do |client, entries|
           slots = entries.sum { |_, count| count }
           {
@@ -68,23 +67,13 @@ class AlpenglowClusterStatsQuery
             leaders: entries.size,
             leader_slots: slots,
             leader_slots_percent: percent(slots, total_slots),
-            versions: sort_versions(entries.filter_map { |user_agent, _| client_version(user_agent) }.uniq)
+            versions: sort_versions(entries.filter_map { |user_agent, _| Blockchain::AlpenglowUserAgent.version(user_agent) }.uniq)
           }
         end
         .sort_by { |client| -client[:leader_slots] }
   end
 
-  def client_name(user_agent)
-    return NOT_REPORTED if user_agent.blank?
-
-    user_agent[/client:([^;)\s]+)/, 1] || user_agent[%r{\A[^/\s]+}]
-  end
-
   def sort_versions(versions)
     versions.sort_by { |version| Gem::Version.correct?(version) ? Gem::Version.new(version) : Gem::Version.new("0") }.reverse
-  end
-
-  def client_version(user_agent)
-    user_agent.to_s[%r{\A[^/\s]+/(\S+)}, 1]
   end
 end

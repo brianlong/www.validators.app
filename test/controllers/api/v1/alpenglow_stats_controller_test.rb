@@ -61,6 +61,32 @@ module Api
         assert_equal({ "epochs" => [], "cluster_stats" => nil }, response_to_json(@response.body))
       end
 
+      test "validators returns validator stats for the latest epoch" do
+        get api_v1_alpenglow_validator_stats_url(network: @network), headers: { "Token" => @user.api_token }
+
+        assert_response 200
+        json = response_to_json(@response.body)
+        assert_equal 222, json["epoch"]
+        assert_equal 1, json["total_count"]
+        assert_equal "notar_participation", json["sort_by"]
+        assert_equal 100, json["validators"].first["leader_slots"]
+        assert_equal "JitoLabs", json["validators"].first["client"]
+      end
+
+      test "validators accepts epoch, sorting and pagination params" do
+        params = { network: @network, epoch: 221, sort_by: "leader_slots", direction: "asc", page: 1, per: 10 }
+        get api_v1_alpenglow_validator_stats_url(params), headers: { "Token" => @user.api_token }
+
+        json = response_to_json(@response.body)
+        assert_equal [221, "leader_slots", "asc", 10], json.values_at("epoch", "sort_by", "direction", "per")
+      end
+
+      test "validators returns empty list for networks without stats" do
+        get api_v1_alpenglow_validator_stats_url(network: "mainnet"), headers: { "Token" => @user.api_token }
+
+        assert_equal({ "epoch" => nil, "total_count" => 0, "validators" => [] }, response_to_json(@response.body))
+      end
+
       test "returns error for invalid network" do
         get api_v1_alpenglow_cluster_stats_url(network: "devnet"), headers: { "Token" => @user.api_token }
 
