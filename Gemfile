@@ -86,6 +86,12 @@ gem 'rack-cors', '~> 1.1.1'
 # Ruby client for Solana
 gem 'solana_rpc_ruby', '~> 2.0.0'
 
+# gRPC client for Yellowstone Geyser streams (Alpenglow block footers)
+gem 'grpc', '~> 1.80.0', require: false
+
+# BLS12-381 signatures for verifying Alpenglow certificates
+gem 'bls12-381', '~> 0.4.0', require: false
+
 # Ruby client for CoinGecko
 gem 'coingecko_ruby', '~> 0.4.2'
 
@@ -164,6 +170,7 @@ group :development do
   gem 'bcrypt_pbkdf'
   gem 'puma', '~> 6.4.2'
   gem 'openssl', '~> 4.0' # can be removed after upgrading Ruby
+  gem 'grpc-tools', '~> 1.80.0', require: false
 end
 
 group :test do
