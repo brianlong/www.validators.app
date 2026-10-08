@@ -48,6 +48,11 @@ class AlpenglowValidatorEpochStat < ApplicationRecord
     for_network(network).distinct.order(epoch: :desc).limit(limit).pluck(:epoch)
   end
 
+  def self.reset_voting(network, epoch)
+    for_network(network).where(epoch: epoch)
+                        .update_all(Blockchain::AlpenglowEpochStats::VOTING_COUNTERS.index_with(0).merge(updated_at: Time.current))
+  end
+
   def self.resolve_epoch(network, requested = nil)
     return requested.to_i if requested.present? && for_network(network).exists?(epoch: requested.to_i)
 

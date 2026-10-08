@@ -7,13 +7,13 @@ class AlpenglowValidatorStatsQueryTest < ActiveSupport::TestCase
     @network = "alpenglow-community"
   end
 
-  def stat(account, epoch: 224, stake: nil, finalized: true, **counters)
+  def stat(account, epoch: 224, stake: nil, status: :verified, **counters)
     validator = create(:validator, network: @network, account: "Identity#{account}", name: "Validator #{account}")
     vote_account = create(:vote_account, validator: validator, network: @network, account: account)
     if stake
       AlpenglowEpochRank.create!(
         network: @network, epoch: epoch, rank: AlpenglowEpochRank.where(epoch: epoch).count, vote_account: account,
-        validator_identity: validator.account, bls_pubkey: "bls#{account}", stake: stake, finalized: finalized
+        validator_identity: validator.account, bls_pubkey: "bls#{account}", stake: stake, status: status
       )
     end
     AlpenglowValidatorEpochStat.create!(network: @network, epoch: epoch, vote_account: vote_account, validator: validator, **counters)
@@ -78,8 +78,8 @@ class AlpenglowValidatorStatsQueryTest < ActiveSupport::TestCase
     assert_equal ["Not reported", nil], query[:validators].first.values_at(:client, :version)
   end
 
-  test "#call uses stake only from finalized ranks" do
-    stat("VoteA", stake: 100, finalized: false)
+  test "#call does not use stake from provisional ranks" do
+    stat("VoteA", stake: 100, status: :provisional)
 
     assert_nil query[:validators].first[:stake]
   end

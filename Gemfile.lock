@@ -101,6 +101,9 @@ GEM
     benchmark (0.4.0)
     bigdecimal (3.1.9)
     bindex (0.8.1)
+    bls12-381 (0.4.0)
+      bigdecimal
+      h2c (>= 0.2.1, < 0.3)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     browser (5.3.1)
@@ -164,6 +167,7 @@ GEM
       logger (~> 1.6.5)
       simpleidn (~> 0.2.1)
     domain_name (0.6.20240107)
+    ecdsa (1.2.0)
     ed25519 (1.4.0)
     encryptor (3.0.0)
     erubi (1.13.1)
@@ -214,6 +218,8 @@ GEM
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
     grpc-tools (1.80.0)
+    h2c (0.2.1)
+      ecdsa (~> 1.2.0)
     hashdiff (1.2.0)
     hcaptcha (7.1.0)
       json
@@ -580,6 +586,7 @@ DEPENDENCIES
   audited (~> 5.8)
   aws-sdk-s3
   bcrypt_pbkdf
+  bls12-381 (~> 0.4.0)
   bootsnap (>= 1.18)
   browser (~> 5.3)
   bullet (~> 7.1)

@@ -39,9 +39,9 @@ module Blockchain
       { body: { jsonrpc: "2.0", id: 1, result: result }.to_json }
     end
 
-    def stub_cluster(epoch:)
+    def stub_cluster(epoch:, slot_index: 10)
       stub_request(:post, @rpc_url).with(body: hash_including("method" => "getEpochInfo"))
-                                   .to_return(rpc_result("epoch" => epoch, "slotIndex" => 10, "slotsInEpoch" => 54_000))
+                                   .to_return(rpc_result("epoch" => epoch, "slotIndex" => slot_index, "slotsInEpoch" => 54_000))
       stub_request(:post, @rpc_url).with(body: hash_including("method" => "getVoteAccounts"))
                                    .to_return(rpc_result(@vote_accounts))
       stub_request(:post, @rpc_url).with(body: hash_including("method" => "getMultipleAccounts")).to_return do |request|
@@ -71,8 +71,27 @@ module Blockchain
       assert_equal %w[VoteBigA VoteBigB VoteNotInEpoch VoteDupBls1 VoteDupBls2 VoteDelinquent VoteSmall].sort,
                    provisional.map(&:vote_account).sort
       assert_equal (0...7).to_a, provisional.map(&:rank)
-      assert(provisional.none?(&:finalized))
+      assert(provisional.all?(&:provisional?))
       assert_equal %w[NodeBigA 2 500], [provisional.first.validator_identity, provisional.first.bls_pubkey, provisional.first.stake.to_s]
+    end
+
+    test "#call does not build provisional ranks late in the epoch" do
+      stub_cluster(epoch: 186, slot_index: 6_000)
+
+      call_service
+
+      assert_empty ranks(187)
+    end
+
+    test "#call still finalizes current epoch ranks late in the epoch" do
+      stub_cluster(epoch: 186)
+      call_service
+      stub_cluster(epoch: 187, slot_index: 50_000)
+
+      call_service
+
+      assert(ranks(187).all?(&:finalized?))
+      assert_empty ranks(188)
     end
 
     test "#call does not rebuild provisional ranks that already exist" do
@@ -95,7 +114,7 @@ module Blockchain
       finalized = ranks(187)
       assert_equal %w[VoteBigA VoteBigB VoteDelinquent VoteSmall], finalized.map(&:vote_account)
       assert_equal [0, 1, 2, 3], finalized.map(&:rank)
-      assert(finalized.all?(&:finalized))
+      assert(finalized.all?(&:finalized?))
       assert_equal 4, AlpenglowEpochRank.finalized.where(network: @network, epoch: 187).count
     end
 

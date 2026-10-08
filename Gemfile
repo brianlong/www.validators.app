@@ -89,6 +89,9 @@ gem 'solana_rpc_ruby', '~> 2.0.0'
 # gRPC client for Yellowstone Geyser streams (Alpenglow block footers)
 gem 'grpc', '~> 1.80.0', require: false
 
+# BLS12-381 signatures for verifying Alpenglow certificates
+gem 'bls12-381', '~> 0.4.0', require: false
+
 # Ruby client for CoinGecko
 gem 'coingecko_ruby', '~> 0.4.2'
 

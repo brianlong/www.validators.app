@@ -135,17 +135,17 @@ module Blockchain
       [0, length].pack("CS<") + bytes.pack("C*")
     end
 
-    def finalize_ranks(epoch, vote_accounts, finalized: true)
+    def create_ranks(epoch, vote_accounts, status: :verified)
       vote_accounts.each_with_index do |account, rank|
         AlpenglowEpochRank.create!(
           network: @network, epoch: epoch, rank: rank, vote_account: account,
-          validator_identity: "Identity#{account}", bls_pubkey: "bls#{account}", stake: 100 - rank, finalized: finalized
+          validator_identity: "Identity#{account}", bls_pubkey: "bls#{account}", stake: 100 - rank, status: status
         )
       end
     end
 
     test "#call counts notar reward votes once per certificate" do
-      finalize_ranks(0, %w[VoteA VoteB])
+      create_ranks(0, %w[VoteA VoteB])
       footer(100, leader: "LeaderA", epoch: 0, notar_reward_slot: 92, notar_reward_signers: bitmap([0]))
       footer(101, leader: "LeaderA", epoch: 0, notar_reward_slot: 92, notar_reward_signers: bitmap([0]))
       footer(102, leader: "LeaderA", epoch: 0, notar_reward_slot: 94, notar_reward_signers: bitmap([0, 1]))
@@ -158,7 +158,7 @@ module Blockchain
     end
 
     test "#call counts fast and slow finalization signatures" do
-      finalize_ranks(0, %w[VoteA VoteB])
+      create_ranks(0, %w[VoteA VoteB])
       footer(100, leader: "LeaderA", epoch: 0)
       footer(101, leader: "LeaderA", epoch: 0, final_cert_slot: 100, finalization: :fast, final_signers: bitmap([0, 1]))
       footer(102, leader: "LeaderB", epoch: 0, final_cert_slot: 101, finalization: :slow,
@@ -178,7 +178,7 @@ module Blockchain
     end
 
     test "#call counts skip votes and marks skips of notarized slots as divergent" do
-      finalize_ranks(0, %w[VoteA VoteB])
+      create_ranks(0, %w[VoteA VoteB])
       footer(100, leader: "LeaderA", epoch: 0, skip_reward_slot: 92, skip_reward_signers: bitmap([1]),
                   notar_reward_slot: 92, notar_reward_signers: bitmap([0]))
       footer(101, leader: "LeaderA", epoch: 0, skip_reward_slot: 93, skip_reward_signers: bitmap([0, 1]))
@@ -191,8 +191,8 @@ module Blockchain
     end
 
     test "#call uses ranks of the certificate slot epoch" do
-      finalize_ranks(0, %w[VoteA VoteB])
-      finalize_ranks(1, %w[VoteB VoteA])
+      create_ranks(0, %w[VoteA VoteB])
+      create_ranks(1, %w[VoteB VoteA])
       footer(1000, leader: "LeaderA", epoch: 1, notar_reward_slot: 999, notar_reward_signers: bitmap([0]))
       footer(1001, leader: "LeaderA", epoch: 1, notar_reward_slot: 1000, notar_reward_signers: bitmap([0]))
       add_tail(1002)
@@ -204,9 +204,9 @@ module Blockchain
       assert_equal 0, stat_for(@vote_account_a, epoch: 1).notar_votes
     end
 
-    test "#call stops before footers whose certificates need ranks that are not finalized yet" do
-      finalize_ranks(0, %w[VoteA VoteB])
-      finalize_ranks(1, %w[VoteA VoteB], finalized: false)
+    test "#call stops before footers whose certificates need ranks that are not verified yet" do
+      create_ranks(0, %w[VoteA VoteB])
+      create_ranks(1, %w[VoteA VoteB], status: :finalized)
       footer(998, leader: "LeaderA", epoch: 0, notar_reward_slot: 990, notar_reward_signers: bitmap([0]))
       footer(1008, leader: "LeaderA", epoch: 1, notar_reward_slot: 1000, notar_reward_signers: bitmap([0]))
       add_tail(1009)
@@ -217,6 +217,25 @@ module Blockchain
       refute Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 1008).processed
       assert_equal 1, stat_for(@vote_account_a, epoch: 0).notar_votes
     end
+
+test "#call waits for provisional ranks as well" do
+  create_ranks(0, %w[VoteA VoteB], status: :provisional)
+  footer(100, leader: "LeaderA", epoch: 0, notar_reward_slot: 92, notar_reward_signers: bitmap([0]))
+  add_tail(101)
+
+  assert_equal 0, call_service
+end
+
+test "#call skips voting stats without waiting when ranks were rejected" do
+  create_ranks(0, %w[VoteA VoteB], status: :rejected)
+  footer(100, leader: "LeaderA", epoch: 0, notar_reward_slot: 92, notar_reward_signers: bitmap([0]))
+  add_tail(101)
+
+  assert_equal 1, call_service
+
+  stat_a = stat_for(@vote_account_a, epoch: 0)
+  assert_equal [1, 0, 0], [stat_a.leader_slots, stat_a.notar_reward_slots, stat_a.notar_votes]
+end
 
     test "#call processes footers without voting stats when an epoch has no ranks" do
       footer(100, leader: "LeaderA", epoch: 0, notar_reward_slot: 92, notar_reward_signers: bitmap([0]))
@@ -234,7 +253,7 @@ module Blockchain
       @leader_a.set_active_vote_account(other_vote_account)
       AlpenglowEpochRank.create!(
         network: @network, epoch: 10, rank: 0, vote_account: "VoteA", validator_identity: "LeaderA",
-        bls_pubkey: "blsA", stake: 100, finalized: true
+        bls_pubkey: "blsA", stake: 100, status: :finalized
       )
       footer(100, leader: "LeaderA")
       add_tail(101)
@@ -256,10 +275,10 @@ module Blockchain
       assert_equal 1, stat_for(other_vote_account).leader_slots
     end
 
-    test "#call stops waiting for ranks that stay unfinalized too long and skips their votes" do
-      finalize_ranks(1, %w[VoteA VoteB], finalized: false)
+    test "#call stops waiting for ranks that stay unverified too long and skips their votes" do
+      create_ranks(1, %w[VoteA VoteB], status: :finalized)
       old_footer = footer(1008, leader: "LeaderA", epoch: 1, notar_reward_slot: 1000, notar_reward_signers: bitmap([0]))
-      old_footer.update_columns(created_at: 31.minutes.ago)
+      old_footer.update_columns(created_at: 61.minutes.ago)
       add_tail(1009)
 
       assert_equal 1, call_service

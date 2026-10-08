@@ -58,7 +58,7 @@ class AlpenglowValidatorStatsQuery
       LEFT JOIN alpenglow_epoch_ranks ON alpenglow_epoch_ranks.network = #{STATS_TABLE}.network
         AND alpenglow_epoch_ranks.epoch = #{STATS_TABLE}.epoch
         AND alpenglow_epoch_ranks.vote_account = vote_accounts.account
-        AND alpenglow_epoch_ranks.finalized = TRUE
+        AND alpenglow_epoch_ranks.status <> #{AlpenglowEpochRank.statuses[:provisional]}
     SQL
   end
 

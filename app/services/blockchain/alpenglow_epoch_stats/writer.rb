@@ -50,7 +50,7 @@ module Blockchain
 
       def leader_vote_accounts(keys)
         leaders = keys.map(&:last).uniq
-        ranked = AlpenglowEpochRank.finalized
+        ranked = AlpenglowEpochRank.settled
                                    .where(network: @network, epoch: keys.map(&:first).uniq, validator_identity: leaders)
                                    .pluck(:epoch, :validator_identity, :vote_account)
         by_address = vote_accounts_by_address(ranked.map(&:last))

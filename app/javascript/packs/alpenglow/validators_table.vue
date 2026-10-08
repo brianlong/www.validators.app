@@ -86,7 +86,7 @@
           { key: 'fast_inclusion', label: 'Fast Cert', title: 'Share of fast finalization certificates including the validator' },
           { key: 'slow_inclusion', label: 'Slow Cert', title: 'Share of slow finalization certificates including the validator' },
           { key: 'divergent_skip_votes', label: 'Divergent Skips', title: 'Skip votes for slots notarized by the cluster' },
-          { key: 'leader_slots', label: 'Blocks', title: 'Blocks produced as leader' },
+          { key: 'leader_slots', label: 'Leader Blocks', title: 'Blocks produced as leader' },
           { key: 'leader_fast_percent', label: 'Fast Blocks', title: 'Share of own blocks finalized on the fast path' },
           { key: 'average_final_lag', label: 'Final Lag', title: 'Average finalization lag of own blocks (slots)' }
         ]

@@ -19,13 +19,10 @@ class AlpenglowClusterStatsQuery
     return nil if epoch.nil?
 
     rows = scope.where(epoch: epoch)
-    leader_slots, with_final_cert, fast, slow, lag_sum = rows.pick(
-      Arel.sql("SUM(leader_slots)"),
-      Arel.sql("SUM(leader_slots_with_final_cert)"),
-      Arel.sql("SUM(leader_fast_finalized)"),
-      Arel.sql("SUM(leader_slow_finalized)"),
-      Arel.sql("SUM(leader_final_lag_sum)")
-    ).map(&:to_i)
+    totals = leader_totals(rows)
+    leader_slots = totals[:leader_slots]
+    fast = totals[:leader_fast_finalized]
+    slow = totals[:leader_slow_finalized]
     finalized = fast + slow
 
     {
@@ -37,8 +34,8 @@ class AlpenglowClusterStatsQuery
       slow_finalized: slow,
       fast_percent: percent(fast, finalized),
       slow_percent: percent(slow, finalized),
-      average_final_lag: finalized.positive? ? lag_sum.to_f / finalized : nil,
-      final_cert_percent: percent(with_final_cert, leader_slots),
+      average_final_lag: finalized.positive? ? totals[:leader_final_lag_sum].to_f / finalized : nil,
+      final_cert_percent: percent(totals[:leader_slots_with_final_cert], leader_slots),
       clients: clients(rows, leader_slots),
       updated_at: rows.maximum(:updated_at)
     }
@@ -48,6 +45,12 @@ class AlpenglowClusterStatsQuery
 
   def scope
     AlpenglowValidatorEpochStat.for_network(@network)
+  end
+
+  def leader_totals(rows)
+    counters = Blockchain::AlpenglowEpochStats::LEADER_COUNTERS
+    sums = rows.select(counters.map { |counter| "COALESCE(SUM(#{counter}), 0) AS #{counter}" }).take
+    counters.index_with { |counter| sums[counter].to_i }
   end
 
   def percent(part, total)

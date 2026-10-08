@@ -13,7 +13,7 @@ module Blockchain
       end
 
       def call(certificates)
-        @ranks = finalized_ranks(certificates)
+        @ranks = verified_ranks(certificates)
         count_notar_rewards(certificates[:notar_reward])
         count_finalizations(certificates[:final])
         count_skips(certificates[:skip_reward])
@@ -58,9 +58,9 @@ module Blockchain
         vote_accounts.each { |vote_account| @counters[[epoch, vote_account]][counter] += 1 }
       end
 
-      def finalized_ranks(certificates)
+      def verified_ranks(certificates)
         epochs = certificates.values.flat_map(&:keys).map { |slot| @epoch_schedule.epoch_for(slot) }.uniq
-        AlpenglowEpochRank.finalized.where(network: @network, epoch: epochs).order(:rank)
+        AlpenglowEpochRank.verified.where(network: @network, epoch: epochs).order(:rank)
                           .pluck(:epoch, :vote_account)
                           .group_by(&:first)
                           .transform_values { |rows| rows.map(&:last) }

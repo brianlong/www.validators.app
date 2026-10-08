@@ -82,6 +82,18 @@ module Blockchain
       refute_includes ranks(result[:notar_reward_cert][:signers]), 81
     end
 
+test "#call returns aggregated signatures for every certificate" do
+  fast = decode("fast")
+  slow = decode("slow")[:block_final_cert]
+
+  [fast[:block_final_cert][:final_signature], fast[:notar_reward_cert][:signature], slow[:final_signature],
+   slow[:notar_signature]].each do |signature|
+    assert_equal 96, signature.bytesize
+  end
+  assert_nil fast[:block_final_cert][:notar_signature]
+  assert_equal 96, decode("skip")[:skip_reward_cert][:signature].bytesize
+end
+
     test "#call returns nil for missing certificates" do
       result = decode("slow")
 

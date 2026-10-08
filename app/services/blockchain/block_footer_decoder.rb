@@ -36,15 +36,17 @@ module Blockchain
       reader = ByteReader.new(bytes)
       slot = reader.u64
       block_id = reader.read_hash
-      final_signers = read_votes_aggregate(reader)
-      notar_signers = reader.u8 == 1 ? read_votes_aggregate(reader) : nil
+      final_signature, final_signers = read_votes_aggregate(reader)
+      notar_signature, notar_signers = reader.u8 == 1 ? read_votes_aggregate(reader) : [nil, nil]
       reader.ensure_consumed!
 
       {
         slot: slot,
         block_id: block_id,
         finalization: notar_signers ? "slow" : "fast",
+        final_signature: final_signature,
         final_signers: final_signers,
+        notar_signature: notar_signature,
         notar_signers: notar_signers
       }
     end
@@ -53,26 +55,26 @@ module Blockchain
       reader = ByteReader.new(bytes)
       slot = reader.u64
       block_id = reader.read_hash
-      reader.skip(BLS_SIGNATURE_SIZE)
+      signature = reader.take(BLS_SIGNATURE_SIZE)
       signers = validated_signers(reader.take(reader.short_u16))
       reader.ensure_consumed!
 
-      { slot: slot, block_id: block_id, signers: signers }
+      { slot: slot, block_id: block_id, signature: signature, signers: signers }
     end
 
     def decode_skip_reward_cert(bytes)
       reader = ByteReader.new(bytes)
       slot = reader.u64
-      reader.skip(BLS_SIGNATURE_SIZE)
+      signature = reader.take(BLS_SIGNATURE_SIZE)
       signers = validated_signers(reader.take(reader.short_u16))
       reader.ensure_consumed!
 
-      { slot: slot, signers: signers }
+      { slot: slot, signature: signature, signers: signers }
     end
 
     def read_votes_aggregate(reader)
-      reader.skip(BLS_SIGNATURE_SIZE)
-      validated_signers(reader.take(reader.u16))
+      signature = reader.take(BLS_SIGNATURE_SIZE)
+      [signature, validated_signers(reader.take(reader.u16))]
     end
 
     def validated_signers(bytes)
@@ -95,11 +97,6 @@ module Blockchain
         chunk = @bytes.byteslice(@offset, size)
         @offset += size
         chunk
-      end
-
-      def skip(size)
-        take(size)
-        nil
       end
 
       def u8

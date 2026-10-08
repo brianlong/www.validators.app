@@ -3,7 +3,7 @@
 module Blockchain
   class AlpenglowEpochRanksService
     ACCOUNTS_BATCH_SIZE = 100
-    BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+    PROVISIONAL_EPOCH_WINDOW = 0.1
 
     LOG_PATH = Rails.root.join("log", "#{name.demodulize.underscore}.log")
 
@@ -14,27 +14,34 @@ module Blockchain
     end
 
     def call
-      current_epoch = @rpc.call("getEpochInfo")&.dig("epoch")
-      return if current_epoch.nil?
+      epoch_info = @rpc.call("getEpochInfo")
+      return if epoch_info.nil?
 
-      build_provisional_ranks(current_epoch + 1)
+      current_epoch = epoch_info["epoch"]
+      build_provisional_ranks(current_epoch + 1, epoch_progress(epoch_info))
       finalize_ranks(current_epoch)
     end
 
     private
 
-    def build_provisional_ranks(epoch)
+    def epoch_progress(epoch_info)
+      epoch_info["slotIndex"].to_f / epoch_info["slotsInEpoch"]
+    end
+
+    def build_provisional_ranks(epoch, progress)
       return if AlpenglowEpochRank.where(network: @network, epoch: epoch).exists?
+
+      return if progress > PROVISIONAL_EPOCH_WINDOW
 
       candidates = sort_by_stake(staked_candidates)
       return if candidates.empty?
 
-      save_ranks(epoch, candidates, finalized: false)
+      save_ranks(epoch, candidates, status: :provisional)
       @logger.info("Saved #{candidates.size} provisional ranks for epoch #{epoch} on #{@network}")
     end
 
     def finalize_ranks(epoch)
-      provisional = AlpenglowEpochRank.where(network: @network, epoch: epoch, finalized: false).order(:rank).to_a
+      provisional = AlpenglowEpochRank.provisional.where(network: @network, epoch: epoch).order(:rank).to_a
       return if provisional.empty?
 
       members = epoch_vote_accounts
@@ -42,13 +49,13 @@ module Blockchain
 
       candidates = provisional.select { |row| members.include?(row.vote_account) }.map do |row|
         row.attributes.symbolize_keys.slice(:vote_account, :validator_identity, :bls_pubkey, :stake)
-           .merge(bls_bytes: base58_decode(row.bls_pubkey))
+           .merge(bls_bytes: Blockchain::Base58.decode(row.bls_pubkey))
       end
       ranked = sort_by_stake(deduplicate(candidates))
 
       AlpenglowEpochRank.transaction do
         AlpenglowEpochRank.where(network: @network, epoch: epoch).delete_all
-        save_ranks(epoch, ranked, finalized: true)
+        save_ranks(epoch, ranked, status: :finalized)
       end
       @logger.info(
         "Finalized #{ranked.size} ranks for epoch #{epoch} on #{@network} " \
@@ -56,12 +63,12 @@ module Blockchain
       )
     end
 
-    def save_ranks(epoch, candidates, finalized:)
+    def save_ranks(epoch, candidates, status:)
       now = Time.current
       AlpenglowEpochRank.insert_all(
         candidates.each_with_index.map do |candidate, rank|
           candidate.except(:bls_bytes).merge(
-            network: @network, epoch: epoch, rank: rank, finalized: finalized, created_at: now, updated_at: now
+            network: @network, epoch: epoch, rank: rank, status: AlpenglowEpochRank.statuses[status], created_at: now, updated_at: now
           )
         end
       )
@@ -82,7 +89,7 @@ module Blockchain
           vote_account: va["votePubkey"],
           validator_identity: va["nodePubkey"],
           bls_pubkey: bls_pubkey,
-          bls_bytes: base58_decode(bls_pubkey),
+          bls_bytes: Blockchain::Base58.decode(bls_pubkey),
           stake: va["activatedStake"].to_i
         }
       end
@@ -118,13 +125,6 @@ module Blockchain
           bls_pubkeys[vote_account] = account&.dig("data", "parsed", "info", "blsPubkeyCompressed")
         end
       end
-    end
-
-    def base58_decode(value)
-      number = value.each_char.inject(0) { |acc, char| acc * 58 + BASE58_ALPHABET.index(char) }
-      hex = number.zero? ? "" : number.to_s(16)
-      hex = "0#{hex}" if hex.size.odd?
-      ("\x00" * value[/\A1*/].size).b + [hex].pack("H*")
     end
   end
 end

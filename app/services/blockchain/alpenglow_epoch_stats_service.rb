@@ -4,7 +4,7 @@ module Blockchain
   class AlpenglowEpochStatsService
     BATCH_SIZE = 5_000
     FINALITY_LAG = 32
-    RANKS_WAIT_LIMIT = 30.minutes
+    RANKS_WAIT_LIMIT = 1.hour
 
     LOG_PATH = Rails.root.join("log", "#{name.demodulize.underscore}.log")
 
@@ -62,19 +62,19 @@ module Blockchain
 
       if blocking.created_at < RANKS_WAIT_LIMIT.ago
         @logger.warn(
-          "Ranks not finalized for slot #{blocking.slot_number} on #{@network} after #{RANKS_WAIT_LIMIT.inspect}, skipping votes"
+          "Ranks not verified for slot #{blocking.slot_number} on #{@network} after #{RANKS_WAIT_LIMIT.inspect}, skipping votes"
         )
         return [footers, certificates]
       end
 
-      @logger.info("Waiting for finalized ranks on #{@network}, stopping before slot #{blocking.slot_number}")
+      @logger.info("Waiting for verified ranks on #{@network}, stopping before slot #{blocking.slot_number}")
       before_blocking = ->(footer) { footer.slot_number < blocking.slot_number }
       kept_certificates = certificates.transform_values { |firsts| firsts.select { |_, footer| before_blocking.call(footer) } }
       [footers.select(&before_blocking), kept_certificates]
     end
 
     def first_footer_waiting_for_ranks(certificates)
-      pending_epochs = provisional_only_epochs(certificates.values.flat_map(&:keys).map { |slot| epoch_schedule.epoch_for(slot) }.uniq)
+      pending_epochs = unverified_epochs(certificates.values.flat_map(&:keys).map { |slot| epoch_schedule.epoch_for(slot) }.uniq)
       return nil if pending_epochs.empty?
 
       certificates.values.flat_map do |firsts|
@@ -82,9 +82,9 @@ module Blockchain
       end.min_by(&:slot_number)
     end
 
-    def provisional_only_epochs(epochs)
-      counts = AlpenglowEpochRank.where(network: @network, epoch: epochs).group(:epoch, :finalized).count
-      epochs.select { |epoch| counts[[epoch, true]].to_i.zero? && counts[[epoch, false]].to_i.positive? }.to_set
+    def unverified_epochs(epochs)
+      ranks = AlpenglowEpochRank.where(network: @network, epoch: epochs)
+      (ranks.distinct.pluck(:epoch) - ranks.where(status: %i[verified rejected]).distinct.pluck(:epoch)).to_set
     end
   end
 end
