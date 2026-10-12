@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 2026_10_05_090000) do
     t.bigint "bank_id"
     t.binary "bank_hash", limit: 32
     t.bigint "block_producer_time_nanos"
-    t.string "block_user_agent"
     t.bigint "final_cert_slot"
     t.integer "finalization"
     t.binary "final_signers", limit: 2048
@@ -134,7 +133,6 @@ ActiveRecord::Schema.define(version: 2026_10_05_090000) do
     t.bigint "bank_id"
     t.binary "bank_hash", limit: 32
     t.bigint "block_producer_time_nanos"
-    t.string "block_user_agent"
     t.bigint "final_cert_slot"
     t.integer "finalization"
     t.binary "final_signers", limit: 2048

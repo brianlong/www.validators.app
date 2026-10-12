@@ -7,7 +7,6 @@
 #  id                        :bigint           not null, primary key
 #  bank_hash                 :binary(32)
 #  block_producer_time_nanos :bigint
-#  block_user_agent          :string(191)
 #  epoch                     :integer          not null
 #  final_cert_slot           :bigint
 #  final_notar_signers       :binary(2048)

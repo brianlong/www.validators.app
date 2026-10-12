@@ -3,12 +3,11 @@
 module Blockchain
   module AlpenglowEpochStats
     class LeaderCounter
-      attr_reader :counters, :user_agents
+      attr_reader :counters
 
       def initialize(footer_class:)
         @footer_class = footer_class
         @counters = AlpenglowEpochStats.new_counters
-        @user_agents = {}
       end
 
       def call(footers, final_certificates)
@@ -26,7 +25,6 @@ module Blockchain
           key = [footer.epoch, footer.leader]
           @counters[key][:leader_slots] += 1
           @counters[key][:leader_slots_with_final_cert] += 1 if footer.final_cert_slot
-          @user_agents[key] = footer.block_user_agent if footer.block_user_agent.present?
         end
       end
 

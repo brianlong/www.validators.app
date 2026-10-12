@@ -9,7 +9,6 @@
 #  epoch                        :integer          not null
 #  fast_final_signatures        :integer          default(0), not null
 #  fast_finalized_slots         :integer          default(0), not null
-#  last_block_user_agent        :string(191)
 #  leader_fast_finalized        :integer          default(0), not null
 #  leader_final_lag_sum         :bigint           default(0), not null
 #  leader_slots                 :integer          default(0), not null

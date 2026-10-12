@@ -13,13 +13,12 @@ module Blockchain
       @vote_account_b = create(:vote_account, validator: @leader_b, network: @network, account: "VoteB")
     end
 
-    def footer(slot, leader:, final_cert_slot: nil, finalization: nil, epoch: 10, user_agent: nil, processed: false, **certificates)
+    def footer(slot, leader:, final_cert_slot: nil, finalization: nil, epoch: 10, processed: false, **certificates)
       Blockchain::AlpenglowCommunityBlockFooter.create!(
         **certificates,
         slot_number: slot,
         epoch: epoch,
         leader: leader,
-        block_user_agent: user_agent,
         final_cert_slot: final_cert_slot,
         finalization: finalization,
         processed: processed
@@ -41,8 +40,8 @@ module Blockchain
     end
 
     test "#call counts produced blocks and footer completeness per leader" do
-      footer(100, leader: "LeaderA", user_agent: "agave/4.3.0")
-      footer(101, leader: "LeaderA", final_cert_slot: 100, finalization: :fast, user_agent: "agave/4.3.1")
+      footer(100, leader: "LeaderA")
+      footer(101, leader: "LeaderA", final_cert_slot: 100, finalization: :fast)
       footer(102, leader: "LeaderB", final_cert_slot: 101, finalization: :slow)
       add_tail(103)
 
@@ -51,7 +50,6 @@ module Blockchain
       stat_a = stat_for(@vote_account_a)
       assert_equal 2, stat_a.leader_slots
       assert_equal 1, stat_a.leader_slots_with_final_cert
-      assert_equal "agave/4.3.1", stat_a.last_block_user_agent
       assert_equal @leader_a.id, stat_a.validator_id
       assert_equal 1, stat_for(@vote_account_b).leader_slots
     end

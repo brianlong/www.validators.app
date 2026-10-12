@@ -30,7 +30,7 @@ module Blockchain
 
       ApplicationRecord.transaction do
         AlpenglowEpochStats::Writer.new(network: @network, logger: @logger).call(
-          leader_counters: leaders.counters, voting_counters: votes.counters, user_agents: leaders.user_agents
+          leader_counters: leaders.counters, voting_counters: votes.counters
         )
         @footer_class.where(id: footers.map(&:id)).update_all(processed: true, updated_at: Time.current)
       end

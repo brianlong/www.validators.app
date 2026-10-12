@@ -19,10 +19,7 @@ const stats_response = {
       slow_percent: 78.213,
       average_final_lag: 1.5,
       final_cert_percent: 93.14,
-      updated_at: new Date().toISOString(),
-      clients: [
-        { client: 'JitoLabs', leaders: 45, leader_slots: 400, leader_slots_percent: 49.63, versions: ['4.3.0', '4.3.0-rc.1'] }
-      ]
+      updated_at: new Date().toISOString()
     }
   }
 }
@@ -50,7 +47,7 @@ describe('cluster_stats_component', () => {
     expect(axios.get).toHaveBeenCalledWith('/api/v1/alpenglow-cluster-stats/alpenglow-community')
   })
 
-  it('renders cluster stats and clients', async () => {
+  it('renders cluster stats', async () => {
     const wrapper = mount_component()
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
@@ -59,8 +56,6 @@ describe('cluster_stats_component', () => {
     expect(wrapper.text()).toContain('1.50')
     expect(wrapper.text()).toContain('93.1%')
     expect(wrapper.text()).toContain('806')
-    expect(wrapper.text()).toContain('JitoLabs')
-    expect(wrapper.text()).toContain('4.3.0, 4.3.0-rc.1')
   })
 
   it('requests older epoch and goes back to latest without epoch param', async () => {

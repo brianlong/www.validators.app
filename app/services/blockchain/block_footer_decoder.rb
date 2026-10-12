@@ -17,7 +17,6 @@ module Blockchain
         bank_id: @footer.bank_id,
         bank_hash: @footer.bank_hash.b,
         block_producer_time_nanos: @footer.block_producer_time_nanos,
-        block_user_agent: @footer.block_user_agent.to_s.dup.force_encoding(Encoding::UTF_8).scrub,
         block_final_cert: decode_optional(@footer.block_final_cert) { |bytes| decode_block_final_cert(bytes) },
         notar_reward_cert: decode_optional(@footer.notar_reward_cert) { |bytes| decode_notar_reward_cert(bytes) },
         skip_reward_cert: decode_optional(@footer.skip_reward_cert) { |bytes| decode_skip_reward_cert(bytes) }

@@ -7,7 +7,7 @@ class AlpenglowClusterStatsQueryTest < ActiveSupport::TestCase
     @network = "alpenglow-community"
   end
 
-  def stat(epoch:, leader_slots:, fast: 0, slow: 0, lag_sum: 0, with_final_cert: leader_slots, user_agent: nil, network: @network)
+  def stat(epoch:, leader_slots:, fast: 0, slow: 0, lag_sum: 0, with_final_cert: leader_slots, network: @network)
     validator = create(:validator, network: network)
     vote_account = create(:vote_account, validator: validator, network: network, account: SecureRandom.hex)
     AlpenglowValidatorEpochStat.create!(
@@ -19,17 +19,14 @@ class AlpenglowClusterStatsQueryTest < ActiveSupport::TestCase
       leader_slots_with_final_cert: with_final_cert,
       leader_fast_finalized: fast,
       leader_slow_finalized: slow,
-      leader_final_lag_sum: lag_sum,
-      last_block_user_agent: user_agent
+      leader_final_lag_sum: lag_sum
     )
   end
 
   test "#call aggregates cluster stats for the latest epoch" do
     stat(epoch: 10, leader_slots: 50, fast: 50)
-    stat(epoch: 11, leader_slots: 60, fast: 10, slow: 30, lag_sum: 60, with_final_cert: 54,
-         user_agent: "agave/4.3.0 (src:1; feat:2, client:Agave)")
-    stat(epoch: 11, leader_slots: 40, fast: 10, slow: 30, lag_sum: 40, with_final_cert: 36,
-         user_agent: "agave/4.3.0-rc.1 (src:3; feat:2, client:JitoLabs)")
+    stat(epoch: 11, leader_slots: 60, fast: 10, slow: 30, lag_sum: 60, with_final_cert: 54)
+    stat(epoch: 11, leader_slots: 40, fast: 10, slow: 30, lag_sum: 40, with_final_cert: 36)
 
     result = AlpenglowClusterStatsQuery.new(network: @network).call
 
@@ -41,24 +38,6 @@ class AlpenglowClusterStatsQueryTest < ActiveSupport::TestCase
     assert_in_delta 75.0, result[:slow_percent]
     assert_in_delta 1.25, result[:average_final_lag]
     assert_in_delta 90.0, result[:final_cert_percent]
-  end
-
-  test "#call groups leaders by client and version" do
-    stat(epoch: 11, leader_slots: 60, user_agent: "agave/4.3.0 (src:1; feat:2, client:JitoLabs)")
-    stat(epoch: 11, leader_slots: 20, user_agent: "agave/4.3.0-rc.1 (src:3; feat:2, client:JitoLabs)")
-    stat(epoch: 11, leader_slots: 15, user_agent: "agave/4.3.0 (src:4; feat:2, client:Agave)")
-    stat(epoch: 11, leader_slots: 7, user_agent: "mithril")
-    stat(epoch: 11, leader_slots: 5, user_agent: nil)
-
-    clients = AlpenglowClusterStatsQuery.new(network: @network).call[:clients]
-
-    assert_equal ["JitoLabs", "Agave", "mithril", "Not reported"], clients.map { |c| c[:client] }
-    assert_empty clients.find { |c| c[:client] == "mithril" }[:versions]
-    jito = clients.first
-    assert_equal 2, jito[:leaders]
-    assert_equal 80, jito[:leader_slots]
-    assert_in_delta 74.77, jito[:leader_slots_percent], 0.01
-    assert_equal ["4.3.0", "4.3.0-rc.1"], jito[:versions]
   end
 
   test "#call uses requested epoch when it has data" do

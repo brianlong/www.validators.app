@@ -27,7 +27,7 @@ class AlpenglowValidatorStatsQueryTest < ActiveSupport::TestCase
     stat("VoteA", stake: 500_000_000_000, notar_votes: 9, notar_reward_slots: 10, fast_final_signatures: 3, fast_finalized_slots: 4,
                   slow_final_signatures: 1, slow_finalized_slots: 2, skip_votes: 5, divergent_skip_votes: 2,
                   leader_slots: 8, leader_slots_with_final_cert: 6, leader_fast_finalized: 1, leader_slow_finalized: 3,
-                  leader_final_lag_sum: 6, last_block_user_agent: "agave/4.3.0 (src:1; feat:2, client:JitoLabs)")
+                  leader_final_lag_sum: 6)
 
     validator = query[:validators].first
 
@@ -43,7 +43,6 @@ class AlpenglowValidatorStatsQueryTest < ActiveSupport::TestCase
     assert_in_delta 1.5, validator[:average_final_lag]
     assert_in_delta 75.0, validator[:final_cert_percent]
     assert_equal [5, 2, 8], validator.values_at(:skip_votes, :divergent_skip_votes, :leader_slots)
-    assert_equal ["JitoLabs", "4.3.0"], validator.values_at(:client, :version)
   end
 
   test "#call sorts by metric with missing values last in both directions" do
@@ -70,12 +69,6 @@ class AlpenglowValidatorStatsQueryTest < ActiveSupport::TestCase
 
     assert_equal 5, result[:total_count]
     assert_equal %w[Vote2 Vote3], result[:validators].map { |v| v[:vote_account] }
-  end
-
-  test "#call reports missing user agent the same way as cluster stats" do
-    stat("VoteA", leader_slots: 1)
-
-    assert_equal ["Not reported", nil], query[:validators].first.values_at(:client, :version)
   end
 
   test "#call does not use stake from provisional ranks" do

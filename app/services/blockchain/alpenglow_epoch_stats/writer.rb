@@ -8,9 +8,9 @@ module Blockchain
         @logger = logger
       end
 
-      def call(leader_counters:, voting_counters:, user_agents:)
-        rows = Hash.new { |hash, key| hash[key] = { values: Hash.new(0), user_agent: nil } }
-        add_leader_rows(rows, leader_counters, user_agents)
+      def call(leader_counters:, voting_counters:)
+        rows = Hash.new { |hash, key| hash[key] = Hash.new(0) }
+        add_leader_rows(rows, leader_counters)
         add_voting_rows(rows, voting_counters)
 
         upsert_with_increment(build_rows(rows)) if rows.any?
@@ -18,7 +18,7 @@ module Blockchain
 
       private
 
-      def add_leader_rows(rows, counters, user_agents)
+      def add_leader_rows(rows, counters)
         vote_accounts = leader_vote_accounts(counters.keys)
 
         counters.each do |key, values|
@@ -29,8 +29,7 @@ module Blockchain
           end
 
           row = rows[[key.first, vote_account]]
-          values.each { |counter, value| row[:values][counter] += value }
-          row[:user_agent] = user_agents[key] || row[:user_agent]
+          values.each { |counter, value| row[counter] += value }
         end
       end
 
@@ -44,7 +43,7 @@ module Blockchain
             next
           end
 
-          values.each { |counter, value| rows[[epoch, vote_account]][:values][counter] += value }
+          values.each { |counter, value| rows[[epoch, vote_account]][counter] += value }
         end
       end
 
@@ -74,12 +73,11 @@ module Blockchain
       def build_rows(rows)
         now = Time.current
         rows.map do |(epoch, vote_account), row|
-          COUNTERS.to_h { |counter| [counter, row[:values][counter]] }.merge(
+          COUNTERS.to_h { |counter| [counter, row[counter]] }.merge(
             network: @network,
             epoch: epoch,
             vote_account_id: vote_account.id,
             validator_id: vote_account.validator_id,
-            last_block_user_agent: row[:user_agent],
             created_at: now,
             updated_at: now
           )
@@ -92,7 +90,6 @@ module Blockchain
         columns = rows.first.keys
         values = rows.map { |row| "(#{columns.map { |column| connection.quote(row[column]) }.join(', ')})" }
         updates = COUNTERS.map { |counter| "#{table}.#{counter} = #{table}.#{counter} + new_values.#{counter}" }
-        updates << "#{table}.last_block_user_agent = COALESCE(new_values.last_block_user_agent, #{table}.last_block_user_agent)"
         updates << "#{table}.updated_at = new_values.updated_at"
 
         connection.execute(<<~SQL.squish)

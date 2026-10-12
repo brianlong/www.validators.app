@@ -41,8 +41,7 @@ module Blockchain
       assert_equal 1, result[:bank_id]
       assert_equal "\x01".b * 32, result[:bank_hash]
       assert_equal @footers["fast"]["block_producer_time_nanos"], result[:block_producer_time_nanos]
-      assert_equal "agave/4.3.0-rc.1 (src:f09566a9; feat:c9ad34d2, client:HarmonicAgave)", result[:block_user_agent]
-      assert_equal Encoding::UTF_8, result[:block_user_agent].encoding
+      refute result.key?(:block_user_agent)
     end
 
     test "#call decodes fast finalization certificate" do

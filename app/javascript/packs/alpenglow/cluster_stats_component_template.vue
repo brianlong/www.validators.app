@@ -90,35 +90,6 @@
         </div>
       </section>
 
-      <div class="card mb-4">
-        <div class="table-responsive">
-          <table class="table mb-0">
-            <thead>
-              <tr>
-                <th colspan="4"><h3 class="h6 mb-0">Leader Clients</h3></th>
-              </tr>
-              <tr>
-                <th>Client</th>
-                <th class="text-end">Leaders</th>
-                <th class="text-end">Blocks</th>
-                <th>Versions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="client in stats.clients" :key="client.client">
-                <td><strong>{{ client.client }}</strong></td>
-                <td class="text-end">{{ client.leaders }}</td>
-                <td class="text-end">
-                  {{ format_number(client.leader_slots) }}
-                  <span class="text-muted">({{ format_percent(client.leader_slots_percent || 0) }})</span>
-                </td>
-                <td class="small text-muted">{{ client.versions.join(', ') }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       <h2 class="h4 mb-3">Validators</h2>
       <validators-table :epoch="stats.epoch" :refreshed_at="now" />
     </div>

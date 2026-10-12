@@ -90,9 +90,7 @@ class AlpenglowValidatorStatsQuery
       notar_reward_slots: record.notar_reward_slots,
       skip_votes: record.skip_votes,
       divergent_skip_votes: record.divergent_skip_votes,
-      leader_slots: record.leader_slots,
-      client: Blockchain::AlpenglowUserAgent.client(record.last_block_user_agent),
-      version: Blockchain::AlpenglowUserAgent.version(record.last_block_user_agent)
+      leader_slots: record.leader_slots
     }.merge(METRICS.keys.to_h { |name| [name.to_sym, record[name]&.to_f] })
   end
 end

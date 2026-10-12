@@ -2,8 +2,6 @@
 
 module Blockchain
   class BlockFooterSaveService
-    USER_AGENT_LIMIT = 191
-
     def initialize(network:, footers:, epoch_schedule:, leader_schedule:)
       @network = network
       @footers = footers
@@ -34,7 +32,6 @@ module Blockchain
         bank_id: footer[:bank_id],
         bank_hash: footer[:bank_hash],
         block_producer_time_nanos: footer[:block_producer_time_nanos],
-        block_user_agent: footer[:block_user_agent].presence&.first(USER_AGENT_LIMIT),
         final_cert_slot: final_cert&.dig(:slot),
         finalization: final_cert && Blockchain::BlockFooter.finalizations.fetch(final_cert[:finalization]),
         final_signers: final_cert&.dig(:final_signers),

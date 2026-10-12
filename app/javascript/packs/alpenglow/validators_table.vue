@@ -13,15 +13,14 @@
                    aria-hidden="true"></i>
               </a>
             </th>
-            <th>Client</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="loading && validators.length === 0">
-            <td :colspan="columns.length + 2"><small class="text-muted">loading...</small></td>
+            <td :colspan="columns.length + 1"><small class="text-muted">loading...</small></td>
           </tr>
           <tr v-if="!loading && validators.length === 0">
-            <td :colspan="columns.length + 2" class="text-muted">No validator statistics for this epoch yet.</td>
+            <td :colspan="columns.length + 1" class="text-muted">No validator statistics for this epoch yet.</td>
           </tr>
           <tr v-for="validator in validators" :key="validator.vote_account">
             <td>
@@ -44,10 +43,6 @@
             <td class="text-end">{{ validator.leader_slots }}</td>
             <td class="text-end">{{ format_percent(validator.leader_fast_percent) }}</td>
             <td class="text-end">{{ format_decimal(validator.average_final_lag) }}</td>
-            <td class="small">
-              {{ validator.client || 'N/A' }}
-              <div class="text-muted" v-if="validator.version">{{ validator.version }}</div>
-            </td>
           </tr>
         </tbody>
       </table>

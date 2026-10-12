@@ -8,6 +8,7 @@ class CreateAlpenglowEpochRanks < ActiveRecord::Migration[6.1]
       t.string :validator_identity, null: false
       t.string :bls_pubkey, null: false
       t.bigint :stake, null: false
+      t.integer :status, limit: 1, default: 0, null: false
 
       t.timestamps
     end

@@ -52,7 +52,6 @@ module Blockchain
       assert_equal "LeaderIdentity", footer.leader
       assert_equal 7, footer.bank_id
       assert_equal "\xAB".b * 32, footer.bank_hash
-      assert_equal "agave/4.3.0-rc.1 (src:84ce33bb; feat:c9ad34d2, client:JitoLabs)", footer.block_user_agent
       assert footer.slow?
       assert_equal 10_007_780, footer.final_cert_slot
       assert_equal 10_007_774, footer.notar_reward_slot
@@ -87,12 +86,12 @@ module Blockchain
       save([@footers["fast"]])
       Blockchain::AlpenglowCommunityBlockFooter.update_all(processed: true)
 
-      replacement = @footers["fast"].merge(block_user_agent: "replacement")
-      save([replacement, @footers["fast"].merge(block_user_agent: "replacement 2")])
+      replacement = @footers["fast"].merge(block_producer_time_nanos: 1)
+      save([replacement, @footers["fast"].merge(block_producer_time_nanos: 2)])
 
       assert_equal 1, Blockchain::AlpenglowCommunityBlockFooter.count
       footer = Blockchain::AlpenglowCommunityBlockFooter.last
-      assert_equal "replacement 2", footer.block_user_agent
+      assert_equal 2, footer.block_producer_time_nanos
       assert footer.processed
     end
 
@@ -100,12 +99,6 @@ module Blockchain
       save([@footers["fast"]])
 
       assert_nil Blockchain::AlpenglowCommunityBlockFooter.last.leader
-    end
-
-    test "#call truncates long user agents" do
-      save([@footers["fast"].merge(block_user_agent: "a" * 300)])
-
-      assert_equal 191, Blockchain::AlpenglowCommunityBlockFooter.last.block_user_agent.size
     end
 
     test "#call returns 0 for empty batch" do

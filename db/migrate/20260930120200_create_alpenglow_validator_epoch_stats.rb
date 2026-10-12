@@ -23,7 +23,6 @@ class CreateAlpenglowValidatorEpochStats < ActiveRecord::Migration[6.1]
       t.integer :leader_fast_finalized, default: 0, null: false
       t.integer :leader_slow_finalized, default: 0, null: false
       t.bigint :leader_final_lag_sum, default: 0, null: false
-      t.string :last_block_user_agent
 
       t.timestamps
     end

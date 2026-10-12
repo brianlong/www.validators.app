@@ -25,9 +25,7 @@ const validators_response = {
         divergent_skip_votes: 2,
         leader_slots: 8,
         leader_fast_percent: 25.0,
-        average_final_lag: 1.5,
-        client: 'JitoLabs',
-        version: '4.3.0'
+        average_final_lag: 1.5
       },
       {
         validator_name: null,
@@ -38,9 +36,7 @@ const validators_response = {
         notar_participation: null,
         skip_votes: 0,
         divergent_skip_votes: 0,
-        leader_slots: 0,
-        client: null,
-        version: null
+        leader_slots: 0
       }
     ]
   }
@@ -81,7 +77,6 @@ describe('validators_table', () => {
     expect(text).toContain('9 / 10')
     expect(text).toContain('75.0%')
     expect(text).toContain('1.50')
-    expect(text).toContain('JitoLabs')
     expect(text).toContain('VoteAc…essB')
     expect(wrapper.find('a[href="/validators/IdentityA?network=alpenglow-community"]').exists()).toBe(true)
   })
