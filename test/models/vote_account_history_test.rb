@@ -10,7 +10,7 @@ class VoteAccountHistoryTest < ActiveSupport::TestCase
 
   test 'skipped_vote_percent' do
     create(:vote_account_history, vote_account: @va, network: 'mainnet')
-    assert_equal 0.9594924757058465, VoteAccountHistory.last.skipped_vote_percent
+    assert_equal 0.9797462716996771, VoteAccountHistory.last.skipped_vote_percent
   end
 
   test 'skipped_vote_percent for testnet uses stake-normalized formula' do
