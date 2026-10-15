@@ -60,7 +60,7 @@ var CommissionHistoryRow = Vue.component('CommissionHistoryRow', {
       </td>
       <td class="text-center text-nowrap">
         {{ comm_history.commission_before }}%
-        <i class="fa-solid fa-right-long px-2"></i>
+        <i class="fa-solid fa-right-long mx-2"></i>
         {{ comm_history.commission_after }}%
         <i class="fa-solid fa-down-long text-success" v-if="descending"></i>
         <i class="fa-solid fa-up-long text-danger" v-if="!descending"></i>

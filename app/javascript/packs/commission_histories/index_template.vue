@@ -60,7 +60,7 @@
             </th>
             <th class="column-sm">Source</th>
             <th class="column-lg text-center px-2">
-              Before<i class="fa-solid fa-right-long px-2"></i>After
+              Before<i class="fa-solid fa-right-long mx-2"></i>After
             </th>
             <th class="column-md">
               <a href="#" @click.prevent="sort_by_timestamp">Timestamp</a>
