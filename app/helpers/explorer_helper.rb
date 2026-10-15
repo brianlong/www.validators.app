@@ -8,7 +8,7 @@ module ExplorerHelper
         :span,
         number_with_delimiter(lamports_to_sol([sol_change].flatten.first.to_i).round(round))
       )
-      tags << content_tag(:i, "", class: "fa-solid fa-right-long px-2")
+      tags << content_tag(:i, "", class: "fa-solid fa-right-long mx-2")
       tags << content_tag(
         :span,
         number_with_delimiter(lamports_to_sol([sol_change].flatten.last.to_i).round(round))
