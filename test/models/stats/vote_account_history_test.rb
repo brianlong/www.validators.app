@@ -84,43 +84,40 @@ module Stats
     end
 
     test 'skipped_vote_percent_best' do
-      max_credits = @vah_slot_index_current.max * 8 + (@vah_slot_index_current.max - 1) * 8
-      expected =
-        (max_credits - (@vah_credit_current.max)) / max_credits.to_f
-      assert_equal expected, @vahq.skipped_vote_percent_best
+      assert_equal @vah_skipped_vote_percent.min, @vahq.skipped_vote_percent_best
     end
 
     test 'top_skipped_vote_percent' do
-      expected = [-0.165e2, -0.1025e2, -0.70952e1, -0.52381e1, -0.40389e1, -0.32123e1]
+      expected = [0.0, 0.0, 0.729e-1, 0.2266e0, 0.3578e0, 0.4583e0]
       assert_equal expected, @vahq.top_skipped_vote_percent.map(&:first)
     end
 
     test 'skipped_votes_stats' do
       expected = {
-        :min=>-16.5, :max=>0.9206349206349206, :median=>0.3333333333333333, :average=>-3.212280252602833, :best=>0.7222222222222222
+        :min=>0.0, :max=>0.9609375, :median=>0.6875, :average=>0.4583333333333333, :best=>0.0
       }
       assert_equal expected, @vahq.skipped_votes_stats
     end
 
     test 'skipped_votes_stats with history' do
       expected = {
-        :min=>-16.5, :max=>0.9206349206349206, :median=>0.3333333333333333, :average=>-3.212280252602833, :best=>0.7222222222222222, :history=>[-16.5, -4.0, -0.7857142857142857, 0.3333333333333333, 0.7580645161290323, 0.9206349206349206]
+        :min=>0.0, :max=>0.9609375, :median=>0.6875, :average=>0.4583333333333333, :best=>0.0, :history=>[0.0, 0.0, 0.21875, 0.6875, 0.8828125, 0.9609375]
       }
       assert_equal expected, @vahq.skipped_votes_stats(with_history: true)
     end
 
     test 'skipped_vote_moving_average_stats' do
       expected = {
-        :min=>-0.165e2, :max=>-0.32123e1, :median=>-0.52381e1, :average=>-0.772241667e1
+        :min=>0.0, :max=>0.4583e0, :median=>0.2266e0, :average=>0.18593333e0
       }
       assert_equal expected, @vahq.skipped_vote_moving_average_stats
     end
 
     test 'skipped_vote_moving_average_stats with history' do
       expected = {
-        :min=>-0.165e2, :max=>-0.32123e1, :median=>-0.52381e1, :average=>-0.772241667e1
+        :min=>0.0, :max=>0.4583e0, :median=>0.2266e0, :average=>0.18593333e0
       }
-      expected_history = [-0.165e2, -0.1025e2, -0.70952e1, -0.52381e1, -0.40389e1, -0.32123e1]
+      expected_history = [0.0, 0.0, 0.729e-1, 0.2266e0, 0.3578e0, 0.4583e0]
       assert_equal expected, @vahq.skipped_vote_moving_average_stats(with_history: false)
       assert_equal expected_history, @vahq.skipped_vote_moving_average_stats(with_history: true)[:history].map(&:first)
     end
