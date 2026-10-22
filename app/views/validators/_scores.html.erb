@@ -35,7 +35,7 @@
 
   <% if validator.stake_concentration_score.to_i < 0 %>
     <i class="fa-solid fa-circle-minus me-1 text-warning"
-       title="Stake Concentration Score = <%= validator.stake_concentration_score %>"></i>
+       title="Stake Concentration Score = <%= validator.stake_concentration_score %>. Validator is one of the top <%= validator.stake_concentration_score.to_i <= -2 ? '20%' : '40%' %> active stake holders."></i>
   <% end %>
 
   <% if validator.data_center_concentration_score.to_i < 0 %>
