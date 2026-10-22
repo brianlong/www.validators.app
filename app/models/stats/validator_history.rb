@@ -13,6 +13,9 @@ module Stats
   #        stats.average_last_vote
   #        ...
   class ValidatorHistory < ApplicationStats
+    ADVERSARIAL_SUPERMINORITY = 0.2
+    OFFLINE_SUPERMINORITY = 0.4
+
     def initialize(network, batch_uuid)
       super
 
@@ -48,10 +51,9 @@ module Stats
       @total_active_stake ||= relation.sum(:active_stake)
     end
 
-    # Lists all the ValidatorHistories that collects top 33% of the
-    # all active stakes
-    def upto_33_stake
-      return @upto_33_stake if @upto_33_stake
+    def upto_stake(share)
+      @upto_stake ||= {}
+      return @upto_stake[share] if @upto_stake.key?(share)
 
       active_stakes_sum = 0
       validator_ids = []
@@ -62,22 +64,15 @@ module Stats
         active_stakes_sum += active_stake
         validator_ids << id
 
-        break if over_33_of_total?(active_stakes_sum)
+        break if active_stakes_sum > total_active_stake * share
       end
 
-      @upto_33_stake =
+      @upto_stake[share] =
         ::ValidatorHistory.where(id: validator_ids).order(active_stake: :desc)
     end
 
-    # ValidatorHistory on the edge of top 33% stakes
-    def at_33_stake
-      @at_33_stake ||= upto_33_stake.last
-    end
-
-    private
-
-    def over_33_of_total?(value)
-      value > (total_active_stake / 3.0)
+    def at_stake(share)
+      upto_stake(share).last
     end
   end
 end

@@ -409,11 +409,21 @@
       </td>
     </tr>
 
-    <% at_33_stake_index ||= nil %>
-    <% if at_33_stake_index && i == at_33_stake_index %>
+    <% adversarial_superminority_index ||= nil %>
+    <% if adversarial_superminority_index && i == adversarial_superminority_index %>
       <tr class="heading-secondary text-center">
         <td colspan="6" class="p-3">
-          Cumulative stake above can halt the network&nbsp;&#8212;&nbsp;improve decentralization
+          Cumulative stake above (20&percnt;) can compromise network safety&nbsp;&#8212;&nbsp;improve decentralization
+          and delegate to validators below
+        </td>
+      </tr>
+    <% end %>
+
+    <% offline_superminority_index ||= nil %>
+    <% if offline_superminority_index && i == offline_superminority_index %>
+      <tr class="heading-secondary text-center">
+        <td colspan="6" class="p-3">
+          Cumulative stake above (40&percnt;) can halt the network if offline&nbsp;&#8212;&nbsp;improve decentralization
           and delegate to validators below
         </td>
       </tr>
