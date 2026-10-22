@@ -3,6 +3,7 @@
 require_relative '../config/environment'
 require 'solana_logic'
 include SolanaLogic
+include AlpenglowLogic
 
 # Send an interrupt with `ctrl-c` or `kill` to stop the script. Results will
 # not be posted to the validators.app server.
@@ -28,6 +29,7 @@ begin
                 .then(&validators_get)
                 .then(&program_accounts)
                 .then(&vote_accounts_get)
+                .then(&alpenglow_vote_credits_get)
                 .then(&reduce_validator_vote_accounts)
                 .then(&validators_save)
                 .then(&validator_history_update)

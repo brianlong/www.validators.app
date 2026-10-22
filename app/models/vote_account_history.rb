@@ -14,6 +14,7 @@
 #  credits                             :bigint
 #  credits_current                     :bigint
 #  last_vote                           :bigint
+#  max_credits_current                 :bigint
 #  network                             :string(191)
 #  root_slot                           :bigint
 #  skipped_vote_percent_moving_average :decimal(10, 4)
@@ -48,17 +49,15 @@ class VoteAccountHistory < ApplicationRecord
   end
 
   def skipped_vote_percent
+    if network.in?(ALPENGLOW_NETWORKS)
+      return nil if max_credits_current.to_i <= 0
 
+      result = (max_credits_current - credits_current.to_i) / max_credits_current.to_f
+      return [result, 0.0].max
+    end
 
     if slot_index_current.to_f.positive?
-      if network.in?(ALPENGLOW_NETWORKS)
-        return nil if activated_stake.to_i <= 0
-        max_credits = slot_index_current * 32.0 * (activated_stake.to_f / 1_000_000_000)
-        result = (max_credits - credits_current.to_i) / max_credits
-        return [result, 0.0].max
-      else
-        max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
-      end
+      max_credits = slot_index_current * 8 + (slot_index_current - 1) * 8
       return ((max_credits - (credits_current.to_i))/max_credits.to_f)
     end
 
