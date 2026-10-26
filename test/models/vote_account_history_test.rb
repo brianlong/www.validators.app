@@ -13,11 +13,10 @@ class VoteAccountHistoryTest < ActiveSupport::TestCase
     assert_equal 0.9797462716996771, VoteAccountHistory.last.skipped_vote_percent
   end
 
-  test 'skipped_vote_percent for testnet uses stake-normalized formula' do
+  test 'skipped_vote_percent for testnet compares credits with max credits' do
     vah = create(:vote_account_history, vote_account: @va,
                  network: 'testnet',
-                 slot_index_current: 100,
-                 activated_stake: 2_000_000_000,
+                 max_credits_current: 6_400,
                  credits_current: 5_000)
     assert_in_delta 0.21875, vah.skipped_vote_percent, 0.000001
   end
@@ -25,11 +24,9 @@ class VoteAccountHistoryTest < ActiveSupport::TestCase
   test 'skipped_vote_percent for testnet stays in range with alpenglow sized credits' do
     vah = create(:vote_account_history, vote_account: @va,
                  network: 'testnet',
-                 slot_index_current: 201_616,
-                 activated_stake: 44_834_804_995_633_717,
+                 max_credits_current: 19_154_183_712_310,
                  credits_current: 18_787_464_805_954)
-    assert_operator vah.skipped_vote_percent, :>=, 0.0
-    assert_operator vah.skipped_vote_percent, :<=, 1.0
+    assert_in_delta 0.019145, vah.skipped_vote_percent, 0.000001
     assert_operator vah.reload.skipped_vote_percent_moving_average, :>=, 0.0
     assert_operator vah.skipped_vote_percent_moving_average, :<=, 1.0
   end
@@ -47,44 +44,35 @@ class VoteAccountHistoryTest < ActiveSupport::TestCase
     assert_not_nil vah.skipped_vote_percent_moving_average
   end
 
-  test 'skipped_vote_percent for alpenglow-community uses stake-normalized formula' do
-    # max_credits = slot_index_current * 32 * (activated_stake / 1_000_000_000)
-    # = 100 * 32 * 2.0 = 6400
-    # skipped = (6400 - 5000) / 6400 = 0.21875
+  test 'skipped_vote_percent for alpenglow-community compares credits with max credits' do
     vah = create(:vote_account_history, vote_account: @va,
                  network: 'alpenglow-community',
-                 slot_index_current: 100,
-                 activated_stake: 2_000_000_000,
+                 max_credits_current: 6_400,
                  credits_current: 5_000)
     assert_in_delta 0.21875, vah.skipped_vote_percent, 0.000001
   end
 
   test 'skipped_vote_percent for alpenglow-community clamps to 0 when credits exceed max' do
-    # max_credits = 10 * 32 * 1.0 = 320 — credits_current (500) > max → clamp to 0
     vah = create(:vote_account_history, vote_account: @va,
                  network: 'alpenglow-community',
-                 slot_index_current: 10,
-                 activated_stake: 1_000_000_000,
+                 max_credits_current: 320,
                  credits_current: 500)
     assert_equal 0.0, vah.skipped_vote_percent
   end
 
-  test 'skipped_vote_percent for alpenglow-community returns nil when stake is zero' do
+  test 'skipped_vote_percent for alpenglow-community returns nil without max credits' do
     vah = create(:vote_account_history, vote_account: @va,
                  network: 'alpenglow-community',
-                 slot_index_current: 100,
-                 activated_stake: 0,
+                 max_credits_current: nil,
                  credits_current: 100)
     assert_nil vah.skipped_vote_percent
   end
 
   test 'skipped_vote_percent_moving_average does not crash when skipped_vote_percent is nil' do
-    # activated_stake: 0 causes skipped_vote_percent to return nil for alpenglow
     assert_nothing_raised do
       create(:vote_account_history, vote_account: @va,
              network: 'alpenglow-community',
-             slot_index_current: 100,
-             activated_stake: 0,
+             max_credits_current: 0,
              credits_current: 100)
     end
   end

@@ -15,18 +15,18 @@ module Stats
       @vote_account = create(:vote_account, validator: @val, network: network)
       @vote_account_histories = [
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 1, credits_current: 140, vote_account: @vote_account),
+               slot_index_current: 1, max_credits_current: 32, credits_current: 140, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 2, credits_current: 120, vote_account: @vote_account),
+               slot_index_current: 2, max_credits_current: 64, credits_current: 120, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 4, credits_current: 100, vote_account: @vote_account),
+               slot_index_current: 4, max_credits_current: 128, credits_current: 100, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 8, credits_current: 80, vote_account: @vote_account),
+               slot_index_current: 8, max_credits_current: 256, credits_current: 80, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 16, credits_current: 60, vote_account: @vote_account),
+               slot_index_current: 16, max_credits_current: 512, credits_current: 60, vote_account: @vote_account),
         create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-               slot_index_current: 32, credits_current: 40, vote_account: @vote_account),
-        create(:vote_account_history, slot_index_current: 64, credits_current: 220, vote_account: @vote_account),
+               slot_index_current: 32, max_credits_current: 1024, credits_current: 40, vote_account: @vote_account),
+        create(:vote_account_history, slot_index_current: 64, max_credits_current: 2048, credits_current: 220, vote_account: @vote_account),
       ]
 
       @vahq = Stats::VoteAccountHistory.new(network, batch_uuid)
@@ -142,7 +142,7 @@ module Stats
       assert_equal 0.2, average2
     end
 
-    test 'skipped_vote_percent_best for alpenglow-community returns min of stake-normalized percents' do
+    test 'skipped_vote_percent_best for alpenglow-community returns min of skipped vote percents' do
       network = 'alpenglow-community'
       batch_uuid = create(:batch).uuid
       val1 = create(:validator, network: network)
@@ -150,20 +150,16 @@ module Stats
       va1 = create(:vote_account, validator: val1, network: network)
       va2 = create(:vote_account, validator: val2, network: network)
 
-      # Validator 1: max = 100 * 32 * 2.0 = 6400, skipped = (6400-5000)/6400 = 0.21875
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-             vote_account: va1, slot_index_current: 100,
-             activated_stake: 2_000_000_000, credits_current: 5_000)
-      # Validator 2: max = 100 * 32 * 2.0 = 6400, skipped = (6400-6000)/6400 = 0.0625
+             vote_account: va1, max_credits_current: 6_400, credits_current: 5_000)
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-             vote_account: va2, slot_index_current: 100,
-             activated_stake: 2_000_000_000, credits_current: 6_000)
+             vote_account: va2, max_credits_current: 6_400, credits_current: 6_000)
 
       stats = Stats::VoteAccountHistory.new(network, batch_uuid)
       assert_in_delta 0.0625, stats.skipped_vote_percent_best, 0.000001
     end
 
-    test 'skipped_vote_percent_best for testnet returns min of stake-normalized percents' do
+    test 'skipped_vote_percent_best for testnet returns min of skipped vote percents' do
       network = 'testnet'
       batch_uuid = create(:batch).uuid
       val1 = create(:validator, network: network)
@@ -172,11 +168,9 @@ module Stats
       va2 = create(:vote_account, validator: val2, network: network)
 
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-             vote_account: va1, slot_index_current: 100,
-             activated_stake: 2_000_000_000, credits_current: 5_000)
+             vote_account: va1, max_credits_current: 6_400, credits_current: 5_000)
       create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-             vote_account: va2, slot_index_current: 100,
-             activated_stake: 2_000_000_000, credits_current: 6_000)
+             vote_account: va2, max_credits_current: 6_400, credits_current: 6_000)
 
       stats = Stats::VoteAccountHistory.new(network, batch_uuid)
       assert_in_delta 0.0625, stats.skipped_vote_percent_best, 0.000001
