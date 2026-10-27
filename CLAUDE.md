@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 Validators.app (https://www.validators.app/) is a Rails 6.1 app that tracks and scores Solana
-validators. It ingests data from Solana RPC nodes (mainnet, testnet, alpenglow-community) via
+validators. It ingests data from Solana RPC nodes (mainnet, testnet) via
 long-running daemons, stores it in MySQL, computes validator scores/stats in background jobs, and
 serves a web UI + JSON API on top of it.
 
@@ -69,10 +69,10 @@ Both Sidekiq processes are started by `Procfile.dev` (`sidekiq` and `sidekiq_blo
 '../config/environment'` and loop indefinitely, polling Solana RPC endpoints and pushing work into
 Sidekiq. They're supervised as system services in production (see `daemons/blockchain/*.service`).
 Examples:
-- `gather_rpc_mainnet_daemon.rb` / `gather_rpc_testnet_daemon.rb` / `gather_rpc_alpenglow_community_daemon.rb`
+- `gather_rpc_mainnet_daemon.rb` / `gather_rpc_testnet_daemon.rb`
   — pull validator/vote-account/epoch data per network on a sleep loop, then enqueue follow-up
   workers (`BuildSkippedSlotPercentWorker`, `ReportSoftwareVersionWorker`, ...).
-- `validator_score_mainnet_v1_daemon.rb` / `*_testnet_v1_daemon.rb` / `*_alpenglow_community_v1_daemon.rb`
+- `validator_score_mainnet_v1_daemon.rb` / `*_testnet_v1_daemon.rb`
   — trigger validator scoring runs per network.
 - `daemons/blockchain/archive_blockchain_daemon.rb`, `slot_subscribe_mainnet_daemon.rb`,
   `slot_subscribe_testnet_daemon.rb` — chain block/slot ingestion and archiving.
@@ -150,7 +150,7 @@ daemons), `app/logic/report_logic.rb`.
 ## Notes specific to this codebase
 
 - Multi-network by convention: most models/tables carry a `network` column
-  (`mainnet`/`testnet`/`alpenglow-community`) rather than using separate tables per network for
+  (`mainnet`/`testnet`) rather than using separate tables per network for
   application data; blockchain-domain models are the exception (separate `Mainnet*`/`Testnet*`
   classes/tables per network).
 - Attribute encryption (`attr_encrypted`) is required for any personally-identifying or sensitive
