@@ -51,7 +51,7 @@ class CreateClusterStatsService
   end
 
   def last_epochs
-    @last_epochs ||= EpochWallClock.recent_finished(@network)
+    @last_epochs ||= EpochWallClock.recent_finished(@network, EpochWallClock::ROD_EPOCHS_TO_CALCULATE)
   end
   
   def hash_valid? hash
