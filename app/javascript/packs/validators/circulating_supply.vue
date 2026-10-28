@@ -28,7 +28,7 @@
             <strong class="text-success">{{ gross_yield }}%</strong>
 
             <div class="small text-muted">
-              (Last 3 epochs annualized)
+              (Last 7 epochs annualized)
               <a href="/faq#rod">
                 <i class="fa-solid fa-circle-info font-size-xs text-muted ms-1"></i>
               </a>

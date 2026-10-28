@@ -23,6 +23,7 @@
 class EpochWallClock < ApplicationRecord
 
   EPOCHS_TO_CALCULATE = 3
+  ROD_EPOCHS_TO_CALCULATE = 7
 
   API_FIELDS = %i[
     epoch
@@ -51,9 +52,9 @@ class EpochWallClock < ApplicationRecord
     end
   end
 
-  def self.recent_finished(network)
+  def self.recent_finished(network, limit = EPOCHS_TO_CALCULATE)
     by_network(network).offset(1)
-                       .limit(EPOCHS_TO_CALCULATE)
+                       .limit(limit)
   end
 
   private
