@@ -96,11 +96,11 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                            .last
                            .validator_score_v1
                            .stake_concentration
-    assert_equal [0.9594924757058465], p.payload[:validators]
+    assert_equal [0.9797462716996771], p.payload[:validators]
                                         .last
                                         .validator_score_v1
                                         .skipped_vote_history
-    assert_equal [0.9595e0], p.payload[:validators]
+    assert_equal [0.9797e0], p.payload[:validators]
                               .last
                               .validator_score_v1
                               .skipped_vote_percent_moving_average_history
@@ -151,7 +151,7 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
 
     assert_equal 0.0, 
                  p.payload[:this_batch].skipped_vote_all_median
-    assert_equal 0.9594924757058465, 
+    assert_equal 0.9797462716996771, 
                  p.payload[:this_batch].best_skipped_vote
 
     assert_equal 2, p.payload[:validators]
@@ -166,6 +166,36 @@ class ValidatorScoreV1LogicTest < ActiveSupport::TestCase
                       .last
                       .validator_score_v1
                       .stake_concentration_score
+  end
+
+  test "assign_block_and_vote_scores assigns stake concentration score by superminority" do
+    ValidatorHistory.where(batch_uuid: @batch.uuid).update_all(active_stake: 10)
+    stakes = [90, 70, 50, 40, 20]
+    validators = stakes.map do |stake|
+      v = create(:validator)
+      create(
+        :validator_history,
+        network: "testnet",
+        batch_uuid: @batch.uuid,
+        account: v.account,
+        validator: v,
+        active_stake: stake
+      )
+      v
+    end
+
+    p = Pipeline.new(200, @initial_payload)
+                .then(&set_this_batch)
+                .then(&validators_get)
+                .then(&block_vote_history_get)
+                .then(&assign_block_and_vote_scores)
+
+    scores = p.payload[:validators].to_h do |v|
+      [v.id, v.validator_score_v1.stake_concentration_score]
+    end
+
+    assert_equal [-2, -1, 0, 0, 0], validators.map { |v| scores[v.id] }
+    assert_equal 0, scores[@validator.id]
   end
 
   test "block_history_get" do

@@ -137,8 +137,9 @@
                   <small class="d-none d-lg-inline text-muted">(max 0)</small>
                 </td>
                 <td class="column-lg small">
-                  This is a&nbsp;contra-score and will deduct points if the validator is one of the&nbsp;top
-                  33%&nbsp;active stake holders.
+                  This is a&nbsp;contra-score and will deduct 2&nbsp;points if the validator is one of the&nbsp;top
+                  20%&nbsp;active stake holders (adversarial superminority) and 1&nbsp;point if it is one of
+                  the&nbsp;top 40%&nbsp;active stake holders (offline superminority).
                 </td>
               </tr>
 

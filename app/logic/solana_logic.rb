@@ -31,6 +31,8 @@ module SolanaLogic
   # We can also set some attributes ie. skipped_slot_all_average.
   def batch_touch
     lambda do |p|
+      return p unless p[:code] == 200
+
       batch = Batch.where(uuid: p.payload[:batch_uuid], network: p.payload[:network]).first
 
       # IMPORTANT: Do not use this values on index page, it's only for show.
@@ -227,8 +229,9 @@ module SolanaLogic
           'HarmonicFiredancer': 9,
           'HarmonicAgave': 10,
           'HarmonicFrankendancer': 11,
-          'FireBam': 12,
+          'FireBAM': 12,
           'Raiku': 13,
+          'FrankenBAM': 14,
         }
 
         if hash['clientId'] && hash['clientId'].is_a?(Integer)
@@ -251,8 +254,9 @@ module SolanaLogic
           client == 'Unknown(9)' ? client = 'HarmonicFiredancer' : client
           client == 'Unknown(10)' ? client = 'HarmonicAgave' : client
           client == 'Unknown(11)' ? client = 'HarmonicFrankendancer' : client
-          client == 'Unknown(12)' ? client = 'FireBam' : client
+          client == 'Unknown(12)' ? client = 'FireBAM' : client
           client == 'Unknown(13)' ? client = 'Raiku' : client
+          client == 'Unknown(14)' ? client = 'FrankenBAM' : client
 
           client_id = if client&.match(/^Unknown/)
                         client&.gsub('Unknown', '')&.gsub('(', '')&.gsub(')', '')&.to_i

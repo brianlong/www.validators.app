@@ -74,14 +74,24 @@ module Stats
       assert_equal expected, @validator_history_stats.total_active_stake
     end
 
-    test 'upto_33_stake' do
-      expected = @validator_histories.values_at(1, 4)
-      assert_equal expected, @validator_history_stats.upto_33_stake
+    test 'upto_stake for adversarial superminority' do
+      expected = @validator_histories.values_at(1)
+      assert_equal expected, @validator_history_stats.upto_stake(Stats::ValidatorHistory::ADVERSARIAL_SUPERMINORITY)
     end
 
-    test 'at_33_stake' do
+    test 'at_stake for adversarial superminority' do
+      expected = @validator_histories[1]
+      assert_equal expected, @validator_history_stats.at_stake(Stats::ValidatorHistory::ADVERSARIAL_SUPERMINORITY)
+    end
+
+    test 'upto_stake for offline superminority' do
+      expected = @validator_histories.values_at(1, 4)
+      assert_equal expected, @validator_history_stats.upto_stake(Stats::ValidatorHistory::OFFLINE_SUPERMINORITY)
+    end
+
+    test 'at_stake for offline superminority' do
       expected = @validator_histories[4]
-      assert_equal expected, @validator_history_stats.at_33_stake
+      assert_equal expected, @validator_history_stats.at_stake(Stats::ValidatorHistory::OFFLINE_SUPERMINORITY)
     end
   end
 end
