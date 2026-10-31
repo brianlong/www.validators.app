@@ -18,6 +18,7 @@ module Blockchain
     test "#perform prunes footers of all networks and old ranks" do
       footer(Blockchain::AlpenglowCommunityBlockFooter, created_at: 8.days.ago)
       footer(Blockchain::TestnetBlockFooter, created_at: 8.days.ago)
+      footer(Blockchain::MainnetBlockFooter, created_at: 8.days.ago)
       rank(created_at: 31.days.ago)
       recent_rank = rank(created_at: 29.days.ago)
 
@@ -25,6 +26,7 @@ module Blockchain
 
       assert_equal 0, Blockchain::AlpenglowCommunityBlockFooter.count
       assert_equal 0, Blockchain::TestnetBlockFooter.count
+      assert_equal 0, Blockchain::MainnetBlockFooter.count
       assert_equal [recent_rank.id], AlpenglowEpochRank.pluck(:id)
     end
 
