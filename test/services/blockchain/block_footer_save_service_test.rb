@@ -104,9 +104,5 @@ module Blockchain
     test "#call returns 0 for empty batch" do
       assert_equal 0, save([])
     end
-
-    test ".network raises for networks without block footers" do
-      assert_raises(ArgumentError) { Blockchain::BlockFooter.network("mainnet") }
-    end
   end
 end
