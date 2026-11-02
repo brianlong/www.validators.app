@@ -370,7 +370,8 @@
   <%= ClusterStats::UpdateEpochDurationService::NUMBER_OF_EPOCHS %> epochs.
 </p>
 <p class="mb-5">
-  And stake_accounts_rewards and vote_accounts_rewards are the average reward per epoch based on last 3 epochs.
+  And stake_accounts_rewards and vote_accounts_rewards are the average reward per epoch based on last
+  <%= EpochWallClock::ROD_EPOCHS_TO_CALCULATE %> epochs.
 </p>
 
 <h5 id="stake-pool">Stake Pool</h5>
