@@ -4,7 +4,6 @@ require "test_helper"
 
 class Blockchain::BlockFooterTest < ActiveSupport::TestCase
   test ".network returns footer model for supported networks" do
-    assert_equal Blockchain::AlpenglowCommunityBlockFooter, Blockchain::BlockFooter.network("alpenglow-community")
     assert_equal Blockchain::TestnetBlockFooter, Blockchain::BlockFooter.network("testnet")
   end
 

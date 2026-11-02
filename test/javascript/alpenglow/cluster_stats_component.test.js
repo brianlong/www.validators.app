@@ -25,7 +25,7 @@ const stats_response = {
 }
 
 const mount_component = () => {
-  store.getters = { network: 'alpenglow-community' }
+  store.getters = { network: 'testnet' }
   return shallowMount(ClusterStatsComponent, { store })
 }
 
@@ -43,8 +43,8 @@ describe('cluster_stats_component', () => {
   it('fetches stats for the current network', () => {
     const wrapper = mount_component()
 
-    expect(wrapper.vm.api_url).toBe('/api/v1/alpenglow-cluster-stats/alpenglow-community')
-    expect(axios.get).toHaveBeenCalledWith('/api/v1/alpenglow-cluster-stats/alpenglow-community')
+    expect(wrapper.vm.api_url).toBe('/api/v1/alpenglow-cluster-stats/testnet')
+    expect(axios.get).toHaveBeenCalledWith('/api/v1/alpenglow-cluster-stats/testnet')
   })
 
   it('renders cluster stats', async () => {
@@ -63,10 +63,10 @@ describe('cluster_stats_component', () => {
     await wrapper.vm.$nextTick()
 
     wrapper.vm.select_epoch(221)
-    expect(axios.get).toHaveBeenLastCalledWith('/api/v1/alpenglow-cluster-stats/alpenglow-community?epoch=221')
+    expect(axios.get).toHaveBeenLastCalledWith('/api/v1/alpenglow-cluster-stats/testnet?epoch=221')
 
     wrapper.vm.select_epoch(222)
-    expect(axios.get).toHaveBeenLastCalledWith('/api/v1/alpenglow-cluster-stats/alpenglow-community')
+    expect(axios.get).toHaveBeenLastCalledWith('/api/v1/alpenglow-cluster-stats/testnet')
   })
 
   it('refreshes stats every minute', () => {
@@ -83,7 +83,7 @@ describe('cluster_stats_component', () => {
     await wrapper.vm.$nextTick()
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.text()).toContain('No Alpenglow statistics are available for alpenglow-community yet.')
+    expect(wrapper.text()).toContain('No Alpenglow statistics are available for testnet yet.')
   })
 
   it('formats missing values as N/A', () => {

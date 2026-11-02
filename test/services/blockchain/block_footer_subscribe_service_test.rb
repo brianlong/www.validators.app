@@ -59,7 +59,7 @@ module Blockchain
         Geyser::SubscribeUpdate.new(ping: Geyser::SubscribeUpdatePing.new)
       ]
       @service = Blockchain::BlockFooterSubscribeService.new(
-        network: "alpenglow-community", grpc_url: "localhost:443", token: "token"
+        network: "testnet", grpc_url: "localhost:443", token: "token"
       )
     end
 

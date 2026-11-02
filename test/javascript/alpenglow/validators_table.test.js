@@ -48,7 +48,7 @@ const flush = async (wrapper) => {
 }
 
 const mount_table = (propsData = { epoch: 224, refreshed_at: 1 }) => {
-  store.getters = { network: 'alpenglow-community' }
+  store.getters = { network: 'testnet' }
   return shallowMount(ValidatorsTable, { store, propsData, stubs: ['b-pagination'] })
 }
 
@@ -62,7 +62,7 @@ describe('validators_table', () => {
     mount_table()
 
     expect(axios.get).toHaveBeenCalledWith(
-      '/api/v1/alpenglow-validator-stats/alpenglow-community?sort_by=notar_participation&direction=desc&page=1&per=25&epoch=224'
+      '/api/v1/alpenglow-validator-stats/testnet?sort_by=notar_participation&direction=desc&page=1&per=25&epoch=224'
     )
   })
 
@@ -78,7 +78,7 @@ describe('validators_table', () => {
     expect(text).toContain('75.0%')
     expect(text).toContain('1.50')
     expect(text).toContain('VoteAc…essB')
-    expect(wrapper.find('a[href="/validators/IdentityA?network=alpenglow-community"]').exists()).toBe(true)
+    expect(wrapper.find('a[href="/validators/IdentityA?network=testnet"]').exists()).toBe(true)
   })
 
   it('toggles sort direction and changes sort column', async () => {

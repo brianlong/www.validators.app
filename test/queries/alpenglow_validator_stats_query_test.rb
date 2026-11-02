@@ -4,7 +4,7 @@ require "test_helper"
 
 class AlpenglowValidatorStatsQueryTest < ActiveSupport::TestCase
   setup do
-    @network = "alpenglow-community"
+    @network = "testnet"
   end
 
   def stat(account, epoch: 224, stake: nil, status: :verified, **counters)

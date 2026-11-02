@@ -9,14 +9,14 @@ module Blockchain
     end
 
     test "#call deletes processed footers older than retention" do
-      footer(Blockchain::AlpenglowCommunityBlockFooter, 1, created_at: 8.days.ago)
-      footer(Blockchain::AlpenglowCommunityBlockFooter, 2, created_at: 8.days.ago, processed: false)
-      footer(Blockchain::AlpenglowCommunityBlockFooter, 3, created_at: 6.days.ago)
+      footer(Blockchain::TestnetBlockFooter, 1, created_at: 8.days.ago)
+      footer(Blockchain::TestnetBlockFooter, 2, created_at: 8.days.ago, processed: false)
+      footer(Blockchain::TestnetBlockFooter, 3, created_at: 6.days.ago)
 
-      deleted = Blockchain::BlockFooterPruneService.new(network: "alpenglow-community").call
+      deleted = Blockchain::BlockFooterPruneService.new(network: "testnet").call
 
       assert_equal 1, deleted
-      assert_equal [2, 3], Blockchain::AlpenglowCommunityBlockFooter.order(:slot_number).pluck(:slot_number)
+      assert_equal [2, 3], Blockchain::TestnetBlockFooter.order(:slot_number).pluck(:slot_number)
     end
 
     test "#call deletes footers in batches" do

@@ -1,5 +1,5 @@
 {
-  "network": "alpenglow-community",
+  "network": "testnet",
   "epoch": 238,
   "shred_version": 35475,
   "epoch_schedule": {

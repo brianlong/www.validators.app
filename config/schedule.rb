@@ -42,7 +42,6 @@ end
 
 every 3.hours, at: 5, roles: [:background] do
   runner "AsnLogicWorker.perform_async('network' => 'testnet')"
-  runner "AsnLogicWorker.perform_async('network' => 'alpenglow-community')"
   ruby_script_data_centers "check_hetzner_admin_warning.rb"
 end
 
@@ -118,7 +117,6 @@ end
 every 1.hour, at: 40, roles: [:background] do
   runner "DataCenterStatsWorker.perform_async({'network' => 'mainnet'})"
   runner "DataCenterStatsWorker.perform_async({'network' => 'testnet'})"
-  runner "DataCenterStatsWorker.perform_async({'network' => 'alpenglow-community'})"
 end
 
 every 1.day, at: '3:10am', roles: [:background] do
@@ -159,9 +157,7 @@ every 1.minute, roles: [:background] do
   runner "PingThingUserStatsWorker.perform_async('mainnet')"
   runner "PingThingUserStatsWorker.perform_async('testnet')"
   runner "PingThingUserStatsWorker.perform_async('anzamain')"
-  runner "Blockchain::AlpenglowEpochRanksWorker.perform_async('network' => 'alpenglow-community')"
   runner "Blockchain::AlpenglowEpochRanksWorker.perform_async('network' => 'testnet')"
-  runner "Blockchain::AlpenglowEpochStatsWorker.perform_async('network' => 'alpenglow-community')"
   runner "Blockchain::AlpenglowEpochStatsWorker.perform_async('network' => 'testnet')"
 end
 

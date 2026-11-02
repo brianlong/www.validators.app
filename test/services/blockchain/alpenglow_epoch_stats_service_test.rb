@@ -5,7 +5,7 @@ require "test_helper"
 module Blockchain
   class AlpenglowEpochStatsServiceTest < ActiveSupport::TestCase
     setup do
-      @network = "alpenglow-community"
+      @network = "testnet"
       @epoch_schedule = Blockchain::EpochSchedule.new("slotsPerEpoch" => 1000, "firstNormalEpoch" => 0, "firstNormalSlot" => 0)
       @leader_a = create(:validator, network: @network, account: "LeaderA")
       @leader_b = create(:validator, network: @network, account: "LeaderB")
@@ -14,7 +14,7 @@ module Blockchain
     end
 
     def footer(slot, leader:, final_cert_slot: nil, finalization: nil, epoch: 10, processed: false, **certificates)
-      Blockchain::AlpenglowCommunityBlockFooter.create!(
+      Blockchain::TestnetBlockFooter.create!(
         **certificates,
         slot_number: slot,
         epoch: epoch,
@@ -86,12 +86,12 @@ module Blockchain
       add_tail(101)
 
       call_service
-      assert Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 100).processed
-      refute Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 101).processed
+      assert Blockchain::TestnetBlockFooter.find_by(slot_number: 100).processed
+      refute Blockchain::TestnetBlockFooter.find_by(slot_number: 101).processed
 
       footer(200, leader: "LeaderA")
       add_tail(201)
-      Blockchain::AlpenglowCommunityBlockFooter.where(leader: "LeaderTail").update_all(processed: true)
+      Blockchain::TestnetBlockFooter.where(leader: "LeaderTail").update_all(processed: true)
       call_service
 
       assert_equal 2, stat_for(@vote_account_a).leader_slots
@@ -114,7 +114,7 @@ module Blockchain
 
       assert_equal 1, call_service
       assert_equal 0, AlpenglowValidatorEpochStat.count
-      assert Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 100).processed
+      assert Blockchain::TestnetBlockFooter.find_by(slot_number: 100).processed
     end
 
     test "worker does not process footers on stage" do
@@ -123,7 +123,7 @@ module Blockchain
 
       Rails.env.stub(:stage?, true) { Blockchain::AlpenglowEpochStatsWorker.new.perform("network" => @network) }
 
-      refute Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 100).processed
+      refute Blockchain::TestnetBlockFooter.find_by(slot_number: 100).processed
       assert_equal 0, AlpenglowValidatorEpochStat.count
     end
 
@@ -211,8 +211,8 @@ module Blockchain
 
       assert_equal 1, call_service
 
-      assert Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 998).processed
-      refute Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 1008).processed
+      assert Blockchain::TestnetBlockFooter.find_by(slot_number: 998).processed
+      refute Blockchain::TestnetBlockFooter.find_by(slot_number: 1008).processed
       assert_equal 1, stat_for(@vote_account_a, epoch: 0).notar_votes
     end
 
@@ -243,7 +243,7 @@ end
 
       stat_a = stat_for(@vote_account_a, epoch: 0)
       assert_equal [1, 0, 0], [stat_a.leader_slots, stat_a.notar_reward_slots, stat_a.notar_votes]
-      assert Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 100).processed
+      assert Blockchain::TestnetBlockFooter.find_by(slot_number: 100).processed
     end
 
     test "#call assigns leader stats to the vote account from finalized ranks instead of the active one" do
