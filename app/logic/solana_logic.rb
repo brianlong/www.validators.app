@@ -79,7 +79,8 @@ module SolanaLogic
 
       Pipeline.new(200, p.payload.merge(
                           epoch: epoch.epoch,
-                          epoch_slot_index: epoch.slot_index
+                          epoch_slot_index: epoch.slot_index,
+                          epoch_start_slot: epoch.current_slot - epoch.slot_index
                         ))
     rescue ActiveRecord::ConnectionNotEstablished => e
       Appsignal.send_error(e)
@@ -392,6 +393,7 @@ module SolanaLogic
         p.payload[:config_urls],
         :get_vote_accounts
       )['current']
+      total_vote_accounts_stake = vote_accounts_json.sum { |hash| hash['activatedStake'].to_i }
 
       vote_accounts = {}
 
@@ -412,11 +414,15 @@ module SolanaLogic
           'commission' => hash['commission'],
           'last_vote' => hash['lastVote'],
           'credits' => credits_total,
-          'credits_current' => credits_current
+          'credits_current' => credits_current,
+          'epoch_credits' => hash['epochCredits']
         }
       end
 
-      Pipeline.new(200, p.payload.merge(vote_accounts: vote_accounts))
+      Pipeline.new(200, p.payload.merge(
+                          vote_accounts: vote_accounts,
+                          total_vote_accounts_stake: total_vote_accounts_stake
+                        ))
     rescue StandardError => e
       Pipeline.new(500, p.payload, 'Error from vote_accounts_get', e)
     end
@@ -476,6 +482,7 @@ module SolanaLogic
           last_vote: v['last_vote'],
           credits: v['credits'],
           credits_current: v['credits_current'],
+          max_credits_current: v['max_credits_current'],
           slot_index_current: p.payload[:epoch_slot_index],
           activated_stake: v['activated_stake'],
           software_version: v['version'] || validator.software_version,

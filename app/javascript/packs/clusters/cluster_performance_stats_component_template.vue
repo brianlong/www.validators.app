@@ -196,13 +196,13 @@
       },
 
       skipped_votes_median() {
-        return (parseFloat(this.skipped_votes.median) * 100).toFixed(1);
+        return ((1 - parseFloat(this.skipped_votes.median)) * 100).toFixed(1);
       },
       skipped_votes_average() {
-        return (parseFloat(this.skipped_votes.average) * 100).toFixed(1);
+        return ((1 - parseFloat(this.skipped_votes.average)) * 100).toFixed(1);
       },
       skipped_votes_best() {
-        return (parseFloat(this.skipped_votes.best) * 100).toFixed(2);
+        return ((1 - parseFloat(this.skipped_votes.best)) * 100).toFixed(2);
       },
 
       skipped_slots_median() {
