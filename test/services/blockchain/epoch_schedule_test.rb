@@ -35,8 +35,8 @@ module Blockchain
       rpc = Minitest::Mock.new
       rpc.expect(:call, result, ["getEpochSchedule"])
 
-      Blockchain::JsonRpcRequest.stub(:new, ->(urls) { assert_equal NETWORK_URLS["alpenglow-community"], urls; rpc }) do
-        assert_equal 54_000, Blockchain::EpochSchedule.fetch("alpenglow-community").slots_per_epoch
+      Blockchain::JsonRpcRequest.stub(:new, ->(urls) { assert_equal NETWORK_URLS["testnet"], urls; rpc }) do
+        assert_equal 54_000, Blockchain::EpochSchedule.fetch("testnet").slots_per_epoch
       end
       rpc.verify
     end

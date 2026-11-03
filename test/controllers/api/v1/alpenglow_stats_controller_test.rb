@@ -9,7 +9,7 @@ module Api
 
       setup do
         @user = create(:user)
-        @network = "alpenglow-community"
+        @network = "testnet"
         validator = create(:validator, network: @network)
         vote_account = create(:vote_account, validator: validator, network: @network)
         [221, 222].each do |epoch|

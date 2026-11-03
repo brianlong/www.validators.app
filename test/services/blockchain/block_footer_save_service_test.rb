@@ -6,7 +6,7 @@ require "geyser_pb"
 module Blockchain
   class BlockFooterSaveServiceTest < ActiveSupport::TestCase
     setup do
-      @network = "alpenglow-community"
+      @network = "testnet"
       @epoch_schedule = Blockchain::EpochSchedule.new(
         "slotsPerEpoch" => 54_000, "firstNormalEpoch" => 0, "firstNormalSlot" => 0
       )
@@ -47,7 +47,7 @@ module Blockchain
     test "#call saves decoded footers" do
       assert_equal 3, save(@footers.values)
 
-      footer = Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 10_007_782)
+      footer = Blockchain::TestnetBlockFooter.find_by(slot_number: 10_007_782)
       assert_equal 185, footer.epoch
       assert_equal "LeaderIdentity", footer.leader
       assert_equal 7, footer.bank_id
@@ -63,7 +63,7 @@ module Blockchain
     test "#call stores raw signer bitmaps from the decoder" do
       save(@footers.values)
 
-      footer = Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 10_007_782)
+      footer = Blockchain::TestnetBlockFooter.find_by(slot_number: 10_007_782)
       decoded = @footers["slow"]
 
       assert_equal decoded[:block_final_cert][:final_signers], footer.final_signers
@@ -75,7 +75,7 @@ module Blockchain
     test "#call saves fast finalization and skip reward" do
       save(@footers.values)
 
-      footer = Blockchain::AlpenglowCommunityBlockFooter.find_by(slot_number: 10_007_807)
+      footer = Blockchain::TestnetBlockFooter.find_by(slot_number: 10_007_807)
       assert footer.fast?
       assert_nil footer.final_notar_signers
       assert_equal 10_007_799, footer.skip_reward_slot
@@ -84,13 +84,13 @@ module Blockchain
 
     test "#call upserts footers for already saved slots without resetting processed" do
       save([@footers["fast"]])
-      Blockchain::AlpenglowCommunityBlockFooter.update_all(processed: true)
+      Blockchain::TestnetBlockFooter.update_all(processed: true)
 
       replacement = @footers["fast"].merge(block_producer_time_nanos: 1)
       save([replacement, @footers["fast"].merge(block_producer_time_nanos: 2)])
 
-      assert_equal 1, Blockchain::AlpenglowCommunityBlockFooter.count
-      footer = Blockchain::AlpenglowCommunityBlockFooter.last
+      assert_equal 1, Blockchain::TestnetBlockFooter.count
+      footer = Blockchain::TestnetBlockFooter.last
       assert_equal 2, footer.block_producer_time_nanos
       assert footer.processed
     end
@@ -98,7 +98,7 @@ module Blockchain
     test "#call saves nil leader when schedule is unknown" do
       save([@footers["fast"]])
 
-      assert_nil Blockchain::AlpenglowCommunityBlockFooter.last.leader
+      assert_nil Blockchain::TestnetBlockFooter.last.leader
     end
 
     test "#call returns 0 for empty batch" do

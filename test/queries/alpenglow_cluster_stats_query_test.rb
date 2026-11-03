@@ -4,7 +4,7 @@ require "test_helper"
 
 class AlpenglowClusterStatsQueryTest < ActiveSupport::TestCase
   setup do
-    @network = "alpenglow-community"
+    @network = "testnet"
   end
 
   def stat(epoch:, leader_slots:, fast: 0, slow: 0, lag_sum: 0, with_final_cert: leader_slots, network: @network)

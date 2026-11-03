@@ -6,7 +6,7 @@ module Blockchain
   module AlpenglowEpochStats
     class CertificateIndexTest < ActiveSupport::TestCase
       def footer(slot, processed: false, **certificates)
-        Blockchain::AlpenglowCommunityBlockFooter.create!(slot_number: slot, epoch: 1, processed: processed, **certificates)
+        Blockchain::TestnetBlockFooter.create!(slot_number: slot, epoch: 1, processed: processed, **certificates)
       end
 
       test "#call returns first footer for each certificate slot" do
@@ -14,8 +14,8 @@ module Blockchain
         footer(101, final_cert_slot: 99, notar_reward_slot: 93, skip_reward_slot: 93)
 
         result = CertificateIndex.new(
-          footer_class: Blockchain::AlpenglowCommunityBlockFooter,
-          footers: Blockchain::AlpenglowCommunityBlockFooter.order(:slot_number).to_a
+          footer_class: Blockchain::TestnetBlockFooter,
+          footers: Blockchain::TestnetBlockFooter.order(:slot_number).to_a
         ).call
 
         assert_equal({ 99 => first }, result[:final])
@@ -28,8 +28,8 @@ module Blockchain
         footer(101, final_cert_slot: 99, skip_reward_slot: 91)
 
         result = CertificateIndex.new(
-          footer_class: Blockchain::AlpenglowCommunityBlockFooter,
-          footers: Blockchain::AlpenglowCommunityBlockFooter.where(processed: false).to_a
+          footer_class: Blockchain::TestnetBlockFooter,
+          footers: Blockchain::TestnetBlockFooter.where(processed: false).to_a
         ).call
 
         assert_empty result[:final]

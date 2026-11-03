@@ -6,7 +6,7 @@ require "webmock/minitest"
 module Blockchain
   class AlpenglowEpochRanksServiceTest < ActiveSupport::TestCase
     setup do
-      @network = "alpenglow-community"
+      @network = "testnet"
       @rpc_url = "https://alpenglow.example.com/token"
       @vote_accounts = {
         "current" => [
