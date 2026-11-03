@@ -14,6 +14,7 @@
 #  credits                             :bigint
 #  credits_current                     :bigint
 #  last_vote                           :bigint
+#  max_credits_current                 :bigint
 #  network                             :string(191)
 #  root_slot                           :bigint
 #  skipped_vote_percent_moving_average :decimal(10, 4)

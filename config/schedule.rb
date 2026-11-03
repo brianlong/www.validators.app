@@ -157,7 +157,9 @@ every 1.minute, roles: [:background] do
   runner "PingThingUserStatsWorker.perform_async('mainnet')"
   runner "PingThingUserStatsWorker.perform_async('testnet')"
   runner "PingThingUserStatsWorker.perform_async('anzamain')"
+  runner "Blockchain::AlpenglowEpochRanksWorker.perform_async('network' => 'mainnet')"
   runner "Blockchain::AlpenglowEpochRanksWorker.perform_async('network' => 'testnet')"
+  runner "Blockchain::AlpenglowEpochStatsWorker.perform_async('network' => 'mainnet')"
   runner "Blockchain::AlpenglowEpochStatsWorker.perform_async('network' => 'testnet')"
 end
 
