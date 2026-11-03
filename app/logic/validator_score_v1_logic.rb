@@ -180,11 +180,15 @@ module ValidatorScoreV1Logic
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_average: #{vote_distance_all_average}"
       Rails.logger.warn "#{p.payload[:network]} vote_distance_all_median: #{vote_distance_all_median}"
 
-      at_33_active_stake =
-        Stats::ValidatorHistory.new(p.payload[:network], p.payload[:batch_uuid])
-                              .at_33_stake
-                              .validator
-                              .active_stake
+      validator_history_stats = Stats::ValidatorHistory.new(p.payload[:network], p.payload[:batch_uuid])
+      adversarial_superminority_stake =
+        validator_history_stats.at_stake(Stats::ValidatorHistory::ADVERSARIAL_SUPERMINORITY)
+                               .active_stake
+                               .to_i
+      offline_superminority_stake =
+        validator_history_stats.at_stake(Stats::ValidatorHistory::OFFLINE_SUPERMINORITY)
+                               .active_stake
+                               .to_i
                               
       p.payload[:validators].each do |v|
         # Assign the root_distance_score
@@ -217,7 +221,13 @@ module ValidatorScoreV1Logic
 
         # Assign the stake concentration & score
         v.validator_score_v1.stake_concentration_score = \
-          v.validator_score_v1.active_stake.to_i >= at_33_active_stake ? -2 : 0
+          if v.validator_score_v1.active_stake.to_i >= adversarial_superminority_stake
+            -2
+          elsif v.validator_score_v1.active_stake.to_i >= offline_superminority_stake
+            -1
+          else
+            0
+          end
 
       rescue StandardError => e
         Appsignal.send_error(e)

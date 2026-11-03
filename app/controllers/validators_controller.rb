@@ -35,11 +35,18 @@ class ValidatorsController < ApplicationController
       }
     )
 
-    if validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
-      @at_33_stake_index = at_33_stake_index(@validators, @batch, @per)
+    if @batch && validators_params[:order] == "stake" && !validators_params[:q] && !validators_params[:watchlist]
+      validator_history_stats = Stats::ValidatorHistory.new(validators_params[:network], @batch.uuid)
+      @adversarial_superminority_index = stake_share_index(
+        @validators, validator_history_stats, Stats::ValidatorHistory::ADVERSARIAL_SUPERMINORITY, @per
+      )
+      @offline_superminority_index = stake_share_index(
+        @validators, validator_history_stats, Stats::ValidatorHistory::OFFLINE_SUPERMINORITY, @per
+      )
     end
 
-    @at_33_stake_index ||= nil
+    @adversarial_superminority_index ||= nil
+    @offline_superminority_index ||= nil
   end
 
   def trent_mode
@@ -91,14 +98,13 @@ class ValidatorsController < ApplicationController
     expires_in 5.minutes, public: true
   end
 
-  def at_33_stake_index(validators, batch, per_page)
-    validator_history_stats = Stats::ValidatorHistory.new(validators_params[:network], batch.uuid)
-    at_33_stake_validator = validator_history_stats.at_33_stake&.validator
+  def stake_share_index(validators, validator_history_stats, share, per_page)
+    edge_validator = validator_history_stats.at_stake(share)&.validator
 
-    return nil unless validators.map(&:account).compact.include? at_33_stake_validator&.account
+    return nil unless validators.map(&:account).compact.include? edge_validator&.account
 
     first_index_of_current_page = [validators_params[:page].to_i - 1, 0].max * per_page
-    first_index_of_current_page + validators.index(at_33_stake_validator).to_i + 1
+    first_index_of_current_page + validators.index(edge_validator).to_i + 1
   end
 
   def validators_params

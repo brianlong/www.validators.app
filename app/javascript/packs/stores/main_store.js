@@ -6,8 +6,7 @@ const state = {
   mainnet_url: "https://validato-va-34e2.mainnet.rpcpool.com",
   mainnet_beta_url: "https://api.mainnet-beta.solana.com",
   testnet_url: "https://api.testnet.solana.com",
-  alpenglow_community_url: "https://alpenglow.rpcpool.com",
-  networks: ["mainnet", "testnet", "alpenglow-community"]
+  networks: ["mainnet", "testnet"]
 }
 
 const getters = {
@@ -23,8 +22,6 @@ const getters = {
         return state.testnet_url
       case 'anzamain':
         return state.mainnet_url
-      case 'alpenglow-community':
-        return state.alpenglow_community_url
     }
   },
 
@@ -33,8 +30,6 @@ const getters = {
       return 'testnet'
     } else if (location.href.match(/network=anzamain/)) {
       return 'anzamain'
-    } else if (location.href.match(/network=alpenglow-community/)) {
-      return 'alpenglow-community'
     } else {
       return 'mainnet'
     }

@@ -142,23 +142,6 @@ module Stats
       assert_equal 0.2, average2
     end
 
-    test 'skipped_vote_percent_best for alpenglow-community returns min of skipped vote percents' do
-      network = 'alpenglow-community'
-      batch_uuid = create(:batch).uuid
-      val1 = create(:validator, network: network)
-      val2 = create(:validator, network: network)
-      va1 = create(:vote_account, validator: val1, network: network)
-      va2 = create(:vote_account, validator: val2, network: network)
-
-      create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-             vote_account: va1, max_credits_current: 6_400, credits_current: 5_000)
-      create(:vote_account_history, network: network, batch_uuid: batch_uuid,
-             vote_account: va2, max_credits_current: 6_400, credits_current: 6_000)
-
-      stats = Stats::VoteAccountHistory.new(network, batch_uuid)
-      assert_in_delta 0.0625, stats.skipped_vote_percent_best, 0.000001
-    end
-
     test 'skipped_vote_percent_best for testnet returns min of skipped vote percents' do
       network = 'testnet'
       batch_uuid = create(:batch).uuid
@@ -176,8 +159,8 @@ module Stats
       assert_in_delta 0.0625, stats.skipped_vote_percent_best, 0.000001
     end
 
-    test 'skipped_vote_percent_best for alpenglow-community returns nil when no records' do
-      stats = Stats::VoteAccountHistory.new('alpenglow-community', 'no-such-batch')
+    test 'skipped_vote_percent_best for testnet returns nil when no records' do
+      stats = Stats::VoteAccountHistory.new('testnet', 'no-such-batch')
       assert_nil stats.skipped_vote_percent_best
     end
 

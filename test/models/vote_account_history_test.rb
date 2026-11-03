@@ -44,25 +44,9 @@ class VoteAccountHistoryTest < ActiveSupport::TestCase
     assert_not_nil vah.skipped_vote_percent_moving_average
   end
 
-  test 'skipped_vote_percent for alpenglow-community compares credits with max credits' do
+  test 'skipped_vote_percent for testnet returns nil without max credits' do
     vah = create(:vote_account_history, vote_account: @va,
-                 network: 'alpenglow-community',
-                 max_credits_current: 6_400,
-                 credits_current: 5_000)
-    assert_in_delta 0.21875, vah.skipped_vote_percent, 0.000001
-  end
-
-  test 'skipped_vote_percent for alpenglow-community clamps to 0 when credits exceed max' do
-    vah = create(:vote_account_history, vote_account: @va,
-                 network: 'alpenglow-community',
-                 max_credits_current: 320,
-                 credits_current: 500)
-    assert_equal 0.0, vah.skipped_vote_percent
-  end
-
-  test 'skipped_vote_percent for alpenglow-community returns nil without max credits' do
-    vah = create(:vote_account_history, vote_account: @va,
-                 network: 'alpenglow-community',
+                 network: 'testnet',
                  max_credits_current: nil,
                  credits_current: 100)
     assert_nil vah.skipped_vote_percent
@@ -71,7 +55,7 @@ class VoteAccountHistoryTest < ActiveSupport::TestCase
   test 'skipped_vote_percent_moving_average does not crash when skipped_vote_percent is nil' do
     assert_nothing_raised do
       create(:vote_account_history, vote_account: @va,
-             network: 'alpenglow-community',
+             network: 'testnet',
              max_credits_current: 0,
              credits_current: 100)
     end

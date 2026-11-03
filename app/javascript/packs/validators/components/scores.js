@@ -48,7 +48,8 @@ export default {
       return "Authorized Withdrawer Score = " + this.score.authorized_withdrawer_score.to_i
     },
     stake_concentration_score_title() {
-      return "Stake Concentration Score = " + this.score.stake_concentration_score
+      const share = parseInt(this.score.stake_concentration_score) <= -2 ? "20%" : "40%"
+      return "Stake Concentration Score = " + this.score.stake_concentration_score + ". Validator is one of the top " + share + " active stake holders."
     },
     data_center_concentration_score_title() {
       return "Data Center Concentration Score = " + this.score.data_center_concentration_score
