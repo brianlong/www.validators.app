@@ -48,6 +48,8 @@ Rails.application.routes.draw do
   get 'validators/:account/vote_accounts/:vote_account', to: 'vote_accounts#show',
                                                          as: 'validator_vote_account'
 
+  get 'alpenglow', to: 'alpenglow#index', as: 'alpenglow'
+
   get 'you/', to: 'you#index', as: :user_root
   post 'you/regenerate_token', to: 'you#regenerate_token'
 
@@ -216,7 +218,10 @@ Rails.application.routes.draw do
       get "stake-explorer/:network", to: "explorer_stake_accounts#index", as: "explorer_stake_accounts"
 
       get "policies/:network", to: "policies#index", as: "policies"
-      get "policies/:network/:pubkey", to: "policies#show", as: "policy"  
+      get "policies/:network/:pubkey", to: "policies#show", as: "policy"
+
+      get "alpenglow-cluster-stats/:network", to: "alpenglow_stats#cluster", as: "alpenglow_cluster_stats"
+      get "alpenglow-validator-stats/:network", to: "alpenglow_stats#validators", as: "alpenglow_validator_stats"
     end
   end
 end

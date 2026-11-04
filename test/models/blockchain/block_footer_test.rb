@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+class Blockchain::BlockFooterTest < ActiveSupport::TestCase
+  test ".network returns footer model for supported networks" do
+    assert_equal Blockchain::TestnetBlockFooter, Blockchain::BlockFooter.network("testnet")
+    assert_equal Blockchain::MainnetBlockFooter, Blockchain::BlockFooter.network("mainnet")
+  end
+
+  test ".network raises for networks without block footers" do
+    assert_raises(ArgumentError) { Blockchain::BlockFooter.network("pythnet") }
+  end
+end
