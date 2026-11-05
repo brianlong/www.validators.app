@@ -35,4 +35,22 @@ class TotalRewardsUpdateServiceTest < ActiveSupport::TestCase
       assert_equal 77432940417, result
     end
   end
+
+  test "#total_rewards_from_stake_accounts requests rewards in batches of max 100 accounts" do
+    epoch = create(:epoch_wall_clock, epoch: 407, network: @network, starting_slot: 1, ending_slot: 2)
+    stake_accounts = (1..250).map { |i| "stake_account_#{i}" }
+    service = TotalRewardsUpdateService.new(@network, stake_accounts, @solana_url)
+    batch_sizes = []
+
+    epoch_rewards = lambda do |_epoch, accounts|
+      batch_sizes << accounts.size
+      accounts.map { { "amount" => 1, "postBalance" => 10 } }
+    end
+
+    service.stub(:epoch_rewards, epoch_rewards) do
+      assert_equal 250, service.total_rewards_from_stake_accounts(epoch)
+    end
+
+    assert_equal [100, 100, 50], batch_sizes
+  end
 end
