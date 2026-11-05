@@ -435,11 +435,10 @@ module SolanaLogic
 
       validators_reduced = {}
       rpc_servers = {}
-      p.payload[:validators].each do |k, _v|
-        unless p.payload[:vote_accounts][k].nil?
-          validators_reduced[k] = \
-            p.payload[:validators][k].merge(p.payload[:vote_accounts][k])
-        end
+      p.payload[:vote_accounts].each do |k, v|
+        next if Rails.application.config.validator_blacklist[p.payload[:network]].include? k
+
+        validators_reduced[k] = (p.payload[:validators][k] || {}).merge(v)
       end
 
       Pipeline.new(
@@ -489,6 +488,8 @@ module SolanaLogic
           software_client: (v['client'] || validator.software_client || 'Unknown'),
           software_client_id: v['client_id'] || validator.software_client_id
         )
+
+        next if v['gossip_ip_port'].blank?
 
         # Find or create the validator IP address
         val_ip = validator.validator_ips.find_or_create_by(
