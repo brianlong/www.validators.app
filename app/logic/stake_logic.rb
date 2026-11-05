@@ -187,14 +187,18 @@ module StakeLogic
         account_rewards[sa.stake_pubkey] = nil
       end
 
-      reward_info = solana_client_request(
-        p.payload[:config_urls],
-        "get_inflation_reward",
-        params: [account_rewards.keys, {}]
-      )
+      reward_info = account_rewards.keys.each_slice(INFLATION_REWARD_MAX_ACCOUNTS).flat_map do |batch|
+        batch_reward_info = solana_client_request(
+          p.payload[:config_urls],
+          "get_inflation_reward",
+          params: [batch, {}]
+        )
 
-      raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
-        if reward_info.blank?
+        raise NoResultsFromSolana.new("No results from `get_inflation_reward`") \
+          if batch_reward_info.blank? || batch_reward_info.size != batch.size
+
+        batch_reward_info
+      end
 
       stake_accounts.each_with_index do |sa, idx|
         account_rewards[sa["stake_pubkey"]] = reward_info[idx]

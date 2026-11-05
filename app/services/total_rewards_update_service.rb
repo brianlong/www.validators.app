@@ -26,7 +26,7 @@ class TotalRewardsUpdateService
   def total_rewards_from_vote_accounts(epoch)
     rewards_sum = 0
     vote_accounts = VoteAccount.where(network: @network).pluck(:account)
-    vote_accounts&.in_groups_of(1000) do |vote_account_batch|
+    vote_accounts&.in_groups_of(INFLATION_REWARD_MAX_ACCOUNTS) do |vote_account_batch|
       epoch_rewards(epoch.epoch, vote_account_batch.compact).each_with_index do |acc, index|
         if acc && acc["amount"] && acc["postBalance"]    
           rewards_sum += acc["amount"].to_i 
@@ -38,7 +38,7 @@ class TotalRewardsUpdateService
 
   def total_rewards_from_stake_accounts(epoch)
     rewards_sum = 0
-    @stake_accounts&.in_groups_of(1000) do |stake_account_batch|
+    @stake_accounts&.in_groups_of(INFLATION_REWARD_MAX_ACCOUNTS) do |stake_account_batch|
       epoch_rewards(epoch.epoch, stake_account_batch.compact).each_with_index do |acc, index|
         if acc && acc["amount"] && acc["postBalance"]    
           rewards_sum += acc["amount"].to_i 

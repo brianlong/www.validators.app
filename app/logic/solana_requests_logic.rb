@@ -2,6 +2,7 @@
 
 module SolanaRequestsLogic
   RPC_TIMEOUT = 60 # seconds
+  INFLATION_REWARD_MAX_ACCOUNTS = 100
 
   # Clusters array, method symbol
   def solana_client_request(clusters, method, params: nil)
