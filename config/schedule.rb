@@ -119,6 +119,10 @@ every 1.hour, at: 40, roles: [:background] do
   runner "DataCenterStatsWorker.perform_async({'network' => 'testnet'})"
 end
 
+every 1.hour, at: 50, roles: [:background] do
+  runner "XNotifications::EpochReportsWorker.perform_async({'network' => 'mainnet'})"
+end
+
 every 1.day, at: '3:10am', roles: [:background] do
   ruby_script_data_centers 'check_unknown_data_centers_for_updates.rb'
 end
