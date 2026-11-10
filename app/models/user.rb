@@ -55,7 +55,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable, :lockable, :timeoutable, :trackable,
-         authentication_keys: [:username]
+         authentication_keys: [:login]
+
+  attr_writer :login
 
   has_many :user_watchlist_elements, dependent: :delete_all 
   has_many :watched_validators, through: :user_watchlist_elements, source: :validator
@@ -85,8 +87,26 @@ class User < ApplicationRecord
 
   # validate :email_unique?, on: :create
 
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    login = conditions.delete(:login).to_s.strip
+    return if login.blank?
+
+    scope = where(conditions.to_h)
+    user = scope.find_by(username: login)
+    return user if user
+
+    email_hashes = [login, login.downcase].uniq.map { |e| Digest::SHA256.hexdigest(e) }
+    users = scope.where(email_hash: email_hashes).limit(2).to_a
+    users.first if users.one?
+  end
+
   def self.search_by_email_hash(email)
     where(email_hash: Digest::SHA256.hexdigest(email)).first
+  end
+
+  def login
+    @login || username
   end
 
   def create_email_hash
