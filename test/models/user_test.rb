@@ -153,4 +153,27 @@ class UserTest < ActiveSupport::TestCase
     assert_equal user.email_hash, Digest::SHA256.hexdigest(user_params[:email])
     assert user.email_encrypted_iv
   end
+
+  test ".find_for_database_authentication finds user by username" do
+    assert_equal @user, User.find_for_database_authentication(login: "test")
+    assert_equal @user, User.find_for_database_authentication(login: " TEST ")
+  end
+
+  test ".find_for_database_authentication finds user by email" do
+    user = create(:user, email: "unique@example.com")
+
+    assert_equal user, User.find_for_database_authentication(login: "unique@example.com")
+    assert_equal user, User.find_for_database_authentication(login: " Unique@Example.com ")
+  end
+
+  test ".find_for_database_authentication returns nil when email is shared by many users" do
+    create(:user)
+
+    assert_nil User.find_for_database_authentication(login: "user@fmatemplate.com")
+  end
+
+  test ".find_for_database_authentication returns nil for blank or unknown login" do
+    assert_nil User.find_for_database_authentication(login: "")
+    assert_nil User.find_for_database_authentication(login: "unknown")
+  end
 end

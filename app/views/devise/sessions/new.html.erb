@@ -4,8 +4,8 @@
   <div class="col-md-6 mb-4 mb-md-0">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="mb-3">
-        <%= f.label :username, class: 'form-label' %><br />
-        <%= f.text_field :username, autofocus: true,
+        <%= f.label :login, class: 'form-label' %><br />
+        <%= f.text_field :login, autofocus: true,
                          autocomplete: "username",
                          class: 'form-control' %>
       </div>

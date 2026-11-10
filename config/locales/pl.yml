@@ -4,6 +4,7 @@ pl:
     attributes:
       user:
         username: 'Nazwa użytkownika'
+        login: 'Nazwa użytkownika lub e-mail'
       contact_request:
         name: 'Imię'
         email_address: 'Adres e-mail'
