@@ -9,165 +9,139 @@ MAINNET_STAKE_POOLS = {
     small_logo: "marinade-logo.svg",
     large_logo: "marinade.png",
     url: "https://marinade.finance",
-    manager_fee: 9.5, #https://docs.marinade.finance/marinade-protocol/faq
-    withdrawal_fee: 0.05,
+    manager_fee: 0, #https://docs.marinade.finance/marinade-protocol/protocol-overview/fees-and-pricing
+    withdrawal_fee: 0.2,
     deposit_fee: 0
   },
   jpool: {
     name: "Jpool",
     authority: "HbJTxftxnXgpePCshA8FubsRj9MW4kfPscfuUfn44fnt",
+    pool_address: "CtMyWsrUtAwXWiGr9WjHT5fC3p3fgV8cyGpLTo2LJzG1",
     network: "mainnet",
     ticker: "jsol",
     small_logo: "jpool-logo.svg",
     large_logo: "jpool.png",
     url: "https://jpool.one",
-    manager_fee: 7, #https://jpool.one/pool-info
-    withdrawal_fee: 0.38,
-    deposit_fee: 0
   },
   daopool: {
     name: "DAOPool",
     authority: "BbyX1GwUNsfbcoWwnkZDo8sqGmwNDzs2765RpjyQ1pQb",
+    pool_address: "7ge2xKsZXmqPxa3YmXxXmzCp9Hc2ezrTxh6PECaxCwrL",
     network: "mainnet",
     ticker: "daosol",
     small_logo: "daopool-logo.png",
     large_logo: "daopool.png",
     url: "https://daopool.monkedao.io",
-    manager_fee: 2, #https://daopool.io/faq
-    withdrawal_fee: 0.3,
-    deposit_fee: 0
   },
   blazestake: {
     name: "BlazeStake",
     authority: "6WecYymEARvjG5ZyqkrVQ6YkhPfujNzWpSPwNKXHCbV2",
+    pool_address: "stk9ApL5HeVAwPLr3TLhDXdZS8ptVu7zp6ov8HFDuMi",
     network: "mainnet",
     ticker: "bsol",
     small_logo: "blazestake-logo.png",
     large_logo: "blazestake.png",
     url: "https://stake.solblaze.org",
-    manager_fee: 0, #https://stake-docs.solblaze.org/features/fees
-    withdrawal_fee: 0.1,
-    deposit_fee: 0
   },
   jito: {
     name: "Jito",
     authority: "6iQKfEyhr3bZMotVkW6beNZz5CPAkiwvgV2CTje9pVSS",
+    pool_address: "Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb",
     network: "mainnet",
     ticker: "jitosol",
     small_logo: "jito-logo.svg",
     large_logo: "jito.png",
     url: "https://www.jito.network",
-    manager_fee: 5, #https://jito-foundation.gitbook.io/mev/jito-solana/faqs
-    withdrawal_fee: 0,
-    deposit_fee: 0
   },
   edgevana: {
     name: "Edgevana",
     authority: "FZEaZMmrRC3PDPFMzqooKLS2JjoyVkKNd2MkHjr7Xvyq",
+    pool_address: "edgejNWAqkePLpi5sHRxT9vHi7u3kSHP9cocABPKiWZ",
     network: "mainnet",
     ticker: "edgesol",
     small_logo: "edgevana-logo.svg",
     large_logo: "edgevana.png",
     url: "https://stake.edgevana.com/",
-    manager_fee: 1, #https://docs.stake.edgevana.com/docs/pool-and-token-info/fees
-    withdrawal_fee: 0.1,
-    deposit_fee: 0
   },
   phase: {
     name: "Phase",
     authority: "AKJt3m2xJ6ANda9adBGqb5BMrheKJSwxyCfYkLuZNmjn",
+    pool_address: "aero2ePURjuEgLKTzcUmF6RypBncBGd7pMUYCoSsVJ6",
     network: "mainnet",
     ticker: "pdsol",
     small_logo: "phase-logo.svg",
     large_logo: "phase-lg.svg",
     url: "https://phase.cc/delegation",
-    manager_fee: 5,
-    withdrawal_fee: 0.1,
-    deposit_fee: 0.1
   },
   shinobi: {
     name: "Shinobi",
     authority: "EpH4ZKSeViL5qAHA9QANYVHxdmuzbUH2T79f32DmSCaM",
+    pool_address: "spp1mo6shdcrRyqDK2zdurJ8H5uttZE6H6oVjHxN1QN",
     network: "mainnet",
     ticker: "xshin",
     small_logo: "shinobi-logo.png",
     large_logo: "shinobi.png",
     url: "https://xshin.fi/",
-    manager_fee: 4,
-    withdrawal_fee: 0.03,
-    deposit_fee: 0.1
   },
   vault: {
     name: "Vault",
     authority: "GdNXJobf8fbTR5JSE7adxa6niaygjx4EEbnnRaDCHMMW",
+    pool_address: "Fu9BYC6tWBo1KMKaP3CFoKfRhqv9akmy3DuYwnCyWiyC",
     network: "mainnet",
     ticker: "vsol",
     small_logo: "vault-logo.png",
     large_logo: "vault.png",
     url: "https://thevault.finance/",
-    manager_fee: 5, #https://docs.thevault.finance/about/the-vault-fees
-    withdrawal_fee: 0.1,
-    deposit_fee: 0
   },
   dynosol: {
     name: "DynoSol",
     authority: "BqPJdYKKpReEfXHv8kgdmRcBfLToBSHpt1qThtb52GSs",
+    pool_address: "DpooSqZRL3qCmiq82YyB4zWmLfH3iEqx2gy8f2B6zjru",
     network: "mainnet",
     ticker: "dynosol",
     small_logo: "dynosol-logo.png",
     large_logo: "dynosol.png",
     url: "https://dynosol.io/",
-    manager_fee: 5, #https://docs.dynosol.io/Fees-1eaddc3951038070a35cda8b72e5707d
-    withdrawal_fee: 0.1,
-    deposit_fee: 0
   },
   jagpool: {
     name: "JagPool",
     authority: "Hodkwm8xf43JzRuKNYPGnYJ7V9cXZ7LJGNy96TWQiSGN",
+    pool_address: "jagEdDepWUgexiu4jxojcRWcVKKwFqgZBBuAoGu2BxM",
     network: "mainnet",
     ticker: "jagsol",
     small_logo: "jagpool-logo.png",
     large_logo: "jagpool.png",
     url: "https://www.jagpool.xyz/",
-    manager_fee: 5,
-    withdrawal_fee: 0.1,
-    deposit_fee: 0
   },
   definity: {
     name: "Definity",
     authority: "5ugu8RogBq5ZdfGt4hKxKotRBkndiV1ndsqWCf7PBmST",
+    pool_address: "Bvbu55B991evqqhLtKcyTZjzQ4EQzRUwtf9T4CcpMmPL",
     network: "mainnet",
     ticker: "definsol",
     small_logo: "definsol-logo.png",
     large_logo: "definsol.png",
     url: "https://www.definity.finance/",
-    manager_fee: 5,
-    withdrawal_fee: 0.1,
-    deposit_fee: 0
   },
   doublezero: {
     name: "DoubleZero",
     authority: "4cpnpiwgBfUgELVwNYiecwGti45YHSH3R72CPkFTiwJt",
+    pool_address: "3fV1sdGeXaNEZj6EPDTpub82pYxcRXwt2oie6jkSzeWi",
     network: "mainnet",
     ticker: "dzsol",
     small_logo: "doublezero.svg",
     large_logo: "doublezero_lg.svg",
     url: "https://doublezero.xyz/staking",
-    manager_fee: 5,
-    withdrawal_fee: 0,
-    deposit_fee: 0
   },
   solstrategies: {
     name: "SolStrategies",
     authority: "5vzKiHVuZNx1XQWQZQEcuqKaq4nfDp6LhuSvowQK2ayd",
+    pool_address: "StKeDUdSu7jMSnPJ1MPqDnk3RdEwD2QbJaisHMebGhw",
     network: "mainnet",
     ticker: "stkesol",
     small_logo: "solstrategies-logo.svg",
     large_logo: "solstrategies.svg",
     url: "https://solstrategies.io/",
-    manager_fee: 5,
-    withdrawal_fee: 0.1,
-    deposit_fee: 0
   },
   socean: {
     # name: "Socean",
@@ -215,6 +189,7 @@ TESTNET_STAKE_POOLS = {
   jpool: {
     name: "Jpool",
     authority: "25jjjw9kBPoHtCLEoWu2zx6ZdXEYKPUbZ6zweJ561rbT",
+    pool_address: "AeuEVJrnL5SwftWzchEfqMkKXPxLcZjrFtShdAZ7FwKy",
     network: "testnet",
     ticker: "jsol",
     small_logo: "jpool-logo.svg",

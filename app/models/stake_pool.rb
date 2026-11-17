@@ -16,7 +16,12 @@
 #  manager_fee                   :float(24)
 #  name                          :string(191)
 #  network                       :string(191)
+#  next_manager_fee              :float(24)
+#  next_withdrawal_fee           :float(24)
+#  pool_address                  :string(191)
+#  pool_token_supply             :bigint           unsigned
 #  ticker                        :string(191)
+#  total_lamports                :bigint           unsigned
 #  withdrawal_fee                :float(24)
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
@@ -48,6 +53,12 @@ class StakePool < ApplicationRecord
     total_stake
     average_stake
     delinquent_count
+    pool_address
+    total_lamports
+    pool_token_supply
+    exchange_rate
+    next_manager_fee
+    next_withdrawal_fee
   ].freeze
 
   has_many :stake_accounts, dependent: :destroy
@@ -65,5 +76,11 @@ class StakePool < ApplicationRecord
     return 0 if validators_count == 0
 
     total_stake / validators_count
+  end
+
+  def exchange_rate
+    return if total_lamports.blank? || pool_token_supply.to_i.zero?
+
+    (total_lamports.to_f / pool_token_supply).round(9)
   end
 end

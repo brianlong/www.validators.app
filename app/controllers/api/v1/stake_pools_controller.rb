@@ -15,7 +15,7 @@ module Api
       private
 
       def index_csv_row_data
-        @stake_pools.as_json(methods: [:validators_count, :total_stake, :average_stake])
+        @stake_pools.as_json(methods: [:validators_count, :total_stake, :average_stake, :exchange_rate])
       end
 
       def index_csv_headers

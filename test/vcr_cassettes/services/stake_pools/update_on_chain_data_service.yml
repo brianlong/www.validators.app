@@ -1,0 +1,79 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.mainnet-beta.solana.com/
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":52247,"method":"getMultipleAccounts","params":[["Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb","11111111111111111111111111111111"],{"encoding":"base64"}]}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.mainnet-beta.solana.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 10 Nov 2026 09:01:12 GMT
+      X-Rpc-Node:
+      - fra286
+      X-Ratelimit-Tier:
+      - free
+      X-Ratelimit-Method-Limit:
+      - '50'
+      X-Ratelimit-Method-Remaining:
+      - '49'
+      X-Ratelimit-Rps-Limit:
+      - '250'
+      X-Ratelimit-Rps-Remaining:
+      - '249'
+      X-Ratelimit-Endpoint-Limit:
+      - unlimited
+      X-Ratelimit-Endpoint-Remaining:
+      - "-20072"
+      X-Ratelimit-Conn-Limit:
+      - '40'
+      X-Ratelimit-Conn-Remaining:
+      - '39'
+      X-Ratelimit-Connrate-Limit:
+      - '40'
+      X-Ratelimit-Connrate-Remaining:
+      - '39'
+      X-Ratelimit-Pubsub-Limit:
+      - '5'
+      X-Ratelimit-Pubsub-Remaining:
+      - '5'
+      Access-Control-Allow-Origin:
+      - backend_traffic
+      Access-Control-Allow-Methods:
+      - OPTIONS, POST, GET
+      Access-Control-Allow-Headers:
+      - authorization, *
+      Access-Control-Max-Age:
+      - '86400'
+      Allow:
+      - OPTIONS, POST, GET
+      Alt-Svc:
+      - h3=":443"; ma=60
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: ASCII-8BIT
+      string: '{"jsonrpc":"2.0","result":{"context":{"apiVersion":"4.4.0","slot":467662485},"value":[{"data":["AUUePdUNO3uFNgRcK3rC7CWUc+vCWuO8vh++sX1S+8e+eXhXwruGsaac0PTcoWwisNzj3eyWuEBcCPHEcDrQj9NUtd6+o5sz4PHc+gqPYiqVuLTrluhPL6HjF2cPHpbB2P0j4HUJut3t/bUWqQuRl7tQR0MlXQ43xf9dzookHu3EMZ6naP7fZEyKrpuOIYit0GvFUPv3Fsgiuc5jx3g9lS4f/NFB6YMsrxCtkXSVyg8nG1spPNRwJ+pzcAftQOs5oL12jyijo7L7UvNaWKfli1lcRMd47QEs9xqm+cI2cAxkJwbd9uHXZaGT2cvhRs7reawctIXtX1s3kTqM9YV+/wCpUE7AdM5XJAAZkNv2+LkbADoEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADoAwAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6AMAAAAAAAABAAAAAAAAAADEqOOiaKobAN2/mMckQiQAAwAAAAAAAAEAAAAAAAAAAPdO5G5V4RQApItSanmLFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=","base64"],"executable":false,"lamports":2719416388,"owner":"SPoo1Ku8WFXoNDMHPsrGSTSG1Y47rzgn41SLUNakuHy","rentEpoch":18446744073709551615,"space":611},{"data":["c29sYW5hX3N5c3RlbV9wcm9ncmFt","base64"],"executable":true,"lamports":1,"owner":"NativeLoader1111111111111111111111111111111","rentEpoch":18446744073709551615,"space":21}]},"id":52247}
+
+        '
+  recorded_at: Tue, 10 Nov 2026 09:01:13 GMT
+recorded_with: VCR 6.3.1
