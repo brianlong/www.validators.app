@@ -58,6 +58,10 @@ every 1.hour, at: 15, roles: [:background] do
   ruby_script 'gather_stake_accounts.rb'
 end
 
+every 1.hour, at: 20, roles: [:background] do
+  ruby_script 'update_stake_pools_on_chain_data.rb'
+end
+
 if ENV['RAILS_ENV'] == "production"
   every 1.hour, at: 30, roles: [:background] do
     ruby_script_data_centers 'append_data_centers_geo_data.rb'

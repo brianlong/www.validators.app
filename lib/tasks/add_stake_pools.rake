@@ -9,6 +9,7 @@ def update_stake_pools(stake_pools)
     ).update(
       ticker: data[:ticker],
       authority: data[:authority],
+      pool_address: data[:pool_address]
     )
   end
 end
@@ -16,6 +17,7 @@ end
 def update_stake_pools_fees(stake_pools)
   stake_pools.each do |key, data|
     next if data[:name].blank? || data[:network].blank? || data[:deleted]
+    next unless data.key?(:manager_fee)
     stake_pool = StakePool.find_by(
       name: data[:name],
       network: data[:network]
