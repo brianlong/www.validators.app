@@ -52,47 +52,6 @@ ActiveRecord::Schema.define(version: 2026_11_10_000000) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "alpenglow_epoch_ranks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "network", null: false
-    t.integer "epoch", null: false
-    t.integer "rank", null: false
-    t.string "vote_account", null: false
-    t.string "validator_identity", null: false
-    t.string "bls_pubkey", null: false
-    t.bigint "stake", null: false
-    t.integer "status", limit: 1, default: 0, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "epoch", "rank"], name: "index_alpenglow_epoch_ranks_on_network_and_epoch_and_rank", unique: true
-    t.index ["network", "epoch", "vote_account"], name: "index_alpenglow_epoch_ranks_on_network_epoch_vote_account", unique: true
-  end
-
-  create_table "alpenglow_validator_epoch_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "network", null: false
-    t.integer "epoch", null: false
-    t.bigint "vote_account_id", null: false
-    t.bigint "validator_id", null: false
-    t.integer "notar_reward_slots", default: 0, null: false
-    t.integer "notar_votes", default: 0, null: false
-    t.integer "fast_finalized_slots", default: 0, null: false
-    t.integer "fast_final_signatures", default: 0, null: false
-    t.integer "slow_finalized_slots", default: 0, null: false
-    t.integer "slow_final_signatures", default: 0, null: false
-    t.integer "slow_notar_signatures", default: 0, null: false
-    t.integer "skip_votes", default: 0, null: false
-    t.integer "divergent_skip_votes", default: 0, null: false
-    t.integer "leader_slots", default: 0, null: false
-    t.integer "leader_slots_with_final_cert", default: 0, null: false
-    t.integer "leader_fast_finalized", default: 0, null: false
-    t.integer "leader_slow_finalized", default: 0, null: false
-    t.bigint "leader_final_lag_sum", default: 0, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "epoch"], name: "index_alpenglow_validator_epoch_stats_on_network_and_epoch"
-    t.index ["validator_id", "epoch"], name: "index_alpenglow_validator_epoch_stats_on_validator_id_and_epoch"
-    t.index ["vote_account_id", "epoch"], name: "index_alpenglow_val_epoch_stats_on_vote_account_id_epoch", unique: true
-  end
-
   create_table "asn_stats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.float "average_score"
     t.integer "traits_autonomous_system_number"
@@ -1068,26 +1027,6 @@ ActiveRecord::Schema.define(version: 2026_11_10_000000) do
     t.index ["account", "created_at"], name: "index_vote_accounts_on_account_and_created_at"
     t.index ["network", "account"], name: "index_vote_accounts_on_network_and_account"
     t.index ["validator_id", "account"], name: "index_vote_accounts_on_validator_id_and_account", unique: true
-  end
-
-  create_table "x_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "network"
-    t.string "kind"
-    t.string "reference_key", null: false
-    t.bigint "validator_id"
-    t.bigint "parent_id"
-    t.text "message"
-    t.text "metadata"
-    t.string "status"
-    t.string "x_post_id"
-    t.text "error"
-    t.datetime "posted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["network", "kind", "created_at"], name: "index_x_posts_on_network_and_kind_and_created_at"
-    t.index ["parent_id"], name: "index_x_posts_on_parent_id"
-    t.index ["reference_key"], name: "index_x_posts_on_reference_key", unique: true
-    t.index ["validator_id"], name: "index_x_posts_on_validator_id"
   end
 
   add_foreign_key "account_authority_histories", "vote_accounts"
