@@ -85,6 +85,77 @@ class StakeLogicTest < ActiveSupport::TestCase
     end
   end
 
+  test "get_stake_accounts requests stake accounts filtered by withdraw authority of each pool" do
+    authority = 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'
+    authority_2 = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
+    create(:stake_pool, authority: authority, network: 'testnet')
+    create(:stake_pool, authority: authority_2, network: 'testnet')
+    requested_methods = []
+
+    request = lambda do |cli_method, _rpc_url|
+      requested_methods << cli_method
+      @json_data
+    end
+
+    SolanaCliService.stub(:request, request) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_last_batch)
+                  .then(&get_stake_accounts)
+
+      expected_count = JSON.parse(@json_data).count { |sa| [authority, authority_2].include?(sa['withdrawer']) }
+
+      assert_equal 200, p.code
+      assert_equal expected_count, p.payload[:stake_accounts].count
+      assert_nil p.payload[:stake_accounts_active]
+    end
+
+    assert_equal(
+      ["stakes --withdraw-authority #{authority}", "stakes --withdraw-authority #{authority_2}"],
+      requested_methods
+    )
+  end
+
+  test "get_stake_accounts fails when any pool returns no stake accounts" do
+    authority = 'H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b'
+    authority_2 = 'mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN'
+    create(:stake_pool, authority: authority, network: 'testnet')
+    create(:stake_pool, authority: authority_2, network: 'testnet')
+
+    request = lambda do |cli_method, _rpc_url|
+      cli_method.include?(authority_2) ? '' : @json_data
+    end
+
+    SolanaCliService.stub(:request, request) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_last_batch)
+                  .then(&get_stake_accounts)
+
+      assert_equal 500, p.code
+      assert_equal NoResultsFromSolana, p.errors.class
+    end
+  end
+
+  test "get_active_stake_accounts returns active stake accounts from the whole cluster" do
+    requested_methods = []
+
+    request = lambda do |cli_method, _rpc_url|
+      requested_methods << cli_method
+      @json_data
+    end
+
+    SolanaCliService.stub(:request, request) do
+      p = Pipeline.new(200, @initial_payload)
+                  .then(&get_active_stake_accounts)
+
+      expected = JSON.parse(@json_data).select { |sa| sa['deactivationEpoch'].nil? }.map { |sa| sa['stakePubkey'] }
+
+      assert_equal 200, p.code
+      assert_equal expected, p.payload[:stake_accounts_active]
+    end
+
+    assert_equal ['stakes'], requested_methods
+  end
+
   test "update_stake_accounts" do
     authority = "H2qwtMNNFh6euD3ym4HLgpkbNY6vMdf5aX5bazkU4y8b"
     network = "testnet"

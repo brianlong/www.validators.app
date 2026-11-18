@@ -27,6 +27,7 @@ NETWORKS.each do |network|
               .then(&assign_epochs)
               .then(&calculate_apy_for_accounts)
               .then(&calculate_apy_for_pools)
+              .then(&get_active_stake_accounts)
 
   TotalRewardsUpdateService.new(p.payload[:network], p.payload[:stake_accounts_active]).call
 

@@ -42,6 +42,27 @@ module StakeLogic
     lambda do |p|
       return p unless p.code == 200
 
+      reduced_stake_accounts = StakePool.where(network: p.payload[:network]).flat_map do |pool|
+        pool_stake_acc = cli_request(
+          "stakes --withdraw-authority #{pool.authority}",
+          p.payload[:config_urls]
+        )
+
+        raise NoResultsFromSolana.new('No results from `solana stakes`') if pool_stake_acc.blank?
+
+        pool_stake_acc.select { |sa| sa["withdrawer"] == pool.authority }
+      end
+
+      Pipeline.new(200, p.payload.merge(stake_accounts: reduced_stake_accounts))
+    rescue StandardError => e
+      Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
+    end
+  end
+
+  def get_active_stake_accounts
+    lambda do |p|
+      return p unless p.code == 200
+
       stake_accounts = cli_request(
         'stakes',
         p.payload[:config_urls]
@@ -49,23 +70,11 @@ module StakeLogic
 
       raise NoResultsFromSolana.new('No results from `solana stakes`') if stake_accounts.blank?
 
-      reduced_stake_accounts = []
-
-      StakePool.where(network: p.payload[:network]).each do |pool|
-        pool_stake_acc = stake_accounts.select do |sa|
-          sa["withdrawer"] == pool.authority || sa["staker"] == pool.authority
-        end
-
-        reduced_stake_accounts = reduced_stake_accounts + pool_stake_acc
-      end
-
       Pipeline.new(200, p.payload.merge(
-        stake_accounts: reduced_stake_accounts,
-        all_stake_accounts: stake_accounts,
         stake_accounts_active: stake_accounts_active(p.payload[:network], stake_accounts)
       ))
     rescue StandardError => e
-      Pipeline.new(500, p.payload, 'Error from get_stake_accounts', e)
+      Pipeline.new(500, p.payload, 'Error from get_active_stake_accounts', e)
     end
   end
 
