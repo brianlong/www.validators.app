@@ -35,6 +35,7 @@ en:
     attributes:
       user:
         username: 'Username'
+        login: 'Username or email'
       contact_request:
           name: 'Name'
           email_address: 'Email address'
