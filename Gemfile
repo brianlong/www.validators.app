@@ -13,6 +13,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'bundler', '>= 2.3.27'
 gem 'json', '~> 2.9.1'
 
+gem 'base64', '~> 0.2.0'
+gem 'bigdecimal', '~> 3.1.9'
+gem 'csv', '~> 3.3.4'
+gem 'drb', '~> 2.1.0'
+gem 'mutex_m', '~> 0.1.1'
+
 gem 'websocket-extensions', '>= 0.1.5'
 gem 'faye-websocket', '~> 0.12.0'
 gem 'eventmachine', '~> 1.2.7'

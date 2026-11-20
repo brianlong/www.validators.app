@@ -54,14 +54,15 @@ class ValidatorHistory < ApplicationRecord
   belongs_to :validator, optional: true
 
   scope :for_batch, ->(network, batch_uuid) { where(network: network, batch_uuid: batch_uuid) }
-  scope :validator_histories_from_period, ->(network:, account:, from:, to:, limit:) do
-    where(network: network, account: account, created_at: from...to)
-      .order(created_at: :asc)
-      .last(limit)
-  end
 
   class << self
     
+    def validator_histories_from_period(network:, account:, from:, to:, limit:)
+      where(network: network, account: account, created_at: from...to)
+        .order(created_at: :asc)
+        .last(limit)
+    end
+
     def for_batch(network, batch_uuid)
       where(network: network, batch_uuid: batch_uuid)
     end
