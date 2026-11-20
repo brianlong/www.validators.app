@@ -462,4 +462,73 @@ class SolanaLogicTest < ActiveSupport::TestCase
     assert_equal "3.1.4", history.software_version
     assert_equal "ScoreClient", history.software_client
   end
+
+  test "reduce_validator_vote_accounts includes vote accounts without gossip node" do
+    payload = {
+      network: "mainnet",
+      validators: {
+        "A" => { "gossip_ip_port" => "1.2.3.4:8001", "version" => "2.0.0", "client" => "Agave" }
+      },
+      vote_accounts: {
+        "A" => { "vote_account" => "VA1", "activated_stake" => 100 },
+        "B" => { "vote_account" => "VB1", "activated_stake" => 200 }
+      }
+    }
+
+    result = reduce_validator_vote_accounts.call(Pipeline.new(200, payload))
+
+    assert_equal 200, result[:code]
+    assert_equal %w[A B], result.payload[:validators_reduced].keys.sort
+    assert_equal "1.2.3.4:8001", result.payload[:validators_reduced]["A"]["gossip_ip_port"]
+    assert_equal "VA1", result.payload[:validators_reduced]["A"]["vote_account"]
+    assert_equal({ "vote_account" => "VB1", "activated_stake" => 200 }, result.payload[:validators_reduced]["B"])
+  end
+
+  test "reduce_validator_vote_accounts skips blacklisted vote accounts" do
+    blacklisted = Rails.application.config.validator_blacklist["testnet"].first
+    payload = {
+      network: "testnet",
+      validators: {},
+      vote_accounts: {
+        blacklisted => { "vote_account" => "VA1" },
+        "B" => { "vote_account" => "VB1" }
+      }
+    }
+
+    result = reduce_validator_vote_accounts.call(Pipeline.new(200, payload))
+
+    assert_equal 200, result[:code]
+    assert_equal ["B"], result.payload[:validators_reduced].keys
+  end
+
+  test "validators_save creates validator without gossip data" do
+    network = "mainnet"
+    batch_uuid = SecureRandom.uuid
+    payload = {
+      network: network,
+      batch_uuid: batch_uuid,
+      epoch_slot_index: 1,
+      validators_reduced: {
+        "A" => {
+          "vote_account" => "VA1",
+          "commission" => 10,
+          "last_vote" => 123,
+          "credits" => 456,
+          "credits_current" => 10,
+          "activated_stake" => 789
+        }
+      }
+    }
+
+    result = validators_save.call(Pipeline.new(200, payload))
+
+    assert_equal 200, result[:code]
+    validator = Validator.find_by(network: network, account: "A")
+    assert validator.present?
+    assert validator.vote_accounts.find_by(account: "VA1").present?
+    assert_empty validator.validator_ips
+    history = validator.vote_accounts.first.vote_account_histories.find_by(batch_uuid: batch_uuid)
+    assert_equal 789, history.activated_stake
+    assert_equal "Unknown", history.software_client
+  end
 end
