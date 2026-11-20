@@ -11,10 +11,10 @@ class CommissionHistoryMailerPreview < ActionMailer::Preview
     )
     commission_history = FactoryBot.create(:commission_history, validator: validator)
 
-    CommissionHistoryMailer.commission_change_info(
+    CommissionHistoryMailer.with(
       user: user,
       validator: validator,
       commission: commission_history
-    )
+    ).commission_change_info
   end
 end
