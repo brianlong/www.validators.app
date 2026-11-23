@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class CommissionHistoryMailer < ApplicationMailer
-  def commission_change_info(user:, validator:, commission:)
-    @validator = validator
+  def commission_change_info
+    user = params[:user]
+    @validator = params[:validator]
     @validator_title = validator_title(@validator)
-    @commission = commission
+    @commission = params[:commission]
 
     raise "invalid user" unless @validator.watchers.include? user
     

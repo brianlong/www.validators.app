@@ -55,11 +55,11 @@ class CommissionHistory < ApplicationRecord
 
   def notify_users
     validator.watchers.each do |watcher|
-      CommissionHistoryMailer.commission_change_info(
+      CommissionHistoryMailer.with(
         user: watcher,
         validator: validator,
         commission: self
-      ).deliver_later
+      ).commission_change_info.deliver_later
     end
   end
 end

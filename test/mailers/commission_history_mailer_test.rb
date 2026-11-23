@@ -16,22 +16,22 @@ class CommissionHistoryMailerTest < ActiveSupport::TestCase
 
   test "#commission_change_info sends email to a watcher" do
     assert_emails 1 do
-      CommissionHistoryMailer.commission_change_info(
+      CommissionHistoryMailer.with(
         user: @user,
         validator: @validator,
         commission: @commission_history
-      ).deliver_now
+      ).commission_change_info.deliver_now
     end
   end
 
   test "#commission_change_info raises error when user is not valid" do
     usr = create(:user)
     assert_raises RuntimeError, "invalid user" do
-      CommissionHistoryMailer.commission_change_info(
+      CommissionHistoryMailer.with(
         user: usr,
         validator: @validator,
         commission: @commission_history
-      ).deliver_now
+      ).commission_change_info.deliver_now
     end
   end
 end
